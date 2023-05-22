@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB9B70BC1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2AF70BC24
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjEVLpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S233403AbjEVLqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbjEVLo6 (ORCPT
+        with ESMTP id S233390AbjEVLqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:44:58 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 372DDB3;
-        Mon, 22 May 2023 04:44:55 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8CxlfC2VWtkIe0KAA--.18805S3;
-        Mon, 22 May 2023 19:44:54 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxlrWxVWtkewNvAA--.55708S3;
-        Mon, 22 May 2023 19:44:53 +0800 (CST)
-Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
- spi
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
-Date:   Mon, 22 May 2023 19:44:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 22 May 2023 07:46:02 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3CFA3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:45:55 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af2696fd1cso37539261fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684755954; x=1687347954;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FV8sCT8BFyA8deJYHWz/IM3mCVuJ3I9ttJCLsYuNvvw=;
+        b=ncnBE9tQNvkUvX0r4gvHMz688irtuvfbMmzx6VHQYyXOKJkl/kA7MdBVfLDbDJm+rI
+         AtB4AsiOidEBoeLiVNHYW0U8mOKjJd48xn/+qCUThICZF0yr0Y/zvo7L/xZjmTNCrp+r
+         9a3NmZ9sMUFgg3d4at/mqkLF+eieu6SU1AoNE/RWTYwVjWwok6L7KYceQ87dJTUlBUEw
+         XvrzT317ubgjXX2hh7/+6vRlC+Frw79HoyCQ4Z2lK0bMjfytE5+U4N7CtnD96RhgOOJE
+         0J0ZYjDR1w4PflsJ1voB+nOO7S3KPofeWVjt0vGGQYdzUUgkCVfAPlksO+tY0IrjZEnm
+         KZ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684755954; x=1687347954;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FV8sCT8BFyA8deJYHWz/IM3mCVuJ3I9ttJCLsYuNvvw=;
+        b=lCGYEWk3HTx8NLz4cNpd+tqjFb1Ik880jODXFOLFC5N1OYTh8ZoV7opYWVsbGLCra9
+         DzRsbWFUnuleFH/lokqdp0AOKJxMQSpcDdggo+H9rage5SZ78+Z1WtQq4fssgcJJxkma
+         jyIqrX01+MYXj40oBeVN6UBUwLjXvIrH9vJux7/HSbG5uRtFufr35ZawnYYMNhAs2+80
+         Rd2d5SPagEB2d/HnXNxz9CVvCD6QVXSdqM/bZZqt8G0IdwRM+AbsCHcGqpXr+7XAA04A
+         O+86pTVx3onQ5dJHspviUXxvhcREJbG9G7qv21MWekV8q3vT0p2kygbHo+Io0xsW/T8U
+         91qA==
+X-Gm-Message-State: AC+VfDwGJXM3loUbBkjcrGjuHajXbKlOQQ7PxpmY+Raj+oRIAggjeq4r
+        hsn+5R5r4R2Wv/8VV99mfeMd4KBpG7bDgwqAfHFTXQ==
+X-Google-Smtp-Source: ACHHUZ6Arb3e86WPLu+kbk3kF3wfmSodwf5+FCkwRV6f1KpcCpFXAAZjz973i1vwCX8k4GFJPOYyd7DyVdEctcGZ77s=
+X-Received: by 2002:ac2:4428:0:b0:4f1:3b59:44cc with SMTP id
+ w8-20020ac24428000000b004f13b5944ccmr3201723lfl.57.1684755953816; Mon, 22 May
+ 2023 04:45:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxlrWxVWtkewNvAA--.55708S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Jw4rXF4DAw4DArykuFWxWFg_yoWkAFb_Cr
-        WxKay7Cw18JrWUA3Wktrs5WFyaqa4xXa1UCw4rWr17C34qvF1DJay3ua4fX3Z7AFZ5ZFsY
-        krn3CrZ3Z3W5ZjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        77CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84
-        ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc80
-        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67
-        AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48I
-        cVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x8Erc
-        xFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230522031714.5089-1-linyunsheng@huawei.com> <1fc46094-a72a-f7e4-ef18-15edb0d56233@redhat.com>
+In-Reply-To: <1fc46094-a72a-f7e4-ef18-15edb0d56233@redhat.com>
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date:   Mon, 22 May 2023 14:45:17 +0300
+Message-ID: <CAC_iWjJaNuDFZuv1Rv4Yr5Kaj1Wq69txAoLGepvnJT=pY1gaRw@mail.gmail.com>
+Subject: Re: [PATCH net] page_pool: fix inconsistency for page_pool_ring_[un]lock()
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, brouer@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks Yunsheng
 
+On Mon, 22 May 2023 at 14:08, Jesper Dangaard Brouer <jbrouer@redhat.com> wrote:
+>
+>
+>
+> On 22/05/2023 05.17, Yunsheng Lin wrote:
+> > page_pool_ring_[un]lock() use in_softirq() to decide which
+> > spin lock variant to use, and when they are called in the
+> > context with in_softirq() being false, spin_lock_bh() is
+> > called in page_pool_ring_lock() while spin_unlock() is
+> > called in page_pool_ring_unlock(), because spin_lock_bh()
+> > has disabled the softirq in page_pool_ring_lock(), which
+> > causes inconsistency for spin lock pair calling.
+> >
+> > This patch fixes it by returning in_softirq state from
+> > page_pool_producer_lock(), and use it to decide which
+> > spin lock variant to use in page_pool_producer_unlock().
+> >
+> > As pool->ring has both producer and consumer lock, so
+> > rename it to page_pool_producer_[un]lock() to reflect
+> > the actual usage. Also move them to page_pool.c as they
+> > are only used there, and remove the 'inline' as the
+> > compiler may have better idea to do inlining or not.
+> >
+> > Fixes: 7886244736a4 ("net: page_pool: Add bulk support for ptr_ring")
+> > Signed-off-by: Yunsheng Lin<linyunsheng@huawei.com>
+>
+> Thanks for spotting and fixing this! :-)
+>
+> Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>
 
-在 2023/5/22 下午6:34, Mark Brown 写道:
-> On Mon, May 22, 2023 at 03:10:28PM +0800, Yinbo Zhu wrote:
->> Loongson platform support spi hardware controller and this series patch
->> was to add spi driver and binding support.
-> 
-> To repeat what I previously asked you *please* send patches against my
-> current tree, this doesn't even apply cleanly against Linus' tree never
-> mind any of the branches in mine.
-
-Hi Mark,
-
-I was base on following tree and branch to apply my patch then to send
-it to upstrem:
-tree: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
-branch: for-next
-
-The recently patch was as follows, It seems no issue for patch apply
-them, Maybe it is the 0/2 patch issue ? this 0/2 patch wasn't a valid
-patch and it need was skipped.
-
-8f7b91d47211 spi: loongson: add bus driver for the loongson spi
-controller
-193a72146430 dt-bindings: spi: add loongson spi
-b1f4091a9eff (spi/for-next) Merge remote-tracking branch 'spi/for-6.5'
-into spi-next
-120e1aa2f2e6 (spi/for-6.5) spi: hisi-kunpeng: Fix error checking
-f2156989bf30 spi: cdns: Add compatible for AMD Pensando Elba SoC
-
-
-Thanks,
-Yinbo.
-
-
-> 
-
+Acked-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
