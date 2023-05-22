@@ -2,158 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EABA70C113
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CB970C115
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbjEVO20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        id S231539AbjEVO3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjEVO2X (ORCPT
+        with ESMTP id S231600AbjEVO3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:28:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DD913E;
-        Mon, 22 May 2023 07:28:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12C8C62359;
-        Mon, 22 May 2023 14:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E9CFC433EF;
-        Mon, 22 May 2023 14:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684765685;
-        bh=J1/IrdcWLkyPO/HENBrgDzFFFs71R2+R5VBaU7rRM9U=;
-        h=From:Date:Subject:To:Cc:From;
-        b=KF17WYEVBG1tcznnRSlaW5QK124oz4pTFkFdaMmBAgj62LJjZdjfB47+YMuYut4yZ
-         aPpuZdFjK68PafqrZHnMukBsxZVNdL86XZ1b2QyoxH7ziuyUPtd8bpkh7gWBtMeJnu
-         b977/3yXxyzVUwq7EcGWkvUWLdvgINVo+VDUaynx5HXrdIRO+imsNGAO4KV78BJJQC
-         9i7oxbEsi/oS3IGk5/AXPV9F0JaFViIEG8F5IViIlUTG8TKVt0XLbO035N/6NCv++B
-         PzG6u/K616Wj4cQtXZd1xoM7yO0fLNDnDUGRX7BbAxOouBsJZNdcFmh4Srk+/mpF2r
-         Frf/XaOuOvwww==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 22 May 2023 15:28:00 +0100
-Subject: [PATCH v2] kselftest/arm64: Add a smoke test for ptracing hardware
- break/watch points
+        Mon, 22 May 2023 10:29:06 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5038799;
+        Mon, 22 May 2023 07:29:04 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QQ0Ch0Z4Nz686w8;
+        Mon, 22 May 2023 22:27:44 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 22 May
+ 2023 15:29:00 +0100
+Date:   Mon, 22 May 2023 15:28:59 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+CC:     <chengyou@linux.alibaba.com>, <kaishen@linux.alibaba.com>,
+        <helgaas@kernel.org>, <yangyicong@huawei.com>, <will@kernel.org>,
+        <baolin.wang@linux.alibaba.com>, <robin.murphy@arm.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <rdunlap@infradead.org>,
+        <mark.rutland@arm.com>, <zhuo.song@linux.alibaba.com>
+Subject: Re: [PATCH v5 0/4] drivers/perf: add Synopsys DesignWare PCIe PMU
+ driver support
+Message-ID: <20230522152859.0000429e@Huawei.com>
+In-Reply-To: <20230522035428.69441-1-xueshuai@linux.alibaba.com>
+References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
+        <20230522035428.69441-1-xueshuai@linux.alibaba.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-arm64-test-hw-breakpoint-v2-1-90a19e3b1059@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAO97a2QC/42OwQ6DIBBEf8VwLg0gtaan/kfjAekiG1swC9E2x
- n8v+gXNnN5MdmdWloAQErtVKyOYMWEMBdSpYtabMADHZ2GmhKqFlpobejeaZ0iZ+4X3BGacIob
- M29qBUK4RV2dZOe9NgpKbYP3+YIk07vZE4PBzND66wh5TjvQ9Bsxyd//omiUv0rJRtoVLX8v7C
- BTgdY40sG7bth+6PCGj2AAAAA==
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2753; i=broonie@kernel.org;
- h=from:subject:message-id; bh=J1/IrdcWLkyPO/HENBrgDzFFFs71R2+R5VBaU7rRM9U=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBka3vzFfRQQOtHZLtoreZcTzoW3LwlLIJ2FHm7fN8j
- erMz2g2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZGt78wAKCRAk1otyXVSH0DXrB/
- 9rU4BPp3+ytt/17GZ0OSOOTLSDO9w4H7SKTO3WdnA5BkhlnCljJoWMGKNJyTXfxStigGR7mAiXSVFH
- 25WVmTTfiYe4/pi81BxfyrHJw7kIlXhCqevs+gp/t9teaW2dDJYJB1LxS8Hp2EQeTL3QrErF+LuS0E
- teRDXnHATeK3R90t2HDyQelSt3vyBQrcmKXrEsXfSS179yLZWjKt01SYzxHdqgb66yGz4t6dcAxvJJ
- l3d2pNtbGwbh/3KeO1kNPE7p8pvhNFf+wpWyAkBUnPJZ5nuKZuvhDQuFbuCumNY6sLM4x5tOVeOeGJ
- RXqeJUoA1PGiP00IPE5NKRmR3CVDLS
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There was a report that the hardware breakpoints and watch points weren't
-reporting the debug architecture version as expected, they were reporting
-a version of 0 which is not defined in the architecture.  This happens
-when running in a KVM guest if the host has a debug architecture version
-not supported by KVM, it in turn confuses GDB which rejects any debug
-architecture version it does not know about.
+On Mon, 22 May 2023 11:54:24 +0800
+Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
-Add a test that covers that situation and while we're at it reports the
-debug architecture version and number of slots available to aid with
-figuring out problems that may arise.
+Hi,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
-Changes in v2:
-- Rebase onto v6.4-rc3.
-- Link to v1: https://lore.kernel.org/r/20230414-arm64-test-hw-breakpoint-v1-1-14162c8e5b31@kernel.org
----
- tools/testing/selftests/arm64/abi/ptrace.c | 32 +++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+Very rarely a good idea to send a new patch set version in reply to an old
+one. Tends to just resort in it being way off the top of people's most recent
+email (depending on client of course!)
 
-diff --git a/tools/testing/selftests/arm64/abi/ptrace.c b/tools/testing/selftests/arm64/abi/ptrace.c
-index be952511af22..abe4d58d731d 100644
---- a/tools/testing/selftests/arm64/abi/ptrace.c
-+++ b/tools/testing/selftests/arm64/abi/ptrace.c
-@@ -20,7 +20,7 @@
- 
- #include "../../kselftest.h"
- 
--#define EXPECTED_TESTS 7
-+#define EXPECTED_TESTS 11
- 
- #define MAX_TPIDRS 2
- 
-@@ -132,6 +132,34 @@ static void test_tpidr(pid_t child)
- 	}
- }
- 
-+static void test_hw_debug(pid_t child, int type, const char *type_name)
-+{
-+	struct user_hwdebug_state state;
-+	struct iovec iov;
-+	int slots, arch, ret;
-+
-+	iov.iov_len = sizeof(state);
-+	iov.iov_base = &state;
-+
-+	/* Should be able to read the values */
-+	ret = ptrace(PTRACE_GETREGSET, child, type, &iov);
-+	ksft_test_result(ret == 0, "read_%s\n", type_name);
-+
-+	if (ret == 0) {
-+		/* Low 8 bits is the number of slots, next 4 bits the arch */
-+		slots = state.dbg_info & 0xff;
-+		arch = (state.dbg_info >> 8) & 0xf;
-+
-+		ksft_print_msg("%s version %d with %d slots\n", type_name,
-+			       arch, slots);
-+
-+		/* Zero is not currently architecturally valid */
-+		ksft_test_result(arch, "%s_arch_set\n", type_name);
-+	} else {
-+		ksft_test_result_skip("%s_arch_set\n");
-+	}
-+}
-+
- static int do_child(void)
- {
- 	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
-@@ -207,6 +235,8 @@ static int do_parent(pid_t child)
- 	ksft_print_msg("Parent is %d, child is %d\n", getpid(), child);
- 
- 	test_tpidr(child);
-+	test_hw_debug(child, NT_ARM_HW_WATCH, "NT_ARM_HW_WATCH");
-+	test_hw_debug(child, NT_ARM_HW_BREAK, "NT_ARM_HW_BREAK");
- 
- 	ret = EXIT_SUCCESS;
- 
+Jonathan
 
----
-base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
-change-id: 20230414-arm64-test-hw-breakpoint-83fe02f607fc
-
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+> changes since v4:
+> 
+> 1. addressing commens from Bjorn Helgaas:
+> - reorder the includes by alpha
+> - change all macros with upper-case hex
+> - change ras_des type into u16
+> - remove unnecessary outer "()"
+> - minor format changes
+> 
+> 2. Address commensts from Jonathan Cameron:
+> - rewrite doc and add a example to show how to use lane event
+> 
+> 3. fix compile error reported by: kernel test robot
+> - remove COMPILE_TEST and add depend on PCI in kconfig
+> - add Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Changes since v3:
+> 
+> 1. addressing comments from Robin Murphy:
+> - add a prepare patch to define pci id in linux/pci_ids.h
+> - remove unnecessary 64BIT dependency
+> - fix DWC_PCIE_PER_EVENT_OFF/ON macro
+> - remove dwc_pcie_pmu struct and move all its fileds into dwc_pcie_rp_info
+> - remove unnecessary format field show
+> - use sysfs_emit() instead of all the assorted sprintf() and snprintf() calls.
+> - remove unnecessary spaces and remove unnecessary cast to follow event show convention
+> - remove pcie_pmu_event_attr_is_visible
+> - fix a refcout leak on error branch when walk pci device in for_each_pci_dev
+> - remove bdf field from dwc_pcie_rp_info and calculate it at runtime
+> - finish all the checks before allocating rp_info to avoid hanging wasted memory
+> - remove some unused fields
+> - warp out control register configuration from sub function to .add()
+> - make function return type with a proper signature
+> - fix lane event count enable by clear DWC_PCIE_CNT_ENABLE field first
+> - pass rp_info directly to the read_*_counter helpers and in start, stop and add callbacks
+> - move event type validtion into .event_init()
+> - use is_sampling_event() to be consistent with everything else of pmu drivers
+> - remove unnecessary dev_err message in .event_init()
+> - return EINVAL instead EOPNOTSUPP for not a valid event 
+> - finish all the checks before start modifying the event
+> - fix sibling event check by comparing event->pmu with sibling->pmu
+> - probe PMU for each rootport independently
+> - use .update() as .read() directly
+> - remove dynamically generating symbolic name of lane event
+> - redefine static symbolic name of lane event and leave lane filed to user
+> - add CPU hotplug support
+> 
+> 2. addressing comments from Baolin:
+> - add a mask to avoid possible overflow
+> 
+> Changes since v2 addressing comments from Baolin:
+> - remove redundant macro definitions
+> - use dev_err to print error message
+> - change pmu_is_register to boolean
+> - use PLATFORM_DEVID_NONE macro
+> - fix module author format
+> 
+> Changes since v1:
+> 
+> 1. address comments from Jonathan:
+> - drop marco for PMU name and VSEC version
+> - simplify code with PCI standard marco
+> - simplify code with FIELD_PREP()/FIELD_GET() to replace shift marco
+> - name register filed with single _ instead double
+> - wrap dwc_pcie_pmu_{write}_dword out and drop meaningless snaity check 
+> - check vendor id while matching vesc with pci_find_vsec_capability()
+> - remove RP_NUM_MAX and use a list to organize PMU devices for rootports
+> - replace DWC_PCIE_CREATE_BDF with standard PCI_DEVID
+> - comments on riping register together
+> 
+> 2. address comments from Bjorn:
+> - rename DWC_PCIE_VSEC_ID to DWC_PCIE_VSEC_RAS_DES_ID
+> - rename cap_pos to ras_des
+> - simplify declare of device_attribute with DEVICE_ATTR_RO
+> - simplify code with PCI standard macro and API like pcie_get_width_cap()
+> - fix some code style problem and typo
+> - drop meaningless snaity check of container_of
+> 
+> 3. address comments from Yicong:
+> - use sysfs_emit() to replace sprintf()
+> - simplify iteration of pci device with for_each_pci_dev
+> - pick preferred CPUs on a near die and add comments
+> - unregister PMU drivers only for failed ones
+> - log on behalf PMU device and give more hint
+> - fix some code style problem
+> 
+> (Thanks for all comments and they are very valuable to me)
+> 
+> This patchset adds the PCIe Performance Monitoring Unit (PMU) driver support
+> for T-Head Yitian 710 SoC chip. Yitian 710 is based on the Synopsys PCI Express
+> Core controller IP which provides statistics feature.
+> 
+> Shuai Xue (4):
+>   docs: perf: Add description for Synopsys DesignWare PCIe PMU driver
+>   PCI: move Alibaba Vendor ID linux/pci_ids.h
+>   drivers/perf: add DesignWare PCIe PMU driver
+>   MAINTAINERS: add maintainers for DesignWare PCIe PMU driver
+> 
+>  .../admin-guide/perf/dwc_pcie_pmu.rst         |  97 +++
+>  Documentation/admin-guide/perf/index.rst      |   1 +
+>  MAINTAINERS                                   |   6 +
+>  drivers/infiniband/hw/erdma/erdma_hw.h        |   2 -
+>  drivers/perf/Kconfig                          |   7 +
+>  drivers/perf/Makefile                         |   1 +
+>  drivers/perf/dwc_pcie_pmu.c                   | 701 ++++++++++++++++++
+>  include/linux/pci_ids.h                       |   2 +
+>  8 files changed, 815 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/admin-guide/perf/dwc_pcie_pmu.rst
+>  create mode 100644 drivers/perf/dwc_pcie_pmu.c
+> 
 
