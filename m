@@ -2,180 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB63870B5D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D90770B5DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjEVHFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S232087AbjEVHGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjEVHFV (ORCPT
+        with ESMTP id S232287AbjEVHGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:05:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4C61FEF;
-        Mon, 22 May 2023 00:02:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6A1361197;
-        Mon, 22 May 2023 07:02:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A79C433EF;
-        Mon, 22 May 2023 07:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684738938;
-        bh=c4gWqr9ur4of/a8IC06iYHE7k0Seduk+Q9U0csTEnpE=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=CDrbZwdhAf88j9UkLMmkDgcaPt//jDinfRmwjncBfzJMJ+kHL005fLuLGd6rBqEkw
-         kbHokEnu3u1GdDnkLzmDhpxEd/TVL3hiWSoZzjrS/I45qGySLF0xMJEXWLiMYDxrZs
-         ERkJ0gDAK3RtCEjYOzHK1Qr9XEtkC8g5vpHR0AX9RnMFhx3dCdl6z3AcarqMXhY6TX
-         9cq2x0c7WHJqJkr5t5CDZhZkvroPfJAL5cbVFtUuZ2jqqj6YBPSeiIj2N+Z1TAUOOH
-         59kCOrU/jIp+mXj6nAZK8AlY8M3426500PEb52Xbiaym0QCFV5DmDe2NmjXLyVYX9H
-         jZ/b4mthmEejw==
-Message-ID: <68953040-1622-254b-f6f8-b279eccacfb1@kernel.org>
-Date:   Mon, 22 May 2023 16:02:16 +0900
+        Mon, 22 May 2023 03:06:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F732698;
+        Mon, 22 May 2023 00:02:54 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M5u1n7020749;
+        Mon, 22 May 2023 07:02:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=72qg8PTgfaStonrGFU93wDu5peymBU0a+rgvFqPO01w=;
+ b=kGimFEvKsvAp85h7N1bufQQ5rQat24hn85chXSweQjGOAdNCB5JxhFISGoox29NqofVM
+ L+sugRYehHzUB9Q9p+35UOHbpAVI7tAnag8JrfQm9ieD0yUWkBatfiOrD/OTCJnYVsCu
+ 7JM0APglh7o1l2OFsS/nRB37pJuyD8FjPDEKNuWpFOSWge9aewxU1kMIlxkim+oV6d2g
+ wOcXX2JlaAR0XNXmRbU6i8mh/0l7OPyVBDkZLWCwjhMdJSvSn4om6/2JkqXIdyj2wNl4
+ Iu9/AeMwr1ARuXg/BJNbo0+K1Ub96oQGcD5r1h0u7rDn1k9/clEUmpkoueqGWnJme6Xo KQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmu273-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 07:02:24 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34M72Ne1020682
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 07:02:23 GMT
+Received: from [10.214.67.128] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
+ 2023 00:02:19 -0700
+Message-ID: <fb8f0d17-555d-d74f-8fe0-1e5da8b3feb9@quicinc.com>
+Date:   Mon, 22 May 2023 12:32:16 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/4] arm: dts: qcom: qdu1000: Add SDHCI node
 Content-Language: en-US
-From:   Damien Le Moal <dlemoal@kernel.org>
-To:     yangxingui <yangxingui@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, john.g.garry@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, prime.zeng@hisilicon.com,
-        kangfenglong@huawei.com
-References: <20230505025712.19438-1-yangxingui@huawei.com>
- <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
- <02d36ee9-cdad-454d-d822-95442d7bd67b@huawei.com>
- <f4ba7a92-1f00-c254-d196-7d21fe14dee2@kernel.org>
- <938d6b5b-0271-977d-f046-5fd70d29b3ca@huawei.com>
- <a5c2e157-aaf7-1300-3fbb-1300ac216cee@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <a5c2e157-aaf7-1300-3fbb-1300ac216cee@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+CC:     <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <20230519085122.15758-1-quic_kbajaj@quicinc.com>
+ <20230519085122.15758-3-quic_kbajaj@quicinc.com>
+ <d606960d-8e0a-611b-579c-c49b5b970462@linaro.org>
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+In-Reply-To: <d606960d-8e0a-611b-579c-c49b5b970462@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: FNU-zoXa3NGNzW639p62aNK8o50TKvmP
+X-Proofpoint-ORIG-GUID: FNU-zoXa3NGNzW639p62aNK8o50TKvmP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220059
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 10:35, Damien Le Moal wrote:
-> On 5/8/23 10:11, yangxingui wrote:
+
+
+On 5/20/2023 4:53 PM, Konrad Dybcio wrote:
+>
+> On 19.05.2023 10:51, Komal Bajaj wrote:
+>> Add sdhc node for eMMC on QDU1000 and QRU1000 SoCs.
 >>
+>> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/qdu1000.dtsi | 60 +++++++++++++++++++++++++++
+>>   1 file changed, 60 insertions(+)
 >>
->> On 2023/5/7 22:51, Damien Le Moal wrote:
->>> On 2023/05/05 18:06, yangxingui wrote:
->>>>
->>>>
->>>> On 2023/5/5 16:17, Damien Le Moal wrote:
->>>>> On 2023/05/05 11:57, Xingui Yang wrote:
->>>>>> The function ata_get_identity() uses the helper ata_scsi_find_dev() to get
->>>>>> the ata_device structure of a scsi device. However, when the ata device is
->>>>>> managed by libsas, ata_scsi_find_dev() returns NULL, turning
->>>>>> ata_get_identity() into a nop and always returns -ENOMSG.
->>>>>
->>>>> What do you do to hit the issue ? A while back for me it was the queue depth
->>>>> setting causing problems. As Garry mentioned, this led to patch 141f3d6256e5
->>>>> ("ata: libata-sata: Fix device queue depth control").
->>>> Attempt to return the correct value at ata_scsi_find_dev() instead of
->>>> NULL, when the ata device is managed by libsas?
->>>
->>> That I understand. My question is *what* user operation/command triggers this ?
->>> Because on my test setup, under normal use, I do not see this issue (beside what
->>> was already corrected with the queue depth control). Is the issue showing up
->>> when using passthrough commands only ?
->> Yeah, we found that command "hdparm -i /dev/sdc" always return faild for 
->> SATA HDD disk. as follows:
->> [root@localhost ~]# hdparm -i /dev/sdc
+>> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+>> index 734438113bba..6113def66a08 100644
+>> --- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+>> @@ -19,6 +19,10 @@
 >>
->> /dev/sdc:
->>   HDIO_GET_IDENTITY failed: Invalid argument
-> 
-> I cannot recreate this issue exactly like this. Here is my setup with a pm80xx
-> driver (Adaptec HBA):
-> 
-> [7:0:0:0]    disk    ATA      WDC  WUH721818AL W232  /dev/sdd   /dev/sg5
-> [7:0:1:0]    disk    ATA      WDC  WUH721818AL WTW2  /dev/sdi   /dev/sg6
-> [7:0:2:0]    disk    ATA      WDC  WUH722222AL Wf86  /dev/sdf   /dev/sg7
-> [7:0:3:0]    zbc     ATA      WDC  WSH722020AL W803  /dev/sdg   /dev/sg8
-> 
-> Using the first drive, I get:
-> 
-> sudo hdparm -i /dev/sdd
-> 
-> /dev/sdd:
-> 
->  Model=WDC  WUH721818ALN604, FwRev=PCGNW232, SerialNo=3KG10LBK
->  Config={ HardSect NotMFM HdSw>15uSec Fixed DTR>10Mbs }
->  RawCHS=16383/16/63, TrkSize=0, SectSize=0, ECCbytes=56
->  BuffType=DualPortCache, BuffSize=unknown, MaxMultSect=2, MultSect=off
->  CurCHS=16383/16/63, CurSects=16514064, LBA=yes, LBAsects=4394582016
->  IORDY=on/off, tPIO={min:120,w/IORDY:120}, tDMA={min:120,rec:120}
->  PIO modes:  pio0 pio1 pio2 pio3 pio4
->  DMA modes:  mdma0 mdma1 mdma2
->  UDMA modes: udma0 udma1 udma2 udma3 udma4 udma5 *udma6
->  AdvancedPM=yes: disabled (255) WriteCache=enabled
->  Drive conforms to: unknown:  ATA/ATAPI-2,3,4,5,6,7
-> 
->  * signifies the current active mode
-> 
-> So all good. However, for the following drives, I get:
-> 
-> sudo hdparm -i /dev/sdi
-> 
-> /dev/sdi:
->  HDIO_GET_IDENTITY failed: No message of desired type
-> 
-> (same for sdf and sdg).
-> 
-> Will dig into this.
+>>   	chosen: chosen { };
+>>
+>> +	aliases {
+>> +		mmc0 = &sdhc_1; /*SDC1 eMMC slot*/
+>> +	};
+>> +
+>>   	cpus {
+>>   		#address-cells = <2>;
+>>   		#size-cells = <0>;
+>> @@ -842,6 +846,62 @@
+>>   			#hwlock-cells = <1>;
+>>   		};
+>>
+>> +		sdhc_1: mmc@8804000 {
+>> +			compatible = "qcom,qdu1000-sdhci", "qcom,sdhci-msm-v5";
+>> +			reg = <0x0 0x08804000 0x0 0x1000>,
+>> +			      <0x0 0x08805000 0x0 0x1000>;
+>> +
+> confusing newline
+Will remove it in the next patch set.
+>> +			reg-names = "hc", "cqhci";
+>> +
+>> +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-names = "hc_irq", "pwr_irq";
+>> +
+>> +			clocks = <&gcc GCC_SDCC5_AHB_CLK>,
+>> +				 <&gcc GCC_SDCC5_APPS_CLK>,
+> SDCC>5<?
+These names are used in accordance with the clock hardware.
+>
+>> +				 <&rpmhcc RPMH_CXO_CLK>;
+>> +			clock-names = "iface", "core", "xo";
+> Please keep one per line
+Noted.
+>
+>> +
+>> +			/* Add dt entry for gcc hw reset */
+>> +			resets = <&gcc GCC_SDCC5_BCR>;
+> 5?
+Reason same as above.
+>
+>> +
+>> +			interconnects = <&system_noc MASTER_SDCC_1 0 &mc_virt SLAVE_EBI1 0>,
+>> +					<&gem_noc MASTER_APPSS_PROC 0 &system_noc SLAVE_SDCC_2 0>;
+>> +			interconnect-names = "sdhc-ddr", "cpu-sdhc";
+>> +			power-domains = <&rpmhpd QDU1000_CX>;
+>> +			operating-points-v2 = <&sdhc1_opp_table>;
+>> +
+>> +			iommus = <&apps_smmu 0x0080 0x0>;
+> Please remove the leading zeroes from the stream id
+Sure, will do so.
+>
+>
+>> +			dma-coherent;
+>> +
+>> +			bus-width = <8>;
+>
+> ----
+>> +			non-removable;
+>> +			supports-cqe;
+>> +
+>> +			no-sd;
+>> +			no-sdio;
+>> +
+>> +			mmc-ddr-1_8v;
+>> +			mmc-hs200-1_8v;
+>> +			mmc-hs400-1_8v;
+>> +			mmc-hs400-enhanced-strobe;
+>> +			cap-mmc-hw-reset;
+> ----
+> This bit is board-specific
+Okay, will move these bits to board specific file.
+>
+>> +
+>> +			qcom,dll-config = <0x0007642c>;
+>> +			qcom,ddr-config = <0x80040868>;
+>> +
+>> +			status = "disabled";
+>> +
+>> +			sdhc1_opp_table: opp-table {
+>> +				compatible = "operating-points-v2";
+>> +
+>> +				opp-384000000 {
+>> +					opp-hz = /bits/ 64 <384000000>;
+>> +					required-opps = <&rpmhpd_opp_min_svs>;
+> You added interconnects, but not any opp-peak-kBps / opp-avg-kBps,
+> presumably mistakengly?
+>
+> Also, 384Mhz + min_svs sounds a bit weird? Is that the correct
+> level for this SoC?
+Yes, you are right, this is wrong configuration, will correct it in the 
+next patch set.
 
-OK, so the issue is that __ata_scsi_find_dev() calls ata_find_dev() with devno
-== scsidev->id. This leads to devno being 0, 1, 2 and 3 for connected drives
-sdd, sd1, sdf and sdg, as shown by lsscsi. However, each drive has its own
-port+link, with the link for each one having  ata_link_max_devices() == 1, so
-ata_find_dev() works only for the first drive with scsidev->id == 0 and fails
-for the others. A naive fix would be this:
-
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 7bb12deab70c..e4d6f17d7ccc 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -2718,7 +2718,7 @@ static struct ata_device *__ata_scsi_find_dev(struct
-ata_port *ap,
-        if (!sata_pmp_attached(ap)) {
-                if (unlikely(scsidev->channel || scsidev->lun))
-                        return NULL;
--               devno = scsidev->id;
-+               devno = 0;
-        } else {
-                if (unlikely(scsidev->id || scsidev->lun))
-                        return NULL;
-
-And running this on my setup, it works. This makes libsas added ports/devices
-look like AHCI ones, where all devices have ID 0 for the !pmp case.
-
-However, I am not sure this would be OK for all setups...
-
-John,
-
-Any idea if there is any cases where libsas managed drives would endup not being
-correctly identified by this change ? As long as a device always has its own
-port, I do not see any issue. But is there a case where we could have multiple
-devices on the same port ? Per libata, max is 2, and that is only for the IDE
-master/slave case. Otherwise, it is always 1.
-
-Not that looking at the pmp case, I am not confident at all that the
-identification is correct for libsas. But I do not think that anyone would ever
-connect a pmp box to a libsas HBA...
-
--- 
-Damien Le Moal
-Western Digital Research
+Thanks
+Komal
+>
+> Konrad
+>> +				};
+>> +			};
+>> +		};
+>> +
+>>   		pdc: interrupt-controller@b220000 {
+>>   			compatible = "qcom,qdu1000-pdc", "qcom,pdc";
+>>   			reg = <0x0 0xb220000 0x0 0x30000>, <0x0 0x174000f0 0x0 0x64>;
+>> --
+>> 2.17.1
+>>
 
