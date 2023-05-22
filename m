@@ -2,113 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EDE70BB97
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D5670BB9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjEVLUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S233206AbjEVLVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbjEVLTw (ORCPT
+        with ESMTP id S233148AbjEVLU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:19:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495B030EE
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684753997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kd+PsvNileg5XRg62rxcYULjvxE2s9HN/H5lXiFohgM=;
-        b=ZldgP6g1wMg9ZwUuT0LFCDkYESJO3o/KRPCubhQuBeTXIOeVnC7XA6v/cJVR6RyDBMdCjM
-        tqUxwbBQRoarQB4oxE5I3UL5jI3/HpJK7EP0NM/7+2FEn5+tLH2b5GQROC4sSFKkRTxl/V
-        wA+T+lamGN8Zjiah/JSOJ+FP70H9CGg=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-56-fH3_xup-PK2y2WIktY1xcw-1; Mon, 22 May 2023 07:13:15 -0400
-X-MC-Unique: fH3_xup-PK2y2WIktY1xcw-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4f24f491835so235741e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:13:15 -0700 (PDT)
+        Mon, 22 May 2023 07:20:58 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3CA1FDF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:15:42 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-43943447fb9so313075137.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684754137; x=1687346137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xe0uEO9ZtluN485cWnZvS1/i70J+fGRHfkqfDe56RAs=;
+        b=VAN8pSDcruxO3TxbsEjJxCCU9DaxhV1ODx1tbBvoCR8pWaxFjwrap1aoWS8Bb1oSng
+         yAxK/nO3U73XAY8u03fb83C6e/y2+Ada5RLoaHNfj1977odITVBTAxmMkaDxMjNtz5Vj
+         7g0jJ7iDUv1adCciCx8bUlEHfEKmbl4IT2nyeSavn8dasN6wUxWTC1ohrMkfIlWsbAfv
+         7Gj9ods0vS0F4qD3TqVwqc79gUKrCi/Aiano9NPGqkfu1RROxmoEmuutn3PsO5RCQb5q
+         +cRRSbSTHoJurdPyjk7SzDiiskfOE4GH4/9bg/f58aW1ZvMUAzGao0SaQCOepauc7ryU
+         AguA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753994; x=1687345994;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kd+PsvNileg5XRg62rxcYULjvxE2s9HN/H5lXiFohgM=;
-        b=TwaOxQ6eAYoWcswT2J1eXGDVN4eNR/VSktCPBBkXg2UqvFSLmdCfkh5dlUDO0nKIm7
-         CnEdKEKuYBoHv1hyyqLMLghJUuWiuN8Ry7YUgchHXq6TPDLv0akSuAojsda8zc+nqwpg
-         7ZidZx2FCDMJlLwkjhiY/WmjpqgK5XRHfxOOQ3QdCEIJvVhVKY35qqCDLBhu+3NgVMF+
-         4aSn7D/m4HajI4QZrdY1G6Vreiik9jOZfg3+lAkYQRol51uZHQOeGXiwsM9BC6As3bXh
-         4tXVBA1PO8be21vMvl84rALlOR+lz/m9YnMs4f1iyrW9bUeq7JNd5toL+UZQk6AyJ17O
-         iODw==
-X-Gm-Message-State: AC+VfDxgW69w/srtC23+4L69R0bTrpW3QbS9i9xQ8S0LZ0brgzdvEzTn
-        JjJgSZpt6zRv7tlyw4WWmYaGchovpeF/8RQ0kZlw5jO0gAo6qmgD0TV9pgUO3qLgnpzbUNMuh7A
-        ZlmxRMsm3vA93lq9c1faKDPMKIf3d+rlJtbOmVEOH
-X-Received: by 2002:a2e:a37a:0:b0:2af:150f:d421 with SMTP id i26-20020a2ea37a000000b002af150fd421mr3749244ljn.5.1684753994431;
-        Mon, 22 May 2023 04:13:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4+vYH0Nc1ESK4QTZEtrWsGcanm7ymTNCOr4z8IJm7Iru4aBRqsqfYh/jPAqeDcjuMGqcwQ1DLogJOpk7PIIHY=
-X-Received: by 2002:a2e:a37a:0:b0:2af:150f:d421 with SMTP id
- i26-20020a2ea37a000000b002af150fd421mr3749226ljn.5.1684753994119; Mon, 22 May
- 2023 04:13:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684754137; x=1687346137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xe0uEO9ZtluN485cWnZvS1/i70J+fGRHfkqfDe56RAs=;
+        b=Zw0NcI+I6cxZENGun7XBNZbnyEMxRSYlDdjGgl2/nRi8O4wrOwbrRMsmryshApywJK
+         z4n1nfU6akQs313r6DfS5U7FmYj6Bf3XPzHVjjhL7OpxLXMSW0slECAF9D/ik8PVDyM9
+         KaH2Jxho8IhvRYKHackKBa6bWO95YGcmv3zv4Hwl+Njf0QEBg8T/QiqQzvzdXaKohied
+         cUWdxu/p1zIQ1ZnOeSkWDND5fLGcKiQLFulldKdQw9PV91VSzU2p5fHkIb+Jomn7tW3Z
+         UjUgS+GvLgka9wMB4H2fvdITlz3Fp6g3S0J9PxJ1hFlKHGoH4tF+RcpWq2JytWrxFfk3
+         w8zg==
+X-Gm-Message-State: AC+VfDxFaqQJ23mgHiQFStmuSxBPpoQVLemxTTZq25CXXG8X5ZHGmdy8
+        lCr80+mDcINf8WUlDdCP/4PoFg==
+X-Google-Smtp-Source: ACHHUZ7xXsCl+lvUt4i9xuTKPrjGekCgXQFO7IApujxds8gKvzk98JPWki37KC4E4nR5EYbORQB3rA==
+X-Received: by 2002:a67:fbda:0:b0:436:158:cf6c with SMTP id o26-20020a67fbda000000b004360158cf6cmr2473206vsr.6.1684754136793;
+        Mon, 22 May 2023 04:15:36 -0700 (PDT)
+Received: from fedora (072-189-067-006.res.spectrum.com. [72.189.67.6])
+        by smtp.gmail.com with ESMTPSA id v24-20020ab05598000000b006904fa86e7csm1178322uaa.2.2023.05.22.04.15.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 04:15:36 -0700 (PDT)
+Date:   Mon, 22 May 2023 07:15:33 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-iio@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v4 05/41] counter: add HAS_IOPORT dependencies
+Message-ID: <ZGtO1U7Wx7MVi0DL@fedora>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-6-schnelle@linux.ibm.com>
+ <ZGbQYzXK8InMqkxu@fedora>
+ <6f4d672ba7136f2b01ea9ee69687b16168eddb8d.camel@linux.ibm.com>
+ <231dcebc57c2e43ba65d007b60d3d446d9ed71c8.camel@linux.ibm.com>
+ <abc02dc2af7563ae26bf0d0ddd927d9b4a21dda3.camel@linux.ibm.com>
+ <ZGeF1K0Yxu9lTgN2@fedora>
+ <cb6aa00b1901abb572e69e218a5500f2cd1561ce.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230517133112.873856-1-trix@redhat.com>
-In-Reply-To: <20230517133112.873856-1-trix@redhat.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Mon, 22 May 2023 13:13:02 +0200
-Message-ID: <CACO55tvx_45D6Jnj_HhL0H9DQ-=PezGqucDQ-=-6JD9s_aAZMg@mail.gmail.com>
-Subject: Re: [PATCH] drm/nouveau/acr/ga102: set variable ga102_gsps
- storage-class-specifier to static
-To:     Tom Rix <trix@redhat.com>
-Cc:     bskeggs@redhat.com, lyude@redhat.com, airlied@gmail.com,
-        daniel@ffwll.ch, gsamaiya@nvidia.com,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lvesmdynfJhc3cAo"
+Content-Disposition: inline
+In-Reply-To: <cb6aa00b1901abb572e69e218a5500f2cd1561ce.camel@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
 
-On Wed, May 17, 2023 at 3:31=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
->
-> smatch reports
-> drivers/gpu/drm/nouveau/nvkm/subdev/gsp/ga102.c:49:1: warning: symbol
->   'ga102_gsps' was not declared. Should it be static?
->
-> This variable is only used in its defining file, so it should be static
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/nouveau/nvkm/subdev/gsp/ga102.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/gsp/ga102.c b/drivers/gp=
-u/drm/nouveau/nvkm/subdev/gsp/ga102.c
-> index 525267412c3e..a3996ceca995 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/gsp/ga102.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/gsp/ga102.c
-> @@ -45,7 +45,7 @@ ga102_gsp_nofw(struct nvkm_gsp *gsp, int ver, const str=
-uct nvkm_gsp_fwif *fwif)
->         return 0;
->  }
->
-> -struct nvkm_gsp_fwif
-> +static struct nvkm_gsp_fwif
->  ga102_gsps[] =3D {
->         { -1, ga102_gsp_nofw, &ga102_gsp },
->         {}
-> --
-> 2.27.0
->
+--lvesmdynfJhc3cAo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 22, 2023 at 12:42:15PM +0200, Niklas Schnelle wrote:
+> On Fri, 2023-05-19 at 10:21 -0400, William Breathitt Gray wrote:
+> > On Fri, May 19, 2023 at 03:39:57PM +0200, Niklas Schnelle wrote:
+> > > On Fri, 2023-05-19 at 15:38 +0200, Niklas Schnelle wrote:
+> > > > On Fri, 2023-05-19 at 15:17 +0200, Niklas Schnelle wrote:
+> > > > > On Thu, 2023-05-18 at 21:26 -0400, William Breathitt Gray wrote:
+> > > > > > On Tue, May 16, 2023 at 01:00:01PM +0200, Niklas Schnelle wrote:
+> > > > > > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() =
+and friends
+> > > > > > > not being declared. We thus need to add HAS_IOPORT as depende=
+ncy for
+> > > > > > > those drivers using them.
+> > > > > > >=20
+> > > > > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > > > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > > > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > > > >=20
+> > > > > > Hi Niklas,
+> > > > > >=20
+> > > > > > The change itself is fine, but please update the description to=
+ reflect
+> > > > > > that this is adding a depends on HAS_IOPORT_MAP rather than HAS=
+_IOPORT,
+> > > > > > along with the reason why it's needed (i.e. devm_ioport_map() i=
+s used).
+> > > > > >=20
+> > > > > > Thanks,
+> > > > > >=20
+> > > > > > William Breathitt Gray
+> > > > > >=20
+> > > > > >=20
+> > > > >=20
+> > > > > Right, this clearly needs adjustment. I went with the following c=
+ommit
+> > > > > message for v5:
+> > > > >=20
+> > > > > "counter: add HAS_IOPORT_MAP dependency
+> > > > >=20
+> > > > > The 104_QUAD_8 counter driver uses devm_ioport_map() without depe=
+nding
+> > > > > on HAS_IOPORT_MAP. This causes compilation to fail on platforms s=
+uch as
+> > > > > s390 which do not support I/O port mapping. Add the missing
+> > > > > HAS_IOPORT_MAP dependency to fix this."
+> > > > >=20
+> > > >=20
+> > > > Just noticed this isn't entirely correct. As devm_ioport_map() has =
+an
+> > > > empty stub for HAS_IOPORT_MAP=3Dn this doesn't lead to a compile er=
+ror it
+> > > > just doesn't work. Will reword to "This causes the driver to not be
+> > > > useable on platforms ..."
+> > >=20
+> > > s/useable/usable/
+> >=20
+> > 104_QUAD_8 has an explicit dependency on PC104 and X86, so I don't think
+> > it would ever be used outside of x86 platforms. Does it still make sense
+> > to have the HAS_IOPORT_MAP dependency in this case?
+> >=20
+> > William Breathitt Gray
+>=20
+> Well, yes and no, you're right that it doesn't really cause compile
+> issues despite the "|| COMPILE_TEST" albeit the code could never work.
+> Still, I'd add the dependency. At the very least it serves as
+> documentation and maybe in the future someone will want to remove those
+> empty stubs for HAS_IOPORT_MAP=3Dn.
+>=20
+> Thanks
+> Niklas
+
+Sure, that reasoning makes sense to me too, so let's go with the
+explicit depends afterall.
+
+By the way, I noticed two other modules that call devm_ioport_map() but
+seem to be missing the HAS_IOPORT_MAP depends lines: the
+drivers/iio/addac/stx104.c and drivers/iio/dac/cio-dac.c drivers. Do
+these need respective patches as well?
+
+As an aside, I haven't been following the previous patchsets closely so
+forgive me if this has already been discussed in another thread: why
+doesn't X86 automatically select HAS_IOPORT? Are there x86 platforms
+that do not support ioport?
+
+William Breathitt Gray
+
+--lvesmdynfJhc3cAo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZGtO1QAKCRC1SFbKvhIj
+K51mAPwIdOqB4viwJHoa872UFoQps4r86WdliN/6XVH9/iKGMQD+K/cgzOH47iLy
+u51o+Y6RoIoavHfWY39mUSbtEm9KngQ=
+=L71k
+-----END PGP SIGNATURE-----
+
+--lvesmdynfJhc3cAo--
