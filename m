@@ -2,146 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0BF70C5A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A81A70C5A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjEVTB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
+        id S233652AbjEVTCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbjEVTBT (ORCPT
+        with ESMTP id S229620AbjEVTCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:01:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB07DB
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684782035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rEdSZfvbZO+EhCCmXRIUmzTZEn//g4Gjj2xDSD4w9qo=;
-        b=G09VcZ7/argKED23E3Io4MJUhWiX8vk3EB1tlgk1CsT0aDUlgYXVYAoi3IRYsz68fG7uU+
-        o4i4MKKPI6Cc4iqmC3AazNJAVaLzcdlQXg2nzW/UYJYQI1H+az8j5dQzjeIUkLSxcWmM8/
-        DlKtlRLR0kZnoNUY2T6oZd6tvqLdd+s=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-313-W949FHKUOymPEmttl6BYqQ-1; Mon, 22 May 2023 15:00:33 -0400
-X-MC-Unique: W949FHKUOymPEmttl6BYqQ-1
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33868d4a686so36750205ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:00:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684782032; x=1687374032;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rEdSZfvbZO+EhCCmXRIUmzTZEn//g4Gjj2xDSD4w9qo=;
-        b=KL6UK98CDiMlTE4cUpTf3vfCVMzME31fNNTlqvxKYRs3aXf1VPaJgSLekDrZCxisyR
-         4IxrbAWHDOcLypiAsh5cLGDHY60TAk4mJITORFMhYQNQwvJeG7Jv1tfBmDUEY+7xVjzv
-         4ZRbVs4SzHiF4ZNXnhM8wSbh4vRKG5T6m9bYE9UF4duPthcFPJVQ8NJm1n+2kOmS70Xj
-         NNC9+WEwrgIi1hqHs2oby2bMs4F8Xjw2mMCFnnJ379isLHZQKZgRQRrlAPPBBlq2oPGD
-         hYNFhv8l1aWujYpGRdG1WpKzEpWxi15pdBqxiMzXlBNnfXB1FmD0O5zDjJm8ugooaya7
-         F6ag==
-X-Gm-Message-State: AC+VfDxrC00cqaNReJYjFCJtecuEyIsA8FTpg7mCcIlJPB+ebBu7VP51
-        pYCEkivKf77+VbIDVy6bybPZKxwxwayCOuQojhGTtZTEPUYmqPXBJRoG8n75U4J0aPpzfY0doFI
-        wuw2l981J9aBob8fkKwFw0GSgx7h7hLw1
-X-Received: by 2002:a92:c70e:0:b0:335:38b:e734 with SMTP id a14-20020a92c70e000000b00335038be734mr6587202ilp.28.1684782032347;
-        Mon, 22 May 2023 12:00:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7YQ+ECS6de+PurjamzC27suSNV0n/CZhf01g4wobY35E8M9AaSfoteJFN3ptWeCzMGLKW7/A==
-X-Received: by 2002:a92:c70e:0:b0:335:38b:e734 with SMTP id a14-20020a92c70e000000b00335038be734mr6587179ilp.28.1684782032004;
-        Mon, 22 May 2023 12:00:32 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id do16-20020a0566384c9000b0041abd81975bsm1882825jab.153.2023.05.22.12.00.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 12:00:31 -0700 (PDT)
-Date:   Mon, 22 May 2023 13:00:30 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kevin.tian@intel.com, jgg@nvidia.com,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v2] vfio/type1: check pfn valid before converting to
- struct page
-Message-ID: <20230522130030.44c6c5c2.alex.williamson@redhat.com>
-In-Reply-To: <20230519065843.10653-1-yan.y.zhao@intel.com>
-References: <20230519065843.10653-1-yan.y.zhao@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Mon, 22 May 2023 15:02:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4E5B0;
+        Mon, 22 May 2023 12:02:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A91D7626C8;
+        Mon, 22 May 2023 19:02:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08262C433EF;
+        Mon, 22 May 2023 19:02:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684782166;
+        bh=ZMwvqTd1EAdihRUe1av1l8Jc4m/dK/xO7RTvtggqCuk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ImfZbSaphIr/rDzMYg127hHzfmG+Av0aZkNXJjwWElRtkOCN0gNPbE1hnz1nv+rBS
+         bPX4BWxzI2XwqkgA4UbE9lQbazaNYBJ6xKwY74486AgcnEmxrrBA9a3wtpg4u0zdpI
+         akiB1M04RCLON3Lk0R2oSEs/BpQJFMeXxYtKItFHCvW0RZ/78pwji6HE+E4P6Bs73b
+         9J4o+zT2RwSKEop/sHjIl2PvKckiac9j2t9EXQ85I5kW0bNOLkZHAUI+jBbxVlpQQ/
+         k1jAdJqqddIfCcudQTcILC23PbuzaBfXKKkv37J/roFrMdtVc6YbzRfYARjYsMsP0X
+         URdd0FqOLxUUQ==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2af278ca45eso41376841fa.1;
+        Mon, 22 May 2023 12:02:45 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyfO8aLQffhGYXJV4H0SRNbxGSwO8m4GuZal7Q/WKTYKhybj1Gw
+        YukOROrSk/yysLg8qM2UbuxcSb4LshrmSf3BkMY=
+X-Google-Smtp-Source: ACHHUZ75BnwCyfdglkOYfRxt2j7pnMhpg1HF7UnmkDf/SfeVyz2PnLijgC5SCZy2mecejUxBCcxDO3qe8+5zzTbJ0wM=
+X-Received: by 2002:a2e:96d2:0:b0:2ad:ce08:7a2b with SMTP id
+ d18-20020a2e96d2000000b002adce087a2bmr4181484ljj.22.1684782163879; Mon, 22
+ May 2023 12:02:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230522133225.2983667-1-yukuai1@huaweicloud.com>
+In-Reply-To: <20230522133225.2983667-1-yukuai1@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 22 May 2023 12:02:31 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7DEZFbzGOThwvZaTgdJdOhYZy2QHRUPUPr=_yYN=wCbQ@mail.gmail.com>
+Message-ID: <CAPhsuW7DEZFbzGOThwvZaTgdJdOhYZy2QHRUPUPr=_yYN=wCbQ@mail.gmail.com>
+Subject: Re: [PATCH v2] md: fix duplicate filename for rdev
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     neilb@suse.de, akpm@linux-foundation.org,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 14:58:43 +0800
-Yan Zhao <yan.y.zhao@intel.com> wrote:
+On Mon, May 22, 2023 at 6:35=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
+>
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> commit 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a device
+> from an md array via sysfs") delay the deleting of rdev, however, this
+> introduce a window that rdev can be added again while the deleting is
+> not done yet, and sysfs will complain about duplicate filename.
+>
+> Follow up patches try to fix this problem by flush workqueue, however,
+> flush_rdev_wq() is just dead code, the progress in
+> md_kick_rdev_from_array():
+>
+> 1) list_del_rcu(&rdev->same_set);
+> 2) synchronize_rcu();
+> 3) queue_work(md_rdev_misc_wq, &rdev->del_work);
+>
+> So in flush_rdev_wq(), if rdev is found in the list, work_pending() can
+> never pass, in the meantime, if work is queued, then rdev can never be
+> found in the list.
+>
+> flush_rdev_wq() can be replaced by flush_workqueue() directly, however,
+> this approach is not good:
+> - the workqueue is global, this synchronization for all raid disks is
+>   not necessary.
+> - flush_workqueue can't be called under 'reconfig_mutex', there is still
+>   a small window between flush_workqueue() and mddev_lock() that other
+>   context can queue new work, hence the problem is not solved completely.
+>
+> sysfs already have apis to support delete itself through writer, and
+> these apis, specifically sysfs_break/unbreak_active_protection(), is used
+> to support deleting rdev synchronously. Therefore, the above commit can b=
+e
+> reverted, and sysfs duplicate filename can be avoided.
+>
+> A new mdadm regression test is proposed as well.
+>
+> Link: https://lore.kernel.org/linux-raid/20230428062845.1975462-1-yukuai1=
+@huaweicloud.com/
+> Fixes: 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a device=
+ from an md array via sysfs")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-> Check physical PFN is valid before converting the PFN to a struct page
-> pointer to be returned to caller of vfio_pin_pages().
-> 
-> vfio_pin_pages() pins user pages with contiguous IOVA.
-> If the IOVA of a user page to be pinned belongs to vma of vm_flags
-> VM_PFNMAP, pin_user_pages_remote() will return -EFAULT without returning
-> struct page address for this PFN. This is because usually this kind of PFN
-> (e.g. MMIO PFN) has no valid struct page address associated.
-> Upon this error, vaddr_get_pfns() will obtain the physical PFN directly.
-> 
-> While previously vfio_pin_pages() returns to caller PFN arrays directly,
-> after commit
-> 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()"),
-> PFNs will be converted to "struct page *" unconditionally and therefore
-> the returned "struct page *" array may contain invalid struct page
-> addresses.
-> 
-> Given current in-tree users of vfio_pin_pages() only expect "struct page *
-> returned, check PFN validity and return -EINVAL to let the caller be
-> aware of IOVAs to be pinned containing PFN not able to be returned in
-> "struct page *" array. So that, the caller will not consume the returned
-> pointer (e.g. test PageReserved()) and avoid error like "supervisor read
-> access in kernel mode".
-> 
-> Fixes: 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()")
-> Cc: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
-> 
+We got build time warning with this patch:
+
+drivers/md/md.c:90:33: warning: =E2=80=98md_rdev_misc_wq=E2=80=99 defined b=
+ut not used
+[-Wunused-variable]
+ static struct workqueue_struct *md_rdev_misc_wq;
+                                 ^~~~~~~~~~~~~~~
+
+Thanks,
+Song
+
 > ---
-> v2: update commit message to explain background/problem clearly. (Sean)
-> ---
->  drivers/vfio/vfio_iommu_type1.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> index 493c31de0edb..0620dbe5cca0 100644
-> --- a/drivers/vfio/vfio_iommu_type1.c
-> +++ b/drivers/vfio/vfio_iommu_type1.c
-> @@ -860,6 +860,11 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
->  		if (ret)
->  			goto pin_unwind;
->  
-> +		if (!pfn_valid(phys_pfn)) {
-
-Why wouldn't we use our is_invalid_reserved_pfn() test here?  Doing
-so would also make it more consistent why we don't need to call
-put_pfn() or rewind accounting for this page.  Thanks,
-
-Alex
-
-> +			ret = -EINVAL;
-> +			goto pin_unwind;
-> +		}
+> Changes in v2:
+>  - rebase from the latest md-next branch
+>
+>  drivers/md/md.c | 84 +++++++++++++++++++++++++------------------------
+>  drivers/md/md.h |  8 +++++
+>  2 files changed, 51 insertions(+), 41 deletions(-)
+>
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 7455bc9d8498..cafb457d614c 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -92,6 +92,7 @@ static struct workqueue_struct *md_rdev_misc_wq;
+>  static int remove_and_add_spares(struct mddev *mddev,
+>                                  struct md_rdev *this);
+>  static void mddev_detach(struct mddev *mddev);
+> +static void export_rdev(struct md_rdev *rdev);
+>
+>  /*
+>   * Default number of read corrections we'll attempt on an rdev
+> @@ -643,9 +644,11 @@ void mddev_init(struct mddev *mddev)
+>  {
+>         mutex_init(&mddev->open_mutex);
+>         mutex_init(&mddev->reconfig_mutex);
+> +       mutex_init(&mddev->delete_mutex);
+>         mutex_init(&mddev->bitmap_info.mutex);
+>         INIT_LIST_HEAD(&mddev->disks);
+>         INIT_LIST_HEAD(&mddev->all_mddevs);
+> +       INIT_LIST_HEAD(&mddev->deleting);
+>         timer_setup(&mddev->safemode_timer, md_safemode_timeout, 0);
+>         atomic_set(&mddev->active, 1);
+>         atomic_set(&mddev->openers, 0);
+> @@ -747,6 +750,23 @@ static void mddev_free(struct mddev *mddev)
+>
+>  static const struct attribute_group md_redundancy_group;
+>
+> +static void md_free_rdev(struct mddev *mddev)
+> +{
+> +       struct md_rdev *rdev;
+> +       struct md_rdev *tmp;
 > +
->  		ret = vfio_add_to_pfn_list(dma, iova, phys_pfn);
->  		if (ret) {
->  			if (put_pfn(phys_pfn, dma->prot) && do_accounting)
-> 
-> base-commit: b3c98052d46948a8d65d2778c7f306ff38366aac
-
+> +       if (list_empty_careful(&mddev->deleting))
+> +               return;
+> +
+> +       mutex_lock(&mddev->delete_mutex);
+> +       list_for_each_entry_safe(rdev, tmp, &mddev->deleting, same_set) {
+> +               list_del_init(&rdev->same_set);
+> +               kobject_del(&rdev->kobj);
+> +               export_rdev(rdev);
+> +       }
+> +       mutex_unlock(&mddev->delete_mutex);
+> +}
+> +
+>  void mddev_unlock(struct mddev *mddev)
+>  {
+>         if (mddev->to_remove) {
+> @@ -788,6 +808,8 @@ void mddev_unlock(struct mddev *mddev)
+>         } else
+>                 mutex_unlock(&mddev->reconfig_mutex);
+>
+> +       md_free_rdev(mddev);
+> +
+>         /* As we've dropped the mutex we need a spinlock to
+>          * make sure the thread doesn't disappear
+>          */
+> @@ -2428,13 +2450,6 @@ static int bind_rdev_to_array(struct md_rdev *rdev=
+, struct mddev *mddev)
+>         return err;
+>  }
+>
+> -static void rdev_delayed_delete(struct work_struct *ws)
+> -{
+> -       struct md_rdev *rdev =3D container_of(ws, struct md_rdev, del_wor=
+k);
+> -       kobject_del(&rdev->kobj);
+> -       kobject_put(&rdev->kobj);
+> -}
+> -
+>  void md_autodetect_dev(dev_t dev);
+>
+>  static void export_rdev(struct md_rdev *rdev)
+> @@ -2452,6 +2467,8 @@ static void export_rdev(struct md_rdev *rdev)
+>
+>  static void md_kick_rdev_from_array(struct md_rdev *rdev)
+>  {
+> +       struct mddev *mddev =3D rdev->mddev;
+> +
+>         bd_unlink_disk_holder(rdev->bdev, rdev->mddev->gendisk);
+>         list_del_rcu(&rdev->same_set);
+>         pr_debug("md: unbind<%pg>\n", rdev->bdev);
+> @@ -2465,15 +2482,17 @@ static void md_kick_rdev_from_array(struct md_rde=
+v *rdev)
+>         rdev->sysfs_unack_badblocks =3D NULL;
+>         rdev->sysfs_badblocks =3D NULL;
+>         rdev->badblocks.count =3D 0;
+> -       /* We need to delay this, otherwise we can deadlock when
+> -        * writing to 'remove' to "dev/state".  We also need
+> -        * to delay it due to rcu usage.
+> -        */
+> +
+>         synchronize_rcu();
+> -       INIT_WORK(&rdev->del_work, rdev_delayed_delete);
+> -       kobject_get(&rdev->kobj);
+> -       queue_work(md_rdev_misc_wq, &rdev->del_work);
+> -       export_rdev(rdev);
+> +
+> +       /*
+> +        * kobject_del() will wait for all in progress writers to be done=
+, where
+> +        * reconfig_mutex is held, hence it can't be called under
+> +        * reconfig_mutex and it's delayed to mddev_unlock().
+> +        */
+> +       mutex_lock(&mddev->delete_mutex);
+> +       list_add(&rdev->same_set, &mddev->deleting);
+> +       mutex_unlock(&mddev->delete_mutex);
+>  }
+>
+>  static void export_array(struct mddev *mddev)
+> @@ -3541,6 +3560,7 @@ rdev_attr_store(struct kobject *kobj, struct attrib=
+ute *attr,
+>  {
+>         struct rdev_sysfs_entry *entry =3D container_of(attr, struct rdev=
+_sysfs_entry, attr);
+>         struct md_rdev *rdev =3D container_of(kobj, struct md_rdev, kobj)=
+;
+> +       struct kernfs_node *kn =3D NULL;
+>         ssize_t rv;
+>         struct mddev *mddev =3D rdev->mddev;
+>
+> @@ -3548,6 +3568,10 @@ rdev_attr_store(struct kobject *kobj, struct attri=
+bute *attr,
+>                 return -EIO;
+>         if (!capable(CAP_SYS_ADMIN))
+>                 return -EACCES;
+> +
+> +       if (entry->store =3D=3D state_store && cmd_match(page, "remove"))
+> +               kn =3D sysfs_break_active_protection(kobj, attr);
+> +
+>         rv =3D mddev ? mddev_lock(mddev) : -ENODEV;
+>         if (!rv) {
+>                 if (rdev->mddev =3D=3D NULL)
+> @@ -3556,6 +3580,10 @@ rdev_attr_store(struct kobject *kobj, struct attri=
+bute *attr,
+>                         rv =3D entry->store(rdev, page, length);
+>                 mddev_unlock(mddev);
+>         }
+> +
+> +       if (kn)
+> +               sysfs_unbreak_active_protection(kn);
+> +
+>         return rv;
+>  }
+>
+> @@ -4479,20 +4507,6 @@ null_show(struct mddev *mddev, char *page)
+>         return -EINVAL;
+>  }
+>
+> -/* need to ensure rdev_delayed_delete() has completed */
+> -static void flush_rdev_wq(struct mddev *mddev)
+> -{
+> -       struct md_rdev *rdev;
+> -
+> -       rcu_read_lock();
+> -       rdev_for_each_rcu(rdev, mddev)
+> -               if (work_pending(&rdev->del_work)) {
+> -                       flush_workqueue(md_rdev_misc_wq);
+> -                       break;
+> -               }
+> -       rcu_read_unlock();
+> -}
+> -
+>  static ssize_t
+>  new_dev_store(struct mddev *mddev, const char *buf, size_t len)
+>  {
+> @@ -4520,7 +4534,6 @@ new_dev_store(struct mddev *mddev, const char *buf,=
+ size_t len)
+>             minor !=3D MINOR(dev))
+>                 return -EOVERFLOW;
+>
+> -       flush_rdev_wq(mddev);
+>         err =3D mddev_lock(mddev);
+>         if (err)
+>                 return err;
+> @@ -5590,7 +5603,6 @@ struct mddev *md_alloc(dev_t dev, char *name)
+>          * removed (mddev_delayed_delete).
+>          */
+>         flush_workqueue(md_misc_wq);
+> -       flush_workqueue(md_rdev_misc_wq);
+>
+>         mutex_lock(&disks_mutex);
+>         mddev =3D mddev_alloc(dev);
+> @@ -7553,9 +7565,6 @@ static int md_ioctl(struct block_device *bdev, fmod=
+e_t mode,
+>
+>         }
+>
+> -       if (cmd =3D=3D ADD_NEW_DISK || cmd =3D=3D HOT_ADD_DISK)
+> -               flush_rdev_wq(mddev);
+> -
+>         if (cmd =3D=3D HOT_REMOVE_DISK)
+>                 /* need to ensure recovery thread has run */
+>                 wait_event_interruptible_timeout(mddev->sb_wait,
+> @@ -9618,10 +9627,6 @@ static int __init md_init(void)
+>         if (!md_misc_wq)
+>                 goto err_misc_wq;
+>
+> -       md_rdev_misc_wq =3D alloc_workqueue("md_rdev_misc", 0, 0);
+> -       if (!md_rdev_misc_wq)
+> -               goto err_rdev_misc_wq;
+> -
+>         ret =3D __register_blkdev(MD_MAJOR, "md", md_probe);
+>         if (ret < 0)
+>                 goto err_md;
+> @@ -9640,8 +9645,6 @@ static int __init md_init(void)
+>  err_mdp:
+>         unregister_blkdev(MD_MAJOR, "md");
+>  err_md:
+> -       destroy_workqueue(md_rdev_misc_wq);
+> -err_rdev_misc_wq:
+>         destroy_workqueue(md_misc_wq);
+>  err_misc_wq:
+>         destroy_workqueue(md_wq);
+> @@ -9937,7 +9940,6 @@ static __exit void md_exit(void)
+>         }
+>         spin_unlock(&all_mddevs_lock);
+>
+> -       destroy_workqueue(md_rdev_misc_wq);
+>         destroy_workqueue(md_misc_wq);
+>         destroy_workqueue(md_wq);
+>  }
+> diff --git a/drivers/md/md.h b/drivers/md/md.h
+> index 1eec65cf783c..4d191db831da 100644
+> --- a/drivers/md/md.h
+> +++ b/drivers/md/md.h
+> @@ -531,6 +531,14 @@ struct mddev {
+>         unsigned int                    good_device_nr; /* good device nu=
+m within cluster raid */
+>         unsigned int                    noio_flag; /* for memalloc scope =
+API */
+>
+> +       /*
+> +        * Temporarily store rdev that will be finally removed when
+> +        * reconfig_mutex is unlocked.
+> +        */
+> +       struct list_head                deleting;
+> +       /* Protect the deleting list */
+> +       struct mutex                    delete_mutex;
+> +
+>         bool    has_superblocks:1;
+>         bool    fail_last_dev:1;
+>         bool    serialize_policy:1;
+> --
+> 2.39.2
+>
