@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D5F70B505
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F295970B509
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjEVG17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S231623AbjEVG33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjEVG15 (ORCPT
+        with ESMTP id S231593AbjEVG31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:27:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D31CDB
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:27:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3CC0C219E7;
-        Mon, 22 May 2023 06:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684736869; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 22 May 2023 02:29:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66090A9
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684736925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Vx2nNN9xn/GiTb7kNXIJ6fyz9OE+XujsJgq0Pwe/pE4=;
-        b=1SR7qabb7OwwDAYBXeBjDgbTdhmhmJi0x+f8U91BkzWcqg5wgdE7/nk5/Mp2e4vqJMqYq7
-        8L07ZgJTAJrEEhLbMK4KYXXWJ23wdTWDy4VVhAVN3tE80fqTIZDwT6wA2U301+Dg2G6do+
-        WU2m5M33lsz2INUHAU19UYOl85uix8A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684736869;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vx2nNN9xn/GiTb7kNXIJ6fyz9OE+XujsJgq0Pwe/pE4=;
-        b=y55M4ULZ03lEi0Owx/Nd0cvpWa7l9MUZogACOS1glC6+T39GiodtCSCmovjHZAhMDz2Amx
-        isB2ZPxzj56+JVAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=L51D923F/Qnr60svKwlOplic/YuXek4iXgzeRvfwk/0=;
+        b=b3TEzDauC4NXZUHMGNwYgn+fhD9njDkYOhG1UNT14cOfZmefBkCWKmU1g7WPVPJfmAg98Z
+        riTIxdwU2gsSF3gYMYYXZPQRXvQHBU3jCFH1tKLKJADDSJkMhFH1PNwbHWtgfpDBq9uC6h
+        5SZR6wKhvXqiBU0C70BCgmDyUjaPgxs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-197-_JqmLVPHOXevZRe0HvSLeg-1; Mon, 22 May 2023 02:28:41 -0400
+X-MC-Unique: _JqmLVPHOXevZRe0HvSLeg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 12D0913776;
-        Mon, 22 May 2023 06:27:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UcCiA2ULa2QUFgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 22 May 2023 06:27:49 +0000
-Date:   Mon, 22 May 2023 08:27:48 +0200
-Message-ID: <87sfboyj6j.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Adam Stylinski <kungfujesus06@gmail.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: hda/ca0132: add quirk for EVGA X299 DARK
-In-Reply-To: <ZGopOe19T1QOwizS@eggsbenedict.adamsnet>
-References: <ZGopOe19T1QOwizS@eggsbenedict.adamsnet>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F1933C025A2;
+        Mon, 22 May 2023 06:28:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EC7E8C54184;
+        Mon, 22 May 2023 06:28:36 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <376ab23b-52d0-d7fd-2dd9-414cbb474e01@linux.alibaba.com>
+References: <376ab23b-52d0-d7fd-2dd9-414cbb474e01@linux.alibaba.com> <20230520000049.2226926-1-dhowells@redhat.com> <20230520000049.2226926-23-dhowells@redhat.com>
+To:     Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>, Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>, ocfs2-devel@oss.oracle.com
+Subject: Re: [PATCH v21 22/30] ocfs2: Provide a splice-read stub
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2362050.1684736916.1@warthog.procyon.org.uk>
+Date:   Mon, 22 May 2023 07:28:36 +0100
+Message-ID: <2362051.1684736916@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 21 May 2023 16:52:23 +0200,
-Adam Stylinski wrote:
-> 
-> This quirk is necessary for surround and other DSP effects to work
-> with the onboard ca0132 based audio chipset for the EVGA X299 dark
-> mainboard.
-> 
-> Signed-off-by: Adam Stylinski <kungfujesus06@gmail.com>
+Joseph Qi <joseph.qi@linux.alibaba.com> wrote:
 
-Thanks, applied now.
+> Don't see direct IO logic now. Am I missing something?
 
+See that patch description ;-)
 
-Takashi
+    Provide a splice_read stub for ocfs2.  This emits trace lines and does an
+    atime lock/update before calling filemap_splice_read().  Splicing from
+    direct I/O is handled by the caller.
+
+David
+
