@@ -2,142 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4AD70E0FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A71A70E103
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237640AbjEWPv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
+        id S237536AbjEWPwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237536AbjEWPvY (ORCPT
+        with ESMTP id S235682AbjEWPwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:51:24 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8100412B
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:51:22 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30789a4c537so5047244f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684857066; x=1687449066;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OFhOPyHhLH6S5WQRz4qZfiECpWpktNJWuxewg6N6IXY=;
-        b=qmsnxYsc8pdszz2nsTxGMoJAZgg5Y5p1CbbmW4gVjPTKSjhSWFySqVgyuCSWcXmnUl
-         LT50FSWpfZBGJTaaEC08YAc9IqnV51EVrXO5ZfBigFdMCRP7uZnd1hhq1u58/wQdmSOL
-         h7dj0HW7cCntiO6oLgPjmGVaHVND2YntbCP+IrYDQJJltVd3oa+G8fkZdZJvc7aliV0w
-         nIBB0lp2Hz2rZ+G0MHKLBydDe11hoXBQPhe19AXyohKndVmSYYb7txGYVAxCovZQwv+b
-         W5Gd4yVGOEkQBeaqYk8X7SBLuebht/9+JNFxzooxC3T3I3KUG6IElMjj71r19sfJpy/S
-         8GoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684857066; x=1687449066;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OFhOPyHhLH6S5WQRz4qZfiECpWpktNJWuxewg6N6IXY=;
-        b=EbD2o0NrV6At6jImAfjGMK8GVvn4mS5NwTPbkgU/52ScVVbyerMAiTHHWsyOCO7xGM
-         zPQAP7+vSO+wpseTmYGLTJLaLv75liXH4jOgjxmhYfCZw1fpt73Yd4VLkZnqraN2JepF
-         QjSYiZ1KhfD22rksuAJmmq9z6FiEDH5ZV4lXHwZ/PLP/v2GLXS8JOZmhd7RJv+B4KEGU
-         Wk+qJDkagXs54p+a7qOFR/zEeS8znRkAOAt1YnhXUAsvruxvaaV7aAgrj6xhYc6taC3u
-         41MwrBxmH631QTPVuHlYm/zTrEj4QsF649wFlA0f7TIxpc5oPL2wBDIx4hjeO51GN49B
-         ngMw==
-X-Gm-Message-State: AC+VfDwzTy0r4KjZeCf9T+ln2ETNCJNi9alBHW03ZdRHQ8E2duZewQM2
-        dmmFBM8aVQE+KJaUK4xIMKxsLw==
-X-Google-Smtp-Source: ACHHUZ733LhblIwWJGaG+EyLuxGA2QiNjQeXabahP2K/M87pbYfmG3qopcIvtqdxbwq72fL2x7QEyw==
-X-Received: by 2002:a05:6000:118d:b0:309:41f7:e40e with SMTP id g13-20020a056000118d00b0030941f7e40emr9968237wrx.28.1684857065664;
-        Tue, 23 May 2023 08:51:05 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:3c9:a1c2:c486:3efd])
-        by smtp.gmail.com with ESMTPSA id s3-20020a5d4243000000b002cea9d931e6sm11434149wrr.78.2023.05.23.08.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 08:51:05 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH] gpio: cdev: fix a crash on line-request release
-Date:   Tue, 23 May 2023 17:51:01 +0200
-Message-Id: <20230523155101.196853-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 11:52:02 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65AC2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:52:00 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id A024A5C025F;
+        Tue, 23 May 2023 11:51:57 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 23 May 2023 11:51:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1684857117; x=1684943517; bh=IZt8D0cKx8Wt+SUWyeaYqCgFBquCK/LV/4e
+        dJ17+9iI=; b=fBwNBOmYGjtTwgq9Q1VX6jfJoEWy8CBnDuwNEHAp9jhqr9qMQHz
+        A3b3WFaENpUVbrJdvCTk7fbjydtSajuA/MvSBMasiFnCz7zyZMbyVecqgPrEmzEb
+        YSsjnErn1jguxiuM0DEB4pW+SEsWTbMc2K4bmuNd0CXH9IoB2Mi6XRvh6R8ZNzZ4
+        8z8pr6l2KrhQ08gdCbQSvFCXq71r8OsV3Jb2p7ggRXc3l92WMRq63el6ykmcgUvz
+        0uIhLdH4rdxuRfUWO4kMi7oOiLT8QNhFTu4su+8BvqQ4O9aqG59K41fRRSb54NdO
+        8VACcrDmIRjbDNfieYugnc12cD6JxmKCBxA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684857117; x=1684943517; bh=IZt8D0cKx8Wt+SUWyeaYqCgFBquCK/LV/4e
+        dJ17+9iI=; b=e7qH1cSPxB6LQ4xbfbg5oUULYFO2tJ/actUwD7T9p/st3/i3/jv
+        CyS+s9gmVlyeEk9EUKRjurC/pWzhlaQ2iCPzDh49shKVr2OmUnZz6zfv4TDmu4hJ
+        z6cbkiLvckybwMdYOyWRa+XroN2cBn7UbCFBpo9dvROrSYGZrRg1IZnvhOxFkxOS
+        ONK8TIRyPaWn6u3JRFohV97jJMV+lhfeMn4lKnsleovRArcSUNeTulpmIVAMhZUo
+        CkM43/+Gzq0XGuiMVljkWicf7AmGmJg9BjvgitIOzNGUhWZtb/uOhgIKHW6Hkaac
+        qDDRnsGZquEw1MVTUqiAzx6M/Nh5QcAb4tw==
+X-ME-Sender: <xms:HOFsZLiqoaHbWx0hWl_Caz3mfCEahsOsp0p00-bpmMHcFSUNS19RqQ>
+    <xme:HOFsZIAczUqhYgKNuwaNQDrQU0ReN-cy7G6x6Em0rSsCLarS3weo2fL4LYgVYuoSh
+    jIpHMO3xRKwuctxTAo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedgleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:HOFsZLF6UF4MEbmyIKBk5hx_nolOJd6UfHBiMiFzgru51HPhMRVKNw>
+    <xmx:HOFsZISvjlTRxR15pnLf516fmYgJ24tu-D-0rQWh7tVHcedKRBDY6g>
+    <xmx:HOFsZIwXZbQeTJBtkjIl23M4Y34jDmvcpNNEBG2RQPsCKqCJRqiFFQ>
+    <xmx:HeFsZNqksFM2iWY602fjv0NwnUyntLamKo1T4QOfdW15O8ZGRg_kqA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9D697B60086; Tue, 23 May 2023 11:51:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <559288c4-ed44-4d13-80af-6c73ffb6bb47@app.fastmail.com>
+In-Reply-To: <CAD=FV=XS6ZXbZvMVYTm8p46SauE6t_qsE7o2AUOJLbsTzK3Jpw@mail.gmail.com>
+References: <20230522114922.1052421-1-arnd@kernel.org>
+ <CAD=FV=XrTVVEP8gLx3e7Sqa_3fod3Ox79Ao5fk3S_ORH7jHS9Q@mail.gmail.com>
+ <CAD=FV=XS6ZXbZvMVYTm8p46SauE6t_qsE7o2AUOJLbsTzK3Jpw@mail.gmail.com>
+Date:   Tue, 23 May 2023 17:51:36 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Doug Anderson" <dianders@chromium.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Pingfan Liu" <kernelfans@gmail.com>,
+        "Sumit Garg" <sumit.garg@linaro.org>,
+        "Lecopzer Chen" <lecopzer.chen@mediatek.com>,
+        "Petr Mladek" <pmladek@suse.com>,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: watchdog_hld: provide arm_pmu_irq_is_nmi stub
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a GPIO device is forcefully unregistered, we are left with an
-inactive object. If user-space kept an open file descriptor to a line
-request associated with such a structure, upon closing it, we'll see the
-kernel crash due to freeing unexistent GPIO descriptors.
+On Tue, May 23, 2023, at 17:47, Doug Anderson wrote:
+> On Mon, May 22, 2023 at 7:31=E2=80=AFAM Doug Anderson <dianders@chromi=
+um.org> wrote:
+>> On Mon, May 22, 2023 at 4:49=E2=80=AFAM Arnd Bergmann <arnd@kernel.or=
+g> wrote:
+>
+> Breadcrumbs: since I didn't see a patch this morning and I'd love to
+> get this resolved, I've posted the Kconfig fix:
+>
+> https://lore.kernel.org/r/20230523073952.1.I60217a63acc35621e13f10be16=
+c0cd7c363caf8c@changeid
+>
+> Assuming people think that's OK, it should land instead of ${SUBJECT} =
+patch.
 
-Fix it by checking if chip is still alive before calling gpiod_free() in
-release callbacks for both v2 and v1 ABI.
+Looks good to me, I've replaced my patch with yours now in my randconfig
+build setup, I assume it's fine but I'll let you know if another regress=
+ion
+comes up.
 
-Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
-Reported-by: Kent Gibson <warthog618@gmail.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- drivers/gpio/gpiolib-cdev.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+Thanks for addressing it,
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index 0a33971c964c..6830f668a1b0 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -315,13 +315,19 @@ static long linehandle_ioctl_compat(struct file *file, unsigned int cmd,
- 
- static void linehandle_free(struct linehandle_state *lh)
- {
-+	struct gpio_device *gdev = lh->gdev;
- 	int i;
- 
--	for (i = 0; i < lh->num_descs; i++)
--		if (lh->descs[i])
--			gpiod_free(lh->descs[i]);
-+	for (i = 0; i < lh->num_descs; i++) {
-+		if (lh->descs[i]) {
-+			down_write(&gdev->sem);
-+			if (gdev->chip)
-+				gpiod_free(lh->descs[i]);
-+			up_write(&gdev->sem);
-+		}
-+	}
- 	kfree(lh->label);
--	gpio_device_put(lh->gdev);
-+	gpio_device_put(gdev);
- 	kfree(lh);
- }
- 
-@@ -1565,17 +1571,21 @@ static ssize_t linereq_read(struct file *file, char __user *buf,
- 
- static void linereq_free(struct linereq *lr)
- {
-+	struct gpio_device *gdev = lr->gdev;
- 	unsigned int i;
- 
- 	for (i = 0; i < lr->num_lines; i++) {
- 		if (lr->lines[i].desc) {
- 			edge_detector_stop(&lr->lines[i]);
--			gpiod_free(lr->lines[i].desc);
-+			down_write(&gdev->sem);
-+			if (gdev->chip)
-+				gpiod_free(lr->lines[i].desc);
-+			up_write(&gdev->sem);
- 		}
- 	}
- 	kfifo_free(&lr->events);
- 	kfree(lr->label);
--	gpio_device_put(lr->gdev);
-+	gpio_device_put(gdev);
- 	kfree(lr);
- }
- 
--- 
-2.39.2
-
+   Arnd
