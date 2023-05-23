@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AD670D47E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4A370D487
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235282AbjEWHGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S235193AbjEWHHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjEWHF6 (ORCPT
+        with ESMTP id S235269AbjEWHHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:05:58 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938D109
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:05:53 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3093a7b71fbso6702683f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684825552; x=1687417552;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lK0FbIRIU3vRu14qlzr2pPFF9QsFl229avcXo3OZVb4=;
-        b=ltWNi/Ovu+Y0LtOwMv9XC7UwQCaBPib0inFJtmQUu6FWYA8voz0YkccytfW/HmsUT0
-         dIkIs2pMYH9iBuS5JZUABVjx7IfXXz6kJ5nBuaQLVRfhIuIAsO42iJUzptnrW/qn/6cS
-         jh1WrWPm9G+lRFljum30CIDHkyCirMKPSAoYq3jbLlBFpBfNeKmD5p1oWZMPr+U/zHBn
-         3hDaYJPOzT/w4tXOAtx5m1jqDhdUMorK1DSCLJ5iSe04LKaDUdmeBmuwyNJ5vIIRMBN6
-         zDgF8xrHafaxpwhzuiGVboPWkdpALW8qF/OlYzErq9ka+TBUuJuzbPgJoFO1/NcvicMO
-         ohxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684825552; x=1687417552;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lK0FbIRIU3vRu14qlzr2pPFF9QsFl229avcXo3OZVb4=;
-        b=VajyeNoMMXrWG6sXIhnqhBBxcxYwUwLsPxqAlqUprlmcO8epJys28hNLjOVVpDEkst
-         B/8QOEOXt/QecFjMxnRyRDLG5J2ldg/15hY0lTC0E4f0STRPuwRlaaN5dVBd/sCGoJE8
-         xY5An+yhrNvEJs/z5JDO6fIjxQgzhi9Cu4lu3A+0Ju9icII7siGagIHT4Hjj+ZzIoAle
-         WZcbm+JkQNxrAWgkAmyGx4StgxRE5xJ3YsGBCCX5T9+8632UJpHCM+PemXTsxPejByUL
-         1B60zRuVSIEQSoL/FxQw7pwSTa+tWA1O01lZuAD6rO5t/Gh2StjS+J7zqX+cAZKaTqLC
-         RLzQ==
-X-Gm-Message-State: AC+VfDxaoogxD8jHIDfJrgR4mwdV0HEfAKk2ckgdyhDh51274MY2gWtC
-        C5krYqzOL6cUJTQ4p//f9RiIgw==
-X-Google-Smtp-Source: ACHHUZ4iZ9w3Br7aj/u4JCbG1/68MLmy50VAHu+zhSShAqCVeTRVEy8L0hvXV+NBg0asbp8H7v2myA==
-X-Received: by 2002:a5d:40cd:0:b0:2c9:e585:84b0 with SMTP id b13-20020a5d40cd000000b002c9e58584b0mr9015110wrq.1.1684825552047;
-        Tue, 23 May 2023 00:05:52 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o2-20020a056000010200b002ca864b807csm10278389wrx.0.2023.05.23.00.05.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 00:05:49 -0700 (PDT)
-Date:   Tue, 23 May 2023 10:05:45 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Su Hui <suhui@nfschina.com>, Jeremy Kerr <jk@ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Alistar Popple <alistair@popple.id.au>,
-        Eddie James <eajames@linux.ibm.com>, eajames@us.ibm.com,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cbostic@linux.vnet.ibm.com, linux-fsi@lists.ozlabs.org
-Subject: Re: [PATCH] drivers/fsi/scom: Return -EFAULT if copy fails
-Message-ID: <413f4e50-b722-427f-ab30-d320efe71cc0@kili.mountain>
-References: <20230519013710.34954-1-suhui@nfschina.com>
- <de9a7ffe-bedd-4181-886d-c9a3006b7be8@roeck-us.net>
+        Tue, 23 May 2023 03:07:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039991B1;
+        Tue, 23 May 2023 00:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684825630; x=1716361630;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=P5aD8T4OPWO3H/B7LgZ9I5LK6FmSItXjie0o4e9PMFA=;
+  b=RxQKP6sqm+eabWOsCWZ8OtritO9oSig+UKwPs01D1HrR2ZwZ0nciRb1t
+   Fu/08pJjYDOJULi4i3wooPfoAFSwvPX1yjxRbB9MTeFQ5VlnQLxCefT1g
+   PlYRWhZ8PsqjM66HmMlbHMDEpAx+QVMlqQZTAl9Sw0LBxF4VaMgNt98AY
+   tLGQDniKJ4gp77NP+eIF75UCg0ehUmF2ZC7hWLwpgqy3vnhsVD/cGI6ww
+   at4zsbJ3PVF4cT8qRvK1j5XZHZAHz9OKUNaeZlf9+/f4JvhiKwCod3wP7
+   YPtjoPNR7wHiab3/bwVbaP6F2GpZhHD3k6KrOpWBVZVW0WNbSqG2tqt4s
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="153442760"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 May 2023 00:07:09 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 23 May 2023 00:07:08 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Tue, 23 May 2023 00:07:05 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 0/2] dt-bindings: interrupt-controller: microchip,sama7g5-eic: use right naming syntax
+Date:   Tue, 23 May 2023 10:06:35 +0300
+Message-ID: <20230523070637.224476-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de9a7ffe-bedd-4181-886d-c9a3006b7be8@roeck-us.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,25 +63,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:30:06PM -0700, Guenter Roeck wrote:
-> On Fri, May 19, 2023 at 09:37:10AM +0800, Su Hui wrote:
-> > The copy_to/from_user() functions return the number of bytes remaining
-> > to be copied, but we want to return -EFAULT to the user.
-> > 
-> Why ? EFAULT means that a bad address was provided, and it is not
-> immediately obvious why that would be the case.
-> 
+Hi,
 
-Right now the function is returning success so that's definitely wrong.
-The copy_to/from_user() function will only fail if a bad address is
-provided so -EFAULT is correct.
+Series updates the documentation file for Microchip SAMA7G5 EIC to use
+proper naming syntax. It also updates MAINTAINERS EIC section with
+documentation file.
 
-There is a different Smatch warning for when people return a different
-error code such as -EINVAL.
-drivers/fsi/fsi-scom.c:337 scom_read() warn: return -EFAULT instead of '-EINVAL'
-The return affects the user and -EFAULT but that level of pendantry feel
-like possibly too much?  There aren't many instances of this warning.
+Thank you,
+Claudiu Beznea
 
-regards,
-dan carpenter
+Claudiu Beznea (2):
+  dt-bindings: interrupt-controller: microchip,sama7g5-eic: use proper
+    naming syntax
+  MAINTAINERS: add documentation file for Microchip EIC section
+
+ .../{microchip,eic.yaml => microchip,sama7g5-eic.yaml}          | 2 +-
+ MAINTAINERS                                                     | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+ rename Documentation/devicetree/bindings/interrupt-controller/{microchip,eic.yaml => microchip,sama7g5-eic.yaml} (98%)
+
+-- 
+2.34.1
 
