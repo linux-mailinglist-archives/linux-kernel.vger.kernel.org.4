@@ -2,113 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1009F70E940
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B39B70E947
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235694AbjEWWuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S238543AbjEWWv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjEWWuu (ORCPT
+        with ESMTP id S229517AbjEWWvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:50:50 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB142BF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:50:48 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3384bfb39b4so2542255ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:50:48 -0700 (PDT)
+        Tue, 23 May 2023 18:51:54 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD7FCA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:51:51 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bac6a453dd5so344535276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684882311; x=1687474311;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NnP2L+PrkWu+EM485P08sdt6RHU4vMuznsdnNr0qL8A=;
+        b=6jvb+8fWvUa0FJhCsBbdAx0Gab06ZAKeDU5sd+rqDD93rfnU7/tSjqY0W4McHKFGKQ
+         3jXcoN5POkVcQKDS9nLxUopBmY/pwIL7nrwRbeTIW4zN6IxM585nuPw2ghkD85/g65Zc
+         1qLYRSmVMewc6t6zpOODlJnnfCFREoO6Kw/SIGg+afx5ysEomN0IvOYoTOeh5v/ynPNv
+         rapoYYKDMd+TcG7mb7I5ooy6jR3tpIpcD4eNE00yhj5H9MrcqKJ8gAkWClza95gsdG6/
+         GWlwQ8j5ZCOCJ0wEVy8h1Yg4bPHVrUPkD22+z+VEZR6BaIBzdXs5H/Rs2F9rHltFcm9B
+         0fpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684882248; x=1687474248;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CdB683sgWwh+OYHpDOYM2ACu6pGxWfF2nR7ZnTieMw0=;
-        b=aIrsIq1A+MGPaQakkrLT6yATVX7q1jePp2K9kaSiGnqMszjUP6f+qcLc5Ow7brvp+p
-         2WEaMF+odFmZ59/NXtpLcdoFiqEIR0j8taRblSgyzsGP6ZgUfZP2afKn1XSROUCSvoDU
-         3UH+uv+m1D1l9w2BxMwlfw/jbADWHCiSKgaCKjYdrC2zUDjSPMXvdIWNMgzKH14kSfuc
-         esNClQxQE2mZwftK1d+B4lbtONoeT3koU3t5VOobSJ21AxBfrLATZkkmpgnVt0daxIq5
-         2ktmHsVYmdbEyEMKLn52l9vGj9KIif3nw9fVzYr20+5XzfjlfxExb1gPSmC+/iOaXJtX
-         aZZw==
-X-Gm-Message-State: AC+VfDzZD999KBL6MDaCYuYNN/WU0hQ8MaobMejunDyVc4q0iF8JSeBH
-        bGhGPu3todOd3NRw8wScBpwZBk1MhHYCNaZtqaCA4AtMgypN
-X-Google-Smtp-Source: ACHHUZ6P1bc/CABl11eEtK49q0VaWEeHBQcwhV0y4KgKtuiyZrILQ9lPfSOceFAnsuz7GPDc90Rychfg9XZSReefQPm3OY+2iFU8
-MIME-Version: 1.0
-X-Received: by 2002:a92:d287:0:b0:335:908b:8ee with SMTP id
- p7-20020a92d287000000b00335908b08eemr7899169ilp.2.1684882248078; Tue, 23 May
- 2023 15:50:48 -0700 (PDT)
-Date:   Tue, 23 May 2023 15:50:48 -0700
-In-Reply-To: <000000000000172fc905f8a19ab5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e29eee05fc64378e@google.com>
-Subject: Re: [syzbot] [btrfs?] WARNING in btrfs_commit_transaction (2)
-From:   syzbot <syzbot+dafbca0e20fbc5946925@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684882311; x=1687474311;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NnP2L+PrkWu+EM485P08sdt6RHU4vMuznsdnNr0qL8A=;
+        b=igY0TbGXzthFRP9yqE7r5D8RjqZTKP4lYHqTkJ2CEqgt0N2wJHbOcZazbuZ5VpItaG
+         870fCEGD2SO9AcDYgXHIazgaOAcJiKb6h9AMmD/yZ/zPNNfMNDo4+lSF2IutxQtTScVk
+         c7S4JeWfGFjm8Pyjm9AlST6+TT0qTKD/xDxYBa8oU1QB+uG9r/W1GdWQAIK688StP59e
+         XkZh4SyM9c3tDG9Oejt6zA71iHfS7yNh6BRd1Jq+Q7JBdI4z5XX9lzB3ymLyYCSJUEOz
+         AO/j5z7uUXo9dYjMQZGQTLQJePz8P1F3WqmRQOQVNjpf9bzhEA5iPnr+Xop9zSO4ZzhU
+         r8/g==
+X-Gm-Message-State: AC+VfDzei1Lovm5KKbioXM8TWprWh4bpUzaruHpqBbxskT/O0QdX8Wyd
+        7bPFpJe24Lhs7S9vbywQ6JZ6PRYZScA=
+X-Google-Smtp-Source: ACHHUZ4sG+cvyiEhk9tjcIIq1PsOtHI409kEMx110CD8dQmZdMZ7A/Pr3eHV3RVYFcAQwZev31rW/6cMZEg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a5b:110:0:b0:ba7:5d7a:b50d with SMTP id
+ 16-20020a5b0110000000b00ba75d7ab50dmr9356262ybx.10.1684882310974; Tue, 23 May
+ 2023 15:51:50 -0700 (PDT)
+Date:   Tue, 23 May 2023 15:51:49 -0700
+In-Reply-To: <ZFtQeLNuXP6tDMne@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230509134825.1523-1-yan.y.zhao@intel.com> <20230509135006.1604-1-yan.y.zhao@intel.com>
+ <ZFsr9TynkA/CyPgg@chao-email> <ZFtQeLNuXP6tDMne@yzhao56-desk.sh.intel.com>
+Message-ID: <ZG1DhSdhpTkxrfCq@google.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: add a new mmu zap helper to indicate
+ memtype changes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Wed, May 10, 2023, Yan Zhao wrote:
+> On Wed, May 10, 2023 at 01:30:29PM +0800, Chao Gao wrote:
+> > On Tue, May 09, 2023 at 09:50:06PM +0800, Yan Zhao wrote:
+> > >Add a helper to indicate that the kvm_zap_gfn_range() request is to update
+> > >memory type.
+> > >
+> > >Then the zap can be avoided in cases:
+> > >1. TDP is not enabled.
+> > >2. EPT is not enabled.
+> > >
+> > >This is because only memory type of EPT leaf entries are subjected to
+> > >change when noncoherent DMA/guest CR0.CD/guest MTRR settings change.
+> > >
+> > >Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> > >---
+> > > arch/x86/kvm/mmu.h     |  1 +
+> > > arch/x86/kvm/mmu/mmu.c | 16 ++++++++++++++++
+> > > 2 files changed, 17 insertions(+)
+> > >
+> > >diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> > >index 92d5a1924fc1..a04577afbc71 100644
+> > >--- a/arch/x86/kvm/mmu.h
+> > >+++ b/arch/x86/kvm/mmu.h
+> > >@@ -236,6 +236,7 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> > > }
+> > > 
+> > > void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
+> > >+void kvm_zap_gfn_for_memtype(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
+> > > 
+> > > int kvm_arch_write_log_dirty(struct kvm_vcpu *vcpu);
+> > > 
+> > >diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > >index c8961f45e3b1..2706754794d1 100644
+> > >--- a/arch/x86/kvm/mmu/mmu.c
+> > >+++ b/arch/x86/kvm/mmu/mmu.c
+> > >@@ -6272,6 +6272,22 @@ static bool kvm_rmap_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_e
+> > > 	return flush;
+> > > }
+> > > 
+> > >+/*
+> > >+ * Invalidate (zap) TDP SPTEs that cover GFNs from gfn_start and up to gfn_end
+> > >+ * (not including it) for reason of memory type being updated.
+> > >+ */
+> > >+void kvm_zap_gfn_for_memtype(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
+> > >+{
+> > >+	/* Currently only memory type of EPT leaf entries are affected by
+> > >+	 * guest CR0.CD and guest MTRR.
+> > >+	 * So skip invalidation (zap) in other cases
+> > >+	 */
+> > >+	if (!shadow_memtype_mask)
+> > 
+> > Do you need to check kvm_arch_has_noncoherent_dma()? if yes, maybe just extract
+> > the first if() statement and its associated comment from kvm_tdp_page_fault()?
+> >
+> This kvm_zap_gfn_for_memtype() helper will be called in
+> kvm_arch_unregister_noncoherent_dma() as well when noncoherent_dma_count
+> goes from 1 to 0.
+> So, checking kvm_arch_has_noncoherent_dma() is not desired.
+> 
+> > >+		return;
+> > >+
+> > >+	kvm_zap_gfn_range(kvm, gpa_to_gfn(0), gpa_to_gfn(~0ULL));
+> > 
+> > This should be:
+> > 
+> > 	kvm_zap_gfn_range(kvm, start, end);
+> >
+> Oops. sorry about this mistake. Will fix it in next version.
 
-HEAD commit:    ae8373a5add4 Merge tag 'x86_urgent_for_6.4-rc4' of git://g..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17b3b489280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f389ffdf4e9ba3f0
-dashboard link: https://syzkaller.appspot.com/bug?extid=dafbca0e20fbc5946925
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14243ef9280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c06772280000
+Rather than add a helper to zap "for memtype", add a helper to query if KVM honors
+guest MTRRs.  The "for memtype" isn't intuitive and ends up being incomplete.
+That will also allow for deduplicating other code (and a comment).  Waiting until
+the zap also wastes cycles in the MTRR case, there's no need to compute start and
+end if the zap will ultimately be skipped.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2c5ee189dd12/disk-ae8373a5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/63acf75623d7/vmlinux-ae8373a5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/29de65c99e9d/bzImage-ae8373a5.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/2eac0114b435/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dafbca0e20fbc5946925@syzkaller.appspotmail.com
-
-BTRFS warning (device loop0): Skipping commit of aborted transaction.
-------------[ cut here ]------------
-BTRFS: Transaction aborted (error -28)
-WARNING: CPU: 0 PID: 41 at fs/btrfs/transaction.c:1978 cleanup_transaction fs/btrfs/transaction.c:1978 [inline]
-WARNING: CPU: 0 PID: 41 at fs/btrfs/transaction.c:1978 btrfs_commit_transaction+0x3223/0x3fa0 fs/btrfs/transaction.c:2565
-Modules linked in:
-CPU: 0 PID: 41 Comm: kworker/u4:2 Not tainted 6.4.0-rc3-syzkaller-00008-gae8373a5add4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-Workqueue: events_unbound btrfs_async_reclaim_metadata_space
-RIP: 0010:cleanup_transaction fs/btrfs/transaction.c:1978 [inline]
-RIP: 0010:btrfs_commit_transaction+0x3223/0x3fa0 fs/btrfs/transaction.c:2565
-Code: c8 fe ff ff be 02 00 00 00 e8 f9 41 aa 00 e9 21 d3 ff ff e8 af 68 1b fe 8b b5 20 ff ff ff 48 c7 c7 c0 25 95 8a e8 2d 28 e3 fd <0f> 0b c7 85 00 ff ff ff 01 00 00 00 e9 97 df ff ff e8 87 68 1b fe
-RSP: 0018:ffffc90000b27990 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 000000001f0d8001 RCX: 0000000000000000
-RDX: ffff888014aa0000 RSI: ffffffff814c03e7 RDI: 0000000000000001
-RBP: ffffc90000b27b00 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88801f0d8000
-R13: ffff888074df3e98 R14: ffff888074df4000 R15: ffff88801f0d8000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055bc77452c28 CR3: 0000000072dfb000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- flush_space+0x1e0/0xde0 fs/btrfs/space-info.c:808
- btrfs_async_reclaim_metadata_space+0x39e/0xa90 fs/btrfs/space-info.c:1078
- process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
+E.g. over two or three patches:
 
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ arch/x86/kvm/mmu.h     |  1 +
+ arch/x86/kvm/mmu/mmu.c | 19 ++++++++++++++-----
+ arch/x86/kvm/mtrr.c    |  2 +-
+ arch/x86/kvm/x86.c     |  2 +-
+ 4 files changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+index 92d5a1924fc1..c3c50ec9d9db 100644
+--- a/arch/x86/kvm/mmu.h
++++ b/arch/x86/kvm/mmu.h
+@@ -103,6 +103,7 @@ static inline u8 kvm_get_shadow_phys_bits(void)
+ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask);
+ void kvm_mmu_set_me_spte_mask(u64 me_value, u64 me_mask);
+ void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);
++bool kvm_mmu_honors_guest_mtrrs(struct kvm *kvm);
+ 
+ void kvm_init_mmu(struct kvm_vcpu *vcpu);
+ void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index c8961f45e3b1..a2b1723bc6a4 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4512,12 +4512,10 @@ static int kvm_tdp_mmu_page_fault(struct kvm_vcpu *vcpu,
+ }
+ #endif
+ 
+-int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
++bool kvm_mmu_honors_guest_mtrrs(struct kvm *kvm)
+ {
+ 	/*
+-	 * If the guest's MTRRs may be used to compute the "real" memtype,
+-	 * restrict the mapping level to ensure KVM uses a consistent memtype
+-	 * across the entire mapping.  If the host MTRRs are ignored by TDP
++	 * If the TDP is enabled, the host MTRRs are ignored by TDP
+ 	 * (shadow_memtype_mask is non-zero), and the VM has non-coherent DMA
+ 	 * (DMA doesn't snoop CPU caches), KVM's ABI is to honor the memtype
+ 	 * from the guest's MTRRs so that guest accesses to memory that is
+@@ -4526,7 +4524,18 @@ int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 	 * Note, KVM may still ultimately ignore guest MTRRs for certain PFNs,
+ 	 * e.g. KVM will force UC memtype for host MMIO.
+ 	 */
+-	if (shadow_memtype_mask && kvm_arch_has_noncoherent_dma(vcpu->kvm)) {
++	return tdp_enabled && shadow_memtype_mask &&
++	       kvm_arch_has_noncoherent_dma(kvm);
++}
++
++int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
++{
++	/*
++	 * If the guest's MTRRs may be used to compute the "real" memtype,
++	 * restrict the mapping level to ensure KVM uses a consistent memtype
++	 * across the entire mapping.
++	 */
++	if (kvm_mmu_honors_guest_mtrrs(vcpu->kvm)) {
+ 		for ( ; fault->max_level > PG_LEVEL_4K; --fault->max_level) {
+ 			int page_num = KVM_PAGES_PER_HPAGE(fault->max_level);
+ 			gfn_t base = gfn_round_for_level(fault->gfn,
+diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+index 3eb6e7f47e96..a67c28a56417 100644
+--- a/arch/x86/kvm/mtrr.c
++++ b/arch/x86/kvm/mtrr.c
+@@ -320,7 +320,7 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+ 	struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
+ 	gfn_t start, end;
+ 
+-	if (!tdp_enabled || !kvm_arch_has_noncoherent_dma(vcpu->kvm))
++	if (!kvm_mmu_honors_guest_mtrrs(vcpu->kvm))
+ 		return;
+ 
+ 	if (!mtrr_is_enabled(mtrr_state) && msr != MSR_MTRRdefType)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 076d50f6321b..977dceb7ba7e 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -942,7 +942,7 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
+ 		kvm_mmu_reset_context(vcpu);
+ 
+ 	if (((cr0 ^ old_cr0) & X86_CR0_CD) &&
+-	    kvm_arch_has_noncoherent_dma(vcpu->kvm) &&
++	    kvm_mmu_honors_guest_mtrrs(vcpu->kvm) &&
+ 	    !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+ 		kvm_zap_gfn_range(vcpu->kvm, 0, ~0ULL);
+ }
+
+base-commit: 8d4a1b4011c125b1510254b724433aaae746ce14
+-- 
+
