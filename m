@@ -2,77 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB2470D0E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD07F70D0F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjEWCNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S234317AbjEWCP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjEWCN1 (ORCPT
+        with ESMTP id S234545AbjEWCPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:13:27 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C92811A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 19:13:25 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-76c27782e30so270072739f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 19:13:25 -0700 (PDT)
+        Mon, 22 May 2023 22:15:13 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8A6186;
+        Mon, 22 May 2023 19:14:44 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-333eb36e453so675005ab.3;
+        Mon, 22 May 2023 19:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684808068; x=1687400068;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zX10SJBU8S1HDBYkbi8trIiB7376uD4rHt1agT0RgVE=;
+        b=OaujpSZZUqwVOx9NEQ6g6toA8bjHdiLSGCHF/k5eKXl3ABo1UGNtVSzhTAX0SAhrbE
+         cgx3x15bwXRGHk0+mEh2cffCJ3is4InYof0oCRfm9gT0XYCNJhUQfjzpIy2jthkLRpWM
+         eciWFP26qbGuLXO1Uf8zUXuD7HRpsvF5evYPF53lpz4UerC6UOC1F9lTMdeaI5n+EyjI
+         v9sQUBd0qgmEdzEd6Mkc6G0G9WXl0LXrI9LSILXFeM7ET6fhdiX33OYpZ4kZlp1IQ5ht
+         /oyvczEGS9vnKPLX8VcTgthDs3kdmKuTyRuPnCsCfTrKVKndpPrAS2GOUJHqCQig1F8k
+         QFFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684808005; x=1687400005;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ld4BfU0VLxl5x6yDFqKhqit5WImG/Bc0Y+8M10OgY8w=;
-        b=GbwU9213zKU1W7N0S7TwgUESbCe4HPTpsuptRnhkbZrdDeX/x2sIJWW4RLBXdZqs2O
-         GJ4B4/RCFj7knQ7q18ngRUPDpwRzgA4cgalwGVqiWC0Qb3GXT43YPIXlk5sAg1s2Yf48
-         jUP6aykk9iYBpqwhFoprfaXd848/RXGoxGkh54P2yC9/GDHirsX7Ck9XYeuHv9ww5Tbk
-         8orubv9izN3oEtFKozTk/9Brq5xbJd3hOOFBBhElzRru2xjbxqn/IF8a9uTVusvqKdMP
-         XQGZWHJNlHfO0REuVuBE0gl5vB4KtoxeE5pN2iSC8zSF44UiKAnTCRokdPhzOBqwueui
-         SYCA==
-X-Gm-Message-State: AC+VfDyj0u1E+qCveoRuDGV0VFNlpNjPZqRsthZBNuSVg6Xc/v6IzEhl
-        nwt3Fd2l5K95UH+UaJAmvCGJlRCd9trVawpt0PN99TMDxr5T
-X-Google-Smtp-Source: ACHHUZ6i6qzx3KdoUGB7zeJblsyBnPyyqo41SA9bhWFsK3Nb5NGsyRpwbwbw1HfPzqgiRMrvMwUxicSR/e1VGxCVLUwruyVS/iNd
+        d=1e100.net; s=20221208; t=1684808068; x=1687400068;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zX10SJBU8S1HDBYkbi8trIiB7376uD4rHt1agT0RgVE=;
+        b=EK+67/SMp6rAyk2e9QeTg39GWeKs0ul31S+ZDQyVjbwh8lZ73WHQpuJkJKFKoVnBZc
+         U+PMJ4Q1jrcHhbe1at/xJTMaolFtDMYb7/Mash84xhDsZQqqPKRBP5tCJb/CDcgD5M5v
+         z3XowVEoNAbJuF5b53xmRUacws7csQfnetEtW0Kj4YI9YD77bazptsuAvrkjBIObpBxS
+         CIEq4pwDwgy5pYWG6hiWA8NLiqZlbuP8jVxzm6vWG7mvQojgSMEOS6aqmUWuUfb9nGND
+         no8dTEIS+ohpLJ4OVyCdp3FyYAx9OgvKbH627ksD3zLBfuczjvTguYIcZAY51OcUXP7r
+         Cw+w==
+X-Gm-Message-State: AC+VfDwbk94RGFUasphymmhsKdZz6hwkRh1g0h4zw5ClxHwXQ1PiaE3c
+        3xzaUUYLD+0H5OcO/Vuq6TZsZHe9OGhfVA==
+X-Google-Smtp-Source: ACHHUZ5F/Ce0ACQDapyA4JTnP2JZCUo2WThK1XKG2+ZKLbNVrxkTbmV0t/7CPbKthDMx/RVENWD5nQ==
+X-Received: by 2002:a92:de46:0:b0:335:1ed:359b with SMTP id e6-20020a92de46000000b0033501ed359bmr8482325ilr.15.1684808068359;
+        Mon, 22 May 2023 19:14:28 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id i1-20020a056638380100b00418647d4279sm2223488jav.69.2023.05.22.19.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 19:14:27 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Qiang Zhao <qiang.zhao@nxp.com>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Li Yang <leoyang.li@nxp.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] soc: fsl: qe: Replace all non-returning strlcpy with strscpy
+Date:   Tue, 23 May 2023 02:14:25 +0000
+Message-ID: <20230523021425.2406309-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-X-Received: by 2002:a02:85cb:0:b0:3c5:1971:1b7f with SMTP id
- d69-20020a0285cb000000b003c519711b7fmr6203433jai.6.1684808004894; Mon, 22 May
- 2023 19:13:24 -0700 (PDT)
-Date:   Mon, 22 May 2023 19:13:24 -0700
-In-Reply-To: <0f3f5941-0a95-723e-11e1-6fad8e2133b0@linux.dev>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a589d005fc52ee2d@google.com>
-Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
- skb_dequeue (2)
-From:   syzbot <syzbot+eba589d8f49c73d356da@syzkaller.appspotmail.com>
-To:     guoqing.jiang@linux.dev, jgg@ziepe.ca, leon@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        zyjzyj2000@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-failed to apply patch:
-checking file drivers/infiniband/sw/rxe/rxe_qp.c
-patch: **** unexpected end of file in patch
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ drivers/soc/fsl/qe/qe.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-
-Tested on:
-
-commit:         56518a60 RDMA/hns: Modify the value of long message lo..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-rc
-dashboard link: https://syzkaller.appspot.com/bug?extid=eba589d8f49c73d356da
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=132bea5a280000
+diff --git a/drivers/soc/fsl/qe/qe.c b/drivers/soc/fsl/qe/qe.c
+index b3c226eb5292..58746e570d14 100644
+--- a/drivers/soc/fsl/qe/qe.c
++++ b/drivers/soc/fsl/qe/qe.c
+@@ -524,7 +524,7 @@ int qe_upload_firmware(const struct qe_firmware *firmware)
+ 	 * saved microcode information and put in the new.
+ 	 */
+ 	memset(&qe_firmware_info, 0, sizeof(qe_firmware_info));
+-	strlcpy(qe_firmware_info.id, firmware->id, sizeof(qe_firmware_info.id));
++	strscpy(qe_firmware_info.id, firmware->id, sizeof(qe_firmware_info.id));
+ 	qe_firmware_info.extended_modes = be64_to_cpu(firmware->extended_modes);
+ 	memcpy(qe_firmware_info.vtraps, firmware->vtraps,
+ 		sizeof(firmware->vtraps));
+@@ -599,7 +599,7 @@ struct qe_firmware_info *qe_get_firmware_info(void)
+ 	/* Copy the data into qe_firmware_info*/
+ 	sprop = of_get_property(fw, "id", NULL);
+ 	if (sprop)
+-		strlcpy(qe_firmware_info.id, sprop,
++		strscpy(qe_firmware_info.id, sprop,
+ 			sizeof(qe_firmware_info.id));
+ 
+ 	of_property_read_u64(fw, "extended-modes",
 
