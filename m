@@ -2,217 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2006A70D88E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFBD70D8B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbjEWJNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S235543AbjEWJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236192AbjEWJN3 (ORCPT
+        with ESMTP id S232211AbjEWJRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:13:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6F7109
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684833161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jnRPg7QY2jmRwV2BnlPo6Mcti7P+VISSM7w+qVsNvmc=;
-        b=XiSlec67OSl+5B9kolvuBOOqdsm/ZSS+vETAWV3eTlyPL6nIzOJOmUWvJHwetX6UuuaSWK
-        EP045Em6YB2iFYFSxJle0B0E17EZIRdN4liNlQemlBYwf37AI4dYfbu6+QtI7V+tk+L63a
-        aqw68KQTLAVUQoLXTWvbyr7yjwpsvIg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-423-GQwu75XnM06-bsMLf2eYSA-1; Tue, 23 May 2023 05:12:40 -0400
-X-MC-Unique: GQwu75XnM06-bsMLf2eYSA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30a8ba2debdso865921f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:12:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684833159; x=1687425159;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jnRPg7QY2jmRwV2BnlPo6Mcti7P+VISSM7w+qVsNvmc=;
-        b=jHYWVKVrAuLFEb4BSVNxoiEoyBpRPN9QToDMCjQRRqtlLuLJ+7RtuTKcILTz04bY/3
-         WFSvrUCBujGjx/CMvedA0Y79y5TuxaIFhLcAmBILojKr1Vj2ZTrnmvEid9WBvROdAwa1
-         CWC82sY93gHu7U3wCPdD+th/nwo14IdmP9kiGh7ecVxKrWieMVVP+tIDRbQDLMG95iLp
-         /Q8G+/naifLQY9wroK1C08MW2YLRPdmvsRZdUUYfprci9I4cehfutJ4sMdsjAGeD/s+/
-         2nGxSvTteM5ERfgpEr3530mZ57J1QPTeq3dzAjrNQ5ot79ySuLtZC+40qEcMo3PWCLCM
-         78Lg==
-X-Gm-Message-State: AC+VfDyj4be9bQYl9r4a50aT8rFJAeLFB205OZX23ax+Wudg0S+HU1Vl
-        xfT0q8d88WcmWY62rFZvcWDFmkC+EysF4lI685bSfmN8tb0gTnu7nDZh/gnJRc7h1q9Br+FRwD5
-        nTnizr8jR1p2lsewxAYjIPgl/
-X-Received: by 2002:a5d:4e8c:0:b0:309:4642:8773 with SMTP id e12-20020a5d4e8c000000b0030946428773mr10054988wru.55.1684833159525;
-        Tue, 23 May 2023 02:12:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5DElfwciEr1wIsTm3SdAMxxR1WaQ5j0YnhXCadJrC6nCvLteEd4TgO+w2gRb7AK1f623mTXg==
-X-Received: by 2002:a5d:4e8c:0:b0:309:4642:8773 with SMTP id e12-20020a5d4e8c000000b0030946428773mr10054968wru.55.1684833159103;
-        Tue, 23 May 2023 02:12:39 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
-        by smtp.gmail.com with ESMTPSA id k1-20020adfd841000000b002f28de9f73bsm10365717wrl.55.2023.05.23.02.12.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 02:12:38 -0700 (PDT)
-Message-ID: <c63053b0-5797-504d-7896-c86271b64162@redhat.com>
-Date:   Tue, 23 May 2023 11:12:37 +0200
+        Tue, 23 May 2023 05:17:09 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A13794
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:17:05 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 110CA5FD61;
+        Tue, 23 May 2023 12:17:03 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1684833423;
+        bh=+ABvyWQfCXkUi2+uQOAB+8PQel5h0wJF+jP4krYjQWw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=HvZysagfHA7sgcXd41nR5hvCN81dWokfJKKCFbJtvglsoLqWaq2lZGu5f3RFq4D7t
+         o7AYGZMLDm9SQl2CGVu/m9wsInTf/BJLgdhBpHEcY363w04IQyKnYZ8pPx0IH0Phes
+         8wWjJwem+NbJKsHwtCEvC74MwcJSDb4sIiLqiw8RomJwBxlesYeUWf5B5p/SOk7mOx
+         T3UegBFLjm/T+nxR0YwWPIm6L3hnHVeo0HH8vN5gBaqe/LezzPk8nPfNsSID0Y4yGD
+         aOk2Qw6jGwdOBzaVnTmOY1Kco+Cl4o0cL9DUoOKOOdbwkUwWfvI8YY1PdOR1Mz3hAR
+         C4ULRLv+08kmA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 23 May 2023 12:17:00 +0300 (MSK)
+Message-ID: <9013b0e2-c923-43f8-0bd6-979bf0c23ebc@sberdevices.ru>
+Date:   Tue, 23 May 2023 12:12:39 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/5] mtd: rawnand: meson: fix command sequence for
+ read/write
 Content-Language: en-US
-To:     Alexey Izbyshev <izbyshev@ispras.ru>
-Cc:     Florent Revest <revest@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
-        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
-References: <20230517150321.2890206-1-revest@chromium.org>
- <20230517150321.2890206-4-revest@chromium.org>
- <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
- <884d131bbc28ebfa0b729176e6415269@ispras.ru>
- <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
- <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
-In-Reply-To: <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Liang Yang <liang.yang@amlogic.com>
+CC:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
+ <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
+ <20230522170526.6486755a@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230522170526.6486755a@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/23 05:11:00 #21371280
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.05.23 20:58, Alexey Izbyshev wrote:
-> On 2023-05-22 19:22, David Hildenbrand wrote:
->> On 22.05.23 12:35, Alexey Izbyshev wrote:
->>> On 2023-05-22 11:55, David Hildenbrand wrote:
->>>> On 17.05.23 17:03, Florent Revest wrote:
->>>>> Alexey pointed out that defining a prctl flag as an int is a footgun
->>>>> because, under some circumstances, when used as a flag to prctl, it
->>>>> can
->>>>> be casted to long with garbage upper bits which would result in
->>>>> unexpected behaviors.
->>>>>
->>>>> This patch changes the constant to a UL to eliminate these
->>>>> possibilities.
->>>>>
->>>>> Signed-off-by: Florent Revest <revest@chromium.org>
->>>>> Suggested-by: Alexey Izbyshev <izbyshev@ispras.ru>
->>>>> ---
->>>>>     include/uapi/linux/prctl.h       | 2 +-
->>>>>     tools/include/uapi/linux/prctl.h | 2 +-
->>>>>     2 files changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
->>>>> index f23d9a16507f..6e9af6cbc950 100644
->>>>> --- a/include/uapi/linux/prctl.h
->>>>> +++ b/include/uapi/linux/prctl.h
->>>>> @@ -283,7 +283,7 @@ struct prctl_mm_map {
->>>>>       /* Memory deny write / execute */
->>>>>     #define PR_SET_MDWE			65
->>>>> -# define PR_MDWE_REFUSE_EXEC_GAIN	1
->>>>> +# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
->>>>>       #define PR_GET_MDWE			66
->>>>>     diff --git a/tools/include/uapi/linux/prctl.h
->>>>> b/tools/include/uapi/linux/prctl.h
->>>>> index 759b3f53e53f..6e6563e97fef 100644
->>>>> --- a/tools/include/uapi/linux/prctl.h
->>>>> +++ b/tools/include/uapi/linux/prctl.h
->>>>> @@ -283,7 +283,7 @@ struct prctl_mm_map {
->>>>>       /* Memory deny write / execute */
->>>>>     #define PR_SET_MDWE			65
->>>>> -# define PR_MDWE_REFUSE_EXEC_GAIN	1
->>>>> +# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
->>>>>       #define PR_GET_MDWE			66
->>>>>
->>>>
->>>> Both are changing existing uapi, so you'll already have existing user
->>>> space using the old values, that your kernel code has to deal with
->>>> no?
->>>
->>> I'm the one who suggested this change, so I feel the need to clarify.
->>>
->>> For any existing 64-bit user space code using the kernel and the uapi
->>> headers before this patch and doing the wrong prctl(PR_SET_MDWE,
->>> PR_MDWE_REFUSE_EXEC_GAIN) call instead of the correct
->>> prctl(PR_SET_MDWE,
->>> (unsigned long)PR_MDWE_REFUSE_EXEC_GAIN), there are two possibilities
->>> when prctl() implementation extracts the second argument via
->>> va_arg(op,
->>> unsigned long):
->>>
->>> * It gets lucky, and the upper 32 bits of the argument are zero. The
->>> call does what is expected by the user.
->>>
->>> * The upper 32 bits are non-zero junk. The flags argument is rejected
->>> by
->>> the kernel, and the call fails with EINVAL (unexpectedly for the
->>> user).
->>>
->>> This change is intended to affect only the second case, and only after
->>> the program is recompiled with the new uapi headers. The currently
->>> wrong, but naturally-looking prctl(PR_SET_MDWE,
->>> PR_MDWE_REFUSE_EXEC_GAIN) call becomes correct.
->>>
->>> The kernel ABI is unaffected by this change, since it has been defined
->>> in terms of unsigned long from the start.
->>
->> The thing I'm concerned about is the following: old user space (that
->> would fail) on new kernel where we define some upper 32bit to actually
->> have a meaning (where it would succeed with wrong semantics).
->>
->> IOW, can we ever really "use" these upper 32bit, or should we instead
->> only consume the lower 32bit in the kernel and effectively ignore the
->> upper 32bit?
->>
-> I see, thanks. But I think this question is mostly independent from this
-> patch. The patch removes a footgun, but it doesn't change the flags
-> check in the kernel, and nothing stops the user from doing
+Hello Miquel, Liang
+
+On 22.05.2023 18:05, Miquel Raynal wrote:
+> Hi Arseniy,
 > 
-> int flags = PR_MDWE_REFUSE_EXEC_GAIN;
-> prctl(PR_SET_MDWE, flags);
+> AVKrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:44:35 +0300:
 > 
-> So we have to decide whether to ignore the upper 32 bits or not even if
-> this patch is not applied (actually *had to* when PR_SET_MDWE op was
-> being added).
+>> This fixes read/write functionality by:
+>> 1) Changing NFC_CMD_RB_INT bit value.
+> 
+> I guess this is a separate fix
+> 
 
-Well, an alternative to this patch would be to say "well, for this prctl 
-we ignore any upper 32bit. Then, this change would not be needed. Yes, I 
-also don't like that :)
+Ok, I'll move it to separate patch
 
-Bu unrelated, I looked at some other random prctl.
+>> 2) Adding extra NAND_CMD_STATUS command on each r/w request.
+> 
+> Is this really needed? Looks like you're delaying the next op only. Is
+> using a delay enough? If yes, then it's probably the wrong approach.
+> 
+>> 3) Adding extra idle commands during r/w request.
+> 
+> Question about this below, might also be a patch on its own?
+> 
+>> 4) Adding extra NAND_CMD_READ0 on each read request.
+>>
+>> Without this patch driver works unstable, for example there are a lot
+>> of ECC errors.
+> 
+> I believe all the fixes should be Cc'ed to stable, please add in your
+> commits:
+> 
+> Cc: stable@...
+> 
 
-#define SUID_DUMP_USER           1
+Ack, after everything will be clear with this patch :)
 
-And in kernel/sys.c:
+>>
+>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>> Suggested-by: Liang Yang <liang.yang@amlogic.com>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>>  drivers/mtd/nand/raw/meson_nand.c | 30 +++++++++++++++++++++---------
+>>  1 file changed, 21 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>> index 074e14225c06..2f4d8c84186b 100644
+>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>> @@ -37,7 +37,7 @@
+>>  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
+>>  #define NFC_CMD_SCRAMBLER_DISABLE	0
+>>  #define NFC_CMD_SHORTMODE_DISABLE	0
+>> -#define NFC_CMD_RB_INT		BIT(14)
+>> +#define NFC_CMD_RB_INT ((0xb << 10) | BIT(18) | BIT(16))
+>>  
+>>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+>>  
+>> @@ -392,7 +392,7 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
+>>  	}
+>>  }
+>>  
+>> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>> +static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms, int cmd_read0)
+>>  {
+>>  	u32 cmd, cfg;
+>>  	int ret = 0;
+>> @@ -407,17 +407,29 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>>  
+>>  	reinit_completion(&nfc->completion);
+>>  
+>> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> +	meson_nfc_cmd_idle(nfc, 5);
+> 
+> Why 5 and 2 below? They look like magic values. Is this totally
+> experimental?
 
-	case PR_SET_DUMPABLE:
-		if (arg2 != SUID_DUMP_DISABLE && arg2 != SUID_DUMP_USER)
-	...
+@Liang, may be change it to defines ?
 
-Wouldn't that also suffer from the same issue, or how is this different?
+> 
+>> +
+>>  	/* use the max erase time as the maximum clock for waiting R/B */
+>> -	cmd = NFC_CMD_RB | NFC_CMD_RB_INT
+>> -		| nfc->param.chip_select | nfc->timing.tbers_max;
+> 
+> This is not documented in the commit log, is it?
+> 
+>> +	cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
+>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> +	meson_nfc_cmd_idle(nfc, 2);
+>>  
+>>  	ret = wait_for_completion_timeout(&nfc->completion,
+>>  					  msecs_to_jiffies(timeout_ms));
+>>  	if (ret == 0)
+>> -		ret = -1;
+>> +		return -1;
+> 
+> Please use real error codes, such as ETIMEDOUT.
 
-Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We need 
-arg2 -> arg5 to be 0. But wouldn't the following also just pass a 0 "int" ?
+Ack
 
-prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
+> 
+>>  
+>> -	return ret;
+>> +	if (!cmd_read0)
+>> +		return 0;
+>> +
+>> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
+> 
+> This looks really wrong, I don't get why you would need to send an
+> expensive READ0 command.
 
+This logic was suggested by @Liang Yang here to fix this driver (suggested as patch):
+https://lore.kernel.org/linux-mtd/8537e736-44a8-d17b-7923-25d5bd406dcc@sberdevices.ru/T/#m0df09d2ab2cac98431fb268a4ce3c00dc5c7a69e
+@Liang, could You please give us more details?
 
-I'm easily confused by such (va_args) things, so sorry for the dummy 
-questions.
+Thanks, Arseniy
 
--- 
-Thanks,
-
-David / dhildenb
-
+> 
+>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> +	meson_nfc_drain_cmd(nfc);
+>> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+>> +
+>> +	return 0;
+>>  }
+>>  
+>>  static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
+>> @@ -623,7 +635,7 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
+>>  	if (in) {
+>>  		nfc->cmdfifo.rw.cmd1 = cs | NFC_CMD_CLE | NAND_CMD_READSTART;
+>>  		writel(nfc->cmdfifo.rw.cmd1, nfc->reg_base + NFC_REG_CMD);
+>> -		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max));
+>> +		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max), 1);
+>>  	} else {
+>>  		meson_nfc_cmd_idle(nfc, nfc->timing.tadl);
+>>  	}
+>> @@ -669,7 +681,7 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>  
+>>  	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
+>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> -	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
+>> +	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max), 0);
+>>  
+>>  	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
+>>  
+>> @@ -952,7 +964,7 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
+>>  			break;
+>>  
+>>  		case NAND_OP_WAITRDY_INSTR:
+>> -			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms);
+>> +			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms, 1);
+>>  			if (instr->delay_ns)
+>>  				meson_nfc_cmd_idle(nfc, delay_idle);
+>>  			break;
+> 
+> 
+> Thanks,
+> Miquèl
