@@ -2,85 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2AD70E8FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A8A70E902
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238799AbjEWWSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S238807AbjEWWSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjEWWSI (ORCPT
+        with ESMTP id S238702AbjEWWSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:18:08 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4384683;
-        Tue, 23 May 2023 15:18:07 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQpbx6gPtz4x2k;
-        Wed, 24 May 2023 08:18:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684880286;
-        bh=NgSmQJ7GpO3XoRPYLfvI7a7Bvqx92irlBcZelJ/lFic=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nXhzF2ooA6e7qoXYg25RkH1zfnnFftO1QzXIaSAY4IVUIjENME/akP9N6LTZcsn3z
-         mQYf15Wsqcp+2V6CCfQHnVxdy1e6WsQitflL0sCgRrQG7IXyJvcDAXF6wJNsMmd+LI
-         6MjEY8UdUUkEckRR0nw55FIELkUwC/H8aWkPb5Dbz/nIAEzUJXLUXbKvFgcsBvzi2u
-         Rnb3MGlgRoxjs2RmBy7sAa26xkRHW6PFTywlmsxBKXHyCQ36z7IzSb/mhNnM1HESI+
-         uemezxCCFMMyHFzeaNjVuu1dU7JQHT5GbgKexazSq/aZGMHIKCrkC4LIrKM6sUeotH
-         20eC0oMNfqeKg==
-Date:   Wed, 24 May 2023 08:18:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the vfs-brauner
- tree
-Message-ID: <20230524081805.4c969d7f@canb.auug.org.au>
+        Tue, 23 May 2023 18:18:22 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEF1CA;
+        Tue, 23 May 2023 15:18:19 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6af81142b6dso123424a34.2;
+        Tue, 23 May 2023 15:18:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684880299; x=1687472299;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0/95G6TtWDMqnJqi09q4BRdDKrrrr1cl8z6kSG/6bRA=;
+        b=iyfRk4+jac99E2ssWFn52x2OBo4w2YytZkiwRSJ9EzfYkSsWyGi9+WX5b5WCq4P2Zo
+         UG0CYbxEIx4QtFJVvXqI1/pltOsBOtahzGRdVcPlvMIq3CrzVoHuI0gUJErXK61pgqIt
+         if8n6hHi3w7DwRGk8ZURnYT+P5m5qUqRT618Z+kxMxh8DPxxw1JVAPIFBEExfPxDUEwo
+         yO7UKyNBv221wESeWJk8uN7CyloCu/UedFCqmiDJD8vTevIR2O15RFPKNBpdnGGYNere
+         kM+60TdCH+EUMDEJ6uDsWh7ucxwVRW27fSEI/58C99gx63bss+aEtHQzpZTlDlOV3baZ
+         oTYg==
+X-Gm-Message-State: AC+VfDxWV/Mj8ccTREtkt5PXGVTrZInEooYmYBLV6o2OVQAYHPjfgdeS
+        Qk8M/+AsrelfQzZhvqYWvw==
+X-Google-Smtp-Source: ACHHUZ4QOOvthD3w2RdBiE5VTT3ti9m94NuJVi4/VOv1vNaUnI/8iObgUbyNTlHl5zM/LlxIgDjLdA==
+X-Received: by 2002:a05:6830:1d66:b0:6a5:ea63:b9e6 with SMTP id l6-20020a0568301d6600b006a5ea63b9e6mr7643237oti.16.1684880298905;
+        Tue, 23 May 2023 15:18:18 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v26-20020a05683018da00b006a5db4474c8sm3909647ote.33.2023.05.23.15.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 15:18:18 -0700 (PDT)
+Received: (nullmailer pid 2003240 invoked by uid 1000);
+        Tue, 23 May 2023 22:18:17 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sapP7NEcPg=wZFQjiIgUWO/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Justin Chen <justin.chen@broadcom.com>
+Cc:     kuba@kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
+        sumit.semwal@linaro.org, netdev@vger.kernel.org,
+        linux@armlinux.org.uk, bcm-kernel-feedback-list@broadcom.com,
+        christian.koenig@amd.com, opendmb@gmail.com, robh+dt@kernel.org,
+        conor@kernel.org, justinpopo6@gmail.com, richardcochran@gmail.com,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        f.fainelli@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        edumazet@google.com, andrew@lunn.ch, simon.horman@corigine.com,
+        devicetree@vger.kernel.org, pabeni@redhat.com
+In-Reply-To: <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
+References: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
+ <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
+Message-Id: <168488029701.2003121.3742030688630968396.robh@kernel.org>
+Subject: Re: [PATCH net-next v4 2/6] dt-bindings: net: Brcm ASP 2.0
+ Ethernet controller
+Date:   Tue, 23 May 2023 17:18:17 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/sapP7NEcPg=wZFQjiIgUWO/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Tue, 23 May 2023 14:53:43 -0700, Justin Chen wrote:
+> From: Florian Fainelli <florian.fainelli@broadcom.com>
+> 
+> Add a binding document for the Broadcom ASP 2.0 Ethernet
+> controller.
+> 
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+> ---
+> v3
+> 	- Adjust compatible string example to reference SoC and HW ver
+> 
+> v3
+>         - Minor formatting issues
+>         - Change channel prop to brcm,channel for vendor specific format
+>         - Removed redundant v2.0 from compat string
+>         - Fix ranges field
+> 
+> v2
+>         - Minor formatting issues
+> 
+>  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 145 +++++++++++++++++++++
+>  1 file changed, 145 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+> 
 
-Commit
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-  ee3b4556cee8 ("ntfs: do not dereference a null ctx on error")
+yamllint warnings/errors:
 
-is missing a Signed-off-by from its committer.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: ethernet@9c00000: compatible: ['brcm,bcm72165-asp', 'brcm,asp-v2.0'] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
 
---=20
-Cheers,
-Stephen Rothwell
+doc reference errors (make refcheckdocs):
 
---Sig_/sapP7NEcPg=wZFQjiIgUWO/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1684878827-40672-3-git-send-email-justin.chen@broadcom.com
 
------BEGIN PGP SIGNATURE-----
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtO50ACgkQAVBC80lX
-0GxuwQf/fpXYEcLxiTulnSoTc/ebVvD6oHnAT7WY3fGhxfjyF5wSq529XRICoIwH
-25pvHNvvNn3ZFs1Xle2+SJWljU97+7f9q2O1/UC3gp5dWv1Pg6eFgA7UgTBoZsTd
-OpNOYNza5mluf4Ovz4sGMNjPo7OLmEPxonu6/8W3K4crSx+g2uS4BUnmolfdqYkw
-NHIkENKBT2xTlM334lMnTZnoZFQzKev3LBBjHcZtMg+cK73NwDi7UlpEgh7JHbTE
-SbNHRiii87fq+gDgql8tmHHz5y9U20xagg8hMFjnfJ+1DdGoSBTc7dcdkrvS44qb
-ZnoDrPLkZK7ePIpCfsghpfobdZjuUA==
-=vvuj
------END PGP SIGNATURE-----
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
---Sig_/sapP7NEcPg=wZFQjiIgUWO/--
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
