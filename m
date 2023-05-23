@@ -2,171 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEB870DCB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D5370DCB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbjEWMhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        id S236899AbjEWMhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjEWMhP (ORCPT
+        with ESMTP id S230230AbjEWMho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:37:15 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7833BC4;
-        Tue, 23 May 2023 05:37:11 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id E560C5C0210;
-        Tue, 23 May 2023 08:37:10 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Tue, 23 May 2023 08:37:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1684845430; x=1684931830; bh=Kn
-        Gn5eb4S+X3iYghnL3L3fVpbv3jSMexyjANQhxZcyc=; b=pDM+Z+AlEZqBx/UAV1
-        g4h1NeD5cA+bdcYuh++qDkn4cSaAME3/QaEzUOfTwhXScztogpr0HbWZjMEmNJiF
-        1bJG0Jvk4tAlk4pVYsuZqPjI8b1r26LSacTVUoI+f8By0iGPEiu9iDgjHrS+R75g
-        C8nobsPVPYiYmqqBCQk3T0UebQAyAMMWr32akQvTDizNRJRnutXteK65gHO7m6fy
-        XONvH8yd4Zql+oYxtGIYIZQMptYySY0ns4fzR42MvP4jHKo0sJfMAhLI3yMetb4z
-        dZeLWNaF8NcLNV98hER6ATNhh+pPr2lNeCgkpZj+GjeFrIAIUTH1hgxQinceN2UO
-        1Y0A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684845430; x=1684931830; bh=KnGn5eb4S+X3i
-        YghnL3L3fVpbv3jSMexyjANQhxZcyc=; b=PHL1WdgBFZkfFbt9ks6liV5vLMxMt
-        xJD+cHdq6P5qn0MRk66rzRemeoK4e1cWU2JOGSedTxCxoO9/bAgaK410z2M+zg9K
-        6xEghNyJ3bzRf1CQNbomd9QUPxtlcqhPIPV03F4E8sjm9ChYH+cJ/S3OkPopJBKn
-        Qqjec4ZTQ4iej6WTL9K+/qzPoeEMEtb4t2pYcnQCMXkbStTnK2eg/ijqLinVN9ua
-        b9iBaEgtj7296vXAB+yBS0bejOU7AZlq7f9LQ17aFSNWfxwQvexfnjfRZcdtgGt+
-        Wr8plHpiqbjhPwm03rOeFrjQDCE87qpJu2khPgZruyIGu5cM70QSj0qaw==
-X-ME-Sender: <xms:drNsZGg47uNcAt92VBvdajqE-PjiABFJjh2a9_ppLTpt7hX5hUwniw>
-    <xme:drNsZHCQ8YqPTkouYQlU73N7Voxj3Tymqw1ypJogd8B58pUaGlezsFvIIzFPDZk6s
-    IUBvkdy2f-YJIy7psU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedgheduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
-    rhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssg
-    drtggrqeenucggtffrrghtthgvrhhnpeeiueefjeeiveetuddvkeetfeeltdevffevudeh
-    ffefjedufedvieejgedugeekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:drNsZOF3P2_h-awo3bPuNbVafqCqxdJWtaPKZIezpwR5Lc17HbaaYA>
-    <xmx:drNsZPScCUpRkEJ1EubMR0uXHJfdtnln9rkISO-C66LAeoqVsAC2tw>
-    <xmx:drNsZDzQTq7cuR3d7fMw4mofDmTRVw2ScRVSMGpGKpXz171DyJ5QRw>
-    <xmx:drNsZMrSU9o1Zq8KVjskrAL-vBluC9hLsgDINdlDkxpquIItK8P4CA>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 72EFDC6008B; Tue, 23 May 2023 08:37:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <04415f83-64fa-4d70-91fa-4425e163b350@app.fastmail.com>
-In-Reply-To: <b79fa66c-b8bc-125c-ccfa-9dae727022e9@redhat.com>
-References: <mpearson-lenovo@squebb.ca>
- <20230517181945.3725-1-mpearson-lenovo@squebb.ca>
- <b79fa66c-b8bc-125c-ccfa-9dae727022e9@redhat.com>
-Date:   Tue, 23 May 2023 08:36:49 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     "Hans de Goede" <hdegoede@redhat.com>
-Cc:     "markgross@kernel.org" <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] platform/x86: think-lmi: Enable opcode support on BIOS
- settings
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 08:37:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC48DD;
+        Tue, 23 May 2023 05:37:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBF2631E6;
+        Tue, 23 May 2023 12:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1AFFC433D2;
+        Tue, 23 May 2023 12:37:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684845462;
+        bh=IrFR6hSXFwTPIqL0va6YERj1ltruCOkzI1N56fCgPFM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BbcPp5Wk39tfRgN0F4hqRWr2z1n0SIKLjtFrqEbV6rdwWzWWBf41JaluXdPwngS7n
+         YkP2M+MNrre1IqYdowqD2gvwspBlw+78DyFX72q66G+F/EgL87TSfBL03dsoLrD1qM
+         au4VSvKklwQat8ncTYQIWu6YEu3YE2e8269d+DGcLRwFi/TP2lU7v9EbyBbjcrqMjT
+         TfL44g4byc+ONKKhrrNPF7Del3TtLGY10AAIErkDGWFzW9t8m2z9qEjENI9kADmq1S
+         RJahiUXw1uO7b7wkD3a2j0nrda5NEi0cA233jlDNrLclS7KunYJMBDqfAzEFmnY2a2
+         OI0JXdTdk+PsQ==
+Date:   Tue, 23 May 2023 14:37:35 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v21 2/6] block: Fix bio_flagged() so that gcc can better
+ optimise it
+Message-ID: <20230523-kommst-gewechselt-e7b94e891a12@brauner>
+References: <20230522205744.2825689-1-dhowells@redhat.com>
+ <20230522205744.2825689-3-dhowells@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230522205744.2825689-3-dhowells@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Hans,
+On Mon, May 22, 2023 at 09:57:40PM +0100, David Howells wrote:
+> Fix bio_flagged() so that multiple instances of it, such as:
+> 
+> 	if (bio_flagged(bio, BIO_PAGE_REFFED) ||
+> 	    bio_flagged(bio, BIO_PAGE_PINNED))
+> 
+> can be combined by the gcc optimiser into a single test in assembly
+> (arguably, this is a compiler optimisation issue[1]).
+> 
+> The missed optimisation stems from bio_flagged() comparing the result of
+> the bitwise-AND to zero.  This results in an out-of-line bio_release_page()
+> being compiled to something like:
+> 
+>    <+0>:     mov    0x14(%rdi),%eax
+>    <+3>:     test   $0x1,%al
+>    <+5>:     jne    0xffffffff816dac53 <bio_release_pages+11>
+>    <+7>:     test   $0x2,%al
+>    <+9>:     je     0xffffffff816dac5c <bio_release_pages+20>
+>    <+11>:    movzbl %sil,%esi
+>    <+15>:    jmp    0xffffffff816daba1 <__bio_release_pages>
+>    <+20>:    jmp    0xffffffff81d0b800 <__x86_return_thunk>
+> 
+> However, the test is superfluous as the return type is bool.  Removing it
+> results in:
+> 
+>    <+0>:     testb  $0x3,0x14(%rdi)
+>    <+4>:     je     0xffffffff816e4af4 <bio_release_pages+15>
+>    <+6>:     movzbl %sil,%esi
+>    <+10>:    jmp    0xffffffff816dab7c <__bio_release_pages>
+>    <+15>:    jmp    0xffffffff81d0b7c0 <__x86_return_thunk>
+> 
+> instead.
+> 
+> Also, the MOVZBL instruction looks unnecessary[2] - I think it's just
+> 're-booling' the mark_dirty parameter.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: linux-block@vger.kernel.org
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108370 [1]
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108371 [2]
+> Link: https://lore.kernel.org/r/167391056756.2311931.356007731815807265.stgit@warthog.procyon.org.uk/ # v6
+> ---
 
-On Tue, May 23, 2023, at 6:46 AM, Hans de Goede wrote:
-> Hi Mark,
->
-> On 5/17/23 20:19, Mark Pearson wrote:
->> Whilst reviewing some documentation from the FW team on using WMI on
->> Lenovo system I noticed that we weren't using Opcode support when
->> changing BIOS settings in the thinkLMI driver.
->> 
->> We should be doing this to ensure we're future proof as the old
->> non-opcode mechanism has been deprecated.
->> 
->> Tested on X1 Carbon G10 and G11.
->> 
->> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
->> ---
->>  drivers/platform/x86/think-lmi.c | 23 ++++++++++++++++++++++-
->>  1 file changed, 22 insertions(+), 1 deletion(-)
->> 
->> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->> index 1138f770149d..d9341305eba9 100644
->> --- a/drivers/platform/x86/think-lmi.c
->> +++ b/drivers/platform/x86/think-lmi.c
->> @@ -1001,7 +1001,28 @@ static ssize_t current_value_store(struct kobject *kobj,
->>  				tlmi_priv.pwd_admin->save_signature);
->>  		if (ret)
->>  			goto out;
->
->> -	} else { /* Non certiifcate based authentication */
->> +	} else if (tlmi_priv.opcode_support) {
->> +		/* If opcode support is present use that interface */
->> +		set_str = kasprintf(GFP_KERNEL, "%s,%s;", setting->display_name,
->> +					new_setting);
->> +		if (!set_str) {
->> +			ret = -ENOMEM;
->> +			goto out;
->> +		}
->> +
->> +		ret = tlmi_simple_call(LENOVO_SET_BIOS_SETTINGS_GUID, set_str);
->> +		if (ret)
->> +			goto out;
->> +
->> +		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
->> +			ret = tlmi_opcode_setting("WmiOpcodePasswordAdmin",
->> +					tlmi_priv.pwd_admin->password);
->> +			if (ret)
->> +				goto out;
->> +		}
->> +
->> +		ret = tlmi_save_bios_settings("");
->
-> I'm a bit confused about how this works. You are calling the same
-> LENOVO_SET_BIOS_SETTINGS_GUID as the old non opcode based authentication method
-> without any auth string.
->
-> And then afterwards you are calling LENOVO_OPCODE_IF_GUID with
-> "WmiOpcodePasswordAdmin:<passwd>"
->
-> Won't the initial LENOVO_SET_BIOS_SETTINGS_GUID get rejected since
-> it does not include an auth-string and you have not authenticated
-> yet using the opcode mechanism either. IOW shouldn't the opcode
-> auth call go first ?
->
-> And how does this work timing wise, vs races with userspace doing
-> multiple sysfs writes at once.
->
-> If the authentication done afterwards really acks the last
-> LENOVO_SET_BIOS_SETTINGS_GUID call then a userspace based
-> attacker could try to race and overwrite the last
-> LENOVO_SET_BIOS_SETTINGS_GUID call before the ack happens... ?
->
-> If this code really is correct I think we need to introduce
-> a mutex to avoid this race.
->
-> And this also needs some comments to explain what is going on.
-
-Agreed - and looking at it now....I'm questioning it myself. This was tested so it works...but I wonder if that was more luck than judgement.
-Let me do some checking - I think I may have messed up here.
-
-Mark
+Reviewed-by: Christian Brauner <brauner@kernel.org>
