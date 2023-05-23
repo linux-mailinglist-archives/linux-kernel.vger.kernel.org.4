@@ -2,72 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B5470D3DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABA470D3E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbjEWGUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S235207AbjEWGUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235170AbjEWGTw (ORCPT
+        with ESMTP id S235200AbjEWGUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:19:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F316C130
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 23:19:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 896D062F72
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72211C433EF;
-        Tue, 23 May 2023 06:19:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684822789;
-        bh=KAVEqt/JEohCVjW0sfFZBs2E7jSKgH4ZExSL2rRnJAk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RkChh1nRR4XlzI5dz24Hqt59N6RTFlEQXytCmNL9YEZsM/KhIgwR1LRC0pQJlUNNs
-         64ihtB8stMuIt/XiOZNQIB/carbXmWibAIAX/K33ptqF+X2KRx8qDNkuGrgmmQEht9
-         EHXyyzZ+dGwFQYTmB9UxufWmi5PJYhngfvRBG2z52C9FNRI+yIcYlQmrJiirFDJDUy
-         Gh9Le41b1nHwcyGIKuHID3in3tYB7BNwEnavhM+Z5PGvVeCgJ6QVCzpxWDb29kNVOc
-         YJ8tfVvev3Ui7ItwVpze18qSxFXqlQRYlVPo+E4QPKtRDl/gvNvkMXFQTisaaA+foG
-         KU+0qxcdUmZJg==
-Message-ID: <b183ca8b-7292-7d6c-e267-0e10bd32ba8c@kernel.org>
-Date:   Tue, 23 May 2023 14:19:46 +0800
+        Tue, 23 May 2023 02:20:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A721BD;
+        Mon, 22 May 2023 23:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684822812; x=1716358812;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kv+U3eR2t5jXrzu7bhE+tT5rUsZNuQI3uVH6Dk7rusQ=;
+  b=cqq//bPah+oPEEmq1hxULMMLI4G6PPUbCiHkVNhPS5mYyZL4iXjtQ7ZK
+   5OGeEJi85vAegfpZItWyyqOxexWJZDV584CYn12RM1Dj1i3C8CRNMZHqW
+   RhOKe7oNzhpOaA3TwHV3EBM44rfnCapY2dfSWU/SQp4osOSwyJfSQM5U+
+   CfFYiUgwcGidEC0KrFLviFyBVBqKZ7FMBxKfE7wzibnRnlWrbZ3KVm3ee
+   ESxc0eJFbWTfwD+sm/viGdkWHj0PnGw6zESeImh8mZj8dGPEdlvwim+GT
+   pvlmzVxgXozOwwEEIfXbVxsvJLafeFah0Xt7rSaIjQUWKpNzIDcuT89Lg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="351994164"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="351994164"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 23:20:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="734636085"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="734636085"
+Received: from ganyifangubuntu20-ilbpg12.png.intel.com ([10.88.229.31])
+  by orsmga008.jf.intel.com with ESMTP; 22 May 2023 23:20:07 -0700
+From:   Gan Yi Fang <yi.fang.gan@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Gan Yi Fang <yi.fang.gan@intel.com>
+Subject: [PATCH net-next 1/1] net: stmmac: Remove redundant checking for rx_coalesce_usecs
+Date:   Tue, 23 May 2023 02:19:52 -0400
+Message-Id: <20230523061952.204537-1-yi.fang.gan@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] erofs: avoid pcpubuf.c inclusion if CONFIG_EROFS_FS_ZIP
- is off
-Content-Language: en-US
-To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org,
-        linux-erofs@lists.ozlabs.org
-Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
-        linux-kernel@vger.kernel.org
-References: <20230515095758.10391-1-zbestahu@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230515095758.10391-1-zbestahu@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/15 17:57, Yue Hu wrote:
-> From: Yue Hu <huyue2@coolpad.com>
-> 
-> The function of pcpubuf.c is just for low-latency decompression
-> algorithms (e.g. lz4).
-> 
-> Signed-off-by: Yue Hu <huyue2@coolpad.com>
-> Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+The datatype of rx_coalesce_usecs is u32, always larger or equal to zero.
+Previous checking does not include value 0, this patch removes the
+checking to handle the value 0.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Gan Yi Fang <yi.fang.gan@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
+index 35c8dd92d369..6ed0e683b5e0 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
+@@ -917,7 +917,7 @@ static int __stmmac_set_coalesce(struct net_device *dev,
+ 	else if (queue >= max_cnt)
+ 		return -EINVAL;
+ 
+-	if (priv->use_riwt && (ec->rx_coalesce_usecs > 0)) {
++	if (priv->use_riwt) {
+ 		rx_riwt = stmmac_usec2riwt(ec->rx_coalesce_usecs, priv);
+ 
+ 		if ((rx_riwt > MAX_DMA_RIWT) || (rx_riwt < MIN_DMA_RIWT))
+-- 
+2.34.1
+
