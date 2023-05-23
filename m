@@ -2,275 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F5270DA10
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6743970DA53
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbjEWKP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S229921AbjEWKVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbjEWKPy (ORCPT
+        with ESMTP id S232621AbjEWKVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:15:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE519FD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684836906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ND/ou30ORoYCnfj9Kyfqf3MTIMtAMJBB+4GB/lYgQKU=;
-        b=S6EdV6xJ9Gynvw57NVXWS/+Qxi4XtWFDvRqWP2Njwuz0kTM1FxpgJbkFcHcif84fw6wW6C
-        cJXB9bsvxs9Luyr0xVsoWs5ZVq+c+aKXyeitnJPP2Ps4ki0fTNfV7+8SDdkSNFDwcvaZgD
-        Q18WWsnWXeGh4cHiaME3BJwnDKpFLOI=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-671-0P6vwIawM_aiRoMu41KIPg-1; Tue, 23 May 2023 06:15:05 -0400
-X-MC-Unique: 0P6vwIawM_aiRoMu41KIPg-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30932d15a30so4210633f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:15:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684836904; x=1687428904;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ND/ou30ORoYCnfj9Kyfqf3MTIMtAMJBB+4GB/lYgQKU=;
-        b=FUE6iE0aMePkHXWyzcsk/gR1vET/hpTXDW+uPox9YYb8NFZ2qIaUbeFHh+AKiXhwUY
-         pX9ZH2vn/xd8MfR0ag03oXtR3hA7NBMNQkabJIH9L7Ynl8DtA9mSokCic7tJnKad6EKr
-         AxgN4aVqdxf/nAtsoEl24rYBjALb09Bkj99JWvRB9FQPBzoa96m1m/S/F2GTyubIgCVW
-         rTbFmlq61a5hMgFVLxjwwzv9fBHtDtoxu7ZcaL4TJXMaGjtrL2zn86mhfFMpgPbe616c
-         NMPgygZvxyNg5PSNvSaxGaDwtIRgXG/ATTq2pka2/CJtqOp05vflPQQA6jQaK4cjAYfS
-         rj6g==
-X-Gm-Message-State: AC+VfDw5lW95xhCqHF1GHdLREkye961qA9w+CbGKSXtEHMDFMpBQkd5B
-        WrPV3DnIPKobSAulL/UlUI2XU8X6/P4a5Y/eeTSUGmGl+bH2BhbBG5ib+MQOWW96tZuhdRtjbHE
-        iYJQr2g5LNr5a9CeFLMV4dEjvqWHxUSev
-X-Received: by 2002:a5d:6509:0:b0:309:3db8:51e6 with SMTP id x9-20020a5d6509000000b003093db851e6mr9859191wru.35.1684836904072;
-        Tue, 23 May 2023 03:15:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5ycDNXEE29gfxeRpK0bpjNrv1eub8emKCQxHXG/xj0UVG7NHbcGQGOldzjjRYRaTNPSsgWeA==
-X-Received: by 2002:a5d:6509:0:b0:309:3db8:51e6 with SMTP id x9-20020a5d6509000000b003093db851e6mr9859162wru.35.1684836903680;
-        Tue, 23 May 2023 03:15:03 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
-        by smtp.gmail.com with ESMTPSA id s4-20020a5d4244000000b00307bc4e39e5sm10489729wrr.117.2023.05.23.03.15.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 03:15:03 -0700 (PDT)
-Message-ID: <c496e8b8-e0d4-a2d6-5cce-e336904e15ae@redhat.com>
-Date:   Tue, 23 May 2023 12:15:02 +0200
+        Tue, 23 May 2023 06:21:19 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42289100;
+        Tue, 23 May 2023 03:21:16 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 43CB05FD0D;
+        Tue, 23 May 2023 13:21:14 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1684837274;
+        bh=Bk3y/ekW1k32shYNnUtpGVBff1mL1/GErdcGcnG133Y=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=lwKXK7oVPa99pFr5ap9b7ja++6PtDMIXjDCpGU/xv4LmfZ2hR/K6JfTWEjCYWHv6J
+         hcMRdn9plF+Wm+iqMZSjrugYxKYP18B6zg91Sb/2EAD0jMOJdv5dTtwaCp/16vZdLT
+         HWTnQaqTUK5sRkM1sYKbHBQfGXqKp5GDRIsxBu9WjRY508kYm4YCJxw1kg2cyJdRec
+         LqQLH1bsu3BLVi8f7gV0+UV31PoJbGorJuipU2Yf2HHjAWmap92xEMLPQuZTDavWPo
+         PZdqdPHs8WMglGgtdJeml2rzofoHoZHnDcGjR8k1TA5EXq7ER34zBb8hiYgyC0aP5W
+         w8aif/SqwgkfQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 23 May 2023 13:21:10 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Jaime Liao <jaimeliao.tw@gmail.com>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>
+Subject: [PATCH v4] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
+Date:   Tue, 23 May 2023 13:16:34 +0300
+Message-ID: <20230523101637.3009746-1-AVKrasnov@sberdevices.ru>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
-Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
-References: <202305221842587200002@zte.com.cn>
- <20230522105433.4277-1-yang.yang29@zte.com.cn>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v8 6/6] selftest: add a testcase of ksm zero pages
-In-Reply-To: <20230522105433.4277-1-yang.yang29@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/23 05:11:00 #21371280
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.05.23 12:54, Yang Yang wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> Add a function test_unmerge_zero_page() to test the functionality on
-> unsharing and counting ksm-placed zero pages and counting of this patch
-> series.
-> 
-> test_unmerge_zero_page() actually contains three subjct test objects:
-> (1) whether the count of ksm zero pages can update correctly after merging;
-> (2) whether the count of ksm zero pages can update correctly after
->      unmerging;
-> (3) whether ksm zero pages are really unmerged.
-> 
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
-> Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-> ---
->   tools/testing/selftests/mm/ksm_functional_tests.c | 75 +++++++++++++++++++++++
->   1 file changed, 75 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-> index 26853badae70..9b7fb94ed64f 100644
-> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
-> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-> @@ -29,6 +29,8 @@
->   
->   static int ksm_fd;
->   static int ksm_full_scans_fd;
-> +static int ksm_zero_pages_fd;
-> +static int ksm_use_zero_pages_fd;
->   static int pagemap_fd;
->   static size_t pagesize;
->   
-> @@ -59,6 +61,21 @@ static bool range_maps_duplicates(char *addr, unsigned long size)
->   	return false;
->   }
->   
-> +static long get_ksm_zero_pages(void)
-> +{
-> +	char buf[20];
-> +	ssize_t read_size;
-> +	unsigned long ksm_zero_pages;
-> +
+This adds support for OTP area access on MX30LFxG18AC chip series.
 
-I would add:
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+---
+  v1 -> v2:
+  * Add slab.h include due to kernel test robot error.
+  v2 -> v3:
+  * Use 'uint64_t' as input argument for 'do_div()' instead
+    of 'unsigned long' due to kernel test robot error.
+  v3 -> v4:
+  * Use 'dev_err()' instead of 'WARN()'.
+  * Call 'match_string()' before checking 'supports_set_get_features'
+    in 'macronix_nand_setup_otp().
+  * Use 'u8' instead of 'uint8_t' as ./checkpatch.pl wants.
 
-if (!ksm_zero_pages_fd)
-	return 0;
+ drivers/mtd/nand/raw/nand_macronix.c | 216 +++++++++++++++++++++++++++
+ 1 file changed, 216 insertions(+)
 
-> +	read_size = pread(ksm_zero_pages_fd, buf, sizeof(buf) - 1, 0);
-> +	if (read_size < 0)
-> +		return -errno;
-> +	buf[read_size] = 0;
-> +	ksm_zero_pages = strtol(buf, NULL, 10);
-> +
-> +	return ksm_zero_pages;
-> +}
-> +
->   static long ksm_get_full_scans(void)
->   {
->   	char buf[10];
-> @@ -159,6 +176,61 @@ static void test_unmerge(void)
->   	munmap(map, size);
->   }
->   
-> +static inline unsigned long expected_ksm_pages(unsigned long mergeable_size)
-> +{
-> +	return mergeable_size / pagesize;
-> +}
-
-I suggest to just inline that.
-
-> +
-> +static void test_unmerge_zero_pages(void)
-> +{
-> +	const unsigned int size = 2 * MiB;
-> +	char *map;
-> +	unsigned long pages_expected;
-> +
-> +	ksft_print_msg("[RUN] %s\n", __func__);
-> +
-> +	/* Confirm the interfaces*/
-
-Missing space at the end of the comment. But I suggest to just drop this comment.
-
-> +	if (ksm_zero_pages_fd < 0) {
-> +		ksft_test_result_skip("open(\"/sys/kernel/mm/ksm/ksm_zero_pages\") failed\n");
-> +		return;
-> +	}
-> +	if (ksm_use_zero_pages_fd < 0) {
-> +		ksft_test_result_skip("open \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
-> +		return;
-> +	}
-> +	if (write(ksm_use_zero_pages_fd, "1", 1) != 1) {
-> +		ksft_test_result_skip("write \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
-> +		return;
-> +	}
-> +
-> +	/* Mmap zero pages*/
-
-Missing space at the end of the comment
-
-> +	map = mmap_and_merge_range(0x00, size, false);
-> +	if (map == MAP_FAILED)
-> +		return;
-> +
-> +	/* Check if ksm_zero_pages can be update correctly after merging */
-> +	pages_expected = expected_ksm_pages(size);
-> +	ksft_test_result(pages_expected == get_ksm_zero_pages(),
-> +		"The count zero_page_sharing was updated after merging\n");
-> +
-
-Make sure that the number of tests (ksft_test_result*() invocations) is on any return
-path as expected (e.g., 1).
-
-if (pages_expected != get_ksm_zero_pages) {
-	ksft_test_result_pass("'zero_page_sharing' updated after merging\n");
-	goto unmap;
-}
-
-> +	/* try to unmerge half of the region */
-> +	if (madvise(map, size / 2, MADV_UNMERGEABLE)) {
-> +		ksft_test_result_fail("MADV_UNMERGEABLE failed\n");
-> +		goto unmap;
-> +	}
-> +
-> +	/* Check if ksm_zero_pages can be update correctly after unmerging */
-> +	pages_expected = expected_ksm_pages(size / 2);
-
-Just do
-
-pages_expected /= 2;
-
-> +	ksft_test_result(pages_expected == get_ksm_zero_pages(),
-> +		"The count zero_page_sharing was updated after unmerging\n");
-> +
-
-if (pages_expected == get_ksm_zero_pages()) {
-	ksft_test_result_pass("'zero_page_sharing' updated after unmerging\n");
-	goto unmap;
-}
-
-> +	/* Check if ksm zero pages are really unmerged */
-> +	ksft_test_result(!range_maps_duplicates(map, size / 2),
-> +				"KSM zero pages were unmerged\n");
-> +unmap:
-> +	munmap(map, size);
-> +}
-> +
->   static void test_unmerge_discarded(void)
->   {
->   	const unsigned int size = 2 * MiB;
-> @@ -379,8 +451,11 @@ int main(int argc, char **argv)
->   	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
->   	if (pagemap_fd < 0)
->   		ksft_exit_skip("open(\"/proc/self/pagemap\") failed\n");
-> +	ksm_zero_pages_fd = open("/sys/kernel/mm/ksm/ksm_zero_pages", O_RDONLY);
-> +	ksm_use_zero_pages_fd = open("/sys/kernel/mm/ksm/use_zero_pages", O_RDWR);
->   
->   	test_unmerge();
-> +	test_unmerge_zero_pages();
->   	test_unmerge_discarded();
->   #ifdef __NR_userfaultfd
->   	test_unmerge_uffd_wp();
-
-You should need something like this:
-
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 26853badae70..00df05bfc3a3 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -358,7 +358,7 @@ static void test_prctl_unmerge(void)
-  
-  int main(int argc, char **argv)
-  {
--	unsigned int tests = 5;
-+	unsigned int tests = 6;
-  	int err;
-  
-  #ifdef __NR_userfaultfd
-
+diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
+index 1472f925f386..be1ffa93bebb 100644
+--- a/drivers/mtd/nand/raw/nand_macronix.c
++++ b/drivers/mtd/nand/raw/nand_macronix.c
+@@ -6,6 +6,7 @@
+  * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
+  */
+ 
++#include <linux/slab.h>
+ #include "linux/delay.h"
+ #include "internals.h"
+ 
+@@ -31,6 +32,20 @@
+ 
+ #define MXIC_CMD_POWER_DOWN 0xB9
+ 
++#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
++#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
++#define MACRONIX_30LFXG18AC_OTP_PAGES		30
++#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
++#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
++	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
++	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
++#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
++	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
++	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
++
++#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
++#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
++
+ struct nand_onfi_vendor_macronix {
+ 	u8 reserved;
+ 	u8 reliability_func;
+@@ -316,6 +331,206 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
+ 	chip->ops.resume = mxic_nand_resume;
+ }
+ 
++static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
++					    size_t *retlen,
++					    struct otp_info *buf)
++{
++	if (len < sizeof(*buf))
++		return -EINVAL;
++
++	/* Don't know how to check that OTP is locked. */
++	buf->locked = 0;
++	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
++	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
++
++	*retlen = sizeof(*buf);
++
++	return 0;
++}
++
++static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
++{
++	u8 feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++
++	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
++	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				 feature_buf);
++}
++
++static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
++{
++	u8 feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++
++	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				 feature_buf);
++}
++
++static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
++					loff_t offs_in_flash,
++					size_t len, size_t *retlen,
++					u_char *buf, bool write)
++{
++	struct nand_chip *nand;
++	size_t bytes_handled;
++	off_t offs_in_page;
++	void *dma_buf;
++	u64 page;
++	int ret;
++
++	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
++	 * so allocate properly aligned memory for it. This is
++	 * needed because cross page accesses may lead to unaligned
++	 * buffer address for DMA.
++	 */
++	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
++	if (!dma_buf)
++		return -ENOMEM;
++
++	nand = mtd_to_nand(mtd);
++	nand_select_target(nand, 0);
++
++	ret = macronix_30lfxg18ac_otp_enable(nand);
++	if (ret)
++		goto out_otp;
++
++	page = offs_in_flash;
++	/* 'page' will be result of division. */
++	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
++	bytes_handled = 0;
++
++	while (bytes_handled < len &&
++	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
++		size_t bytes_to_handle;
++
++		bytes_to_handle = min_t(size_t, len - bytes_handled,
++					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
++					offs_in_page);
++
++		if (write) {
++			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
++			ret = nand_prog_page_op(nand, page, offs_in_page,
++						dma_buf, bytes_to_handle);
++		} else {
++			ret = nand_read_page_op(nand, page, offs_in_page,
++						dma_buf, bytes_to_handle);
++			if (!ret)
++				memcpy(&buf[bytes_handled], dma_buf,
++				       bytes_to_handle);
++		}
++		if (ret)
++			goto out_otp;
++
++		bytes_handled += bytes_to_handle;
++		offs_in_page = 0;
++		page++;
++	}
++
++	*retlen = bytes_handled;
++
++out_otp:
++	if (ret)
++		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
++
++	ret = macronix_30lfxg18ac_otp_disable(nand);
++	if (ret)
++		dev_err(&mtd->dev, "failed to leave OTP mode after %s\n",
++			write ? "write" : "read");
++
++	nand_deselect_target(nand);
++	kfree(dma_buf);
++
++	return ret;
++}
++
++static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
++					 size_t len, size_t *rlen,
++					 const u_char *buf)
++{
++	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
++					    true);
++}
++
++static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
++					size_t len, size_t *rlen,
++					u_char *buf)
++{
++	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
++}
++
++static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
++					size_t len)
++{
++	u8 feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++	struct nand_chip *nand;
++	int ret;
++
++	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
++	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
++		return -EINVAL;
++
++	dev_dbg(&mtd->dev, "locking OTP\n");
++
++	nand = mtd_to_nand(mtd);
++	nand_select_target(nand, 0);
++
++	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
++			 MACRONIX_30LFXG18AC_OTP_LOCKED;
++	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				feature_buf);
++	if (ret) {
++		dev_err(&mtd->dev,
++			"failed to lock OTP (set features): %i\n", ret);
++		nand_deselect_target(nand);
++		return ret;
++	}
++
++	/* Do dummy page prog with zero address. */
++	feature_buf[0] = 0;
++	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
++	if (ret)
++		dev_err(&mtd->dev,
++			"failed to lock OTP (page prog): %i\n", ret);
++
++	ret = macronix_30lfxg18ac_otp_disable(nand);
++	if (ret)
++		dev_err(&mtd->dev, "failed to leave OTP mode after lock\n");
++
++	nand_deselect_target(nand);
++
++	return ret;
++}
++
++static void macronix_nand_setup_otp(struct nand_chip *chip)
++{
++	static const char * const supported_otp_models[] = {
++		"MX30LF1G18AC",
++		"MX30LF2G18AC",
++		"MX30LF4G18AC",
++	};
++	struct mtd_info *mtd;
++
++	if (match_string(supported_otp_models,
++			 ARRAY_SIZE(supported_otp_models),
++			 chip->parameters.model) < 0)
++		return;
++
++	if (!chip->parameters.supports_set_get_features)
++		return;
++
++	bitmap_set(chip->parameters.get_feature_list,
++		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
++	bitmap_set(chip->parameters.set_feature_list,
++		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
++
++	mtd = nand_to_mtd(chip);
++	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
++	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
++	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
++	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
++	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
++	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
++}
++
+ static int macronix_nand_init(struct nand_chip *chip)
+ {
+ 	if (nand_is_slc(chip))
+@@ -325,6 +540,7 @@ static int macronix_nand_init(struct nand_chip *chip)
+ 	macronix_nand_onfi_init(chip);
+ 	macronix_nand_block_protection_support(chip);
+ 	macronix_nand_deep_power_down_support(chip);
++	macronix_nand_setup_otp(chip);
+ 
+ 	return 0;
+ }
 -- 
-Thanks,
-
-David / dhildenb
+2.35.0
 
