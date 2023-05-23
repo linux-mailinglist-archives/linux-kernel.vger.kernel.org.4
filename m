@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F321370CFE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3FF70CFDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbjEWA5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S235249AbjEWAw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235199AbjEWA5S (ORCPT
+        with ESMTP id S235087AbjEWAwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:57:18 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E0E270A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:53:13 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae3f74c98bso40955ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:53:13 -0700 (PDT)
+        Mon, 22 May 2023 20:52:38 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0062D58
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:45:58 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-2537a79b9acso3040614a91.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684803121; x=1687395121;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0t+3evlCLlh8Vv6Mnjo2JSq0Q8GfskIouq/uyhSRTHA=;
-        b=l0s1tfsBkLul0R6dsA3XF8f9SMtZBnuThFwzCYzha5dJkSxN+5/cO73DPsm5Gs+psh
-         /PNQHyOsLqxoSCW3GqyV4R6dpa4BX7UiSKkWKNKBZKjwdQLyewJvBTpESXsAUHY9L5HX
-         NGn7zMYU7cBaGQH/pLOztrjas6T2eu3BjvTy8MeCa3xXd8fzPPEgOh6YnOEbMlYqHOvU
-         aboAd0tWpjiN165/faQOf4W0GXsyLoFZtsSwZd5WUVV10m1vkLtxCRzsmxm51qxscfUC
-         9dSkcrdsgWvXmvpk2aqXGvY02KRADCtt3gFRPWrK3O4kpdFgTmtMN2TAN2NEX/vIc7V1
-         ZPPA==
+        d=gmail.com; s=20221208; t=1684802668; x=1687394668;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ohaTtJOaeTv+DUbIMaoQB65niNoQeGMvZ+rell6iqk=;
+        b=Lh2t3iKMxSvClzmCWv9vggXg6qa912HRceMhmGZW22Nea0fZW/Q4GLwhOXlOvZlt8+
+         svTRTl6rlknvFhR/Vb28ViINP9WwvZd/IjbY8vu685AtJGUVUZog1b3RQQM9orQ0WDtk
+         dECpFw98w8XuJATQW2Y9dMfd+3Xoavt+3vGl6CQsk2BtDr0Qu2EJi01c1Oe3q75H7bHv
+         1OGVaoV2JE/o0M/8bwm9TIGFYoE8GSL+GWN8OpYHBWW6QU2KiWyW6OLC9Dv0mIABSqSV
+         wS7nO7w+CYB2CEx/D2V5zSOHVLL/c3SiyK87ySOtc86/ZhxG8Hlq6aUypkW0y1WTBXZy
+         cQKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684803121; x=1687395121;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0t+3evlCLlh8Vv6Mnjo2JSq0Q8GfskIouq/uyhSRTHA=;
-        b=ZODDEvIPAcnbQSE5UkJr1T6JNKKUUZs+ABkorS6KjT9wUMrT1NHfeZbq2EoHkHMvvn
-         UwHJ21wnPqk4nnQp0p+YdtmhzmyQhs4wVWVYUzn/Lx//7XbRYYJ3IjvnQzmY853JYjoC
-         60WfiFMZn8ceLjEOhF3rCdLuWPnlWTv1inc3MXxYSIJLUExLK2qFr278MWXUw5q+SEL6
-         cM5KcKA7ZeS/tPpMS1olJFaZlvFh83VNQYqH95H3umSw3/zvaRAB0Kc3oIkU5fOwFYYv
-         d5qd1piBRLzowRoRy8tnUUq2sQH5FkZl4zSiMEQZRc+pk5oOvBnP0bPen6r82/PteutL
-         Uu/g==
-X-Gm-Message-State: AC+VfDysKX4Xw9CNkEuNOfL+64hF74XsMqeXAQJZp4mpXXBhq1wZ3feg
-        V8ATI83n7fym0FNrwkp8Q6oFfA==
-X-Google-Smtp-Source: ACHHUZ4PQwfJjRZAuHW1FOPTNIN+gBe7njrrVyuW9BbXkCLmIROCieXX12Bmtt2AUlqiHDd7O/dfpw==
-X-Received: by 2002:a17:902:e74e:b0:1a8:96c:738 with SMTP id p14-20020a170902e74e00b001a8096c0738mr159173plf.2.1684803121320;
-        Mon, 22 May 2023 17:52:01 -0700 (PDT)
-Received: from [2620:0:1008:11:2b0e:a3da:5943:182] ([2620:0:1008:11:2b0e:a3da:5943:182])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902f7c700b001a19196af48sm5428262plw.64.2023.05.22.17.52.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 17:52:00 -0700 (PDT)
-Date:   Mon, 22 May 2023 17:51:59 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM
- checks
-In-Reply-To: <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com>
-Message-ID: <b2bf7ae9-983d-6c20-0781-7f37a4454bfd@google.com>
-References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com> <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com> <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com> <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1684802668; x=1687394668;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+ohaTtJOaeTv+DUbIMaoQB65niNoQeGMvZ+rell6iqk=;
+        b=SJvvxgjGIBd7uC6YwlLRpGPyP4YB6FhQEw+kMzRzFr0JBbr2xtBV+/ixK5Tap1/cAR
+         6VCN65azJKz8EgU5vWNYHyHwNizf9kZs3ySuxIo6n+X8Q6f6GpYeGOzJSx22IxlKLjQ5
+         OEfgFJbJmJtw/r5RhtMYPeKLLWhh8GS7wVx2yO1OazENFMzRaoiAXklRMg+XJjakbU01
+         EOgi9Tv8vjbAm/17mQaaCLhxmm5Eb8drR+8Ft+/w1x8sfW4e/YWixZ9vsbopqhDhAYEW
+         tL9RNHer+Dq1VQ2rlppJRWDwLQYe/TpDplWSF4fYN3++RsJLTCc9JhzTr0BDDxetqAk5
+         89MQ==
+X-Gm-Message-State: AC+VfDzOzHFfAcyYzU6qV5ZbFF0RuO6Ei6XbqzM2g39sv4Ssq/0XNFut
+        S2x1UNSbvTDFT7Izor7LJQg=
+X-Google-Smtp-Source: ACHHUZ7Z00JJe8o88wNi/jig565qsA7QD7/XTMHnzm4a67eYa0dAv7dLNOTRPHowJnhdhWSqEW9znQ==
+X-Received: by 2002:a17:90a:d513:b0:24d:d377:d1 with SMTP id t19-20020a17090ad51300b0024dd37700d1mr12085705pju.45.1684802668474;
+        Mon, 22 May 2023 17:44:28 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id lp4-20020a17090b4a8400b002555689006esm3048698pjb.47.2023.05.22.17.44.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 22 May 2023 17:44:28 -0700 (PDT)
+Date:   Tue, 23 May 2023 08:52:26 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Sandeep Dhavale <dhavale@google.com>, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+Subject: Re: [PATCH] erofs: use HIPRI by default if per-cpu kthreads are
+ enabled
+Message-ID: <20230523085226.00006933.zbestahu@gmail.com>
+In-Reply-To: <20230522092141.124290-1-hsiangkao@linux.alibaba.com>
+References: <20230522092141.124290-1-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="2003089352-356300863-1684803120=:4168530"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,43 +75,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, 22 May 2023 17:21:41 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
---2003089352-356300863-1684803120=:4168530
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 22 May 2023, Linus Torvalds wrote:
-
-> On Mon, May 22, 2023 at 11:39 AM David Rientjes <rientjes@google.com> wrote:
-> >
-> > I think VM_BUG_ON*() and friends are used to crash the kernel for
-> > debugging so that we get a crash dump and because some variants don't
-> > exist for VM_WARN_ON().
+> As Sandeep shown [1], high priority RT per-cpu kthreads are
+> typically helpful for Android scenarios to minimize the scheduling
+> latencies.
 > 
-> I do think that from a VM developer standpoint, I think it should be
-> fine to just effectively turn VM_BUG_ON() into WARN_ON_ONCE() together
-> with panic_on_warn.
+> Switch EROFS_FS_PCPU_KTHREAD_HIPRI on by default if
+> EROFS_FS_PCPU_KTHREAD is on since it's the typical use cases for
+> EROFS_FS_PCPU_KTHREAD.
 > 
-> Maybe we could even extend 'panic_on_warn' to be a bitmap and
-> effectively have a "don't panic on non-VM warnings" option.
+> Also clean up unneeded sched_set_normal().
 > 
+> [1] https://lore.kernel.org/r/CAB=BE-SBtO6vcoyLNA9F-9VaN5R0t3o_Zn+FW8GbO6wyUqFneQ@mail.gmail.com
+> Cc: Sandeep Dhavale <dhavale@google.com>
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> ---
+>  fs/erofs/Kconfig | 1 +
+>  fs/erofs/zdata.c | 2 --
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
+> index 704fb59577e0..f259d92c9720 100644
+> --- a/fs/erofs/Kconfig
+> +++ b/fs/erofs/Kconfig
+> @@ -121,6 +121,7 @@ config EROFS_FS_PCPU_KTHREAD
+>  config EROFS_FS_PCPU_KTHREAD_HIPRI
+>  	bool "EROFS high priority per-CPU kthread workers"
+>  	depends on EROFS_FS_ZIP && EROFS_FS_PCPU_KTHREAD
+> +	default y
 
-I hadn't thought of that approach, it would definitely help us achieve our 
-goal of emitting warnings on a small set of production hosts that we don't 
-want to crash.  It's also very clean.
+How about removing this config option?
 
-Right now kernel.panic_on_warn can either be 0 or 1.  We can keep the 
-lowest bit to be "panic on all warnings" and then bit-1 as "panic on debug 
-VM warnings."  When CONFIG_DEBUG_VM is enabled, set the new bit by 
-default so there's no behavior change.
+>  	help
+>  	  This permits EROFS to configure per-CPU kthread workers to run
+>  	  at higher priority.
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index 92f3a01262cf..3ba505434f03 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -367,8 +367,6 @@ static struct kthread_worker *erofs_init_percpu_worker(int cpu)
+>  		return worker;
+>  	if (IS_ENABLED(CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI))
+>  		sched_set_fifo_low(worker->task);
+> -	else
+> -		sched_set_normal(worker->task, 0);
+>  	return worker;
+>  }
+>  
 
-Then, we can keep VM_BUG_ON*() and friends around and extend them to check 
-whether they should BUG() after the WARN_ON(1) or not.
-
-On our production hosts, we'll just set kernel.panic_on_oom to 0.
-
-I'll give it a few days to see if anybody else has any comments or 
-concerns; if not, I'll send a v2 based on this.
---2003089352-356300863-1684803120=:4168530--
