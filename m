@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803D970D6C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5B570D6D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbjEWIKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S235694AbjEWIN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235985AbjEWIJi (ORCPT
+        with ESMTP id S236187AbjEWINM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:09:38 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0F9E43
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:08:42 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-510eb3dbaaeso1014126a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:08:42 -0700 (PDT)
+        Tue, 23 May 2023 04:13:12 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB46F10C3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:11:53 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-510f3db1cd8so1051962a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684829315; x=1687421315;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h/aoipumKtjIgmVBCWgRH2IIEC1OCL6rlPm9b4d5hh0=;
-        b=Dj99uFtw0pORpUZ9+dkFy3pFwdjOR0py1GV+bLZqzq7LSET7zCm0h0bLtWb+z4r18c
-         +pUd7MgZptqd3Lcs/X/GOh4Pq0+r5cN9Wd/KsLi1lEP6nUBLCN+rAgJrXyqioU/n+XZj
-         anfIGaRcZakDAyqKjFKrv10L+NVAHq5lfquTqSgD5SWeSFM+lG5wGn4vFkQ1MGGFQxqv
-         DSQj627Fbug/j+ljPcCOVbAFzyA0+hF0yuBfNKkSEPAN9FBcINaYOs1U0Iobr/qP1QlQ
-         QFbqZmmslinjcho7IvL4MNVe0fOcI9gBGC+cWWJLMH04hgBc5Bm9IT6hdmwqMkLUvnim
-         Vk/w==
+        d=linaro.org; s=google; t=1684829512; x=1687421512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gp1v4Cr3o5+B6rrBcs3JmI/C2kk1LIFxtPN9N4d37Ss=;
+        b=EvPA2B3oorfLyrZF5+6TITFdLDkF66Ib+k892LvDLlQoulCfTaoXHVG77F++9noH5r
+         8hWSTBG3PtGTTb2CipVLGUnw9O0RqyvF/DK1iJ3/IUu4047Jiv0pY/OJOcOTDA3yaYMs
+         Q/RN5/5isOaZp/Qxn40WP4y3igFIuGYNClZRsjmD2LPRzLq1J8zZPqWL+ePtGjzjoWZN
+         D+1VgjpBN5s4giysmxwI4kOk1BSPl0La4JD4ABGdxb0yuIC4szQIE4qIZRPy1+VY/9pF
+         cM4BPbjHNcdnsMEIYuR73DRhHr7L8H/W8vSs5Cv07ZgqSjJ15idImfh3GDmo+FymY7h4
+         klOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684829315; x=1687421315;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684829512; x=1687421512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h/aoipumKtjIgmVBCWgRH2IIEC1OCL6rlPm9b4d5hh0=;
-        b=IPWMAuTrwhMVYeGp83lA8mdegFf/VcbPnd1kFqwwVvDJAzfk67hkg7cUw3oylW6Trn
-         9ZArjl4YBmCe1GOig9lfBQySBFncPOjuSGkiyCt2xa38lHSNtw3jnK3zJivfJVHCzHiP
-         sXdjIu7qZ+TfX51gwCO8JNcWQWoTI7zQRZLpMs5B/qpWdyQVA8qw4zdPrMRdOm0e6nE5
-         bYCeAx3Ilp1pkLhAhIC6Kk1kTA65JCNfLC1O6KLbJTp9w8Rgx01c53hivsiz6UAnv8Uv
-         4deHkRJDvBk7GNyLbkFDqRjofYdovAzyVzHw41hDzssNZDYtLFt5BUZodKLdpLTGjVmG
-         krhg==
-X-Gm-Message-State: AC+VfDxkAl2iReBTdgc0lr6PZnwY5CPfigIaT8AHW6AkGYe53hdpPKhP
-        /z1ddw1rgFpejzVCw+81JZJVyjwPgftf6534kCI=
-X-Google-Smtp-Source: ACHHUZ4hBzBfGUkzVb30MbKl54siE4/TDVUICuxRJ347mzFww1b7qcAvP1rxrghl9gmrYfd6X7qPlQ==
-X-Received: by 2002:a05:6512:510:b0:4f3:8196:80c8 with SMTP id o16-20020a056512051000b004f3819680c8mr3993040lfb.1.1684828794784;
-        Tue, 23 May 2023 00:59:54 -0700 (PDT)
+        bh=gp1v4Cr3o5+B6rrBcs3JmI/C2kk1LIFxtPN9N4d37Ss=;
+        b=e1ehV8jlnc153eUR41PwJCOtpXH6FLfqtW4wF/qsng3HkmPR0yZNpYrV4XiBTFh9h6
+         HYMerYHrUOI0WeHxcgQcx98fjugiyEvkHkma+0xbAU3CppL3P66CzYBN7RGJz4s2H+J2
+         YaI06Q8ZOV4aaOt0dRPBqE2HH33XpzJ2OtPgUE5Hyu97mQ9Jrv2ssODfOsc8i+0jnUUp
+         j+2ggfiH81Gj8XzTnh+Sjon1cskjxM8OBWBzcL/ST78H3570H49+uB3QdZal/F8y6/Gt
+         MC2OXhV9aFeOAx5XeIB0DpLuQvn9nrFJRm82+7gn6Rkp5nI9BtAfPVxl7K5+K/GWcWrc
+         /8aQ==
+X-Gm-Message-State: AC+VfDzrK3XrmH3cH3FxYAXToQKtMTVj+YgSjnZWrch1cJb7NqDb7jLj
+        E3v7FXviwmUUP8ES8QOf/8Em+EEl50FOViqLOGg=
+X-Google-Smtp-Source: ACHHUZ7rRd4HnSgmEMMg7ba24i++vzAy/3RyMhjRS9MJknXCIJXMuRwbIaMN9p9Cs7sBRCbccNJENg==
+X-Received: by 2002:a2e:8058:0:b0:2af:47b2:3f6a with SMTP id p24-20020a2e8058000000b002af47b23f6amr2376442ljg.53.1684828939421;
+        Tue, 23 May 2023 01:02:19 -0700 (PDT)
 Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
-        by smtp.gmail.com with ESMTPSA id p4-20020a2e9ac4000000b002a774fb7923sm1522807ljj.45.2023.05.23.00.59.53
+        by smtp.gmail.com with ESMTPSA id v23-20020a2e9617000000b002a77583b718sm1501256ljh.12.2023.05.23.01.02.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 00:59:54 -0700 (PDT)
-Message-ID: <097944b0-fa7a-ad4d-1c3d-e74ab2b977de@linaro.org>
-Date:   Tue, 23 May 2023 09:59:53 +0200
+        Tue, 23 May 2023 01:02:18 -0700 (PDT)
+Message-ID: <0f7a33c1-f894-adfe-94d7-89296893128f@linaro.org>
+Date:   Tue, 23 May 2023 10:02:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
+Subject: Re: [PATCH] venus: replace arrary index with enum for supported
+ formats
 Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, johan@kernel.org, mani@kernel.org
-References: <20230523011522.65351-1-quic_bjorande@quicinc.com>
- <20230523011522.65351-3-quic_bjorande@quicinc.com>
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <1684736229-30567-1-git-send-email-quic_dikshita@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sc8280xp: Add GPU related nodes
-In-Reply-To: <20230523011522.65351-3-quic_bjorande@quicinc.com>
+In-Reply-To: <1684736229-30567-1-git-send-email-quic_dikshita@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,224 +80,231 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 23.05.2023 03:15, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+On 22.05.2023 08:17, Dikshita Agarwal wrote:
+> Use enums to list supported formats for encoder and decoder
+> instead of array index which was a error prone design.
 > 
-> Add Adreno SMMU, GPU clock controller, GMU and GPU nodes for the
-> SC8280XP.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 > ---
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Thanks a lot.
 
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+>  drivers/media/platform/qcom/venus/core.h | 16 ++++++++
+>  drivers/media/platform/qcom/venus/vdec.c | 63 +++++++++++++++++++-------------
+>  drivers/media/platform/qcom/venus/venc.c | 31 +++++++++-------
+>  3 files changed, 72 insertions(+), 38 deletions(-)
 > 
-> Changes since v1:
-> - Dropped gmu_pdc_seq region from &gmu, as it shouldn't have been used.
-> - Added missing compatible to &adreno_smmu.
-> - Dropped aoss_qmp clock in &gmu and &adreno_smmu.
+> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+> index 12a42fb..e988ed4 100644
+> --- a/drivers/media/platform/qcom/venus/core.h
+> +++ b/drivers/media/platform/qcom/venus/core.h
+> @@ -83,6 +83,22 @@ struct venus_resources {
+>  	const char *fwname;
+>  };
 >  
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 169 +++++++++++++++++++++++++
->  1 file changed, 169 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index d2a2224d138a..329ec2119ecf 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -6,6 +6,7 @@
->  
->  #include <dt-bindings/clock/qcom,dispcc-sc8280xp.h>
->  #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
-> +#include <dt-bindings/clock/qcom,gpucc-sc8280xp.h>
->  #include <dt-bindings/clock/qcom,rpmh.h>
->  #include <dt-bindings/interconnect/qcom,osm-l3.h>
->  #include <dt-bindings/interconnect/qcom,sc8280xp.h>
-> @@ -2331,6 +2332,174 @@ tcsr: syscon@1fc0000 {
->  			reg = <0x0 0x01fc0000 0x0 0x30000>;
->  		};
->  
-> +		gpu: gpu@3d00000 {
-> +			compatible = "qcom,adreno-690.0", "qcom,adreno";
-> +
-> +			reg = <0 0x03d00000 0 0x40000>,
-> +			      <0 0x03d9e000 0 0x1000>,
-> +			      <0 0x03d61000 0 0x800>;
-> +			reg-names = "kgsl_3d0_reg_memory",
-> +				    "cx_mem",
-> +				    "cx_dbgc";
-> +			interrupts = <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>;
-> +			iommus = <&adreno_smmu 0 0xc00>, <&adreno_smmu 1 0xc00>;
-> +			operating-points-v2 = <&gpu_opp_table>;
-> +
-> +			qcom,gmu = <&gmu>;
-> +			interconnects = <&gem_noc MASTER_GFX3D 0 &mc_virt SLAVE_EBI1 0>;
-> +			interconnect-names = "gfx-mem";
-> +			#cooling-cells = <2>;
-> +
-> +			status = "disabled";
-> +
-> +			gpu_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-270000000 {
-> +					opp-hz = /bits/ 64 <270000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
-> +					opp-peak-kBps = <451000>;
-> +				};
-> +
-> +				opp-410000000 {
-> +					opp-hz = /bits/ 64 <410000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
-> +					opp-peak-kBps = <1555000>;
-> +				};
-> +
-> +				opp-500000000 {
-> +					opp-hz = /bits/ 64 <500000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
-> +					opp-peak-kBps = <1555000>;
-> +				};
-> +
-> +				opp-547000000 {
-> +					opp-hz = /bits/ 64 <547000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
-> +					opp-peak-kBps = <1555000>;
-> +				};
-> +
-> +				opp-606000000 {
-> +					opp-hz = /bits/ 64 <606000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
-> +					opp-peak-kBps = <2736000>;
-> +				};
-> +
-> +				opp-640000000 {
-> +					opp-hz = /bits/ 64 <640000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
-> +					opp-peak-kBps = <2736000>;
-> +				};
-> +
-> +				opp-690000000 {
-> +					opp-hz = /bits/ 64 <690000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
-> +					opp-peak-kBps = <2736000>;
-> +				};
-> +			};
-> +		};
-> +
-> +		gmu: gmu@3d6a000 {
-> +			compatible = "qcom,adreno-gmu-690.0", "qcom,adreno-gmu";
-> +			reg = <0 0x03d6a000 0 0x34000>,
-> +			      <0 0x03de0000 0 0x10000>,
-> +			      <0 0x0b290000 0 0x10000>;
-> +			reg-names = "gmu", "rscc", "gmu_pdc";
-> +			interrupts = <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hfi", "gmu";
-> +			clocks = <&gpucc GPU_CC_CX_GMU_CLK>,
-> +				 <&gpucc GPU_CC_CXO_CLK>,
-> +				 <&gcc GCC_DDRSS_GPU_AXI_CLK>,
-> +				 <&gcc GCC_GPU_MEMNOC_GFX_CLK>,
-> +				 <&gpucc GPU_CC_AHB_CLK>,
-> +				 <&gpucc GPU_CC_HUB_CX_INT_CLK>,
-> +				 <&gpucc GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK>;
-> +			clock-names = "gmu",
-> +				      "cxo",
-> +				      "axi",
-> +				      "memnoc",
-> +				      "ahb",
-> +				      "hub",
-> +				      "smmu_vote";
-> +			power-domains = <&gpucc GPU_CC_CX_GDSC>,
-> +					<&gpucc GPU_CC_GX_GDSC>;
-> +			power-domain-names = "cx",
-> +					     "gx";
-> +			iommus = <&adreno_smmu 5 0xc00>;
-> +			operating-points-v2 = <&gmu_opp_table>;
-> +
-> +			status = "disabled";
-I've recently discovered that - and I am not 100% sure - all GMUs are
-cache-coherent. Could you please ask somebody at qc about this?
-
-> +
-> +			gmu_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-200000000 {
-> +					opp-hz = /bits/ 64 <200000000>;
-> +					opp-level = <RPMH_REGULATOR_LEVEL_MIN_SVS>;
-> +				};
-Missing 500MHz + RPMH_REGULATOR_LEVEL_SVS
-
-(that may be used in the future for hw scheduling)
-> +			};
-> +		};
-> +
-> +		gpucc: clock-controller@3d90000 {
-> +			compatible = "qcom,sc8280xp-gpucc";
-> +			reg = <0 0x03d90000 0 0x9000>;
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_GPU_GPLL0_CLK_SRC>,
-> +				 <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
-> +			clock-names = "bi_tcxo",
-> +				      "gcc_gpu_gpll0_clk_src",
-> +				      "gcc_gpu_gpll0_div_clk_src";
-FWIW the driver doesn't use clock-names, but the binding defines it,
-so I suppose it's fine
-
-> +
-> +			power-domains = <&rpmhpd SC8280XP_GFX>;
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		adreno_smmu: iommu@3da0000 {
-> +			compatible = "qcom,sc8280xp-smmu-500", "qcom,adreno-smmu",
-> +				     "qcom,smmu-500", "arm,mmu-500";
-> +			reg = <0 0x03da0000 0 0x20000>;
-> +			#iommu-cells = <2>;
-> +			#global-interrupts = <2>;
-> +			interrupts = <GIC_SPI 672 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 673 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 678 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 679 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 680 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 681 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 682 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 683 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 684 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 685 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 686 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 687 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 688 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 689 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			clocks = <&gcc GCC_GPU_MEMNOC_GFX_CLK>,
-> +				 <&gcc GCC_GPU_SNOC_DVM_GFX_CLK>,
-> +				 <&gpucc GPU_CC_AHB_CLK>,
-> +				 <&gpucc GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK>,
-> +				 <&gpucc GPU_CC_CX_GMU_CLK>,
-> +				 <&gpucc GPU_CC_HUB_CX_INT_CLK>,
-> +				 <&gpucc GPU_CC_HUB_AON_CLK>;
-> +			clock-names = "gcc_gpu_memnoc_gfx_clk",
-> +				      "gcc_gpu_snoc_dvm_gfx_clk",
-> +				      "gpu_cc_ahb_clk",
-> +				      "gpu_cc_hlos1_vote_gpu_smmu_clk",
-> +				      "gpu_cc_cx_gmu_clk",
-> +				      "gpu_cc_hub_cx_int_clk",
-> +				      "gpu_cc_hub_aon_clk";
-> +
-> +			power-domains = <&gpucc GPU_CC_CX_GDSC>;
-> +
-> +			status = "disabled";
-This one should be dma-coherent (per downstream, plus 8350's mmu is for sure)
+> +enum venus_fmt {
+> +	VENUS_FMT_NV12			= 0,
+> +	VENUS_FMT_QC08C			= 1,
+> +	VENUS_FMT_QC10C			= 2,
+> +	VENUS_FMT_H264			= 3,
+> +	VENUS_FMT_VP8			= 4,
+> +	VENUS_FMT_VP9			= 5,
+> +	VENUS_FMT_HEVC			= 6,
+> +	VENUS_FMT_VC1_ANNEX_G		= 7,
+> +	VENUS_FMT_VC1_ANNEX_L		= 8,
+> +	VENUS_FMT_MPEG4			= 9,
+> +	VENUS_FMT_MPEG2			= 10,
+> +	VENUS_FMT_H263			= 11,
+> +	VENUS_FMT_XVID			= 12,
+Nit: I don't think the '= n' is necessary here, as it doesn't
+map to anything in hw/fw (or does it?)
 
 Konrad
-> +		};
+
+> +};
 > +
->  		usb_0_hsphy: phy@88e5000 {
->  			compatible = "qcom,sc8280xp-usb-hs-phy",
->  				     "qcom,usb-snps-hs-5nm-phy";
+>  struct venus_format {
+>  	u32 pixfmt;
+>  	unsigned int num_planes;
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index c6f0fd08..bab985b 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -30,69 +30,82 @@
+>   * - future firmware versions could add support for >1 planes
+>   */
+>  static const struct venus_format vdec_formats[] = {
+> -	{
+> +	[VENUS_FMT_NV12] = {
+>  		.pixfmt = V4L2_PIX_FMT_NV12,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	}, {
+> +	},
+> +	[VENUS_FMT_QC08C] = {
+>  		.pixfmt = V4L2_PIX_FMT_QC08C,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	}, {
+> +	},
+> +	[VENUS_FMT_QC10C] = {
+>  		.pixfmt = V4L2_PIX_FMT_QC10C,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_MPEG4,
+> +	},
+> +	[VENUS_FMT_H264] = {
+> +		.pixfmt = V4L2_PIX_FMT_H264,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_MPEG2,
+> +	},
+> +	[VENUS_FMT_VP8] = {
+> +		.pixfmt = V4L2_PIX_FMT_VP8,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_H263,
+> +	},
+> +	[VENUS_FMT_VP9] = {
+> +		.pixfmt = V4L2_PIX_FMT_VP9,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
+> +	},
+> +	[VENUS_FMT_HEVC] = {
+> +		.pixfmt = V4L2_PIX_FMT_HEVC,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+> +	},
+> +	[VENUS_FMT_VC1_ANNEX_G] = {
+> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_H264,
+> +	},
+> +	[VENUS_FMT_VC1_ANNEX_L] = {
+> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_VP8,
+> +	},
+> +	[VENUS_FMT_MPEG4] = {
+> +		.pixfmt = V4L2_PIX_FMT_MPEG4,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_VP9,
+> +	},
+> +	[VENUS_FMT_MPEG2] = {
+> +		.pixfmt = V4L2_PIX_FMT_MPEG2,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_XVID,
+> +	},
+> +	[VENUS_FMT_H263] = {
+> +		.pixfmt = V4L2_PIX_FMT_H263,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_HEVC,
+> +	},
+> +	[VENUS_FMT_XVID] = {
+> +		.pixfmt = V4L2_PIX_FMT_XVID,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>  	},
+> +
+>  };
+>  
+>  static const struct venus_format *
+> @@ -1575,8 +1588,8 @@ static const struct hfi_inst_ops vdec_hfi_ops = {
+>  static void vdec_inst_init(struct venus_inst *inst)
+>  {
+>  	inst->hfi_codec = HFI_VIDEO_CODEC_H264;
+> -	inst->fmt_out = &vdec_formats[8];
+> -	inst->fmt_cap = &vdec_formats[0];
+> +	inst->fmt_out = &vdec_formats[VENUS_FMT_H264];
+> +	inst->fmt_cap = &vdec_formats[VENUS_FMT_NV12];
+>  	inst->width = frame_width_min(inst);
+>  	inst->height = ALIGN(frame_height_min(inst), 32);
+>  	inst->crop.left = 0;
+> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+> index 4666f42..b60772c 100644
+> --- a/drivers/media/platform/qcom/venus/venc.c
+> +++ b/drivers/media/platform/qcom/venus/venc.c
+> @@ -32,28 +32,33 @@
+>   * - future firmware versions could add support for >1 planes
+>   */
+>  static const struct venus_format venc_formats[] = {
+> -	{
+> +	[VENUS_FMT_NV12] = {
+>  		.pixfmt = V4L2_PIX_FMT_NV12,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_MPEG4,
+> +	},
+> +	[VENUS_FMT_H264] = {
+> +		.pixfmt = V4L2_PIX_FMT_H264,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_H263,
+> +	},
+> +	[VENUS_FMT_VP8] = {
+> +		.pixfmt = V4L2_PIX_FMT_VP8,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_H264,
+> +	},
+> +	[VENUS_FMT_HEVC] = {
+> +		.pixfmt = V4L2_PIX_FMT_HEVC,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_VP8,
+> +	},
+> +	[VENUS_FMT_MPEG4] = {
+> +		.pixfmt = V4L2_PIX_FMT_MPEG4,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	}, {
+> -		.pixfmt = V4L2_PIX_FMT_HEVC,
+> +	},
+> +	[VENUS_FMT_H263] = {
+> +		.pixfmt = V4L2_PIX_FMT_H263,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>  	},
+> @@ -1416,8 +1421,8 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
+>  
+>  static void venc_inst_init(struct venus_inst *inst)
+>  {
+> -	inst->fmt_cap = &venc_formats[3];
+> -	inst->fmt_out = &venc_formats[0];
+> +	inst->fmt_cap = &venc_formats[VENUS_FMT_H264];
+> +	inst->fmt_out = &venc_formats[VENUS_FMT_NV12];
+>  	inst->width = 1280;
+>  	inst->height = ALIGN(720, 32);
+>  	inst->out_width = 1280;
