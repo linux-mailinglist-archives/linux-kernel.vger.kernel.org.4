@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E9770D934
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AF370D933
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbjEWJf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S236348AbjEWJfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236326AbjEWJfS (ORCPT
+        with ESMTP id S236387AbjEWJfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:35:18 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2620E138;
-        Tue, 23 May 2023 02:35:14 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B6BD41FF45;
-        Tue, 23 May 2023 09:35:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1684834512; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IAYq7YJVS2Hlnl42uVu2goasTRVPRgZ4NqjKSyNxGrQ=;
-        b=KU08sltoiXCpoxueN/xTm1Dj8XgBHSTDWuL90uW147a2/O/Mr6ZoeLyNLFpVJWdIVW5kxX
-        qqA4ifcAtaWSIWN6bnayexKSUglQmxet+EFMnoKUKq4Izsg5nga9Xy+G/qI4h+1EzPAbdY
-        lsmjo1AyUZ4F7lDFhMIZqs6iohgJ0mY=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 46EBC2C141;
-        Tue, 23 May 2023 09:35:07 +0000 (UTC)
-Date:   Tue, 23 May 2023 11:35:02 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
-        npiggin@gmail.com, davem@davemloft.net,
-        Marc Zyngier <maz@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
-        christophe.leroy@csgroup.eu,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
-        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH v5 02/18] watchdog/perf: More properly prevent false
- positives with turbo modes
-Message-ID: <ZGyIxvKhVjr-L8-I@alley>
-References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
- <20230519101840.v5.2.I843b0d1de3e096ba111a179f3adb16d576bef5c7@changeid>
+        Tue, 23 May 2023 05:35:16 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8919A12B;
+        Tue, 23 May 2023 02:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684834513; x=1716370513;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Iw8Yy2Z1tvGZYFerS0IcUyhSccmNuan8NjhlAC1ECBY=;
+  b=j8T88rrUp1OBj4AslXbS5hdPjXJ6e2W9Lhrg9F7oExwpsVes0fTiVzO+
+   HSCaI/5Apc3lYUF5AYlrJRYIsT7omULTMYVvOcAuH0zzw8ZmfbZBs2f1K
+   W2jkTDYky6hDfFcqFZIp2bwg0/5CCYDH8MDwMhdD6l6tiJWLutECLWesB
+   oZkjBjteiOpqPQ4chSiQ+app5bLhP4khdbeCWo1PnyDvafevRAsxwz2n2
+   zYWPDweeDHhqKOqqDeJtC5Uzuu0O74hrPOkQ2MdCOWsYEfaooakbRC4av
+   2EQcDYIdivYwdc5n3SlB+y7XGEIHY7ewSv4a64NcaZO95AANCAUefoygX
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="216818395"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 May 2023 02:35:12 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 23 May 2023 02:35:11 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Tue, 23 May 2023 02:35:09 -0700
+Message-ID: <124faf73-af03-4688-427c-fa247fde40b4@microchip.com>
+Date:   Tue, 23 May 2023 11:35:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519101840.v5.2.I843b0d1de3e096ba111a179f3adb16d576bef5c7@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] ARM: dts: at91: sama7g5ek: fix debounce delay property
+ for shdwc
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.belloni@bootlin.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230523052750.184223-1-claudiu.beznea@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230523052750.184223-1-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-05-19 10:18:26, Douglas Anderson wrote:
-> Currently, in the watchdog_overflow_callback() we first check to see
-> if the watchdog had been touched and _then_ we handle the workaround
-> for turbo mode. This order should be reversed.
+On 23/05/2023 at 07:27, Claudiu Beznea wrote:
+> There is no atmel,shdwc-debouncer property for SHDWC. The right DT property
+> is debounce-delay-us. Use it.
 > 
-> Specifically, "touching" the hardlockup detector's watchdog should
-> avoid lockups being detected for one period that should be roughly the
-> same regardless of whether we're running turbo or not. That means that
-> we should do the extra accounting for turbo _before_ we look at (and
-> clear) the global indicating that we've been touched.
+> Fixes: 16b161bcf5d4 ("ARM: dts: at91: sama7g5: add shdwc node")
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-The ideal solution would be to reset the turbo-mode-related
-variables when the watchdog is touched. And keep checking
-watchdog_nmi_touch first.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-But this ordering change should be good enough. It causes that
-we always check watchdog_nmi_touch when the turbo-more-related
-variables are already reset.
+Thanks Claudiu. Best regards,
+   Nicolas
 
-> NOTE: this fix is made based on code inspection. I am not aware of any
-> reports where the old code would have generated false positives. That
-> being said, this order seems more correct and also makes it easier
-> down the line to share code with the "buddy" hardlockup detector.
+> ---
+>   arch/arm/boot/dts/at91-sama7g5ek.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Fixes: 7edaeb6841df ("kernel/watchdog: Prevent false positives with turbo modes")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
+> index aa5cc0e98bba..217e9b96c61e 100644
+> --- a/arch/arm/boot/dts/at91-sama7g5ek.dts
+> +++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
+> @@ -792,7 +792,7 @@ &sdmmc2 {
+>   };
+>   
+>   &shdwc {
+> -	atmel,shdwc-debouncer = <976>;
+> +	debounce-delay-us = <976>;
+>   	status = "okay";
+>   
+>   	input@0 {
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+-- 
+Nicolas Ferre
 
-Best Regards,
-Petr
