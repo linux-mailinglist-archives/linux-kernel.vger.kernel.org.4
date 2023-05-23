@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F1D70D631
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6BC70D62F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235890AbjEWH4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S235310AbjEWH4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236042AbjEWHzN (ORCPT
+        with ESMTP id S236022AbjEWHzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:55:13 -0400
+        Tue, 23 May 2023 03:55:10 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A28E79
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:54:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F73E46
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:54:47 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E323A218F6;
-        Tue, 23 May 2023 07:54:03 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 54D5E21899;
+        Tue, 23 May 2023 07:54:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684828443; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1684828444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mpcAAE3E4+YS/NXc11uNo67NAO9/YDf8hhSiZWIao78=;
-        b=aPH7OmYKZu8BQQkdToCuu48NDoKzcKQjlgkw3HNaUK7AIxeKSliXjH9ehE1zUkm/o5pRek
-        PlJQTagEc4URt3nlPdwV59STvRB4xeQ/tzIMQohGU1ZpM6SdbEHOo737PZAGFAm2Aq7Hfq
-        wJB1s6cuOJ8m9CvFE0lJXTBGi3oI8Zk=
+        bh=6ktXHEJwRtSCCBPJ4QDB5v/NoMHF3eNfNjpM8JZRdSA=;
+        b=wG/pLiU0OcYlgFzM6QRLr+INpJvf0m4Hz2GMDUZ23jkPN2DGYViq3c7pfiuDiTTWf4C5jp
+        PKIuq/GvgVXqPKSbsXtMXMtz0k6eo/NtpNm3m+cMMRm6ewLEZbP6Hep6WL3Tw0dBN8y6kc
+        pWQMefdPxRLLA6Gf0Skw9fiHSxNqiRQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684828443;
+        s=susede2_ed25519; t=1684828444;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mpcAAE3E4+YS/NXc11uNo67NAO9/YDf8hhSiZWIao78=;
-        b=c6k2oPCvgn3Eye7b7y7Caz/kTQVqr43clil4WgHn17wzsGG5Q0mqV/Ae3fFVHYi6MpWdxr
-        occ8/bQsThCrkQCw==
+        bh=6ktXHEJwRtSCCBPJ4QDB5v/NoMHF3eNfNjpM8JZRdSA=;
+        b=DjW414mYwn4rBb2KkFpafnCmgs9VHPabazpjcceVa0rlAjGheDlavBsNoHm6ApXEUo6OB7
+        uS0v3nxo3u116cAQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8285113A24;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F159613588;
         Tue, 23 May 2023 07:54:03 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id mLFHHhtxbGT4KgAAMHmgww
+        id 6P4GOhtxbGT4KgAAMHmgww
         (envelope-from <tiwai@suse.de>); Tue, 23 May 2023 07:54:03 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 05/37] ALSA: ump: Add ioctls to inquiry UMP EP and Block info via control API
-Date:   Tue, 23 May 2023 09:53:26 +0200
-Message-Id: <20230523075358.9672-6-tiwai@suse.de>
+Subject: [PATCH v2 06/37] ALSA: ump: Additional proc output
+Date:   Tue, 23 May 2023 09:53:27 +0200
+Message-Id: <20230523075358.9672-7-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230523075358.9672-1-tiwai@suse.de>
 References: <20230523075358.9672-1-tiwai@suse.de>
@@ -70,81 +70,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It'd be convenient to have ioctls to inquiry the UMP Endpoint and UMP
-Block information directly via the control API without opening the
-rawmidi interface, just like SNDRV_CTL_IOCTL_RAWMIDI_INFO.
+UMP devices may have more interesting information than the traditional
+rawmidi.  Extend the rawmidi_global_ops to allow the optional proc
+info output and show some more bits in the proc file for UMP.
 
-This patch extends the rawmidi ioctl handler to support those; new
-ioctls, SNDRV_CTL_IOCTL_UMP_ENDPOINT_INFO and
-SNDRV_CTL_IOCTL_UMP_BLOCK_INFO, return the snd_ump_endpoint and
-snd_ump_block data that is specified by the device field,
-respectively.
+Note that the "Groups" field shows the first and the last UMP Groups,
+and both numbers are 1-based (i.e. the first group is 1).
 
-Suggested-by: Jaroslav Kysela <perex@perex.cz>
 Reviewed-by: Jaroslav Kysela <perex@perex.cz>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- include/uapi/sound/asound.h |  2 ++
- sound/core/rawmidi.c        | 26 ++++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ include/sound/rawmidi.h |  3 +++
+ sound/core/rawmidi.c    |  2 ++
+ sound/core/ump.c        | 49 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
 
-diff --git a/include/uapi/sound/asound.h b/include/uapi/sound/asound.h
-index 1e4a21036109..5c5f41dd4001 100644
---- a/include/uapi/sound/asound.h
-+++ b/include/uapi/sound/asound.h
-@@ -1178,6 +1178,8 @@ struct snd_ctl_tlv {
- #define SNDRV_CTL_IOCTL_RAWMIDI_INFO	_IOWR('U', 0x41, struct snd_rawmidi_info)
- #define SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE _IOW('U', 0x42, int)
- #define SNDRV_CTL_IOCTL_UMP_NEXT_DEVICE	_IOWR('U', 0x43, int)
-+#define SNDRV_CTL_IOCTL_UMP_ENDPOINT_INFO _IOWR('U', 0x44, struct snd_ump_endpoint_info)
-+#define SNDRV_CTL_IOCTL_UMP_BLOCK_INFO	_IOWR('U', 0x45, struct snd_ump_block_info)
- #define SNDRV_CTL_IOCTL_POWER		_IOWR('U', 0xd0, int)
- #define SNDRV_CTL_IOCTL_POWER_STATE	_IOR('U', 0xd1, int)
+diff --git a/include/sound/rawmidi.h b/include/sound/rawmidi.h
+index b8a230a7583b..b0197b1d1fe4 100644
+--- a/include/sound/rawmidi.h
++++ b/include/sound/rawmidi.h
+@@ -18,6 +18,7 @@
+ #if IS_ENABLED(CONFIG_SND_SEQUENCER)
+ #include <sound/seq_device.h>
+ #endif
++#include <sound/info.h>
  
+ /*
+  *  Raw MIDI interface
+@@ -49,6 +50,8 @@ struct snd_rawmidi_global_ops {
+ 			      struct snd_seq_port_info *info);
+ 	long (*ioctl)(struct snd_rawmidi *rmidi, unsigned int cmd,
+ 		      void __user *argp);
++	void (*proc_read)(struct snd_info_entry *entry,
++			  struct snd_info_buffer *buf);
+ };
+ 
+ struct snd_rawmidi_runtime {
 diff --git a/sound/core/rawmidi.c b/sound/core/rawmidi.c
-index 9936ed282b85..ffb5b58105f4 100644
+index ffb5b58105f4..2d3cec908154 100644
 --- a/sound/core/rawmidi.c
 +++ b/sound/core/rawmidi.c
-@@ -1043,6 +1043,28 @@ static int snd_rawmidi_next_device(struct snd_card *card, int __user *argp,
- 	return 0;
+@@ -1770,6 +1770,8 @@ static void snd_rawmidi_proc_info_read(struct snd_info_entry *entry,
+ 	if (IS_ENABLED(CONFIG_SND_UMP))
+ 		snd_iprintf(buffer, "Type: %s\n",
+ 			    rawmidi_is_ump(rmidi) ? "UMP" : "Legacy");
++	if (rmidi->ops->proc_read)
++		rmidi->ops->proc_read(entry, buffer);
+ 	mutex_lock(&rmidi->open_mutex);
+ 	if (rmidi->info_flags & SNDRV_RAWMIDI_INFO_OUTPUT) {
+ 		list_for_each_entry(substream,
+diff --git a/sound/core/ump.c b/sound/core/ump.c
+index ee57ba1ee989..651cd3752719 100644
+--- a/sound/core/ump.c
++++ b/sound/core/ump.c
+@@ -21,11 +21,14 @@ static int snd_ump_dev_register(struct snd_rawmidi *rmidi);
+ static int snd_ump_dev_unregister(struct snd_rawmidi *rmidi);
+ static long snd_ump_ioctl(struct snd_rawmidi *rmidi, unsigned int cmd,
+ 			  void __user *argp);
++static void snd_ump_proc_read(struct snd_info_entry *entry,
++			      struct snd_info_buffer *buffer);
+ 
+ static const struct snd_rawmidi_global_ops snd_ump_rawmidi_ops = {
+ 	.dev_register = snd_ump_dev_register,
+ 	.dev_unregister = snd_ump_dev_unregister,
+ 	.ioctl = snd_ump_ioctl,
++	.proc_read = snd_ump_proc_read,
+ };
+ 
+ static void snd_ump_endpoint_free(struct snd_rawmidi *rmidi)
+@@ -226,5 +229,51 @@ static long snd_ump_ioctl(struct snd_rawmidi *rmidi, unsigned int cmd,
+ 	}
  }
  
-+#if IS_ENABLED(CONFIG_SND_UMP)
-+/* inquiry of UMP endpoint and block info via control API */
-+static int snd_rawmidi_call_ump_ioctl(struct snd_card *card, int cmd,
-+				      void __user *argp)
++static const char *ump_direction_string(int dir)
 +{
-+	struct snd_ump_endpoint_info __user *info = argp;
-+	struct snd_rawmidi *rmidi;
-+	int device, ret;
-+
-+	if (get_user(device, &info->device))
-+		return -EFAULT;
-+	mutex_lock(&register_mutex);
-+	rmidi = snd_rawmidi_search(card, device);
-+	if (rmidi && rmidi->ops && rmidi->ops->ioctl)
-+		ret = rmidi->ops->ioctl(rmidi, cmd, argp);
-+	else
-+		ret = -ENXIO;
-+	mutex_unlock(&register_mutex);
-+	return ret;
++	switch (dir) {
++	case SNDRV_UMP_DIR_INPUT:
++		return "input";
++	case SNDRV_UMP_DIR_OUTPUT:
++		return "output";
++	case SNDRV_UMP_DIR_BIDIRECTION:
++		return "bidirection";
++	default:
++		return "unknown";
++	}
 +}
-+#endif
 +
- static int snd_rawmidi_control_ioctl(struct snd_card *card,
- 				     struct snd_ctl_file *control,
- 				     unsigned int cmd,
-@@ -1056,6 +1078,10 @@ static int snd_rawmidi_control_ioctl(struct snd_card *card,
- #if IS_ENABLED(CONFIG_SND_UMP)
- 	case SNDRV_CTL_IOCTL_UMP_NEXT_DEVICE:
- 		return snd_rawmidi_next_device(card, argp, true);
-+	case SNDRV_CTL_IOCTL_UMP_ENDPOINT_INFO:
-+		return snd_rawmidi_call_ump_ioctl(card, SNDRV_UMP_IOCTL_ENDPOINT_INFO, argp);
-+	case SNDRV_CTL_IOCTL_UMP_BLOCK_INFO:
-+		return snd_rawmidi_call_ump_ioctl(card, SNDRV_UMP_IOCTL_BLOCK_INFO, argp);
- #endif
- 	case SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE:
- 	{
++/* Additional proc file output */
++static void snd_ump_proc_read(struct snd_info_entry *entry,
++			      struct snd_info_buffer *buffer)
++{
++	struct snd_rawmidi *rmidi = entry->private_data;
++	struct snd_ump_endpoint *ump = rawmidi_to_ump(rmidi);
++	struct snd_ump_block *fb;
++
++	snd_iprintf(buffer, "EP Name: %s\n", ump->info.name);
++	snd_iprintf(buffer, "EP Product ID: %s\n", ump->info.product_id);
++	snd_iprintf(buffer, "UMP Version: 0x%04x\n", ump->info.version);
++	snd_iprintf(buffer, "Protocol Caps: 0x%08x\n", ump->info.protocol_caps);
++	snd_iprintf(buffer, "Protocol: 0x%08x\n", ump->info.protocol);
++	snd_iprintf(buffer, "Num Blocks: %d\n\n", ump->info.num_blocks);
++
++	list_for_each_entry(fb, &ump->block_list, list) {
++		snd_iprintf(buffer, "Block %d (%s)\n", fb->info.block_id,
++			    fb->info.name);
++		snd_iprintf(buffer, "  Direction: %s\n",
++			    ump_direction_string(fb->info.direction));
++		snd_iprintf(buffer, "  Active: %s\n",
++			    fb->info.active ? "Yes" : "No");
++		snd_iprintf(buffer, "  Groups: %d-%d\n",
++			    fb->info.first_group + 1,
++			    fb->info.first_group + fb->info.num_groups);
++		snd_iprintf(buffer, "  Is MIDI1: %s%s\n",
++			    (fb->info.flags & SNDRV_UMP_BLOCK_IS_MIDI1) ? "Yes" : "No",
++			    (fb->info.flags & SNDRV_UMP_BLOCK_IS_LOWSPEED) ? " (Low Speed)" : "");
++		snd_iprintf(buffer, "\n");
++	}
++}
++
+ MODULE_DESCRIPTION("Universal MIDI Packet (UMP) Core Driver");
+ MODULE_LICENSE("GPL");
 -- 
 2.35.3
 
