@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9DE70E386
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F63970E3F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237632AbjEWRCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        id S237913AbjEWREE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237922AbjEWRCk (ORCPT
+        with ESMTP id S235903AbjEWRED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:02:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A49390;
-        Tue, 23 May 2023 10:02:38 -0700 (PDT)
+        Tue, 23 May 2023 13:04:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6343B5;
+        Tue, 23 May 2023 10:04:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4D0C634CB;
-        Tue, 23 May 2023 17:02:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D70C433EF;
-        Tue, 23 May 2023 17:02:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F24161462;
+        Tue, 23 May 2023 17:04:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B35C433EF;
+        Tue, 23 May 2023 17:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684861357;
-        bh=bqtg2gzZ7yBsVvMiiXA1gNJFMTN6BSdFaSLeeq2qr8g=;
+        s=k20201202; t=1684861440;
+        bh=1tP2yGAX7ONXZO/ENxQ1XwHW2RgkmzFFGEyJhStYBxw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hkpoetokkQsg+j8zbENYRW3D/eapwSURz3+12Nlh0Y+0ULUKRA8mbBMoX/3q/cy5I
-         pZkLkfhPs3w3CRXs1McibPqt480fhRYOxOgUBycsEB9EQZ1q1+XtXfCWn1ewgKIYH0
-         Y2D1EYO57h6UPfuCmcJBkbVc8hEzQJPOlO1ktePDHN16UHyS+yQgDK+RxVG4drVlEJ
-         x2/YhgmlpYCdPLGyrq46eVuXYSkQxBxjqQd68s5FRdIO9EBZj57eaOiIaGyQj+uQzM
-         s/Mxrglcp9RAb7AOsTL/xDyScqTrbk9JiXWIlSAaspUCBJA8oUDeJ8sCGabqF+NznS
-         dGcPz5IqA7rEA==
-Date:   Tue, 23 May 2023 18:02:33 +0100
+        b=c2qnq0D53iDw89RCjs+JpezZr+ssBzwGyQgAnsS69F9aqCSLi8q2meUUmS9IgGKjW
+         qaa7XV+z5oW0LLIqHR1iFBwk2zqXEsSBQNdM+2ReDDwN79YFi5RlHZHdkT6FKzNtQt
+         Op+EhCHM0XGLLxB4ele/kaqTifDHVVxKhnQwljJr6LmsOlX563IgnvNhNMKGieBukz
+         V6n8SqGOlSz5elSKJ/rw9FjmQlx8pDB6HA2eDpXoElwzaqJxAmsxmur5KK5gBesEwB
+         kWlJ4SjU7RHiUuzL45QLMiiRD6xeesROkBNz9GQyLobkPs+mDRxje6k2wtEBVoXOzt
+         I23EtExjX1f4w==
+Date:   Tue, 23 May 2023 18:03:55 +0100
 From:   Conor Dooley <conor@kernel.org>
-To:     p.paillet@foss.st.com
-Cc:     lee@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
         Conor Dooley <conor+dt@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mfd: add vref_ddr supply for STPMIC1
-Message-ID: <20230523-popular-chastise-67184785bae4@spud>
-References: <20230523074206.201962-1-p.paillet@foss.st.com>
+        Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: xilinx: Remove Rajan, Jolly and Manish
+Message-ID: <20230523-oppressed-happily-50a6d0046e3e@spud>
+References: <9b252dd71c82593fa6b137eca2174d9ab6e57f7a.1684828606.git.michal.simek@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UbRlB+0udV4GUR2J"
+        protocol="application/pgp-signature"; boundary="7gzcSTFsSYxRBwbM"
 Content-Disposition: inline
-In-Reply-To: <20230523074206.201962-1-p.paillet@foss.st.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <9b252dd71c82593fa6b137eca2174d9ab6e57f7a.1684828606.git.michal.simek@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,54 +65,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---UbRlB+0udV4GUR2J
+--7gzcSTFsSYxRBwbM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 23, 2023 at 09:42:06AM +0200, p.paillet@foss.st.com wrote:
-> From: Pascal Paillet <p.paillet@foss.st.com>
+On Tue, May 23, 2023 at 09:56:57AM +0200, Michal Simek wrote:
+> Rajan, Jolly and Manish are no longer work for AMD/Xilinx and there is no
+> activity from them to continue to maintain bindings that's why remove the=
+m.
 >=20
-> Add vref_ddr supply description for the STPMIC1.
->=20
-> Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Thanks,
 Conor.
 
-> ---
->  Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b/Docu=
-mentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> index 9573e4af949e..97c61097f9e2 100644
-> --- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> @@ -184,7 +184,7 @@ properties:
->          additionalProperties: false
-> =20
->      patternProperties:
-> -      "^(buck[1-4]|ldo[1-6]|boost|pwr_sw[1-2])-supply$":
-> +      "^(buck[1-4]|ldo[1-6]|vref_ddr|boost|pwr_sw[1-2])-supply$":
->          description: STPMIC1 voltage regulators supplies
-> =20
->        "^(buck[1-4]|ldo[1-6]|boost|vref_ddr|pwr_sw[1-2])$":
-> --=20
-> 2.25.1
->=20
-
---UbRlB+0udV4GUR2J
+--7gzcSTFsSYxRBwbM
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGzxqQAKCRB4tDGHoIJi
-0nVwAP9HoYA6RsRFC5ZRa8pRYOFuGxOZoqpu4qiPLakmq++azAEA3ezO6nGHTrLH
-Kh6X9fVxXJ/zLYUM7NWAWNQbmWl+Twc=
-=7sMn
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGzx+wAKCRB4tDGHoIJi
+0sa1AQCjYsEvbrrj+nzjP9+7ogb57qeToZNE2AFu2S7iNM/E+AD9H6qFZ2kFR526
+/N7k65buzURkw4bTwA5otwe84iOrZwI=
+=oOrn
 -----END PGP SIGNATURE-----
 
---UbRlB+0udV4GUR2J--
+--7gzcSTFsSYxRBwbM--
