@@ -2,182 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B7C70D168
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DDB70D15C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjEWCjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S234730AbjEWCiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233967AbjEWCjR (ORCPT
+        with ESMTP id S232332AbjEWCiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:39:17 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F90CFD;
-        Mon, 22 May 2023 19:39:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1684809554; x=1716345554;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nny6LjxpUW6mJRzHzp9QlRzCPGPnlS5WgOn3BfbgZ8Q=;
-  b=WofiW930yBbmNG7fWEAaJMcXjKVqmerWGSBXpbo66bIPBzbXzRuF2Kbi
-   3qfjMFPxSt7pr/UMZqs7pUSg9pT75ywgbOz7h3tstrMmfgPBnnmk+srfO
-   o6/pXggVguxiS9Q+NVgg8Try2NBKXefvW0De5+h6yHdupYV13yux81LML
-   s=;
-X-IronPort-AV: E=Sophos;i="6.00,185,1681171200"; 
-   d="scan'208";a="1132910551"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-d2040ec1.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:39:07 +0000
-Received: from EX19D009EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-d2040ec1.us-west-2.amazon.com (Postfix) with ESMTPS id EAE3A40D40;
-        Tue, 23 May 2023 02:39:01 +0000 (UTC)
-Received: from EX19D026EUB004.ant.amazon.com (10.252.61.64) by
- EX19D009EUA003.ant.amazon.com (10.252.50.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 23 May 2023 02:38:53 +0000
-Received: from uc3ecf78c6baf56.ant.amazon.com (10.119.183.60) by
- EX19D026EUB004.ant.amazon.com (10.252.61.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 23 May 2023 02:38:50 +0000
-From:   Andrew Paniakin <apanyaki@amazon.com>
-CC:     <luizcap@amazon.com>, <benh@amazon.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Andrew Paniakin <apanyaki@amazon.com>,
-        Jozsef Kadlecsik <kadlec@blackhole.kfki.hu>,
-        "David S. Miller" <davem@davemloft.net>,
-        <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] netfilter: nf_tables: fix register ordering
-Date:   Mon, 22 May 2023 19:35:14 -0700
-Message-ID: <20230523023514.1672418-1-apanyaki@amazon.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 22 May 2023 22:38:18 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F16CA;
+        Mon, 22 May 2023 19:38:16 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34N2bpBK020737;
+        Mon, 22 May 2023 21:37:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684809471;
+        bh=hkhGcEhPR6UPrPlDGiGXc7Ka/ldbgk7SCCgn8nIuQ/w=;
+        h=From:To:CC:Subject:Date;
+        b=dO3Y73RSaVoMXz/rqUArHKOiuaKYOCbU+Y5ciJxtAdcrC1V0yFh/4Wq8QfQi0rUoF
+         Y7JuBIedqMDOiwXSdcF5tuhZFyXnBmVjf2oJWuRRLcV51cEILu7AMcR028EAvEaCG8
+         kiU5/zqzXcxkhu9+vmWh09cuMVhhmu8FUnUIJ/IE=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34N2bpMc032579
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 22 May 2023 21:37:51 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 22
+ May 2023 21:37:50 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 22 May 2023 21:37:50 -0500
+Received: from a0498204.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34N2bnsW031957;
+        Mon, 22 May 2023 21:37:50 -0500
+From:   Judith Mendez <jm@ti.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        <linux-can@vger.kernel.org>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [PATCH v7 0/2] Enable multiple MCAN on AM62x
+Date:   Mon, 22 May 2023 21:37:47 -0500
+Message-ID: <20230523023749.4526-1-jm@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.119.183.60]
-X-ClientProxiedBy: EX19D045UWA003.ant.amazon.com (10.13.139.46) To
- EX19D026EUB004.ant.amazon.com (10.252.61.64)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+On AM62x there are two MCANs in MCU domain. The MCANs in MCU domain
+were not enabled since there is no hardware interrupt routed to A53
+GIC interrupt controller. Therefore A53 Linux cannot be interrupted
+by MCU MCANs.
 
-commit d209df3e7f7002d9099fdb0f6df0f972b4386a63 upstream
+This solution instantiates a hrtimer with 1 ms polling interval
+for MCAN device when there is no hardware interrupt property in
+DTB MCAN node. The hrtimer generates a recurring software interrupt
+which allows to call the isr. The isr will check if there is pending
+transaction by reading a register and proceed normally if there is.
+MCANs with hardware interrupt routed to A53 Linux will continue to
+use the hardware interrupt as expected.
 
-[ We hit the trace described in commit message with the
-kselftest/nft_trans_stress.sh. This patch diverges from the upstream one
-since kernel 4.14 does not have following symbols:
-nft_chain_filter_init, nf_tables_flowtable_notifier ]
+Timer polling method was tested on both classic CAN and CAN-FD
+at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+switching.
 
-We must register nfnetlink ops last, as that exposes nf_tables to
-userspace.  Without this, we could theoretically get nfnetlink request
-before net->nft state has been initialized.
+Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+1 MBPS timer polling interval is the better timer polling interval
+since it has comparable latency to hardware interrupt with the worse
+case being 1ms + CAN frame propagation time and CPU load is not
+substantial. Latency can be improved further with less than 1 ms
+polling intervals, howerver it is at the cost of CPU usage since CPU
+load increases at 0.5 ms.
 
-Fixes: 99633ab29b213 ("netfilter: nf_tables: complete net namespace support")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-[apanyaki: backport to v4.14-stable]
-Signed-off-by: Andrew Paniakin <apanyaki@amazon.com>
----
+Note that in terms of power, enabling MCU MCANs with timer-polling
+implementation might have negative impact since we will have to wake
+up every 1 ms whether there are CAN packets pending in the RX FIFO or
+not. This might prevent the CPU from entering into deeper idle states
+for extended periods of time.
 
-[  163.471426] Call Trace:
-[  163.474901]  netlink_dump+0x125/0x2d0
-[  163.479081]  __netlink_dump_start+0x16a/0x1c0
-[  163.483589]  nf_tables_gettable+0x151/0x180 [nf_tables]
-[  163.488561]  ? nf_tables_gettable+0x180/0x180 [nf_tables]
-[  163.493658]  nfnetlink_rcv_msg+0x222/0x250 [nfnetlink]
-[  163.498608]  ? __skb_try_recv_datagram+0x114/0x180
-[  163.503359]  ? nfnetlink_net_exit_batch+0x60/0x60 [nfnetlink]
-[  163.508590]  netlink_rcv_skb+0x4d/0x130
-[  163.512832]  nfnetlink_rcv+0x92/0x780 [nfnetlink]
-[  163.517465]  ? netlink_recvmsg+0x202/0x3e0
-[  163.521801]  ? __kmalloc_node_track_caller+0x31/0x290
-[  163.526635]  ? copy_msghdr_from_user+0xd5/0x150
-[  163.531216]  ? __netlink_lookup+0xd0/0x130
-[  163.535536]  netlink_unicast+0x196/0x240
-[  163.539759]  netlink_sendmsg+0x2da/0x400
-[  163.544010]  sock_sendmsg+0x36/0x40
-[  163.548030]  SYSC_sendto+0x10e/0x140
-[  163.552119]  ? __audit_syscall_entry+0xbc/0x110
-[  163.556741]  ? syscall_trace_enter+0x1df/0x2e0
-[  163.561315]  ? __audit_syscall_exit+0x231/0x2b0
-[  163.565857]  do_syscall_64+0x67/0x110
-[  163.569930]  entry_SYSCALL_64_after_hwframe+0x59/0xbe
+v6:
+Link: https://lore.kernel.org/linux-can/20230518193613.15185-1-jm@ti.com/T/#t
 
-Reproduce with debug logs clearly shows the nft initialization issue exactly as
-in ported patch description:
-[   22.600051] nft load start
-[   22.600858] nf_tables: (c) 2007-2009 Patrick McHardy <kaber@trash.net>
-[   22.601241] nf_tables_gettable start: ffff888527c10000
-[   22.601271] register_pernet_subsys ffffffffa02ba0c0
-[   22.601274] netns ops_init ffffffffa02ba0c0 ffffffff821aeec0
-[   22.602506] nf_tables_dump_tables: ffff888527c10000
-[   22.603187] af_info list init done: ffffffff821aeec0
-[   22.604064] nf_tables_dump_tables: afi:           (null)
-[   22.604077] BUG: unable to handle kernel
-[   22.604820] netns ops_init end ffffffffa02ba0c0 ffffffff821aeec0
-[   22.605698] NULL pointer dereference
-[   22.606354] netns ops_init ffffffffa02ba0c0 ffff888527c10000
+v5:
+Link: https://lore.kernel.org/linux-can/20230510202952.27111-1-jm@ti.com/T/#t
 
-(gdb) p &init_net
-$2 = (struct net *) 0xffffffff821aeec0 <init_net>
-ffff888527c10000 is a testns1 namespaces
+v4:
+Link: https://lore.kernel.org/linux-can/c3395692-7dbf-19b2-bd3f-31ba86fa4ac9@linaro.org/T/#t
 
-To reproduce this problem and test the fix I scripted following steps:
-- start Qemu VM
-- run nft_trans_stress.sh test
-- check dmesg logs for NULL pointer dereference
-- reboot via QMP and repeat
+v2:
+Link: https://lore.kernel.org/linux-can/20230424195402.516-1-jm@ti.com/T/#t
 
-I tested the fix with our kernel regression tests (including kselftest) also.
+V1:
+Link: https://lore.kernel.org/linux-can/19d8ae7f-7b74-a869-a818-93b74d106709@ti.com/T/#t
 
- net/netfilter/nf_tables_api.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+RFC:
+Link: https://lore.kernel.org/linux-can/52a37e51-4143-9017-42ee-8d17c67028e3@ti.com/T/#t
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index c683a45b8ae53..65495b528290b 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -6032,18 +6032,25 @@ static int __init nf_tables_module_init(void)
- 		goto err1;
- 	}
- 
--	err = nf_tables_core_module_init();
-+	err = register_pernet_subsys(&nf_tables_net_ops);
- 	if (err < 0)
- 		goto err2;
- 
--	err = nfnetlink_subsys_register(&nf_tables_subsys);
-+	err = nf_tables_core_module_init();
- 	if (err < 0)
- 		goto err3;
- 
-+	/* must be last */
-+	err = nfnetlink_subsys_register(&nf_tables_subsys);
-+	if (err < 0)
-+		goto err4;
-+
- 	pr_info("nf_tables: (c) 2007-2009 Patrick McHardy <kaber@trash.net>\n");
--	return register_pernet_subsys(&nf_tables_net_ops);
--err3:
-+	return err;
-+err4:
- 	nf_tables_core_module_exit();
-+err3:
-+	unregister_pernet_subsys(&nf_tables_net_ops);
- err2:
- 	kfree(info);
- err1:
+v6:
+- Clean up m_can_platform.c after removing poll-interval
+
+v6:
+- Move hrtimer stop/start function calls to m_can_open and m_can_close to
+support power suspend/resume
+
+v5:
+- Remove poll-interval in bindings
+- Change dev_dbg to dev_info if hardware int exists and polling
+is enabled
+
+v4:
+- Wrong patches sent
+
+v3:
+- Update binding poll-interval description
+- Add oneOf to select either interrupts/interrupt-names or poll-interval
+- Create a define for 1 ms polling interval
+- Change plarform_get_irq to optional to not print error msg
+
+v2:
+- Add poll-interval property to bindings and MCAN DTB node
+- Add functionality to check for 'poll-interval' property in MCAN node 
+- Bindings: add an example using poll-interval
+- Add 'polling' flag in driver to check if device is using polling method
+- Check for timer polling and hardware interrupt cases, default to
+hardware interrupt method
+- Change ns_to_ktime() to ms_to_ktime()
+
+Judith Mendez (2):
+  dt-bindings: net: can: Remove interrupt properties for MCAN
+  can: m_can: Add hrtimer to generate software interrupt
+
+ .../bindings/net/can/bosch,m_can.yaml         | 20 +++++++++--
+ drivers/net/can/m_can/m_can.c                 | 33 +++++++++++++++++--
+ drivers/net/can/m_can/m_can.h                 |  4 +++
+ drivers/net/can/m_can/m_can_platform.c        | 25 ++++++++++++--
+ 4 files changed, 75 insertions(+), 7 deletions(-)
+
+
+base-commit: 9f258af06b6268be8e960f63c3f66e88bdbbbdb0
 -- 
-2.39.2
+2.17.1
 
