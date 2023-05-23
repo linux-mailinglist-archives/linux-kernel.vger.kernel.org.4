@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4D470D925
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5C170D90F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236191AbjEWJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S235105AbjEWJct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbjEWJd6 (ORCPT
+        with ESMTP id S232553AbjEWJcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:33:58 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB80FE6;
-        Tue, 23 May 2023 02:33:48 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QQTZg2f46zLpv6;
-        Tue, 23 May 2023 17:30:51 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 23 May 2023 17:33:47 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <jonathan.cameron@huawei.com>, <corbet@lwn.net>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-CC:     <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
-        <linuxarm@huawei.com>
-Subject: [PATCH v3 4/4] hwtracing: hisi_ptt: Advertise PERF_PMU_CAP_NO_EXCLUDE for PTT PMU
-Date:   Tue, 23 May 2023 17:32:28 +0800
-Message-ID: <20230523093228.48149-5-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230523093228.48149-1-yangyicong@huawei.com>
-References: <20230523093228.48149-1-yangyicong@huawei.com>
+        Tue, 23 May 2023 05:32:46 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE6494;
+        Tue, 23 May 2023 02:32:44 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 692C81BF208;
+        Tue, 23 May 2023 09:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684834363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X9Qn8AqTo/sXg8jlDCBz4izis3PpHn0GZ9QSR6MiR2o=;
+        b=nDLTR3vUfrTOLo3EM5MuxyetQ0aQdZJM+Ho1A4w2GfIirH7p4eH4c2TDG/3OEXvma9vKPC
+        obbBH7nmZo1SiIwLKlU/noxPyVUnR1SsgXwrP5iRZCGDyCaU7xO/Vk7vWlbnLit0NmV8kV
+        m02z5NwwFnxYe40ugcnK7LQmb5c+jb8MwLtLJfdcoV5cUZMb2QnzyuzEauviQLaTcLqw6m
+        2ya4z3/LN47E29vcHLvs21LUmJ/zNFLig5VUwQni0fOM8/6P94Hx0DxoYg7aecPc0wmLND
+        6dqjmGBlVobsq2X/SZb7YaYswGocBo6i9e+marQku6QRSGtv5Ak72OaDQiwxew==
+Date:   Tue, 23 May 2023 11:32:36 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 22/24] mtd: block2mtd: factor the early block device
+ open logic into a helper
+Message-ID: <20230523113236.7003c303@xps-13>
+In-Reply-To: <20230523074535.249802-23-hch@lst.de>
+References: <20230523074535.249802-1-hch@lst.de>
+        <20230523074535.249802-23-hch@lst.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+Hi Christoph,
 
-The PTT trace collects PCIe TLP headers from the PCIe link and don't
-have the ability to exclude certain context. It doesn't support itrace
-as well. So only advertise PERF_PMU_CAP_NO_EXCLUDE. This will greatly
-save the storage of final data. Tested tracing idle link for ~15s,
-without this patch we'll collect ~28.682MB data for context related
-information and with this patch it reduced to ~0.226MB.
+hch@lst.de wrote on Tue, 23 May 2023 09:45:33 +0200:
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/hwtracing/ptt/hisi_ptt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Simply add_device a bit by splitting out the cumbersome early boot logic
 
-diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-index 65f4288a1915..b9917db849bf 100644
---- a/drivers/hwtracing/ptt/hisi_ptt.c
-+++ b/drivers/hwtracing/ptt/hisi_ptt.c
-@@ -1210,7 +1210,7 @@ static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
- 
- 	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
- 		.module		= THIS_MODULE,
--		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
-+		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
- 		.task_ctx_nr	= perf_sw_context,
- 		.attr_groups	= hisi_ptt_pmu_groups,
- 		.event_init	= hisi_ptt_pmu_event_init,
--- 
-2.24.0
+I guess you meant "Simplify..."
 
+Otherwise lgtm so,
+
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+> into a separate helper.
+>=20
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/mtd/devices/block2mtd.c | 53 +++++++++++++++++++--------------
+>  1 file changed, 30 insertions(+), 23 deletions(-)
+>=20
+
+Thanks,
+Miqu=C3=A8l
