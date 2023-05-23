@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A16670D0E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB2470D0E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbjEWCNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
+        id S232929AbjEWCNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjEWCNS (ORCPT
+        with ESMTP id S232716AbjEWCN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:13:18 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1EDCA;
-        Mon, 22 May 2023 19:13:17 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QQHmb1vQNzqSHT;
-        Tue, 23 May 2023 10:08:47 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 23 May
- 2023 10:13:15 +0800
-Subject: Re: [PATCH net] page_pool: fix inconsistency for
- page_pool_ring_[un]lock()
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <brouer@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>
-References: <20230522031714.5089-1-linyunsheng@huawei.com>
- <1fc46094-a72a-f7e4-ef18-15edb0d56233@redhat.com>
- <CAC_iWjJaNuDFZuv1Rv4Yr5Kaj1Wq69txAoLGepvnJT=pY1gaRw@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <cc64a349-aaf4-9d80-3653-75eeb3032baf@huawei.com>
-Date:   Tue, 23 May 2023 10:13:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Mon, 22 May 2023 22:13:27 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C92811A
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 19:13:25 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-76c27782e30so270072739f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 19:13:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684808005; x=1687400005;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ld4BfU0VLxl5x6yDFqKhqit5WImG/Bc0Y+8M10OgY8w=;
+        b=GbwU9213zKU1W7N0S7TwgUESbCe4HPTpsuptRnhkbZrdDeX/x2sIJWW4RLBXdZqs2O
+         GJ4B4/RCFj7knQ7q18ngRUPDpwRzgA4cgalwGVqiWC0Qb3GXT43YPIXlk5sAg1s2Yf48
+         jUP6aykk9iYBpqwhFoprfaXd848/RXGoxGkh54P2yC9/GDHirsX7Ck9XYeuHv9ww5Tbk
+         8orubv9izN3oEtFKozTk/9Brq5xbJd3hOOFBBhElzRru2xjbxqn/IF8a9uTVusvqKdMP
+         XQGZWHJNlHfO0REuVuBE0gl5vB4KtoxeE5pN2iSC8zSF44UiKAnTCRokdPhzOBqwueui
+         SYCA==
+X-Gm-Message-State: AC+VfDyj0u1E+qCveoRuDGV0VFNlpNjPZqRsthZBNuSVg6Xc/v6IzEhl
+        nwt3Fd2l5K95UH+UaJAmvCGJlRCd9trVawpt0PN99TMDxr5T
+X-Google-Smtp-Source: ACHHUZ6i6qzx3KdoUGB7zeJblsyBnPyyqo41SA9bhWFsK3Nb5NGsyRpwbwbw1HfPzqgiRMrvMwUxicSR/e1VGxCVLUwruyVS/iNd
 MIME-Version: 1.0
-In-Reply-To: <CAC_iWjJaNuDFZuv1Rv4Yr5Kaj1Wq69txAoLGepvnJT=pY1gaRw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:85cb:0:b0:3c5:1971:1b7f with SMTP id
+ d69-20020a0285cb000000b003c519711b7fmr6203433jai.6.1684808004894; Mon, 22 May
+ 2023 19:13:24 -0700 (PDT)
+Date:   Mon, 22 May 2023 19:13:24 -0700
+In-Reply-To: <0f3f5941-0a95-723e-11e1-6fad8e2133b0@linux.dev>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a589d005fc52ee2d@google.com>
+Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
+ skb_dequeue (2)
+From:   syzbot <syzbot+eba589d8f49c73d356da@syzkaller.appspotmail.com>
+To:     guoqing.jiang@linux.dev, jgg@ziepe.ca, leon@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        zyjzyj2000@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/22 19:45, Ilias Apalodimas wrote:
->> On 22/05/2023 05.17, Yunsheng Lin wrote:
->>> page_pool_ring_[un]lock() use in_softirq() to decide which
->>> spin lock variant to use, and when they are called in the
->>> context with in_softirq() being false, spin_lock_bh() is
->>> called in page_pool_ring_lock() while spin_unlock() is
->>> called in page_pool_ring_unlock(), because spin_lock_bh()
->>> has disabled the softirq in page_pool_ring_lock(), which
->>> causes inconsistency for spin lock pair calling.
->>>
->>> This patch fixes it by returning in_softirq state from
->>> page_pool_producer_lock(), and use it to decide which
->>> spin lock variant to use in page_pool_producer_unlock().
->>>
->>> As pool->ring has both producer and consumer lock, so
->>> rename it to page_pool_producer_[un]lock() to reflect
->>> the actual usage. Also move them to page_pool.c as they
->>> are only used there, and remove the 'inline' as the
->>> compiler may have better idea to do inlining or not.
->>>
->>> Fixes: 7886244736a4 ("net: page_pool: Add bulk support for ptr_ring")
->>> Signed-off-by: Yunsheng Lin<linyunsheng@huawei.com>
->>
->> Thanks for spotting and fixing this! :-)
+Hello,
 
-It was spotted when implementing the below patch:)
+syzbot tried to test the proposed patch but the build/boot failed:
 
-https://patchwork.kernel.org/project/netdevbpf/patch/168269857929.2191653.13267688321246766547.stgit@firesoul/#25325801
+failed to apply patch:
+checking file drivers/infiniband/sw/rxe/rxe_qp.c
+patch: **** unexpected end of file in patch
 
-Do you still working on optimizing the page_pool destroy
-process? If not, do you mind if I carry it on based on
-that?
+
+
+Tested on:
+
+commit:         56518a60 RDMA/hns: Modify the value of long message lo..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-rc
+dashboard link: https://syzkaller.appspot.com/bug?extid=eba589d8f49c73d356da
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=132bea5a280000
+
