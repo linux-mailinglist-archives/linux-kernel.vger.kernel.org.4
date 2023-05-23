@@ -2,81 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B21A70E83C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BA370E919
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238630AbjEWV6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S233495AbjEWWcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233459AbjEWV6j (ORCPT
+        with ESMTP id S230006AbjEWWcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:58:39 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E4FE9;
-        Tue, 23 May 2023 14:58:37 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d2981e3abso29903b3a.1;
-        Tue, 23 May 2023 14:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684879117; x=1687471117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KxzlsA2ox//OU4cHa1oP0gHZlv78mJtJSYZTmINNVTk=;
-        b=WaS64H6DgvcpplJGtgaRrFZYUT1nLdJ0eusi7A7eptWSx4HjAU373CvuWrxf5lE94Q
-         B/co0DwNjy9acXd89omxnN4kUEAvLayJR6JiFFKGjN9dn7PVJ8/kH43NV843dpW1+48y
-         j4Op3Z66M4CB7SVFyWKu97hwmweldAGHs+hu2Png4zYJ4BWhwXYP2awM04n2vZkBZT4l
-         NPD1dNgV6KcNkFBMVuHdKuWZIwa+6R/u0BAQC04FrEM6H+y5JysAo5LvUwqnNVzbeIKL
-         I9QLNDByhrmOeTdeYlY6Lhh5AGTpm4MLbXG5OGXS9D4HM96FFwDxEQVI/+hhqD806a+B
-         tl+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684879117; x=1687471117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KxzlsA2ox//OU4cHa1oP0gHZlv78mJtJSYZTmINNVTk=;
-        b=ASqaGQ22qDHeLeF1s1Kn3nitgAzERokoQnhATXWnhuRSOuBH55DsEkOiFddk4p5/23
-         p24w3wPqHZOIbBuxnzQLOqMKuH4FAXtJ+B2u7AwNANpwOnxsMMFtbUX5v8VHp/Hp1oAY
-         pmGgRkEAZoovCflZhD8BzWWKXbWp5zpEcjCdNv9RqhRhrDGT0t5Fe8rFdbMSo6dJWPSg
-         QtDfDLbEIj6Au2jm9hkwud5n/RvlGqFFABbalgtlwjxwmx5SzW5Oezcm2gZSe0fQpwHc
-         /LrGmWj+XL73TLAG17yAYnwy+IWaN/dG+NEglNYJfoS/TOkaa7MjelQu2iGgcvdt43E4
-         ILLQ==
-X-Gm-Message-State: AC+VfDwGyeAI5qYt7sou07ebHMd4YPhBV1S/Jgl/AKf6TPWiktjP8kOD
-        /ez1PDo5AE1A0fYE6TC5jbo=
-X-Google-Smtp-Source: ACHHUZ7bdpQxnAzcoMajSi+oUUimM366y1QT29dZAnGRd1HA2uwoVphakHnjFILHcr2iKE8FKfJBhA==
-X-Received: by 2002:a05:6a21:6d86:b0:10b:6e18:b6a6 with SMTP id wl6-20020a056a216d8600b0010b6e18b6a6mr9729213pzb.40.1684879117049;
-        Tue, 23 May 2023 14:58:37 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:3913:9c00:6a9e:2c95])
-        by smtp.gmail.com with ESMTPSA id 14-20020a17090a194e00b0023cfdbb6496sm62621pjh.1.2023.05.23.14.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 14:58:36 -0700 (PDT)
-Date:   Tue, 23 May 2023 14:58:33 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [resend] Input: gpio-keys - Use input_report_key()
-Message-ID: <ZG03CVo0FGXhKNvQ@google.com>
-References: <185f3320e39000159d4bd843fd3119b94c30d607.1684854795.git.geert+renesas@glider.be>
+        Tue, 23 May 2023 18:32:43 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C255A83;
+        Tue, 23 May 2023 15:32:37 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id E95AE2625B4;
+        Tue, 23 May 2023 22:32:36 +0000 (UTC)
+Received: from pdx1-sub0-mail-a231.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 57F6826299D;
+        Tue, 23 May 2023 22:32:36 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1684881156; a=rsa-sha256;
+        cv=none;
+        b=mvLLQuieURznLNtWzGkSDH9GdPHzda9U0jkhDnk500jtS2kc1t9yi2QSMdexBq9yiE+Nml
+        4hg9VZ5XuL3kkzuLkn3aZ9l87DVcqixtx7gVG8QaQhlzjU7tvp7A31zAwnCSnjx5SbhlRG
+        PJ7hBDnvVI4ua8vxF5MQOWRB4/Lw2WjBn2nEavAuAAVltN00dD0hYZ0Kc08EIbWp4bMmK6
+        ovlbCJ5T6ZPQ6UEym2FdX+HciuIgr7a0nTZxYCwcRzBFoUWEtVSrJLV+aSrDGjLqPinFFl
+        L9xzbeYsEkPtEG86JLAGuZvrZRgnPrbnhB9GiXQFATC7aXTqaVaFlFeLc1vy/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1684881156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=HPpUvUlKVgkRykdkxhgx4qqYUkE2Qav7c/IvvoWZhI4=;
+        b=oH1HF70sFCxv0mKY8pLhL2iQV3P97PP+qq6jQvnaX+/oS1IDOM8auq4snp7TFzIwUrd49M
+        FgRnu+t8GX7kziufj+NLX+tbJYtG6ejf9qpb8AbNpb9ZS7/E+raiIIYKYByMgsXuFcddx2
+        Rghf0IOdIiAeRNbAvKTF1MEzN3OzTD9fdVIzdYwzjTd6300D/NFq52iXN2xffmx9pjB/Yh
+        CezkZxG7z8xPtRHZe4LOmItj36AObZC9xcb1akscidNGr+Zn+1RzySChpYbGcc8SaeYFPF
+        bsWeJMrfNTadtMzDEd6/Ev2LyjFm0kgl8F4xSAWIUNLSNjY4YItFRrgXKDokFQ==
+ARC-Authentication-Results: i=1;
+        rspamd-5cdf8fd7d9-qfmcz;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Print-Relation: 63fb7ecb3aa40227_1684881156699_1266590105
+X-MC-Loop-Signature: 1684881156699:2324547449
+X-MC-Ingress-Time: 1684881156699
+Received: from pdx1-sub0-mail-a231.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.126.30.61 (trex/6.8.1);
+        Tue, 23 May 2023 22:32:36 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a231.dreamhost.com (Postfix) with ESMTPSA id 4QQpwg3hpxz6X;
+        Tue, 23 May 2023 15:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1684881156;
+        bh=HPpUvUlKVgkRykdkxhgx4qqYUkE2Qav7c/IvvoWZhI4=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=oVWh+FtL0zPUdLFwEYMFPi5msxNhCtDaGfWdpLxtRNAy12/QH2P9QtvtVmF1+Cing
+         4d/SNBtHfxXohP5vXdzrX1gLuVWo+OAbBFmkGMS0+tFSUJKTrj33N6cgF+5PPNhvtr
+         639EQl0ZpdLNLi1Dz3I/uNIJ5ScZZz5PZ2+esyUXkoqxWAQ2J4eP8Oeiu90Kz+w3mF
+         XRrhzc+Kpgk4L/a6Qsm38B9UapD6fNSV4huPt6xGJqIPaeRQkAxTVREUGIlemXZObd
+         Ptt6qDBKfajaa6oSpetGF5cIQ1SegyUDEN9Ox42LaBXi7JINyuuBLZyu/Epn0bMl44
+         RADrfX3Rky4Uw==
+Date:   Tue, 23 May 2023 14:59:04 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     dave.jiang@intel.com, alison.schofield@intel.com,
+        vishal.l.verma@intel.com, ira.weiny@intel.com,
+        Jonathan.Cameron@huawei.com, fan.ni@samsung.com,
+        a.manzanares@samsung.com, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] cxl: Handle background commands
+Message-ID: <ho6fq5f6dd3bj25kidhsnwlqj2xgd5rmjkh7t33lmaqclh3a5f@5udgwp4nvsfe>
+References: <20230523170927.20685-1-dave@stgolabs.net>
+ <646d2a394342c_33fb3294bf@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <185f3320e39000159d4bd843fd3119b94c30d607.1684854795.git.geert+renesas@glider.be>
+In-Reply-To: <646d2a394342c_33fb3294bf@dwillia2-xfh.jf.intel.com.notmuch>
+User-Agent: NeoMutt/20230407
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 05:13:55PM +0200, Geert Uytterhoeven wrote:
-> Use the input_report_key() helper instead of open-coding the same
-> operation.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Tue, 23 May 2023, Dan Williams wrote:
 
-Applied, thank you.
+>Like Linus I want to see the conflicts. Whenever possible base on latest
+>Linus tag like v6.4-rc3.
 
--- 
-Dmitry
+So I'm clear, do you want me to resend this series based on -rc3?
+
+Frankly I'm always confused as to what is the correct/preferred branch to
+do development on.
+
+>In this case I will add this to a
+>for-6.5/cxl-background topic branch based on 'fixes' for now, but once
+>'fixes' hits v6.4-rc4 I will move the topic baseline just to have it not
+>be based on a random point in the history.
+
+Ok, thanks for picking this up.
