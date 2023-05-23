@@ -2,99 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882D470E993
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 01:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E1870E971
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 01:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238849AbjEWX2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 19:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S238319AbjEWXW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 19:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238846AbjEWX2f (ORCPT
+        with ESMTP id S229837AbjEWXW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 19:28:35 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2089.outbound.protection.outlook.com [40.107.95.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2437BE5F;
-        Tue, 23 May 2023 16:28:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DoKsM2X5eqeNKEpyPA76l7Pmvars9LbIBbNmIaLV1vCWAOxMDYs8bYibEO8W+YeJ+x3EqxX5kEoN73uNN2FrJ8HRXYAxNQzFc73V/Evp75hm5YxFcKBT1h3tdNl0oZcYWjTbzgwuhWkrORdMg7U2BRx/kod6ZF8cZaWgXEmJJGHGXiWA6jDLrodCfAdx2g+L2FiD2KjcL8p3lanJN9hQH0FG4Ogi8kj/DVKxx3rGatAPdT41Gq62iXEpI9Aa6wyUCyXR6K5pJCIxRPW+DhSwYJzIeVX78GNlUFggZ+j06E/tX0M3kF355WXhKq+tqjDqcMkqpAkgTNzMl4hsXPnmOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ru4BkiU5cPsAD4arfiZPyON6tBIvUzVPdxT2kisKG/s=;
- b=LJ4uj4WViBibNsBBskKoLC5pg7yIcbI4B3XwQPv1Z8QuJWNolA+VenSKYW/tH+s3I/t/1fQQOiuvNvUi0biRyHTU+zbS6oX/BSBnZlujvf/Wu0kQOS59woa8aWz+z2T1BE5QE8wYskfD5lWHQkVqeDuuyW9Eznmz3pjuYE0QpEY+p2tqre6Z8/UbSqduoP6/RzyXDdQJIxQXO65735qxp3V0YW1oKDNhuk04i4MfQ3mV6qOXDLMEGyuAFZrDY+w83CpJ1XbBVNd5fWFG8Yt/K9aYuf820v48ZERZCrIgsHBEmpGtZXfv1YmRBvgds7PLvUNQYgI3pTFO/k8EJEV6Mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
- is 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com;
- dmarc=temperror action=none header.from=amd.com; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ru4BkiU5cPsAD4arfiZPyON6tBIvUzVPdxT2kisKG/s=;
- b=X7e57O4yvN1ZQPkzJaqtP0dvAwpIbyH0ZZ7sE70R8TyKmALZfN75VRfyJbfYIae4rqIYvlexMW0cKqeyfVk4A9l+r/EW4p7bjTsEwq6yv+FmEjf30471EB5qUKVii/4PWvDTl8ZQcZVWxHUFmkvbfZ6vUHBtM3/9cqwRoynp54Q=
-Received: from MW3PR06CA0022.namprd06.prod.outlook.com (2603:10b6:303:2a::27)
- by SA1PR12MB6994.namprd12.prod.outlook.com (2603:10b6:806:24d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Tue, 23 May
- 2023 23:26:53 +0000
-Received: from CO1NAM11FT038.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2a:cafe::d4) by MW3PR06CA0022.outlook.office365.com
- (2603:10b6:303:2a::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
- Transport; Tue, 23 May 2023 23:26:53 +0000
-X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
- 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=temperror action=none header.from=amd.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of amd.com: DNS Timeout)
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT038.mail.protection.outlook.com (10.13.174.231) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.30 via Frontend Transport; Tue, 23 May 2023 23:26:51 +0000
-Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 23 May
- 2023 18:26:50 -0500
-From:   Terry Bowman <terry.bowman@amd.com>
-To:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <Jonathan.Cameron@huawei.com>, <linux-cxl@vger.kernel.org>
-CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: [PATCH v4 21/23] cxl/pci: Add RCH downstream port error logging
-Date:   Tue, 23 May 2023 18:22:12 -0500
-Message-ID: <20230523232214.55282-22-terry.bowman@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230523232214.55282-1-terry.bowman@amd.com>
-References: <20230523232214.55282-1-terry.bowman@amd.com>
+        Tue, 23 May 2023 19:22:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539BDDA;
+        Tue, 23 May 2023 16:22:24 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:17:6c0::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 771E1660298C;
+        Wed, 24 May 2023 00:22:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684884142;
+        bh=GKh6EOIgX3e36fz9KVxKeOlDpcpRzh+0I4D+rqUNQ9U=;
+        h=Subject:From:To:Date:In-Reply-To:References:From;
+        b=JrRS2H/bRjZDMJLLJsJpM1cZlk0WBLtKG77OgOvgmEVJkra0DGvOcDw6QpFbl2zx0
+         S9zqksYQEFj02mRm7o9862FbQmYM/fwk7nPCGNdi9V9WmdOWilSPpe/MUzz+YlDjAx
+         yjn8zmBpg29OArF22qQqQ9Z6ffRywFLNDiPRqjdT3FTFfklsQ/JkOWhueDXEjX07Ol
+         yfM1hcsmS9Gm49qbunvWDx/3lwjUyT44g3IVffpQhlJrRLrAnJn/eVH4g/Lo2iHul1
+         fvaUbEVPm+nS/zqZNVy5v5txnRC3INIW26cePScnetaGqDFq1TGArkdaGbe0OMFqVB
+         QD+kAXVgQAXaA==
+Message-ID: <e6b11230654e9b217c007eb3bfe73a3c6e7a13c2.camel@collabora.com>
+Subject: Re: [PATCH] media: verisilicon: Additional fix for the crash when
+ opening the driver
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        p.zabel@pengutronix.de, mchehab@kernel.org,
+        m.szyprowski@samsung.com, didi.debian@cknow.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
+        regressions@lists.linux.dev
+Date:   Tue, 23 May 2023 19:22:13 -0400
+In-Reply-To: <CAAEAJfAG_Z_tW8_LzgL7D+tGFYRhyJz3n0uy0gZiOkMnz6FOGA@mail.gmail.com>
+References: <20230523162515.993862-1-benjamin.gaignard@collabora.com>
+         <c034db29-b664-793d-35e0-406fdfe2b145@collabora.com>
+         <20230523170637.GE9943@pengutronix.de>
+         <CAAEAJfAG_Z_tW8_LzgL7D+tGFYRhyJz3n0uy0gZiOkMnz6FOGA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT038:EE_|SA1PR12MB6994:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f7d45fb-55e9-452d-6c98-08db5be53052
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bvTSsD+kTxcZGtDMGjHsND7snPqmr6YiAUNttivJVKwsF2woUIm6Vy77N4yY16rsm2Weoe5j+rQCnC3GpZmT5FiHc1I8Rvkl5hWY4qL1gPMvHblM+vJ1Oxtf0xz2hKuWbqAN0zm46+3jOj549rGAVMLrVId48WOmxzCTkGTf69lOTLW4AzOEY0IWzP06ho2TeMbNVc6mQYEyiH28r9ba4I/U7lGkDO5nU3imlxsLyv54dacC7EdVcIIgwPf3PfGiIt3x6EPiREAKMoWxnTgl5nur7yg7InnTlUC+oUgMn5r07edXptfHAaLzWCEIgx3Yk7EMcfEsapxxzN8MjCipF3m77IvI+WMmBYEpUYl6YU3i//wVO8IMu33+A9zVSbnAzHDpogXTPChBoPSq4Rc4pauz8oCT6vpdeAOgHoVNFi4sCRBdMnDNzyhuN8FMsAAp1ZJE4aTbBF+G7GyVuLPViclLHyRhwWqM8MhHzUwkUPHMmI9emkpGioFtFxGt0xlg6VhtQ9e38Irc5a46ZUAqCGWiqPQYtitDdO0SMIGsUodFr+GXjvmGiLt3Ya8L6ixLg5QnpkoJ6y2A104gzDddl/P7CQejGGeoyeuXYzDMLNFKbOXlGk7z1KdrCZPx0abM/mtmdhBkRuY1GGv09/S2lQjx2+QxjNlRiR0z3RRHhJpzvwCWFCFBdvcUfSGbJ25ltzQGjGJ+8XQmM78yBrWZcGO4HwVWjrLyKQ3TZhUfLzejI56bhwYODARyIH2N6r7MMAeviNDc1DetMqxEmnJ5+g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(36840700001)(40470700004)(46966006)(5660300002)(8936002)(8676002)(40460700003)(86362001)(2906002)(1076003)(26005)(426003)(47076005)(36756003)(83380400001)(63350400001)(2616005)(63370400001)(336012)(16526019)(36860700001)(186003)(40480700001)(7416002)(44832011)(4326008)(70586007)(356005)(82740400003)(81166007)(70206006)(316002)(110136005)(54906003)(478600001)(7696005)(41300700001)(6666004)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 23:26:51.7997
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f7d45fb-55e9-452d-6c98-08db5be53052
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT038.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6994
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,158 +65,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RCH downstream port error logging is missing in the current CXL driver. The
-missing AER and RAS error logging is needed for communicating driver error
-details to userspace. Update the driver to include PCIe AER and CXL RAS
-error logging.
+Le mardi 23 mai 2023 =C3=A0 14:36 -0300, Ezequiel Garcia a =C3=A9crit=C2=A0=
+:
+> Hi guys,
+>=20
+> After reviewing the format logic (hantro_reset_encoded_fmt and
+> hantro_reset_raw_fmt).
+> It seems to me trying to support Decoders, Encoders and so many
+> different SoC Variants, is getting increasingly fragile.
+> This driver is becoming a big fat monolith. Regressions like this will
+> be increasingly frequent.
+>=20
+> The only codec that supports encoding right now is JPEG, so I think
+> it's a good idea to remove it for good,
+> and split it to its own driver.
+>=20
+> Anyone volunteering? :-)
 
-Add RCH downstream port error handling into the existing RCiEP handler.
-The downstream port error handler is added to the RCiEP error handler
-because the downstream port is implemented in a RCRB, is not PCI
-enumerable, and as a result is not directly accessible to the PCI AER
-root port driver. The AER root port driver calls the RCiEP handler for
-handling RCD errors and RCH downstream port protocol errors.
+We won't have that luxury with VP8 and H.264, as the decoder and encoder sh=
+ares
+the same cache memory. They must be time sliced. Note that this driver is o=
+nly
+missing VP8/H.264 encoding before it becomes maintenance only (there won't =
+be
+any interesting feature left, so I would not start on big refactoring, as t=
+his
+may cause more trouble then good. Anything newer like VC8000 or VC9000 shou=
+ld be
+a new driver, and with encoder/decoder split.
 
-Update existing RCiEP correctable and uncorrectable handlers to also call
-the RCH handler. The RCH handler will read the RCH AER registers, check for
-error severity, and if an error exists will log using an existing kernel
-AER trace routine. The RCH handler will also log downstream port RAS errors
-if they exist.
+regards,
+Nicolas
 
-Co-developed-by: Robert Richter <rrichter@amd.com>
-Signed-off-by: Robert Richter <rrichter@amd.com>
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
----
- drivers/cxl/core/pci.c | 98 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+p.s. this is my personal opinion, in general, we should improve the helpers=
+ if
+there is too much boilerplate, rather then creating monolithic drivers, and=
+ on
+that, I believe I agree, but the H1/G1 combo have hardware dependencies whi=
+ch
+has been solve that way, and changing that now is a big amount of work for =
+a
+relative quite driver. Feel free to split G2 away from that driver, that wo=
+uld
+make sense, its not sharing anything.
 
-diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-index def6ee5ab4f5..97886aacc64a 100644
---- a/drivers/cxl/core/pci.c
-+++ b/drivers/cxl/core/pci.c
-@@ -5,6 +5,7 @@
- #include <linux/delay.h>
- #include <linux/pci.h>
- #include <linux/pci-doe.h>
-+#include <linux/aer.h>
- #include <cxlpci.h>
- #include <cxlmem.h>
- #include <cxl.h>
-@@ -747,10 +748,105 @@ static bool cxl_report_and_clear(struct cxl_dev_state *cxlds)
- 	return __cxl_report_and_clear(cxlds, cxlds->regs.ras);
- }
- 
-+#ifdef CONFIG_PCIEAER_CXL
-+
-+static void cxl_log_correctable_ras_dport(struct cxl_dev_state *cxlds,
-+					  struct cxl_dport *dport)
-+{
-+	return __cxl_log_correctable_ras(cxlds, dport->regs.ras);
-+}
-+
-+static bool cxl_report_and_clear_dport(struct cxl_dev_state *cxlds,
-+				       struct cxl_dport *dport)
-+{
-+	return __cxl_report_and_clear(cxlds, dport->regs.ras);
-+}
-+
-+/*
-+ * Copy the AER capability registers using 32 bit read accesses.
-+ * This is necessary because RCRB AER capability is MMIO mapped. Clear the
-+ * status after copying.
-+ *
-+ * @aer_base: base address of AER capability block in RCRB
-+ * @aer_regs: destination for copying AER capability
-+ */
-+static bool cxl_rch_get_aer_info(void __iomem *aer_base,
-+				 struct aer_capability_regs *aer_regs)
-+{
-+	int read_cnt = sizeof(struct aer_capability_regs) / sizeof(u32);
-+	u32 *aer_regs_buf = (u32 *)aer_regs;
-+	int n;
-+
-+	if (!aer_base)
-+		return false;
-+
-+	/* Use readl() to guarantee 32-bit accesses */
-+	for (n = 0; n < read_cnt; n++)
-+		aer_regs_buf[n] = readl(aer_base + n * sizeof(u32));
-+
-+	writel(aer_regs->uncor_status, aer_base + PCI_ERR_UNCOR_STATUS);
-+	writel(aer_regs->cor_status, aer_base + PCI_ERR_COR_STATUS);
-+
-+	return true;
-+}
-+
-+/* Get AER severity. Return false if there is no error. */
-+static bool cxl_rch_get_aer_severity(struct aer_capability_regs *aer_regs,
-+				     int *severity)
-+{
-+	if (aer_regs->uncor_status & ~aer_regs->uncor_mask) {
-+		if (aer_regs->uncor_status & PCI_ERR_ROOT_FATAL_RCV)
-+			*severity = AER_FATAL;
-+		else
-+			*severity = AER_NONFATAL;
-+		return true;
-+	}
-+
-+	if (aer_regs->cor_status & ~aer_regs->cor_mask) {
-+		*severity = AER_CORRECTABLE;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static void cxl_handle_rch_dport_errors(struct cxl_dev_state *cxlds)
-+{
-+	struct pci_dev *pdev = to_pci_dev(cxlds->dev);
-+	struct aer_capability_regs aer_regs;
-+	struct cxl_dport *dport;
-+	int severity;
-+
-+	if (!cxlds->rcd)
-+		return;
-+
-+	if (!cxl_pci_find_port(pdev, &dport) || !dport->rch)
-+		return;
-+
-+	if (!cxl_rch_get_aer_info(dport->regs.dport_aer, &aer_regs))
-+		return;
-+
-+	if (!cxl_rch_get_aer_severity(&aer_regs, &severity))
-+		return;
-+
-+	pci_print_aer(pdev, severity, &aer_regs);
-+
-+	if (severity == AER_CORRECTABLE)
-+		cxl_log_correctable_ras_dport(cxlds, dport);
-+	else
-+		cxl_report_and_clear_dport(cxlds, dport);
-+}
-+
-+#else
-+static void cxl_handle_rch_dport_errors(struct cxl_dev_state *cxlds) { }
-+#endif
-+
- void cxl_cor_error_detected(struct pci_dev *pdev)
- {
- 	struct cxl_dev_state *cxlds = pci_get_drvdata(pdev);
- 
-+	cxl_handle_rch_dport_errors(cxlds);
-+
- 	cxl_log_correctable_ras_endpoint(cxlds);
- }
- EXPORT_SYMBOL_NS_GPL(cxl_cor_error_detected, CXL);
-@@ -763,6 +859,8 @@ pci_ers_result_t cxl_error_detected(struct pci_dev *pdev,
- 	struct device *dev = &cxlmd->dev;
- 	bool ue;
- 
-+	cxl_handle_rch_dport_errors(cxlds);
-+
- 	/*
- 	 * A frozen channel indicates an impending reset which is fatal to
- 	 * CXL.mem operation, and will likely crash the system. On the off
--- 
-2.34.1
+>=20
+> Thanks,
+> Ezequiel
+>=20
+> On Tue, May 23, 2023 at 2:06=E2=80=AFPM Michael Tretter
+> <m.tretter@pengutronix.de> wrote:
+> >=20
+> > On Tue, 23 May 2023 18:36:09 +0200, Benjamin Gaignard wrote:
+> > >=20
+> > > Le 23/05/2023 =C3=A0 18:25, Benjamin Gaignard a =C3=A9crit :
+> > > > This fixes the following issue observed on Odroid-M1 board:
+> > > >=20
+> > > >   Unable to handle kernel NULL pointer dereference at virtual addre=
+ss 0000000000000008
+> > > >   Mem abort info:
+> > > >   ...
+> > > >   Modules linked in: crct10dif_ce hantro_vpu snd_soc_simple_card sn=
+d_soc_simple_card_utils v4l2_vp9 v4l2_h264 rockchip_saradc v4l2_mem2mem vid=
+eobuf2_dma_contig videobuf2_memops rtc_rk808 videobuf2_v4l2 industrialio_tr=
+iggered_buffer rockchip_thermal dwmac_rk stmmac_platform stmmac videodev kf=
+ifo_buf display_connector videobuf2_common pcs_xpcs mc rockchipdrm analogix=
+_dp dw_mipi_dsi dw_hdmi drm_display_helper panfrost drm_shmem_helper gpu_sc=
+hed ip_tables x_tables ipv6
+> > > >   CPU: 3 PID: 176 Comm: v4l_id Not tainted 6.3.0-rc7-next-20230420 =
+#13481
+> > > >   Hardware name: Hardkernel ODROID-M1 (DT)
+> > > >   pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+> > > >   pc : hantro_try_fmt+0xa0/0x278 [hantro_vpu]
+> > > >   lr : hantro_try_fmt+0x94/0x278 [hantro_vpu]
+> > > >   ...
+> > > >   Call trace:
+> > > >    hantro_try_fmt+0xa0/0x278 [hantro_vpu]
+> > > >    hantro_set_fmt_out+0x3c/0x298 [hantro_vpu]
+> > > >    hantro_reset_raw_fmt+0x98/0x128 [hantro_vpu]
+> > > >    hantro_set_fmt_cap+0x240/0x254 [hantro_vpu]
+> > > >    hantro_reset_encoded_fmt+0x94/0xcc [hantro_vpu]
+> > > >    hantro_reset_fmts+0x18/0x38 [hantro_vpu]
+> > > >    hantro_open+0xd4/0x20c [hantro_vpu]
+> > > >    v4l2_open+0x80/0x120 [videodev]
+> > > >    chrdev_open+0xc0/0x22c
+> > > >    do_dentry_open+0x13c/0x48c
+> > > >    vfs_open+0x2c/0x38
+> > > >    path_openat+0x550/0x934
+> > > >    do_filp_open+0x80/0x12c
+> > > >    do_sys_openat2+0xb4/0x168
+> > > >    __arm64_sys_openat+0x64/0xac
+> > > >    invoke_syscall+0x48/0x114
+> > > >    el0_svc_common+0x100/0x120
+> > > >    do_el0_svc+0x3c/0xa8
+> > > >    el0_svc+0x40/0xa8
+> > > >    el0t_64_sync_handler+0xb8/0xbc
+> > > >    el0t_64_sync+0x190/0x194
+> > > >   Code: 97fc8a7f f940aa80 52864a61 72a686c1 (b9400800)
+> > > >   ---[ end trace 0000000000000000 ]---
+> > > >=20
+> > > > Fixes: db6f68b51e5c ("media: verisilicon: Do not set context src/ds=
+t formats in reset functions")
+> >=20
+> > This patch partially reverts the previous commit. I wonder whether the =
+reason
+> > for resetting the context format only if the targeted queue is not busy=
+ still
+> > stands.
+> >=20
+> > > >=20
+> > > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> >=20
+> > Tested-by: Michael Tretter <m.tretter@pengutronix.de>
+> >=20
+> > > > ---
+> > >=20
+> > > Diederick, Marek, Michael,
+> > > I have tested this patch on my boards and I see no regressions on
+> > > decoder part and no more crash when probing the encoder.
+> > > Could you test it on your side to confirm it is ok ?
+> > >=20
+> > > Thorsten, I try/test regzbot commands, please tell me if it is correc=
+t.
+> > >=20
+> > > #regzbot ^introduced db6f68b51e5c
+> > > #regzbot title media: verisilicon: null pointer dereference in try_fm=
+t
+> > > #regzbot ignore-activity
+> > >=20
+> > >=20
+> > > >   drivers/media/platform/verisilicon/hantro_v4l2.c | 6 ++++--
+> > > >   1 file changed, 4 insertions(+), 2 deletions(-)
+> > > >=20
+> > > > diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/dri=
+vers/media/platform/verisilicon/hantro_v4l2.c
+> > > > index 835518534e3b..61cfaaf4e927 100644
+> > > > --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > > > +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > > > @@ -397,10 +397,12 @@ hantro_reset_raw_fmt(struct hantro_ctx *ctx, =
+int bit_depth)
+> > > >     if (!raw_vpu_fmt)
+> > > >             return -EINVAL;
+> > > > -   if (ctx->is_encoder)
+> > > > +   if (ctx->is_encoder) {
+> > > >             encoded_fmt =3D &ctx->dst_fmt;
+> > > > -   else
+> > > > +           ctx->vpu_src_fmt =3D raw_vpu_fmt;
+> > > > +   } else {
+> > > >             encoded_fmt =3D &ctx->src_fmt;
+> > > > +   }
+> > > >     hantro_reset_fmt(&raw_fmt, raw_vpu_fmt);
+> > > >     raw_fmt.width =3D encoded_fmt->width;
+> > >=20
 
