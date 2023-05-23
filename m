@@ -2,212 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA4C70DAFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1227B70DB08
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235981AbjEWK4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S233019AbjEWK6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjEWK4R (ORCPT
+        with ESMTP id S232227AbjEWK6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:56:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6BE119;
-        Tue, 23 May 2023 03:56:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 758D96117C;
-        Tue, 23 May 2023 10:56:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 654B3C433EF;
-        Tue, 23 May 2023 10:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684839374;
-        bh=gxdNW1/f/9PAgN6QIwpZFg/Q6GBpd45ovH2YHV9pO24=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=bVruV3sfe1VK8SZ8P5llKLoXL2vEi7/YPZpm3eD3FCnwY7TaqZlutR0O5J1XfTFO8
-         V4FriMdQrV8yIlcYenD73/ZMeKxuvRpTziaPFRSZTlvWV5jHVdurKve62yfwG6Zl+b
-         OBxSQCLK5har0jXlIP5KUo1cr4Ueqf+Ahj2hO9YIC0/3JR7CRwA/vwieKKjvBaPx9U
-         yOlljBAVMuwFvB5OpGcOpKlKmv2bQXmiEJ7DASCKa2t4Q5aB3kwXFyBsINxX2ovN9r
-         TtP3dth+zi3QttpVp2hkLYDXGaW9pIxAj0gJO63C2R56YrNK3EYFmwl/nyP2a4RqKi
-         U3phrhKjQbShQ==
-Message-ID: <ef75ac7c96f309b8f080a717f260247f69988d4a.camel@kernel.org>
-Subject: Re: [PATCH v4 2/9] fs: add infrastructure for multigrain inode
- i_m/ctime
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Neil Brown <neilb@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org
-Date:   Tue, 23 May 2023 06:56:11 -0400
-In-Reply-To: <20230523101723.xmy7mylbczhki6aa@quack3>
-References: <20230518114742.128950-1-jlayton@kernel.org>
-         <20230518114742.128950-3-jlayton@kernel.org>
-         <20230523100240.mgeu4y46friv7hau@quack3>
-         <20230523101723.xmy7mylbczhki6aa@quack3>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Tue, 23 May 2023 06:58:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B39119
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684839462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RZ0nZCW3MFVFDtLFej2MU/t6cdsfnpL0O0gs9bg+QYI=;
+        b=Cskz0EIC+ZMfiWZ4eGKIFw/7zSKbcmE2ecbZpDMBxW7/CT+No/qtaiDgydpraRm0crXJ//
+        Iz2neoqAPRmGW7hM6IXpCYYgWUGbbYfmGkMx16fr7Kh07pqx/BJd/nFIMjXg3KXeNczZ6w
+        P/JD965F32d2tvUiKMBlUAqZfm6LxDs=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-517-4mKdDR5CM-6nt9ploTM4kQ-1; Tue, 23 May 2023 06:57:41 -0400
+X-MC-Unique: 4mKdDR5CM-6nt9ploTM4kQ-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-96fa4c724fdso416731066b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:57:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684839460; x=1687431460;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZ0nZCW3MFVFDtLFej2MU/t6cdsfnpL0O0gs9bg+QYI=;
+        b=glKoMCKuvHCRer6LwHeKv2m82fG4huWIRejUaLznT97/BHRNNXbm3YR/5/jk1UC5+Z
+         lBnVqzdNjpn3H/i8Y7+5SENiSixnWp1BHDWcPNfaS9ImtgS4Gi2mfzEzWVEV4bFQM8I6
+         TtHQQWMMjR/Tc1+MKWxCvK3tQAeyv/L0m0Bf2x6qQXvlRFGV4+c5qsT29RFzUCPTBztU
+         9UJph1dJdXE8WPPSyy1/DkrL552FubW9tYCqIXpv7C3y9Ph1gyDa7CaB3uPplu8h8Bb1
+         6Hpk0smZKwETxZ+ZH/Uobyqd0orNXhcPMcwhiQS+WS0EXQwfK5KShNy07TxbYLU+6toy
+         TgUQ==
+X-Gm-Message-State: AC+VfDxmr4q6K90MOiHHaZNnp/10k42SjGm4vf9SSU+ejg9eTU4+AAtH
+        PhRZ7/hYjht0MJowvYK15tmhElbBwD7l5X3iRcGUurxfTxOChj6BvGuFpXzi5HGEbutkWhVKsoZ
+        t+sZiiPL+B5+VnX4I2qi/i+KZ
+X-Received: by 2002:a17:907:930d:b0:96a:2dd7:2ee0 with SMTP id bu13-20020a170907930d00b0096a2dd72ee0mr12333146ejc.5.1684839460693;
+        Tue, 23 May 2023 03:57:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5R/ny+kGH/gT+o4UMnrnlpA/YR5sLcCvHjVcj1Knsevjc+AmvFA0QzN4E8hMQb2lZmbCi4lA==
+X-Received: by 2002:a17:907:930d:b0:96a:2dd7:2ee0 with SMTP id bu13-20020a170907930d00b0096a2dd72ee0mr12333128ejc.5.1684839460372;
+        Tue, 23 May 2023 03:57:40 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id t20-20020a17090616d400b009662c57b4ffsm4332344ejd.96.2023.05.23.03.57.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 03:57:39 -0700 (PDT)
+Message-ID: <4897786d-e34a-38b9-3dd1-26571bcab54f@redhat.com>
+Date:   Tue, 23 May 2023 12:57:39 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] platform/x86/intel/ifs: Annotate work queue on stack so
+ object debug does not complain
+Content-Language: en-US, nl
+To:     David Arcari <darcari@redhat.com>,
+        platform-driver-x86@vger.kernel.org
+Cc:     Jithu Joseph <jithu.joseph@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230523105400.674152-1-darcari@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230523105400.674152-1-darcari@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-23 at 12:17 +0200, Jan Kara wrote:
-> On Tue 23-05-23 12:02:40, Jan Kara wrote:
-> > On Thu 18-05-23 07:47:35, Jeff Layton wrote:
-> > > The VFS always uses coarse-grained timestamp updates for filling out =
-the
-> > > ctime and mtime after a change. This has the benefit of allowing
-> > > filesystems to optimize away a lot metadata updates, down to around 1
-> > > per jiffy, even when a file is under heavy writes.
-> > >=20
-> > > Unfortunately, this has always been an issue when we're exporting via
-> > > NFSv3, which relies on timestamps to validate caches. Even with NFSv4=
-, a
-> > > lot of exported filesystems don't properly support a change attribute
-> > > and are subject to the same problems with timestamp granularity. Othe=
-r
-> > > applications have similar issues (e.g backup applications).
-> > >=20
-> > > Switching to always using fine-grained timestamps would improve the
-> > > situation, but that becomes rather expensive, as the underlying
-> > > filesystem will have to log a lot more metadata updates.
-> > >=20
-> > > What we need is a way to only use fine-grained timestamps when they a=
-re
-> > > being actively queried.
-> > >=20
-> > > The kernel always stores normalized ctime values, so only the first 3=
-0
-> > > bits of the tv_nsec field are ever used. Whenever the mtime changes, =
-the
-> > > ctime must also change.
-> > >=20
-> > > Use the 31st bit of the ctime tv_nsec field to indicate that somethin=
-g
-> > > has queried the inode for the i_mtime or i_ctime. When this flag is s=
-et,
-> > > on the next timestamp update, the kernel can fetch a fine-grained
-> > > timestamp instead of the usual coarse-grained one.
-> > >=20
-> > > This patch adds the infrastructure this scheme. Filesytems can opt
-> > > into it by setting the FS_MULTIGRAIN_TS flag in the fstype.
-> > >=20
-> > > Later patches will convert individual filesystems over to use it.
-> > >=20
-> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> >=20
-> > So there are two things I dislike about this series because I think the=
-y
-> > are fragile:
-> >=20
-> > 1) If we have a filesystem supporting multigrain ts and someone
-> > accidentally directly uses the value of inode->i_ctime, he can get bogu=
-s
-> > value (with QUERIED flag). This mistake is very easy to do. So I think =
-we
-> > should rename i_ctime to something like __i_ctime and always use access=
-or
-> > function for it.
-> >=20
-> > 2) As I already commented in a previous version of the series, the sche=
-me
-> > with just one flag for both ctime and mtime and flag getting cleared in
-> > current_time() relies on the fact that filesystems always do an equival=
-ent
-> > of:
-> >=20
-> > 	inode->i_mtime =3D inode->i_ctime =3D current_time();
-> >=20
-> > Otherwise we can do coarse grained update where we should have done a f=
-ine
-> > grained one. Filesystems often update timestamps like this but not
-> > universally. Grepping shows some instances where only inode->i_mtime is=
- set
-> > from current_time() e.g. in autofs or bfs. Again a mistake that is rath=
-er
-> > easy to make and results in subtle issues. I think this would be also
-> > nicely solved by renaming i_ctime to __i_ctime and using a function to =
-set
-> > ctime. Mtime could then be updated with inode->i_mtime =3D ctime_peek()=
-.
-> >=20
-> > I understand this is quite some churn but a very mechanical one that co=
-uld
-> > be just done with Coccinelle and a few manual fixups. So IMHO it is wor=
-th
-> > the more robust result.
->=20
-> Also as I'm thinking about it your current scheme is slightly racy. Suppo=
-se
-> the filesystem does:
->=20
-> CPU1					CPU2
->=20
-> 					statx()
-> inode->i_ctime =3D current_time()
->   current_mg_time()
->     nsec =3D atomic_long_fetch_andnot(QUERIED, &inode->i_ctime.tv_nsec)
-> 					  nsec =3D atomic_long_fetch_or(QUERIED, &inode->i_ctime.tv_nsec)
->     if (nsec & QUERIED) - not set
->       ktime_get_coarse_real_ts64(&now)
->     return timestamp_truncate(now, inode);
-> - QUERIED flag in the inode->i_ctime gets overwritten by the assignment
->   =3D> we need not update ctime due to granularity although it was querie=
-d
->=20
-> One more reason to use explicit function to update inode->i_ctime ;)
+Hi,
 
-When we store the new time in the i_ctime field, the flag gets cleared
-because at that point we're storing a new (unseen) time.
+On 5/23/23 12:54, David Arcari wrote:
+> Object Debug results in the following warning while attempting to load
+> ifs firmware:
+> 
+> [  220.007422] ODEBUG: object 000000003bf952db is on stack 00000000e843994b, but NOT annotated.
+> [  220.007459] ------------[ cut here ]------------
+> [  220.007461] WARNING: CPU: 0 PID: 11774 at lib/debugobjects.c:548 __debug_object_init.cold+0x22e/0x2d5
+> [  220.137476] RIP: 0010:__debug_object_init.cold+0x22e/0x2d5
+> [  220.254774] Call Trace:
+> [  220.257641]  <TASK>
+> [  220.265606]  scan_chunks_sanity_check+0x368/0x5f0 [intel_ifs]
+> [  220.288292]  ifs_load_firmware+0x2a3/0x400 [intel_ifs]
+> [  220.332793]  current_batch_store+0xea/0x160 [intel_ifs]
+> [  220.357947]  kernfs_fop_write_iter+0x355/0x530
+> [  220.363048]  new_sync_write+0x28e/0x4a0
+> [  220.381226]  vfs_write+0x62a/0x920
+> [  220.385160]  ksys_write+0xf9/0x1d0
+> [  220.399421]  do_syscall_64+0x59/0x90
+> [  220.440635]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [  220.566845] ---[ end trace 3a01b299db142b41 ]---
+> 
+> Correct this by calling INIT_WORK_ONSTACK instead of INIT_WORK.
+> 
+> Fixes: 684ec215706d ("platform/x86/intel/ifs: Authenticate and copy to secured memory")
+> 
+> Signed-off-by: David Arcari <darcari@redhat.com>
+> Cc: Jithu Joseph <jithu.joseph@intel.com>
+> Cc: Ashok Raj <ashok.raj@intel.com>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: stable@vger.kernel.org
 
-However, you're correct: if the i_ctime in your above example starts at
-the same value that is currently being returned by
-ktime_get_coarse_real_ts64, then we'll lose the flag set in statx.
+Thank you for your patch, I've applied this patch to my fixes
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
 
-I think the right fix there would be to not update the ctime at all if
-it's a coarse grained time, and the value wouldn't have an apparent
-change to an observer. That would leave the flag intact.
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
 
-That does mean we'd need to move to a function that does clock fetch and
-assigns it to i_ctime in one go (like you suggest). Something like:
+Regards,
 
-    inode_update_ctime(inode);
+Hans
 
-How we do that with atomic operations over two values (the tv_sec and
-tv_nsec) is a bit tricky. I'll have to think about it.
 
-Christian, given Jan's concerns do you want to drop this series for now
-and let me respin it?
 
-Thanks,
---=20
-Jeff Layton <jlayton@kernel.org>
+
+
+> ---
+>  drivers/platform/x86/intel/ifs/load.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
+> index 61dffb4c8a1d..e6ae8265f3a3 100644
+> --- a/drivers/platform/x86/intel/ifs/load.c
+> +++ b/drivers/platform/x86/intel/ifs/load.c
+> @@ -208,7 +208,7 @@ static int scan_chunks_sanity_check(struct device *dev)
+>  			continue;
+>  		reinit_completion(&ifs_done);
+>  		local_work.dev = dev;
+> -		INIT_WORK(&local_work.w, copy_hashes_authenticate_chunks);
+> +		INIT_WORK_ONSTACK(&local_work.w, copy_hashes_authenticate_chunks);
+>  		schedule_work_on(cpu, &local_work.w);
+>  		wait_for_completion(&ifs_done);
+>  		if (ifsd->loading_error) {
+
