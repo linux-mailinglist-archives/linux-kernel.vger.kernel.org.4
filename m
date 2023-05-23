@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A9F70DB46
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8254A70DB56
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbjEWLNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S236467AbjEWLQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjEWLNe (ORCPT
+        with ESMTP id S235288AbjEWLQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:13:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9594DC4;
-        Tue, 23 May 2023 04:13:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F1F5139F;
-        Tue, 23 May 2023 04:14:16 -0700 (PDT)
-Received: from [10.57.84.70] (unknown [10.57.84.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61F1D3F6C4;
-        Tue, 23 May 2023 04:13:29 -0700 (PDT)
-Message-ID: <b404dc20-c460-ac3f-6659-8be7a7d32bfe@arm.com>
-Date:   Tue, 23 May 2023 12:13:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND 0/2] media: rockchip: rga: Add rk3568 support
-Content-Language: en-GB
-To:     Michael Tretter <m.tretter@pengutronix.de>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Jacob Chen <jacob-chen@iotwrt.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
- <168466589373.900480.8086350880534437090.b4-ty@sntech.de>
- <2386524.2IynHR6iFi@prancing-pony> <20230522102953.GB23678@pengutronix.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230522102953.GB23678@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 07:16:21 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2CAFE;
+        Tue, 23 May 2023 04:16:18 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QQWwH0M82z4f41Sw;
+        Tue, 23 May 2023 19:16:15 +0800 (CST)
+Received: from ubuntu1804.huawei.com (unknown [10.67.174.58])
+        by APP1 (Coremail) with SMTP id cCh0CgBXrRd_oGxkxWnRJQ--.15544S4;
+        Tue, 23 May 2023 19:16:16 +0800 (CST)
+From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiujianfeng@huaweicloud.com
+Subject: [PATCH -next] cgroup: Remove out-of-date comment in cgroup_migrate()
+Date:   Tue, 23 May 2023 19:14:56 +0800
+Message-Id: <20230523111456.146053-1-xiujianfeng@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cCh0CgBXrRd_oGxkxWnRJQ--.15544S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1kZF48Aw1fCw17uw1rWFg_yoWfZrb_tw
+        4jq340qryfAw13tr1Sqws3XFZ2grs5Cryvgw15tay7JFyUtFn5Xrs7tF13JrZ8AFs2kr1D
+        ur9xWa97trnFgjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
+        AVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSLv
+        NUUUUU=
+X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-22 11:29, Michael Tretter wrote:
-> On Sun, 21 May 2023 21:32:51 +0200, Diederik de Haas wrote:
->> On Sunday, 21 May 2023 12:44:58 CEST Heiko Stuebner wrote:
->>> On Fri, 20 Jan 2023 10:14:21 +0100, Michael Tretter wrote:
->>>> The RGA2 on the Rockchip rk3568 is the same core as the RGA2 on the
->>>> Rockchip rk3288.
->>>>
->>>> This series adds the necessary device tree binding and node in the device
->>>> tree to enable the RGA2 on the Rockchip rk3568.
->>>>
->>>> I tested the driver with the GStreamer v4l2convert element on a Rock3
->>>> Model A board.
->>>>
->>>> [...]
->>>
->>> Applied, thanks!
->>>
->>> [1/2] media: dt-bindings: media: rockchip-rga: add rockchip,rk3568-rga
->>>        commit: 9b12ceb5a80d1fb45d293265de100e33b5843943
->>> [2/2] arm64: dts: rockchip: Add RGA2 support to rk356x
->>>        commit: 0c3391f8bb06b744df521651534cd99e3d77e0a8
->>
->> https://lore.kernel.org/all/TY3P286MB26115F60D273E840D36A610598CA9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
->>
->> indicated that there was a problem with device >= 4GB (RAM?):
->>> Since we have the over-4GB problem now, should we mark this problem as a
->>> TODO or something?
->>
->> I thought that was the reason that these patches weren't picked up before?
-> 
-> That's what I thought, too.
-> 
->>
->> I have no insight into this problem, so I can't comment on the technical
->> aspects, but I had made a note for myself 'locally' about it.
-> 
-> Using the RGA2 with the driver in its current form on devices with more than 4
-> GB system memory may lead to memory corruption as buffer addresses are
-> silently truncated to 32 bits.
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-That's because the driver is completely broken and is not using the DMA 
-API anywhere near properly. The fact that it's been getting away with it 
-so far can be mostly put down to good luck and nobody using 
-CONFIG_DMA_API_DEBUG.
+Commit 674b745e22b3 ("cgroup: remove rcu_read_lock()/rcu_read_unlock()
+in critical section of spin_lock_irq()") has removed the rcu_read_lock,
+which makes the comment out-of-date, so remove it.
 
-> I'm not sure if that's actually a blocker for merging these patches.
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ kernel/cgroup/cgroup.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-If anything, hopefully getting more SoC support merged might provide 
-more motivation for someone to fix the existing code :)
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index d8ba2c67910d..415d51c713ad 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2871,11 +2871,6 @@ int cgroup_migrate(struct task_struct *leader, bool threadgroup,
+ {
+ 	struct task_struct *task;
+ 
+-	/*
+-	 * Prevent freeing of tasks while we take a snapshot. Tasks that are
+-	 * already PF_EXITING could be freed from underneath us unless we
+-	 * take an rcu_read_lock.
+-	 */
+ 	spin_lock_irq(&css_set_lock);
+ 	task = leader;
+ 	do {
+-- 
+2.17.1
 
-Robin.
