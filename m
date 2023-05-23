@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5123870D0FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B6C70D0FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234264AbjEWCPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S233430AbjEWCRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233909AbjEWCPX (ORCPT
+        with ESMTP id S229447AbjEWCRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:15:23 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FE6172B;
-        Mon, 22 May 2023 19:14:55 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-77019719423so283952439f.2;
-        Mon, 22 May 2023 19:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684808095; x=1687400095;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GFnzX1YeRTORJ2mp1cDV7I61mJxb5oiNjy6UFmq8zYE=;
-        b=nQaW1Rkp9W1d4h+h2FO8I2STIbpNl70lBJE2f/qvQgjtMWl01dZZ3fOf2Qo3WLgXKW
-         94YtelFAtd0NVkBGAw2qbWfxJjqbcTZgURTtd7wleVeeVYhEkm/XQDkXPp0p+o0GJESd
-         QfvgtdosYhkiCa2kg3BL/uSBxwGCONkPMs6tTN0zjzFC+7STM+jbt/5huTiEZJb8RMGW
-         bvmnV459HUBMyYQk4OqIpQ1E5eWPb2zyrczOjFUFlflNC+AG27dLNJj3PxHB5bC5SQjD
-         3ItVIcMB8IK/CbbPrmSvu2JhfHia66mChtEuRsELb1nop0RA8trXe8bc640eH8gXqZ/D
-         i/Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684808095; x=1687400095;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GFnzX1YeRTORJ2mp1cDV7I61mJxb5oiNjy6UFmq8zYE=;
-        b=dZa3sjK+thl3gSyRrkOh/ZD9t2PtRTeFu//GUwOS9dkOPQ5lra1afOwC5qBs0Le5qQ
-         qQFsMw37CUWlhMClrnUaO0AD7FGPFTE6gM9JryvjgELVW9TZ3azn25HBnO5j06VoM5h7
-         RgzLJb+Ac2JnSRBLVmC3YRPtjw23CvLdkgSCUSGfrk2PCC6OoYKHD2y1DFUbRlpHth4Q
-         S6UTYxOfUTLdqLHo+lHyASxHDmfMUKu8SIP9PC6E9VINOJbA4cBSgeM7jEIlc3DyXAYS
-         oTGQxsMi7KFbecnpIncMgt3q0QEsFcff3D2AVo0OyI+lMQ2MWj1OLwKACgt7jXazdmuU
-         uHQA==
-X-Gm-Message-State: AC+VfDzT2CUkoMc3tP9ZNMNUFsDgw8TkguLXUvUX4g+8ywLz3ncXxubG
-        s/TkALAQKOI9fJ26hLrBpX4=
-X-Google-Smtp-Source: ACHHUZ6AwniIp+HrDfguDY/5LqySPXpzDIVpGAuJ42gTefCub0YKiNO5Pwt5JNOELLpebUGFL3CL7w==
-X-Received: by 2002:a6b:dd12:0:b0:76c:7365:42d8 with SMTP id f18-20020a6bdd12000000b0076c736542d8mr8079568ioc.5.1684808094813;
-        Mon, 22 May 2023 19:14:54 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id d59-20020a0285c1000000b004143ffd4399sm2104035jai.39.2023.05.22.19.14.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 19:14:54 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] leds: Replace all non-returning strlcpy with strscpy
-Date:   Tue, 23 May 2023 02:14:51 +0000
-Message-ID: <20230523021451.2406362-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+        Mon, 22 May 2023 22:17:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AD4188;
+        Mon, 22 May 2023 19:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684808212; x=1716344212;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O3Nuri+DG1gTT8nlRY3lmDXYmBR5yEt4so5n7inqQsU=;
+  b=R5eZqWu1ta2yvulql3n8+T4oSO0zuy0IFo2KZumh+FrcAdpNqLr89byS
+   TIpy9alBf/rUrKAdTYWfhE/mhD2iE7OuAZtjYBdMloUvGWTuvODV8otdE
+   3JTxB/Xbg7jQXMGKXUOR9aRLSsGdphJ9MNjzB1jJYl8y3/ul6Xtx2IjyN
+   eVUzY75Mx/4n8juRPycE9PFkcDBjSwibmkzR6yJRLB1uwET4H7I3tWcOb
+   RebS0MRprygbljhV8lfKKSMPvZd8jOVepN399551S3DiUxNpul8GlPSWe
+   DnHwcsz+ol67r0uyBITU3bx4eQI8Vhi3zmMyyl2LE5+ydwiTxCHXjm7Gk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="351949733"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="351949733"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 19:16:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="654183381"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="654183381"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 May 2023 19:16:38 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q1HZl-000DRT-1v;
+        Tue, 23 May 2023 02:16:37 +0000
+Date:   Tue, 23 May 2023 10:15:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org, neilb@suse.de,
+        akpm@linux-foundation.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH v2] md: fix duplicate filename for rdev
+Message-ID: <202305230956.Zk6vAYvj-lkp@intel.com>
+References: <20230522133225.2983667-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522133225.2983667-1-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
+Hi Yu,
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- drivers/leds/flash/leds-aat1290.c |    2 +-
- drivers/leds/led-class.c          |    2 +-
- drivers/leds/leds-spi-byte.c      |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+[auto build test WARNING on song-md/md-next]
+[also build test WARNING on linus/master v6.4-rc3 next-20230522]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/leds/flash/leds-aat1290.c b/drivers/leds/flash/leds-aat1290.c
-index 589484b22c79..f12ecb2c6580 100644
---- a/drivers/leds/flash/leds-aat1290.c
-+++ b/drivers/leds/flash/leds-aat1290.c
-@@ -425,7 +425,7 @@ static void aat1290_init_v4l2_flash_config(struct aat1290_led *led,
- 	struct led_classdev *led_cdev = &led->fled_cdev.led_cdev;
- 	struct led_flash_setting *s;
- 
--	strlcpy(v4l2_sd_cfg->dev_name, led_cdev->dev->kobj.name,
-+	strscpy(v4l2_sd_cfg->dev_name, led_cdev->dev->kobj.name,
- 		sizeof(v4l2_sd_cfg->dev_name));
- 
- 	s = &v4l2_sd_cfg->intensity;
-diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
-index 9255bc11f99d..6dae56b914fe 100644
---- a/drivers/leds/led-class.c
-+++ b/drivers/leds/led-class.c
-@@ -409,7 +409,7 @@ static int led_classdev_next_name(const char *init_name, char *name,
- 	int ret = 0;
- 	struct device *dev;
- 
--	strlcpy(name, init_name, len);
-+	strscpy(name, init_name, len);
- 
- 	while ((ret < len) &&
- 	       (dev = class_find_device_by_name(leds_class, name))) {
-diff --git a/drivers/leds/leds-spi-byte.c b/drivers/leds/leds-spi-byte.c
-index 2bc5c99daf51..2c7ffc3c78e6 100644
---- a/drivers/leds/leds-spi-byte.c
-+++ b/drivers/leds/leds-spi-byte.c
-@@ -98,7 +98,7 @@ static int spi_byte_probe(struct spi_device *spi)
- 		return -ENOMEM;
- 
- 	of_property_read_string(child, "label", &name);
--	strlcpy(led->name, name, sizeof(led->name));
-+	strscpy(led->name, name, sizeof(led->name));
- 	led->spi = spi;
- 	mutex_init(&led->mutex);
- 	led->cdef = device_get_match_data(dev);
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/md-fix-duplicate-filename-for-rdev/20230522-221940
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
+patch link:    https://lore.kernel.org/r/20230522133225.2983667-1-yukuai1%40huaweicloud.com
+patch subject: [PATCH v2] md: fix duplicate filename for rdev
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20230523/202305230956.Zk6vAYvj-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/b6addfb36d27d4c98b397edec92ed6feeaf7afab
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yu-Kuai/md-fix-duplicate-filename-for-rdev/20230522-221940
+        git checkout b6addfb36d27d4c98b397edec92ed6feeaf7afab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305230956.Zk6vAYvj-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/md/md.c:90:33: warning: 'md_rdev_misc_wq' defined but not used [-Wunused-variable]
+      90 | static struct workqueue_struct *md_rdev_misc_wq;
+         |                                 ^~~~~~~~~~~~~~~
+
+
+vim +/md_rdev_misc_wq +90 drivers/md/md.c
+
+edb39c9deda87d Goldwyn Rodrigues 2014-03-29  86  
+90b08710e41a07 Bernd Schubert    2008-05-23  87  static DECLARE_WAIT_QUEUE_HEAD(resync_wait);
+e804ac780e2f01 Tejun Heo         2010-10-15  88  static struct workqueue_struct *md_wq;
+e804ac780e2f01 Tejun Heo         2010-10-15  89  static struct workqueue_struct *md_misc_wq;
+cc1ffe61c026e2 Guoqing Jiang     2020-04-04 @90  static struct workqueue_struct *md_rdev_misc_wq;
+90b08710e41a07 Bernd Schubert    2008-05-23  91  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
