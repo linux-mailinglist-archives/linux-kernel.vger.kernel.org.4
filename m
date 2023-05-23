@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C73A70E3DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7F570E403
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237547AbjEWRbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
+        id S235628AbjEWRb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238083AbjEWRb3 (ORCPT
+        with ESMTP id S237275AbjEWRbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:31:29 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF38E42
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:31:05 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-56187339d6eso97747997b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:31:05 -0700 (PDT)
+        Tue, 23 May 2023 13:31:51 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on20717.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaf::717])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0A710EB;
+        Tue, 23 May 2023 10:31:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c16pDIdoBZd1stR5bqZkg8gT8SQzy5MRm6uWQq50xMR7sJnFUBuUA7wXa4XyzjOeqcYRHCqJR5QdRf6cFzfmtiGgxJq4cC8bALmBkMcf8GpxWFcDK2+glaj045gYhZX54DKaHSDjIHi1USXTKbhY9/xJpWuh/2PVGkQh4SMtfTdt2+PxdecbKjkMpY5cFFkhjhmhp3CIwTqNGiGf5eUMM/c8c+/oSHXKNaalUCeR6F9KJuc3zUj1K3Jnl3V1TZymOBIXXI83a+y2Bb0tSNRqxVMCNi1qVqjdnB5V7cyMFG/ddhxCfhw3P/Thb+rjBiKphqTGfecV92rRsOwJJHh+FA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IBLW0nsxXd+sZFfRIZukOl99JhCfMrGl5dI/ulyDdUU=;
+ b=fWvml+s9fvORsxvixtY+CpMh4OM1KAfZKyz4Ifq3ibvwJdsbUEMB3HphmHTPc1jVCclrxtTN4WktoBv1GJDxKR/0d/6qE6s7XwX9RPnrmFCv5qQXdusQs6VTF/HwEmb8mljqEqKJVoG+AfLf2vAdgM27JZya0iJY4wX+MYEb369LKz7s3Fj8H4dtM8ge0L0+QuY1rl4Ngl8TxqnZT66altcgGnbWCidIABQB3LUytSttfxhEa6mX0SdRv2JRWE5KQmvn90iNTf0dmzGY91VjQyXfZrhkPahLErT3cbRm/KCO4v9v7b1tPPf7331PxVpGQ5ibepQGcVUF2L1sqiafgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
+ action=none header.from=esd.eu; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684863056; x=1687455056;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vCJa6a9Ra0P6pgbG0lhDXLRP41OI9WKqV43rqziMdQ8=;
-        b=ve1uZ4uzbxpWqFdZAeBe4akBPIsstn7rc643BsI62tzmJXzN0UOAQSh5WDvBcvmdnr
-         4pV3C7ImiPfdiT5O8+w4pLLfV7EhcM4tQRCmcnsmHEDN9yPvXiH92r0sJS0HOtJORZDc
-         kCN1qKjbRje3eM2FnszyLZoJjdx/8dXklM6BY9pO/hFXprIpQLpMayP7eE5dEd0p0xlq
-         lLNWO/y+pbHTNIfNsUWJKOjQM0fcJafjd0pXCAio2y+poeMOyVoD7i+9POdcOKaH1bhK
-         KsWqH76g8SZBwXRRDvw8Rt/ohdLjozmCKIJp5KKJAjXAHPN7ladD5eZs2KQqPCj8i8NJ
-         Javg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684863056; x=1687455056;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vCJa6a9Ra0P6pgbG0lhDXLRP41OI9WKqV43rqziMdQ8=;
-        b=awwHh7Q5LnmDEi3WlKIvPVQR5WNac8KekJ4OFKDsO+rgj1G+cZVVF8xrD2xUF3aBWT
-         ce73HQNgrc3zcojIclvPjcKNzzqQPYjArAL6RdCxYSIVlQWsSD0C/vHjGHVZV7ustS54
-         ineHeMiHOA0urYldMSV/PpC6Tz2BR+nwhtaUcJGspdZNlMcMHWmYco4e1pzFjWNuuSaM
-         2ERlHBiNLA3gACyNzrCgUM4E0rN22DaJ4joUGa0cWQ3YfdhAnATVIxH/BwZqYsU6aJ8y
-         37mCoXJLOprYEe71gv1NfYKpXm+fbbwQi5MfinvvMDlIn956fCyfkiVnHQpG1bOFwce3
-         K1rA==
-X-Gm-Message-State: AC+VfDxOywXnbx5MGr1kZOq0dv694JDqPaPiCsIhDoiyu69NllsCmf/P
-        O+cCzgT8L/lzh2burs2uZbkh78/e9noHAY392YjgLg==
-X-Google-Smtp-Source: ACHHUZ6IWi/mxhp9wdD5jINZn8HH6CcwIeGxgs86a21+3mAKzVveQ6aQ30xRzyYLqcPze9lXJiK6c1Rghx2XzcBAopw=
-X-Received: by 2002:a0d:eb0e:0:b0:55a:72f6:a451 with SMTP id
- u14-20020a0deb0e000000b0055a72f6a451mr12125650ywe.41.1684863056089; Tue, 23
- May 2023 10:30:56 -0700 (PDT)
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IBLW0nsxXd+sZFfRIZukOl99JhCfMrGl5dI/ulyDdUU=;
+ b=hG2mHr6opGpUSSA4++ZHPxjuJEqAwvCnJpM8MCKqUUWluPuVIxN33CgM5yAicZxo4egKNr6Z/dbZemSwRbZ+e5jDPBqX6DaHGKsy/868k7ioRl2k+MKXYWlPvPG2DD+6ehBet0gdK4tGjSXe3WXwf9TJU273rIYouehGuN39BPY=
+Received: from AM5PR0201CA0005.eurprd02.prod.outlook.com
+ (2603:10a6:203:3d::15) by AS8PR03MB7349.eurprd03.prod.outlook.com
+ (2603:10a6:20b:2b6::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Tue, 23 May
+ 2023 17:31:07 +0000
+Received: from VI1EUR06FT059.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:203:3d:cafe::d9) by AM5PR0201CA0005.outlook.office365.com
+ (2603:10a6:203:3d::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
+ Transport; Tue, 23 May 2023 17:31:07 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ VI1EUR06FT059.mail.protection.outlook.com (10.13.6.222) with Microsoft SMTP
+ Server id 15.20.6433.15 via Frontend Transport; Tue, 23 May 2023 17:31:07
+ +0000
+Received: from esd-s20.esd.local (debby [10.0.0.190])
+        by esd-s7.esd (Postfix) with ESMTPS id 0222A7C16D7;
+        Tue, 23 May 2023 19:31:07 +0200 (CEST)
+Received: by esd-s20.esd.local (Postfix, from userid 2046)
+        id E64B02E1804; Tue, 23 May 2023 19:31:06 +0200 (CEST)
+From:   Frank Jungclaus <frank.jungclaus@esd.eu>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Jungclaus <frank.jungclaus@esd.eu>
+Subject: [PATCH 0/2] can: esd_usb: More preparation before supporting esd CAN-USB/3 (addendum)
+Date:   Tue, 23 May 2023 19:31:03 +0200
+Message-Id: <20230523173105.3175086-1-frank.jungclaus@esd.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAO9szn03msW6pu37Zws5EaFGL10rjp9ugPdCuDvOPuQRU72gVQ@mail.gmail.com>
-In-Reply-To: <CAO9szn03msW6pu37Zws5EaFGL10rjp9ugPdCuDvOPuQRU72gVQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 23 May 2023 19:30:44 +0200
-Message-ID: <CACRpkdYwcFk0k18hxWPyPHukE87eiXSJm0_0+fjSJ=ktD_MEoA@mail.gmail.com>
-Subject: Re: drm/panel: Add panel-mipi-dsi-bringup
-To:     =?UTF-8?B?UGF1bG8gUGF2YcSNacSH?= <pavacic.p@gmail.com>
-Cc:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "airlied@gmail.com" <airlied@gmail.com>, sam@ravnborg.org,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1EUR06FT059:EE_|AS8PR03MB7349:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 818374a7-75bf-4a55-cdcd-08db5bb37dee
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6Oz9W0ybPQcFp7xLP9gVgTwr4GlXorTQYekJIF4Wjqa82pFyWccTko9exOrLw3jG7i9twWXdKPsq5p0KBL+5QSX6H1QdG/0mHbcuFlTIfuEXJJ1RgWik2YeiZTlXhADt0XI8j4yN9/hsSdUJdwBbxjbIp4SPYX753H/hBBSuKAp+aEgLerzqbYYyUVTv4nKc/YrjeYVXPXn7IKdwvjLS1oFaJ3felUwt6plb2MR4/9TdevhZvRi3vjSxWYsR40d+WDmFFz55zIYqnx+EohXPqY+ROyiC9riwTys5cLfqxOXQztgcoo0trfHbTyx96tKrvlse6ylXQU/9ZJwEopVWcANTk0Ad5e/nSMjpE0G0zYWoSpp9V+1EZ7aDQ4vHVYbG6ujXEfx3+7nRE8FwShMIYn0RMbIYGENwpXgPt/ic4jY2r3v2PvxZhKfgSbu1wf6UtKcT2nzULY591UOTZJQrKeZ/s7JTbvoLcLF206rO/+Xzl6qp8aU12vsiczS0ckZHQ+CgpFvcFjq89ZOwbZa2D3eDzinC9btXQxZkmx6ko2Krcq8aIT1Qe5F1uA7GypoGDM+d13wc1j3DBaeBUKRwNlFWLOSejwB1PTJNwGPcbcMufpKuyup3XxMTao+E/JHI76tozME7AXZA/THPAdWXBK8UlqKnN/JJh7E9QQskdjfSxXUuQiYz4pcVTyIu7Ksj
+X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(376002)(39840400004)(451199021)(46966006)(36840700001)(1076003)(26005)(186003)(6266002)(2616005)(336012)(966005)(47076005)(83380400001)(36756003)(36860700001)(82310400005)(2906002)(4744005)(6666004)(5660300002)(316002)(42186006)(44832011)(54906003)(40480700001)(110136005)(478600001)(70206006)(86362001)(4326008)(70586007)(356005)(8936002)(41300700001)(8676002)(81166007);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 17:31:07.2195
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 818374a7-75bf-4a55-cdcd-08db5bb37dee
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT059.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7349
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 9:52=E2=80=AFAM Paulo Pava=C4=8Di=C4=87 <pavacic.p@=
-gmail.com> wrote:
+While trying to again merge my code changes for CAN-USB/3, I came
+across some more places where it could make sense to change them
+analogous to the previous clean-up patch series [1].
 
-> From 118419935002e076b44292c832e9b26106f93c89 Mon Sep 17 00:00:00 2001
-> From: =3D?UTF-8?q?Paulo=3D20Pava=3DC4=3D8Di=3DC4=3D87?=3D <pavacic.p@gmai=
-l.com>
-> Date: Fri, 12 May 2023 17:38:29 +0200
-> Subject: [PATCH] drm/panel: add panel-mipi-dsi-bringup driver
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=3DUTF-8
-> Content-Transfer-Encoding: 8bit
+[1] [PATCH v2 0/6] can: esd_usb: More preparation before supporting esd CAN-USB/3
+Link: https://lore.kernel.org/all/20230519195600.420644-1-frank.jungclaus@esd.eu/
 
-This header is really mangled. I wonder what happened?
+Frank Jungclaus (2):
+  can: esd_usb: Make use of kernel macros BIT() and GENMASK()
+  can: esd_usb: Use consistent prefix ESD_USB_ for macros
 
-> +//macro for writing to DSI
-> +#define WRITE_DSI(dsi, seq...)
->            \
-> +    {                                                                   =
-     \
-> +        const u8 d[] =3D { seq };                                       =
-   \
-> +        int ret =3D mipi_dsi_generic_write(dsi, d, ARRAY_SIZE(d));      =
-   \
-> +        if (ret < 0) {                                                  =
- \
-> +            dev_err(&dsi->dev,                                       \
-> +                "Error (%d) occurred while trying to"            \
-> +                " write MIPI DSI command: %s (decimal value)\n", \
-> +                ret, d);                                         \
-> +        }                                                               =
- \
-> +    }
+ drivers/net/can/usb/esd_usb.c | 41 +++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 21 deletions(-)
 
-This is reinventing
-mipi_dsi_generic_write_seq() from <drm/drm_mipi_dsi.h>
-so use that instead.
 
-> +static void brup_panel_fannal_c3004_enable_function(struct
-> mipi_dsi_device *dsi)
+base-commit: ef43ce2c3a1879b3d2f021124c199817d64966d2
+-- 
+2.25.1
 
-Doesn't look like a good name for a generic function?
-
-> +    WRITE_DSI(dsi, 0xFF, 0x77, 0x01, 0x00, 0x00, 0x13);
-
-Use
-mipi_dsi_generic_write_seq()
-
-I suppose these review comments go fo rthe c3004 driver too.
-
-Yours,
-Linus Walleij
