@@ -2,75 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247F270DCE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEFE70DC9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236979AbjEWMry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S236867AbjEWMcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236680AbjEWMrv (ORCPT
+        with ESMTP id S236863AbjEWMcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:47:51 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AA6DB;
-        Tue, 23 May 2023 05:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=6/VrPyQQQacl91J2hYd6SMf8Ci8TKTyXgXBTBksvLyk=; b=wMYqtRxN92vQUJeMN6YMn/VWR4
-        WaXSKKD+cw/qVfR62SPqLBiIILMbH23nR9zX4TMHuBnemambq56hUHToLCbNitV1PlvOg5J4M7a7L
-        x68Ma58jh5bmO2KMIcHq6eQiqip/k0kHT6HTvnhELUW+OtUU6NvI66hueCuemO0XucE4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q1R8j-00DgVb-98; Tue, 23 May 2023 14:29:21 +0200
-Date:   Tue, 23 May 2023 14:29:21 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Parthiban.Veerasooran@microchip.com
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ramon.nordin.rodriguez@ferroamp.se, Horatiu.Vultur@microchip.com,
-        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
-        Thorsten.Kummermehr@microchip.com
-Subject: Re: [PATCH net-next v2 6/6] net: phy: microchip_t1s: add support for
- Microchip LAN865x Rev.B0 PHYs
-Message-ID: <819531cd-ebd7-4734-b35b-8f8c3d138004@lunn.ch>
-References: <20230522113331.36872-1-Parthiban.Veerasooran@microchip.com>
- <20230522113331.36872-7-Parthiban.Veerasooran@microchip.com>
- <349e1c57-24c6-46fa-b0ab-c6225ae1ece4@lunn.ch>
- <f366d388-420a-082d-ed26-25e93d143671@microchip.com>
+        Tue, 23 May 2023 08:32:05 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5763109;
+        Tue, 23 May 2023 05:31:44 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f60dfc5f93so3266745e9.2;
+        Tue, 23 May 2023 05:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684845103; x=1687437103;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G+XmU9cW6dJqezkxpvVuKdHpfUq+glTTnVbU9jQUiIY=;
+        b=BDsW8NKXWqnFAViuFEK3+DwmsJ3XA06LSPv9HjHVs5GKyo1yV/SucJ936S6bNsIhJh
+         jTj4G9coN/rwe0OPxC1VlrWDIKgASIOfXqvRpTg6yP4NWUYkOGD9W4oeQpNYfYgutB4e
+         nj3tjodWahVPM2ZwAtnq+Nww6bHEbAwBK3vg6OysQWDqMNoDtG37mh6vGzCaH5ZdCAnr
+         UIra1foqagU/c/HW8F3S8UplRlbt91wPrgvKSbB6t5XKeTVtae9Yscrd+YXyb88dzuXe
+         johacs49XetzbV6WqEcwrprsN9kXEFVP51o5EN967GFxi+EHmn1AulV9lc7dyc1Fv1XP
+         InUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684845103; x=1687437103;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G+XmU9cW6dJqezkxpvVuKdHpfUq+glTTnVbU9jQUiIY=;
+        b=DKxKoVk2sjtfOsCspoQlAq2E4YJFA8+2odOzEOwm0p6+j0WvEJHz4TNrLJVQwIgDOY
+         1s3muN8U14jiNlkmRJ/Po43CzBpxjM++sBSghjZwHOumhI+4OOechi8zkRw09Ia01ovz
+         Bey9SCIon+GIr9AXThhWvwAFuo4KI8DpjuCjKY78U2iJrA2XKeI7XkCwYysTBqYCIo74
+         2DsmbeViaQcGVBJYOHnxVgZn9xQBun6D9C0D1j/0AP5+6YcgOWT1b5UT9kz3Jy3ueTcF
+         fILFsiz9aGwsMNpEMQiZEjnlP6mRBNj0phAFE+DTYChsaBLKN9eLIsFdcxEG8d+3zFVn
+         jbQA==
+X-Gm-Message-State: AC+VfDytxBJoU1KillKFdc6nf625rm0S4St5Ya4/QmPXSYIW2PT+9a3x
+        8p6Tt/8hgKoS2aucafvYSEZqXW7gMU4VsTFE6tZJeht8Dn0tGgsh
+X-Google-Smtp-Source: ACHHUZ7eyHVelDYqGRcyV5GEaa5qgxyRZz2b4R38sbUlVVncJAHgy5N45wc0X6Zmj95p6Lf77UFhSQw+36FXBfxCi9M=
+X-Received: by 2002:a05:600c:259:b0:3f4:f0c2:125 with SMTP id
+ 25-20020a05600c025900b003f4f0c20125mr9235031wmj.23.1684845102963; Tue, 23 May
+ 2023 05:31:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f366d388-420a-082d-ed26-25e93d143671@microchip.com>
+References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn> <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
+From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
+Date:   Tue, 23 May 2023 15:31:06 +0300
+Message-ID: <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] perf arm64: Handle __NR3264_ prefixed syscall number
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Hans-Peter Nilsson <hp@axis.com>, Leo Yan <leo.yan@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Is this doing a read from fuses? Is anything documented about this?
-> > What the values mean? Would a board designer ever need to use
-> > different values? Or is this just a case of 'trust us', you don't need
-> > to understand this magic.
-> Yes, it is a read from fuses and those values are specific/unique for 
-> each PHY chip. Those values are calculated based on some characteristics 
-> of the PHY chip behavior for optimal performance and they are fused in 
-> the PHY chip for the driver to configure it during the initialization. 
-> This is done in the production/testing stage of the PHY chip. As it is 
-> specific to PHY chip, a board designer doesn't have any influence on 
-> this and need not to worry about it. Unfortunately they can't be 
-> documented anywhere as they are design specific. So simply 'trust us'.
+On Tue, May 23, 2023 at 1:22=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
+> in the generated syscall table file syscalls.c, there exist some
+> __NR3264_ prefixed syscall numbers such as [__NR3264_ftruncate],
+> it looks like not so good, just do some small filter operations
+> to handle __NR3264_ prefixed syscall number as a digital number.
+>
+> Without this patch:
+>
+>   [__NR3264_ftruncate] =3D "ftruncate",
+>
+> With this patch:
+>
+>   [46] =3D "ftruncate",
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools/pe=
+rf/arch/arm64/entry/syscalls/mksyscalltbl
+> index 22cdf91..59ab7939 100755
+> --- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+> +++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+> @@ -39,7 +39,8 @@ create_table()
+>         echo "};"
+>  }
+>
+> -$gcc -E -dM -x c -I $incpath/include/uapi $input \
+> -       |sed -ne 's/^#define __NR_//p' \
+> -       |sort -t' ' -k2 -n             \
+> +$gcc -E -dM -x c -I $incpath/include/uapi $input               \
+> +       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
+> +       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
+> +       |sort -t' ' -k2 -n                                      \
+>         |create_table
+> --
+> 2.1.0
+>
 
-O.K. Please consider for future generations that you move all this
-magic into the PHY firmware. There does not seem to be any reason the
-OS needs to know about this.
-
-     Andrew
+As an aside, the awk + sed + sort parts of the command line may be
+reduced to the following awk script, if desired:
+awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
+        sub("^#define __NR_", "")
+        sub("^#define __NR3264_", "")
+        print | "sort -k2 -n"
+}'
