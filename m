@@ -2,132 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6DD70DE3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC78F70DE3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237072AbjEWN5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S237057AbjEWN5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236973AbjEWN5o (ORCPT
+        with ESMTP id S236875AbjEWN5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 May 2023 09:57:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB8CE5E;
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F8E5F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:57:14 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id 98e67ed59e1d1-253340db64fso6811218a91.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684850233; x=1687442233;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RE5pljgoQG181tjwuhg4W/JZgWLsjKIcNLZqb+B2pwg=;
+        b=naCmkZ+ge6/s2VO38wiDl4LMWZA24oDqNGbSyjWkqLEEpsSrL2UZfnEbbWaQwyahab
+         djCRmY33ZnhyT4jLZLEdTnPT4HN1BqKmpG5k9BYhUbHqfHj5+jMEvv4jtxX1C1w4b2tW
+         26ufViFYncJYmgNOqcaB8+wh+SlPc5JJlA9PldXPXmaDE5GcogmwOWirr/1Tl2sd/qOT
+         W2g9NUZFJN1hjZqqe9q3iOps0XxyY4T3xAtZk9+T8wr12wn4KptpmrAVBNVaOaUSz4Lu
+         vE+CT3YvLckAixfu21WF+eve7jxbwYOsKeI3eDd7dtO+thGK3Au3oVGzTxB23gcnAAi2
+         gbew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684850233; x=1687442233;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RE5pljgoQG181tjwuhg4W/JZgWLsjKIcNLZqb+B2pwg=;
+        b=SRUl1JKIA3SUZv44Baa0b5TSapnPK4qg/oiDkoYYcBVr4M+3FS6LQVwhJs37DI41No
+         4QhD95DZBmoj96dhqC+PumBA1Z1+o4Hhzw2bm9RuaTMu0RsIgULUJigZxseoZPHAYjou
+         8gliJwO2nhHHUtEZI7ISMabxVIGosRTQxeLWhMaLU+gE6KU9mCZ5f5vvzinLVXM/QhYG
+         KMmKODuHTmI5gSlRZ2miD7GM6h4D6PNMps6hZgAVoLPiuy7Up7K55XsdZDs7EOJrlf4W
+         XBVzI7Ja497op/x4vZiIScM25DjzaCKmEsX2WkLmOKHQXwcbqlCfMMxC2SXtODGqlL3b
+         zr7A==
+X-Gm-Message-State: AC+VfDyRjXpbjMdvLbWIf5FgMAzMDMM0LPoPtWbWxlf7T3+C+Li3QOSw
+        /ICp1LNjc7EDtBdIL9izj+M=
+X-Google-Smtp-Source: ACHHUZ6Id+zBNB8WNjEYqXttPKy16f58rmZEC2yONMtyCsgnTTKt4TcgKh5kBq0/CauftKSKxHUivQ==
+X-Received: by 2002:a17:90a:71c2:b0:255:70e1:e41 with SMTP id m2-20020a17090a71c200b0025570e10e41mr6031679pjs.19.1684850233201;
         Tue, 23 May 2023 06:57:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F26086197C;
-        Tue, 23 May 2023 13:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3736CC4339B;
-        Tue, 23 May 2023 13:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684850227;
-        bh=3axLG1/K+AxB/rbOTBfx2ocK/Ii7na1MiC0XPF5pG20=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=poHUIVXpVVWETw8/bgOC5BRbtv/cBcpF+itnmqrPNrVa0ufX13ni+Ja5L+28pJXME
-         ywgBoc/reN96eK4PorILej2avPaL6BXEBfy5GHV5qJvIoGMS7PgjmLSv/K/GZsxF7v
-         foxT+k3/aQU2M+uw72J1wXem2Yp9fyZUA3aAl+UZao8BAPh4sMzp89zCAqbDeKccu6
-         xJ/iAqjk1QyCafF7/yUNucGHYNVCwZf62alZn1CBI4AMyOrEEByzU/yrO6G553UK57
-         KuHhHldasJrKAzYW/A4R3h6DuhG2R2HdJSeGM2AgLwLQM8KaP0M2uFKHPHxmTUShy1
-         byhhvzfewmIZA==
-Date:   Tue, 23 May 2023 15:57:03 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: ensure timely release of driver-allocated
- resources
-In-Reply-To: <ZFWarGkRAfPOmI6E@google.com>
-Message-ID: <nycvar.YFH.7.76.2305231554250.29760@cbobk.fhfr.pm>
-References: <ZFWarGkRAfPOmI6E@google.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s31-20020a17090a69a200b0023a9564763bsm8226319pjj.29.2023.05.23.06.57.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 06:57:12 -0700 (PDT)
+From:   xu xin <xu.xin.sc@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     david@redhat.com
+Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn
+Subject: Re: [PATCH v8 1/6] ksm: support unsharing KSM-placed zero pages
+Date:   Tue, 23 May 2023 21:57:09 +0800
+Message-Id: <20230523135709.6902-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1925d301-462d-6b33-8867-4e1646b2dbd6@redhat.com>
+References: <1925d301-462d-6b33-8867-4e1646b2dbd6@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023, Dmitry Torokhov wrote:
+>> ---
+>>   include/linux/ksm.h | 6 ++++++
+>>   mm/ksm.c            | 5 +++--
+>>   2 files changed, 9 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+>> index 899a314bc487..7989200cdbb7 100644
+>> --- a/include/linux/ksm.h
+>> +++ b/include/linux/ksm.h
+>> @@ -26,6 +26,9 @@ int ksm_disable(struct mm_struct *mm);
+>>   
+>>   int __ksm_enter(struct mm_struct *mm);
+>>   void __ksm_exit(struct mm_struct *mm);
+>> +/* use pte_mkdirty to track a KSM-placed zero page */
+>> +#define set_pte_ksm_zero(pte)	pte_mkdirty(pte_mkspecial(pte))
+>
+>If there is only a single user (which I assume), please inline it instead.
 
-> More and more drivers rely on devres to manage their resources, however
-> if bus' probe() and release() methods are not trivial and control some
-> of resources as well (for example enable or disable clocks, or attach
-> device to a power domain), we need to make sure that driver-allocated
-> resources are released immediately after driver's remove() method
-> returns, and not postponed until driver core gets around to releasing
-> resources.
-> 
-> In case of HID we should not try to close the report and release
-> associated memory until after all devres callbacks are executed. To fix
-> that we open a new devres group before calling driver's probe() and
-> explicitly release it when we return from driver's remove().
-> 
-> This is similar to what we did for I2C bus in commit 5b5475826c52 ("i2c:
-> ensure timely release of driver-allocated resources"). It is tempting to
-> try and move this into driver core, but actually doing so is challenging,
-> we need to split bus' remove() method into pre- and post-remove methods,
-> which would make the logic even less clear.
-> 
-> Reported-by: Stephen Boyd <swboyd@chromium.org>
-> Link: https://lore.kernel.org/r/20230505232417.1377393-1-swboyd@chromium.org
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  drivers/hid/hid-core.c | 55 ++++++++++++++++++++++++++++--------------
->  include/linux/hid.h    |  1 +
->  2 files changed, 38 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index c4ac9081194c..02a43bba9091 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -2602,35 +2602,29 @@ static bool hid_device_check_match(struct hid_device *hdev,
->  	return !hid_ignore_special_drivers;
->  }
->  
-> -static int hid_device_probe(struct device *dev)
-> +static int __hid_device_probe(struct hid_device *hdev)
->  {
-> -	struct hid_driver *hdrv = to_hid_driver(dev->driver);
-> -	struct hid_device *hdev = to_hid_device(dev);
-> +	struct hid_driver *hdrv = to_hid_driver(hdev->dev.driver);
->  	const struct hid_device_id *id;
->  	int ret;
->  
-> -	if (down_interruptible(&hdev->driver_input_lock)) {
-> -		ret = -EINTR;
-> -		goto end;
-> -	}
->  	hdev->io_started = false;
-> -
->  	clear_bit(ffs(HID_STAT_REPROBED), &hdev->status);
->  
-> -	if (hdev->driver) {
-> -		ret = 0;
-> -		goto unlock;
-> -	}
-> +	if (hdev->driver)
-> +		return 0;
->  
-> -	if (!hid_device_check_match(hdev, hdrv, &id)) {
-> -		ret = -ENODEV;
-> -		goto unlock;
-> -	}
+Excuse me, I'm wondering why using inline here instead of macro is better.
+Thanks! :)
 
-Dmitry, which tree is this patch against, please? The code above looks 
-different in current tree (and hasn't been touched for a while).
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Thanks for reviews.
