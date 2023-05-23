@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D739870DA7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE48B70DA82
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbjEWK1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
+        id S236325AbjEWK2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236373AbjEWK1b (ORCPT
+        with ESMTP id S236204AbjEWK2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:27:31 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F6F196;
-        Tue, 23 May 2023 03:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684837640; bh=Rz/jMDI3oh2zrPusaXmjU04cYzz6hGQWeOgOEHalzd8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=c+zjYF5TpdsF52OTYDOxRLNuSsDFqIM3ZaPTqSGcWba5wKmKaSFNIfXz/kWtW8/D2
-         jpOc3vobIycxsYyGlYOfhL08n2YfCo69J7M2h2NAMPv78M7OtpfJePRdo96mH2qNzo
-         qBe84T+MmH3a7osEVPx1SpWyXFv8D9ey2OcvPl9g=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 23 May 2023 06:28:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B802129;
+        Tue, 23 May 2023 03:28:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E29C160115;
-        Tue, 23 May 2023 18:27:19 +0800 (CST)
-Message-ID: <29a9c6b4-96b8-3fb5-9b7a-2f9dba97e06f@xen0n.name>
-Date:   Tue, 23 May 2023 18:27:19 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA8460FB8;
+        Tue, 23 May 2023 10:28:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419C7C433D2;
+        Tue, 23 May 2023 10:28:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684837700;
+        bh=rEtWtzgud+dO4P7xKWlT7z3oMQmShxLx4UZLon9bI8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=itC55Fb3VuqSwZMKKdERBjnsvn4Pl3mwXDIyQVMQ5ZdClxgMM2XYDfxPQNmHwVeOA
+         k8MwbLW9WlO41YUIrtYXkTHHpDUOERpa8kOp1EiqEu7ABatoOhX1CBBzkSQpunmXX+
+         yZJujZPRclL+9Sb4lpuYgynCwOXHpFzcWYtbgs+5X7uZBc5WBFqzg59IAcxS4U7xdT
+         keKGS8IcCOVkOeS/LHHd5b+H+PJYTYYtuw5GJmbn/yslH+GCWk942e2coAv7zddNxR
+         Dxwrg7qTwgKYbcgtNTqUZCpiC+xqXhdI/De+Yt7+AL8W5QKhCoLy/Ot8JfjQ413XEL
+         YkgYpYhdwqFog==
+Date:   Tue, 23 May 2023 11:28:14 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
+ fpsimd_release_task
+Message-ID: <99c3fac1-e964-4cf6-ba14-58de305aa37d@sirena.org.uk>
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+ <2d9a04d8-c09e-49aa-95eb-32b4679f7eba@kili.mountain>
+ <ZGWE36pSRMsIHCCa@finisterre.sirena.org.uk>
+ <43d53046-f8d9-4c4a-90ba-709910a13f97@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
-Content-Language: en-US
-To:     maobibo <maobibo@loongson.cn>, Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>
-References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
- <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
- <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
- <99371487-717a-64d6-1c3d-aaeaee6f20db@loongson.cn>
- <90b2fc60-af26-4ba6-f775-7db2514a62f4@xen0n.name>
- <1218d3f9-4955-7176-afbd-a0dfa0bd7565@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <1218d3f9-4955-7176-afbd-a0dfa0bd7565@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tUbDFipGxi8zU7ey"
+Content-Disposition: inline
+In-Reply-To: <43d53046-f8d9-4c4a-90ba-709910a13f97@kili.mountain>
+X-Cookie: Beware of low-flying butterflies.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,70 +68,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/23 10:54, maobibo wrote:
-> 
-> [snip]
-> 
-> I hate parse_r helper also, it is hard to understand, the kernel about
-> LoongArch has the same issue. How about using a fixed register like this?
-> 
-> /* GCSR */
-> static __always_inline u64 gcsr_read(u32 reg)
-> {
-> 	u64 val = 0;
-> 
-> 	BUILD_BUG_ON(!__builtin_constant_p(reg));
-> 	/* Instructions will be available in binutils later */
-> 	asm volatile (
-> 		"parse_r __reg, %[val]\n\t"
 
-Isn't this still parse_r-ing things? ;-)
+--tUbDFipGxi8zU7ey
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 		/*
-> 		 * read val from guest csr register %[reg]
-> 		 * gcsrrd %[val], %[reg]
-> 		 */
-> 		".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | __reg\n\t"
-> 		: [val] "+r" (val)
-> 		: [reg] "i" (reg)
-> 		: "memory");
-> 
-> 	return val;
-> }
-> 
-> /* GCSR */
-> static __always_inline u64 gcsr_read(u32 reg)
-> {
->          register unsigned long val asm("t0");
+On Mon, May 22, 2023 at 06:40:59PM +0300, Dan Carpenter wrote:
+> On Thu, May 18, 2023 at 10:52:31AM +0900, Mark Brown wrote:
 
-I got what you're trying to accomplish here. At which point you may just 
-refer to how glibc implements its inline syscall templates and hardcode 
-both the input and output arguments, then simply hard-code the whole 
-instruction word. If others don't have opinions about doing things this 
-way, I wouldn't either.
+> > > When we call sme_alloc() it will say the buffer is already allocated
+> > > and just zero out what we need for "vl", but the existing buffer is too
+> > > small.
 
-(CSR operations are not expected to become performance-sensitive in any 
-case, so you may freely choose registers here, and t0 for output seems 
-okay. I'd recommend stuffing "reg" to a temporary value bound to a0 though.)
+> > If we are setting the SVE vector length we do not need to reallocate the
+> > SME state since the size of the data stored in the sme_state buffer is
+> > influenced only by the SME vector length, not the SVE vector length.  We
+> > unconditionally free the SVE state (causing it to be reallocated when
+> > needed) since the size needed for it depends on both vector lengths.
 
-> 
->          BUILD_BUG_ON(!__builtin_constant_p(reg));
->          /* Instructions will be available in binutils later */
->          asm volatile (
->                  "parse_r __reg, %[val]\n\t"
->                  /*
->                   * read val from guest csr register %[reg]
->                   * gcsrrd %[val], %[reg]
->                   */
->                  ".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | 12 \n\t"
->                  : : [reg] "i" (reg)
->                  : "memory", "t0");
-> 
->          return val;
-> }
+> arch/arm64/kernel/fpsimd.c
+>    909          /*
+>    910           * Force reallocation of task SVE and SME state to the correct
+>    911           * size on next use:
+>    912           */
+>    913          sve_free(task);
 
--- 
-WANG "xen0n" Xuerui
+> Sure, this forces a reallocation.  But what prevents it from happening
+> before we reach the task_set_vl() line?
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+Reallocation is either triggered by a trap from userspace or via ptrace,
+as is a vector length configuration.  The two cases should already be
+prevented from running simultaneously, and can't simultaneously perform
+two actions.
 
+--tUbDFipGxi8zU7ey
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRslT4ACgkQJNaLcl1U
+h9A16Af8DEHdwYbxzAGJWh0art8EcInVylPkg10slrjsYkGzxsElEhGfBJadP853
+Q8eenp8r+T1Mp8y1gxa5C6kzU+Zgv3k8QkaOuZ6WJoXuH5iB57pHeRiakeaXyEqF
+RGze2TlhPN5ztgkNxllH4arDKvzxrPr/r3DuZRYOLTDLiEvCbVeZ4ev43K8Fu12x
+X5vhL+s0ZAHTIzN/SLwLW2LMF3fBSbYg/zBBcuLFy7aaGtQpNvAKD3g1YpdoQnIR
+nvciW+LV1Oi0/gW3Pl/1bG8PxBFDhAHVj50DDuWpo2oQ7qKVxQXnnj1ogS6FCpa6
+rnW5/mie6Z3vvMnDnFexfq5+dM7nGg==
+=y/eH
+-----END PGP SIGNATURE-----
+
+--tUbDFipGxi8zU7ey--
