@@ -2,104 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0FC70E126
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBEE70E131
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237439AbjEWP5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S237598AbjEWP5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237134AbjEWP47 (ORCPT
+        with ESMTP id S237460AbjEWP5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:56:59 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D70318B;
-        Tue, 23 May 2023 08:56:55 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NFhBoY006556;
-        Tue, 23 May 2023 15:56:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JkG0jJwY+HNo45imlfDWQJek8azwevKvDQrgTSX7ZYM=;
- b=hhVXYzrmvPLPAPgS8my5XdZb+scNNBY4IZFwNxcqV32/WpksCJRnIKPkETZUwc/jlLAN
- EMKroHfb2k49/I5hBwa+izU2+BE/B9D5D6C5WR9EBWT9srYv9A9TOOcaGwVg2C8q1dzw
- NDk0/hBTC6uH/dqd/8U0Rl9CSTjjpJiLStR35BoitlOTI9cX9qaerRFA3ZQhH7A9YRPZ
- 49MXEeuyDPZ7HA9/hLnim2Z3hbeowbQ9fafEjs5Rvz/rITlk5ubFNqNsEhxrqIyi3dbF
- M3x8clX4bfGPleo72ou+mSc/ODtEU054Tv8i0Dov1qo65ufhAPZJvaLNwTrRXZ2HnTrS LQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrpmm1qhq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 15:56:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34NFuaAC002143
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 15:56:36 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
- 2023 08:56:35 -0700
-Message-ID: <71a6c04a-7ad8-97cd-b629-ce5f779d4578@quicinc.com>
-Date:   Tue, 23 May 2023 09:56:34 -0600
+        Tue, 23 May 2023 11:57:23 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AD818E;
+        Tue, 23 May 2023 08:57:15 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-38dec65ab50so4297229b6e.2;
+        Tue, 23 May 2023 08:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684857434; x=1687449434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eRQKQx8o7pYZMBO/dPIhBa/weTc59LxA8RBQRRvbAww=;
+        b=nIEgy4xsmB+3hYy0CDH3MPkPWE5BrLDU5tN7cSIz3IzgJBvUH63E7oD9+J8dFGHW9L
+         FBZbFIgKNh8FcUIK+6hwQfqH84IMyWxuYNPVjHn+W1EB9utNHces2xfBTPye8n7jt8Tq
+         0M8B3LQCzG2nX5FKJV/Tgx3TrxVg+uNFPJ6ZBLP0xSSdPeXhuv+JU9S7B+REPf7DKtFJ
+         KEvlWJocc0Ml50bYDpWW+Qn4erdWJqgeHE9UPd/j4CCJUhgFIZzzEVhqh5p3fCV+rOIV
+         uwSe4xyITKa9BhftK4hXho1frTE+zqE820is8Ci3xzkG9ZEEVVaL4jV5XuDAqCDQDU5x
+         kxnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684857434; x=1687449434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eRQKQx8o7pYZMBO/dPIhBa/weTc59LxA8RBQRRvbAww=;
+        b=DdddIgC0CgC0ti5zaJDZ6/9dZKFEwVEuWvmCJG/zNQV97v49RZBvrgH9TZh8jncW9R
+         aABbJ092jtcAt7iffn/qfPMn9Zx2hJJBFJ1VZCcFZJTwXV8rbFMPKR0D/Z/4wbYK++1V
+         /F/igp3cZCZy2aAMCusrMChyAWg9qQ7K6A/6PLGcDONifN48XBhqXXXJkbiuAZOP6u3K
+         zETTDNfe6mUTom1XOHfFK7x961qJHZ1jKAeKoQAS/wysEZ8DmXfpVHDDFBHX8Q/VkFz7
+         dIINP/OoVcDlHapQW/ccY9l6A/8LtZcu8xHpbwixcGrqbFvK/qZFUL4pPnlMyle+HbFj
+         +FcQ==
+X-Gm-Message-State: AC+VfDzIOGVQlxA3n6QE3a0JtmAMlL0nfci32L2VqsiPHBGchLd+rxSi
+        IivZ03J+xX7fvUWHgPwV+cWXVBx8s00EGQ1DZoI=
+X-Google-Smtp-Source: ACHHUZ7DHxeQXuGbDyGY66H9cdMMYdFh6mTJpvChsFzqktlYAXoSFaO4ugdpNPumCfSnl1H7T26HF1Xrnt8cWO29BAg=
+X-Received: by 2002:a05:6808:6393:b0:398:af5:a18a with SMTP id
+ ec19-20020a056808639300b003980af5a18amr3200495oib.59.1684857434503; Tue, 23
+ May 2023 08:57:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 0/5] accel/qaic fixes for 6.4
-Content-Language: en-US
-To:     <ogabbay@kernel.org>, <jacek.lawrynowicz@linux.intel.com>,
-        <quic_pkanojiy@quicinc.com>, <stanislaw.gruszka@linux.intel.com>,
-        <quic_carlv@quicinc.com>, <quic_ajitpals@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230517193540.14323-1-quic_jhugo@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230517193540.14323-1-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Xp7u_f0JiqGFAlVxjC2IzoXcJ49S19Z1
-X-Proofpoint-GUID: Xp7u_f0JiqGFAlVxjC2IzoXcJ49S19Z1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_10,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0
- adultscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305230126
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230523031709.19673-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20230523031709.19673-1-jiapeng.chong@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 23 May 2023 11:57:03 -0400
+Message-ID: <CADnq5_NKuq8ZO0mBMmogwTesr1gWa=aXO9BJFp0bnfWhYj7X7A@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Modify mismatched function name
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     alexander.deucher@amd.com, linaro-mm-sig@lists.linaro.org,
+        llvm@lists.linux.dev, trix@redhat.com, Xinhui.Pan@amd.com,
+        ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, sumit.semwal@linaro.org,
+        nathan@kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/2023 1:35 PM, Jeffrey Hugo wrote:
-> During development of new features, we noticed some spots in the code that
-> could be improved based on review feedback from the initial driver series.
-> 
-> Also two race condition fixes, one found during stress testing and another
-> via code inspection.
-> 
-> Jeffrey Hugo (1):
->    accel/qaic: Fix NNC message corruption
-> 
-> Pranjal Ramajor Asha Kanojiya (4):
->    accel/qaic: Validate user data before grabbing any lock
->    accel/qaic: Validate if BO is sliced before slicing
->    accel/qaic: Flush the transfer list again
->    accel/qaic: Grab ch_lock during QAIC_ATTACH_SLICE_BO
-> 
->   drivers/accel/qaic/qaic_control.c | 41 ++++++++------
->   drivers/accel/qaic/qaic_data.c    | 91 +++++++++++++++----------------
->   2 files changed, 70 insertions(+), 62 deletions(-)
-> 
+Applied.  Thanks!
 
-Pushed to drm-misc-fixes
+On Mon, May 22, 2023 at 11:17=E2=80=AFPM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> No functional modification involved.
+>
+> drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:426: warning: expecting prototyp=
+e for sdma_v4_4_2_gfx_stop(). Prototype was for sdma_v4_4_2_inst_gfx_stop()=
+ instead.
+> drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:457: warning: expecting prototyp=
+e for sdma_v4_4_2_rlc_stop(). Prototype was for sdma_v4_4_2_inst_rlc_stop()=
+ instead.
+> drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:470: warning: expecting prototyp=
+e for sdma_v4_4_2_page_stop(). Prototype was for sdma_v4_4_2_inst_page_stop=
+() instead.
+> drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:506: warning: expecting prototyp=
+e for sdma_v4_4_2_ctx_switch_enable(). Prototype was for sdma_v4_4_2_inst_c=
+tx_switch_enable() instead.
+> drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:561: warning: expecting prototyp=
+e for sdma_v4_4_2_enable(). Prototype was for sdma_v4_4_2_inst_enable() ins=
+tead.
+> drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:798: warning: expecting prototyp=
+e for sdma_v4_4_2_rlc_resume(). Prototype was for sdma_v4_4_2_inst_rlc_resu=
+me() instead.
+> drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:814: warning: expecting prototyp=
+e for sdma_v4_4_2_load_microcode(). Prototype was for sdma_v4_4_2_inst_load=
+_microcode() instead.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D5283
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c b/drivers/gpu/drm/a=
+md/amdgpu/sdma_v4_4_2.c
+> index bf47eb33c12e..590b08585901 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c
+> @@ -415,7 +415,7 @@ static void sdma_v4_4_2_ring_emit_fence(struct amdgpu=
+_ring *ring, u64 addr, u64
+>
+>
+>  /**
+> - * sdma_v4_4_2_gfx_stop - stop the gfx async dma engines
+> + * sdma_v4_4_2_inst_gfx_stop - stop the gfx async dma engines
+>   *
+>   * @adev: amdgpu_device pointer
+>   *
+> @@ -446,7 +446,7 @@ static void sdma_v4_4_2_inst_gfx_stop(struct amdgpu_d=
+evice *adev,
+>  }
+>
+>  /**
+> - * sdma_v4_4_2_rlc_stop - stop the compute async dma engines
+> + * sdma_v4_4_2_inst_rlc_stop - stop the compute async dma engines
+>   *
+>   * @adev: amdgpu_device pointer
+>   *
+> @@ -459,7 +459,7 @@ static void sdma_v4_4_2_inst_rlc_stop(struct amdgpu_d=
+evice *adev,
+>  }
+>
+>  /**
+> - * sdma_v4_4_2_page_stop - stop the page async dma engines
+> + * sdma_v4_4_2_inst_page_stop - stop the page async dma engines
+>   *
+>   * @adev: amdgpu_device pointer
+>   *
+> @@ -494,7 +494,7 @@ static void sdma_v4_4_2_inst_page_stop(struct amdgpu_=
+device *adev,
+>  }
+>
+>  /**
+> - * sdma_v4_4_2_ctx_switch_enable - stop the async dma engines context sw=
+itch
+> + * sdma_v4_4_2_inst_ctx_switch_enable - stop the async dma engines conte=
+xt switch
+>   *
+>   * @adev: amdgpu_device pointer
+>   * @enable: enable/disable the DMA MEs context switch.
+> @@ -548,7 +548,7 @@ static void sdma_v4_4_2_inst_ctx_switch_enable(struct=
+ amdgpu_device *adev,
+>  }
+>
+>  /**
+> - * sdma_v4_4_2_enable - stop the async dma engines
+> + * sdma_v4_4_2_inst_enable - stop the async dma engines
+>   *
+>   * @adev: amdgpu_device pointer
+>   * @enable: enable/disable the DMA MEs.
+> @@ -786,7 +786,7 @@ static void sdma_v4_4_2_init_pg(struct amdgpu_device =
+*adev)
+>  }
+>
+>  /**
+> - * sdma_v4_4_2_rlc_resume - setup and start the async dma engines
+> + * sdma_v4_4_2_inst_rlc_resume - setup and start the async dma engines
+>   *
+>   * @adev: amdgpu_device pointer
+>   *
+> @@ -802,7 +802,7 @@ static int sdma_v4_4_2_inst_rlc_resume(struct amdgpu_=
+device *adev,
+>  }
+>
+>  /**
+> - * sdma_v4_4_2_load_microcode - load the sDMA ME ucode
+> + * sdma_v4_4_2_inst_load_microcode - load the sDMA ME ucode
+>   *
+>   * @adev: amdgpu_device pointer
+>   *
+> --
+> 2.20.1.7.g153144c
+>
