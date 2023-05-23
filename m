@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D2570DB43
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1840270DBD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbjEWLK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
+        id S233057AbjEWL50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236022AbjEWLK5 (ORCPT
+        with ESMTP id S229893AbjEWL5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:10:57 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABA0129;
-        Tue, 23 May 2023 04:10:44 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 107)
-        id 4927E68B05; Tue, 23 May 2023 13:10:41 +0200 (CEST)
+        Tue, 23 May 2023 07:57:23 -0400
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79022118;
+        Tue, 23 May 2023 04:57:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=3uKJdpdHvGb7u2eKUE
+        FYmCgJiT6WLkcLPzktaTRRs/8=; b=pr+9zbuDv9tkRtXAygM2MdVbRcr3s6FIJE
+        2fFOn6iQo89avdcvqE1pWgMJhrwFxbZc9hZDNJjI6x2sxTnzRONQ9GnnuCSxaPzQ
+        WUQUW5hjn8HLuUFS0bIUbVSX6acUcCGU8nmbNG8oFQ3JnqtZIR4/jMRsnrGPsxi8
+        PeW5eR5i0=
+Received: from wh-chevronli-w10.bayhubtech.com (unknown [58.48.115.170])
+        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wBn3Vlon2xkD_MDAQ--.2819S2;
+        Tue, 23 May 2023 19:11:37 +0800 (CST)
+From:   Chevron Li <chevron_li@126.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shirley.her@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
+        shaper.liu@bayhubtech.com, justin.wang@bayhubtech.com,
+        Chevron Li <chevron.li@bayhubtech.com>
+Subject: [PATCH V1 1/1] mmc: sdhci: fix DMA configure compatibility issue when 64bit DMA mode is used.
+Date:   Tue, 23 May 2023 19:11:14 +0800
+Message-Id: <20230523111114.18124-1-chevron_li@126.com>
+X-Mailer: git-send-email 2.18.0.windows.1
+X-CM-TRANSID: _____wBn3Vlon2xkD_MDAQ--.2819S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZryrJw4fuF1ktry7AFWrZrb_yoW8Zw17pF
+        W5WrW5tFyUtF4YqF4DWaya9Fy5JFWkta9F9FyrGwsIvr45Zry7AanFka47t3WUXFyxXa15
+        ZF4j9F1UuFZ8AaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UnqXLUUUUU=
+X-Originating-IP: [58.48.115.170]
+X-CM-SenderInfo: hfkh42xrqbzxa6rslhhfrp/1tbiFwl4AVpEGVxAxwAAs7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from blackhole.lan (p5b33fa9c.dip0.t-ipconnect.de [91.51.250.156])
-        by verein.lst.de (Postfix) with ESMTPSA id 676E867328;
-        Tue, 23 May 2023 13:10:11 +0200 (CEST)
-Date:   Tue, 23 May 2023 13:10:06 +0200
-From:   Torsten Duwe <duwe@lst.de>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <yanhong.wang@starfivetech.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Add StarFive JH7110 PLL
- clock generator
-Message-ID: <20230523131006.46997d84@blackhole.lan>
-In-Reply-To: <20230523-fondue-monotype-0c751a8f0c13@wendy>
-References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
-        <20230512022036.97987-2-xingyu.wu@starfivetech.com>
-        <20230519135733.GA10188@lst.de>
-        <20230519-smokeless-guileless-2a71cae06509@wendy>
-        <df43411e-8982-74f5-6148-e7281c37dada@starfivetech.com>
-        <20230523-fondue-monotype-0c751a8f0c13@wendy>
-Organization: LST e.V.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 09:28:39 +0100
-Conor Dooley <conor.dooley@microchip.com> wrote:
+From: Chevron Li <chevron.li@bayhubtech.com>
 
-> On Tue, May 23, 2023 at 10:56:43AM +0800, Xingyu Wu wrote:
-> > On 2023/5/19 22:16, Conor Dooley wrote:
-> > > On Fri, May 19, 2023 at 03:57:33PM +0200, Torsten Duwe wrote:
-> > >> On Fri, May 12, 2023 at 10:20:30AM +0800, Xingyu Wu wrote:
-> > >> [...]
+Bayhub SD host has hardware limitation:
+1.The upper 32bit address is inhibited to be written at SD Host Register
+  [03E][13]=0 (32bits addressing) mode, is admitted to be written only at
+  SD Host Register [03E][13]=1 (64bits addressing) mode.
+2.Because of above item#1, need to configure SD Host Register [03E][13] to
+  1(64bits addressing mode) before set 64bit ADMA system address's higher
+  32bits SD Host Register [05F~05C] if 64 bits addressing mode is used.
 
-> > >> > +/* PLL clocks */
-> > >> > +#define JH7110_CLK_PLL0_OUT			0
-> > >> > +#define JH7110_CLK_PLL1_OUT			1
-> > >> > +#define JH7110_CLK_PLL2_OUT			2
-> > >> 
-> > >> In U-Boot commit 58c9c60b Yanhong Wang added:
-> > >> 
-> > >> +
-> > >> +#define JH7110_SYSCLK_PLL0_OUT                       190
-> > >> +#define JH7110_SYSCLK_PLL1_OUT                       191
-> > >> +#define JH7110_SYSCLK_PLL2_OUT                       192
-> > >> +
-> > >> +#define JH7110_SYSCLK_END                    193
-[...]
-> > > Ohh, that's not good.. If you pass the U-Boot dtb to Linux it
-> > > won't understand the numbering. The headers are part of the
-> > > dt-binding :/
+The hardware limitation is reasonable for below reasons:
+1.Normal flow should set DMA working mode first, then do
+  DMA-transfer-related configuration, such as system address.
+2.The hardware limitation may avoid the software to configure wrong higher
+  32bit address at 32bits addressing mode although it is redundant.
 
-In fact, the clock index >= 190 makes linux hang on boot, waiting with
-EPROBE_DEFER for every device's clock, because the sysclk driver errors
-out with EINVAL (jh7110_sysclk_get()).
+The change that set 32bits/64bits addressing mode before set ADMA address,
+  has no side-effect to other host IPs for below reason:
+The setting order is reasonable and standard: DMA Mode setting first and
+  then DMA address setting. It meets all DMA setting sequence.
 
-> > Because PLL driver is separated from SYSCRG drivers in Linux, the
-> > numbering starts from 0. But in Uboot, the PLL driver is included
-> > in the SYSCRG driver, and the number follows the SYSCRG.
-> 
-> Unfortunately, how you choose to construct your drivers has nothing to
-> do with this.
-> These defines/numbers appear in the dts and are part of the DT ABI.
-> The same dts is supposed to work for Linux & U-Boot.
+Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+---
+Change in V1:
+Set dma mode configure before set dma address
+---
+ drivers/mmc/host/sdhci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The JH7110 has 6 blocks of 64k iomem in that functional area:
-{SYS,STG,AON} x {CRG,SYSCON}. None of these has 190 clocks.
-The good news: the current DTS, as proposed here and in U-Boot master,
-provides nodes for all 6 entities. The bad news is that the clock
-assignments to those nodes and their numbering is messed up.
+diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+index 3241916141d7..ff41aa56564e 100644
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -1167,6 +1167,8 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+ 		}
+ 	}
+ 
++	sdhci_config_dma(host);
++
+ 	if (host->flags & SDHCI_REQ_USE_DMA) {
+ 		int sg_cnt = sdhci_pre_dma_transfer(host, data, COOKIE_MAPPED);
+ 
+@@ -1186,8 +1188,6 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+ 		}
+ 	}
+ 
+-	sdhci_config_dma(host);
+-
+ 	if (!(host->flags & SDHCI_REQ_USE_DMA)) {
+ 		int flags;
+ 
 
-AFAICT PLL{0,1,2} _are_ generated in SYS_SYSCON and thus U-Boot gets it
-wrong, in addition to the erroneous DTS.
+base-commit: cc3c44c9fda264c6d401be04e95449a57c1231c6
+-- 
+2.25.1
 
-	Torsten
