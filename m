@@ -2,213 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A73970D362
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 07:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C54070D363
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 07:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjEWFwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 01:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S231791AbjEWFxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 01:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEWFwb (ORCPT
+        with ESMTP id S229459AbjEWFxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 01:52:31 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C93109;
-        Mon, 22 May 2023 22:52:30 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-970028cfb6cso291696866b.1;
-        Mon, 22 May 2023 22:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684821149; x=1687413149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GAnZGDk/FN7vuQkDTHFR40h0pyNa8eDVqn6h/H/qRE4=;
-        b=AHUVle6SGyOqFZNmxo/n79Q/lkpN45w+hs1HUOKjnZpfVgJG50GAuBK7o4MIiK3944
-         1+vvNNqrhuF3GVVjPTds3M1ffZaFfzvp3aceE5TurXJ6oQUxQzKiRUgrRQ9qh1c2f4g9
-         hGNb1lzhECE65Pn0RbLjIf5B0bwzyk8To09cQ1Y27AfWwe77mwqUL2XqjcI5Q1F+WLjU
-         zuyBpz0ns/HZ/gSdL2ZrWtB+MceHLKC+gZz45Mts3aAELWizJP2pIz0DJd6pAhxPDv00
-         h/GNNoXZD+MfODSkAlPSMP8I9vcbqsMNShIIUISCwWuwWravTFoF8zyEyR0AClrtsEBp
-         QbdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684821149; x=1687413149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GAnZGDk/FN7vuQkDTHFR40h0pyNa8eDVqn6h/H/qRE4=;
-        b=DmuciBPBuhLochUeZtDTyFcvW1NK1Tge3Sjf1g4lX/tgjNa2i8KsITwzx+zxwAvYP0
-         FV8Nvh3bdtWG0rqzoDCWZJUI0x4WCJrTEmYlYafj+YOdFgBx8YoDtGNPunFgc4HMOR1R
-         WlwbUdJM6WPXCCiqGe1AXyABxa/DnEC2UMv/0B6WUrdADqDXN2ODUJEfwAMYJexm2s+e
-         mPTEhoU4K5G1LfuDJhyCnmdN75IpxFh9YZNaXg8a6LoEWSkqf3ijFzJwypsEvebgtZWO
-         sHZmT8T2irCG3i0rDkM/9opbIwzerMri2E9G1YtY2O4DxA2F+d13hvmZHeORjh8bGsvq
-         1nvw==
-X-Gm-Message-State: AC+VfDzOAr4JcBOAEK/bUU3PvSrWPPeygH3btC5m1BiuINpGw75Rv2+e
-        CXbMahBEKTvAFORJFaqKmVJiTTptfeI7/zOCAjg=
-X-Google-Smtp-Source: ACHHUZ4I4AQ7WeHjg7BWPjCFZusXPuOrzMi+WsHqXJzeSQakVfl2dBkawp2cayOw96DPe7VZs7Y63KY7sij+zmVjiUk=
-X-Received: by 2002:a17:907:16a9:b0:959:a9a1:589e with SMTP id
- hc41-20020a17090716a900b00959a9a1589emr12631243ejc.76.1684821148506; Mon, 22
- May 2023 22:52:28 -0700 (PDT)
+        Tue, 23 May 2023 01:53:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D79E9109
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 22:53:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7457F139F;
+        Mon, 22 May 2023 22:54:28 -0700 (PDT)
+Received: from [10.162.42.7] (unknown [10.162.42.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E0293F762;
+        Mon, 22 May 2023 22:53:41 -0700 (PDT)
+Message-ID: <8e5ea681-f07e-fd09-4cdd-9ec35e11d539@arm.com>
+Date:   Tue, 23 May 2023 11:23:38 +0530
 MIME-Version: 1.0
-References: <000000000000a589d005fc52ee2d@google.com> <13528f21-0f36-4fa2-d34f-eecee6720bc1@linux.dev>
- <CAD=hENeCo=-Pk9TWnqxOWP9Pg-JXWk6n6J19gvPo9_h7drROGg@mail.gmail.com>
- <CAD=hENdoyBZaRz7aTy4mX5Kq1OYmWabx2vx8vPH0gQfHO1grzw@mail.gmail.com>
- <0d515e17-5386-61ba-8278-500620969497@linux.dev> <CAD=hENcqa0jQvLjuXw9bMtivCkKpQ9=1e0-y-1oxL23OLjutuw@mail.gmail.com>
- <CAD=hENdXdqfcxjNrNnP8CoaDy6sUJ4g5uxcWE0mj3HtNohDUzw@mail.gmail.com>
- <CAD=hENda4MxgEsgT-GUhYHH66m79wi8yxBQS8CYnxc_DsQKGwg@mail.gmail.com> <5b6b8431-92c7-62df-299b-28f3a5f61d5f@linux.dev>
-In-Reply-To: <5b6b8431-92c7-62df-299b-28f3a5f61d5f@linux.dev>
-From:   Zhu Yanjun <zyjzyj2000@gmail.com>
-Date:   Tue, 23 May 2023 13:52:15 +0800
-Message-ID: <CAD=hENc72B+gLLd_Xn7w8bd_qDw=mFd5sC0RKEsHpNA=85a9KA@mail.gmail.com>
-Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
- skb_dequeue (2)
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>
-Cc:     syzbot <syzbot+eba589d8f49c73d356da@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] memblock: Add flags and nid info in memblock debugfs
+Content-Language: en-US
+To:     Yuwei Guan <ssawgyw@gmail.com>, rppt@kernel.org,
+        akpm@linux-foundation.org, tsahu@linux.ibm.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230519105321.333-1-ssawgyw@gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230519105321.333-1-ssawgyw@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 1:44=E2=80=AFPM Guoqing Jiang <guoqing.jiang@linux.=
-dev> wrote:
->
->
->
-> On 5/23/23 13:18, Zhu Yanjun wrote:
-> > On Tue, May 23, 2023 at 1:08=E2=80=AFPM Zhu Yanjun <zyjzyj2000@gmail.co=
-m> wrote:
-> >> On Tue, May 23, 2023 at 12:29=E2=80=AFPM Zhu Yanjun <zyjzyj2000@gmail.=
-com> wrote:
-> >>> On Tue, May 23, 2023 at 12:10=E2=80=AFPM Guoqing Jiang <guoqing.jiang=
-@linux.dev> wrote:
-> >>>>
-> >>>>
-> >>>> On 5/23/23 12:02, Zhu Yanjun wrote:
-> >>>>> On Tue, May 23, 2023 at 11:47=E2=80=AFAM Zhu Yanjun <zyjzyj2000@gma=
-il.com> wrote:
-> >>>>>> On Tue, May 23, 2023 at 10:26=E2=80=AFAM Guoqing Jiang <guoqing.ji=
-ang@linux.dev> wrote:
-> >>>>>>>
-> >>>>>>> On 5/23/23 10:13, syzbot wrote:
-> >>>>>>>> Hello,
-> >>>>>>>>
-> >>>>>>>> syzbot tried to test the proposed patch but the build/boot faile=
-d:
-> >>>>>>>>
-> >>>>>>>> failed to apply patch:
-> >>>>>>>> checking file drivers/infiniband/sw/rxe/rxe_qp.c
-> >>>>>>>> patch: **** unexpected end of file in patch
-> >>>>>> This is not the root cause. The fix is not good.
-> >>>>> This problem is about "INFO: trying to register non-static key. The
-> >>>>> code is fine but needs lockdep annotation, or maybe"
-> >>> This warning is from "lock is not initialized". This is a
-> >>> use-before-initialized problem.
-> >>> The correct fix is to initialize the lock that is complained before i=
-t is used.
-> >>>
-> >>> Zhu Yanjun
-> >> Based on the call trace, the followings are the order of this call tra=
-ce.
-> >>
-> >> 291 /* called by the create qp verb */
-> >> 292 int rxe_qp_from_init(struct rxe_dev *rxe, struct rxe_qp *qp,
-> >> struct rxe_pd *pd,
-> >> 297 {
-> >>              ...
-> >> 317         rxe_qp_init_misc(rxe, qp, init);
-> >>              ...
-> >> 322
-> >> 323         err =3D rxe_qp_init_resp(rxe, qp, init, udata, uresp);
-> >> 324         if (err)
-> >> 325                 goto err2;   <--- error
-> >>
-> >>              ...
-> >>
-> >> 334 err2:
-> >> 335         rxe_queue_cleanup(qp->sq.queue); <--- Goto here
-> >> 336         qp->sq.queue =3D NULL;
-> >>
-> >> In rxe_qp_init_resp, the error occurs before skb_queue_head_init.
-> >> So this call trace appeared.
-> > 250 static int rxe_qp_init_resp(struct rxe_dev *rxe, struct rxe_qp *qp,
-> > 254 {
-> >                          ...
-> > 264
-> > 265                 type =3D QUEUE_TYPE_FROM_CLIENT;
-> > 266                 qp->rq.queue =3D rxe_queue_init(rxe, &qp->rq.max_wr=
-,
-> > 267                                         wqe_size, type);
-> > 268                 if (!qp->rq.queue)
-> > 269                         return -ENOMEM;    <---Error here
-> > 270
-> >
-> > ...
-> >
-> > 282         skb_queue_head_init(&qp->resp_pkts); <-this is not called.
-> > ...
-> > This will make spin_lock of resp_pkts is used before initialized.
->
-> IMHO, the above is same as
->
-> > Which is caused by  "skb_queue_head_init(&qp->resp_pkts)" is not called
-> > given rxe_qp_init_resp returns error, but the cleanup still trigger the
-> > chain.
-> >
-> > rxe_qp_do_cleanup -> rxe_completer -> drain_resp_pkts ->
-> > skb_dequeue(&qp->resp_pkts)
->
-> my previous analysis. If not, could you provide another better way to
-> fix it?
 
-Move the initialization to the beginning. This can fix this problem.
-See below:
 
-"
-diff --git a/drivers/infiniband/sw/rxe/rxe_qp.c
-b/drivers/infiniband/sw/rxe/rxe_qp.c
-index c5451a4488ca..22ef6188d7b1 100644
---- a/drivers/infiniband/sw/rxe/rxe_qp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_qp.c
-@@ -176,6 +176,9 @@ static void rxe_qp_init_misc(struct rxe_dev *rxe,
-struct rxe_qp *qp,
-        spin_lock_init(&qp->rq.producer_lock);
-        spin_lock_init(&qp->rq.consumer_lock);
+On 5/19/23 16:23, Yuwei Guan wrote:
+> Currently, the memblock debugfs can display the count of memblock_type and
+> the base and end of the reg. However, when memblock_mark_*() or
+> memblock_set_node() is executed on some range, the information in the
+> existing debugfs cannot make it clear why the address is not consecutive.
+> 
+> For example,
+> cat /sys/kernel/debug/memblock/memory
+>    0: 0x0000000080000000..0x00000000901fffff
+>    1: 0x0000000090200000..0x00000000905fffff
+>    2: 0x0000000090600000..0x0000000092ffffff
+>    3: 0x0000000093000000..0x00000000973fffff
+>    4: 0x0000000097400000..0x00000000b71fffff
+>    5: 0x00000000c0000000..0x00000000dfffffff
+>    6: 0x00000000e2500000..0x00000000f87fffff
+>    7: 0x00000000f8800000..0x00000000fa7fffff
+>    8: 0x00000000fa800000..0x00000000fd3effff
+>    9: 0x00000000fd3f0000..0x00000000fd3fefff
+>   10: 0x00000000fd3ff000..0x00000000fd7fffff
+>   11: 0x00000000fd800000..0x00000000fd901fff
+>   12: 0x00000000fd902000..0x00000000fd909fff
+>   13: 0x00000000fd90a000..0x00000000fd90bfff
+>   14: 0x00000000fd90c000..0x00000000ffffffff
+>   15: 0x0000000880000000..0x0000000affffffff
+> 
+> So we can add flags and nid to this debugfs.
+> 
+> For example,
+> cat /sys/kernel/debug/memblock/memory
+>    0: 0x0000000080000000..0x00000000901fffff    0 NONE
+>    1: 0x0000000090200000..0x00000000905fffff    0 NOMAP
+>    2: 0x0000000090600000..0x0000000092ffffff    0 NONE
+>    3: 0x0000000093000000..0x00000000973fffff    0 NOMAP
+>    4: 0x0000000097400000..0x00000000b71fffff    0 NONE
+>    5: 0x00000000c0000000..0x00000000dfffffff    0 NONE
+>    6: 0x00000000e2500000..0x00000000f87fffff    0 NONE
+>    7: 0x00000000f8800000..0x00000000fa7fffff    0 NOMAP
+>    8: 0x00000000fa800000..0x00000000fd3effff    0 NONE
+>    9: 0x00000000fd3f0000..0x00000000fd3fefff    0 NOMAP
+>   10: 0x00000000fd3ff000..0x00000000fd7fffff    0 NONE
+>   11: 0x00000000fd800000..0x00000000fd901fff    0 NOMAP
+>   12: 0x00000000fd902000..0x00000000fd909fff    0 NONE
+>   13: 0x00000000fd90a000..0x00000000fd90bfff    0 NOMAP
+>   14: 0x00000000fd90c000..0x00000000ffffffff    0 NONE
+>   15: 0x0000000880000000..0x0000000affffffff    0 NONE
+> 
+> Signed-off-by: Yuwei Guan <ssawgyw@gmail.com>
 
-+       skb_queue_head_init(&qp->req_pkts);
-+       skb_queue_head_init(&qp->resp_pkts);
-+
-        atomic_set(&qp->ssn, 0);
-        atomic_set(&qp->skb_out, 0);
- }
-@@ -234,8 +237,6 @@ static int rxe_qp_init_req(struct rxe_dev *rxe,
-struct rxe_qp *qp,
-        qp->req.opcode          =3D -1;
-        qp->comp.opcode         =3D -1;
+LGTM
 
--       skb_queue_head_init(&qp->req_pkts);
--
-        rxe_init_task(&qp->req.task, qp, rxe_requester);
-        rxe_init_task(&qp->comp.task, qp, rxe_completer);
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-@@ -279,8 +280,6 @@ static int rxe_qp_init_resp(struct rxe_dev *rxe,
-struct rxe_qp *qp,
-                }
-        }
-
--       skb_queue_head_init(&qp->resp_pkts);
--
-        rxe_init_task(&qp->resp.task, qp, rxe_responder);
-
-        qp->resp.opcode         =3D OPCODE_NONE;
-"
-
->
-> Guoqing
+> ---
+> v4:
+> - show string value for each memblock flag
+> ---
+>  mm/memblock.c | 24 ++++++++++++++++++++++--
+>  1 file changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 511d4783dcf1..10d0ddbeebc1 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2136,12 +2136,19 @@ void __init memblock_free_all(void)
+>  }
+>  
+>  #if defined(CONFIG_DEBUG_FS) && defined(CONFIG_ARCH_KEEP_MEMBLOCK)
+> +static const char * const flagname[] = {
+> +	[ilog2(MEMBLOCK_HOTPLUG)] = "HOTPLUG",
+> +	[ilog2(MEMBLOCK_MIRROR)] = "MIRROR",
+> +	[ilog2(MEMBLOCK_NOMAP)] = "NOMAP",
+> +	[ilog2(MEMBLOCK_DRIVER_MANAGED)] = "DRV_MNG",
+> +};
+>  
+>  static int memblock_debug_show(struct seq_file *m, void *private)
+>  {
+>  	struct memblock_type *type = m->private;
+>  	struct memblock_region *reg;
+> -	int i;
+> +	int i, j;
+> +	unsigned int count = ARRAY_SIZE(flagname);
+>  	phys_addr_t end;
+>  
+>  	for (i = 0; i < type->cnt; i++) {
+> @@ -2149,7 +2156,20 @@ static int memblock_debug_show(struct seq_file *m, void *private)
+>  		end = reg->base + reg->size - 1;
+>  
+>  		seq_printf(m, "%4d: ", i);
+> -		seq_printf(m, "%pa..%pa\n", &reg->base, &end);
+> +		seq_printf(m, "%pa..%pa ", &reg->base, &end);
+> +		seq_printf(m, "%4d ", memblock_get_region_node(reg));
+> +		if (reg->flags) {
+> +			for (j = 0; j < count; j++) {
+> +				if (reg->flags & (1U << j)) {
+> +					seq_printf(m, "%s\n", flagname[j]);
+> +					break;
+> +				}
+> +			}
+> +			if (j == count)
+> +				seq_printf(m, "%s\n", "UNKNOWN");
+> +		} else {
+> +			seq_printf(m, "%s\n", "NONE");
+> +		}
+>  	}
+>  	return 0;
+>  }
