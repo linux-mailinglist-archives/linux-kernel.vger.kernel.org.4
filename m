@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2FA70E44F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFF870E455
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235873AbjEWSEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S232954AbjEWSD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238028AbjEWSEC (ORCPT
+        with ESMTP id S234191AbjEWSDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:04:02 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2194AC2;
-        Tue, 23 May 2023 11:03:58 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1684865022tcxah01h
-Received: from linux-lab-host.localdomain ( [116.30.125.36])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 24 May 2023 02:03:41 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000B00A0000000
-X-QQ-FEAT: swyrzWPvyR0MduXpVglWqnX/F5HbgaaQRtAemZVP+sG0/GJZ2D1Y/ShFZ8m7+
-        ziR3C6JHZMUzvcAn2FwvU648OVTDIxR4ZJYfKygUbbeMPfvz3ccq3CKNE64aCcEq9+CCn0q
-        CiFhW82vl2CW0rnJ89xQJLaOf4AnSnB1nFzruLcHLazA5iZHRefcLmVGCSnfLohCMb14uh8
-        Dqy6oCARHkBhf58RZyuHqP6VQj6FGIG91XExRJffbaM0xxWFA/56fJYzS6hgl9URmJQjHup
-        1/AB5I3hQEDTSVrksGlevBahKLR8aiEtXT6GhGb816t/Pepo2YvLvONJFiXjl7YaO6A3oX1
-        n5T+gFHCX3N7qPbIcZCvkprKTpJHw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17320655173653481143
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, aou@eecs.berkeley.edu, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, shuah@kernel.org
-Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
-Date:   Wed, 24 May 2023 02:03:40 +0800
-Message-Id: <20230523180340.466619-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230521180823.164289-1-falcon@tinylab.org>
-References: <20230521180823.164289-1-falcon@tinylab.org>
+        Tue, 23 May 2023 14:03:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468C197;
+        Tue, 23 May 2023 11:03:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F08CC229FD;
+        Tue, 23 May 2023 18:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684865031; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QIKXE18YCt2a5EaIfrPTcuzVpMr14MFcJX+6a1jLsJE=;
+        b=mqE1HN+2G9ZRAmRwAvYxxkejhwssTMsB4PU/QrTFcDC62D6YDlgdFTH+y12iScA317uLt6
+        q3kqW3COqvCTnFUOxDowHATGID+IJqZTelS6o5lrk852blgvQGb8eHz9p12aLEUoyIG3a3
+        Q2XZuxblwNzgFMRW2OdZABxirD4HLhU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684865031;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QIKXE18YCt2a5EaIfrPTcuzVpMr14MFcJX+6a1jLsJE=;
+        b=WGRryJIJusqiBWnmygCZnvGAOT/NmE0g8tgrK2Le5F4rEF617unFLV0w4GXvtMfpirIW2K
+        DNs/K/MZ7d7mIhBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C2FE713A10;
+        Tue, 23 May 2023 18:03:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zrpELQcAbWR9QgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 23 May 2023 18:03:51 +0000
+Date:   Tue, 23 May 2023 20:03:50 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Marius Hoch <mail@mariushoch.de>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
+Message-ID: <20230523200350.62ab4788@endymion.delvare>
+In-Reply-To: <20230514103634.235917-1-mail@mariushoch.de>
+References: <20230514103634.235917-1-mail@mariushoch.de>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,100 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy, Thomas
+Hi Marius,
 
-Good news, I just fixed up all of the time32 syscalls related build and
-test failures for rv32 and plan to send out the whole patchset tomorrow.
-
-The patchset is based on 20230520-nolibc-rv32+stkp2 of [1] and the new
-statckprotect patchset [2] (If v2 is ready, I prefer to rebase on v2).
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-[2]: https://lore.kernel.org/linux-riscv/20230521100818.GA29408@1wt.eu/T/#t
-
-For the fstat compile issue, I prefer to use a __NR_statx for rv32
-instead of using fstatfs, because of different fstatfs* have different
-errno's, it is ugly to use lots of macros ;-) what's your suggestion?
-
-Here is the __NR_statx version:
-
-    +static int test_syscall_args(void)
-    +{
-    +#ifdef __NR_statx
-    +	return syscall(__NR_statx, 0, NULL, 0, 0, NULL);
-    +#elif defined(__NR_fstat)
-    +	return syscall(__NR_fstat, 0, NULL);
-    +#else
-    +#error Neither __NR_statx nor __NR_fstat defined, cannot implement syscall_args test
-    +#endif
-    +}
-
-And the fstatfs version:
-
-    +#ifdef __NR_fstatfs64
-    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs64, 0, 0, NULL), -1, EINVAL)
-    +#elif defined(__NR_fstatfs)
-    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs, 0, NULL), -1, EFAULT)
-    +#elif defined(__NR_fstat)
-    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT)
-    +#else
-    +#error None of __NR_fstatfs64, __NR_fstatfs and __NR_fstat defined, cannot implement syscall_args test
-    +#endif
-
-And I plan to move __NR_fstat as the first branch to make sure it works
-as before on the other platforms.
-
->     30 fork = 1 ENOSYS                                              [FAIL]
->     33 gettimeofday_null = -1 ENOSYS                                [FAIL]
->     35 gettimeofday_bad1 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     36 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     37 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     51 poll_null = -1 ENOSYS                                        [FAIL]
->     52 poll_stdout = -1 ENOSYS                                      [FAIL]
->     53 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
->     56 select_null = -1 ENOSYS                                      [FAIL]
->     57 select_stdout = -1 ENOSYS                                    [FAIL]
->     58 select_fault = -1 ENOSYS  != (-1 EFAULT)                     [FAIL]
->     64 wait_child = -1 ENOSYS  != (-1 ECHILD)                       [FAIL]
->     65 waitpid_min = -1 ENOSYS  != (-1 ESRCH)                       [FAIL]
->     66 waitpid_child = -1 ENOSYS  != (-1 ECHILD)                    [FAIL]
->
-
-All of the above failures have been fixed up, some of them are very
-easy, some of them are a little hard.
-
-1. 30, 64-66 depends on wait4, use waitid instead
-2. 33-37 depends on gettimeofday, use clock_gettime64 instead
-3. 51-53 depends on ppoll, use ppoll_time64 instead
-4. 56-58 depends on pselect*, use pselect_time64 instead
-
-And I have found there are two same 'gettimeofday_bad2', is it designed?
-If no, I will send a patch to dedup it:
-
-    CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
-    CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
-
+On Sun, 14 May 2023 12:36:32 +0200, Marius Hoch wrote:
+> The Dell Latitude E7450 uses IRQ 18 for the accelerometer,
+> but also claims that the SMBus uses IRQ 18. This will
+> result in:
 > 
-> My suggestion is directly fix up the failures one by one in current stage,
-> because nolibc currently only uses part of the time32 syscalls, it may be not
-> that complex to fix up them. Have read the code of musl and glibc today, both
-> of them have good time64 syscalls support, I plan to fix up the above failures
-> in several days, hope so but no promise ;-)
->
+> i801_smbus 0000:00:1f.3: PCI INT C: failed to register GSI
+> i801_smbus 0000:00:1f.3: Failed to enable SMBus PCI device (-16)
+> i801_smbus: probe of 0000:00:1f.3 failed with error -16
 
-both musl and glibc help a lot, but also encounter some critical issues, for
-example, to pass some test cases, it is required to emulate the same path of
-the target syscalls and return the same errno's for them, the code comment will
-exaplain the details.
+The i2c-i801 driver supports shared IRQ. If this fails, this means that
+the other driver is not passing IRQF_SHARED when registering the
+interrupt. Which driver is this? I'd rather check whether sharing the
+IRQ is possible, rather that falling back to polling, which has a
+performance cost.
 
-> And another question: for the new changes, If a platform support both of the
-> 32bit and 64bit syscalls, do we need to put the 64bit syscalls at first?
->
+> Force the SMBus IRQ to IRQ_NOTCONNECTED in this case, so that
+> we fall back to polling, which also seems to be what the (very
+> dated) Windows 7 drivers on the Dell Latitude E7450 do.
 
-To make sure not touch too much on the code and reduce test cost, the patchset
-just kept the default code order and let the old code in the first branch.
+What makes you think so?
 
-I plan to send the whole patchset tomorrow.
-
-Thanks,
-Zhangjin
+-- 
+Jean Delvare
+SUSE L3 Support
