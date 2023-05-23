@@ -2,133 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7885370D227
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 05:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4E870D22D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 05:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjEWDEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 23:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S232000AbjEWDFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 23:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjEWDEa (ORCPT
+        with ESMTP id S229448AbjEWDFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 23:04:30 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FF690
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 20:04:28 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ae8ecb4f9aso25986325ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 20:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684811068; x=1687403068;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XFNNihuBrXSC701L37bPlsyjHuGUOLaLQwRdUI1QSrM=;
-        b=IYn1Lsfyd0/h3pNjHVrIaDJ1pbFjPR3XxctiNvG+P4ElqouoVNhCq8TIGhxSB4tn2+
-         +8azudD9VJeI98Lm3g+ir7kOQ+kn3GpOasu2KHaoGvq4MUnahgXyYdcN5oAZ3E9f3l2P
-         wG/HiJ61SGhzQxT3nEuEF2kvJA+IEfTnQgMXonzZLr7jRdo4KsGHbtoPYm6TtOj3cHhz
-         7wnKRMIFEl0cgsPqrgxuvVlvybyMfNY51vgnE9aR1fI8+JBAXg2ETQ6x2jWk3ufts7fD
-         r6skFVysonK39GJ54Oovn2lad4/lpSh84YMgxC6r8Je4lGcQJVhnyAdJwiVJnBAwir7g
-         Xkzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684811068; x=1687403068;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XFNNihuBrXSC701L37bPlsyjHuGUOLaLQwRdUI1QSrM=;
-        b=VYlpufZ5JZJ/lKLX9K1QEPnTH6CRdhlftEu5PjIrBsacF7mjnelUBe36ciU2fIFB7X
-         1k/SXVp/ROl5GNsjDk3qgZRd22cjG4lLgD25xTqo6Jdezq5cBjoLoY1EiK8K5tsFb/GU
-         d476nB6ZKMijutRQy50ulT/C52jsBonjv+KtqqolKOqzWoVXJRdjy4vHLhoEHWguxh2V
-         WX/t+F3hh8Oe+fJKJA5+asglIQQyEcUB7TvwJQlLy50JWx/SiI7NVn12CPQO7SeC2JwF
-         YBmgNGwpvFrBvKIaX0xPnExNs7dH7y+axpb4+Kn18suXMkqqre7cN4R5erNX7Rm3wpLD
-         ybGQ==
-X-Gm-Message-State: AC+VfDwvtFdXp4H9xNU95ZStDS+wD6nikc/MlF+JIP42ZztU8P0Aa9EU
-        zfVR0W/dGpoB1LBsRHxAKL4DDIvVv35BDY1SXpA=
-X-Google-Smtp-Source: ACHHUZ6yQU7ZG8zePTbfq80ocZHL60v6iyIxrqH8T42ih7vJQB9zJJk4bGKeFrDgtNX3xO3GkT31lQ==
-X-Received: by 2002:a17:902:e80b:b0:1ae:62ed:9630 with SMTP id u11-20020a170902e80b00b001ae62ed9630mr16141107plg.15.1684811068270;
-        Mon, 22 May 2023 20:04:28 -0700 (PDT)
-Received: from [10.255.25.150] ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id ji6-20020a170903324600b001a804b16e38sm5550294plb.150.2023.05.22.20.04.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 20:04:27 -0700 (PDT)
-Message-ID: <59a250f6-d38d-9fae-8835-4fd1c501d913@bytedance.com>
-Date:   Tue, 23 May 2023 11:04:22 +0800
+        Mon, 22 May 2023 23:05:47 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECF98F;
+        Mon, 22 May 2023 20:05:45 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VjIII9u_1684811140;
+Received: from 30.240.108.216(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VjIII9u_1684811140)
+          by smtp.aliyun-inc.com;
+          Tue, 23 May 2023 11:05:42 +0800
+Message-ID: <60f6f1f0-4918-5fea-9827-9bf9d1e496e3@linux.alibaba.com>
+Date:   Tue, 23 May 2023 11:05:38 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: Re: [PATCH v2 4/4] sock: Remove redundant cond of memcg pressure
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Glauber Costa <glommer@parallels.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230522070122.6727-1-wuyun.abel@bytedance.com>
- <20230522070122.6727-5-wuyun.abel@bytedance.com>
- <ZGtmH/0ytVZkkmCP@corigine.com>
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 0/2] capability: Introduce CAP_BLOCK_ADMIN
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        louxiao.lx@alibaba-inc.com
+References: <20230511070520.72939-1-tianjia.zhang@linux.alibaba.com>
+ <b645e195-7875-9fc3-a8de-6676dfe800b8@schaufler-ca.com>
+ <e1242268-e7b6-d77c-a94f-edd913845ca7@linux.alibaba.com>
+ <bcf4df59-3915-6df3-027b-8cb35b310650@schaufler-ca.com>
+ <345a7cdc-e55b-7aaa-43d4-59b3f911ef18@linux.alibaba.com>
+ <bcf38ded-f1da-2fe4-c6a5-195c9d46718b@schaufler-ca.com>
 Content-Language: en-US
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <ZGtmH/0ytVZkkmCP@corigine.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <bcf38ded-f1da-2fe4-c6a5-195c9d46718b@schaufler-ca.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon, thanks for reviewing! I will fix the coding style issues
-next version!
 
-Thanks,
-	Abel
 
-On 5/22/23 8:54 PM, Simon Horman wrote:
-> On Mon, May 22, 2023 at 03:01:22PM +0800, Abel Wu wrote:
->> Now with the preivous patch, __sk_mem_raise_allocated() considers
-> 
-> nit: s/preivous/previous/
-> 
->> the memory pressure of both global and the socket's memcg on a func-
->> wide level, making the condition of memcg's pressure in question
->> redundant.
+On 5/23/23 3:13 AM, Casey Schaufler wrote:
+> On 5/21/2023 7:53 PM, Tianjia Zhang wrote:
+>> Hi Casey,
 >>
->> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
->> ---
->>   net/core/sock.c | 7 ++++++-
->>   1 file changed, 6 insertions(+), 1 deletion(-)
+>> On 5/18/23 8:01 AM, Casey Schaufler wrote:
+>>> On 5/16/2023 5:05 AM, Tianjia Zhang wrote:
+>>>> Hi Casey,
+>>>>
+>>>> On 5/12/23 12:17 AM, Casey Schaufler wrote:
+>>>>> On 5/11/2023 12:05 AM, Tianjia Zhang wrote:
+>>>>>> Separated fine-grained capability CAP_BLOCK_ADMIN from CAP_SYS_ADMIN.
+>>>>>> For backward compatibility, the CAP_BLOCK_ADMIN capability is
+>>>>>> included
+>>>>>> within CAP_SYS_ADMIN.
+>>>>>>
+>>>>>> Some database products rely on shared storage to complete the
+>>>>>> write-once-read-multiple and write-multiple-read-multiple functions.
+>>>>>> When HA occurs, they rely on the PR (Persistent Reservations)
+>>>>>> protocol
+>>>>>> provided by the storage layer to manage block device permissions to
+>>>>>> ensure data correctness.
+>>>>>>
+>>>>>> CAP_SYS_ADMIN is required in the PR protocol implementation of
+>>>>>> existing
+>>>>>> block devices in the Linux kernel, which has too many sensitive
+>>>>>> permissions, which may lead to risks such as container escape. The
+>>>>>> kernel needs to provide more fine-grained permission management like
+>>>>>> CAP_NET_ADMIN to avoid online products directly relying on root to
+>>>>>> run.
+>>>>>>
+>>>>>> CAP_BLOCK_ADMIN can also provide support for other block device
+>>>>>> operations that require CAP_SYS_ADMIN capabilities in the future,
+>>>>>> ensuring that applications run with least privilege.
+>>>>>
+>>>>> Can you demonstrate that there are cases where a program that needs
+>>>>> CAP_BLOCK_ADMIN does not also require CAP_SYS_ADMIN for other
+>>>>> operations?
+>>>>> How much of what's allowed by CAP_SYS_ADMIN would be allowed by
+>>>>> CAP_BLOCK_ADMIN? If use of a new capability is rare it's difficult to
+>>>>> justify.
+>>>>>
+>>>>
+>>>> For the previous non-container scenarios, the block device is a shared
+>>>> device, because the business-system generally operates the file system
+>>>> on the block. Therefore, directly operating the block device has a high
+>>>> probability of affecting other processes on the same host, and it is a
+>>>> reasonable requirement to need the CAP_SYS_ADMIN capability.
+>>>>
+>>>> But for a database running in a container scenario, especially a
+>>>> container scenario on the cloud, it is likely that a container
+>>>> exclusively occupies a block device. That is to say, for a container,
+>>>> its access to the block device will not affect other process, there is
+>>>> no need to obtain a higher CAP_SYS_ADMIN capability.
+>>>
+>>> If I understand correctly, you're saying that the process that requires
+>>> CAP_BLOCK_ADMIN in the container won't also require CAP_SYS_ADMIN for
+>>> other operations.
+>>>
+>>> That's good, but it isn't clear how a process on bare metal would
+>>> require CAP_SYS_ADMIN while the same process in a container wouldn't.
+>>>
+>>>>
+>>>> For a file system similar to distributed write-once-read-many, it is
+>>>> necessary to ensure the correctness of recovery, then when recovery
+>>>> occurs, it is necessary to ensure that no inflighting-io is completed
+>>>> after recovery.
+>>>>
+>>>> This can be guaranteed by performing operations such as SCSI/NVME
+>>>> Persistent Reservations on block devices on the distributed file
+>>>> system.
+>>>
+>>> Does your cloud based system always run "real" devices? My
+>>> understanding is that cloud based deployment usually uses
+>>> virtual machines and virtio or other simulated devices.
+>>> A container deployment in the cloud seems unlikely to be able
+>>> to take advantage of block administration. But I can't say
+>>> I know the specifics of your environment.
+>>>
+>>>> Therefore, at present, it is only necessary to have the relevant
+>>>> permission support of the control command of such container-exclusive
+>>>> block devices.
+>>>
+>>> This looks like an extremely special case in which breaking out
+>>> block management would make sense.
+>>>
+>> Our scenario is like this. In simply terms, a distributed database has
+>> a read-write instance and one or more read-only instances. Each instance
+>> runs in an isolated container. All containers share the same block
+>> device.
 >>
->> diff --git a/net/core/sock.c b/net/core/sock.c
->> index 7641d64293af..baccbb58a11a 100644
->> --- a/net/core/sock.c
->> +++ b/net/core/sock.c
->> @@ -3029,9 +3029,14 @@ int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
->>   	if (sk_has_memory_pressure(sk)) {
->>   		u64 alloc;
->>   
->> -		if (!sk_under_memory_pressure(sk))
->> +		if (!sk_under_global_memory_pressure(sk))
->>   			return 1;
->>   		alloc = sk_sockets_allocated_read_positive(sk);
->> +		/*
->> +		 * If under global pressure, allow the sockets that are below
->> +		 * average memory usage to raise, trying to be fair among all
->> +		 * the sockets under global constrains.
->> +		 */
+>> In addition to the database instance, there is also a control program
+>> running on the control plane in the container. The database ensures
+>> the correctness of the data through the PR (Persistent Reservations)
+>> of the block device. This operation is also the only operation in the
+>> container that requires CAP_SYS_ADMIN privileges.
+>>
+>> This system as a whole, whether it is running on VM or bare metal, the
+>> difference is not big.
+>>
+>> In order to support the PR of block devices, we need to grant
+>> CAP_SYS_ADMIN permissions to the container, which not only greatly
+>> increases the risk of container escape, but also makes us have to
+>> carefully configure the permissions of the container. Many container
+>> escapes that have occurred are also caused by these reasons.
+>>
+>> This is essentially a problem of permission isolation. We hope to
+>> share the smallest possible permissions from CAP_SYS_ADMIN to support
+>> necessary operations, and avoid providing CAP_SYS_ADMIN permissions
+>> to containers as much as possible.
 > 
-> nit:
-> 		/* Multi-line comments in networking code
-> 		 * look like this.
-> 		 */
+> Your use case is interesting, but not compelling. While you may have
+> come up with a specific case where you can completely break CAP_BLOCK_ADMIN
+> out from CAP_SYS_ADMIN, it's hardly general.
 > 
->>   		if (sk_prot_mem_limits(sk, 2) > alloc *
->>   		    sk_mem_pages(sk->sk_wmem_queued +
->>   				 atomic_read(&sk->sk_rmem_alloc) +
->> -- 
->> 2.37.3
->>
->>
+
+It sounds a pity, thanks for your reply, we try to provide support
+through self-developed patches first.
+
+Kind regards,
+Tianjia
+
