@@ -2,155 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624EC70D758
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750DA70D753
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbjEWIZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S235847AbjEWIZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235825AbjEWIYR (ORCPT
+        with ESMTP id S232397AbjEWIYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:24:17 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2134.outbound.protection.outlook.com [40.107.113.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B22E1FC8;
-        Tue, 23 May 2023 01:21:50 -0700 (PDT)
+        Tue, 23 May 2023 04:24:14 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071d.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::71d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AB71BFC;
+        Tue, 23 May 2023 01:21:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gvu7LCK/Sz/UZh7J+n+fnfFmSzFJklPJ1UZLyOTPr8qHbeNUbScLIAa1Nn+x9yadqHWI6gNLLQ+UTGk/ggKyPuLt4pTBVMPlOUPH6ctuLSQe4685iVlO3E8KdaUNRU0GbVtbSAP7mDGfiL15SvTgv30dSzmI26zD75uTG751in1aGnIBaFO4QKBehmyfmNqpR/sUBkg4Del12yG3G+2qNBwbtfQgkqo52p0ABd/C9sAtp3KILGwuEWQNOhOTbRUluoQOoZkItch9BCSrqc6AciAE4hkp9kZC+i6Rhzf9iRSgM0/HOBLecmEm+H9iRAkzYTftuHZTh4IHVKfmHYt49A==
+ b=Sujosp95LQnO1SrlLw30IofG9xbLpdrgY/0tu3SOtluLTaF5iSv2GWBcCSf2BTqO3aa7p4BloxEG38iL1otBPBFzqHG0UlwYnqQxm6qRrLwfGF4HoBHjXKAFQ6ShwPVC9QOLFgrSsYX4qXSSnEJgjVWWtkxLwTgofVUwT3UaAiNLenhmX/UPYJqjylLIOJdPGTizF/Rq+6xm8PCTSxTAMxZstwAH/4IFnmJJy+eRtwJ728vbDusPqQMOa92nwhHzCJXHUjy0r4bjAa+PIbEyqAVMd33vVQi9t0u9uUEG4w08/hlvowaKtV6HC6lknG0CSdUafqpN7o/BkVHIEL2MRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tyl0ERCDU/+Tn1KkfWVKp0nmoTdIQGLAKV6LcUxqOYE=;
- b=eaDFHf3faYIAgoLoxOyqC9cnBfv9Yo/EyrzL1iSFd+13WAdfdIIUU8a9IB4jUpqByZdy6h6YrduPU36PGrqKbKrbQ2wozDgnn0tmNyoKCJeDpSS5BBd9JDpcX2UpoLJhnTY1NoIBcuZDqhNTwa8JIQ474ayjdw3HpIUy3xVhxP6SnbXyxiPXiCMsQ4FPa6/D6wxQu1+CjSWfviQw1M8fSJjfh6ppcqzPNshvN4r1EBmH9ERGUXGaMAcETR75HkRxcfwai1YIndHzU9IfK2itwHuHzW+ktrXi3oyaWI7wgFPd7xdzqYK13wfU76JH7b+vCZbBcWw+qhIZgubs0SLswQ==
+ bh=7e4gv9TX1tZn2bC1wJlHhiyYh78hy+Z65tRLZ6+ULPw=;
+ b=mB/uy+QshfBx0RpD3i2V/OHKHcF4Utski04gr0WlL+ezuCe6yjZqCoSm0HmoHTPFPbAJLKUVsyKEeBzpycO5YtF4WqL8msxpJJ+9a7p90lY5y5tbEHqr/QnF7bkohmijezHxup6sEUGlWf4TfFEp+R9NHW94AiARF/nTdBXKBICEMbaG4LUe+I0hov/AsyJovRGUPymDwRc3H8dB3WKgnYYbBDbQU8SKifvIdkN8WDRAsbAvZOupeVfk0wxHsv5+iVY3R+b7tln/2WtcVdCwuKODfij8gQiRXHkLJP/cZU+/HfJ6q/4D/S/GtIMi8HSzOquwswaZVCSlF7MRzskdqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
- header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
- s=selector1;
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tyl0ERCDU/+Tn1KkfWVKp0nmoTdIQGLAKV6LcUxqOYE=;
- b=QwcXTx0ADJ8bC8H+nl7DR8MnNnKWRefTcYtYks0p9ahvlwwF5xIhtBqIxmndLIIiYrsFp+q5YCT/qmBKa5esLAtGwg059qxLuKo8JGQvgXU5w7+jI8F1236qbhRkx0otkYVMP8ypuP3zzLNq+gmuOZiooK0QCm6GbLv+jv4bwbs=
+ bh=7e4gv9TX1tZn2bC1wJlHhiyYh78hy+Z65tRLZ6+ULPw=;
+ b=vBT6C25fa5fUD+RHynMngxV3NdJYIgwK/gBr1TKDdCgvP3K8mbqTHjjLBRfJyc2WVgulmj3KWyxz6c5rxejWcIDCQmYzssCh/GPmk1IxxSAIHj1LslfmogWto5AWuGa3E3d/1M5E4AkngDi8cUF24ct2vnD2sWveFwGKSf3Jvpc=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=dm.renesas.com;
-Received: from OS3PR01MB6641.jpnprd01.prod.outlook.com (2603:1096:604:10b::11)
- by TY3PR01MB11797.jpnprd01.prod.outlook.com (2603:1096:400:373::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 08:21:37 +0000
-Received: from OS3PR01MB6641.jpnprd01.prod.outlook.com
- ([fe80::2de2:b2ee:d931:157]) by OS3PR01MB6641.jpnprd01.prod.outlook.com
- ([fe80::2de2:b2ee:d931:157%6]) with mapi id 15.20.6411.029; Tue, 23 May 2023
- 08:21:36 +0000
-From:   David Rau <David.Rau.opensource@dm.renesas.com>
-To:     conor+dt@kernel.org
-Cc:     support.opensource@diasemi.com, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Rau <David.Rau.opensource@dm.renesas.com>
-Subject: [ASoC: da7219: Add Jack insertion detection polarity selection 2/2]  ASoC: dt-bindings: da7219: Add jack-ins-det-pty property
-Date:   Tue, 23 May 2023 08:21:01 +0000
-Message-Id: <20230523082101.380-2-David.Rau.opensource@dm.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230523082101.380-1-David.Rau.opensource@dm.renesas.com>
-References: <20230523082101.380-1-David.Rau.opensource@dm.renesas.com>
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from CY4PR01MB2840.prod.exchangelabs.com (2603:10b6:903:eb::13) by
+ BL1PR01MB7817.prod.exchangelabs.com (2603:10b6:208:399::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.28; Tue, 23 May 2023 08:21:41 +0000
+Received: from CY4PR01MB2840.prod.exchangelabs.com
+ ([fe80::6be9:32d4:b518:8b54]) by CY4PR01MB2840.prod.exchangelabs.com
+ ([fe80::6be9:32d4:b518:8b54%12]) with mapi id 15.20.6411.019; Tue, 23 May
+ 2023 08:21:41 +0000
+From:   Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     patches@amperecomputing.com, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, tamnguyenchi@os.amperecomputing.com,
+        chuong@os.amperecomputing.com, darren@os.amperecomputing.com,
+        stable@vger.kernel.org
+Subject: [PATCH v1] i2c: designware: Handle invalid SMBus block data response length
+Date:   Tue, 23 May 2023 15:21:18 +0700
+Message-Id: <20230523082118.10935-1-tamnguyenchi@os.amperecomputing.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: OS3P301CA0007.JPNP301.PROD.OUTLOOK.COM
- (2603:1096:604:21d::14) To OS3PR01MB6641.jpnprd01.prod.outlook.com
- (2603:1096:604:10b::11)
+X-ClientProxiedBy: SGAP274CA0008.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::20)
+ To CY4PR01MB2840.prod.exchangelabs.com (2603:10b6:903:eb::13)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OS3PR01MB6641:EE_|TY3PR01MB11797:EE_
-X-MS-Office365-Filtering-Correlation-Id: d24c3dd0-e830-420b-257d-08db5b66b9e5
+X-MS-TrafficTypeDiagnostic: CY4PR01MB2840:EE_|BL1PR01MB7817:EE_
+X-MS-Office365-Filtering-Correlation-Id: 29359652-ed57-4869-c79e-08db5b66bc2f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /OUb7z6FWh6cORLxEFEkmovgP1WoJ6BiOD5NCLXfFzj7CA7bTs79jO/cc6QRRe0ZGQoMFrnvXLH5vdTErWXRaXvU/Yo1fN87ICZwoNUBd7JvXZinLEsj5ZjqcA7Rghvn/koU46bLgObzH/PGCBGzjXINKsbR2pKJg5awM+S7vFzuqjygUnjP/k/KnJJSx63cJoTJeKX1XdW/7xOBgW9xZZKOuNbwD9wJqOrHrGIlfUcQf0aNMZ2LrzmJ51AsZ1EiVH4UrrgN0poDyTF/2vTJob47o4JaMnfu2bh65pkOSwBlxKJqYjGnaYU+UvdemsjBlwOmb4W+1/PbUnmHG2k8ZkAPA35UiV9xr1FTdoLTw7wEuKFjpdy4LA5jAKtFiphCI+qw9WdcWG5Vnz3fUYZCMII/q7/vwMDeNCyZpHeq5hLQXaafQrOW1jW0f8rZmxqWhEMbM3mqZCI/Att9ZC90HeDhigyfVeTTqFz9yT7tqnAZZp0zBY2klOO67qrda85/q/UYfOdXjyRRE9R+PSG9CZ3S2La62huW2WmU0Vxd+Fb+bKNeR5lfNCjnMwscV0oNoz8/Iy6bcs4Z4VBsxoRLHDkMzy+nrx2OwO2zrrgaVPA76Hz47wp3tZstsFZdURSv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB6641.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199021)(107886003)(6512007)(8676002)(8936002)(83380400001)(103116003)(38350700002)(38100700002)(86362001)(6506007)(2616005)(2906002)(41300700001)(52116002)(66946007)(66556008)(66476007)(4326008)(316002)(6666004)(6486002)(5660300002)(26005)(186003)(1076003)(478600001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: u3q2atTDTildJzmtl/jJ9W3OLzCdREYBsfPwz7ZsG7ktzEtPakRVs4aR6EsQEvF8PM3iyGzA1DGQRfUQQ3nA+RLY3DOxGZMyZTZpIxYTSsdKQnrn1QZvTo5T9QwcePoGxo/EoLBciUXJ47lmp/RquP3ODePGJWVO0tELHiJQH9y5jPvJ1gyvx7sJssTudFVxfZan1ILpCqi5YNe4TAo9fv6kQnjF61wTc05sYHWldTg413q8PWaHso4MTJvUDD5ax9cRmBCR7/ajj3X2SQ7Qc6RA/Q8fHsKhJldsEU7spcciEXWGx+vo/MqkhHjR/riGEaDchl1bupbHT+1n29b8GNqG7XeJ43mkxr9x86D18qzqdBoQ7eDLwvXnXbr6QEnfFQkOWLfazzQMLVTloYPG8m7Ao763PBzp9boTFZLm6gDlkwLeHdlF/61iXckrlbtaA7DOkRzB9wSoZx3lSM+jk1qzYc0yVwDg3tu7N+CUczD7I0YQLmEEZNBXtKLzP4Zjlr7/pSEYeK0Zee//tuWWCNSJuywDiE8ylhFW6/rmKZRKKbqoc2G1gu0TyndnBXOWg+nCTyi/EpEQVuKKjmh9wqNAqox/JqsqwfO65pXGZ5c=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR01MB2840.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39850400004)(366004)(396003)(451199021)(41300700001)(2616005)(83380400001)(186003)(2906002)(4326008)(66946007)(66556008)(66476007)(6486002)(316002)(6666004)(478600001)(5660300002)(1076003)(6512007)(26005)(6506007)(52116002)(8676002)(8936002)(38100700002)(38350700002)(86362001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?69l7xOLyJfplMESNRJMD+muoJUvTgxDaICVK7DiBDOtyq7ujXmfUXBsz1PrZ?=
- =?us-ascii?Q?KGAten+oBeJv4yehExde69gkrcFqhf8QE69N6j1/SH+w8eD2p25DZs3sAty7?=
- =?us-ascii?Q?jfjj9TdfaOPssVOYFkTIAJXrfb5vpDbJvOctD14Gb5TzogjmtUGjxAQkou20?=
- =?us-ascii?Q?ywfohHAgxXrBtV8Gs70t7ovfszdGz+QlGxLQ7/HSMc6WfUaIhKWhuzXa8UJ5?=
- =?us-ascii?Q?+d5FyNCP9gwTwdBIMIoHqCSkGB3E6gwvsaigIhr3U/PkJrveMsL0r197XjGY?=
- =?us-ascii?Q?dtHvjkv6wWmB5sR1692cXFwPfCKzm3UriqJFvzBWoN+aI1IXMBEu0DNMdB2t?=
- =?us-ascii?Q?WKGvJjtHA3b910+uHT1hTBxcRR4JU5yD2i4DCWalS0ajcfOi8ERG5Z5W1nPh?=
- =?us-ascii?Q?vWlzQ24+7BBoR+Lgb+T1BSY5kv9l49eVEPZ/e7fNBxmBdWG4iG1p1JV5HlMf?=
- =?us-ascii?Q?Y4YBFAH554yraUlL/YFJcNq9ycq6v9HRvr1yJyjjqBvhTI2EEv9QMFqgfh5V?=
- =?us-ascii?Q?bpwB3qkGUH9bmjWWxEwznloIR+PfC3MyXPqRB+4cSeAxeAGP6aSncLixB8G1?=
- =?us-ascii?Q?0HWvKi3qw86HUq49nj8yYLcRNFakjwbk+Piuu6KdXkuNgObXOhE2yDm0z6cs?=
- =?us-ascii?Q?u+5ZNTVqKBrMlbZYbmO0p3qQ69uQ9R4mTrjy/fJ5VE/hWqkipNtE3LZ+qmMu?=
- =?us-ascii?Q?KWXhctqC5V86hwtcTR5jcEHV7bQRq49J9jNEKUbNUnLF5msLGpt4XZS14LXv?=
- =?us-ascii?Q?PgjKbVN+2LoHZUOtLNDME67lYBwWUnZxmBkn3fHnBmp0H7ycg8wXXqJuwkn5?=
- =?us-ascii?Q?BEEZ0FX3AB7lWGQKMNSYsqzvrSiL6FCmIJgH30CJ2YkcnPjUnQZqf6hvuRer?=
- =?us-ascii?Q?DMvo8UAJye94AQJYlIZllA7r4LtKdk5nfX6Fs4NPHPwUQK/1VmHWZC24h3z1?=
- =?us-ascii?Q?3wo3ktvn5hjFtYOWVmjDCXGznALWNowUnWl3R0BZXt7QW2+Se6ucJ+fOaKB4?=
- =?us-ascii?Q?4JdSUBraAgqCKBloyJ6tII6Nlv0Lt+EntYLBk/p3oDePILFsPrwk+mMqwG03?=
- =?us-ascii?Q?1Ly1d6hhjk3SYTUCFZV9Jd+OI/muFrY7JhUrTwQvj3yrSaBoMOLKOBTqUBuX?=
- =?us-ascii?Q?3rKGbjYw+2GVJK5hAEa22Z2s8bfaoXeQdzH7j3dquiRbFgpR0nPFSf72urir?=
- =?us-ascii?Q?AcdUpD9r26dAwNvbBHH9Jf94IPt40O7SSAark10Jm1zsZACmyYYw6vCEm3P0?=
- =?us-ascii?Q?IFxqDpn5K1OXvQDEErRHkMqawkNPw6x5ZGGcNaaEFiMarlobQ4GlZvdRZbx5?=
- =?us-ascii?Q?XYYZuHkXQXuQSeQbMoQhzs/ZSALGjFkbwKViakY7DgUZsA/rptOAYzsLfPb3?=
- =?us-ascii?Q?LXmviGi6XQNWTqqpSb2/uRwC9sG14QEuLbeIdtGnz4tkHicwzaTFojHmcXe8?=
- =?us-ascii?Q?n2vkuljNkqrbhMkJ1W3jeWnuaRlgNqnX6ppQppwWGwuSYUOugf7F131bIk0c?=
- =?us-ascii?Q?L/85sHzfWSDk23SqsGhWC4JDUb6bzHkA/ytfKR2oRgdPf0jfpMtD3/rZfVbT?=
- =?us-ascii?Q?aJzUZXhQ/PLNRdc1AGKdsT1DemBvO4fUoo69zY9192D7wXn3WonDrAR5gb0U?=
- =?us-ascii?Q?uA=3D=3D?=
-X-OriginatorOrg: dm.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d24c3dd0-e830-420b-257d-08db5b66b9e5
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB6641.jpnprd01.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VU9zuXL3XNm5u4PYM6R1Zo8A6AzsJ48VBdetys4iRejXFzSWpDGUVeYPNsV/?=
+ =?us-ascii?Q?613nZJ64pfGHaJQ1Lo+szEsKbWvf9KWNPXZ9nqi4tZaH9ebJ2HXzGu/1Jgmo?=
+ =?us-ascii?Q?YwthHpLM5k78k5wh0sdC9xIVgZ1v/AmAdkUiOgDrgzyTDT1kYtV6LzCaPFQA?=
+ =?us-ascii?Q?YbzO1Gc+41TwO+1d/b0kbecNpIhMOVn6JcS0RaYGKIuqgqGIP0/6JC1ijssn?=
+ =?us-ascii?Q?Bb3OtKSSRRQCBZK9XWb0HrKKexCntl2YQceG4d1ExB5iaymU5Tya23YUVbXl?=
+ =?us-ascii?Q?de8EYcYTCljE5A2SSbKWaMDf9YFAm5ih1kWbtLDWdlOzLRLD1ZjVc9eZo7HR?=
+ =?us-ascii?Q?dhTSbTHPXm4hnC7GTEIVQLqw2mzAy1MAFdA+XDNk3V+NkYm4fpaggOsbIM8v?=
+ =?us-ascii?Q?uk3hPYP2rDevIPuiarsMCgukLNQFGXreVgy3LLiqI4ZJOShISiG6EI5FjLJ5?=
+ =?us-ascii?Q?ybMw7sPptnnGO17iYAhQOreplgkrOaVzAWp/VhP4Je0/AxsUG6onj8WvdAeF?=
+ =?us-ascii?Q?ye/NBOlqmGaWJdzhxrZv7oNYfZTY8uYpmmOccXLPsXs6JXbaSAGI1PMY23Le?=
+ =?us-ascii?Q?K05WbUxusfaqj8zJBrjdpWo1NqGQ6EDBpXo5T0RzCOxl1TUGWWi8ByCJvmVU?=
+ =?us-ascii?Q?59KaFPbFj94ag+z0oA7SqGDwY2eMFIrJy5lIc5yc9aVk4H56qA5dpoojYKrc?=
+ =?us-ascii?Q?2V7lEnPFJ0O71mNZ80pP4c+pSq0jXFqxLzo0GCZb/sqcbRZSyoZqdkAMxvlf?=
+ =?us-ascii?Q?z3fBfHadr89rTIabf7tTUU1xKCeN6gMcLth5hnCpZ0yMJ4BjL1R0qlHOOfNi?=
+ =?us-ascii?Q?BFMwNgy1WzDynMwRggrYClFjNkn1EJzBFLGzoU6+fb7R/Q2kJuhphCbuox8f?=
+ =?us-ascii?Q?r8eDFH+2xX0xngIUyZkX5Owi9nvcF4Ysx6102Fx7ozd7/zl55P1XBYSeNv4L?=
+ =?us-ascii?Q?v9qoxaag1NwZ+ZYJRvj7+uU6b8OAb810UBHb4RTbXgLtEH1JNokj7+f3i7wg?=
+ =?us-ascii?Q?BPEl2RlctFkvRA8/Lj99VSyaeBhTtNgjyhuS220TucNSZO4O7huL5vnggmOn?=
+ =?us-ascii?Q?LO2FcNXMA506lQbBW2uXPso6fC25axTHq1u2UYjxRz/TYQgGnLzZ8K7nVPvm?=
+ =?us-ascii?Q?7amGLRmcSq1Tl4thJ1YT7h0ZpkUL2ZSKOtAfD3sfKke495HTGSvZt6Jm5/KD?=
+ =?us-ascii?Q?gN9b3XonBaez7psrCXh12bMei1YEwpH09FwyPd77I6NfZiEzQN5n5D7UnUgk?=
+ =?us-ascii?Q?fEVc78x4tgzfRE/pEuuwCoY4qrykkhi32zq2cYqr3G5Na4hVtlKuPV13CCAC?=
+ =?us-ascii?Q?LG0Qw3MYqLTuIvXH4Zh2jEueQ5Gr1QW93XeOHpmC1FDPgkYmVM517DC26fi0?=
+ =?us-ascii?Q?RutJcz6nwLffmbJw6YmJW7XRCOYop1ZZM2OsK9jnGH4oUDjGYZCUrf0CqcE9?=
+ =?us-ascii?Q?RSjQBdDdw0g3O6k7WZDUDcB8llp+3Y4dmLyrOnWeMTAYiitBxOIJr07DPMvd?=
+ =?us-ascii?Q?F8kciQIZExv9EbSGpGitUA2ERY+B4rGcAqFZVeIeypSuWofRsCugcs45LQKo?=
+ =?us-ascii?Q?tFfXcPDZF39OhhghEkVfJ8gqxvyw2/ddGZlQiq6+uRzJo5D3VkNXJWO0qIPZ?=
+ =?us-ascii?Q?KKjqFQHSKlXp6oO0lpw9YjSD0KaxIps2zSa6Ec8ZBaXc?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29359652-ed57-4869-c79e-08db5b66bc2f
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR01MB2840.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 08:21:36.8958
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 08:21:41.2153
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Pz+koEk3D3wq4Hi80vuhD7xrre3SaFMbmi5WRcddSYNHT7IvJBccGvEX4T7FZEQgwWg6U6PKPsh0rduWWC5b0MwAA21k98pSaBtak7lhWCM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11797
+X-MS-Exchange-CrossTenant-UserPrincipalName: gWCk9ELbbN6QqNZU8fkT2gyPG1YxsUklZ+eT/nYDJnVg7Qsgm+RxUXXX+W3CvXDouMbr84vWbEyycAy03vlJZ0RzVcI4Bl1ASdueJuOiIFlwSpGbQtZLzGm5Cy/tH2iY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR01MB7817
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add `dlg,jack-ins-det-pty` property for Jack insertion detection
-polarity selection.
+In I2C_FUNC_SMBUS_BLOCK_DATA case, the I2C Designware driver does not
+handle correctly when it receives the length of SMBus block data
+response from SMBus slave device, which is outside the range 1-32 bytes.
+Consequently, the I2C Designware bus is stuck and cannot recover.
+Because if IC_EMPTYFIFO_HOLD_MASTER_EN is set, which cannot be detected
+from the registers, the controller can be disabled if the STOP bit is set.
+But it is only set after receiving block data response length.
 
-Signed-off-by: David Rau <David.Rau.opensource@dm.renesas.com>
+Hence, to prevent the bus from stuck condition, after receiving the
+invalid block data response length, the driver will read another byte
+with STOP bit set.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
 ---
- Documentation/devicetree/bindings/sound/dialog,da7219.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/dialog,da7219.yaml b/Documentation/devicetree/bindings/sound/dialog,da7219.yaml
-index 9160f68696dd..bb5af48ab1e1 100644
---- a/Documentation/devicetree/bindings/sound/dialog,da7219.yaml
-+++ b/Documentation/devicetree/bindings/sound/dialog,da7219.yaml
-@@ -122,6 +122,12 @@ properties:
-           Debounce time for jack insertion (ms).
-         $ref: /schemas/types.yaml#/definitions/uint32
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 55ea91a63382..94dadd785ed0 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -527,8 +527,19 @@ i2c_dw_read(struct dw_i2c_dev *dev)
  
-+      dlg,jack-ins-det-pty:
-+        enum: ["low", "high"]
-+        description:
-+          Polarity for jack insertion detection.
-+        $ref: /schemas/types.yaml#/definitions/string
+ 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
+ 			/* Ensure length byte is a valid value */
+-			if (flags & I2C_M_RECV_LEN &&
+-			    (tmp & DW_IC_DATA_CMD_DAT) <= I2C_SMBUS_BLOCK_MAX && tmp > 0) {
++			if (flags & I2C_M_RECV_LEN) {
++				/*
++				 * if IC_EMPTYFIFO_HOLD_MASTER_EN is set, which cannot be
++				 * detected from the registers, the controller can be
++				 * disabled if the STOP bit is set. But it is only set
++				 * after receiving block data response length in
++				 * I2C_FUNC_SMBUS_BLOCK_DATA case. That needs to read
++				 * another byte with STOP bit set when the block data
++				 * response length is invalid to complete the transaction.
++				 */
++				if ((tmp & DW_IC_DATA_CMD_DAT) > I2C_SMBUS_BLOCK_MAX || tmp == 0)
++					tmp = 1;
 +
-       dlg,jack-det-rate:
-         enum: ["32_64", "64_128", "128_256", "256_512"]
-         description:
-@@ -215,6 +221,7 @@ examples:
-               dlg,btn-cfg = <50>;
-               dlg,mic-det-thr = <500>;
-               dlg,jack-ins-deb = <20>;
-+              dlg,jack-ins-det-pty = "low";
-               dlg,jack-det-rate = "32_64";
-               dlg,jack-rem-deb = <1>;
- 
+ 				len = i2c_dw_recv_len(dev, tmp);
+ 			}
+ 			*buf++ = tmp;
 -- 
-2.17.1
+2.25.1
 
