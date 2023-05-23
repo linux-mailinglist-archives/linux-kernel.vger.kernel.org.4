@@ -2,186 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42FA70D0A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4960470D0A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbjEWBrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S231720AbjEWBsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjEWBrh (ORCPT
+        with ESMTP id S231622AbjEWBsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:47:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF85393;
-        Mon, 22 May 2023 18:47:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2711862D98;
-        Tue, 23 May 2023 01:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C6CC43443;
-        Tue, 23 May 2023 01:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684806454;
-        bh=zF9SlkquxGLSSSsCHeIU+JOEWIonnAgASkV8Rx91284=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hNjsFAIRCjjLHInm0rtZOeU0u2QBN+7SX1d35PNhKmbjTJUNgZahsq+as7R+Uq9OB
-         opALivvid8n+5J6g5NnVKfWiU8RP776bhJ+jplk0eZxY4zK42if6lw2/ScC7sbtg5D
-         g0adg/Ex5tUOfEu5hYZZDIhtAggbQ4d3TOGf/Z05JD0U/G07UbG2LBCSuGHjQGZ3Kh
-         4IOJ0cr2t9S3SRZNs5ZcixBhv+LW5+b6wHFlrlK7APDre14MyvXbu7odngO6PDsAcE
-         f7BnxTC+lQAKOOqTHvw+qQUIUdcdW9jVtkYGEHTH3wPnBI1BjCBfiJ09IwBZPMeWEO
-         N2+aZi+qyW7og==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-510eb980ce2so451163a12.2;
-        Mon, 22 May 2023 18:47:34 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwFDnXyW9LwzKt9BgiCNft7ewA5Gr3A4Op3w+wX6dy+TY9v/Jbt
-        WhLxclzwQ24besWC0pY1JgKuRI0H2QSCKO7x5Yg=
-X-Google-Smtp-Source: ACHHUZ6qqygH0lMEsrELRXy5wCYzVStel8CIlNRie2g9W5SwbYX6OwQG92lQVrbI1jC1i6Ej47DgLVRkT82CbNgvOPE=
-X-Received: by 2002:a17:907:6e14:b0:971:5a46:8ac8 with SMTP id
- sd20-20020a1709076e1400b009715a468ac8mr418537ejc.27.1684806452724; Mon, 22
- May 2023 18:47:32 -0700 (PDT)
+        Mon, 22 May 2023 21:48:08 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5416EB7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:47:58 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96f683e8855so624539566b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684806476; x=1687398476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oOGZYEghKs3nn4mexef6OEUtQ/86KDKLq99QlVJ/owA=;
+        b=ZJaxkpAsmW2osgbozhA2kQz7mhYMPQ69oEqBCw3bFnsGfVq2QIkVEuINdNTL5UW2Zc
+         YgR6DUSAMrP1Ncl5QZ3K1IxUbrNwOmY3C64uD0a16QbuFHRzdILQaUdDCHoEPHApFpX3
+         rdFkKRwgXCwHucwvwNiciuUh0VaUq3X71sIMA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684806476; x=1687398476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oOGZYEghKs3nn4mexef6OEUtQ/86KDKLq99QlVJ/owA=;
+        b=hov8eRsR/9Nn0K8QZjKy+7pP0ak4N4C7wqF3mMMq+E47w0LAhvLNWATEP+KvQpr+Dm
+         LsLxfk3PehvryPmuQoE5FHDoIqj5A5uHdzo1XvKv/Ikghn70u9PkdmipLnDMUl0hQR9o
+         l3jN6vEXmTm6WPqufYI9zwa4LeKV2sU45OO2VU+Afi0JXKsGC5sXWhgjmz0tAJ8+6QDY
+         30WJYap8tSrVNkC2NBgePbZG1tow7PCMIzHie2ZN6/efpXPiRE4Jd7t3X3hO2v6pwgo6
+         QI5ULpgeyNQme0oVkdQGFIQuGki//O0uHVL9H9peyyCAMND26oCAVV1cp+wtieV+sDrQ
+         LEOg==
+X-Gm-Message-State: AC+VfDxSqvhmB1lrs1W3VI8/bzZ0XoJWzDmHt/D1LuDUUP5BePj2v2GX
+        U5YBl2KHeq3aHQFIqvZ2KkTiZDraOuoD1gZGJA9nCF+3
+X-Google-Smtp-Source: ACHHUZ5PsIuYNKT4mJtsrpYJWDQtc1Ci9cDsRDCaflRfvYqpJ0lx3NQOojn4YSkSQmIa13q+SIOINg==
+X-Received: by 2002:a17:907:1b12:b0:8b8:c06e:52d8 with SMTP id mp18-20020a1709071b1200b008b8c06e52d8mr12836769ejc.36.1684806476574;
+        Mon, 22 May 2023 18:47:56 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id ia18-20020a170907a07200b00968242f8c37sm3827712ejc.50.2023.05.22.18.47.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 18:47:54 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-96ff9c0a103so227230366b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:47:54 -0700 (PDT)
+X-Received: by 2002:a17:907:86a2:b0:96f:a39c:86d6 with SMTP id
+ qa34-20020a17090786a200b0096fa39c86d6mr9081820ejc.8.1684806474318; Mon, 22
+ May 2023 18:47:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <1683615352-10794-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7waE0gmSU09YKJMHDAnj7BV7ukiLqWs+JzzLrHDG5z8w@mail.gmail.com>
- <20230518030618.GB1068119@leoy-yangtze.lan> <CAAhV-H6L9kNyGU2UrX7jyN_6O_pafSVSamP7DYHkzfMgmCxVXA@mail.gmail.com>
- <20230518032129.GC1068119@leoy-yangtze.lan> <CAAhV-H6_=qwheWvNozop2+9MexnOZQcva28xaeikCc49_DqABA@mail.gmail.com>
- <20230518040553.GE1068119@leoy-yangtze.lan> <ZGYXKnRZQh18D2Fd@kernel.org>
- <CAAhV-H40kQf5WD-8ozFwS6copfQaGtUJqm=nvQ6btXZnpDmZFA@mail.gmail.com> <387463f9-adb0-8e98-1de6-cae7a79a7d03@loongson.cn>
-In-Reply-To: <387463f9-adb0-8e98-1de6-cae7a79a7d03@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 23 May 2023 09:47:19 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4mLCZ7qN3y6siTzpaybMr64f4FrKhfUhA_Qjm-O+sKnQ@mail.gmail.com>
-Message-ID: <CAAhV-H4mLCZ7qN3y6siTzpaybMr64f4FrKhfUhA_Qjm-O+sKnQ@mail.gmail.com>
-Subject: Re: [PATCH] perf symbol: Add LoongArch case in get_plt_sizes()
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com>
+ <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com> <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com>
+ <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com> <b2bf7ae9-983d-6c20-0781-7f37a4454bfd@google.com>
+In-Reply-To: <b2bf7ae9-983d-6c20-0781-7f37a4454bfd@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 22 May 2023 18:47:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi6L6yZnGCYVEmLgQY+KEHNsAW2V69mfdUCMk4qS=GnKA@mail.gmail.com>
+Message-ID: <CAHk-=wi6L6yZnGCYVEmLgQY+KEHNsAW2V69mfdUCMk4qS=GnKA@mail.gmail.com>
+Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM checks
+To:     David Rientjes <rientjes@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 3:59=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+On Mon, May 22, 2023 at 5:52=E2=80=AFPM David Rientjes <rientjes@google.com=
 > wrote:
 >
->
->
-> On 05/22/2023 11:50 AM, Huacai Chen wrote:
-> > Hi, Arnaldo,
-> >
-> > On Thu, May 18, 2023 at 8:16=E2=80=AFPM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
-> >>
-> >> Em Thu, May 18, 2023 at 12:05:53PM +0800, Leo Yan escreveu:
-> >>> On Thu, May 18, 2023 at 11:57:29AM +0800, Huacai Chen wrote:
-> >>>> On Thu, May 18, 2023 at 11:21=E2=80=AFAM Leo Yan <leo.yan@linaro.org=
-> wrote:
-> >>>>>
-> >>>>> On Thu, May 18, 2023 at 11:12:26AM +0800, Huacai Chen wrote:
-> >>>>>> On Thu, May 18, 2023 at 11:06=E2=80=AFAM Leo Yan <leo.yan@linaro.o=
-rg> wrote:
-> >>>>>>>
-> >>>>>>> On Thu, May 18, 2023 at 10:11:27AM +0800, Huacai Chen wrote:
-> >>>>>>>> Queued, thanks.
-> >>>>>>>
-> >>>>>>> The patch is fine for me.
-> >>>>>>>
-> >>>>>>> Should not perf patches are to be merged via Arnaldo's tree?
-> >>>>>>
-> >>>>>> I think both are OK, if Arnaldo takes this patch, I will drop it.
-> >>>>>
-> >>>>> A good practice is to firstly inquiry the maintainers.
-> >>>>>
-> >>>>> AFAIK, Arnaldo will test perf patches before sending out pull reque=
-st;
-> >>>>> if perf patches are scattered out, it might be out of the testing
-> >>>>> radar.
-> >>>> OK, I know, thank you very much.
-> >>>
-> >>> You are welcome!
-> >>>
-> >>> I found the code base for bfd:
-> >>> https://github.com/bminor/binutils-gdb/blob/master/bfd/elfnn-loongarc=
-h.c
-> >>>
-> >>> And this patch is consistent with above link, FWIW:
-> >>>
-> >>> Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> >>
-> >> Thanks, applied.
-> > I'm very sorry that this patch breaks cross-build. We need some
-> > additional modification.
-> >
-> > diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.=
-c
-> > index 5d409c26a22e..b3dbf6ca99a7 100644
-> > --- a/tools/perf/util/symbol-elf.c
-> > +++ b/tools/perf/util/symbol-elf.c
-> > @@ -35,6 +35,10 @@
-> >  #define EM_AARCH64     183  /* ARM 64 bit */
-> >  #endif
-> >
-> > +#ifndef EM_LOONGARCH
-> > +#define EM_LOONGARCH   258
-> > +#endif
-> > +
-> >  #ifndef ELF32_ST_VISIBILITY
-> >  #define ELF32_ST_VISIBILITY(o) ((o) & 0x03)
-> >  #endif
-> >
-> > Then, drop this patch to get an updated version, or let me send an
-> > incremental patch?
-> >
->
-> I tested this patch on native LoongArch and x86 system, I did not
-> hit the build error about undeclared EM_LOONGARCH both on LoongArch
-> and x86, because EM_LOONGARCH is defined in /usr/include/elf.h
->
-> Here is the x86 system info:
->
-> [root@fedora yangtiezhu]# cat /etc/fedora-release
-> Fedora release 38 (Thirty Eight)
-> [root@fedora yangtiezhu]# uname -m
-> x86_64
-> [root@fedora yangtiezhu]# grep -rn -w EM_LOONGARCH /usr/include/
-> /usr/include/linux/elf-em.h:54:#define EM_LOONGARCH    258    /*
-> LoongArch */
-> /usr/include/linux/audit.h:442:#define AUDIT_ARCH_LOONGARCH32
-> (EM_LOONGARCH|__AUDIT_ARCH_LE)
-> /usr/include/linux/audit.h:443:#define AUDIT_ARCH_LOONGARCH64
-> (EM_LOONGARCH|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
-> /usr/include/elf.h:361:#define EM_LOONGARCH    258    /* LoongArch */
-> [root@fedora yangtiezhu]# rpm -qf /usr/include/elf.h
-> glibc-headers-x86-2.37-1.fc38.noarch
->
-> If I am missing something, please let me know.
-Fedora 38 has a very new toolchain, older distribution will meet build erro=
-rs.
+> Right now kernel.panic_on_warn can either be 0 or 1.  We can keep the
+> lowest bit to be "panic on all warnings" and then bit-1 as "panic on debu=
+g
+> VM warnings."  When CONFIG_DEBUG_VM is enabled, set the new bit by
+> default so there's no behavior change.
 
-Huacai
->
-> Anyway, it is not a bad thing to add the EM_LOONGARCH definition
-> to avoid the build error on some systems which have no EM_LOONGARCH
-> in the glibc header.
->
-> Thanks,
-> Tiezhu
->
->
+So right now CONFIG_DEBUG_VM being off means that there's nothing at
+all - not just no output, but also no code generation.
+
+I don't think CONFIG_DEBUG_VM in itself should enable that bit-1 behavior.
+
+That may be what *you* as a VM person wants, but VM people are not
+exactly the common case.
+
+So I think we've got several cases:
+
+ (a) the "don't even build it" case (CONFIG_DEBUG_VM being off)
+
+ (b) the "build it, and it is a WARN_ON_ONCE()" case
+
+ (c) the *normal* "panic_on_warn=3D1" case, which by default would panic
+on all warnings, including any warnings from CONFIG_DEBUG_VM
+
+ (d) the "VM person" case, which might not panic on normal warnings,
+but would panic on the VM warnings.
+
+and I think the use-cases are for different classes of kernel use:
+
+ (a) is for people who disable debugging code until they feel it is
+needed (which I think covers a lot of kernel developers - I certainly
+personally tend to not build with debug support unless I'm chasing
+some issue down)
+
+ (b) would probably be most distros - enable the warning so that the
+distro can report it, but try not to kill the machine of random people
+
+ (c) would be most cloud use cases, presumably together with reboot-on-pani=
+c
+
+ (d) would be people who are actual VM developers, and basically want
+the *current* behavior of VM_BUG_ON() with a machine that stops
+
+and I think (d) is the smallest set of cases of all, but is the one
+you're personally interested in.
+
+             Linus
+
+
+
+             Linus
