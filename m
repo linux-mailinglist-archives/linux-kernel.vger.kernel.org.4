@@ -2,159 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A332070E512
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778B270E514
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238167AbjEWTCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        id S238216AbjEWTEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjEWTCf (ORCPT
+        with ESMTP id S233536AbjEWTEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:02:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652B591;
-        Tue, 23 May 2023 12:02:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED976635CA;
-        Tue, 23 May 2023 19:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEF6C433EF;
-        Tue, 23 May 2023 19:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684868553;
-        bh=VxVQh9QC5yaIKfdgFury2Apw+pRWi/bYlcBOunKON8s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DVqiDHSfDMHWS7TpBbz+AwzsPVBqse6T/LUXjEIn9wRormIgmZc5/MbEEid8lKrQl
-         WA2UfA8AG1vgln980RdoJSGT03Cczc5CzNb9SxvfoKR/RpJLorigTWGBX7urwL/H7F
-         Z2ymhX1I8Ht1UkzfX9FnGs2wLD83pnjp5d85R6ks/Zcg4EULDoAS8Z6Dz4IYVKP6+G
-         ULZZQWas/UrGxSM9TnOpcLGWpl5aOPmfN5yqnTRYeBLxZcztbi17nq2eOaSGXIqSaD
-         u7fD0w8Q+hgFa+MC5Xm/mlrIAjdjMclGJg33Bq+TBsiqLl5nsRQsJHJofTFIhzysiy
-         HlkhmJAfd5jKw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Len Brown <lenb@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Subject: [PATCH] [v2] efi: fix missing prototype warnings
-Date:   Tue, 23 May 2023 21:01:30 +0200
-Message-Id: <20230523190226.3860727-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Tue, 23 May 2023 15:04:14 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A72791;
+        Tue, 23 May 2023 12:04:11 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-ba80dc46972so79018276.2;
+        Tue, 23 May 2023 12:04:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684868651; x=1687460651;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r4W28a48SDMi1QUsmpPavFVHSFTXlIc71K5bxCuD8AU=;
+        b=ZRJ/zAT62lvPAsJ7OfmHx5mI+/0OAeVa0HDys5AOeWMY47xppArpln+pBLFrDOBw4z
+         U6PoPXN1NmiwiQwpTszlr8XAnfL4bGQA8SC7bDJ8GVzpkOa/DwbU1gFuClX9P1wokDX/
+         F+pFUSnId7mVTo1E41O3q9BdiiVZy7qrcg0fm+dzxUcxtWGXlyiRGRE6vUOt6I2S8gPe
+         d4Hz7NlMdu4BNGcaQh1KubUgaUXyh6ufU7Q7mzmLWVJGd7g0bLmkW0T65gE2Ca44Ij/p
+         MVry52F6FmUG926OLTHZ1vX++8fut6NZc4FgG/0k6cm5Ac0QHU/nr0h1s+aEADCwAyKv
+         iFjw==
+X-Gm-Message-State: AC+VfDxL9/Qc8IxHogF99/FxVq7zq0bIf1gCrZZcc78h2nJZXPgc88vd
+        jF3PCO68q214fQA/8NVz/j1ZEJ8tuZY=
+X-Google-Smtp-Source: ACHHUZ7q4JW7+x8k8wobTkNcopVEP1XKn8W2OeuB9TqTyMXF1cqswqQ6280FVBRRuKDNccBJcJmtng==
+X-Received: by 2002:a25:4d8:0:b0:bac:7294:4fb6 with SMTP id 207-20020a2504d8000000b00bac72944fb6mr2254036ybe.30.1684868650601;
+        Tue, 23 May 2023 12:04:10 -0700 (PDT)
+Received: from tofu.cs.purdue.edu ([128.210.0.165])
+        by smtp.gmail.com with ESMTPSA id x3-20020a2584c3000000b00ba88763e5b5sm2226962ybm.2.2023.05.23.12.04.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 12:04:10 -0700 (PDT)
+From:   Sungwoo Kim <iam@sung-woo.kim>
+Cc:     wuruoyu@me.com, benquike@gmail.com, daveti@purdue.edu,
+        Sungwoo Kim <iam@sung-woo.kim>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Bluetooth: L2CAP: Fix use-after-free in bt_accept_unlink
+Date:   Tue, 23 May 2023 15:03:48 -0400
+Message-Id: <20230523190347.2584368-1-iam@sung-woo.kim>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+==================================================================
+BUG: KASAN: use-after-free in bt_accept_unlink+0x77/0x1f0 net/bluetooth/af_bluetooth.c:189
+Write of size 8 at addr ffff888104d59300 by task kworker/0:3/128
 
-The cper.c file needs to include an extra header, and efi_zboot_entry
-needs an extern declaration to avoid these 'make W=1' warnings:
+CPU: 0 PID: 128 Comm: kworker/0:3 Not tainted 6.2.0-00001-gef397bd4d5fb-dirty #58
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+Workqueue: events l2cap_chan_timeout
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x72/0x95 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x175/0x478 mm/kasan/report.c:417
+ kasan_report+0xb1/0x130 mm/kasan/report.c:517
+ __list_del include/linux/list.h:114 [inline]
+ __list_del_entry include/linux/list.h:137 [inline]
+ list_del_init include/linux/list.h:206 [inline]
+ bt_accept_unlink+0x77/0x1f0 net/bluetooth/af_bluetooth.c:189
+ l2cap_sock_teardown_cb+0x1c6/0x4c0 net/bluetooth/l2cap_sock.c:1586
+ l2cap_chan_del+0x108/0x5e0 net/bluetooth/l2cap_core.c:651
+ l2cap_chan_close+0x159/0x830 net/bluetooth/l2cap_core.c:859
+ l2cap_chan_timeout+0x14f/0x240 net/bluetooth/l2cap_core.c:452
+ process_one_work+0x4ea/0x8e0 kernel/workqueue.c:2289
+ worker_thread+0x364/0x8e0 kernel/workqueue.c:2436
+ kthread+0x1b9/0x200 kernel/kthread.c:376
+ ret_from_fork+0x2c/0x50 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-drivers/firmware/efi/libstub/zboot.c:65:1: error: no previous prototype for 'efi_zboot_entry' [-Werror=missing-prototypes]
-drivers/firmware/efi/efi.c:176:16: error: no previous prototype for 'efi_attr_is_visible' [-Werror=missing-prototypes]
-drivers/firmware/efi/cper.c:626:6: error: no previous prototype for 'cper_estatus_print' [-Werror=missing-prototypes]
-drivers/firmware/efi/cper.c:649:5: error: no previous prototype for 'cper_estatus_check_header' [-Werror=missing-prototypes]
-drivers/firmware/efi/cper.c:662:5: error: no previous prototype for 'cper_estatus_check' [-Werror=missing-prototypes]
+Allocated by task 285:
+ kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x82/0x90 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:211 [inline]
+ __do_kmalloc_node mm/slab_common.c:968 [inline]
+ __kmalloc+0x5a/0x140 mm/slab_common.c:981
+ kmalloc include/linux/slab.h:584 [inline]
+ sk_prot_alloc+0x113/0x1f0 net/core/sock.c:2040
+ sk_alloc+0x36/0x3c0 net/core/sock.c:2093
+ l2cap_sock_alloc.constprop.0+0x39/0x1c0 net/bluetooth/l2cap_sock.c:1851
+ l2cap_sock_create+0x10d/0x220 net/bluetooth/l2cap_sock.c:1897
+ bt_sock_create+0x183/0x290 net/bluetooth/af_bluetooth.c:132
+ __sock_create+0x226/0x380 net/socket.c:1518
+ sock_create net/socket.c:1569 [inline]
+ __sys_socket_create net/socket.c:1606 [inline]
+ __sys_socket_create net/socket.c:1591 [inline]
+ __sys_socket+0x112/0x200 net/socket.c:1639
+ __do_sys_socket net/socket.c:1652 [inline]
+ __se_sys_socket net/socket.c:1650 [inline]
+ __x64_sys_socket+0x40/0x50 net/socket.c:1650
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3f/0x90 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-To make this easier, move the cper specific declarations to
-include/linux/cper.h.
+Freed by task 285:
+ kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x50 mm/kasan/generic.c:523
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free mm/kasan/common.c:200 [inline]
+ __kasan_slab_free+0x10a/0x190 mm/kasan/common.c:244
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook mm/slub.c:1807 [inline]
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0x88/0x1f0 mm/slub.c:3800
+ sk_prot_free net/core/sock.c:2076 [inline]
+ __sk_destruct+0x347/0x430 net/core/sock.c:2168
+ sk_destruct+0x9c/0xb0 net/core/sock.c:2183
+ __sk_free+0x82/0x220 net/core/sock.c:2194
+ sk_free+0x7c/0xa0 net/core/sock.c:2205
+ sock_put include/net/sock.h:1991 [inline]
+ l2cap_sock_kill+0x256/0x2b0 net/bluetooth/l2cap_sock.c:1257
+ l2cap_sock_release+0x169/0x1c0 net/bluetooth/l2cap_sock.c:1427
+ __sock_release+0x80/0x150 net/socket.c:650
+ sock_close+0x19/0x30 net/socket.c:1368
+ __fput+0x17a/0x5c0 fs/file_table.c:320
+ task_work_run+0x132/0x1c0 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x113/0x120 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x21/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x4c/0x90 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Last potentially related work creation:
+ kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0x97/0xb0 mm/kasan/generic.c:493
+ insert_work+0x33/0x180 kernel/workqueue.c:1358
+ __queue_work+0x410/0x960 kernel/workqueue.c:1517
+ rcu_work_rcufn+0x2e/0x40 kernel/workqueue.c:1754
+ rcu_do_batch kernel/rcu/tree.c:2246 [inline]
+ rcu_core+0x43b/0xe70 kernel/rcu/tree.c:2506
+ __do_softirq+0x124/0x3f9 kernel/softirq.c:571
+
+Second to last potentially related work creation:
+ kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0x97/0xb0 mm/kasan/generic.c:493
+ __call_rcu_common.constprop.0+0x41/0x550 kernel/rcu/tree.c:2755
+ call_rcu_hurry include/linux/rcupdate.h:116 [inline]
+ queue_rcu_work+0x79/0x90 kernel/workqueue.c:1774
+ process_one_work+0x4ea/0x8e0 kernel/workqueue.c:2289
+ worker_thread+0x364/0x8e0 kernel/workqueue.c:2436
+ kthread+0x1b9/0x200 kernel/kthread.c:376
+ ret_from_fork+0x2c/0x50 arch/x86/entry/entry_64.S:308
+
+The buggy address belongs to the object at ffff888104d59000
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 768 bytes inside of
+ 1024-byte region [ffff888104d59000, ffff888104d59400)
+
+The buggy address belongs to the physical page:
+page:0000000067fcb39f refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x104d58
+head:0000000067fcb39f order:2 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+anon flags: 0x200000000010200(slab|head|node=0|zone=2)
+raw: 0200000000010200 ffff888100041dc0 ffffea00041fa600 dead000000000003
+raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff888104d59200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888104d59280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888104d59300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff888104d59380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888104d59400: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+l2cap_chan_timeout() tries to write on (struck sock*)chan->data that
+points to already free'd address by l2cap_sock_release().
+This patch prevents this by clearing the timers in l2cap_sock_release()
+as l2cap_sock_cleanup_listen() does.
+
+Ack: This bug is found by FuzzBT with a modified Syzkaller. Other
+contributors are Ruoyu Wu and Hui Peng.
+Fixes: 1bff51ea59a9 (Bluetooth: fix use-after-free error in
+lock_sock_nested())
+Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
 ---
-v2: move the prototypes rather than including a file in a different
-subdir
----
- drivers/acpi/apei/apei-internal.h      | 6 ------
- drivers/acpi/apei/bert.c               | 1 +
- drivers/firmware/efi/libstub/efistub.h | 3 +++
- include/linux/cper.h                   | 6 ++++++
- include/linux/efi.h                    | 2 ++
- 5 files changed, 12 insertions(+), 6 deletions(-)
+ net/bluetooth/l2cap_sock.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/acpi/apei/apei-internal.h b/drivers/acpi/apei/apei-internal.h
-index 1d6ef9654725..67c2c3b959e1 100644
---- a/drivers/acpi/apei/apei-internal.h
-+++ b/drivers/acpi/apei/apei-internal.h
-@@ -7,7 +7,6 @@
- #ifndef APEI_INTERNAL_H
- #define APEI_INTERNAL_H
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index eebe25610..cb274ee1c 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -1423,6 +1423,7 @@ static int l2cap_sock_release(struct socket *sock)
+ 	l2cap_chan_hold(chan);
+ 	l2cap_chan_lock(chan);
  
--#include <linux/cper.h>
- #include <linux/acpi.h>
++	__clear_chan_timer(chan);
+ 	sock_orphan(sk);
+ 	l2cap_sock_kill(sk);
  
- struct apei_exec_context;
-@@ -130,10 +129,5 @@ static inline u32 cper_estatus_len(struct acpi_hest_generic_status *estatus)
- 		return sizeof(*estatus) + estatus->data_length;
- }
- 
--void cper_estatus_print(const char *pfx,
--			const struct acpi_hest_generic_status *estatus);
--int cper_estatus_check_header(const struct acpi_hest_generic_status *estatus);
--int cper_estatus_check(const struct acpi_hest_generic_status *estatus);
--
- int apei_osc_setup(void);
- #endif
-diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
-index c23eb75866d0..7514e38d5640 100644
---- a/drivers/acpi/apei/bert.c
-+++ b/drivers/acpi/apei/bert.c
-@@ -23,6 +23,7 @@
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/acpi.h>
-+#include <linux/cper.h>
- #include <linux/io.h>
- 
- #include "apei-internal.h"
-diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-index 67d5a20802e0..54a2822cae77 100644
---- a/drivers/firmware/efi/libstub/efistub.h
-+++ b/drivers/firmware/efi/libstub/efistub.h
-@@ -1133,4 +1133,7 @@ const u8 *__efi_get_smbios_string(const struct efi_smbios_record *record,
- void efi_remap_image(unsigned long image_base, unsigned alloc_size,
- 		     unsigned long code_size);
- 
-+asmlinkage efi_status_t __efiapi
-+efi_zboot_entry(efi_handle_t handle, efi_system_table_t *systab);
-+
- #endif
-diff --git a/include/linux/cper.h b/include/linux/cper.h
-index eacb7dd7b3af..c1a7dc325121 100644
---- a/include/linux/cper.h
-+++ b/include/linux/cper.h
-@@ -572,4 +572,10 @@ void cper_print_proc_ia(const char *pfx,
- int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg);
- int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg);
- 
-+struct acpi_hest_generic_status;
-+void cper_estatus_print(const char *pfx,
-+			const struct acpi_hest_generic_status *estatus);
-+int cper_estatus_check_header(const struct acpi_hest_generic_status *estatus);
-+int cper_estatus_check(const struct acpi_hest_generic_status *estatus);
-+
- #endif
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index bed3c92cbc31..120af31a5136 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -1349,4 +1349,6 @@ bool efi_config_table_is_usable(const efi_guid_t *guid, unsigned long table)
- 	return xen_efi_config_table_is_usable(guid, table);
- }
- 
-+umode_t efi_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n);
-+
- #endif /* _LINUX_EFI_H */
 -- 
-2.39.2
+2.34.1
 
