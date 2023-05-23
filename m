@@ -2,118 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0025770DF85
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FD370DF81
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjEWOkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S237160AbjEWOkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237224AbjEWOkw (ORCPT
+        with ESMTP id S229960AbjEWOk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:40:52 -0400
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D67FE9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:40:49 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so2563474e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:40:49 -0700 (PDT)
+        Tue, 23 May 2023 10:40:28 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBB2E9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:40:27 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d41763796so2950962b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:40:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684852788; x=1687444788;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xfPbF+pfNryuLeOwunW5hBDLem6I21D/ZP6zdS6Z5fE=;
-        b=CChN9vLcknEVg4w5lLAaXPgLtbpQPQfKDDmz5zBDRZ24x+C6ngTmvM5OwtBT972K5O
-         nBQeVgu//hzmedk0OsJtMEM0BPk6ZOLK9O9Kx7y3zrrt6k6eAUOsgOhspYnVmWh462pC
-         nQ8eFxu6Emp93yLuPAibGaAf8koQwBXrgMin1C9e4/tUXCE3HsUH/hP0lLa8isD82sfX
-         9cNWSKtFzZ1Ay865MOGAIpkZdOh3GmOYHIo1tBUWffTbxup3qM57h9wNMKG6Cbp0c4sS
-         LPHu8SEW06V4pvLO9YoJehKXGQsHhSIK2uxpbXGqL5hgIb/l9WYJNGlsHtFmtUWVOT7i
-         ZGQg==
+        d=chromium.org; s=google; t=1684852827; x=1687444827;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEbJUA2VY3P1Gw/9E3ZC2zbULYIeWfglzaOBedvnWVU=;
+        b=NFeLY3SkA8AC3qhDYso7wMcli0cn4QwrTfP1yc8JJHOY+KU7eeYHu6Y5qgeh9CLKOH
+         RIjeh7iU5NLc9qaleOGDBNFgmHHWAFHhCEfTd50q93OvDiKqgC4CafhCUG+QkavJWOF6
+         dMJFbEQ0nrQJvt+lBesUHD0pW6muhDoZzvjx0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684852788; x=1687444788;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xfPbF+pfNryuLeOwunW5hBDLem6I21D/ZP6zdS6Z5fE=;
-        b=jGA91jDnle8D0zlJpZ4EAKAmfub4pdzIySGE9LUFVZ6SQlboWuz+dY5LAX30wbj062
-         FbOb48aYXiVf9mnNJrgXXfcxMRLIxfFYKPwNlL/nasd+4DX0F3QHoQLyOObsNRGl+2v3
-         hsT3MwxvXrNa0LlRgQWi95OYdHweZnIFek0c5hvo9nJD44xEcRZSeX6LdsWCEuA1c1BA
-         cdmiCp6LSNqzmoinBUYC9BGjZFJowhLA/96ooGtWwh12w4mPNLFChyDah+dLJX51Thtx
-         QgrqL2a4I5OoLpysM5tWOyXyVY73CuW5xobS/qjbdG3VcxOwATZhsO+0zGPJwxwfkIvJ
-         3Y+w==
-X-Gm-Message-State: AC+VfDy3lx30TfVNkARCUdEqLCPshabK52yHVn4ErD5xaWusv53TR8I0
-        8pDLXswUnmsau0Y2icf9eUEYVA==
-X-Google-Smtp-Source: ACHHUZ4B/K8ujjGFZUtWcWYxYqD1Y6WKumhmX64ROwFpyvkogGPmqosOwd2FjPNL/SWIbp2gmxEmww==
-X-Received: by 2002:ac2:5ed1:0:b0:4f1:4fe6:56c8 with SMTP id d17-20020ac25ed1000000b004f14fe656c8mr4710296lfq.34.1684852787926;
-        Tue, 23 May 2023 07:39:47 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id v17-20020ac25591000000b004f37918bb20sm1366684lfg.248.2023.05.23.07.39.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 07:39:47 -0700 (PDT)
-Message-ID: <358e3015-0e42-4f8c-8c1c-ce27106984cc@linaro.org>
-Date:   Tue, 23 May 2023 17:39:46 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 06/12] drm/msm/dpu: Add SM6350 support
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        d=1e100.net; s=20221208; t=1684852827; x=1687444827;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zEbJUA2VY3P1Gw/9E3ZC2zbULYIeWfglzaOBedvnWVU=;
+        b=DGFGs6RF8lG2+w5G/WN0w+CcI6AzPW2KWNwY+OzzWVBqMIVNG8kcoO4tj91hDDOhVN
+         3BSyGh+a/AfxN6hH2e59HVohmUB1lYzvrzRRpkNfPPRxHOpTDIcP+hNKZfQwhQuYk5Dy
+         WtuQNLNwBDoR+aP3N44sMKhsWDr1g4kDE9kz0G9NkA0NQ9yNG9L/ttZkdv3oCfiUbm/x
+         Uq9JKYIe0DXkxBtaVMgzyeGGtU2HWJ+kJgsyiYW+uru6QMWbAnRB/svYrO/JqgDO9QyI
+         nVa5FQlwd9l6u3BjUeXvgMh36Q54PvH6hQibzMEUFvoLWO/sziyiacgfYhx15LRv4+Nh
+         Vkzg==
+X-Gm-Message-State: AC+VfDybefhFinw4kH+Utc0nNbE953c2TJdcP3xjgR6G3UWRocjiK731
+        wUfLzktJQZRregfSgSv0l4gW5g==
+X-Google-Smtp-Source: ACHHUZ4teF8qs4STLyE0zOA8dYn9fz0SS7kmHOjPAUtFeNbBav3U28Ed6thHQ2NIkTRalg4X4AnOFA==
+X-Received: by 2002:a05:6a00:140b:b0:63d:3339:e967 with SMTP id l11-20020a056a00140b00b0063d3339e967mr18303483pfu.19.1684852826764;
+        Tue, 23 May 2023 07:40:26 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:ed64:17be:457a:f5e4])
+        by smtp.gmail.com with ESMTPSA id a14-20020a62e20e000000b00643889e30c2sm3701402pfi.180.2023.05.23.07.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 07:40:25 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
         Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
- <20230411-topic-straitlagoon_mdss-v5-6-998b4d2f7dd1@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v5-6-998b4d2f7dd1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: Only HAVE_HARDLOCKUP_DETECTOR_PERF if the PMU config is enabled
+Date:   Tue, 23 May 2023 07:39:53 -0700
+Message-ID: <20230523073952.1.I60217a63acc35621e13f10be16c0cd7c363caf8c@changeid>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 10:46, Konrad Dybcio wrote:
-> Add SM6350 support to the DPU1 driver to enable display output.
-> 
-> It's worth noting that one entry dpu_qos_lut_entry was trimmed off:
-> 
-> {.fl = 0, .lut = 0x0011223344556677 },
-> 
-> due to the lack of support for selecting between portrait and landscape
-> LUT settings (for danger and safe LUTs) and no full support for
-> qseed/non-qseed usescases (for QoS LUT).
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h | 173 +++++++++++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   5 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
->   4 files changed, 180 insertions(+)
+If you try to enable the arm64 perf-based hardlockup detector but you
+don't enable CONFIG_ARM_PMU then you'll get an error:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+arch/arm64/kernel/watchdog_hld.c: In function 'arch_perf_nmi_is_available':
+arch/arm64/kernel/watchdog_hld.c:35:16: error: implicit declaration of function 'arm_pmu_irq_is_nmi' [-Werror=implicit-function-declaration]
+   35 |         return arm_pmu_irq_is_nmi();
 
+It doesn't make sense to enable HAVE_HARDLOCKUP_DETECTOR_PERF if the
+PMU isn't enabled. Let's add a dependency. HW_PERF_EVENTS is a synonum
+for ARM_PMU and makes the most logical sense here, so add the
+dependency on that.
+
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Closes: https://lore.kernel.org/r/20230522114922.1052421-1-arnd@kernel.org
+Fixes: 02ea35ee19d9 ("arm64: enable perf events based hard lockup detector")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+This is an alternative fix to the one Arnd proposed. I think it's a
+little cleaner / more correct.
+
+I'm not sure the exact way to mark "Fixes" for things in Andrew's tree
+these days. I don't think the git hash is stable? I wouldn't object to
+this being squashed into the patch it's fixing.
+
+ arch/arm64/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 3eacf40da850..0b055e6cda00 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -203,7 +203,8 @@ config ARM64
+ 	select HAVE_FUNCTION_ERROR_INJECTION
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_GCC_PLUGINS
+-	select HAVE_HARDLOCKUP_DETECTOR_PERF if PERF_EVENTS && HAVE_PERF_EVENTS_NMI
++	select HAVE_HARDLOCKUP_DETECTOR_PERF if PERF_EVENTS && \
++		HW_PERF_EVENTS && HAVE_PERF_EVENTS_NMI
+ 	select HAVE_HW_BREAKPOINT if PERF_EVENTS
+ 	select HAVE_IOREMAP_PROT
+ 	select HAVE_IRQ_TIME_ACCOUNTING
 -- 
-With best wishes
-Dmitry
+2.40.1.698.g37aff9b760-goog
 
