@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D91A70DF2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F19970DF2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbjEWO3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S236968AbjEWO3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbjEWO3f (ORCPT
+        with ESMTP id S234679AbjEWO3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 May 2023 10:29:35 -0400
 Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AD2E9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9CEDD;
         Tue, 23 May 2023 07:29:32 -0700 (PDT)
 Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id F319D852DB;
-        Tue, 23 May 2023 16:29:28 +0200 (CEST)
+        by phobos.denx.de (Postfix) with ESMTPSA id BA459854DA;
+        Tue, 23 May 2023 16:29:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1684852169;
-        bh=6ptexe/u4vS+fQddFLan9T1NLcrbA6NWyhAdTJ0l0nc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VJln1mKhUGPqvxddB6Euz8zLAn9rT/oOeWCPltDeweYtsD5gPbzYhylgbwhOPnTE8
-         6lNToyfkv8Rmjffk35gRkOiMyRoXRwDnOud4k9SJCqL5anTbVgmLl4TGm6uCjzUH6j
-         x3S1Lqn0uGkNtPeXtOuJ9WafAojF828/wo/L+nKm51LUYnzL31VOp2fltztFSADhk1
-         xZ8UgHeGiRZwgQLYyyD0lWeKIO2iRrT4gSmj+GLA+3lO46wb8R/baBADAdtQsICYUb
-         uS6ENe8jXSfU18skRYUiVapMyS+f5FL8S6iUZD9qzvLu42YtEtsQ/SjsgQ6nvaz313
-         nz6PvtqfFdpEA==
+        s=phobos-20191101; t=1684852170;
+        bh=nyydpcvCYcJ2fkOSjPCLykhfksngix993L7ypy8jbD0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pyaaTNuvLGUaIL7yqBimu9B657MlehkS853B3qB0Wp/L15dQgCxtOT6R5kBq1a9k6
+         LMlLfnWUs9wQ/PZ37QUYHRWbFYGlCraXC+nupvOr1U4DhORUIvhj9MVg97LJ/rz+kO
+         hAzgE0+88MgwHtLj0RuIuSIuOMUcYx9qjIbIIB5Bv2r9rrlplxO2r5YgKDBE5r9ABB
+         nSYNoxx8XuFnSz0IlENoCTxdWEYy1uL7gGKbaKGgjSXLV6Spa6u0t3+XuZQTTK/L8s
+         QMg6Ro+57AzhSoPcF4CUj8JOBu97QZsZU8CePt9/gAmCGvjcRybXVdr+cPE1gCE9Yn
+         kHvDTdBv4f/8A==
 From:   Lukasz Majewski <lukma@denx.de>
 To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
         Russell King <linux@armlinux.org.uk>
@@ -42,10 +42,12 @@ Cc:     Eric Dumazet <edumazet@google.com>,
         Alexander Duyck <alexander.duyck@gmail.com>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH v7 0/3] dsa: marvell: Add support for mv88e6071 and 6020  switches
-Date:   Tue, 23 May 2023 16:29:09 +0200
-Message-Id: <20230523142912.2086985-1-lukma@denx.de>
+Subject: [PATCH v7 1/3] dsa: marvell: Define .set_max_frame_size() function for mv88e6250 SoC family
+Date:   Tue, 23 May 2023 16:29:10 +0200
+Message-Id: <20230523142912.2086985-2-lukma@denx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230523142912.2086985-1-lukma@denx.de>
+References: <20230523142912.2086985-1-lukma@denx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
@@ -60,26 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the commit (SHA1: 7e9517375a14f44ee830ca1c3278076dd65fcc8f);
-"net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220, 6250, 6290" the
-error when mv88e6020 or mv88e6071 is used is not present anymore.
+Switches from mv88e6250 family (the marketing name - "Link Street",
+including mv88e6020 and mv88e6071) need the possibility to setup the
+maximal frame size, as they support frames up to 2048 bytes.
 
-As a result patches for adding max frame size are not required to provide
-working setup with aforementioned switches.
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
+---
+Changes for v6:
+- New patch
 
-Lukasz Majewski (2):
-  dsa: marvell: Define .set_max_frame_size() function for mv88e6250 SoC
-    family
-  net: dsa: mv88e6xxx: add support for MV88E6071 switch
+Changes for v7:
+- Update commit message
+---
+ drivers/net/dsa/mv88e6xxx/chip.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Matthias Schiffer (1):
-  net: dsa: mv88e6xxx: add support for MV88E6020 switch
-
- drivers/net/dsa/mv88e6xxx/chip.c | 41 ++++++++++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/chip.h |  2 ++
- drivers/net/dsa/mv88e6xxx/port.h |  2 ++
- 3 files changed, 45 insertions(+)
-
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 64a2f2f83735..b5e43dd40431 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -5043,6 +5043,7 @@ static const struct mv88e6xxx_ops mv88e6250_ops = {
+ 	.avb_ops = &mv88e6352_avb_ops,
+ 	.ptp_ops = &mv88e6250_ptp_ops,
+ 	.phylink_get_caps = mv88e6250_phylink_get_caps,
++	.set_max_frame_size = mv88e6185_g1_set_max_frame_size,
+ };
+ 
+ static const struct mv88e6xxx_ops mv88e6290_ops = {
 -- 
 2.20.1
 
