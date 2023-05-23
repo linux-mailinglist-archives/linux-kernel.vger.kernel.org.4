@@ -2,170 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDA870DB78
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3D670DB7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjEWL3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S236489AbjEWLcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236228AbjEWL33 (ORCPT
+        with ESMTP id S232469AbjEWLcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:29:29 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF9AFA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:29:27 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae763f9a94so36665775ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684841367; x=1687433367;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QmAH7D4gu+/LqJqROct5SqtuBq3KdxiRPY9I9eXlXSE=;
-        b=ZD5D7CE/e65K27r8szZiMurwNaCxaRdGb67vzDNUWeChI6i63diAJ9ZuRmF9bB697f
-         6gq/mt8563OZF98uGaHx/v6F+vLeHlPFPzMw6JmhX2OpP0Ee5mcUSzxis1J3R1dYazye
-         VAjvzZEj+mYljzEv9oJ6E+9zCr1qdhBUR9zrZsMSPpWcpyU/uEn6OiLehEP8HarUBp6n
-         yPeZbCl+hTQZG1ERSNAeyEfI3wkYia6hwdokOqleSbHiw9OjzEmf454iCy48BLwDk8n9
-         DZ8xUEXrYssKrhZ7ikr74PJa0MT9ui8xQbErT47JodVA15gPYf1Eph9j6tOjcAanGhG4
-         jKwg==
+        Tue, 23 May 2023 07:32:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89990FA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684841520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xqvkKPpeyvJC3LKAlZdrdd0G6ZskzvSyTK5XVg14pug=;
+        b=aTsMOHIx8B51/uMELwLQtjuOSnRqre/9pxZnvFN2gHo6tPNfMeIUp25uYF6AIpgv5mbu/v
+        LyrzF4QP3NGtR//vS/vHUgunXOrJK8GjSowOGdzYH0hMXWd6Go/t1O6Vy6BscWQdIjugxK
+        M2/VNqsye0VG0YZzStCZaXNZxfVXQGQ=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-41-nnnVNEZLOhe19j9LHpcmGg-1; Tue, 23 May 2023 07:31:59 -0400
+X-MC-Unique: nnnVNEZLOhe19j9LHpcmGg-1
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-64d2e1db9e6so354455b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:31:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684841367; x=1687433367;
+        d=1e100.net; s=20221208; t=1684841517; x=1687433517;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QmAH7D4gu+/LqJqROct5SqtuBq3KdxiRPY9I9eXlXSE=;
-        b=kD7ch1CZj1qPSthM8/f6U5+gDJpO+zf42E4NpPOrKKOotLFzThK3yK/368HH1J80e0
-         eU1WhzEHI3kBtlmLvNiKA0dp346FQuIDWQ7WU1Ssu6w6hzNvkw9ktiDP4rE/Va2fZKwW
-         sSAGwnX7tPMhJygPvWFdCpW8FSZZeP1PJUbguE2d/RHQ94ttMKINbjiq2OofUIjLUDGp
-         z+C1MnRcxRTGvReV4bNKGZZ5iWF355Mi1uiXiVvPwh0k6se3rCF7vLwO9p81jqLV6yt6
-         Jo+4LV7OVB+nvTXTNDwsLykiESHkhcbQIYgDhmQPEUPORqnpejKejJZqVBCuc8DssTfA
-         p/Vw==
-X-Gm-Message-State: AC+VfDwP/0ol5tV1aqG7Qiv+tzHM+iOWQaGlMA7hbY59w7gyWdEs8aSp
-        2oFtufmQr6KKubkBuRgPlOQtFw==
-X-Google-Smtp-Source: ACHHUZ7nUaQPePxWSD/ka5HaSe15sJIKu/E/LKlKePd9CPLwgQaxsiHIYn4rXk+I9Qp2jmGC6V0Z6Q==
-X-Received: by 2002:a17:902:c20c:b0:1aa:ef83:34be with SMTP id 12-20020a170902c20c00b001aaef8334bemr13534069pll.47.1684841366703;
-        Tue, 23 May 2023 04:29:26 -0700 (PDT)
-Received: from [10.255.25.150] ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902788500b001a96269e12csm6574848pll.51.2023.05.23.04.29.23
+        bh=xqvkKPpeyvJC3LKAlZdrdd0G6ZskzvSyTK5XVg14pug=;
+        b=bMpDgLAFHj1OGk6irsG6ZaEl25pBmtQ4MawSBOUkKSzE2DdSkhd36hpBy51T862Pj6
+         z33ZkM7DWRG6oxNM40lHwdyjLa9kYfa6g1LC8lE01+oS8mKYQidPIDJuJLe1W09oFcTU
+         iB6Y2Ar32lx4qzSlAngek2d0mYehXVI+SNIJ/wIjcbIad2HobOidHDAMTuindgz/0CGG
+         4aArAGaMKKGHXlTzrRu9AEWeecxP715Ql8S8YHO8v3iw2hNZe7TJH97IOmU2w8nS3Ioh
+         UeiT0/kO0jVYl2AlB7ESS1js6ts0JhhsWb+YL6MpZIWRUs7zUfJQ0GNrXUVGaDigo20I
+         MJVA==
+X-Gm-Message-State: AC+VfDxHKBSnerOmqqc3vCIq4/zAGgo04yu2yweFEjsJz7uD8X4aQnmD
+        3XzJQnH4NrJbeLmVF/Evd+bmNfw94cig9AsT+ufsWKaF8cqACpESCVCaEVgccnq+9QdaIio2wWa
+        JridtNkjFuLYl6PCjE2Q9f0jY
+X-Received: by 2002:a05:6a00:1c91:b0:63d:2d6a:47be with SMTP id y17-20020a056a001c9100b0063d2d6a47bemr13311106pfw.2.1684841517222;
+        Tue, 23 May 2023 04:31:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7FgAilTzoSI89QW4N0Hm/4MD2G7X0a1vaxsB7MtNKFBw0Ak3fCBuMJI+YnvZGSlxGyzUBaug==
+X-Received: by 2002:a05:6a00:1c91:b0:63d:2d6a:47be with SMTP id y17-20020a056a001c9100b0063d2d6a47bemr13311094pfw.2.1684841516938;
+        Tue, 23 May 2023 04:31:56 -0700 (PDT)
+Received: from [10.66.61.39] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id g17-20020aa78751000000b0063b89300347sm5768361pfo.142.2023.05.23.04.31.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 04:29:26 -0700 (PDT)
-Message-ID: <79945d0c-2430-c094-f3ba-12ee428eb8c7@bytedance.com>
-Date:   Tue, 23 May 2023 19:29:20 +0800
+        Tue, 23 May 2023 04:31:56 -0700 (PDT)
+Message-ID: <e2660ce1-7ac1-8413-8ef7-284592cce708@redhat.com>
+Date:   Tue, 23 May 2023 19:31:51 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: Re: [PATCH v3 4/5] sock: Consider memcg pressure when raising
- sockmem
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/5] arm64/sysreg: Remove some unused sysreg definitions
 Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Simon Horman <simon.horman@corigine.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230523094652.49411-1-wuyun.abel@bytedance.com>
- <20230523094652.49411-5-wuyun.abel@bytedance.com>
- <58241c427684e6da0ab454d344421c2fb29a0465.camel@redhat.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <58241c427684e6da0ab454d344421c2fb29a0465.camel@redhat.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev
+References: <20230419-arm64-syreg-gen-v1-0-936cd769cb9e@kernel.org>
+ <20230419-arm64-syreg-gen-v1-1-936cd769cb9e@kernel.org>
+From:   Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <20230419-arm64-syreg-gen-v1-1-936cd769cb9e@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 6:26 PM, Paolo Abeni wrote:
-> On Tue, 2023-05-23 at 17:46 +0800, Abel Wu wrote:
->> For now __sk_mem_raise_allocated() mainly considers global socket
->> memory pressure and allows to raise if no global pressure observed,
->> including the sockets whose memcgs are in pressure, which might
->> result in longer memcg memstall.
->>
->> So take net-memcg's pressure into consideration when allocating
->> socket memory to alleviate long tail latencies.
->>
->> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
->> ---
->>   net/core/sock.c | 23 ++++++++++++++++-------
->>   1 file changed, 16 insertions(+), 7 deletions(-)
->>
->> diff --git a/net/core/sock.c b/net/core/sock.c
->> index 801df091e37a..b899e0b9feda 100644
->> --- a/net/core/sock.c
->> +++ b/net/core/sock.c
->> @@ -2976,22 +2976,31 @@ EXPORT_SYMBOL(sk_wait_data);
->>   int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
->>   {
->>   	bool memcg_charge = mem_cgroup_sockets_enabled && sk->sk_memcg;
->> +	bool charged = true, pressured = false;
->>   	struct proto *prot = sk->sk_prot;
->> -	bool charged = true;
->>   	long allocated;
->>   
->>   	sk_memory_allocated_add(sk, amt);
->>   	allocated = sk_memory_allocated(sk);
->> -	if (memcg_charge &&
->> -	    !(charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
->> -						gfp_memcg_charge())))
->> -		goto suppress_allocation;
->> +
->> +	if (memcg_charge) {
->> +		charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
->> +						  gfp_memcg_charge());
->> +		if (!charged)
->> +			goto suppress_allocation;
->> +		if (mem_cgroup_under_socket_pressure(sk->sk_memcg))
->> +			pressured = true;
->> +	}
->>   
->>   	/* Under limit. */
->> -	if (allocated <= sk_prot_mem_limits(sk, 0)) {
->> +	if (allocated <= sk_prot_mem_limits(sk, 0))
->>   		sk_leave_memory_pressure(sk);
->> +	else
->> +		pressured = true;
+
+
+On 5/23/23 00:22, Mark Brown wrote:
+> Since there are no references to OSDTRRX_EL1 or OSECCR_EL1 in the code
+> just remove the definitions rather than converting to automatic
+> generation.
 > 
-> The above looks not correct to me.
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> ---
+>   arch/arm64/include/asm/sysreg.h | 3 ---
+>   1 file changed, 3 deletions(-)
 > 
-> 	allocated > sk_prot_mem_limits(sk, 0)
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 9e3ecba3c4e6..6505665624d4 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -134,11 +134,8 @@
+>   #define SYS_SVCR_SMSTART_SM_EL0		sys_reg(0, 3, 4, 3, 3)
+>   #define SYS_SVCR_SMSTOP_SMZA_EL0	sys_reg(0, 3, 4, 6, 3)
+>   
+> -#define SYS_OSDTRRX_EL1			sys_reg(2, 0, 0, 0, 2)
+>   #define SYS_MDCCINT_EL1			sys_reg(2, 0, 0, 2, 0)
+>   #define SYS_MDSCR_EL1			sys_reg(2, 0, 0, 2, 2)
+> -#define SYS_OSDTRTX_EL1			sys_reg(2, 0, 0, 3, 2)
+> -#define SYS_OSECCR_EL1			sys_reg(2, 0, 0, 6, 2)
+>   #define SYS_DBGBVRn_EL1(n)		sys_reg(2, 0, 0, n, 4)
+>   #define SYS_DBGBCRn_EL1(n)		sys_reg(2, 0, 0, n, 5)
+>   #define SYS_DBGWVRn_EL1(n)		sys_reg(2, 0, 0, n, 6)
 > 
-> does not mean the protocol has memory pressure. Such condition is
-> checked later with:
-> 
-> 	if (allocated > sk_prot_mem_limits(sk, 1))
 
-Yes, this condition stands means the global socket memory is absolutely
-under pressure, and the status is sustained until @allocated falls down
-to sk_prot_mem_limits(sk, 0). I see some places in the source tree call
-it 'soft pressure' if usage between index [0] and [1].
+-- 
+Shaoqin
 
-The idea behind this patch is to allow the socket memory to raise if
-there is no pressure neither in global nor net-memcg. With the condition
-
-	@allocated > sk_prot_mem_limits(sk, 0)
-
-we can't be sure whether there is pressure or not in global. And this
-also aligns with the original logic if net-memcg is not used.
-
-I am thinking changing the name of this variable to @might_pressured or
-something to better illustrate the status of memory pressure. What do
-you think?
-
-> 
-> Here an allocation could fail even if memcg charge is successful and
-> the protocol is not under pressure, which in turn sounds quite (too
-> much?) conservative.
-
-IIUC the failure can only be due to its memcg under vmpressure. In this
-case allowing the allocation would burden the mm subsys with increased
-fragmented unmovable/unreclaimable memory.
-
-Thanks & Best,
-	Abel
