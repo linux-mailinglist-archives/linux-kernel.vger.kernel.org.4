@@ -2,129 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FBE70D0FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD84070D102
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjEWCRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S234236AbjEWCSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjEWCRI (ORCPT
+        with ESMTP id S233909AbjEWCSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:17:08 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2628E49;
-        Mon, 22 May 2023 19:16:44 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-3318bd82810so755925ab.1;
-        Mon, 22 May 2023 19:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684808203; x=1687400203;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NB99lYKRnx+FQmUmcJ1k5C7PBLcbIKJhm9jHT8RwDc=;
-        b=hwCrUSAAEVJ9qhd82IuiYCJHoSMMMhsJkiPHoe6M/a6asG7Ygr7txfBNgY7OoSF9ZK
-         sgKGL+R+S4gIFGm9tN8igYrhcFvJgxKZXfjixMJaOEjFDNkN+nOiY0TaRsy6Lq1ZlDw0
-         irfNqeY/EWrRGUUzdyskNK62WwfWKtidFoqvmtgSVROsAsFftKNv9Dt8eWISYJf8bIiM
-         4olnjezwemse5QXT1lLejTEJbVli4gSwV1fGlD7SrOK81LaLWhWIGUL9uQ8DkAjGIVYA
-         6QyGQ1OKEM8sTpOvVtH5PHcapU6ukipoq+t83/+dNqGA1r+AEqZPRKLCCjldF1Cgvj0+
-         FWRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684808203; x=1687400203;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0NB99lYKRnx+FQmUmcJ1k5C7PBLcbIKJhm9jHT8RwDc=;
-        b=BVCQTEsNEKWgU6pYq+1QLelf4zzNwzfQ71A0G2lEVAIUjN8+CtKL0x8uteww3YQPLQ
-         btHAk/dGvaFmTxU3gnwopNxrFvbFF70GLl7i25bDvWrL4UuKSScI63oQwGcmLQ1v6pQh
-         4HHmWxtnY9ET6Vj2Je8r2Zx+4A935FBy8wKJIl8zcNVAn1XzrWZVLZusawVTVG5rxWxF
-         LUprman5f7bkECOI32b1pyc1otFSsFijfkA5aDssqCVFj4L28oqj3jgLh0/kNde2tlfs
-         BsnenoxZk6D5a+fBM2zRorNTe804CmbOD7kSVJMomdl+J14ajmgM75qaCLQs12eSh3Zs
-         uRng==
-X-Gm-Message-State: AC+VfDzlrmlhwZK8NjPIIqR39MV9ThHr+R0PFRVAyR02ReTponfJJCTP
-        gXPpfkcUebJKPgPbFOufoceZ6SCJrUXC/w==
-X-Google-Smtp-Source: ACHHUZ6sehwshPL/GGR7VhnPWgP9QpjoGtYJvvM1p/nUUdwEr4yIvJzHsqFxLOY2ah38LSVi9qJajw==
-X-Received: by 2002:a92:da8d:0:b0:335:9220:2ec2 with SMTP id u13-20020a92da8d000000b0033592202ec2mr7895806iln.26.1684808203113;
-        Mon, 22 May 2023 19:16:43 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id s5-20020a92cc05000000b00326bd11f5d1sm2110237ilp.11.2023.05.22.19.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 19:16:42 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-        Christian Gromm <christian.gromm@microchip.com>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: most: Replace all non-returning strlcpy with strscpy
-Date:   Tue, 23 May 2023 02:16:40 +0000
-Message-ID: <20230523021640.2406585-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+        Mon, 22 May 2023 22:18:03 -0400
+Received: from out-49.mta0.migadu.com (out-49.mta0.migadu.com [91.218.175.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586C5115
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 19:17:46 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684808263;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jKXmsz8eArZ/Avp7H5tYRwE5yYwvCqsB3ep5xws9lrY=;
+        b=XqPhciSTRq3T/i7yKpCvm5m2dHbcVWhgVJ1Ehfb3lFXNieDNVKER/+ja2w7nIwl48sMRx0
+        jDhcsxRQ9I2hzaeG2w5sGpe+U/tcGXw2OrNxuMWQeIM85d8w4/2O0dNQ+H7PTPmAIfg7Vy
+        FuOOxV1l9vAI49JYuvARvmbNYGdaihI=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] kernfs: fix missing kernfs_idr_lock to remove an ID from
+ the IDR
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <ZGu9v3OA0wkhff7g@slm.duckdns.org>
+Date:   Tue, 23 May 2023 10:17:04 +0800
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6D4D62D0-FD5D-4065-8D7F-C6E220186DE6@linux.dev>
+References: <20230516034536.25548-1-songmuchun@bytedance.com>
+ <ZGu9v3OA0wkhff7g@slm.duckdns.org>
+To:     Tejun Heo <tj@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- drivers/most/configfs.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> On May 23, 2023, at 03:08, Tejun Heo <tj@kernel.org> wrote:
+>=20
+> On Tue, May 16, 2023 at 11:45:36AM +0800, Muchun Song wrote:
+>> @@ -655,7 +660,7 @@ static struct kernfs_node =
+*__kernfs_new_node(struct kernfs_root *root,
+>> return kn;
+>>=20
+>>  err_out3:
+>> - idr_remove(&root->ino_idr, (u32)kernfs_ino(kn));
+>> + kernfs_idr_remove(root, kn);
+>=20
+> Good catch but I'd just open code the locking here.
 
-diff --git a/drivers/most/configfs.c b/drivers/most/configfs.c
-index 27b0c923597f..36d8c917f65f 100644
---- a/drivers/most/configfs.c
-+++ b/drivers/most/configfs.c
-@@ -204,7 +204,7 @@ static ssize_t mdev_link_device_store(struct config_item *item,
- {
- 	struct mdev_link *mdev_link = to_mdev_link(item);
- 
--	strlcpy(mdev_link->device, page, sizeof(mdev_link->device));
-+	strscpy(mdev_link->device, page, sizeof(mdev_link->device));
- 	strim(mdev_link->device);
- 	return count;
- }
-@@ -219,7 +219,7 @@ static ssize_t mdev_link_channel_store(struct config_item *item,
- {
- 	struct mdev_link *mdev_link = to_mdev_link(item);
- 
--	strlcpy(mdev_link->channel, page, sizeof(mdev_link->channel));
-+	strscpy(mdev_link->channel, page, sizeof(mdev_link->channel));
- 	strim(mdev_link->channel);
- 	return count;
- }
-@@ -234,7 +234,7 @@ static ssize_t mdev_link_comp_store(struct config_item *item,
- {
- 	struct mdev_link *mdev_link = to_mdev_link(item);
- 
--	strlcpy(mdev_link->comp, page, sizeof(mdev_link->comp));
-+	strscpy(mdev_link->comp, page, sizeof(mdev_link->comp));
- 	strim(mdev_link->comp);
- 	return count;
- }
-@@ -250,7 +250,7 @@ static ssize_t mdev_link_comp_params_store(struct config_item *item,
- {
- 	struct mdev_link *mdev_link = to_mdev_link(item);
- 
--	strlcpy(mdev_link->comp_params, page, sizeof(mdev_link->comp_params));
-+	strscpy(mdev_link->comp_params, page, sizeof(mdev_link->comp_params));
- 	strim(mdev_link->comp_params);
- 	return count;
- }
+OK. I'll send v2.
+
+Thanks.
+
+>=20
+> Thanks.
+>=20
+> --=20
+> tejun
 
