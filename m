@@ -2,213 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF4E70E43C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643DE70E463
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238080AbjEWSED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S238028AbjEWSEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234191AbjEWSEB (ORCPT
+        with ESMTP id S229445AbjEWSEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:04:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1079CA;
-        Tue, 23 May 2023 11:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684865039; x=1716401039;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=19Cl938j4SaCENVj2c58gnejr/SeqoZn2rN3RDbai60=;
-  b=kTvzaI1i5cDQZ3NBSUS88LXWccsbSdFQoi1W9G21hdimm5RDFWH2bSn0
-   z+q5uEYdLu5rL03IIqESc35YIiQo/IMvP8h4Bjj+4uRgJrMkzGvVWtXsk
-   658+1DNMoEqRYPFGsluSmue05CXroNeFvsMWniKeCxcUwNz/O5XTILW1O
-   GBbHAw9RsUTBKOpDZrRAg3MjZ17mH4Tl4E++kWxWqEakZUnND+JQ9bEeQ
-   p5Zp8ExK2DBEoy8RJii4KfcCAuI7h8vRb727XWRIL2d12zV/rJ8vGVQUk
-   D60VPrecTjT0ZSqV+Hd/bLhZ4sBdqYaduJ50+mpDLwtGNsStC7IUQJTpK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="333681909"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="333681909"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:03:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="654470899"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="654470899"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga003.jf.intel.com with ESMTP; 23 May 2023 11:03:58 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 23 May 2023 11:03:58 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 23 May 2023 11:03:58 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 23 May 2023 11:03:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iaU42b/ln1v6wvJhpkhddrtwzGgHQr9rzC132OFMCKcNCR6W+klgd3ersTJMXwN31sPHJqXpw/ot3LqLXcjIEwNrpRBOthPdSExApIaCFHU439rEWIjQdi188ow29s1Q4Y3p0BusU4mpwQughikMmH1kQY+dZANyiWddVvFfmE5k3TOgFeHDVEJ5KgZise4XA+3gfEC2riRXbekYRPrxUtCcpBz/MXMP9+Vm8wPJesIWtxGwXKyUmmTo+/38g/vjL/9M+AJODptu52+FillBjePipPTXgdD7dHnmvoHJ8avM7hGa9x0Mi77mpc6XVDTUJNjSJEQcpoEu/GWYpYujZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AXMozgen9iugukfMK3kGd3PP95g0lXMVcbbxeLREQ/k=;
- b=HVN17mw91a8f9FXXpDoisZpI37jOzHKsKEG1bx4O3Dk40O6jUlYH/1IVd0UPKmX5L7870EW1GBzAC3gVFYSzpWwtO+qfT4XasYTaNYuugeU1qv7oos4l9qHMatS00jYGtedib6U0PZSkS3KIs9KKIY/FqOvODP6ducsTp2JokYNfu+B2jG6nLRl1o3LGsTfbpwXUALAeRyp/Y9fCNf2mHWgs7qefPlJQ25XSjXQom+LRmcO+iyGU98OWGQ8gn7NR+MRhbdwxJqLWwWACCENuhhgRshh6wicTcTjmKFCuLEmlImW+fbe5sjJszl5a9nvDJMyIC80DV+XRMEIfLEHAnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN6PR11MB3229.namprd11.prod.outlook.com (2603:10b6:805:ba::28)
- by MW4PR11MB5892.namprd11.prod.outlook.com (2603:10b6:303:16a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Tue, 23 May
- 2023 18:03:56 +0000
-Received: from SN6PR11MB3229.namprd11.prod.outlook.com
- ([fe80::bdec:3ca4:b5e1:2b84]) by SN6PR11MB3229.namprd11.prod.outlook.com
- ([fe80::bdec:3ca4:b5e1:2b84%7]) with mapi id 15.20.6411.029; Tue, 23 May 2023
- 18:03:55 +0000
-Message-ID: <52cfebaf-79f6-c318-c14b-3716555d0e8f@intel.com>
-Date:   Tue, 23 May 2023 11:03:51 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] igb: Fix igb_down hung on surprise removal
-To:     Grant Grundler <grundler@chromium.org>,
-        Pavan Chebbi <pavan.chebbi@broadcom.com>,
-        Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-        "Neftin, Sasha" <sasha.neftin@intel.com>,
-        "Ruinskiy, Dima" <dima.ruinskiy@intel.com>
-CC:     Ying Hsu <yinghsu@chromium.org>, <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-References: <20230518072657.1.If9539da710217ed92e764cc0ba0f3d2d246a1aee@changeid>
- <CALs4sv2+Uu=Bry=B3FYzWdNrHjGWDvPCDhTFcNERVpWTjpmEyA@mail.gmail.com>
- <CANEJEGuzoBa_yYHRCa0KygUe=AOhUkSg4u6gWx+QNCuGtKod2Q@mail.gmail.com>
-Content-Language: en-US
-From:   Tony Nguyen <anthony.l.nguyen@intel.com>
-In-Reply-To: <CANEJEGuzoBa_yYHRCa0KygUe=AOhUkSg4u6gWx+QNCuGtKod2Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR13CA0133.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::18) To SN6PR11MB3229.namprd11.prod.outlook.com
- (2603:10b6:805:ba::28)
+        Tue, 23 May 2023 14:04:40 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E551B1;
+        Tue, 23 May 2023 11:04:22 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1ae40dcdc18so54978995ad.2;
+        Tue, 23 May 2023 11:04:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684865061; x=1687457061;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7G+6JAe83A/18uddV8Wr/e+zu8FEvMqf/FTgHFCweHM=;
+        b=OjRBHmKyZVkTv8ipCSSjMC979Aa2g8Vef/qdvxWXNK7NfpzJNVJzYzTbPwBqOJYnIM
+         vwYPxKbp7kt4/uzWVCrugRgi2qAog0S5e0N/D4KORZxxCcleybetuj0ZoVe1zrvhJuHs
+         NPimC3YHLcXmNFW845z/8XZ99tVVoyiyvn0aNHlu7cELROsQq5Ejt0Mkg5qTC4q8O1P/
+         RLk34aD+U5QHietxZJhXe+22UN+3njLRq4RA6mjnCw5zYbssPk5+vRPk9RiS2LDaRzdw
+         TmjTW23dM/3zhjSzXiKomSO4Z95x93uk/fiaoRI2DOFOpAN7I0mtdv09iiB9T1/tOxaB
+         NoCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684865061; x=1687457061;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7G+6JAe83A/18uddV8Wr/e+zu8FEvMqf/FTgHFCweHM=;
+        b=aSDKuImqSN0rrS76/RZfux3v/jnhz1PvAhdpsDRbaWdyf3s3YEGqjiKoy3d8Y3V6Hq
+         iahjlH25dbO23HRv3U6NTOYUBMXzTI9iCcCkngDghVi08yP6BSJgVmvATuRF3VrPZ1hH
+         CtI0iLvcZfjkxFhlvg58wKBqI++IbzZtUcKv5FnXyxOgoJljU66b395kTRArodD3w4PT
+         pfU1gN5bCCIZgihi4tSSDttDb8t0cdNo67a2fxGeBSPywOe9FFMRy0+Z5JyKXZxjYi1/
+         5aDX7ViraC0RGn6EexKMx9ZiMw2aoc9MIeN7SrWf/7Y5U4YI+vSNOjueEwGA72MCzXgM
+         5oHg==
+X-Gm-Message-State: AC+VfDxr3ASA+hSAdJeHHBmq0wdNj8pDr+En5PjxL+JTCEiLaYPJVmYc
+        JEly6Aww7Mk6INU9dTfeB4w=
+X-Google-Smtp-Source: ACHHUZ7Qj/je6b3i19kqNy7D3SzNF2pLpsy4V4UegPxSa9h9jg3U20AWBdyQoww8RgK0muN41BIKXA==
+X-Received: by 2002:a17:902:ce91:b0:1af:c599:6a88 with SMTP id f17-20020a170902ce9100b001afc5996a88mr3866632plg.49.1684865060999;
+        Tue, 23 May 2023 11:04:20 -0700 (PDT)
+Received: from debian-BULLSEYE-live-builder-AMD64 ([211.108.101.96])
+        by smtp.gmail.com with ESMTPSA id bj6-20020a170902850600b001a183ade911sm7080795plb.56.2023.05.23.11.04.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 11:04:20 -0700 (PDT)
+Date:   Wed, 24 May 2023 03:04:28 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        linux-xfs@vger.kernel.org
+Subject: Re: [PATCH 0/9] Mitigate a vmap lock contention
+Message-ID: <ZG0AE9mjHkRZIGmr@debian-BULLSEYE-live-builder-AMD64>
+References: <20230522110849.2921-1-urezki@gmail.com>
+ <ZGyqiaRnMJPFhxR6@debian-BULLSEYE-live-builder-AMD64>
+ <ZGzX3vRMlGHIcYCe@pc636>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3229:EE_|MW4PR11MB5892:EE_
-X-MS-Office365-Filtering-Correlation-Id: 56036917-8791-4708-71bc-08db5bb812b2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U7Sbm+To2IeNUJX4wFsWh3zKe35Q5xOnyP/67uMJRK+7LIAO+JTp3/CxvAxfpZ3yUuvKtXjl3+qdWfKs7tuB/+t5rFTXhyDtFvGv7gms9u1K9BZcQsM6Dsb44p3k/UMaK5tSMKxlyaRKF+g3yuH/I2hSidmRILY9is4klgOaT1yMpqAxa5AN3MXbLb5MF9SKGJabMHNqKt/bupBr4ZYdzxoB0rw/Kf1fvC2XwBr8Dljwn/L1OgIzUttC4RYCTfh6K6YcFHCKVQkbR50anUy156cDp/7OOMHcdyvEnwkHOebmiJfJyrBHF32xwLIriVnd63jMT+dfDm6tvTBpBwOQSBJXs7xxfVaVxOvLkiN9+0IXMgHazR4W9juQLdCBdJZoiCl8qYb1dox10TfaKfahCqVhZOvBdEKxx9kqEWzwMm8tKqdxbIkvHETiACFamKbQTwar/Q+t0KD/BI2eQawvajP2Y4sLjGYk94caRpd9Dh+2bZjKnYgbBOqN9uugKQyekEyTN0u+YYZObIuGcLzKr0XU7D4gXZLsQT+D4SDmEwq4iBnCu3pmwQa4vupzvJmnD6i11vTGyMZEbsM5LsEYJZdVmLqeEeffx5ZmKCZHwojmppb1wAEUpB4Gtc/a2o2jWCt9a4KsEe61LbPPARMokg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3229.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199021)(6506007)(6512007)(186003)(82960400001)(53546011)(26005)(7416002)(38100700002)(2616005)(36756003)(83380400001)(2906002)(316002)(6666004)(66556008)(66476007)(4326008)(6636002)(66946007)(41300700001)(6486002)(54906003)(31696002)(110136005)(86362001)(478600001)(31686004)(8676002)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1FpMUxaZ0pQU2JUN3lyb3dMZUx6QlNIWFRGWjhjMzJwbkEvZllKY2RBV3lv?=
- =?utf-8?B?YnY2YjhLeU92anFxY095MFoxOXU4a1RYY0luNXVJNXZOd0s5eHVDMUZnSTlw?=
- =?utf-8?B?Zi92aC9Ra2ZFUmhqVUdFbWpKL3h4VEJkM2MrOXpzY202VW90K2toQnh6eEpZ?=
- =?utf-8?B?K3hJRFBJKysrK0oyWjRiUFc4ZXcvTldFTnc4TTl4NjVCZTVKV0h3ZVRZcDl3?=
- =?utf-8?B?aTZZTEZjcGtWaURmdnQ2UldtODl0VkRZdUdhU2NjWU1DWVplRkhuSHFsM2tQ?=
- =?utf-8?B?Q2ppZUsxK21yU25BTjRFS1h5d09TU2hNN1pDblJCcWllWHljelpTMVE1MDAv?=
- =?utf-8?B?MmpuMVB3S3RxTHRaUUViaU1QRnJuVnJ2NU1VMHlaUVRrUTd2cnJZVGtISDRt?=
- =?utf-8?B?eS9KTDl2WGg4K2FheTZwbXZJS2V2TCthUFg2RW14MHRpR2hIdCtPTkEvVStY?=
- =?utf-8?B?UEo3QkFFMDVKcW9QT2hSeGNCek1YQWszUXlacnhySTV5VFYwdHhaV3VMSTNs?=
- =?utf-8?B?cmxXanlxMjQ4aThvZ1NlSFY2UnFKOThBKzIyRjZ5TEVXcGhialh4dVR2bHhl?=
- =?utf-8?B?K3lySll0aTJ6N1FZL3BEcDE4eUF3ME00MkF1eEhBWVJBSmxEbTRBTnhobUlC?=
- =?utf-8?B?M2lqVUFOc3R0YWFFR3NCMTRtbGkyNFYxa2NwNWFOZlI1bzRFekNzVE5EbEJ0?=
- =?utf-8?B?NGhCeDljemZOdCs4WXpiSTh5dVVkYTJtMkpQNEtQQ3JhdGZHWlpxb3loUkF4?=
- =?utf-8?B?blRVV1pQcTJEYkVCY0lBOE0rYUQ1RVZXTlhrTUhHMGt4OFRLUmhreW1nZklm?=
- =?utf-8?B?a0JtMlVzR0pwZ3JESHNXQWM0MHF6VllrVGdxcW5vVUZFMWtwa1Noc3Rnc2Yx?=
- =?utf-8?B?dVo1UjlOWit3OVlEeVVkdHBoUkJwTHA0ZjIvbzRCbmRpZXpXVzA5UjU2R2FI?=
- =?utf-8?B?S1Jzd3hXWjRZVjFHRUhLanNRWkIxTWVVam12dUdYNm5YaTN4YUxSZ1ovTi9y?=
- =?utf-8?B?bmhkcUpmQWpGb21mRy85Wk91djNpZmppZkdnTnArdkxQWnNiOXpJRVc1NlEw?=
- =?utf-8?B?TUVtK1IySXpJcWNXY1IxVWJnSFVpaHhyS2FOVVFUb01rRlZDT1YxVFpxalFo?=
- =?utf-8?B?eTkxcEJ5b1ZJZjBaUU5KUE01Tkg2ZWlITk16M21DK1M4MHJaeWdlZk9MY2Za?=
- =?utf-8?B?VzZyNCtwZkkwdkQ0UGFjR0dXNTdFWmZQL2dWUWJ6SmNVSndXOGwxSkVlU2RT?=
- =?utf-8?B?cW9XS1E5VkpldUJyRS9jWmpldXR5bnRhaTRnZFVoeFpjTitlMVUza1h0YlJO?=
- =?utf-8?B?d2Q1UTVHRHRnVWpGTllwbmdJRFUzczd5OGJiYkdNNytzSGFSaXFWZVFlVzZT?=
- =?utf-8?B?cklpbXBqVWhZcFI3RVRCUFAwZ1JNSWNsS0JSQ0dsckpzUEJ5K0lJYlpZSmZ2?=
- =?utf-8?B?QUV1ZzZkaU52WmdyM3JzY202L1hBVEV4bTUrcDFQUFE2M01HU0dOMjM2ZFl6?=
- =?utf-8?B?SHJCZFA0cWV4TTBpSUtNRmRFcEI4KzEvQ2p2UGoyOW52OExEVlFTaURPMHRV?=
- =?utf-8?B?M251NlozWmw4VTgyL05ZeXExVTFWNHNpTzNxWDhyM2RhZTFsQ0tSVFdXcytJ?=
- =?utf-8?B?RmdwejhKbGNsZk1nWFEyRTRYcU5ZR2w1RGFmcGRPekxFRzZ3NmhiY0trSzRy?=
- =?utf-8?B?SUUzSGg5bmlzOEhGdHFaZWRBRjhHY21qOCtPMGw2ZkJVOElPNVV1OVJhaHNE?=
- =?utf-8?B?V0Z4cFJSYi9ZV2tkOGVtaFV3WjlPa2FzMlY5M1RDUDZLb3RtZWgvWFRBWXBm?=
- =?utf-8?B?UE94Q3BhcHdWUEtBMzRDa24rVlQ2elBhY09oaEJweWRpQ3d1K1hnaFNrZHdB?=
- =?utf-8?B?Q2VuQURaSUowUG00TWMzSWdtcUdXTUt1VndMQzk5cC9nbHBlQXRHdmE3OUwv?=
- =?utf-8?B?OEVzb1h1TWtmQ2JsYWxGbHdXTGRuMFNGVlpadDZFLzNMWTlYT1hQREEzSXJ1?=
- =?utf-8?B?WnBzUml2QzNOVWpicklmcVBZT25Ma0xCbWVmSHA0QmV4UUU1UUJlcXREWGRt?=
- =?utf-8?B?Y215eEVCSlVXNHVjVDIwTXFoTkxZUFk2UzRNdWh5SEErZExhSS9OQUMvQi9K?=
- =?utf-8?B?SUVwSWF5TGp4d3NuWmxpT2p6cFh4dmE4eVdXMnF1S1Q5ZXBQUXZTcWdXSnEv?=
- =?utf-8?B?cXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56036917-8791-4708-71bc-08db5bb812b2
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3229.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 18:03:55.4715
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3Sx4dlGIHM/CXLPHWkO16WSsbk6VzbfJ3cBuVv8N+x6te2OoVvtrduOL2YK81GcMabODm5AV6E4fAj3RBWeILpU+z0MuXuqMj84iWrsWV2A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5892
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGzX3vRMlGHIcYCe@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/2023 1:16 PM, Grant Grundler wrote:
-> On Thu, May 18, 2023 at 3:36 AM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
->>
->> On Thu, May 18, 2023 at 12:58 PM Ying Hsu <yinghsu@chromium.org> wrote:
->>>
->>> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
->>> index 58872a4c2540..a8b217368ca1 100644
->>> --- a/drivers/net/ethernet/intel/igb/igb_main.c
->>> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
->>> @@ -9581,6 +9581,11 @@ static pci_ers_result_t igb_io_error_detected(struct pci_dev *pdev,
->>>          struct net_device *netdev = pci_get_drvdata(pdev);
->>>          struct igb_adapter *adapter = netdev_priv(netdev);
->>>
->>> +       if (state == pci_channel_io_normal) {
->>> +               dev_warn(&pdev->dev, "Non-correctable non-fatal error reported.\n");
->>> +               return PCI_ERS_RESULT_CAN_RECOVER;
->>> +       }
->>> +
->>
->> This code may be good to have. But not sure if this should be the fix
->> for igb_down() synchronization.
+On Tue, May 23, 2023 at 05:12:30PM +0200, Uladzislau Rezki wrote:
+> > > 2. Motivation.
+> > > 
+> > > - The vmap code is not scalled to number of CPUs and this should be fixed;
+> > > - XFS folk has complained several times that vmalloc might be contented on
+> > >   their workloads:
+> > > 
+> > > <snip>
+> > > commit 8dc9384b7d75012856b02ff44c37566a55fc2abf
+> > > Author: Dave Chinner <dchinner@redhat.com>
+> > > Date:   Tue Jan 4 17:22:18 2022 -0800
+> > > 
+> > >     xfs: reduce kvmalloc overhead for CIL shadow buffers
+> > >     
+> > >     Oh, let me count the ways that the kvmalloc API sucks dog eggs.
+> > >     
+> > >     The problem is when we are logging lots of large objects, we hit
+> > >     kvmalloc really damn hard with costly order allocations, and
+> > >     behaviour utterly sucks:
+> > 
+> > based on the commit I guess xfs should use vmalloc/kvmalloc is because
+> > it allocates large buffers, how large could it be?
+> > 
+> They use kvmalloc(). When the page allocator is not able to serve a
+> request they fallback to vmalloc. At least what i see, the sizes are:
 > 
-> I have the same opinion. This appears to solve the problem - but I
-> don't know if there is a better way to solve this problem.
+> from 73728 up to 1048576, i.e. 18 pages up to 256 pages.
 > 
->> Intel guys may comment.
-> 
-> Ping? Can we please get feedback from IGB/IGC maintainers this week?
-> 
-> (I hope igc maintainers can confirm this isn't an issue for igc.)
+> > > 3. Test
+> > > 
+> > > On my: AMD Ryzen Threadripper 3970X 32-Core Processor, i have below figures:
+> > > 
+> > >     1-page     1-page-this-patch
+> > > 1  0.576131   vs   0.555889
+> > > 2   2.68376   vs    1.07895
+> > > 3   4.26502   vs    1.01739
+> > > 4   6.04306   vs    1.28924
+> > > 5   8.04786   vs    1.57616
+> > > 6   9.38844   vs    1.78142
+> > 
+> > <snip>
+> > 
+> > > 29    20.06   vs    3.59869
+> > > 30  20.4353   vs     3.6991
+> > > 31  20.9082   vs    3.73028
+> > > 32  21.0865   vs    3.82904
+> > > 
+> > > 1..32 - is a number of jobs. The results are in usec and is a vmallco()/vfree()
+> > > pair throughput.
+> > 
+> > I would be more interested in real numbers than synthetic benchmarks,
+> > Maybe XFS folks could help performing profiling similar to commit 8dc9384b7d750
+> > with and without this patchset?
+> > 
+> I added Dave Chinner <david@fromorbit.com> to this thread.
 
-Adding some of the igb and igc developers.
+Oh, I missed that, and it would be better to [+Cc linux-xfs]
 
-> cheers,
-> grant
-> 
->>
->>>          netif_device_detach(netdev);
->>>
->>>          if (state == pci_channel_io_perm_failure)
->>> --
->>> 2.40.1.606.ga4b1b128d6-goog
->>>
->>>
+> But. The contention exists.
+
+I think "theoretically can be contended" doesn't necessarily mean it's actually
+contended in the real world.
+
+Also I find it difficult to imagine vmalloc being highly contended because it was
+historically considered slow and thus discouraged when performance is important.
+
+IOW vmalloc would not be contended when allocation size is small because we have
+kmalloc/buddy API, and therefore I wonder which workloads are allocating very large
+buffers and at the same time allocating very frequently, thus performance-sensitive.
+
+I am not against this series, but wondering which workloads would benefit ;)
+
+> Apart of that per-cpu-KVA allocator can go away if we make it generic instead.
+
+Not sure I understand your point, can you elaborate please?
+
+And I would like to ask some side questions:
+
+1. Is vm_[un]map_ram() API still worth with this patchset?
+
+2. How does this patchset deals with 32-bit machines where
+   vmalloc address space is limited?
+
+Thanks!
+
+> > By the way looking at the commit, teaching __p?d_alloc() about gfp
+> > context (that I'm _slowly_ working on...) could be nice for allowing
+> > non-GFP_KERNEL kvmalloc allocations, as Matthew mentioned. [1]
+> > 
+> > Thanks!
+> > 
+> > [1] https://lore.kernel.org/linux-mm/Y%2FOHC33YLedMXTlD@casper.infradead.org
+> > 
+
+-- 
+Hyeonggon Yoo
+
+Doing kernel stuff as a hobby
+Undergraduate | Chungnam National University
+Dept. Computer Science & Engineering
