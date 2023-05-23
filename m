@@ -2,125 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9574570D72C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA91470D7AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236061AbjEWIUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S236239AbjEWIhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjEWITp (ORCPT
+        with ESMTP id S236174AbjEWIhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:19:45 -0400
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CED1BCA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:17:57 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f4b256a0c9so1988902e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684829816; x=1687421816;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uw6zfBHO0opEqODFwIHcb35ENxPJxB7I1/UM0FjZOR4=;
-        b=rO/mlnMe0juAfrp+bwTQRotV7vZq/zI3lAtffatqC5TQNH/pvGh7BO8Zg1mwhSiLuP
-         nAOhvxQbk+J024E+foGtlb3HGRApBNrZ3YNdyYKQh1r0nE42MpQsfUh618NLoNZtrYxM
-         yiT0W1BLHFT59DBORdg2Pv26aem5o9RtDzX8zvHUa8KzqoxXPnScBGFjms9Ep9guXuib
-         Cdx4T5N/mygHPGNzKWn8xdamnB90TPS/exKzlGPDkVzRbewB7PiiTqsy9cry7nF3CP+2
-         j7hZIlwgSW4CGtUuuA5pDsScTV2qe9WD9kOWGtvYTVvoNy8Ipe5VbeTYsaX3gJ8q5mzf
-         GfCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684829816; x=1687421816;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uw6zfBHO0opEqODFwIHcb35ENxPJxB7I1/UM0FjZOR4=;
-        b=arLOV2ORi5LwuD2f9Nc2b90WZ4frbDImiaZerZj/VwB3+FH3HicRAOadQTJqJRrXaY
-         HU1oLXy/Hzpuq+RZjUFgzjWr/Dsu29YCvrUg1TaXOwjd3IA8GXJlpTiSNII1Yz5S0UHj
-         yzrKp9DoJ0CyTttqeZGEXop/KA76ohIHeKzJ51Xzc7NT1jAKgPX3z9yZvSZYbTn0ebpI
-         n4YWwrYDEq0DI/7Cl1PfrOyn14b7nRu6c3h8FJm2pI3eH24i+NL29Z9pv7cGO9VcLaR9
-         stBJwX9zsggUwMin8sAr2MxtBZlADlZ9bOQ6hx4Y2Rz/l1g+oHyp+kAW4GXXimLj0FHX
-         BUlg==
-X-Gm-Message-State: AC+VfDyR44h6Lx+araREERJJ81bYvjha+oHIrb5QPxRcITiQCLZ+nVHq
-        1erNBWLmeHwXcFxgtHQDd4mqKFHfQ8fczUmSIs0=
-X-Google-Smtp-Source: ACHHUZ5je+tCABEpT59rWVo/4tlBAhiBSx3eWKuptU/vYCax7CwZgnwKQkwyRKrX/EuvKpPExSEdGg==
-X-Received: by 2002:ac2:5d72:0:b0:4f3:bbfe:db4e with SMTP id h18-20020ac25d72000000b004f3bbfedb4emr2136125lft.56.1684828022062;
-        Tue, 23 May 2023 00:47:02 -0700 (PDT)
-Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
-        by smtp.gmail.com with ESMTPSA id t9-20020ac25489000000b004eb0c51780bsm1257070lfk.29.2023.05.23.00.47.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 00:47:01 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 23 May 2023 09:46:21 +0200
-Subject: [PATCH v5 10/12] iommu/arm-smmu-qcom: Sort the compatible list
- alphabetically
+        Tue, 23 May 2023 04:37:14 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF35BE47;
+        Tue, 23 May 2023 01:35:28 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N7N4gp000432;
+        Tue, 23 May 2023 07:49:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=qcppdkim1;
+ bh=C5RCb3DBpPeqbo3fxtcAA8qIzXb1DW+88OYyPdACG+k=;
+ b=LlQdxRPXVqxk3S1A/t6oMcSKeWPg4k5hqxgSj88j2Rjl+yQqZZt2vAyD4hPLVUf+fJ/G
+ rZE/7r48FJJUi20LRS4E/6dcDb9OkVDFqPJjeP0BkaRjSN/EvgJpuUbE+SZkFAAqkbQJ
+ cCytlziB/6tgQ58DOb9dHPgDuao7kcm76ck/WDwFhuhjnfgvglViQigmDzYp+zlbdTZZ
+ A0rzEetE8HZwqYyGnjnZVTG9iJgojE++V13H6/OOjIzA8F3GX7o8tmr9ZpO3Szk4BcW/
+ PIMAeRn0/CVBwXXhtfz1CQX6ccSofy2K8P6q71asuhVAO3Csyv4FACESShETxxzFrdx4 UQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qr8qra0yx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 07:49:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N7nAvw012078
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 07:49:10 GMT
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 23 May 2023 00:49:09 -0700
+Received: from nalasex01b.na.qualcomm.com ([fe80::a057:7d2:b40d:81d6]) by
+ nalasex01b.na.qualcomm.com ([fe80::a057:7d2:b40d:81d6%12]) with mapi id
+ 15.02.0986.042; Tue, 23 May 2023 00:49:09 -0700
+From:   "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
+To:     "krzk@kernel.org" <krzk@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
+        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>
+Subject: RE: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
+Thread-Topic: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
+Thread-Index: AQHZiWr4KiB/3yzZPk+lfwSX6G7z5K9ngxfQ
+Date:   Tue, 23 May 2023 07:49:09 +0000
+Message-ID: <fb3678d67fd4428eaec98365288384ed@quicinc.com>
+References: <20230518092719.11308-1-quic_tjiang@quicinc.com>
+In-Reply-To: <20230518092719.11308-1-quic_tjiang@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.45.109.133]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-topic-straitlagoon_mdss-v5-10-998b4d2f7dd1@linaro.org>
-References: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684828003; l=1026;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=Rc5Y2oI69X8xvGgWy74AqbUqZBcFJifSW/Zzw/OwQv0=;
- b=AxD88SslQYlSx+jDzVZY7fDCrbjY+DxcqY2OWDXBPIglsPSrTy+5sbTPXxbrAqbDZono0TRFx
- 8kqS2MfeoXfAzSUSXNSdhEehNfc1/lMYFLm6PLksmE0XSCcxYw8tQoV
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 684AyIU3oWLYxBl2Web_ePKl21SATIze
+X-Proofpoint-ORIG-GUID: 684AyIU3oWLYxBl2Web_ePKl21SATIze
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 phishscore=0
+ adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015
+ mlxlogscore=907 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230064
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It got broken at some point, fix it up.
+Hi krzk:
+  Could you help review this patch ?
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Regards.
+Tim
+
+
+-----Original Message-----
+From: Tim Jiang (QUIC) <quic_tjiang@quicinc.com>=20
+Sent: Thursday, May 18, 2023 5:27 PM
+To: krzk@kernel.org
+Cc: netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.k=
+ernel.org; Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Heman=
+t Gupta (QUIC) <quic_hemantg@quicinc.com>; Tim Jiang (QUIC) <quic_tjiang@qu=
+icinc.com>
+Subject: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
+
+Add bindings for the QCA2066 chipset.
+
+Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
 ---
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml   | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index c71afda79d64..3800ab478216 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -251,10 +251,10 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
- 	{ .compatible = "qcom,sc7280-mss-pil" },
- 	{ .compatible = "qcom,sc8180x-mdss" },
- 	{ .compatible = "qcom,sc8280xp-mdss" },
--	{ .compatible = "qcom,sm8150-mdss" },
--	{ .compatible = "qcom,sm8250-mdss" },
- 	{ .compatible = "qcom,sdm845-mdss" },
- 	{ .compatible = "qcom,sdm845-mss-pil" },
-+	{ .compatible = "qcom,sm8150-mdss" },
-+	{ .compatible = "qcom,sm8250-mdss" },
- 	{ }
- };
- 
-
--- 
-2.40.1
+diff --git a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluet=
+ooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-blueto=
+oth.yaml
+index 68f78b90d23a..28296b6d35b2 100644
+--- a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.ya=
+ml
++++ b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.ya=
+ml
+@@ -16,6 +16,7 @@ description:
+ properties:
+   compatible:
+     enum:
++      - qcom,qca2066-bt
+       - qcom,qca6174-bt
+       - qcom,qca9377-bt
+       - qcom,wcn3990-bt
+@@ -95,6 +96,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,qca2066-bt
+               - qcom,qca6174-bt
+     then:
+       required:
+--=20
+2.17.1
 
