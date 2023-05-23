@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE2170DC9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A97370DCA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236862AbjEWMbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S236878AbjEWMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236863AbjEWMbW (ORCPT
+        with ESMTP id S236863AbjEWMcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:31:22 -0400
+        Tue, 23 May 2023 08:32:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A516D126;
-        Tue, 23 May 2023 05:31:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B279D18E;
+        Tue, 23 May 2023 05:32:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33F5C631DA;
-        Tue, 23 May 2023 12:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4987C433EF;
-        Tue, 23 May 2023 12:31:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D82C63168;
+        Tue, 23 May 2023 12:32:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C644C43442;
+        Tue, 23 May 2023 12:32:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684845079;
-        bh=g2m24cQ4gdROItmruRoaFFe92RJLnSrCp+y/ymODJ8s=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=L+0fOCK34D1zmuin8Wl7I2gS8xbpwc+/hTe4sw9jiQW0h2b20dbAJPF0a34lmLh/F
-         XmrAxb1GibB/Dxs3YT6w0dZlJyUOmhUwbidEUmlevoXGzRk38O/ww9tnPxgB0HkyJl
-         ae0ROulk07UdRyR5wjzJ2IbmfQhdWXvdaGIfFRJfllboDOkuiBfNj3dUAQ1GESJcxR
-         2t2wxumoQwJTHLWFtHU/ZTtOholkBfcBLDm62TGI6it7X1TYjcZWCPeR9PnSccK4nH
-         MgoI7Mi7VM5x6dPhpms9OWUTA4srYIpad+p/SuyT8FPt59/rj/vNoR5hulsmjWYKZn
-         VSPTIjGlA+krQ==
-Date:   Tue, 23 May 2023 14:31:15 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
-Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
- working properly
-In-Reply-To: <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.2305231422180.29760@cbobk.fhfr.pm>
-References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info> <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info> <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com> <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
- <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info> <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        s=k20201202; t=1684845131;
+        bh=lIhkwbsmEFc9E7hGaujlmcd5yC5nfUtCpttTcD1F5eM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gMH854KaECDra+q5gU1RNsEYQQz9204GMZzxs4kEod0Y02NEzW5nh/L1uTbezAY9F
+         pHQmmA4Fpd2puQny+XrB7aj7kP9VEFUxPP9gFkzEw9w+bJaS3GgSM1hhFg/TBJLPIp
+         xBP9FxG6bZsAbgb+0VhSqf+G8RkYmFm2v9yHr9SxG0izrXH8Jc8sPLYByR3IfPcakQ
+         U9GnUu6fKTvDMdE0y5Wkgx7wvHnItOudOCbazWqxK7OpeaerKS29nWGe+cwz4s7lfA
+         CIANm1Wj0vYf6LKfRgf5mMWitWu/hUS8ATL06l+1LFSb/fFKMF0z18hqI3zkHMDoib
+         JAfGejGY+dqRA==
+Date:   Tue, 23 May 2023 14:32:06 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     aloktiagi <aloktiagi@gmail.com>
+Cc:     viro@zeniv.linux.org.uk, willy@infradead.org,
+        David.Laight@ACULAB.COM, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hch@infradead.org, tycho@tycho.pizza
+Subject: Re: [RFC v6 1/2] epoll: Implement eventpoll_replace_file()
+Message-ID: <20230523-unleserlich-impfen-e193df4b4b30@brauner>
+References: <20230523065802.2253926-1-aloktiagi@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230523065802.2253926-1-aloktiagi@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,73 +56,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023, Linus Torvalds wrote:
-
-> > FWIW, in case anybody is interested in a status update: one reporter
-> > bisected the problem down to 586e8fede79 ("HID: logitech-hidpp: Retry
-> > commands when device is busy"); reverting that commit on-top of 6.3
-> > fixes the problem for that reporter. For that reporter things also work
-> > on 6.4-rc; but for someone else that is affected that's not the case.
-
-FWIW, I was pretty much away for past few weeks as well, same as Benjamin 
-as Bastien. Which is unfortunate timing, but that's how things pan out 
-sometimes.
-
-> Hmm. It's likely timing-dependent.
+On Tue, May 23, 2023 at 06:58:01AM +0000, aloktiagi wrote:
+> Introduce a mechanism to replace a file linked in the epoll interface with a new
+> file.
 > 
-> But that code is clearly buggy.
+> eventpoll_replace() finds all instances of the file to be replaced and replaces
+> them with the new file and the interested events.
 > 
-> If the wait_event_timeout() returns early, the device hasn't replied,
-> but the code does
+> Signed-off-by: aloktiagi <aloktiagi@gmail.com>
+> ---
+> Changes in v6:
+>   - incorporate latest changes that get rid of the global epmutex lock.
 > 
->                 if (!wait_event_timeout(hidpp->wait, hidpp->answer_available,
->                                         5*HZ)) {
->                         dbg_hid("%s:timeout waiting for response\n", __func__);
->                         memset(response, 0, sizeof(struct hidpp_report));
->                         ret = -ETIMEDOUT;
->                 }
+> Changes in v5:
+>   - address review comments and move the call to replace old file in each
+>     subsystem (epoll, io_uring, etc.) outside the fdtable helpers like
+>     replace_fd().
 > 
-> and then continues to look at the response _anyway_.
-
-Yeah; we are zeroing it out, but that doesn't really make things any 
-better in principle, given all the dereferences later.
-
-The issue seems to be existing ever since 2f31c52529 ("HID: Introduce 
-hidpp, a module to handle Logitech hid++ devices") when this whole driver 
-was introduced, as far as I can tell.
-
-> Now, depending on out hardening options, that response may have been 
-> initialized by the compiler, or may just be random stack contents.
-
-Again, as in case of timeout the buffer is just zeroed out, I'd just much 
-more expect NULL pointer dereference in such case. Which is not what we 
-are seeing here.
-
-> That bug is pre-existing (ie the problem was not introduced by that 
-> commit), but who knows if the retry makes things worse (ie if it then 
-> triggers on a retry, the response data will be the *previous* response).
+> Changes in v4:
+>   - address review comment to remove the redundant eventpoll_replace() function.
+>   - removed an extra empty line introduced in include/linux/file.h
 > 
-> The whole "goto exit" games should be removed too, because we're in a
-> for-loop, and instead of "goto exit" it should just do "break".
+> Changes in v3:
+>   - address review comment and iterate over the file table while holding the
+>     spin_lock(&files->file_lock).
+>   - address review comment and call filp_close() outside the
+>     spin_lock(&files->file_lock).
+> ---
+>  fs/eventpoll.c            | 76 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/eventpoll.h |  8 +++++
+>  2 files changed, 84 insertions(+)
 > 
-> IOW, something like this might be worth testing.
-> 
-> That said, while I think the code is buggy, I doubt this is the actual
-> cause of the problem people are reporting. But it would be lovely to
-> hear if the attached patch makes any difference, and I think this is
-> fixing a real - but unlikely - problem anyway.
-> 
-> And obviously it might be helpful to actually enable those dbg_hid()
-> messages, but I didn't look at what the magic config option to do so
-> was.
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index 980483455cc0..9c7bffa8401b 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -973,6 +973,82 @@ void eventpoll_release_file(struct file *file)
+>  	spin_unlock(&file->f_lock);
+>  }
+>  
+> +static int ep_insert(struct eventpoll *ep, const struct epoll_event *event,
+> +			struct file *tfile, int fd, int full_check);
+> +
+> +/*
+> + * This is called from eventpoll_replace() to replace a linked file in the epoll
+> + * interface with a new file received from another process. This is useful in
+> + * cases where a process is trying to install a new file for an existing one
+> + * that is linked in the epoll interface
+> + */
+> +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd)
+> +{
+> +	struct file *to_remove = toreplace;
+> +	struct epoll_event event;
+> +	struct hlist_node *next;
+> +	struct eventpoll *ep;
+> +	struct epitem *epi;
+> +	int error = 0;
+> +	bool dispose;
+> +	int fd;
+> +
+> +	if (!file_can_poll(file))
+> +		return 0;
+> +
+> +	spin_lock(&toreplace->f_lock);
+> +	if (unlikely(!toreplace->f_ep)) {
+> +		spin_unlock(&toreplace->f_lock);
+> +		return 0;
+> +	}
+> +	hlist_for_each_entry_safe(epi, next, toreplace->f_ep, fllink) {
+> +		ep = epi->ep;
+> +		mutex_lock(&ep->mtx);
 
-dbg_hid() is just pr_debug(), which means that on kernels with 
-CONFIG_DYNAMIC_DEBUG, this makes use of the dynamic debug facility; 
-otherwsie it just becomes printk(KERN_DEBUG...).
+Afaict, you're under a spinlock and you're acquiring a mutex. The
+spinlock can't sleep (on non-rt kernels at least) but the mutex can.
 
-Thanks,
+> +		fd = epi->ffd.fd;
+> +		if (fd != tfd) {
+> +			mutex_unlock(&ep->mtx);
+> +			continue;
+> +		}
+> +		event = epi->event;
+> +		error = ep_insert(ep, &event, file, fd, 1);
+> +		mutex_unlock(&ep->mtx);
+> +		if (error != 0) {
+> +			break;
+> +		}
 
--- 
-Jiri Kosina
-SUSE Labs
-
+nit: we don't do { } around single lines.
