@@ -2,217 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D1B70E695
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8BE70E697
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237965AbjEWUhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
+        id S238180AbjEWUhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEWUhb (ORCPT
+        with ESMTP id S229473AbjEWUhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:37:31 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C52CA;
-        Tue, 23 May 2023 13:37:30 -0700 (PDT)
-Received: from [192.168.122.1] (84-115-214-73.cable.dynamic.surfer.at [84.115.214.73])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B748DCFB2A;
-        Tue, 23 May 2023 20:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1684874219; bh=R38mKTlIEZaX+EkDqWS8iS9Wk/v0TsXd/NEYgSra/8c=;
-        h=From:Date:Subject:To:Cc;
-        b=EOCUc0Q4qvUvFbAzxLmR603/vFPcOGFVcsl0/XcmhOpl8/b2t5Tv1zupRMhrJDLPY
-         +9uQhyxaT5pZvgCNf5Ry7ZDD41OLoIIXXZY/1fx5ClH1maDda+goqVK3yYAYEkUH++
-         YQs7BlbW+Vr97dgPMJTZ4quqSad3XtX0adF+t9d0=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Tue, 23 May 2023 22:36:49 +0200
-Subject: [PATCH v2] arm64: dts: qcom: msm8953: Add BLSP DMAs for I2C
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230422-msm8953-blsp-dma-v2-1-076134481b1b@z3ntu.xyz>
-X-B4-Tracking: v=1; b=H4sIAOAjbWQC/32NSwqDMBQAryJv3VeSp5LYlfcoLhKNNaBREhU/e
- PemHqDLGRjmhGC8NQFeyQnerDbY0UWgRwJ1p9zHoG0iAzFKWUaEQxhkkaeo+zBhMyjkXGQkhMy
- LliBmWgWD2itXdzF0S99HOXnT2u3+vKvInQ3z6Pd7u/Kf/XNYOXJkjDLJuNa5FOWRunl5bvsB1
- XVdXwIUz1XFAAAA
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4768; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=R38mKTlIEZaX+EkDqWS8iS9Wk/v0TsXd/NEYgSra/8c=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkbSPnn+FpHMtv8lr42Jv9XOxpmFE73h0zPeCJe
- Kv4kV2fpO+JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZG0j5wAKCRBy2EO4nU3X
- VnTqEACwGAqynXAtCHIasXn6bw6QuJP2M0Qxt+tgSirPTgzTziBLIDA07RmWq30u1LYXIrDBw3X
- o49t4JME2NqNA+IUtXyq8NLoZcXBoDAa8nAdmWROBoMuHSIuUA91IcZr9MXRN7OOScw6jKMYyU9
- mwIpGl4LJEkqdl5Qu2o4toB2I6aX2YfnTrK2l2yH9g412uh6fLgXvi3QZG+44vKotM8kTDwY5Ws
- NQMbROZjo7Q1MXslpnFg1ZmFip+YgTfoL10i9zfu5VnpnVMrFWaUw6dhQkon88chvKsnXnwtFzt
- pNJlUgGwHYJ+9350Sds1Q5JUvpTPOF7pxOi8x3Vpcyn/SeUw+I2aZBnrgwgy+4Elfki9a+cKAnX
- pPZkGMO57Is4iftavakxrCT13ZJUCUUd5CdD05lz51KNef2jHQVPsjMY6i5dDVC3BeMbdhbDknc
- UM7lg8oAQ/vpCj/2GnV55/pr+d+04sQtZhlmVDWqdTFkpv7PECya1cE7xDYiA0QLjVrHNrv54lh
- u5yMnPfnQiPvdyjibsdZG7mexpukivjQac73wG3b3Bq6kv3YvZcI0mXNwd6fNBDK0JUChZyCYeJ
- Wq48VGe6RwlXTkVkQEdt6xi9pXPUJkHNhbucrRwbGsxjrFM3Tc9bOB3ep4GWr/W26eZKqm27s2T
- nAXdYhdjxjS8ltQ==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 16:37:37 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A345DCA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:37:35 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 97711320039A;
+        Tue, 23 May 2023 16:37:31 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 23 May 2023 16:37:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684874251; x=1684960651; bh=k+
+        bwdQP9AGCGHKD++qZv5KMOabdeJ0JpVksfMHT8xqQ=; b=g60/YYiE2JmkqOBOUa
+        XY1qnShfctdB+wEArZbQpSLhHcZyqwcCUMjwHTqw05t3g63Ymx7kfjiWEWM4ryH/
+        QX67pkxSCtd9+iz3hQiaK0cIZH7EgJrbYd7L76Bu1iFroFmygo0oEt8DgU4AuX+Q
+        y0S9gr8VYvoB6OZsxufVjAACGbFGmjYbMPQiyoj+JPlNRtjZpgp6rzYQWEvUa6C/
+        W0XhB4M8rRm70IfJaO1VtTNVT6kpM4800mHA5rfCrrbwPN8hGvRNdZvCVkV9ZwwA
+        lq+Wuuqd0xmxskSyzlPCTuRhiK+pmfFMKhqQVMTQxOdxleMO0P18kkIY5rpD+g3D
+        AFZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684874251; x=1684960651; bh=k+bwdQP9AGCGH
+        KD++qZv5KMOabdeJ0JpVksfMHT8xqQ=; b=JDyznUMubiXFh8oJaXvwlfxCJWNSa
+        PnVs/XoD3hYJrb3FGcvkxKqbR7sWjQHwDk0eKf4k+BT8Z7a6wlYllN8yA20PcF67
+        tYTUDjSPg04DOX5pYPGpYmFCC9tlQ9J8wme85X/WqSRyjynju0aR/z0fZEKk1btg
+        nVdrIBtwvzImpuiE5xcpIQu0Or6pOI+inTFy34eCXWbhehA5hUoLQEkgGWIvaCJj
+        UKyEnH5zn8Nm8VZ/B8aj3rduZZ7VFhvvKIVGZ03ldiXT6k+ubie3SxCcXFWPCZNj
+        av+T6vdP6Vfd+hhThCeuoW+iPXSE9TtB3eB4tE2OZsYkXvQG5tExZncXQ==
+X-ME-Sender: <xms:CSRtZHI6Noe76T50p519ldksbvrDV-0PxOGO9iPOxffGnHtUXwp2AA>
+    <xme:CSRtZLJqp0-0DeNVg_ynRRmoq6vcljIYSjcx7iyNxPAW1wy4JbOoCdP6LIglITnrk
+    YDZebmspOrq_J7txdE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedgudeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:CSRtZPuxnAORlY84xEv5PojDG5wD_B_JKTeTU1zRZcFO3ICboxVbbg>
+    <xmx:CSRtZAa25lND9tAT-uTOiNxVL95gmUsJvEKE_RDFWXbHLC3mfcuAhQ>
+    <xmx:CSRtZOaokD6a31vcwJoFWzp1glAFv-iuBDh1XnCHBadw_OMjQIGAVg>
+    <xmx:CyRtZABNekMVVlF679HRCKNrTPSclHjooVT8oAogJ0hS-OVXfsHFaA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BE89CB60086; Tue, 23 May 2023 16:37:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <418f75d5-5acb-4eba-96a5-5f9ec7f963a6@app.fastmail.com>
+In-Reply-To: <35c82bbd-4c33-05da-1252-6eeec946ea22@oracle.com>
+References: <20230519092905.3828633-1-arnd@kernel.org>
+ <35c82bbd-4c33-05da-1252-6eeec946ea22@oracle.com>
+Date:   Tue, 23 May 2023 22:37:09 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Juergen Gross" <jgross@suse.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Stefano Stabellini" <sstabellini@kernel.org>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] x86: xen: add missing prototypes
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MSM8953 has two DMA controllers for the various I2C, SPI and UART
-busses. Add the nodes and configure all the I2C nodes so that the driver
-can use the DMA.
+On Sat, May 20, 2023, at 00:24, Boris Ostrovsky wrote:
+> On 5/19/23 5:28 AM, Arnd Bergmann wrote:
+>
+>> diff --git a/arch/x86/xen/smp.h b/arch/x86/xen/smp.h
+>> index 22fb982ff971..81a7821dd07f 100644
+>> --- a/arch/x86/xen/smp.h
+>> +++ b/arch/x86/xen/smp.h
+>> @@ -1,7 +1,11 @@
+>>   /* SPDX-License-Identifier: GPL-2.0 */
+>>   #ifndef _XEN_SMP_H
+>>   
+>> +void asm_cpu_bringup_and_idle(void);
+>> +asmlinkage void cpu_bringup_and_idle(void);
+>
+> These can go under CONFIG_SMP
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-Changes in v2:
-- Fix subject line, add "msm8953" (thanks Alexey)
-- Pick up tags
-- Link to v1: https://lore.kernel.org/r/20230422-msm8953-blsp-dma-v1-1-0024801bb587@z3ntu.xyz
----
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 48 +++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Not sure if there is much point for the second one, since
+it's only called from assembler, so the #else path is
+never seen, but I can do that for consistency if you
+like.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index 602cb188a635..c9b589353918 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -1274,6 +1274,19 @@ opp-200000000 {
- 			};
- 		};
- 
-+		blsp1_dma: dma-controller@7884000 {
-+			compatible = "qcom,bam-v1.7.0";
-+			reg = <0x07884000 0x1f000>;
-+			interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc GCC_BLSP1_AHB_CLK>;
-+			clock-names = "bam_clk";
-+			num-channels = <12>;
-+			#dma-cells = <1>;
-+			qcom,ee = <0>;
-+			qcom,num-ees = <4>;
-+			qcom,controlled-remotely;
-+		};
-+
- 		uart_0: serial@78af000 {
- 			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
- 			reg = <0x078af000 0x200>;
-@@ -1292,6 +1305,8 @@ i2c_1: i2c@78b5000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP1_QUP1_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
-+			dmas = <&blsp1_dma 4>, <&blsp1_dma 5>;
-+			dma-names = "tx", "rx";
- 
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_1_default>;
-@@ -1310,6 +1325,8 @@ i2c_2: i2c@78b6000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
-+			dmas = <&blsp1_dma 6>, <&blsp1_dma 7>;
-+			dma-names = "tx", "rx";
- 
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_2_default>;
-@@ -1328,6 +1345,9 @@ i2c_3: i2c@78b7000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
-+			dmas = <&blsp1_dma 8>, <&blsp1_dma 9>;
-+			dma-names = "tx", "rx";
-+
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_3_default>;
- 			pinctrl-1 = <&i2c_3_sleep>;
-@@ -1345,6 +1365,9 @@ i2c_4: i2c@78b8000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
-+			dmas = <&blsp2_dma 10>, <&blsp2_dma 11>;
-+			dma-names = "tx", "rx";
-+
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_4_default>;
- 			pinctrl-1 = <&i2c_4_sleep>;
-@@ -1355,6 +1378,19 @@ i2c_4: i2c@78b8000 {
- 			status = "disabled";
- 		};
- 
-+		blsp2_dma: dma-controller@7ac4000 {
-+			compatible = "qcom,bam-v1.7.0";
-+			reg = <0x07ac4000 0x1f000>;
-+			interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc GCC_BLSP2_AHB_CLK>;
-+			clock-names = "bam_clk";
-+			num-channels = <12>;
-+			#dma-cells = <1>;
-+			qcom,ee = <0>;
-+			qcom,num-ees = <4>;
-+			qcom,controlled-remotely;
-+		};
-+
- 		i2c_5: i2c@7af5000 {
- 			compatible = "qcom,i2c-qup-v2.2.1";
- 			reg = <0x07af5000 0x600>;
-@@ -1362,6 +1398,9 @@ i2c_5: i2c@7af5000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP2_QUP1_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP2_AHB_CLK>;
-+			dmas = <&blsp2_dma 4>, <&blsp2_dma 5>;
-+			dma-names = "tx", "rx";
-+
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_5_default>;
- 			pinctrl-1 = <&i2c_5_sleep>;
-@@ -1379,6 +1418,9 @@ i2c_6: i2c@7af6000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP2_QUP2_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP2_AHB_CLK>;
-+			dmas = <&blsp2_dma 6>, <&blsp2_dma 7>;
-+			dma-names = "tx", "rx";
-+
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_6_default>;
- 			pinctrl-1 = <&i2c_6_sleep>;
-@@ -1396,6 +1438,9 @@ i2c_7: i2c@7af7000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP2_QUP3_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP2_AHB_CLK>;
-+			dmas = <&blsp2_dma 8>, <&blsp2_dma 9>;
-+			dma-names = "tx", "rx";
-+
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_7_default>;
- 			pinctrl-1 = <&i2c_7_sleep>;
-@@ -1413,6 +1458,9 @@ i2c_8: i2c@7af8000 {
- 			clock-names = "core", "iface";
- 			clocks = <&gcc GCC_BLSP2_QUP4_I2C_APPS_CLK>,
- 				 <&gcc GCC_BLSP2_AHB_CLK>;
-+			dmas = <&blsp2_dma 10>, <&blsp2_dma 11>;
-+			dma-names = "tx", "rx";
-+
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&i2c_8_default>;
- 			pinctrl-1 = <&i2c_8_sleep>;
+I generally prefer to avoid the extra #if checks
+when there is no strict need for an empty stub.
 
----
-base-commit: 99e988f2970e39d0859908c3adc2ff689172496a
-change-id: 20230422-msm8953-blsp-dma-1174277859f2
+I guess you also want me to add the empty stubs for the
+other functions that only have a bit in #ifdef but not
+#else then?
 
-Best regards,
--- 
-Luca Weiss <luca@z3ntu.xyz>
+>> +void xen_force_evtchn_callback(void);
+>
+> These ...
+>
+>> +pteval_t xen_pte_val(pte_t pte);
+>> +pgdval_t xen_pgd_val(pgd_t pgd);
+>> +pte_t xen_make_pte(pteval_t pte);
+>> +pgd_t xen_make_pgd(pgdval_t pgd);
+>> +pmdval_t xen_pmd_val(pmd_t pmd);
+>> +pmd_t xen_make_pmd(pmdval_t pmd);
+>> +pudval_t xen_pud_val(pud_t pud);
+>> +pud_t xen_make_pud(pudval_t pud);
+>> +p4dval_t xen_p4d_val(p4d_t p4d);
+>> +p4d_t xen_make_p4d(p4dval_t p4d);
+>> +pte_t xen_make_pte_init(pteval_t pte);
+>> +void xen_start_kernel(struct start_info *si);
+>
+>
+> ... should go under '#ifdef CONFIG_XEN_PV'
 
+What should the stubs do here? I guess just return the
+unmodified value?
+
+    Arnd
