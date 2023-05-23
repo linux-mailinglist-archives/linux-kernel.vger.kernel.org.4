@@ -2,117 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50AF70E241
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B5070E217
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237637AbjEWQmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S237599AbjEWQdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjEWQmN (ORCPT
+        with ESMTP id S234390AbjEWQdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:42:13 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEEBE9;
-        Tue, 23 May 2023 09:42:12 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-19a16355c51so5416964fac.0;
-        Tue, 23 May 2023 09:42:12 -0700 (PDT)
+        Tue, 23 May 2023 12:33:01 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE6A192;
+        Tue, 23 May 2023 09:32:55 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6af6b6837acso2284903a34.1;
+        Tue, 23 May 2023 09:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684860131; x=1687452131;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7IhlLUomDZt1o19VFYJsKL4i2eF/CFk4flQyr7NsxSo=;
-        b=MMf0iQkrx/+n6tsEc26eBYnhu3NARXoUERX1UnQwbIQ/brBtPGyRi14+Ww7ncmk56v
-         D+4FY7rGBb7ICVjyt83Qw8g+HrBxu3/U19CA/sXBbwd1naCtU3ksx5DNOVt8jGCDNFOp
-         vOhQy3NH+1TLUNTiQsrsfq99uNFOkqlzTAEnbcGLsaqAe3Ww/GvRZMZVRfoDL2qjGngD
-         8T0p9vzjiP9VRUcB4LCk77GU8FJo/KfrXHGid3fzNHxXbRfbIHjzzaTe3SnLigrau3Qz
-         wP3S2hMDNPkJOKaox2IA8hBv7pw096sMawMVP3wXCYSM65tD3qgiqM67dTqitpM4yoh9
-         YE8A==
+        d=gmail.com; s=20221208; t=1684859574; x=1687451574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gPezlvdKhV+coJaauiTgwhI+5Pzq8mi1EoTAVT+O2ts=;
+        b=lVNeG+5Eyg9uJXCOL/rNQ6fySKIAPy/y9LvgrHrpZica5FHk0YiiV6ALtlDQHu3fZa
+         oq+v+FzZmArma8i5i95WxN5ufCjpW4sEA4SymafCkw1ypAXTac3CSYn1vvHMyheNvWiF
+         dv69+QGNWjIsmy/2yytJNuJTJILsXgEH9Q7htfd7E9g7Z63ZNnZSuab0Cr5hpVDbElzK
+         i5HMpDhXNFsOk/VLxtAalVvPBW7dafxKTav0bUEKhGgHlg14yEkZaG7b5XP0BP+yMnqW
+         E3Qo1RKFDPyzmuYLj9EKsvzg39D7A+kM1dogbMXkgIBGkMMaFaUZImKjC0lwclrktiJj
+         lDTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684860131; x=1687452131;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7IhlLUomDZt1o19VFYJsKL4i2eF/CFk4flQyr7NsxSo=;
-        b=ELREnjLE1vBSWqRBlwzOOL55Wk/QLkpTKsUVcoHYOohnM+dn9BHXa46CWJdndNC9q5
-         CaZGC7Fm+CfuHkTtGa3BwHSIC6Y/jQQkosovmvC/LdP3WcQd2T35gkiXcfK2QPLmjrLI
-         vQRwyvNnOzb2gHMyXsVERO1ziKZ5icXnUzF5zi1WyhKzzJrCpVub8mxmJQ9hwYeAMU5L
-         TRE1yRz0CDH4EKI4ri+C1Jm8sN2th3CrUUEuk+UiohxXFvbHs+Xu09UTPtEJsqslhc/G
-         wQVjJhroH7/CgMJ/eJW07YLBD8ZZWJVcAiwZveKiTLlNcCUMXHt/3NJmUh2cwd90hM+x
-         RIfQ==
-X-Gm-Message-State: AC+VfDy57DqZRGKngS1cOtYB0y3Jcbsz2dEhteSQKLaO/XDfUDXkMOIy
-        +o6f7tmxZ4PMQfTDEHRDA/c=
-X-Google-Smtp-Source: ACHHUZ54MIOmyW2xqymcK594+bszkCG9ijALhXQ1lqcxnkM1JXf9gC7QoEgV307dnZnEl+ggpJw/wg==
-X-Received: by 2002:a05:6871:585:b0:192:b3f7:9325 with SMTP id u5-20020a056871058500b00192b3f79325mr7074664oan.47.1684860131171;
-        Tue, 23 May 2023 09:42:11 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id y4-20020a056870a34400b0018b22156e84sm446680oak.38.2023.05.23.09.42.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 09:42:10 -0700 (PDT)
-Message-ID: <0b52529c-5570-bfe8-eb53-f51ae00c2e05@gmail.com>
-Date:   Tue, 23 May 2023 13:31:12 -0300
+        d=1e100.net; s=20221208; t=1684859574; x=1687451574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gPezlvdKhV+coJaauiTgwhI+5Pzq8mi1EoTAVT+O2ts=;
+        b=C2LBbtPIYr78v1UAmTNsXKWuzmG0K8Sz75RgsKDvz8ui2tMw1fv3CJegh8UAJVHpNi
+         vAupZMFpOX+tgUWrKPQgzHh8mttnbezAHm+sOx5GExdyRr7JxP1RKTpB8/2fenC9Bigo
+         malqoMRY04NKh9inhMAFIUqFHiWTOCp808UC1bzjBqESMz/JSRk0eVPc9si7l5ZioZOn
+         Sseynz8i9WZxIEJBxduXzLJfiNmQcspBLVX6CgT+meYVNl98uoE2vJujx/Xjzt0KBi/F
+         RAdbf5f11z4bdXZCQTXf3/DV3dU8sPntz9YT9uKUuW5qfhVO2Xm9i3j0vv27sjbs/i0/
+         0cmA==
+X-Gm-Message-State: AC+VfDzM1TMC3uHbFDwoIJ1HThIRXBnB/cZWtnHFf7KN/j4tivDvrzWL
+        UBMNsbF8bgYIW5ssPpTniEiJXp/pEKY2RPHGMQg=
+X-Google-Smtp-Source: ACHHUZ7agrWpvbSwDULewkv3+90ipL/mriVjj2Uo2kBIiVTM37EaF7RgSxdtRpG+ZXoGAvRSFmZrjP9k79UbMEZ7nXU=
+X-Received: by 2002:a54:4003:0:b0:398:349:aa8d with SMTP id
+ x3-20020a544003000000b003980349aa8dmr4578796oie.28.1684859574251; Tue, 23 May
+ 2023 09:32:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/4] rust: specify when `ARef` is thread safe
-Content-Language: en-US
-To:     Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
+References: <20230517152654.7193-1-mathieu.desnoyers@efficios.com>
+ <20230517152654.7193-2-mathieu.desnoyers@efficios.com> <CAFUsyfJ49mE+7p1ywEHetRHqr=DWY7aiFYzfva9Mtqp3_XYncg@mail.gmail.com>
+ <cdac8821-a298-aced-8084-8da3ba64a1be@efficios.com>
+In-Reply-To: <cdac8821-a298-aced-8084-8da3ba64a1be@efficios.com>
+From:   Noah Goldstein <goldstein.w.n@gmail.com>
+Date:   Tue, 23 May 2023 11:32:40 -0500
+Message-ID: <CAFUsyf+L6JF=pZ6QstQhdGGPVM7e7ML2a5LEbzmP6sTs3cwJng@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/4] rseq: Add sched_state field to struct rseq
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Andreas Hindborg <a.hindborg@samsung.com>
-References: <20230523144418.1250547-1-aliceryhl@google.com>
- <20230523144418.1250547-4-aliceryhl@google.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230523144418.1250547-4-aliceryhl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        libc-alpha@sourceware.org, Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Florian Weimer <fweimer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 11:44, Alice Ryhl wrote:
-> An `ARef` behaves just like the `Arc` when it comes to thread safety, so
-> we can reuse the thread safety comments from `Arc` here.
-> 
-> This is necessary because without this change, the Rust compiler will
-> assume that things are not thread safe even though they are.
-> 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
-> [...]
->   
-> +// SAFETY: It is safe to send `ARef<T>` to another thread when the underlying `T` is `Sync` because
-> +// it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally, it needs
-> +// `T` to be `Send` because any thread that has an `ARef<T>` may ultimately access `T` using a
-> +// mutable reference, for example, when the reference count reaches zero and `T` is dropped.
-> +unsafe impl<T: AlwaysRefCounted + Sync + Send> Send for ARef<T> {}
-> +
-> +// SAFETY: It is safe to send `&ARef<T>` to another thread when the underlying `T` is `Sync`
-> +// because it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally,
-> +// it needs `T` to be `Send` because any thread that has a `&ARef<T>` may clone it and get an
-> +// `ARef<T>` on that thread, so the thread may ultimately access `T` using a mutable reference, for
-> +// example, when the reference count reaches zero and `T` is dropped.
-> +unsafe impl<T: AlwaysRefCounted + Sync + Send> Sync for ARef<T> {}
-> +
->   impl<T: AlwaysRefCounted> ARef<T> {
->       /// Creates a new instance of [`ARef`].
->       ///
+On Tue, May 23, 2023 at 7:49=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> On 2023-05-19 16:51, Noah Goldstein wrote:
+> > On Wed, May 17, 2023 at 10:28=E2=80=AFAM Mathieu Desnoyers via Libc-alp=
+ha
+> > <libc-alpha@sourceware.org> wrote:
+> >>
+> >> Expose the "on-cpu" state for each thread through struct rseq to allow
+> >> adaptative mutexes to decide more accurately between busy-waiting and
+> >> calling sys_futex() to release the CPU, based on the on-cpu state of t=
+he
+> >> mutex owner.
+> >>
+> >> It is only provided as an optimization hint, because there is no
+> >> guarantee that the page containing this field is in the page cache, an=
+d
+> >> therefore the scheduler may very well fail to clear the on-cpu state o=
+n
+> >> preemption. This is expected to be rare though, and is resolved as soo=
+n
+> >> as the task returns to user-space.
+> >>
+> >> The goal is to improve use-cases where the duration of the critical
+> >> sections for a given lock follows a multi-modal distribution, preventi=
+ng
+> >> statistical guesses from doing a good job at choosing between busy-wai=
+t
+> >> and futex wait behavior.
+> >>
+> >> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> >> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> >> Cc: Jonathan Corbet <corbet@lwn.net>
+> >> Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
+> >> Cc: Carlos O'Donell <carlos@redhat.com>
+> >> Cc: Florian Weimer <fweimer@redhat.com>
+> >> Cc: libc-alpha@sourceware.org
+> >> ---
+> >>   include/linux/sched.h     | 12 ++++++++++++
+> >>   include/uapi/linux/rseq.h | 17 +++++++++++++++++
+> >>   kernel/rseq.c             | 14 ++++++++++++++
+> >>   3 files changed, 43 insertions(+)
+> >>
+> >> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> >> index eed5d65b8d1f..c7e9248134c1 100644
+> >> --- a/include/linux/sched.h
+> >> +++ b/include/linux/sched.h
+> >> @@ -2351,11 +2351,20 @@ static inline void rseq_signal_deliver(struct =
+ksignal *ksig,
+> >>          rseq_handle_notify_resume(ksig, regs);
+> >>   }
+> >>
+> >> +void __rseq_set_sched_state(struct task_struct *t, unsigned int state=
+);
+> >> +
+> >> +static inline void rseq_set_sched_state(struct task_struct *t, unsign=
+ed int state)
+> >> +{
+> >> +       if (t->rseq)
+> >> +               __rseq_set_sched_state(t, state);
+> >> +}
+> >> +
+> >>   /* rseq_preempt() requires preemption to be disabled. */
+> >>   static inline void rseq_preempt(struct task_struct *t)
+> >>   {
+> >>          __set_bit(RSEQ_EVENT_PREEMPT_BIT, &t->rseq_event_mask);
+> >>          rseq_set_notify_resume(t);
+> >> +       rseq_set_sched_state(t, 0);
+> >
+> > Should rseq_migrate also be made to update the cpu_id of the new core?
+> > I imagine the usage of this will be something along the lines of:
+> >
+> > if(!on_cpu(mutex->owner_rseq_struct) &&
+> >     cpu(mutex->owner_rseq_struct) =3D=3D this_threads_cpu)
+> >     // goto futex
+> >
+> > So I would think updating on migrate would be useful as well.
+>
+> I don't think we want to act differently based on the cpu on which the
+> owner is queued.
+>
+> If the mutex owner is not on-cpu, and queued on the same cpu as the
+> current thread, we indeed want to call sys_futex WAIT.
+>
+> If the mutex owner is not on-cpu, but queued on a different cpu than the
+> current thread, we *still* want to call sys_futex WAIT, because
+> busy-waiting for a thread which is queued but not currently running is
+> wasteful.
+>
+I think this is less clear. In some cases sure but not always. Going
+to the futex
+has more latency that userland waits, and if the system is not busy (other =
+than
+the one process) most likely less latency that yield. Also going to the fut=
+ex
+requires a syscall on unlock.
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+For example if the critical section is expected to be very small, it
+would be easy
+to imagine the lock be better implemented with:
+while(is_locked)
+  if (owner->on_cpu || owner->cpu !=3D my_cpu)
+    exponential backoff
+  else
+    yield
+
+Its not that "just go to futex" doesn't ever make sense, but I don't
+think its fair
+to say that *always* the case.
+
+Looking at the kernel code, it doesn't seem to be a particularly high cost =
+to
+keep the CPU field updated during migration so seems like a why not
+kind of question.
+> Or am I missing something ?
+>
+> Thanks,
+>
+> Mathieu
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
+>
