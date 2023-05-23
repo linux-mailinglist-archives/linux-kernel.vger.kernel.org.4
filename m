@@ -2,161 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF57370D8CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ECE70D8DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236185AbjEWJVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
+        id S235608AbjEWJXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbjEWJVB (ORCPT
+        with ESMTP id S233035AbjEWJXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:21:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E77126
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684833613;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fn6/Mg38CazICzLvvCRl9KTjMS04MbP9e/f9SZahjis=;
-        b=Givdtjht+aKKBB8Vr63U4tcEgt1hs7HdgR1SmJz/5zrBebelP8GExms3UNSVVxQOKaG8Qy
-        ukQtNc+l1vj2vFnlW29YVxq5rG2Jlm3QYhPm2xASS9cmE3n0gHU2wNKW7/YdVbydlbDU0/
-        UsxTniXWevPNMeJiDmiydvHTAcsBRg8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-VUKuREUuMKiiZ2Xt7IBIew-1; Tue, 23 May 2023 05:20:06 -0400
-X-MC-Unique: VUKuREUuMKiiZ2Xt7IBIew-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-96fd3757bd1so288458066b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:20:05 -0700 (PDT)
+        Tue, 23 May 2023 05:23:16 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BFA94
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:23:14 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d1e96c082so3995799b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684833794; x=1687425794;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4HOxSRVzApR+fbfYRlO7PRlpChvkHSAVFcm4uggedBs=;
+        b=iaEizCq0VZC4u5Q782TovPcJYy0mzXSh3W6Sk0W22Q+IN54LAhDeZ4HJjO668yQ9kU
+         6QMBSelAOI/ocM7KF3w2hqiByjnTyucJVk1oTWAYoK+ZqSD00d6pTD5pMWieffLB+6b2
+         N9/ppSzVN0UMd9fprtWTWNOHdrXvs++ir23PjChMfO1b/BZ6otdYxvTqaOjftGDihLiM
+         Ij1l9C7umjE77Go13xepmKSwGJil/VMBi5pZsmAyXaHC0uDk8pxykzrcmXLCj2yAQo0u
+         iqQaOV+ItLpQ4dMPGkRqkJS4rnNPbRMUm5ZuckC+ZPL/qxXdkLGmSoMFJuecj10621n4
+         ZuQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684833605; x=1687425605;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fn6/Mg38CazICzLvvCRl9KTjMS04MbP9e/f9SZahjis=;
-        b=lCSJxcSt8kM9dkTkz+H0mOQRdeUGmoIfyO4FnUWlb9VNBy6CJKEswhYUwt4uailvhL
-         hOAVQ7gSOtVKSlggyQLtTo1xPrXSK0GuMP067Q7sJoKT6bvVWEoMTf16k4LnstOmukZb
-         7xlSVZZpZQ/+4x4RnE1aUgg1/+CEYoNx5QGexNG1nYQ3ugJL6uwJQoIsYcXaGtt/DIub
-         +jxee3VzFPoaKN6vS/v7iMef/IFqCZhTInu4XQA10lg0p99hCD5Wd4M0VeTUEakBZscf
-         niWRriHeg7J7RwZycdk2tQjPEsQLnqAohzq6r7uQ7BugoSrqsXeg6XOHrF3Q07E3Yjhh
-         XN2g==
-X-Gm-Message-State: AC+VfDzeTgRk8Ws2Ewd3QoPWHaSzewayYG8k1Gm7Q0vHd6vsKv67/jIm
-        KpLk2HRAK9m0WumtkHeJ0QfwKxk2s3Htv7ds+wzLCEtIdvA1jvdEGijqXrsDsyljVhPwEiwXAqO
-        +OxObMQ/FNLhOOYKOXsBkSxOB
-X-Received: by 2002:a17:906:dc90:b0:96f:cf04:82a3 with SMTP id cs16-20020a170906dc9000b0096fcf0482a3mr7124246ejc.70.1684833604953;
-        Tue, 23 May 2023 02:20:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5QVxXgvr8hupi6y88smfN74RETs+4H065rSKm8uwDXUIIaBa/cxhH4Mj1EY+5no2GOcncMNA==
-X-Received: by 2002:a17:906:dc90:b0:96f:cf04:82a3 with SMTP id cs16-20020a170906dc9000b0096fcf0482a3mr7124217ejc.70.1684833604525;
-        Tue, 23 May 2023 02:20:04 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id y2-20020a170906914200b0094e597f0e4dsm4152574ejw.121.2023.05.23.02.20.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 02:20:03 -0700 (PDT)
-Message-ID: <2fae3c48-c9d6-7251-1692-7365f9d0cfa7@redhat.com>
-Date:   Tue, 23 May 2023 11:20:03 +0200
+        d=1e100.net; s=20221208; t=1684833794; x=1687425794;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4HOxSRVzApR+fbfYRlO7PRlpChvkHSAVFcm4uggedBs=;
+        b=iEd7p8dONlqlHBkJMNxmFRIdoBZC2p38s3ZcRruQYxHIynW+cv7AadSKxzli+Uk84n
+         LGZykhe7RrIgjfpuHGxcb+gTVLqmDcMFZQxpQA2iQsUJlhAQuKqvSC085sZxKCWBe+KZ
+         +rsR2PYKsbqtAjMpAtUW16B9MmYaGldSgJ2t3l+6fhhVKW8jyrGeoOP4TruNQ8+bgghX
+         Rm90fEIto92VzUrqjaqAGHNpNN6olqgbNW652cK2MQ5zamzksVyW+P+P3+qa/zIlYYnt
+         SnQGwdhIXS4hq+5sKV9QO+Xcf+lvcFY2L09TcFJqvx0uvKEPF3l6VxM1hy59oPopZgDh
+         tXvQ==
+X-Gm-Message-State: AC+VfDyUyyAjlXr7qmz4fqvlHe5dXyW16APO4w+ydWzHbYBw7jePt9EG
+        5ydX3HW29JSy82Gzk5sANRdw2mck5Y1Kzp2JRemw7w==
+X-Google-Smtp-Source: ACHHUZ5fiQT4DuQNkuyic2VbhzXC8m+KqeEYi6rdxbT+J5NY7Mnv2b78Rt10tVJYmpfcZQsHtIxxVuwOSMFE1g+c+QU=
+X-Received: by 2002:a05:6a20:12c7:b0:10c:41a6:ac1f with SMTP id
+ v7-20020a056a2012c700b0010c41a6ac1fmr3546948pzg.16.1684833793507; Tue, 23 May
+ 2023 02:23:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-Content-Language: en-US, nl
-To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
-        oe-lkp@lists.linux.dev, lkp@intel.com, peterz@infradead.org,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        p.rosenberger@kunbus.com
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
- <20230523074443.GA21236@wunner.de>
- <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230505152440.142265-1-hongyan.xia2@arm.com> <20230518113000.pvboekaba7vspjyn@airbuntu>
+ <8035fedb-820b-2a98-a1af-3a4a8971bcd1@arm.com>
+In-Reply-To: <8035fedb-820b-2a98-a1af-3a4a8971bcd1@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 23 May 2023 11:23:02 +0200
+Message-ID: <CAKfTPtAmV-0+2D5d8-CyQcowaFhWCB=C5xEUoEb0g1ObpmdegQ@mail.gmail.com>
+Subject: Re: [PATCH] sched/documentation: elaborate on uclamp limitations
+To:     Hongyan Xia <hongyan.xia2@arm.com>
+Cc:     Qais Yousef <qyousef@layalina.io>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 18 May 2023 at 14:42, Hongyan Xia <hongyan.xia2@arm.com> wrote:
+>
+> Hi Qais,
+>
+> On 2023-05-18 12:30, Qais Yousef wrote:
+> > Please CC sched maintainers (Ingo + Peter) next time as they should pick this
+> > up ultimately and they won't see it from the list only.
+>
+> Will do. I was using the get_maintainers script and I thought that gave
+> me all the CCs.
+>
+> > On 05/05/23 16:24, Hongyan Xia wrote:
+> >> The story in 5.2 about util_avg abruptly jumping from 300 when
+> >> Fmax/Fmin == 3 to 1024 when Fmax/Fmin == 4 hides some details about how
+> >> clock_pelt works behind the scenes. Explicitly mention it to make it
+> >> easier for readers to follow.
+> >>
+> >> Signed-off-by: Hongyan Xia <hongyan.xia2@arm.com>
+> >> Cc: Qais Yousef <qyousef@layalina.io>
+> >> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> >> ---
+> >>   Documentation/scheduler/sched-util-clamp.rst | 17 +++++++++++++++++
+> >>   1 file changed, 17 insertions(+)
+> >>
+> >> diff --git a/Documentation/scheduler/sched-util-clamp.rst b/Documentation/scheduler/sched-util-clamp.rst
+> >> index 74d5b7c6431d..524df07bceba 100644
+> >> --- a/Documentation/scheduler/sched-util-clamp.rst
+> >> +++ b/Documentation/scheduler/sched-util-clamp.rst
+> >> @@ -669,6 +669,19 @@ but not proportional to Fmax/Fmin.
+> >>
+> >>           p0->util_avg = 300 + small_error
+> >>
+> >> +The reason why util_avg is around 300 even though it runs for 900 at Fmin is:
 
-On 5/23/23 11:14, Péter Ujfalusi wrote:
-> 
-> 
-> On 23/05/2023 10:44, Lukas Wunner wrote:
->> On Tue, May 23, 2023 at 09:48:23AM +0300, Péter Ujfalusi wrote:
->>> On 22/05/2023 17:31, Lino Sanfilippo wrote:
->> [...]
->>> This looked promising, however it looks like the UPX-i11 needs the DMI
->>> quirk.
->>
->> Why is that?  Is there a fundamental problem with the patch or is it
->> a specific issue with that device?
-> 
-> The flood is not detected (if there is a flood at all), interrupt stops
-> working after about 200 interrupts - in the latest boot at 118th.
-> I can check this later, likely tomorrow.
-> 
->>>> --- a/drivers/char/tpm/tpm_tis_core.c
->>>> +++ b/drivers/char/tpm/tpm_tis_core.c
->>>> @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
->>>>  	return status == TPM_STS_COMMAND_READY;
->>>>  }
->>>>  
->>>> +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
->>>> +{
->>>> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->>>> +	int intmask = 0;
->>>> +
->>>> +	dev_err(&chip->dev, HW_ERR
->>>> +		"TPM interrupt storm detected, polling instead\n");
->>>
->>> Should this be dev_warn or even dev_info level?
->>
->> The corresponding message emitted in tpm_tis_core_init() for
->> an interrupt that's *never* asserted uses dev_err(), so using
->> dev_err() here as well serves consistency:
->>
->> 	dev_err(&chip->dev, FW_BUG
->> 		"TPM interrupt not working, polling instead\n");
->>
->> That way the same severity is used both for the never asserted and
->> the never deasserted interrupt case.
-> 
-> Oh, OK.
-> Is there anything the user can do to have a ERROR less boot?
+What does it mean running for 900 at Fmin ? util_avg is a ratio in the
+range [0:1024] without time unit
 
-That is a good point. Even though the typical dmesg has at least some false-positive error messages I believe we should still strive to not log errors in cases where there is not e.g. an actual error which the user needs to care about (e.g. disk IO errors).
+> >> +Although running at Fmin reduces the rate of rq_clock_pelt() to 1/3 thus
+> >> +accumulates util_sum at 1/3 of the rate at Fmax, the clock period
+> >> +(rq_clock_pelt() now minus previous rq_clock_pelt()) in:
+> >> +
+> >> +::
+> >> +
+> >> +        util_sum / clock period = util_avg
 
-Usually in similar cases like this, where we are basically correcting for firmware bugs (1) we use:
+I don't get the meaning of the formula above ? There is no "clock
+period" (although I'm not sure what it means here) involved when
+computing util_avg
 
-	dev_warn(dev, FW_BUG "...", ...);
+Also, there is no linear relation between util_avg and Fmin/Fmax
+ratio. Fmin/Fmax ratio is meaningful in regards to the ratio between
+running time and period time of a periodic task. I understand the
+reference of pelt in this document as a quite simplified description
+of PELT so I'm not sure that adding a partial explanation will help.
+It will probably cause more confusion to people. The only thing that
+is sure, is that PELT expects some idle time to stay fully invariant
+for periodic task
 
-maybe we should switch both messages here to this ?
+> >> +
+> >> +does not shrink to 1/3, since rq->clock_pelt is periodically synchronized with
+> >> +rq->clock_task as long as there's idle time. As a result, we get util_avg of
+> >> +about 300, not 900.
+> >> +
+> >
+> > I feel neutral about these changes. It does answer some questions, but poses
+> > more questions like what is clock_pelt. So we might end up in recursive
+> > regression of explaining the explanation.
+> >
+> > I don't think we have a doc about clock_pelt. Worth adding one and just add
+> > a reference to it from here for those interested in understanding more details
+> > on why we need to go to idle to correct util_avg? I think our code has
+> > explanation, a reference to update_rq_clock_pelt() might suffice too.
+> >
+> > Vincent, do you have an opinion here?
+>
+> Sounds reasonable. I don't mind drafting a doc or just a couple of
+> paragraphs for clock_pelt (or all the different clocks like clock,
+> clock_task, clock_idle_*), if that's what we can agree on.
 
-FW_BUG is: defined in linux/printk as:
+I don't have a strong opinion on adding a doc on PELT.
 
-#define FW_BUG		"[Firmware Bug]: "
-
-And we are trying to use this in places like this both for uniformity of reporting these kinda bugs and to allow grepping for it.
-
-Regards,
-
-Hans
-
-
-
-1) providing wrong / non working ACPI IRQ resources in this case
-
+>
+> Hongyan
