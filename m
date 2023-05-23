@@ -2,394 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A880070D05B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08D770D078
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbjEWBQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S234734AbjEWBZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234018AbjEWBQm (ORCPT
+        with ESMTP id S231947AbjEWBZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:16:42 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0984CC1;
-        Mon, 22 May 2023 18:16:18 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QQGbz17bjz4f3l8B;
-        Tue, 23 May 2023 09:16:15 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgCHZQPfE2xkQMLkJA--.15236S3;
-        Tue, 23 May 2023 09:16:16 +0800 (CST)
-Subject: Re: [PATCH v2] md: fix duplicate filename for rdev
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, neilb@suse.de, akpm@linux-foundation.org,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230522133225.2983667-1-yukuai1@huaweicloud.com>
- <876eb6b4-db0f-02e8-9b24-4db3ebc6962d@molgen.mpg.de>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <06ec466d-398e-5817-7bf9-78b96b3f72e8@huaweicloud.com>
-Date:   Tue, 23 May 2023 09:16:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 22 May 2023 21:25:19 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171A792
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684805118; x=1716341118;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=/Rr1Ww12mnmb9bTOxG8cwIMpz32Kbz0VUCkHhqn4XE0=;
+  b=PryA+/461nfBJez+uCPmoaY4SsNAD6XYtDotJzGRlrrd0Okpmkd0ntmg
+   gsjQ556/EBTR42l9eWXKZJTNWROJo9iZhxk0+lIrvmJ5e5urmeEBi6rmi
+   B6eu1Onnk8iWnD6AOG+SDU4LWg/Nt5AhiWnUFaVmit8q5ZwJybXwwRls/
+   XmSXpRM7nQrKi4Dy6k7bAwq56kSO+PZ2cAEJDV86KHYTZDLzXxi2LCY5e
+   +JBk0IanrZ54S2WzjUZVK78UB6XriO+dxWVhY+neDZoQLOH7D5d1OhS9p
+   LfUrU5Z0HjXKKAxxvUNoYuwq+HM9i37Nx/FkluKLHtlaPWMf4pAaOhj44
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="342548887"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="342548887"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 18:25:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="703753968"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="703753968"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP; 22 May 2023 18:25:16 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 18:25:16 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 18:25:16 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 18:25:16 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 22 May 2023 18:25:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MVPArhyJCw27tRDiXQJVS73eCe2/on8oWesQXuGbWlhYTHPCdXlVJ5IZvfQBKFVQj/dSjog1xd8kSSHQvI1qOOfmBL++YRxnBfizuyVNHir3PrPH9UscQJ93A2NctVlZKNsOUnyIf0RRYCqC9DQvBhxQBZ3VrGkNh3uCAjRs84jXnQ0mkqX1zsRYG5IgJBpFqWsVO1rjSvsk0vfXdDjmX7fECGEQ78q7IQxhpVvPwS6PrpdmcnxLAnvlqYOacpw7jG1E7Xyidjef07tTPRG/seSwcWAUY5L+pVBcWCDl/xkXCEDMGgpe+oVuCUWAbvfmvCXSICb3Y6lzIliBxv/uow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fURAyvZ9E0mXcd/nuhYo7a451lgFi7DZx5kd9kbwqmo=;
+ b=AOyX9TswGs3DKJD018G+SmbOEClSMrwl3LyMhthXASEjVbhDqB+zK6PFWGAlXCLPDbZ867OGP9V2A3ecSxuv1OTV3jwHTsXjx9hZ8h6Ulh7vpa594YaDd1RsuWD4Kdh9s7sqJf3hq8B/GPqYxcKht4DAOlhpZa5IDl15YIcLme9yEaTufOPawVOhMjycTwlV/3hgE1kOJwAHHkXv8slzUAG6vYZ/5GSa609ClTYwJIRp5e7afdzdbchf4ix1bjgMEd03JVOT6vei+ha0SLNARk0JFWdAP49zwF7iCIJAk6gE/pEqP9jlXT0Qo1fdbOYn5RX4FiuTA3BW1cXa3SM/HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by SJ1PR11MB6300.namprd11.prod.outlook.com (2603:10b6:a03:455::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
+ 2023 01:25:14 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::a100:94c4:fab4:f14d]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::a100:94c4:fab4:f14d%7]) with mapi id 15.20.6411.028; Tue, 23 May 2023
+ 01:25:14 +0000
+Date:   Tue, 23 May 2023 09:18:23 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, <paulmck@kernel.org>,
+        <rui.zhang@intel.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bin.gao@intel.com>
+Subject: Re: [PATCH RFC] x86/tsc: Make recalibration default on for
+ TSC_KNOWN_FREQ cases
+Message-ID: <ZGwUXzGcMgbcZVnf@feng-clx>
+References: <20230522033018.1276836-1-feng.tang@intel.com>
+ <87h6s4ye9b.ffs@tglx>
+ <ZGssENXFKmOk/zL7@feng-clx>
+ <87zg5wwppa.ffs@tglx>
+ <ZGtnUQJy+1Nrazhy@feng-clx>
+ <87pm6swi7z.ffs@tglx>
+ <ZGuIL6tyzzZP3kyR@feng-clx>
+ <20230522161158.GA3330346@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230522161158.GA3330346@hirez.programming.kicks-ass.net>
+X-ClientProxiedBy: SG2PR01CA0174.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:28::30) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
-In-Reply-To: <876eb6b4-db0f-02e8-9b24-4db3ebc6962d@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCHZQPfE2xkQMLkJA--.15236S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3KrW5Zw47WF1fGr1UuryDWrg_yoWkKFy8pr
-        Z5ta45GrWUAwn5Gr1UJr4DWa45Xr1Uta1DtryfX3WUAw43Ar1qgF4UXr1qgFy5ArWkZr1U
-        JF1UWrsrZFyUXr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
-        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|SJ1PR11MB6300:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4ba3ce9-1c5c-4b37-d18e-08db5b2c8ed2
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Dr+Q5Pb1Th1uhcnavdTrAMeLcRuCOMKtKaXFAcoY3u5J3lFD1t1qzRl9uemkYcLPbXqfziSBTXthfrpI2eN/HVOrM3ogHrcsa2ietCRPcdO4djssFRhFPs4VLllcc5hW4hXxOag29xCh/lM+Raad/BCcKV828reBpwu9kqmOuWX5CRvxqAgGZabF+f1YEB6snF00T7C0bo+/lgY/CVMC7zo6Dr8v2kABVkqpHmHIzykdAlS6k9XazxAH68Hpb9nbQH4WCatPCRmTlA4KTatFaOanpMtQfEGoQ0+oxqPBR7IdcNZrsN0hbII2Got7SuCoZ9cgSOl1EwfqUl4qyOi/vJGuW2FZhXPzPw12uvv8Dv/tOlIgxgCxHE2+Lz1/lEabPAlHCG0y5eUNgOLRo8HsfBCc+gjV559nlYmWWC6eRYLtW6q8CM+DE2EneesRK6c12B0OhUFLxP5W5w9BcdkveZtqhUW3E7m1SzrH4tw2hKf80MGgL+eFu9AwigvoY2JlcikIPCPFiMbKkFIC8cPSf+qC6at1gFT7a6HZ1haUeAyP/1aLLJ/5mKbLpWdpvqtX
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199021)(5660300002)(8936002)(8676002)(86362001)(26005)(6512007)(6506007)(9686003)(2906002)(83380400001)(186003)(44832011)(107886003)(6916009)(66476007)(66556008)(4326008)(33716001)(82960400001)(66946007)(316002)(54906003)(478600001)(38100700002)(6486002)(41300700001)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5jkAFBYUHSNC7JGoYM0XDuP6O10jvt11p8mps5TsPyxwaUOvNE4aWt9j37Ey?=
+ =?us-ascii?Q?H3kJNw0/JWHfQintZA8WGu9OhGp86IwCfEFIJgcvMab3mMxx3odvFJsRll7w?=
+ =?us-ascii?Q?98FcuS9D57v1QvGTHUI/5tWu2bfCnjWkB5mq09V2lEFIun6fZ3IG5xb6NLFl?=
+ =?us-ascii?Q?AXEnZDUDFOo3dSgtEuRNkD0roKWwPaAQIo0R+JUAdWxtbtpZCxAQajSbZjWl?=
+ =?us-ascii?Q?xR7tH2SOFfYwEAJbA/3XgayQbj8DYVMmFKvvWShFRjYfD1hoAyieiSJ+XZRh?=
+ =?us-ascii?Q?HFm+4pftDJY0dsQKJrbt9JCS72X+mIW4qAkFa9O9jNVlia0eGNSkbRZFFS0i?=
+ =?us-ascii?Q?pXtpxi0NajcjQk3Msvn3F8hXy9Owsbol7jp3Zfz3fHm+bv4ozEFRQ9nph+uX?=
+ =?us-ascii?Q?OkSsY8RjbXnhjyY6urDd176WQGs7zte5XoDCMCAH2qVz4STkmT3zbmYa+URR?=
+ =?us-ascii?Q?gn86/XiqRVa94F2+FFeqsLotCSii762STr6u4b8XGHkY2I3reTPQUmX2pfRw?=
+ =?us-ascii?Q?pu9/GXtbbx4924Wtg+VGyRwpHgoTyQO2u0Q0BODUV1bTwlQz1LIW2yqFQXwW?=
+ =?us-ascii?Q?o45Uid6SlHOZn2esN03UgLChFPKyKq6XpNbCiJDI/F5R8M0+ZS+PDctojCYw?=
+ =?us-ascii?Q?LKX1GEwpp1DzIeYlOhvVKtjQYqcAw8z+kIxAJVdCjwOEtwiMnf6SiJuoIKXn?=
+ =?us-ascii?Q?qmUj4NpDPK1xNK2OVnyjaSj7FYuDbhok0Q6T+rtq8SckC6MN1eAyDQ4kJSgw?=
+ =?us-ascii?Q?RhTgem+BPrxZ5C5P0JN954sOP5glcYYddS4saeOCbGAsdYzfYbZRSeJ5pJEz?=
+ =?us-ascii?Q?0K6Q2sGvmxlpHwSqOMCIgOJ2ELABahs4pxx7Y4bx1WSqSmQKCnfd1SXlfMDh?=
+ =?us-ascii?Q?fbzpLuoo8KNcx6xk3sw7O2S06DgCNUnbXJSCfMdF1K9SJzpAeztEhtM261eP?=
+ =?us-ascii?Q?WTN3fzSuJuzx1UN0Wc+YoKt7LTirSXPMe2mKM6Cbq1lBovGfd+JhUPBZQq7G?=
+ =?us-ascii?Q?AkhOgpqNWHvk8prYPsMxDL+/Dp6+ls0SK8Frj/wOwYOk8OW321yV/pw6ILs+?=
+ =?us-ascii?Q?BVCcOtqav/G7inwCzldd5EXKrF/fl6cgCJxfsynWIp7G4/GUHwVbGPzsfMtQ?=
+ =?us-ascii?Q?mLcMKmZJ3k0UlYrZiY1gZSsOULWx/wsARcEK57IoIRws+LN9kQZ5il1BNNwk?=
+ =?us-ascii?Q?+iC4+TEBUteGNTfRxIoJeMQZfl8Wt7IyqQIC/ihR0xB9irUsRVEJukL8e+zi?=
+ =?us-ascii?Q?hBneeJldlrcAwA9a5V51iw4oxDZOTZ1CFlhxxaH08fHWal2Vd2Vjqg5Lqah0?=
+ =?us-ascii?Q?A48ySjfesj2jMsi3y2cPbWASO6giPrRjR6Kp6JSQz0NGHo0Os33LOjhwNgJ/?=
+ =?us-ascii?Q?u5sCBD5IgaIM3uWYjTvZWBg/s1MWzqYUQREcnPHgLVL5WdaOB9+6zu1ipeYd?=
+ =?us-ascii?Q?9eN9YIxCh6Dk8eJrdktwckOXSdilKiOBs8x1y9LHI/GV6RD8/8ddDLqkiY3n?=
+ =?us-ascii?Q?6qDqu5Td2z0chtiC/xo7wWCyOE5ylqO9AmnFrp8l/CyTZld1R9SD3+FfAxdD?=
+ =?us-ascii?Q?5GDb1Y538zT/cMLhnsaIZt4CCNZIQggTv6kjRGA0?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4ba3ce9-1c5c-4b37-d18e-08db5b2c8ed2
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 01:25:14.1281
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FBjXjzDYKBnlyHF33In4ftHJ1wfhpEmA2YLj/ESziuY5ihpkru/P4M9BeN/pRfdQJLshTO95SyFWR7Wzk3LR1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6300
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 22, 2023 at 06:11:58PM +0200, Peter Zijlstra wrote:
+> On Mon, May 22, 2023 at 11:20:15PM +0800, Feng Tang wrote:
+> 
+> > And I don't understand the commit log: "On Intel GOLDMONT Atom SoC
+> > TSC is the only reliable clocksource. We mark TSC reliable to avoid
+> > watchdog on it."
+> > 
+> > Clearly the Denventon I found today has both HPET and ACPI_PM timer:
+> > 
+> >   [root@dnv0 ~]# grep .  /sys/devices/system/clocksource/clocksource0/*
+> >   /sys/devices/system/clocksource/clocksource0/available_clocksource:tsc hpet acpi_pm
+> >   /sys/devices/system/clocksource/clocksource0/current_clocksource:tsc
+> >   
+> > The lscpu info is:
+> >   
+> >   Architecture:                    x86_64
+> >   CPU op-mode(s):                  32-bit, 64-bit
+> >   Address sizes:                   39 bits physical, 48 bits virtual
+> >   Byte Order:                      Little Endian
+> >   CPU(s):                          12
+> >   On-line CPU(s) list:             0-11
+> >   Vendor ID:                       GenuineIntel
+> >   BIOS Vendor ID:                  Intel(R) Corporation
+> >   Model name:                      Intel(R) Atom(TM) CPU C3850 @ 2.10GHz
+> >   BIOS Model name:                 Intel(R) Atom(TM) CPU C3850 @ 2.10GHz  CPU @ 2.1GHz
+> >   BIOS CPU family:                 43
+> >   CPU family:                      6
+> >   Model:                           95
+> >   Thread(s) per core:              1
+> >   Core(s) per socket:              12
+> >   Socket(s):                       1
+> >   Stepping:                        1
+> > 
+> > Maybe this cpu model (0x5F) has been used by some type of platforms
+> > which has met the false alarm watchdog issue.
+> 
+> It has them; but they are not *reliable*.
+ 
+Yes, that's possible. I tried to CC the author Bin in case he can
+provide more background or information for his statement, but his
+email address is unreachable now.
 
-在 2023/05/22 22:03, Paul Menzel 写道:
-> Dear Yu,
-> 
-> 
-> Thank you for your patch. Just a few nits, that can be ignored.
-
-Thanks for these sugestions, I'll update them in v3.
-
-Kuai
-> 
-> Am 22.05.23 um 15:32 schrieb Yu Kuai:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> commit 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a device
-> 
-> I’d start with capital letter: Commit ….
-> 
->> from an md array via sysfs") delay the deleting of rdev, however, this
-> 
-> 1.  delay*s*
-> 2.  s/deleting/deletion/
-> 
->> introduce a window that rdev can be added again while the deleting is
-> 
-> 1.  introduce*s*
-> 2.  s/deleting/deletion/
-> 
->> not done yet, and sysfs will complain about duplicate filename.
->>
->> Follow up patches try to fix this problem by flush workqueue, however,
-> 
-> flush*ing* the work queue
-> 
->> flush_rdev_wq() is just dead code, the progress in
->> md_kick_rdev_from_array():
-> 
-> … is:
-> 
->> 1) list_del_rcu(&rdev->same_set);
->> 2) synchronize_rcu();
->> 3) queue_work(md_rdev_misc_wq, &rdev->del_work);
->>
->> So in flush_rdev_wq(), if rdev is found in the list, work_pending() can
->> never pass, in the meantime, if work is queued, then rdev can never be
->> found in the list.
->>
->> flush_rdev_wq() can be replaced by flush_workqueue() directly, however,
->> this approach is not good:
->> - the workqueue is global, this synchronization for all raid disks is
->>    not necessary.
-> 
-> The work queue …
-> 
->> - flush_workqueue can't be called under 'reconfig_mutex', there is still
->>    a small window between flush_workqueue() and mddev_lock() that other
->>    context can queue new work, hence the problem is not solved 
->> completely.
-> 
-> context*s*
-> 
->> sysfs already have apis to support delete itself through writer, and
-> 
-> 1.  s/have/has/
-> 2.  deleting
-> 
->> these apis, specifically sysfs_break/unbreak_active_protection(), is used
-> 
-> s/is/are/
-> 
->> to support deleting rdev synchronously. Therefore, the above commit 
->> can be
->> reverted, and sysfs duplicate filename can be avoided.
->>
->> A new mdadm regression test is proposed as well.
-> 
-> It’s not included, right? Then I’d remove the sentence, or write: … is 
-> going to be proposed …
-> 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> 
->> Link: 
->> https://lore.kernel.org/linux-raid/20230428062845.1975462-1-yukuai1@huaweicloud.com/ 
->>
->> Fixes: 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a 
->> device from an md array via sysfs")
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->> Changes in v2:
->>   - rebase from the latest md-next branch
->>
->>   drivers/md/md.c | 84 +++++++++++++++++++++++++------------------------
->>   drivers/md/md.h |  8 +++++
->>   2 files changed, 51 insertions(+), 41 deletions(-)
->>
->> diff --git a/drivers/md/md.c b/drivers/md/md.c
->> index 7455bc9d8498..cafb457d614c 100644
->> --- a/drivers/md/md.c
->> +++ b/drivers/md/md.c
->> @@ -92,6 +92,7 @@ static struct workqueue_struct *md_rdev_misc_wq;
->>   static int remove_and_add_spares(struct mddev *mddev,
->>                    struct md_rdev *this);
->>   static void mddev_detach(struct mddev *mddev);
->> +static void export_rdev(struct md_rdev *rdev);
->>   /*
->>    * Default number of read corrections we'll attempt on an rdev
->> @@ -643,9 +644,11 @@ void mddev_init(struct mddev *mddev)
->>   {
->>       mutex_init(&mddev->open_mutex);
->>       mutex_init(&mddev->reconfig_mutex);
->> +    mutex_init(&mddev->delete_mutex);
->>       mutex_init(&mddev->bitmap_info.mutex);
->>       INIT_LIST_HEAD(&mddev->disks);
->>       INIT_LIST_HEAD(&mddev->all_mddevs);
->> +    INIT_LIST_HEAD(&mddev->deleting);
->>       timer_setup(&mddev->safemode_timer, md_safemode_timeout, 0);
->>       atomic_set(&mddev->active, 1);
->>       atomic_set(&mddev->openers, 0);
->> @@ -747,6 +750,23 @@ static void mddev_free(struct mddev *mddev)
->>   static const struct attribute_group md_redundancy_group;
->> +static void md_free_rdev(struct mddev *mddev)
->> +{
->> +    struct md_rdev *rdev;
->> +    struct md_rdev *tmp;
->> +
->> +    if (list_empty_careful(&mddev->deleting))
->> +        return;
->> +
->> +    mutex_lock(&mddev->delete_mutex);
->> +    list_for_each_entry_safe(rdev, tmp, &mddev->deleting, same_set) {
->> +        list_del_init(&rdev->same_set);
->> +        kobject_del(&rdev->kobj);
->> +        export_rdev(rdev);
->> +    }
->> +    mutex_unlock(&mddev->delete_mutex);
->> +}
->> +
->>   void mddev_unlock(struct mddev *mddev)
->>   {
->>       if (mddev->to_remove) {
->> @@ -788,6 +808,8 @@ void mddev_unlock(struct mddev *mddev)
->>       } else
->>           mutex_unlock(&mddev->reconfig_mutex);
->> +    md_free_rdev(mddev);
->> +
->>       /* As we've dropped the mutex we need a spinlock to
->>        * make sure the thread doesn't disappear
->>        */
->> @@ -2428,13 +2450,6 @@ static int bind_rdev_to_array(struct md_rdev 
->> *rdev, struct mddev *mddev)
->>       return err;
->>   }
->> -static void rdev_delayed_delete(struct work_struct *ws)
->> -{
->> -    struct md_rdev *rdev = container_of(ws, struct md_rdev, del_work);
->> -    kobject_del(&rdev->kobj);
->> -    kobject_put(&rdev->kobj);
->> -}
->> -
->>   void md_autodetect_dev(dev_t dev);
->>   static void export_rdev(struct md_rdev *rdev)
->> @@ -2452,6 +2467,8 @@ static void export_rdev(struct md_rdev *rdev)
->>   static void md_kick_rdev_from_array(struct md_rdev *rdev)
->>   {
->> +    struct mddev *mddev = rdev->mddev;
->> +
->>       bd_unlink_disk_holder(rdev->bdev, rdev->mddev->gendisk);
->>       list_del_rcu(&rdev->same_set);
->>       pr_debug("md: unbind<%pg>\n", rdev->bdev);
->> @@ -2465,15 +2482,17 @@ static void md_kick_rdev_from_array(struct 
->> md_rdev *rdev)
->>       rdev->sysfs_unack_badblocks = NULL;
->>       rdev->sysfs_badblocks = NULL;
->>       rdev->badblocks.count = 0;
->> -    /* We need to delay this, otherwise we can deadlock when
->> -     * writing to 'remove' to "dev/state".  We also need
->> -     * to delay it due to rcu usage.
->> -     */
->> +
->>       synchronize_rcu();
->> -    INIT_WORK(&rdev->del_work, rdev_delayed_delete);
->> -    kobject_get(&rdev->kobj);
->> -    queue_work(md_rdev_misc_wq, &rdev->del_work);
->> -    export_rdev(rdev);
->> +
->> +    /*
->> +     * kobject_del() will wait for all in progress writers to be 
->> done, where
->> +     * reconfig_mutex is held, hence it can't be called under
->> +     * reconfig_mutex and it's delayed to mddev_unlock().
->> +     */
->> +    mutex_lock(&mddev->delete_mutex);
->> +    list_add(&rdev->same_set, &mddev->deleting);
->> +    mutex_unlock(&mddev->delete_mutex);
->>   }
->>   static void export_array(struct mddev *mddev)
->> @@ -3541,6 +3560,7 @@ rdev_attr_store(struct kobject *kobj, struct 
->> attribute *attr,
->>   {
->>       struct rdev_sysfs_entry *entry = container_of(attr, struct 
->> rdev_sysfs_entry, attr);
->>       struct md_rdev *rdev = container_of(kobj, struct md_rdev, kobj);
->> +    struct kernfs_node *kn = NULL;
->>       ssize_t rv;
->>       struct mddev *mddev = rdev->mddev;
->> @@ -3548,6 +3568,10 @@ rdev_attr_store(struct kobject *kobj, struct 
->> attribute *attr,
->>           return -EIO;
->>       if (!capable(CAP_SYS_ADMIN))
->>           return -EACCES;
->> +
->> +    if (entry->store == state_store && cmd_match(page, "remove"))
->> +        kn = sysfs_break_active_protection(kobj, attr);
->> +
->>       rv = mddev ? mddev_lock(mddev) : -ENODEV;
->>       if (!rv) {
->>           if (rdev->mddev == NULL)
->> @@ -3556,6 +3580,10 @@ rdev_attr_store(struct kobject *kobj, struct 
->> attribute *attr,
->>               rv = entry->store(rdev, page, length);
->>           mddev_unlock(mddev);
->>       }
->> +
->> +    if (kn)
->> +        sysfs_unbreak_active_protection(kn);
->> +
->>       return rv;
->>   }
->> @@ -4479,20 +4507,6 @@ null_show(struct mddev *mddev, char *page)
->>       return -EINVAL;
->>   }
->> -/* need to ensure rdev_delayed_delete() has completed */
->> -static void flush_rdev_wq(struct mddev *mddev)
->> -{
->> -    struct md_rdev *rdev;
->> -
->> -    rcu_read_lock();
->> -    rdev_for_each_rcu(rdev, mddev)
->> -        if (work_pending(&rdev->del_work)) {
->> -            flush_workqueue(md_rdev_misc_wq);
->> -            break;
->> -        }
->> -    rcu_read_unlock();
->> -}
->> -
->>   static ssize_t
->>   new_dev_store(struct mddev *mddev, const char *buf, size_t len)
->>   {
->> @@ -4520,7 +4534,6 @@ new_dev_store(struct mddev *mddev, const char 
->> *buf, size_t len)
->>           minor != MINOR(dev))
->>           return -EOVERFLOW;
->> -    flush_rdev_wq(mddev);
->>       err = mddev_lock(mddev);
->>       if (err)
->>           return err;
->> @@ -5590,7 +5603,6 @@ struct mddev *md_alloc(dev_t dev, char *name)
->>        * removed (mddev_delayed_delete).
->>        */
->>       flush_workqueue(md_misc_wq);
->> -    flush_workqueue(md_rdev_misc_wq);
->>       mutex_lock(&disks_mutex);
->>       mddev = mddev_alloc(dev);
->> @@ -7553,9 +7565,6 @@ static int md_ioctl(struct block_device *bdev, 
->> fmode_t mode,
->>       }
->> -    if (cmd == ADD_NEW_DISK || cmd == HOT_ADD_DISK)
->> -        flush_rdev_wq(mddev);
->> -
->>       if (cmd == HOT_REMOVE_DISK)
->>           /* need to ensure recovery thread has run */
->>           wait_event_interruptible_timeout(mddev->sb_wait,
->> @@ -9618,10 +9627,6 @@ static int __init md_init(void)
->>       if (!md_misc_wq)
->>           goto err_misc_wq;
->> -    md_rdev_misc_wq = alloc_workqueue("md_rdev_misc", 0, 0);
->> -    if (!md_rdev_misc_wq)
->> -        goto err_rdev_misc_wq;
->> -
->>       ret = __register_blkdev(MD_MAJOR, "md", md_probe);
->>       if (ret < 0)
->>           goto err_md;
->> @@ -9640,8 +9645,6 @@ static int __init md_init(void)
->>   err_mdp:
->>       unregister_blkdev(MD_MAJOR, "md");
->>   err_md:
->> -    destroy_workqueue(md_rdev_misc_wq);
->> -err_rdev_misc_wq:
->>       destroy_workqueue(md_misc_wq);
->>   err_misc_wq:
->>       destroy_workqueue(md_wq);
->> @@ -9937,7 +9940,6 @@ static __exit void md_exit(void)
->>       }
->>       spin_unlock(&all_mddevs_lock);
->> -    destroy_workqueue(md_rdev_misc_wq);
->>       destroy_workqueue(md_misc_wq);
->>       destroy_workqueue(md_wq);
->>   }
->> diff --git a/drivers/md/md.h b/drivers/md/md.h
->> index 1eec65cf783c..4d191db831da 100644
->> --- a/drivers/md/md.h
->> +++ b/drivers/md/md.h
->> @@ -531,6 +531,14 @@ struct mddev {
->>       unsigned int            good_device_nr;    /* good device num 
->> within cluster raid */
->>       unsigned int            noio_flag; /* for memalloc scope API */
->> +    /*
->> +     * Temporarily store rdev that will be finally removed when
->> +     * reconfig_mutex is unlocked.
->> +     */
->> +    struct list_head        deleting;
->> +    /* Protect the deleting list */
->> +    struct mutex            delete_mutex;
->> +
->>       bool    has_superblocks:1;
->>       bool    fail_last_dev:1;
->>       bool    serialize_policy:1;
-> 
-> .
-> 
-
+Thanks,
+Feng
