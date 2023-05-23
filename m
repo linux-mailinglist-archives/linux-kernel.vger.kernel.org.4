@@ -2,45 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5BB70D45F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A37570D461
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbjEWGzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
+        id S235204AbjEWGzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbjEWGzS (ORCPT
+        with ESMTP id S235186AbjEWGzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:55:18 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A25109
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 23:55:14 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:b0ac:7afd:272:4cff])
-        by andre.telenet-ops.be with bizsmtp
-        id 06vC2A0090Jkz7G016vCLD; Tue, 23 May 2023 08:55:12 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1Lv7-002pRl-KO
-        for linux-kernel@vger.kernel.org;
-        Tue, 23 May 2023 08:55:12 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1LvL-009gzy-RG
-        for linux-kernel@vger.kernel.org;
-        Tue, 23 May 2023 08:55:11 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v6.4-rc3
-Date:   Tue, 23 May 2023 08:55:11 +0200
-Message-Id: <20230523065511.2310231-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHk-=wgL4Sa64qUZkpAs06t9UKoNyAYqBpzmukefJz8P8sa2=Q@mail.gmail.com>
-References: <CAHk-=wgL4Sa64qUZkpAs06t9UKoNyAYqBpzmukefJz8P8sa2=Q@mail.gmail.com>
+        Tue, 23 May 2023 02:55:38 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38008132;
+        Mon, 22 May 2023 23:55:36 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-5344d45bfb0so287944a12.1;
+        Mon, 22 May 2023 23:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684824935; x=1687416935;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AxJRMSjFiU7MHcgUIRL+XqTRWQxV3GgrxAc+FVBvwiU=;
+        b=IhTXUhy9MlNkQnisTrIUcOFqQNGgdSx+hBVH/YuFy8d/mzYynBDeW8bJa7xiGKNQhU
+         6v1dpAsGZuN0zMeAS0wK1xrfdQhwHYbHCr4hySk0N+rLpM9tD0NIxQ1ZGiEs23OOmtLs
+         oLXiq54+DpPHKmBCkOK6SGHg1/JAEv5KCkrBmaKwfzjaJeZf7JsgV+qDQdmsDBPXVsom
+         PnJJQs5aL00sDbVlTobrrbayqpE6VGtZr3rkPM43R3Mz+xZZ4nzEvRjFf2Y7IrCEemq9
+         WQoeNwUGzWl6nRtYdDxlHy6SlddoN93nLs8dEcQM9Z8XTED6390NNktIWJOVoPbj4tFI
+         smdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684824935; x=1687416935;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AxJRMSjFiU7MHcgUIRL+XqTRWQxV3GgrxAc+FVBvwiU=;
+        b=YRXyRvoV8uvkiJxLoQJYAkHXN5BeKirijP3oZ8hJPYp91jCA8oEODUTbx7La/7GKNR
+         epg0mpRVFKGcZWJ0KaAEG8p5VA/OeLzYyOcBIJA4Wp3+N5DTpV8XPtgLrEXchlkistpS
+         7w46vDb8BTe0u0F5wIlAdnImMA1OmlPI/L3u8X7VkdnJuQ61oAKuThBXhc/xlfolF6s5
+         Eim95sbAhLFQzSuYnqG5mJjsOXKArbK19GBUQxS2448zkAl+NDeU3QQ71ISmgc/f2bdJ
+         MvodHRN/6oI4UFHQtvIDsDRL1tjMl+Olxlpwac/lzL0uzAeWdgtmby0L33OogPs45X6+
+         7gKg==
+X-Gm-Message-State: AC+VfDz1DrytRAYR+PD5ifCUGtVdzR3wYrX5Lb+DsLX9lzbLdBm6puQi
+        /a/54w6k4k/vfEaAFA56hUo=
+X-Google-Smtp-Source: ACHHUZ6kdntI+DtUsqVpdBz8wswQttnsDSe0y5zvGoz02fIFOAtzEqDBj9qWrObRCBAW04+R2ukM1A==
+X-Received: by 2002:a17:902:d506:b0:1ae:4a37:d5af with SMTP id b6-20020a170902d50600b001ae4a37d5afmr14773631plg.0.1684824935505;
+        Mon, 22 May 2023 23:55:35 -0700 (PDT)
+Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
+        by smtp.gmail.com with ESMTPSA id bj6-20020a170902850600b001a183ade911sm5954864plb.56.2023.05.22.23.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 23:55:35 -0700 (PDT)
+Date:   Tue, 23 May 2023 06:55:33 +0000
+From:   Alok Tiagi <aloktiagi@gmail.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, willy@infradead.org,
+        David.Laight@aculab.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hch@infradead.org, tycho@tycho.pizza, aloktiagi@gmail.com
+Subject: Re: [RFC v5 1/2] epoll: Implement eventpoll_replace_file()
+Message-ID: <ZGxjZXHvvJcCafxT@ip-172-31-38-16.us-west-2.compute.internal>
+References: <20230429054955.1957024-1-aloktiagi@gmail.com>
+ <20230520-pseudologie-beharren-5c5c440c204e@brauner>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230520-pseudologie-beharren-5c5c440c204e@brauner>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,104 +76,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v6.4-rc3[1] compared to v6.3[2].
+On Sat, May 20, 2023 at 03:03:48PM +0200, Christian Brauner wrote:
+> On Sat, Apr 29, 2023 at 05:49:54AM +0000, aloktiagi wrote:
+> > Introduce a mechanism to replace a file linked in the epoll interface with a new
+> > file.
+> > 
+> > eventpoll_replace() finds all instances of the file to be replaced and replaces
+> > them with the new file and the interested events.
+> > 
+> > Signed-off-by: aloktiagi <aloktiagi@gmail.com>
+> > ---
+> > Changes in v5:
+> >   - address review comments and move the call to replace old file in each
+> >     subsystem (epoll, io_uring, etc.) outside the fdtable helpers like
+> >     replace_fd().
+> > 
+> > Changes in v4:
+> >   - address review comment to remove the redundant eventpoll_replace() function.
+> >   - removed an extra empty line introduced in include/linux/file.h
+> > 
+> > Changes in v3:
+> >   - address review comment and iterate over the file table while holding the
+> >     spin_lock(&files->file_lock).
+> >   - address review comment and call filp_close() outside the
+> >     spin_lock(&files->file_lock).
+> > ---
+> >  fs/eventpoll.c            | 65 +++++++++++++++++++++++++++++++++++++++
+> >  include/linux/eventpoll.h |  8 +++++
+> >  2 files changed, 73 insertions(+)
+> > 
+> > diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> > index 64659b110973..be9d192b223d 100644
+> > --- a/fs/eventpoll.c
+> > +++ b/fs/eventpoll.c
+> > @@ -935,6 +935,71 @@ void eventpoll_release_file(struct file *file)
+> >  	mutex_unlock(&epmutex);
+> >  }
+> >  
+> > +static int ep_insert(struct eventpoll *ep, const struct epoll_event *event,
+> > +			struct file *tfile, int fd, int full_check);
+> > +
+> > +/*
+> > + * This is called from eventpoll_replace() to replace a linked file in the epoll
+> > + * interface with a new file received from another process. This is useful in
+> > + * cases where a process is trying to install a new file for an existing one
+> > + * that is linked in the epoll interface
+> > + */
+> > +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd)
+> > +{
+> > +	int fd;
+> > +	int error = 0;
+> > +	struct eventpoll *ep;
+> > +	struct epitem *epi;
+> > +	struct hlist_node *next;
+> > +	struct epoll_event event;
+> > +	struct hlist_head *to_remove = toreplace->f_ep;
+> > +
+> > +	if (!file_can_poll(file))
+> > +		return 0;
+> > +
+> > +	mutex_lock(&epmutex);
+> 
+> Sorry, I missed that you send a new version somehow.
+> 
+> So, I think I mentioned this last time: The locking has changed to
+> reduce contention on the global mutex. Both epmutex and ep_remove() are
+> gone. So this doesn't even compile anymore...
+> 
+>   CC      fs/eventpoll.o
+> ../fs/eventpoll.c: In function ‘eventpoll_replace_file’:
+> ../fs/eventpoll.c:998:21: error: ‘epmutex’ undeclared (first use in this function); did you mean ‘mutex’?
+>   998 |         mutex_lock(&epmutex);
+>       |                     ^~~~~~~
+>       |                     mutex
+> ../fs/eventpoll.c:998:21: note: each undeclared identifier is reported only once for each function it appears in
+> ../fs/eventpoll.c:1034:17: error: implicit declaration of function ‘ep_remove’; did you mean ‘idr_remove’? [-Werror=implicit-function-declaration]
+>  1034 |                 ep_remove(ep, epi);
+>       |                 ^~~~~~~~~
+>       |                 idr_remove
+> 
+> on current mainline. So please send a new version for this.
 
-Summarized:
-  - build errors: +5/-8
-  - build warnings: +30/-12
-
-JFYI, when comparing v6.4-rc3[1] to v6.4-rc2[3], the summaries are:
-  - build errors: +0/-0
-  - build warnings: +0/-0
-
-Note that there may be false regressions, as some logs are incomplete.
-Still, they're build errors/warnings.
-
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/44c026a73be8038f03dbdeef028b642880cf1511/ (151 out of 152 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/457391b0380335d5e9a5babdec90ac53928b23b4/ (all 152 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6/ (all 152 configs)
-
-
-*** ERRORS ***
-
-5 error regressions:
-  + /kisskb/src/drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]:  => 495:27, 364:27
-  + /kisskb/src/fs/xfs/scrub/scrub.h: error: initializer element is not constant:  => 111:28
-  + error: modpost: "__floatunsidf" [drivers/phy/mediatek/phy-mtk-hdmi-drv.ko] undefined!:  => N/A
-  + error: modpost: "__gedf2" [drivers/phy/mediatek/phy-mtk-hdmi-drv.ko] undefined!:  => N/A
-  + error: modpost: "__ltdf2" [drivers/phy/mediatek/phy-mtk-hdmi-drv.ko] undefined!:  => N/A
-
-8 error improvements:
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: 'struct cpuinfo_um' has no member named 'apicid': 2157:41, 2157:48 => 
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]: 2161:1 => 
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 7086:1 => 
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 7131:1 => 
-  - /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant: 299:2, 296:2, 300:2 => 
-  - /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]: 641:28 => 
-  - /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]: 641:28 => 
-  - /kisskb/src/fs/btrfs/send.c: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]: 1909:13, 1902:23 => 
-
-
-*** WARNINGS ***
-
-30 warning regressions:
-  + /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1128 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 400:1
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/input/joystick/sidewinder.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/xilinx/xilinx_emac.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/virtio_net.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [fs/hfsplus/hfsplus.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [net/mac80211/mac80211.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashrdi3" [drivers/usb/gadget/function/usb_f_mass_storage.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashrdi3" [fs/xfs/xfs.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-writecache.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/hpsa.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/mpt3sas/mpt3sas.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/ext2/ext2.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/ext4/ext4.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/gfs2/gfs2.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/ntfs3/ntfs3.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [net/mac80211/mac80211.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [net/sched/act_police.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/hwmon/sfctemp.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/platform/nxp/imx8-isi/imx8-isi.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-cadence.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_dfl_tod.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-davinci.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/thermal/mediatek/auxadc_thermal.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: suppressed 1 unresolved symbol warnings because there were too many):  => N/A
-
-12 warning improvements:
-  - /kisskb/src/fs/btrfs/send.c: warning: 'right_gen' may be used uninitialized in this function [-Wmaybe-uninitialized]: 1902:23, 1909:13, 1909:27 => 
-  - /kisskb/src/fs/btrfs/volumes.c: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]: 2524:2, 2524:9 => 
-  - /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 404:1 => 
-  - /kisskb/src/include/linux/list.h: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]: 74:19, 74:12 => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/cm4000_cs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/synclink_cs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/noon010pc30.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/vs6624.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/ixgb/ixgb.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/phy/intel/phy-intel-thunderbay-emmc.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/u132-hcd.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/misc/ftdi-elan.ko] has no CRC!: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Apologies, I didn't realize the change had been merged. Will send out a new version.
