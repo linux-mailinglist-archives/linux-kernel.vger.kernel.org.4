@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018D570DBDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAF970DBDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbjEWL7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S236681AbjEWL7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbjEWL7c (ORCPT
+        with ESMTP id S236280AbjEWL7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:59:32 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304DD118
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:59:26 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso860770466b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:59:26 -0700 (PDT)
+        Tue, 23 May 2023 07:59:01 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F443109
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:59:00 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1ae507af2e5so34470645ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1684843164; x=1687435164;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=QR1MUsbPkF8iaQNWtY/LtUVVkhUDmli1/tIye2VFdbE=;
-        b=qvuLsz9FjN+Ow6wPHmpPN9sq2xFW9UaiuZI8/RpzQTI46zGMjP+7RZAHi5FzfnzJSS
-         hMlsWys/2phDu/pqehttwGb9aySSa8jbSxaTcbAPy7Mp1e5GuDioXy939L7T+V94S2ZA
-         WIqthatCBC4qzoA5rPWm2W5kSwpTqIzNnC4IxUnuv5tz5nNEmE4T+Xsbu7quBpCUWkUP
-         BOmC1G57K4/Jon8MuFyGFjeubHVzPCgyXDykRd00TrdEUnDvWXY5Zyy6A33txfd8Zfye
-         u206w72qGadaHLfEI64LE8stqTZ4PIiN+HpE1ShYEM2Wd2uGI0aTyxStrXta5mlf1Ckc
-         1isA==
+        d=gmail.com; s=20221208; t=1684843140; x=1687435140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n4th3iXOfa5qIG2MobVS/IDr8buOOQSispksL/hzEfA=;
+        b=oBuMY1mwpDRyQ/c9mrNJt6P4ahBppKTLrL1gS6q7FTOkPweEwSDwIMF6kpRz8gpVAE
+         /zr6l2BFroCbmEhqu23/LI6Cu9W2/+8TztbaLnQqteEU0caVwds1TkJQt9aLss4OGhDb
+         OjpPgbVOomylzCfu+gJPYBf1JXjC0shXmIgh0vO3powFQMvn/+rZ5x7935z+VFlNWWzX
+         A6xlMpLYHDIbUVPnd0F8qEevcgibG4FsZdlBzdcAh76BUcvCbWuftm3RuX2AsX6rfGK2
+         aPN6X5kr339zlfvg/RvbpYrseq0eAadjAFsZR6t7XXit5w1C5wrCmgZL3qiRH39OGaDV
+         0NVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684843164; x=1687435164;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1684843140; x=1687435140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QR1MUsbPkF8iaQNWtY/LtUVVkhUDmli1/tIye2VFdbE=;
-        b=TEJs1oi/AEcwOOVkRkvoixAF6KOFORFnMvM4HVan4VqiryrzlGgy5/h+8guK8dH8b3
-         Bi99vAvp8IDP2iuZ4eH/qVRhRUkP/yT93RnBJBNEbMLxPUH4m2WvEYZgk+vG22XkdTV3
-         MOPGOQP26TOrk/Z3pzDnQeTRmpzScukLdbrkU5WDUXAZagGppU8V9dTfkVrO3+S9Dx3e
-         UMitfkH3DKfwAWcftGyOIo+xCEpJsoSGji6hXISIx+4hyA8Cfv9EDJ7at2KvHWVMEc+K
-         Iy4aBOLp8j/u9vNvEVcAfk+Z92AYprARj9iqu3J0MtkNnsbAIliVJ4ZPmNP00oP4NSID
-         esYQ==
-X-Gm-Message-State: AC+VfDz25oyXL1T860bSyqCqQTpeu4fmM+Z+WmmwEFfO+ondzET9nwhI
-        0q+sWHFDMiqSvP5F9E89ZUCb7w==
-X-Google-Smtp-Source: ACHHUZ6mkY0TKM+w8HpDdJk16/geAD+v7LsqjoH7WywHI/OOlQ7m+A1qRTyVyO7jMKHN8tgQAS7z7g==
-X-Received: by 2002:a17:907:8a12:b0:93e:fa12:aa1a with SMTP id sc18-20020a1709078a1200b0093efa12aa1amr14084404ejc.1.1684843164632;
-        Tue, 23 May 2023 04:59:24 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id cf11-20020a170906b2cb00b0094ee700d8e4sm4321311ejb.44.2023.05.23.04.59.23
+        bh=n4th3iXOfa5qIG2MobVS/IDr8buOOQSispksL/hzEfA=;
+        b=kVkT2M+a+moEpNK59MBiiwFI+kmsK7XVgV1j4H0hAyPf4iBWzEiLYMwpaJdhywD8ux
+         0ELcl58ZiOgT3RNaOtUUbburj2aKqVek/dW6fOVzaOJIp8IQg5QqAi+XCS1IOVcQ1wxz
+         o3Pvwt2jmmpTvdpDp7bp4cEu/7/OunhpOIZe/uBkYo/YxRtt8egRaECRPjOQBo/+6t/L
+         DjrCPOtz4Tln28+S2jxZYri76/mNNEmcBzF1cX0BpVKsp6Xe/7MnTWA0leiz7xfUyho5
+         1FjRbsXGT6qIlzo4Q6yYQrhBP8eyetmSMSIxriUCTSniJbSQc0wN0to8jr96A++gGXuR
+         XYxQ==
+X-Gm-Message-State: AC+VfDyLHTToLhkq8pfRBvCpnm9IX7QJ/o7IBFYkaEEkMhIK0VmgGhmm
+        g2LYdqL8nGLcE0tZqsHa+BM=
+X-Google-Smtp-Source: ACHHUZ6pTcFC6bhAYSWxCL+9RgiqZwcBn1Swkgkp+WkLW+9AgtOk1VjAOPYjwpciAhT574UEhmE/og==
+X-Received: by 2002:a17:902:c403:b0:1a9:4cd5:e7e0 with SMTP id k3-20020a170902c40300b001a94cd5e7e0mr21664656plk.17.1684843139548;
+        Tue, 23 May 2023 04:58:59 -0700 (PDT)
+Received: from debian-BULLSEYE-live-builder-AMD64 ([121.183.137.144])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170902c1c600b001a943c41c37sm6659206plc.7.2023.05.23.04.58.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 04:59:24 -0700 (PDT)
-References: <20230517200814.3157916-1-aliceryhl@google.com>
- <20230517200814.3157916-2-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: Re: [PATCH v1 2/2] rust: sync: implement `AsRef<T>` for `Arc<T>`
-Date:   Tue, 23 May 2023 13:59:00 +0200
-In-reply-to: <20230517200814.3157916-2-aliceryhl@google.com>
-Message-ID: <877cszfeck.fsf@metaspace.dk>
+        Tue, 23 May 2023 04:58:58 -0700 (PDT)
+Date:   Tue, 23 May 2023 20:59:05 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 0/9] Mitigate a vmap lock contention
+Message-ID: <ZGyqiaRnMJPFhxR6@debian-BULLSEYE-live-builder-AMD64>
+References: <20230522110849.2921-1-urezki@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522110849.2921-1-urezki@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,40 +80,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 22, 2023 at 01:08:40PM +0200, Uladzislau Rezki (Sony) wrote:
+> Hello, folk.
+> 
+> 1. This is a followup of the vmap topic that was highlighted at the LSFMMBPF-2023
+> conference. This small serial attempts to mitigate the contention across the
+> vmap/vmalloc code. The problem is described here:
+> 
 
-Alice Ryhl <aliceryhl@google.com> writes:
+Hello Uladzislau, thank you for the work!
 
-> This trait lets you use `Arc<T>` in code that is generic over smart
-> pointer types.
->
-> The `AsRef` trait should be implemented on all smart pointers. The
-> standard library also implements it on the ordinary `Arc`.
->
-> Co-developed-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> wget ftp://vps418301.ovh.net/incoming/Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+I ran the exactly same command but couldn't download the file, did I
+miss something?
 
-> ---
->  rust/kernel/sync/arc.rs | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index 274febe3bb06..9ec911e4a0c7 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -264,6 +264,12 @@ impl<T: ?Sized> Deref for Arc<T> {
->      }
->  }
->  
-> +impl<T: ?Sized> AsRef<T> for Arc<T> {
-> +    fn as_ref(&self) -> &T {
-> +        self.deref()
-> +    }
-> +}
-> +
->  impl<T: ?Sized> Clone for Arc<T> {
->      fn clone(&self) -> Self {
->          // INVARIANT: C `refcount_inc` saturates the refcount, so it cannot overflow to zero.
+$ wget ftp://vps418301.ovh.net/incoming/Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf
+[...]
+==> PASV ... done.    ==> RETR Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf ... 
+No such file `Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf'.
 
+> The material is tagged as a v2 version. It contains extra slides about testing
+> the throughput, steps and comparison with a current approach.
+> 
+> 2. Motivation.
+> 
+> - The vmap code is not scalled to number of CPUs and this should be fixed;
+> - XFS folk has complained several times that vmalloc might be contented on
+>   their workloads:
+> 
+> <snip>
+> commit 8dc9384b7d75012856b02ff44c37566a55fc2abf
+> Author: Dave Chinner <dchinner@redhat.com>
+> Date:   Tue Jan 4 17:22:18 2022 -0800
+> 
+>     xfs: reduce kvmalloc overhead for CIL shadow buffers
+>     
+>     Oh, let me count the ways that the kvmalloc API sucks dog eggs.
+>     
+>     The problem is when we are logging lots of large objects, we hit
+>     kvmalloc really damn hard with costly order allocations, and
+>     behaviour utterly sucks:
+
+based on the commit I guess xfs should use vmalloc/kvmalloc is because
+it allocates large buffers, how large could it be?
+
+> 3. Test
+> 
+> On my: AMD Ryzen Threadripper 3970X 32-Core Processor, i have below figures:
+> 
+>     1-page     1-page-this-patch
+> 1  0.576131   vs   0.555889
+> 2   2.68376   vs    1.07895
+> 3   4.26502   vs    1.01739
+> 4   6.04306   vs    1.28924
+> 5   8.04786   vs    1.57616
+> 6   9.38844   vs    1.78142
+
+<snip>
+
+> 29    20.06   vs    3.59869
+> 30  20.4353   vs     3.6991
+> 31  20.9082   vs    3.73028
+> 32  21.0865   vs    3.82904
+> 
+> 1..32 - is a number of jobs. The results are in usec and is a vmallco()/vfree()
+> pair throughput.
+
+I would be more interested in real numbers than synthetic benchmarks,
+Maybe XFS folks could help performing profiling similar to commit 8dc9384b7d750
+with and without this patchset?
+
+By the way looking at the commit, teaching __p?d_alloc() about gfp
+context (that I'm _slowly_ working on...) could be nice for allowing
+non-GFP_KERNEL kvmalloc allocations, as Matthew mentioned. [1]
+
+Thanks!
+
+[1] https://lore.kernel.org/linux-mm/Y%2FOHC33YLedMXTlD@casper.infradead.org
+
+-- 
+Hyeonggon Yoo
+
+Doing kernel stuff as a hobby
+Undergraduate | Chungnam National University
+Dept. Computer Science & Engineering
