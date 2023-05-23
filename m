@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A2670D890
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC24370D8B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbjEWJNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
+        id S235860AbjEWJRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235332AbjEWJNm (ORCPT
+        with ESMTP id S232211AbjEWJRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:13:42 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4539294;
-        Tue, 23 May 2023 02:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684833214; x=1716369214;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tG8tyz16iPziryCvAdBKNZ60+DgIUiN6eZydjnc0lAM=;
-  b=mA1I47F3RtHCEZ8laY3U3UoVCnQgG1UWLk2ichTMD8VQfaazD7L3gIJ2
-   FQGcOUCDU40v1ZdozpoNOT7MfNy3X2XEioTW2QfnZuVCrFWSbI0aQRMUK
-   v95ZPK62p1i8bqrzvFoqR/hjN3hbebP92lCG/fNfz7Khym0fkB1DFTuEl
-   truRh+ZpJc0rBoPdjayifGcuq0bATjOsDNVWntdCKP8sSsl40n8lc5Kf9
-   lftqcuoBqZE09SPPUdT3KT7WWKUU9bjgNLTUN9IQO7aMtu7ARdoxE1QPy
-   1KI0Rrz/2J+hrr9iC0OVvumcBzW6e8h/TOpJ0akmDUrVlgLyHyNEKEdSm
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="350692717"
-X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
-   d="scan'208";a="350692717"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:13:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="816047490"
-X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
-   d="scan'208";a="816047490"
-Received: from nmkenne1-mobl2.ger.corp.intel.com (HELO [10.252.53.154]) ([10.252.53.154])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:13:29 -0700
-Message-ID: <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
-Date:   Tue, 23 May 2023 12:14:28 +0300
+        Tue, 23 May 2023 05:17:36 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE65119
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:17:30 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96f5685f902so741467366b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unimore.it; s=google; t=1684833449; x=1687425449;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Evdstnt+fZo+xq0sG6n9jZlSoQpDRSGli1+1+HmpUO8=;
+        b=PnYOwJG1++jjnSRLyZ+XXt9gySJkJxjqebKiDUDHBOmCchnmXNB5a+RvVScIuwL967
+         bKh6xKW+Q5cvv1H1fQMTZMH1i+o3YXKmFqQqigbN7MomMz631Mm/0jkOceURgFj7rlIO
+         jNcaq99VWU2YxZVuFkRhYdQq+bbIX2RXbr6jM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684833449; x=1687425449;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Evdstnt+fZo+xq0sG6n9jZlSoQpDRSGli1+1+HmpUO8=;
+        b=hwO30v0cfzUbt5eboS+tHv4tCodnoWBnJMV2ot0WgE4HcxfkcBXYDjnbsLnVBVwrXX
+         xGc0U+2djiPEfj9c+NdK5XWlri+H0Np4+Sg0NT9O5q0QspoFTbWXG8X01y/OCHtoVCKM
+         4aQYdCDygpAVxMGLdeBmz4ttm8yYg55eCmRjUMkJzivWnDBq2iucym5/0/IZndQPqe1x
+         LoQiJIyTJIXQDfirU3IQ0Ku6uIeTGQhOKtvssBJUe3DjUMjQEPXCAC9eEsTik79VOveg
+         A2XSziRBq9k087tQVDzonnRp2y3GlRrwkxW4xeSsJ8O6ZCT88Wfcc5YHiR/o6JNvr19m
+         8oBQ==
+X-Gm-Message-State: AC+VfDwWxAuJXNvhsQI+B9Tzm2mW4KubcTsXJHAfZ2BRffTrMyFkCLNr
+        eLKlUbbiNqTbhcJYyaWTOzFoaXX0POTnVmHSPQ==
+X-Google-Smtp-Source: ACHHUZ4iT9f9F/0RNORNFfSPrn2dimqu5j+bYxzVynCCaK2bASqNb6PiChUoa5qPNoivkOVDQRPXDA==
+X-Received: by 2002:a17:906:da89:b0:94e:70bb:5f8a with SMTP id xh9-20020a170906da8900b0094e70bb5f8amr11721372ejb.66.1684833448729;
+        Tue, 23 May 2023 02:17:28 -0700 (PDT)
+Received: from MBP-di-Paolo.station (net-93-70-85-51.cust.vodafonedsl.it. [93.70.85.51])
+        by smtp.gmail.com with ESMTPSA id w9-20020aa7dcc9000000b0050bc13e5aa9sm3800762edu.63.2023.05.23.02.17.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 May 2023 02:17:28 -0700 (PDT)
+From:   Paolo Valente <paolo.valente@unimore.it>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Paolo Valente <paolo.valente@unimore.it>
+Subject: [PATCH] block, bfq: update Paolo's address in maintainer list
+Date:   Tue, 23 May 2023 11:17:24 +0200
+Message-Id: <20230523091724.26636-1-paolo.valente@unimore.it>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
-        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
-        peterz@infradead.org, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, p.rosenberger@kunbus.com
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
- <20230523074443.GA21236@wunner.de>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-In-Reply-To: <20230523074443.GA21236@wunner.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,80 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Paolo Valente <paolo.valente@linaro.org>
 
+Current email address of Paolo Valente is no longer valid, use a good one.
 
-On 23/05/2023 10:44, Lukas Wunner wrote:
-> On Tue, May 23, 2023 at 09:48:23AM +0300, Péter Ujfalusi wrote:
->> On 22/05/2023 17:31, Lino Sanfilippo wrote:
-> [...]
->> This looked promising, however it looks like the UPX-i11 needs the DMI
->> quirk.
-> 
-> Why is that?  Is there a fundamental problem with the patch or is it
-> a specific issue with that device?
+Signed-off-by: Paolo Valente <paolo.valente@unimore.it>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The flood is not detected (if there is a flood at all), interrupt stops
-working after about 200 interrupts - in the latest boot at 118th.
-I can check this later, likely tomorrow.
-
->>> --- a/drivers/char/tpm/tpm_tis_core.c
->>> +++ b/drivers/char/tpm/tpm_tis_core.c
->>> @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
->>>  	return status == TPM_STS_COMMAND_READY;
->>>  }
->>>  
->>> +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
->>> +{
->>> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->>> +	int intmask = 0;
->>> +
->>> +	dev_err(&chip->dev, HW_ERR
->>> +		"TPM interrupt storm detected, polling instead\n");
->>
->> Should this be dev_warn or even dev_info level?
-> 
-> The corresponding message emitted in tpm_tis_core_init() for
-> an interrupt that's *never* asserted uses dev_err(), so using
-> dev_err() here as well serves consistency:
-> 
-> 	dev_err(&chip->dev, FW_BUG
-> 		"TPM interrupt not working, polling instead\n");
-> 
-> That way the same severity is used both for the never asserted and
-> the never deasserted interrupt case.
-
-Oh, OK.
-Is there anything the user can do to have a ERROR less boot?
-
-> 
->>> +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
->>> +		tpm_tis_handle_irq_storm(chip);
->>
->> Will the kernel step in and disbale the IRQ before we would have
->> detected the storm?
-> 
-> No.  The detection of spurious interrupts in note_interrupt()
-> hinges on handlers returning IRQ_NONE.  And this patch makes
-> tis_int_handler() always return IRQ_HANDLED, thus pretending
-> success to genirq code.
-
-True, thanks!
-
-> 
->>>  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
->>>  	tpm_tis_relinquish_locality(chip, 0);
->>>  	if (rc < 0)
->>> -		return IRQ_NONE;
->>> +		goto unhandled;
->>
->> This is more like an error than just unhandled IRQ. Yes, it was ignored,
->> probably because it is common?
-> 
-> The interrupt may be shared and then it's not an error.
-
-but this is tpm_tis_write32() failing, no? If it is shared interrupt and
-we return IRQ_HANDLED unconditionally then I think the core will think
-that the interrupt was for this device and it was handled.
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ebd26b3ca90e..0c8e6537d6e2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3542,7 +3542,7 @@ F:	Documentation/filesystems/befs.rst
+ F:	fs/befs/
+ 
+ BFQ I/O SCHEDULER
+-M:	Paolo Valente <paolo.valente@linaro.org>
++M:	Paolo Valente <paolo.valente@unimore.it>
+ M:	Jens Axboe <axboe@kernel.dk>
+ L:	linux-block@vger.kernel.org
+ S:	Maintained
 -- 
-Péter
+2.20.1
+
