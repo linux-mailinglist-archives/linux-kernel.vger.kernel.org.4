@@ -2,138 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA91470D7AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615DB70D6AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236239AbjEWIhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S235958AbjEWIHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236174AbjEWIhO (ORCPT
+        with ESMTP id S235577AbjEWIHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:37:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF35BE47;
-        Tue, 23 May 2023 01:35:28 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N7N4gp000432;
-        Tue, 23 May 2023 07:49:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=C5RCb3DBpPeqbo3fxtcAA8qIzXb1DW+88OYyPdACG+k=;
- b=LlQdxRPXVqxk3S1A/t6oMcSKeWPg4k5hqxgSj88j2Rjl+yQqZZt2vAyD4hPLVUf+fJ/G
- rZE/7r48FJJUi20LRS4E/6dcDb9OkVDFqPJjeP0BkaRjSN/EvgJpuUbE+SZkFAAqkbQJ
- cCytlziB/6tgQ58DOb9dHPgDuao7kcm76ck/WDwFhuhjnfgvglViQigmDzYp+zlbdTZZ
- A0rzEetE8HZwqYyGnjnZVTG9iJgojE++V13H6/OOjIzA8F3GX7o8tmr9ZpO3Szk4BcW/
- PIMAeRn0/CVBwXXhtfz1CQX6ccSofy2K8P6q71asuhVAO3Csyv4FACESShETxxzFrdx4 UQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qr8qra0yx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 07:49:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N7nAvw012078
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 07:49:10 GMT
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 23 May 2023 00:49:09 -0700
-Received: from nalasex01b.na.qualcomm.com ([fe80::a057:7d2:b40d:81d6]) by
- nalasex01b.na.qualcomm.com ([fe80::a057:7d2:b40d:81d6%12]) with mapi id
- 15.02.0986.042; Tue, 23 May 2023 00:49:09 -0700
-From:   "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
-To:     "krzk@kernel.org" <krzk@kernel.org>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
-        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>
-Subject: RE: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
-Thread-Topic: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
-Thread-Index: AQHZiWr4KiB/3yzZPk+lfwSX6G7z5K9ngxfQ
-Date:   Tue, 23 May 2023 07:49:09 +0000
-Message-ID: <fb3678d67fd4428eaec98365288384ed@quicinc.com>
-References: <20230518092719.11308-1-quic_tjiang@quicinc.com>
-In-Reply-To: <20230518092719.11308-1-quic_tjiang@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.45.109.133]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 23 May 2023 04:07:19 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E496CE4B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:06:50 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-33164ec77ccso121085ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684829207; x=1687421207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n0Qlrnd0R6kSqL86O88QBELK4XlmSu/G3+eVbSMXROU=;
+        b=h06wA/q+C7KtXuWsKjus/5S5OeCMphpGUE8E/w4PytjQyGSGv/OJSRLCUygrOQPrBK
+         9ib1EzRxb0Zk9OO8EbkJbPmsBhEMlung3et5g7rnXzUqadfSElRzbjvrJofNk+JziuXL
+         F4wnlchljisIjPZC2QQ5cv5KglQj2igBc4405o8lGd6d5ogkwjOht6XpmyQz0XCg1Nmo
+         N9Qp222rxah+zy2GxnSc6uhlToQqTuHiwdXX7Irkvj16pa1+iMODZKjuW6y255EBkw+C
+         HIWeurntunUbR95KVosRaPmmRSKy79Gx+/HncZRmsdfcqPt2GbNGCoSi7X1ybR1+gCWx
+         G5dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684829207; x=1687421207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n0Qlrnd0R6kSqL86O88QBELK4XlmSu/G3+eVbSMXROU=;
+        b=Op84J5ev7G5QKFXZexK2Lm2jTayVyHsT3YhasnI2cgFqAx86BnNgNQwmGxWKeb6VRx
+         6seXHRv0/dk8m6OqL/VnX54qaBf7J9EyCpvL0fGCGxoLYFdQ1mrgFrJeXwYbU+YW6Oex
+         QZJoIt/vuiQGcJRWkbFYEo4xAQbGk2BMRCFW/MftGqoWaDCRCEuc9W3QQKSDwYfnrqUD
+         srewYtG1cDB2M28cskGjdT5IDB+xdcK5nYQVxCQTLsKT7vfvp6k/9ujGLgsamXcrF53z
+         IpQn1KuU9/gmSLdVvNzolXuRfG9NVR6md2Agm4PcW+MLd7v39cPLCQgQMD0RGg13vp8a
+         nCZg==
+X-Gm-Message-State: AC+VfDyG+1L16gOUYlfPohP9j0MP7RXnGkGP0EYPTEiXBP91zO1gEye7
+        EZ/4fkdULKxMnfnDvqLm/Fx575UocYyCK1EcSGuJ6JptblnFbA/HlLw=
+X-Google-Smtp-Source: ACHHUZ6GgCcfaHRO+RcoEiu9TcPl4COQ1hHtVxoAHRksHQKAV2bSus5PClfM3Xko0bVoPhF/7C7t6CgipxxRPVUwAhk=
+X-Received: by 2002:a05:622a:1a09:b0:3f6:97b4:1a51 with SMTP id
+ f9-20020a05622a1a0900b003f697b41a51mr103568qtb.27.1684828704735; Tue, 23 May
+ 2023 00:58:24 -0700 (PDT)
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 684AyIU3oWLYxBl2Web_ePKl21SATIze
-X-Proofpoint-ORIG-GUID: 684AyIU3oWLYxBl2Web_ePKl21SATIze
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 phishscore=0
- adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015
- mlxlogscore=907 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230064
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230510205054.2667898-1-mshavit@google.com> <20230510205054.2667898-5-mshavit@google.com>
+ <ZFwLph9WXByeHxAW@nvidia.com> <CAKHBV2535Dsbm_w0LQYi=NuyqrYmXdPLjd1JrUVEHo+DiO0=ZA@mail.gmail.com>
+ <20230511195928.GA288490@myrica>
+In-Reply-To: <20230511195928.GA288490@myrica>
+From:   Michael Shavit <mshavit@google.com>
+Date:   Tue, 23 May 2023 15:57:48 +0800
+Message-ID: <CAKHBV25kgZFdO=w7tDJ6wTSXgY_Dx67ec3A5yTZdFTu_8PTC-g@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] iommu/arm-smmu-v3: Keep track of attached ssids
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, nicolinc@nvidia.com,
+        baolu.lu@linux.intel.com, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi krzk:
-  Could you help review this patch ?
+Oh nice, this is exactly what I was looking for (minus the missing ATC
+inv, but that's somewhat easier to reason from code)! Thanks for the
+detailed guide Jean!
+I finally got around to trying it out and was able to see the page
+fault followed by invalidations on this patch-series as it is. This
+will be super useful to start refactoring SVA for a v2 of this patch.
 
-Regards.
-Tim
-
-
------Original Message-----
-From: Tim Jiang (QUIC) <quic_tjiang@quicinc.com>=20
-Sent: Thursday, May 18, 2023 5:27 PM
-To: krzk@kernel.org
-Cc: netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.k=
-ernel.org; Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Heman=
-t Gupta (QUIC) <quic_hemantg@quicinc.com>; Tim Jiang (QUIC) <quic_tjiang@qu=
-icinc.com>
-Subject: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
-
-Add bindings for the QCA2066 chipset.
-
-Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
----
- .../devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml   | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluet=
-ooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-blueto=
-oth.yaml
-index 68f78b90d23a..28296b6d35b2 100644
---- a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.ya=
-ml
-+++ b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.ya=
-ml
-@@ -16,6 +16,7 @@ description:
- properties:
-   compatible:
-     enum:
-+      - qcom,qca2066-bt
-       - qcom,qca6174-bt
-       - qcom,qca9377-bt
-       - qcom,wcn3990-bt
-@@ -95,6 +96,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - qcom,qca2066-bt
-               - qcom,qca6174-bt
-     then:
-       required:
---=20
-2.17.1
-
+On Fri, May 12, 2023 at 3:59=E2=80=AFAM Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+>
+> On Thu, May 11, 2023 at 11:26:48PM +0800, Michael Shavit wrote:
+> > > You should be getting rid of mm->pasid in this series as well.
+> > >
+> > > When each domain keeps track of what STE/CD entries that point to it =
+then
+> > > *ALL* invalidation should iterate over the list of pointing entires
+> > > and generate the correct invalidation for that pointer.
+> > >
+> >
+> > Completely agree. The arm_smmu_atc_inv_domain_ssid function introduced
+> > by this patch is a stopgap to decompose this patch from the SVA
+> > refactor that's required to stop using ssid in these calls.
+> > I also agree that such a refactoring probably belongs in the same
+> > patch series. @Jean-Philippe Brucker and others: is there any way I
+> > can about testing or at least exercising the SVA flow without physical
+> > hardware that supports SVA?
+>
+> Yes, there is a model with a simple test device that supports PASID and
+> I/O page faults. It's not completely straightforward to setup and the
+> driver needs to be rewritten from scratch, but it's the best we have at
+> the moment.  I'd like to do something equally useful for QEMU, so we can
+> have proper regression tests, but that requires a lot of preliminary work
+> to add PASID+PRI to PCI, virtio and IOMMUs.
+>
+> You'll need a kernel with the driver and a rootfs with the smmute
+> tool [1]; the RevC model [2] and a boot-wrapper [3].
+>
+>   $ ${BOOTWRAPPER}/configure --host=3Daarch64-linux-gnu
+>      --with-dtb=3D${KERNEL}/arch/arm64/boot/dts/arm/fvp-base-revc.dts
+>      --with-kernel-dir=3D${KERNEL}
+>      --with-initrd=3D${BUILDROOT}/images/rootfs.cpio
+>      --with-cmdline=3D"console=3DttyAMA0"
+>      --enable-psci --enable-gicv3
+>   $ make        # produces linux-system.axf
+>
+> Run the model:
+>   $ FVP_Base_RevC-2xAEMvA
+>      -C bp.secure_memory=3D0
+>      -C 'pctl.startup=3D0.*.*.*'
+>      -C bp.refcounter.non_arch_start_at_default=3D1
+>      -C cache_state_modelled=3D0
+>      -C bp.vis.disable_visualisation=3D1
+>      -C bp.virtio_net.enabled=3D1
+>      -C bp.virtio_net.hostbridge.userNetPorts=3D8022=3D22
+>      -C bp.virtio_net.hostbridge.userNetworking=3D1
+>      -C pci.pci_smmuv3.mmu.SMMU_IDR0=3D135100351
+>      -C pci.pci_smmuv3.mmu.SMMU_IDR3=3D4116
+>      -C pci.pci_smmuv3.mmu.SMMU_IDR5=3D8389749
+>      -C cluster0.NUM_CORES=3D4
+>      -C cluster1.NUM_CORES=3D4
+>      -a 'cluster*.cpu*=3Dlinux-system.axf'
+>
+> Then run a job using the tool. The process allocates two buffers and
+> passes their VA to the device (via the kernel driver). The device memcpie=
+s
+> one buffer to the other:
+>
+>    $ smmute -u mmap
+>    ... Success
+>
+> With smmu and iommu trace events enabled, a trace should contain
+> smmu_mm_invalidate and dev_fault/dev_page_response events.
+>
+> It's not entirely representative of SVA flow, where an assignable device
+> interface is mapped into the process and the process launches jobs
+> directly without going through the kernel (that would now use
+> drivers/misc/uacce), but it does exercise IOMMU SVA: sva_bind(), device
+> accessing the process address space with PASID and some IOPFs, which I
+> think is what you're looking for. However this model doesn't have a PCI
+> test device so you won't be able to test ATC invalidations with PASID.
+>
+> Other useful tests would be enabling lockdep (some intricate locking
+> between IOPF, the driver and mm), killing bound processes (-k), triggerin=
+g
+> invalid accesses to verify TLB invalidations (-f tlb, I think). There is =
+a
+> lot more to test, like thp and oom, but I don't have those in this branch=
+.
+>
+> Thanks,
+> Jean
+>
+> [1] https://jpbrucker.net/git/linux/log/?h=3Dsva/smmute-revc
+> [2] https://developer.arm.com/downloads/-/arm-ecosystem-models
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aar=
+ch64.git/
