@@ -2,220 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BFE70D4E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA3F70D4E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbjEWHZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S232537AbjEWHZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjEWHZk (ORCPT
+        with ESMTP id S229889AbjEWHZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:25:40 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCF0109;
-        Tue, 23 May 2023 00:25:12 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N6E9n3018884;
-        Tue, 23 May 2023 07:24:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=MLx1/vIUWEMIoitYxBaG3qvOzVefDqHIUp8jGBcj1Hg=;
- b=XwYqMfUJyLV0Oy55IYjYeQ0uVjL/z71JuNQI9anDSF2BFYFYYF4YSk56YudvktELpKYQ
- GQuf//Gn8dvgfvkKhshKxyebgqaNortkI+vKLHSeQzcdJvs/l5AlMRj9zx2jBkrqBQqS
- 9qfolPNlRhtP2cnMJmAKz8bvqp4fQFElPddQ7rzpQOKNYoZbHEhgBz9ZizFFEJGXEsWQ
- td6+4rOKWrnJ0VHF2mnsJYXC3pw4uqYENKmBDxNid8lGg6kTeca2Ve2xTr7BoKtZY1tX
- jXesChO7ZJMzGqIhInWRCEoQqFng33VspUjZNzIKbmXZW3ZeepQ9oR+VIpktg8dYI2+o GA== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp3qme59-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 May 2023 07:24:41 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34N7Mt0l027122;
-        Tue, 23 May 2023 07:24:40 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk2d6tgx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 May 2023 07:24:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mpZRp5s7TTOHXjYUYhhSDVXIqdvlG9aVXGron1JQnKt4qduQsHqZOsHR53uXtGmtItzaapZBBg7ylt0Z0Fj+0amHdwBXzQ2MCU9U75nKJOfhmC65xA35ysgHgFB8MY6YU7jaPkWugg4mUxXJ6Hjv6txRxVh2k8riod6o4PQuWe+9dB3ens5F28GEbMo2Obf7wcAYm/N4noDWwFH25KlTclp2q0YfxwF5/IJjIGV6E9XrlYQGZCf8mAninY8BShoVpfG2UC7QD15Kr3C2RKYjM41Uo74MaItplwyTQWwg2Mss0Q/3pUhDsmdhfRkppDHZ+FO1HB9UvgETTyjAzp6Elw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MLx1/vIUWEMIoitYxBaG3qvOzVefDqHIUp8jGBcj1Hg=;
- b=DrkKaHA2Boad6Dwh+QFYBeUDRIqDh7OAUlvciR+Vo1Q0FLGvybQ/j0hV+Whbmw1/E7PAe38Hpa20gAF55QJYQxeOFqvQIVW1aIJS9XMVeCYA2N5iJorRGpzoeOOa5jsYFdCPebe9+AhQJGDKfya2wcbgbjnzDVPgR+m5fM1HJboFTDo55SWX46aqAeVj2+x/7o4pTufVZUclU36BvTKlPOz8wyGaBKca1Z+G1D+R1UiBA14CcFAt67uCoWBarrsERfsJgrov0GWQVJpHIet8Y/pFj91gc7mKS4AARAdkt/3gU6cuPV29JlJqnumMkn7e5Ezt0+D8G1O32Na7mACuQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 23 May 2023 03:25:51 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C3A133
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:25:30 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f607839b89so11280555e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MLx1/vIUWEMIoitYxBaG3qvOzVefDqHIUp8jGBcj1Hg=;
- b=CW+YQbvsJE3INdZHbYGoOqu19MyXv9/m1nMeUHLPpM0EIKHX39eB08w7QbzpsdMhzppoUQ+VO8JC+U48P0sruVdQ9EUTBzDlBauluCOs/fKx4dBDWGKb0CEHVQ2n3RxUhpnBlhbyl2930ck90AKkHbON4jeVUKZaYXIEbT+Y0nI=
-Received: from PH8PR10MB6290.namprd10.prod.outlook.com (2603:10b6:510:1c1::7)
- by SJ0PR10MB4560.namprd10.prod.outlook.com (2603:10b6:a03:2d3::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 07:24:38 +0000
-Received: from PH8PR10MB6290.namprd10.prod.outlook.com
- ([fe80::68c5:330c:d234:3834]) by PH8PR10MB6290.namprd10.prod.outlook.com
- ([fe80::68c5:330c:d234:3834%7]) with mapi id 15.20.6411.028; Tue, 23 May 2023
- 07:24:38 +0000
-Message-ID: <056d3f10-8e27-bfc6-8f56-8bd344fb7f11@oracle.com>
-Date:   Tue, 23 May 2023 12:54:21 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 5.15 000/203] 5.15.113-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Darren Kenny <darren.kenny@oracle.com>
-References: <20230522190354.935300867@linuxfoundation.org>
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-In-Reply-To: <20230522190354.935300867@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0019.apcprd02.prod.outlook.com
- (2603:1096:4:195::13) To PH8PR10MB6290.namprd10.prod.outlook.com
- (2603:10b6:510:1c1::7)
+        d=gmail.com; s=20221208; t=1684826728; x=1687418728;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hh1M/PyhqnPF3gHXcsPzIKqPXVy0TQ5XWDVGt8r34Cw=;
+        b=MbWTUJK0onitNaT4PQy7LWYs3/eCrjGWOztlNDkwLuKrPc2NB3ITFEKXZNPSCQBVkm
+         IsDCDKehWZ8npbFaRSGkKIfRvHD8P75fyk5si+zzsFeFE8w/tJz3S7O1mOUp7Mt7HTdT
+         r6LF5FjChUepkHIWCN4SCllJcZNcSGNLmnC3zqHu1xZ7+jWeJ7IYlfbR7gxLtDkH4JKX
+         mxay8Vb1CJPUnjMgALNdyy5NHyJTWR0JvVa/hBUlmukAz3edKWeYRZ8sytnO6b0QbvCw
+         JlsLc6mnPtF81xYjLlCDrGVNDeM1Zij5DB32GhWHgEDPh620Z76Sx5nLWt4mZOCnoR8i
+         ZMOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684826728; x=1687418728;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hh1M/PyhqnPF3gHXcsPzIKqPXVy0TQ5XWDVGt8r34Cw=;
+        b=HY7PmOtMH+k2OIZHmntzE6QayedIxALB08rnj3c1gVxwKjFFoJC+/4k1PrngahnRRJ
+         aXKA3FleobdR/ugvCzi47C9Pt6kWz3NOLdBsTLat1qPvvId01zrTrhAoC3oQ9Lvs6KND
+         8dZG84Z8How7LUC8FcmV0NcNJxE+erbjqorAfghtIAHWqHg/4GBa+T5VLuVYlLK8JHTu
+         nlqp4EEH+CGxzgFOYTqGk4JvYM94hhRsOgBz1z1ptPZ/sehmZeKuT1/vnnK9RJUr9uIr
+         H1ufxgWS34pqcTj/K9cHdIYLauEovhnlnnU0ZdRuf8n5TJubm/QNZHkldNtg/lB6YJhD
+         Tsfg==
+X-Gm-Message-State: AC+VfDyO5b6ig3kIPe3QGvsMmxFGEnvp+j6KLsT32xGMEXpZqFmQxMfx
+        rZ8WyAU9bGmBWnf+5+innoM=
+X-Google-Smtp-Source: ACHHUZ6TvcH4VxLvgQZWHCNak2I8mUxXM2ty6AS9EVucuJhjX5yJLuwW0XNYUI3IR6a9XcTU9oOJTg==
+X-Received: by 2002:a1c:4c10:0:b0:3f4:5058:a033 with SMTP id z16-20020a1c4c10000000b003f45058a033mr9372191wmf.24.1684826728204;
+        Tue, 23 May 2023 00:25:28 -0700 (PDT)
+Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
+        by smtp.gmail.com with ESMTPSA id h1-20020a1ccc01000000b003eddc6aa5fasm13988260wmb.39.2023.05.23.00.25.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 00:25:27 -0700 (PDT)
+Date:   Tue, 23 May 2023 08:25:26 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Xiaoming Ding <xiaoming.ding@mediatek.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, fei.xu@mediatek.com,
+        srv_heupstream@mediatek.com, linux-mm@kvack.org
+Subject: Re: FOLL_LONGTERM vs FOLL_EPHEMERAL Re: [PATCH] tee: add
+ FOLL_LONGTERM for CMA case when alloc shm
+Message-ID: <106e7886-ef02-4979-b96d-66d33cfa119c@lucifer.local>
+References: <CAFA6WYO+AvnbuAdWyBAQ8HkLaOno7PXdsPb9SubxrGNvAm4UnQ@mail.gmail.com>
+ <ZGSLiiK/JzD5KMd7@infradead.org>
+ <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
+ <ZGSgCZrg+RjAbGO1@infradead.org>
+ <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
+ <d4773626-6cf0-c929-c775-a84ac41fd719@redhat.com>
+ <ZGWnq/dAYELyKpTy@infradead.org>
+ <CAFA6WYPgvifYcj_MT7BBcC0BtQDWXV0u+HY8qv0M9nNyiCgkow@mail.gmail.com>
+ <8b898768-a3c0-198d-a70c-9aa96b7f4a29@redhat.com>
+ <1ced7f32-553e-2a5b-eec9-f794d7983d56@nvidia.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR10MB6290:EE_|SJ0PR10MB4560:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37b99d07-94e6-4315-ac73-08db5b5ec431
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QHPeeNmKESls5y1SI3Oe3QafEyB5l/hGtacNGLZh9TpdIYa5soucTOtdZp0Kl/HyNADL4X+mw0k8hn5gxQEeqkXcYv3x6yZ0Fc0hD1Yj75B2Vpvrra6I4A11ei3h5AZxuFlI1hbdo02DHRiPHpQGgrKj7C1XG7j8ygON7zVtALcyB9+J0OZbW4RQHP5WD9VWNmHz/C704Ihafuj1xGSacrelPph3qxxzO4Hh06vRwQ+SUDoTkQZUeMLmhkDExYsadqPnfCxJLs36y4r2Sj9GE1HIOsR3P/BeACoFUoPedDa8Sh7MskSrh5uq9s+wFj66+BbZd8YXssBOSJafTsBN7h4QlqQHz2PrmnfLtQPYxz/GWZGrNB3GaUJPSxom7XIvmXkhPtfWUhym51p3L8XV7ipTIa794aSm/ZcaOJo00vDzP7tt6Imw9kRs4JawXrG808nTnUDOw6gqKDKaBsJqLo1U4elPaWfS6tkIrjhssym0zV1tcx6rNdk8ZeqTJWDGRtPfp6XfDCoiciy3jEbSNWoYDHyD30nRn/ptuqPNmtvw6gReX6TdMqRm+xQndnB7yffSzibnQSUP3GL6+ZzRQ9HlRVjnVH0dT/nXSwsjFjSevUn2O7htMYgrdoeBAd4duuxkD51HY7n7nevwkoNatw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6290.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(346002)(366004)(39860400002)(376002)(451199021)(8676002)(8936002)(7416002)(5660300002)(186003)(6512007)(6506007)(107886003)(31696002)(2616005)(26005)(86362001)(53546011)(38100700002)(66946007)(6666004)(41300700001)(478600001)(66476007)(966005)(4326008)(6486002)(36756003)(66556008)(316002)(54906003)(2906002)(31686004)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TnJ5cWRzajgweW00VzVOczlJOGtFeXlxREpYdG8zSGZQQlJEWGh2aUsxYW1W?=
- =?utf-8?B?VDhwQzZEME9RVW9HSndCWjdlUW8zQkVscjNXMEVSWGhheEkzS1Mrc0I2bHBG?=
- =?utf-8?B?eko1cFBKck81QmtpTTdWMC9nUVBpRDhsQnl4T2NNaDlzYTFoS2FQcHRPOHlz?=
- =?utf-8?B?VmFaMEN4dVV2RmJDbVRrd1JEazB6VEVqNHh6WmlLYXFRdjNadWlFZGV2QVZE?=
- =?utf-8?B?T2RKUHJRajZVa1RaZDhueGhqdEI1NDVCMmNPcndzT1pLUUx2MG9KbTdHanFa?=
- =?utf-8?B?N2RmVWxmRE5VWGdoNFFMSkwvdFZzYnpoNDdRNkxnWUx5Wmc4RVFlOFcvMEZO?=
- =?utf-8?B?RytId0loaEJSNytyYWp5SXlFdWxiTlNYMjJhdTB0QzNza1UzNHpDYzByMWk3?=
- =?utf-8?B?Rm03NGVvUnBISzlET3g3U29obklld3B3Zzhyb1cyN0JDQnU1VUVRZmRHWDNL?=
- =?utf-8?B?alAxLzYvaHVsaTB5QnpzalE1a2c4bFJkV3IyU2U4MFBKMlNEYjdKc213MWNM?=
- =?utf-8?B?MVBEN3hFb1Z0czFrTXcxb1IweHNCWk9qRGw2SDhPV2lWTTlnSEVwQkViUEZi?=
- =?utf-8?B?akVwaFpma3JJeCtrL0p3V3ZUR0VCbEtDYWhtYkQrZk9Eb1hjeVVTOG1vbUtK?=
- =?utf-8?B?eGxJR2QvMktpZDJZTzdkVFNGMGxicUtFZjA1V1dFSlpVZTBCMWVDTmFWK3d0?=
- =?utf-8?B?WkRjVXRPR1BlSjZhamhZeC9XdEt4SS8ySjJTV0ZDOEFTSklwZDcwa3ovdDVR?=
- =?utf-8?B?Tlp6MkRKZFlqbUdvRFVtTWtuZDFqVGFJdkNaNnYxS2dSRVgwQlF2L3dNek1i?=
- =?utf-8?B?N2Y2Y1hiUWw5Q1E5RnJKWjl0V041OXhhWnNtM1B5eFZOR1RpN1JQck5kRFFz?=
- =?utf-8?B?MmJxREVRQktOSG1UZEVOcndNLzBQT0NJOWNtTlE2dGRRbnAyUit6elFSc0xZ?=
- =?utf-8?B?ZUdXaHk5cUZ5SVJ3UUY5dHo4dFZCdUdOVXgyQjBCaWI1TFh4NkJLbkRBZXhB?=
- =?utf-8?B?aWZvRVBwMzErZHNJaUoyOEpUUUFweDdkSDg4ZUhZVHRSb0pROVZXcVE5VVgx?=
- =?utf-8?B?TXd3dGZaa2xSbGdhZVVFaHZMMllYWEJ5Q0tQd2VlbUlaTlhDSVYzZ2RiUTNG?=
- =?utf-8?B?WHlodlVSeEU5dDA4VGdwRVRUcDdETThtaXpDZ2VCRU5WRytsaksvZCt3S1ZV?=
- =?utf-8?B?dzdSUFQrL2RzdDVKa0ltVFZPK3VSZEJ5bHNlRDJlelA5NEZuVzZOcmJFUEpu?=
- =?utf-8?B?citpYU54dk03NGQyRkVkNE9VRE93cmRaaGlzYjhhUkoxanI1VTBDMFIwY0dN?=
- =?utf-8?B?ejMwZUxiS2tmbndjbER0ekNGNmp0Vll5bnhOVkZRZzJMc09NSlBYMHp2OWVU?=
- =?utf-8?B?eVFMbHU1cE1yN3h0d2owUXUrRWNWbWZINS9ZZ0dPR3hpZWU3SHd0UkN1WEtZ?=
- =?utf-8?B?MmcyK2JTTjk3MUR0OUpEWXRGNGlFOE80QVlTR3NxOXczN2d3VlQ5RDJMS3FI?=
- =?utf-8?B?UWNheTFYUWZ5eVlBNGVNZTd2SFFObnlVSTNhMDhSRG5oYVRENURxMFZGa2pP?=
- =?utf-8?B?RzhYZnNYWmljRjZHb3EwNTdaZzZyeTl2SzFXcVBvTjBaVWtHVWRaSmR3WGs4?=
- =?utf-8?B?K1RqSW51V2M5OFVqWml5TGlMVkdBaVRDZE1ZeVZCOThYclpDY1BZLzFsN3RG?=
- =?utf-8?B?Tk8zTXUvVkkvRnFuN2xlUlRWSmtFL3c0RzlxQ3lBRnU3S1VFbGp4Q1RQeUNp?=
- =?utf-8?B?S3MyT3UrWFVIeUFGdkovU0YzZTJaekd5NDd1TGdwY2V2TEplVHZsanAyaGNN?=
- =?utf-8?B?R0VTbExUK1NBaTRSb3puMnFnc2htN0J6YzR0YVN5dG4yUWx3TWRyaG9VdjI4?=
- =?utf-8?B?Y2FuVXA0Rm5aaUppWVJ0Kys3c2VvbnVWYzY5MzNaay9rRnVTQXFmUEJXdGxP?=
- =?utf-8?B?UTdlRGhZMGVRZTFjUzd6MXc4ZlYvNjFyaFBmVjAvTnNWTENSK0lqR3FiQkdQ?=
- =?utf-8?B?TVJGbVp0UllyVG1xVkdsY0hEekYzS0p2SnZuRno2MU1qZmh2UWRia3p2VjVL?=
- =?utf-8?B?TVdJOVFHZjVCaVRhTnpsYkszSitYbitXZ1d2aTBGdFAyRGVaWU8zWjJRYnNj?=
- =?utf-8?B?VlhQNGNTMVIvSWpkRUZLVWxCalUyQmNTZGI5RDhjbmhMODVpUHNia05xem5W?=
- =?utf-8?Q?3VQhx+nk7b9H0x4ndTf6rk0=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?Uk1kb0VGZ3B5OHlBOHA0ZkQ3VG5lb3FvNkQ2V2dKbWZhcVRaVzlJMEU1amhS?=
- =?utf-8?B?WGZuWHJzVVlvanFtSkZLQmJ4M2JKRkhlYytsS1A3cWhzdzJUOEVTR25aQmZi?=
- =?utf-8?B?VmY2N1BPZ1ZyV29nQzltU21WUFdJdC9OTzdNUHZoc0M1VnZJM0JhSytkSkEw?=
- =?utf-8?B?Q252cEhDaTFqZW9BZGVJcnZDTDFCcmdsWUNFTjN1clI2Vk5hOTh0WWR0THJM?=
- =?utf-8?B?Nk84cHR5anpEa3ZuWXdXU1hRTlZGQXVwcUlwRmI4M0wvSEw0TXRXZGNVMWV0?=
- =?utf-8?B?Nko3czNORjRmTjVQdEpnUHNOU0YveitJTjZQcUZvaGF5S0VZVXJTbEdlb2dm?=
- =?utf-8?B?TTJDaFVZSTVQM1IraVRNbzlWMklhZU9WaFN6ck5wSGRJNWtvc245dGltNnhx?=
- =?utf-8?B?dkM2NTU5MnBJTlVXUmNwQkJ6VldpaGdUakFBaGtsUnJnZnoxWlVRN1AzdUVG?=
- =?utf-8?B?QmVRaUVzWmxXdFVoMzlMTGFLK2NsZ3QxczcybmxXRE1SemdBQnhzUXZHNTQw?=
- =?utf-8?B?KzFrWUVRTlBSa1hiUWdZaHB0cXBLUWx0amg5T1U2NlMzM3BoRmE2TGNKU0cr?=
- =?utf-8?B?K3hEaVlDczU0Nm1oelc4YUpYaDFzSHVYUElWWnU2RjNpWll6d2FtdzdDYjNt?=
- =?utf-8?B?RVhQQlpEaFFJZ2ZldENob3FUSWt4anRQdUhPZW1FZ1pla1hVK1NEcGxZb0Ji?=
- =?utf-8?B?SmZNQU5wc3lpUzVTdDk1T3FsME1YZ0dEVjM4YlN6V25iWDJ4UWlRUTJnejFG?=
- =?utf-8?B?eHZsMFBZSXd5bE4yR3VHU21HYkR2R2lYeGNOL2FCUnF5RGl1M2RmU256OTNT?=
- =?utf-8?B?Q0I3ellUNEJBMUc1RVE4V3gxdWNOb3E3Q0tOSjc0Rm1QbHhRVEtEQUtKR1NK?=
- =?utf-8?B?dDJwL25MUjNoOW44R0NuMk5QU0tvMk40ZmQ1d05nUjNUQ2JqbmNsb2NmOTFN?=
- =?utf-8?B?c0haR295VXNFeCtES0FxOU4xOWpkakVhVVE0MnpKUnpnbkZVV1NVZVN1SzNq?=
- =?utf-8?B?alVIeGxTL2JHcGRxMFlLR0MxNVVDTjcwOHFYM3RXSVE5bkxZQmUwRHJTTFdi?=
- =?utf-8?B?WEsyYlR1SDRmODBpV2JLV200VUVXa2xoTjFSRXBtWFVwLzZzR0ZiODhDckxN?=
- =?utf-8?B?NS9CZkRyQm1YWmRrYUNCZUxJU0ZBN3psSHNDWDJGWTgyYVFVdXNJUzE0WWt3?=
- =?utf-8?B?b1JudGZuMXgxMmV5bjJWRjdKUVNRTkVLU2NzVUo3WldFQk4zNEZLYXNTNGls?=
- =?utf-8?B?SmhIcmRoZzNSZnBGU3NwSUV2NlVEMUhqODdyTlFHd2dhZFNXYkVUajVYOWdH?=
- =?utf-8?B?ZFVORHhJN2pLMlpxd0VQV29BQTczRVQxcHpkNWxNMDNLOTVva1RackV5eVlu?=
- =?utf-8?B?dkFQRG9nc1Z3YjJjTWUrSUs1SEdIM0IvbXhmYnRWRUdXTXZKSFVEdmlCMktx?=
- =?utf-8?B?RVN5SmdaT2FwYzIvSXUxTEtlU0dkeGNBbDBLeDIvRGJlaWpHWExmcS9pTzV4?=
- =?utf-8?B?MXpQZURBSmtVeWtPbGI0RmtyN0FqMlAreTFUVkxVNEIwYkttOUQ4VkxLV3FB?=
- =?utf-8?Q?nbaFsaSwxNhKkj/vuxsLJPK/lqVdt7XZz6D9PSW9xaUKxe?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37b99d07-94e6-4315-ac73-08db5b5ec431
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6290.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 07:24:38.2862
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QlDQV5HEpOyyw2cyE7B9BScxCBmfESHg/4j8K/IKsecfCI3oaJOLR3Wc79r8yfxwqs3Jq1HbZGTRuzs9978Bx2P9Vs+FQ8chrV3ewZsztJpI24InQOpbgNNx0HrO21nM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4560
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 phishscore=0
- malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305230060
-X-Proofpoint-GUID: AQsvc78uKVCa15r9uZgkj2HMB3H-AcYo
-X-Proofpoint-ORIG-GUID: AQsvc78uKVCa15r9uZgkj2HMB3H-AcYo
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1ced7f32-553e-2a5b-eec9-f794d7983d56@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, May 22, 2023 at 06:54:29PM -0700, John Hubbard wrote:
+> On 5/18/23 06:56, David Hildenbrand wrote:
+> > On 18.05.23 08:08, Sumit Garg wrote:
+> > > On Thu, 18 May 2023 at 09:51, Christoph Hellwig <hch@infradead.org> wrote:
+> > > >
+> > > > On Wed, May 17, 2023 at 08:23:33PM +0200, David Hildenbrand wrote:
+> > > > > In general: if user space controls it -> possibly forever -> long-term. Even
+> > > > > if in most cases it's a short delay: there is no trusting on user space.
+> > > > >
+> > > > > For example, iouring fixed buffers keep pages pinned until user space
+> > > > > decides to unregistered the buffers -> long-term.
+> > > > >
+> > > > > Short-term is, for example, something like O_DIRECT where we pin -> DMA ->
+> > > > > unpin in essentially one operation.
+> > > >
+> > > > Btw, one thing that's been on my mind is that I think we got the
+> > > > polarity on FOLL_LONGTERM wrong.  Instead of opting into the long term
+> > > > behavior it really should be the default, with a FOLL_EPHEMERAL flag
+> > > > to opt out of it.  And every users of this flag is required to have
+> > > > a comment explaining the life time rules for the pin..
 
-On 23/05/23 12:37 am, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.113 release.
-> There are 203 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+I couldn't agree more, based on my recent forays into GUP the interface
+continues to strike me as odd:-
 
-No problems seen on x86_64 and aarch64.
+- FOLL_GET is a wing and a prayer that nothing that
+  [folio|page]_maybe_dma_pinned() prevents happens in the brief period the
+  page is pinned/manipulated. So agree completely with David's concept of
+  unexporting that and perhaps carefully considering our use of
+  it. Obviously the comments around functions like gup_remote() make clear
+  that 'this page not be what you think it is' but I wonder whether many
+  callers of GUP _truly_ take that on board.
 
-Tested-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+- FOLL_LONGTERM is entirely optional for PUP and you can just go ahead and
+  fragment page blocks to your heart's content. Of course this would be an
+  abuse, but abuses happen.
 
-Thanks,
-Harshit
+- With the recent change to PUP/FOLL_LONGTERM disallowing dirty tracked
+  file-backed mappings we're now really relying on this flag indicating a
+  _long term_ pin semantically. By defaulting to this being switched on, we
+  avoid cases of callers who might end up treating the won't
+  reclaim/etc. aspect of PUP as all they care about while ignoring the
+  MIGRATE_MOVABLE aspect.
 
-> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.113-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
+>
+> I see maybe 10 or 20 call sites today. So it is definitely feasible to add
+> documentation at each, explaining the why it wants a long term pin.
+>
+
+Yeah, my efforts at e.g. dropping vmas has been eye-opening in actually
+quite how often a refactoring like this often ends up being more
+straightforward than you might imagine.
+
+> > >
+> > > It does look like a better approach to me given the very nature of
+> > > user space pages.
+> >
+> > Yeah, there is a lot of historical baggage. For example, FOLL_GET should be inaccessible to kernel modules completely at one point, to be only used by selected core-mm pieces.
+>
+> Yes. When I first mass-converted call sites from gup to pup, I just
+> preserved FOLL_GET behavior in order to keep from changing too much at
+> once. But I agree that that it would be nice to make FOLL_GET an
+> mm internal-only flag like FOLL_PIN.
+
+Very glad you did that work! And totally understandable as to you being
+conservative with that, but I think we're at a point where there's more
+acceptance of incremental improvements to GUP as a whole.
+
+I have another patch series saved up for _yet more_ changes on this. But
+mindful of churn I am trying to space them out... until Jason nudges me of
+course :)
+
+>
+> >
+> > Maybe we should even disallow passing in FOLL_LONGTERM as a flag and only provide functions like pin_user_pages() vs. pin_user_pages_longterm(). Then, discussions about conditional flag-setting are no more :)
+> >
+> > ... or even use pin_user_pages_shortterm() vs. pin_user_pages() ... to make the default be longterm.
+> >
+>
+> Yes, it is true that having most gup flags be internal to mm does tend
+> to avoid some bugs. But it's also a lot of churn. I'm still on the fence
+> as to whether it's really a good move to do this for FOLL_LONGTERM or
+> not. But it's really easy to push me off of fences. :)
+
+*nudge* ;)
+
+>
 > thanks,
-> 
-> greg k-h
+> --
+> John Hubbard
+> NVIDIA
+>
+
+Looking at non-fast, non-FOLL_LONGTERM PUP callers (forgive me if I missed any):-
+
+- pin_user_pages_remote() in process_vm_rw_single_vec() for the
+  process_vm_access functionality.
+
+- pin_user_pages_remote() in user_event_enabler_write() in
+  kernel/trace/trace_events_user.c.
+
+- pin_user_pages_unlocked() in ivtv_udma_setup() in
+  drivers/media/pci/ivtv/ivtv-udma.c and ivtv_yuv_prep_user_dma() in ivtv-yuv.c.
+
+And none that actually directly invoke PUP without FOLL_LOGNTERM... That
+suggests that we could simply disallow non-FOLL_LONGTERM non-fast PUP calls
+altogether and move to pin_user_pages_longterm() [I'm happy to write a
+patch series doing this].
+
+The ivtv callers look like they really actually want FOLL_LONGTERM unless
+I'm missing something so we should probably change that too?
+
+I haven't surveyed the fast versions, but I think defaulting to
+FOLL_LONGTERM on them also makes sense.
