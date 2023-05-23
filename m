@@ -2,133 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822A970DF9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F92970E492
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237293AbjEWOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        id S237409AbjEWSYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbjEWOre (ORCPT
+        with ESMTP id S237017AbjEWSYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:47:34 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE47E9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:47:33 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30a4ebbda56so3444515f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684853251; x=1687445251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPxJfv8Gp/np80rJQlBAE1bGG9in5p+Ub2ud9nocz6U=;
-        b=WqoXIxmjF4fRAuTza7LWI2l7Be8/QIYJutSNRRaw6QSkA0mZSS80UAZtniMf9EPffx
-         OJ3DQ4IWYyAQdL5dtehn8ytxLkeS218smegrauZjfoDvgLIPqyaA471Ff6rz4yYDo8L0
-         eihGyFOEA4EXqQwzbTXi1GHtWmaD/2gTaCX3tWaEvNU5utjQSjMCCEtIvD8VlLNV7rXl
-         MvBWX/tUboGmcWG7a2buIakdgPUPd5FnKQXFBgZuDHTyU4/lFGLUcEWI8auxq4+QU1Ty
-         xgJsnP06DonVPnXiEblbtQ9eMi5u1EOqtmVRt7KpKabtmIFukFHkC8e0ct4b3138yvOQ
-         DHiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684853251; x=1687445251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zPxJfv8Gp/np80rJQlBAE1bGG9in5p+Ub2ud9nocz6U=;
-        b=kOjRigKYMUx12l2C7RwAMOiorLk9H8jIbTHVLSU6JDgUQZ+1EtEpKTM2W3ZbNrV0Ku
-         AF5qhNPKY4y69icBBvMxCxjTTZyS+ePCNcUQrh1T/f/ikND44mZfVwtRF3w5VFfJf6YJ
-         4fk6hdk/OIPahU5VYKdzCYRhijA76VPJ2kJOOmWaerXec8V01wdJQhHIlbb/buz1BJu3
-         X8Mlz5WCmclzN9XhXSgUt+siHM+JixnZFkPCbeAJUtkw0fgk8lE7YBk+5ZI9xIULqnYK
-         mWalOtFKAAdSOqadgOXlTmgiqeWW2frcWgdkqoteFvA3FoEGXm6XT1OieBhd0rZY2Wov
-         uZgw==
-X-Gm-Message-State: AC+VfDyzMbRNsWPkN6JTHtV31T/ZHz7/Vgw5akhB3y/P6jn21SGJnGnI
-        7uakbhq+yiqKDcOhrdj3IUOAKw==
-X-Google-Smtp-Source: ACHHUZ4qBBoaISjw1qz9BvpZKAg8+GG76ZYbL0DJwXL+ImXaMvFn5rvjbJsBDtXwIQLEzMgaoe0Plg==
-X-Received: by 2002:adf:ee82:0:b0:306:2aa7:2ecc with SMTP id b2-20020adfee82000000b003062aa72eccmr10390763wro.45.1684853251337;
-        Tue, 23 May 2023 07:47:31 -0700 (PDT)
-Received: from myrica (5750a5b3.skybroadband.com. [87.80.165.179])
-        by smtp.gmail.com with ESMTPSA id 10-20020a05600c024a00b003f423dfc686sm10151223wmj.45.2023.05.23.07.47.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 07:47:30 -0700 (PDT)
-Date:   Tue, 23 May 2023 15:47:33 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        narayan.ranganathan@intel.com
-Subject: Re: [PATCH v6 1/4] iommu: Generalize default PCIe requester ID PASID
-Message-ID: <20230523144733.GA4137946@myrica>
-References: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
- <20230519203223.2777255-2-jacob.jun.pan@linux.intel.com>
+        Tue, 23 May 2023 14:24:39 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1420E8F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684866278; x=1716402278;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ix13VAl7dfaEjHEjOpNS6mBHoH/Qpd2+FxMGVb01JO4=;
+  b=TlW/z0cqjcuK9sz+czdVgkv4yy60pzeZabmHToMse19MLPQxwiGKDogp
+   qBVTjg7kFxWSSK9ZRSY40Are7OzOVdvwY0F4FKv8PXTeD36TDoZb0OFz/
+   FjcPgV4Ry9O+OOBEhvsz8X3r/GzZaryIO7S6veQZmh0zEDQ5PQq4wFhK9
+   W/fGzmbkE66uSGa+KSYb9KOC2kV0voKQtjGo0/4DlhcT31DsDRUeboCQZ
+   mykyDJmNW/WgV6jKHsJ5O/4HkQ5+eFQ9+yJDcHh4gLbQnFbLpdWxYHYxT
+   Xs1k0iLmr4NZUl0H4aes8XtUUYCiW55iV1xjehb7sy3NtOaMJOffIz5Js
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="342786239"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="342786239"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="736974294"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="736974294"
+Received: from srusakov-mobl.amr.corp.intel.com (HELO [10.209.35.87]) ([10.209.35.87])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:36 -0700
+Message-ID: <904f47b6-46f4-039c-2019-4ee60ac6d9da@linux.intel.com>
+Date:   Tue, 23 May 2023 09:48:03 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519203223.2777255-2-jacob.jun.pan@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V2 3/9] ASoC: amd: ps: add SoundWire dma driver
+Content-Language: en-US
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
+ <20230522133122.166841-4-Vijendar.Mukunda@amd.com>
+ <0bf45d6e-72bc-d31a-fec5-b52859b8dcae@linux.intel.com>
+ <129df804-a05e-47a6-cfa3-cc36282955d1@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <129df804-a05e-47a6-cfa3-cc36282955d1@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
 
-On Fri, May 19, 2023 at 01:32:20PM -0700, Jacob Pan wrote:
-> PCIe Process address space ID (PASID) is used to tag DMA traffic, it
-> provides finer grained isolation than requester ID (RID).
-> 
-> For each RID, 0 is as a special PASID for the legacy DMA (without
-> PASID), thus RID_PASID. This is universal across all architectures,
-> therefore warranted to be declared in the common header.
-> Noting that VT-d could support none-zero RID_PASID, but currently not
-> used.
-> 
-> By having a common RID_PASID, we can avoid conflicts between different
-> use cases in the generic code. e.g. SVA and DMA API with PASIDs.
-> 
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> ---
-> v6:
->    - let SMMU code use the common RID_PASID macro
-> ---
->  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  2 +-
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   | 10 ++++----
->  drivers/iommu/intel/iommu.c                   | 24 +++++++++----------
->  drivers/iommu/intel/pasid.c                   |  2 +-
->  drivers/iommu/intel/pasid.h                   |  1 -
->  include/linux/iommu.h                         |  1 +
->  6 files changed, 20 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> index a5a63b1c947e..160b31e6239d 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> @@ -80,7 +80,7 @@ arm_smmu_share_asid(struct mm_struct *mm, u16 asid)
->  	 * be some overlap between use of both ASIDs, until we invalidate the
->  	 * TLB.
->  	 */
-> -	arm_smmu_write_ctx_desc(smmu_domain, 0, cd);
-> +	arm_smmu_write_ctx_desc(smmu_domain, IOMMU_DEF_RID_PASID, cd);
 
-I agree with reserving 0 globally for non-PASID DMA, but could we call
-this something more generic, like IOMMU_NO_PASID?  The term "RID_PASID" is
-specific to VT-d and "RID" to PCI, so it looks confusing here (this driver
-also supports non-PCI). "NO_PASID" would be clearer to someone just trying
-to follow this driver code.
 
-Thanks,
-Jean
+>>> +struct sdw_dma_dev_data {
+>>> +	void __iomem *acp_base;
+>>> +	struct mutex *acp_lock; /* used to protect acp common register access */
+>>> +};
+>>> +
+>>>  /**
+>>>   * struct acp63_dev_data - acp pci driver context
+>>>   * @acp63_base: acp mmio base
+>>> diff --git a/sound/soc/amd/ps/ps-sdw-dma.c b/sound/soc/amd/ps/ps-sdw-dma.c
+>>> new file mode 100644
+>>> index 000000000000..f41849fd035c
+>>> --- /dev/null
+>>> +++ b/sound/soc/amd/ps/ps-sdw-dma.c
+>>> @@ -0,0 +1,70 @@
+>>> +// SPDX-License-Identifier: GPL-2.0+
+>>> +/*
+>>> + * AMD ALSA SoC Pink Sardine SoundWire DMA Driver
+>>> + *
+>>> + * Copyright 2023 Advanced Micro Devices, Inc.
+>>> + */
+>>> +
+>>> +#include <linux/err.h>
+>>> +#include <linux/io.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <sound/pcm_params.h>
+>>> +#include <sound/soc.h>
+>>> +#include <sound/soc-dai.h>
+>>> +#include "acp63.h"
+>>> +
+>>> +#define DRV_NAME "amd_ps_sdw_dma"
+>>> +
+>>> +static const struct snd_soc_component_driver acp63_sdw_component = {
+>>> +	.name		= DRV_NAME,
+>>> +};
+>>> +
+>>> +static int acp63_sdw_platform_probe(struct platform_device *pdev)
+>>> +{
+>>> +	struct resource *res;
+>>> +	struct sdw_dma_dev_data *sdw_data;
+>>> +	int status;
+>>> +
+>>> +	if (!pdev->dev.platform_data) {
+>>> +		dev_err(&pdev->dev, "platform_data not retrieved\n");
+>>> +		return -ENODEV;
+>>> +	}
+>>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>> +	if (!res) {
+>>> +		dev_err(&pdev->dev, "IORESOURCE_MEM FAILED\n");
+>>> +		return -ENODEV;
+>>> +	}
+>>> +
+>>> +	sdw_data = devm_kzalloc(&pdev->dev, sizeof(*sdw_data), GFP_KERNEL);
+>>> +	if (!sdw_data)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	sdw_data->acp_base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
+>>> +	if (!sdw_data->acp_base)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	sdw_data->acp_lock = pdev->dev.platform_data;
+>> so you are sharing the same lock between parent and child platform device?
+> Initially, we thought of sharing the same lock between parent and child
+> platform devices. Later we have observed, mutex hang issues observed.
+
+If the goal is a global lock, then the platform data should contain a
+pointer to the lock. We used this for Intel, see .e.g. the shim_mask in
+drivers/soundwire/intel_init.c, where the same pointer is used by all
+children.
+
+> 
+> We have avoided critical section code and removed acp_lock from
+> ACP SoundWire DMA driver while accessing ACP common registers.
+> We will remove mutex lock from ACP SoundWire DMA driver code.
+>> Does this work? IIRC the platform_data is copied, you do not point
+>> directly to the initial data provided by the parent. We had issues with
+>> SoundWire when we used platform devices, with the 'wrong' pointer used.
+> Till now, we haven't observed mutex hang issues due to
+> ACP PDM driver mutex lock changes.
+> Agreed. We will remove the mutex code from ACP PDM driver as
+> well and we will refactor code.
+> In SoundWire manager driver, we are sharing the same copy for two
+> manager instances. We haven't observed any issue.
+
+What's the benefit of passing this lock as platform_data, if the goal is
+to perform mutual exclusion between the two manager instances? Why not
+just create the lock as part of the SoundWire probe?
+
+If there was no need for a lock, then please remove it :-)
+
+If it's needed, please describe what it protects, which agents rely on
+it and how the lock is shared.
+
+>>
+>> The documentation does make mention of a copy....
+>>
+>> /**
+>>  * platform_device_add_data - add platform-specific data to a platform
+>> device
+>>  * @pdev: platform device allocated by platform_device_alloc to add
+>> resources to
+>>  * @data: platform specific data for this platform device
+>>  * @size: size of platform specific data
+>>  *
+>>  * Add a copy of platform specific data to the platform device's
+>>  * platform_data pointer.  The memory associated with the platform data
+>>  * will be freed when the platform device is released.
+>>  */
+>>> +	dev_set_drvdata(&pdev->dev, sdw_data);
+>>> +	status = devm_snd_soc_register_component(&pdev->dev,
+>>> +						 &acp63_sdw_component,
+>>> +						 NULL, 0);
+>>> +	if (status)
+>>> +		dev_err(&pdev->dev, "Fail to register sdw dma component\n");
+>>> +
+>>> +	return status;
+>>> +}
 
