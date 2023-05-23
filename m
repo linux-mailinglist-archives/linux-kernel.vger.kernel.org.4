@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1B270E33D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08E170E3B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237473AbjEWQzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S238025AbjEWRGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjEWQzG (ORCPT
+        with ESMTP id S237980AbjEWRGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:55:06 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE00DE0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:55:04 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d1e96c082so4396499b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:55:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684860904; x=1687452904;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZtmkk+jONnQa4W4uK+zgLIk9BnAdsu1LRB9JUp0pRA=;
-        b=YcXM7AizsHZKC+nEe8qqkjpFx8oVQxBrbpi8ehC37rTsPI6zK/kZYcQNxFv4kz6ci1
-         KIL2mpcoSJ+P5BKhnK+0xAapwCG6ywioPURxl56ZN9ov/DMRJY1jidUZaTuIL65LQ6OQ
-         2PdkMIrENbpeyLhUlp0+fLJUcbrnWlh0QqVAM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684860904; x=1687452904;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mZtmkk+jONnQa4W4uK+zgLIk9BnAdsu1LRB9JUp0pRA=;
-        b=D6vB+PNRxIQp3MF5CKTExQGE+O5QGRbrkBjkqCmqQoipIK3SsaVWIyDtmcPIe7inhV
-         hIjqraNDYWiidvwkfpUU+MqmvsOxM+BunO0+jU7ao+Jy3OWSZBXh6PTQZRhW1MiTE5Ii
-         Ym5JqpKBedVMBkaH7N6cAvrJBbdJ8gDGNvXXHL1iq5qL9uuo89mNLW5RUI67rp74ZIQL
-         GEdR8es5KUcAke5UFBbbiJFECcbWW84EVgb7demUUHUvl5CGAX6GnAg85g7vmdzuecKr
-         VXR6f3RqxbXISSdOgTn/eeMRSaaHgCbPXgMmOf63IExU1jYhX0161M67BKaYxBCkkACF
-         cZeA==
-X-Gm-Message-State: AC+VfDzcJsLTe3FSP8hxfYWMNJ696b9vxoToXEVzBBVn/yuXwzi6MUDq
-        2S9gRH/p1Si2+ThEFzDO7nPHVw==
-X-Google-Smtp-Source: ACHHUZ4QKSw+1ing3KbGt7B+kOHy7kMOgtRyZ0ZvULR23hds7Q2OC0kA2NWfDALZ3ne9/6QoPXVZpA==
-X-Received: by 2002:a05:6a00:2310:b0:63b:859f:f094 with SMTP id h16-20020a056a00231000b0063b859ff094mr21374070pfh.20.1684860904384;
-        Tue, 23 May 2023 09:55:04 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d2-20020aa78e42000000b0062dcf5c01f9sm6069865pfr.36.2023.05.23.09.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 09:55:03 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2] fscrypt: Replace 1-element array with flexible array
-Date:   Tue, 23 May 2023 09:55:02 -0700
-Message-Id: <20230523165458.gonna.580-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 May 2023 13:06:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFCCDA;
+        Tue, 23 May 2023 10:06:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B91634C3;
+        Tue, 23 May 2023 17:06:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BE7C4339B;
+        Tue, 23 May 2023 17:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684861583;
+        bh=J4geLF9/wB/nci7eyTPzHGp1IQrIjTH306iCGvwIsQw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tzqNIne/apjydPkehRRhk/0O0hkReo4pjcZtGnV4WX7abAD5K4e3kuBRAVahk8os8
+         NaRieZa7LqgDjJyjU1AXbv8j08bEFYKRnT2K5WaUoYsQG7u6dbZmYRa4w1lrVkLGKk
+         AfNwCokEOjU34OHzwDt15ZOWzmY2EYcrAgK1lSiNg/G/2OrctV9LzlJcKjD0Xx2O5K
+         5QLRx+rWuzOuVStoft7q68LYRA02Ic6uHJtnWRJcDd5b682rKLWJKDIChj3ot3PNGU
+         Oph96bKhybNTihKFHNrXw/h8maDWRzFbCZ2O4FrUuNE1nqNc9I2eedAOXS8Uji5dXA
+         KoeOlvBux09Rg==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>,
+        Guo Ren <guoren@kernel.org>, Bin Meng <bmeng@tinylab.org>
+Subject: [PATCH v2 4/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+Date:   Wed, 24 May 2023 00:55:02 +0800
+Message-Id: <20230523165502.2592-5-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230523165502.2592-1-jszhang@kernel.org>
+References: <20230523165502.2592-1-jszhang@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2915; h=from:subject:message-id; bh=5hU5H6VcCCVzxQwneKvoaEslQuGBTUVxQyklCojjRSc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkbO/lCibWPVGnc+0KmunFnL6sqLePTIZbyoJB7dT3 hI0SbWOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZGzv5QAKCRCJcvTf3G3AJpvoEA CGQToI49kw84yifCeLDVhY5whkYA1MGP3c9qNIE5XRpaGAJiu9RTjCSfWp0vd3FhpOYk0qWytWdgA4 j46fK3lknxxumy9HSym1ampOtAhs4gvJbdeZhZxACZ8KXS6+WWRANB8rKhyjvN5SZGELGIQg4KfdWR xUoNyV/2E5vI5hwGtpKrW3hj7vXEFmc7FXzQPtkQ+fxHAwDHnTr7es+duoYenQ/DAQhaP5zXNJT/FU UUvpWSOeAaLVEHrq/Qob31nw/FYX5/B9a42R+0Hg75Ig6Z8u/bdJcOCAoIUNjK8oN2TdSK+3KpQq9d A4/61yxkuaEW2QgfT2FfZd5oHJcQcd9ywaeFRi2YLHFWUqwuGuzUeSIJZeGzgLQGZ4Wyoq8NCFG22Y PhGMOuN16eh0VPPdKcsgY/Z8aH8YDVmQfS+oSle0nmpo+CJKNhSZefziEXDYXPlzZQXxJb/QvjHRSS U6hzjaS+fAK7gQ1iRQWf5fAs7V5lPy/xhWQdUU8utvKDkaQMZ9JlFfJjP5L5pmig4bbvwGoZeiA4if 3qtLmPxig81K6YLJbMb+eNPa2n5cX5ZhxW7YM33U584KllbWHdCUQ9vZc0ffzaYujWTW72JFaBI+ab DMGwTR2/wsfXY7u43BWMyR6Abtq5Ihw2KhrjlnxLIdRKR0hGOm+HzJgp+OtQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,85 +58,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1-element arrays are deprecated and are being replaced with C99
-flexible arrays[1].
+From: Zhangjin Wu <falcon@tinylab.org>
 
-As sizes were being calculated with the extra byte intentionally,
-propagate the difference so there is no change in binary output.
+Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
+the user to enable dead code elimination. In order for this to work,
+ensure that we keep the alternative table by annotating them with KEEP.
 
-[1] https://github.com/KSPP/linux/issues/79
+This boots well on qemu with both rv32_defconfig & rv64 defconfig, but
+it only shrinks their builds by ~1%, a smaller config is thereforce
+customized to test this feature:
 
-Cc: Eric Biggers <ebiggers@kernel.org>
-Cc: "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc: Jaegeuk Kim <jaegeuk@kernel.org>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: linux-fscrypt@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+          | rv32                   | rv64
+  --------|------------------------|---------------------
+   No DCE | 4460684                | 4893488
+      DCE | 3986716                | 4376400
+   Shrink |  473968 (~10.6%)       |  517088 (~10.5%)
+
+The config used above only reserves necessary options to boot on qemu
+with serial console, more like the size-critical embedded scenes:
+
+  - rv64 config: https://pastebin.com/crz82T0s
+  - rv32 config: rv64 config + 32-bit.config
+
+Here is Jisheng's original commit-msg:
+When trying to run linux with various opensource riscv core on
+resource limited FPGA platforms, for example, those FPGAs with less
+than 16MB SDRAM, I want to save mem as much as possible. One of the
+major technologies is kernel size optimizations, I found that riscv
+does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
+passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
+--gc-sections flag to the linker.
+
+This not only benefits my case on FPGA but also benefits defconfigs.
+Here are some notable improvements from enabling this with defconfigs:
+
+nommu_k210_defconfig:
+   text    data     bss     dec     hex
+1112009  410288   59837 1582134  182436     before
+ 962838  376656   51285 1390779  1538bb     after
+
+rv32_defconfig:
+   text    data     bss     dec     hex
+8804455 2816544  290577 11911576 b5c198     before
+8692295 2779872  288977 11761144 b375f8     after
+
+defconfig:
+   text    data     bss     dec     hex
+9438267 3391332  485333 13314932 cb2b74     before
+9285914 3350052  483349 13119315 c82f53     after
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Co-developed-by: Jisheng Zhang <jszhang@kernel.org>
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Tested-by: Bin Meng <bmeng@tinylab.org>
 ---
-v2: update commit log to avoid mentioning "len" member.
-v1: https://lore.kernel.org/lkml/20230522213924.never.119-kees@kernel.org/
----
- fs/crypto/fscrypt_private.h |  2 +-
- fs/crypto/hooks.c           | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/riscv/Kconfig              | 1 +
+ arch/riscv/kernel/vmlinux.lds.S | 6 +++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/fs/crypto/fscrypt_private.h b/fs/crypto/fscrypt_private.h
-index 7ab5a7b7eef8..2d63da48635a 100644
---- a/fs/crypto/fscrypt_private.h
-+++ b/fs/crypto/fscrypt_private.h
-@@ -171,7 +171,7 @@ fscrypt_policy_flags(const union fscrypt_policy *policy)
-  */
- struct fscrypt_symlink_data {
- 	__le16 len;
--	char encrypted_path[1];
-+	char encrypted_path[];
- } __packed;
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 8f55aa4aae34..62e84fee2cfd 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -115,6 +115,7 @@ config RISCV
+ 	select HAVE_KPROBES if !XIP_KERNEL
+ 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+ 	select HAVE_KRETPROBES if !XIP_KERNEL
++	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+ 	select HAVE_MOVE_PMD
+ 	select HAVE_MOVE_PUD
+ 	select HAVE_PCI
+diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
+index e5f9f4677bbf..492dd4b8f3d6 100644
+--- a/arch/riscv/kernel/vmlinux.lds.S
++++ b/arch/riscv/kernel/vmlinux.lds.S
+@@ -85,11 +85,11 @@ SECTIONS
+ 	INIT_DATA_SECTION(16)
  
- /**
-diff --git a/fs/crypto/hooks.c b/fs/crypto/hooks.c
-index 9e786ae66a13..6238dbcadcad 100644
---- a/fs/crypto/hooks.c
-+++ b/fs/crypto/hooks.c
-@@ -255,10 +255,10 @@ int fscrypt_prepare_symlink(struct inode *dir, const char *target,
- 	 * for now since filesystems will assume it is there and subtract it.
- 	 */
- 	if (!__fscrypt_fname_encrypted_size(policy, len,
--					    max_len - sizeof(struct fscrypt_symlink_data),
-+					    max_len - sizeof(struct fscrypt_symlink_data) - 1,
- 					    &disk_link->len))
- 		return -ENAMETOOLONG;
--	disk_link->len += sizeof(struct fscrypt_symlink_data);
-+	disk_link->len += sizeof(struct fscrypt_symlink_data) + 1;
- 
- 	disk_link->name = NULL;
- 	return 0;
-@@ -289,7 +289,7 @@ int __fscrypt_encrypt_symlink(struct inode *inode, const char *target,
- 		if (!sd)
- 			return -ENOMEM;
+ 	.init.pi : {
+-		*(.init.pi*)
++		KEEP(*(.init.pi*))
  	}
--	ciphertext_len = disk_link->len - sizeof(*sd);
-+	ciphertext_len = disk_link->len - sizeof(*sd) - 1;
- 	sd->len = cpu_to_le16(ciphertext_len);
  
- 	err = fscrypt_fname_encrypt(inode, &iname, sd->encrypted_path,
-@@ -367,7 +367,7 @@ const char *fscrypt_get_symlink(struct inode *inode, const void *caddr,
- 	 * the ciphertext length, even though this is redundant with i_size.
- 	 */
- 
--	if (max_size < sizeof(*sd))
-+	if (max_size < sizeof(*sd) + 1)
- 		return ERR_PTR(-EUCLEAN);
- 	sd = caddr;
- 	cstr.name = (unsigned char *)sd->encrypted_path;
-@@ -376,7 +376,7 @@ const char *fscrypt_get_symlink(struct inode *inode, const void *caddr,
- 	if (cstr.len == 0)
- 		return ERR_PTR(-EUCLEAN);
- 
--	if (cstr.len + sizeof(*sd) - 1 > max_size)
-+	if (cstr.len + sizeof(*sd) > max_size)
- 		return ERR_PTR(-EUCLEAN);
- 
- 	err = fscrypt_fname_alloc_buffer(cstr.len, &pstr);
+ 	.init.bss : {
+-		*(.init.bss)	/* from the EFI stub */
++		KEEP(*(.init.bss*))	/* from the EFI stub */
+ 	}
+ 	.exit.data :
+ 	{
+@@ -112,7 +112,7 @@ SECTIONS
+ 	. = ALIGN(8);
+ 	.alternative : {
+ 		__alt_start = .;
+-		*(.alternative)
++		KEEP(*(.alternative))
+ 		__alt_end = .;
+ 	}
+ 	__init_end = .;
 -- 
-2.34.1
+2.40.1
 
