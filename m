@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3758070E76A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6171770E76B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238404AbjEWVg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S238614AbjEWVhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjEWVgz (ORCPT
+        with ESMTP id S229884AbjEWVhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:36:55 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8CEFA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:36:52 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-306dbad5182so6395f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:36:51 -0700 (PDT)
+        Tue, 23 May 2023 17:37:19 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96765126
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:37:17 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d3578c25bso5121b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:37:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684877810; x=1687469810;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KJ5K7dlutGkMyOa+L7swtJKw1T6VrOfxQw91P9GKg/c=;
-        b=u9Bbr4+Qiz7b1Pu4j+NnA4t0BD2NhAyGr55vUSUZkkNJcyyPDqt7KGrotGkkXjNFI5
-         QZHOD1WJpXO55O/mIAFU1yougV5MJOr5L3rhXl2LsIJ+X6rou+5MLc8w/puzT7QqiIWK
-         REC2DxbjbOVndco/bUNqZ76fD0/lj8P7dtG/ucSL4e+yrvwkJuu3FhBjop2DKi9k/ELX
-         La1cHz3no1l4IhNsv2eP8BVGVnZf8KEfDao5Ct8sgaLWqo+fjoEZzEiw+TsT+KMV/thp
-         1gejzFk8qCCY1zJmdfsBZfBs9eyQLJDQPs5wb6bgu1IiDhfUQuTXloINPPeB0KrULofO
-         33SQ==
+        d=gmail.com; s=20221208; t=1684877837; x=1687469837;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VO6eLPU/aA233thOtId6HlTxErgTCHCdwyM9bTKsmZk=;
+        b=iuQxrhXE9Bupo9hGLnd39Ks6KE5M1W+KY/nOLwboBl9xB/yUF+a9HiogBfwxYNBY3o
+         YVMxop0Dv5Pq3mI4ywtXKtJJ1EiYS9qOuZGhy8ACXpQZtwfR2Dr+BcU//aWZ62tcBQ2k
+         P9ei5/z7sKRQ/YSMCwU8devVd2JLG8yhevJ7lV86+T9DhPegiZCeDB2tDXQtXoyl0IDM
+         sjQI8pW7IA5pZ2ILYHuQCNtsvhlAtw9H2X0uBPG33jxI5kHLwkpgNikm3XvBJCsVjp7w
+         +ZY6dEdIEsZZsKCgXrLLpzQFw252YeWZjCy3P3YpiAo+cME2OZTMDt59GHqO5uQLOOl1
+         VHYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684877810; x=1687469810;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KJ5K7dlutGkMyOa+L7swtJKw1T6VrOfxQw91P9GKg/c=;
-        b=gDy/Va+tccfGwZZLBbONNvdSzBVSdRkl6ZduD6qmAhhLzIhqOKdaIvSTzdtJTe8vvA
-         cxVPUeS6NKhQtOdj2YB5UDkdh3sDd7IiYVqzZGTqFAk5jekxjnP7sqZkQFwUIEy7kUCl
-         p0m+BmAaDk1oOhWv/eBreTCJLhQ7PePoqW1NaXNqmFo2oui2UgfAu7unWJig5gw5n3C2
-         o4D9L42U4EVIx9JOVAijAnOKllCkqBKRkUcAETjiCFfsP011hnIOYI2dXI4w4w3l8Yzl
-         3l6Q53p6LjpPMyyqCqhOLYdAG0YYkPg8z+5TWqQL3ShYa6ktYAcxxvwLgfsnJrKST0fn
-         KiUw==
-X-Gm-Message-State: AC+VfDzP0yIAk01LzRdkoJ6DuZIe6Fr/Xj01QOp3FLOGeVDEldCzc83J
-        GmgwHLxp0eFUdgQKejWpMJizYhbdRMW2vAccKVv+dA==
-X-Google-Smtp-Source: ACHHUZ7Vvmg/4c3r7SsL9lksoS1NrVLe33/emBnb8TTtsX5HBT/PttY5MM3zrcVA2t8F8oU67MY9TalYYNedfSbAgZY=
-X-Received: by 2002:a5d:4bc4:0:b0:309:4227:829c with SMTP id
- l4-20020a5d4bc4000000b003094227829cmr11007981wrt.36.1684877810453; Tue, 23
- May 2023 14:36:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684877837; x=1687469837;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VO6eLPU/aA233thOtId6HlTxErgTCHCdwyM9bTKsmZk=;
+        b=RSzX5YWdZl9O+KAwf2wpDCiun8zM0RnvmGY2ihnfrZYZrq3jVVk7M8cSc2MTEM+2JQ
+         3klpd9JXDI/yp6IZKp+zyTR4rUtgrgQuwkHtMQIRb1/VAJDTAf9JzGm9MCfXSK+aj+N5
+         wbfhNDH2QG8z6CpTeOCchZXs1gb+onB7GxE5Or7Dlk3gkpNXGb/Pkwc9jSCRLvwW4scl
+         cOePfb+Zd31kwitzjc1/G8ijpuEJp4fr8JXk+UVaFd2my/4Y1ueVogNT/YBFWZcxjI2d
+         K20aAYyvZ/GjYyPCz9XCWfc1Hp48AmHMb/nIJp3Uaoyb/idhyNvAKos4gZvC3uMVyCPN
+         UG2w==
+X-Gm-Message-State: AC+VfDynB8TVhfGrva4rjz409jDVE439jBlAHfWn+Bc3SAVgz2YIKXBP
+        +kEAD1QwmpJJRAhVIXDNLuk=
+X-Google-Smtp-Source: ACHHUZ7UPjE5UqO6gHP6XwMr57d+KMb5iZkIqTVrHAKugXgIlKCfQ/xdt/6ornZbMPmwBp/9hf2Nzg==
+X-Received: by 2002:a05:6a20:8e15:b0:10d:b12:cc9 with SMTP id y21-20020a056a208e1500b0010d0b120cc9mr129279pzj.24.1684877836870;
+        Tue, 23 May 2023 14:37:16 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:7a1e])
+        by smtp.gmail.com with ESMTPSA id w124-20020a636282000000b00528e0b1dd0bsm6508891pgb.82.2023.05.23.14.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 14:37:16 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 May 2023 11:37:14 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     torvalds@linux-foundation.org, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        joshdon@google.com, brho@google.com, briannorris@chromium.org,
+        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
+        void@manifault.com
+Subject: Re: [PATCH 03/24] workqueue: Not all work insertion needs to wake up
+ a worker
+Message-ID: <ZG0yCiRI8apvfWkq@slm.duckdns.org>
+References: <20230519001709.2563-1-tj@kernel.org>
+ <20230519001709.2563-4-tj@kernel.org>
+ <CAJhGHyCdgfNY83ddpQRpsCVvPQF9HtuNXXFFbpJuxYLL+mYcZQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230519001709.2563-1-tj@kernel.org> <CAHk-=whA2ztAcVrgsqj39j30LJYhjBSkk6Dju6TY16zGpXpkZQ@mail.gmail.com>
- <ZGf5rfESYhKYzPSY@slm.duckdns.org> <ZGgAKK-c_DZpvNJB@slm.duckdns.org>
- <CAHk-=whbP8BjGyGyXcSKi32orb+1+cHSC2HoVAMNVKwmbq8pSg@mail.gmail.com> <CAHk-=wiH9JLQ0AN98aLKpxiAL4ssbnnq_=3R_qvy7AEGNT_iJg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiH9JLQ0AN98aLKpxiAL4ssbnnq_=3R_qvy7AEGNT_iJg@mail.gmail.com>
-From:   Sandeep Dhavale <dhavale@google.com>
-Date:   Tue, 23 May 2023 14:36:39 -0700
-Message-ID: <CAB=BE-QgcoHEQo+2moWsDfpq3mR7gbDN5+tvWRrMt2Qhucfj_Q@mail.gmail.com>
-Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
- execution locality
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Tejun Heo <tj@kernel.org>, jiangshanlai@gmail.com,
-        peterz@infradead.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, joshdon@google.com, brho@google.com,
-        briannorris@chromium.org, nhuck@google.com, agk@redhat.com,
-        snitzer@kernel.org, void@manifault.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJhGHyCdgfNY83ddpQRpsCVvPQF9HtuNXXFFbpJuxYLL+mYcZQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Sandeep, any chance that you could try out Tejun's series with plain
-> workers, and compare it to the percpu threads?
->
-> See
->
->      https://lore.kernel.org/lkml/20230519001709.2563-1-tj@kernel.org/
->
-Hi Linus,
-I will try out the series and report back with the results.
+On Tue, May 23, 2023 at 05:54:10PM +0800, Lai Jiangshan wrote:
+> On Fri, May 19, 2023 at 8:17 AM Tejun Heo <tj@kernel.org> wrote:
+> 
+> > +       pool = pwq->pool;
+> > +
+> >         /*
+> >          * If @work was previously on a different pool, it might still be
+> >          * running there, in which case the work needs to be queued on that
+> >          * pool to guarantee non-reentrancy.
+> >          */
+> >         last_pool = get_work_pool(work);
+> > -       if (last_pool && last_pool != pwq->pool) {
+> > +       if (last_pool && last_pool != pool) {
+> >                 struct worker *worker;
+> >
+> >                 raw_spin_lock(&last_pool->lock);
+> > @@ -1638,13 +1636,14 @@ static void __queue_work(int cpu, struct workqueue_struct *wq,
+> >
+> >                 if (worker && worker->current_pwq->wq == wq) {
+> >                         pwq = worker->current_pwq;
+> > +                       pool = pwq->pool;
+> 
+> The code above does a "raw_spin_lock(&last_pool->lock);", and
+> the code next does a "raw_spin_unlock(&pool->lock);".
+> 
+>                             WARN_ON_ONCE(pool != last_pool);
+> 
+> can be added here and served as a comment.
 
-Thanks,
-Sandeep.
+Yeah, this is a bit confusing. Added WARN_ON_ONCE().
+
+Thanks.
+
+-- 
+tejun
