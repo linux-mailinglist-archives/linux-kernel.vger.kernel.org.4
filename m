@@ -2,104 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA9C70DCF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2747A70DCF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236635AbjEWMtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S236615AbjEWMta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjEWMtk (ORCPT
+        with ESMTP id S233843AbjEWMt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:49:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731C1133
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684846129;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=hz+rQBDAcdUtSJzBU0XZBYw1XZqw4mtBlUpMTPXSzN4=;
-        b=Trh/pZ9GaKa5PKi+JyvofVF1+Zgym3EN2PxjuTm6X4d59KRkU19ICBAnpt2tYpfPughZ0/
-        e+GU58dO8YxCQ6QSpHByV2Sw4zgYPBOcEsnpu0msDfTKES2y7RxB1STrwMjmFVaZ2JCWdB
-        nA5EnqE9C5/CGsJHb9H3kUA11GoY340=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-36-2A2PiPSiNQaORPT8h7GuJQ-1; Tue, 23 May 2023 08:48:44 -0400
-X-MC-Unique: 2A2PiPSiNQaORPT8h7GuJQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35CF2811E93;
-        Tue, 23 May 2023 12:48:43 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C540A40CFD46;
-        Tue, 23 May 2023 12:48:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Shyam Prasad N <sprasad@microsoft.com>
-cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] cifs: Fix cifs_limit_bvec_subset() to correctly check the maxmimum size
+        Tue, 23 May 2023 08:49:28 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A0DDD;
+        Tue, 23 May 2023 05:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1684846164;
+        bh=kqceX5raYeRpBbahySDfiWhprDVkugQ30VzTL3JtJHI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=maaFn5bqaA9UiQCHRR3RVWDL86mZEIb1Gre8vZHAOY099bOQrRyXY4bZSVhOnH7Yw
+         58OwEQD0tJ8XfJyhs5IxKsh/NAedwlDvtqWR6RqzkulFy4VWC4/V0zF4BpPDYYjL/s
+         i9KSqJppSVm3vbgfF6Is+EZidbAGIhDYloH+r+WyyqcSt++QgNRaZQf7jJNoQomCvf
+         pnbuaIYavya2q81VyJpQsktj74bZYQSZcAyPdP2zw7my13xKJNwZCsD39KTg+6zUTo
+         oopFQfPwEQMSe9+eMZNLU3WEoyjB+i/khEe47uut/AioWohRpDP5f0YtcnwGMeP6D/
+         HL7HTI0FCXdAQ==
+Received: from [172.16.0.117] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QQYzl3zpSz13Kp;
+        Tue, 23 May 2023 08:49:23 -0400 (EDT)
+Message-ID: <cdac8821-a298-aced-8084-8da3ba64a1be@efficios.com>
+Date:   Tue, 23 May 2023 08:49:33 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2989164.1684846121.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 23 May 2023 13:48:41 +0100
-Message-ID: <2989165.1684846121@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH 1/4] rseq: Add sched_state field to struct rseq
+Content-Language: en-US
+To:     Noah Goldstein <goldstein.w.n@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        libc-alpha@sourceware.org, Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Florian Weimer <fweimer@redhat.com>
+References: <20230517152654.7193-1-mathieu.desnoyers@efficios.com>
+ <20230517152654.7193-2-mathieu.desnoyers@efficios.com>
+ <CAFUsyfJ49mE+7p1ywEHetRHqr=DWY7aiFYzfva9Mtqp3_XYncg@mail.gmail.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <CAFUsyfJ49mE+7p1ywEHetRHqr=DWY7aiFYzfva9Mtqp3_XYncg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix cifs_limit_bvec_subset() so that it limits the span to the maximum
-specified and won't return with a size greater than max_size.
+On 2023-05-19 16:51, Noah Goldstein wrote:
+> On Wed, May 17, 2023 at 10:28 AM Mathieu Desnoyers via Libc-alpha
+> <libc-alpha@sourceware.org> wrote:
+>>
+>> Expose the "on-cpu" state for each thread through struct rseq to allow
+>> adaptative mutexes to decide more accurately between busy-waiting and
+>> calling sys_futex() to release the CPU, based on the on-cpu state of the
+>> mutex owner.
+>>
+>> It is only provided as an optimization hint, because there is no
+>> guarantee that the page containing this field is in the page cache, and
+>> therefore the scheduler may very well fail to clear the on-cpu state on
+>> preemption. This is expected to be rare though, and is resolved as soon
+>> as the task returns to user-space.
+>>
+>> The goal is to improve use-cases where the duration of the critical
+>> sections for a given lock follows a multi-modal distribution, preventing
+>> statistical guesses from doing a good job at choosing between busy-wait
+>> and futex wait behavior.
+>>
+>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
+>> Cc: Carlos O'Donell <carlos@redhat.com>
+>> Cc: Florian Weimer <fweimer@redhat.com>
+>> Cc: libc-alpha@sourceware.org
+>> ---
+>>   include/linux/sched.h     | 12 ++++++++++++
+>>   include/uapi/linux/rseq.h | 17 +++++++++++++++++
+>>   kernel/rseq.c             | 14 ++++++++++++++
+>>   3 files changed, 43 insertions(+)
+>>
+>> diff --git a/include/linux/sched.h b/include/linux/sched.h
+>> index eed5d65b8d1f..c7e9248134c1 100644
+>> --- a/include/linux/sched.h
+>> +++ b/include/linux/sched.h
+>> @@ -2351,11 +2351,20 @@ static inline void rseq_signal_deliver(struct ksignal *ksig,
+>>          rseq_handle_notify_resume(ksig, regs);
+>>   }
+>>
+>> +void __rseq_set_sched_state(struct task_struct *t, unsigned int state);
+>> +
+>> +static inline void rseq_set_sched_state(struct task_struct *t, unsigned int state)
+>> +{
+>> +       if (t->rseq)
+>> +               __rseq_set_sched_state(t, state);
+>> +}
+>> +
+>>   /* rseq_preempt() requires preemption to be disabled. */
+>>   static inline void rseq_preempt(struct task_struct *t)
+>>   {
+>>          __set_bit(RSEQ_EVENT_PREEMPT_BIT, &t->rseq_event_mask);
+>>          rseq_set_notify_resume(t);
+>> +       rseq_set_sched_state(t, 0);
+> 
+> Should rseq_migrate also be made to update the cpu_id of the new core?
+> I imagine the usage of this will be something along the lines of:
+> 
+> if(!on_cpu(mutex->owner_rseq_struct) &&
+>     cpu(mutex->owner_rseq_struct) == this_threads_cpu)
+>     // goto futex
+> 
+> So I would think updating on migrate would be useful as well.
 
-Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rather=
- than a page list")
-Reported-by: Shyam Prasad N <sprasad@microsoft.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <smfrench@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: Paulo Alcantara <pc@manguebit.com>
-cc: Tom Talpey <tom@talpey.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
----
- fs/cifs/file.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I don't think we want to act differently based on the cpu on which the 
+owner is queued.
 
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index ba7f2e09d6c8..df88b8c04d03 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -3353,9 +3353,10 @@ static size_t cifs_limit_bvec_subset(const struct i=
-ov_iter *iter, size_t max_siz
- 	while (n && ix < nbv) {
- 		len =3D min3(n, bvecs[ix].bv_len - skip, max_size);
- 		span +=3D len;
-+		max_size -=3D len;
- 		nsegs++;
- 		ix++;
--		if (span >=3D max_size || nsegs >=3D max_segs)
-+		if (max_size =3D=3D 0 || nsegs >=3D max_segs)
- 			break;
- 		skip =3D 0;
- 		n -=3D len;
+If the mutex owner is not on-cpu, and queued on the same cpu as the 
+current thread, we indeed want to call sys_futex WAIT.
+
+If the mutex owner is not on-cpu, but queued on a different cpu than the 
+current thread, we *still* want to call sys_futex WAIT, because 
+busy-waiting for a thread which is queued but not currently running is 
+wasteful.
+
+Or am I missing something ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
