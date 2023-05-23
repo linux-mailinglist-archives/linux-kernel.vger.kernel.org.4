@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5340770E3E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1455570E2FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238254AbjEWRoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S237744AbjEWRoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237501AbjEWRoM (ORCPT
+        with ESMTP id S237723AbjEWRol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:44:12 -0400
+        Tue, 23 May 2023 13:44:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6988490;
-        Tue, 23 May 2023 10:44:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BC8C2;
+        Tue, 23 May 2023 10:44:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE0756355A;
-        Tue, 23 May 2023 17:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C74C4339B;
-        Tue, 23 May 2023 17:44:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F57463564;
+        Tue, 23 May 2023 17:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93CFAC433D2;
+        Tue, 23 May 2023 17:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684863846;
-        bh=rFkmvkO0OpsALLfe8oNx4FG/ovMg2iAu1RwUUNxXPOk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P1G5Bggfei3jyT4cBhkFKbGmpWhjxNa6mc9jYXeQzxNn8WmCrcdc+HCKddBnO8mUP
-         sShp2kKTJk6gWyhVLLCdl16VvhUUnhqim+omtCICUtyA+A+A7P12Cl/Tu3EKXHKmXU
-         RacbOqavhH0QMZYR5BiNbc7yWqtj1fJYD+RImi0DGtKlAqcuFyOa2tQdjlHKfpEDIl
-         i6DRD2DcNw18izG2+a1yMpBViqbBd7SQw0bdfGVP+vCXHaU2Bq6SA6vqe0o93GwoIN
-         NgHMlUDmjmuvr7x0VB2tF52q5uwaZXTR0zxOlo1npN42vPW06a7kfqBM3EJ0yM6Ot+
-         Ritn8eeVXa0dA==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f3b39cea1eso163440e87.3;
-        Tue, 23 May 2023 10:44:06 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxMVLAdYpYfsZSHmuI5gZOvVmhsYT6O1vQ0aiO/l+TRkmhM2jnP
-        d4EYVdpJEqL1+f1bRkO5LtTQEJmekMeAl0totVE=
-X-Google-Smtp-Source: ACHHUZ4DbuIfaUp1u6uliqoitws7+tPxKJaq+XmWOizvJLUvMg2ZyqPNF4XDkghkzwObqfKkvrOlK9KCdBIRIFnzJkg=
-X-Received: by 2002:a05:6512:922:b0:4eb:1361:895c with SMTP id
- f2-20020a056512092200b004eb1361895cmr5457525lft.55.1684863844325; Tue, 23 May
- 2023 10:44:04 -0700 (PDT)
+        s=k20201202; t=1684863878;
+        bh=oWpv0JJ4KVfHOHESY1z8zrd5HeQS1i0jsjMhHlSCsd4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o7ALmsTxImOubWs8UMvaMoPKWvnaroijVaeu5M/wpU1QfSimwxK3COphovNq6Bh6Z
+         IJmTVyI1Ob96tNwvcM5FWFLmTI9WHST9C0pocBSRPhgC83CxofM2gF3k7KLhAkRM7e
+         gp5vVTkiHV4TgE5u43++uzct4hjPzqFs6zieXZU1qMnL7ddKl/22eMTOn2/8Z9AW7A
+         oaEL0EAudrcdUT06vaLqeIu3palPkZayV8oWIKrDFkLP8lEzIz94H0NnpMcmzpFIQg
+         VufBbc5cAWEPzAImWbCSy7NcTLgHr+3DBUbjZoB9CLRfwMuVvT+ZAHh1G5mb8JG/V9
+         acdvM8AqYUGGQ==
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        William White <chwhite@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH V2 0/9] rtla improvements
+Date:   Tue, 23 May 2023 19:44:22 +0200
+Message-Id: <cover.1684863094.git.bristot@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230522212114.gonna.589-kees@kernel.org>
-In-Reply-To: <20230522212114.gonna.589-kees@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 23 May 2023 10:43:52 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5ibONdyyJq0zVCEHuM38GUocn8A1abi4mTa9gUHH1hHQ@mail.gmail.com>
-Message-ID: <CAPhsuW5ibONdyyJq0zVCEHuM38GUocn8A1abi4mTa9gUHH1hHQ@mail.gmail.com>
-Subject: Re: [PATCH v2] md/raid5: Convert stripe_head's "dev" to flexible
- array member
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,33 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 2:21=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> Replace old-style 1-element array of "dev" in struct stripe_head with
-> modern C99 flexible array. In the future, we can additionally annotate
-> it with the run-time size, found in the "disks" member.
->
-> Cc: Christoph Hellwig <hch@infradead.org>
-> Cc: linux-raid@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> It looks like this memory calculation:
->
->         memory =3D conf->min_nr_stripes * (sizeof(struct stripe_head) +
->                  max_disks * ((sizeof(struct bio) + PAGE_SIZE))) / 1024;
->
-> ... was already buggy (i.e. it included the single "dev" bytes in the
-> result). However, I'm not entirely sure if that is the right analysis,
-> since "dev" is not related to struct bio nor PAGE_SIZE?
->
-> v1: https://lore.kernel.org/all/20230517233313.never.130-kees@kernel.org/
-> v2: use new struct_size_t() helper from
->     https://lore.kernel.org/lkml/20230522211810.never.421-kees@kernel.org=
-/
+This is a series of improvements for rtla, mainly as a result of our
+daily usage of the tool debugging problems at red hat.
 
-LTGM. Thanks!
+The cgroup support and house keeping options are from our usage
+of the tool debugging containers.
 
-I will hold this for a while until struct_size_t() merged.
+The auto-analysis overhead reduction is needed when we go to
+large boxes - but it is really hand in practice, as it gives an idea
+of the problem without having to look at the trace.
 
-Song
+Running hwnoise 100 % of CPU time might cause some systems
+to slow down too much. Reduce its utilization to 75% by default to
+avoid problems for people using it for the first time.
+
+Finally, it adds support for running timerlat user-space threads,
+and to collect the additional field via rtla timerlat top.
+
+Changes from V1:
+  - Add the user-space thread support to rtla timerlat top
+    Link: https://lore.kernel.org/lkml/cover.1683827510.git.bristot@kernel.org/
+
+Daniel Bristot de Oliveira (9):
+  rtla: Add -C cgroup support
+  rtla: Add --house-keeping option
+  rtla: Change monitored_cpus from char * to cpu_set_t
+  rtla: Automatically move rtla to a house-keeping cpu
+  rtla/timerlat: Give timerlat auto analysis its own instance
+  rtla/timerlat_hist: Add auto-analysis support
+  rtla: Start the tracers after creating all instances
+  rtla/hwnoise: Reduce runtime to 75%
+  rtla: Add timerlat user-space support for timerlat top
+
+ Documentation/tools/rtla/common_options.rst   |   8 +
+ .../tools/rtla/common_timerlat_aa.rst         |   7 -
+ .../tools/rtla/rtla-timerlat-hist.rst         |   7 +-
+ .../tools/rtla/rtla-timerlat-top.rst          |  14 +
+ tools/tracing/rtla/src/osnoise.c              |  65 ++++
+ tools/tracing/rtla/src/osnoise.h              |   5 +
+ tools/tracing/rtla/src/osnoise_hist.c         |  90 ++++-
+ tools/tracing/rtla/src/osnoise_top.c          |  83 ++++-
+ tools/tracing/rtla/src/timerlat_aa.c          |  35 +-
+ tools/tracing/rtla/src/timerlat_aa.h          |   5 +-
+ tools/tracing/rtla/src/timerlat_hist.c        | 139 +++++++-
+ tools/tracing/rtla/src/timerlat_top.c         | 229 +++++++++++--
+ tools/tracing/rtla/src/timerlat_u.c           | 224 ++++++++++++
+ tools/tracing/rtla/src/timerlat_u.h           |  18 +
+ tools/tracing/rtla/src/utils.c                | 324 +++++++++++++++++-
+ tools/tracing/rtla/src/utils.h                |   7 +
+ 16 files changed, 1162 insertions(+), 98 deletions(-)
+ create mode 100644 tools/tracing/rtla/src/timerlat_u.c
+ create mode 100644 tools/tracing/rtla/src/timerlat_u.h
+
+-- 
+2.38.1
+
