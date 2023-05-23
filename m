@@ -2,137 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E0F70DD5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F8070DD68
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbjEWNT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S233330AbjEWNZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbjEWNT1 (ORCPT
+        with ESMTP id S230130AbjEWNZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:19:27 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A71109
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:19:24 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-56187339d6eso93859417b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684847963; x=1687439963;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/y8I9Pv/4V6YStWX5R2hWIwO0b0qZb/p+qZFG9UP80A=;
-        b=OIvUK9YMalUppxB8kSu51gObJXvRPS5kRx5ma9aApqEDi59LWrpN5QR7NZohdMM/Z9
-         CvKp4N1eOkMX5MA0EPbt5dxeCJqZ8ZRAGq9hG3m1x6Q7CIWML9Zi6pjn0Gwxc0UFOxZo
-         KoNv9t0GuZ2wXhQZTfDS1b0gzjoLY9VqGwrozfdW9980ADGshUzbRh/v586Hfc2ZcJvd
-         niF/iW4URNhQNhkQs0DwahCAvxMHM0wPFrQ6ZaEt5SibaffLRD/qt3wZLTriyJ3PhPNL
-         xSY+/V1cJfM25Iaf5FuAtIY0Ns++qV/NaTMUB4YyXxolaGvnAwS7ovbUofRHQUvjU1ID
-         yZsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684847963; x=1687439963;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/y8I9Pv/4V6YStWX5R2hWIwO0b0qZb/p+qZFG9UP80A=;
-        b=RHDhOxlTChgtPWYCg0nZTnaZkk/Vlsmit8L2uZf5lYADywxxqu307/G/q4a42AF4Sa
-         R/wsYJXBtjG5+sJlvN/Whbc5WMFWo2cPD/qL6TBv5eW9pgTZvCZIPaQPYS66+pRZh16P
-         Wqb0AhsqMrz34phWpoS56YMCxT3FYsdf+DneYmm7CyBZx63As7tIeb8H+IrZfhYOkT6y
-         1nhaud9GG/EMYe+peZuTL/G8rAD2DjXVkC8x7/+3NuUDrtPb2LOSB9VmiRgvzAK72jZr
-         athmgcIi/QQhuDYglxackK1HMaNyrDxbH2v3NOhmZGzV+Y3oG7TYOFQiNW50ODrv44HU
-         fvHw==
-X-Gm-Message-State: AC+VfDyse3HjgvK0/dro9YOoipCywWm2t22SzyI7D3b4n7YLg665ktFC
-        USTzkZ3KK5zz4TcLr+7OhOh90Q88eHkRrGMdc/QPeQ==
-X-Google-Smtp-Source: ACHHUZ4W3lqcYsC4MLnVzY16h0UOyn1i5YCHe1kXkQgAhuKadsLr0wsFOnpwCZsNgNSeBC25L/8YDjH3irN6ShXY8Q4=
-X-Received: by 2002:a0d:cb16:0:b0:561:a80b:6647 with SMTP id
- n22-20020a0dcb16000000b00561a80b6647mr13906047ywd.45.1684847963644; Tue, 23
- May 2023 06:19:23 -0700 (PDT)
+        Tue, 23 May 2023 09:25:53 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C490BFF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:25:48 -0700 (PDT)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id C32A140755F6;
+        Tue, 23 May 2023 13:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C32A140755F6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1684848345;
+        bh=0iLXMfAG64un1bK4+l+r1HB734Vlmbk2PlPOZutpnzg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ixefp+5MZcH+kctUKLe0AiWgkUNjiEgHLEXGQtRJysEMRDXjf+YAA55EOmQnCiF3S
+         INbiWJ5fn2erFqwXBZultwEE+1oUW1BP/4jD/RfiDlvGJd8ezSn4dEd8wyoWphMMPY
+         5dVqQEQhqMUeZNqMNDA2hwVWKmD/epQY4xOX0GPw=
 MIME-Version: 1.0
-References: <20230506-seama-partitions-v1-0-5806af1e4ac7@linaro.org>
- <20230509093129.40b30c7a@xps-13> <CACRpkdYLZ36Ad5y7qLUTFix6yx=jBQ=ZvxaB9U-fhqQ_fvvXCQ@mail.gmail.com>
- <20230522164559.6c599c61@xps-13>
-In-Reply-To: <20230522164559.6c599c61@xps-13>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 23 May 2023 15:19:12 +0200
-Message-ID: <CACRpkdan-iG9po88btAndwTz_VRu0ccUAQDxyZeoBH1jCumUJQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Add SEAMA partition types
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 23 May 2023 16:25:45 +0300
+From:   Alexey Izbyshev <izbyshev@ispras.ru>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
+        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
+        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
+Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
+In-Reply-To: <ZGy6q7v+7jsXb1bV@arm.com>
+References: <20230517150321.2890206-1-revest@chromium.org>
+ <20230517150321.2890206-4-revest@chromium.org>
+ <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
+ <884d131bbc28ebfa0b729176e6415269@ispras.ru>
+ <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
+ <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
+ <c63053b0-5797-504d-7896-c86271b64162@redhat.com> <ZGy6q7v+7jsXb1bV@arm.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <f47d587fe5a6285f88191fbb13f367c7@ispras.ru>
+X-Sender: izbyshev@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 4:46=E2=80=AFPM Miquel Raynal <miquel.raynal@bootli=
-n.com> wrote:
+On 2023-05-23 16:07, Catalin Marinas wrote:
+> On Tue, May 23, 2023 at 11:12:37AM +0200, David Hildenbrand wrote:
+>> Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We 
+>> need arg2
+>> -> arg5 to be 0. But wouldn't the following also just pass a 0 "int" ?
+>> 
+>> prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
+>> 
+>> I'm easily confused by such (va_args) things, so sorry for the dummy
+>> questions.
+> 
+> Isn't the prctl() prototype in the user headers defined with the first
+> argument as int while the rest as unsigned long? At least from the man
+> page:
+> 
+> int prctl(int option, unsigned long arg2, unsigned long arg3,
+> 	  unsigned long arg4, unsigned long arg5);
+> 
+> So there are no va_args tricks (which confuse me as well).
+> 
+I have explicitly mentioned the problem with man pages in my response to 
+David[1]. Quoting myself:
 
-> > The mtdsplit code uses different magic numbers to identify where
-> > the different partitions start.
->
-> Is mtdsplit acting on a device or on a partition?
+> This stuff *is* confusing, and note that Linux man pages don't even 
+> tell
+that prctl() is actually declared as a variadic function (and for
+ptrace() this is mentioned only in the notes, but not in its signature).
 
-It acts on a partition, usually you use a fixed-partitition scheme to point
-out the different chunks in the flash and then mtdsplit comes in to
-do its job.
+The reality:
 
-> Right now you define
-> a partition to be compatible with seama, I would have imagined the
-> partitions container should be compatible with seama instead of
-> fixed-partitions, but I haven't looked at the whole implementation, so
-> maybe my comment is just wrong.
+* glibc: 
+https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sys/prctl.h;h=821aeefc1339b35210e8918ecfe9833ed2792626;hb=glibc-2.37#l42
 
-The NAND flash on my device needs it to be a partition, it looks
-like so:
+* musl: 
+https://git.musl-libc.org/cgit/musl/tree/include/sys/prctl.h?h=v1.2.4#n180
 
-&nandcs {
-        /* Spansion S34ML01G2, 128MB with 128KB erase blocks */
-        partitions {
-                compatible =3D "fixed-partitions";
-                #address-cells =3D <1>;
-                #size-cells =3D <1>;
+Though there is a test in the kernel that does define its own prototype, 
+avoiding the issue: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/sched/cs_prctl_test.c?h=v6.3#n77
 
-                firmware@0 {
-                        compatible =3D "seama";
-                        label =3D "firmware";
-                        reg =3D <0x00000000 0x08000000>;
-                };
-        };
-};
+Thanks,
+Alexey
 
-The reason is mainly that other devices may put eraseblocks
-aside for other things, and the SEAMA format itself does not
-know its extents (it needs to be told where the end of the
-partition is).
+[1] 
+https://lore.kernel.org/lkml/7c572622c0d8e283fc880fe3f4ffac27@ispras.ru//lkml/7c572622c0d8e283fc880fe3f4ffac27@ispras.ru
 
-> > One such type of partition is seama, so the code needs to know
-> > that it should look for seama magic to determine the size and
-> > split this partition in a kernel and rootfs part. This is the code:
-> > https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dtree;f=3Dtarget/li=
-nux/generic/files/drivers/mtd/mtdsplit;h=3D3e0df856713a84b1decf17190f171cb1=
-0ce7a757;hb=3DHEAD
->
-> That's very informative, thanks for all the context. I believe this
-> could actually be part of the binding description (not the "this is an
-> openWRT stuff", of course).
-
-Hm I'll think about what I can put in there...
-
-Yours,
-Linus Walleij
+> Any int passed to arg[2-5] would be converted by the compiler to an
+> unsigned long before being passed to the kernel. So I think the change
+> in this patch is harmless as the conversion is happening anyway.
+> 
+> (well, unless I completely missed what the problem is)
