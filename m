@@ -2,48 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120DE70E049
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011B370E02C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237512AbjEWPVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
+        id S237050AbjEWPQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237489AbjEWPV2 (ORCPT
+        with ESMTP id S237029AbjEWPPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:21:28 -0400
-X-Greylist: delayed 343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 08:21:24 PDT
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C20121
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:21:24 -0700 (PDT)
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by cantor.telenet-ops.be (Postfix) with ESMTPS id 4QQdCk00m4z4x0bW
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:14:58 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:b0ac:7afd:272:4cff])
-        by andre.telenet-ops.be with bizsmtp
-        id 0FDx2A0020Jkz7G01FDxrP; Tue, 23 May 2023 17:13:57 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1Thm-002swf-JF;
-        Tue, 23 May 2023 17:13:57 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1Ti1-00CkQr-0X;
-        Tue, 23 May 2023 17:13:57 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] [resend] Input: gpio-keys - Use input_report_key()
-Date:   Tue, 23 May 2023 17:13:55 +0200
-Message-Id: <185f3320e39000159d4bd843fd3119b94c30d607.1684854795.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 May 2023 11:15:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ABEE7A;
+        Tue, 23 May 2023 08:15:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 375842209D;
+        Tue, 23 May 2023 15:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684854870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TkLyPkT+GsXSuBlfsNmALpub2P5cbuZv3uR/8NK1ky0=;
+        b=fcrH5ERbBAosvtM3sKUk3hFQzKgQeSkCA4K9SRdafLYsKszWYKAZid+OERHyO74Tz7T82s
+        JSUdRkqoJzEk0MGj7qlVteas8OpU4uxXh/zsuaM/Kkkw8G8E2URO+5W8hru2wqxtrggH3Z
+        2EF4m4urlnB9MG4mUGJYmbxLqQzgC6Y=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 180A213A10;
+        Tue, 23 May 2023 15:14:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IfL6BFbYbGSSewAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 23 May 2023 15:14:30 +0000
+Date:   Tue, 23 May 2023 17:14:28 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: rstat: Simplified cgroup_base_stat_flush()
+ update last_bstat logic
+Message-ID: <5g73i4yvi4ub4dqrf4dnq5qghkyckoygmgd2st6be3gg7twww2@w6zim6nxpt3b>
+References: <20230518124142.57644-1-jiahao.os@bytedance.com>
+ <f39b9229-e59c-2b1c-7f3f-1aeedfad44dc@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wg2kypm56q6zgssf"
+Content-Disposition: inline
+In-Reply-To: <f39b9229-e59c-2b1c-7f3f-1aeedfad44dc@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,41 +64,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the input_report_key() helper instead of open-coding the same
-operation.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/input/keyboard/gpio_keys.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+--wg2kypm56q6zgssf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
-index 5e18ef01b0340f1b..7e8342ef7a79b17f 100644
---- a/drivers/input/keyboard/gpio_keys.c
-+++ b/drivers/input/keyboard/gpio_keys.c
-@@ -456,7 +456,7 @@ static enum hrtimer_restart gpio_keys_irq_timer(struct hrtimer *t)
- 	struct input_dev *input = bdata->input;
- 
- 	if (bdata->key_pressed) {
--		input_event(input, EV_KEY, *bdata->code, 0);
-+		input_report_key(input, *bdata->code, 0);
- 		input_sync(input);
- 		bdata->key_pressed = false;
- 	}
-@@ -478,11 +478,11 @@ static irqreturn_t gpio_keys_irq_isr(int irq, void *dev_id)
- 		if (bdata->button->wakeup)
- 			pm_wakeup_event(bdata->input->dev.parent, 0);
- 
--		input_event(input, EV_KEY, *bdata->code, 1);
-+		input_report_key(input, *bdata->code, 1);
- 		input_sync(input);
- 
- 		if (!bdata->release_delay) {
--			input_event(input, EV_KEY, *bdata->code, 0);
-+			input_report_key(input, *bdata->code, 0);
- 			input_sync(input);
- 			goto out;
- 		}
--- 
-2.34.1
+Hello Jia.
 
+On Fri, May 19, 2023 at 12:15:57PM +0800, Hao Jia <jiahao.os@bytedance.com>=
+ wrote:
+> Maybe something like this?
+
+(Next time please send with a version bump in subject.)
+
+
+> In cgroup_base_stat_flush() function, {rstatc, cgrp}->last_bstat
+> needs to be updated to the current {rstatc, cgrp}->bstat after the
+> calculation.
+>=20
+> For the rstatc->last_bstat case, rstatc->bstat may be updated on other
+> cpus during our calculation, resulting in inconsistent rstatc->bstat
+> statistics for the two reads. So we use the temporary variable @cur to
+> record the read statc->bstat statistics, and use @cur to update
+> rstatc->last_bstat.
+
+If a concurrent update happens after sample of bstat was taken for
+calculation, it won't be reflected in the flushed result.
+But subsequent flush will use the updated bstat and the difference from
+last_bstat would account for that concurrent change (and any other
+changes between the flushes).
+
+IOW flushing cannot prevent concurrent updates but it will give
+eventually consistent (repeated without more updates) results.
+
+> It is better for us to assign directly instead of using
+> cgroup_base_stat_add() to update {rstatc, cgrp}->last_bstat.
+
+Or do you mean the copying is faster then arithmetics?
+
+Thanks,
+Michal
+
+--wg2kypm56q6zgssf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZGzYUgAKCRAkDQmsBEOq
+uW/EAPwMre77h1BOYEzmFLgU5ag4wBzdTwS70cy56P6QTg7dgAEAwdZrK+0lAsgP
+xGFhjmxnFKU0VP6MC3rCl/yhKOddwQ8=
+=25fp
+-----END PGP SIGNATURE-----
+
+--wg2kypm56q6zgssf--
