@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DEB70DB70
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6FA70DB72
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236475AbjEWL0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S235695AbjEWL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbjEWL0a (ORCPT
+        with ESMTP id S232119AbjEWL2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:26:30 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B85FF;
-        Tue, 23 May 2023 04:26:27 -0700 (PDT)
-X-UUID: a4e5092cf95c11edb20a276fd37b9834-20230523
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Lvk3JaTrwPLSWWOaMLoAICxAPDtCTseef/dYBEf8duA=;
-        b=FXAaU5RGXzQ2kOenbv8WN45X6C1EVfjzi2hGrA6cTe8njHl1SKRbSJRI/4Nu42Vk4Fm4vSmaGY47sLqI4Uu+rX5kWIydghPvRWVnUBlLY6LbqPku/yeJOqnQnKPmUlu+pgZm/Ucj+3nG5P1JCAdr37zmL8iwAez33WWJdaEscBc=;
-X-CID-CACHE: Type:Local,Time:202305231926+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:9dd24f03-b5bc-4808-80c7-e440b5220667,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:-35
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:9119c5c1-e32c-4c97-918d-fbb3fc224d4e,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
-        L:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: a4e5092cf95c11edb20a276fd37b9834-20230523
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1094335045; Tue, 23 May 2023 19:26:21 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 23 May 2023 19:26:17 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 23 May 2023 19:26:17 +0800
-From:   <qii.wang@mediatek.com>
-To:     <broonie@kernel.org>
-CC:     <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, "Tim . Kuo" <Tim.kuo@mediatek.com>
-Subject: [PATCH] spi: mediatek: advertise the availability of Dual and Quad mode
-Date:   Tue, 23 May 2023 19:26:08 +0800
-Message-ID: <20230523112608.10298-1-qii.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 23 May 2023 07:28:30 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B45FF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:28:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f6042d60b5so23380585e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684841305; x=1687433305;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=de919cKCe4wT4S260hv+KZxN0tV8ssN9pP3EBr3fXco=;
+        b=P8jxl9ew7AY7pYFsvzp2552hspigR6Z9lTpMrx/E/rm0e9IVC3n86B9YEwEivObDJL
+         pnKZVxH6JW3C7k0XuIoSYxW7ST2AQFmiyT8AK+Cdf4KW1E6Nxh2aOrbPP8VXJjL0icbQ
+         tjFstIeHLlMxleXsg5vBL3c/Do6TW7Xi6cH9nTNfKt4Qy8vP3p5bNa3F1lBR0jdICuoY
+         jkfK40NRUmzqYK1DBInaQADMSh/vP4OpRURdNPpkdhT0N+vlN5db0iVSZ1qKfw6aOmoM
+         Ss8eeVP1m1v0Ax1plx4Yij+URN26nen6sEwae7yzxtDWpFCjmb2uT5EL4pspmsja6FER
+         aaFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684841305; x=1687433305;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=de919cKCe4wT4S260hv+KZxN0tV8ssN9pP3EBr3fXco=;
+        b=eIc0KhCQMHeoBRNupsy1eolgWVl607adHFQkyFZkW3mayliQa+WqeVwvJktSotWCyx
+         8KWubCJJD3jIFAAhhpABdkyR5H5AK7sndPLEZz0LblugR2Epj92jp3AP3zvpM1/T2lU/
+         LG7r3pCpp9SChJQS4Pa8d61mJUXYGMfPu9qsivAeAobceUPzgEMYRoOkxMzo/0D7Jewl
+         SxLxxIwuRAZVg51iaBA7wIIEuzyIuT7VwJMvlu7vg7COWKXKymLRlmIdrhNnjULYLE2r
+         Wzyftohp55kcodAoTvNCRg3LvzAdlSb320MXY1yBDOXuQ2GjYXuNmHSZ5I7JQfNm79lE
+         mPmg==
+X-Gm-Message-State: AC+VfDxiLFG7BHgIukDYJbqfUtwz10FPb+1FOMth3WdXqghmQpftq0sE
+        e7YVPlO2yV9gMNhpmtgd20Gzpg==
+X-Google-Smtp-Source: ACHHUZ6ZUa+nR/kj5kFbDcpE0lUe0Vuodny5XRTkBlniwziBN4L/FCtuVVfY4htvApP+nKiAfJ0p4Q==
+X-Received: by 2002:a05:600c:ac5:b0:3f6:44e:9d8 with SMTP id c5-20020a05600c0ac500b003f6044e09d8mr4801602wmr.22.1684841305153;
+        Tue, 23 May 2023 04:28:25 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c205300b003f60101074dsm9380658wmg.33.2023.05.23.04.28.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 04:28:24 -0700 (PDT)
+Message-ID: <b0a1d728-6ef5-9cca-4cb9-18e35df61748@baylibre.com>
+Date:   Tue, 23 May 2023 13:28:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 4/4] clocksource/drivers/timer-mediatek: Make
+ timer-mediatek become loadable module
+Content-Language: en-US
+To:     walter.chang@mediatek.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230517022557.24388-1-walter.chang@mediatek.com>
+ <20230517022557.24388-5-walter.chang@mediatek.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230517022557.24388-5-walter.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qii Wang <qii.wang@mediatek.com>
+On 17/05/2023 04:25, walter.chang@mediatek.com wrote:
+> Make the timer-mediatek driver which can register
+> an always-on timer as tick_broadcast_device on
+> MediaTek SoCs become loadable module in GKI.
 
-this patch advertise the availability of Dual and Quad SPI mode
-for ipm design.
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Signed-off-by: Qii Wang <qii.wang@mediatek.com>
-Signed-off-by: Tim.Kuo <Tim.kuo@mediatek.com>
----
- drivers/spi/spi-mt65xx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 21c321f43766..1501ee8459ff 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -1144,7 +1144,8 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 	if (mdata->dev_comp->must_tx)
- 		master->flags = SPI_MASTER_MUST_TX;
- 	if (mdata->dev_comp->ipm_design)
--		master->mode_bits |= SPI_LOOP;
-+		master->mode_bits |= SPI_LOOP | SPI_RX_DUAL | SPI_TX_DUAL |
-+				     SPI_RX_QUAD | SPI_TX_QUAD;
- 
- 	if (mdata->dev_comp->ipm_design) {
- 		mdata->dev = dev;
--- 
-2.25.1
 
