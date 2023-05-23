@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9565E70E381
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6B170E308
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235624AbjEWRNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S238032AbjEWRN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjEWRNa (ORCPT
+        with ESMTP id S229794AbjEWRN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:13:30 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CB9B5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:13:28 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f603ff9c02so783635e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:13:28 -0700 (PDT)
+        Tue, 23 May 2023 13:13:56 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0D090
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:13:55 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-3357fc32a31so1332565ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684862007; x=1687454007;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LOCz9RmdVTOhhgpghZZJPcHjAiJmOglm8+PVBiqiJ8M=;
-        b=JTmAXusTTWbezv+kPsqc/VpadaF11BibQj/KIeC96y9uQq9onicO38T4JD9dwJPb2q
-         ZH7lOkREYl3UKh+dvdB9buIxpLqZsrPl3NQ4DP5rRWPfWHUHfnDKRsj7SjSENgxjGG2V
-         JCBY3qvDGHvDRexp1ap9XNwVujjRZ4XcqdaKyuDRRo5y8tuPHQVc2zu0/7/QQ/G0GkX/
-         s+NzAXQU4P8GP5b8d1Qtlj7szLyrQfKHsqHlXp0/jy4hjmHIVxUg5oJ/TfBewcJUD5AD
-         4vGxVDKTvz8vN5AMujK+A2ZoW1+5Fv6zxrzFWipcousRaGPwmWRHlaOmPwHnt+FO4KfN
-         THYQ==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1684862034; x=1687454034;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lHqkW47AY8QARjZ5sy2gHsO5riEq31n+nVihbrRMHeg=;
+        b=eYmYusKwHer1Vddz3pPV7eYUdrCDXog4GbnNmTtVn6yjEa5nW+iLa4GHdG/+5J9Jtq
+         vQQrEo+AbKTYqOkM081VcPtdOP4uTwol/9BWtYm0THz/MCQPrRBOT29fRaspDpoJzNDf
+         TnEvF+e/w1115/oI2u6MJ6I/SJoXuxb8Mco/v9TUerlWvYy8EyTRs2zKSOSc/zza3cAd
+         R/KQgtfcR1IbkLiYvMCFqSoSW5G+9jWmcoCSHLsZN/DPMp2v3BsJ0CgrQ6yU/WceRx7h
+         sapeU3+G0pBWIblX1cgB+DnnUBThOhBmT7kYFYAisuOMqZMAA1l/Y0ZYCmkR35O+oAqU
+         acbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684862007; x=1687454007;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LOCz9RmdVTOhhgpghZZJPcHjAiJmOglm8+PVBiqiJ8M=;
-        b=Al16aCm6SzAAQbTtQtD9FyJ+AGDgWqxkUbCRtX/iXkWI8d2bsAvJccsz1OtGXqNtFq
-         MzAtg0ei01hDuSspw2XAO74XagyyWibXaKwglPWqr+Y5wjxLHInv7Tc7ZUOUDyz4Y9U2
-         Sfc4eu7EXsKzHNiNH/dNR56yrTysegN7Tftt/Dh5h557rHZm5JSOaXRiqyPFYP3xuy2o
-         pc8glzExgLsM7NYqlI4INgi3BUXH2TZvd4q7nSHzeknEJV85a3NFRnLQbwYe9xLLB0qE
-         TVEhOY/VivomWJxBL2N2+tBoyLOm8l9bJRhN3VD9yfWVUsHv4w7ml0aWx0p4+HBFt0/v
-         7IxA==
-X-Gm-Message-State: AC+VfDxfjIPL20vaUHclyDPpf3zSnR8ilyiV8lJPmdKLuvTSD575uuu2
-        eQDrKGQ/lzEqPGVnFRizNRR9PBJEw1qwW19Qu9I=
-X-Google-Smtp-Source: ACHHUZ5WSgfukiscV+11TkJVeTmzV96VC51JBJR1AfJN9Q4/xg4yAEFQ1pBpwNuiqAnOJ217YowYmw==
-X-Received: by 2002:adf:f8c4:0:b0:30a:9cb2:badd with SMTP id f4-20020adff8c4000000b0030a9cb2baddmr2525866wrq.46.1684862007071;
-        Tue, 23 May 2023 10:13:27 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id a9-20020a5d5709000000b0030922ba6d0csm11587461wrv.45.2023.05.23.10.13.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 10:13:26 -0700 (PDT)
-Message-ID: <1f34ca48-75cc-d824-2230-7375146ad970@linaro.org>
-Date:   Tue, 23 May 2023 18:13:25 +0100
+        d=1e100.net; s=20221208; t=1684862034; x=1687454034;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lHqkW47AY8QARjZ5sy2gHsO5riEq31n+nVihbrRMHeg=;
+        b=QKUwdgxwB1lpqO+y0c4+DD86HtbttzJnhWp6p9lbY0R6quSu90yKG/7YUK6zQeSexI
+         fpdIudjpsOKhGUnrUWuoWv8LjI7BMpMrkq5oJVuX5KcCxdePe4Z+7HKf/d9Nbxx/1b5Q
+         bGcwVTQ5Zl1ZqJ6QG1U8yrlQm4FbYxFGNTuNPmaHQZjVB2c4WOzz1SiDtc/A04/S53Rf
+         aTbqYQuPnq2MvDyRsIhCtgDTdJrGOA91UZvn3oxwCBGrzzsG67R+XBzXjUM0ObbjX48n
+         EgzR7Y0CBc1Qwu9JjW8PH0hCtoa7OIxWzT46h1xeHeO875PQcnkAdQraaRi7+KC2FhoM
+         xs1A==
+X-Gm-Message-State: AC+VfDzgB3KVCpf6N8l3NKfNPuNRsBPwGY9zOU22yuApG/Aks0D2orCH
+        sHZ3vcRGxyG58j0exwO0bEqlhw==
+X-Google-Smtp-Source: ACHHUZ5np/5g+AjvJUk/rzK1gJys/RTdgbLu8FCkGoLJWbSCHJ8ovlR92Aj/dzoTfL5zkPflb+jbwA==
+X-Received: by 2002:a6b:5817:0:b0:76c:883c:60a2 with SMTP id m23-20020a6b5817000000b0076c883c60a2mr7078214iob.0.1684862034386;
+        Tue, 23 May 2023 10:13:54 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id u7-20020a02aa87000000b00411a1373aa5sm2524580jai.155.2023.05.23.10.13.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 10:13:53 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     regressions@leemhuis.info, chengming.zhou@linux.dev, hch@lst.de,
+        yukuai3@huawei.com, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+In-Reply-To: <20230522121854.2928880-1-yukuai1@huaweicloud.com>
+References: <20230522121854.2928880-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH RESEND] blk-wbt: fix that wbt can't be disabled by
+ default
+Message-Id: <168486203336.398377.14105222183209089058.b4-ty@kernel.dk>
+Date:   Tue, 23 May 2023 11:13:53 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] regmap: sdw: check for invalid multi-register writes
- config
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        ckeepax@opensource.cirrus.com, tanureal@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20230523154747.5429-1-srinivas.kandagatla@linaro.org>
- <dd2d2484-13f9-4fa6-85d2-5a540f137b3a@sirena.org.uk>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <dd2d2484-13f9-4fa6-85d2-5a540f137b3a@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,22 +75,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 23/05/2023 17:58, Mark Brown wrote:
-> On Tue, May 23, 2023 at 04:47:47PM +0100, Srinivas Kandagatla wrote:
+On Mon, 22 May 2023 20:18:54 +0800, Yu Kuai wrote:
+> commit b11d31ae01e6 ("blk-wbt: remove unnecessary check in
+> wbt_enable_default()") removes the checking of CONFIG_BLK_WBT_MQ by
+> mistake, which is used to control enable or disable wbt by default.
 > 
->> +	/* Only bulk writes are supported not multi-register writes */
->> +	if (config->can_multi_write)
->> +		return -ENOTSUPP;
->> +
+> Fix the problem by adding back the checking. This patch also do a litter
+> cleanup to make related code more readable.
 > 
-> This doesn't seem like the right fix - I'd expect us to simply choose
-> not to use multiple writes, with an additional flag/check for bus
-> support.
-Is there a way to check if bus support multi-register writes?
+> [...]
 
-All I can see from the code is that regmap can_multi_write is set based 
-on regmap_config from device and write callback from bus.
+Applied, thanks!
+
+[1/1] blk-wbt: fix that wbt can't be disabled by default
+      (no commit info)
+
+Best regards,
+-- 
+Jens Axboe
 
 
---srini
+
