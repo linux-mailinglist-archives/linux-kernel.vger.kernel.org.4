@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A2170E3A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE1470E313
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238053AbjEWRV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S238055AbjEWRWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbjEWRVw (ORCPT
+        with ESMTP id S238057AbjEWRWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:21:52 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B204A192
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:21:30 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d24136663so24085b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684862490; x=1687454490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UfEhaREexnLunSg5wCBPL+dpFdiNnSkUrVOZqlQDHEk=;
-        b=A+WJheSy//Cq7Wk2eOH+sG3g3yvZZ+Pi55iMBsieOKUKWggt+b26yGdogCuM+EHe4o
-         KCw93KwA1md97XsWNPEj2DMYDxWrH2uiL9eDHCQL847E2YXq64KZy+wfC4zOrqOyHn9D
-         HFV0skJfYm4mJAQvZ4D1IhGsXWLhBFXNK7LPw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684862490; x=1687454490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UfEhaREexnLunSg5wCBPL+dpFdiNnSkUrVOZqlQDHEk=;
-        b=N2gmzjDl8QdgaAsySsjPJYw6ZMC6TgkkuGGOb8DMwB59R3Ho53WB1/WAY6F+EmSss4
-         X5hToSRNQdx087ykRKUZR4RWgW6JpEeC5/m83cOwlFCGp3aYTQjmHAOa4cgHFH0KAtb/
-         GSWDphtFgj2FOvbwrDAfGRNYVaZsL5crpQuqSU8Mi2QvvNNh3ibwIuh3IpvU5gjxnRQI
-         TDKW5Q5hG+6Y9ElUDx+S6WYiozCtiw/wA5nIorwjQg04PT0pQjbCHNhAUdU1fIFtP2Lw
-         H82zFnShm+txNV5BM4U1YbP2zbBa6MNCWLGT0sTgWujHGYt2PO7MIruJz4r5UIwh2U+l
-         TUcw==
-X-Gm-Message-State: AC+VfDx1Q0ms8NVkbXF9qqI+TFaaJFnSiLBl9EefN4cXcjp8Y/7OE2Zc
-        l43jmeFdZhex8uBt33RUKRXcJw==
-X-Google-Smtp-Source: ACHHUZ56/NYRoSNuzleiRtV4dRY/zW0gZwuFEggLub1Lj8aT7EotD520+MbzI/emSzlCoGE2EUD4VA==
-X-Received: by 2002:a05:6a00:2314:b0:648:8c0d:6e4e with SMTP id h20-20020a056a00231400b006488c0d6e4emr18112351pfh.19.1684862490206;
-        Tue, 23 May 2023 10:21:30 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e14-20020a62aa0e000000b0063b6cccd5dfsm3551359pff.195.2023.05.23.10.21.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 10:21:29 -0700 (PDT)
-Date:   Tue, 23 May 2023 10:21:29 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: most: Replace all non-returning strlcpy with
- strscpy
-Message-ID: <202305231021.73BFA380D@keescook>
-References: <20230523021640.2406585-1-azeemshaikh38@gmail.com>
+        Tue, 23 May 2023 13:22:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C1218E;
+        Tue, 23 May 2023 10:21:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26C78634FC;
+        Tue, 23 May 2023 17:21:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C999C4339B;
+        Tue, 23 May 2023 17:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684862516;
+        bh=VonElC8wOqM+LDZvf96EDpTmmf7XGYZNo7lSoNX7MvE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qgkgY52gosRPlhPkg1lcyCVYJ7yXg4hXYtHMPyRd+JWfGqeP3zQeyTWwo5IeHQaJx
+         l2+hWw/h7dl8814tBajCwHeIUSsuF/F+uHBAjWsl4vZ2UKSgMi3zo7ZrwiXm6FBVw0
+         qsODYwcepkXjxczxys9GWoEK1o5Ph091t9Q8glEncAhOhas2VdeLt0FFO5qXFMBAAN
+         fHLf3iBrfZYxhTfJW9HplhGaLGPEAmc5ec6M2jLvUZfFfwzVe8s/af3IloZ075S803
+         wTji+8LNmZpOy934aXtQGDd8qxCTWU7uOdZqGti42iYO5V/dYdnInZPxg4CXbecNwk
+         4uju8eX08/OtA==
+From:   rfoss@kernel.org
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Robert Foss <rfoss@kernel.org>, linux-kernel@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Guillaume BRUN <the.cheaterman@gmail.com>,
+        linux-hardening@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/bridge: dw-hdmi: Replace all non-returning strlcpy with strscpy
+Date:   Tue, 23 May 2023 19:21:49 +0200
+Message-Id: <168486250045.3617730.17499429425987433532.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230522155210.2336690-1-azeemshaikh38@gmail.com>
+References: <20230522155210.2336690-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523021640.2406585-1-azeemshaikh38@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 02:16:40AM +0000, Azeem Shaikh wrote:
+From: Robert Foss <rfoss@kernel.org>
+
+On Mon, 22 May 2023 15:52:10 +0000, Azeem Shaikh wrote:
 > strlcpy() reads the entire source buffer first.
 > This read may exceed the destination size limit.
 > This is both inefficient and can lead to linear read
@@ -79,12 +78,14 @@ On Tue, May 23, 2023 at 02:16:40AM +0000, Azeem Shaikh wrote:
 > strlcpy() here with strscpy().
 > No return values were used, so direct replacement is safe.
 > 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> [...]
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Applied, thanks!
 
--- 
-Kees Cook
+[1/1] drm/bridge: dw-hdmi: Replace all non-returning strlcpy with strscpy
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=37cee4876a45
+
+
+
+Rob
+
