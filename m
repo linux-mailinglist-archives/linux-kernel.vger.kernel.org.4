@@ -2,249 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7792270DC61
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EEA70DC6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbjEWMUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S236802AbjEWMVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234129AbjEWMUU (ORCPT
+        with ESMTP id S235518AbjEWMVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:20:20 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BE1188;
-        Tue, 23 May 2023 05:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684844393; x=1716380393;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=cSEOYPfunSW4a7ojtMkq0xtAYcLulVEFqRdgLDwJDLY=;
-  b=C8hZZnj632TlsabSA8whPbRPC+TQrZkBduGRwHnGOi98OZ8FhQQd/61J
-   OOgbhBekv9lG5BRLSCGSr8DmGZwifS+IP7PMb4LoCei4xCtx70Jl3+B2Q
-   eehMaAor9V+9Q5sVbQnzTqmdWaZy2OkaIzZZOJmLP41Alpi9P6L2Z9WL2
-   O2+Qd3Vu9DZdNMg7Mi6VQQBIEj2YlGDX3XhWFtxi2sQmmEfZrD35GdDia
-   W736uPi//97yo1cIQH1v2HO/oD3OZOwnhd1GqkAKeBnNMBZfSa8Rn9ZKp
-   1XrDHAYhMnoiky2fX4yoNRVcbIykhCYLPurKR59vfy94kP+o1QH8P3C4T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="342679858"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="342679858"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 05:19:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="848248129"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="848248129"
-Received: from hverma-mobl1.amr.corp.intel.com ([10.212.7.16])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 05:19:52 -0700
-Message-ID: <b5e35f904174905d8f90df3f49944b22389126c7.camel@linux.intel.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Avoid initializing variables
- prematurely
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Fieah Lim <kweifat@gmail.com>
-Cc:     lenb@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 23 May 2023 05:19:49 -0700
-In-Reply-To: <CAJZ5v0ifp1088wY7o=7pnBVBm=_3H0M4sfq6=gmyChZD6R9g1g@mail.gmail.com>
-References: <20230523085045.29391-1-kweifat@gmail.com>
-         <CAJZ5v0ifp1088wY7o=7pnBVBm=_3H0M4sfq6=gmyChZD6R9g1g@mail.gmail.com>
+        Tue, 23 May 2023 08:21:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD436119;
+        Tue, 23 May 2023 05:21:37 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NC85Cd010591;
+        Tue, 23 May 2023 12:20:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=b/N97QNJLbmr+RhSzhUpL7rxH3poMQwYGelaxe/kHjw=;
+ b=ikq5fqhiSpAAT0nJmLp0aCj978Av/rRSS20Vc4ULriCHaM0B7e6jTtTZJvoiEszfEp9B
+ l7miWEJ49bMuuMf1IpkL0lHjV9aYJAP4k4tugihoSJ+ulamMiXffid3ZMqXCYrOhemca
+ b697LrcX3VA2GTXABwyFzt0QEAzH0LWC47K1qa9a190SlVw00sYxpmR3QWCWyn+lMG0w
+ O7Vdf1FG9BiZhYoT+2OE9qZxkgvgdDI6gDcQOXIhpLK6HvUP32YP2uq12Ef/ajaAlWoJ
+ s1A8hVsg7S/r9zE0ldTpDCJaPMjUrWa79b/rzIwRHbSCz33LjwGjs4zykqMBYji7DN/U 3g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qrw2n8kac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 12:20:34 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34NC85YP010666;
+        Tue, 23 May 2023 12:20:33 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qrw2n8k8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 12:20:33 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34N2FIwg013811;
+        Tue, 23 May 2023 12:20:30 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qppcu9f06-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 12:20:30 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34NCKRRA11338474
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 May 2023 12:20:27 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E82A02004D;
+        Tue, 23 May 2023 12:20:26 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4EA4820040;
+        Tue, 23 May 2023 12:20:24 +0000 (GMT)
+Received: from [9.171.22.235] (unknown [9.171.22.235])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 23 May 2023 12:20:24 +0000 (GMT)
+Message-ID: <b06a47fecf5eab9440c1c35d9c7b83fe87f918a0.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 6/6] iommu/dma: Make flush queue sizes and timeout
+ driver configurable
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Julian Ruess <julianr@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Date:   Tue, 23 May 2023 14:20:24 +0200
+In-Reply-To: <ZGuT2R42SWFHmklu@8bytes.org>
+References: <20230310-dma_iommu-v9-0-65bb8edd2beb@linux.ibm.com>
+         <20230310-dma_iommu-v9-6-65bb8edd2beb@linux.ibm.com>
+         <ZGuT2R42SWFHmklu@8bytes.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SCHk9GNBzwPXZyeAocq9ZCr1U8UNYoFE
+X-Proofpoint-ORIG-GUID: YIMPkAl4-Wv-r6WPNnYiGonT3FNgmVP_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_08,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ bulkscore=0 mlxscore=0 priorityscore=1501 adultscore=0 spamscore=0
+ mlxlogscore=686 impostorscore=0 clxscore=1015 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-23 at 13:08 +0200, Rafael J. Wysocki wrote:
-> On Tue, May 23, 2023 at 10:51=E2=80=AFAM Fieah Lim <kweifat@gmail.com> wr=
-ote:
-> >=20
-> > We should avoid initializing some rather expensive data
-> > when the function has a chance to bail out earlier
-> > before actually using it.
-> > This applies to the following initializations:
-> >=20
-> > =C2=A0- cpudata *cpu =3D all_cpu_data; (in everywhere)
-> > =C2=A0- this_cpu =3D smp_processor_id(); (in notify_hwp_interrupt)
-> > =C2=A0- hwp_cap =3D READ_ONCE(cpu->hwp_cap_cached); (in
-> > intel_pstate_hwp_boost_up)
-> >=20
-> > These initializations are premature because there is a chance
-> > that the function will bail out before actually using the data.
-> > I think this qualifies as a micro-optimization,
-> > especially in such a hot path.
-> >=20
-> > While at it, tidy up how and when we initialize
-> > all of the cpu_data pointers, for the sake of consistency.
-> >=20
-> > A side note on the intel_pstate_cpu_online change:
-> > we simply don't have to initialize cpudata just
-> > for the pr_debug, while policy->cpu is being there.
-> >=20
-> > Signed-off-by: Fieah Lim <kweifat@gmail.com>
-> > ---
-> > V1 -> V2: Rewrite changelog for better explanation.
-> >=20
-
-[...]
-
-> > =C2=A0void notify_hwp_interrupt(void)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int this_cpu =3D smp_pro=
-cessor_id();
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int this_cpu;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cpudata *cpudata;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long flags;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 value;
-> > @@ -1591,6 +1593,8 @@ void notify_hwp_interrupt(void)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!(value & 0x01))
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 return;
-> >=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 this_cpu =3D smp_processor_id();
-> > +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_lock_irqsave(&hwp_notif=
-y_lock, flags);
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!cpumask_test_cpu(this_c=
-pu, &hwp_intr_enable_mask))
+On Mon, 2023-05-22 at 18:10 +0200, Joerg Roedel wrote:
+> On Mon, May 15, 2023 at 11:15:56AM +0200, Niklas Schnelle wrote:
+> > In the s390 IOMMU driver a large fixed queue size and timeout is then
+> > set together with single queue mode bringing its performance on s390
+> > paged memory guests on par with the previous s390 specific DMA API
+> > implementation.
 >=20
-> This is a place where it may really matter for performance, but how
-> much?=C2=A0 Can you actually estimate this?
+> Hmm, the right flush-queue size and timeout settings are more a function
+> of the endpoint device and device driver than of the iommu driver, no? I
+> think something like this could also help solving the recently reported
+> scalability problems in the fq-code, if done right.
+>=20
+> Regards,
+>=20
+> 	Joerg
+>=20
 
-If DEBUG_PREEMPT is defined
-~12 instructions (most of them with latency =3D 1 in dependency chain)
+In our case the large flush queue and timeout is needed because the
+IOTLB flushes of the virtualized s390 IOMMU are used by KVM and z/VM to
+synchronize their IOMMU shadow tables thus making them more expensive.
+This then applies to all pass-through PCI devices without their drivers
+knowing about the IOMMU being virtualized like that. But yes of course
+there could be cases where the device driver knows better.
 
 Thanks,
-Srinivas=20
-
-
-
->=20
-> > @@ -2024,8 +2028,8 @@ static int hwp_boost_hold_time_ns =3D 3 *
-> > NSEC_PER_MSEC;
-> >=20
-> > =C2=A0static inline void intel_pstate_hwp_boost_up(struct cpudata *cpu)
-> > =C2=A0{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 hwp_cap;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 hwp_req =3D READ_ONCE(cp=
-u->hwp_req_cached);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 hwp_cap =3D READ_ONCE(cpu->hw=
-p_cap_cached);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 max_limit =3D (hwp_req &=
- 0xff00) >> 8;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 min_limit =3D (hwp_req &=
- 0xff);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 boost_level1;
-> > @@ -2052,6 +2056,7 @@ static inline void
-> > intel_pstate_hwp_boost_up(struct cpudata *cpu)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 cpu->hwp_boost_min =3D min_limit;
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* level at half way mark be=
-tween min and guranteed */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hwp_cap =3D READ_ONCE(cpu->hwp_ca=
-p_cached);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 boost_level1 =3D (HWP_GUARAN=
-TEED_PERF(hwp_cap) + min_limit)
-> > >> 1;
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cpu->hwp_boost_min < boo=
-st_level1)
->=20
-> For clarity, the original code is much better than the new one and
-> the
-> only case where hwp_cap is not used is when that single read doesn't
-> matter.=C2=A0 Moreover, the compiler is free to optimize it too.
->=20
-> > @@ -2389,9 +2394,7 @@ static const struct x86_cpu_id
-> > intel_pstate_cpu_ee_disable_ids[] =3D {
-> >=20
-> > =C2=A0static int intel_pstate_init_cpu(unsigned int cpunum)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cpudata *cpu;
-> > -
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cpu =3D all_cpu_data[cpunum];
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cpudata *cpu =3D all_cpu_d=
-ata[cpunum];
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!cpu) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 cpu =3D kzalloc(sizeof(*cpu), GFP_KERNEL);
-> > @@ -2431,11 +2434,13 @@ static int intel_pstate_init_cpu(unsigned
-> > int cpunum)
-> >=20
-> > =C2=A0static void intel_pstate_set_update_util_hook(unsigned int
-> > cpu_num)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cpudata *cpu =3D all_cpu_d=
-ata[cpu_num];
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cpudata *cpu;
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (hwp_active && !hwp_boost=
-)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 return;
-> >=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cpu =3D all_cpu_data[cpu_num];
-> > +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cpu->update_util_set)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 return;
-> >=20
->=20
-> This isn't a hot path.
->=20
-> > @@ -2638,9 +2643,7 @@ static int intel_cpufreq_cpu_offline(struct
-> > cpufreq_policy *policy)
-> >=20
-> > =C2=A0static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cpudata *cpu =3D all_cpu_d=
-ata[policy->cpu];
-> > -
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_debug("CPU %d going online\n",=
- cpu->cpu);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_debug("CPU %d going online\n",=
- policy->cpu);
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 intel_pstate_init_acpi_perf_=
-limits(policy);
-> >=20
-> > @@ -2649,6 +2652,8 @@ static int intel_pstate_cpu_online(struct
-> > cpufreq_policy *policy)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Re-enable HWP and clear the "suspended" flag =
-to
-> > let "resume"
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 * know that it need not do that.
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 struct cpudata *cpu =3D all_cpu_data[policy->cpu];
-> > +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 intel_pstate_hwp_reenable(cpu);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 cpu->suspended =3D false;
->=20
-> Same here and I don't see why the change matters.
->=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > --
->=20
-> There is one piece in this patch that may be regarded as useful.
-> Please send it separately.
-
+Niklas
