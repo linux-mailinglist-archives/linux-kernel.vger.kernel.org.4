@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2F270DD45
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7512170DCE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236841AbjEWNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S236662AbjEWMr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236893AbjEWNNL (ORCPT
+        with ESMTP id S236631AbjEWMrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:13:11 -0400
-X-Greylist: delayed 1831 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 06:12:58 PDT
-Received: from bosmailout03.eigbox.net (bosmailout03.eigbox.net [66.96.187.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F40DB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:12:58 -0700 (PDT)
-Received: from bosmailscan01.eigbox.net ([10.20.15.1])
-        by bosmailout03.eigbox.net with esmtp (Exim)
-        id 1q1R3J-0006uD-7O; Tue, 23 May 2023 08:23:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=anniebear.net; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Cc:To:From:Subject:Date:References:In-Reply-To:Message-ID:
-        Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-        :Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=adHSZYLF1OQRtMEH4XxOr8eL2i1ZMqljhXv2Kh+46aM=; b=ABYqWEpkPQbnM515RlFnjL7mPy
-        MfjU48N8nUTstwiR36FXig82Ga8q2tozoxB2Fa1uigcgjP/xboVSkwS0rNFAuwPaPoU5dOmNHs4Qn
-        em11ktOZwIw8kwq3q6W2wceNljK+/byImueS9Tsw3VNH/ok9YfVxiFkTliSopYUVsGZUMEJipDeWR
-        mYBCdmIMVnaAkevhW4pvf0LqI3oBTDqBcIip8RQ8qdC9pKj8jzVHJsYN+Hgs8rrfzwhWMUqxWPQNn
-        BkPNWwO7pW64HFbvMMBaQUK5WM+Xp7LDMJKh/aXvS1UxOkrWz0iLH8znjQpnenBx6+zRGsDA3TcoD
-        3yXiRYJg==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan01.eigbox.net with esmtp (Exim)
-        id 1q1R3I-0001pi-S2; Tue, 23 May 2023 08:23:44 -0400
-Received: from boswebmail11.eigbox.net ([10.20.16.11])
-        by bosimpout12 with 
-        id 0CPh2A00D0EKGQi01CPkGK; Tue, 23 May 2023 08:23:44 -0400
-X-Authority-Analysis: v=2.3 cv=d4VuNSrE c=1 sm=1 tr=0
- a=arGavn6Z5cgUkMHml6gAfw==:117 a=8nJEP1OIZ-IA:10 a=P0xRbXHiH_UA:10
- a=QyXUC8HyAAAA:8 a=mrD3klddzif1__fuzFkA:9 a=wPNLvfGTeEIA:10
-Received: from [127.0.0.1] (helo=emailmg.ipower.com)
-        by boswebmail11.eigbox.net with esmtp (Exim)
-        id 1q1R3B-0001GH-Gt; Tue, 23 May 2023 08:23:37 -0400
-Received: from 192.168.151.0
-        (SquirrelMail authenticated user dinh.linux@anniebear.net)
-        by emailmg.ipower.com with HTTP;
-        Tue, 23 May 2023 07:23:37 -0500
-Message-ID: <0a7b6e4775ea8ae3c41cd49c6cd19f90.squirrel@emailmg.ipower.com>
-In-Reply-To: <20230511041221.135527-3-niravkumar.l.rabara@intel.com>
-References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
-    <20230511041221.135527-1-niravkumar.l.rabara@intel.com>
-    <20230511041221.135527-3-niravkumar.l.rabara@intel.com>
-Date:   Tue, 23 May 2023 07:23:37 -0500
-Subject: Re: [PATCH v3 2/2] EDAC/altera: Check previous DDR DBE during 
- driver probe
-From:   dinh.linux@anniebear.net
-To:     niravkumar.l.rabara@intel.com
-Cc:     niravkumar.l.rabara@intel.com, bp@alien8.de, dinguyen@kernel.org,
-        james.morse@arm.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
-        tony.luck@intel.com
-User-Agent: SquirrelMail/1.4.19
+        Tue, 23 May 2023 08:47:52 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392ABFF;
+        Tue, 23 May 2023 05:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Z6eOEPsyrN+N7rxxjRZ8obpKLPnx37W4en5fClkPwhs=; b=QF5fCvNg3Rr9X+pP2QSVuCCfxr
+        tRKORr+icqPX3ynC8b13QzqnUzmvGDMeaoKWSKU5AS06sH0CjHQo02WPuIVG0Gq4i76PkYBkOUZRe
+        vx6dYseNOBWFBd9yu6Z+i2TDSWwvBXVatZxVUy7pMLN30zEjmZcQYjbZvuM+Av3cwmrw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q1R3W-00DgTf-Ti; Tue, 23 May 2023 14:23:58 +0200
+Date:   Tue, 23 May 2023 14:23:58 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Parthiban.Veerasooran@microchip.com
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ramon.nordin.rodriguez@ferroamp.se, Horatiu.Vultur@microchip.com,
+        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
+        Thorsten.Kummermehr@microchip.com
+Subject: Re: [PATCH net-next v2 4/6] net: phy: microchip_t1s: fix reset
+ complete status handling
+Message-ID: <e9db9ce6-dee8-4a78-bfa4-aace4ae88257@lunn.ch>
+References: <20230522113331.36872-1-Parthiban.Veerasooran@microchip.com>
+ <20230522113331.36872-5-Parthiban.Veerasooran@microchip.com>
+ <f0769755-6d04-4bf5-a273-c19b1b76f7f6@lunn.ch>
+ <b226c865-d4a7-c126-9e54-60498232b5a5@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain;charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-X-Priority: 3 (Normal)
-Importance: Normal
-X-EN-AuthUser: dinh.linux@anniebear.net
-Sender:  dinh.linux@anniebear.net
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b226c865-d4a7-c126-9e54-60498232b5a5@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,75 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, May 23, 2023 at 05:30:06AM +0000, Parthiban.Veerasooran@microchip.com wrote:
+> Hi Andrew,
+> 
+> On 22/05/23 6:13 pm, Andrew Lunn wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Mon, May 22, 2023 at 05:03:29PM +0530, Parthiban Veerasooran wrote:
+> >> As per the datasheet DS-LAN8670-1-2-60001573C.pdf, the Reset Complete
+> >> status bit in the STS2 register to be checked before proceeding for the
+> >> initial configuration.
+> > 
+> > Is this the unmaskable interrupt status bit which needs clearing?
+> Yes, it is non-maskable interrupt.
+> > There is no mention of interrupts here.
+> The device will assert the Reset Complete (RESETC) bit in the Status 2 
+> (STS2) register to indicate that it has completed its internal 
+> initialization and is ready for configuration. As the Reset Complete 
+> status is non-maskable, the IRQ_N pin will always be asserted and driven 
+> low following a device reset. Upon reading of the Status 2 register, the 
+> pending Reset Complete status bit will be automatically cleared causing 
+> the IRQ_N pin to be released and pulled high again.
+> 
+> Do you think it makes sense to add these explanation regarding the reset 
+> and interrupt behavior with the above comment for a better understanding?
 
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
->
-> Add DDR DBE check during driver probe to notify user if previous
-> reboot cause by DDR DBE and print DBE error related information.
->
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->  drivers/edac/altera_edac.c | 29 ++++++++++++++++++++++++-----
->  1 file changed, 24 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index 8b31cd54bdb6..04c0675adc8c 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct
-> platform_device *pdev)
->  #ifdef CONFIG_64BIT
->  	{
->  		int dberror, err_addr;
-> +		struct arm_smccc_res result;
->
->  		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
->  		atomic_notifier_chain_register(&panic_notifier_list,
-> @@ -2168,11 +2169,29 @@ static int altr_edac_a10_probe(struct
-> platform_device *pdev)
->  		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
->  			    &dberror);
->  		if (dberror) {
-> -			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> -				    &err_addr);
-> -			edac_printk(KERN_ERR, EDAC_DEVICE,
-> -				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-> -				    dberror, err_addr);
-> +			/* Bit-31 is set if previous DDR UE happened */
-> +			if (dberror & (1 << 31)) {
-> +				/* Read previous DDR UE info */
-> +				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
-> +					      0, 0, 0, 0, 0, 0, &result);
-> +
-> +				if (!result.a0) {
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						    "Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
-> +						    , (unsigned int)result.a1
-> +						    , (unsigned int)result.a2
-> +						    , (unsigned int)result.a3);
-> +				} else {
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						    "INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
-> +				}
-> +			} else {
-> +				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> +					    &err_addr);
-> +				edac_printk(KERN_ERR, EDAC_DEVICE,
-> +					    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-> +					    dberror, err_addr);
-> +			}
->  			/* Reset the sticky registers */
->  			regmap_write(edac->ecc_mgr_map,
->  				     S10_SYSMGR_UE_VAL_OFST, 0);
-> --
-> 2.25.1
->
->
+Comments should explain 'Why?'. At the moment, it is not clear why you
+are reading the status. The discussion so far has been about clearing
+the interrupt, not about checking it has actually finished its
+internal reset. So i think you should be mentioning interrupts
+somewhere. Especially since this is a rather odd behaviour.
 
-I think it would make sense if you combined the 1st patch. This patch
-cannot survive on its own without the defines.
-
-Dinh
-
-
+	   Andrew
