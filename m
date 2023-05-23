@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B2D70DAF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D01D70DAF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbjEWKzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S236042AbjEWKyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236455AbjEWKzI (ORCPT
+        with ESMTP id S236620AbjEWKyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:55:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC00FF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684839262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BJTjmH1bvSQiv1dY4ZXd2PGQrsClXzAj4WHKRaeS0KE=;
-        b=YwgxeksrEZUzxV3KiGgLzU9f2XcidoWWvEO76NLvUwzi/n9LIj4e6B1vrLRqegGiqD/BC9
-        TF/UuC8F+8BExb44rU9vm+P402PMtDijGLU17NhofBrnEdLaZCUz8d3O0ubXXjKlrogDE7
-        C3VLvtZS+TaXJWGSSeeOLt/SG1pFUHY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-IsNu_UZEOk67pwoPBqva1w-1; Tue, 23 May 2023 06:54:19 -0400
-X-MC-Unique: IsNu_UZEOk67pwoPBqva1w-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2009629AA382;
-        Tue, 23 May 2023 10:54:19 +0000 (UTC)
-Received: from dba62.ml3.eng.bos.redhat.com (dba62.ml3.eng.bos.redhat.com [10.19.176.128])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B802D492B0A;
-        Tue, 23 May 2023 10:54:18 +0000 (UTC)
-From:   David Arcari <darcari@redhat.com>
-To:     platform-driver-x86@vger.kernel.org
-Cc:     David Arcari <darcari@redhat.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] platform/x86/intel/ifs: Annotate work queue on stack so object debug does not complain
-Date:   Tue, 23 May 2023 06:54:00 -0400
-Message-Id: <20230523105400.674152-1-darcari@redhat.com>
+        Tue, 23 May 2023 06:54:50 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4293B121
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:54:49 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f607839b89so13199235e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684839287; x=1687431287;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JpbiziC971fCgdwZTyN3rsD98IhVaUnm83YTaNKNO9U=;
+        b=Im2BC/cZZs/nLmwVnIFV9v2x4XddTP6s/jNYrRuPb3xtg9NZgt5845Wuc5CCzJxvqt
+         jyU6XsT6NRj8lu7AJ5J4YVMk12Iq/b/NmbZG8HNvsD0OrGAuphe1ipnH+3MBZDws5+3G
+         oaMhKoymv3iCrZVy6I7p9okVdADL8bMeeBKnFDHpjsJ9WGRlv9VklsgCniJ8Ods85TJk
+         v0i0DgcH37rrtDFdpazXkVThlpPpN87h/v5/HOe8gTu8hKN+f+k6drBg7tK7d/XqsUBk
+         l/cYOlh4HFLLgPauWUTOWMeZyyNlx7EDF6Eg+AInEETIWnW00/ZOF9MWNopq3qI/3HY2
+         wx/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684839287; x=1687431287;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JpbiziC971fCgdwZTyN3rsD98IhVaUnm83YTaNKNO9U=;
+        b=aA484X8JGIGNmVnMWns3R/l2/NaoIswughjxYDQRf18soV0mmaeS/ZjCpG53pFb+ZW
+         QPEf3wiBZjj3iQOY43EQDK7M0Ux4X+EA+SZ6HjRQa8It7IoVJGmweNW9DW0oOK6L+To7
+         FBM/je31j2gsgItiwOqzJB5VuGH2QUVnc0cvHlMw0kqvB98QPF+k64waoMoLbJ5dB51c
+         uNZkvNSIh/LPGxeXONHgjIy/KoglRMU6Fh/LYb2tQjo0crz0W2OjxAHx8hkbwRDFWAKY
+         Y1N46tvUdKgmMW8kWZg4fF1XPq8sC0JMnOzQj9iOkEkcpWmUV4ArJ4lzs99hHwxLrP9X
+         KnWA==
+X-Gm-Message-State: AC+VfDz/NcrrSF4cIVKW6ZVMVaShvC+XLMe+enSe3AZm4TaoHFHDTWDs
+        9RlGXQjmmVlpR2MsiCb0xPfH+w==
+X-Google-Smtp-Source: ACHHUZ4OkQbxZxWJnqMxYZkGGL+kAn4S+slV+wc6xaUCOai6Uyf3iG710FbrcdEtIc85NncyWLqDTQ==
+X-Received: by 2002:adf:f409:0:b0:2fe:e137:dbad with SMTP id g9-20020adff409000000b002fee137dbadmr8403815wro.51.1684839287494;
+        Tue, 23 May 2023 03:54:47 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id w13-20020adfd4cd000000b0030497b3224bsm10633223wrk.64.2023.05.23.03.54.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 03:54:47 -0700 (PDT)
+Message-ID: <b91a60a8-0f9e-9020-8b06-e78f21ef1fed@baylibre.com>
+Date:   Tue, 23 May 2023 12:54:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] clk: mediatek: mux: Stop forcing
+ CLK_SET_RATE_PARENT flag
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com
+Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, wenst@chromium.org,
+        chun-jie.chen@mediatek.com, mandyjh.liu@mediatek.com,
+        miles.chen@mediatek.com, zhaojh329@gmail.com,
+        daniel@makrotopia.org, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, Garmin.Chang@mediatek.com,
+        msp@baylibre.com, yangyingliang@huawei.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230516135205.372951-1-angelogioacchino.delregno@collabora.com>
+ <20230516135205.372951-2-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230516135205.372951-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Object Debug results in the following warning while attempting to load
-ifs firmware:
+On 16/05/2023 15:52, AngeloGioacchino Del Regno wrote:
+> The clk-mux driver was forcing the CLK_SET_RATE_PARENT flag even for
+> the GATE_CLK_SET_UPD_FLAGS() macro, as in mtk_clk_register_mux() the
+> flag was unconditionally added.
+> 
+> In preparation for a change on MSDC clock muxes, stop forcing this
+> flag and, where necessary, update clock drivers to add it so that
+> with this commit we introduce no functional changes for the currently
+> supported SoCs.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Matthias Brugger<matthias.bgg@gmail.com>
+> Reviewed-by: Markus Schneider-Pargmann<msp@baylibre.com>
 
-[  220.007422] ODEBUG: object 000000003bf952db is on stack 00000000e843994b, but NOT annotated.
-[  220.007459] ------------[ cut here ]------------
-[  220.007461] WARNING: CPU: 0 PID: 11774 at lib/debugobjects.c:548 __debug_object_init.cold+0x22e/0x2d5
-[  220.137476] RIP: 0010:__debug_object_init.cold+0x22e/0x2d5
-[  220.254774] Call Trace:
-[  220.257641]  <TASK>
-[  220.265606]  scan_chunks_sanity_check+0x368/0x5f0 [intel_ifs]
-[  220.288292]  ifs_load_firmware+0x2a3/0x400 [intel_ifs]
-[  220.332793]  current_batch_store+0xea/0x160 [intel_ifs]
-[  220.357947]  kernfs_fop_write_iter+0x355/0x530
-[  220.363048]  new_sync_write+0x28e/0x4a0
-[  220.381226]  vfs_write+0x62a/0x920
-[  220.385160]  ksys_write+0xf9/0x1d0
-[  220.399421]  do_syscall_64+0x59/0x90
-[  220.440635]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  220.566845] ---[ end trace 3a01b299db142b41 ]---
+Tested on mt8365-evk board.
 
-Correct this by calling INIT_WORK_ONSTACK instead of INIT_WORK.
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Tested-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Fixes: 684ec215706d ("platform/x86/intel/ifs: Authenticate and copy to secured memory")
-
-Signed-off-by: David Arcari <darcari@redhat.com>
-Cc: Jithu Joseph <jithu.joseph@intel.com>
-Cc: Ashok Raj <ashok.raj@intel.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Mark Gross <markgross@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
----
- drivers/platform/x86/intel/ifs/load.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
-index 61dffb4c8a1d..e6ae8265f3a3 100644
---- a/drivers/platform/x86/intel/ifs/load.c
-+++ b/drivers/platform/x86/intel/ifs/load.c
-@@ -208,7 +208,7 @@ static int scan_chunks_sanity_check(struct device *dev)
- 			continue;
- 		reinit_completion(&ifs_done);
- 		local_work.dev = dev;
--		INIT_WORK(&local_work.w, copy_hashes_authenticate_chunks);
-+		INIT_WORK_ONSTACK(&local_work.w, copy_hashes_authenticate_chunks);
- 		schedule_work_on(cpu, &local_work.w);
- 		wait_for_completion(&ifs_done);
- 		if (ifsd->loading_error) {
--- 
-2.27.0
 
