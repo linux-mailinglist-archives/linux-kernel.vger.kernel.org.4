@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189A470D43F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EDD70D437
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235026AbjEWGpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S234858AbjEWGpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234907AbjEWGp3 (ORCPT
+        with ESMTP id S231784AbjEWGpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:45:29 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3249211F;
-        Mon, 22 May 2023 23:45:25 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4ec8eca56cfso7685948e87.0;
-        Mon, 22 May 2023 23:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684824323; x=1687416323;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bljbLmxykD3kwxzernS2PWZ42kbHe92cMTT9N5V9ktk=;
-        b=ApfBlR8GphedxzmbUmg0b6LW1G/1wZ3kI7/pPLSlz6bbq/joQgF1jjGAmuCFA8vmaJ
-         Oad7WTKZaBIR3xUvl4ha2IBOafNKbeFnaiVShv5yZ1NT+BR4D0gXCuzuvAf1piUMChzM
-         hqGtNWPXfUaW+hn9D1uf8iNSSRix3H19L3DGzYxUHT7tllyTcVfdB0HhsMG8aC12ZHuQ
-         WYbuEZm1gY4InhxJ6WfbqWoseNTiaO+YMIM3KAm7CHaHQGprqH9/IFNHNsaKlc7T+rCd
-         Axm9blxJQGILf+LrttlmAV8wvgtOv7tYNBdkr1lbpUGcjwftfl8e+fJg5twLyezLM6Ot
-         DNUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684824323; x=1687416323;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bljbLmxykD3kwxzernS2PWZ42kbHe92cMTT9N5V9ktk=;
-        b=BCZxYpA6oItcBCkqvExmVUKjKMNcztxPVvL7UAh4VMY6JJYWCWsYOBh5mhNMT05sEU
-         KT2yKEfdzS6zSPou/knu0bY3c3ik60k72mV43vK8xkqvrtMO3LQFDvo/oYUyVd/xps0t
-         bOhqNVSPMQrkt7E/6wL64a2qJ4n6IvGoK7Y9zbE0rOtxo6LjoYeKvAuYdj614DaDk1iT
-         Rfyoik8sGVFz8G+9lc5hZjU7XFGFGjrbVaElE7Xci6jmd3cIoyyMN8FXtZQSLrOKDDUq
-         SdcrMJs6UpjYpCrYjcbMYwDWlYzCmbL5Qz001NhvmoVVGLA03Iwq0tsdQm3iezCAH8kt
-         Nl/w==
-X-Gm-Message-State: AC+VfDwvymQq1BmpoNldfd5xxdM1RBs8WMXQlBxtZ6zLHacmGdTK3hqg
-        HByf0nVZkP1nAm0e2Oy3J/PElwya2Yse2aRQbXo=
-X-Google-Smtp-Source: ACHHUZ6KaidAKEq3jzz278crBeX9oCb3F1L0Z12eqJXBXJ2OM5LUWrXF0SUTCMc7k/i5q3NHa5AVdyoZcMLesF7+WgQ=
-X-Received: by 2002:a2e:3506:0:b0:2a8:ba49:a811 with SMTP id
- z6-20020a2e3506000000b002a8ba49a811mr4622733ljz.25.1684824323078; Mon, 22 May
- 2023 23:45:23 -0700 (PDT)
+        Tue, 23 May 2023 02:45:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C43511F;
+        Mon, 22 May 2023 23:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0gea6RehJXx9DE2mUeb9T6tvlF6DNioynOY2MO8ezuc=; b=Ox6CC6l+zWAZhhJfa1q2YddRlq
+        2ayM85IfKhwJ7m7JOwrnDLaSuCDKOUjUTefjigDVLII9Gxxj+V8ccY38we9x92Pr5r8dO6iOL+4Ih
+        1fdJZzuoNBNQlL7XWpuLlVk1bH0uWrjppmcokLoVbI/+UzoRe5VHZK8pW02pU3wcDIEiXRdwBMV1Y
+        Lr8xIHXBdJukeHW7sAll5I0I/wv4bW/xiDLY1YqFSDkNzlIoGAikETRPs/gJ6TPccCHabdLt1aCji
+        OOMfKZo6fH6J4HqKV7RZ8LMFKYc0AB7GvZgwDw0MsXGxXo7PMrHR4jfSzflJcCeM0nRL+nJhm9U8U
+        HAiIL7WA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1Llg-0096va-27;
+        Tue, 23 May 2023 06:45:12 +0000
+Date:   Mon, 22 May 2023 23:45:12 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        will@kernel.org, nicolinc@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, jgg@nvidia.com,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH] mmu_notifiers: Notify on pte permission upgrades
+Message-ID: <ZGxg+I8FWz3YqBMk@infradead.org>
+References: <20230522063725.284686-1-apopple@nvidia.com>
 MIME-Version: 1.0
-References: <2811951.1684766430@warthog.procyon.org.uk> <CANT5p=pNFpEj0p+njYw3sVdq9CKgsTdh29Gj6iYDOsMN0ocj1Q@mail.gmail.com>
- <2818727.1684779061@warthog.procyon.org.uk>
-In-Reply-To: <2818727.1684779061@warthog.procyon.org.uk>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 23 May 2023 01:45:11 -0500
-Message-ID: <CAH2r5mtXR7xeP79Rit58769r+Q22Cg6ruV7dSPcNOb_=rQ9neA@mail.gmail.com>
-Subject: Re: [PATCH] cifs: Fix cifs_limit_bvec_subset() to correctly check the
- maxmimum size
-To:     David Howells <dhowells@redhat.com>
-Cc:     Shyam Prasad N <nspmangalore@gmail.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522063725.284686-1-apopple@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 1:11=E2=80=AFPM David Howells <dhowells@redhat.com>=
- wrote:
->
-> Shyam Prasad N <nspmangalore@gmail.com> wrote:
->
-> > > +               max_size -=3D len;
-> >
-> > Shouldn't this decrement happen below, after the span has been
-> > compared with max_size?
->
-> It probably doesn't matter.  The compiler is free to move it around, but =
-yes
-> that and ix++ can both be moved down.
+On Mon, May 22, 2023 at 04:37:25PM +1000, Alistair Popple wrote:
+> This problem was discovered during testing of an ARM SMMU
+> implementation that does not support broadcast TLB maintenance
+> (BTM). In this case the SMMU driver uses notifiers to issue TLB
+> invalidates. For read-only to read-write pte upgrades the SMMU
+> continually returned a read-only PTE to the device, even though the
+> CPU had a read-write PTE installed.
+> 
+> Sending a mmu notifier event to the SMMU driver fixes the problem by
+> flushing secondary TLB entries. A new notifier event type is added so
+> drivers may filter out these invalidations if not required. Note a
+> driver should never upgrade or install a PTE in response to this mmu
+> notifier event as it is not synchronised against other PTE operations.
 
-I am not sure I follow - can you explain? It looks like moving it up
-vs. down would change behavior
-
-
---=20
-Thanks,
-
-Steve
+I don't see these SMMU driver changes anywhere.  I.e. you're adding dead
+code as far as I can tell.
