@@ -2,118 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A3770CF6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C1070CF8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbjEWAjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S235059AbjEWAk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbjEWAXE (ORCPT
+        with ESMTP id S235280AbjEWAZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:23:04 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBFB212E
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:07:17 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53488b6a929so2219256a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684800437; x=1687392437;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=00M59/ERL5rCid+0EeexM90p8FMZ55e8xTVk/5IwWAI=;
-        b=eKS08NvvMxcTks/gD/Aef3buBTIRd89+5ZUYMh1veW2Bwau8N4vvj1C9yASUIO/Gl1
-         oxHyQwzG9vN+C/niZsJ++pGG2eokuUJnWPCjy6ek3v5mPoLqVq8whstRJFwEID2GUHec
-         Mi9oBdwFZDPfV7XB9rTviIM16S5fpiSaIMHo3VNaob6ESktjrnlVgQMzSw721XDdv87x
-         1GZq2rhXbQfTFYPhNp99bfZY1T5TXRdPui6I+y0hdirdTSX84g6S5Kb1osAfq+3Sd+c/
-         XgTs77NQ8/gz2esL3Leed4EPQBrJE0uEuWzjOpKjOrBYvCEl9OYgP2+Uk05chf+qs3j7
-         baXA==
+        Mon, 22 May 2023 20:25:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C4219B3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684800616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7dG5YdmnL3Weqna4gM6GxGrV4/Sj8R56RKJ1KU2i2lM=;
+        b=c63D5cAJnz74eYNPEf4cpJBaU5R65uKemVy0MSbw+6tDiljdGPx55bkhM3/JuNdYOpHPMb
+        YoR99xVFmLNtw2owp5oZyQnJAjs3sAPd9NjdaI/1yPdZzszmqp7z3wryrpG/LdPX1pAboT
+        LWKhi9w8Wfvlf2YtIiWoe0D17iYoNQg=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-524-3WI5yxJ8NzqdAJuXO3O9pQ-1; Mon, 22 May 2023 20:10:06 -0400
+X-MC-Unique: 3WI5yxJ8NzqdAJuXO3O9pQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-624d1043e4aso17861706d6.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:10:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684800437; x=1687392437;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=00M59/ERL5rCid+0EeexM90p8FMZ55e8xTVk/5IwWAI=;
-        b=kpS44BXnGCTMH+RD3RBEsWrLPQLxsQdEBAnJ3QcAMO9iKbFFcSrF/V3/a9XjIJajgq
-         fpw+uzi+Ljek7uI49YyvzWD2qMX0C371D2ZivDFBNwTZ9fVi4bvKn2/dTNrrrQrXOF3M
-         +ZuGbcd1kVNuAw9wl88mZD63npnF5lmV/J0LETWEgCLgA5jFKLx7Yc4fCfLReGizUvzY
-         Iro4lXuV/Wd9yBoO9Tmrkf5hI7mQEjRuvVBDgfTy5bKlTGSizGwhrKCJUW6Zi4RzuxMl
-         GWcjZRT8PwKm4aNZGzliyisOBkJTi0EK9ooa3MAlwekFl6yDyRmiTZFZfEryuliQuZSe
-         /fng==
-X-Gm-Message-State: AC+VfDw97IX8iVzMHGlTQve/3X+47At0zRukws3dBfyT9m5jASlaxNMt
-        S4kJKr2JBZLL20V88Yu9PPK1Kz1r9jA=
-X-Google-Smtp-Source: ACHHUZ4h8CKM4xTy1lkpuF74m6v7QXKl/pIuViq4YXbsPdpBl9vkZ+vUKUQxs/EZ3XZmIxBRr/AUmQ9wf74=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:ba08:0:b0:534:9003:d58e with SMTP id
- k8-20020a63ba08000000b005349003d58emr2722120pgf.9.1684800436821; Mon, 22 May
- 2023 17:07:16 -0700 (PDT)
-Date:   Tue, 23 May 2023 00:07:15 +0000
-In-Reply-To: <20230522072508.GA326851@chaop.bj.intel.com>
-Mime-Version: 1.0
-References: <20230512231026.799267-1-seanjc@google.com> <20230522072508.GA326851@chaop.bj.intel.com>
-Message-ID: <ZGwDs1qHcl8PX+m2@google.com>
-Subject: Re: [ANNOUNCE / RFC] Periodic Upstream Call for KVM
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Fuad Tabba <tabba@google.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Qinglan Xiang <qinglan.xiang@intel.com>,
-        Kai Svahn <kai.svahn@intel.com>,
-        Margarita Maroto <margarita.maroto@intel.com>,
-        Anil Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Nagareddy Reddy <nspreddy@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        d=1e100.net; s=20221208; t=1684800606; x=1687392606;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7dG5YdmnL3Weqna4gM6GxGrV4/Sj8R56RKJ1KU2i2lM=;
+        b=VnNvegMt5Et4qRpPPQ6Uew9kR/0YRalRaxk363plh/jt5ZRzJcB5glANRyTMbWBBPW
+         BKo0kDvWdvlGjp9jf95WfcNMgXnNrtyFFVzfxCVg2AdwpqraX3N0illv0grhOTEqwFar
+         Ptt47MazOyE2JDzO92BqqT+P3KJZ5BsG2VSTcW2UeIWzLVBrBynpXq5FYN0OrCEDrmvT
+         mKu6gA5rGPXBfJQzoL4EBtBG3aQdqLVp3CoFqyf8eM72xFMKR/VxKuz4m9jNTf2G9mh2
+         7ssKmnU+Bm8F2onNEwJkL7r0QODDJ4MKGo/wg1IYz7aRBC7JAXQM6UObjEIphNXbFcqN
+         k3og==
+X-Gm-Message-State: AC+VfDyCjUVCnBy1+4sFCJ+UO6A7mG8zwMsmNnXswVNDFfyYQY3JSdS/
+        y6/TXTVf6VcmoUg4LS5H3LEZFgPGjtFRgUy+IGs5ddDTGa9PuBzTDfBWv90CbNHxECyIlkEJ7qy
+        SGKx5L+PSOT1IXcfHlXhO1mhw
+X-Received: by 2002:a05:6214:202b:b0:622:199c:c4dc with SMTP id 11-20020a056214202b00b00622199cc4dcmr23205599qvf.51.1684800606456;
+        Mon, 22 May 2023 17:10:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5S6h41GdM85gKktnEr0J/YZo1Ilm5BfR+uLxMd2oAczz1nnh2830KQbyzAG+Lg+sfpsdhsfw==
+X-Received: by 2002:a05:6214:202b:b0:622:199c:c4dc with SMTP id 11-20020a056214202b00b00622199cc4dcmr23205561qvf.51.1684800606175;
+        Mon, 22 May 2023 17:10:06 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id p7-20020a0cf687000000b006238cf6d2a8sm2370925qvn.2.2023.05.22.17.10.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 17:10:05 -0700 (PDT)
+Date:   Mon, 22 May 2023 17:10:04 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        joro@8bytes.org, joao.m.martins@oracle.com,
+        alejandro.j.jimenez@oracle.com, boris.ostrovsky@oracle.com,
+        jon.grimm@amd.com, santosh.shukla@amd.com, vasant.hegde@amd.com,
+        kishon.vijayabraham@amd.com
+Subject: Re: [PATCH v2 3/5] iommu/amd: Introduce Disable IRTE Caching Support
+Message-ID: <qbcm4ac4foyafz7xqkkv45exevquu6psqnczwq5dnyrwm3on2o@auwkdo5al2fv>
+References: <20230519005529.28171-1-suravee.suthikulpanit@amd.com>
+ <20230519005529.28171-4-suravee.suthikulpanit@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519005529.28171-4-suravee.suthikulpanit@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,71 +81,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023, Chao Peng wrote:
-> On Fri, May 12, 2023 at 04:10:27PM -0700, Sean Christopherson wrote:
-> >   PT   (6am)
-> >   MT   (7am)
-> >   CT   (8am)
-> >   ET   (9am)
-> >   WET  (2pm)
-> >   CET  (3pm)
-> >   EET  (4pm)
-> >   EST  (5pm)
-> >   CST  (9pm)
-> >   NZST (1am)
+On Thu, May 18, 2023 at 08:55:27PM -0400, Suravee Suthikulpanit wrote:
+> An Interrupt Remapping Table (IRT) stores interrupt remapping configuration
+> for each device. In a normal operation, the AMD IOMMU caches the table
+> to optimize subsequent data accesses. This requires the IOMMU driver to
+> invalidate IRT whenever it updates the table. The invalidation process
+> includes issuing an INVALIDATE_INTERRUPT_TABLE command following by
+> a COMPLETION_WAIT command.
 > 
-> This looks good, 9pm is not too late for PRC people.
+> However, there are cases in which the IRT is updated at a high rate.
+> For example, for IOMMU AVIC, the IRTE[IsRun] bit is updated on every
+> vcpu scheduling (i.e. amd_iommu_update_ga()). On system with large
+> amount of vcpus and VFIO PCI pass-through devices, the invalidation
+> process could potentially become a performance bottleneck.
 > 
-> > 
-> > The obvious alternative would be to invert the schedule and have the sync be in
-> > the evening/night for Pacific Time, but to get 6am for ARM folks, we end up with:
-> > 
-> >   PT   (10pm)
-> >   MT   (11pm)
-> >   CT   (12pm)
-> >   ET   (1am)
-> >   WET  (6am)
-> >   CET  (7am)
-> >   EET  (8am)
-> >   EST  (9am)
-> >   CST  (1pm)
-> >   NZST (5pm)
-> > 
-> > which is quite unreasonable for pretty much everyone based in the US.  Earlier
-> > than 6am for WET is likewise unreasonable and will result in people not attending.
-> > 9pm for China is also unreasonable, but I hope that it's not completely ridiculous
-> > and is doable enough that people can at least attend on an as-needed basis.  Sorry
-> > Kai, as the sole representative from New Zealand, you get hosed :-(
-> > 
-> > Wednesday because holidays and (short) vacations most often land at the beginning
-> > and end of the week.
-> > 
-> > 60 minutes because I'm not waking up at dawn for anything less, and anything
-> > more will likely have dimishing returns, especially for folks on the edges of
-> > the time zone table.
-> > 
-> > Lastly, the big unknown is which video communication software to use.  My default
-> > is obviously Google Meet, but I've been told that Meet is unusable in some
-> > countries. :-/  My only requirements (beyond basic, obvious functionality) are
-> > that (a) there's a web interface (no install required) and that (b) the calls can
-> > be recorded.
+> Introducing a new kernel boot option:
 > 
-> Google Meet should work for me, but may not for every (PRC) people.
-> Besides no installation, if no registration would be even better ;)
-> Maybe we can run with Google Meet for the first session(s) if you
-> havn't get one in your mind, it's not too hard to switch to alternative
-> at a later time right?
+>     amd_iommu=irtcachedis
+> 
+> which disables IRTE caching by setting the IRTCachedis bit in each IOMMU
+> Control register, and bypass the IRT invalidation process.
+> 
+> Co-developed-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> [Awaiting sign-off by Alejandro]
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 
-Ya, switching should be no problem.  Let's try Google Meet and go from there.
-Thanks much for the input!
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-> > To kick things off, I am leaning toward a "launch" date of May 24th (Pacific),
-> > with KVM guest private mem (a.k.a. UPM) as the first topic.
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  1 +
+>  drivers/iommu/amd/amd_iommu_types.h           |  4 +++
+>  drivers/iommu/amd/init.c                      | 36 +++++++++++++++++++
+>  3 files changed, 41 insertions(+)
 > 
-> Thanks for driving this, yes for UPM I would definitely join.
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 6221a1d057dd..f29dee600faf 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -323,6 +323,7 @@
+>  				       option with care.
+>  			pgtbl_v1     - Use v1 page table for DMA-API (Default).
+>  			pgtbl_v2     - Use v2 page table for DMA-API.
+> +			irtcachedis  - Disable Interrupt Remapping Table (IRT) caching.
+>  
+>  	amd_iommu_dump=	[HW,X86-64]
+>  			Enable AMD IOMMU driver option to dump the ACPI table
+> diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
+> index a0ff1e852efc..486a052e37ca 100644
+> --- a/drivers/iommu/amd/amd_iommu_types.h
+> +++ b/drivers/iommu/amd/amd_iommu_types.h
+> @@ -172,6 +172,7 @@
+>  #define CONTROL_GAINT_EN	29
+>  #define CONTROL_XT_EN		50
+>  #define CONTROL_INTCAPXT_EN	51
+> +#define CONTROL_IRTCACHEDIS	59
+>  #define CONTROL_SNPAVIC_EN	61
+>  
+>  #define CTRL_INV_TO_MASK	(7 << CONTROL_INV_TIMEOUT)
+> @@ -708,6 +709,9 @@ struct amd_iommu {
+>  	/* if one, we need to send a completion wait command */
+>  	bool need_sync;
+>  
+> +	/* true if disable irte caching */
+> +	bool irtcachedis_enabled;
+> +
+>  	/* Handle for IOMMU core code */
+>  	struct iommu_device iommu;
+>  
+> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+> index fd487c33b28a..fc0392d706db 100644
+> --- a/drivers/iommu/amd/init.c
+> +++ b/drivers/iommu/amd/init.c
+> @@ -160,6 +160,7 @@ static int amd_iommu_xt_mode = IRQ_REMAP_XAPIC_MODE;
+>  static bool amd_iommu_detected;
+>  static bool amd_iommu_disabled __initdata;
+>  static bool amd_iommu_force_enable __initdata;
+> +static bool amd_iommu_irtcachedis;
+>  static int amd_iommu_target_ivhd_type;
+>  
+>  /* Global EFR and EFR2 registers */
+> @@ -477,6 +478,9 @@ static void iommu_disable(struct amd_iommu *iommu)
+>  
+>  	/* Disable IOMMU hardware itself */
+>  	iommu_feature_disable(iommu, CONTROL_IOMMU_EN);
+> +
+> +	/* Clear IRTE cache disabling bit */
+> +	iommu_feature_disable(iommu, CONTROL_IRTCACHEDIS);
+>  }
+>  
+>  /*
+> @@ -2700,6 +2704,33 @@ static void iommu_enable_ga(struct amd_iommu *iommu)
+>  #endif
+>  }
+>  
+> +static void iommu_disable_irtcachedis(struct amd_iommu *iommu)
+> +{
+> +	iommu_feature_disable(iommu, CONTROL_IRTCACHEDIS);
+> +}
+> +
+> +static void iommu_enable_irtcachedis(struct amd_iommu *iommu)
+> +{
+> +	u64 ctrl;
+> +
+> +	if (!amd_iommu_irtcachedis)
+> +		return;
+> +
+> +	/*
+> +	 * Note:
+> +	 * The support for IRTCacheDis feature is dertermined by
+> +	 * checking if the bit is writable.
+> +	 */
+> +	iommu_feature_enable(iommu, CONTROL_IRTCACHEDIS);
+> +	ctrl = readq(iommu->mmio_base +  MMIO_CONTROL_OFFSET);
+> +	ctrl &= (1ULL << CONTROL_IRTCACHEDIS);
+> +	if (ctrl)
+> +		iommu->irtcachedis_enabled = true;
+> +	pr_info("iommu%d (%#06x) : IRT cache is %s\n",
+> +		iommu->index, iommu->devid,
+> +		iommu->irtcachedis_enabled ? "disabled" : "enabled");
+> +}
+> +
+>  static void early_enable_iommu(struct amd_iommu *iommu)
+>  {
+>  	iommu_disable(iommu);
+> @@ -2710,6 +2741,7 @@ static void early_enable_iommu(struct amd_iommu *iommu)
+>  	iommu_set_exclusion_range(iommu);
+>  	iommu_enable_ga(iommu);
+>  	iommu_enable_xt(iommu);
+> +	iommu_enable_irtcachedis(iommu);
+>  	iommu_enable(iommu);
+>  	iommu_flush_all_caches(iommu);
+>  }
+> @@ -2760,10 +2792,12 @@ static void early_enable_iommus(void)
+>  		for_each_iommu(iommu) {
+>  			iommu_disable_command_buffer(iommu);
+>  			iommu_disable_event_buffer(iommu);
+> +			iommu_disable_irtcachedis(iommu);
+>  			iommu_enable_command_buffer(iommu);
+>  			iommu_enable_event_buffer(iommu);
+>  			iommu_enable_ga(iommu);
+>  			iommu_enable_xt(iommu);
+> +			iommu_enable_irtcachedis(iommu);
+>  			iommu_set_device_table(iommu);
+>  			iommu_flush_all_caches(iommu);
+>  		}
+> @@ -3411,6 +3445,8 @@ static int __init parse_amd_iommu_options(char *str)
+>  			amd_iommu_pgtable = AMD_IOMMU_V1;
+>  		} else if (strncmp(str, "pgtbl_v2", 8) == 0) {
+>  			amd_iommu_pgtable = AMD_IOMMU_V2;
+> +		} else if (strncmp(str, "irtcachedis", 11) == 0) {
+> +			amd_iommu_irtcachedis = true;
+>  		} else {
+>  			pr_notice("Unknown option - '%s'\n", str);
+>  		}
+> -- 
+> 2.31.1
+> 
 
-I'm going to push out the inagaural date one week until May 31st, partly to give
-more time for this to get widely disseminated, but mostly because I need to write
-down my various thoughts on where to go with UPM, and I don't think I'll get that
-done before Wednesday.  That'll also give me time to setup a public calendar so
-that people can get reminders and whatnot.
