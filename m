@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197BF70D1C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07ABB70D1C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbjEWCuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S233203AbjEWCxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjEWCuK (ORCPT
+        with ESMTP id S229605AbjEWCxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:50:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C93CCA;
-        Mon, 22 May 2023 19:50:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B552C62E36;
-        Tue, 23 May 2023 02:50:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF33BC433D2;
-        Tue, 23 May 2023 02:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684810209;
-        bh=CzakUcJHhCSYBooe6gFoQyfZa+C4bAclSd0YXYcgfWE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bKq4Pz1DLcQPqnPwxXCXYhZykp4/CmTjQLJ92OFeA/UaXsqQiMIRfDAByLhqZN3gK
-         v0mR71rUOX2G/mOLRAnxTLAUy+sVGl8/AfWuKE6603vVcoi2sJ2l9jwxxkdtvDLukh
-         RbXwAqRVG2kUc+2C8eSAcZRd3Aw+K7BkbM1HRFbzfIGgm8vvw7gGsz3R/OQlTXDz0e
-         aTYHnGXGxTpTtS8wmjYhhwnlePlZtkjfOGFycS0kkQyLJG74gW+PttVV5gcbz340a4
-         g3NlKUHZ0qzK9Yg1ogSi9zsPdzolnViUQoqh1JI1I308DWO8sJxNUjhl9bS4IGz5HX
-         BXNZJeGr8Dy3A==
-Date:   Tue, 23 May 2023 02:50:07 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Kees Cook <kees@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] fscrypt: Replace 1-element array with flexible array
-Message-ID: <20230523025007.GC3187780@google.com>
-References: <20230522213924.never.119-kees@kernel.org>
- <20230522230206.GA3187780@google.com>
- <F340AF2B-C611-48FE-BCB6-C4FF45005409@kernel.org>
+        Mon, 22 May 2023 22:53:43 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E25DCA;
+        Mon, 22 May 2023 19:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1684810423; x=1716346423;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wGfPfOgkUe4uOICPdB8msh2VfBA1m4x1APSIg9XveEc=;
+  b=iBJFK5qq/pjt7hDGpyGz6+9+HjRC3xqOMK/9RQqKKenZHwr8/ExPUzcW
+   n5RvLqVz1tLbSKWKNPQ9oZLzMBvMQmzXI9l8r3sZ+fKdqYaZ/66H9sBNF
+   Nj2oMd7Xsmr4Ap83FWXo6E8TVvP6HqiVI5bnZ/e7MJJImVyjqnK3HU8oo
+   4=;
+X-IronPort-AV: E=Sophos;i="6.00,185,1681171200"; 
+   d="scan'208";a="327787396"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:53:31 +0000
+Received: from EX19D020EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com (Postfix) with ESMTPS id 3FA1D40D7B;
+        Tue, 23 May 2023 02:53:29 +0000 (UTC)
+Received: from EX19D026EUB004.ant.amazon.com (10.252.61.64) by
+ EX19D020EUA003.ant.amazon.com (10.252.50.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 23 May 2023 02:53:28 +0000
+Received: from uc3ecf78c6baf56.ant.amazon.com (10.119.183.60) by
+ EX19D026EUB004.ant.amazon.com (10.252.61.64) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 23 May 2023 02:53:25 +0000
+From:   Andrew Paniakin <apanyaki@amazon.com>
+To:     Andrew Paniakin <apanyaki@amazon.com>
+CC:     <luizcap@amazon.com>, <benh@amazon.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@blackhole.kfki.hu>,
+        "David S. Miller" <davem@davemloft.net>,
+        <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] netfilter: nf_tables: fix register ordering
+Date:   Mon, 22 May 2023 19:53:12 -0700
+Message-ID: <20230523025312.1690992-1-apanyaki@amazon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230523023514.1672418-1-apanyaki@amazon.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <F340AF2B-C611-48FE-BCB6-C4FF45005409@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.119.183.60]
+X-ClientProxiedBy: EX19D045UWC001.ant.amazon.com (10.13.139.223) To
+ EX19D026EUB004.ant.amazon.com (10.252.61.64)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 06:23:06PM -0700, Kees Cook wrote:
-> On May 22, 2023 4:02:06 PM PDT, Eric Biggers <ebiggers@kernel.org> wrote:
-> >On Mon, May 22, 2023 at 02:39:28PM -0700, Kees Cook wrote:
-> >> In the future, we can add annotations for the flexible array member
-> >> "encrypted_path" to have a size determined by the "len" member.
-> >
-> >That seems unlikely, as 'struct fscrypt_symlink_data' is an on-disk data
-> >structure.  The "len" field does not necessarily use CPU endianness, and before
-> >being validated it might be greater than the size of the allocated space.
-> 
-> Oh yes, good point.
-> 
-> >I agree that it should use a flex array (and thanks for catching this one that I
-> >had forgotten about...), but the above explanation seems wrong.
-> 
-> Shall I spin a v2?
+Please ignore this patch as I forgot to add the stable ML.
+I will re-send it.
 
-Yes, please go ahead.
+On Mon, 22 May 2023 19:35:14 -0700 Andrew Paniakin <apanyaki@amazon.com> wrote:
 
-- Eric
+> From: Florian Westphal <fw@strlen.de>
+> 
+> commit d209df3e7f7002d9099fdb0f6df0f972b4386a63 upstream
+> 
