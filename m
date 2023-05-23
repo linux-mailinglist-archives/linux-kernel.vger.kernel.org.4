@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31EA70E21E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558B670E25C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjEWQlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S237655AbjEWQmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEWQlM (ORCPT
+        with ESMTP id S229815AbjEWQmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:41:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FDEC2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:41:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E03961AF2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 16:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BE6C433EF;
-        Tue, 23 May 2023 16:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684860069;
-        bh=99tQwGA2fivyaV7yBZi/QCxkc1ZXrPn5AFuiF2mq8rg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WCr6pmi8qFTvA9PzUaQCujXU10uw4JCyzTKklseMJ6rM1cpkexU/37RFwEj3m8IO1
-         vuHCtztHI3Yyrhp/TPATmpzc+lPAYW0+RFFjKeJapxrje56uSOB6Mi4RPvHOz0rSxl
-         pGiLYHYyJ3UDYg6j6+ymGz3L177PLcUb/dcEP1FyBn9GNKG2qYC4Zf7Q0AYXbgXM6N
-         R1AQrN3mCqPQY5MV+4NVt+CCfHNKsocqU6nNJ+dmzcBRj8fQsjQayGKhVLnkS49LFi
-         XcADI5btRA3/gN3IuwOD4H8Yk+a+UG++lKvhr6kdyqsfzTltXkXEuet5M24U4LrpBi
-         pMpb+bp4AYxlQ==
-Date:   Tue, 23 May 2023 09:41:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        syzbot <syzbot+c2775460db0e1c70018e@syzkaller.appspotmail.com>,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        pabeni@redhat.com, wireguard@lists.zx2c4.com, jann@thejh.net
-Subject: Re: [syzbot] [wireguard?] KASAN: slab-use-after-free Write in
- enqueue_timer
-Message-ID: <20230523094108.0c624d47@kernel.org>
-In-Reply-To: <CANn89iLVSiO1o1C-P30_3i19Ci8W1jQk9mr-_OMsQ4tS8Nq2dg@mail.gmail.com>
-References: <000000000000c0b11d05fa917fe3@google.com>
-        <ZGzfzEs-vJcZAySI@zx2c4.com>
-        <20230523090512.19ca60b6@kernel.org>
-        <CANn89iLVSiO1o1C-P30_3i19Ci8W1jQk9mr-_OMsQ4tS8Nq2dg@mail.gmail.com>
+        Tue, 23 May 2023 12:42:20 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AA513E;
+        Tue, 23 May 2023 09:42:18 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-38ef6217221so4329021b6e.3;
+        Tue, 23 May 2023 09:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684860137; x=1687452137;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oeg/x8ElLxAyFPJ7qiWHT0FiJCrJGSJu6Alu0egt5Uk=;
+        b=Cuzse6fc6vWWICPMHp6WOgOCrjVqiwCLDc6cMmV4y6VpglijS/esr7OItyOfLSLFaD
+         uzH3zg1NpiuhR1V02vDVsyTrkH5pvYCp44n3f011ZwSDfxi6t28+j+pm/uGMnix4H3J7
+         wjgkOr+5ntWdGqLmRPqRIKtn1uQ+IlvSZXs3cZY9mf6oudHL6qMm3n9OI7bKA6EVkxhL
+         5p6SfR+y59ac/lcVbmIlGNCFcZU3wfnhAN/AyRLM2Rcfptvo+790f53shNyOy6ciEIhU
+         3WjhIvu5glppjnJaQ0WrUU6aZMh4aItHrDAi8rnvjwApp/EcnlcmCgbMe3eSnwDhiRoh
+         NsBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684860137; x=1687452137;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oeg/x8ElLxAyFPJ7qiWHT0FiJCrJGSJu6Alu0egt5Uk=;
+        b=js96n1EigCKeLSkt7JkX/zmJ9BA47V8MUVH8y1ieXUZd50dSOaPxHCaVRI521dcrhO
+         1/YFSuVjUHPH891FbXV2zU/2VVKyZfqWJz7HohT6/KXDxWPMtnR2ghnYUcqfAOQtjDLi
+         KDFWpNxmAcmRMWMjrOTBcjiz7obDjI45OoFXq07m5rWN4WAHpKuLqUuSghOHMa6NX1bt
+         cZZPqig32yDrr4YXhilPJ2WZtdbX1GirIa5xggHKDWlnMLUsBF/4VNQ+f2E+grSGjkVF
+         v3RdYtVi24tv2WCR5eRn9DBw3wH6EUuJRSBV05rTY7HyY0WSZulYaAZtM1HeQ/9sW9/7
+         GeWg==
+X-Gm-Message-State: AC+VfDydigA0idJzofFGLZbOG0Fw1gIEjwu78Qtz7vPwvSbVAJXfnATq
+        EmNbZX41ZAFOvoQyZeC6OTk=
+X-Google-Smtp-Source: ACHHUZ4KiqUCV5vcGG9La2JI7FtHqJtRDi5PtpsZqmtFy+kGQcvvEiOyY34u3mTt2fU8dnHrZL8C1A==
+X-Received: by 2002:a05:6808:191:b0:398:10ad:e857 with SMTP id w17-20020a056808019100b0039810ade857mr3427905oic.48.1684860137521;
+        Tue, 23 May 2023 09:42:17 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id w81-20020acadf54000000b00398031b1014sm2887905oig.26.2023.05.23.09.42.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 09:42:17 -0700 (PDT)
+Message-ID: <83f2822e-f36c-0dbf-8226-cef3dc2ba072@gmail.com>
+Date:   Tue, 23 May 2023 13:41:35 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 4/4] rust: task: add `Send` marker to `Task`
+Content-Language: en-US
+To:     Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Andreas Hindborg <a.hindborg@samsung.com>
+References: <20230523144418.1250547-1-aliceryhl@google.com>
+ <20230523144418.1250547-5-aliceryhl@google.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230523144418.1250547-5-aliceryhl@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 18:12:32 +0200 Eric Dumazet wrote:
-> > Your timer had the pleasure of getting queued _after_ a dead watchdog
-> > timer, no? IOW it tries to update the ->next pointer of a queued
-> > watchdog timer. We should probably do:
-> >
-> > diff --git a/net/core/dev.c b/net/core/dev.c
-> > index 374d38fb8b9d..f3ed20ebcf5a 100644
-> > --- a/net/core/dev.c
-> > +++ b/net/core/dev.c
-> > @@ -10389,6 +10389,8 @@ void netdev_run_todo(void)
-> >                 WARN_ON(rcu_access_pointer(dev->ip_ptr));
-> >                 WARN_ON(rcu_access_pointer(dev->ip6_ptr));
-> >
-> > +               WARN_ON(timer_shutdown_sync(&dev->watchdog_timer));
-> > +
-> >                 if (dev->priv_destructor)
-> >                         dev->priv_destructor(dev);
-> >                 if (dev->needs_free_netdev)
-> >
-> > to catch how that watchdog_timer is getting queued. Would that make
-> > sense, Eric?  
+On 5/23/23 11:44, Alice Ryhl wrote:
+> When a type also implements `Sync`, the meaning of `Send` is just "this
+> type may be accessed mutably from threads other than the one it is
+> created on". That's ok for this type.
 > 
-> Would this case be catched at the time the device is freed ?
-> 
-> (CONFIG_DEBUG_OBJECTS_FREE=y or something)
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+> ---
+> [...]
+>   
+> -// SAFETY: It's OK to access `Task` through references from other threads because we're either
+> -// accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
+> +// SAFETY: By design, the only way to access a `Task` is via the `current` function or via an
+> +// `ARef<Task>` obtained through the `AlwaysRefCounted` impl. This means that the only situation in
+> +// which a `Task` can be accessed mutably is when the refcount drops to zero and the destructor
+> +// runs. It is safe for that to happen on any thread, so it is ok for this type to be `Send`.
+> +unsafe impl Send for Task {}
+> +
+> +// SAFETY: It's OK to access `Task` through shared references from other threads because we're
+> +// either accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
+>   // synchronised by C code (e.g., `signal_pending`).
+>   unsafe impl Sync for Task {}
+>   
 
-It should, no idea why it isn't. Looking thru the code now I don't see
-any obvious gaps where timer object is on a list but not active :S
-There's no way to get a vmcore from syzbot, right? :)
-
-Also I thought the shutdown leads to a warning when someone tries to
-schedule the dead timer but in fact add_timer() just exits cleanly.
-So the shutdown won't help us find the culprit :(
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
