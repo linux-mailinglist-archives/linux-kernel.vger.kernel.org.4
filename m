@@ -2,159 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AE970E656
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA1670E65B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbjEWUQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S238193AbjEWURK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbjEWUQP (ORCPT
+        with ESMTP id S233333AbjEWURH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:16:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F265213E
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:15:34 -0700 (PDT)
+        Tue, 23 May 2023 16:17:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29523120
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684872934;
+        s=mimecast20190719; t=1684872979;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cuGsJq81+rG6lnQFp71rynuXDjC9rqreWyLFpkfHXI0=;
-        b=UXXcEM5Sg33LZA2lfQo0GpZ+jZYsjvjxOJvT29LRc2bc/PtlLqrv+ARVkqwCkcXCLw/AR9
-        J3OpstieiHZswLki9llZ4/CeTc86C9AjxEg3BNjqVJftsXRgnJ6O/j/5FsWMSsGoIHJ+k1
-        EcuBzE0Pr8koixmI/bfqI1tto0/vPmA=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-518-qLUasdn9ND28abGQ-AwPvw-1; Tue, 23 May 2023 16:15:30 -0400
-X-MC-Unique: qLUasdn9ND28abGQ-AwPvw-1
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3384bfb39b4so515535ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:15:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684872930; x=1687464930;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cuGsJq81+rG6lnQFp71rynuXDjC9rqreWyLFpkfHXI0=;
-        b=Sz42M3Kjkrf0LRvtueaRw2S85q0TSgR+OR1H2sxNbOhkaH6JQ9Gf8WCtkgCJR0zGai
-         uSDlFBPLmkty3uiIRtHIcfUCBxpNAFrQA82+FvIf8mkbnE6BYbCCvTtgABubngSIwmPf
-         JyC96hvBlR7q7om7Y6vmqLh5aHzwAi+YpBARa0mwE2JY9aq5Nk6Lt1tJjIiKtiQjfFog
-         ze/AE3fMQt7J37RXEUs20g/+aQLkm9MoGpXcoI6XFPc3xXqlh9wh5/o8DFQVrjtNn6UO
-         zE/Ai7UCTDgwGyeTi+tMxCMcMDCmh9f/XmnQv4zjvtHMYye8pmtd6ExRpEkQ3xFlwUju
-         mD+A==
-X-Gm-Message-State: AC+VfDwjRgdNfdyAv+7TNbdjSwARv9KPfgk6+qslJNjnW+qOHm0EAY/i
-        Qkki0iRZdoDtq0PiCNUA1JQlBNth6bc2sDP9O4wH6u4ARgXpVkz2458D+7B6C8MOg+LeL9Vmkq4
-        THfDati/o9plOPbf3P44KexLa
-X-Received: by 2002:a92:c691:0:b0:32b:c70b:92af with SMTP id o17-20020a92c691000000b0032bc70b92afmr10104051ilg.16.1684872929887;
-        Tue, 23 May 2023 13:15:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5jnBGKc1//J7T8ZKzI7utit9/2wFXFS8PyN6dZFNhg+b7iIA8IA3ZxtJniFT1wYfrexXH/Dg==
-X-Received: by 2002:a92:c691:0:b0:32b:c70b:92af with SMTP id o17-20020a92c691000000b0032bc70b92afmr10104034ilg.16.1684872929599;
-        Tue, 23 May 2023 13:15:29 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id h25-20020a056638063900b004166d06f656sm2627536jar.177.2023.05.23.13.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 13:15:29 -0700 (PDT)
-Date:   Tue, 23 May 2023 14:15:27 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kevin.tian@intel.com>, <jgg@nvidia.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v2] vfio/type1: check pfn valid before converting to
- struct page
-Message-ID: <20230523141527.6186a044.alex.williamson@redhat.com>
-In-Reply-To: <ZGxTpo1Zmi54UYFE@yzhao56-desk.sh.intel.com>
-References: <20230519065843.10653-1-yan.y.zhao@intel.com>
-        <20230522130030.44c6c5c2.alex.williamson@redhat.com>
-        <ZGxTpo1Zmi54UYFE@yzhao56-desk.sh.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        bh=yBM2BC/T1ufxa3+rehpISkT4UVTxaMeNKJrdmGcTYHE=;
+        b=FZF2+7PmxesyVLocBcwttVDErpJT8dN6QzIyP3wf2P2HgR5wX1ofkRKoIfbaOp4S4++aPr
+        dDbzpY89OLMwM0g6zd1coJDbgRHNFJWLGs/nu4iGQDqiVPv5BR4nrV91YDH6c9ybCWOWfC
+        oJMxVCWQIYZ6PsETdOpOv90r7F2vYYI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-ZyBG9gwjMIOeTqnxB5ImZQ-1; Tue, 23 May 2023 16:16:16 -0400
+X-MC-Unique: ZyBG9gwjMIOeTqnxB5ImZQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 367763C0F660;
+        Tue, 23 May 2023 20:16:15 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D0E5B1121314;
+        Tue, 23 May 2023 20:16:11 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <ZGxfrOLZ4aN9/MvE@infradead.org>
+References: <ZGxfrOLZ4aN9/MvE@infradead.org> <20230522205744.2825689-1-dhowells@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Extending page pinning into fs/direct-io.c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3068544.1684872971.1@warthog.procyon.org.uk>
+Date:   Tue, 23 May 2023 21:16:11 +0100
+Message-ID: <3068545.1684872971@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 13:48:22 +0800
-Yan Zhao <yan.y.zhao@intel.com> wrote:
+Christoph Hellwig <hch@infradead.org> wrote:
 
-> On Mon, May 22, 2023 at 01:00:30PM -0600, Alex Williamson wrote:
-> > On Fri, 19 May 2023 14:58:43 +0800
-> > Yan Zhao <yan.y.zhao@intel.com> wrote:
-> >   
-> > > Check physical PFN is valid before converting the PFN to a struct page
-> > > pointer to be returned to caller of vfio_pin_pages().
-> > > 
-> > > vfio_pin_pages() pins user pages with contiguous IOVA.
-> > > If the IOVA of a user page to be pinned belongs to vma of vm_flags
-> > > VM_PFNMAP, pin_user_pages_remote() will return -EFAULT without returning
-> > > struct page address for this PFN. This is because usually this kind of PFN
-> > > (e.g. MMIO PFN) has no valid struct page address associated.
-> > > Upon this error, vaddr_get_pfns() will obtain the physical PFN directly.
-> > > 
-> > > While previously vfio_pin_pages() returns to caller PFN arrays directly,
-> > > after commit
-> > > 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()"),
-> > > PFNs will be converted to "struct page *" unconditionally and therefore
-> > > the returned "struct page *" array may contain invalid struct page
-> > > addresses.
-> > > 
-> > > Given current in-tree users of vfio_pin_pages() only expect "struct page *
-> > > returned, check PFN validity and return -EINVAL to let the caller be
-> > > aware of IOVAs to be pinned containing PFN not able to be returned in
-> > > "struct page *" array. So that, the caller will not consume the returned
-> > > pointer (e.g. test PageReserved()) and avoid error like "supervisor read
-> > > access in kernel mode".
-> > > 
-> > > Fixes: 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()")
-> > > Cc: Sean Christopherson <seanjc@google.com>
-> > > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> > > Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
-> > > 
-> > > ---
-> > > v2: update commit message to explain background/problem clearly. (Sean)
-> > > ---
-> > >  drivers/vfio/vfio_iommu_type1.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > > 
-> > > diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> > > index 493c31de0edb..0620dbe5cca0 100644
-> > > --- a/drivers/vfio/vfio_iommu_type1.c
-> > > +++ b/drivers/vfio/vfio_iommu_type1.c
-> > > @@ -860,6 +860,11 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
-> > >  		if (ret)
-> > >  			goto pin_unwind;
-> > >  
-> > > +		if (!pfn_valid(phys_pfn)) {  
-> > 
-> > Why wouldn't we use our is_invalid_reserved_pfn() test here?  Doing
-> > so would also make it more consistent why we don't need to call
-> > put_pfn() or rewind accounting for this page.  Thanks,
-> >   
-> I actually struggled in choosing is_invalid_reserved_pfn() or
-> pfn_valid() when writing this patch.
-> 
-> Choosing pfn_valid() is because invalid PFN obviously cannot have
-> struct page address and it's a bug fix.
-> 
-> While declining reserved pages will have the IOVA range supported by
-> vfio_pin_pages() even more reduced. So I don't know if there's enough
-> justification to do so, given that (1) device zone memory usually has
-> PG_reserved set. (2) vm_normal_page() also contains reserved page.
+> But can you please also take care of the legacy direct I/O code?  I'd really
+> hate to leave yet another unfinished transition around.
 
-Based on the exclusion we have in vaddr_get_pfn() where we unpin
-zero-page pfns because they hit on the is_invalid_reserved_pfn() test
-and break our accounting otherwise, this does seem like the correct
-choice.  I can imagine a scenario where the device wants to do a DMA
-read from VM memory backed by the zero page.  Ok.  Thanks,
+I've been poking at it this afternoon, but it doesn't look like it's going to
+be straightforward, unfortunately.  The mm folks have been withdrawing access
+to the pinning API behind the ramparts of the mm/ dir.  Further, the dio code
+will (I think), under some circumstances, arbitrarily insert the zero_page
+into a list of things that are maybe pinned or maybe unpinned, but I can (I
+think) also be given a pinned zero_page from the GUP code if the page tables
+point to one and a DIO-write is requested - so just doing if page == zero_page
+isn't sufficient.
 
-Alex
+What I'd like to do is to make the GUP code not take a ref on the zero_page
+if, say, FOLL_DONT_PIN_ZEROPAGE is passed in, and then make the bio cleanup
+code always ignore the zero_page.
+
+Alternatively, I can drop the pin immediately if I get given one on the
+zero_page - it's not going anywhere, after all.
+
+I also need to be able to take an additional pin on a folio that gets split
+across multiple bio submissions to replace the get_page() that's there now.
+
+Alternatively to that, I can decide how much data I'm willing to read/write in
+one batch, call something like netfs_extract_user_iter() to decant that
+portion of the parameter iterator into an bvec[] and let that look up the
+overlapping page multiple times.  However, I'm not sure if this would work
+well for a couple of reasons: does a single bio have to refer to a contiguous
+range of disk blocks?  and we might expend time on getting pages we then have
+to give up because we hit a hole.
+
+Something that I noticed is that the dio code seems to wangle to page bits on
+the target pages for a DIO-read, which seems odd, but I'm not sure I fully
+understand the code yet.
+
+David
 
