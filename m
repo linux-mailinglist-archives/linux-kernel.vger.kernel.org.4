@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D0170CFE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A1770CFEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjEWBAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S235254AbjEWBAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235016AbjEWA7u (ORCPT
+        with ESMTP id S234638AbjEWBAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:59:50 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C845BDB
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684803437; x=1716339437;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=PaQ+uFejefUKDhkjELmrTi97YlZDHlfjttd0/Isxric=;
-  b=mmgExzJpRO1eg885plv+eqcW6YX/K/M+SS9sjmlFy6pzMym1ZfweQK7x
-   akiD0kYhzVVhPmVlcbSjCYiBEez+CU4Sg04hzYwgh9I4YgeD53sCXf5X3
-   0dr8x3wkh0ijEMajQrQMBYxhu9NxGA/bgvIK4zSlIRbEjY6QBAa9L3AvE
-   PgZsuDi2vTJtmPNu6tyT5PqTGY7Yk2fGdAImRJVJOMStyqIpx24IZa+xC
-   QfHKUdpiUFB/HPd4oNFSGtyeSd5rPIZfAMAjue9TyJ0YmyuTNP1nbfw3C
-   tZAqowDgJ9AuJ/i5b3aQf4fartVnzMmPkW7OvwTsMBPKC9wcGfs+af/KU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="350596431"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="350596431"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 17:57:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="654154365"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="654154365"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 17:57:14 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Mon, 22 May 2023 21:00:14 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528CBF4;
+        Mon, 22 May 2023 17:58:01 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae3a5dfa42so47434515ad.0;
+        Mon, 22 May 2023 17:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684803466; x=1687395466;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p1yeqEL2YFpMCthAHwog2p9ezUJQgAe4nd/8yOnzMLc=;
+        b=mKHau8NZ3Yfh1+Dl1mZTJ3fMqlAxuzxBvZBEcbcRmB+4MXlsrHFZxRkkSVizIiOk+2
+         884tLTyi8cz3TFoBQOYDx7LyT1Cin+4VQSM6mebUsRyzPQS4/tEnm8ETaOu1a+rTHKQG
+         ccvvmWNKW7FBJCpZ9ltt4n3kl+5lhEm9qSDVme3umGX9Q95ekxoN7PKRosfVZCtaUbK8
+         EADZsG7lRqZ1ykzwADZT6gC6+1A8Db6ayB3WAhGTmtMT5bCPoXCwIaMpaMYCAgOr6GSP
+         ormBpu2Wmxp4YXUXlpkjeheAy3sVKuF1wQrdwl+9iSYF5fVOrj6Lz5/nZ4TBuY5TjgPO
+         td7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684803466; x=1687395466;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p1yeqEL2YFpMCthAHwog2p9ezUJQgAe4nd/8yOnzMLc=;
+        b=CwoC3GYxCScjvVFY92v7+hd/fX6/K2EQDk8p/LVk3BimA4aAi1AoLNhI1flD4lbWPp
+         Kt4UfX04DMyDDHeWtTN34b56V5ugCDiBYfM6buUnZU/tZNMzamNqVSHukLMoBlyUw2Q6
+         Jcf06DjVfhQfBwBBPl/VcgJS3PATyXrWjP/SFHrFFTHq4kq/IsDJ13vZLtbKevgjnyn/
+         sxTQpJ2oYwitXFu9wUNfeMRVPx/1wa3BAfo4bD5qv3hQoVyjLkTZ7ZQ33xrtt6mPYjjd
+         7lgq9NRguYh7mwdnWVOVvheWbicLMd+/d9fgKTxF1AEZZOhYqlRYnzijnY2Z0id0M5O3
+         dzRw==
+X-Gm-Message-State: AC+VfDy/q1BuWatP7QX4xKAejQrtev+HFlAR4mPxpu13J+911loobyk6
+        2JIeACyx+hKYRbM2bl5nmVs=
+X-Google-Smtp-Source: ACHHUZ6kMl5/PXrFASjEZtGrJSoUco4dItV83+U06SvBQ2QSIyK+0CqZR4t8vjgCMyoxVVVwEIMO+Q==
+X-Received: by 2002:a17:902:ce8a:b0:1af:cbe4:d953 with SMTP id f10-20020a170902ce8a00b001afcbe4d953mr654888plg.60.1684803466050;
+        Mon, 22 May 2023 17:57:46 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090341c500b001aae909cfbbsm5409544ple.119.2023.05.22.17.57.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 17:57:45 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 14:57:43 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     John Sperbeck <jsperbeck@google.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH -V2 4/5] swap: remove get/put_swap_device() in
- __swap_duplicate()
-References: <20230522070905.16773-1-ying.huang@intel.com>
-        <20230522070905.16773-5-ying.huang@intel.com>
-        <9cbd93e0-721a-01c2-14dd-87f89363a830@redhat.com>
-Date:   Tue, 23 May 2023 08:56:11 +0800
-In-Reply-To: <9cbd93e0-721a-01c2-14dd-87f89363a830@redhat.com> (David
-        Hildenbrand's message of "Mon, 22 May 2023 14:06:05 +0200")
-Message-ID: <87o7mbyifo.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Christian Brauner <brauner@kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: always put cset in cgroup_css_set_put_fork
+Message-ID: <ZGwPhzm_Eh2Bx-5v@slm.duckdns.org>
+References: <20230521192953.229715-1-jsperbeck@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230521192953.229715-1-jsperbeck@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+On Sun, May 21, 2023 at 07:29:53PM +0000, John Sperbeck wrote:
+> A successful call to cgroup_css_set_fork() will always have taken
+> a ref on kargs->cset (regardless of CLONE_INTO_CGROUP), so always
+> do a corresponding put in cgroup_css_set_put_fork().
+> 
+> Without this, a cset and its contained css structures will be
+> leaked for some fork failures.  The following script reproduces
+> the leak for a fork failure due to exceeding pids.max in the
+> pids controller.  A similar thing can happen if we jump to the
+> bad_fork_cancel_cgroup label in copy_process().
+> 
+> [ -z "$1" ] && echo "Usage $0 pids-root" && exit 1
+> PID_ROOT=$1
+> CGROUP=$PID_ROOT/foo
+> 
+> [ -e $CGROUP ] && rmdir -f $CGROUP
+> mkdir $CGROUP
+> echo 5 > $CGROUP/pids.max
+> echo $$ > $CGROUP/cgroup.procs
+> 
+> fork_bomb()
+> {
+> 	set -e
+> 	for i in $(seq 10); do
+> 		/bin/sleep 3600 &
+> 	done
+> }
+> 
+> (fork_bomb) &
+> wait
+> echo $$ > $PID_ROOT/cgroup.procs
+> kill $(cat $CGROUP/cgroup.procs)
+> rmdir $CGROUP
+> 
+> Fixes: ef2c41cf38a7 ("clone3: allow spawning processes into cgroups")
+> Signed-off-by: John Sperbeck <jsperbeck@google.com>
 
-> On 22.05.23 09:09, Huang Ying wrote:
->> __swap_duplicate() is called by
->> - swap_shmem_alloc(): the page lock of the swap cache is held.
->
-> page lock of the swap cache? Did you really mean to say that or am I
-> confused?
->
-> "Page lock of the page that is in the swap cache?"
+Applied to cgroup/for-6.4-fixes w/ stable cc'd.
 
-Sorry for my poor English. Or make it shorter?
+Thanks.
 
-"the folio in the swap cache is locked"
-
-Best Regards,
-Huang, Ying
-
->> - copy_nonpresent_pte() -> swap_duplicate() and try_to_unmap_one()
->> ->
->>    swap_duplicate(): the page table lock is held.
->> - __read_swap_cache_async() -> swapcache_prepare(): enclosed with
->>    get/put_swap_device() in __read_swap_cache_async() already.
->> So, it's safe to remove get/put_swap_device() in __swap_duplicate().
+-- 
+tejun
