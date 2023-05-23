@@ -2,395 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C07370E1A0
+	by mail.lfdr.de (Postfix) with ESMTP id E024D70E1A1
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237672AbjEWQOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S237155AbjEWQQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237599AbjEWQOr (ORCPT
+        with ESMTP id S236100AbjEWQQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:14:47 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A3CC2;
-        Tue, 23 May 2023 09:14:45 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id BFB025C01A6;
-        Tue, 23 May 2023 12:14:44 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Tue, 23 May 2023 12:14:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684858484; x=1684944884; bh=dxu1dO39Wxb6UsHw03YdxHqxhUteh63mls9
-        UH1pUmIM=; b=w9nIlnmCEjKRDa4rE2o0YKKlhxqtIF3+h3RRYlawrz18eXVRYSV
-        j7f9MzmE8JhbgdX+eMMRZ0nL6yzIFCcBskA+GKnsSUq0gn+vIwneWNp4JNfXZz70
-        emQtlqjBXoY/lVLtxPG2RvbzcErO+Fb454AFpFoB4yJ2Ouadi0t46JXvxOMSoFte
-        FvqBXEmf08ViMHy7rqRXP5A87Le6SwrH3Q6Mfn2E6IF91qjWOK2Tgx39tlWaedMy
-        t1Nr4ACAwQMC/UdCEuOUEv5L/flelpRcrOpMGT+GIT57BEx9o8roChi3NNJoQK3c
-        GbDi0REXLD98/aQWNEinapGO3qZkW15WFlw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684858484; x=1684944884; bh=dxu1dO39Wxb6UsHw03YdxHqxhUteh63mls9
-        UH1pUmIM=; b=K8LsVSjsMYgzaDascXI7XHbjNziK4NXZMaWivarrZ4oMTo4EVgr
-        wJsW2R+7/1DkibV579HYdd+/i/5qP6sQkKjdYZqvKDLHPksT6xy4gZoZhrBcqKQr
-        OJ3UDjs2NnYU97IaNpbdtnDzJk42VNcuvQ8gDyhY5FeWi0F0DZBaPb2iacinPTqT
-        OdROXSm/F3FLEjklqL7QUY2eneYbM3ISOGFyTLtOm0QfFD+4GBU0CsQfoc2sW1cS
-        uW9evNyi/OvvYROs1BLgj5xtwdoM0UIGqd3FEZz6Dogct+gJWEiA5MOu1GrvkZpP
-        FSI+eJ+vEYBI5TSt6+RNmqLwZK6ax+aBGgA==
-X-ME-Sender: <xms:dOZsZHc4OPnppnwwEQrW21C4-ZQ8gAb4sPfHLbog6kXv8gIwOJBKog>
-    <xme:dOZsZNMQVSdUYEzisQMxPWTJFbUhumqv7wGKnWfiuJluYpDPV07Qb-KAZVKequNRl
-    7N87RK6NEU-GOSMoFQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfo
-    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
-    gsrdgtrgeqnecuggftrfgrthhtvghrnhephfefgedufeetgfetlefgkefgvdejleelvefg
-    hfejfffhtdeitdejfeekvdeugfeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgt
-    rg
-X-ME-Proxy: <xmx:dOZsZAgUOqCw-vFwJlG9JKuyd_CbVojERfOVJFiH1Y0cgMwdGrNKlg>
-    <xmx:dOZsZI8j_RJ0qMATM9qp6ZcXm6Zddk8HYv74eSzypqxJX1LPEKokCw>
-    <xmx:dOZsZDti0omRpzSlIrcAu8NAeJuk7LNzAn1-WDY-L6J-RsBRGSNlRg>
-    <xmx:dOZsZDI0gHEdA9T0j_o4wd5BHaJibUZJCV7wcVnYmAJ6SGhgEWdA2Q>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 43BE3C60091; Tue, 23 May 2023 12:14:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <78e5ae29-5ebb-47d4-bd9d-38909c0ff7e2@app.fastmail.com>
-In-Reply-To: <CAOOmCE-1LykpkkSFd112F=YFsY2Vmyphn-coE_SbDbnfGrdyGQ@mail.gmail.com>
-References: <20230517155026.28535-1-jorge.lopez2@hp.com>
- <20230517155026.28535-2-jorge.lopez2@hp.com>
- <0abdb306-1e24-4653-9a14-e5db8d508a82@app.fastmail.com>
- <CAOOmCE8-GB-yM-cfCP6Sw8xdnOgNm4b7viUziA48YJ4mGkGfag@mail.gmail.com>
- <7406150c-4ac0-4a61-b7e5-fd5f89ef0d45@app.fastmail.com>
- <CAOOmCE-1LykpkkSFd112F=YFsY2Vmyphn-coE_SbDbnfGrdyGQ@mail.gmail.com>
-Date:   Tue, 23 May 2023 12:14:23 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     "Jorge Lopez" <jorgealtxwork@gmail.com>
-Cc:     "Hans de Goede" <hdegoede@redhat.com>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v14 01/13] hp-bioscfg: Documentation
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 12:16:11 -0400
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2094.outbound.protection.outlook.com [40.107.11.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A329C2;
+        Tue, 23 May 2023 09:16:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L571I0l5GZpJpN712fredus6xEcUmN784RunqiAmvFICvwrITu+r8Bwg8S2r/memzP9pShaPd4o/n56ARc43v28Isn/IkVtsl6mdhea4vVWu9sKEj6W9d7emXTfuP29Z+OnuT/+qzqmgXyy9OmHHjRgPoi3l0xBpIZK99GTFrDGY67qsXa2iHWDOldcNqvNlbi7DF8KvaPMBOyuPfcG4nb7Pd1EW9+x2vhyKztwVcdD262jkyMBvgJ8sS6SqQ+qmqM2LgzNmryUGL2ZJE7/hA52hNnVy5UsMbaoBCbH+9kQMzXFEcObgh3pZaPpBeZkt5aY2EYEY3xgFt2+zsik7EQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kWNwlRTGVitowBlEGl+F1tjYEryxdl5JKH60q4MeVqE=;
+ b=cL+Ekpq9rRRgq/mI22OUL6xrz58PHSdWrgaZAfL9QELKg6jpjJCDsPqstDfuCo/T2F+xd3ue3l409vinUKNy5HO0QYU0YK8T/pdjnv6N1K4B/NxvVE8NPfMkuPFOH5BCIIc2N19t25nZE2hwc1B56jBQwHuaSqnAC4b1tOkI4kn0nQMTe551FJVyAz7lU09ZkZDHUYGHAu5htIi0SR8czU/w0Oihp/UDive54/cxJaid4tAMBIrv/p7xlw8s5ljuOAmFW8sfw3FID1oylvUWhFT8YDnlxESgoOcyUXlBn2v4bktBEV3vihoyBmssVT4jsy+/DdXUbwyOBvwNXUB7Sg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kWNwlRTGVitowBlEGl+F1tjYEryxdl5JKH60q4MeVqE=;
+ b=Z+d0hVIU4veoGF+WNmLwcqi2vo+7MXkR/0oXsof/WgUWG/nJ2TDs/EPSt97u0VmmUeN819WDVkou/1G5hUlKqatQAxC9o5cN0UCXxXjx9IBQMk0nqo57n9iN4/YbIvWbZDRwvFR/Gw8Nl7nTQytdHa+yNA+dRD8SMM7ijuMBEh0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO6P265MB6256.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2b6::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.14; Tue, 23 May
+ 2023 16:16:02 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1d51:d482:270c:7daf]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1d51:d482:270c:7daf%4]) with mapi id 15.20.6433.013; Tue, 23 May 2023
+ 16:16:02 +0000
+Date:   Tue, 23 May 2023 17:15:59 +0100
+From:   Gary Guo <gary@garyguo.net>
+To:     Benno Lossin <benno.lossin@proton.me>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH 4/4] rust: init: update macro expansion example in docs
+Message-ID: <20230523171559.7458afc1.gary@garyguo.net>
+In-Reply-To: <20230424081112.99890-4-benno.lossin@proton.me>
+References: <20230424081112.99890-1-benno.lossin@proton.me>
+        <20230424081112.99890-4-benno.lossin@proton.me>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P123CA0032.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600::20)
+ To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB6256:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6e88e6bc-837f-4f47-eea0-08db5ba900c9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ur1i0CTMJpdl25+LEZ0YshnLSn9vsxoR7V54gTFmRADfebQe2byyc+pGbsSjhWRFpfCrpZDRlVHyPEjc37CKyJvTr2a1oZJV1E8+VN8uS3ZdXPCImt3LaK6JlUJNCCFgHid/7/8JYortLisYILFvgkikX5FIbyWmCot+V7gy0KFZAuqbW4oxUQ8AgL8dARw+x4WUEH71S9Nw2/E8FlHizS0gYoda/xjAtiFqEjbH+yWDG7lC8vU5NYIKAUzQ0MOF8/81RAbvZbo4VzemZ+QnEsBCZIy/6DWGbsYZjXhk4WZFXMho3ZG2NdErb3G27yCER/mPw+xY+JD0MrwrtzXeluEaaBWDg2GnMlN6NKjLp2k2OW6FEf5P1EsalDl9d9ENZzN9PPPgn1ZgeD+RFdnfkCC5bUOsoa/Ycq8EWXP34VEig5wpsNfno6Dp5D3DQt1gRlMCcmH0Cf6fHz3cIFC/2htoLT4CEltNxEBYJh1yxAxnPb9Na9UG8soJ6R9qD922iiK/tPcQxxZ8zcI9r/NOZTLvrhIVAH3CuiGafc6P5WfhxPzt3HLTQBxrdJ5IobiT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(376002)(396003)(366004)(346002)(136003)(451199021)(186003)(6512007)(6506007)(1076003)(26005)(2616005)(83380400001)(36756003)(6666004)(6486002)(2906002)(316002)(54906003)(5660300002)(8676002)(478600001)(4326008)(66946007)(66556008)(66476007)(38100700002)(86362001)(6916009)(8936002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m2w8jCVSYwYobuTlb8ExVM+dGxBIRE64trYtKCKiYmqDnx17MrjbvN962Wne?=
+ =?us-ascii?Q?LhHulgN/LCN/bsUuxRg92F8H7tMbTheqkAEPlD+Z1vcbQmEmDntkwpzfpS/+?=
+ =?us-ascii?Q?L+Mq38tqcu/KpzPbhZrhEKLd8qU4UyL+IRF714rjjDCcjIc09h8zPNmU9qnR?=
+ =?us-ascii?Q?ukPAZ31hTckPfxfu6hGHgX1U/i28Wsoh0SEQJSl90uFsoRgdVXCQqoDjGJWe?=
+ =?us-ascii?Q?0FT9z0o9yh/tnN+JagqbxFzhRJh9Bs8gwf8OafcC7mBKMikSGdZPdm/8KicI?=
+ =?us-ascii?Q?3Q53ynQqOODdPf0udWISkjO6KCvjRPHi9BRYJObujD3isoVM4gfM1XLa0HwT?=
+ =?us-ascii?Q?m/zjEEXvLnebxmzpNLHz8fM3NuPpb/MEwQFfkDckkk/7/WKZbeQKVdTvuHH5?=
+ =?us-ascii?Q?fE193/3RKxZnLbGGvJ30ylhV9XZfH87bjkJ3lsmd+MqXcrwAaQtj7/PHyj7D?=
+ =?us-ascii?Q?b+cxm3OD/d4qzl+DGaBH+Lm8OQDpXQ9SRIykA3L6yzaQEyK4Pf56g/qi59zZ?=
+ =?us-ascii?Q?9ZxIC8YX5XPKiOoF7anw0Ot0ijz2i9I7Np4HF4On4Ti0sM7Gh15kkOq7QXqY?=
+ =?us-ascii?Q?++PfdMEU/FGo6YsXsO79v5i+R6ZuQdxz7tSoG84HY0N9ZKE35Ps+JNxitJQ6?=
+ =?us-ascii?Q?jfCE7Ggni5N/54SpCgv4ShHglqz5zUwr5l3fJdxCyCaaIB8LL4jM5+3z4/HW?=
+ =?us-ascii?Q?5K2xHKAjzkfPF/7QOOmXmzw2sPHn6o3kKQx7kHDdzIgeVIyYc5jd6S7DWdRI?=
+ =?us-ascii?Q?7y7OM0Ni/g5O+0G2SQAYL/WiL6/nK3Ud/REAHwp07poaytdIzlorCznmnuDu?=
+ =?us-ascii?Q?bKazUOmJUW/+6DyAhPXnC3tuBTAOYiTQBdIYHoDkUEgD5V69XsX7xXzrImCF?=
+ =?us-ascii?Q?prXLUiOlIxSKK47vEHfGqvoGNZUxkH6ItbV4YFwtBjOYnnqoKcYJFB9R9Rvr?=
+ =?us-ascii?Q?Veq6xiohadXXkzXsmp0yPsuZFrxFd7r44foOrjWecTmFKTiP0Wc8v1OgUWPf?=
+ =?us-ascii?Q?G3FroZLT/qHu51qBZsccEbE3CfHKQBZK8wr6rT6SVdZV2lvpWWDW/o8cJVYt?=
+ =?us-ascii?Q?ds4LonxzM872pFEZQS1KsjOnDYuUBRxz7+Z9U72SNEjJ/jT1czOsnvIG8Jby?=
+ =?us-ascii?Q?5slFB1gQuKf9YDOQRpcuaE0MfAwoAQwnFxNWDsPvtMYICyn/afH3klhr+x7J?=
+ =?us-ascii?Q?hUDkOgUUaglqE4x9f0FyNJ4Nm9mctuztDd8vSf+Z5o5Fxj1ie/YIlxt1KTYf?=
+ =?us-ascii?Q?Ua05OHfWG/cUyEF/ukCq16mMfOyUuX2rxzIHd0tumFrNkPrIM8iDmOVrnLac?=
+ =?us-ascii?Q?XRBalaWF3yQauSvJYoDH6tKBs4FMUjVbHsux3d9fHqynV6F38oBlsGVkOtF3?=
+ =?us-ascii?Q?pipoIGo9ToFJ4f2Dl00VZl6dAuxsJpOH9Us0QV22FTGa2e2SnxpDFkD1pMfW?=
+ =?us-ascii?Q?hnCpVdfato7vh9zmOmbzWQfEfiTQ9aTIW+iPIfByNWOpLZmZ9a/3mZui46cV?=
+ =?us-ascii?Q?DofCvT4rs+QbPsgEBwOBcqpVFjqK5rtYUJuviATR3fQUM3lewrZOc5LBMCxK?=
+ =?us-ascii?Q?38MMkR0qj4gpTaPQuMcoT1dM1ajUhvj8mTAAjKtf?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e88e6bc-837f-4f47-eea0-08db5ba900c9
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 16:16:02.5370
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CYK7LKDkErxTNbOkvtvAUXLfXNIzrxk5AjESi9jZ6OlJlVCmKtePBBNCpN3CqDtZE74BG3eiA/RzdGrUtC0MOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Jorge
+On Mon, 24 Apr 2023 08:11:49 +0000
+Benno Lossin <benno.lossin@proton.me> wrote:
 
-On Tue, May 23, 2023, at 10:16 AM, Jorge Lopez wrote:
-> On Fri, May 19, 2023 at 6:19=E2=80=AFPM Mark Pearson <mpearson-lenovo@=
-squebb.ca> wrote:
->>
->> Thanks Jorge,
->>
->> On Fri, May 19, 2023, at 4:58 PM, Jorge Lopez wrote:
->> > On Fri, May 19, 2023 at 12:34=E2=80=AFPM Mark Pearson <mpearson-len=
-ovo@squebb.ca> wrote:
->> >>
->> >> Hi Jorge,
->> >>
->> >> On Wed, May 17, 2023, at 11:50 AM, Jorge Lopez wrote:
->> >> > HP BIOS Configuration driver purpose is to provide a driver supp=
-orting
->> >> > the latest sysfs class firmware attributes framework allowing th=
-e user
->> >> > to change BIOS settings and security solutions on HP Inc.=E2=80=99=
-s commercial
->> >> > notebooks.
->> >> >
->> >> > Many features of HP Commercial notebooks can be managed using Wi=
-ndows
->> >> > Management Instrumentation (WMI). WMI is an implementation of We=
-b-Based
->> >> > Enterprise Management (WBEM) that provides a standards-based int=
-erface
->> >> > for changing and monitoring system settings. HP BIOSCFG driver p=
-rovides
->> >> > a native Linux solution and the exposed features facilitates the
->> >> > migration to Linux environments.
->> >> >
->> >> > The Linux security features to be provided in hp-bioscfg driver =
-enables
->> >> > managing the BIOS settings and security solutions via sysfs, a v=
-irtual
->> >> > filesystem that can be used by user-mode applications. The new
->> >> > documentation cover HP-specific firmware sysfs attributes such S=
-ecure
->> >> > Platform Management and Sure Start. Each section provides securi=
-ty
->> >> > feature description and identifies sysfs directories and files e=
-xposed
->> >> > by the driver.
->> >> >
->> >> > Many HP Commercial notebooks include a feature called Secure Pla=
-tform
->> >> > Management (SPM), which replaces older password-based BIOS setti=
-ngs
->> >> > management with public key cryptography. PC secure product manag=
-ement
->> >> > begins when a target system is provisioned with cryptographic ke=
-ys
->> >> > that are used to ensure the integrity of communications between =
-system
->> >> > management utilities and the BIOS.
->> >> >
->> >> > HP Commercial notebooks have several BIOS settings that control =
-its
->> >> > behaviour and capabilities, many of which are related to securit=
-y.
->> >> > To prevent unauthorized changes to these settings, the system can
->> >> > be configured to use a cryptographic signature-based authorizati=
-on
->> >> > string that the BIOS will use to verify authorization to modify =
-the
->> >> > setting.
->> >> >
->> >> > Linux Security components are under development and not publishe=
-d yet.
->> >> > The only linux component is the driver (hp bioscfg) at this time.
->> >> > Other published security components are under Windows.
->> >> >
->> >> > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
->> >> >
->> >> > ---
->> >> > Based on the latest platform-drivers-x86.git/for-next
->> >> > ---
->> >> >  .../testing/sysfs-class-firmware-attributes   | 102 +++++++++++=
-++++++-
->> >> >  1 file changed, 100 insertions(+), 2 deletions(-)
->> >> >
->> >> > diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attr=
-ibutes
->> >> > b/Documentation/ABI/testing/sysfs-class-firmware-attributes
->> >> > index 4cdba3477176..f8d6c089228b 100644
->> >> > --- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
->> >> > +++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
->> >> <snip>
->> >> > +
->> >> > +
->> >> > +             HP specific class extensions - Secure Platform Man=
-ager (SPM)
->> >> > +             --------------------------------
->> >> > +
->> >> > +What:                /sys/class/firmware-attributes/*/authentic=
-ation/SPM/kek
->> >> > +Date:                March 29
->> >> > +KernelVersion:       5.18
->> >> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
->> >> > +Description:
->> >> > +             'kek' Key-Encryption-Key is a write-only file that=
- can be used to
->> >> > configure the
->> >> > +             RSA public key that will be used by the BIOS to ve=
-rify
->> >> > +             signatures when setting the signing key.  When wri=
-tten,
->> >> > +             the bytes should correspond to the KEK certificate
->> >> > +             (x509 .DER format containing an OU).  The size of =
-the
->> >> > +             certificate must be less than or equal to 4095 byt=
-es.
->> >> > +
->> >> > +What:                /sys/class/firmware-attributes/*/authentic=
-ation/SPM/sk
->> >> > +Date:                March 29
->> >> > +KernelVersion:       5.18
->> >> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
->> >> > +Description:
->> >> > +             'sk' Signature Key is a write-only file that can b=
-e used to
->> >> > configure the RSA
->> >> > +             public key that will be used by the BIOS to verify=
- signatures
->> >> > +             when configuring BIOS settings and security featur=
-es.  When
->> >> > +             written, the bytes should correspond to the modulu=
-s of the
->> >> > +             public key.  The exponent is assumed to be 0x10001.
->> >> > +
->> >> > +What:                /sys/class/firmware-attributes/*/authentic=
-ation/SPM/status
->> >> > +Date:                March 29
->> >> > +KernelVersion:       5.18
->> >> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
->> >> > +Description:
->> >> > +             'status' is a read-only file that returns ASCII te=
-xt in JSON format
->> >> > reporting
->> >> > +             the status information.
->> >> > +
->> >> > +               "State": "not provisioned | provisioned | provis=
-ioning in progress
->> >> > ",
->> >> > +               "Version": " Major. Minor ",
->> >> > +               "Nonce": <16-bit unsigned number display in base=
- 10>,
->> >> > +               "FeaturesInUse": <16-bit unsigned number display=
- in base 10>,
->> >> > +               "EndorsementKeyMod": "<256 bytes in base64>",
->> >> > +               "SigningKeyMod": "<256 bytes in base64>"
->> >> > +
->> >> > +What:                /sys/class/firmware-attributes/*/attribute=
-s/Sure_Start/audit_log_entries
->> >> > +Date:                March 29
->> >> > +KernelVersion:       5.18
->> >> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
->> >> > +Description:
->> >> > +             'audit_log_entries' is a read-only file that retur=
-ns the events in
->> >> > the log.
->> >> > +
->> >> > +                     Audit log entry format
->> >> > +
->> >> > +                     Byte 0-15:   Requested Audit Log entry  (E=
-ach Audit log is 16 bytes)
->> >> > +                     Byte 16-127: Unused
->> >> > +
->> >> > +What:                /sys/class/firmware-attributes/*/attribute=
-s/Sure_Start/audit_log_entry_count
->> >> > +Date:                March 29
->> >> > +KernelVersion:       5.18
->> >> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
->> >> > +Description:
->> >> > +             'audit_log_entry_count' is a read-only file that r=
-eturns the number
->> >> > of existing
->> >> > +             audit log events available to be read. Values are =
-separated using
->> >> > comma (``,``)
->> >> > +
->> >> > +                     [No of entries],[log entry size],[Max numb=
-er of entries supported]
->> >> > +
->> >> > +             log entry size identifies audit log size for the c=
-urrent BIOS
->> >> > version.
->> >> > +             The current size is 16 bytes but it can be up to 1=
-28 bytes long in
->> >> > future BIOS
->> >> > +             versions.
->> >> > --
->> >> > 2.34.1
->> >>
->> >> Firstly apologies as I've done a poor job of following the updates=
- to this series - so if this has already been discussed and agreed by mo=
-re seasoned kernel contributors please feel free to disregard my comment=
-s :) I was catching up on my inbox and had some thoughts.
->> >
->> > No worries.
->> >
->> >>
->> >> For SPM - as this replaces password usage, is it done for all acco=
-unt types? It seems a bit odd having it be a replacement for the passwor=
-ds but in it's own location and not in the same place as (for example) A=
-dmin/current_password.
->> >> For the Lenovo implementation I put certificate, signature and sav=
-e_signature in the authentication/Admin directory and I realise your imp=
-lementation is different with the keys but if the kek and sk are only us=
-ed with the Admin account then shouldn't they also be in that directory?=
- It would be nice to have some commonality across vendors in my opinion.
->> >>
->> >
->> > SPM (Security Platform Management) does not replace password usage =
-and
->> > it is done for the Admin account (Setup Password).  SPM is a securi=
-ty
->> > feature available to the user to configure/update BIOS settings when
->> > Sure Admin is enabled in BIOS.  One of the files provided under SPM=
- is
->> > the key _role and its value is set to =E2=80=98bios-spm.=E2=80=99  =
- A =E2=80=98bios-spm=E2=80=99 role
->> > indicates a password is used in combination with an
->> > endorsement/signing key.  It is also the reason why SPM is kept
->> > separate under the list of authentication attributes.
->>
->> Ah - I think I get it, and in that case I can see why you keep it sep=
-arate and it is a unique role.
->> I withdraw my suggestion :)
->>
->> >
->> >> For the Sure_Start I would propose de-branding this so it's generi=
-c and I don't think it fits under attributes as it doesn't support any o=
-f the other required attribute fields. I think your implementation of an=
- audit log seems neat but if another vendor was to do similar it would b=
-e better to be able to reuse the same attribute name and enable common t=
-ooling.
->> >> I propose having this as just log/audit_entries and log/audit_coun=
-t and have the log folder in the top alongside authentication and attrib=
-utes.
->> >> If someone wants to add other logs in the future it would be a goo=
-d place to have them.
->> >
->> > I like the idea of having a log folder alongside authentication and
->> > attributes where future logs can be placed.  Unfortunately, Sure_St=
-art
->> > is part of the security attributes  and the initial driver provides=
- a
->> > minimal implementation.   Other attributes associated with Sure_Sta=
-rt
->> > and available in BIOS are  'SureStart Production Mode', 'Sure Start
->> > Security Event Boot Notification', 'Sure Start BIOS Settings
->> > Protection', 'Sure Start Secure Boot Keys Protection', and 'Sure St=
-art
->> > Security Event Policy'
->>
->> Aren't all of these just regular attributes that show up under the at=
-tributes folder (and have current_value and possible_value settings etc)=
-? Do they get created in your equivalent of probing the BIOS to determin=
-e what attributes are available or are they manually created entries? (I=
-'m assuming automatic or they would be also added to the documentation)
->
-> 'SureStart Production Mode', 'Sure Start Security Event Boot
-> Notification', 'Sure Start BIOS Settings Protection', 'Sure Start
-> Secure Boot Keys Protection', and 'Sure Start Security Event Policy'
-> are reported by BIOS therefore listed under attributes.  'Sure
-> Start/audit_log_entries and Sure_Start/audit_log_count_entries are
-> created manually and kept under attributes/Sure_Start; same location
-> as all other 'Sure Start' entries.
->
-Thanks for the clarification
+> Also improve the explaining comments.
+> 
+> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
 
->>
->> It seemed to me the audit log entries were being handled differently =
-because you had to specifically create the entries, with (I assume) some=
- special handling for display?
->
-> Gathering the number of entries and reading each audit logs require
-> making multiple WMI calls (Security related).  If 'Sure Start' was not
-> part of a security feature, I would agree to move it under a log
-> directory; sadly it is not the case.
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-OK - I'll defer to the more experienced kernel folk; but to me I think t=
-he argument still stands that these two fields are not standard attribut=
-es (they won't have any of the regular attribute fields) and by being in=
- a directory they look as if they are trying to be. My vote would still =
-be to:
+> ---
+>  rust/kernel/init/macros.rs | 85 +++++++++++++++++++++-----------------
+>  1 file changed, 48 insertions(+), 37 deletions(-)
+> 
+> diff --git a/rust/kernel/init/macros.rs b/rust/kernel/init/macros.rs
+> index 541cfad1d8be..00aa4e956c0a 100644
+> --- a/rust/kernel/init/macros.rs
+> +++ b/rust/kernel/init/macros.rs
+> @@ -16,8 +16,9 @@
+>  //!
+>  //! We will look at the following example:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! # use kernel::init::*;
+> +//! # use core::pin::Pin;
+>  //! #[pin_data]
+>  //! #[repr(C)]
+>  //! struct Bar<T> {
+> @@ -71,11 +72,12 @@
+>  //!
+>  //! Here is the definition of `Bar` from our example:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! # use kernel::init::*;
+>  //! #[pin_data]
+>  //! #[repr(C)]
+>  //! struct Bar<T> {
+> +//!     #[pin]
+>  //!     t: T,
+>  //!     pub x: usize,
+>  //! }
+> @@ -83,7 +85,7 @@
+>  //!
+>  //! This expands to the following code:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! // Firstly the normal definition of the struct, attributes are preserved:
+>  //! #[repr(C)]
+>  //! struct Bar<T> {
+> @@ -116,20 +118,22 @@
+>  //!         unsafe fn t<E>(
+>  //!             self,
+>  //!             slot: *mut T,
+> -//!             init: impl ::kernel::init::Init<T, E>,
+> +//!             // Since `t` is `#[pin]`, this is `PinInit`.
+> +//!             init: impl ::kernel::init::PinInit<T, E>,
+>  //!         ) -> ::core::result::Result<(), E> {
+> -//!             unsafe { ::kernel::init::Init::__init(init, slot) }
+> +//!             unsafe { ::kernel::init::PinInit::__pinned_init(init, slot) }
+>  //!         }
+>  //!         pub unsafe fn x<E>(
+>  //!             self,
+>  //!             slot: *mut usize,
+> +//!             // Since `x` is not `#[pin]`, this is `Init`.
+>  //!             init: impl ::kernel::init::Init<usize, E>,
+>  //!         ) -> ::core::result::Result<(), E> {
+>  //!             unsafe { ::kernel::init::Init::__init(init, slot) }
+>  //!         }
+>  //!     }
+>  //!     // Implement the internal `HasPinData` trait that associates `Bar` with the pin-data struct
+> -//!     // that we constructed beforehand.
+> +//!     // that we constructed above.
+>  //!     unsafe impl<T> ::kernel::init::__internal::HasPinData for Bar<T> {
+>  //!         type PinData = __ThePinData<T>;
+>  //!         unsafe fn __pin_data() -> Self::PinData {
+> @@ -160,6 +164,8 @@
+>  //!     struct __Unpin<'__pin, T> {
+>  //!         __phantom_pin: ::core::marker::PhantomData<fn(&'__pin ()) -> &'__pin ()>,
+>  //!         __phantom: ::core::marker::PhantomData<fn(Bar<T>) -> Bar<T>>,
+> +//!         // Our only `#[pin]` field is `t`.
+> +//!         t: T,
+>  //!     }
+>  //!     #[doc(hidden)]
+>  //!     impl<'__pin, T>
+> @@ -193,7 +199,7 @@
+>  //!
+>  //! Here is the impl on `Bar` defining the new function:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! impl<T> Bar<T> {
+>  //!     fn new(t: T) -> impl PinInit<Self> {
+>  //!         pin_init!(Self { t, x: 0 })
+> @@ -203,7 +209,7 @@
+>  //!
+>  //! This expands to the following code:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! impl<T> Bar<T> {
+>  //!     fn new(t: T) -> impl PinInit<Self> {
+>  //!         {
+> @@ -232,25 +238,31 @@
+>  //!                     // that will refer to this struct instead of the one defined above.
+>  //!                     struct __InitOk;
+>  //!                     // This is the expansion of `t,`, which is syntactic sugar for `t: t,`.
+> -//!                     unsafe { ::core::ptr::write(&raw mut (*slot).t, t) };
+> +//!                     unsafe { ::core::ptr::write(::core::addr_of_mut!((*slot).t), t) };
+>  //!                     // Since initialization could fail later (not in this case, since the error
+> -//!                     // type is `Infallible`) we will need to drop this field if it fails. This
+> -//!                     // `DropGuard` will drop the field when it gets dropped and has not yet
+> -//!                     // been forgotten. We make a reference to it, so users cannot `mem::forget`
+> -//!                     // it from the initializer, since the name is the same as the field.
+> +//!                     // type is `Infallible`) we will need to drop this field if there is an
+> +//!                     // error later. This `DropGuard` will drop the field when it gets dropped
+> +//!                     // and has not yet been forgotten. We make a reference to it, so users
+> +//!                     // cannot `mem::forget` it from the initializer, since the name is the same
+> +//!                     // as the field (including hygiene).
+>  //!                     let t = &unsafe {
+> -//!                         ::kernel::init::__internal::DropGuard::new(&raw mut (*slot).t)
+> +//!                         ::kernel::init::__internal::DropGuard::new(
+> +//!                             ::core::addr_of_mut!((*slot).t),
+> +//!                         )
+>  //!                     };
+>  //!                     // Expansion of `x: 0,`:
+>  //!                     // Since this can be an arbitrary expression we cannot place it inside of
+>  //!                     // the `unsafe` block, so we bind it here.
+>  //!                     let x = 0;
+> -//!                     unsafe { ::core::ptr::write(&raw mut (*slot).x, x) };
+> +//!                     unsafe { ::core::ptr::write(::core::addr_of_mut!((*slot).x), x) };
+> +//!                     // We again create a `DropGuard`.
+>  //!                     let x = &unsafe {
+> -//!                         ::kernel::init::__internal::DropGuard::new(&raw mut (*slot).x)
+> +//!                         ::kernel::init::__internal::DropGuard::new(
+> +//!                             ::core::addr_of_mut!((*slot).x),
+> +//!                         )
+>  //!                     };
+>  //!
+> -//!                     // Here we use the type checker to ensuer that every field has been
+> +//!                     // Here we use the type checker to ensure that every field has been
+>  //!                     // initialized exactly once, since this is `if false` it will never get
+>  //!                     // executed, but still type-checked.
+>  //!                     // Additionally we abuse `slot` to automatically infer the correct type for
+> @@ -272,7 +284,7 @@
+>  //!                         };
+>  //!                     }
+>  //!                     // Since initialization has successfully completed, we can now forget the
+> -//!                     // guards.
+> +//!                     // guards. This is not `mem::forget`, since we only have `&DropGuard`.
+>  //!                     unsafe { ::kernel::init::__internal::DropGuard::forget(t) };
+>  //!                     unsafe { ::kernel::init::__internal::DropGuard::forget(x) };
+>  //!                 }
+> @@ -280,7 +292,7 @@
+>  //!                 // `__InitOk` that we need to return.
+>  //!                 Ok(__InitOk)
+>  //!             });
+> -//!             // Change the return type of the closure.
+> +//!             // Change the return type from `__InitOk` to `()`.
+>  //!             let init = move |slot| -> ::core::result::Result<(), ::core::convert::Infallible> {
+>  //!                 init(slot).map(|__InitOk| ())
+>  //!             };
+> @@ -299,7 +311,7 @@
+>  //! Since we already took a look at `#[pin_data]` on `Bar`, this section will only explain the
+>  //! differences/new things in the expansion of the `Foo` definition:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! #[pin_data(PinnedDrop)]
+>  //! struct Foo {
+>  //!     a: usize,
+> @@ -310,7 +322,7 @@
+>  //!
+>  //! This expands to the following code:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! struct Foo {
+>  //!     a: usize,
+>  //!     b: Bar<u32>,
+> @@ -330,8 +342,6 @@
+>  //!         unsafe fn b<E>(
+>  //!             self,
+>  //!             slot: *mut Bar<u32>,
+> -//!             // Note that this is `PinInit` instead of `Init`, this is because `b` is
+> -//!             // structurally pinned, as marked by the `#[pin]` attribute.
+>  //!             init: impl ::kernel::init::PinInit<Bar<u32>, E>,
+>  //!         ) -> ::core::result::Result<(), E> {
+>  //!             unsafe { ::kernel::init::PinInit::__pinned_init(init, slot) }
+> @@ -359,14 +369,13 @@
+>  //!     struct __Unpin<'__pin> {
+>  //!         __phantom_pin: ::core::marker::PhantomData<fn(&'__pin ()) -> &'__pin ()>,
+>  //!         __phantom: ::core::marker::PhantomData<fn(Foo) -> Foo>,
+> -//!         // Since this field is `#[pin]`, it is listed here.
+>  //!         b: Bar<u32>,
+>  //!     }
+>  //!     #[doc(hidden)]
+>  //!     impl<'__pin> ::core::marker::Unpin for Foo where __Unpin<'__pin>: ::core::marker::Unpin {}
+>  //!     // Since we specified `PinnedDrop` as the argument to `#[pin_data]`, we expect `Foo` to
+>  //!     // implement `PinnedDrop`. Thus we do not need to prevent `Drop` implementations like
+> -//!     // before, instead we implement it here and delegate to `PinnedDrop`.
+> +//!     // before, instead we implement `Drop` here and delegate to `PinnedDrop`.
+>  //!     impl ::core::ops::Drop for Foo {
+>  //!         fn drop(&mut self) {
+>  //!             // Since we are getting dropped, no one else has a reference to `self` and thus we
+> @@ -388,7 +397,7 @@
+>  //!
+>  //! Here is the `PinnedDrop` impl for `Foo`:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! #[pinned_drop]
+>  //! impl PinnedDrop for Foo {
+>  //!     fn drop(self: Pin<&mut Self>) {
+> @@ -399,7 +408,7 @@
+>  //!
+>  //! This expands to the following code:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! // `unsafe`, full path and the token parameter are added, everything else stays the same.
+>  //! unsafe impl ::kernel::init::PinnedDrop for Foo {
+>  //!     fn drop(self: Pin<&mut Self>, _: ::kernel::init::__internal::OnlyCallFromDrop) {
+> @@ -410,10 +419,10 @@
+>  //!
+>  //! ## `pin_init!` on `Foo`
+>  //!
+> -//! Since we already took a look at `pin_init!` on `Bar`, this section will only explain the
+> -//! differences/new things in the expansion of `pin_init!` on `Foo`:
+> +//! Since we already took a look at `pin_init!` on `Bar`, this section will only show the expansion
+> +//! of `pin_init!` on `Foo`:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! let a = 42;
+>  //! let initializer = pin_init!(Foo {
+>  //!     a,
+> @@ -423,7 +432,7 @@
+>  //!
+>  //! This expands to the following code:
+>  //!
+> -//! ```rust
+> +//! ```rust,ignore
+>  //! let a = 42;
+>  //! let initializer = {
+>  //!     struct __InitOk;
+> @@ -438,13 +447,15 @@
+>  //!     >(data, move |slot| {
+>  //!         {
+>  //!             struct __InitOk;
+> -//!             unsafe { ::core::ptr::write(&raw mut (*slot).a, a) };
+> -//!             let a = &unsafe { ::kernel::init::__internal::DropGuard::new(&raw mut (*slot).a) };
+> +//!             unsafe { ::core::ptr::write(::core::addr_of_mut!((*slot).a), a) };
+> +//!             let a = &unsafe {
+> +//!                 ::kernel::init::__internal::DropGuard::new(::core::addr_of_mut!((*slot).a))
+> +//!             };
+>  //!             let b = Bar::new(36);
+> -//!             // Here we use `data` to access the correct field and require that `b` is of type
+> -//!             // `PinInit<Bar<u32>, Infallible>`.
+> -//!             unsafe { data.b(&raw mut (*slot).b, b)? };
+> -//!             let b = &unsafe { ::kernel::init::__internal::DropGuard::new(&raw mut (*slot).b) };
+> +//!             unsafe { data.b(::core::addr_of_mut!((*slot).b), b)? };
+> +//!             let b = &unsafe {
+> +//!                 ::kernel::init::__internal::DropGuard::new(::core::addr_of_mut!((*slot).b))
+> +//!             };
+>  //!
+>  //!             #[allow(unreachable_code, clippy::diverging_sub_expression)]
+>  //!             if false {
+> --
+> 2.40.0
+> 
+> 
 
- - make them non vendor trademark specific so it could be used by other =
-vendors for similar in the future.
- - move them out of the attributes folder as they seem a bad fit to me
-
-Thanks for all the insights - appreciated :)
-Mark
