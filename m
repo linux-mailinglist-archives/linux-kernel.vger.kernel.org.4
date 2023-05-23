@@ -2,266 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C84D70E441
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF14970E464
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237745AbjEWR4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S237911AbjEWR4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237781AbjEWR4H (ORCPT
+        with ESMTP id S237833AbjEWR4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:56:07 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690F5119
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:56:02 -0700 (PDT)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NHtiqO003481;
-        Tue, 23 May 2023 17:55:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=JPqBRTwMF5K9fet2RVsP7VHwBwl5+3VWF2K7lUEEQSk=;
- b=PPJjLqLTx9+yRi5LD23rdHP7y3oE7xOZFVaMWfqGOrtzPmqsMOmiCognJvEi1FW+/Z7l
- 37jBFVtVv5gpSD3O40DeXAzCu89WxUdPZ3UIUVxwhmLwEX9E882yLEBeKw6x4j4ChhOi
- P0s9Q3j0e/mtoR6zGiPSGKfXD9dqfPdF1ZTE35BsvIzu5vLwXGvG/8XeVzhplYtxu5sE
- H/kjhT7HiX4Qy1YRhETH2Dmyy6KUMabcMSL7sHCScY/O8cj7Tc24jgnBxPZQmXN5vEMn
- uvgGC31e2ugJlyimwWIHfRrTl0nCw0ET2Kwcrp7fKTjGF1W5wOUR7JUiTGrL18AQmmaE zw== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp5bntjv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 May 2023 17:55:44 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34NHNKcL028926;
-        Tue, 23 May 2023 17:55:44 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk2b6bux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 May 2023 17:55:43 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dlpXQFpe/muFnPzPYWMXOdXKpDybdG6wgMJzBaUNH8bK5YuZw0W2PeEMnBYuMQenAF2GlSlsPGafbOBAxABHpdhElLki1WfKONhDL6vCmdqxSMI8PhzlolgYxBHgxX3yEHoKE2B7SqfprHDh0Ws+FLPj3DIg0VOic6QGpQUx87HD7bkrI11OYSxHzUaHaRok051dqW7A+zfOroqu9SbfI0rI0EmCgwu5rOdgAiD0OhD/BnEhTdZLXAs9kOVYIBBw54I31JWA97gRT8yWr5WQ9sK59VwrWzZKcXRU6ixe+jwHtfeLxUgqPD24fFRCIAyUPnMd/vqeLlAWNnZaE3CzbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JPqBRTwMF5K9fet2RVsP7VHwBwl5+3VWF2K7lUEEQSk=;
- b=FPWN/nuv8Ry9IvYOCdNrIi5UF7AtlDM67EbjAVi9aezf4Fkq6ufu0EFLjWjVKKfjJ0BgTXHtTtISN9pnthIMlYVaBqLRA3PDEedHAC42LjK8PMmAkStfezprajepnzF8V8w/55lS9ffQhJrGOgIYFa4ADosy1Aqb212/PCG2JJnAlpotI5ltSLA5yVb2GpbuuVVTRTmGKrXwbOpWG0AG8zsEAPB4CJcbTXc4Uv+ZZcM5jcP4IQH0FeinKEmlrPK8ygRE4vbIRXwhwQlej341v/+eAj3klUIQYAUVH6vBNAClDDLUvxgzF4eyjQQoLX2xzVvoBydJluAO6mUZV/9axw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JPqBRTwMF5K9fet2RVsP7VHwBwl5+3VWF2K7lUEEQSk=;
- b=Rzq1GzMAZc7QaGao6KuwVLx97mh40RFA3cTzAqN3YNOMLIqTeEsPkY6hNPqvchneQjhMa3LWNsDeaaOplRrZULujPz0k+Y+yACnwHb6cbYaig34bhRHpX38QidAzLQP9G5ssbwWU22kFSk0cd63Ulv7HB9EdglXXLQkporV//Tg=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by SJ0PR10MB4527.namprd10.prod.outlook.com (2603:10b6:a03:2d5::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 17:55:41 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6411.027; Tue, 23 May 2023
- 17:55:41 +0000
-Date:   Tue, 23 May 2023 13:55:38 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
-Subject: Re: [PATCH v3 07/10] maple_tree: Add comments and some minor
- cleanups to mas_wr_append()
-Message-ID: <20230523175538.etpthyoq3oqtslbo@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org
-References: <20230522050656.96215-1-zhangpeng.00@bytedance.com>
- <20230522050656.96215-8-zhangpeng.00@bytedance.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522050656.96215-8-zhangpeng.00@bytedance.com>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT4PR01CA0094.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:ff::8) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        Tue, 23 May 2023 13:56:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316E4C5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684864566;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4j97EwXZbpGeydneOiYzyqIdUbofrkUoFZFV5L4oKTY=;
+        b=E/XaKhBlcT6aLG9xJf/sQTdB/WrgEjssTGBDZE+oA5gyHE/jEgwBewazRLnYz7IFC9LlNa
+        Rq4f+sfQ4NBsMClCEyfbqfzhFIdfPMuVniV/l8lB6f+YodCr3e1k2QK9i6w8DNt5EbUaxh
+        Yu3ttVf/MUCfSOlN6rZUz8hMfrD74To=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-93-CX6PDZAuNGWMjJetbYbzbg-1; Tue, 23 May 2023 13:56:05 -0400
+X-MC-Unique: CX6PDZAuNGWMjJetbYbzbg-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-513ddd8e39cso104473a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:56:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684864564; x=1687456564;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4j97EwXZbpGeydneOiYzyqIdUbofrkUoFZFV5L4oKTY=;
+        b=I466cbW8RD0cnrYD2mJuRgzydiC7A/9KDTBPUajsQXz8Et5+NXznPaHAKa01pfM8BD
+         W5A3ZVMDLrCzOJzJHvIXZe9HboVM2wRaxiQx82yKCOAASEuPUjwgZSABIYOeu6pCnWU5
+         E09QS4k/EalDfwQcxrUqM92hrgj5Mf6X2L82HsWJclc77lBPs2gVca0Od/lq5TsAqrck
+         0dR2LIm2vP/GaM8AapSAd3wEMoLe/ajnxGNb/vaE+bc28s6Ng77j62dAz1qdgy0FppJe
+         tiYIsZx01iCvi3HW6q0FPOngBOSoiuL8/LJUfu7i5JIWPcsI7V9qQNUrODHhQXG4FKne
+         iLDQ==
+X-Gm-Message-State: AC+VfDz6RkmuIPIv4lf1jusVg/NRfXNn97JDycj+LEjtFCcxyJwXy/Jq
+        FbMfS1K2zqL2hSY7l8pAtO78zNgR9ixaRm8Stf5ziapyzyeJ6LBQJUAH3KiGm1GXgvsbb73POhf
+        5DYl/jDkG3+lFhzCArQ0pdHsn
+X-Received: by 2002:aa7:d397:0:b0:50b:d270:6b6f with SMTP id x23-20020aa7d397000000b0050bd2706b6fmr13033730edq.4.1684864564241;
+        Tue, 23 May 2023 10:56:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7OjC/WBaUIOdcO5ca/pkGTV8HRMGItXeHTCT10i9NO7a8kOkcBihYbR/ZpPyvYpATJ1Ey90w==
+X-Received: by 2002:aa7:d397:0:b0:50b:d270:6b6f with SMTP id x23-20020aa7d397000000b0050bd2706b6fmr13033713edq.4.1684864563964;
+        Tue, 23 May 2023 10:56:03 -0700 (PDT)
+Received: from [192.168.0.107] (ip4-83-240-118-160.cust.nbox.cz. [83.240.118.160])
+        by smtp.gmail.com with ESMTPSA id c9-20020aa7c989000000b0050b2f588db6sm4190270edt.16.2023.05.23.10.56.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 10:56:03 -0700 (PDT)
+Message-ID: <461c6576-71df-c16a-3c4f-4691ae84064f@redhat.com>
+Date:   Tue, 23 May 2023 19:56:02 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|SJ0PR10MB4527:EE_
-X-MS-Office365-Filtering-Correlation-Id: d7524661-c981-4a8a-bff5-08db5bb6ec2b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LjQQ3BjR+fm2gbD9AdDOiuat8iuFZMLheKjCmHSxWsDZFISjSYP5wsRwXWqb2HCN7pBx+8cGbe0JDRVf03eH2ymhNrdsD8LbIqcEI/mjSpKNPEJeYVo+c827FAY01M9vOeM17alSqdA3z+oU2rL1J7HeYpul4T7BdMFX5lsQqqp3XukGn8fOSeFLEkXpxVzrlv34Riek0LTbn8TlxQsUeF/BD+rJ210NgNhophC9F3mAgJeFb7csh/b0PHsK9gIfW/bN/SHOImo5sraJIr2ZAwfeabr4Rpv/qLZ7nfirpNhZpL6UXBlIDbeDglGXA466GU/0CzRVlh/kzC+JYkqcrR+xjfTK25XZ14A5xq2cedcr5wqLh+UuqwwGJU/YpFA6mOmPDZtnN3SRNEvmAWuQKUHy4Pc1y1wZA/qVmh5bYm46o9yZadMb0DGbHW4Jk55RA53R5fs8Zf9GaYeBr560qYACtW224Swj3YW+3Cou0GkqUZzv7AQkksaBSlkEY9ijoScIFo/Fto1fycU0cFKw3aChOGIj96JUjsFoYJM+wTcfQxe9c5T0SE0zHCFgYDJC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199021)(2906002)(5660300002)(8676002)(8936002)(41300700001)(316002)(66556008)(66476007)(66946007)(4326008)(478600001)(6916009)(6486002)(6666004)(6512007)(6506007)(1076003)(9686003)(26005)(38100700002)(86362001)(33716001)(83380400001)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D/yu6ngORBZ/Z6M/3d1hh+qbWKxxYu5MGZnGF6pW5UBPEbM2ajeZtUktH7nk?=
- =?us-ascii?Q?eybiLCDqyuD9MeGimY1oNWGSQceq77HGBhJLGJWs3z/HR6HvFuinkwDm3stP?=
- =?us-ascii?Q?ChkmdNVl8XJUjXCd3BCXOszemTLoTmdtwYhGznXz1Z6OLGR6Z8q8ozKdNHmb?=
- =?us-ascii?Q?K0imoGv0fXR/E6qtI8Q+rX9DlPUV1eTHbPPB0NdK1DwC5IO/9kLWHmvtzfcQ?=
- =?us-ascii?Q?XMmmcBzRnJdHjCiUHvNwa9iV2GZbL3kDaqTQ7/+Yl2QIOF30ykaJT4Zryrmy?=
- =?us-ascii?Q?t5E+G/tpaI3kJVJxT6UpOOhbqH8JbXAUqx1q5xHVoKP9mnBNy/+ddbnXSN63?=
- =?us-ascii?Q?Jk1vG0hzd3obm9qPaqrvphspIkU0fYxiOv/WNlTTXL7mFnSszsgiHZBIZ831?=
- =?us-ascii?Q?WmaNBWsF2jckpXZk5N0Jucs2LbaNaD3ldLnRkQtv1ZDhHpZWbq6IXpOfGZg7?=
- =?us-ascii?Q?qHOvNx7MeVFjEeH/RS0cr3/wfpq6QEIva9Q2IimFb0m58uOtmJARV5QxqXBR?=
- =?us-ascii?Q?Or9m8kLphRRr0KX/1vNHukUdKBggdZFCi74racgW6+B2azZ4tVe8QHorNZTz?=
- =?us-ascii?Q?igwqWRVZgi1HY1788bwzLxO6KysJhEciHRjQMKRlDH+1Sv+BN0S83rrZWs2K?=
- =?us-ascii?Q?K8NTSO9LyUCe34v/6P8PSvPch0umipTHbNgFqjcEpDKANovdWN4bVJIFUoBU?=
- =?us-ascii?Q?+3S/1bWw0hhMVAVZ8eHwvJfhwnUcZW3Iy4TzBYSBomMu4gnlp3oVAWzmwYai?=
- =?us-ascii?Q?hYk3SGV5PxT1CnCdfI+gnkOVgVSPHa8FJVw8Zf0NjJBhh0GFViIk2+paar8x?=
- =?us-ascii?Q?dYH8uRi4qFsRzkpeCv2hO0ov2WfcGCKveJdB6iod1lTTM1R79KLoygsR+NYw?=
- =?us-ascii?Q?u2x6ZMXN0zI09nez2HqhPNcnl4O5bEWT3H/pMb4MaXFOh8baheJCI5y+eXj4?=
- =?us-ascii?Q?HocjvEnxIMB1nXGLMqap9kzgqhNrsQnlQ1/iKUeCFLIb78JJ8wse1iqWNVAS?=
- =?us-ascii?Q?wiVL5bknm8Z2JXjLe8nPnkyqPZFPek14wS0JuwIHvBF4zTw8PoH5Y0c8hOsY?=
- =?us-ascii?Q?Ii2HBIDSeFeGcZWXZG3z51ZcZ0X8lt+SHVs35xe3DpER1yG9l7EnFpg+j/Nm?=
- =?us-ascii?Q?vs8nsD7LVzePt6mFpRXD5tGJ/tnCt/R1Ai1dFbAGIydoZ4044PwK3Ba9Da5U?=
- =?us-ascii?Q?lUnPfisO4EbihqJ8UNyH4eBCt3Est/2lb3IBLnkKTDtz6FLBmEwtSTVfvsmF?=
- =?us-ascii?Q?sjMW3+IXUcGJHsDRqCKNHvLgY8UMSKk2zpGFxxQ0qartQSpXipMiovlA/F7I?=
- =?us-ascii?Q?e6eNfkaep75960knPNZ17MCkvzpMCJo/bbsJqLJH4Wxd936nybHZGpasliYD?=
- =?us-ascii?Q?rI8S+LQHIXoD1AZtLMSlVrrVLYxapndC+XV9lsS0FQwjKsWWf+n36pxd3VdL?=
- =?us-ascii?Q?uhoC/IUflXplhFXcGWIP8oHXvC3YyeOAHRJzLV4LbdaiVlv1XGOq/dcb4jDP?=
- =?us-ascii?Q?TQhceyrOCNXsipirL/tJOic0DDuAr2zusgQwRktEGW4zEortiG6nmKtyILva?=
- =?us-ascii?Q?HuH/3jPGNmUYUEgk0kc1wZMc0F1Se9X33UsVtmE0Jt6S55cAz8gY/sY3Jzps?=
- =?us-ascii?Q?Mw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?dJdq9Ijlo1+9hO1el1oJ+Q9tlVjS1Q061BcDHS0zws9cZim4HcBTQnolYIU7?=
- =?us-ascii?Q?Y6tg+llQnMu2+Yz3UfCEq8SOwlzHwCLPw0ZVyWWpSL8zzWS/V7Aqu2Ir+Ddx?=
- =?us-ascii?Q?pkPa74M8nx6fYsHOdXvXb3l5Z8vULjNLr0D8bFMmAojzY31rosUG8sVJ+QDd?=
- =?us-ascii?Q?K6TMZ8jy2pxvkx2PjGhNc7h4TTHI7Y0nx8Y3aB5V5mIzHFU7j9s8M5cWA9dK?=
- =?us-ascii?Q?4OLZlmO7GieuAlhSmAcUJ2YExX+nBsgucwbNXwE2DPfFbVkS7dbOHTHvaPqt?=
- =?us-ascii?Q?tEmMHr943CwYSm456N8gMqge3CxYgetF0FJ4+aQX/aTWt/N/tx+RyOydrs2R?=
- =?us-ascii?Q?4fPPAytJhuDNtc37rHKvOIi/istgam/9toVBV3lzqQpsAkF1WnBf0/1zuBph?=
- =?us-ascii?Q?66ut/LdYy5HSyUJ6zuZUKm1OPlnozxWEa8NWI1DAtg1ntk7Qwv9qVATJcyEs?=
- =?us-ascii?Q?PJ1FMSOPojNMgxADvyxc+st/I4mJf5N4sRubAwiN6fNb0KzUn0pXk57J8ZS6?=
- =?us-ascii?Q?S75CNX5/zIMfOD/hgqIawaWuoiCmV+ZIUg4O/JQsmvAOq082NSKEPkNAubpV?=
- =?us-ascii?Q?fTe0uBNRb0eDyJAvKgQAhdSJiNIrMX4+y/jlAszwIUMFnJ043c2F+8smFxyB?=
- =?us-ascii?Q?3h9X9xWtqT8qcdNGCkBGtxkONcLr3poPx4M2TJ7JXm7Gq5yzhNlMSiYSDUvk?=
- =?us-ascii?Q?ho7L7rNewm2suI3Bap9X6Tp7rZ5lDfHVkL8JgXJjik4m+hcikeSnQ9IkeNds?=
- =?us-ascii?Q?6gcwD1aL0QQ7ra+5PKZKQ6maEF7c8xLWimiCu1YxO/pS1QH9oY6J90+PI9bR?=
- =?us-ascii?Q?SzI+gJb31S3ePdULmJX6kPKSUlWGJWFX/bou0ojZiRG2JUJqi/lIEB0rcCRj?=
- =?us-ascii?Q?lru/3O+9VGjErMXyWXR54SGRwitUwG5bm0ONNUd0GgGF1fILcnuz0znAzSgw?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7524661-c981-4a8a-bff5-08db5bb6ec2b
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 17:55:40.9389
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d3AemTqvoAFf4gtm4OxchD0Q/LhaVnUpI0WssSJdjFCGudmnS75b5JlL0Qx1uNr+TKQlA/SnDDZMxAAmqn4aGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4527
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_11,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230144
-X-Proofpoint-GUID: SQVt8MfREvyAUmUVlbsTpM7yTqvTC2UW
-X-Proofpoint-ORIG-GUID: SQVt8MfREvyAUmUVlbsTpM7yTqvTC2UW
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drivers: mpt3sas: mpt3sas_debugfs: return value check of
+ `mpt3sas_debugfs_root`
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, Jing Xu <U202112064@hust.edu.cn>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230423122535.31019-1-U202112064@hust.edu.cn>
+ <6e69b57c-80ae-8b6e-cb5f-9e05da46ecd6@redhat.com>
+ <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
+ <b7154e2c-0438-87d1-9edc-7eb1aad40cd1@hust.edu.cn>
+ <81d236bb-3913-4eef-bf71-6d17535d6d79@kili.mountain>
+ <892bc614-9e2e-904b-29e0-62daeb855f79@redhat.com>
+ <3c4b372f-db4b-43b4-b5ab-7f4860cf6f20@kili.mountain>
+From:   Tomas Henzl <thenzl@redhat.com>
+In-Reply-To: <3c4b372f-db4b-43b4-b5ab-7f4860cf6f20@kili.mountain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Peng Zhang <zhangpeng.00@bytedance.com> [230522 01:07]:
-> Add comment for mas_wr_append(), move mas_update_gap() into
-> mas_wr_append(), and other cleanups to make mas_wr_modify() cleaner.
+On 5/23/23 16:57, Dan Carpenter wrote:
+> On Tue, May 23, 2023 at 04:48:12PM +0200, Tomas Henzl wrote:
+>> On 5/8/23 16:38, Dan Carpenter wrote:
+>>> On Mon, May 08, 2023 at 09:40:41PM +0800, Dongliang Mu wrote:
+>>>>>>> diff --git a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+>>>>>>> index a6ab1db81167..c92e08c130b9 100644
+>>>>>>> --- a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+>>>>>>> +++ b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+>>>>>>> @@ -99,8 +99,6 @@ static const struct file_operations mpt3sas_debugfs_iocdump_fops = {
+>>>>>>>   void mpt3sas_init_debugfs(void)
+>>>>>>>   {
+>>>>>>>   	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
+>>>>>>> -	if (!mpt3sas_debugfs_root)
+>>>>>>> -		pr_info("mpt3sas: Cannot create debugfs root\n");
+>>>>>> Hi Jing,
+>>>>>> most drivers just ignore the return value but here the author wanted to
+>>>>>> have the information logged.
+>>>>>> Can you instead of removing the message modify the 'if' condition so it
+>>>>>> suits the author's intention?
+>>>>>
+>>>>> This code was always just wrong.
+>>>>>
+>>>>> The history of this is slightly complicated and boring.  These days it's
+>>>>> harmless dead code so I guess it's less bad than before.
+>>>>
+>>>> Hi Dan and Tomas,
+>>>>
+>>>> Any conclusion about this patch? The student Jing Xu is not sure about how
+>>>> to revise this patch.
+>>>
+>>> The correct fix is to delete the code.
+>>>
+>>> Debugfs code has error checking built in and was never supposed to be
+>>> checked for errors in normal driver code.
+>>>
+>>> Originally, debugfs returned a mix of error pointers and NULL.  In the
+>>> kernel, when you have a mix of error pointers and NULL, then the NULL
+>>> means that the feature has been disabled deliberately.  It's not an
+>>> error, we should not print a message.
+>>>
+>>> So a different, correct-ish way to write write debugfs error handling
+>>> was to say:
+>>>
+>>> 	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
+>>> 	if (IS_ERR(mpt3sas_debugfs_root))
+>>> 		return PTR_ERR(mpt3sas_debugfs_root);
+>> I'm fine with this as well, I could wish we get a fix for the exact same
+>> case of debugfs_create_dir in mpt3sas_setup_debugfs and ideally all the
+>> debugfs_create* in  mpt3sas_debugfs.c in a single patch. But this patch
+>> is ok even if that wasn't possible.
+>> tomash
 > 
-> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+> No, you didn't read until the end.  That will break the driver badly.
+> 
+> This *used* to be a correct-ish way that *used* to work but it was never
+> the what Greg wanted.  So to discourage people from doing it, Greg made
+> it *impossible* to check for if debugfs has failed.  Literally, the only
+> correct thing to do now is to delete the debugfs checking.
 
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+I put my comment in on a wrong place I meant the original patch without
+the check, sorry for the confusion. The only thing I'd like to see is to
+have corrected all debugfs_create* and that is also optional.
 
-> ---
->  lib/maple_tree.c | 47 +++++++++++++++++++++++------------------------
->  1 file changed, 23 insertions(+), 24 deletions(-)
 > 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 0550a07355d7..afbfdcdde5db 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -4312,6 +4312,12 @@ static inline unsigned char mas_wr_new_end(struct ma_wr_state *wr_mas)
->  	return new_end;
->  }
->  
-> +/*
-> + * mas_wr_append: Attempt to append
-> + * @wr_mas: the maple write state
-> + *
-> + * Return: True if appended, false otherwise
-> + */
->  static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
->  {
->  	unsigned char end = wr_mas->node_end;
-> @@ -4319,34 +4325,30 @@ static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
->  	struct ma_state *mas = wr_mas->mas;
->  	unsigned char node_pivots = mt_pivots[wr_mas->type];
->  
-> -	if ((mas->index != wr_mas->r_min) && (mas->last == wr_mas->r_max)) {
-> -		if (new_end < node_pivots)
-> -			wr_mas->pivots[new_end] = wr_mas->pivots[end];
-> +	if (mas->offset != wr_mas->node_end)
-> +		return false;
->  
-> -		if (new_end < node_pivots)
-> -			ma_set_meta(wr_mas->node, maple_leaf_64, 0, new_end);
-> +	if (new_end < node_pivots) {
-> +		wr_mas->pivots[new_end] = wr_mas->pivots[end];
-> +		ma_set_meta(wr_mas->node, maple_leaf_64, 0, new_end);
-> +	}
->  
-> +	if (mas->last == wr_mas->r_max) {
-> +		/* Append to end of range */
->  		rcu_assign_pointer(wr_mas->slots[new_end], wr_mas->entry);
-> -		mas->offset = new_end;
->  		wr_mas->pivots[end] = mas->index - 1;
-> -
-> -		return true;
-> -	}
-> -
-> -	if ((mas->index == wr_mas->r_min) && (mas->last < wr_mas->r_max)) {
-> -		if (new_end < node_pivots)
-> -			wr_mas->pivots[new_end] = wr_mas->pivots[end];
-> -
-> +		mas->offset = new_end;
-> +	} else {
-> +		/* Append to start of range */
->  		rcu_assign_pointer(wr_mas->slots[new_end], wr_mas->content);
-> -		if (new_end < node_pivots)
-> -			ma_set_meta(wr_mas->node, maple_leaf_64, 0, new_end);
-> -
->  		wr_mas->pivots[end] = mas->last;
->  		rcu_assign_pointer(wr_mas->slots[end], wr_mas->entry);
-> -		return true;
->  	}
->  
-> -	return false;
-> +	if (!wr_mas->content || !wr_mas->entry)
-> +		mas_update_gap(mas);
-> +
-> +	return  true;
->  }
->  
->  /*
-> @@ -4386,12 +4388,9 @@ static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
->  	if (new_end >= mt_slots[wr_mas->type])
->  		goto slow_path;
->  
-> -	if (wr_mas->entry && (wr_mas->node_end < mt_slots[wr_mas->type] - 1) &&
-> -	    (mas->offset == wr_mas->node_end) && mas_wr_append(wr_mas)) {
-> -		if (!wr_mas->content || !wr_mas->entry)
-> -			mas_update_gap(mas);
-> +	/* Attempt to append */
-> +	if (new_end == wr_mas->node_end + 1 && mas_wr_append(wr_mas))
->  		return;
-> -	}
->  
->  	if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
->  		return;
-> -- 
-> 2.20.1
+> regards,
+> dan carpenter
 > 
+> 
+
