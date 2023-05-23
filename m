@@ -2,133 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DB470E94A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B91370E94E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbjEWWxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        id S238626AbjEWWxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjEWWx2 (ORCPT
+        with ESMTP id S238619AbjEWWxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:53:28 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D2EDA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:53:27 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ae6dce19f7so1718095ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:53:27 -0700 (PDT)
+        Tue, 23 May 2023 18:53:51 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B84FC5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:53:48 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64f48625615so72640b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:53:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684882407; x=1687474407;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D4PhmKVouafwl2lkI37bc+Y4HJ74bZ8XIgMqc4mDI8U=;
-        b=ydqarSiJJg8/qlfiybY04O3RO4ik8W1MGJy8LAFW2WWKhnJjVg/kliO9Csr6ezjTxQ
-         CCr+qRpaopVTGsAn0f3l5dbMCo+p2W+aPNeaBhEtfP5bJ9Mjgnc5fTAqVn4RIB2q1YN9
-         T4tabZcuFaOoU/7IsAEwcXQPtLoiHvECcuXyTIfNzB2W2sq5mFSLbAYLnz/KQMv1ljoG
-         wZuSL7Bbl0DjHi49APaxTV/JWMjZM3CCRFDqQhqEu4zJlEZBtHCtHARwqCzUqKDFWYgN
-         xW1Z5cvUGTnV+ZYWY/MRBI4erUVV8hNCo5i56rdI6V8+qX0d2IZFSvvBWq9u+nWEMdhO
-         Wyig==
+        d=gmail.com; s=20221208; t=1684882428; x=1687474428;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dzyaEdd/JqPFdlbr4P5lD8SJNFEFOGGYtrKk5EhfcwE=;
+        b=cJ9/TcBhxIj9lFFCTweyLaXwUwkDLt4FKgqqFc6IOluWlbYQkLefOCulf0oAMe6LnY
+         nIE/jFemSdWsEOihT8TAkYFRcDAA5Z0vjIW0OrZ/lL/YUraMlprdLjoyVFDyxUHA3VmJ
+         zFiMFbIOQoiHxy1zrNa5npE/6/2z0vAAHZ5TY4D1qEKrJwOTXswOhZMaOiPDgWOmamG2
+         9iZHbcjLwWPtb/2/XR9otOys1/M3+rBhO/wGSpl6mFFY2h7eo5aHJk1hNdh8eOW2j67D
+         5uxpKnicGNoLOGqgC32O0oYVBs+Kzn7EeT1Np51YR/liWQKN2nQDUoYD+iUQ42OIFZTT
+         /DLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684882407; x=1687474407;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D4PhmKVouafwl2lkI37bc+Y4HJ74bZ8XIgMqc4mDI8U=;
-        b=XewcIuEV0UYX0yebQ50tsiuNzXs+ZmbkDlqoHT0u8XoJSFgVXSfCLaO3zyt2mhfRDS
-         mQpCFHieVc1p4SH+OhWRzy68ULrqA2IhUEuKQEZN1N8YoQZrsTJ0+/4i5QTE4gCFpgfc
-         oJ2FPPJrPu+lNlhJLhDJbKNdlRxpto9kZs38qN+YIQTQOQw5EziV2g61m2nmx5WoZsTR
-         YGBm41samqYM9mshBc7jpJbFbSdC4LaiXuONeFIAqNAz/Gk/PWmNNoKx6+vY4BLPNlA0
-         0x6Zms7j4KjyuAspk9EXOW2J6YpFMQD9yriNZK5Knviml0Xuix+A/2sr/8OtKacMjt0M
-         nFog==
-X-Gm-Message-State: AC+VfDy8bwbXxZfLNWnfw0nS0ipw2ld5Q+iovE5mo9jH2HezJywxXcAl
-        gkex5V8T9gUBI1/BsGzbcucDuQ==
-X-Google-Smtp-Source: ACHHUZ4rf3ZnipqrpeU5LtwMsMVWiU9amtx3ykAwdeSvQFidX6a1jAjFyPwJGzq92rRNbryEDFU+Kg==
-X-Received: by 2002:a17:902:d50e:b0:1ae:6720:8e01 with SMTP id b14-20020a170902d50e00b001ae67208e01mr17699251plg.20.1684882407345;
-        Tue, 23 May 2023 15:53:27 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id u3-20020a170902e80300b001a682a195basm7284710plg.28.2023.05.23.15.53.26
+        d=1e100.net; s=20221208; t=1684882428; x=1687474428;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dzyaEdd/JqPFdlbr4P5lD8SJNFEFOGGYtrKk5EhfcwE=;
+        b=l1j/0f3gsD5DvuqPosMrQeiDsTLOZTO7EVHqpccUonWxNKhLse9FpKPU/nxkfUsDxx
+         Om6C/OqO0g3C41fDZHx7wP1l8apH1d1RrcpYb31E7xLjm11hJHO5ms9/jPGN2qG8P+yS
+         67+qUnS2Istz9wtx9PutM+Qoq0MEhgO+z02lQrRkUrPXajDudEfAJ01Do3UMYQNsXAgp
+         W2JxfLS7GPr0bu8EwIkAQDnooD0V62E0kynJvBorZTayM8lI+5l4C1IdvRQ1x1rxxhF0
+         QC4uY6a7jis0temXyxpcKFr2kmzIxHqTqpnNWYOvGAf4pb/Qav3mS3PQuwF7Q1LLLHO9
+         vetg==
+X-Gm-Message-State: AC+VfDxxV59BptQDanIGeMj8NhMbnk6C0E7iLHHPQGKLwOtpu8OXdqcn
+        CLqBMlo2qOguPqwqdDawdHo=
+X-Google-Smtp-Source: ACHHUZ728+Nnl4PPO5tB1/wctSVh7SxxOLII12WRy5EBIrkEoseUDiTO3WoKmZyv4E/fCCAY5BBz1Q==
+X-Received: by 2002:a05:6a20:3d95:b0:105:66d3:854d with SMTP id s21-20020a056a203d9500b0010566d3854dmr13269686pzi.6.1684882427464;
+        Tue, 23 May 2023 15:53:47 -0700 (PDT)
+Received: from olv-ct-22.c.googlers.com.com (217.108.125.34.bc.googleusercontent.com. [34.125.108.217])
+        by smtp.gmail.com with ESMTPSA id 23-20020aa79157000000b0064d681c753csm1670525pfi.40.2023.05.23.15.53.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 15:53:26 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q1asc-0036XB-37;
-        Wed, 24 May 2023 08:53:22 +1000
-Date:   Wed, 24 May 2023 08:53:22 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: (subset) [PATCH 20/32] vfs: factor out inode hash head
- calculation
-Message-ID: <ZG1D4gvpkFjZVMcL@dread.disaster.area>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-21-kent.overstreet@linux.dev>
- <20230523-plakat-kleeblatt-007077ebabb6@brauner>
+        Tue, 23 May 2023 15:53:47 -0700 (PDT)
+From:   Chia-I Wu <olvaffe@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Mukul Joshi <mukul.joshi@amd.com>,
+        Danijel Slivka <danijel.slivka@amd.com>,
+        Jammy Zhou <Jammy.Zhou@amd.com>, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] amdgpu: validate drm_amdgpu_gem_va addrs
+Date:   Tue, 23 May 2023 15:53:23 -0700
+Message-ID: <20230523225336.2642008-1-olvaffe@gmail.com>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523-plakat-kleeblatt-007077ebabb6@brauner>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 11:27:06AM +0200, Christian Brauner wrote:
-> On Tue, 09 May 2023 12:56:45 -0400, Kent Overstreet wrote:
-> > In preparation for changing the inode hash table implementation.
-> >
-> >
-> 
-> This is interesting completely independent of bcachefs so we should give
-> it some testing.
-> 
-> ---
-> 
-> Applied to the vfs.unstable.inode-hash branch of the vfs/vfs.git tree.
-> Patches in the vfs.unstable.inode-hash branch should appear in linux-next soon.
-> 
-> Please report any outstanding bugs that were missed during review in a
-> new review to the original patch series allowing us to drop it.
-> 
-> It's encouraged to provide Acked-bys and Reviewed-bys even though the
-> patch has now been applied. If possible patch trailers will be updated.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-> branch: vfs.unstable.inode-hash
-> 
-> [20/32] vfs: factor out inode hash head calculation
->         https://git.kernel.org/vfs/vfs/c/b54a4516146d
+Validate drm_amdgpu_gem_va addrs in amdgpu_gem_va_ioctl.
+amdgpu_vm_bo_replace_map no longer needs to validate (and its
+validations were insufficient either).  amdgpu_vm_bo_map has internal
+users and its validations are kept.
 
-Hi Christian - I suspect you should pull the latest version of these
-patches from:
+This is motivated by OOB access in amdgpu_vm_update_range when
+offset_in_bo+map_size overflows.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/dgc/linux-xfs.git vfs-scale
+Userspace (radeonsi and radv) seems fine as well.
 
-The commit messages are more recent and complete, and I've been
-testing the branch in all my test kernels since 6.4-rc1 without
-issues.
+v2: keep the validations in amdgpu_vm_bo_map
 
-There's also the dlist-lock stuff for avoiding s_inode_list_lock
-contention in that branch. Once the global hash lock is removed,
-the s_inode_list_lock is the only global lock in the inode
-instantiation and reclaim paths. It nests inside the hash locks, so
-all the contention is currently taken on the hash locks - remove the
-global hash locks and we just contend on the next global cache
-line and the workload doesn't go any faster.
+Fixes: 9f7eb5367d00 ("drm/amdgpu: actually use the VM map parameters")
+Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c | 15 +++++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c  |  8 +-------
+ 2 files changed, 16 insertions(+), 7 deletions(-)
 
-i.e. to see the full benefit of the inode hash lock contention
-reduction, we also need the sb->s_inode_list_lock contention to be
-fixed....
-
-Cheers,
-
-Dave.
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+index d8e683688daab..36d5adfdf0f69 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+@@ -681,6 +681,21 @@ int amdgpu_gem_va_ioctl(struct drm_device *dev, void *data,
+ 	uint64_t vm_size;
+ 	int r = 0;
+ 
++	if (args->va_address & ~PAGE_MASK || args->offset_in_bo & ~PAGE_MASK ||
++	    args->map_size & ~PAGE_MASK) {
++		dev_dbg(dev->dev, "unaligned va_address 0x%LX, offset_in_bo 0x%LX, or map_size 0x%LX\n",
++			args->va_address, args->offset_in_bo, args->map_size);
++		return -EINVAL;
++	}
++
++	if (args->map_size == 0 ||
++	    args->va_address + args->map_size < args->va_address ||
++	    args->offset_in_bo + args->map_size < args->offset_in_bo) {
++		dev_dbg(dev->dev, "invalid map_size 0x%LX (va_address 0x%LX, offset_in_bo 0x%LX)\n",
++			args->map_size, args->va_address, args->offset_in_bo);
++		return -EINVAL;
++	}
++
+ 	if (args->va_address < AMDGPU_VA_RESERVED_SIZE) {
+ 		dev_dbg(dev->dev,
+ 			"va_address 0x%LX is in reserved area 0x%LX\n",
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+index b9441ab457ea7..6307baaa136cf 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+@@ -1501,15 +1501,9 @@ int amdgpu_vm_bo_replace_map(struct amdgpu_device *adev,
+ 	uint64_t eaddr;
+ 	int r;
+ 
+-	/* validate the parameters */
+-	if (saddr & ~PAGE_MASK || offset & ~PAGE_MASK ||
+-	    size == 0 || size & ~PAGE_MASK)
+-		return -EINVAL;
+-
+ 	/* make sure object fit at this offset */
+ 	eaddr = saddr + size - 1;
+-	if (saddr >= eaddr ||
+-	    (bo && offset + size > amdgpu_bo_size(bo)) ||
++	if ((bo && offset + size > amdgpu_bo_size(bo)) ||
+ 	    (eaddr >= adev->vm_manager.max_pfn << AMDGPU_GPU_PAGE_SHIFT))
+ 		return -EINVAL;
+ 
 -- 
-Dave Chinner
-david@fromorbit.com
+2.40.1.698.g37aff9b760-goog
+
