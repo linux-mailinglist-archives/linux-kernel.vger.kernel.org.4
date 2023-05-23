@@ -2,163 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750E970E75C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A113E70E766
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234176AbjEWVaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
+        id S238605AbjEWVdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238587AbjEWVaN (ORCPT
+        with ESMTP id S230142AbjEWVdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:30:13 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1B718F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:30:11 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f38a7c5d45so25425371cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684877410; x=1687469410;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=12a8TVZQvjkkyWtI7fz8x1oDJA/k8YRY6ApQKDzedDE=;
-        b=i5moAtbaux+oKTRJvt8kgT2kh9lY+QtUnf5dOM8p9NVz4BW7Jbvr/60GqaqzzqW91O
-         ciN7S77mH1rmkRF+C0oA2vYi02ye9vfNbVpAmFoKiPBeORYUuzHCIKrCwltxv5szNa+B
-         2OQBuSzBN/s/EG4L6EegcVwP1XVnCnWc1EAQNkV5cI+Sz7UdfWpertNCSdk1DfxA02R4
-         Ky5c0TpQcbqG4a8Q1xOvmGokmJMDow7bLEH67Ow78PcsGt+TgIEK+/XGezREYGbPWYac
-         m1qKMHu+hz4+FsbCHOWFJiYEEn37+QHR3z+Uoi88pXSBgnIzSpenOztV60VvMWUjIBJY
-         j6xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684877410; x=1687469410;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=12a8TVZQvjkkyWtI7fz8x1oDJA/k8YRY6ApQKDzedDE=;
-        b=aK+zM9bD8A0/kjREwUPdqgEa3mMtZnWgNPKDHkR/Ha3idUA/0evrVjC+eYMdKxfq5M
-         f7Vfmb/xhuM5Mhjqbh3PzU8oNbpH1uBjPHrAJ8rr/ACJT8D8ErP38rw1tJ5hiQ6/1NTb
-         XwrmpyXaGQCQr/xK1LsugMyoAkCE4gTwtqfyMlOYnFkl9nHVvqPAIuP3r5+FXhjldFAb
-         kaMEE/mnQxHWJoH0cFVx3GyU/3oJ1SEs+Xn1+OrB+4ONUde33aPFL6DA3C4LsttxfGUH
-         0euIaW/MaQODfINpCXCnuaPI6qkx73DGA9ZvzoVdykH6ez8wazdniM639EXTUQsiCNXN
-         qtfQ==
-X-Gm-Message-State: AC+VfDxzO64perIk8nO9DjKMZz9o5qIyR0P5HSg6WL2O+pE8Y/6fSJ87
-        xyPqsapb0l0KalnHNbtxZWbeKcNkFkCMdopxcJQqIQ==
-X-Google-Smtp-Source: ACHHUZ4Wan+pBGA30UDc0Hp2h00PD3iAXL1/dmWzS2pNFookLK0VclHG8VPaSvULEt2cdpPwFDE0Oudo35XhtSYs7m4=
-X-Received: by 2002:a05:6214:20ef:b0:623:7108:362d with SMTP id
- 15-20020a05621420ef00b006237108362dmr28098589qvk.9.1684877409885; Tue, 23 May
- 2023 14:30:09 -0700 (PDT)
+        Tue, 23 May 2023 17:33:05 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06ECE119;
+        Tue, 23 May 2023 14:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684877585; x=1716413585;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=erRzVOCGdMgsoDcayD8raaTvBwRGaZfeDXdMjszFzQw=;
+  b=O0gKXkRYq07YVG0itCtiFvQgxGqedLvFMhCAmQyG90AKmfUo7jIINwKS
+   VrnuOdnzr4pJzEd4TOQIpQIXPurVfRsyY1OgIKCi/6sYm7dhWIyWmL/IJ
+   uKJuk7bMW5xcgbvoEhR2nr3Xc6rCpLMLbrdnN0Qhc/tOcCm4Ou2jYLuGz
+   RLEtHu78EiUpicinkTtpcugfpUomJovkAezLd3Sl4kWMbtIh5TLrxkDpy
+   1lJU1z4QApEhz5bVQTIY6sOm18psFOxKkOHyJBKJJnxdPfUH1ZGzk+DWV
+   OH+b30/Xxbj8wpuJzBOX52oNTxsfUfuI42hwMx1fa5sVuhsZc5qJY8HHu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="419079811"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="419079811"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 14:33:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="769153243"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="769153243"
+Received: from kroconn-mobl2.amr.corp.intel.com (HELO [10.251.1.84]) ([10.251.1.84])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 14:33:03 -0700
+Message-ID: <9a772a17-6038-a73e-eb2c-c3a28fa3b85f@intel.com>
+Date:   Tue, 23 May 2023 14:33:02 -0700
 MIME-Version: 1.0
-References: <20230523212050.9970-1-aweber.kernel@gmail.com>
-In-Reply-To: <20230523212050.9970-1-aweber.kernel@gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 23 May 2023 14:29:59 -0700
-Message-ID: <CAKwvOd=00s_MMQcnbyQkEsUE8HwhSCw+=KyzckKpdTrivQ3N-w@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: samsung-s6d7aa0: use pointer for drm_mode in
- panel desc struct
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>, thierry.reding@gmail.com,
-        David Airlie <airlied@gmail.com>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Daniel Vetter <daniel@ffwll.ch>, Tom Rix <trix@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 2/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, mikelley@microsoft.com,
+        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+References: <20230504225351.10765-1-decui@microsoft.com>
+ <20230504225351.10765-3-decui@microsoft.com>
+ <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
+ <ZG0vXlQpXgll+YJ1@google.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ZG0vXlQpXgll+YJ1@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 2:20=E2=80=AFPM Artur Weber <aweber.kernel@gmail.co=
-m> wrote:
->
-> Fixes compilation errors on older GCC versions (before 8.x) and Clang
-> after changes introduced in commit 6810bb390282 ("drm/panel: Add
-> Samsung S6D7AA0 panel controller driver"). Tested with GCC 13.1.1,
-> GCC 6.4.0 and Clang 16.0.3.
+On 5/23/23 14:25, Sean Christopherson wrote:
+>> There are consequences for converting pages between shared and private.
+>> Doing it on a vmalloc() mapping is guaranteed to fracture the underlying
+>> EPT/SEPT mappings.
+>>
+>> How does this work with load_unaligned_zeropad()?  Couldn't it be
+>> running around poking at one of these vmalloc()'d pages via the direct
+>> map during a shared->private conversion before the page has been accepted?
+> Would it be feasible and sensible to add a GFP_SHARED or whatever, to communicate
+> to the core allocators that the page is destined to be converted to a shared page?
+> I assume that would provide a common place (or two) for initiating conversions,
+> and would hopefully allow for future optimizations, e.g. to keep shared allocation
+> in the same pool or whatever.  Sharing memory without any intelligence as to what
+> memory is converted is going to make both the guest and host sad.
 
-Hi Artur,
-Thanks for the patch! Mind sending a v2 with the diagnostic added to
-the commit message? This gives reviewers much more context as to what
-issue you are fixing.
+I don't think we want a GFP flag.  This is still way too specialized to
+warrant one of those.
 
->
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
->  drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/=
-drm/panel/panel-samsung-s6d7aa0.c
-> index f532aa018428..102e1fc7ee38 100644
-> --- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-> +++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-> @@ -37,7 +37,7 @@ struct s6d7aa0_panel_desc {
->         unsigned int panel_type;
->         int (*init_func)(struct s6d7aa0 *ctx);
->         int (*off_func)(struct s6d7aa0 *ctx);
-> -       const struct drm_display_mode drm_mode;
-> +       const struct drm_display_mode *drm_mode;
->         unsigned long mode_flags;
->         u32 bus_flags;
->         bool has_backlight;
-> @@ -309,7 +309,7 @@ static const struct s6d7aa0_panel_desc s6d7aa0_lsl080=
-al02_desc =3D {
->         .panel_type =3D S6D7AA0_PANEL_LSL080AL02,
->         .init_func =3D s6d7aa0_lsl080al02_init,
->         .off_func =3D s6d7aa0_lsl080al02_off,
-> -       .drm_mode =3D s6d7aa0_lsl080al02_mode,
-> +       .drm_mode =3D &s6d7aa0_lsl080al02_mode,
->         .mode_flags =3D MIPI_DSI_MODE_VSYNC_FLUSH | MIPI_DSI_MODE_VIDEO_N=
-O_HFP,
->         .bus_flags =3D DRM_BUS_FLAG_DE_HIGH,
->
-> @@ -412,7 +412,7 @@ static const struct s6d7aa0_panel_desc s6d7aa0_lsl080=
-al03_desc =3D {
->         .panel_type =3D S6D7AA0_PANEL_LSL080AL03,
->         .init_func =3D s6d7aa0_lsl080al03_init,
->         .off_func =3D s6d7aa0_lsl080al03_off,
-> -       .drm_mode =3D s6d7aa0_lsl080al03_mode,
-> +       .drm_mode =3D &s6d7aa0_lsl080al03_mode,
->         .mode_flags =3D MIPI_DSI_MODE_NO_EOT_PACKET,
->         .bus_flags =3D 0,
->
-> @@ -440,7 +440,7 @@ static const struct s6d7aa0_panel_desc s6d7aa0_ltl101=
-at01_desc =3D {
->         .panel_type =3D S6D7AA0_PANEL_LTL101AT01,
->         .init_func =3D s6d7aa0_lsl080al03_init, /* Similar init to LSL080=
-AL03 */
->         .off_func =3D s6d7aa0_lsl080al03_off,
-> -       .drm_mode =3D s6d7aa0_ltl101at01_mode,
-> +       .drm_mode =3D &s6d7aa0_ltl101at01_mode,
->         .mode_flags =3D MIPI_DSI_MODE_NO_EOT_PACKET,
->         .bus_flags =3D 0,
->
-> @@ -458,7 +458,7 @@ static int s6d7aa0_get_modes(struct drm_panel *panel,
->         if (!ctx)
->                 return -EINVAL;
->
-> -       mode =3D drm_mode_duplicate(connector->dev, &ctx->desc->drm_mode)=
-;
-> +       mode =3D drm_mode_duplicate(connector->dev, ctx->desc->drm_mode);
->         if (!mode)
->                 return -ENOMEM;
->
->
-> base-commit: 37cee4876a45a5c3da79a83d34ed4f3c68548aef
-> --
-> 2.40.1
->
+It sounds like a similar problem to what folks want for modules or BPF.
+There are a bunch of allocations that are related and can have some of
+their setup/teardown costs amortized if they can be clumped together.
 
+For BPF, the costs are from doing RW=>RO in the kernel direct map, and
+fracturing it in the process.
 
---=20
-Thanks,
-~Nick Desaulniers
+Here, the costs are from the private->shared conversions and fracturing
+both the direct map and the EPT/SEPT.
+
+I just don't know if there's anything that we can reuse from the BPF effort.
