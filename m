@@ -2,77 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E581370DA61
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27E270DA3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbjEWKXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S236509AbjEWKTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbjEWKXM (ORCPT
+        with ESMTP id S236512AbjEWKTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:23:12 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E938C119;
-        Tue, 23 May 2023 03:23:06 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 5779F5FD39;
-        Tue, 23 May 2023 13:23:05 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1684837385;
-        bh=YVSNlUFqOfOENIf/2FPJt1QNdXnjHRXeUW+g6HMwMHY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=iBV/XXpwaO9FpIEk88A+AMBB+thI4vZgb+TDs1CwgYJUqs8zf/7dL5Nf1AExROIZG
-         wraUd6STLJ6yjI5QAEe8ARueOCmOtUibNteaCopfKwXHeIVrJ5X6WwS224Mj+fXwjC
-         nuz+D4OtEVK/3g7s/J85xf4Bjq/glDvgNW/KRrh/IrK/fAIDc+0wqBfzW4Ilyi9AKn
-         2pfBgE8A0eYEfmjR7XzkcjRzwLWfZ9uNHHB+V5g7qUyq+8uMais1I0BrLvkD40LXJK
-         2P3qxhjGI+g9jRv4nJ/bW9wrBjycR4Dp75PJ7bHtQvbXqCLZ5bbhj26xgNNQPxNski
-         2MFcBxH0ljzgg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 23 May 2023 13:23:03 +0300 (MSK)
-Message-ID: <0c929cb9-4de9-bc65-c81c-2f2d968df120@sberdevices.ru>
-Date:   Tue, 23 May 2023 13:18:42 +0300
+        Tue, 23 May 2023 06:19:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB9F94;
+        Tue, 23 May 2023 03:19:45 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NA82RB009845;
+        Tue, 23 May 2023 10:19:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=dk8HLLZPWZ+CSPzJuc18BjNfkPZ4Kmk0/japlqgqybc=;
+ b=OTGY0hWe7O5lQh9jFtO5z60jHjBzvG1yhXPCqpRwCoyYLmNk1+asXcVFVqDoyNkJU7C3
+ 5yWsm4N3WPLa46AMcBzP+XZFuM8gRby4QX+XdPTGekTr4aK5Y4l+FHouSuAfTQhfm3j1
+ 2QmFQWcEf2akei53loEJJMFqdNvh6EPheoICpjOodiNaKpCvEJwu+CVU9+VrDwiD0bBd
+ t0ygLorshP4B8y36wIKT97u0YR9Xlqm5sUR1imYBsxBTcODsSgGyXLxeycHEWcCdmw7i
+ Sv9j9IVoPwCRJgVkI7A0DqKsP+dibJ0HbKzngl3NKBLYH5yxh+TC6RBo1xlAkW1K0yLn cA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrpmm0uvm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 10:19:13 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34NAJDuc000506
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 10:19:13 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 23 May 2023 03:19:08 -0700
+Date:   Tue, 23 May 2023 15:49:04 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+Message-ID: <20230523101903.GA31656@varda-linux.qualcomm.com>
+References: <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
+ <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
+ <20230516120426.GA1679@varda-linux.qualcomm.com>
+ <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
+ <20230517055726.GA3165@varda-linux.qualcomm.com>
+ <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
+ <20230518054054.GA998@varda-linux.qualcomm.com>
+ <fe1d81d2-52e6-7d2d-8d6c-ffdcbb8ccc89@linaro.org>
+ <20230518090503.GA9173@varda-linux.qualcomm.com>
+ <24b60ca3-b6b9-662f-03c8-df1536b52bc9@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RESEND PATCH v3] mtd: rawnand: macronix: OTP access for
- MX30LFxG18AC
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Jaime Liao <jaimeliao.tw@gmail.com>,
-        Jaime Liao <jaimeliao@mxic.com.tw>
-References: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
- <c873b5a9-17ad-767c-5b20-35a49ab2bd40@sberdevices.ru>
- <aa67ee8b-898b-319b-f167-b554700842b3@sberdevices.ru>
- <20230522161446.16d1f307@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230522161446.16d1f307@xps-13>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/23 05:11:00 #21371280
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <24b60ca3-b6b9-662f-03c8-df1536b52bc9@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8xDTVSq8aSk1mu5vyVJO804DDkQ_zO5A
+X-Proofpoint-GUID: 8xDTVSq8aSk1mu5vyVJO804DDkQ_zO5A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_06,2023-05-23_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305230084
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,311 +93,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 18, 2023 at 01:06:49PM +0200, Krzysztof Kozlowski wrote:
+> On 18/05/2023 11:05, Varadarajan Narayanan wrote:
+> > On Thu, May 18, 2023 at 09:09:12AM +0200, Krzysztof Kozlowski wrote:
+> >> On 18/05/2023 07:40, Varadarajan Narayanan wrote:
+> >>> On Wed, May 17, 2023 at 09:00:49AM +0200, Krzysztof Kozlowski wrote:
+> >>>> On 17/05/2023 07:57, Varadarajan Narayanan wrote:
+> >>>>> Part-1 is adding the 'const' entries at the beginning i.e.
+> >>>>>
+> >>>>> 	+      - const: qcom,tsens-v0_1
+> >>>>> 	+      - const: qcom,tsens-v1
+> >>>>> 	+      - const: qcom,tsens-v2
+> >>>>> 	+      - const: qcom,ipq8074-tsens
+> >>>>>
+> >>>>> Part-2 is changing from one valid syntax to another i.e.
+> >>>>>
+> >>>>> 	+        items:
+> >>>>> 	+          - enum:
+> >>>>> 	+              - qcom,ipq9574-tsens
+> >>>>> 	+          - const: qcom,ipq8074-tsens
+> >>>>>
+> >>>>> Without both of the above changes, either or both of dtbs_check
+> >>>>> & dt_binding_check fails. So, it is not possible to just add the
+> >>>>> "valid hunk" (part-2) alone.
+> >>>>
+> >>>> Of course it is. All schema files work like that...
+> >>>>>
+> >>>>> If having both part-1 and part-2 in the same patch is not
+> >>>>> acceptable, shall I split them into two patches? Please let me know.
+> >>>>
+> >>>> No, hunk one is not justified.
+> >>>
+> >>> For the other compatibles, the enum entries and const/fallback
+> >>> entries are different. For the 9574 & 8074 case, we want to have
+> >>> qcom,ipq8074-tsens as both enum and const/fallback entry. Hence,
+> >>> if we don't have the first hunk, dtbs_check fails for 8074
+> >>> related dtbs
+> >>>
+> >>> 	ipq8074-hk01.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+> >>> 		['qcom,ipq8074-tsens'] is too short
+> >>
+> >> Why? It is already there. Open the file and you will see that this is
+> >> already covered.
+> >
+> > I guess dtbs_check doesn't like the same value being a const and
+> > a oneof entry.
+>
+> I don't understand.
+
+      - description: v2 of TSENS with combined interrupt
+        items:
+          - enum:
+              - qcom,ipq9574-tsens	<--- one of the compatible entries
+          - const: qcom,ipq8074-tsens	<--- fallback entry
+
+In this patch, we want 8074 to act as a compatible entry for
+ipq8074*.dts and fallback entry for ipq9574.dtsi. That is why I
+believe we are not able to just add 9574 and get it to pass
+dtbs_check and dt_binding_check.
+
+> >  Have attached the file, please see if something is
+> > not in order.
+>
+> I don't know what changed there. Please work on patches.
+>
+> >
+> >> If you remove it, then yes, you will see errors and the answer is: do
+> >> not remove it.
+> >
+> > I haven't removed it.
+>
+> You did. Look:
+>
+>        - description: v2 of TSENS with combined interrupt
+> -        enum:
+> -          - qcom,ipq8074-tsens
+>
+> The first character in the diff (-) means removal.
+
+It changed from 'enum' to 'const', that is why I said it is not
+removed.
+
+> > For this patch, ipq8074-tsens changed from
+> > being an oneof enum entry to a const entry. Probably, that is why
+> > dtbs_check is giving these errors.
+>
+> You removed the entry which you should not have touched.
+>
+> >
+> >>> 	ipq8074-hk10-c2.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+> >>> 		['qcom,ipq8074-tsens'] is too short
+> >>>
+> >>> 	ipq8074-hk10-c1.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+> >>> 		['qcom,ipq8074-tsens'] is too short
+> >>>
+> >>> I'm not sure of the correct solution. Having the first hunk
+> >>> solves the above dtbs_check errors, so went with it. I'm able to
+> >>> avoid dtbs_check errors with just one entry in the first hunk.
+> >>
+> >> You made multiple changes in one patch which is not correct. Your goal
+> >> is to add only one change - ipq9574 followed by ipq8074. Add this one.
+> >> Don't touch others.
+> >
+> > But that breaks dtbs_check.
+>
+> All other cases, hundreds of other binding files, do not have problem.
+> Only this one "breaks dtbs_check". No, it does not.
+>
+> Whatever is broken is result of your removal of unrelated pieces.
+
+Not sure about other binding files. Probably they don't have the
+same value for fallback and normal compatible. If there is such
+an example binding file, will replicate that syntax/structure for
+ipq9574 too.
+
+In the 'nvidia,tegra210-ope' example (https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L25)
+too 'nvidia,tegra210-ope' is listed twice
+
+      - const: nvidia,tegra210-ope	<===
+      - items:
+          - enum:
+              - nvidia,tegra234-ope
+              - nvidia,tegra194-ope
+              - nvidia,tegra186-ope
+          - const: nvidia,tegra210-ope	<===
+
+> >>>  	+      - const: qcom,ipq8074-tsens
+> >>>
+> >>> Please let me know if there is a better way to resolve this or we
+> >>> can have just the 8074 entry in the first hunk.
+> >>
+> >> You only need to add new item on the oneOf list:
+> >>  - enum
+> >>      - ipq9574
+> >>  - const: ipq8074
+> >
+> > The "['qcom,ipq8074-tsens'] is too short" errors were generated
+> > with the above snippet only. Please see the attachment
+>
+> It's not true. The error you see is result because you removed something
+> you should not. I did not ask you to remove anything. So repeating -
+> "add new item". Adding is not "removal and adding". Adding is just "adding".
+
+See below for the changes that were tried and the corresponding errors.
+
+(1) No lines removed
+
+	@@ -66,6 +66,7 @@
+	       - description: v2 of TSENS with combined interrupt
+		 enum:
+		   - qcom,ipq8074-tsens
+	+          - qcom,ipq9574-tsens
+
+	   reg:
+	     items:
+
+	dt_binding_check: No errors
+
+	dtbs_check	:
+		arch/arm64/boot/dts/qcom/ipq9574-rdp433.dtb: thermal-sensor@4a9000: compatible: 'oneOf' conditional failed, one must be fixed:
+	        ['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
+
+(2) No lines removed
+
+	@@ -66,6 +66,8 @@
+	       - description: v2 of TSENS with combined interrupt
+		 enum:
+		   - qcom,ipq8074-tsens
+	+          - qcom,ipq9574-tsens
+	+        - const: qcom,ipq8074-tsens
+
+	   reg:
+	     items:
+
+	dt_binding_check: No errors
+
+	dtbs_check	: Gives errors for all the DTS files that have tsens-v0_1, tsens-v2, tsens-v1. Copy pasted a sample for each one of them
+		arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb: /soc@0/thermal-sensor@4a9000: failed to match any schema with compatible: ['qcom,msm8916-tsens', 'qcom,tsens-v0_1']
+		arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dtb: /soc@0/thermal-sensor@4a9000: failed to match any schema with compatible: ['qcom,msm8953-tsens', 'qcom,tsens-v2']
+		arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-suzu.dtb: /soc@0/thermal-sensor@4a9000: failed to match any schema with compatible: ['qcom,msm8956-tsens', 'qcom,tsens-v1']
 
 
-On 22.05.2023 17:14, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> avkrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:49:50 +0300:
-> 
->> Hello @Miquel!
->>
->> Sorry, but who could review this patch? :) IIUC this logic is very hw specific and we need
->> someone who knows it well? I tested this patch on our devices (with already known Meson NAND
->> controller).
-> 
-> + Jaime, who might test
-> 
->>
->> Thanks, Arseniy
->>
->> On 11.05.2023 21:21, Arseniy Krasnov wrote:
->>> Cc: Mason Yang <masonccyang@mxic.com.tw> and Boris Brezillon <boris.brezillon@collabora.com>
->>>
->>> On 11.05.2023 18:21, Arseniy Krasnov wrote:  
->>>> This adds support for OTP area access on MX30LFxG18AC chip series.
->>>>
->>>> Changelog:
->>>>   v1 -> v2:
->>>>   * Add slab.h include due to kernel test robot error.
->>>>   v2 -> v3:
->>>>   * Use 'uint64_t' as input argument for 'do_div()' instead
->>>>     of 'unsigned long' due to kernel test robot error.
->>>>
->>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>> ---
->>>>  drivers/mtd/nand/raw/nand_macronix.c | 213 +++++++++++++++++++++++++++
->>>>  1 file changed, 213 insertions(+)
->>>>
->>>> diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
->>>> index 1472f925f386..2301f990678e 100644
->>>> --- a/drivers/mtd/nand/raw/nand_macronix.c
->>>> +++ b/drivers/mtd/nand/raw/nand_macronix.c
->>>> @@ -6,6 +6,7 @@
->>>>   * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
->>>>   */
->>>>  
->>>> +#include <linux/slab.h>
->>>>  #include "linux/delay.h"
->>>>  #include "internals.h"
->>>>  
->>>> @@ -31,6 +32,20 @@
->>>>  
->>>>  #define MXIC_CMD_POWER_DOWN 0xB9
->>>>  
->>>> +#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
->>>> +#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
->>>> +#define MACRONIX_30LFXG18AC_OTP_PAGES		30
->>>> +#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
->>>> +#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
->>>> +	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
->>>> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
->>>> +#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
->>>> +	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
->>>> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
->>>> +
->>>> +#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
->>>> +#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
->>>> +
->>>>  struct nand_onfi_vendor_macronix {
->>>>  	u8 reserved;
->>>>  	u8 reliability_func;
->>>> @@ -316,6 +331,203 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
->>>>  	chip->ops.resume = mxic_nand_resume;
->>>>  }
->>>>  
->>>> +static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
->>>> +					    size_t *retlen,
->>>> +					    struct otp_info *buf)
->>>> +{
->>>> +	if (len < sizeof(*buf))
->>>> +		return -EINVAL;
->>>> +
->>>> +	/* Don't know how to check that OTP is locked. */
-> 
-> Jaime, any idea?
-> 
+(3) No lines removed
+	@@ -19,6 +19,7 @@
+	 properties:
+	   compatible:
+	     oneOf:
+	+      - const: qcom,ipq8074-tsens
+	       - description: msm8960 TSENS based
+		 items:
+		   - enum:
+	@@ -66,6 +67,8 @@
+	       - description: v2 of TSENS with combined interrupt
+		 enum:
+		   - qcom,ipq8074-tsens
+	+          - qcom,ipq9574-tsens
+	+        - const: qcom,ipq8074-tsens
 
-That will be great, because i didn't found any doc about that
+	   reg:
+	     items:
+
+	dt_binding_check: Same as above
+
+	dtbs_check	: Same as above
+
+(4) Change 8074 from enum to const
+	@@ -19,6 +19,7 @@
+	 properties:
+	   compatible:
+	     oneOf:
+	+      - const: qcom,ipq8074-tsens
+	       - description: msm8960 TSENS based
+		 items:
+		   - enum:
+	@@ -64,8 +65,10 @@
+		   - const: qcom,tsens-v2
+
+	       - description: v2 of TSENS with combined interrupt
+	-        enum:
+	-          - qcom,ipq8074-tsens
+	+        items:
+	+          - enum:
+	+              - qcom,ipq9574-tsens
+	+          - const: qcom,ipq8074-tsens
+
+	   reg:
+	     items:
+
+	dt_binding_check: No errors
+
+	dtbs_check	: No errors
+
+But (4) doesn't seem acceptable. Any other alternative to resolve this?
 
 Thanks
-
->>>> +	buf->locked = 0;
->>>> +	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
->>>> +	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
->>>> +
->>>> +	*retlen = sizeof(*buf);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
->>>> +{
->>>> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
->>>> +
->>>> +	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
->>>> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
->>>> +				 feature_buf);
->>>> +}
->>>> +
->>>> +static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
->>>> +{
->>>> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
->>>> +
->>>> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
->>>> +				 feature_buf);
->>>> +}
->>>> +
->>>> +static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
->>>> +					loff_t offs_in_flash,
->>>> +					size_t len, size_t *retlen,
->>>> +					u_char *buf, bool write)
->>>> +{
->>>> +	struct nand_chip *nand;
->>>> +	size_t bytes_handled;
->>>> +	off_t offs_in_page;
->>>> +	uint64_t page;
->>>> +	void *dma_buf;
->>>> +	int ret;
->>>> +
->>>> +	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
->>>> +	 * so allocate properly aligned memory for it. This is
->>>> +	 * needed because cross page accesses may lead to unaligned
->>>> +	 * buffer address for DMA.
->>>> +	 */
->>>> +	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
->>>> +	if (!dma_buf)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	nand = mtd_to_nand(mtd);
->>>> +	nand_select_target(nand, 0);
->>>> +
->>>> +	ret = macronix_30lfxg18ac_otp_enable(nand);
->>>> +	if (ret)
->>>> +		goto out_otp;
->>>> +
->>>> +	page = offs_in_flash;
->>>> +	/* 'page' will be result of division. */
->>>> +	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
->>>> +	bytes_handled = 0;
->>>> +
->>>> +	while (bytes_handled < len &&
->>>> +	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
->>>> +		size_t bytes_to_handle;
->>>> +
->>>> +		bytes_to_handle = min_t(size_t, len - bytes_handled,
->>>> +					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
->>>> +					offs_in_page);
->>>> +
->>>> +		if (write) {
->>>> +			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
->>>> +			ret = nand_prog_page_op(nand, page, offs_in_page,
->>>> +						dma_buf, bytes_to_handle);
->>>> +		} else {
->>>> +			ret = nand_read_page_op(nand, page, offs_in_page,
->>>> +						dma_buf, bytes_to_handle);
->>>> +			if (!ret)
->>>> +				memcpy(&buf[bytes_handled], dma_buf,
->>>> +				       bytes_to_handle);
->>>> +		}
->>>> +		if (ret)
->>>> +			goto out_otp;
->>>> +
->>>> +		bytes_handled += bytes_to_handle;
->>>> +		offs_in_page = 0;
->>>> +		page++;
->>>> +	}
->>>> +
->>>> +	*retlen = bytes_handled;
->>>> +
->>>> +out_otp:
->>>> +	if (ret)
->>>> +		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
->>>> +
->>>> +	ret = macronix_30lfxg18ac_otp_disable(nand);
->>>> +	WARN(ret, "failed to leave OTP mode after %s\n",
->>>> +	     write ? "write" : "read");
-> 
-> Let's avoid WARN() calls (none in this driver are relevant IMHO). Just a
-> dev_err() should be enough.
-
-Done in v4
-
-> 
->>>> +	nand_deselect_target(nand);
->>>> +	kfree(dma_buf);
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +
->>>> +static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
->>>> +					 size_t len, size_t *rlen,
->>>> +					 const u_char *buf)
->>>> +{
->>>> +	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
->>>> +					    true);
->>>> +}
->>>> +
->>>> +static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
->>>> +					size_t len, size_t *rlen,
->>>> +					u_char *buf)
->>>> +{
->>>> +	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
->>>> +}
->>>> +
->>>> +static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
->>>> +					size_t len)
->>>> +{
->>>> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
->>>> +	struct nand_chip *nand;
->>>> +	int ret;
->>>> +
->>>> +	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
->>>> +	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
->>>> +		return -EINVAL;
->>>> +
->>>> +	dev_dbg(&mtd->dev, "locking OTP\n");
->>>> +
->>>> +	nand = mtd_to_nand(mtd);
->>>> +	nand_select_target(nand, 0);
->>>> +
->>>> +	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
->>>> +			 MACRONIX_30LFXG18AC_OTP_LOCKED;
->>>> +	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
->>>> +				feature_buf);
->>>> +	if (ret) {
->>>> +		dev_err(&mtd->dev,
->>>> +			"failed to lock OTP (set features): %i\n", ret);
->>>> +		nand_deselect_target(nand);
->>>> +		return ret;
->>>> +	}
->>>> +
->>>> +	/* Do dummy page prog with zero address. */
->>>> +	feature_buf[0] = 0;
->>>> +	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
->>>> +	if (ret)
->>>> +		dev_err(&mtd->dev,
->>>> +			"failed to lock OTP (page prog): %i\n", ret);
->>>> +
->>>> +	ret = macronix_30lfxg18ac_otp_disable(nand);
->>>> +	WARN(ret, "failed to leave OTP mode after lock\n");
->>>> +
->>>> +	nand_deselect_target(nand);
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +
->>>> +static void macronix_nand_setup_otp(struct nand_chip *chip)
->>>> +{
->>>> +	static const char * const supported_otp_models[] = {
->>>> +		"MX30LF1G18AC",
->>>> +		"MX30LF2G18AC",
->>>> +		"MX30LF4G18AC",
->>>> +	};
->>>> +	struct mtd_info *mtd;
->>>> +
->>>> +	if (!chip->parameters.supports_set_get_features)
->>>> +		return;
->>>> +
->>>> +	if (match_string(supported_otp_models,
->>>> +			 ARRAY_SIZE(supported_otp_models),
->>>> +			 chip->parameters.model) < 0)
->>>> +		return;
-> 
-> I would start by checking the model, then it's list of supported ops.
-> 
-
-Done in v4
-
->>>> +
->>>> +	bitmap_set(chip->parameters.get_feature_list,
->>>> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
->>>> +	bitmap_set(chip->parameters.set_feature_list,
->>>> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
->>>> +
->>>> +	mtd = nand_to_mtd(chip);
->>>> +	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
->>>> +	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
->>>> +	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
->>>> +	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
->>>> +	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
->>>> +	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
->>>> +}
->>>> +
->>>>  static int macronix_nand_init(struct nand_chip *chip)
->>>>  {
->>>>  	if (nand_is_slc(chip))
->>>> @@ -325,6 +537,7 @@ static int macronix_nand_init(struct nand_chip *chip)
->>>>  	macronix_nand_onfi_init(chip);
->>>>  	macronix_nand_block_protection_support(chip);
->>>>  	macronix_nand_deep_power_down_support(chip);
->>>> +	macronix_nand_setup_otp(chip);
->>>>  
->>>>  	return 0;
->>>>  }  
-> 
-> 
-> Thanks,
-> Miquèl
-
-Thanks, Arseniy
+Varada
