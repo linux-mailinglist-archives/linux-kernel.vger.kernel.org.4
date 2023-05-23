@@ -2,99 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7808070E106
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E018F70E10A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237644AbjEWPwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S237445AbjEWPws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235682AbjEWPwG (ORCPT
+        with ESMTP id S231615AbjEWPwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:52:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3412A91;
-        Tue, 23 May 2023 08:52:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BE94139F;
-        Tue, 23 May 2023 08:52:49 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4AC13F840;
-        Tue, 23 May 2023 08:52:01 -0700 (PDT)
-Date:   Tue, 23 May 2023 16:51:59 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, suzuki.poulose@arm.com,
-        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        Steve Clevenger <scclevenger@os.amperecomputing.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH V4 0/6] coresight: etm4x: Migrate ACPI AMBA devices to
- platform driver
-Message-ID: <20230523155159.na2wfhuhb7fqr3cy@bogus>
-References: <20230523044553.1525048-1-anshuman.khandual@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523044553.1525048-1-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 11:52:46 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1418F8E
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:52:46 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 82F165C010A;
+        Tue, 23 May 2023 11:52:45 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 23 May 2023 11:52:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684857165; x=1684943565; bh=zw
+        CjvXn53rcaO3Y1t4OkLX7eScSqHORtEFyq3yn/8kI=; b=MbLkHCgetIrafdPdgQ
+        0ZQbl61Tin0qDctxV4gw+14zHIHhiZV3q6uOpN/GZF+AFCk+9BmNZWLkwq6+d1Ub
+        L2gW/ViVfHOGcTIJ4V3g+4M6dfZuLQSgWDOyxhq81lSZkwUjnnWaW2QHFqQGsYuw
+        7fbIni8sgQAwisIkVZm7vu1WC3f8C5o95hT78//FIKymPVXHtZvigFGFN6F83yCa
+        l7HS/rTLJlC0wKEm+UELgTdk/shK5BvfI2z72JLmfhesqDOvAa1hCdsgLzUgLoZ9
+        6iqlnzTou7liQGqUtietwzpnzqLcdAjy+UAnW2VismYfg/RPjtUSUMXRXarZs69D
+        wRvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684857165; x=1684943565; bh=zwCjvXn53rcaO
+        3Y1t4OkLX7eScSqHORtEFyq3yn/8kI=; b=iOVHXOMCdEwIi26GWNXZNX1Xh25AS
+        QDx9AiORNWxqW5X+l+Z8bmpq7GBTsFwUE5qcQgdFT25LBNizeITOwcIxI4282NnO
+        wwbps7EFeDYmWuQVoIadEpbde2ZZhEXowmaPRefEM3u4/2K8fz1wZFt1CoHP2DAJ
+        gwUha4aV5nENl9GfspeRa07vVCY+/e4bNq4FyCF+GwWTllcQB7tFEKg7pzXPmBbD
+        ZdmnPxDKgJEdKOFVB71bndkAKY8LTZqLnxrrdP4yUw5IcSZc2XxEBOj8KvO5ZPt9
+        QZnELJDWbCsfzb7VMzHhOrCq6Z2cFUVqh4ZV7Vf/LrueioqkdmZJE4L/A==
+X-ME-Sender: <xms:TeFsZK-RGTOp4S3wXCbS33THBxVUkiHDCD93DNzshDhtfKWe2jiapQ>
+    <xme:TeFsZKtdEBKVdkwCvsVhr0pzVlamKaYMJj05AK8T1xDjKOCyT779ytqH3S9RVkHH0
+    OMov4lgp2QctvL4hU4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedgleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:TeFsZADcIwBU2m4OTIQ2FUD48_cZ7RVRqjOplz26-5M-J-VwhgLN3A>
+    <xmx:TeFsZCcY0Ft_hsNr3R6E4wTVhEE8aYGYOzYZcx0sFb3DYp2q2Tfcmw>
+    <xmx:TeFsZPMWhV8IoRnJdKoRfNHWhreYqgyFoVghVlnlfUGQ610WBtwugQ>
+    <xmx:TeFsZLDAWntuJd5K8DyWeY4Z1wW4Q9q7dBfDXCp46gu2WHDBlwtIYg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5F4FFB60086; Tue, 23 May 2023 11:52:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <d651c1f2-ce77-4876-bbc4-88e014a83f35@app.fastmail.com>
+In-Reply-To: <20230523073952.1.I60217a63acc35621e13f10be16c0cd7c363caf8c@changeid>
+References: <20230523073952.1.I60217a63acc35621e13f10be16c0cd7c363caf8c@changeid>
+Date:   Tue, 23 May 2023 17:52:24 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Doug Anderson" <dianders@chromium.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Lecopzer Chen" <lecopzer.chen@mediatek.com>,
+        "Pingfan Liu" <kernelfans@gmail.com>,
+        "Sumit Garg" <sumit.garg@linaro.org>,
+        "Will Deacon" <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: Only HAVE_HARDLOCKUP_DETECTOR_PERF if the PMU config is
+ enabled
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:15:47AM +0530, Anshuman Khandual wrote:
-> CoreSight ETM4x devices could be accessed either via MMIO (handled via
-> amba_driver) or CPU system instructions (handled via platform driver). But
-> this has the following issues :
-> 
->   - Each new CPU comes up with its own PID and thus we need to keep on
->     adding the "known" PIDs to get it working with AMBA driver. While
->     the ETM4 architecture (and CoreSight architecture) defines way to
->     identify a device as ETM4. Thus older kernels  won't be able to
->     "discover" a newer CPU, unless we add the PIDs.
-> 
->   - With ACPI, the ETM4x devices have the same HID to identify the device
->     irrespective of the mode of access. This creates a problem where two
->     different drivers (both AMBA based driver and platform driver) would
->     hook into the "HID" and could conflict. e.g., if AMBA driver gets
->     hold of a non-MMIO device, the probe fails. If we have single driver
->     hooked into the given "HID", we could handle them seamlessly,
->     irrespective of the mode of access.
-> 
->   - CoreSight is heavily dependent on the runtime power management. With
->     ACPI, amba_driver doesn't get us anywhere with handling the power
->     and thus one need to always turn the power ON to use them. Moving to
->     platform driver gives us the power management for free.
-> 
-> Due to all of the above, we are moving ACPI MMIO based etm4x devices to be
-> supported via tha platform driver. The series makes the existing platform
-> driver generic to handle both type of the access modes. Although existing
-> AMBA driver would still continue to support DT based etm4x MMIO devices.
-> Although some problems still remain, such as manually adding PIDs for all
-> new AMBA DT based devices.
-> 
-> The series applies on 6.4-rc3.
-> 
+On Tue, May 23, 2023, at 16:39, Douglas Anderson wrote:
+> If you try to enable the arm64 perf-based hardlockup detector but you
+> don't enable CONFIG_ARM_PMU then you'll get an error:
+>
+> arch/arm64/kernel/watchdog_hld.c: In function 
+> 'arch_perf_nmi_is_available':
+> arch/arm64/kernel/watchdog_hld.c:35:16: error: implicit declaration of 
+> function 'arm_pmu_irq_is_nmi' [-Werror=implicit-function-declaration]
+>    35 |         return arm_pmu_irq_is_nmi();
+>
+> It doesn't make sense to enable HAVE_HARDLOCKUP_DETECTOR_PERF if the
+> PMU isn't enabled. Let's add a dependency. HW_PERF_EVENTS is a synonum
+> for ARM_PMU and makes the most logical sense here, so add the
+> dependency on that.
+>
+> Reported-by: Arnd Bergmann <arnd@arndb.de>
+> Closes: https://lore.kernel.org/r/20230522114922.1052421-1-arnd@kernel.org
+> Fixes: 02ea35ee19d9 ("arm64: enable perf events based hard lockup detector")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Tested on Juno with some hacked up UEFI f/w.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+Still build testing it with randconfigs, but I assume it's fine.
 
--- 
-Regards,
-Sudeep
+    Arnd
