@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CB370DCEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA9C70DCF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbjEWMsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        id S236635AbjEWMtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236635AbjEWMsx (ORCPT
+        with ESMTP id S230255AbjEWMtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:48:53 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA051AD;
-        Tue, 23 May 2023 05:48:38 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53033a0b473so5165410a12.0;
-        Tue, 23 May 2023 05:48:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684846118; x=1687438118;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+luJcpnDqm+8+ya6draBWUeu0r+QunqXQzG/ngCVWE=;
-        b=L01Yxi54Oo6q+9Bjt3sEn3NMpYld/wO3CBq2BdI95nhVavzMbfrHIOmKTmh7TP5PLy
-         rX4bVJB7xaLYk29lSa/XK+Hv/50UcCHKto6d3cjCRyOcY9DbtAF/3gOmiRzwMgWgS99o
-         Yyqpl1jiFYyeEf5FKK6qmg85v0uUui/14PuAVZBDqupxtWYN/PinMMyqkEAcWoaxqeRg
-         UcNmFEZRuOtrw/7aQ5P2AGzhGwp7HmB/S8m1x/Bsvsh5i3gIPJxDSGyZkjKmYFgy4Ep6
-         NL0BXI+4s8rDbyCTPsSUdYPe/7W5hxP6e5XtqYK8G6rzuUJww0kzLF1u5+OBHKcWb9xU
-         FW4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684846118; x=1687438118;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M+luJcpnDqm+8+ya6draBWUeu0r+QunqXQzG/ngCVWE=;
-        b=OwE3P2p01ms6gr4XF9MqNNqyj+W8Yn5u/W4UkQKzSMXU3nIKAxiA5YLC5kvor+QJoZ
-         NLg9ZZ5slzhPGafhVl6JGE9Wjbt46FjOZPLqQ3O31jlnqFoO8lafzQxRqtj6JQOh1WpD
-         9NxFW5MiQOrSR24mI6Ia3scTGnGWci0VKmZfMyjBr8TKYMNHJuVigjR0tzY8Li0HRwSs
-         cdTUVt0ZyY9i9PipEhdzHEO86ezIsAjQvJbbfJmLcIy7yoeRzZkjh84126NaYjYN3epv
-         +5f3da+WUTe6LDUvTl6rGhCjMgqDd6uBMZ53VVu5I/Y20xCA/Pn9ddHX0pdCQVUl3qqW
-         Gj0g==
-X-Gm-Message-State: AC+VfDwl+Dozl0fn+9LQqMkH5WOp9cuc/Qv1B4p+GdF8ZAOc9I0sfnrS
-        71LdBUn9I/L6efo4xBEcE2Y=
-X-Google-Smtp-Source: ACHHUZ5dFsCRzWBgAhyoG3sD+YVv98rtQyBuK1AwpbLs/ugAraGkuzXE8ahejEHSa8TTw0rWmvd49A==
-X-Received: by 2002:a17:90a:5d06:b0:255:6133:f561 with SMTP id s6-20020a17090a5d0600b002556133f561mr6328538pji.10.1684846118045;
-        Tue, 23 May 2023 05:48:38 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:49e0:15f7:15f4:3a2b:204c])
-        by smtp.gmail.com with ESMTPSA id q31-20020a17090a1b2200b002508f0ac3edsm8077936pjq.53.2023.05.23.05.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 05:48:37 -0700 (PDT)
-From:   Anup Sharma <anupnewsmail@gmail.com>
-X-Google-Original-From: Anup Sharma <AnupSharma>
-Date:   Tue, 23 May 2023 18:18:30 +0530
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Anup Sharma <anupnewsmail@gmail.com>, lgirdwood@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oder_chiou@realtek.com
-Subject: Re: [PATCH] ASoC: dt-bindings: rt1016: Convert to dtschema
-Message-ID: <ZGy2Hpo4MvmMw4v+@yoga>
-References: <ZFUFAmBJXvkQAG7m@yoga>
- <ZFUFrWqOHVmzE+ut@finisterre.sirena.org.uk>
+        Tue, 23 May 2023 08:49:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731C1133
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684846129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hz+rQBDAcdUtSJzBU0XZBYw1XZqw4mtBlUpMTPXSzN4=;
+        b=Trh/pZ9GaKa5PKi+JyvofVF1+Zgym3EN2PxjuTm6X4d59KRkU19ICBAnpt2tYpfPughZ0/
+        e+GU58dO8YxCQ6QSpHByV2Sw4zgYPBOcEsnpu0msDfTKES2y7RxB1STrwMjmFVaZ2JCWdB
+        nA5EnqE9C5/CGsJHb9H3kUA11GoY340=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-36-2A2PiPSiNQaORPT8h7GuJQ-1; Tue, 23 May 2023 08:48:44 -0400
+X-MC-Unique: 2A2PiPSiNQaORPT8h7GuJQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35CF2811E93;
+        Tue, 23 May 2023 12:48:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C540A40CFD46;
+        Tue, 23 May 2023 12:48:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Shyam Prasad N <sprasad@microsoft.com>
+cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] cifs: Fix cifs_limit_bvec_subset() to correctly check the maxmimum size
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFUFrWqOHVmzE+ut@finisterre.sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2989164.1684846121.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 23 May 2023 13:48:41 +0100
+Message-ID: <2989165.1684846121@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 10:33:33PM +0900, Mark Brown wrote:
-> On Fri, May 05, 2023 at 07:00:42PM +0530, Anup Sharma wrote:
-> 
-> > +maintainers:
-> > +  - oder_chiou@realtek.com
-> 
-> If you're nominating someone as the maintainer for a binding it's
-> probably best to copy them on the patch so they're aware...
+Fix cifs_limit_bvec_subset() so that it limits the span to the maximum
+specified and won't return with a size greater than max_size.
 
-Hi Mark,
+Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rather=
+ than a page list")
+Reported-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steve French <smfrench@gmail.com>
+cc: Rohith Surabattula <rohiths.msft@gmail.com>
+cc: Paulo Alcantara <pc@manguebit.com>
+cc: Tom Talpey <tom@talpey.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: linux-cifs@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+---
+ fs/cifs/file.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Do I need to send the v2 by copying oder_chiou@realtek.com into the
-patch?
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index ba7f2e09d6c8..df88b8c04d03 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -3353,9 +3353,10 @@ static size_t cifs_limit_bvec_subset(const struct i=
+ov_iter *iter, size_t max_siz
+ 	while (n && ix < nbv) {
+ 		len =3D min3(n, bvecs[ix].bv_len - skip, max_size);
+ 		span +=3D len;
++		max_size -=3D len;
+ 		nsegs++;
+ 		ix++;
+-		if (span >=3D max_size || nsegs >=3D max_segs)
++		if (max_size =3D=3D 0 || nsegs >=3D max_segs)
+ 			break;
+ 		skip =3D 0;
+ 		n -=3D len;
 
-I saw you already added him. 
-
-Regards, 
-Anup Sharma
