@@ -2,149 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3CC70DDB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5331D70DDB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236829AbjEWNlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S236871AbjEWNlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjEWNlH (ORCPT
+        with ESMTP id S236910AbjEWNlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:41:07 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2067.outbound.protection.outlook.com [40.107.94.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61A3FD;
-        Tue, 23 May 2023 06:41:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RuipYWbJvPay3cQYkBvGZ2Dv4bTTa9k7RFJT0rg+idmEOGJQTgsXrAx5XUUskfwCck6EqOVk9PLxmWJoreBCyyVHTQY9J0Fgbj8UFZan6lLzYhzL2nJ3bds7zN0e0Kg8m/i1sej40iKIUNRdc0+5pZc1F6TL4LkJkaGRWYtYiNokEsrW22hVYTLxuceTJxEyoguIne8aNLDTt2xv6qP3acP88ptPtYwVbVZp3l8n7Yh8ZBvOyLoaTDmhna9cVSsOI8HCBywEGT68LwJiaIc0CaJ7uRxO/uqZMbsb3Jqwc9tLz5lKsl5ANkHw8vWkWVFUoC9GWvXk8YUEFHezokxtiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lL/+39sSL0eLKPssELX2RPSAM65AoU+TIF1TBawxIHs=;
- b=jwWp8p3K7vp0bP65A16Zfcr5aYLBvhqe2m+xY3z0LkVJeKUgsL7r9o4iUTHXAvnTubyS6aprSQXp/buTIJ7fcmp+lBVZhKpXveWF42tAYDdAqL7SywUKkWA2abPXdzQ0zz32CC0/P6pwbAwnCIbWbSd36M5/lnUNQlNe4oWpJrAblrEtk1n+v8Ncyfj2KAgiZLZHqYyAwZfZEHbbjqgYU0d+YoJ+TO4kQb+WvX31grNYVpGQ8g4cGrNFSjXbFSwejYdj2CNRrIuGs/FWuGFneUbPocayaPWf+9eACVRXPNZMW9O+orm7YdaCF6B+R1zUMIwG0W6dPaneYrggDo10FA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lL/+39sSL0eLKPssELX2RPSAM65AoU+TIF1TBawxIHs=;
- b=hQ77EQTgp37QRCanAP1xqfcJCel/YRNrfYRlPmX4bjF2/gvZlFecSwJm26FmWMOB8oY0IWlLvf2gmLyVIEAwfj6hSosA7Xif6EW055Ob7frPn1W40IAgj96pY0Buvn5ypFIYgb6svUcoP/gDPWJ0JWPgdhoaqHDtAYzc6G+AXwlFwxYDL+Jvkuwb6UY/HFs9Ky8VBKC+XSYiVYLlPemO9thh/Zx4ATUBQIijmDHLYCXeYtlF7LYt6qxdjeEZS9ZSdooL75cHuSksaJ4qfgn96gDX00lJDHqPXY2IFteg8Bt1iIpjlsP9nGlxgwd9yw+kjlHhMGrWRrXEP9YXHox/mA==
-Received: from DS7PR03CA0321.namprd03.prod.outlook.com (2603:10b6:8:2b::6) by
- MW4PR12MB6999.namprd12.prod.outlook.com (2603:10b6:303:20a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Tue, 23 May
- 2023 13:41:04 +0000
-Received: from DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2b:cafe::bf) by DS7PR03CA0321.outlook.office365.com
- (2603:10b6:8:2b::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29 via Frontend
- Transport; Tue, 23 May 2023 13:41:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT066.mail.protection.outlook.com (10.13.173.179) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.29 via Frontend Transport; Tue, 23 May 2023 13:41:03 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 23 May 2023
- 06:40:53 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 23 May
- 2023 06:40:52 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 23 May 2023 06:40:52 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/292] 6.1.30-rc1 review
-In-Reply-To: <20230522190405.880733338@linuxfoundation.org>
-References: <20230522190405.880733338@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 23 May 2023 09:41:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B174138;
+        Tue, 23 May 2023 06:41:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 814A063291;
+        Tue, 23 May 2023 13:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65475C433D2;
+        Tue, 23 May 2023 13:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684849275;
+        bh=IEUevsV5Tv6TaHhge5wi4t7qxjgDO959yxwDY9txkGM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=crhcbz4d+Oy+m/mJ4NDwEGIpz1uNdq3Xrk3RZcj5LfYe6fqS2UksFZ3zQjLhNe2NQ
+         emcpTOntHB4XS6R8rXn3G5jqqzxJwX2YMdB+5ra9wDgzyT+NOvVqVbCqERT6GeeT3x
+         +5/km26cNs8vmxN5Gw8364G1Ge5kYhRhTuuYYOHvJ10EUE/HKx63MN7DiKzK/bDUtS
+         NIpltkp9KF7cJUUO4/TohKdcEbwuMmBPWGODE6LKDOSbCNvIzFXS5gS4MRvoZWpjVa
+         cfLRLu8bwR5q1/Yd7Au8dTV1II0bqFc9cxQXApNiJBMzcHflrr11KNah9bxXfG2MUn
+         D9o0IpA0SCQtQ==
+Message-ID: <d07a0957040ebc3b5689f524e9d3c04cd166c42b.camel@kernel.org>
+Subject: Re: [PATCH] nfsd: make a copy of struct iattr before calling
+ notify_change
+From:   Jeff Layton <jlayton@kernel.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Chuck Lever <chuck.lever@oracle.com>, Zhi Li <yieli@redhat.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 23 May 2023 09:41:14 -0400
+In-Reply-To: <168472353748.5298.2381558773846767023@noble.neil.brown.name>
+References: <20230517162645.254512-1-jlayton@kernel.org>
+         <168472353748.5298.2381558773846767023@noble.neil.brown.name>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Message-ID: <2a7f7329-a5bb-4bc0-8eb1-c4f0348659d4@rnnvmail202.nvidia.com>
-Date:   Tue, 23 May 2023 06:40:52 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT066:EE_|MW4PR12MB6999:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59ea8b19-6dbe-435d-33d5-08db5b935a69
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NqfpePHQc0hmb4u/bTTbFp7vyYMad7v1goqX+gOVNd/QElr8SVX2veunH1IWgCyotB/1lwk0wr4hbWdatt/bJj7d5h2F7swso6yebkLnHxdLFo0dro37G+AmxnpT3eeeWQ+15bdeZ4ihwiwoZxbDszDbWrJ3lKv3uTbc6Lo67PiESCw8GrMA6VQZl6g5YVnlfgOSKPTI5gipNP2Uybh6n09yWFXHQN+y3srjCyT5u2kch8nK6Z46tJx9s2fpJli4IDw3hzHPhc4Y3AkLfLi7sRcuc9RtGmFZ4u2Fa5ssbBqHNqXhLr4cDy61v3ZQQE0Cj4jETaFtm7yuAwLbvJeZZv/R61kjdA0TmOFL8aSGz7BEb40x0IVUcvYPlGC2QwVgVfDISXTLmiSEZU5hdjKGyILi8mUPxO8J14zytB0GJPl14Uu2OG5s3RG9lcqvobihJdI9QU55VlBPA5UZGkLW+4QU0WYIX2ZJ4MH69HJeN3KJ97p16Wm0STT/jrd3trbQn6mmb3wKWatDMxf/VpdxtG4KHPiQ+/xzoJ35Vao6dIhiAFU/r8A2ir9rMUva2CdBNh3mnRseWhia3hIRbkKnpkhCcwQq4iO2oMM0jrdbwW2m9zSXVEDEFpOZUvmoDZv4RF06SwiUhbQassHwb3+KT0hpOMYxmlbF5EmXPcy9siaIP68BAWPzxOxh7gnfsX2Ck1VhbZ27+Zz7yD7zfO7H0ZruyplFXdmeFFpr+aR/wRaIRd6Ot6b3il7DDl+tePy4OIfzfD0vO6GKkU0BVPeg8j4XpkRv8225cQ7rkrC9OmA=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199021)(46966006)(36840700001)(40470700004)(40460700003)(31686004)(316002)(70586007)(966005)(4326008)(478600001)(70206006)(54906003)(6916009)(41300700001)(31696002)(426003)(47076005)(186003)(26005)(36860700001)(86362001)(8936002)(82310400005)(40480700001)(8676002)(7416002)(7636003)(336012)(356005)(82740400003)(2906002)(5660300002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 13:41:03.6815
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59ea8b19-6dbe-435d-33d5-08db5b935a69
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6999
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 20:05:57 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.30 release.
-> There are 292 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.30-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, 2023-05-22 at 12:45 +1000, NeilBrown wrote:
+> On Thu, 18 May 2023, Jeff Layton wrote:
+> > notify_change can modify the iattr structure. In particular it can can
+> > end up setting ATTR_MODE when ATTR_KILL_SUID is already set, causing a
+> > BUG() if the same iattr is passed to notify_change more than once.
+> >=20
+> > Make a copy of the struct iattr before calling notify_change.
+> >=20
+> > Fixes: 34b91dda7124 NFSD: Make nfsd4_setattr() wait before returning NF=
+S4ERR_DELAY
+> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2207969
+> > Reported-by: Zhi Li <yieli@redhat.com>
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  fs/nfsd/vfs.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+> > index c4ef24c5ffd0..ad0c5cd900b1 100644
+> > --- a/fs/nfsd/vfs.c
+> > +++ b/fs/nfsd/vfs.c
+> > @@ -538,7 +538,9 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh =
+*fhp,
+> > =20
+> >  	inode_lock(inode);
+> >  	for (retries =3D 1;;) {
+> > -		host_err =3D __nfsd_setattr(dentry, iap);
+> > +		struct iattr attrs =3D *iap;
+> > +
+> > +		host_err =3D __nfsd_setattr(dentry, &attrs);
+>=20
+> I think this needs something to ensure a well meaning by-passer doesn't
+> try to "optimise" it back to the way it was.
+> Maybe make "iap" const?  Or add a comment?  Or both?
+>=20
 
-All tests passing for Tegra ...
+We can't make iap const, as we have to call nfsd_sanitize_attrs on it,
+and that will change things in it. I think we'll probably have to settle
+for a comment. Chuck, can we fold the patch below in to this one?
 
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
+--------------------8<------------------
 
-Linux version:	6.1.30-rc1-ge00a3d96f756
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+index 2a3687cdf926..817effd63730 100644
+--- a/fs/nfsd/vfs.c
++++ b/fs/nfsd/vfs.c
+@@ -538,6 +538,11 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *fh=
+p,
+ 	for (retries =3D 1;;) {
+ 		struct iattr attrs;
+=20
++		/*
++		 * notify_change can alter the iattr in ways that make it
++		 * unsuitable for submission multiple times. Make a copy
++		 * for every loop.
++		 */
+ 		attrs =3D *iap;
+ 		host_err =3D __nfsd_setattr(dentry, &attrs);
+ 		if (host_err !=3D -EAGAIN || !retries--)
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
