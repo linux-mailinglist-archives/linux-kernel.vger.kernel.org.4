@@ -2,118 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE48B70DA82
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D870F70DA8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236325AbjEWK2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
+        id S236445AbjEWK3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236204AbjEWK2X (ORCPT
+        with ESMTP id S236204AbjEWK3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:28:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B802129;
-        Tue, 23 May 2023 03:28:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA8460FB8;
-        Tue, 23 May 2023 10:28:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419C7C433D2;
-        Tue, 23 May 2023 10:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684837700;
-        bh=rEtWtzgud+dO4P7xKWlT7z3oMQmShxLx4UZLon9bI8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=itC55Fb3VuqSwZMKKdERBjnsvn4Pl3mwXDIyQVMQ5ZdClxgMM2XYDfxPQNmHwVeOA
-         k8MwbLW9WlO41YUIrtYXkTHHpDUOERpa8kOp1EiqEu7ABatoOhX1CBBzkSQpunmXX+
-         yZJujZPRclL+9Sb4lpuYgynCwOXHpFzcWYtbgs+5X7uZBc5WBFqzg59IAcxS4U7xdT
-         keKGS8IcCOVkOeS/LHHd5b+H+PJYTYYtuw5GJmbn/yslH+GCWk942e2coAv7zddNxR
-         Dxwrg7qTwgKYbcgtNTqUZCpiC+xqXhdI/De+Yt7+AL8W5QKhCoLy/Ot8JfjQ413XEL
-         YkgYpYhdwqFog==
-Date:   Tue, 23 May 2023 11:28:14 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
- fpsimd_release_task
-Message-ID: <99c3fac1-e964-4cf6-ba14-58de305aa37d@sirena.org.uk>
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <2d9a04d8-c09e-49aa-95eb-32b4679f7eba@kili.mountain>
- <ZGWE36pSRMsIHCCa@finisterre.sirena.org.uk>
- <43d53046-f8d9-4c4a-90ba-709910a13f97@kili.mountain>
+        Tue, 23 May 2023 06:29:45 -0400
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDBAFD;
+        Tue, 23 May 2023 03:29:42 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so1995152e87.2;
+        Tue, 23 May 2023 03:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684837721; x=1687429721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWUyqe1Hx0qJvTJ8mr6ssQT6TVvbWeNPeCd8kj4GkHM=;
+        b=hOve3PIgESzmA1/VwP9qwbqQQJq41+7E4NS4NExcIxi7kGA9xY3KUSYUgZ6E2CR6eu
+         teZIz2BZSliKnG9iC/5e0txWLNlb5yHuQnuIX2GotfaWc8z1S1Cg08mETbuGrWqoTNlh
+         jHw4vTN0K3+s+UbHSaa+o5d2EVBvI4YssvxDkYVk5/3gB/tRGJNfi1/S2VtF0tQDKV1D
+         q/s/OeGc8Tfr0XUc701qADiqbWwX9QX0RsryuvcjBY4d6iLh+DKD0RBZALAsoFKZk2/s
+         3duS0k4z3T4Z2W2RBHRM7kEfryP6nJLWdN77HgkrIRDel9hXu5CFr8T3k6nA+D38ken9
+         BAcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684837721; x=1687429721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eWUyqe1Hx0qJvTJ8mr6ssQT6TVvbWeNPeCd8kj4GkHM=;
+        b=IKV0wPwjU3VaO0wAHHHSE0aivHr+CwQvI//xoz5Anuf70pujf98Fye1aE1t5vNPUUY
+         3rVP8jivpQMuLyalqEoZQsEoLA0rKiAredo8nS8DxZdQPOz60RlF2kSykordWdBpJPlp
+         c/oZulDNELNkZvZxXb6eU1XCCs1HmJ+JNZ8bGFQnc/EEeWfX3rsytsZ9qswsOta4STlB
+         B97rkzgzKvS3SMMLNF/mdEzarNocbN67gkl6A833ukh4QUKyzrmru09bVDEQg3bsiKJ2
+         Qj5TvXkTGn7dPRhAe4+2AMnIYySqGHB1C6z1oC1ikOP9qymA9mX7PcD2Wap8IC+zIwp0
+         BURQ==
+X-Gm-Message-State: AC+VfDxeGhayfqU6aTqYB4l5SiI8iQ9ZxF+suOi5e2IgN3v7Z3CjMKKr
+        KWB0YvMKy3g8NY2qLav8Ee/l+HMAd1xRsuH7
+X-Google-Smtp-Source: ACHHUZ7FKsiuoxhPaIQ8Yvpa5bGSvahqza7ModaNmEwxSScEs404CydwamQ+ox/0Y2qLDp7NTdU9PA==
+X-Received: by 2002:ac2:555e:0:b0:4f3:880b:285a with SMTP id l30-20020ac2555e000000b004f3880b285amr4572686lfk.29.1684837720546;
+        Tue, 23 May 2023 03:28:40 -0700 (PDT)
+Received: from pc636 (host-90-235-19-70.mobileonline.telia.com. [90.235.19.70])
+        by smtp.gmail.com with ESMTPSA id t15-20020ac243af000000b004f121c8beddsm1297639lfl.124.2023.05.23.03.28.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 03:28:40 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 23 May 2023 12:28:37 +0200
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, Forza <forza@tnonline.net>
+Cc:     Forza <forza@tnonline.net>,
+        Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Stable <stable@vger.kernel.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
+        urezki@gmail.com
+Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
+ kernel 6.3.x
+Message-ID: <ZGyVVQxnw6Tn7Xb8@pc636>
+References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
+ <fcf1d04.faed4a1a.18844d8e78f@tnonline.net>
+ <ZGwcVTpQNBoJHBB+@debian.me>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tUbDFipGxi8zU7ey"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <43d53046-f8d9-4c4a-90ba-709910a13f97@kili.mountain>
-X-Cookie: Beware of low-flying butterflies.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZGwcVTpQNBoJHBB+@debian.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 23, 2023 at 08:52:21AM +0700, Bagas Sanjaya wrote:
+> On Mon, May 22, 2023 at 09:04:05PM +0200, Forza wrote:
+> > I have a similar experience with kernel 6.3 where vmalloc fails in a similar way. I was able to reproduce it in a QEMU VM as well as on my system. 
+> > 
+> > https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc0b78@tnonline.net/T/
+> 
+> Thanks for your similar report. Telling regzbot about it:
+> 
+> #regzbot link: https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc0b78@tnonline.net/
+> 
+It is good that you can reproduce it. Could you please test below patch?
 
---tUbDFipGxi8zU7ey
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+<snip>
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 31ff782d368b..7a06452f7807 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -2957,14 +2957,18 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+                        page = alloc_pages(alloc_gfp, order);
+                else
+                        page = alloc_pages_node(nid, alloc_gfp, order);
++
+                if (unlikely(!page)) {
+-                       if (!nofail)
+-                               break;
++                       if (nofail)
++                               alloc_gfp |= __GFP_NOFAIL;
 
-On Mon, May 22, 2023 at 06:40:59PM +0300, Dan Carpenter wrote:
-> On Thu, May 18, 2023 at 10:52:31AM +0900, Mark Brown wrote:
+-                       /* fall back to the zero order allocations */
+-                       alloc_gfp |= __GFP_NOFAIL;
+-                       order = 0;
+-                       continue;
++                       /* Fall back to the zero order allocations. */
++                       if (order || nofail) {
++                               order = 0;
++                               continue;
++                       }
++
++                       break;
+                }
 
-> > > When we call sme_alloc() it will say the buffer is already allocated
-> > > and just zero out what we need for "vl", but the existing buffer is too
-> > > small.
+                /*
+<snip>
 
-> > If we are setting the SVE vector length we do not need to reallocate the
-> > SME state since the size of the data stored in the sme_state buffer is
-> > influenced only by the SME vector length, not the SVE vector length.  We
-> > unconditionally free the SVE state (causing it to be reallocated when
-> > needed) since the size needed for it depends on both vector lengths.
+Thanks!
 
-> arch/arm64/kernel/fpsimd.c
->    909          /*
->    910           * Force reallocation of task SVE and SME state to the correct
->    911           * size on next use:
->    912           */
->    913          sve_free(task);
-
-> Sure, this forces a reallocation.  But what prevents it from happening
-> before we reach the task_set_vl() line?
-
-Reallocation is either triggered by a trap from userspace or via ptrace,
-as is a vector length configuration.  The two cases should already be
-prevented from running simultaneously, and can't simultaneously perform
-two actions.
-
---tUbDFipGxi8zU7ey
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRslT4ACgkQJNaLcl1U
-h9A16Af8DEHdwYbxzAGJWh0art8EcInVylPkg10slrjsYkGzxsElEhGfBJadP853
-Q8eenp8r+T1Mp8y1gxa5C6kzU+Zgv3k8QkaOuZ6WJoXuH5iB57pHeRiakeaXyEqF
-RGze2TlhPN5ztgkNxllH4arDKvzxrPr/r3DuZRYOLTDLiEvCbVeZ4ev43K8Fu12x
-X5vhL+s0ZAHTIzN/SLwLW2LMF3fBSbYg/zBBcuLFy7aaGtQpNvAKD3g1YpdoQnIR
-nvciW+LV1Oi0/gW3Pl/1bG8PxBFDhAHVj50DDuWpo2oQ7qKVxQXnnj1ogS6FCpa6
-rnW5/mie6Z3vvMnDnFexfq5+dM7nGg==
-=y/eH
------END PGP SIGNATURE-----
-
---tUbDFipGxi8zU7ey--
+--
+Uladzislau Rezki
