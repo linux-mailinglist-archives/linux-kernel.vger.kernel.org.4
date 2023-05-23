@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DC870D47B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AD670D47E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjEWHDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S235282AbjEWHGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjEWHDI (ORCPT
+        with ESMTP id S232672AbjEWHF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:03:08 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2672F118
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:03:07 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N6qFV6025365;
-        Tue, 23 May 2023 07:02:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=KdVhtHdOnWIZUYhKerQpaXS/ZJ9W0ck7VHG9hfMhg+c=;
- b=AxAeBoRBrgVIHE8zA5JudeMYpNa5U64tRZ1L87q4vlhRJmx8NuwVe5k+Ltn3iKDP+Glj
- qOB0lhugX597WtMuu0YqMarSF5s1MF6onUflZAuCHGJo5aoliVJrAsM/hMbYH9dTU0Mt
- J24svLZQc0Oq2qAaK670OuYQdlUqycNdhW+9ItGEQUE2tOF1BiEiMQqmepjlmV4rbso4
- jfAm+Ja68jJ17M78Y+rn9XObjgl4pzBS9/gkn1IcxwMXxvjUCyPq/pYlLWBfjZRSZHT1
- Fu/IOtTTEEleJjywCgb+t70d9v6Oitto3D192S4VZVnk9E2R981yvLnDsLRD/DwHCcGB Zw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qraassm1t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 07:02:49 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N72lHL023404
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 07:02:47 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
- 2023 00:02:44 -0700
-Message-ID: <c183a3d8-f2d8-b31e-4121-5e04c26114d9@quicinc.com>
-Date:   Tue, 23 May 2023 12:32:41 +0530
+        Tue, 23 May 2023 03:05:58 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938D109
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:05:53 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3093a7b71fbso6702683f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:05:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684825552; x=1687417552;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lK0FbIRIU3vRu14qlzr2pPFF9QsFl229avcXo3OZVb4=;
+        b=ltWNi/Ovu+Y0LtOwMv9XC7UwQCaBPib0inFJtmQUu6FWYA8voz0YkccytfW/HmsUT0
+         dIkIs2pMYH9iBuS5JZUABVjx7IfXXz6kJ5nBuaQLVRfhIuIAsO42iJUzptnrW/qn/6cS
+         jh1WrWPm9G+lRFljum30CIDHkyCirMKPSAoYq3jbLlBFpBfNeKmD5p1oWZMPr+U/zHBn
+         3hDaYJPOzT/w4tXOAtx5m1jqDhdUMorK1DSCLJ5iSe04LKaDUdmeBmuwyNJ5vIIRMBN6
+         zDgF8xrHafaxpwhzuiGVboPWkdpALW8qF/OlYzErq9ka+TBUuJuzbPgJoFO1/NcvicMO
+         ohxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684825552; x=1687417552;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lK0FbIRIU3vRu14qlzr2pPFF9QsFl229avcXo3OZVb4=;
+        b=VajyeNoMMXrWG6sXIhnqhBBxcxYwUwLsPxqAlqUprlmcO8epJys28hNLjOVVpDEkst
+         B/8QOEOXt/QecFjMxnRyRDLG5J2ldg/15hY0lTC0E4f0STRPuwRlaaN5dVBd/sCGoJE8
+         xY5An+yhrNvEJs/z5JDO6fIjxQgzhi9Cu4lu3A+0Ju9icII7siGagIHT4Hjj+ZzIoAle
+         WZcbm+JkQNxrAWgkAmyGx4StgxRE5xJ3YsGBCCX5T9+8632UJpHCM+PemXTsxPejByUL
+         1B60zRuVSIEQSoL/FxQw7pwSTa+tWA1O01lZuAD6rO5t/Gh2StjS+J7zqX+cAZKaTqLC
+         RLzQ==
+X-Gm-Message-State: AC+VfDxaoogxD8jHIDfJrgR4mwdV0HEfAKk2ckgdyhDh51274MY2gWtC
+        C5krYqzOL6cUJTQ4p//f9RiIgw==
+X-Google-Smtp-Source: ACHHUZ4iZ9w3Br7aj/u4JCbG1/68MLmy50VAHu+zhSShAqCVeTRVEy8L0hvXV+NBg0asbp8H7v2myA==
+X-Received: by 2002:a5d:40cd:0:b0:2c9:e585:84b0 with SMTP id b13-20020a5d40cd000000b002c9e58584b0mr9015110wrq.1.1684825552047;
+        Tue, 23 May 2023 00:05:52 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o2-20020a056000010200b002ca864b807csm10278389wrx.0.2023.05.23.00.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 00:05:49 -0700 (PDT)
+Date:   Tue, 23 May 2023 10:05:45 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Su Hui <suhui@nfschina.com>, Jeremy Kerr <jk@ozlabs.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Alistar Popple <alistair@popple.id.au>,
+        Eddie James <eajames@linux.ibm.com>, eajames@us.ibm.com,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cbostic@linux.vnet.ibm.com, linux-fsi@lists.ozlabs.org
+Subject: Re: [PATCH] drivers/fsi/scom: Return -EFAULT if copy fails
+Message-ID: <413f4e50-b722-427f-ab30-d320efe71cc0@kili.mountain>
+References: <20230519013710.34954-1-suhui@nfschina.com>
+ <de9a7ffe-bedd-4181-886d-c9a3006b7be8@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 4/5] sched: make task_vruntime_update() prototype visible
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230522195021.3456768-1-arnd@kernel.org>
- <20230522195021.3456768-5-arnd@kernel.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230522195021.3456768-5-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DrKuMfCWkakdZ5IECBIsYa3JsZNo8CY5
-X-Proofpoint-ORIG-GUID: DrKuMfCWkakdZ5IECBIsYa3JsZNo8CY5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0 phishscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230057
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de9a7ffe-bedd-4181-886d-c9a3006b7be8@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,53 +76,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/23/2023 1:20 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, May 22, 2023 at 03:30:06PM -0700, Guenter Roeck wrote:
+> On Fri, May 19, 2023 at 09:37:10AM +0800, Su Hui wrote:
+> > The copy_to/from_user() functions return the number of bytes remaining
+> > to be copied, but we want to return -EFAULT to the user.
+> > 
+> Why ? EFAULT means that a bad address was provided, and it is not
+> immediately obvious why that would be the case.
 > 
-> Having the prototype next to the caller but not visible to the callee causes
-> a W=1 warning:
-> 
-> kernel/sched/fair.c:11985:6: error: no previous prototype for 'task_vruntime_update' [-Werror=missing-prototypes]
-> 
-> Move this to a header, as we do for all other function declarations.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
+Right now the function is returning success so that's definitely wrong.
+The copy_to/from_user() function will only fail if a bad address is
+provided so -EFAULT is correct.
 
-LGTM.
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+There is a different Smatch warning for when people return a different
+error code such as -EINVAL.
+drivers/fsi/fsi-scom.c:337 scom_read() warn: return -EFAULT instead of '-EINVAL'
+The return affects the user and -EFAULT but that level of pendantry feel
+like possibly too much?  There aren't many instances of this warning.
 
--- Mukesh
+regards,
+dan carpenter
 
-> ---
->   kernel/sched/core.c  | 2 --
->   kernel/sched/sched.h | 1 +
->   2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 044bcdf4181a..aae6ff717c55 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -6030,8 +6030,6 @@ static inline struct task_struct *pick_task(struct rq *rq)
->   	BUG(); /* The idle class should always have a runnable task. */
->   }
->   
-> -extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
-> -
->   static void queue_core_balance(struct rq *rq);
->   
->   static struct task_struct *
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 44b34836bb60..d5ac0af1eede 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1245,6 +1245,7 @@ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
->   
->   bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
->   			bool fi);
-> +void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
->   
->   /*
->    * Helpers to check if the CPU's core cookie matches with the task's cookie
