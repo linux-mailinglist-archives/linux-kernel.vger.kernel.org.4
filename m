@@ -2,135 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F8670DB1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D2570DB27
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbjEWLE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S236441AbjEWLGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjEWLEX (ORCPT
+        with ESMTP id S229525AbjEWLGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:04:23 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2108.outbound.protection.outlook.com [40.107.220.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B562F11F;
-        Tue, 23 May 2023 04:04:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c6ogsKvHTj+z7HB7MqRkCk3csDAK8Dj1FCtePGpmpq/f0Notp2xreoMK+WJSUg2xY2Ks91e0IfacyzOI/jY2R5aOPaLbZpu90uF01TAojl7YljaSziX9X1gbeWqu1Kp63lEITd5pzeHFIweweECUWBnrhig5ejBCucARWVZNrvFaXqE01lvePFFnuyW9GDl5LVeuK5fReylT6OoewGpAe2GX0exoMUqkaq3EmmMRMtJMNmzCjDtTsun+xu4LuV6NTyjwfI6TL6o7vk8paJiZnusY80kdATMQ1dt/FWfZNqIkb0L6HPqfUf7qdmWlJj0/I2Yz3Cm/wT63boBzmblVkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vt8ofYJRZQDel/FPkhs4YEzF4Cv9/gMM0nJsV3GK9a0=;
- b=fg8gncZP308CtZTCkEtzderKhHPicQ+OQ5wJrpYtywq79VipdNEH61ebDRk6QBgTWOPoBJyw5YJahbGNDagBR/i/wEPnLDkYDvBea7ORCWOKZ2GXtgF7XF35RUg8L9FyFGS4SGa2aAfkRutxWcm4GiyvxQmEzU2KXSekzAfIYCSsvqfpc63iZtXmIXIVmDMzDV6etdaSlFBubI1rR1uNYGKnq64zrM14jPXwEAOltYHyLJr9v2HxabvnAxKg3vV4RLFPhVzLC4OnAxmTbQ60DLFl4ZpyGf+i1+ohhUs34n5bowVA6WY6pw1wLYscBhTIZnE4NnqzDGNJN17PaVfQrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vt8ofYJRZQDel/FPkhs4YEzF4Cv9/gMM0nJsV3GK9a0=;
- b=qA96A2HlVw6RsBLQRq4dPyf7WqBpNgMD0qy07+9rEVnjP00FdF1neOmeatUzCAIj5OzCJy3UJVihHTkyr/k2sjeOwX6E8POIBAhogV0glJGcHoWnkg2bAwTrvIidc3nBzdTcJXa1oi3r/BTY+iFRoYZ3Qcq3Ns0qUz018mburn0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by LV3PR13MB6527.namprd13.prod.outlook.com (2603:10b6:408:1a0::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.14; Tue, 23 May
- 2023 11:04:20 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Tue, 23 May 2023
- 11:04:19 +0000
-Date:   Tue, 23 May 2023 13:04:12 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Gan Yi Fang <yi.fang.gan@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Subject: Re: [PATCH net-next 1/1] net: stmmac: Remove redundant checking for
- rx_coalesce_usecs
-Message-ID: <ZGydrKQg6RsL1qHo@corigine.com>
-References: <20230523061952.204537-1-yi.fang.gan@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523061952.204537-1-yi.fang.gan@intel.com>
-X-ClientProxiedBy: AS4P192CA0036.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:658::29) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 23 May 2023 07:06:21 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B82FD;
+        Tue, 23 May 2023 04:06:19 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230523110614euoutp02a29bb60b1cf063096552cfef59dae07b~hwQesOLC22721527215euoutp02J;
+        Tue, 23 May 2023 11:06:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230523110614euoutp02a29bb60b1cf063096552cfef59dae07b~hwQesOLC22721527215euoutp02J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1684839974;
+        bh=LvmWWTdeo8NJLJrvLCy+RlGOb++PIzwBjJtTyVBLH10=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=qtGCPTn4Y35XnciMKMI+Uny1s8jweJ+WVIPwWn8ZCX8KPfOdPwxIgZih2lpXITu6r
+         Ix6uirxVhIe2wGewH66sj7DY2/XJIOddnl38XZFZQIlpjG+nWZDwDnZRxE8mNXDafp
+         V1wrW89TOwkEdMev92s1RaRkQNehPCjYODDQ6rZU=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230523110614eucas1p267f629707538c7b6a62bb138ac8e0fb5~hwQejXmRq1639016390eucas1p2z;
+        Tue, 23 May 2023 11:06:14 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 35.F4.11320.62E9C646; Tue, 23
+        May 2023 12:06:14 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230523110613eucas1p1d504533387155d7d1c5806f3259f7e89~hwQeH1DXy1101711017eucas1p1E;
+        Tue, 23 May 2023 11:06:13 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230523110613eusmtrp105cdb87855f36718a4e4cd6adef47dcc~hwQeHSx-Z1820818208eusmtrp16;
+        Tue, 23 May 2023 11:06:13 +0000 (GMT)
+X-AuditID: cbfec7f4-993ff70000022c38-80-646c9e26d674
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 67.83.10549.52E9C646; Tue, 23
+        May 2023 12:06:13 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230523110613eusmtip1ea43fa603f782331e7202065fde06d05~hwQd5Mms92279622796eusmtip1T;
+        Tue, 23 May 2023 11:06:13 +0000 (GMT)
+Received: from localhost (106.210.248.82) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Tue, 23 May 2023 12:06:12 +0100
+Date:   Tue, 23 May 2023 13:06:11 +0200
+From:   Joel Granados <j.granados@samsung.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Luis Chamberlain <mcgrof@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: bott test warning
+Message-ID: <20230523110611.ph22q32w3vhc5zhc@localhost>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|LV3PR13MB6527:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6d0cd89-a673-4810-e062-08db5b7d7526
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jdaXyK2ZXNL830h32kg1pKkOGcpsR7q1uBGndIwXJSnZUAP1+Y79AHywT0cZlPJG40/0YseRZ8bnU/6znjeFk2IkciN9twTY/G8Xb1a6Tnz5QEL9NWtS47bLcSrhcyhAzZzT0XUV8z2vplOtfjGQ9Yf5MfDPBGT2/pzbz5BwuH0V0ICec2mY4nc26MMXg8wJL48mbluK0CguO7sg4Yf4b6OFlAseMnrEfbZSezMfOAeztCxJ7cIVG3m+0ZruZmYQb7ZeqKyi2uZSFrzGnRqQH+BbpzMLNhNREnSDfnP2tSoMOLZnp5xvvzEH21j/STQjF2z5pM9q7+LadeMEbAY2rB6dOzGDFkjI7/tvdQCjVLQNveVMyNCGEPb1zuFtIx1Ykhe7ALvKWOi6pnErJk37ZuNRMYWrECG/AGXqACqWq0A0nsElEuAGgq6mB012/6pKheh+9X0f3oKNf2srf0d+cTMmmOkZ0RmmZJ7NO+BkHjqCOsl/4FX461hSQWmgWtRKlNIbsdRBh9qrUvxGamG3KKo/t+MAetAvulUfvTDsFpFB//YWXHADAen8Z7mPph8V
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39840400004)(396003)(136003)(366004)(346002)(451199021)(36756003)(2906002)(6666004)(6486002)(38100700002)(4744005)(8936002)(66946007)(66476007)(66556008)(7416002)(8676002)(316002)(5660300002)(41300700001)(6916009)(44832011)(54906003)(4326008)(478600001)(2616005)(6512007)(6506007)(86362001)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cqQ/ab07RN0lkISIP1C2cxdaqQI4IrcAf0PQINS0OEG6ue22qZtWzQdEBY6N?=
- =?us-ascii?Q?NlsAzgGZYNXQ+RXmDjod9p2cxiDwklxGNGdzlzHdJC3n0Z/iHFw3GKfVVQTA?=
- =?us-ascii?Q?Iu72iqmNNWRhIqyvsPXZINPKgUZJ634GAixi9I1GUy1TOjlHhZu/KaQyaXxi?=
- =?us-ascii?Q?/968K35nMWVMD8AggGgk93ax+kPSeYQ3rQjzE/zOKn4Udt4slQPafg48VUDj?=
- =?us-ascii?Q?c5YZ3M1+RztZNJZGTLb3Lc7Ma03tNHRYyJefRCrvvK8Ja3by71MXvkqlOj2/?=
- =?us-ascii?Q?A9heB4PjTZ7u0ZZghyx29NzIrRzeKkDxs4NMjghJfXf2uRQjQAWCmP5EgTm7?=
- =?us-ascii?Q?rwszPwvItds+iNx7dh4+SnELbXvrxrLXCueAo2w/ab9FaoruODkXUDJDgptj?=
- =?us-ascii?Q?oMgZ7kXuNAi5VJUwD1dQLPIlDZ1s7cJ+Zv0D4k8Rakbu5Lh5Sh3PTLv7Z/DC?=
- =?us-ascii?Q?PAM9i6bm2MGQzuaWNYuTxHItmkBNcUxssumNgcWrhEQzUXfCFH7wXPj1E852?=
- =?us-ascii?Q?Lqi5Wli0leMG6BUGM+/0cHFRHxNzaVbXnwe4FM9GGSkmp5umFexlVkq4d2IB?=
- =?us-ascii?Q?diIR3kE535W1SKMxXs8V0QKnwic37suKO/Ik5dbsifdlsd6amglXJIgBM0uA?=
- =?us-ascii?Q?mhQbEftZwqbcx1wAWlTNFDO4YXsYp6Hxshge7dEqvxbcx0suJo+9kKZhWLL+?=
- =?us-ascii?Q?l+q+xMF+rEz5c18pYEZMybwNRUbVRGDz4m2P5PLeAoQ2fHePDi3OFX3Y7IU7?=
- =?us-ascii?Q?oEv5W0gRUdMod/3WpY8hyh7JRP3C+IqFHPBw1l5hRcNPPEYqiFC62hUHsQt7?=
- =?us-ascii?Q?p7tPaQwW0/u5yjKRgAODlzgTciSsO1lXAUz+TTCE4JqD1P2qnCH+JXphXSY1?=
- =?us-ascii?Q?1rwELg2/oBYCvNq6dyELCAjLDiLmolzFxEuCVeZhSiDgnn30hSGafclqV7Iy?=
- =?us-ascii?Q?w+B+5s7fqtuy4LvmR9m/qWCvVukIS8Sz8jKwyi/W5iSasL5sI9UyiNH4LQuB?=
- =?us-ascii?Q?e4GgRhfWDIdaIwJBqmllaB0oaos0VwwZBa5UN/F5Vt81dzIzyeVZuvypJ4vP?=
- =?us-ascii?Q?qmbhHcPbfTElmTC2H29jnTWXMN6tgoRCY50WDhevPSIeO+JHN4u8+ISS9d5d?=
- =?us-ascii?Q?qWbQ+dp+d6FZNKI3oWqdW64JQ9o80U5VWLJoUu1hK3gd7hx42P71hLJY6htb?=
- =?us-ascii?Q?eMiojFQuWveowGMny1SI/hB3zM5/OB4dJXgdUFM7iPnJ8JyUAY8epfxFwOTB?=
- =?us-ascii?Q?nYSFPJdBlxjGL5bx4sLKQT64CaVxAMvVXj72jL1sG7TC12eLcgSEnqSwnIku?=
- =?us-ascii?Q?qmoMj6VxpS/kHR6sH0N45CRTmo6CfZ5SgXvrg01Lxj/dP7U2sAcf0by4LlUy?=
- =?us-ascii?Q?IazyXGySKyjuk4mJkcQDzQA3GYFBmIMPP4NlIm/H73uxNRpNINSN/Zd9Lp3+?=
- =?us-ascii?Q?0yliNUQg4WoE4EPMPgqmgvhCUfn36m+nGr41wsErfkHAV/EVb0ubTIEXXBMd?=
- =?us-ascii?Q?jPrChcSwLLG+ywHneBHbwYi7M063TuYw7F6i/TIzgIjt5vux0lrocLlAwzCS?=
- =?us-ascii?Q?hPOr+rsOHzSKGS+vyFLhBtYh+CK1w/pxN36TEw2ZvBVTzkZ6lQ4p+aYH1jSp?=
- =?us-ascii?Q?necOKkW3GRxVj7QVyO0TXgNhN3Pcy0T8ZfOdqriHfmVaIqvJTGVFYOPjMVye?=
- =?us-ascii?Q?wZ0RtQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6d0cd89-a673-4810-e062-08db5b7d7526
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 11:04:19.9208
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pzTiGOr7FsorKK5U2FP59cQrLQ2+wpKM84JrSHygZyty5uGiJgAw2nUow/vx6KKPbjxfVaulbG8JO6L2LxXI2RyYp2ltvcaknGgsQgm8kRE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR13MB6527
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="y7qniprnbfkodh4h"
+Content-Disposition: inline
+In-Reply-To: <20230523135739.73068c68@canb.auug.org.au>
+X-Originating-IP: [106.210.248.82]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIKsWRmVeSWpSXmKPExsWy7djPc7pq83JSDD7dZrG4vGsOm8XBhW2M
+        FjcmPGW02Lr3KrsDi0fjjRtsHptWdbJ5fN4kF8AcxWWTkpqTWZZapG+XwJVxYcI+1oI9whWb
+        1kxnaWBcLNjFyMEhIWAi0fXcuIuRi0NIYAWjxOMdn1kgnC+MEuff90M5nxklulY9Y+xi5ATr
+        uPhqJxuILSSwnFHiw0IpuKIZ57ZDJbYwSjTN0gaxWQRUJSbv/MkMYrMJ6Eicf3OHGWS1iIC2
+        xIHfAiC9zAJzGCVeXXzCChIXFtCSaNpmAmLyCphLbFviBtLJKyAocXLmExYQm1mgQuLyumaw
+        amYBaYnl/zhAwpxA1RNvfmOCuFJJYnXXHzYIu1bi1JZbTCCbJAS+cEhseb2FFSLhIrHqWQs7
+        hC0s8er4FihbRuL05B4WiIbJjBL7/31gh3BWM0osa/wKtcJaouXKE6gOR4nbi3ewQIKUT+LG
+        W0GIQ/kkJm2bzgwR5pXoaBOCqFaTWH3vDcsERuVZSF6bheS1WQivQYR1JBbs/sSGIawtsWzh
+        a2YI21Zi3br3LAsY2VcxiqeWFuempxYb5aWW6xUn5haX5qXrJefnbmIEpqTT/45/2cG4/NVH
+        vUOMTByMhxhVgJofbVh9gVGKJS8/L1VJhPdEeXaKEG9KYmVValF+fFFpTmrxIUZpDhYlcV5t
+        25PJQgLpiSWp2ampBalFMFkmDk6pBqaKhxOLfSwmiU46Wu+9dHH8reuLS9fMNxIUXa24JXt/
+        UauUjfat1uxX6XIR83RT1Dg+C+9x/8TUJbzS42fth/X8IUFv9vDWLd2mVlhuXbTv4SHH4I/b
+        9ddcurKgJdPGRkV4Xcu2CqMV09Zei7SbMbnb+cDCN6qeP9dsUMh+eyDh2sEdZ601GCxO34u7
+        OWX6zuo6nyQT88PrPs9u9WKTUPOYGR/Lmp99qmTW09gcIz+dbeWbteWKDl58O/eve1a95rx9
+        rVb8X+b09wV/mLXi15/IvRVbbxxZ81H0qtH7gNBmq5lHTZIjXtVZfu06fmW+ym72TZcCeaLZ
+        pT/opVjqZYmpzp+uvdD5wbUHH4NWaLMrsRRnJBpqMRcVJwIALHQH6MQDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsVy+t/xu7qq83JSDE60K1lc3jWHzeLgwjZG
+        ixsTnjJabN17ld2BxaPxxg02j02rOtk8Pm+SC2CO0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAz
+        MrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0Mv4vG0qS8Eu4YqZ31cwNjAuFOxi5OSQEDCRuPhq
+        J1sXIxeHkMBSRon1x5rYIRIyEhu/XGWFsIUl/lzrgir6yCixaO1vZghnC6NEz/VTYFUsAqoS
+        k3f+ZAax2QR0JM6/uQNkc3CICGhLHPgtAFLPLDCHUeLVxSesIHFhAS2Jpm0mICavgLnEtiVu
+        ECO7GCVW31zECDKGV0BQ4uTMJywgNrNAmcSUK+sYQeqZBaQllv/jAAlzArVOvPmNCeJOJYnV
+        XX/YIOxaic9/nzFOYBSehWTSLCSTZiFMgghrSdz495IJQ1hbYtnC18wQtq3EunXvWRYwsq9i
+        FEktLc5Nzy021CtOzC0uzUvXS87P3cQIjM5tx35u3sE479VHvUOMTByMhxhVgDofbVh9gVGK
+        JS8/L1VJhPdEeXaKEG9KYmVValF+fFFpTmrxIUZTYBhOZJYSTc4Hpo28knhDMwNTQxMzSwNT
+        SzNjJXFez4KORCGB9MSS1OzU1ILUIpg+Jg5OqQamRsMbJVcmqN7OSXha0hnzf2ZuOKvS5bmd
+        smc358dP9DjwkUGlvHLJ69tMGh8PTPqewXpv8l+z2duezjhX4Xnqrm/M7cTT+bFHOxvtH2Vc
+        2M1XU2+dfbhsSb98mMpRnfyH9/Y92yopf3bn+ZWvSg8I72te8k7Uq3nNy/9udmHHP7VVT7W7
+        2fg0LnnuhJ7m0sisWGOg7/ecn/p+0pzpeRFyZeevpiTPniQ4q9zAbzmftuQfw2OfHoTkLDDe
+        +etq4ZcTx+oTJ1268sxxc+S01z2z45QPxWl+52KMbPU5NLlWfLlyUcDPH/tkPTL7nobu27Yv
+        VF9B9dSfqydXc09Q4rFnnW461VE7KaNosfiSs2J5SizFGYmGWsxFxYkAyxBYXGMDAAA=
+X-CMS-MailID: 20230523110613eucas1p1d504533387155d7d1c5806f3259f7e89
+X-Msg-Generator: CA
+X-RootMTR: 20230523035747eucas1p2f10754f5eb6759d6665a35562c523841
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230523035747eucas1p2f10754f5eb6759d6665a35562c523841
+References: <CGME20230523035747eucas1p2f10754f5eb6759d6665a35562c523841@eucas1p2.samsung.com>
+        <20230523135739.73068c68@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 02:19:52AM -0400, Gan Yi Fang wrote:
-> The datatype of rx_coalesce_usecs is u32, always larger or equal to zero.
-> Previous checking does not include value 0, this patch removes the
-> checking to handle the value 0.
-> 
-> Signed-off-by: Gan Yi Fang <yi.fang.gan@intel.com>
+--y7qniprnbfkodh4h
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+On Tue, May 23, 2023 at 01:57:39PM +1000, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next boot test (powerpc pseries_le_defconfig) produced
+> this warning:
+>=20
+> sysctl table check failed: kernel/usermodehelper Not a file
+> sysctl table check failed: kernel/usermodehelper No proc_handler
+> sysctl table check failed: kernel/usermodehelper bogus .mode 0555
+> sysctl table check failed: kernel/keys Not a file
+> sysctl table check failed: kernel/keys No proc_handler
+> sysctl table check failed: kernel/keys bogus .mode 0555
+> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc3-04222-g1999c5d1802e #1
+> Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf00=
+0004 of:SLOF,HEAD pSeries
+> Call Trace:
+> [c0000000028bfd40] [c00000000113ea2c] dump_stack_lvl+0x70/0xa0 (unreliabl=
+e)
+> [c0000000028bfd70] [c0000000006166f0] __register_sysctl_table+0x7f0/0x9e0
+> [c0000000028bfe50] [c00000000204e650] __register_sysctl_init+0x40/0x78
+> [c0000000028bfec0] [c00000000202d660] sysctl_init_bases+0x40/0xb4
+> [c0000000028bfef0] [c00000000204e6dc] proc_sys_init+0x54/0x68
+> [c0000000028bff10] [c00000000204dff4] proc_root_init+0xb8/0xdc
+> [c0000000028bff30] [c0000000020045d8] start_kernel+0x7f8/0x834
+> [c0000000028bffe0] [c00000000000e998] start_here_common+0x1c/0x20
+> failed when register_sysctl kern_table to kernel
+>=20
+> I am not sure exactly which commit caused this.
+Its probably this one 7eec88986dce2d85012fbe516def7a2d7d77735c
 
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+
+
+
+--=20
+
+Joel Granados
+
+--y7qniprnbfkodh4h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmRsniEACgkQupfNUreW
+QU8H3Qv+O7LmDVAl5XFm7jN6HwdRNxO1kRlV+SY0f+aoFrXEVVkXQFrWY0BrJwS2
+J6ITNRRCSlQHGJXiaw8OAOnhVIOQm3KbY/JPT/EMkSLUp2k2dOn0X25lMBf3e9mE
+VbG0X7kqFUVpvWvvzEQghW1ugEZENJXRvAlbQgSDEIkYE/JCkJbb86vAdFG032gX
+Or72mUiSW1MtrKZSmkaOpv+F2eDxCKN4W9HyOBky3LajGZAEVCEJMZ80eKRMRp7e
+xC87LTs30sZMTl0hKoVv4+R2CU0vOD13KTznL+6JeOado3c8Iz4RK6z/w0qBpNR5
+yX4zs/fGRDHkVJSwxiQbte52L28SyFojUcqm72+JzuJmlGt57hwyvHrsK9K2+dMm
+m198+JRfvHoT4hCIUcO92RmwMj/6UU0V7UyN1kiRqlCKJOQVmoXKkvEdpTf6ZkwA
+Np0ROcFxwHc5EDxmbzcmsWl6GiMSvKou5TOvga3MumAKp74dpcITQ7Ufi4XjHx46
+Hkp/+bQR
+=Cvv6
+-----END PGP SIGNATURE-----
+
+--y7qniprnbfkodh4h--
