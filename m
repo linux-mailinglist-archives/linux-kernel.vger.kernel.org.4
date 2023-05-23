@@ -2,263 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5535B70D4FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4425F70D4FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235503AbjEWHak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S235452AbjEWHaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbjEWHaf (ORCPT
+        with ESMTP id S235473AbjEWHaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:30:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8EB11A;
-        Tue, 23 May 2023 00:30:02 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N7MOdr031554;
-        Tue, 23 May 2023 07:29:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=fFxOJlVlhuvFzYutazyLVXNCf8wMvkWPEFJYeiTNkmg=;
- b=jMDWMhQmbKbwIpq3ImmffL/iHtGJ7RN8WaDRRcF6VkAB/PBXwb4uypGCr6LGeYTccueZ
- ScpzCNGO4Uv3B970q5TGEpPdTb1Lza3AaH2jNn7NoNuCs6SEze0lnhK4zIwdc3tUCBNY
- Gamt1QP8bNqnN8wUnZ3KoDDX5/3dkZZ1fUtUET6Fh/JgavH4hnJktkRjYQIAAt1WmTPF
- 4EvMuGVZRLUsoWxhfkAWneajLW9Mq/d1fsSSNegtXsn+I5Yyqor+kfEqYKosGDV1sw5d
- WX8UckYuESM+TgWEf9AXITCwPuxleIALFRmUH4npzCDaA5g/Us4199o8oamo8sRpIyqx ZQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrpmm0a5c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 07:29:36 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N7TUSc019938
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 07:29:30 GMT
-Received: from stor-berry.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 23 May 2023 00:29:30 -0700
-From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-To:     <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
-        <bvanassche@acm.org>, <mani@kernel.org>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <beanhuo@micron.com>, <avri.altman@wdc.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 7/7] ufs: core: Add error handling for MCQ mode
-Date:   Tue, 23 May 2023 00:28:15 -0700
-Message-ID: <a8afbd1088d9f8803610a5907cb2bdf1c0852457.1684825500.git.quic_nguyenb@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1684825500.git.quic_nguyenb@quicinc.com>
-References: <cover.1684825500.git.quic_nguyenb@quicinc.com>
+        Tue, 23 May 2023 03:30:02 -0400
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ED2130
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:29:38 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso3622139e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684826916; x=1687418916;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R4wijngb6QvR7fUb6UoriVyz99/h98K23JMN/hOkrwE=;
+        b=H9dQ97nC5ybHa0NcQluD8by3BHn6gAnM82D0rSakruU9ARajhmcIelQRGk4Y6bRGgB
+         ThqKyX5n8BbRJYAKwzXmA9Azj0wgLL4N1JMdpnuoaQrIH8FG+YwooAVsAIEy2lxvtnvc
+         z5Qp6Q1m5fl7Et1JswRqRapGUwtnb2sd1UuVrdSsurcDBsYAdW0vvJHCldGPC6MC80UN
+         sZKJFEflubZfgIvum1A/kBW8y6vAiieBkj5JWTO3CnzzIWmjk4Ra1Wy2DdOJT7CsLvA0
+         aydfBdz3fmMJ5Fl4tLzvmwpeGVJOnYV/X7kRAaMpvdEj+xaE9Fv75ZKfKFNHL8sLlAjF
+         tItA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684826916; x=1687418916;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R4wijngb6QvR7fUb6UoriVyz99/h98K23JMN/hOkrwE=;
+        b=Db5+JUZu63/pdtwzZwNxugoZnBTnRUrxg8B35tu8HBhwx3zDx4D8Pe/BgF3WBHxtLX
+         JZZzsNV1eROOOKljYaiVyqFr83KRJFkQBvJ8+xrTxboYjLtDEZrdbkxkrSluQbeL4wTB
+         Kfxlz+VdPGPEP5vczDGpRXBh0nfvwxKgi07vUohHS2zxKjubz5BCUIbFO+ykgAIiVW2L
+         cv2PPMHjBjhYuXGsTuJ2tOdHclKs/OSv5D83ec2EwXtn413XPEdakcwrJGwVHL71Uvgg
+         9NFmsEx0hGNp3TvRD5jE7bcXegNWR/Y6ffZVkc97Rlajun6AwelepwcJ43g9+mhNJasE
+         HNYA==
+X-Gm-Message-State: AC+VfDxTM0E9QkLABn4Joyl7XFQSASiBnSmqTd2xYvYhCL3JnDVlPiKL
+        qOUjszrjRokeig5L+uguledQrA==
+X-Google-Smtp-Source: ACHHUZ7ckzgTPARCqQoFm84g1VkR8uBKvcTnnnaG7omjOTx5eT2p+q7zUCq3nyUBqCKJ2vjO1+UWzw==
+X-Received: by 2002:ac2:4556:0:b0:4f1:3d9f:1b4f with SMTP id j22-20020ac24556000000b004f13d9f1b4fmr4111085lfm.49.1684826916275;
+        Tue, 23 May 2023 00:28:36 -0700 (PDT)
+Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
+        by smtp.gmail.com with ESMTPSA id m4-20020a2e9104000000b002adb10a6620sm1443408ljg.107.2023.05.23.00.28.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 00:28:35 -0700 (PDT)
+Message-ID: <bab56b1e-18e3-25a2-b596-b181f3032cd1@linaro.org>
+Date:   Tue, 23 May 2023 09:28:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zzj3JL40w5LfI-vO2VgG1XJPBeLYb2jK
-X-Proofpoint-GUID: zzj3JL40w5LfI-vO2VgG1XJPBeLYb2jK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0
- adultscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305230061
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/3] drm/msm/adreno: Add Adreno A690 support
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, johan@kernel.org, mani@kernel.org
+References: <20230523011522.65351-1-quic_bjorande@quicinc.com>
+ <20230523011522.65351-2-quic_bjorande@quicinc.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230523011522.65351-2-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for error handling for MCQ mode.
 
-Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
----
- drivers/ufs/core/ufshcd.c | 106 ++++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 94 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 69562c4..90cf047 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -3148,6 +3148,15 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- 		err = -ETIMEDOUT;
- 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
- 			__func__, lrbp->task_tag);
-+
-+		/* MCQ mode */
-+		if (is_mcq_enabled(hba)) {
-+			err = ufshcd_clear_cmd(hba, lrbp->task_tag);
-+			hba->dev_cmd.complete = NULL;
-+			return err;
-+		}
-+
-+		/* SDB mode */
- 		if (ufshcd_clear_cmd(hba, lrbp->task_tag) == 0) {
- 			/* successfully cleared the command, retry if needed */
- 			err = -EAGAIN;
-@@ -5572,6 +5581,31 @@ static int ufshcd_poll(struct Scsi_Host *shost, unsigned int queue_num)
- }
- 
- /**
-+ * ufshcd_mcq_compl_pending_transfer - MCQ mode function. It is
-+ * invoked from the error handler context or ufshcd_host_reset_and_restore()
-+ * to complete the pending transfers and free the resources associated with
-+ * the scsi command.
-+ *
-+ * @hba: per adapter instance
-+ */
-+static void ufshcd_mcq_compl_pending_transfer(struct ufs_hba *hba)
-+{
-+	struct ufshcd_lrb *lrbp;
-+	struct scsi_cmnd *cmd;
-+	int tag;
-+
-+	for (tag = 0; tag < hba->nutrs; tag++) {
-+		lrbp = &hba->lrb[tag];
-+		cmd = lrbp->cmd;
-+		if (ufshcd_cmd_inflight(lrbp->cmd)) {
-+			set_host_byte(cmd, DID_ERROR);
-+			ufshcd_release_scsi_cmd(hba, lrbp);
-+			scsi_done(cmd);
-+		}
-+	}
-+}
-+
-+/**
-  * ufshcd_transfer_req_compl - handle SCSI and query command completion
-  * @hba: per adapter instance
-  *
-@@ -6137,7 +6171,11 @@ static void ufshcd_exception_event_handler(struct work_struct *work)
- /* Complete requests that have door-bell cleared */
- static void ufshcd_complete_requests(struct ufs_hba *hba)
- {
--	ufshcd_transfer_req_compl(hba);
-+	if (is_mcq_enabled(hba))
-+		ufshcd_mcq_compl_pending_transfer(hba);
-+	else
-+		ufshcd_transfer_req_compl(hba);
-+
- 	ufshcd_tmc_handler(hba);
- }
- 
-@@ -6378,18 +6416,36 @@ static bool ufshcd_abort_all(struct ufs_hba *hba)
- 	bool needs_reset = false;
- 	int tag, ret;
- 
--	/* Clear pending transfer requests */
--	for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
--		ret = ufshcd_try_to_abort_task(hba, tag);
--		dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
--			hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
--			ret ? "failed" : "succeeded");
--		if (ret) {
--			needs_reset = true;
--			goto out;
-+	if (is_mcq_enabled(hba)) {
-+		struct ufshcd_lrb *lrbp;
-+		int tag;
-+
-+		for (tag = 0; tag < hba->nutrs; tag++) {
-+			lrbp = &hba->lrb[tag];
-+			if (!ufshcd_cmd_inflight(lrbp->cmd))
-+				continue;
-+			ret = ufshcd_try_to_abort_task(hba, tag);
-+			dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
-+				hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
-+				ret ? "failed" : "succeeded");
-+			if (ret) {
-+				needs_reset = true;
-+				goto out;
-+			}
-+		}
-+	} else {
-+		/* Clear pending transfer requests */
-+		for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
-+			ret = ufshcd_try_to_abort_task(hba, tag);
-+			dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
-+				hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
-+				ret ? "failed" : "succeeded");
-+			if (ret) {
-+				needs_reset = true;
-+				goto out;
-+			}
- 		}
- 	}
--
- 	/* Clear pending task management requests */
- 	for_each_set_bit(tag, &hba->outstanding_tasks, hba->nutmrs) {
- 		if (ufshcd_clear_tm_cmd(hba, tag)) {
-@@ -7321,6 +7377,8 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 	unsigned long flags, pending_reqs = 0, not_cleared = 0;
- 	struct Scsi_Host *host;
- 	struct ufs_hba *hba;
-+	struct ufs_hw_queue *hwq;
-+	struct ufshcd_lrb *lrbp;
- 	u32 pos, not_cleared_mask = 0;
- 	int err;
- 	u8 resp = 0xF, lun;
-@@ -7336,6 +7394,20 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 		goto out;
- 	}
- 
-+	if (is_mcq_enabled(hba)) {
-+		for (pos = 0; pos < hba->nutrs; pos++) {
-+			lrbp = &hba->lrb[pos];
-+			if (ufshcd_cmd_inflight(lrbp->cmd) &&
-+			    lrbp->lun == lun) {
-+				ufshcd_clear_cmd(hba, pos);
-+				hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(lrbp->cmd));
-+				ufshcd_mcq_poll_cqe_lock(hba, hwq);
-+			}
-+		}
-+		err = 0;
-+		goto out;
-+	}
-+
- 	/* clear the commands that were pending for corresponding LUN */
- 	spin_lock_irqsave(&hba->outstanding_lock, flags);
- 	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs)
-@@ -7610,7 +7682,8 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
-  */
- static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
- {
--	int err;
-+	struct ufs_hw_queue *hwq;
-+	int err, i;
- 
- 	/*
- 	 * Stop the host controller and complete the requests
-@@ -7622,6 +7695,15 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
- 	ufshcd_complete_requests(hba);
- 	hba->silence_err_logs = false;
- 
-+	if (is_mcq_enabled(hba)) {
-+		for (i = 0; i < hba->nr_hw_queues; i++) {
-+			hwq = &hba->uhq[i];
-+			hwq->sq_tail_slot = 0;
-+			hwq->cq_tail_slot = 0;
-+			hwq->cq_head_slot = 0;
-+		}
-+	}
-+
- 	/* scale up clocks to max frequency before full reinitialization */
- 	ufshcd_scale_clks(hba, true);
- 
--- 
-2.7.4
+On 23.05.2023 03:15, Bjorn Andersson wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Introduce support for the Adreno A690, found in Qualcomm SC8280XP.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+> 
+> Changes since v1:
+> - Moved a690 to adreno_is_a660_family(), which simplifies hw_init() and
+>   ensured that pdc_in_aop got set.
+> - Dropped dynamic lookup in cmd-db. Will look into posting this
+>   separately.
+> 
+>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 113 ++++++++++++++++++++-
+>  drivers/gpu/drm/msm/adreno/a6xx_hfi.c      |  33 ++++++
+>  drivers/gpu/drm/msm/adreno/adreno_device.c |  14 +++
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.h    |  11 +-
+>  4 files changed, 166 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 9fb214f150dd..cabc8f9a12d7 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -588,6 +588,63 @@ const struct adreno_reglist a660_hwcg[] = {
+>  	{},
+>  };
+>  
+> +const struct adreno_reglist a690_hwcg[] = {
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_SP0, 0x02222222},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL2_SP0, 0x02222220},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_SP0, 0x00000080},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_SP0, 0x0000F3CF},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_TP0, 0x22222222},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL2_TP0, 0x22222222},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL3_TP0, 0x22222222},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL4_TP0, 0x00022222},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_TP0, 0x11111111},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY2_TP0, 0x11111111},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY3_TP0, 0x11111111},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY4_TP0, 0x00011111},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_TP0, 0x77777777},
+> +	{REG_A6XX_RBBM_CLOCK_HYST2_TP0, 0x77777777},
+> +	{REG_A6XX_RBBM_CLOCK_HYST3_TP0, 0x77777777},
+> +	{REG_A6XX_RBBM_CLOCK_HYST4_TP0, 0x00077777},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_RB0, 0x22222222},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL2_RB0, 0x01002222},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_CCU0, 0x00002220},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_RB_CCU0, 0x00040F00},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_RAC, 0x25222022},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL2_RAC, 0x00005555},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_RAC, 0x00000011},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_RAC, 0x00445044},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_TSE_RAS_RBBM, 0x04222222},
+> +	{REG_A6XX_RBBM_CLOCK_MODE_VFD, 0x00002222},
+> +	{REG_A6XX_RBBM_CLOCK_MODE_GPC, 0x00222222},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_HLSQ_2, 0x00000002},
+> +	{REG_A6XX_RBBM_CLOCK_MODE_HLSQ, 0x00002222},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_TSE_RAS_RBBM, 0x00004000},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_VFD, 0x00002222},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_GPC, 0x00000200},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_HLSQ, 0x00000000},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_TSE_RAS_RBBM, 0x00000000},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_VFD, 0x00000000},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_GPC, 0x04104004},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_HLSQ, 0x00000000},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_TEX_FCHE, 0x00000222},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_TEX_FCHE, 0x00000111},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_TEX_FCHE, 0x00000000},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_UCHE, 0x22222222},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_UCHE, 0x00000004},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_UCHE, 0x00000002},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL, 0x8AA8AA82},
+> +	{REG_A6XX_RBBM_ISDB_CNT, 0x00000182},
+> +	{REG_A6XX_RBBM_RAC_THRESHOLD_CNT, 0x00000000},
+> +	{REG_A6XX_RBBM_SP_HYST_CNT, 0x00000000},
+> +	{REG_A6XX_RBBM_CLOCK_CNTL_GMU_GX, 0x00000222},
+> +	{REG_A6XX_RBBM_CLOCK_DELAY_GMU_GX, 0x00000111},
+> +	{REG_A6XX_RBBM_CLOCK_HYST_GMU_GX, 0x00000555},
+> +	{REG_A6XX_GPU_GMU_AO_GMU_CGC_MODE_CNTL, 0x20200},
+> +	{REG_A6XX_GPU_GMU_AO_GMU_CGC_DELAY_CNTL, 0x10111},
+> +	{REG_A6XX_GPU_GMU_AO_GMU_CGC_HYST_CNTL, 0x5555},
+> +	{}
+> +};
+> +
+>  static void a6xx_set_hwcg(struct msm_gpu *gpu, bool state)
+>  {
+>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+> @@ -747,6 +804,45 @@ static const u32 a660_protect[] = {
+>  	A6XX_PROTECT_NORDWR(0x1f8c0, 0x0000), /* note: infinite range */
+>  };
+>  
+> +/* These are for a690 */
+> +static const u32 a690_protect[] = {
+> +	A6XX_PROTECT_RDONLY(0x00000, 0x004ff),
+> +	A6XX_PROTECT_RDONLY(0x00501, 0x00001),
+> +	A6XX_PROTECT_RDONLY(0x0050b, 0x002f4),
+> +	A6XX_PROTECT_NORDWR(0x0050e, 0x00000),
+> +	A6XX_PROTECT_NORDWR(0x00510, 0x00000),
+> +	A6XX_PROTECT_NORDWR(0x00534, 0x00000),
+> +	A6XX_PROTECT_NORDWR(0x00800, 0x00082),
+> +	A6XX_PROTECT_NORDWR(0x008a0, 0x00008),
+> +	A6XX_PROTECT_NORDWR(0x008ab, 0x00024),
+> +	A6XX_PROTECT_RDONLY(0x008d0, 0x000bc),
+> +	A6XX_PROTECT_NORDWR(0x00900, 0x0004d),
+> +	A6XX_PROTECT_NORDWR(0x0098d, 0x00272),
+> +	A6XX_PROTECT_NORDWR(0x00e00, 0x00001),
+> +	A6XX_PROTECT_NORDWR(0x00e03, 0x0000c),
+> +	A6XX_PROTECT_NORDWR(0x03c00, 0x000c3),
+> +	A6XX_PROTECT_RDONLY(0x03cc4, 0x01fff),
+> +	A6XX_PROTECT_NORDWR(0x08630, 0x001cf),
+> +	A6XX_PROTECT_NORDWR(0x08e00, 0x00000),
+> +	A6XX_PROTECT_NORDWR(0x08e08, 0x00008),
+> +	A6XX_PROTECT_NORDWR(0x08e50, 0x0001f),
+> +	A6XX_PROTECT_NORDWR(0x08e80, 0x0027f),
+> +	A6XX_PROTECT_NORDWR(0x09624, 0x001db),
+> +	A6XX_PROTECT_NORDWR(0x09e60, 0x00011),
+> +	A6XX_PROTECT_NORDWR(0x09e78, 0x00187),
+> +	A6XX_PROTECT_NORDWR(0x0a630, 0x001cf),
+> +	A6XX_PROTECT_NORDWR(0x0ae02, 0x00000),
+> +	A6XX_PROTECT_NORDWR(0x0ae50, 0x0012f),
+> +	A6XX_PROTECT_NORDWR(0x0b604, 0x00000),
+> +	A6XX_PROTECT_NORDWR(0x0b608, 0x00006),
+> +	A6XX_PROTECT_NORDWR(0x0be02, 0x00001),
+> +	A6XX_PROTECT_NORDWR(0x0be20, 0x0015f),
+> +	A6XX_PROTECT_NORDWR(0x0d000, 0x005ff),
+> +	A6XX_PROTECT_NORDWR(0x0f000, 0x00bff),
+> +	A6XX_PROTECT_RDONLY(0x0fc00, 0x01fff),
+> +	A6XX_PROTECT_NORDWR(0x11c00, 0x00000), /*note: infiite range */
+> +};
+> +
+>  static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>  {
+>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+> @@ -758,6 +854,11 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>  		count = ARRAY_SIZE(a650_protect);
+>  		count_max = 48;
+>  		BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+> +	} else if (adreno_is_a690(adreno_gpu)) {
+> +		regs = a690_protect;
+> +		count = ARRAY_SIZE(a690_protect);
+> +		count_max = 48;
+> +		BUILD_BUG_ON(ARRAY_SIZE(a690_protect) > 48);
+>  	} else if (adreno_is_a660_family(adreno_gpu)) {
+>  		regs = a660_protect;
+>  		count = ARRAY_SIZE(a660_protect);
+> @@ -806,6 +907,13 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
+>  		uavflagprd_inv = 2;
+>  	}
+>  
+> +	if (adreno_is_a690(adreno_gpu)) {
+> +		lower_bit = 2;
+> +		amsbc = 1;
+> +		rgb565_predicator = 1;
+> +		uavflagprd_inv = 2;
+> +	}
+> +
+>  	if (adreno_is_7c3(adreno_gpu)) {
+>  		lower_bit = 1;
+>  		amsbc = 1;
+> @@ -1084,7 +1192,7 @@ static int hw_init(struct msm_gpu *gpu)
+>  	/* Setting the primFifo thresholds default values,
+>  	 * and vccCacheSkipDis=1 bit (0x200) for A640 and newer
+>  	*/
+> -	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
+> +	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu) || adreno_is_a690(adreno_gpu))
+>  		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
+>  	else if (adreno_is_a640_family(adreno_gpu) || adreno_is_7c3(adreno_gpu))
+>  		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
+> @@ -1991,7 +2099,8 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+>  	info = adreno_info(config->rev);
+>  
+>  	if (info && (info->revn == 650 || info->revn == 660 ||
+> -			adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), info->rev)))
+> +		     info->revn == 690 ||
+> +		     adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), info->rev)))
+>  		adreno_gpu->base.hw_apriv = true;
+>  
+>  	a6xx_llc_slices_init(pdev, a6xx_gpu);
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> index 2cc83e049613..25b235b49ebc 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> @@ -414,6 +414,37 @@ static void a650_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
+>  	msg->cnoc_cmds_data[1][0] =  0x60000001;
+>  }
+>  
+> +static void a690_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
+> +{
+> +	/*
+> +	 * Send a single "off" entry just to get things running
+> +	 * TODO: bus scaling
+> +	 */
+> +	msg->bw_level_num = 1;
+> +
+> +	msg->ddr_cmds_num = 3;
+> +	msg->ddr_wait_bitmask = 0x01;
+> +
+> +	msg->ddr_cmds_addrs[0] = 0x50004;
+> +	msg->ddr_cmds_addrs[1] = 0x50000;
+> +	msg->ddr_cmds_addrs[2] = 0x500ac;
+> +
+> +	msg->ddr_cmds_data[0][0] =  0x40000000;
+> +	msg->ddr_cmds_data[0][1] =  0x40000000;
+> +	msg->ddr_cmds_data[0][2] =  0x40000000;
+> +
+> +	/*
+> +	 * These are the CX (CNOC) votes - these are used by the GMU but the
+> +	 * votes are known and fixed for the target
+> +	 */
+> +	msg->cnoc_cmds_num = 1;
+> +	msg->cnoc_wait_bitmask = 0x01;
+> +
+> +	msg->cnoc_cmds_addrs[0] = 0x5003c;
+> +	msg->cnoc_cmds_data[0][0] =  0x40000000;
+> +	msg->cnoc_cmds_data[1][0] =  0x60000001;
+> +}
+> +
+>  static void a660_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
+>  {
+>  	/*
+> @@ -531,6 +562,8 @@ static int a6xx_hfi_send_bw_table(struct a6xx_gmu *gmu)
+>  		adreno_7c3_build_bw_table(&msg);
+>  	else if (adreno_is_a660(adreno_gpu))
+>  		a660_build_bw_table(&msg);
+> +	else if (adreno_is_a690(adreno_gpu))
+> +		a690_build_bw_table(&msg);
+>  	else
+>  		a6xx_build_bw_table(&msg);
+>  
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> index 8cff86e9d35c..e5a865024e94 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> @@ -355,6 +355,20 @@ static const struct adreno_info gpulist[] = {
+>  		.init = a6xx_gpu_init,
+>  		.zapfw = "a640_zap.mdt",
+>  		.hwcg = a640_hwcg,
+> +	}, {
+> +		.rev = ADRENO_REV(6, 9, 0, ANY_ID),
+> +		.revn = 690,
+> +		.name = "A690",
+> +		.fw = {
+> +			[ADRENO_FW_SQE] = "a660_sqe.fw",
+> +			[ADRENO_FW_GMU] = "a690_gmu.bin",
+> +		},
+> +		.gmem = SZ_4M,
+> +		.inactive_period = DRM_MSM_INACTIVE_PERIOD,
+> +		.init = a6xx_gpu_init,
+> +		.zapfw = "a690_zap.mdt",
+> +		.hwcg = a690_hwcg,
+> +		.address_space_size = SZ_16G,
+>  	},
+>  };
+>  
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> index f62612a5c70f..ac9c429ca07b 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+> @@ -55,7 +55,7 @@ struct adreno_reglist {
+>  	u32 value;
+>  };
+>  
+> -extern const struct adreno_reglist a615_hwcg[], a630_hwcg[], a640_hwcg[], a650_hwcg[], a660_hwcg[];
+> +extern const struct adreno_reglist a615_hwcg[], a630_hwcg[], a640_hwcg[], a650_hwcg[], a660_hwcg[], a690_hwcg[];
+>  
+>  struct adreno_info {
+>  	struct adreno_rev rev;
+> @@ -272,6 +272,11 @@ static inline int adreno_is_a660(struct adreno_gpu *gpu)
+>  	return gpu->revn == 660;
+>  }
+>  
+> +static inline int adreno_is_a690(struct adreno_gpu *gpu)
+> +{
+> +	return gpu->revn == 690;
+> +};
+> +
+>  /* check for a615, a616, a618, a619 or any derivatives */
+>  static inline int adreno_is_a615_family(struct adreno_gpu *gpu)
+>  {
+> @@ -280,13 +285,13 @@ static inline int adreno_is_a615_family(struct adreno_gpu *gpu)
+>  
+>  static inline int adreno_is_a660_family(struct adreno_gpu *gpu)
+>  {
+> -	return adreno_is_a660(gpu) || adreno_is_7c3(gpu);
+> +	return adreno_is_a660(gpu) || adreno_is_a690(gpu) || adreno_is_7c3(gpu);
+>  }
+>  
+>  /* check for a650, a660, or any derivatives */
+>  static inline int adreno_is_a650_family(struct adreno_gpu *gpu)
+>  {
+> -	return gpu->revn == 650 || gpu->revn == 620 || adreno_is_a660_family(gpu);
+> +	return gpu->revn == 650 || gpu->revn == 620  || adreno_is_a660_family(gpu);
+>  }
+>  
+>  u64 adreno_private_address_space_size(struct msm_gpu *gpu);
