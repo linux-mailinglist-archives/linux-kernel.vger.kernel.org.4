@@ -2,97 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F9670E935
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1009F70E940
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238634AbjEWWnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S235694AbjEWWuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238682AbjEWWnR (ORCPT
+        with ESMTP id S229517AbjEWWuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:43:17 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E82DA;
-        Tue, 23 May 2023 15:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684881796; x=1716417796;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=J+jN9q7cfTT3mtaA3PEXaYDQb1DYIjMPr3zxn/71cmw=;
-  b=VMc3rVFLNymAOU36KMq7Jr2mP8nBKqBrgAX7xGBx66DA+vxMYgbstnyH
-   yuc884XQ+gORx4uL0Hd7L8oz6umihB/rcan0FjXZE3cSB3jGKBMuroqd4
-   hHQHl9K/qgQIDTCvBSygpUKdxTAVRTo3F2PB9TWC4veuTDtld6XnKKoRX
-   49HJFCe59t+SFI+uriOvf9NaI2GiuiaX+mD0h8Vy4AIqCnC1tF45lNgY8
-   5Y/m/sUzfF2gKit8UsKUfYRhlragKE3vuk0koSprJybLVsan/cj++G5Gl
-   cvo8xZGmElhhM6UqR1IagUH+hARUWHSGlgIv7hY1wGmPBoeK2IMnSWIZR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="337967443"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="337967443"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 15:43:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="848473138"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="848473138"
-Received: from nalipour-mobl.amr.corp.intel.com (HELO [10.212.250.202]) ([10.212.250.202])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 15:43:14 -0700
-Message-ID: <2d96a23f-a16a-50e1-7960-a2d4998ce52f@intel.com>
-Date:   Tue, 23 May 2023 15:43:15 -0700
+        Tue, 23 May 2023 18:50:50 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB142BF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:50:48 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3384bfb39b4so2542255ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:50:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684882248; x=1687474248;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CdB683sgWwh+OYHpDOYM2ACu6pGxWfF2nR7ZnTieMw0=;
+        b=aIrsIq1A+MGPaQakkrLT6yATVX7q1jePp2K9kaSiGnqMszjUP6f+qcLc5Ow7brvp+p
+         2WEaMF+odFmZ59/NXtpLcdoFiqEIR0j8taRblSgyzsGP6ZgUfZP2afKn1XSROUCSvoDU
+         3UH+uv+m1D1l9w2BxMwlfw/jbADWHCiSKgaCKjYdrC2zUDjSPMXvdIWNMgzKH14kSfuc
+         esNClQxQE2mZwftK1d+B4lbtONoeT3koU3t5VOobSJ21AxBfrLATZkkmpgnVt0daxIq5
+         2ktmHsVYmdbEyEMKLn52l9vGj9KIif3nw9fVzYr20+5XzfjlfxExb1gPSmC+/iOaXJtX
+         aZZw==
+X-Gm-Message-State: AC+VfDzZD999KBL6MDaCYuYNN/WU0hQ8MaobMejunDyVc4q0iF8JSeBH
+        bGhGPu3todOd3NRw8wScBpwZBk1MhHYCNaZtqaCA4AtMgypN
+X-Google-Smtp-Source: ACHHUZ6P1bc/CABl11eEtK49q0VaWEeHBQcwhV0y4KgKtuiyZrILQ9lPfSOceFAnsuz7GPDc90Rychfg9XZSReefQPm3OY+2iFU8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Content-Language: en-US
-To:     kirill.shutemov@linux.intel.com
-Cc:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
-        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
-References: <20230504225351.10765-1-decui@microsoft.com>
- <20230504225351.10765-3-decui@microsoft.com>
- <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
- <20230523223750.botogigv6ht7p2zg@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230523223750.botogigv6ht7p2zg@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d287:0:b0:335:908b:8ee with SMTP id
+ p7-20020a92d287000000b00335908b08eemr7899169ilp.2.1684882248078; Tue, 23 May
+ 2023 15:50:48 -0700 (PDT)
+Date:   Tue, 23 May 2023 15:50:48 -0700
+In-Reply-To: <000000000000172fc905f8a19ab5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e29eee05fc64378e@google.com>
+Subject: Re: [syzbot] [btrfs?] WARNING in btrfs_commit_transaction (2)
+From:   syzbot <syzbot+dafbca0e20fbc5946925@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 15:37, kirill.shutemov@linux.intel.com wrote:
->> How does this work with load_unaligned_zeropad()?  Couldn't it be
->> running around poking at one of these vmalloc()'d pages via the direct
->> map during a shared->private conversion before the page has been accepted?
-> Alias processing in __change_page_attr_set_clr() will change direct
-> mapping if you call it on vmalloc()ed memory. I think we are safe wrt
-> load_unaligned_zeropad() here.
+syzbot has found a reproducer for the following issue on:
 
-We're *eventually* OK:
+HEAD commit:    ae8373a5add4 Merge tag 'x86_urgent_for_6.4-rc4' of git://g..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17b3b489280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f389ffdf4e9ba3f0
+dashboard link: https://syzkaller.appspot.com/bug?extid=dafbca0e20fbc5946925
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14243ef9280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c06772280000
 
->         /* Notify hypervisor that we are about to set/clr encryption attribute. */
->         x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
-> 
->         ret = __change_page_attr_set_clr(&cpa, 1);
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2c5ee189dd12/disk-ae8373a5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/63acf75623d7/vmlinux-ae8373a5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/29de65c99e9d/bzImage-ae8373a5.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/2eac0114b435/mount_0.gz
 
-But what about in the middle between enc_status_change_prepare() and
-__change_page_attr_set_clr()?  Don't the direct map and the
-shared/private status of the page diverge in there?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dafbca0e20fbc5946925@syzkaller.appspotmail.com
 
+BTRFS warning (device loop0): Skipping commit of aborted transaction.
+------------[ cut here ]------------
+BTRFS: Transaction aborted (error -28)
+WARNING: CPU: 0 PID: 41 at fs/btrfs/transaction.c:1978 cleanup_transaction fs/btrfs/transaction.c:1978 [inline]
+WARNING: CPU: 0 PID: 41 at fs/btrfs/transaction.c:1978 btrfs_commit_transaction+0x3223/0x3fa0 fs/btrfs/transaction.c:2565
+Modules linked in:
+CPU: 0 PID: 41 Comm: kworker/u4:2 Not tainted 6.4.0-rc3-syzkaller-00008-gae8373a5add4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Workqueue: events_unbound btrfs_async_reclaim_metadata_space
+RIP: 0010:cleanup_transaction fs/btrfs/transaction.c:1978 [inline]
+RIP: 0010:btrfs_commit_transaction+0x3223/0x3fa0 fs/btrfs/transaction.c:2565
+Code: c8 fe ff ff be 02 00 00 00 e8 f9 41 aa 00 e9 21 d3 ff ff e8 af 68 1b fe 8b b5 20 ff ff ff 48 c7 c7 c0 25 95 8a e8 2d 28 e3 fd <0f> 0b c7 85 00 ff ff ff 01 00 00 00 e9 97 df ff ff e8 87 68 1b fe
+RSP: 0018:ffffc90000b27990 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 000000001f0d8001 RCX: 0000000000000000
+RDX: ffff888014aa0000 RSI: ffffffff814c03e7 RDI: 0000000000000001
+RBP: ffffc90000b27b00 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: ffff88801f0d8000
+R13: ffff888074df3e98 R14: ffff888074df4000 R15: ffff88801f0d8000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055bc77452c28 CR3: 0000000072dfb000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ flush_space+0x1e0/0xde0 fs/btrfs/space-info.c:808
+ btrfs_async_reclaim_metadata_space+0x39e/0xa90 fs/btrfs/space-info.c:1078
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
