@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F6270D88A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFC970D88C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbjEWJNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:13:07 -0400
+        id S236074AbjEWJNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:13:10 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjEWJNF (ORCPT
+        with ESMTP id S229604AbjEWJNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:13:05 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D13894;
+        Tue, 23 May 2023 05:13:07 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEB8118;
+        Tue, 23 May 2023 02:13:06 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f7bf29550so634954066b.3;
+        Tue, 23 May 2023 02:13:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684833185; x=1687425185;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e65v/JQ0YakfdpO5WAozFB3zrVj1i6YIZiY4qha6yIU=;
+        b=cherXCFnt1MF3SeL1NDhtsI3G8BZiSMjAyAEDUQaiIiN//oSZwZAR6xeJWVgPnEXwY
+         mmlUL98Cg01OdUCaDi5zFGTu4qCEE0WvBGgKObClHQ7xp20c1lntctiZEIq/Ufg/QsHa
+         ME5RhpqM1BE1zfNaBtENfkxO87yJNwrROJ2P//6rrkjHX9dyUUdC35zGV24BEOx0rOnP
+         e+PXh4mS3FVl8f9/NHv1t8FLfQf4gM7nv7qcrDl3FFUnQPd1R9CCqOVHaqaGpZYCkyBu
+         jJlRzL9lSVKNX5xADR6UZBJnk9C8DupMZV36Vmm9cKNUHdx0DPMWaMapWlTOtAj8qjS9
+         dxJg==
+X-Gm-Message-State: AC+VfDw/iVKpy3+WtYViWQu/oBvDccd3fQruZUDhBYNsKxzSrZj0G3Fy
+        oA+/h7/oQU5ugOOG373vDRaEXWolKyw=
+X-Google-Smtp-Source: ACHHUZ7RCSSHlTvlKn5S49Hw1Z7qGeq8+J1cF4YtJ4wYDQ+mU0uyNA3Z4JuVX1vTGl6Lc5SU2Hiv7Q==
+X-Received: by 2002:a17:907:9408:b0:965:6d21:48bc with SMTP id dk8-20020a170907940800b009656d2148bcmr11601570ejc.75.1684833184311;
+        Tue, 23 May 2023 02:13:04 -0700 (PDT)
+Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id h26-20020a17090634da00b0096f7e7d1566sm4147570ejb.224.2023.05.23.02.13.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Tue, 23 May 2023 02:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=D9zz2EfQHvFlqqWXnKU+7M4y1ladVpq1HHbcIMCV3vs=; b=EzCfXQQYj+5+gv8aimO33Wlymt
-        0omXim2MltSjSqNf9ewvxI6uVWrvwlLoKZyUWYzxIvK0a0K3Cn1p5QghNKzEhiaVTJPz8wwhaYXyO
-        nXPusPy+4LgGTq2TQGOXMp4VW3/juA/sIpZTy5Nbk4/qxGhHrZKCM4Me2h/ONd0sd/Cv59YNUR9yT
-        6Bhc61FAfT6rkX2NsQSOR86LgPImxxQvqon8qzkDm0RXtaZI3T4fbcHGLCnnoV14nNhZE5bKjk0rn
-        p2p31FXJr5v5aN/ybzrMNkpP0cMsz+TqgyBbZ71dpZx4UuXy2ANNg3/nhNxNbmD8v1FRmHYFN6Qa1
-        DPznK8eA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46606)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q1O4b-0008R2-HD; Tue, 23 May 2023 10:12:53 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q1O4Z-0000Ro-90; Tue, 23 May 2023 10:12:51 +0100
-Date:   Tue, 23 May 2023 10:12:51 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net v2 0/3] net: phy: mscc: support VSC8501
-Message-ID: <ZGyDk0Om9Sr3hgLV@shell.armlinux.org.uk>
-References: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
+Message-ID: <012b7c3d-1411-e5e1-662a-33369bfca610@kernel.org>
+Date:   Tue, 23 May 2023 11:13:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 2/2] serial: cpm_uart: Fix a COMPILE_TEST dependency
+Content-Language: en-US
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel test robot <lkp@intel.com>
+References: <20230523085902.75837-1-herve.codina@bootlin.com>
+ <20230523085902.75837-3-herve.codina@bootlin.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20230523085902.75837-3-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,81 +71,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 11:04:02AM +0200, David Epping wrote:
-> Hello,
+On 23. 05. 23, 10:59, Herve Codina wrote:
+> In a COMPILE_TEST configuration, the cpm_uart driver uses symbols from
+> the cpm_uart_cpm2.c file. This file is compiled only when CONFIG_CPM2 is
+> set.
 > 
-> this updated series of patches adds support for the VSC8501 Ethernet
-> PHY and fixes support for the VSC8502 PHY in cases where no other
-> software (like U-Boot) has initialized the PHY after power up.
+> Without this dependency, the linker fails with some missing symbols for
+> COMPILE_TEST configuration that needs SERIAL_CPM without enabling CPM2.
 > 
-> The first patch simply adds the VSC8502 to the MODULE_DEVICE_TABLE,
-> where I guess it was unintentionally missing. I have no hardware to
-> test my change.
+> This lead to:
+>    depends on CPM2 || CPM1 || (PPC32 && CPM2 && COMPILE_TEST)
 > 
-> The second patch adds the VSC8501 PHY with exactly the same driver
-> implementation as the existing VSC8502.
-> 
-> The third patch fixes the initialization for VSC8501 and VSC8502.
-> I have tested this patch with VSC8501 on hardware in RGMII mode only.
-> https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/VSC8501-03_Datasheet_60001741A.PDF
-> https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/VSC8502-03_Datasheet_60001742B.pdf
-> Table 4-42 "RGMII CONTROL, ADDRESS 20E2 (0X14)" Bit 11 for each of
-> them.
-> By default the RX_CLK is disabled for these PHYs. In cases where no
-> other software, like U-Boot, enabled the clock, this results in no
-> received packets being handed to the MAC.
-> The patch enables this clock output.
-> According to Microchip support (case number 01268776) this applies
-> to all modes (RGMII, GMII, and MII).
-> 
-> Other PHYs sharing the same register map and code, like
-> VSC8530/31/40/41 have the clock enabled and the relevant bit 11 is
-> reserved and read-only for them. As per previous discussion the
-> patch still clears the bit on these PHYs, too, possibly more easily
-> supporting other future PHYs implementing this functionality.
-> 
-> For the VSC8572 family of PHYs, having a different register map,
-> no such changes are applied.
-> 
-> Thanks for your feedback,
-> David
-> 
-> --
-> 
-> Changes in v2:
-> - adjust cover letter (U-Boot, PHY families)
-> - add reviewed-by tags to patch 1/3 and 2/3
-> - patch 3/3: combine vsc85xx_rgmii_set_skews() and
->   vsc85xx_rgmii_enable_rx_clk() into vsc85xx_update_rgmii_cntl()
->   for fewer MDIO accesses
-> - patch 3/3: treat all VSC8502 family PHYs the same (regardless of
->   bit 11 reserved status)
-> 
-> Additional notes for review:
-> - If you want to, feel free to add something like
->   Co developed by Vladimir Oltean <olteanv@gmail.com>.
->   I did not do that, because the Kernel documentation requires a
->   signed off by to go with it.
->   Significant parts of the new patch are from your emails.
-> - I left the mutex_lock(&phydev->lock) in the
->   vsc85xx_update_rgmii_cntl() function, as I'm not sure whether it
->   is required to repeatedly access phydev->interface and
->   phy_interface_is_rgmii(phydev) in a consistent way.
+> This dependency does not make sense anymore and can be simplified
+> removing all the COMPILE_TEST part.
 
-Nothing should change phydev->interface except:
-1. the PHY driver in its ->read_status method when phylib has been
-   started (via phy_start()).
-2. phylib when the PHY is initially being attached.
+Then it's the same as my revert:
+https://lore.kernel.org/all/20230518055620.29957-1-jirislaby@kernel.org/
 
-The config_init methods are called during initial attachment and also
-when the phy is being resumed, for neither of which phylib will be in
-the "started" mode so (1) doesn't apply, and (2) doesn't apply because
-phy_attach_direct() will have set ->interface prior to calling the
-config_init method.
+:D
 
-As far as a phy driver should be concerned, phydev->interface is
-stable while it's being called.
+But nevermind.
+
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202305160221.9XgweObz-lkp@intel.com/
+> Fixes: e3e7b13bffae ("serial: allow COMPILE_TEST for some drivers")
+> ---
+>   drivers/tty/serial/Kconfig             | 2 +-
+>   drivers/tty/serial/cpm_uart/cpm_uart.h | 2 --
+>   2 files changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 625358f44419..de092bc1289e 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -769,7 +769,7 @@ config SERIAL_PMACZILOG_CONSOLE
+>   
+>   config SERIAL_CPM
+>   	tristate "CPM SCC/SMC serial port support"
+> -	depends on CPM2 || CPM1 || (PPC32 && COMPILE_TEST)
+> +	depends on CPM2 || CPM1
+>   	select SERIAL_CORE
+>   	help
+>   	  This driver supports the SCC and SMC serial ports on Motorola
+> diff --git a/drivers/tty/serial/cpm_uart/cpm_uart.h b/drivers/tty/serial/cpm_uart/cpm_uart.h
+> index 0577618e78c0..46c03ed71c31 100644
+> --- a/drivers/tty/serial/cpm_uart/cpm_uart.h
+> +++ b/drivers/tty/serial/cpm_uart/cpm_uart.h
+> @@ -19,8 +19,6 @@ struct gpio_desc;
+>   #include "cpm_uart_cpm2.h"
+>   #elif defined(CONFIG_CPM1)
+>   #include "cpm_uart_cpm1.h"
+> -#elif defined(CONFIG_COMPILE_TEST)
+> -#include "cpm_uart_cpm2.h"
+>   #endif
+>   
+>   #define SERIAL_CPM_MAJOR	204
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+js
+suse labs
+
