@@ -2,157 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6B670DEEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF6770DEF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbjEWOPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S237169AbjEWOQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237328AbjEWOPF (ORCPT
+        with ESMTP id S237159AbjEWOQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:15:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F26BCA;
-        Tue, 23 May 2023 07:15:03 -0700 (PDT)
-Date:   Tue, 23 May 2023 14:14:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684851300;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Nk3X6BKw3HRCtmi2q1JAJeoY4KAETf3DsT8Z6wEf8Rw=;
-        b=3y0glTUIVtWGDeDInhXGc3UU65t7OkopbpSkRJ8/FRQW03eYuSjt4dcwoizogeDXbIeXd9
-        QADforY/YbWKQG3WU8Lfzyc1fvzcicvQTVlpE/kHSEm4Lb8P652poduyJxXjLmZb2r1pwR
-        yv/PGoqLZKsgxr71Ww4qAUt8WErsQD9Jfc1hyqOwfz/lz2UgCdVb/aiVATDaqinPe4Cyvt
-        ag7ZxktXSoc9Al+D4YmSkR4ntoXP/e9O1s5z0HShoPgMsEXdHClkj7b/L5Qv2LgXywrJDe
-        NHi/NgbtzgX2X5WEeK1afdTSNCFO1gmi5EIqizpb2rpV7G0rTvDfI3xdoTY9fw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684851300;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Nk3X6BKw3HRCtmi2q1JAJeoY4KAETf3DsT8Z6wEf8Rw=;
-        b=YXFyZN1kcjYigNPEGD02bFcoQMRP4pcg0/+BenAybTqpk+SSmf31/FmDDpusSfU5JeRosA
-        B89XGOU2DrAqSMDA==
-From:   "tip-bot2 for Nikolay Borisov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/tdx: Wrap exit reason with hcall_func()
-Cc:     Nikolay Borisov <nik.borisov@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+        Tue, 23 May 2023 10:16:09 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7B019D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:15:58 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f601c57d8dso21772295e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684851357; x=1687443357;
+        h=content-transfer-encoding:subject:cc:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kz6Gi3RTfxiYpLAjeGysY3hGl/xWM9p135m8/b2TXIE=;
+        b=UEF/dplSE18i60LNJHY5+75WHRsq7a8bp9344rUJENC0RIZogsD+Dj7OCMgtZvVtCK
+         BgRxCAeSOQmjl425KJ/8KXtN0qfbU2/25dZafKreLE6V7vuzckw039vx8ffmCrvDqRsd
+         Na6xgqpcayH3RMjBdV6qDNFORd5vLqE3C221ag9TOI0uHS1WplMNmN3CcQ6Cuxup/bL7
+         pYZhhwAl90l+vZibWpbLdm88U0sLJKQ2MGl749iuViYaDK36ORa5HkkAJGfeS2+CNZ8e
+         DL79dSaryADhgw3SE+R2jmM2Cj9JrasYMbicgehclDprVu74sd0iq6OZCt78pjuntzMh
+         jTxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684851357; x=1687443357;
+        h=content-transfer-encoding:subject:cc:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kz6Gi3RTfxiYpLAjeGysY3hGl/xWM9p135m8/b2TXIE=;
+        b=dX6F122r6K9l9HWkJWC338hp/FD9jW3eHACbE40m0Ts/ermzHcRBNQuH0531bVU44d
+         rMvIQ5n6N21+HBWOyuI51f95HwprQun39NI6lRdbbPiFDW1PJMAmsJ7razphbjQuNGSQ
+         ZA1ish7XK2rttC30NCQg4Pu0gfR2gH0L8b/nmaKd0uET0goMtjsFt8QmKISx0fDikPCz
+         d0YbLt3JXpI6KdKLxhrGx8Thmu2MKFdPLKaM3iD/npCaZSmvoKPV5NB9YmN2Rr5CY7IG
+         2dokpbaQ3sZkZk1vIin39ot5uZRQiDQLZgyEXUK+KZnOd5/uSOcRQTLwek6sDMbDQZY9
+         ef/g==
+X-Gm-Message-State: AC+VfDw5Z0awxTKBG60NwgqNumv5uEyqYaIyqph1dceGBhQ+N9IJoG0X
+        j+oOTxCa3ZCp+hiIcldEirk=
+X-Google-Smtp-Source: ACHHUZ5SvExwQliWsy9HlQCZ6K1qT4JGa8cKUENvdZEqfQj3cGZfMhE81Fc05n1Cp3bT1caUFO6SmA==
+X-Received: by 2002:a05:600c:1c8b:b0:3f6:286:95d with SMTP id k11-20020a05600c1c8b00b003f60286095dmr5551614wms.18.1684851356571;
+        Tue, 23 May 2023 07:15:56 -0700 (PDT)
+Received: from [192.168.1.2] (host-95-237-135-26.retail.telecomitalia.it. [95.237.135.26])
+        by smtp.gmail.com with ESMTPSA id 3-20020a05600c028300b003f43f82001asm15125467wmk.31.2023.05.23.07.15.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 07:15:56 -0700 (PDT)
+Message-ID: <a2b2c557-c46e-6236-24a1-d605758e87f2@gmail.com>
+Date:   Tue, 23 May 2023 16:15:54 +0200
 MIME-Version: 1.0
-Message-ID: <168485129927.404.7998546441150815663.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     akpm@linux-foundation.org
+From:   Alessandro Astone <ales.astone@gmail.com>
+Cc:     kamezawa.hiroyu@jp.fujitsu.com, hughd@google.com, jakub@redhat.com,
+        ales.astone@gmail.com, linux-kernel@vger.kernel.org
+Subject: Increasing the vm.max_map_count value
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/tdx branch of tip:
+We are seeing userspace requiring more than the default 65330 mappings,
+specifically some Windows games running through wine. We are looking into
+changing the default in Fedora, but the source code includes a scary comment
+about the current value:
 
-Commit-ID:     122333d6bd229af279cdb35d1b874b71b3b9ccfb
-Gitweb:        https://git.kernel.org/tip/122333d6bd229af279cdb35d1b874b71b3b9ccfb
-Author:        Nikolay Borisov <nik.borisov@suse.com>
-AuthorDate:    Fri, 05 May 2023 15:03:32 +03:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 23 May 2023 07:01:45 -07:00
+ > Default maximum number of active map areas, this limits the number of 
+vmas
+ > per mm struct. Users can overwrite this number by sysctl but there is a
+ > problem.
+ >
+ > When a program's coredump is generated as ELF format, a section is 
+created
+ > per a vma. In ELF, the number of sections is represented in unsigned 
+short.
+ > This means the number of sections should be smaller than 65535 at 
+coredump.
+ > Because the kernel adds some informative sections to a image of 
+program at
+ > generating coredump, we need some margin. The number of extra sections is
+ > 1-3 now and depends on arch. We use "5" as safe margin, here.
 
-x86/tdx: Wrap exit reason with hcall_func()
+It seems that going over 16 bits would at least break ELF coredumps (for
+programs actually requesting as many mappings).
 
-TDX reuses VMEXIT "reasons" in its guest->host hypercall ABI.  This is
-confusing because there might not be a VMEXIT involved at *all*.
-These instances are supposed to document situation and reduce confusion
-by wrapping VMEXIT reasons with hcall_func().
+Do you think it is otherwise safe to increase this value arbitrarily?
 
-The decompression code does not follow this convention.
-
-Unify the TDX decompression code with the other TDX use of VMEXIT reasons.
-No functional changes.
-
-Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Link: https://lore.kernel.org/all/20230505120332.1429957-1-nik.borisov%40suse.com
----
- arch/x86/boot/compressed/tdx.c    |  4 ++--
- arch/x86/coco/tdx/tdx.c           | 11 -----------
- arch/x86/include/asm/shared/tdx.h | 11 +++++++++++
- 3 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-index 2d81d3c..8841b94 100644
---- a/arch/x86/boot/compressed/tdx.c
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -20,7 +20,7 @@ static inline unsigned int tdx_io_in(int size, u16 port)
- {
- 	struct tdx_hypercall_args args = {
- 		.r10 = TDX_HYPERCALL_STANDARD,
--		.r11 = EXIT_REASON_IO_INSTRUCTION,
-+		.r11 = hcall_func(EXIT_REASON_IO_INSTRUCTION),
- 		.r12 = size,
- 		.r13 = 0,
- 		.r14 = port,
-@@ -36,7 +36,7 @@ static inline void tdx_io_out(int size, u16 port, u32 value)
- {
- 	struct tdx_hypercall_args args = {
- 		.r10 = TDX_HYPERCALL_STANDARD,
--		.r11 = EXIT_REASON_IO_INSTRUCTION,
-+		.r11 = hcall_func(EXIT_REASON_IO_INSTRUCTION),
- 		.r12 = size,
- 		.r13 = 1,
- 		.r14 = port,
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index e146b59..15569bd 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -76,17 +76,6 @@ noinstr void __tdx_hypercall_failed(void)
- 	panic("TDVMCALL failed. TDX module bug?");
- }
- 
--/*
-- * The TDG.VP.VMCALL-Instruction-execution sub-functions are defined
-- * independently from but are currently matched 1:1 with VMX EXIT_REASONs.
-- * Reusing the KVM EXIT_REASON macros makes it easier to connect the host and
-- * guest sides of these calls.
-- */
--static __always_inline u64 hcall_func(u64 exit_reason)
--{
--	return exit_reason;
--}
--
- #ifdef CONFIG_KVM_GUEST
- long tdx_kvm_hypercall(unsigned int nr, unsigned long p1, unsigned long p2,
- 		       unsigned long p3, unsigned long p4)
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index 2631e01..b415a24 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -40,5 +40,16 @@ u64 __tdx_hypercall_ret(struct tdx_hypercall_args *args);
- /* Called from __tdx_hypercall() for unrecoverable failure */
- void __tdx_hypercall_failed(void);
- 
-+/*
-+ * The TDG.VP.VMCALL-Instruction-execution sub-functions are defined
-+ * independently from but are currently matched 1:1 with VMX EXIT_REASONs.
-+ * Reusing the KVM EXIT_REASON macros makes it easier to connect the host and
-+ * guest sides of these calls.
-+ */
-+static __always_inline u64 hcall_func(u64 exit_reason)
-+{
-+        return exit_reason;
-+}
-+
- #endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_SHARED_TDX_H */
