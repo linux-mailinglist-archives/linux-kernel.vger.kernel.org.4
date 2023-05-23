@@ -2,156 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C059070E30E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C8A70E2ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238236AbjEWRa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S237777AbjEWRfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237564AbjEWRaX (ORCPT
+        with ESMTP id S235042AbjEWRfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:30:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E3797;
-        Tue, 23 May 2023 10:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684863022; x=1716399022;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cEJSLPDvzjlLklZPDg24lbhzBd1u5HoZaAKoC5OD1wQ=;
-  b=BesdEZaGjucrCSUpAlpU3H0acaqMhKVrl7izBTXtIWCBvc05YFefcCZX
-   mmYrM2fKooThef2KBju2V591uumsXASbo9oMx9DuE9yMeAo7VA+qE2Uhf
-   ySWpruiyHdM2Zmw8Lr3mm0y7bs6yKU+ANTsa/Elsg/RDKz6NAmk0fc69x
-   aKsfPErMS1xxvdr2CoZW6U0nk1NbLRh0upm4w//aFTDyPrKYBz3TXARhl
-   lu1jHR3p8ri3LTrbXBDZkTVdmZlhxbPhoGRySZI5VwUME2cKUkG3W2d3P
-   37s6zGpH3lvdxhUIad3hmRzhsImVrvBoaVovl458Kb8gYWNH5nZ+pi4K4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="337892789"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="337892789"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 10:30:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="1034170002"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="1034170002"
-Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.97.184])
-  by fmsmga005.fm.intel.com with ESMTP; 23 May 2023 10:30:20 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        dmaengine@vger.kernel.org, vkoul@kernel.org
-Cc:     "Will Deacon" <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        narayan.ranganathan@intel.com,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v7 0/4] Re-enable IDXD kernel workqueue under DMA API
-Date:   Tue, 23 May 2023 10:34:47 -0700
-Message-Id: <20230523173451.2932113-1-jacob.jun.pan@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 23 May 2023 13:35:39 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66741A7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:35:09 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50db91640d3so206768a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684863306; x=1687455306;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WgE8ji/h7CMcJNn0UAt7kbxemzWw21WFjqqu1Nqn77o=;
+        b=Vw7AS+AaFz/dbCV0lwHrLUjLV6JjQuZhqzF9BMNaNNjX6Zcflxx+AjQe3+paqQJtxR
+         U0AHB5n4d398LhALQubCoAudNTHGd4tDGZ+hWZwuf+vVHZt2kdApH85vUqGhasNFnydw
+         U4kljGqf63frbBV5XP9K6nh7prfXd7VOJBaNw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684863306; x=1687455306;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WgE8ji/h7CMcJNn0UAt7kbxemzWw21WFjqqu1Nqn77o=;
+        b=aA7oUQRvoCdIYrVvdtS9I/wN2zDMMArw9toihJa1U1UEQhi+Wti93OKm7SAtrlnz0e
+         OQdjAXqEtj8C5fqhvmdli0ZKF96sITF3wkQ9hAwtmIREQu4oiUMN+aMSsFuPfBnEGxhq
+         fvOaW780SlwXjp7E/6zXYARadYVguqM/6i6OkZzjq7xaOKC+3A/hNQJvY/4vwMAs6dyF
+         cTsXR7z92HC8cYn0mIFVzmasx+6eMtRZ1k9n0GXT/3Z1GqWEiS/X+uxlvX/WpVeY4NLe
+         3bAtUuhMLGxrXxEjQGdANLzantVB/cHsmPpH2C2kzy1cID8p05H8AL89dDp2ZBNTu0gz
+         mW4g==
+X-Gm-Message-State: AC+VfDzRH4W3mvkAt1+E7x7n3eIU0X7K/B0jALrh9K7gaxfsTy+2eAI9
+        cN0aoX9uQ8GT2nA0+XbTizcX/FBBllbjCUVi76jNoemU
+X-Google-Smtp-Source: ACHHUZ60wfcaLDuaOwjT319nZmpubsxZGGaFxVyMDZrKc+nfOcJSHiSb4S0QnLSb7H8kfZhnNB90VQ==
+X-Received: by 2002:a17:907:843:b0:94e:1764:b09b with SMTP id ww3-20020a170907084300b0094e1764b09bmr13049780ejb.45.1684863305927;
+        Tue, 23 May 2023 10:35:05 -0700 (PDT)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
+        by smtp.gmail.com with ESMTPSA id d1-20020a1709067a0100b0096f738bc2f7sm4739689ejo.60.2023.05.23.10.35.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 10:35:05 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96ff9c0a103so366483666b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:35:05 -0700 (PDT)
+X-Received: by 2002:a17:907:9443:b0:94f:3b07:a708 with SMTP id
+ dl3-20020a170907944300b0094f3b07a708mr15767293ejc.29.1684863304990; Tue, 23
+ May 2023 10:35:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <CAH2r5msVBGuRbv2tEuZWLR6_pSNNaoeihx=CjvgZ7NxwCNqZvA@mail.gmail.com>
+ <CAHk-=wjuNDG-nu6eAv1vwPuZp=6FtRpK_izmH7aBkc4Cic-uGQ@mail.gmail.com> <CAH2r5msZ_8q1b4FHKGZVm_gbiMWuYyaF=_Mz1-gsfJPS0ryRsg@mail.gmail.com>
+In-Reply-To: <CAH2r5msZ_8q1b4FHKGZVm_gbiMWuYyaF=_Mz1-gsfJPS0ryRsg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 23 May 2023 10:34:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjYTAK4PSK23bDm_urZ49Q=5m=ScYcmK27ZJNKSBPdbgA@mail.gmail.com>
+Message-ID: <CAHk-=wjYTAK4PSK23bDm_urZ49Q=5m=ScYcmK27ZJNKSBPdbgA@mail.gmail.com>
+Subject: Re: patches to move ksmbd and cifs under new subdirectory
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joerg and all,
+On Mon, May 22, 2023 at 11:39=E2=80=AFPM Steve French <smfrench@gmail.com> =
+wrote:
+>
+> My reason for adding CONFIG_SMB_CLIENT, enabling CONFIG_SMB_CLIENT
+> when CONFIG_CIFS was enabled, I was trying to make the Makefile more clea=
+r
+> (without changing any behavior):
 
-IDXD kernel work queues were disabled due to the flawed use of kernel VA
-and SVA API.
-Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
+That sounds ok, but I think it should be done separately from the
+move. Keep the move as a pure move/rename, not "new things".
 
-The solution is to enable it under DMA API where IDXD shared workqueue users
-can use ENQCMDS to submit work on buffers mapped by DMA API.
+Also, when you actually do this cleanup, I think you really should just do
 
-This patchset adds support for attaching PASID to the device's default
-domain and the ability to allocate global PASIDs from IOMMU APIs. IDXD driver
-can then re-enable the kernel work queues and use them under DMA API.
+  config SMB
+        tristate
 
-This depends on the IOASID removal series. (merged)
-https://lore.kernel.org/all/ZCaUBJvUMsJyD7EW@8bytes.org/
+  config SMB_CLIENT
+        tristate
 
+to declare them, but *not* have that
 
-Thanks,
+        default y if CIFS=3Dy || SMB_SERVER=3Dy
+        default m if CIFS=3Dm || SMB_SERVER=3Dm
 
-Jacob
+kind of noise anywhere. Not for SMBFS, not for SMB_CLIENT.
 
----
-Changelog:
-v7:
-	- renamed IOMMU_DEF_RID_PASID to be IOMMU_NO_PASID to be more generic
-	  (Jean)
-	- simplify range checking for sva PASID (Baolu) 
-v6:
-	- use a simplified version of vt-d driver change for set_device_pasid
-	  from Baolu.
-	- check and rename global PASID allocation base
-v5:
-	- exclude two patches related to supervisor mode, taken by VT-d
-	maintainer Baolu.
-	- move PASID range check into allocation API so that device drivers
-	  only need to pass in struct device*. (Kevin)
-	- factor out helper functions in device-domain attach (Baolu)
-	- make explicit use of RID_PASID across architectures
-v4:
-	- move dummy functions outside ifdef CONFIG_IOMMU_SVA (Baolu)
-	- dropped domain type check while disabling idxd system PASID (Baolu)
+Just do
 
-v3:
-	- moved global PASID allocation API from SVA to IOMMU (Kevin)
-	- remove #ifdef around global PASID reservation during boot (Baolu)
-	- remove restriction on PASID 0 allocation (Baolu)
-	- fix a bug in sysfs domain change when attaching devices
-	- clear idxd user interrupt enable bit after disabling device( Fenghua)
-v2:
-	- refactored device PASID attach domain ops based on Baolu's early patch
-	- addressed TLB flush gap
-	- explicitly reserve RID_PASID from SVA PASID number space
-	- get dma domain directly, avoid checking domain types
+        select SMBFS
+        select SMB_CLIENT
 
+in the current CIFS Kconfig entry. And then SMB_SERVER can likewise do
 
+        select SMBFS
 
-Jacob Pan (3):
-  iommu: Generalize PASID 0 for normal DMA w/o PASID
-  iommu: Move global PASID allocation from SVA to core
-  dmaengine/idxd: Re-enable kernel workqueue under DMA API
+and I think it will all automatically do what those much more complex
+"default" expressions currently do.
 
-Lu Baolu (1):
-  iommu/vt-d: Add set_dev_pasid callback for dma domain
+But again - I think this kind of "clean things up" should be entirely
+separate from the pure code movement. Don't do new functionality when
+moving things, just do the minimal required infrastructure changes to
+make things work with the movement.
 
- drivers/dma/idxd/device.c                     |  30 +---
- drivers/dma/idxd/dma.c                        |   5 +-
- drivers/dma/idxd/init.c                       |  60 ++++++-
- drivers/dma/idxd/sysfs.c                      |   7 -
- .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |   2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  10 +-
- drivers/iommu/intel/iommu.c                   | 159 +++++++++++++++---
- drivers/iommu/intel/iommu.h                   |   7 +
- drivers/iommu/intel/pasid.c                   |   2 +-
- drivers/iommu/intel/pasid.h                   |   1 -
- drivers/iommu/iommu-sva.c                     |  28 ++-
- drivers/iommu/iommu.c                         |  24 +++
- include/linux/iommu.h                         |  11 ++
- 13 files changed, 261 insertions(+), 85 deletions(-)
-
--- 
-2.25.1
-
+              Linus
