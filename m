@@ -2,84 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1665670DBA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36BC70DBA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236584AbjEWLmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S236665AbjEWLnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjEWLmi (ORCPT
+        with ESMTP id S230197AbjEWLnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:42:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E4FFE;
-        Tue, 23 May 2023 04:42:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 23 May 2023 07:43:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EBB118;
+        Tue, 23 May 2023 04:43:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8197B229AD;
-        Tue, 23 May 2023 11:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684842155; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y5OsFTJQlT1HP4PZ2CxU3TzCtEIcI+DtJ1ZvdSvwdV8=;
-        b=woqqhvTEeKGw14U0e+mSdFr7+Xm5nkc7Vq/PMqB96PXoXs4riCpEY7i21rIyCnQ9kYIN83
-        U/lUQTWG6RvI0W+6tzfFu/eZ256WR+J8/oexJpyhj8HvYtwigCFxCcDgD8NPQH1kTEEKkb
-        YOLS2pRDXw8cTZJObz7BWypBem4aDho=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684842155;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y5OsFTJQlT1HP4PZ2CxU3TzCtEIcI+DtJ1ZvdSvwdV8=;
-        b=ZkvCZau2Mms91EZ20b1cE7FhxReUJxXFJtR6iJagHk/Bjm4ALKeBdRluxvKqdxtfnUDHvL
-        hWmso+f7JNUs6nDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0435213588;
-        Tue, 23 May 2023 11:42:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YT0YAKumbGTJFAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 23 May 2023 11:42:34 +0000
-Date:   Tue, 23 May 2023 13:42:34 +0200
-Message-ID: <87353ngtp1.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     "Ding, Shenghao" <shenghao-ding@ti.com>
-Cc:     Shenghao Ding <13916275206@139.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Lu, Kevin" <kevin-lu@ti.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
-        "Navada Kanyana, Mukund" <navada@ti.com>,
-        "gentuser@gmail.com" <gentuser@gmail.com>,
-        "Ryan_Chu@wistron.com" <Ryan_Chu@wistron.com>,
-        "Sam_Wu@wistron.com" <Sam_Wu@wistron.com>
-Subject: Re: [EXTERNAL] Re: [PATCH v3 4/5] ALSA: hda/tas2781: Add tas2781 HDA driver
-In-Reply-To: <9daf95da47b540329aa9fbbd2df5e504@ti.com>
-References: <20230519080227.20224-1-13916275206@139.com>
-        <871qjayuvv.wl-tiwai@suse.de>
-        <9daf95da47b540329aa9fbbd2df5e504@ti.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA6596316D;
+        Tue, 23 May 2023 11:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5BEC433D2;
+        Tue, 23 May 2023 11:42:57 +0000 (UTC)
+Message-ID: <b5799dfe-f17b-a838-0916-645ba83307d2@xs4all.nl>
+Date:   Tue, 23 May 2023 13:42:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] media: mediatek: vcodec: mtk_vcodec_dec_hw: Use
+ devm_pm_runtime_enable()
+Content-Language: en-US
+To:     Fei Shao <fshao@chromium.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230515141610.v2.1.I0d1657be3fea5870f797e975a7aa490291e17993@changeid>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230515141610.v2.1.I0d1657be3fea5870f797e975a7aa490291e17993@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,58 +57,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 13:22:03 +0200,
-Ding, Shenghao wrote:
+On 15/05/2023 08:16, Fei Shao wrote:
+> Convert pm_runtime_enable() to the managed version, and clean up error
+> handling and unnecessary .remove() callback accordingly.
+
+This patch no longer applies. Can you make a v3?
+
+Regards,
+
+	Hans
+
 > 
-> > +	[ALC287_FIXUP_TAS2781_I2C_2] = {
-> > +		.type = HDA_FIXUP_FUNC,
-> > +		.v.func = tas2781_fixup_i2c,
-> > +		.chained = true,
-> > +		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
-> > +	},
-> > +	[ALC287_FIXUP_TAS2781_I2C_4] = {
-> > +		.type = HDA_FIXUP_FUNC,
-> > +		.v.func = tas2781_fixup_i2c,
-> > +		.chained = true,
-> > +		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
-> > +	},
+> Signed-off-by: Fei Shao <fshao@chromium.org>
 > 
-> What's a difference between *_2 and *_4?
-> Combine them into ALC287_FIXUP_TAS2781_I2C
-
-Hm, so there is no difference in stereo and quad speakers?
-
-> > +static int tas2781_save_calibration(struct tasdevice_priv *tas_priv) 
-> > +{
-> > +	efi_guid_t efi_guid = EFI_GUID(0x02f9af02, 0x7734, 0x4233, 0xb4, 0x3d,
-> > +		0x93, 0xfe, 0x5a, 0xa3, 0x5d, 0xb3);
-> > +	static efi_char16_t efi_name[] = L"CALI_DATA";
-> > +	struct hda_codec *codec = tas_priv->codec;
-> > +	unsigned int subid = codec->core.subsystem_id & 0xFFFF;
-> > +	struct tm *tm = &tas_priv->tm;
-> > +	unsigned int attr, crc;
-> > +	unsigned int *tmp_val;
-> > +	efi_status_t status;
-> > +	int ret = 0;
-> > +
-> > +	//Lenovo devices
-> > +	if ((subid == 0x387d) || (subid == 0x387e) || (subid == 0x3881)
-> > +		|| (subid == 0x3884) || (subid == 0x3886) || (subid == 0x38a7)
-> > +		|| (subid == 0x38a8) || (subid == 0x38ba) || (subid == 0x38bb)
-> > +		|| (subid == 0x38be) || (subid == 0x38bf) || (subid == 0x38c3)
-> > +		|| (subid == 0x38cb) || (subid == 0x38cd))
-> > +		efi_guid = EFI_GUID(0x1f52d2a1, 0xbb3a, 0x457d, 0xbc, 0x09,
-> > +			0x43, 0xa3, 0xf4, 0x31, 0x0a, 0x92);
+> ---
 > 
-> Here can be a problem: the device ID is embedded here, and it's hard to find out.  You'd better to make it some quirk flag that is set in a common place and check the flag here instead of checking ID at each place.
+> Changes in v2:
+> Use devm_pm_runtime_enable() per suggestion from the previous thread:
+> https://lore.kernel.org/lkml/20230510164330.z2ygkl7vws6fci75@pengutronix.de/T/#m25be91afe3e9554600e859a8a59128ca234fc63d
 > 
-> Do you have example of the solution? I found some quirk flag is static in the patch_realtek.c, can't be accessed outside that file.
+>  .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 26 ++++++-------------
+>  1 file changed, 8 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> index b753bf54ebd9..e1cb2f8dca33 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> @@ -148,20 +148,21 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+>  	ret = mtk_vcodec_init_dec_clk(pdev, &subdev_dev->pm);
+>  	if (ret)
+>  		return ret;
+> -	pm_runtime_enable(&pdev->dev);
+> +
+> +	ret = devm_pm_runtime_enable(&pdev->dev);
+> +	if (ret)
+> +		return ret;
+>  
+>  	of_id = of_match_device(mtk_vdec_hw_match, dev);
+>  	if (!of_id) {
+>  		dev_err(dev, "Can't get vdec subdev id.\n");
+> -		ret = -EINVAL;
+> -		goto err;
+> +		return -EINVAL;
+>  	}
+>  
+>  	hw_idx = (enum mtk_vdec_hw_id)(uintptr_t)of_id->data;
+>  	if (hw_idx >= MTK_VDEC_HW_MAX) {
+>  		dev_err(dev, "Hardware index %d not correct.\n", hw_idx);
+> -		ret = -EINVAL;
+> -		goto err;
+> +		return -EINVAL;
+>  	}
+>  
+>  	main_dev->subdev_dev[hw_idx] = subdev_dev;
+> @@ -173,36 +174,25 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+>  	if (IS_SUPPORT_VDEC_HW_IRQ(hw_idx)) {
+>  		ret = mtk_vdec_hw_init_irq(subdev_dev);
+>  		if (ret)
+> -			goto err;
+> +			return ret;
+>  	}
+>  
+>  	subdev_dev->reg_base[VDEC_HW_MISC] =
+>  		devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR((__force void *)subdev_dev->reg_base[VDEC_HW_MISC])) {
+>  		ret = PTR_ERR((__force void *)subdev_dev->reg_base[VDEC_HW_MISC]);
+> -		goto err;
+> +		return ret;
+>  	}
+>  
+>  	if (!main_dev->subdev_prob_done)
+>  		main_dev->subdev_prob_done = mtk_vdec_hw_prob_done;
+>  
+>  	platform_set_drvdata(pdev, subdev_dev);
+> -	return 0;
+> -err:
+> -	pm_runtime_disable(subdev_dev->pm.dev);
+> -	return ret;
+> -}
+> -
+> -static int mtk_vdec_hw_remove(struct platform_device *pdev)
+> -{
+> -	pm_runtime_disable(&pdev->dev);
+> -
+>  	return 0;
+>  }
+>  
+>  static struct platform_driver mtk_vdec_driver = {
+>  	.probe	= mtk_vdec_hw_probe,
+> -	.remove = mtk_vdec_hw_remove,
+>  	.driver	= {
+>  		.name	= "mtk-vdec-comp",
+>  		.of_match_table = mtk_vdec_hw_match,
 
-You may store some values in struct hda_component, I suppose?
-
-BTW, please try to fix your mailer to do citation more correctly...
-
-
-thanks,
-
-Takashi
