@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D8470DFC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2539E70DFC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237416AbjEWOzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S237413AbjEWOzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbjEWOzE (ORCPT
+        with ESMTP id S237401AbjEWOyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:55:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D09FA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684853655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XzmSpxQsa2CTLr4rwU0KMIUjwE1e290Moluru4LsCWQ=;
-        b=i+51YwHQqeDuhjq6wbuiMqh/tMYVpy5JjTUjGzq5XkzJKlefDUaxb1UThcXE8/i2qCKsIq
-        L4T7Q/qMowrXwCFB51w2hgSDd4hETqNeorCe2RoaFEF9GE0eFlT3WFEaMq7ubYm6gZfmRh
-        Gru6Ai0WMpC2N4oojBWVRRUKCevKOvY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-400-hGm0NJs0OUKlecjgItN9DQ-1; Tue, 23 May 2023 10:54:14 -0400
-X-MC-Unique: hGm0NJs0OUKlecjgItN9DQ-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3095483ea29so2085647f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:54:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684853653; x=1687445653;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XzmSpxQsa2CTLr4rwU0KMIUjwE1e290Moluru4LsCWQ=;
-        b=aN2ljhxL6WwHFc38s9n4EgpKHmacpRD7b1LkFDEg3DnnA49GvoMT174pbWltQCBTg2
-         pf0mvfBmc/d3Vrxo5lieWZTm/UQ0RHQvzqfbV8KZ8fqBm2r5JZcInDh60nslk592WHiQ
-         S3l2XDhAoj5uSLuYIwSbkb4oH97zj1NkK6apu/OXkyGY/rJHN3NsYUtbSBb4P7SMFDgW
-         +p9Wbj+FQzwBFJNAWPACdk3Z0IYjDeRIhKxKotzFRISQpNDSfWXMYaWB65zyg+8yNhjw
-         W0R9KBrGEbDwpN6BebHI9P+3EvbP522QAGeY9Hn6YGIQ00KvoSeeEArLF8HcEZklvYar
-         B9bA==
-X-Gm-Message-State: AC+VfDxZHfskLBNbI6JADZC+aZZaj0AAdb3ap4NuJgTXZrmKgIC90h+r
-        8Q7x6xB6siEtToBrfu7NDGFtqZiuOecwLxqorFm3Tws+pGgYieT4rGxiRP109Exuyxa6pVlyo2p
-        iOPHYgU3OLuIZVLoyllcjiPlX
-X-Received: by 2002:a5d:4707:0:b0:306:31e0:964 with SMTP id y7-20020a5d4707000000b0030631e00964mr9243299wrq.55.1684853652814;
-        Tue, 23 May 2023 07:54:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4s9KcYtaMvwy+5Pq6aNhocIKn4SglN2/iLOvifbgaQZ0TrNWZdT1Hfp3EtsXRoATqppHcvZw==
-X-Received: by 2002:a5d:4707:0:b0:306:31e0:964 with SMTP id y7-20020a5d4707000000b0030631e00964mr9243289wrq.55.1684853652535;
-        Tue, 23 May 2023 07:54:12 -0700 (PDT)
-Received: from sgarzare-redhat ([89.42.5.88])
-        by smtp.gmail.com with ESMTPSA id g9-20020adffc89000000b002e5ff05765esm11359411wrr.73.2023.05.23.07.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 07:54:12 -0700 (PDT)
-Date:   Tue, 23 May 2023 16:54:09 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Prathu Baronia <prathubaronia2011@gmail.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost: use kzalloc() instead of kmalloc() followed by
- memset()
-Message-ID: <5kn47peabxjrptkqa6dwtyus35ahf4pcj4qm4pumse33kxqpjw@mec4se5relrc>
-References: <20230522085019.42914-1-prathubaronia2011@gmail.com>
+        Tue, 23 May 2023 10:54:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162BA126
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:54:48 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1q1TPE-0008TL-9A; Tue, 23 May 2023 16:54:32 +0200
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1q1TPC-0000ix-7X; Tue, 23 May 2023 16:54:30 +0200
+Date:   Tue, 23 May 2023 16:54:30 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Diederik de Haas <didi.debian@cknow.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        p.zabel@pengutronix.de, mchehab@kernel.org,
+        m.szyprowski@samsung.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, hverkuil-cisco@xs4all.nl,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v2] media: verisilicon: Fix crash when probing encoder
+Message-ID: <20230523145430.GB9943@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        p.zabel@pengutronix.de, mchehab@kernel.org,
+        m.szyprowski@samsung.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, hverkuil-cisco@xs4all.nl,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
+ <4995215.LvFx2qVVIh@bagend>
+ <7c1bf9c4-f14b-30cd-2610-871f5f512d06@collabora.com>
+ <12724349.O9o76ZdvQC@bagend>
+ <5d871928-dcd5-3f27-e975-d1639525dad0@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230522085019.42914-1-prathubaronia2011@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5d871928-dcd5-3f27-e975-d1639525dad0@leemhuis.info>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 02:20:19PM +0530, Prathu Baronia wrote:
->Use kzalloc() to allocate new zeroed out msg node instead of
->memsetting a node allocated with kmalloc().
->
->Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
->---
-> drivers/vhost/vhost.c | 5 ++---
-> 1 file changed, 2 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
->index a92af08e7864..579ecb4ee4d2 100644
->--- a/drivers/vhost/vhost.c
->+++ b/drivers/vhost/vhost.c
->@@ -2575,12 +2575,11 @@ EXPORT_SYMBOL_GPL(vhost_disable_notify);
-> /* Create a new message. */
-> struct vhost_msg_node *vhost_new_msg(struct vhost_virtqueue *vq, int type)
-> {
->-	struct vhost_msg_node *node = kmalloc(sizeof *node, GFP_KERNEL);
->+	/* Make sure all padding within the structure is initialized. */
->+	struct vhost_msg_node *node = kzalloc(sizeof(*node), GFP_KERNEL);
-> 	if (!node)
-> 		return NULL;
->
->-	/* Make sure all padding within the structure is initialized. */
->-	memset(&node->msg, 0, sizeof node->msg);
+On Tue, 23 May 2023 12:50:42 +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
+> CCing the Regression list and a bunch of other people that were CCed in
+> threads that look related:
 
-the patch LGTM:
+Thanks!
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> 
+> On 23.05.23 00:38, Diederik de Haas wrote:
+> > On Monday, 22 May 2023 18:17:39 CEST Benjamin Gaignard wrote:
+> >> Le 20/05/2023 à 00:34, Diederik de Haas a écrit :
+> >>> On Thursday, 13 April 2023 21:52:50 CEST Nicolas Dufresne wrote:
+> > [...]
+> >>> When I booted into my 6.4-rc1 (but also rc2) kernel on my
+> >>> Pine64 Quartz64 Model A, I noticed a crash which seems the same as
+> >>> above, but I didn't have such a crash with my 6.3 kernel.
+> >>> Searching for 'hantro' led me to this commit as the most likely culprit
+> >>> but when I build a new 6.4-rcX kernel with this commit reverted,
+> >>> I still had this crash.
+> >>> Do you have suggestions which commit would then be the likely culprit?
+> >>
+> >> This patch fix the crash at boot time, revert it doesn't seem to be the
+> >> solution. Maybe this proposal from Marek can help you ?
+> >>
+> >> https://patchwork.kernel.org/project/linux-media/patch/20230421104759.2236463-1-m.szyprowski@samsung.com/
+> > 
+> > That helped :) After applying that patch I no longer have the crash.
+> > Thanks!
+> 
+> That regression fix is now a month old, but not yet merged afaics --
+> guess due to Nicolas comment that wasn't addressed yet and likely
+> requires a updated patch.
 
-> 	node->vq = vq;
-> 	node->msg.type = type;
-> 	return node;
->
->base-commit: 4d6d4c7f541d7027beed4fb86eb2c451bd8d6fff
->-- 
->2.34.1
->
->
+I agree with Nicolas comment on that patch and it needs to be updated.
 
+> 
+> Michael afaics a week ago posted a patch that to my *very limited
+> understanding of things* (I hope I don't confuse matters here!) seems to
+> address the same problem, but slightly differently:
+> https://lore.kernel.org/all/20230516091209.3098262-1-m.tretter@pengutronix.de/
+
+Correct, my patch addresses the same problem.
+
+> 
+> No reply yet.
+> 
+> That's all a bit unfortunate, as it's not how regression fixes should be
+> dealt with -- and caused multiple people headaches that could have been
+> avoided. :-/
+> 
+> But well, things happen. But it leads to the question:
+> 
+> How can we finally address the issue quickly now to ensure is doesn't
+> cause headaches for even more people?
+> 
+> Marek, Michael, could you work on a patch together that we then get
+> somewhat fast-tracked to Linus to avoid him getting even more unhappy
+> about the state of things[1]?
+
+Marek, if you have an updated patch, I will happily test and review it.
+Otherwise, please take a look at my patch.
+
+Michael
