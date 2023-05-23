@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED0F70D13C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC83F70D11D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbjEWCaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S231241AbjEWCVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234676AbjEWC34 (ORCPT
+        with ESMTP id S229605AbjEWCVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:29:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC36CA;
-        Mon, 22 May 2023 19:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684808994; x=1716344994;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=+gDiLZPsuz1kelUJx+GgjjhllFg4WBajJIGyW+kQs+c=;
-  b=OAhS4r/RqIGAAge4fBXGjYNHrJ8yFUgYvVxaqm0cmYhpZG5SfKoYu1Vu
-   4npKjVZku2wXL3OFKHaga0A2EurhHCAOUBgEyu+NrQh+dHsMBwfOlqXD8
-   4UfZsy0R2++ysVBrPLFCmVqYIHwcKEGSPxgivRFYBuKRqreHF7f3z1xlB
-   lOKNgiwa6bfnFrPXwb/ykw+vBRG3UVBzF52kbj09Sq7XKUSodVbiAhT54
-   9Fa3Lwc5XsHaP5y8cSTmocDTOOtF6I/rQxpgxZEvygzrOj8vSq1blClWW
-   Wn6Ey9IxT4X1EKFBNVVYgo9FKY3itDLdJXAB2xWq2xHyrsetO84vkXSW0
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="353131976"
-X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
-   d="scan'208";a="353131976"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 19:29:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="1033863646"
-X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
-   d="scan'208";a="1033863646"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.139])
-  by fmsmga005.fm.intel.com with ESMTP; 22 May 2023 19:29:42 -0700
-Date:   Tue, 23 May 2023 10:19:58 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Fuad Tabba <tabba@google.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Qinglan Xiang <qinglan.xiang@intel.com>,
-        Kai Svahn <kai.svahn@intel.com>,
-        Margarita Maroto <margarita.maroto@intel.com>,
-        Anil Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Nagareddy Reddy <nspreddy@google.com>,
+        Mon, 22 May 2023 22:21:06 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3879C115;
+        Mon, 22 May 2023 19:20:43 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-3311691ebd0so800665ab.1;
+        Mon, 22 May 2023 19:20:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684808431; x=1687400431;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oYo4pMyUdPXoTIgJZPlxTi0wlXBCKivgPw4C35RfkhE=;
+        b=mn3iqGGY8l5fJKxQExXBk5R7/B8z/k4w/kyn53w6x0qvFrxRDgs0mZVuVbDEjUA1xY
+         +v98xGZ/ShB5GgbqyLcdZbdDjyAs+xYKZYoJxf9ThiRn27iTBsu2v65WoSvKb3p1HBeM
+         FCJ6IAqXl7pssqGRKKTtVqpzoSFFOvIxZrdYF0iy5vczERT8uyF4bf07nBvJ9hNzmgwz
+         ICfOtR2bs6+OCzXEbGhbc8tkqn4JZSAQLxjKznQ62WCQhC9HRkhKKqDbESP6BDzEghQQ
+         VSFjtP7h1CJ8kejzjt2fBoc/kEIStBAcdKIDJpZeTmoDREjr4WjUcO6Q5cOBwzQ6ifGq
+         NQTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684808431; x=1687400431;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oYo4pMyUdPXoTIgJZPlxTi0wlXBCKivgPw4C35RfkhE=;
+        b=a2rdm5unTjVTubVhdo+l0d8s29E4CmA5xkQd0vbozdBs8lGvUC3vGI/1Tbumrtpe0u
+         0x+Y8BoyUv7u/A7Bc5wgT9kx4BMMi0AY3gLLGLhyE6qIECg1X+7D1FksXkT94w8UtuGR
+         /mJOWhMPflECeujcyq+JPffB6anR5ZAqyLUzcTG8uX1anVJ4KBKD+oePGsjisq+pWtDP
+         f0Fd2YQd935T1yO90V/wzOEHCkcx1lJ++DPgoLSykVr42MCnpxmJl3jJK2C4mRNHtLkg
+         gylhkQyTMcpsfMOnx/FItb4hh1P5UJmTtgEQfMYvaN+RAGzDW2hAjwngdwKRv0SlKMAD
+         n/IQ==
+X-Gm-Message-State: AC+VfDxCWfpDKBw9E5N5DxvgHcc4rrrM5c5oP2ZzhMw7Ybz+i2j2qeDO
+        TZvEQE0dcvy73u0u9/BaeYY=
+X-Google-Smtp-Source: ACHHUZ5Kd6TdxFRK6Z9xrvAwgxEGZNeFR9ha6BzgqUmsqqM0uV2dgyzRx8l2DxbFe8V8Ji5a7mCsaA==
+X-Received: by 2002:a92:ce49:0:b0:331:40f0:69b2 with SMTP id a9-20020a92ce49000000b0033140f069b2mr7973831ilr.31.1684808431028;
+        Mon, 22 May 2023 19:20:31 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id cl9-20020a0566383d0900b0040faf78330asm2198932jab.28.2023.05.22.19.20.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 19:20:30 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [ANNOUNCE / RFC] Periodic Upstream Call for KVM
-Message-ID: <20230523021958.GA346459@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20230512231026.799267-1-seanjc@google.com>
- <20230522072508.GA326851@chaop.bj.intel.com>
- <ZGwDs1qHcl8PX+m2@google.com>
+Subject: [PATCH] w1: sgi_w1: Replace all non-returning strlcpy with strscpy
+Date:   Tue, 23 May 2023 02:20:23 +0000
+Message-ID: <20230523022023.2406955-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGwDs1qHcl8PX+m2@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-... 
-> > > To kick things off, I am leaning toward a "launch" date of May 24th (Pacific),
-> > > with KVM guest private mem (a.k.a. UPM) as the first topic.
-> > 
-> > Thanks for driving this, yes for UPM I would definitely join.
-> 
-> I'm going to push out the inagaural date one week until May 31st, partly to give
-> more time for this to get widely disseminated, but mostly because I need to write
-> down my various thoughts on where to go with UPM, and I don't think I'll get that
-> done before Wednesday.  That'll also give me time to setup a public calendar so
-> that people can get reminders and whatnot.
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
 
-That looks good to me.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-Chao
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ drivers/w1/masters/sgi_w1.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/w1/masters/sgi_w1.c b/drivers/w1/masters/sgi_w1.c
+index e8c7fa68d3cc..d7fbc3c146e1 100644
+--- a/drivers/w1/masters/sgi_w1.c
++++ b/drivers/w1/masters/sgi_w1.c
+@@ -93,7 +93,7 @@ static int sgi_w1_probe(struct platform_device *pdev)
+ 
+ 	pdata = dev_get_platdata(&pdev->dev);
+ 	if (pdata) {
+-		strlcpy(sdev->dev_id, pdata->dev_id, sizeof(sdev->dev_id));
++		strscpy(sdev->dev_id, pdata->dev_id, sizeof(sdev->dev_id));
+ 		sdev->bus_master.dev_id = sdev->dev_id;
+ 	}
+ 
+
