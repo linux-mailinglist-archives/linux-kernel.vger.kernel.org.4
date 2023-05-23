@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDBE70DF99
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5781B70DF9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbjEWOqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S237220AbjEWOq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbjEWOqE (ORCPT
+        with ESMTP id S232856AbjEWOq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:46:04 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF659119
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:46:02 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8bab3b392so9966548276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684853162; x=1687445162;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r16leosVab/uLX7D74lYCjCyQd2teI7cw9N2TnAgQsA=;
-        b=Hd/uUrDISL30aYgFZm7tT9bNmVfu5Hj5bE8z8pqztEcp7fh7IokeZvyVl4+oOgQpv2
-         1msJ8stWSASsldMCECBLTZSZbmB67D/T7j1oTM2DeUMplouDBShHymsHyviGEf60tBiM
-         d5vZPUEHKU0E12wSNBYOP4P1NYGjDUM5j4FC2jB/qherVgJcq2o2o9Lx9KuA3cUjjFbh
-         fGZSVMVBEzRtgYXzq81Yb06w9UEFGdV9cfI9x14itoTZcmT+hYvViRiWZtK/VEhv4HGE
-         vpDT/Rx7Cux0WO7uyvBET3G0qLUukSAXX6k4OFRmxbn4iL0lJKuXNJeqS7trW8tXqQhC
-         akzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684853162; x=1687445162;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r16leosVab/uLX7D74lYCjCyQd2teI7cw9N2TnAgQsA=;
-        b=VnRpNx//PCRUC6kaSXEDNJ8FdJ4eH801yTEA5aq0Ko3Ebl714GMxqyxLaWj7U4PtFp
-         VGqMt9n5Hu9M+vzrVUGlRdoIvfZ7cfM6RnGol8p8fBc5d507Dj9N0sCpVYfM4qNXipA6
-         SqEIR5TIpCLR8979SWUaeKtG2iyOLzWmgWIItX9xnitrvWCB55qdqN1Utumom4yqQsxR
-         XynjuwjhlDuUZRSpSGGVZ9clB9O2TtMqx+aOd71901m9XIpbG/twLTS5ReYTDQdb4Rth
-         ZbUnBHoJmTin2AXPcdI+zjsTGffcHJhjOlJSTIvlhlMVq4XKHoH0FQQeG7eTGnb2qYOU
-         k7XA==
-X-Gm-Message-State: AC+VfDz50AZaG3GN0VbaW9/M6hqDrCeOOxrbC9havZwxldmQ0oyUp+oA
-        ml+IyI1WuPUCq/uTq2SvMgVDZZCPaIqRbj4=
-X-Google-Smtp-Source: ACHHUZ5GGO9M9zi95iQU/We2rgCa/AZ2NpDuHENeetlWQiYs4A5/3srhvSG4IjsY4UStilvM/k6fLMYqCtGwmFY=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a25:9989:0:b0:ba2:2d0e:a752 with SMTP id
- p9-20020a259989000000b00ba22d0ea752mr8278874ybo.6.1684853162123; Tue, 23 May
- 2023 07:46:02 -0700 (PDT)
-Date:   Tue, 23 May 2023 14:44:18 +0000
-In-Reply-To: <20230523144418.1250547-1-aliceryhl@google.com>
-Mime-Version: 1.0
-References: <20230523144418.1250547-1-aliceryhl@google.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Message-ID: <20230523144418.1250547-5-aliceryhl@google.com>
-Subject: [PATCH v2 4/4] rust: task: add `Send` marker to `Task`
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Andreas Hindborg <a.hindborg@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 10:46:56 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2925BCD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:46:54 -0700 (PDT)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 1233B4010159;
+        Tue, 23 May 2023 14:46:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 1233B4010159
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1684853212;
+        bh=WjIqZeXgtE4G/zI0XOtx3zWtmrcxBElWuTM9Lec+WqA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=em5+wnNXj6hCrEQiF23O2r9tinzq/BP+++PJt+E8WhNc7tjRBxDVId/vJJu+PH2hB
+         omexiFB7DKpFkruA6jJxtY9JckWeMTpIF46gW4Ys6mETiDKRbTwx5G77dGCE/riuQm
+         BG/9MwDdQD8o4q47/ldEN0YskoRcA1GaEGyBMfes=
+MIME-Version: 1.0
+Date:   Tue, 23 May 2023 17:46:52 +0300
+From:   Alexey Izbyshev <izbyshev@ispras.ru>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
+        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
+        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
+Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
+In-Reply-To: <ZGzJNvKu8h5nDXsa@arm.com>
+References: <20230517150321.2890206-1-revest@chromium.org>
+ <20230517150321.2890206-4-revest@chromium.org>
+ <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
+ <884d131bbc28ebfa0b729176e6415269@ispras.ru>
+ <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
+ <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
+ <c63053b0-5797-504d-7896-c86271b64162@redhat.com> <ZGy6q7v+7jsXb1bV@arm.com>
+ <f47d587fe5a6285f88191fbb13f367c7@ispras.ru> <ZGzJNvKu8h5nDXsa@arm.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <a91012e9cde9046d98713835476cab4b@ispras.ru>
+X-Sender: izbyshev@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a type also implements `Sync`, the meaning of `Send` is just "this
-type may be accessed mutably from threads other than the one it is
-created on". That's ok for this type.
+On 2023-05-23 17:09, Catalin Marinas wrote:
+> On Tue, May 23, 2023 at 04:25:45PM +0300, Alexey Izbyshev wrote:
+>> On 2023-05-23 16:07, Catalin Marinas wrote:
+>> > On Tue, May 23, 2023 at 11:12:37AM +0200, David Hildenbrand wrote:
+>> > > Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We
+>> > > need arg2
+>> > > -> arg5 to be 0. But wouldn't the following also just pass a 0 "int" ?
+>> > >
+>> > > prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
+>> > >
+>> > > I'm easily confused by such (va_args) things, so sorry for the dummy
+>> > > questions.
+>> >
+>> > Isn't the prctl() prototype in the user headers defined with the first
+>> > argument as int while the rest as unsigned long? At least from the man
+>> > page:
+>> >
+>> > int prctl(int option, unsigned long arg2, unsigned long arg3,
+>> > 	  unsigned long arg4, unsigned long arg5);
+>> >
+>> > So there are no va_args tricks (which confuse me as well).
+>> >
+>> I have explicitly mentioned the problem with man pages in my response 
+>> to
+>> David[1]. Quoting myself:
+>> 
+>> > This stuff *is* confusing, and note that Linux man pages don't even tell
+>> that prctl() is actually declared as a variadic function (and for
+>> ptrace() this is mentioned only in the notes, but not in its 
+>> signature).
+> 
+> Ah, thanks for the clarification (I somehow missed your reply).
+> 
+>> The reality:
+>> 
+>> * glibc: 
+>> https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sys/prctl.h;h=821aeefc1339b35210e8918ecfe9833ed2792626;hb=glibc-2.37#l42
+>> 
+>> * musl:
+>> https://git.musl-libc.org/cgit/musl/tree/include/sys/prctl.h?h=v1.2.4#n180
+>> 
+>> Though there is a test in the kernel that does define its own 
+>> prototype,
+>> avoiding the issue: 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/sched/cs_prctl_test.c?h=v6.3#n77
+> 
+> At least for glibc, it seems that there is a conversion to unsigned
+> long:
+> 
+> https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/prctl.c#l28
+> 
+> unsigned long int arg2 = va_arg (arg, unsigned long int);
+> 
+> (does va_arg expand to an actual cast?)
+> 
+No, this not a conversion or a cast in the sense that I think you mean 
+it. What happens in the situation discussed in this thread is the 
+following (assuming the argument is passed via a register, which is 
+typical for initial variadic arguments on 64-bit targets):
 
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
----
- rust/kernel/task.rs | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+* User calls prctl(op, 0) on a 64-bit target.
+* The second argument is an int.
+* The compiler generates code to pass an int (32 bits) via a 64-bit 
+register. The compiler is NOT required to clear the upper 32 bits of the 
+register, so they might contain arbitrary junk in a general case.
+* The prctl() implementation calls va_arg(arg, unsigned long) (as in 
+your quote).
+* The compiler extracts the full 64-bit value of the same register 
+(which in our case might contain junk in the upper 32 bits).
+* This extracted 64-bit value is then passed to the system call.
 
-diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-index 526d29a0ae27..7eda15e5f1b3 100644
---- a/rust/kernel/task.rs
-+++ b/rust/kernel/task.rs
-@@ -64,8 +64,14 @@ macro_rules! current {
- #[repr(transparent)]
- pub struct Task(pub(crate) Opaque<bindings::task_struct>);
- 
--// SAFETY: It's OK to access `Task` through references from other threads because we're either
--// accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
-+// SAFETY: By design, the only way to access a `Task` is via the `current` function or via an
-+// `ARef<Task>` obtained through the `AlwaysRefCounted` impl. This means that the only situation in
-+// which a `Task` can be accessed mutably is when the refcount drops to zero and the destructor
-+// runs. It is safe for that to happen on any thread, so it is ok for this type to be `Send`.
-+unsafe impl Send for Task {}
-+
-+// SAFETY: It's OK to access `Task` through shared references from other threads because we're
-+// either accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
- // synchronised by C code (e.g., `signal_pending`).
- unsafe impl Sync for Task {}
- 
--- 
-2.40.1.698.g37aff9b760-goog
+So...
 
+> If the libc passes a 32-bit to a kernel ABI that expects 64-bit, I 
+> think
+> it's a user-space bug and not a kernel ABI issue.
+
+... the problem happens not at the user/kernel boundary, but in prctl() 
+call/implementation in user space. But yes, it's still a user-space bug 
+and not a kernel ABI issue. The David's question, as I understand it, 
+was whether we want to keep such buggy code that happens to pass junk 
+failing with EINVAL in future kernels or not. If we do want to keep it 
+failing, we can never assign any meaning to the upper 32 bits of the 
+second prctl() argument for PR_SET_MDWE op.
+
+Thanks,
+Alexey
