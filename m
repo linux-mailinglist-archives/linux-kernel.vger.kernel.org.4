@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A1770CFEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6224970CFF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbjEWBAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S234773AbjEWBBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234638AbjEWBAO (ORCPT
+        with ESMTP id S234560AbjEWBAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:00:14 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528CBF4;
-        Mon, 22 May 2023 17:58:01 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae3a5dfa42so47434515ad.0;
-        Mon, 22 May 2023 17:58:01 -0700 (PDT)
+        Mon, 22 May 2023 21:00:44 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ACC196;
+        Mon, 22 May 2023 17:58:34 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-534696e4e0aso3863748a12.0;
+        Mon, 22 May 2023 17:58:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684803466; x=1687395466;
+        d=gmail.com; s=20221208; t=1684803514; x=1687395514;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p1yeqEL2YFpMCthAHwog2p9ezUJQgAe4nd/8yOnzMLc=;
-        b=mKHau8NZ3Yfh1+Dl1mZTJ3fMqlAxuzxBvZBEcbcRmB+4MXlsrHFZxRkkSVizIiOk+2
-         884tLTyi8cz3TFoBQOYDx7LyT1Cin+4VQSM6mebUsRyzPQS4/tEnm8ETaOu1a+rTHKQG
-         ccvvmWNKW7FBJCpZ9ltt4n3kl+5lhEm9qSDVme3umGX9Q95ekxoN7PKRosfVZCtaUbK8
-         EADZsG7lRqZ1ykzwADZT6gC6+1A8Db6ayB3WAhGTmtMT5bCPoXCwIaMpaMYCAgOr6GSP
-         ormBpu2Wmxp4YXUXlpkjeheAy3sVKuF1wQrdwl+9iSYF5fVOrj6Lz5/nZ4TBuY5TjgPO
-         td7w==
+        bh=m/TN5H2z3LpXN/tgkrSVUCXuSpR0rK3XhYwk0PjuaCI=;
+        b=SIwN3J9dLeEEUFNtNtwBysRaT7B//5MeVsP8eyBLenB9tLtdAzIMNcTrapemETi0lu
+         f1Cl5tIL63VPLJx5Q4LKuB75//+F2jh8mbJ1zUsBqcsOwmUTvolshbVb+UArw5bCYJtY
+         nR1UAg5TqImG47wr6VeaWs+oPgbunaMFFcpx8C/tHeyQ/jMkpa1LLA81tlUTjMNy6v2/
+         1bOMr1PAY2Xg/TarKOHVxPAf+Z2BhYkonq/Nr8yStZ8kZqgFN9B1CoCX5shd0QpEz5ee
+         UrceODeCBkUTnIcd7TCgqTiKbZatsGgAWuIqz2+pdr8856jkJI9JgitwY0ks2V4JS5C0
+         JAIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684803466; x=1687395466;
+        d=1e100.net; s=20221208; t=1684803514; x=1687395514;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p1yeqEL2YFpMCthAHwog2p9ezUJQgAe4nd/8yOnzMLc=;
-        b=CwoC3GYxCScjvVFY92v7+hd/fX6/K2EQDk8p/LVk3BimA4aAi1AoLNhI1flD4lbWPp
-         Kt4UfX04DMyDDHeWtTN34b56V5ugCDiBYfM6buUnZU/tZNMzamNqVSHukLMoBlyUw2Q6
-         Jcf06DjVfhQfBwBBPl/VcgJS3PATyXrWjP/SFHrFFTHq4kq/IsDJ13vZLtbKevgjnyn/
-         sxTQpJ2oYwitXFu9wUNfeMRVPx/1wa3BAfo4bD5qv3hQoVyjLkTZ7ZQ33xrtt6mPYjjd
-         7lgq9NRguYh7mwdnWVOVvheWbicLMd+/d9fgKTxF1AEZZOhYqlRYnzijnY2Z0id0M5O3
-         dzRw==
-X-Gm-Message-State: AC+VfDy/q1BuWatP7QX4xKAejQrtev+HFlAR4mPxpu13J+911loobyk6
-        2JIeACyx+hKYRbM2bl5nmVs=
-X-Google-Smtp-Source: ACHHUZ6kMl5/PXrFASjEZtGrJSoUco4dItV83+U06SvBQ2QSIyK+0CqZR4t8vjgCMyoxVVVwEIMO+Q==
-X-Received: by 2002:a17:902:ce8a:b0:1af:cbe4:d953 with SMTP id f10-20020a170902ce8a00b001afcbe4d953mr654888plg.60.1684803466050;
-        Mon, 22 May 2023 17:57:46 -0700 (PDT)
+        bh=m/TN5H2z3LpXN/tgkrSVUCXuSpR0rK3XhYwk0PjuaCI=;
+        b=Yzx57jCBkXQV8S8HGN/lKMLGWqhGyEX8IsxuZvjAuS1JRuOlCOlJiCz0K6ekwA2o1A
+         q25gtVnHlNyL/2bV6ua+E7EF1/4LHm3uXkxpSS9jN/Vmsyl3YhMI9zOFL7gcq0JaGgxI
+         X0cVGNoM6RfRjT4kM3pwB1mpZQS7mO/xhXl56UsAY1UhYjFeX5kycaBtslCf6HSYEBY3
+         9Vr31tx3KNg9w7jtToyNxunXjbwTFQdORn9/wgTPZCJIiAYqojRvtbAH4syttrgxnY/k
+         ZuT5c15PaanB8hEW0X01/eD75s+fsViRpXEAvuZHDaF+Ef+m7En1ILJKf9zCNjmdO5Xh
+         AlAg==
+X-Gm-Message-State: AC+VfDwvJXIBeqUI00hfgsQr8m42Mu75/37kQp0hPIg+VAEowBZ/7qSv
+        2wv4gnO7KyEYUgBJsf+Yq5o=
+X-Google-Smtp-Source: ACHHUZ5pW0WgPZKvATk/xZ1Socp7ec7BFUpiko1vlkAvxBEG7EBNK6x9a9f/nA9U72TmTSC+B7koQQ==
+X-Received: by 2002:a17:902:c153:b0:1ac:988e:2624 with SMTP id 19-20020a170902c15300b001ac988e2624mr13628616plj.37.1684803513520;
+        Mon, 22 May 2023 17:58:33 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::5:39c])
-        by smtp.gmail.com with ESMTPSA id u5-20020a17090341c500b001aae909cfbbsm5409544ple.119.2023.05.22.17.57.45
+        by smtp.gmail.com with ESMTPSA id i1-20020a635401000000b0051b36aee4f6sm4914044pgb.83.2023.05.22.17.58.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 17:57:45 -0700 (PDT)
+        Mon, 22 May 2023 17:58:33 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 22 May 2023 14:57:43 -1000
+Date:   Mon, 22 May 2023 14:58:31 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     John Sperbeck <jsperbeck@google.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup: always put cset in cgroup_css_set_put_fork
-Message-ID: <ZGwPhzm_Eh2Bx-5v@slm.duckdns.org>
-References: <20230521192953.229715-1-jsperbeck@google.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Finn Thain <fthain@linux-m68k.org>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH RESEND 01/13] scsi: ncr53c8xx: Use default @max_active
+ for hostdata->work_q
+Message-ID: <ZGwPt4VNs1RhWpvn@slm.duckdns.org>
+References: <20230509015032.3768622-1-tj@kernel.org>
+ <20230509015032.3768622-2-tj@kernel.org>
+ <ZGmGZxYmN0En7wAB@slm.duckdns.org>
+ <yq1v8gkm3aq.fsf@ca-mkp.ca.oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230521192953.229715-1-jsperbeck@google.com>
+In-Reply-To: <yq1v8gkm3aq.fsf@ca-mkp.ca.oracle.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -76,46 +81,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 07:29:53PM +0000, John Sperbeck wrote:
-> A successful call to cgroup_css_set_fork() will always have taken
-> a ref on kargs->cset (regardless of CLONE_INTO_CGROUP), so always
-> do a corresponding put in cgroup_css_set_put_fork().
+On Mon, May 22, 2023 at 06:06:56PM -0400, Martin K. Petersen wrote:
 > 
-> Without this, a cset and its contained css structures will be
-> leaked for some fork failures.  The following script reproduces
-> the leak for a fork failure due to exceeding pids.max in the
-> pids controller.  A similar thing can happen if we jump to the
-> bad_fork_cancel_cgroup label in copy_process().
+> Hi Tejun!
 > 
-> [ -z "$1" ] && echo "Usage $0 pids-root" && exit 1
-> PID_ROOT=$1
-> CGROUP=$PID_ROOT/foo
+> > Subject: scsi: ncr53c8xx: Use default @max_active for hostdata->work_q
+> >
+> > hostdata->work_q only hosts a single work item, hostdata->main_task, and
+> > thus doesn't need explicit concurrency limit. Let's use the default
+> > @max_active. This doesn't cost anything and clearly expresses that
+> > @max_active doesn't matter.
 > 
-> [ -e $CGROUP ] && rmdir -f $CGROUP
-> mkdir $CGROUP
-> echo 5 > $CGROUP/pids.max
-> echo $$ > $CGROUP/cgroup.procs
+> > It's not a must but it'd be great if I can route this through the workqueue
+> > tree so that it can go together with other related and followup cleanups.
 > 
-> fork_bomb()
-> {
-> 	set -e
-> 	for i in $(seq 10); do
-> 		/bin/sleep 3600 &
-> 	done
-> }
+> As Finn pointed out, please make sure it's tagged NCR5380: instead of
+> ncr53c8xx:. Otherwise OK.
 > 
-> (fork_bomb) &
-> wait
-> echo $$ > $PID_ROOT/cgroup.procs
-> kill $(cat $CGROUP/cgroup.procs)
-> rmdir $CGROUP
-> 
-> Fixes: ef2c41cf38a7 ("clone3: allow spawning processes into cgroups")
-> Signed-off-by: John Sperbeck <jsperbeck@google.com>
+> Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
 
-Applied to cgroup/for-6.4-fixes w/ stable cc'd.
+Will update and apply to wq/for-6.5-cleanup-ordered.
 
-Thanks.
+Thank you.
 
 -- 
 tejun
