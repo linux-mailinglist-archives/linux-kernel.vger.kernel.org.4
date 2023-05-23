@@ -2,128 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B9670D7D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A28070D7D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235930AbjEWIss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S235369AbjEWIuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235978AbjEWIso (ORCPT
+        with ESMTP id S229604AbjEWIun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:48:44 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E30E0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:48:42 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-456f7ea8694so1548561e0c.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684831721; x=1687423721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsCD0of1x6zAZe4E8ewHElcvWX4G+68HMU5ECsDupIE=;
-        b=1MkyHwpRBLggLehbgS6eNfVckrrq+fSGe5Ml3QKm23i2ADWDBXeDmBN5mQpLixA1L7
-         /STGoEzvvRpB9YR2lAH38LNK5EPoPYKR0USAiTHsMkH6PTlH/4pBmYOjfPYy2J/Y2FcC
-         W0SzIJp0LCOnczI45DnIN/FEU25qCLA55krEq3uZR/TWW0lkWemQI6q2sZ56sLldQeO4
-         d/eXHJjaLnm4UoLa2As4aYZOgyoAXDh3WFoT3NduC98nzH9ryrxihWhELLMp37MvEnu9
-         wTZIKhJ5nO1lXo+qss4xvuc4vmH3GlFD9n7BGgxhyQbeV/BjRa2SUxLokggVFcHHaH+a
-         DmOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684831721; x=1687423721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nsCD0of1x6zAZe4E8ewHElcvWX4G+68HMU5ECsDupIE=;
-        b=A8JSxsw3keu9x1OzdJD1Nwz+usMCTbaJLHpJtOtAunvkwKcySeHcPY22OtQZSUaoBW
-         SnVJZv6pSeWaK+fMIV6k2hlhvDBO/DWD0g5GJC3vhIhQOkulwe9KuuyffbHsVHSlifmc
-         3JDAb4QEFnePFTckkADe/9LQ8XLGY1yxPK46Z7/pIPSQlRKl8Uaw9jGkO09sxd72SkQA
-         fIymWb7mRBeLJxee712J/KU6od5i56kSqsmFE7+UOeYtZzm8R+fHnvQdd9Cyt71ZhaZY
-         IWPUJoG/x7ZEjuQMfYon3S2or+5EpgY8qTrCM8NDTNOGnE8dhkTX8GTC6rGLTKkdwOw0
-         pUPg==
-X-Gm-Message-State: AC+VfDyoYy9Lsc8q1wQ8TyeN9mBOxr40C9XPunXzZJP/60QLBNwgoM0s
-        z5MdiY2PnmKaPENaPBxsr8tIRQcZL+Z/e/Llv8ztKg==
-X-Google-Smtp-Source: ACHHUZ4g3A8Ho/5ndNryXQpmLu1vYMnDo3U7OPTUNTtRkDJDs/TtPHk0tvFU6g2UWK2DN5PGxRYri4rRpoeNl2oXti8=
-X-Received: by 2002:a1f:4113:0:b0:44f:d1f5:6bec with SMTP id
- o19-20020a1f4113000000b0044fd1f56becmr4252400vka.4.1684831721544; Tue, 23 May
- 2023 01:48:41 -0700 (PDT)
+        Tue, 23 May 2023 04:50:43 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACDF95;
+        Tue, 23 May 2023 01:50:41 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34N8oNYT047116;
+        Tue, 23 May 2023 03:50:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684831823;
+        bh=pGNhxnHYMKdEp7LCgpudevP6jkF3wR2W62IcO5JqcFA=;
+        h=From:To:CC:Subject:Date;
+        b=NOg9CiAr6uodWTXZYeEsxmhnn27V6pBPPwKrUvnnV2lkVc4rddCKGdYQqTkvOVm2T
+         T+KvGEdj7osmrWHgq4VcegsFbOHcdI2OR02bJb5WIkPjvYTFz/LpL+lQqP0qOiaRtO
+         ClKx6HufrfSPxGyz9Rf8hMVKvEX7Ije1zk8WtIuo=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34N8oNNB100542
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 23 May 2023 03:50:23 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 23
+ May 2023 03:50:23 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 23 May 2023 03:50:23 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34N8oLtS123581;
+        Tue, 23 May 2023 03:50:22 -0500
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <u-kumar1@ti.com>, <jm@ti.com>, <b-kapoor@ti.com>
+Subject: [tiL6.1 PATCH v2] arm64: dts: ti: k3-j721s2: Add support for CAN instances 3 and 5 in main domain
+Date:   Tue, 23 May 2023 14:20:21 +0530
+Message-ID: <20230523085021.22524-1-b-kapoor@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230427152055.18380-1-henning.schild@siemens.com>
- <20230427152055.18380-2-henning.schild@siemens.com> <ZEuBMCxeWAx9OilV@76cbfcf04d45>
- <759b2df004e2445e850a01b33e748972@siemens.com> <20230428113332.3a7b9a18@md1za8fc.ad001.siemens.net>
- <CAMRc=Mdfptr0ZXV=fzBE0T+=vTxhL1tOKxRy+ccFLOqinb0w1A@mail.gmail.com> <20230513115326.0a9f669e@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20230513115326.0a9f669e@md1za8fc.ad001.siemens.net>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 23 May 2023 10:48:30 +0200
-Message-ID: <CAMRc=MegFzyKSW6KAOUHfdMqnZGb3iAqhCbVrn2GFmyEqPTbcw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio-f7188x: fix chip name and pin count on
- Nuvoton chip
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     "Wu, Xing Tong (DI FA CTR IPC CN PRC4)" <XingTong.Wu@siemens.com>,
-        Simon Guinot <simon.guinot@sequanux.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13, 2023 at 11:53=E2=80=AFAM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> Am Thu, 11 May 2023 14:52:17 +0200
-> schrieb Bartosz Golaszewski <brgl@bgdev.pl>:
->
-> > On Fri, Apr 28, 2023 at 11:33=E2=80=AFAM Henning Schild
-> > <henning.schild@siemens.com> wrote:
-> > >
-> > > Am Fri, 28 Apr 2023 10:26:18 +0200
-> > > schrieb "Wu, Xing Tong (DI FA CTR IPC CN PRC4)"
-> > > <XingTong.Wu@siemens.com>:
-> > >
-> > > > Hi all
-> > > >
-> > > > The chip id of NCT6116D is 0XD281, you can refer to
-> > > > NCT6116D_Datasheet_V1_0.pdf, Page 291
-> > >
-> > > Thanks Xing Tong. I think we have come to agree that for now
-> > > NCT6116D 0xD281 will not be supported in the kernel. Maybe until
-> > > someone has access to that very chip and a use-case.
-> > >
-> > > But you managed to somehow get these datasheets, which are still not
-> > > publicly available. Maybe you can use your contacts at Nuvoton to
-> > > kindly ask them to publish those specs on their website for future
-> > > reference. Some specs are there, but not all. That would help
-> > > people to add more chips and avoid mistakes like they happened to
-> > > me.
-> > >
-> > > Henning
-> > >
-> >
-> > Henning, do you plan to respin this with the ID corrected?
->
-> Bart, no this one fixes the name of the chip i have at hand, and fixes
-> the size of its last bank. So it is valid on its own and should IMHO be
-> merged as is.
->
-> Since i do not have a NCT6116D (0xD281) i could basically just guess
-> (not too hard) but not test. And i do not really feel like contributing
-> untested code for which there is no known user/tester.
->
-> Henning
->
-> > Bart
->
+CAN instances 3 and 5 in the main domain are brought on the common
+processor board through header J27 and J28. The CAN High and Low lines
+from the SoC are routed through a mux on the SoM. The select lines need
+to be set for the CAN signals to get connected to the transceivers on
+the common processor board. Threfore, add respective mux, transceiver
+dt nodes to add support for these CAN instances.
 
-Fair enough, applied.
+Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+---
 
-Bart
+Changelog v1->v2: Modified indentation according to comments
+
+Link to v1 : https://lore.kernel.org/all/20230412084935.699791-1-b-kapoor@ti.com/
+
+ .../dts/ti/k3-j721s2-common-proc-board.dts    | 46 +++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 12 +++++
+ 2 files changed, 58 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+index a7aa6cf08acd..f07663bbea16 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+@@ -27,6 +27,8 @@ aliases {
+ 		can0 = &main_mcan16;
+ 		can1 = &mcu_mcan0;
+ 		can2 = &mcu_mcan1;
++		can3 = &main_mcan3;
++		can4 = &main_mcan5;
+ 	};
+ 
+ 	evm_12v0: fixedregulator-evm12v0 {
+@@ -107,6 +109,22 @@ transceiver2: can-phy2 {
+ 		standby-gpios = <&wkup_gpio0 2 GPIO_ACTIVE_HIGH>;
+ 	};
+ 
++	transceiver3: can-phy3 {
++		compatible = "ti,tcan1043";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&exp2 7 GPIO_ACTIVE_LOW>;
++		enable-gpios = <&exp2 6 GPIO_ACTIVE_HIGH>;
++		mux-states = <&mux0 1>;
++	};
++
++	transceiver4: can-phy4 {
++		compatible = "ti,tcan1042";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&exp_som 7 GPIO_ACTIVE_HIGH>;
++		mux-states = <&mux1 1>;
++	};
+ };
+ 
+ &main_pmx0 {
+@@ -144,6 +162,20 @@ vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+ 			J721S2_IOPAD(0x020, PIN_INPUT, 7) /* (AA23) MCAN15_RX.GPIO0_8 */
+ 		>;
+ 	};
++
++	main_mcan3_pins_default: main-mcan3-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x080, PIN_INPUT, 0) /* (U26) MCASP0_AXR4.MCAN3_RX */
++			J721S2_IOPAD(0x07c, PIN_OUTPUT, 0) /* (T27) MCASP0_AXR3.MCAN3_TX */
++		>;
++	};
++
++	main_mcan5_pins_default: main-mcan5-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x03c, PIN_INPUT, 0) /* (U27) MCASP0_AFSX.MCAN5_RX */
++			J721S2_IOPAD(0x038, PIN_OUTPUT, 0) /* (AB28) MCASP0_ACLKX.MCAN5_TX */
++		>;
++	};
+ };
+ 
+ &wkup_pmx0 {
+@@ -309,3 +341,17 @@ &mcu_mcan1 {
+ 	pinctrl-0 = <&mcu_mcan1_pins_default>;
+ 	phys = <&transceiver2>;
+ };
++
++&main_mcan3 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan3_pins_default>;
++	phys = <&transceiver3>;
++};
++
++&main_mcan5 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan5_pins_default>;
++	phys = <&transceiver4>;
++};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+index 6930efff8a5a..e74bc5141903 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+@@ -31,6 +31,18 @@ secure_ddr: optee@9e800000 {
+ 		};
+ 	};
+ 
++	mux0: mux-controller0 {
++		compatible = "gpio-mux";
++		#mux-state-cells = <1>;
++		mux-gpios = <&exp_som 1 GPIO_ACTIVE_HIGH>;
++	};
++
++	mux1: mux-controller1 {
++		compatible = "gpio-mux";
++		#mux-state-cells = <1>;
++		mux-gpios = <&exp_som 2 GPIO_ACTIVE_HIGH>;
++	};
++
+ 	transceiver0: can-phy0 {
+ 		/* standby pin has been grounded by default */
+ 		compatible = "ti,tcan1042";
+-- 
+2.39.2
+
