@@ -2,171 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37E170DFC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB39B70DFCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbjEWO5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S230024AbjEWO5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjEWO5B (ORCPT
+        with ESMTP id S237052AbjEWO5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:57:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B18FA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:56:59 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6630F6601EB5;
-        Tue, 23 May 2023 15:56:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684853811;
-        bh=SJZt9atAoQRj3rcAzTtRqoL9FHE3CxbtatuFUkIZ7/A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A1iFbFydVp3BqMWN95Xd90xFzcZubgebSvcSsSVMayqpt/U15l42yyOzA9edNLnOd
-         8F1xjWVOzbbJAbIqkHPwO54nb1qh44lgbs+e0wGGVXYGxVeYJpprP+Ub4fhOspKV9r
-         NGzJksq5HLKiF2OF1oZYmxIYnrBwJ7xE1/UIVNN7zPIToepFjTRFGi1Tq+DllnF/lJ
-         7f0tptQujdNHi+8ZqceJgdUi25YN8R+rsQ97X54L4TjG5KLtDuLKpcQlFeCaNFXZAG
-         uKCjNfGO0gfFESyFTgnhuKQrlch1e7cU/r1s3mo6KfkE9I/Y531ni+UGp0iWtKI/2D
-         XeTaPWT7f3eiw==
-Message-ID: <a1793745-eae3-cae5-49fc-2e75fe0847f0@collabora.com>
-Date:   Tue, 23 May 2023 16:56:47 +0200
+        Tue, 23 May 2023 10:57:11 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB47CFA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:57:09 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f60410106cso18148245e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684853828; x=1687445828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/1Wj0P6YeefVDWUhmrWZwCaqFzfv9dXPwxlScY7Er8M=;
+        b=amAVpLeJyPwKhmefM8/EOAHIHLVYlyiJwOdyk6pFO51tvPzhlvX3vOOTggg8tP73YP
+         xzBcgusJeBauUJv950RurKmsemJ2NIovZeXxHoSjgHPPXKwDHJOzF7ubHJypOLSO/94t
+         fxh1gxyVKCabr2VdjelC711MlJn8t3xT0VqLz+t4luwAUZOkRnPLHWHNHnbv8WtviXub
+         l9BC48BpOuZQWtJmqRXoSBdlhBJYqo3gS1F2xU4Q12EYp3piOG5NNY0Oik+Dv+wf1mUP
+         d6DAqS4DQ+uhq4ZkhN31RUWDwQxpRS2MDrbKQQxtO7Ay2z84UfxDTggFZK1hQIE7NH7c
+         Wm3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684853828; x=1687445828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/1Wj0P6YeefVDWUhmrWZwCaqFzfv9dXPwxlScY7Er8M=;
+        b=SVu4asozWogQ5jfhq0rMRHPmQ+0OhByhCD1KdqKXTShoevTXtCdluwRI4a/YTeXfXv
+         X9631GNm1bhI2EoyK1vaGnyNvMOf7MkTJnxK/tVFV/guy76CltpNbwoKX3KlQjQP8sUN
+         1z28fSr2JNGCgfdMOiPRP7DCwCUMncksaHbaViZfn5Dtsm3s82AtW3lGYX9EzTH8paQG
+         p/aXRqh1Wpcx5vZdeFFRJDHG1MWAfL5x/SW/Mjjegns3ei0GhjGR9YD6M+00xV0BYXE7
+         m3pOMuf6Ko846z0KXW4zRww3E5m4bLB4aeLYNez+ZkgOf+Bq7R5Ic+L+6+/vxJ2a02s5
+         Q0Ww==
+X-Gm-Message-State: AC+VfDxqtnzapHgrvNRdGs0AHJlEptwL7NI6Ye35kG33B1TP5qucDBtd
+        h4x5nPDqvCQs5bpiNCl9OrMbuA==
+X-Google-Smtp-Source: ACHHUZ4Tf0ls0pXCeCE4Vy0Kg1p+ousOsWikkiU/FrmHmlgOsVxZrCE7R6nE7OjJLyNkfOhVRDCXLQ==
+X-Received: by 2002:a5d:4e8c:0:b0:306:37ec:656c with SMTP id e12-20020a5d4e8c000000b0030637ec656cmr10823357wru.66.1684853828416;
+        Tue, 23 May 2023 07:57:08 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n1-20020adfe781000000b002c54c9bd71fsm11388835wrm.93.2023.05.23.07.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 07:57:05 -0700 (PDT)
+Date:   Tue, 23 May 2023 17:57:03 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Tomas Henzl <thenzl@redhat.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, Jing Xu <U202112064@hust.edu.cn>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: mpt3sas: mpt3sas_debugfs: return value check of
+ `mpt3sas_debugfs_root`
+Message-ID: <3c4b372f-db4b-43b4-b5ab-7f4860cf6f20@kili.mountain>
+References: <20230423122535.31019-1-U202112064@hust.edu.cn>
+ <6e69b57c-80ae-8b6e-cb5f-9e05da46ecd6@redhat.com>
+ <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
+ <b7154e2c-0438-87d1-9edc-7eb1aad40cd1@hust.edu.cn>
+ <81d236bb-3913-4eef-bf71-6d17535d6d79@kili.mountain>
+ <892bc614-9e2e-904b-29e0-62daeb855f79@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 4/4] cpufreq: mediatek: Raise proc and sram max voltage
- for MT7622/7623
-To:     Daniel Golle <daniel@makrotopia.org>,
-        "jia-wei.chang" <jia-wei.chang@mediatek.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com, Nick Hainke <vincent@systemli.org>,
-        Dan Carpenter <error27@gmail.com>
-References: <20230324101130.14053-1-jia-wei.chang@mediatek.com>
- <20230324101130.14053-5-jia-wei.chang@mediatek.com>
- <ZGuuVPCqgpUO6p0Q@makrotopia.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ZGuuVPCqgpUO6p0Q@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <892bc614-9e2e-904b-29e0-62daeb855f79@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/05/23 20:03, Daniel Golle ha scritto:
-> Hi Jia-Wei,
-> Hi AngeloGioacchino,
-> 
-> On Fri, Mar 24, 2023 at 06:11:30PM +0800, jia-wei.chang wrote:
->> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>
->> During the addition of SRAM voltage tracking for CCI scaling, this
->> driver got some voltage limits set for the vtrack algorithm: these
->> were moved to platform data first, then enforced in a later commit
->> 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
->> using these as max values for the regulator_set_voltage() calls.
->>
->> In this case, the vsram/vproc constraints for MT7622 and MT7623
->> were supposed to be the same as MT2701 (and a number of other SoCs),
->> but that turned out to be a mistake because the aforementioned two
->> SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
->>
->> Fix that by adding new platform data for MT7622/7623 declaring the
->> right {proc,sram}_max_volt parameter.
->>
->> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
->> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> ---
->>   drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
->>   1 file changed, 11 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
->> index 764e4fbdd536..9a39a7ccfae9 100644
->> --- a/drivers/cpufreq/mediatek-cpufreq.c
->> +++ b/drivers/cpufreq/mediatek-cpufreq.c
->> @@ -693,6 +693,15 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
->>   	.ccifreq_supported = false,
->>   };
->>   
->> +static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
->> +	.min_volt_shift = 100000,
->> +	.max_volt_shift = 200000,
->> +	.proc_max_volt = 1360000,
->> +	.sram_min_volt = 0,
->> +	.sram_max_volt = 1360000,
-> 
-> This change breaks cpufreq (with ondemand scheduler) on my BPi R64
-> board (having MT7622AV SoC with MT6380N PMIC).
-> ...
-> [    2.540091] cpufreq: __target_index: Failed to change cpu frequency: -22
-> [    2.556985] cpu cpu0: cpu0: failed to scale up voltage!
-> ...
-> (repeating a lot, every time the highest operating point is selected
-> by the cpufreq governor)
-> 
-> The reason is that the MT6380N doesn't support 1360000uV on the supply
-> outputs used for SRAM and processor.
-> 
-> As for some reason cpufreq-mediatek tries to rise the SRAM supply
-> voltage to the maximum for a short moment (probably a side-effect of
-> the voltage tracking algorithm), this fails because the PMIC only
-> supports up to 1350000uV. As the highest operating point is anyway
-> using only 1310000uV the simple fix is setting 1350000uV as the maximum
-> instead for both proc_max_volt and sram_max_volt.
-> 
-> A similar situation applies also for BPi R2 (MT7623NI with MT6323L
-> PMIC), here the maximum supported voltage of the PMIC which also only
-> supports up to 1350000uV, and the SoC having its highest operating
-> voltage defined at 1300000uV.
-> 
-> If all agree with the simple fix I will post a patch for that.
-> 
-> However, to me it feels fishy to begin with that the tracking algorithm
-> tries to rise the voltage above the highest operating point defined in
-> device tree, see here:
-> 
-> 6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei Chang              2022-05-05 19:52:20 +0800 100)    new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
-> 6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei Chang              2022-05-05 19:52:20 +0800 101)                      soc_data->sram_min_volt, soc_data->sram_max_volt);
-> 
-> However, I did not investigate in depth the purpose of this
-> initial rise and can impossibly test my modifications to the
-> tracking algorithm on all supported SoCs.
-> 
+On Tue, May 23, 2023 at 04:48:12PM +0200, Tomas Henzl wrote:
+> On 5/8/23 16:38, Dan Carpenter wrote:
+> > On Mon, May 08, 2023 at 09:40:41PM +0800, Dongliang Mu wrote:
+> >>>>> diff --git a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+> >>>>> index a6ab1db81167..c92e08c130b9 100644
+> >>>>> --- a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+> >>>>> +++ b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+> >>>>> @@ -99,8 +99,6 @@ static const struct file_operations mpt3sas_debugfs_iocdump_fops = {
+> >>>>>   void mpt3sas_init_debugfs(void)
+> >>>>>   {
+> >>>>>   	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
+> >>>>> -	if (!mpt3sas_debugfs_root)
+> >>>>> -		pr_info("mpt3sas: Cannot create debugfs root\n");
+> >>>> Hi Jing,
+> >>>> most drivers just ignore the return value but here the author wanted to
+> >>>> have the information logged.
+> >>>> Can you instead of removing the message modify the 'if' condition so it
+> >>>> suits the author's intention?
+> >>>
+> >>> This code was always just wrong.
+> >>>
+> >>> The history of this is slightly complicated and boring.  These days it's
+> >>> harmless dead code so I guess it's less bad than before.
+> >>
+> >> Hi Dan and Tomas,
+> >>
+> >> Any conclusion about this patch? The student Jing Xu is not sure about how
+> >> to revise this patch.
+> > 
+> > The correct fix is to delete the code.
+> > 
+> > Debugfs code has error checking built in and was never supposed to be
+> > checked for errors in normal driver code.
+> > 
+> > Originally, debugfs returned a mix of error pointers and NULL.  In the
+> > kernel, when you have a mix of error pointers and NULL, then the NULL
+> > means that the feature has been disabled deliberately.  It's not an
+> > error, we should not print a message.
+> > 
+> > So a different, correct-ish way to write write debugfs error handling
+> > was to say:
+> > 
+> > 	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
+> > 	if (IS_ERR(mpt3sas_debugfs_root))
+> > 		return PTR_ERR(mpt3sas_debugfs_root);
+> I'm fine with this as well, I could wish we get a fix for the exact same
+> case of debugfs_create_dir in mpt3sas_setup_debugfs and ideally all the
+> debugfs_create* in  mpt3sas_debugfs.c in a single patch. But this patch
+> is ok even if that wasn't possible.
+> tomash
 
-Thanks for actually reporting that, I don't think that there's any
-valid reason why the algorithm should set a voltage higher than the
-maximum votage specified in the fastest OPP.
+No, you didn't read until the end.  That will break the driver badly.
 
-Anyway - the logic for the platform data of this driver is to declare
-the maximum voltage that SoC model X supports, regardless of the actual
-board-specific OPPs, so that part is right; to solve this issue, I guess
-that the only way is for this driver to parse the OPPs during .probe()
-and then always use in the algorithm
+This *used* to be a correct-ish way that *used* to work but it was never
+the what Greg wanted.  So to discourage people from doing it, Greg made
+it *impossible* to check for if debugfs has failed.  Literally, the only
+correct thing to do now is to delete the debugfs checking.
 
-	vproc_max = max(proc_max_volt, opp_vproc_max);
-	vsram_max = max(sram_max_volt, vsram_vreg_max);
+regards,
+dan carpenter
 
-Jia-Wei, can you please handle this?
-
-Thanks,
-Angelo
 
