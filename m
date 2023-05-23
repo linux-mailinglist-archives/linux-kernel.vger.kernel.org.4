@@ -2,124 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A557370CF58
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8D870CF60
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbjEWAiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
+        id S235746AbjEWAic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235186AbjEWAM4 (ORCPT
+        with ESMTP id S235146AbjEWAM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 May 2023 20:12:56 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F33C51FE7;
-        Mon, 22 May 2023 16:59:45 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [218.12.18.192])
-        by mail-app4 (Coremail) with SMTP id cS_KCgAHPQjlAWxkmzJzAw--.47639S2;
-        Tue, 23 May 2023 07:59:40 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     mchehab@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH RESEND] media: usb: siano: Fix warning due to null work_func_t function pointer
-Date:   Tue, 23 May 2023 07:59:32 +0800
-Message-Id: <20230522235932.5927-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgAHPQjlAWxkmzJzAw--.47639S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAry8JFyDtFyDXrW5uFWxZwb_yoW5ZF18p3
-        48XrWjkFW8Jr1Yyrn8Ar1UG3W5J3WxZa48GrW7Wr1rWF1rG3W7XFy8KFWjkryDtr4UZrya
-        yF90q34xtr1jgaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6FWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUw189UUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwIDAWRrhN4CuQBPsi
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0050B2109;
+        Mon, 22 May 2023 17:01:00 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MNtdvs015380;
+        Tue, 23 May 2023 00:00:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=lnhlqcDpdebCW8fTwQlsbFTiHOOMDDt1r96jqt2Cg5Y=;
+ b=gwVAdpwyF5ykS+1NDFl5dQ3wYqOSp7BdevFtnVP4iZk3n0MOfv9P7+WyV7X513lSlekG
+ hO4KggP3fY+cAAY3pjOeULU5apMtfATKOEWoog86119UvXQy7PthgkeNZP1Y2RfWTAeF
+ 8VcHxQROqERL40BobUk3xH+Q5pQHsjHATbn/8PrZyldNt8xr+ssUr4nHA3P7HqMzQOoF
+ TMGhvenV31cKXnc105oJKlLrc4TjkafPi/Z+qSeQnkzEjdZHnsdJ5NaEjwfStLrLyQU9
+ gHLd4giB7UMRa03olLhtJ+/uyIKUFYHXs3OafGkkRPJ0+w17NDtO2LtgjWI33jfYEv+g vg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qracsh0k9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 00:00:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N00nni029888
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 00:00:49 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 22 May 2023 17:00:48 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v13 00/10] add DSC 1.2 dpu supports
+Date:   Mon, 22 May 2023 17:00:29 -0700
+Message-ID: <1684800039-18231-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KdlPAh4rgsxvIj4gXw3cYbyEsRjt7fQ_
+X-Proofpoint-ORIG-GUID: KdlPAh4rgsxvIj4gXw3cYbyEsRjt7fQ_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-22_18,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=907 spamscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 clxscore=1015 adultscore=0
+ mlxscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220203
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous commit ebad8e731c1c ("media: usb: siano: Fix use after
-free bugs caused by do_submit_urb") adds cancel_work_sync() in
-smsusb_stop_streaming(). But smsusb_stop_streaming() may be called,
-even if the work_struct surb->wq has not been initialized. As a result,
-the warning will occur. One of the processes that could lead to warning
-is shown below:
+This series adds the DPU side changes to support DSC 1.2 encoder. This
+was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
+The DSI and DP parts will be pushed later on top of this change.
+This seriel is rebase on [1], [2] and catalog fixes from rev-4 of [3].
 
-smsusb_probe()
-  smsusb_init_device()
-    if (!dev->in_ep || !dev->out_ep || align < 0) {
-         smsusb_term_device(intf);
-           smsusb_stop_streaming()
-             cancel_work_sync(&dev->surbs[i].wq);
-               __cancel_work_timer()
-                 __flush_work()
-                   if (WARN_ON(!work->func)) // work->func is null
+[1]: https://patchwork.freedesktop.org/series/116851/
+[2]: https://patchwork.freedesktop.org/series/116615/
+[3]: https://patchwork.freedesktop.org/series/112332/
 
-The log reported by syzbot is shown below:
+Abhinav Kumar (2):
+  drm/msm/dpu: add dsc blocks to the catalog of MSM8998 and SC8180X
+  drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
 
-WARNING: CPU: 0 PID: 897 at kernel/workqueue.c:3066 __flush_work+0x798/0xa80 kernel/workqueue.c:3063
-Modules linked in:
-CPU: 0 PID: 897 Comm: kworker/0:2 Not tainted 6.2.0-rc1-syzkaller #0
-RIP: 0010:__flush_work+0x798/0xa80 kernel/workqueue.c:3066
-...
-RSP: 0018:ffffc9000464ebf8 EFLAGS: 00010246
-RAX: 1ffff11002dbb420 RBX: 0000000000000021 RCX: 1ffffffff204fa4e
-RDX: dffffc0000000000 RSI: 0000000000000001 RDI: ffff888016dda0e8
-RBP: ffffc9000464ed98 R08: 0000000000000001 R09: ffffffff90253b2f
-R10: 0000000000000001 R11: 0000000000000000 R12: ffff888016dda0e8
-R13: ffff888016dda0e8 R14: ffff888016dda100 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd4331efe8 CR3: 000000000b48e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __cancel_work_timer+0x315/0x460 kernel/workqueue.c:3160
- smsusb_stop_streaming drivers/media/usb/siano/smsusb.c:182 [inline]
- smsusb_term_device+0xda/0x2d0 drivers/media/usb/siano/smsusb.c:344
- smsusb_init_device+0x400/0x9ce drivers/media/usb/siano/smsusb.c:419
- smsusb_probe+0xbbd/0xc55 drivers/media/usb/siano/smsusb.c:567
-...
+Kuogee Hsieh (8):
+  drm/msm/dpu: set DSC flush bit correctly at MDP CTL flush register
+  drm/msm/dpu: add DPU_PINGPONG_DSC feature bit for DPU < 7.0.0
+  drm/msm/dpu: Guard PINGPONG DSC ops behind DPU_PINGPONG_DSC bit
+  drm/msm/dpu: Introduce PINGPONG_NONE to disconnect DSC from PINGPONG
+  drm/msm/dpu: add support for DSC encoder v1.2 engine
+  drm/msm/dpu: always clear every individual pending flush mask
+  drm/msm/dpu: separate DSC flush update out of interface
+  drm/msm/dpu: tear down DSC data path when DSC disabled
 
-This patch adds check before cancel_work_sync(). If surb->wq has not
-been initialized, the cancel_work_sync() will not be executed.
+ drivers/gpu/drm/msm/Makefile                       |   1 +
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  11 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  16 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  14 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  51 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  24 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  35 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  33 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  11 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c         |  14 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  15 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 387 +++++++++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h        |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |   9 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |   7 +-
+ 19 files changed, 644 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
 
-Reported-by: syzbot+27b0b464864741b18b99@syzkaller.appspotmail.com
-Fixes: ebad8e731c1c ("media: usb: siano: Fix use after free bugs caused by do_submit_urb")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/media/usb/siano/smsusb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/usb/siano/smsusb.c b/drivers/media/usb/siano/smsusb.c
-index 6f443c542c6..640737d3b8a 100644
---- a/drivers/media/usb/siano/smsusb.c
-+++ b/drivers/media/usb/siano/smsusb.c
-@@ -179,7 +179,8 @@ static void smsusb_stop_streaming(struct smsusb_device_t *dev)
- 
- 	for (i = 0; i < MAX_URBS; i++) {
- 		usb_kill_urb(&dev->surbs[i].urb);
--		cancel_work_sync(&dev->surbs[i].wq);
-+		if (dev->surbs[i].wq.func)
-+			cancel_work_sync(&dev->surbs[i].wq);
- 
- 		if (dev->surbs[i].cb) {
- 			smscore_putbuffer(dev->coredev, dev->surbs[i].cb);
 -- 
-2.17.1
+2.7.4
 
