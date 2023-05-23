@@ -2,121 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E25A70DFBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBD670DFBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237397AbjEWOye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S237386AbjEWOyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbjEWOyc (ORCPT
+        with ESMTP id S236276AbjEWOyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:54:32 -0400
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910FEC6
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:54:30 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4f4bdcde899so979439e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684853609; x=1687445609;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZPDh95iV7ZIM20wN/RJo+ESwo6JWKcZLQ714XdToWTM=;
-        b=DdHuAtDLZ9Aq51LhMVyMbW66l8PWVwpjFPyAL61hIwDs2FRDPLSzbn5lL5TSEU8FYe
-         A0iVDHBCruSZFsZFzXga9b/u4binsWQaYCtWpm+OQn6yWKklx1PrG34abagolPcGljBH
-         abIcZkGgzvY9CkvZsFzobWfaVkIrhMhwdrbFn8u2SRw3k2/gk1UzBawPNHAPf7lup4Rr
-         Tu6Fj2CXDgLMIYhMA+gw3d6LEcjs82jRu4IFQ/+M1qZMpoRnqsISgOLfQ4T76XJNAnfy
-         qeJSKVqbQbpWAWXoobZMO4l3FeqIpv/OzMjNijaoz6K1x3GrcZUiyypu06cwqSRaFzrs
-         6u/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684853609; x=1687445609;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZPDh95iV7ZIM20wN/RJo+ESwo6JWKcZLQ714XdToWTM=;
-        b=OCb9JUSABVZ5KrPq7PF99ERYdtfQF4d+lII4xOLbDdE78g/V9CU+D2jeoN302GbQJS
-         zpVWdlM7WlXfzmyHOiVx18sK4FhLFwJOAz368J0GCyYwJgVcC4TEsEU/b4XFTm8Fka/Q
-         gr8jouFqgLtBuDZw6toiZfIG32ZCNVm753EgGEFL+4kbrGjejmVCC2XLy0ngjepUc0b5
-         fR1elNdPrsT3e6YgC+Zr+8qFEwQOS72VjCcwS7gs6P5CrGKd7tPtG65kzqMRUDzCw8Bn
-         0urbq05ioN2jvoxBWTwmi/LDEgw6KjYjdgd025609pkfBTkWrwEhx+bbi9hOzAtPePrQ
-         LSjw==
-X-Gm-Message-State: AC+VfDywQXuV26fTaT6db9fSE3q2Y4ivvTdMi0Au3NXhBmXl2LK49aGN
-        oUZlHYpo1HGAEMTlFVyPW4k=
-X-Google-Smtp-Source: ACHHUZ7xLEhYELzSdWO0jZx+QmWP4agZmxO45Aopzbemh2+A2FF5b+51Q4BYW3u6x1LYMlHl4DuLfA==
-X-Received: by 2002:ac2:4182:0:b0:4f3:93d6:377b with SMTP id z2-20020ac24182000000b004f393d6377bmr3877478lfh.37.1684853608618;
-        Tue, 23 May 2023 07:53:28 -0700 (PDT)
-Received: from pc636 (host-90-235-19-70.mobileonline.telia.com. [90.235.19.70])
-        by smtp.gmail.com with ESMTPSA id x7-20020ac25dc7000000b004eff6c7bc08sm1351889lfq.75.2023.05.23.07.53.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 07:53:28 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 23 May 2023 16:53:25 +0200
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 4/9] mm: vmalloc: Add a per-CPU-zone infrastructure
-Message-ID: <ZGzTZWq/hAYCE3DA@pc636>
-References: <20230522110849.2921-1-urezki@gmail.com>
- <20230522110849.2921-5-urezki@gmail.com>
- <ZGxYZlLoADBWktT8@infradead.org>
+        Tue, 23 May 2023 10:54:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A96DC6;
+        Tue, 23 May 2023 07:54:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A43FA62946;
+        Tue, 23 May 2023 14:54:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC2EC433EF;
+        Tue, 23 May 2023 14:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684853646;
+        bh=VG85k3UmDA0cBr8ib9xlQ3gxEXwGIoprsHWZyuLD+34=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Son2xWpb0IElMBJO2MkFdV/bbY0MXj/ZYtwCfSegNWucxK+7L67Ind5JbMwtNXGAJ
+         gDoY2p37RSGNe8AeUwIKzPZq0Bs0T8TPKdoEQIywqRjkhiKkZudC0dsWCekXf6XEOi
+         x3KnxodKkWF7kkkEyuI9x2rOLitMpTlTAn0sTD44IBnlv9jefcIBj0aoYDbjuYFErO
+         xjqc2IQtCgssxXL8uGFnyekxIluuXtQhRxa1WcgbIU6sLc/BmITUXpEJDXRKggaCPt
+         d6JO/UsLjAcG87h3RzJwkswU2GLFeJo99/amh40bIp7ULl3W0JQJ91TDsRqtpK8VH4
+         QBPz4hibwXQfw==
+Date:   Tue, 23 May 2023 15:54:00 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 000/364] 6.3.4-rc1 review
+Message-ID: <20230523-preflight-outline-c54237967fd4@spud>
+References: <20230522190412.801391872@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UmTNjBIJ/RbTUjkM"
 Content-Disposition: inline
-In-Reply-To: <ZGxYZlLoADBWktT8@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230522190412.801391872@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:08:38PM -0700, Christoph Hellwig wrote:
-> On Mon, May 22, 2023 at 01:08:44PM +0200, Uladzislau Rezki (Sony) wrote:
-> > +#define fbl(z, i, m) z->fbl[i].m
-> > +#define fbl_root(z, i) fbl(z, i, root)
-> > +#define fbl_head(z, i) fbl(z, i, head)
-> > +
-> > +#define fbl_lock(z, i) spin_lock(&fbl(z, i, lock))
-> > +#define fbl_unlock(z, i) spin_unlock(&fbl(z, i, lock))
-> 
-> Even if it is just temporary, I don't think adding these wrappers
-> make much sense.
-> 
-If open-coded, it looks like:
 
-spin_lock(&z->fbl[BUSY].lock);
-fbl_lock(z, BUSY);
+--UmTNjBIJ/RbTUjkM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-the reason of adding such helpers is to make the name shorter.
+On Mon, May 22, 2023 at 08:05:05PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.4 release.
+> There are 364 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-> > +struct cpu_vmap_zone {
-> > +	/*
-> > +	 * FREE, BUSY, LAZY bookkeeping data of this CPU zone.
-> > +	 */
-> > +	struct {
-> > +		struct rb_root root;
-> > +		struct list_head head;
-> > +		spinlock_t lock;
-> > +	} fbl[NFBL];
-> 
-> Maybe replace NFBL with something longer and more descriptive?
-> 
-> But also in general it feels like this should be folded into a patch
-> doing real work.  As-is it doesn't look very useful.
->
-I split it for better understanding for review. But i can fold it.
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
---
-Uladzislau Rezki
+Thanks,
+Conor.
+
+--UmTNjBIJ/RbTUjkM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGzThQAKCRB4tDGHoIJi
+0noUAQC3zBOdWMQfDf02EVlBpaGq0TgjUFmdOs6c5euEi++TnQD+K62VkuBLPsLB
+q5VY54OL+4v5d9ZR6uEYi/L2ekw5DAo=
+=IWxF
+-----END PGP SIGNATURE-----
+
+--UmTNjBIJ/RbTUjkM--
