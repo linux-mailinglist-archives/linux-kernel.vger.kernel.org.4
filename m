@@ -2,179 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADC670D860
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CB370D867
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236311AbjEWJFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S235632AbjEWJGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236312AbjEWJEo (ORCPT
+        with ESMTP id S236361AbjEWJGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:04:44 -0400
-Received: from smtp.missinglinkelectronics.com (smtp.missinglinkelectronics.com [162.55.135.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CAB119;
-        Tue, 23 May 2023 02:04:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.missinglinkelectronics.com (Postfix) with ESMTP id 471212045B;
-        Tue, 23 May 2023 11:04:41 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at missinglinkelectronics.com
-Received: from smtp.missinglinkelectronics.com ([127.0.0.1])
-        by localhost (mail.missinglinkelectronics.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aR_MD1budl8V; Tue, 23 May 2023 11:04:41 +0200 (CEST)
-Received: from humpen-bionic2.mle (p578c5bfe.dip0.t-ipconnect.de [87.140.91.254])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 23 May 2023 05:06:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DC4E52;
+        Tue, 23 May 2023 02:05:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: david)
-        by smtp.missinglinkelectronics.com (Postfix) with ESMTPSA id AFACE206DA;
-        Tue, 23 May 2023 11:04:40 +0200 (CEST)
-From:   David Epping <david.epping@missinglinkelectronics.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        David Epping <david.epping@missinglinkelectronics.com>
-Subject: [PATCH net v2 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
-Date:   Tue, 23 May 2023 11:04:05 +0200
-Message-Id: <20230523090405.10655-4-david.epping@missinglinkelectronics.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
-References: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50290625DB;
+        Tue, 23 May 2023 09:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CB5C433D2;
+        Tue, 23 May 2023 09:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684832745;
+        bh=Ktz8c9CHrsBCyq8EDDrmqMvG7rMPCaYUk0I1BJHxuRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bBQwJUE045rFUQP9CaTfylO/L9qUNlhLCuacZzQ7g7NvBB7whRU3HywN4vIjcTQNw
+         G8e15bN/SttNz1xQ5JXEJfOBlob1rY+TU1VWrvgvMYXk9qFcw5bShck8PJukkTB/k4
+         6cO0EuE3NCKUtTquSoFblwoY50wyOPN1RqimPXJ6hgT7UxWa0I7nh7azSxsaJ4k+Ow
+         pgWLL0+CT5mLRprPhu9Ah2yCKdsUafPo/JvkWEt+2QnVCRMRRYUcl9jwZBj1Xuojca
+         DldQSCcSX5MQl8Bf+7JFlCWzkHpS/tlKfpTKpB4Czd/w65EUdg9UZQxMJZWiM2NGgQ
+         7sJ4Ai9VuNAYQ==
+Date:   Tue, 23 May 2023 10:05:40 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-hardening@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH] i2c: Replace all non-returning strlcpy with strscpy
+Message-ID: <20230523090540.GC2174496@google.com>
+References: <20230523021150.2406032-1-azeemshaikh38@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230523021150.2406032-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default the VSC8501 and VSC8502 RGMII/GMII/MII RX_CLK output is
-disabled. To allow packet forwarding towards the MAC it needs to be
-enabled.
+On Tue, 23 May 2023, Azeem Shaikh wrote:
 
-For other PHYs supported by this driver the clock output is enabled
-by default.
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> ---
+>  drivers/leds/flash/leds-as3645a.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: David Epping <david.epping@missinglinkelectronics.com>
----
- drivers/net/phy/mscc/mscc.h      |  1 +
- drivers/net/phy/mscc/mscc_main.c | 54 +++++++++++++++++---------------
- 2 files changed, 29 insertions(+), 26 deletions(-)
+Please resubmit, taking the time to check the subject line please.
 
-diff --git a/drivers/net/phy/mscc/mscc.h b/drivers/net/phy/mscc/mscc.h
-index 79cbb2418664..defe5cc6d4fc 100644
---- a/drivers/net/phy/mscc/mscc.h
-+++ b/drivers/net/phy/mscc/mscc.h
-@@ -179,6 +179,7 @@ enum rgmii_clock_delay {
- #define VSC8502_RGMII_CNTL		  20
- #define VSC8502_RGMII_RX_DELAY_MASK	  0x0070
- #define VSC8502_RGMII_TX_DELAY_MASK	  0x0007
-+#define VSC8502_RGMII_RX_CLK_DISABLE	  0x0800
- 
- #define MSCC_PHY_WOL_LOWER_MAC_ADDR	  21
- #define MSCC_PHY_WOL_MID_MAC_ADDR	  22
-diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
-index 29fc27a16805..3bd24520b2d9 100644
---- a/drivers/net/phy/mscc/mscc_main.c
-+++ b/drivers/net/phy/mscc/mscc_main.c
-@@ -519,17 +519,30 @@ static int vsc85xx_mac_if_set(struct phy_device *phydev,
-  *  * 2.0 ns (which causes the data to be sampled at exactly half way between
-  *    clock transitions at 1000 Mbps) if delays should be enabled
-  */
--static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
--				   u16 rgmii_rx_delay_mask,
--				   u16 rgmii_tx_delay_mask)
-+static int vsc85xx_update_rgmii_cntl(struct phy_device *phydev, u32 rgmii_cntl,
-+				     u16 rgmii_rx_delay_mask,
-+				     u16 rgmii_tx_delay_mask)
- {
- 	u16 rgmii_rx_delay_pos = ffs(rgmii_rx_delay_mask) - 1;
- 	u16 rgmii_tx_delay_pos = ffs(rgmii_tx_delay_mask) - 1;
- 	u16 reg_val = 0;
--	int rc;
-+	u16 mask = 0;
-+	int rc = 0;
-+
-+	/* For traffic to pass, the VSC8502 family needs the RX_CLK disable bit
-+	 * to be unset for all PHY modes, so do that as part of the paged
-+	 * register modification.
-+	 * For some family members (like VSC8530/31/40/41) this bit is reserved
-+	 * and read-only, and the RX clock is enabled by default.
-+	 */
-+	if (rgmii_cntl == VSC8502_RGMII_CNTL)
-+		mask |= VSC8502_RGMII_RX_CLK_DISABLE;
- 
- 	mutex_lock(&phydev->lock);
- 
-+	if (phy_interface_is_rgmii(phydev))
-+		mask |= rgmii_rx_delay_mask | rgmii_tx_delay_mask;
-+
- 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
- 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
- 		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_rx_delay_pos;
-@@ -537,10 +550,9 @@ static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
- 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
- 		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_tx_delay_pos;
- 
--	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
--			      rgmii_cntl,
--			      rgmii_rx_delay_mask | rgmii_tx_delay_mask,
--			      reg_val);
-+	if (mask)
-+		rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
-+				      rgmii_cntl, mask, reg_val);
- 
- 	mutex_unlock(&phydev->lock);
- 
-@@ -549,19 +561,11 @@ static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
- 
- static int vsc85xx_default_config(struct phy_device *phydev)
- {
--	int rc;
--
- 	phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
- 
--	if (phy_interface_mode_is_rgmii(phydev->interface)) {
--		rc = vsc85xx_rgmii_set_skews(phydev, VSC8502_RGMII_CNTL,
--					     VSC8502_RGMII_RX_DELAY_MASK,
--					     VSC8502_RGMII_TX_DELAY_MASK);
--		if (rc)
--			return rc;
--	}
--
--	return 0;
-+	return vsc85xx_update_rgmii_cntl(phydev, VSC8502_RGMII_CNTL,
-+					 VSC8502_RGMII_RX_DELAY_MASK,
-+					 VSC8502_RGMII_TX_DELAY_MASK);
- }
- 
- static int vsc85xx_get_tunable(struct phy_device *phydev,
-@@ -1758,13 +1762,11 @@ static int vsc8584_config_init(struct phy_device *phydev)
- 	if (ret)
- 		return ret;
- 
--	if (phy_interface_is_rgmii(phydev)) {
--		ret = vsc85xx_rgmii_set_skews(phydev, VSC8572_RGMII_CNTL,
--					      VSC8572_RGMII_RX_DELAY_MASK,
--					      VSC8572_RGMII_TX_DELAY_MASK);
--		if (ret)
--			return ret;
--	}
-+	ret = vsc85xx_update_rgmii_cntl(phydev, VSC8572_RGMII_CNTL,
-+					VSC8572_RGMII_RX_DELAY_MASK,
-+					VSC8572_RGMII_TX_DELAY_MASK);
-+	if (ret)
-+		return ret;
- 
- 	ret = genphy_soft_reset(phydev);
- 	if (ret)
+> diff --git a/drivers/leds/flash/leds-as3645a.c b/drivers/leds/flash/leds-as3645a.c
+> index bb2249771acb..7dc574b18f5f 100644
+> --- a/drivers/leds/flash/leds-as3645a.c
+> +++ b/drivers/leds/flash/leds-as3645a.c
+> @@ -651,8 +651,8 @@ static int as3645a_v4l2_setup(struct as3645a *flash)
+>  		},
+>  	};
+>  
+> -	strlcpy(cfg.dev_name, led->dev->kobj.name, sizeof(cfg.dev_name));
+> -	strlcpy(cfgind.dev_name, flash->iled_cdev.dev->kobj.name,
+> +	strscpy(cfg.dev_name, led->dev->kobj.name, sizeof(cfg.dev_name));
+> +	strscpy(cfgind.dev_name, flash->iled_cdev.dev->kobj.name,
+>  		sizeof(cfgind.dev_name));
+>  
+>  	flash->vf = v4l2_flash_init(
+> 
+
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
