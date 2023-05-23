@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFC970D88C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD89570D8A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbjEWJNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S236356AbjEWJOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjEWJNH (ORCPT
+        with ESMTP id S236340AbjEWJON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:13:07 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEB8118;
-        Tue, 23 May 2023 02:13:06 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f7bf29550so634954066b.3;
-        Tue, 23 May 2023 02:13:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684833185; x=1687425185;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e65v/JQ0YakfdpO5WAozFB3zrVj1i6YIZiY4qha6yIU=;
-        b=cherXCFnt1MF3SeL1NDhtsI3G8BZiSMjAyAEDUQaiIiN//oSZwZAR6xeJWVgPnEXwY
-         mmlUL98Cg01OdUCaDi5zFGTu4qCEE0WvBGgKObClHQ7xp20c1lntctiZEIq/Ufg/QsHa
-         ME5RhpqM1BE1zfNaBtENfkxO87yJNwrROJ2P//6rrkjHX9dyUUdC35zGV24BEOx0rOnP
-         e+PXh4mS3FVl8f9/NHv1t8FLfQf4gM7nv7qcrDl3FFUnQPd1R9CCqOVHaqaGpZYCkyBu
-         jJlRzL9lSVKNX5xADR6UZBJnk9C8DupMZV36Vmm9cKNUHdx0DPMWaMapWlTOtAj8qjS9
-         dxJg==
-X-Gm-Message-State: AC+VfDw/iVKpy3+WtYViWQu/oBvDccd3fQruZUDhBYNsKxzSrZj0G3Fy
-        oA+/h7/oQU5ugOOG373vDRaEXWolKyw=
-X-Google-Smtp-Source: ACHHUZ7RCSSHlTvlKn5S49Hw1Z7qGeq8+J1cF4YtJ4wYDQ+mU0uyNA3Z4JuVX1vTGl6Lc5SU2Hiv7Q==
-X-Received: by 2002:a17:907:9408:b0:965:6d21:48bc with SMTP id dk8-20020a170907940800b009656d2148bcmr11601570ejc.75.1684833184311;
-        Tue, 23 May 2023 02:13:04 -0700 (PDT)
-Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id h26-20020a17090634da00b0096f7e7d1566sm4147570ejb.224.2023.05.23.02.13.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 02:13:03 -0700 (PDT)
-Message-ID: <012b7c3d-1411-e5e1-662a-33369bfca610@kernel.org>
-Date:   Tue, 23 May 2023 11:13:02 +0200
+        Tue, 23 May 2023 05:14:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352D18C;
+        Tue, 23 May 2023 02:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684833241; x=1716369241;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p11Fh3zV0aO7V1029S8TVD+DK0K/zYni8ofbYQ7Ur8U=;
+  b=dhjVFSoymcX7tLWEY1tE4i6E5V9Hi2pI2RP3t6LQzFhjY6nNfICgtWri
+   tgVhPUASZjT54s7XPSlhtjN4Vj1xayWdbV7k4zIKj/EfkBCvheO/1TjaD
+   rm0qGTIrBC1ftVZe/f+rPghk1C6l64thEWrReyT5fh26QuCAuWrw7Ck39
+   0MtZ2y36vFEci8VNzsKi/MlMw9kmkJS8hBZPjyQyVJWkBAkuIvHz9sHCj
+   MUz+8QXQgS69FvrIgfOZxKioDHD/xNKXjG9P4otYKBNxP54xHhLZHJGKk
+   IouYIpqm2YawlllW16qEMf/bMNvXskXjvEondvjOMx1YSpQfjEnjdJ6rM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="439538453"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="439538453"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:13:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="697986976"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="697986976"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:13:46 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id E8B301202A8;
+        Tue, 23 May 2023 12:13:43 +0300 (EEST)
+Date:   Tue, 23 May 2023 09:13:43 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>, Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-hardening@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH] i2c: Replace all non-returning strlcpy with strscpy
+Message-ID: <ZGyDx4Jg9j2zmjD6@kekkonen.localdomain>
+References: <20230523021150.2406032-1-azeemshaikh38@gmail.com>
+ <20230523090540.GC2174496@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/2] serial: cpm_uart: Fix a COMPILE_TEST dependency
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel test robot <lkp@intel.com>
-References: <20230523085902.75837-1-herve.codina@bootlin.com>
- <20230523085902.75837-3-herve.codina@bootlin.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230523085902.75837-3-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523090540.GC2174496@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,64 +66,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 05. 23, 10:59, Herve Codina wrote:
-> In a COMPILE_TEST configuration, the cpm_uart driver uses symbols from
-> the cpm_uart_cpm2.c file. This file is compiled only when CONFIG_CPM2 is
-> set.
-> 
-> Without this dependency, the linker fails with some missing symbols for
-> COMPILE_TEST configuration that needs SERIAL_CPM without enabling CPM2.
-> 
-> This lead to:
->    depends on CPM2 || CPM1 || (PPC32 && CPM2 && COMPILE_TEST)
-> 
-> This dependency does not make sense anymore and can be simplified
-> removing all the COMPILE_TEST part.
+Hi Lee, Azeem,
 
-Then it's the same as my revert:
-https://lore.kernel.org/all/20230518055620.29957-1-jirislaby@kernel.org/
-
-:D
-
-But nevermind.
-
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202305160221.9XgweObz-lkp@intel.com/
-> Fixes: e3e7b13bffae ("serial: allow COMPILE_TEST for some drivers")
-> ---
->   drivers/tty/serial/Kconfig             | 2 +-
->   drivers/tty/serial/cpm_uart/cpm_uart.h | 2 --
->   2 files changed, 1 insertion(+), 3 deletions(-)
+On Tue, May 23, 2023 at 10:05:40AM +0100, Lee Jones wrote:
+> On Tue, 23 May 2023, Azeem Shaikh wrote:
 > 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index 625358f44419..de092bc1289e 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -769,7 +769,7 @@ config SERIAL_PMACZILOG_CONSOLE
->   
->   config SERIAL_CPM
->   	tristate "CPM SCC/SMC serial port support"
-> -	depends on CPM2 || CPM1 || (PPC32 && COMPILE_TEST)
-> +	depends on CPM2 || CPM1
->   	select SERIAL_CORE
->   	help
->   	  This driver supports the SCC and SMC serial ports on Motorola
-> diff --git a/drivers/tty/serial/cpm_uart/cpm_uart.h b/drivers/tty/serial/cpm_uart/cpm_uart.h
-> index 0577618e78c0..46c03ed71c31 100644
-> --- a/drivers/tty/serial/cpm_uart/cpm_uart.h
-> +++ b/drivers/tty/serial/cpm_uart/cpm_uart.h
-> @@ -19,8 +19,6 @@ struct gpio_desc;
->   #include "cpm_uart_cpm2.h"
->   #elif defined(CONFIG_CPM1)
->   #include "cpm_uart_cpm1.h"
-> -#elif defined(CONFIG_COMPILE_TEST)
-> -#include "cpm_uart_cpm2.h"
->   #endif
->   
->   #define SERIAL_CPM_MAJOR	204
+> > strlcpy() reads the entire source buffer first.
+> > This read may exceed the destination size limit.
+> > This is both inefficient and can lead to linear read
+> > overflows if a source string is not NUL-terminated [1].
+> > In an effort to remove strlcpy() completely [2], replace
+> > strlcpy() here with strscpy().
+> > No return values were used, so direct replacement is safe.
+> > 
+> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> > [2] https://github.com/KSPP/linux/issues/89
+> > 
+> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> > ---
+> >  drivers/leds/flash/leds-as3645a.c |    4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Please resubmit, taking the time to check the subject line please.
+
+I'd say also shorter description will suffice. Nowadays people understand
+the motivation replacing strlcpy() by strscpy() without too much
+elaboration. Lines may be up to 74 characters long, too, and period isn't
+automatically followed by a newline.
+
+The patch itself seems fine.
+
+I also prefer my @linux.intel.com address, as in MAINTAINERS for this
+driver.
 
 -- 
-js
-suse labs
+Kind regards,
 
+Sakari Ailus
