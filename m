@@ -2,104 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0640870D9D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4471870D9E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236453AbjEWKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S236490AbjEWKFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236517AbjEWKDx (ORCPT
+        with ESMTP id S236498AbjEWKEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:03:53 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49514132
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:03:34 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba83fed50a6so16619768276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:03:34 -0700 (PDT)
+        Tue, 23 May 2023 06:04:52 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2120.outbound.protection.outlook.com [40.107.237.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7A4119;
+        Tue, 23 May 2023 03:04:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dnYJzrcsq/pwr9ovLPRr18nIP2Bf44TRAp9IWqkvjJSPD/MjryGj9+Fi6c6utXWx38VhiKW7sbvuVBA5FebWl8yjxPPEEt1Pdk9dPq9Ab4Dui2IlI/X+3UdCe/xrS77x8Cr85Z6f/iXFZAl7t5OzAzD7+UhW82Qi6K8a8xT/wmVdiKF9qt+pkyl+RmTXQCAICm2KfXQHysQcyEA4SmYH99A4M4BIXFqhmWDtmOWo/chKzyzcslwykp6xfcQbrVW6r+gzyqcZGhV1pATum0pDVq9x9qBnSe736GyD8qDlbxNn2BqrZaqX/Uzjjxa5YigjgC1yV7Ig3oecXfW9THwl3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KJYBoVzgs6bTKAM+vc0SYbEmT4n8azIWzn4/e1LaoHE=;
+ b=X5cK4iuBRSPboPQVGHgcqpq17+qLtneEavvo6TugsiJN54zDxbAMhY+DbfZAA0bgg87e7ptMasPEOHSCAI4eSavdL6HjYGjv3fpnZiazrQSKi4IlQ7m2RIjB8k694HvXE7FUcLdGNYPfHqIpWQjZT1YK88Edbqapzk0cUKRl1L6QvV0NbZzggDtDjgu9CmoZjYSaoi8K+Mj87EMyXpbRfTibMW1CC7ayFm5fIf/hPA+JvitYg8zq2XH4SRiE7y5ft47L/8LQ42wy6dxoK2+qHjkguJQnEptGioF79Hn1j2vFFzQm0ZyL73tG5bYT0s3fkgH2UPpWoY6w/p8ojGeC6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684836213; x=1687428213;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lhbu9xWkX3wLR4lq6dHzqQfPPOyNOfH06YqwJA9yG9w=;
-        b=4dGLh+H8/haGhmxxd255Mz98LoY9lbqlzhvIM0z5TVaS8s7iiloqpEQFQ2qP1Jt9PE
-         zKpqTTulmUI/MWJQvFQXhUCnpdIaOpFNGdGvsPNhSJwihz3YaSDyHUCqKHELkhMuL8Hu
-         +nSXeD+NZLAvNBHsHokuZd+gTNoQggLV7wIWR3U68CYwaFDMTli0094VK1HT++cFNryg
-         zaBKyFBiBb7yJR1v0cAXkCSSTWoKOYUs8N6tfJ7RbJ2vk6ypbgOgDiANKcjZkoN2coRA
-         p+JGDbr97LlwKRbllnPDz4+36UKAESyhAXUJpaFwHvg62hN6Ea4uP0p2RkC8LvTnIsVw
-         m/1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684836213; x=1687428213;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lhbu9xWkX3wLR4lq6dHzqQfPPOyNOfH06YqwJA9yG9w=;
-        b=Xz0QczC5Q+2J3d2c1f8XfAOu/roiApcKzIAVsViLG/OpxJo++4K3fmN+j0kkVhj7V3
-         W5J4y5vxae3Piya7dmqXC3prtrFPA1Z5pRNrHhrF6uJhniuzqc48yAVwi8NMimLtlSN5
-         lSuOp0Ebo7A2YIfP5EXgp4vs6htW1NT3pWKHilngsE51wP35og+wzGUTDSXKowxgiGzR
-         qP5Zn12l+NYj+ZsI8kU52yHKC5whFuLmjf75pYa7EHo9THLbrjnHsh/6spANob6613Kg
-         t1QmamJCvJqELQHhrc5rgqLYPmb0ymcEsU0WKafd7OqgbvKXg6KDHEq7MfsBTnSMbL3c
-         /xSg==
-X-Gm-Message-State: AC+VfDy+pgI2KBV5K1aLW9EAI10gGbJARt890biiyuIM95k6hRCFnEn3
-        G5ew7aHxjkkiXVsSuB6jxht50U+BYH6eEdA=
-X-Google-Smtp-Source: ACHHUZ4NyfEHvy9cwuuqUdgnYfvSx3Y0xS9fHqMoUQEZs42xAAW/AgpB44Yzdmz7fLNz6YiTYLzDdVorZ13CiOU=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a25:d6c1:0:b0:ba8:17de:552f with SMTP id
- n184-20020a25d6c1000000b00ba817de552fmr5502594ybg.3.1684836213484; Tue, 23
- May 2023 03:03:33 -0700 (PDT)
-Date:   Tue, 23 May 2023 10:03:30 +0000
-In-Reply-To: <beb2932e-7f16-e368-9cb5-edbe115fcb67@gmail.com>
-Mime-Version: 1.0
-References: <beb2932e-7f16-e368-9cb5-edbe115fcb67@gmail.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Message-ID: <20230523100331.4070035-1-aliceryhl@google.com>
-Subject: Re: [PATCH v1 1/7] rust: workqueue: add low-level workqueue bindings
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     yakoyoku@gmail.com
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        tj@kernel.org, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KJYBoVzgs6bTKAM+vc0SYbEmT4n8azIWzn4/e1LaoHE=;
+ b=AC5RlLZm02xeLIEK+prdLX7wt206aGWKOZ3j7FV5gsWnIUnrJpefq1O6YFIWrA8m5av/VC0nqdZX413URWjC6H/SgsYM39DJhCwkr2eEWrB5EzCAyZRME0u8+PeQR4LSr0WndwHxYnZ8E58RJ5oM+46cdDenqK3xqvI0D1icsdY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY5PR13MB3652.namprd13.prod.outlook.com (2603:10b6:a03:226::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
+ 2023 10:04:46 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Tue, 23 May 2023
+ 10:04:45 +0000
+Date:   Tue, 23 May 2023 12:04:39 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ying Hsu <yinghsu@chromium.org>
+Cc:     linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2] Bluetooth: Fix l2cap_disconnect_req deadlock
+Message-ID: <ZGyPt1GYGV2C2RQZ@corigine.com>
+References: <20230522234154.2924052-1-yinghsu@chromium.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522234154.2924052-1-yinghsu@chromium.org>
+X-ClientProxiedBy: AS4P191CA0018.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d9::14) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY5PR13MB3652:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1806417c-ddf1-4fd3-2bef-08db5b7522b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Tb+RnuQMP+SU6FnkRqeekZjvFPqHLIolbjmHOEuLhWDTYGtzjuPVoV6wxlfjFo1AsWud9OefXFFFKx4CtPFmJTHvxs4gK5LwZ+HiLlyvgbxdndCs8OZ9JsjuMRFcmMFfguGEY9y/8ObUx40XczvPQnP+Njdsmo7UUxUC8BhxHzw25cOfusbcJg3T9uEfipaD8oqP5DlYNptgUXKVzH9yp//uSZ6cq796HhS3Gmtp5JuDhodGmW2FBZJvVFZCDkHJsTo8uZC7NNq14dovxvZ3sScy5yaXyFMEYYd7TrRxH1IfcJ6NOFZKzHKquJrFIkOoShkPfJ/SLgVmqAf9vWU9MODE/ea6NizSBh9OTnqbIzq/dxgzKwlgt5yoPZYr0IlCOsuU4e+gIfs/U3LY7eAYzrkqL1keibs+GLGD8g5VXUOXQplSyyHKsQ+elF739uksrlyvPo1pO677BWjdsu9cAP2ucj9z5OLldKR7KRjsp8HCaBXYSJNkhyV6biG4LY82HKaOZRcwUkbrv/ubLFTnIqWNitsH9JprhDvwNgPZ/BsbYolLyIZIc1349GNOWsjT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(376002)(366004)(346002)(136003)(396003)(451199021)(41300700001)(66556008)(66476007)(66946007)(2906002)(186003)(44832011)(478600001)(6486002)(316002)(4326008)(6666004)(6916009)(5660300002)(54906003)(6512007)(7416002)(8936002)(8676002)(36756003)(2616005)(6506007)(83380400001)(86362001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QuHXy4h8+Wxdf8SW11T/dw7fqzVTFe4O6KkBmMXfQr9zCQCQ+Tr1VZNMkEHI?=
+ =?us-ascii?Q?FnrGlAaGqpIGBrjTIJ9aGO9V9dKH7ck4x/2hI8oXUYdnvFqsOdsr0q5uPWlI?=
+ =?us-ascii?Q?X8JOPfSKkzsMxCHP/kRW+qVxqakD92DNG0TjG2E/b7tNg0UlYv4Fea1jY9vE?=
+ =?us-ascii?Q?ZhgQ3qHMCQ+UEXRUZQHb+GVxZY7wbgGL4i2hR9oh+sTruxgZPLXHMURcpvCy?=
+ =?us-ascii?Q?ywPQT40jMJtbfLwEDSZ5Qwba1xp/44fWq4f5SmDWZwZnZEcMtezLXMHvC4Kv?=
+ =?us-ascii?Q?cEz1RQ12C9kxB8oJCDFMKtLv5mEj94sRwklDJveQKqpHlQnaYXNooI87Pr84?=
+ =?us-ascii?Q?8aXDPG31Zft0oIE+l5/wvmrtX5aW7RNExLUDqUvUqSB+k7dyv0I8lvfuAtlv?=
+ =?us-ascii?Q?wnObv057VyPHQl/cZWEjGOolelLWb5FcQGlERIDGOyUcbX/i11ngUYXoi/Ks?=
+ =?us-ascii?Q?WFfHP2EN6LMjslMRjszPxOETrNcFD5dY1FQxoug0ttg/0CVOfFZ4u3HsV9KM?=
+ =?us-ascii?Q?KuVknA+YjEwRtiVbqux2vWO3lyMsCj7udeMCuDHtTPOC5n2ODpxSALOHWbSL?=
+ =?us-ascii?Q?JVbOiYSY2zh2gtZHbK6bxzakJBSVuhR/iyWkFI//GGxT+AsutTVpAKdbPmF9?=
+ =?us-ascii?Q?sykNUykggFzJvIiigaIzhWpUrFPE2dRCDCqeo97qaR0sbhNnQSuwx6QE02Hm?=
+ =?us-ascii?Q?NglYWolWhevvy1WDvXo2jVN1c+VCQ8puH/OLxbvpcWUb/U9OnQT3NqMFTaFE?=
+ =?us-ascii?Q?biNARQfAd6fNrJFEwlcYEXAQpPlyIPkMej68GbvgR5/qwFNp62Np1UdXFRNf?=
+ =?us-ascii?Q?K77hQEyE73C5r3o2LgthG+GD126BPmu7m2cDIRhLH5082VTua6LryVoiI8a5?=
+ =?us-ascii?Q?nyDLxkuAWgc0dvP11koByZtRWoUm4HhaAzB81JoTS9VED3XLsX82+tK1wW7G?=
+ =?us-ascii?Q?VbvaaJgZWeiJu4PeQdKzwgNJ5KimeadMWJD3f3t1GYEwFW5olJKCKg7B436n?=
+ =?us-ascii?Q?GB5YcPwXIKrsIts352SztyihiNsRaIWwOBueizbBOV8LZH/gJS06ex2h4hlw?=
+ =?us-ascii?Q?p0Yhmr+t3d6vnHYChEK1AaClmRq3vhFEPm5wBWoBnVBv4rGzj0Hu41dmadNC?=
+ =?us-ascii?Q?e+UukQav1v0yksnZEOrT8pbT2Ajo7iKgEODT9yC/DNpKVv9BQU0ksJ7Y2FI2?=
+ =?us-ascii?Q?lstCvzC5W2fwOshTtzxErCPwqBXmO0Mi5IiihtkBc2rRQCPod2Mna2XRMGi9?=
+ =?us-ascii?Q?Q+zhZvPdeM3iEGfIMU+qNdfbn/kPK8IapWUNRgizXOuN4LmnGaLQ0RfIGOmB?=
+ =?us-ascii?Q?1ERD4kF762UBTcWzf4/ObNe0QQp2IlK82cOIy/0q6/2kKwos8r4wqcRk+pFn?=
+ =?us-ascii?Q?GuG86o+k+WIEnCbia/5e9taPGJNxSw54jG/G4OUurXDBqzCA/BxCXrXcclqr?=
+ =?us-ascii?Q?5ZPolM5BMLfh93lCLyPWwULP8yYOY3W95c647fOIpQOAVlT1xxG9tY1K8KIN?=
+ =?us-ascii?Q?lFCyUw0UNB3PKd0K7tnd89r8u46dXQaj8w/1G1cLBOvkZnhFmnPUnNMnNRyz?=
+ =?us-ascii?Q?l3q0FVi1VIYKui6fd11q2XrgepHGNIsF+IYLrPkmATAMH33BDRYhBoTd9bdP?=
+ =?us-ascii?Q?wv0QKoburULmgg1QQCfyfemIglQoDEhRXbYPKSvsM75Eojqc72PiERFWHYe5?=
+ =?us-ascii?Q?jWtgUA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1806417c-ddf1-4fd3-2bef-08db5b7522b6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 10:04:45.8770
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S3ZK42vw9fY2OwPtq6hnzVSgsW3tFOIc8Yq6TBjVyH9T+ZsVs+Wz/LBgnozkojXtxB5tMjaJnCwOWJYcdQikLAlRc9ZPTOnTr1Jv1gLdVpQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB3652
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/23 09:04, Martin Rodriguez Reboredo wrote:
-> On 5/19/23 06:40, Alice Ryhl wrote:
->> On 5/18/23 16:51, Martin Rodriguez Reboredo wrote:
->>> On 5/17/23 17:31, Alice Ryhl wrote:
->>>> +    /// Enqueues a work item.
->>>> +    ///
->>>> +    /// This may fail if the work item is already enqueued in a workqueue.
->>>
->>> Wouldn't be worth to mention that, if not implied, the item it's going
->>> to be worked on an unbound CPU?
->> 
->> I'm not really sure what you mean. Can you elaborate?
+On Mon, May 22, 2023 at 11:41:51PM +0000, Ying Hsu wrote:
+> L2CAP assumes that the locks conn->chan_lock and chan->lock are
+> acquired in the order conn->chan_lock, chan->lock to avoid
+> potential deadlock.
+> For example, l2sock_shutdown acquires these locks in the order:
+>   mutex_lock(&conn->chan_lock)
+>   l2cap_chan_lock(chan)
 > 
-> I've meant that if it's good to mention that `queue_work_on` is going
-> to be called with `WORK_CPU_UNBOUND` so that API users know about it.
+> However, l2cap_disconnect_req acquires chan->lock in
+> l2cap_get_chan_by_scid first and then acquires conn->chan_lock
+> before calling l2cap_chan_del. This means that these locks are
+> acquired in unexpected order, which leads to potential deadlock:
+>   l2cap_chan_lock(c)
+>   mutex_lock(&conn->chan_lock)
+> 
+> This patch uses __l2cap_get_chan_by_scid to replace
+> l2cap_get_chan_by_scid and adjusts the locking order to avoid the
+> potential deadlock.
+> 
+> Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+> ---
+> This commit has been tested on a Chromebook device.
+> 
+> Changes in v2:
+> - Adding the prefix "Bluetooth:" to subject line.
+> 
+>  net/bluetooth/l2cap_core.c | 26 ++++++++++++++++++++------
+>  1 file changed, 20 insertions(+), 6 deletions(-)
+> 
+> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+> index 376b523c7b26..8f08192b8fb1 100644
+> --- a/net/bluetooth/l2cap_core.c
+> +++ b/net/bluetooth/l2cap_core.c
+> @@ -4651,8 +4651,16 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
+>  
+>  	BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
+>  
+> -	chan = l2cap_get_chan_by_scid(conn, dcid);
+> +	mutex_lock(&conn->chan_lock);
+> +	chan = __l2cap_get_chan_by_scid(conn, dcid);
+> +	if (chan) {
+> +		chan = l2cap_chan_hold_unless_zero(chan);
+> +		if (chan)
+> +			l2cap_chan_lock(chan);
+> +	}
+> +
+>  	if (!chan) {
+> +		mutex_unlock(&conn->chan_lock);
+>  		cmd_reject_invalid_cid(conn, cmd->ident, dcid, scid);
+>  		return 0;
+>  	}
 
-Ah, I misunderstood at first. I thought you were commenting on the "This
-may fail if ..." sentence. I'll go ahead and add that to the
-documentation. I will include it in the next patch set once I have
-looked at your other reviews.
+Hi Ying,
 
-This part of the next version will look like this:
+The conditional setting of chan and calling l2cap_chan_lock()
+is both non-trivial and repeated. It seems that it ought to be
+in a helper.
 
-+    /// Enqueues a work item.
-+    ///
-+    /// This may fail if the work item is already enqueued in a workqueue.
-+    ///
-+    /// The work item will be submitted using `WORK_CPU_UNBOUND`.
-+    pub fn enqueue<T: WorkItem + Send + 'static>(&self, w: T) -> T::EnqueueOutput {
+Something like this (I'm sure a better function name can be chosen):
 
-Alice
+	chan = __l2cap_get_and_lock_chan_by_scid(conn, dcid);
+	if (!chan) {
+		...
+	}
+
+	...
