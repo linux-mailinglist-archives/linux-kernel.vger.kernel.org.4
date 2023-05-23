@@ -2,171 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BF270DFED
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5BB70DFF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237441AbjEWPKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S237450AbjEWPMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237105AbjEWPJ7 (ORCPT
+        with ESMTP id S229889AbjEWPMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:09:59 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD30511F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:09:55 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6042d610fso26651455e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:09:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1684854594; x=1687446594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E8b9MpzTCglN7HI+qZ7EYTlHwVoKr0imEe2dKuGSUUc=;
-        b=oedF/OpaSzR0ty3V7END7dGpEbKtM9xZFqWV75o4kqKtimqL14VCIbfzEeX2RK4svX
-         vxTe8PsCutukTy7lfsL2C1C8OdHQyQqAqIO+2v6etis6aieDlewgAvQqdy7iKuxlj/ze
-         kJSKUdJlLYTMdPLGgElYQ2/WJGcCBsw6Zm9GKGycBR9BZs7CKmHF3darLzJ4fUWT8Kwm
-         lXO6X85FLpXKuoYLk07ZsOJCr/3NiJqFywVt+zDzED0lLsFJ+vPYkvCeA4sZDPv+roE+
-         XUZfldjTcau4V7yYACc2RTLfe1c4FXOeA7qaJjwDEVo28mmoB2g0YCB/G3MW2i6gG6l+
-         Dgqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684854594; x=1687446594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E8b9MpzTCglN7HI+qZ7EYTlHwVoKr0imEe2dKuGSUUc=;
-        b=c8fheQhHByIhKJJe3HbWWr45Z1zwexaHm8sfyeq25WRbOzXQuE/TEAuRx54ndcQWZn
-         0xgsZBa/Y3xN+q+EpC4L/2eWrDv7orfusKOGq16f0HOndkjMXOph1um1/veG5RUSQ1wT
-         nPuOn+PH8P5c0Iue4oPyd7QkHqUW3FUxxVgk0zFn/mnnWgodPsGzIsPWkXGF6b8/Pv2m
-         onB9iMO1oHCyQKECkEU3x4MLTbynvSxcrKQspCYyOL/2w5uRF1QXO2l643YinJ+RGQHh
-         fAqQedSaJUTUVeF228/AbyfbO7ztChZ++V2QWcml3RzgzgBj5eDFzXUWQpH0BpxTJ8hR
-         T5SA==
-X-Gm-Message-State: AC+VfDyRtMG5IKGnx3t1EqKL54h3fYpdxvbs+8xdHQsBe2SgyzM8X0ck
-        Dx3v6KMWUzWGx+x9zxHNqTWmxg==
-X-Google-Smtp-Source: ACHHUZ53ALZt8ITA9PYkpa+ddvkzqMUvuxLGadsY4TgcTyLDpTXlK3mlv8nuCJzmyUKUbpLaMhQxSw==
-X-Received: by 2002:a1c:7716:0:b0:3f6:f56:5e82 with SMTP id t22-20020a1c7716000000b003f60f565e82mr717086wmi.3.1684854594086;
-        Tue, 23 May 2023 08:09:54 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:6cb1:7d36:3be3:30d? ([2a02:578:8593:1200:6cb1:7d36:3be3:30d])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003f42d8dd7ffsm11930110wmi.19.2023.05.23.08.09.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 08:09:53 -0700 (PDT)
-Message-ID: <457ea968-b2dd-1a9b-7eab-0b0ec825304d@tessares.net>
-Date:   Tue, 23 May 2023 17:09:52 +0200
+        Tue, 23 May 2023 11:12:34 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87FD11A;
+        Tue, 23 May 2023 08:12:30 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 6D690C000C;
+        Tue, 23 May 2023 15:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684854749;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=44LW4D+dEQ4642r5zsLapFoXq9b1JcRYCd7i3HkCKYM=;
+        b=TSmhYRr+lsHjhiKF/pnRF7qFR3c7YLwMNGErcOAdJzgvH65cnroU6fGyh0hzPo2ZdfE7GJ
+        a9Vxf9vSpCPRBXGZ3tVcWomX++WuAl3nWH2mlbzQkWwpAFDucsO6MdvD6mmTHSVIH6d6G+
+        +af87BadCTLNfjxOVFgIOuAZgZaW1o/58W3oAFaTrXIf44iHdcF+KfoD8pEpeUfP3fqDTs
+        9O5aoRFqE5I3MsxGhM4LF7k/aKCWyLuDWjXr61zR546f5Lww8WaHpWrL0TRfhjmXBWyGG3
+        4zLenMx4cSwu7xhw3zyD4KErAPRtf7NSjpwtb04vjHBhO6mOA7H4skh+JpDWfw==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v2 0/9] Add support for IIO devices in ASoC
+Date:   Tue, 23 May 2023 17:12:14 +0200
+Message-Id: <20230523151223.109551-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6.1 000/292] 6.1.30-rc1 review
-Content-Language: en-GB
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        LTP List <ltp@lists.linux.it>, Netdev <netdev@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        MPTCP Upstream <mptcp@lists.linux.dev>
-References: <20230522190405.880733338@linuxfoundation.org>
- <CA+G9fYs4zoTUQUnkvncEpPWvfGD6sDSXi94KXji+udMrvfm5Rg@mail.gmail.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <CA+G9fYs4zoTUQUnkvncEpPWvfGD6sDSXi94KXji+udMrvfm5Rg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+Several weeks ago, I sent a series [1] for adding a potentiometer as an
+auxiliary device in ASoC. The feedback was that the potentiometer should
+be directly handled in IIO (as other potentiometers) and something more
+generic should be present in ASoC in order to have a binding to import
+some IIO devices into sound cards.
 
-On 23/05/2023 16:52, Naresh Kamboju wrote:
-> On Tue, 23 May 2023 at 00:53, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->>
->> This is the start of the stable review cycle for the 6.1.30 release.
->> There are 292 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.30-rc1.gz
->> or in the git tree and branch at:
->>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
-> 
-> 
-> Results from Linaro’s test farm.
-> No regressions on arm64, arm, x86_64, and i386.
-> 
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The series related to the IIO potentiometer device is already under
+review [2].
 
-(...)
+This series introduces audio-iio-aux. Its goal is to offer the binding
+between IIO and ASoC.
+It exposes attached IIO devices as ASoC auxiliary devices and allows to
+control them through mixer controls.
 
-> selftests: net/mptcp: diag.sh started failing on 6.1.30-rc1 but
-> passed on 6.3.4-rc1. This is due to changes in latest kselftest
-> (6.3) running on 6.1.
-> 
-> test logs:
-> =======
-> # selftests: net/mptcp: diag.sh
-> # no msk on netns creation                          [  ok  ]
-> # listen match for dport 10000                      [  ok  ]
-> # listen match for sport 10000                      [  ok  ]
-> # listen match for saddr and sport                  [  ok  ]
-> # all listen sockets                                [  ok  ]
-> # after MPC handshake                               [  ok  ]
-> # ....chk remote_key                                [  ok  ]
-> # ....chk no fallback                               [  ok  ]
-> # ....chk 2 msk in use                              [ fail ] expected 2 found 0
-> # ....chk 0 msk in use after flush                  [  ok  ]
-> # check fallback                                    [  ok  ]
-> # ....chk 1 msk in use                              [ fail ] expected 1 found 0
-> # ....chk 0 msk in use after flush                  [  ok  ]
-> # many msk socket present                           [  ok  ]
-> # ....chk many msk in use                           [ fail ] expected
-> 254 found 0
-> # ....chk 0 msk in use after flush                  [  ok  ]
-> not ok 4 selftests: net/mptcp: diag.sh # exit=11
-> 
-> logs:
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.29-293-ge00a3d96f756/testrun/17163977/suite/kselftest-net-mptcp/test/net_mptcp_diag_sh/history/
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.29-293-ge00a3d96f756/testrun/17163977/suite/kselftest-net-mptcp/test/net_mptcp_diag_sh/details/
+On my system, the IIO device is a potentiometer and it is present in an
+amplifier design present in the audio path.
 
-Thank you for looking at these MPTCP selftests and for having reported
-these issues.
+Compare to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230421124122.324820-1-herve.codina@bootlin.com/
+This v2 series mainly:
+ - updates the binding using a simple-card subnode and handles this new
+   subnode in the simple-card driver.
+ - Improves existing IIO code and documentation.
+ - Renames simple-iio-aux to audio-iio-aux and fixes the driver itself.
 
-We are looking at having MPTCP selftests supporting previous kernel
-versions but that's not easy because our selftests are verifying some
-internal behaviours, not just what is exposed to the uAPI, e.g. what
-network packets are being sent, etc.. Also, some socket options and
-counters -- like what you reported here above with diag.sh -- were
-returning 0 before being implemented in MPTCP: so we need to accept that
-these counters might not work, that's not ideal for a test that wants to
-check if they work :)
+Best regards,
+Hervé
 
-Anyway, for those who wants to follow the evolution, patches have been
-shared on our mailing list:
+[1] https://lore.kernel.org/linux-kernel/20230203111422.142479-1-herve.codina@bootlin.com/
+[2] https://lore.kernel.org/linux-kernel/20230421085245.302169-1-herve.codina@bootlin.com/
 
-  https://patchwork.kernel.org/project/mptcp/list/?series=749868&state=*
-  https://github.com/multipath-tcp/mptcp_net-next/commits/7220c4c22b88
-  https://github.com/multipath-tcp/mptcp_net-next/issues/368
+Changes v1 -> v2
+  - Patch 1
+    Rename simple-iio-aux to audio-iio-aux
+    Rename invert to snd-control-invert-range
+    Remove the /schemas/iio/iio-consumer.yaml reference
+    Remove the unneeded '|' after description
 
-Cheers,
-Matt
+  - Patch 2 (new in v2)
+    Introduce the simple-audio-card additional-devs subnode
+
+  - Patch 3 (new in v2)
+    Check err before switch() in iio_channel_read_max()
+
+  - Patch 4 (new in v2)
+    Fix raw reads and raw writes documentation
+
+  - Patch 5 (patch 2 in v1)
+    Check err before switch() in iio_channel_read_min()
+    Fix documentation
+
+  - Patch 6 (path 3 in v1)
+    No changes
+
+  - Patch 7 (patch 4 in v1)
+    Rename simple-iio-aux to audio-iio-aux
+    Rename invert to snd-control-invert-range
+    Remove the mask usage from audio_iio_aux_{get,put}_volsw helpers
+    Use directly PTR_ERR() in dev_err_probe() parameter
+    Remove the '!!' construction
+    Remove of_match_ptr()
+
+  - Patch 8 (new in v2)
+    Add a missing of_node_put() in the simple-card driver
+
+  - Patch 9 (new in v2)
+    Handle additional-devs in the simple-card driver
+
+Herve Codina (9):
+  ASoC: dt-bindings: Add audio-iio-aux
+  ASoC: dt-bindings: simple-card: Add additional-devs subnode
+  iio: inkern: Check error explicitly in iio_channel_read_max()
+  iio: consumer.h: Fix raw values documentation notes
+  iio: inkern: Add a helper to query an available minimum raw value
+  ASoC: soc-dapm.h: Add a helper to build a DAPM widget dynamically
+  ASoC: codecs: Add support for the generic IIO auxiliary devices
+  ASoC: simple-card: Add missing of_node_put() in case of error
+  ASoC: simple-card: Handle additional devices
+
+ .../bindings/sound/audio-iio-aux.yaml         |  64 ++++
+ .../bindings/sound/simple-card.yaml           |  53 +++
+ drivers/iio/inkern.c                          |  75 ++++-
+ include/linux/iio/consumer.h                  |  37 ++-
+ include/sound/soc-dapm.h                      |  12 +-
+ sound/soc/codecs/Kconfig                      |  12 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/audio-iio-aux.c              | 302 ++++++++++++++++++
+ sound/soc/generic/simple-card.c               |  53 ++-
+ 9 files changed, 596 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
+ create mode 100644 sound/soc/codecs/audio-iio-aux.c
+
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+2.40.1
+
