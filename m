@@ -2,57 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7DA70D3DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AC470D3DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbjEWGUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S235194AbjEWGUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbjEWGTu (ORCPT
+        with ESMTP id S235193AbjEWGTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:19:50 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B64E18B;
-        Mon, 22 May 2023 23:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=E3za+pRQKoKCVofrMtAmbV5NMn
-        GQ2B6q4S9MjGYx3+HCqha5EvLxXsdjHIbUwy00b/q6mhgogaCfGerWFj4rIjZjIF5LnDwHRsA70tZ
-        a68wpXuICQ/01rLOjXfvfDL4qLkeEWbcXMQKf1SPgD7QjXw2tJN5+xWmKZ3otTZdPRkU1IIfuVK88
-        k2XvXF/0ks5RoCOZSI+jhUaDb2VrcfwSoURkP+SqRixIEp17C3SgCpcj7RVhwu7ijMB+vX4VsV3Jb
-        px0h1w+Atw22YtBX80y9go2x1rb12w6nhA4tHLzgEcSfi7pN52hbSi5iL2vyvPSFpv085XOTHbw91
-        zK7Bz+Ow==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1LN1-0093zs-28;
-        Tue, 23 May 2023 06:19:43 +0000
-Date:   Mon, 22 May 2023 23:19:43 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     linan666@huaweicloud.com
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-Subject: Re: [PATCH] block: remove redundant req_op in blk_rq_is_passthrough
-Message-ID: <ZGxa/0BsZ0DJ+AK6@infradead.org>
-References: <20230522085355.1740772-1-linan666@huaweicloud.com>
+        Tue, 23 May 2023 02:19:55 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D152F119;
+        Mon, 22 May 2023 23:19:54 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-6238386eb9cso59272966d6.1;
+        Mon, 22 May 2023 23:19:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684822794; x=1687414794;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9o/AkYCvO3tV2BU0V8GNdESZ1hmHFfJ/JAYYnq2G7Ts=;
+        b=ltSNDHag4sBJXgnPrLe1CebvaUqaao+DR+zTyCo5AHases8sTOQVIaeH85q1QXnnAY
+         lQw9vk7fkxQB7hrKCsNxtdOX+J9HbTj13D7yi4YjM3s+ZmhpaOSygpboeXXoyboMMK9v
+         DU0++lebgnMKXewdizqARwdvl5VQSujfrfDX1D/6Ka1h/IPNHjbP045rveIPdQ0xat//
+         Qb9F0P3aECjUjlNGFDZ9o5MqW62U6ezv9UB4cl20RNuVouXEA7ZcyP6Fc+5fyWWHmJFb
+         742h42pMC68PBgRJWiB7RLMXIcTPuENNXj4lXCCdUa0rZCXki+JwsBhCq6LewsvB8uBB
+         27Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684822794; x=1687414794;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9o/AkYCvO3tV2BU0V8GNdESZ1hmHFfJ/JAYYnq2G7Ts=;
+        b=HmFgx9fVRVIwmZ/BH3feVS6xSwLhp/NJkvToI/URFNlqB1gqQmmnJqRh+SX0+obN+L
+         yyFDTScUbeed5t8S7vdaoD4oDHZ42e5ABWmDfT4o41y/KjrAVRk/MQL13a/JPn4ba+ra
+         Da0AUksm5Iss8ppPjvRV+l+PeE+cgwIH+ADLJLIFE4joKMPLJ7YrrWso+Rwoayl/vQ5/
+         /RFnNVGY7pMY8MKEDI9/OYFFSV+Ozx5h9ZrYCZUjSpe8FtAe749m8+0Mhn3zPQefYxhM
+         ImBSSm3GnGmN5qyAZre/idpPeE5wnZyhyZdXU89PpPfx/V9WbRKbtSRBqVjyh+S9pRnK
+         6sUA==
+X-Gm-Message-State: AC+VfDwS2ml/hQ3Br7e72BoFFhgAZ4rJrPMkN1Uq8y2x2vhe9V9bRyR5
+        NHxGpgbPGUdtafzI9cmiyw==
+X-Google-Smtp-Source: ACHHUZ5/l+u9V0ZEoDbPOfnGgrn6JxSlQeOvcewZ/8UgiMcfjyKlE3y3IUjhKeYxNZqgrMWLcZcq6w==
+X-Received: by 2002:a05:6214:29e9:b0:625:8b9a:b426 with SMTP id jv9-20020a05621429e900b006258b9ab426mr3639169qvb.46.1684822793931;
+        Mon, 22 May 2023 23:19:53 -0700 (PDT)
+Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:18c1:dc19:5e29:e9a0])
+        by smtp.gmail.com with ESMTPSA id ev18-20020a0562140a9200b0062363e7dac5sm2502043qvb.104.2023.05.22.23.19.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 May 2023 23:19:53 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>
+Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <peilin.ye@bytedance.com>
+Subject: [PATCH v3 net 1/6] net/sched: sch_ingress: Only create under TC_H_INGRESS
+Date:   Mon, 22 May 2023 23:19:44 -0700
+Message-Id: <72c5a2b8ae1c3301175419a18da18f186818fa7c.1684821877.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <cover.1684821877.git.peilin.ye@bytedance.com>
+References: <cover.1684821877.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522085355.1740772-1-linan666@huaweicloud.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+From: Peilin Ye <yepeilin.cs@gmail.com>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+From: Peilin Ye <peilin.ye@bytedance.com>
+
+ingress Qdiscs are only supposed to be created under TC_H_INGRESS.
+Similar to mq_init(), return -EOPNOTSUPP if 'parent' is not
+TC_H_INGRESS.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/r/0000000000006cf87705f79acf1a@google.com/
+Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+change in v3:
+  - add in-body From: tag
+
+ net/sched/sch_ingress.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/sched/sch_ingress.c b/net/sched/sch_ingress.c
+index 84838128b9c5..3d71f7a3b4ad 100644
+--- a/net/sched/sch_ingress.c
++++ b/net/sched/sch_ingress.c
+@@ -80,6 +80,9 @@ static int ingress_init(struct Qdisc *sch, struct nlattr *opt,
+ 	struct net_device *dev = qdisc_dev(sch);
+ 	int err;
+ 
++	if (sch->parent != TC_H_INGRESS)
++		return -EOPNOTSUPP;
++
+ 	net_inc_ingress_queue();
+ 
+ 	mini_qdisc_pair_init(&q->miniqp, sch, &dev->miniq_ingress);
+-- 
+2.20.1
+
