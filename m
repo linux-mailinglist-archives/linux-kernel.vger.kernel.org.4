@@ -2,151 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5781B70DF9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822A970DF9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237220AbjEWOq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
+        id S237293AbjEWOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbjEWOq4 (ORCPT
+        with ESMTP id S232856AbjEWOre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:46:56 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2925BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:46:54 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 1233B4010159;
-        Tue, 23 May 2023 14:46:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 1233B4010159
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1684853212;
-        bh=WjIqZeXgtE4G/zI0XOtx3zWtmrcxBElWuTM9Lec+WqA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=em5+wnNXj6hCrEQiF23O2r9tinzq/BP+++PJt+E8WhNc7tjRBxDVId/vJJu+PH2hB
-         omexiFB7DKpFkruA6jJxtY9JckWeMTpIF46gW4Ys6mETiDKRbTwx5G77dGCE/riuQm
-         BG/9MwDdQD8o4q47/ldEN0YskoRcA1GaEGyBMfes=
+        Tue, 23 May 2023 10:47:34 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE47E9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:47:33 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30a4ebbda56so3444515f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684853251; x=1687445251;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zPxJfv8Gp/np80rJQlBAE1bGG9in5p+Ub2ud9nocz6U=;
+        b=WqoXIxmjF4fRAuTza7LWI2l7Be8/QIYJutSNRRaw6QSkA0mZSS80UAZtniMf9EPffx
+         OJ3DQ4IWYyAQdL5dtehn8ytxLkeS218smegrauZjfoDvgLIPqyaA471Ff6rz4yYDo8L0
+         eihGyFOEA4EXqQwzbTXi1GHtWmaD/2gTaCX3tWaEvNU5utjQSjMCCEtIvD8VlLNV7rXl
+         MvBWX/tUboGmcWG7a2buIakdgPUPd5FnKQXFBgZuDHTyU4/lFGLUcEWI8auxq4+QU1Ty
+         xgJsnP06DonVPnXiEblbtQ9eMi5u1EOqtmVRt7KpKabtmIFukFHkC8e0ct4b3138yvOQ
+         DHiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684853251; x=1687445251;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zPxJfv8Gp/np80rJQlBAE1bGG9in5p+Ub2ud9nocz6U=;
+        b=kOjRigKYMUx12l2C7RwAMOiorLk9H8jIbTHVLSU6JDgUQZ+1EtEpKTM2W3ZbNrV0Ku
+         AF5qhNPKY4y69icBBvMxCxjTTZyS+ePCNcUQrh1T/f/ikND44mZfVwtRF3w5VFfJf6YJ
+         4fk6hdk/OIPahU5VYKdzCYRhijA76VPJ2kJOOmWaerXec8V01wdJQhHIlbb/buz1BJu3
+         X8Mlz5WCmclzN9XhXSgUt+siHM+JixnZFkPCbeAJUtkw0fgk8lE7YBk+5ZI9xIULqnYK
+         mWalOtFKAAdSOqadgOXlTmgiqeWW2frcWgdkqoteFvA3FoEGXm6XT1OieBhd0rZY2Wov
+         uZgw==
+X-Gm-Message-State: AC+VfDyzMbRNsWPkN6JTHtV31T/ZHz7/Vgw5akhB3y/P6jn21SGJnGnI
+        7uakbhq+yiqKDcOhrdj3IUOAKw==
+X-Google-Smtp-Source: ACHHUZ4qBBoaISjw1qz9BvpZKAg8+GG76ZYbL0DJwXL+ImXaMvFn5rvjbJsBDtXwIQLEzMgaoe0Plg==
+X-Received: by 2002:adf:ee82:0:b0:306:2aa7:2ecc with SMTP id b2-20020adfee82000000b003062aa72eccmr10390763wro.45.1684853251337;
+        Tue, 23 May 2023 07:47:31 -0700 (PDT)
+Received: from myrica (5750a5b3.skybroadband.com. [87.80.165.179])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05600c024a00b003f423dfc686sm10151223wmj.45.2023.05.23.07.47.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 07:47:30 -0700 (PDT)
+Date:   Tue, 23 May 2023 15:47:33 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        narayan.ranganathan@intel.com
+Subject: Re: [PATCH v6 1/4] iommu: Generalize default PCIe requester ID PASID
+Message-ID: <20230523144733.GA4137946@myrica>
+References: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
+ <20230519203223.2777255-2-jacob.jun.pan@linux.intel.com>
 MIME-Version: 1.0
-Date:   Tue, 23 May 2023 17:46:52 +0300
-From:   Alexey Izbyshev <izbyshev@ispras.ru>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
-        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
-Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
-In-Reply-To: <ZGzJNvKu8h5nDXsa@arm.com>
-References: <20230517150321.2890206-1-revest@chromium.org>
- <20230517150321.2890206-4-revest@chromium.org>
- <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
- <884d131bbc28ebfa0b729176e6415269@ispras.ru>
- <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
- <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
- <c63053b0-5797-504d-7896-c86271b64162@redhat.com> <ZGy6q7v+7jsXb1bV@arm.com>
- <f47d587fe5a6285f88191fbb13f367c7@ispras.ru> <ZGzJNvKu8h5nDXsa@arm.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <a91012e9cde9046d98713835476cab4b@ispras.ru>
-X-Sender: izbyshev@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519203223.2777255-2-jacob.jun.pan@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-23 17:09, Catalin Marinas wrote:
-> On Tue, May 23, 2023 at 04:25:45PM +0300, Alexey Izbyshev wrote:
->> On 2023-05-23 16:07, Catalin Marinas wrote:
->> > On Tue, May 23, 2023 at 11:12:37AM +0200, David Hildenbrand wrote:
->> > > Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We
->> > > need arg2
->> > > -> arg5 to be 0. But wouldn't the following also just pass a 0 "int" ?
->> > >
->> > > prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
->> > >
->> > > I'm easily confused by such (va_args) things, so sorry for the dummy
->> > > questions.
->> >
->> > Isn't the prctl() prototype in the user headers defined with the first
->> > argument as int while the rest as unsigned long? At least from the man
->> > page:
->> >
->> > int prctl(int option, unsigned long arg2, unsigned long arg3,
->> > 	  unsigned long arg4, unsigned long arg5);
->> >
->> > So there are no va_args tricks (which confuse me as well).
->> >
->> I have explicitly mentioned the problem with man pages in my response 
->> to
->> David[1]. Quoting myself:
->> 
->> > This stuff *is* confusing, and note that Linux man pages don't even tell
->> that prctl() is actually declared as a variadic function (and for
->> ptrace() this is mentioned only in the notes, but not in its 
->> signature).
-> 
-> Ah, thanks for the clarification (I somehow missed your reply).
-> 
->> The reality:
->> 
->> * glibc: 
->> https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sys/prctl.h;h=821aeefc1339b35210e8918ecfe9833ed2792626;hb=glibc-2.37#l42
->> 
->> * musl:
->> https://git.musl-libc.org/cgit/musl/tree/include/sys/prctl.h?h=v1.2.4#n180
->> 
->> Though there is a test in the kernel that does define its own 
->> prototype,
->> avoiding the issue: 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/sched/cs_prctl_test.c?h=v6.3#n77
-> 
-> At least for glibc, it seems that there is a conversion to unsigned
-> long:
-> 
-> https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/prctl.c#l28
-> 
-> unsigned long int arg2 = va_arg (arg, unsigned long int);
-> 
-> (does va_arg expand to an actual cast?)
-> 
-No, this not a conversion or a cast in the sense that I think you mean 
-it. What happens in the situation discussed in this thread is the 
-following (assuming the argument is passed via a register, which is 
-typical for initial variadic arguments on 64-bit targets):
+Hi Jacob,
 
-* User calls prctl(op, 0) on a 64-bit target.
-* The second argument is an int.
-* The compiler generates code to pass an int (32 bits) via a 64-bit 
-register. The compiler is NOT required to clear the upper 32 bits of the 
-register, so they might contain arbitrary junk in a general case.
-* The prctl() implementation calls va_arg(arg, unsigned long) (as in 
-your quote).
-* The compiler extracts the full 64-bit value of the same register 
-(which in our case might contain junk in the upper 32 bits).
-* This extracted 64-bit value is then passed to the system call.
+On Fri, May 19, 2023 at 01:32:20PM -0700, Jacob Pan wrote:
+> PCIe Process address space ID (PASID) is used to tag DMA traffic, it
+> provides finer grained isolation than requester ID (RID).
+> 
+> For each RID, 0 is as a special PASID for the legacy DMA (without
+> PASID), thus RID_PASID. This is universal across all architectures,
+> therefore warranted to be declared in the common header.
+> Noting that VT-d could support none-zero RID_PASID, but currently not
+> used.
+> 
+> By having a common RID_PASID, we can avoid conflicts between different
+> use cases in the generic code. e.g. SVA and DMA API with PASIDs.
+> 
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> ---
+> v6:
+>    - let SMMU code use the common RID_PASID macro
+> ---
+>  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  2 +-
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   | 10 ++++----
+>  drivers/iommu/intel/iommu.c                   | 24 +++++++++----------
+>  drivers/iommu/intel/pasid.c                   |  2 +-
+>  drivers/iommu/intel/pasid.h                   |  1 -
+>  include/linux/iommu.h                         |  1 +
+>  6 files changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> index a5a63b1c947e..160b31e6239d 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> @@ -80,7 +80,7 @@ arm_smmu_share_asid(struct mm_struct *mm, u16 asid)
+>  	 * be some overlap between use of both ASIDs, until we invalidate the
+>  	 * TLB.
+>  	 */
+> -	arm_smmu_write_ctx_desc(smmu_domain, 0, cd);
+> +	arm_smmu_write_ctx_desc(smmu_domain, IOMMU_DEF_RID_PASID, cd);
 
-So...
-
-> If the libc passes a 32-bit to a kernel ABI that expects 64-bit, I 
-> think
-> it's a user-space bug and not a kernel ABI issue.
-
-... the problem happens not at the user/kernel boundary, but in prctl() 
-call/implementation in user space. But yes, it's still a user-space bug 
-and not a kernel ABI issue. The David's question, as I understand it, 
-was whether we want to keep such buggy code that happens to pass junk 
-failing with EINVAL in future kernels or not. If we do want to keep it 
-failing, we can never assign any meaning to the upper 32 bits of the 
-second prctl() argument for PR_SET_MDWE op.
+I agree with reserving 0 globally for non-PASID DMA, but could we call
+this something more generic, like IOMMU_NO_PASID?  The term "RID_PASID" is
+specific to VT-d and "RID" to PCI, so it looks confusing here (this driver
+also supports non-PCI). "NO_PASID" would be clearer to someone just trying
+to follow this driver code.
 
 Thanks,
-Alexey
+Jean
+
