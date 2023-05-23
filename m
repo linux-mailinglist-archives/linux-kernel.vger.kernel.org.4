@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B428370E4E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5590170E4EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238162AbjEWSwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S236914AbjEWSxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbjEWSwB (ORCPT
+        with ESMTP id S229473AbjEWSw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:52:01 -0400
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD0791;
-        Tue, 23 May 2023 11:52:00 -0700 (PDT)
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-64d1e96c082so93419b3a.1;
-        Tue, 23 May 2023 11:52:00 -0700 (PDT)
+        Tue, 23 May 2023 14:52:59 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A138191;
+        Tue, 23 May 2023 11:52:57 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-62382e86f81so32748066d6.2;
+        Tue, 23 May 2023 11:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684867976; x=1687459976;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rWn2MIKjUVOy+G+HIOvINhREydSAiCGuFlv2fGYs64o=;
+        b=AHu218kDLLmj5B9inD98p0ijdWxsVzotJoiFBu7VYMbOBxwClSKDrm9NIa+Gf/7Yb3
+         M9eyEnLGkUac6u+bNwVOFN3szjB9xDIWkdVnwR4+ETtvBp3JkBhn/xV59A3QdlfZeulA
+         gJnoNuum4Nn12d+oF5/+XZDnpuwv5CAc2KtPxI+VxUnrhfxO7qKMuy8RKc7/XAHi3rXd
+         Pp2ysJftfHMjKaNUFUWlIP66u6tR9/L4iTD7+t06d+Y3Uxhcs53t29mWItjTZJiI08eP
+         VAqAHPc0967s5GmblTQfSvu+vWiingIRBNQEWJ/FS2/z/r1UDfJbmwcxKKM0xkTzE2Os
+         URsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684867920; x=1687459920;
+        d=1e100.net; s=20221208; t=1684867976; x=1687459976;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5oG31BoHoHiHwOlqYGhtkonFmlXgV+FoMl6Z765+ow0=;
-        b=PBKPsxUEIsqLgyqpBgTHG27FPe/tRDyDh2aNmMcKYOchx6xKQ+FTFyrPkZaIiwnmjO
-         yLaS+ZqGRcYyfQsFAiRvjSRHf8b20Ez6mZNq4S6rFOLwA15KFaI1XL8F/i6maGjWPLoi
-         sX+ufG8fh30dgxBta1KJSYJbwgmqsTJ5NWrcpCzD2P4Y7r3oQjcE1MpTXnICDXjmptfi
-         LS4g3HlL2lYkSAXFBy7F55WCvrr3j0sIrhWsNi3wpRoVgJy83kh8gPavqjAWlZ/4S4Wr
-         rO3Etz6kI7J41IyDYnrNCr62sEHAbSzkKZx5A2dl/g0xgarf44eb45ErmQayYwCjFiOB
-         H9yg==
-X-Gm-Message-State: AC+VfDwb9Ks03CmlZy7ItXUF0bD5XjK17QtK/nzswlYXK4ZXrMDiEeDR
-        Izs6JatqjVAZlCFWhgq3LTM=
-X-Google-Smtp-Source: ACHHUZ5YNdnPd8x4bK04UQx412rlbNvN8OuRKTB5AGhP622dL7WqYAj832Ewisttkrnv0+SzatUQVw==
-X-Received: by 2002:a05:6a21:7886:b0:10b:b6cf:bbb0 with SMTP id bf6-20020a056a21788600b0010bb6cfbbb0mr8498025pzc.42.1684867919866;
-        Tue, 23 May 2023 11:51:59 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id b24-20020aa78718000000b0063d2989d5b4sm6112108pfo.45.2023.05.23.11.51.58
+        bh=rWn2MIKjUVOy+G+HIOvINhREydSAiCGuFlv2fGYs64o=;
+        b=e2GMAK3G7LmzldEwUH52F3XASF64KO35wNJ9oU2M0gVI7hy40D/0kpiiZzz0UJNL6m
+         1uY4d5jTansoNjohvQhmpti2pP2Fgh64xR7SscoTeYwUAP7Lprt7L7IHVR2pIfoa52ir
+         T+/6WRuEamNLrMHZ3VnLdNS0dJCXfhlHZghw7hAxJ+ZGF7q4eNxSCqwD5Y9R0SfPpuwn
+         vZEGJGSG9wclBjMtzGmULGoZLIAJtSiVHIwfu/S8APedC75wemldfg6oaO2joPg+DpKE
+         /lFzdqnRVS3fGFcyqA8AiEGOB1QVhEjCBZhh753Vzeb1ThxMNwwjLlKaOk7fi6Gvj6un
+         DHBA==
+X-Gm-Message-State: AC+VfDyuCD78HH9hEu71WPyBxr4WKUeNzbbaeESavhc2X9lXxSyVeJVU
+        Gv7dhK5siz2jo1vYV9eIhA==
+X-Google-Smtp-Source: ACHHUZ41XhXT0087V4u7c4h9ZtuUk0wwdyR0WPz5F5FFh5ElEJXfHBqz4o9qAwjwBelPkWBPo7ftXA==
+X-Received: by 2002:a05:6214:410d:b0:619:ff0c:9246 with SMTP id kc13-20020a056214410d00b00619ff0c9246mr8059323qvb.34.1684867976633;
+        Tue, 23 May 2023 11:52:56 -0700 (PDT)
+Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:c32:b55:eaec:a556])
+        by smtp.gmail.com with ESMTPSA id mm19-20020a0562145e9300b00623927281c2sm2974588qvb.40.2023.05.23.11.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 11:51:58 -0700 (PDT)
-Date:   Tue, 23 May 2023 18:51:56 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org
-Subject: Re: [PATCH v2 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling
- when CPUs go online/offline
-Message-ID: <ZG0LTAeV+KMAGXIq@liuwe-devbox-debian-v2>
-References: <1684862062-51576-1-git-send-email-mikelley@microsoft.com>
+        Tue, 23 May 2023 11:52:56 -0700 (PDT)
+Date:   Tue, 23 May 2023 11:52:48 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Vlad Buslov <vladbu@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH v2 net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+Message-ID: <ZG0LgCGLAKOV82YN@C02FL77VMD6R.googleapis.com>
+References: <cover.1684796705.git.peilin.ye@bytedance.com>
+ <8e3383d0bacd084f0e33d9158d24bd411f1bf6ba.1684796705.git.peilin.ye@bytedance.com>
+ <87sfbnxhg7.fsf@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1684862062-51576-1-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87sfbnxhg7.fsf@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:14:21AM -0700, Michael Kelley wrote:
-[...]
-> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-> index 0f1001d..3ceb9df 100644
-> --- a/include/linux/cpuhotplug.h
-> +++ b/include/linux/cpuhotplug.h
-> @@ -200,6 +200,7 @@ enum cpuhp_state {
->  
->  	/* Online section invoked on the hotplugged CPU from the hotplug thread */
->  	CPUHP_AP_ONLINE_IDLE,
-> +	CPUHP_AP_HYPERV_ONLINE,
+Hi Vlad,
 
-x86 maintainers, are you okay with this?
+On Tue, May 23, 2023 at 05:04:40PM +0300, Vlad Buslov wrote:
+> > @@ -1458,6 +1472,7 @@ static int tc_get_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
+> >     struct Qdisc *p = NULL;
+> >     int err;
+> >
+> > +replay:
+>
+> Perhaps also set q and p to NULL here? Even though on cursory look you
+> should get the same lookup result since the function is called under
+> rtnl_lock, tc_modify_qdisc() does this on replay ("Reinit, just in case
+> something touches this.") and tc_new_tfilter() got some non-obvious bugs
+> after I introduced replay there without re-setting some of the required
+> variables.
 
-Thanks,
-Wei.
+Sure, I'll reinitialize tcm, q and p after "replay:" in next version, just
+like tc_modify_qdisc().  Thanks for the suggestion!
 
->  	CPUHP_AP_KVM_ONLINE,
->  	CPUHP_AP_SCHED_WAIT_EMPTY,
->  	CPUHP_AP_SMPBOOT_THREADS,
-> -- 
-> 1.8.3.1
-> 
+Peilin Ye
+
