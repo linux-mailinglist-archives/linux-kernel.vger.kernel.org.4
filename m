@@ -2,182 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE2D70E4E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B428370E4E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238123AbjEWStN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
+        id S238162AbjEWSwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234984AbjEWStL (ORCPT
+        with ESMTP id S232824AbjEWSwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:49:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23E591;
-        Tue, 23 May 2023 11:49:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DF1F61D46;
-        Tue, 23 May 2023 18:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77566C433D2;
-        Tue, 23 May 2023 18:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684867749;
-        bh=iKyVdrNdupf6FLPN38zfHmfs/Nd6a0SWOFcdapufsBw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mhGWyFqAUIiIiIEpykYA95zO4MY9L61Oq6pg8Y7hxTBcJJri5cml0pw55QB3duh2i
-         dfpVTdmg6UqqQPTkuFyxRdPoZCRsXQDzgPwEdodP4AcZJVnR/m9abkpHwT3sIfppTd
-         HRPIvcW7z05HZa+SmBu9zqJRkpphUr0DPiilbxK2JKy25CZgD4LJuDRJ9GSMRJxZts
-         tudUfwoWs/DFroseSdgeHbi2/pFC4hKtT9IMjrs16E8L8MFSryUKuKChW9XHe+mP7k
-         osPPBjyzC9Zlac4gM0wCs0hfG+wTxc7J0p0VWFer+3rLsRLHKJDKshY1A1wXZOW0qS
-         ZNfW9nD4Rs7og==
-Date:   Tue, 23 May 2023 19:49:05 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, sre@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
- convert to yaml
-Message-ID: <20230523-remission-ageless-0880ed49765d@spud>
-References: <20230523061512.195271-1-claudiu.beznea@microchip.com>
- <20230523061512.195271-4-claudiu.beznea@microchip.com>
+        Tue, 23 May 2023 14:52:01 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD0791;
+        Tue, 23 May 2023 11:52:00 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-64d1e96c082so93419b3a.1;
+        Tue, 23 May 2023 11:52:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684867920; x=1687459920;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5oG31BoHoHiHwOlqYGhtkonFmlXgV+FoMl6Z765+ow0=;
+        b=PBKPsxUEIsqLgyqpBgTHG27FPe/tRDyDh2aNmMcKYOchx6xKQ+FTFyrPkZaIiwnmjO
+         yLaS+ZqGRcYyfQsFAiRvjSRHf8b20Ez6mZNq4S6rFOLwA15KFaI1XL8F/i6maGjWPLoi
+         sX+ufG8fh30dgxBta1KJSYJbwgmqsTJ5NWrcpCzD2P4Y7r3oQjcE1MpTXnICDXjmptfi
+         LS4g3HlL2lYkSAXFBy7F55WCvrr3j0sIrhWsNi3wpRoVgJy83kh8gPavqjAWlZ/4S4Wr
+         rO3Etz6kI7J41IyDYnrNCr62sEHAbSzkKZx5A2dl/g0xgarf44eb45ErmQayYwCjFiOB
+         H9yg==
+X-Gm-Message-State: AC+VfDwb9Ks03CmlZy7ItXUF0bD5XjK17QtK/nzswlYXK4ZXrMDiEeDR
+        Izs6JatqjVAZlCFWhgq3LTM=
+X-Google-Smtp-Source: ACHHUZ5YNdnPd8x4bK04UQx412rlbNvN8OuRKTB5AGhP622dL7WqYAj832Ewisttkrnv0+SzatUQVw==
+X-Received: by 2002:a05:6a21:7886:b0:10b:b6cf:bbb0 with SMTP id bf6-20020a056a21788600b0010bb6cfbbb0mr8498025pzc.42.1684867919866;
+        Tue, 23 May 2023 11:51:59 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id b24-20020aa78718000000b0063d2989d5b4sm6112108pfo.45.2023.05.23.11.51.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 11:51:58 -0700 (PDT)
+Date:   Tue, 23 May 2023 18:51:56 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Subject: Re: [PATCH v2 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling
+ when CPUs go online/offline
+Message-ID: <ZG0LTAeV+KMAGXIq@liuwe-devbox-debian-v2>
+References: <1684862062-51576-1-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WWGOvCNCU6jCwAEm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230523061512.195271-4-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1684862062-51576-1-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 23, 2023 at 10:14:21AM -0700, Michael Kelley wrote:
+[...]
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index 0f1001d..3ceb9df 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -200,6 +200,7 @@ enum cpuhp_state {
+>  
+>  	/* Online section invoked on the hotplugged CPU from the hotplug thread */
+>  	CPUHP_AP_ONLINE_IDLE,
+> +	CPUHP_AP_HYPERV_ONLINE,
 
---WWGOvCNCU6jCwAEm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+x86 maintainers, are you okay with this?
 
-Hey Claudiu,
+Thanks,
+Wei.
 
-On Tue, May 23, 2023 at 09:15:11AM +0300, Claudiu Beznea wrote:
-> Convert Atmel SAMA5D2 shutdown controller to YAML.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  .../devicetree/bindings/arm/atmel-sysregs.txt |  63 ----------
->  .../power/reset/atmel,sama5d2-shdwc.yaml      | 114 ++++++++++++++++++
->  2 files changed, 114 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,s=
-ama5d2-shdwc.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-=
-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-sh=
-dwc.yaml
-> new file mode 100644
-> index 000000000000..613668d6099b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
-aml
-> @@ -0,0 +1,114 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-
-Same comment on the license here. Figure you need a Rob Ack.
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel SAMA5D2 SHDWC Shutdown Controller
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description: |
-
-Also, you don't need the | if you do not need to preserve formatting.
-
-> +  Atmel SHDWC shutdown controller controls the power supplies VDDIO and =
-VDDCORE
-> +  and the wake-up detection on debounced input lines.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: microchip,sama7g5-shdwc
-> +          - const: syscon
-
-^ you should probably mention in the commit message where the syscon
-came from, as it doesn't appear in the txt binding AFAICT.
-
-> +      - items:
-> +          enum:
-> +            - atmel,sama5d2-shdwc
-> +            - microchip,sam9x60-shdwc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  debounce-delay-us:
-> +    description: |
-> +      Minimum wake-up inputs debouncer period in microseconds. It is usu=
-ally a
-> +      board-related property.
-> +
-> +  atmel,wakeup-rtc-timer:
-> +    description: enable real-time clock wake-up
-> +    type: boolean
-> +
-> +patternProperties:
-> +  "^input@[0-15]$":
-> +    description: |
-> +      Wake-up input nodes. These are usually described in the "board" pa=
-rt of
-> +      the Device Tree. Note also that input 0 is linked to the wake-up p=
-in and
-> +      is frequently used.
-> +    type: object
-> +    properties:
-> +      reg:
-> +        description: contains the wake-up input index
-> +        enum: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]
-
-Same here with minimum & maximum, no?
-
-Otherwise, this seems fine to me...
-
-Cheers,
-Conor.
-
-
---WWGOvCNCU6jCwAEm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG0KoAAKCRB4tDGHoIJi
-0kdhAQCskLgP2mlO/lNxcX/CGR6mGvWUEPUc12bU7z8iCSk3TQEAiudITCr1jawD
-4NCyoquvEKgbjWtwsLyE6VyjqrF5Sgc=
-=4RFH
------END PGP SIGNATURE-----
-
---WWGOvCNCU6jCwAEm--
+>  	CPUHP_AP_KVM_ONLINE,
+>  	CPUHP_AP_SCHED_WAIT_EMPTY,
+>  	CPUHP_AP_SMPBOOT_THREADS,
+> -- 
+> 1.8.3.1
+> 
