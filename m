@@ -2,105 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C305070D10B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED0F70D13C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjEWCUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S234324AbjEWCaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbjEWCTs (ORCPT
+        with ESMTP id S234676AbjEWC34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:19:48 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B029CA;
-        Mon, 22 May 2023 19:19:47 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-332cc0efe88so2498565ab.0;
-        Mon, 22 May 2023 19:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684808387; x=1687400387;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kzTqOaIPWfW9eLUYmANhI0oqNLmXhJYkC7KiwdLC9Pk=;
-        b=HSD7l7aKqkH7bpomTMkzPvcKzQpp2eYwyn0IteDdsQLQjpEWrRaSrLc67veKl7F0/T
-         cn2iJlW2p3p+ttdzw9ZAV7HQ8xxxsTjGKeDqk9ze5VrKHVaDEi+t3OW7XqBuV/glXXnC
-         D2eds/9o/cQ3eOaOppD0DjNpMbm7bViiVNn4xVcB+ZMtP9Pzx2mqEv3rSuUKAgMxU6nL
-         gqqvNmyRkrNekvbh16k/UGWh5sknRUXgxI9DzPtYOgcYIE58tIKFTJbuDRwL5PBaJyQ5
-         8aQnfvzVb1Tev33snfKB5whGHevkySQHAoZR2clKZs9dZU5d0XWHlZc0r5BlpjMUYgkj
-         FfsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684808387; x=1687400387;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kzTqOaIPWfW9eLUYmANhI0oqNLmXhJYkC7KiwdLC9Pk=;
-        b=kq6wzNSJQ6z1OQfkS0x2XG8r8EX+Ae/nb8H3mpLXXCiLzp5L+5vviNji+Nuchj2y5T
-         QuBaoyx2TLmb/i5ZXhqo7q924X45bkZ0zks2Ht/SMkdC2xZ2sQaQYw+bISNZbY6544L0
-         zsuzhsZ7vZNvp1H+jFiWLcQ+/uKapEUN8utTIDz3YRgicHVFIu49EQwUTmb00j7rmguW
-         wy1Fb8fwHsfuWMkaFYt9sv23mjlT8Q0/2QLWYXaPyiDcCZa1/BAsf/Sc3yjBH6WKX5V/
-         yJzOl6YLNmwsncFlunT5opE01F2uUTkNLsP4lMtz/4tDQxf1tozWX8ODKIX1hbNopbyJ
-         imGw==
-X-Gm-Message-State: AC+VfDwXM8ZBZRtmokc2y6CygvOXZZA4nsDJ/9OMI9dT8c6YLw+9IpHQ
-        WPJtiCiB1qLzT4A2pidif0Q=
-X-Google-Smtp-Source: ACHHUZ4+DJLABRuPBSRDE1JxdVeIA6RNnSI8JrvW9bu3YuMmFMvYwh3HXeHrlA5FYY/ygXGrB/itLA==
-X-Received: by 2002:a92:d8cf:0:b0:338:1a22:bf47 with SMTP id l15-20020a92d8cf000000b003381a22bf47mr7507410ilo.21.1684808386720;
-        Mon, 22 May 2023 19:19:46 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id x1-20020a920601000000b0033549a5fb36sm2131699ilg.27.2023.05.22.19.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 19:19:46 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH] dma-buf/sw_sync: Replace all non-returning strlcpy with strscpy
-Date:   Tue, 23 May 2023 02:19:43 +0000
-Message-ID: <20230523021943.2406847-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+        Mon, 22 May 2023 22:29:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC36CA;
+        Mon, 22 May 2023 19:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684808994; x=1716344994;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=+gDiLZPsuz1kelUJx+GgjjhllFg4WBajJIGyW+kQs+c=;
+  b=OAhS4r/RqIGAAge4fBXGjYNHrJ8yFUgYvVxaqm0cmYhpZG5SfKoYu1Vu
+   4npKjVZku2wXL3OFKHaga0A2EurhHCAOUBgEyu+NrQh+dHsMBwfOlqXD8
+   4UfZsy0R2++ysVBrPLFCmVqYIHwcKEGSPxgivRFYBuKRqreHF7f3z1xlB
+   lOKNgiwa6bfnFrPXwb/ykw+vBRG3UVBzF52kbj09Sq7XKUSodVbiAhT54
+   9Fa3Lwc5XsHaP5y8cSTmocDTOOtF6I/rQxpgxZEvygzrOj8vSq1blClWW
+   Wn6Ey9IxT4X1EKFBNVVYgo9FKY3itDLdJXAB2xWq2xHyrsetO84vkXSW0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="353131976"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="353131976"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 19:29:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="1033863646"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="1033863646"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.139])
+  by fmsmga005.fm.intel.com with ESMTP; 22 May 2023 19:29:42 -0700
+Date:   Tue, 23 May 2023 10:19:58 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Fuad Tabba <tabba@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Qinglan Xiang <qinglan.xiang@intel.com>,
+        Kai Svahn <kai.svahn@intel.com>,
+        Margarita Maroto <margarita.maroto@intel.com>,
+        Anil Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Nagareddy Reddy <nspreddy@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ANNOUNCE / RFC] Periodic Upstream Call for KVM
+Message-ID: <20230523021958.GA346459@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20230512231026.799267-1-seanjc@google.com>
+ <20230522072508.GA326851@chaop.bj.intel.com>
+ <ZGwDs1qHcl8PX+m2@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGwDs1qHcl8PX+m2@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
+... 
+> > > To kick things off, I am leaning toward a "launch" date of May 24th (Pacific),
+> > > with KVM guest private mem (a.k.a. UPM) as the first topic.
+> > 
+> > Thanks for driving this, yes for UPM I would definitely join.
+> 
+> I'm going to push out the inagaural date one week until May 31st, partly to give
+> more time for this to get widely disseminated, but mostly because I need to write
+> down my various thoughts on where to go with UPM, and I don't think I'll get that
+> done before Wednesday.  That'll also give me time to setup a public calendar so
+> that people can get reminders and whatnot.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+That looks good to me.
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- drivers/dma-buf/sw_sync.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/dma-buf/sw_sync.c b/drivers/dma-buf/sw_sync.c
-index 348b3a9170fa..63f0aeb66db6 100644
---- a/drivers/dma-buf/sw_sync.c
-+++ b/drivers/dma-buf/sw_sync.c
-@@ -85,7 +85,7 @@ static struct sync_timeline *sync_timeline_create(const char *name)
- 
- 	kref_init(&obj->kref);
- 	obj->context = dma_fence_context_alloc(1);
--	strlcpy(obj->name, name, sizeof(obj->name));
-+	strscpy(obj->name, name, sizeof(obj->name));
- 
- 	obj->pt_tree = RB_ROOT;
- 	INIT_LIST_HEAD(&obj->pt_list);
-
+Chao
