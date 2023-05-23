@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A1B70DF87
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119A570DF89
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbjEWOlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        id S237348AbjEWOlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237343AbjEWOk6 (ORCPT
+        with ESMTP id S237372AbjEWOlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:40:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAE7FA;
-        Tue, 23 May 2023 07:40:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 23 May 2023 10:41:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7151B5;
+        Tue, 23 May 2023 07:41:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 11270229F9;
-        Tue, 23 May 2023 14:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1684852848; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nGlr9RSvSIRIegvdJA3tDbcOz/gxFk1P8G5vHNFFvdw=;
-        b=Uxk2np0yuV6dsJAJsvbMA15zF96rjED8fP2akEhLxsmTpt+feyN2T/XT2pX2L8XeAZ4ZNd
-        x/FzKx4vRGic0qaTq8sE2kEc12gKEby+NSQYZAjT9a/i9yg98rtiR1IHPVBAP/QqZKzzcp
-        /LSS2uf6XfVEVLuRagQgPj5k0Vkwt7U=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA1DA13588;
-        Tue, 23 May 2023 14:40:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tCdyNG/QbGRaawAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 23 May 2023 14:40:47 +0000
-Date:   Tue, 23 May 2023 16:40:46 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, hannes@cmpxchg.org,
-        shakeelb@google.com, akpm@linux-foundation.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests: cgroup: fix unexpected failure on
- test_memcg_low
-Message-ID: <r5owzlvxbx22gqmw2cnmykvrzzhhw3hkoffk3f4wbvv7lmqzod@wbbmnt4a76cu>
-References: <20230522095233.4246-2-haifeng.xu@shopee.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACC6E63341;
+        Tue, 23 May 2023 14:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 054AEC433D2;
+        Tue, 23 May 2023 14:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684852867;
+        bh=d9J3DkDPYoY3R19fL1JMV5Kh4ZEEyVTMhbq27T3m+Tk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=etOhZG44wkJggVLmEJT26ihmCK04oldyLTDOs4/a17yQwOSWMGdPOrUlrOTRlcqdM
+         HMqarlJcFu81mB4zFNS9MpyG8gLgBh/AZVslrR4Eo073J9Jpe1CbF+dwrimwJIMDJq
+         sv4Thqo5bkx4pq4LJPvZ1K2q1hSHsE2m6IqvmLKtBqGn8LN+1ggaywHtOujvpUucJy
+         6bFWMzNUskpAm3vg/NPOlPrsQo4jxcM/aSkXKYk36H2UYXs2zvqeP1GawNs3CBdDP5
+         Rx9LmTIwyDqTEX8lXysrrqacTatQDqJRMkYEOag7/5+bfWJKS3NYKqoNRbIaK5INcX
+         g3D5+AqswI92Q==
+Date:   Tue, 23 May 2023 08:41:59 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <james.smart@broadcom.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2][next] scsi: lpfc: Use struct_size() helper
+Message-ID: <ZGzQt2VFG4P/Vufn@work>
+References: <cover.1684358315.git.gustavoars@kernel.org>
+ <99e06733f5f35c6cd62e05f530b93107bfd03362.1684358315.git.gustavoars@kernel.org>
+ <202305171601.B3FF9D0BB@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qrfw5lltt6r2lzen"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522095233.4246-2-haifeng.xu@shopee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <202305171601.B3FF9D0BB@keescook>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,50 +60,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 17, 2023 at 04:01:47PM -0700, Kees Cook wrote:
+> On Wed, May 17, 2023 at 03:23:01PM -0600, Gustavo A. R. Silva wrote:
+> > Prefer struct_size() over open-coded versions of idiom:
+> > 
+> > sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
+> > 
+> > where count is the max number of items the flexible array is supposed to
+> > contain.
+> > 
+> > Link: https://github.com/KSPP/linux/issues/160
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > ---
+> >  drivers/scsi/lpfc/lpfc_ct.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
+> > index e880d127d7f5..3b95c56023bf 100644
+> > --- a/drivers/scsi/lpfc/lpfc_ct.c
+> > +++ b/drivers/scsi/lpfc/lpfc_ct.c
+> > @@ -3748,8 +3748,7 @@ lpfc_vmid_cmd(struct lpfc_vport *vport,
+> >  		rap->obj[0].entity_id_len = vmid->vmid_len;
+> >  		memcpy(rap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
+> >  		size = RAPP_IDENT_OFFSET +
+> > -			sizeof(struct lpfc_vmid_rapp_ident_list) +
+> > -			sizeof(struct entity_id_object);
+> > +			struct_size(rap, obj, rap->no_of_objects);
+> 
+> Has rap->no_of_objects always been "1"? (i.e. there was a prior
+> multiplication here before...
 
---qrfw5lltt6r2lzen
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Mmh.. not sure what multiplication you are talking about. I based these
+changes on the fact that rap->no_of_objects is set to cpu_to_be32(1);
+for both instances. It doesn't show up in the context of the patch, so
+here you go:
 
-On Mon, May 22, 2023 at 09:52:33AM +0000, Haifeng Xu <haifeng.xu@shopee.com=
-> wrote:
-> Since commit f079a020ba95 ("selftests: memcg: factor out common parts
-> of memory.{low,min} tests"), the value used in second alloc_anon has
-> changed from 148M to 170M. Because memory.low allows reclaiming page
-> cache in child cgroups, so the memory.current is close to 30M instead
-> of 50M. Therefore, adjust the expected value of parent cgroup.
->=20
-> Fixes: f079a020ba95 ("selftests: memcg: factor out common parts of memory=
-=2E{low,min} tests")
-> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
-> ---
->  tools/testing/selftests/cgroup/test_memcontrol.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+3747                 rap->no_of_objects = cpu_to_be32(1);
+3748                 rap->obj[0].entity_id_len = vmid->vmid_len;
+3749                 memcpy(rap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
+3750                 size = RAPP_IDENT_OFFSET +
+3751                         sizeof(struct lpfc_vmid_rapp_ident_list) +
+3752                         sizeof(struct entity_id_object);
 
-Yes, the expected value should be complement of the allocation to the
-limit when reclaim is allowed.
 
-Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
-
-FTR, the test_memcg_low fails after the fix still (6.3.1-2-default)
-because of nonzero memory.events:low in the unprotected A/B/E group
-(with memory_recursiveprot).
-(That's another and long standing issues -- perhaps the reason why this
-issue was hidden.)
-
-Thanks,
-Michal
-
---qrfw5lltt6r2lzen
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZGzQbAAKCRAkDQmsBEOq
-uZ7BAQCh/IzL0Y/nVUwN/zZJm3gzAUIYiiYkjKXr3IdIi/nEEAD8CrjZAUCERkWq
-My0modfCN7u48OMYoc2a0660bD9tYww=
-=er1S
------END PGP SIGNATURE-----
-
---qrfw5lltt6r2lzen--
+--
+Gustavo
