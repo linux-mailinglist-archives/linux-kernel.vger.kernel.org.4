@@ -2,187 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E3970CF5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9217270CF9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235718AbjEWAiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S232481AbjEWAlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjEWAM4 (ORCPT
+        with ESMTP id S235082AbjEWAMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:12:56 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2E92126;
-        Mon, 22 May 2023 17:01:12 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MNiQxD023670;
-        Tue, 23 May 2023 00:01:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=PFalLILKfIjbCKaYneMK+rufaWTVpgJFk4nGgwR2k9A=;
- b=REBF/Ee9s6I3twABHYt3lEieMW+eWaVVN806DBBaXWnhJ+0BhEHE8p+kfYCzGvGZtnSu
- vlOd9OePN5bCT9l7Wg5PtNHNI3+LUTKwwgO8besYSJliI1jPnDT9z8xSfYePw+fDlB3w
- ya+BgJ6PrnbqaoKZUBMoMMP2xLDF0J4EALn898lTeSCj4nJRGJtTGXXrcAEi9YXO3xAm
- 5aS8zPzwuLzrve91ff0v4l+9y6Y5jtKbxzPZKXoeZd3GqxtHBAyB/vO2xSUPJJ1XCXEW
- 3MBvSG88+6gZ25cGtnD0Iu8JP6mEIwyPd1Ss3FRlm3A6DUTLLWt3UavoLXrig6q1ZGjo rA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qracsh0km-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 00:01:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N013bR030083
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 00:01:03 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 22 May 2023 17:01:02 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v13 10/10] drm/msm/dpu: tear down DSC data path when DSC disabled
-Date:   Mon, 22 May 2023 17:00:39 -0700
-Message-ID: <1684800039-18231-11-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1684800039-18231-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1684800039-18231-1-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 22 May 2023 20:12:55 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2C2105;
+        Mon, 22 May 2023 17:00:48 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae3ed1b0d6so46850925ad.3;
+        Mon, 22 May 2023 17:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684800047; x=1687392047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RfShBrimcvfQvoSW9H7VPg8y8VhC7yAuAl2Q2us2MOE=;
+        b=Gn7T5NOLRH94HNqln1r1fynHLmaqyP3yvCtlj45POcIfD4MhgTa0WxwhIRmsftXEMk
+         Z7S8y5+Uqz9WUp7ztJWYEemAg0kwXHi21LruY3EPB04Gp40Wt9vSMseMkcNgOVI5w2zY
+         r1ZoLfNCge13xiYGhlg4RPCSWkKv7+KobtGOZaPkihe8V7PYaXIycKH3rqsPg/nEbqeY
+         Ek9aZdI99CXlRxegKY5K8BpHJEDs4NKJRO5z5mDs0tsi7heczzjrwz7vAmAEEqjVT6DQ
+         /vfdTSj098EnGa2feb+Rg2Gz13YaGL3QItCrHvp2MMZhBP2bJ9SGW+F79VsndBN2uhI5
+         JRog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684800048; x=1687392048;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RfShBrimcvfQvoSW9H7VPg8y8VhC7yAuAl2Q2us2MOE=;
+        b=ET2tg4Dl0V8u1u45eYFJKtqVUQC06myifn6TgNl/FWXNyTu0aWuEmCSvYXEIyfpkGe
+         vLBuvt6mpFTJ5i8Y0/QTRqnt2hxxLVRX+rEuljzqpuCcATpk+oIutNWq0e9jlHgV2xEF
+         FYa+2jk4OD4Yo0GZlIkDRS+Z8q2t3KmYlshGlZhbxtTwW9DbfEPTCzH8xDx92x89y9c4
+         8sZpEZqpv+nDefO7WXd70MRUZr+8EqW86CkDDsMRs4eVZQPsMlF1cRxEJyHdOdt1L7XK
+         PCaY3pBZSgKT2m9C9NSZOru1h079p0xZdnS+Ehc41EqHzbUPvQ4oXwKWY9DkD5Z/qd4Z
+         QaPA==
+X-Gm-Message-State: AC+VfDxsKr6rNX+2fZ/LmiP0P0w3/N9KTmeaR3OYhRBsJQBMv/dmn5DI
+        g7l+FGQul4f2qmf5y7BxjT+iev+92YQ=
+X-Google-Smtp-Source: ACHHUZ76t7JP0WL3FW9gcb6W5j0OuuhYuEntEmFDq/p38FuWTG7i3mSCL6Ax6ojcZaIUHNGGkbXWrw==
+X-Received: by 2002:a17:902:c20c:b0:1ab:d2c:a1a6 with SMTP id 12-20020a170902c20c00b001ab0d2ca1a6mr11179857pll.69.1684800047465;
+        Mon, 22 May 2023 17:00:47 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:54fa:e8a7:76de:888d])
+        by smtp.gmail.com with ESMTPSA id p13-20020a1709028a8d00b001a674fb0dd8sm5356394plo.247.2023.05.22.17.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 17:00:46 -0700 (PDT)
+Date:   Mon, 22 May 2023 17:00:43 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Dana Elfassy <delfassy@redhat.com>
+Cc:     eballetb@redhat.com, javierm@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dana Elfassy <dangel101@gmail.com>
+Subject: Re: [PATCH v3] Input: tests: add test to cover all
+ input_grab_device() function
+Message-ID: <ZGwCK3A+pFldJ23r@google.com>
+References: <20230522215514.722564-1-dangel101@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZCI698JQ102RgcIkMWXJ54OAAGtk8g0q
-X-Proofpoint-ORIG-GUID: ZCI698JQ102RgcIkMWXJ54OAAGtk8g0q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_18,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=945 spamscore=0
- malwarescore=0 phishscore=0 impostorscore=0 clxscore=1015 adultscore=0
- mlxscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220203
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522215514.722564-1-dangel101@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unset DSC_ACTIVE bit at dpu_hw_ctl_reset_intf_cfg_v1(),
-dpu_encoder_unprep_dsc() and dpu_encoder_dsc_pipe_clr() functions
-to tear down DSC data path if DSC data path was setup previous.
+On Tue, May 23, 2023 at 12:55:14AM +0300, Dana Elfassy wrote:
+> Currently input_grab_device() isn't covered by any tests
+> Thus, adding a test to cover the cases:
+> 1. The device is grabbed successfully
+> 2. Trying to grab a device that is already grabbed by another input
+>    handle
+> 
+> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+> Tested-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> Changes in v3:
+> 1. Retrieve test_handle variable to try and grab the device that's
+> currently grabbed by another handle
+> 2. Add verification that test_handle can indeed grab the device after
+> it's released by the handle that grabbed it
+> 3. Remove duplicated call for input_grab_device() in KUNIT_ASSERT_TRUE()
+> functions
+> Changes in v2:
+> - Use input_put_device() to decrement the refcount increased by get().
+> - Remove unnecessary struct input_handle test_handle variable.
+> 
+>  drivers/input/tests/input_test.c | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+> 
+> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
+> index 25bbf51b5c87..1939cc12bae0 100644
+> --- a/drivers/input/tests/input_test.c
+> +++ b/drivers/input/tests/input_test.c
+> @@ -124,10 +124,42 @@ static void input_test_match_device_id(struct kunit *test)
+>  	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
+>  }
+>  
+> +static void input_test_grab(struct kunit *test)
+> +{
+> +	struct input_dev *input_dev = test->priv;
+> +	struct input_handle test_handle;
+> +	struct input_handler handler;
+> +	struct input_handle handle;
+> +	struct input_device_id id;
+> +	int res;
+> +
+> +	handler.name = "handler";
+> +	handler.id_table = &id;
+> +
+> +	handle.dev = input_get_device(input_dev);
+> +	handle.name = dev_name(&input_dev->dev);
+> +	handle.handler = &handler;
+> +	res = input_grab_device(&handle);
+> +	KUNIT_ASSERT_TRUE(test, res == 0);
 
-Changes in V10:
--- pass ctl directly instead of dpu_enc to dsc_pipe_cfg()
--- move both dpu_encoder_unprep_dsc() and dpu_encoder_dsc_pipe_clr() to above phys_cleanup()
+Could you please tell me why you are using KUNIT_ASSERT_TRUE() here but
+KUNIT_ASSERT_EQ() below?
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 39 +++++++++++++++++++++++++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  |  7 ++++++
- 2 files changed, 46 insertions(+)
+> +
+> +	test_handle.dev = input_get_device(input_dev);
+> +	test_handle.name = dev_name(&input_dev->dev);
+> +	test_handle.handler = &handler;
+> +	res = input_grab_device(&test_handle);
+> +	KUNIT_ASSERT_EQ(test, res, -EBUSY);
+> +
+> +	input_release_device(&handle);
+> +	input_put_device(input_dev);
+> +	res = input_grab_device(&test_handle);
+> +	KUNIT_ASSERT_TRUE(test, res == 0);
+> +	input_put_device(input_dev);
+> +}
+> +
+>  static struct kunit_case input_tests[] = {
+>  	KUNIT_CASE(input_test_polling),
+>  	KUNIT_CASE(input_test_timestamp),
+>  	KUNIT_CASE(input_test_match_device_id),
+> +	KUNIT_CASE(input_test_grab),
+>  	{ /* sentinel */ }
+>  };
+>  
+> -- 
+> 2.40.1
+> 
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 7fca09e..3b416e1 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -2036,6 +2036,41 @@ static void dpu_encoder_helper_reset_mixers(struct dpu_encoder_phys *phys_enc)
- 	}
- }
- 
-+static void dpu_encoder_dsc_pipe_clr(struct dpu_hw_ctl *ctl,
-+				     struct dpu_hw_dsc *hw_dsc,
-+				     struct dpu_hw_pingpong *hw_pp)
-+{
-+	if (hw_dsc->ops.dsc_disable)
-+		hw_dsc->ops.dsc_disable(hw_dsc);
-+
-+	if (hw_pp->ops.disable_dsc)
-+		hw_pp->ops.disable_dsc(hw_pp);
-+
-+	if (hw_dsc->ops.dsc_bind_pingpong_blk)
-+		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, PINGPONG_NONE);
-+
-+	if (ctl->ops.update_pending_flush_dsc)
-+		ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
-+}
-+
-+static void dpu_encoder_unprep_dsc(struct dpu_encoder_virt *dpu_enc)
-+{
-+	/* coding only for 2LM, 2enc, 1 dsc config */
-+	struct dpu_encoder_phys *enc_master = dpu_enc->cur_master;
-+	struct dpu_hw_ctl *ctl = enc_master->hw_ctl;
-+	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
-+	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
-+	int i;
-+
-+	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
-+		hw_pp[i] = dpu_enc->hw_pp[i];
-+		hw_dsc[i] = dpu_enc->hw_dsc[i];
-+
-+		if (hw_pp[i] && hw_dsc[i])
-+			dpu_encoder_dsc_pipe_clr(ctl, hw_dsc[i], hw_pp[i]);
-+	}
-+}
-+
- void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
- {
- 	struct dpu_hw_ctl *ctl = phys_enc->hw_ctl;
-@@ -2086,8 +2121,12 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
- 					phys_enc->hw_pp->merge_3d->idx);
- 	}
- 
-+	if (dpu_enc->dsc)
-+		dpu_encoder_unprep_dsc(dpu_enc);
-+
- 	intf_cfg.stream_sel = 0; /* Don't care value for video mode */
- 	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
-+	intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
- 
- 	if (phys_enc->hw_intf)
- 		intf_cfg.intf = phys_enc->hw_intf->idx;
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index ad6983e..e28e8f8 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -582,6 +582,7 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 	u32 intf_active = 0;
- 	u32 wb_active = 0;
- 	u32 merge3d_active = 0;
-+	u32 dsc_active;
- 
- 	/*
- 	 * This API resets each portion of the CTL path namely,
-@@ -611,6 +612,12 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 		wb_active &= ~BIT(cfg->wb - WB_0);
- 		DPU_REG_WRITE(c, CTL_WB_ACTIVE, wb_active);
- 	}
-+
-+	if (cfg->dsc) {
-+		dsc_active = DPU_REG_READ(c, CTL_DSC_ACTIVE);
-+		dsc_active &= ~cfg->dsc;
-+		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, dsc_active);
-+	}
- }
- 
- static void dpu_hw_ctl_set_fetch_pipe_active(struct dpu_hw_ctl *ctx,
+Thanks.
+
 -- 
-2.7.4
-
+Dmitry
