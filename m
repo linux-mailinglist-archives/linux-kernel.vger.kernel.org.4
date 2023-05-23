@@ -2,100 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B857D70E372
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D6470E30D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238165AbjEWR1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S238103AbjEWRZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238156AbjEWR11 (ORCPT
+        with ESMTP id S238122AbjEWRZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:27:27 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20BF130
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:27:12 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d2e8a842cso8275b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:27:12 -0700 (PDT)
+        Tue, 23 May 2023 13:25:27 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3CD1BC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:25:01 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-510d92184faso243173a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:25:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684862832; x=1687454832;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wr5Y1AbC5Kt78Cige8N9lA89ZsVNn6MGAOTvD82Xhes=;
-        b=WTldKzUaYF/QsUJrGQyUPUk4T7QfuSDnzbO5uxdSr9QExW7/uZkZN2tVlqH5OjckrZ
-         Lvyf8VCVGnsZ0xBeX+yHJaaM2KU3JGjkEt29Mf4bgj5RprnzbsTyaqmfLbvJJ7iuY4d6
-         5iPgSRimHE5U53JOAjrgL6gARNgn9yAdJRMuLcHIE8yg2FLB/9DuB1hI47bnBHZEuaLB
-         lALQEmC3IwiQqbMc9H+7xWLl6JcuEL4+rGzCBgL5nng4MRPCxM1Efr7LMA90Is7FDl3Y
-         nGA751GN8n94gcsx8gTdz7arinWyqd/1BJ8R6OjH8TeIZrUwkGEbZSAItgxx0MWkXFnw
-         ISng==
+        d=linaro.org; s=google; t=1684862696; x=1687454696;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DEQuDajhaZ5cNizdu4KdcsUEK1KvsZFvK+NmAK64xCc=;
+        b=zqS4hmYdmyTgTuFuZBatzvy1P5XCncyzyB/SHx+DytMTt0EAR55RzyQyB7rzM5D/kD
+         729VdVKEtBqRWmDahNbOGMZXb+sHAr0PUit3bMCuqInzrlSwjmCzZOUVoClLI48qQKKj
+         pm55Cs3s7LC8YMF5xw6awXiGIirF5BJLgNppgroTrM8BwPwiC5rHsIxp6FTBdIo1VJJ2
+         Ffy41yHZJONUhAvnPhnCwBxGiPVFRv0dCa1zOo7PUHD//U+uuMoDarw1Z6TkpE0+acVT
+         qkWDpcBaLF8myHmvyEA0nrjKk8OK9ZaimM3xCNndN+sbG4UOarr7c+vxPViPgWwSJbwt
+         9Ggg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684862832; x=1687454832;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wr5Y1AbC5Kt78Cige8N9lA89ZsVNn6MGAOTvD82Xhes=;
-        b=NkkQ6C0cBDqEhmqv/iuMbo3Bh6SZCwosvZtBTBnQKReRK/W6TM0qYG4NjRa34YlcXW
-         OgKc7Ugo5l/y3OmKK8dtCNwfPBAoJgokbBhP+YYZYZgrodxnM9bb3NblUO+nLjQBdXLJ
-         guThf88k7jbT9IYtw2m2KrZkB0X3ttWnOs+ovyOrW68GgxqKMUwiSPJmJ0AJG7SGKgx0
-         Mrj1ILvxCwX5Uv/ANVRGLF3EBYUMCoLkmEzx7IsZdyzF3pxqQoeBnEk2JphDLnfteqED
-         eG950+TwFimSsSnRvb3Y2qWvNiES25vN+zt/f8yh3dl0szo5BcXV+pePQQDdwGPx4c54
-         Stzw==
-X-Gm-Message-State: AC+VfDwMMd66cCch3BBWyq8TNDVvUr/P3LmAyVuecSZLHQQYG+7J/bzR
-        q7qhdOI6I4xhJGV9zk8zzE8=
-X-Google-Smtp-Source: ACHHUZ6l0a1Pe8kJUHAg+kjIv6UxReiNdf6ysBDRIXlGUk2xbGzZELxgfBfcrJuHlk4C/maxzoO8lw==
-X-Received: by 2002:a05:6a00:2282:b0:643:b263:404 with SMTP id f2-20020a056a00228200b00643b2630404mr21862389pfe.33.1684862831639;
-        Tue, 23 May 2023 10:27:11 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.89])
-        by smtp.gmail.com with ESMTPSA id y23-20020aa78557000000b0063b8f17768dsm6071547pfn.129.2023.05.23.10.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 10:27:11 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     sre@kernel.org, jinpu.wang@ionos.com
-Cc:     linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] omap_ssi_port.c: Fix error checking for debugfs_create_dir
-Date:   Tue, 23 May 2023 22:24:34 +0500
-Message-Id: <20230523172434.13477-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1684862696; x=1687454696;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DEQuDajhaZ5cNizdu4KdcsUEK1KvsZFvK+NmAK64xCc=;
+        b=XSmAWeK8gQ4QbPU7iZ819uDZv20wzMOTimxTEC2F3dYAloSoAaQ0f3tBa9zAhUn6UH
+         Q/8AIyG5oE58jS5rHnbuADwpL0YaMifjkI43+znuutV4g3MLlIvXsaDje3R3RnyPAmzl
+         aKLju/KQ5AAGKkpYZFhuW+KYYdmTMwYOlHvn8iUjQ6jSfA+WcW6hqaZEGt9Z3w00dpCO
+         k7IzY5v1yf8j9UL8S7R+VKcRZSgp8kUhfKGg8QZeQxA7hUHpUiIxgL17S2oKzhcoIuJ9
+         ghXQ/mWpbuSfXUQXx9auX/2tI/uvdpgJuv61a0dIl0vtE2TrpzHUg2sfrQcDxzF+vtYa
+         jNNg==
+X-Gm-Message-State: AC+VfDyyuhZT7xag/RD6sMgOxXkgxRCBh4kHHgEnV0wPNsVg6yrXtZuh
+        FojHerdCpgH/yxOl481ceJtcnw==
+X-Google-Smtp-Source: ACHHUZ7hnAw8R6Rbp5a00MNSddIWqxi/0dPWaeG+2dd9cCNPdaO3LBC1H/D/J5DZ01kSz/JGCwiPAw==
+X-Received: by 2002:a17:907:7f09:b0:94f:8aff:c8b3 with SMTP id qf9-20020a1709077f0900b0094f8affc8b3mr13313466ejc.28.1684862695996;
+        Tue, 23 May 2023 10:24:55 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.206])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170906950700b0096f71ace804sm4638374ejx.99.2023.05.23.10.24.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 10:24:54 -0700 (PDT)
+Message-ID: <06d53c3d-d300-dca1-6877-b8745e0673e8@linaro.org>
+Date:   Tue, 23 May 2023 18:24:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dmaengine: at_hdmac: Repair bitfield macros for
+ peripheral ID handling
+Content-Language: en-US
+To:     Peter Rosin <peda@axentia.se>, LKML <linux-kernel@vger.kernel.org>
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <221d19e2-6b92-7f38-7d8a-a730f54c33ea@axentia.se>
+ <01e5dae1-d4b0-cf31-516b-423b11b077f1@axentia.se>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <01e5dae1-d4b0-cf31-516b-423b11b077f1@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the error checking in omap_ssi_port.c in
-debugfs_create_dir. The correct way to check if an error occurred
-is 'IS_ERR' inline function.
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
----
- drivers/hsi/controllers/omap_ssi_port.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hsi/controllers/omap_ssi_port.c b/drivers/hsi/controllers/omap_ssi_port.c
-index b9495b720f1b..7ad41599baa5 100644
---- a/drivers/hsi/controllers/omap_ssi_port.c
-+++ b/drivers/hsi/controllers/omap_ssi_port.c
-@@ -157,12 +157,12 @@ static int ssi_debug_add_port(struct omap_ssi_port *omap_port,
- 	struct hsi_port *port = to_hsi_port(omap_port->dev);
- 
- 	dir = debugfs_create_dir(dev_name(omap_port->dev), dir);
--	if (!dir)
-+	if (IS_ERR(dir))
- 		return -ENOMEM;
- 	omap_port->dir = dir;
- 	debugfs_create_file("regs", S_IRUGO, dir, port, &ssi_port_regs_fops);
- 	dir = debugfs_create_dir("sst", dir);
--	if (!dir)
-+	if (IS_ERR(dir))
- 		return -ENOMEM;
- 	debugfs_create_file_unsafe("divisor", 0644, dir, port,
- 				   &ssi_sst_div_fops);
--- 
-2.34.1
+On 5/23/23 18:20, Peter Rosin wrote:
+> The MSB part of the peripheral IDs need to go into the ATC_SRC_PER_MSB
+> and ATC_DST_PER_MSB fields. Not the LSB part.
+> 
+> This fixes a severe regression for TSE-850 devices (compatible
+> axentia,tse850v3) where output to the audio I2S codec (the main
+> purpose of the device) simply do not work.
+> 
+> Fixes: d8840a7edcf0 ("dmaengine: at_hdmac: Use bitfield access macros")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+
+> ---
+>  drivers/dma/at_hdmac.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
+> index 8858470246e1..6362013b90df 100644
+> --- a/drivers/dma/at_hdmac.c
+> +++ b/drivers/dma/at_hdmac.c
+> @@ -153,8 +153,6 @@
+>  #define ATC_AUTO		BIT(31)		/* Auto multiple buffer tx enable */
+>  
+>  /* Bitfields in CFG */
+> -#define ATC_PER_MSB(h)	((0x30U & (h)) >> 4)	/* Extract most significant bits of a handshaking identifier */
+> -
+>  #define ATC_SRC_PER		GENMASK(3, 0)	/* Channel src rq associated with periph handshaking ifc h */
+>  #define ATC_DST_PER		GENMASK(7, 4)	/* Channel dst rq associated with periph handshaking ifc h */
+>  #define ATC_SRC_REP		BIT(8)		/* Source Replay Mod */
+> @@ -181,10 +179,15 @@
+>  #define ATC_DPIP_HOLE		GENMASK(15, 0)
+>  #define ATC_DPIP_BOUNDARY	GENMASK(25, 16)
+>  
+> -#define ATC_SRC_PER_ID(id)	(FIELD_PREP(ATC_SRC_PER_MSB, (id)) |	\
+> -				 FIELD_PREP(ATC_SRC_PER, (id)))
+> -#define ATC_DST_PER_ID(id)	(FIELD_PREP(ATC_DST_PER_MSB, (id)) |	\
+> -				 FIELD_PREP(ATC_DST_PER, (id)))
+> +#define ATC_PER_MSB		GENMASK(5, 4)	/* Extract MSBs of a handshaking identifier */
+> +#define ATC_SRC_PER_ID(id)					       \
+> +	({ typeof(id) _id = (id);				       \
+> +	   FIELD_PREP(ATC_SRC_PER_MSB, FIELD_GET(ATC_PER_MSB, _id)) |  \
+> +	   FIELD_PREP(ATC_SRC_PER, _id); })
+> +#define ATC_DST_PER_ID(id)					       \
+> +	({ typeof(id) _id = (id);				       \
+> +	   FIELD_PREP(ATC_DST_PER_MSB, FIELD_GET(ATC_PER_MSB, _id)) |  \
+> +	   FIELD_PREP(ATC_DST_PER, _id); })
+>  
+>  
+>  
