@@ -2,280 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E05B70D255
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 05:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922A370D254
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 05:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjEWDXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 23:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S232469AbjEWDXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 23:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233597AbjEWDXL (ORCPT
+        with ESMTP id S232495AbjEWDXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 23:23:11 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F72618E
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 20:23:07 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Ax3eqaMWxknCcLAA--.19119S3;
-        Tue, 23 May 2023 11:23:06 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFLGZMWxk3ttvAA--.56063S2;
-        Tue, 23 May 2023 11:23:05 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v2] LoongArch: Add support to clone a time namespace
-Date:   Tue, 23 May 2023 11:23:04 +0800
-Message-Id: <1684812184-5849-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8BxFLGZMWxk3ttvAA--.56063S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxuw4DJrW7KF1kurW7JF48tFb_yoWxWF4fpF
-        WSkrnrtw4Utry8KryUJ3sruwn8Krn7Gw42gF1jgayfAF1I9ryDZr1vyr95AFWYy3ykGryx
-        WaySqr45ZF4DXw7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 22 May 2023 23:23:00 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3936BF;
+        Mon, 22 May 2023 20:22:58 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-25355609a04so5251314a91.0;
+        Mon, 22 May 2023 20:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684812178; x=1687404178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=flrKSz8wj7uBPovX7y+XUIJRT3fF/6yUn+0B3i6QKLQ=;
+        b=qMRvLgPaqR4txaUrf5nU0xI9zLcmfjZV20W9G7tOlAJnOALWFU4kZaBYjLUfsXWr6/
+         8WywItsot2a3wd3NETDp9+VWK7bH44iinPMenyhjnWtg1yFy43h+u/6H1LjaRKftURic
+         JE4vdmXHvnSplemzQOzwkwi0pP7uBWLi7LavbDwCcJZYHLz4ZXmRx3/5pf+46dqSXl4b
+         QSFkb6go880G+6On5eeUkiAwqT244pRa4Jzg/O3EBbZj4nthNgS9qOHxxyw9D2B1LA6q
+         y8JBFOzeKTh6a+pLfEI6LhpLyAC2O7skz0z433pP10qaDtpSpx6DdqVJOvZS5hND7pW5
+         csSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684812178; x=1687404178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=flrKSz8wj7uBPovX7y+XUIJRT3fF/6yUn+0B3i6QKLQ=;
+        b=OvZxGwVri16jXCzfdn1p1CO8c89uRYPzBEWjOa0mjMmG2Hb5KcVdgX8CNNblx1EmSn
+         Bo4ZtEZmDUGAIZpnwb/7u4a9hmbTyLCOJ3cj84RzRvl6NhhSuEWRwH6CaxCZnGdIYlcX
+         J3zRZd1cpXvEdNwRxP1QjsRYvTA/iD/KH3EKxu1uMDIe8CIxyQnYvowo7LLiT+WinASu
+         tTc8KZVg6/xb0HuK4H2lXQT+bQW6E9Nkg9zSld+NUQoHUSxMvCC1FaEejTXNV05TeQGQ
+         WrR/Nx5ZhEAe4FBGimfGJsKkYxrzbWpYgIqKCAqGT4KIdCUx72+fHxQMaH4/Me9zaJ+5
+         Qf8Q==
+X-Gm-Message-State: AC+VfDwcH1G2PkaadvNqF5mbHCBcje4gVHszFp9gWvHSburddmtj2QuX
+        cUkztjuar+tthIpYhoxUiXLRk6uvTH/yDz0EyJA=
+X-Google-Smtp-Source: ACHHUZ7z1WDZBaYSaTHU5IxjZOGjsVGkql682gndzZa3dcPcYMqiCcl4QqztD/zczGZbTNK4uUXOIa7CHSy497kFm/M=
+X-Received: by 2002:a17:90a:5303:b0:24e:4b1c:74d2 with SMTP id
+ x3-20020a17090a530300b0024e4b1c74d2mr12181474pjh.32.1684812178107; Mon, 22
+ May 2023 20:22:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230506195325.876871-1-aford173@gmail.com> <02e4e072-a2bb-8455-304d-49552ce9c866@oss.nxp.com>
+In-Reply-To: <02e4e072-a2bb-8455-304d-49552ce9c866@oss.nxp.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 22 May 2023 22:23:16 -0500
+Message-ID: <CAHCN7x+pFM7_yAWxVaUCKyLQ1A_5-F4sQ_t2k2iug7DdD9PwmQ@mail.gmail.com>
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+To:     Peng Fan <peng.fan@oss.nxp.com>
+Cc:     linux-clk@vger.kernel.org, aford@beaconembedded.com,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When execute the following command to test clone3 on LoongArch:
+On Mon, May 22, 2023 at 9:33=E2=80=AFPM Peng Fan <peng.fan@oss.nxp.com> wro=
+te:
+>
+>
+>
+> On 5/7/2023 3:53 AM, Adam Ford wrote:
+> > Caution: This is an external email. Please take care when clicking link=
+s or opening attachments. When in doubt, report the message using the 'Repo=
+rt this email' button
+> >
+> >
+> > Currently, certain clocks are derrived as a divider from their
+> > parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
+> > is set, the parent clock is not properly set which can lead
+> > to some relatively inaccurate clock values.
+> >
+> > Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
+> > cannot rely on calling a standard determine_rate function,
+> > because the 8m composite clocks have a pre-divider and
+> > post-divider. Because of this, a custom determine_rate
+> > function is necessary to determine the maximum clock
+> > division which is equivalent to pre-divider * the
+> > post-divider.
+> >
+> > With this added, the system can attempt to adjust the parent rate
+> > when the proper flags are set which can lead to a more precise clock
+> > value.
+> >
+> > On the imx8mplus, no clock changes are present.
+> > On the Mini and Nano, this can help achieve more accurate
+> > lcdif clocks. When trying to get a pixel clock of 31.500MHz
+> > on an imx8m Nano, the clocks divided the 594MHz down, but
+> > left the parent rate untouched which caused a calulation error.
+>
+> Not all clocks has pre/post div both.
+>
+> If CLK_SET_RATE_PARENT not set, would there be any issues for
+> other clocks?
 
-  # cd tools/testing/selftests/clone3 && make && ./clone3
+I did a dump of the clk_summary for Mini, Nano and Plus, and I found
+no changes to any clock other than the video_pll, and most of the
+clocks do not have CLK_SET_RATE_PARENT set, so from what I could tell
+it seemed harmless.
 
-we can see the following error info:
-
-  # [5719] Trying clone3() with flags 0x80 (size 0)
-  # Invalid argument - Failed to create new process
-  # [5719] clone3() with flags says: -22 expected 0
-  not ok 18 [5719] Result (-22) is different than expected (0)
-
-This is because if CONFIG_TIME_NS is not set, but the flag
-CLONE_NEWTIME (0x80) is used to clone a time namespace, it
-will return -EINVAL in copy_time_ns().
-
-Here is the related code in include/linux/time_namespace.h:
-
-  #ifdef CONFIG_TIME_NS
-  ...
-  struct time_namespace *copy_time_ns(unsigned long flags,
-				      struct user_namespace *user_ns,
-				      struct time_namespace *old_ns);
-  ...
-  #else
-  ...
-  static inline
-  struct time_namespace *copy_time_ns(unsigned long flags,
-				      struct user_namespace *user_ns,
-				      struct time_namespace *old_ns)
-  {
-	  if (flags & CLONE_NEWTIME)
-		  return ERR_PTR(-EINVAL);
-
-	  return old_ns;
-  }
-  ...
-  #endif
-
-Here is the complete call stack:
-
-  clone3()
-    kernel_clone()
-      copy_process()
-        copy_namespaces()
-          create_new_namespaces()
-            copy_time_ns()
-              clone_time_ns()
-
-Because CONFIG_TIME_NS depends on GENERIC_VDSO_TIME_NS, select
-GENERIC_VDSO_TIME_NS to enable CONFIG_TIME_NS to build the real
-implementation of copy_time_ns() in kernel/time/namespace.c.
-
-Additionally, it needs to define some arch dependent functions
-such as __arch_get_timens_vdso_data(), arch_get_vdso_data() and
-vdso_join_timens(), then the failed test can be fixed.
-
-At the same time, modify the layout of vvar to expand a page size
-for timens_data, and also map it to zero pfn before creating time
-namespace.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/Kconfig                         |  1 +
- arch/loongarch/include/asm/vdso/gettimeofday.h |  7 +++
- arch/loongarch/kernel/vdso.c                   | 63 +++++++++++++++++++++++---
- 3 files changed, 65 insertions(+), 6 deletions(-)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index d38b066..93b167f 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -80,6 +80,7 @@ config LOONGARCH
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
- 	select GENERIC_TIME_VSYSCALL
-+	select GENERIC_VDSO_TIME_NS
- 	select GPIOLIB
- 	select HAS_IOPORT
- 	select HAVE_ARCH_AUDITSYSCALL
-diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
-index 7b2cd37..1af88ac 100644
---- a/arch/loongarch/include/asm/vdso/gettimeofday.h
-+++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
-@@ -94,6 +94,13 @@ static __always_inline const struct vdso_data *__arch_get_vdso_data(void)
- 	return get_vdso_data();
- }
- 
-+#ifdef CONFIG_TIME_NS
-+static __always_inline
-+const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
-+{
-+	return get_vdso_data() + PAGE_SIZE;
-+}
-+#endif
- #endif /* !__ASSEMBLY__ */
- 
- #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
-diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
-index eaebd2e..5bb2b4f 100644
---- a/arch/loongarch/kernel/vdso.c
-+++ b/arch/loongarch/kernel/vdso.c
-@@ -14,6 +14,7 @@
- #include <linux/random.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-+#include <linux/time_namespace.h>
- #include <linux/timekeeper_internal.h>
- 
- #include <asm/page.h>
-@@ -22,7 +23,22 @@
- #include <vdso/vsyscall.h>
- #include <generated/vdso-offsets.h>
- 
-+/*
-+ * The layout of vvar:
-+ *
-+ *                 high
-+ * +----------------+----------------+
-+ * | timens_data    | PAGE_SIZE      |
-+ * +----------------+----------------+
-+ * | vdso_data      |                |
-+ * | vdso_pcpu_data | VDSO_DATA_SIZE |
-+ * +----------------+----------------+
-+ *                 low
-+ */
-+#define VVAR_SIZE (VDSO_DATA_SIZE + PAGE_SIZE)
-+
- extern char vdso_start[], vdso_end[];
-+extern unsigned long zero_pfn;
- 
- /* Kernel-provided data used by the VDSO. */
- static union {
-@@ -73,6 +89,37 @@ static int __init init_vdso(void)
- }
- subsys_initcall(init_vdso);
- 
-+#ifdef CONFIG_TIME_NS
-+struct vdso_data *arch_get_vdso_data(void *vvar_page)
-+{
-+	return (struct vdso_data *)(vvar_page);
-+}
-+
-+/*
-+ * The vvar mapping contains data for a specific time namespace, so when a
-+ * task changes namespace we must unmap its vvar data for the old namespace.
-+ * Subsequent faults will map in data for the new namespace.
-+ *
-+ * For more details see timens_setup_vdso_data().
-+ */
-+int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
-+{
-+	struct mm_struct *mm = task->mm;
-+	struct vm_area_struct *vma;
-+
-+	VMA_ITERATOR(vmi, mm, 0);
-+
-+	mmap_read_lock(mm);
-+	for_each_vma(vmi, vma) {
-+		if (vma_is_special_mapping(vma, &vdso_info.data_mapping))
-+			zap_vma_pages(vma);
-+	}
-+	mmap_read_unlock(mm);
-+
-+	return 0;
-+}
-+#endif
-+
- static unsigned long vdso_base(void)
- {
- 	unsigned long base = STACK_TOP;
-@@ -88,7 +135,7 @@ static unsigned long vdso_base(void)
- int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- {
- 	int ret;
--	unsigned long vvar_size, size, data_addr, vdso_addr;
-+	unsigned long size, data_addr, vdso_addr;
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 	struct loongarch_vdso_info *info = current->thread.vdso;
-@@ -100,17 +147,16 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	 * Determine total area size. This includes the VDSO data itself
- 	 * and the data pages.
- 	 */
--	vvar_size = VDSO_DATA_SIZE;
--	size = vvar_size + info->size;
-+	size = VVAR_SIZE + info->size;
- 
- 	data_addr = get_unmapped_area(NULL, vdso_base(), size, 0, 0);
- 	if (IS_ERR_VALUE(data_addr)) {
- 		ret = data_addr;
- 		goto out;
- 	}
--	vdso_addr = data_addr + VDSO_DATA_SIZE;
-+	vdso_addr = data_addr + VVAR_SIZE;
- 
--	vma = _install_special_mapping(mm, data_addr, vvar_size,
-+	vma = _install_special_mapping(mm, data_addr, VVAR_SIZE,
- 				       VM_READ | VM_MAYREAD,
- 				       &info->data_mapping);
- 	if (IS_ERR(vma)) {
-@@ -121,7 +167,12 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	/* Map VDSO data page. */
- 	ret = remap_pfn_range(vma, data_addr,
- 			      virt_to_phys(&loongarch_vdso_data) >> PAGE_SHIFT,
--			      vvar_size, PAGE_READONLY);
-+			      VDSO_DATA_SIZE, PAGE_READONLY);
-+	if (ret)
-+		goto out;
-+
-+	ret = remap_pfn_range(vma, data_addr + VDSO_DATA_SIZE, zero_pfn,
-+			      PAGE_SIZE, PAGE_READONLY);
- 	if (ret)
- 		goto out;
- 
--- 
-2.1.0
-
+>
+> Regards,
+> Peng.
+>
+> >
+> > Before:
+> > video_pll              594000000
+> >    video_pll_bypass     594000000
+> >      video_pll_out      594000000
+> >        disp_pixel       31263158
+> >          disp_pixel_clk 31263158
+> >
+> > Variance =3D -236842 Hz
+> >
+> > After this patch:
+> > video_pll               31500000
+> >    video_pll_bypass      31500000
+> >      video_pll_out       31500000
+> >        disp_pixel        31500000
+> >          disp_pixel_clk  31500000
+> >
+> > Variance =3D 0 Hz
+> >
+> > All other clocks rates and parent were the same.
+> > Similar results on imx8mm were found.
+> >
+> > Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to de=
+termine_rate"")
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > ---
+> > V2:  Fix build warning found by build bot and fix prediv_value
+> >       and div_value because the values stored are the divisor - 1,
+> >       so we need to add 1 to the values to be correct.
+> >
+> > diff --git a/drivers/clk/imx/clk-composite-8m.c b/drivers/clk/imx/clk-c=
+omposite-8m.c
+> > index cbf0d7955a00..7a6e3ce97133 100644
+> > --- a/drivers/clk/imx/clk-composite-8m.c
+> > +++ b/drivers/clk/imx/clk-composite-8m.c
+> > @@ -119,10 +119,41 @@ static int imx8m_clk_composite_divider_set_rate(s=
+truct clk_hw *hw,
+> >          return ret;
+> >   }
+> >
+> > +static int imx8m_divider_determine_rate(struct clk_hw *hw,
+> > +                                     struct clk_rate_request *req)
+> > +{
+> > +       struct clk_divider *divider =3D to_clk_divider(hw);
+> > +       int prediv_value;
+> > +       int div_value;
+> > +
+> > +       /* if read only, just return current value */
+> > +       if (divider->flags & CLK_DIVIDER_READ_ONLY) {
+> > +               u32 val;
+> > +
+> > +               val =3D readl(divider->reg);
+> > +               prediv_value =3D val >> divider->shift;
+> > +               prediv_value &=3D clk_div_mask(divider->width);
+> > +               prediv_value++;
+> > +
+> > +               div_value =3D val >> PCG_DIV_SHIFT;
+> > +               div_value &=3D clk_div_mask(PCG_DIV_WIDTH);
+> > +               div_value++;
+> > +
+> > +               return divider_ro_determine_rate(hw, req, divider->tabl=
+e,
+> > +                                                PCG_PREDIV_WIDTH + PCG=
+_DIV_WIDTH,
+> > +                                                divider->flags, prediv=
+_value * div_value);
+> > +       }
+> > +
+> > +       return divider_determine_rate(hw, req, divider->table,
+> > +                                     PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
+> > +                                     divider->flags);
+> > +}
+> > +
+> >   static const struct clk_ops imx8m_clk_composite_divider_ops =3D {
+> >          .recalc_rate =3D imx8m_clk_composite_divider_recalc_rate,
+> >          .round_rate =3D imx8m_clk_composite_divider_round_rate,
+> >          .set_rate =3D imx8m_clk_composite_divider_set_rate,
+> > +       .determine_rate =3D imx8m_divider_determine_rate,
+> >   };
+> >
+> >   static u8 imx8m_clk_composite_mux_get_parent(struct clk_hw *hw)
+> > --
+> > 2.39.2
+> >
