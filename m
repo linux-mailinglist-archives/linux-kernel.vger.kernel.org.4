@@ -2,408 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542C370E0CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3C470E0D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjEWPob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S237428AbjEWPqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236849AbjEWPo3 (ORCPT
+        with ESMTP id S237029AbjEWPq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:44:29 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2847DD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:44:27 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba81b24c1deso15156954276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:44:27 -0700 (PDT)
+        Tue, 23 May 2023 11:46:28 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A0F126
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:46:25 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6042d60b5so26592645e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:46:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684856667; x=1687448667;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QDHc53bZmqIqUAnat9C7bwzMrYIxO5J3dPTUYBJnfZE=;
-        b=Vgn+Kkp741xrj6z/R/ZKC7DXK6xoGHPiPFCoYSF0v1JbJB54V+yJlynEPLJKvrumTL
-         +AZi+cSGWfXYD5kq6DfwYMbU9DOYLKfW39Sxl9/NEsWpxLKqYCStTRjbAcfPMb3RVLo6
-         Ry5ZUDJI8jIuJhEMwR8vHh8muGQ8+laQ9eI++Os2JlZ3SwfqSUmTWDLlxuLCpaqlRsez
-         fJkn4tGnJ+gRUxG5EnOWDWZPpj4Udmlx/a3t0++443OpBL0Lba/782+QTe1jrqwspkXB
-         nQQQNa7GePPjOlJJKpLVq238XomSml8qJgccIBYPvqXi3wS+Lp0DLN5M8iNlszCLbj9B
-         Y3GQ==
+        d=linaro.org; s=google; t=1684856783; x=1687448783;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PfRw2ALokx9vLy8rQUgzg1qNBvtdQEE/4htl4GPyFIo=;
+        b=nWNoA6Sjt7sar6bT5Wo7aS7Yc7m34FIb/IPgWD81u2XmfxqZy8KlLpQjOWv16/jon5
+         r9ollhVW6YH7NfbuUpGGiFI2PoQsBLoeInpaFEAFlbMtNr/hC+EMEAcNhtOpzJEyLd54
+         7C+AXOqYLclUAvF/sNsb2Bph/vJoPsj+7wFJnrV9n36DSEjRrJ5DivQ7lCMZJVhG2E+x
+         osQRnx+JV6XS7XazzwU6kFsLuDGgV0o3IEblDcwD6iDseVAZKJZb3xcMuuydJ0O53+D/
+         1kAnyuwPYstnRQs46f5u26CXhFu20A3z+IeYSdm+azQaZs3NGE6eO/K3Ila8h2n5Gpqw
+         TGZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684856667; x=1687448667;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QDHc53bZmqIqUAnat9C7bwzMrYIxO5J3dPTUYBJnfZE=;
-        b=EH4MI5qX4LRGbVpSHKmYzdncTIU5XWtVqjM4sBZek80SRsuht2nUN49gA2BQb9Sean
-         /m7RczAC08KP7tfSzZTIifQiT1b75kalTZC8yu7XevXvpJGiJ76UzDFM8vygl04BnNS6
-         Xi/ndaQnMjDtdsHkP/K/grVM4ThWLifH3DbA/YOEmZrW4Ku7+7+iVtmMGpqSVi3sbbf0
-         qzJHos576uaz0rDeCxM+yfQ6B3znQdrZt7gvlcTEK0s4oBeds/N/iavqhKhj1K4c8mO9
-         08eBsDb2qZBl8Evllsb4IvwxQjFuFPK+CRKTzde9hogMpRfgFibMD+cOK//1EbkOVqn4
-         Hh9g==
-X-Gm-Message-State: AC+VfDzOv4Fap2AG+URy4dvPcA7oEzsOuJAxgbUDzzLHT7G2HNVM5dOP
-        zC7nVJj35XUq0nuvR8egc+REEtEZTVU=
-X-Google-Smtp-Source: ACHHUZ6B3oaUsi+ZJMd0uNjJjb3QcQdYtrO1DvYWUMIB8rCIIDCduDFQNU4LDgknZQ0l7eadMQ8Xamj1gWw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:c091:0:b0:ba8:92bd:134c with SMTP id
- c139-20020a25c091000000b00ba892bd134cmr8887577ybf.0.1684856667142; Tue, 23
- May 2023 08:44:27 -0700 (PDT)
-Date:   Tue, 23 May 2023 08:44:25 -0700
-In-Reply-To: <719a6b42-fd91-8eb4-f773-9ed98d2fdb07@amd.com>
-Mime-Version: 1.0
-References: <20230411125718.2297768-1-aik@amd.com> <20230411125718.2297768-6-aik@amd.com>
- <ZGv9Td4p1vtXC0Hy@google.com> <719a6b42-fd91-8eb4-f773-9ed98d2fdb07@amd.com>
-Message-ID: <ZGzfWQub4FQOrEtw@google.com>
-Subject: Re: [PATCH kernel v5 5/6] KVM: SEV: Enable data breakpoints in SEV-ES
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pankaj Gupta <pankaj.gupta@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684856783; x=1687448783;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PfRw2ALokx9vLy8rQUgzg1qNBvtdQEE/4htl4GPyFIo=;
+        b=D4XUvtloPLKjl2q/JBCf70HeDGaZ+DMeUAGMtyGBHnUeIwTilw2UXjqGGMp1SXjEpo
+         v4L4W7+Ls4T0peGpUNutVGQUxPCV2nRtIhIuoFnpdlXuzVTAvs16q6eRmky2Jo/C2xeC
+         keiwg3VheIH3z8Cs4HK4JtsRfOM+bFY1iExEB8RYj7560+1xAO0BOLn5a2MO9hkNqAVV
+         mBBeQ6cjO20lQQLKSRlyPG22SaAjkA3BY/1TxBLJD5qs5UBlCCEyErml5sOd0xuZuc3Z
+         JVVw5oMNqZE4jtagRoBY/oRQK7nXmtELumrSUDiQyaLwo3hyglc5RKDlgBwLCsh0ANTq
+         sMrQ==
+X-Gm-Message-State: AC+VfDyh29ZCHj0oLyTbk8lFw35WizHBDaY8JJNlX0R9a6PKJQ9vsXI/
+        AcPVWl+jBCJ+HNTFn6uqKbVTgg==
+X-Google-Smtp-Source: ACHHUZ71Rz/9C0SXOP97Z5WNP/e5538De6w5FC/OjCJcrWWF8rV5viic9V4O3MIuQsYQihYn5e5MXA==
+X-Received: by 2002:a1c:e905:0:b0:3f5:fbd0:94ab with SMTP id q5-20020a1ce905000000b003f5fbd094abmr7809138wmc.3.1684856783483;
+        Tue, 23 May 2023 08:46:23 -0700 (PDT)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id f4-20020a1c6a04000000b003f1978bbcd6sm3374063wmc.3.2023.05.23.08.46.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 08:46:22 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 1/2] ASoC: codecs: wsa883x: do not set can_multi_write flag
+Date:   Tue, 23 May 2023 16:46:04 +0100
+Message-Id: <20230523154605.4284-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023, Alexey Kardashevskiy wrote:
->=20
->=20
-> On 23/5/23 09:39, Sean Christopherson wrote:
-> > On Tue, Apr 11, 2023, Alexey Kardashevskiy wrote:
-> > > Prior to SEV-ES, KVM saved/restored host debug registers upon switchi=
-ng
-> > > to/from a VM. Changing those registers inside a running SEV VM
-> > > triggered #VMEXIT to KVM.
-> >=20
-> > Please, please don't make it sound like some behavior is *the* one and =
-only behavior.
-> > *KVM* *chooses* to intercept debug register accesses.  Though I would o=
-mit this
-> > paragraph (and largely the next) entirely, IMO it's safe to assume the =
-reader has
-> > a basic understanding of how KVM deals with DRs and #DBs.
->=20
-> Out of curiosity - is ARM similar in this regard, interceptions and stuff=
-?
+regmap-sdw does not support multi register writes, so there is
+no point in setting this flag. This also leads to incorrect
+programming of WSA codecs with regmap_multi_reg_write() call.
 
-Yes.  The granularity of interceptions varies based on the architectural re=
-vision,
-and presumably there are things that always trap.  But the core concept of =
-letting
-software decide what to intercept is the same.
+This invalid configuration should have been rejected by regmap-sdw.
 
-> > > SEV-ES added encrypted state (ES) which uses an encrypted page
-> > > for the VM state (VMSA). The hardware saves/restores certain register=
-s
-> > > on VMRUN/VMEXIT according to a swap type (A, B, C), see
-> > > "Table B-3. Swap Types" in the AMD Architecture Programmer=E2=80=99s =
-Manual
-> > > volume 2.
-> > >=20
-> > > The DR6 and DR7 registers have always been swapped as Type A for SEV-=
-ES
-> >=20
-> > Please rewrite this to just state what the behavior is instead of "Type=
- A" vs.
-> > "Type B".  Outside of AMD, the "type a/b/c" stuff isn't anywhere near u=
-biquitous
-> > enough to justify obfuscating super simple concepts.
-> >=20
-> > Actually, this feature really has nothing to do with Type A vs. Type B,=
- since
-> > that's purely about host state.
->=20
-> Mmm. Nothing? If the feature is enabled and DR[0-3] are not saved in HOST=
-SA,
-> then the host looses debug state because of the working feature.
->=20
-> > I assume the switch from Type A to Type B is a
-> > side effect, or an opportunistic optimization?
->=20
-> There is no switch. DR[67] were and are one type, and the other DRs were =
-not
-> swapped and now are, but with a different Swap Type.
+Fixes: 43b8c7dc85a1 ("ASoC: codecs: add wsa883x amplifier support")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ sound/soc/codecs/wsa883x.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Ah, this is what I missed.
+diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
+index b83b5b0d4bab..2faf66c60703 100644
+--- a/sound/soc/codecs/wsa883x.c
++++ b/sound/soc/codecs/wsa883x.c
+@@ -946,7 +946,6 @@ static struct regmap_config wsa883x_regmap_config = {
+ 	.writeable_reg = wsa883x_writeable_register,
+ 	.reg_format_endian = REGMAP_ENDIAN_NATIVE,
+ 	.val_format_endian = REGMAP_ENDIAN_NATIVE,
+-	.can_multi_write = true,
+ 	.use_single_read = true,
+ };
+ 
+-- 
+2.21.0
 
-> And the patch saves DR[0-3] in HOSTSA but not DR[67] and this deserves so=
-me
-> explaining why is that.
->=20
-> > Regardless, something like this is a lot easier for a human to read.  I=
-t's easy
-> > enough to find DebugSwap in the APM (literally took me longer to find m=
-y copy of
-> > the PDF).
->=20
-> It is also easy to find "Swap Types" in the APM...
-
-Redirecting readers to specs for gory details is fine.  Redirecting for bas=
-ic,
-simple functionality is not.  Maybe the swap types will someday be common k=
-nowledge
-in KVM, and an explanation will no longer be necessary, but we are nowhere =
-near
-that point.
-
-> >    Add support for "DebugSwap for SEV-ES guests", which provides suppor=
-t
-> >    for swapping DR[0-3] and DR[0-3]_ADDR_MASK on VMRUN and VMEXIT, i.e.
-> >    allows KVM to expose debug capabilities to SEV-ES guests.  Without
-> >    DebugSwap support, the CPU doesn't save/load _guest_ debug registers=
-,
->=20
-> But it does save/load DR6 and DR7.
->=20
-> >    and KVM cannot manually context switch guest DRs due the VMSA being
-> >    encrypted.
-> >=20
-> >    Enable DebugSwap if and only if the CPU also supports NoNestedDataBp=
-,
-> >    which causes the CPU to ignore nested #DBs, i.e. #DBs that occur whe=
-n
-> >    vectoring a #DB.
->=20
-> (english question) What does "vectoring" mean here precisely? Handling?
-> Processing?
-
-It's not really an English thing.  "Vectoring" is, or at least was, Intel t=
-erminology
-for describing the flow from the initial detection of an exception to the e=
-xception's
-delivery to software, e.g. covers the IDT lookup, any GDT/LDT lookups, push=
-ing
-information on the stack, fetching the software exception handler, etc.  Im=
-portantly,
-it describes the period where there are no instructions retired and thus uc=
-ode doesn't
-open event windows, i.e. where triggering another, non-contributory excepti=
-on will
-effectively "hang" the CPU (at least on CPUs without Intel's "notify" VM-Ex=
-it support).
-
-> >    the host by putting the CPU into an infinite loop of vectoring #DBs
-> >    (see https://bugzilla.redhat.com/show_bug.cgi?id=3D1278496)
->=20
-> Good one, thanks for the link.
->=20
-> >=20
-> >    Set the features bit in sev_es_sync_vmsa() which is the last point
-> >    when VMSA is not encrypted yet as sev_(es_)init_vmcb() (where the mo=
-st
-> >    init happens) is called not only when VCPU is initialized but also o=
-n
-> >    intrahost migration when VMSA is encrypted.
-> >=20
-> > > guests, but a new feature is available, identified via
-> > > CPUID Fn8000001F_EAX[14] "DebugSwap for SEV-ES guests", that provides
-> > > support for swapping additional debug registers. DR[0-3] and
-> > > DR[0-3]_ADDR_MASK are swapped as Type B when SEV_FEATURES[5] (DebugSw=
-ap)
-> > > is set.
-> > >=20
-> > > Enable DebugSwap for a VMSA but only do so if CPUID Fn80000021_EAX[0]
-> > > ("NoNestedDataBp", "Processor ignores nested data breakpoints") is
-> > > supported by the SOC as otherwise a malicious SEV-ES guest can set up
-> > > data breakpoints on the #DB IDT entry/stack and cause an infinite loo=
-p.
-> > > Set the features bit in sev_es_sync_vmsa() which is the last point
-> > > when VMSA is not encrypted yet as sev_(es_)init_vmcb() (where the mos=
-t
-> > > init happens) is called not only when VCPU is initialized but also on
-> > > intrahost migration when VMSA is encrypted.
-> > >=20
-> > > Eliminate DR7 and #DB intercepts as:
-> > > - they are not needed when DebugSwap is supported;
-> >=20
-> > "not needed" isn't sufficient justification.  KVM doesn't strictly need=
- to do a
-> > lot of things, but does them anyways for a variety of reasons.  E.g. #D=
-B intercept
-> > is also not needed when NoNestedDataBp is supported and vcpu->guest_deb=
-ug=3D=3D0, i.e.
-> > this should clarify why KVM doesn't simply disable #DB intercepts for _=
-all_ VMs
-> > when NoNestedDataBp is support.  Presumably the answer is "because it's=
- simpler
-> > than toggling #DB interception for guest_debug.
->=20
-> TBH I did not have a good answer but from the above I'd say we want to
-> disable #DB intercepts in a separate patch, just as you say below.
->=20
-> > Actually, can't disabling #DB interception for DebugSwap SEV-ES guests =
-be a
-> > separate patch?  KVM can still inject #DBs for SEV-ES guests, no?
->=20
-> Sorry for my ignorance but what is the point of injecting #DB if there is=
- no
-> way of changing the guest's DR7?
-
-Well, _injecting_ the #DB is necessary for correctness from the guest's per=
-spective.
-"What's the point of _intercepting_ #DB" is the real question.  And for SEV=
--ES guests
-with DebugSwap, there is no point, which is why I agree that KVM should dis=
-able
-interception in that case.  What I'm calling out is that disabling #Db inte=
-rception
-isn't _necessary_ for correctness (unless I'm missing something), which mea=
-ns that
-it can and should go in a separate patch.
-
-> > As for DR7, the real justification is that, as above, KVM can't modify =
-guest DR7,
-> > and intercepting DR7 would completely defeat the purpose of enabling De=
-bugSwap.
-> >=20
-> > > - #VC for these intercepts is most likely not supported anyway and
-> > > kills the VM.
-> >=20
-> > I don't see how this is relevant or helpful.  What the guest may or may=
- not do in
-> > response to a #VC on a DR7 write has no bearing on KVM's behavior.
->=20
-> Readers of the patch may wonder of the chances of breaks guests. Definite=
-ly
-> helps me to realize there is likely to be some sort of panic() in the gue=
-st
-> if such intercept happens.
-
-But that's irrelevant.  Intercepting DR7 writes will break the guest regard=
-less
-of how the guest deals with the #VC.  If the guest eats the #VC and continu=
-es on,
-the debug capabilities expected by the guest will still be missing, i.e. KV=
-M has
-broken the functionality of the guest.  I am total ok if the changelog desc=
-ribes
-the _possible_ scenarios (within reason), e.g. that the guest will either p=
-anic
-on an unexpected #VC or lose debug capabilities that were promised.  What I=
-'m
-objecting to is speculating on what the guest is _likely_ to do, and especi=
-ally
-using that speculation as justification for doing something in KVM.
-
-> > > Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
-> > > Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-> > > ---
-> >=20
-> > ...
-> >=20
-> > > @@ -3048,6 +3066,18 @@ void sev_es_prepare_switch_to_guest(struct sev=
-_es_save_area *hostsa)
-> > >   	/* MSR_IA32_XSS is restored on VMEXIT, save the currnet host value=
- */
-> > >   	hostsa->xss =3D host_xss;
-> > > +
-> > > +	/* The DebugSwap SEV feature does Type B swaps of DR[0-3] */
-> >=20
-> > Since dangling a carrot didn't work[*], I'm going to resort to extortio=
-n :-)
-> > Can you fold the below somewhere before this patch, and then tweak this=
- comment
-> > to say something like:
-> >=20
-> > 	/*
-> > 	 * If DebugSwap is enabled, debug registers are loaded but NOT saved b=
-y
-> > 	 * the CPU (Type-B).  If DebugSwap is disabled/unsupported, the CPU bo=
-th
-> > 	 * saves and loads debug registers (Type-A).
-> > 	 */
->=20
-> Sure but...
->=20
-> >=20
-> > [*] https://lore.kernel.org/all/YzOTOzUzKPQSqURo@google.com/
-> >=20
-> >=20
-> > From: Sean Christopherson <seanjc@google.com>
-> > Date: Mon, 22 May 2023 16:29:52 -0700
-> > Subject: [PATCH] KVM: SVM: Rewrite sev_es_prepare_switch_to_guest()'s c=
-omment
-> >   about swap types
->=20
->=20
-> ... I am missing the point here. You already wrote the patch below which =
-1)
-> you are happy about 2) you can push out right away to the upstream. Are y=
-ou
-> suggesting that I repost it?
-
-I am asking you to include it in your series because the comment I suggeste=
-d above
-(for DebugSwap) loosely depends on the revamped comment for sev_es_prepare_=
-switch_to_guest()
-as a whole.  I would like to settle on the exact wording for all of the com=
-ments
-in sev_es_prepare_switch_to_guest() in a single series instead of having di=
-sjoint
-threads.
-
-> > Rewrite the comment(s) in sev_es_prepare_switch_to_guest() to explain t=
-he
-> > swap types employed by the CPU for SEV-ES guests, i.e. to explain why K=
-VM
-> > needs to save a seemingly random subset of host state, and to provide a
-> > decoder for the APM's Type-A/B/C terminology.
-> >=20
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   arch/x86/kvm/svm/sev.c | 25 +++++++++++++++----------
-> >   1 file changed, 15 insertions(+), 10 deletions(-)
-> >=20
-> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> > index 69ae5e1b3120..1e0e9b08e491 100644
-> > --- a/arch/x86/kvm/svm/sev.c
-> > +++ b/arch/x86/kvm/svm/sev.c
-> > @@ -3017,19 +3017,24 @@ void sev_es_vcpu_reset(struct vcpu_svm *svm)
-> >   void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa)
-> >   {
-> >   	/*
-> > -	 * As an SEV-ES guest, hardware will restore the host state on VMEXIT=
-,
-> > -	 * of which one step is to perform a VMLOAD. KVM performs the
-> > -	 * corresponding VMSAVE in svm_prepare_guest_switch for both
-> > -	 * traditional and SEV-ES guests.
->=20
->=20
-> When I see "traditional", I assume there was one single x86 KVM before sa=
-y
-> 2010 which was slow, emulated a lot but worked exactly the same on Intel =
-and
-> AMD. Which does not seem to ever be the case. May be say "SVM" here?
-
-This is the code being removed.  I agree that "traditional" is ambiguous, w=
-hich
-is why I want to delete it :-)
-
-> > +	 * All host state for SEV-ES guests is categorized into three swap ty=
-pes
-> > +	 * based on how it is handled by hardware during a world switch:
-> > +	 *
-> > +	 * A: VMRUN:   Host state saved in host save area
-> > +	 *    VMEXIT:  Host state loaded from host save area
-> > +	 *
-> > +	 * B: VMRUN:   Host state _NOT_ saved in host save area
-> > +	 *    VMEXIT:  Host state loaded from host save area
-> > +	 *
-> > +	 * C: VMRUN:   Host state _NOT_ saved in host save area
-> > +	 *    VMEXIT:  Host state initialized to default(reset) values
-> > +	 *
-> > +	 * Manually save type-B state, i.e. state that is loaded by VMEXIT bu=
-t
-> > +	 * isn't saved by VMRUN, that isn't already saved by VMSAVE (performe=
-d
-> > +	 * by common SVM code).
