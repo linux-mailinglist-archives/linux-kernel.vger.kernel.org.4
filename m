@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF86C70D98D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FCC70D993
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236434AbjEWJve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S236436AbjEWJxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236156AbjEWJtb (ORCPT
+        with ESMTP id S236403AbjEWJvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:49:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0881E7A;
-        Tue, 23 May 2023 02:49:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3376060D2D;
-        Tue, 23 May 2023 09:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E9FDC433EF;
-        Tue, 23 May 2023 09:49:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684835357;
-        bh=F/kNVB79mMMqUME2ygzIJRbu7qcW7y1FnAv1mRYfEH8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AOY3svIebr1ZJz2DqCK1GD5W8HSGiLHYu7cLu4k20tmfrNp44PHB3dNw9SHjv4LPJ
-         xeeilKV/n25FpF6uSKFm14nsNYHvq1zbs//3T6Fq4+Xc6GMybkU+eIeMw1DIqeyMGg
-         T0oF3ExydPAIHEewvW9crtw9QS9VdHZocJugetsBMpAbfPbreCHUqcYCIZkIAM0YTi
-         fj0scCGwt87RkMtSthHiZj3B7NfEoJInXpFLl7H52CVwm3e740LSOwMsd5Rfy0y/kq
-         HQ6Q7EJaQYbiFU0Bzj6q9nGN+z5Od1pc7eBUT1jSmPuWnHxwMqIJxW68T3Uzkt225D
-         QDfgj5jJeluHg==
-Date:   Tue, 23 May 2023 11:49:10 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-Message-ID: <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
- <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
- <20230522133409.5c6e839a@kernel.org>
+        Tue, 23 May 2023 05:51:32 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7F5E7C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:50:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684835403; x=1716371403;
+  h=from:to:subject:in-reply-to:references:date:message-id:
+   mime-version;
+  bh=z+PhmPjSvAdptOmQesLi0iHqQbygzxTXNrjRxXGKZnA=;
+  b=fd4eHArl+uLYRLw26dzwqU8S6TMb33JC7b3wJ4aD9kubheNSbCeI0jCL
+   QACTZeXpJrNZAwMiKvQ4dXiJG2buEtkptOj3W69dCO+89drwwWcrxLU/6
+   qBA9DQs+amYPwtwxlsZnW09XWl2yfOX406nICUR9xGuJOLD0a59jxd8nu
+   e6+T6sTrVZWyg+XL8/UI2iNRgiLz+OmqxaOPUAqP6upFrmYk1TPI4vd0e
+   HYzJT4s0NadwzJ+sqB3A38+OBaSa5a2CaIbxw7s9aL581BqdD/n84vzc9
+   afPJ5AOTpvfwMosR9VjRYJJbduODlRhlJzKQzJOGeMkLYTewQWYRFhA/5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="342651762"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="342651762"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:50:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="681325468"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="681325468"
+Received: from chauvina-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.70])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:49:59 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH] drm/i915: constify pointers to hwmon_channel_info
+In-Reply-To: <87a5y3guvv.fsf@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230511175446.282041-1-krzysztof.kozlowski@linaro.org>
+ <87cz2zgvdd.fsf@intel.com>
+ <2a1b81da-39c8-4111-7e42-18f5f2f557c4@linaro.org>
+ <87a5y3guvv.fsf@intel.com>
+Date:   Tue, 23 May 2023 12:49:57 +0300
+Message-ID: <87a5xvml6i.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230522133409.5c6e839a@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 01:34:09PM -0700, Jakub Kicinski wrote:
-> On Mon, 22 May 2023 15:24:37 +0200 Alexander Mikhalitsyn wrote:
-> > v6:
-> > 	- disable feature when CONFIG_UNIX=n/m (pidfd_prepare API is not exported to modules)
-> 
-> IMHO hiding the code under #if IS_BUILTIN(CONFIG_UNRELATED) is
-> surprising to the user and.. ugly?
-> 
-> Can we move scm_pidfd_recv() into a C source and export that?
-> That should be less controversial than exporting pidfd_prepare()
-> directly?
+On Wed, 17 May 2023, Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> On Wed, 17 May 2023, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>> On 17/05/2023 11:28, Jani Nikula wrote:
+>>> On Thu, 11 May 2023, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>>> Statically allocated array of pointers to hwmon_channel_info can be made
+>>>> const for safety.
+>>>>
+>>>> Acked-by: Jani Nikula <jani.nikula@intel.com>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> 
+>>> FYI we'll merge this once we've done a backmerge to get the hwmon
+>>> changes to our tree.
+>>
+>> There are no dependencies. hwmon changes are already in rc1.
+>
+> That's what I'm saying, drm-intel-next doesn't have rc1. :)
 
-I really would like to avoid that because it will just mean that someone
-else will abuse that function and then make an argument why we should
-export the other function.
+Pushed to drm-intel-next, thanks for the patch.
 
-I think it would be ok if we required that unix support is built in
-because it's not unprecedented either and we're not breaking anything.
-Bpf has the same requirement:
+BR,
+Jani.
 
-  #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
-  struct bpf_unix_iter_state {
-          struct seq_net_private p;
-          unsigned int cur_sk;
-          unsigned int end_sk;
-          unsigned int max_sk;
-          struct sock **batch;
-          bool st_bucket_done;
-  };
+>
+> BR,
+> Jani.
+>
+>>
+>> Best regards,
+>> Krzysztof
+>>
 
-and
-
-  #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
-  DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
-                       struct unix_sock *unix_sk, uid_t uid)
+-- 
+Jani Nikula, Intel Open Source Graphics Center
