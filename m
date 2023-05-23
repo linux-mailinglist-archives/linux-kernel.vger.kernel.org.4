@@ -2,248 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DAF70E5C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C5C70E5D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238453AbjEWTjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S238460AbjEWTju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238390AbjEWTjl (ORCPT
+        with ESMTP id S238443AbjEWTjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:39:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6C6E4F;
-        Tue, 23 May 2023 12:39:13 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NJHPbK027740;
-        Tue, 23 May 2023 19:38:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Vgex8UsbtCktiKteHQwNp7o1/Ls7Gbddnp8I3giQeKQ=;
- b=ql+IgI8Q6eDCb9hrhKJ1Bq10PXgnvyKau54mTxPo9qJB0wLVgygl8e+6lDb/inIaWr3J
- r0iGE4DLy7NfPje0bxYTi6cWnywgNN48/tYZwqU+bXEcG1HMBDIjoAXmvasWHAkVNq3u
- PBbiRoreOJW5qMjifpv6L8W1uZQYYMKRMLpXa9/yeRa5RKbgjG5UN/DmPO0bAXk/CjYn
- WDuK1eNFq7b1pU57mincQMPnLuervcmlFTHp3HcN7SwFcKuDPhsNIcgTU6PPR9O6Y/Ag
- UVNF1hKCV8E2Mx+GhjCPGRcFtHRIJI7iiXfsVclFxaCbk7H9CuzjXoMgn31Nse/7vmFB OA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qs29pjk90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 19:38:56 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34NIeHaC028885;
-        Tue, 23 May 2023 19:38:56 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qs29pjk83-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 19:38:56 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34NFUXRU009193;
-        Tue, 23 May 2023 19:38:54 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3qppc5gmq0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 19:38:54 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34NJcslr3146358
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 May 2023 19:38:54 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 055CE58056;
-        Tue, 23 May 2023 19:38:54 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C58858052;
-        Tue, 23 May 2023 19:38:53 +0000 (GMT)
-Received: from wecm-9-67-154-32.wecm.ibm.com (unknown [9.67.154.32])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 23 May 2023 19:38:53 +0000 (GMT)
-Message-ID: <85070b837c134341bb10a2647dbe62e2b5806565.camel@linux.ibm.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        Ignaz Forster <iforster@suse.de>, Petr Vorel <pvorel@suse.cz>
-Date:   Tue, 23 May 2023 15:38:52 -0400
-In-Reply-To: <CAOQ4uxjjLLGQM5BUgDrFdghYsFgShNA6tDpvC8vNg_jOh9WGAQ@mail.gmail.com>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-         <078d8c1fd6b6de59cde8aa85f8e59a056cb78614.camel@linux.ibm.com>
-         <CAOQ4uxi7PFPPUuW9CZAZB9tvU2GWVpmpdBt=EUYyw60K=WX-Yg@mail.gmail.com>
-         <9aced306f134628221c55530643535b89874ccc0.camel@linux.ibm.com>
-         <CAOQ4uxjjLLGQM5BUgDrFdghYsFgShNA6tDpvC8vNg_jOh9WGAQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LycEsRAw8JRrBB-8NMf98hXLdZNeEj3b
-X-Proofpoint-ORIG-GUID: nFeOZ42C0MsrKmUcQk_gPLhlgBP0djeB
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 23 May 2023 15:39:44 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017FD18D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:39:21 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b9a7e639656so219390276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1684870750; x=1687462750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cSklzBjxhZmzMNotdKdz2ZXQTBM+PT0yLU4Hf0qksUo=;
+        b=J1+Lh90+86HHzJ7Ba1MAeG6dBd/GlUnA8IZWFTSpRu1BcxvZ/Bjetmd8L1OCVI7bsG
+         /vHoMAhkCLNIsJXlDFSjuhNK/i92CV1ZcXtHndRLXbtLyo814cuuLTHE4PeWowcDRcE7
+         QT4gwr5ty9kkloUBxcKKqvl+zIm1CqWoNyw4JmxtgZDzEm20RV4X2T44Ai8MBCIkmd9S
+         ayCtjHJW+9kwDX5kcGYBiY2wQwI/UFf7dqbw3XvOKTgV9LxTuSKD2u5scnh5egG2cCDw
+         3LBW5QaprHdfc6uj4l7B5WneoF4V+5PfN9trESHUUh3+M0ec9z4nLh5HOOR5FdJHTIFl
+         KFXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684870750; x=1687462750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cSklzBjxhZmzMNotdKdz2ZXQTBM+PT0yLU4Hf0qksUo=;
+        b=HhHCyzxrvnxqmJYgrRO4joMAmkGfNXnF+4TqYO/SQpb3RlBqhmGGZUTbikJetMsa1Y
+         pNGW7k/Y27hm9tv+xOiC6pkjYYHfytnSEkSIZmtAOhwe7eZvE9AYRVfmagmPM091R2uI
+         +ih6HV8TTkq9TayNg0oY3sbd0q3MlwYVUES5oKcZC/GwDmOaFMl7uYbEcjgUWSyr6LXI
+         BSXepI2TJSrThoD6NsgO8X6QHK7jw1bg3Yh2UtVyBwDtVuBuzsNymAlrZCOWAgo/7Ntz
+         2Cx6YeFYvrSq3yMe0HGAwHCPVPebZE0ES/zwWo5ZffRNVGh7XLZ8K+PNAFnB3koxoobf
+         aGjQ==
+X-Gm-Message-State: AC+VfDwiQQCS6XT46IUUprgvYfI7u7ZO5UgzckMEJ54fzk7opoaiC3WG
+        eupOdMagnLHIbh3zuuYtpw7CH/bmzL6ffSC9xZXP
+X-Google-Smtp-Source: ACHHUZ5t3ISNlc8css/TIbS3nKAqJFZ751H1T5Cj7O+AaEakwztSyfUhzg3HqqZydPeGF3do/inmnStTBrpGIbF5Z2Q=
+X-Received: by 2002:a81:a0d2:0:b0:559:f52b:7c5f with SMTP id
+ x201-20020a81a0d2000000b00559f52b7c5fmr15335674ywg.17.1684870750245; Tue, 23
+ May 2023 12:39:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_12,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 adultscore=0 impostorscore=0
- mlxscore=0 phishscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230158
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230511123213.722912-1-cgzones@googlemail.com>
+ <6301fdfd0927df2b2fd7a4f2b384e477.paul@paul-moore.com> <CAHC9VhSSA04wzPFgx_Z4jf1gOdEO40hU-augjMqX1uGd-eHLQA@mail.gmail.com>
+ <CAJ2a_DeJhGcXBtVfuOp3xeUNxJyFR4QG-+5=4Q_38go+v6d9-A@mail.gmail.com>
+In-Reply-To: <CAJ2a_DeJhGcXBtVfuOp3xeUNxJyFR4QG-+5=4Q_38go+v6d9-A@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 23 May 2023 15:38:59 -0400
+Message-ID: <CAHC9VhQ_yLL432Ete+ZB3TV-wwG7capXCOE1NKY029evKxQ9DA@mail.gmail.com>
+Subject: Re: [PATCH] selinux: deprecated fs ocon
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-22 at 17:00 +0300, Amir Goldstein wrote:
-> On Mon, May 22, 2023 at 3:18 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >
-> > On Sat, 2023-05-20 at 12:15 +0300, Amir Goldstein wrote:
-> > > On Fri, May 19, 2023 at 10:42 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+On Tue, May 23, 2023 at 2:25=E2=80=AFPM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+> On Thu, 18 May 2023 at 22:18, Paul Moore <paul@paul-moore.com> wrote:
+> > On Thu, May 18, 2023 at 1:56=E2=80=AFPM Paul Moore <paul@paul-moore.com=
+> wrote:
+> > > On May 11, 2023 =3D?UTF-8?q?Christian=3D20G=3DC3=3DB6ttsche?=3D <cgzo=
+nes@googlemail.com> wrote:
 > > > >
-> > > > On Fri, 2023-04-07 at 10:31 +0200, Christian Brauner wrote:
-> > > > > So, I think we want both; we want the ovl_copyattr() and the
-> > > > > vfs_getattr_nosec() change:
-> > > > >
-> > > > > (1) overlayfs should copy up the inode version in ovl_copyattr(). That
-> > > > >     is in line what we do with all other inode attributes. IOW, the
-> > > > >     overlayfs inode's i_version counter should aim to mirror the
-> > > > >     relevant layer's i_version counter. I wouldn't know why that
-> > > > >     shouldn't be the case. Asking the other way around there doesn't
-> > > > >     seem to be any use for overlayfs inodes to have an i_version that
-> > > > >     isn't just mirroring the relevant layer's i_version.
-> > > > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
-> > > > >     Currently, ima assumes that it will get the correct i_version from
-> > > > >     an inode but that just doesn't hold for stacking filesystem.
-> > > > >
-> > > > > While (1) would likely just fix the immediate bug (2) is correct and
-> > > > > _robust_. If we change how attributes are handled vfs_*() helpers will
-> > > > > get updated and ima with it. Poking at raw inodes without using
-> > > > > appropriate helpers is much more likely to get ima into trouble.
+> > > > The object context type `fs`, not to be confused with the well used
+> > > > object context type `fscon`, was introduced in the initial git comm=
+it
+> > > > 1da177e4c3f4 ("Linux-2.6.12-rc2") but never actually used since.
 > > > >
-> > > > In addition to properly setting the i_version for IMA, EVM has a
-> > > > similar issue with i_generation and s_uuid. Adding them to
-> > > > ovl_copyattr() seems to resolve it.   Does that make sense?
+> > > > The paper "A Security Policy Configuration for the Security-Enhance=
+d
+> > > > Linux" [1] mentions it under `7.2 File System Contexts` but also st=
+ates:
 > > > >
-> > > > diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
-> > > > index 923d66d131c1..cd0aeb828868 100644
-> > > > --- a/fs/overlayfs/util.c
-> > > > +++ b/fs/overlayfs/util.c
-> > > > @@ -1118,5 +1118,8 @@ void ovl_copyattr(struct inode *inode)
-> > > >         inode->i_atime = realinode->i_atime;
-> > > >         inode->i_mtime = realinode->i_mtime;
-> > > >         inode->i_ctime = realinode->i_ctime;
-> > > > +       inode->i_generation = realinode->i_generation;
-> > > > +       if (inode->i_sb)
-> > > > +               uuid_copy(&inode->i_sb->s_uuid, &realinode->i_sb-
-> > > > >s_uuid);
+> > > >     Currently, this configuration is unused.
+> > > >
+> > > > The policy statement defining such object contexts is `fscon`, e.g.=
+:
+> > > >
+> > > >     fscon 2 3 gen_context(system_u:object_r:conA_t,s0) gen_context(=
+system_u:object_r:conB_t,s0)
+> > > >
+> > > > It is not documented at selinuxproject.org or in the SELinux notebo=
+ok
+> > > > and not supported by the Reference Policy buildsystem - the stateme=
+nt is
+> > > > not properly sorted - and thus not used in the Reference or Fedora
+> > > > Policy.
+> > > >
+> > > > Print a warning message at policy load for each such object context=
+:
+> > > >
+> > > >     SELinux:  void and deprecated fs ocon 02:03
+> > > >
+> > > > This topic was initially highlighted by Nicolas Iooss [2].
+> > > >
+> > > > [1]: https://media.defense.gov/2021/Jul/29/2002815735/-1/-1/0/SELIN=
+UX-SECURITY-POLICY-CONFIGURATION-REPORT.PDF
+> > > > [2]: https://lore.kernel.org/selinux/CAJfZ7=3DmP2eJaq2BfO3y0VnwUJaY=
+2cS2p=3DHZMN71z1pKjzaT0Eg@mail.gmail.com/
+> > > >
+> > > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > > > ---
+> > > >  security/selinux/ss/policydb.c | 4 ++++
+> > > >  security/selinux/ss/policydb.h | 2 +-
+> > > >  2 files changed, 5 insertions(+), 1 deletion(-)
 > > >
-> > > That is not a possible solution Mimi.
+> > > Thanks, this is a nice catch, although some minor suggestions below .=
+..
 > > >
-> > > The i_gneration copy *may* be acceptable in "all layers on same fs"
-> > > setup, but changing overlayfs s_uuid over and over is a non-starter.
+> > > > diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/p=
+olicydb.c
+> > > > index 97c0074f9312..31b08b34c722 100644
+> > > > --- a/security/selinux/ss/policydb.c
+> > > > +++ b/security/selinux/ss/policydb.c
+> > > > @@ -2257,6 +2257,10 @@ static int ocontext_read(struct policydb *p,=
+ const struct policydb_compat_info *
+> > > >                               if (rc)
+> > > >                                       goto out;
+> > > >
+> > > > +                             if (i =3D=3D OCON_FS)
+> > > > +                                     pr_warn("SELinux:  void and d=
+eprecated fs ocon %s\n",
+> > > > +                                             c->u.name);
 > > >
-> > > If you explain the problem, I may be able to help you find a better solution.
+> > > Instead of having to check if 'i =3D=3D OCON_FS', why not simply put =
+the
+> > > pr_warn() call up in the OCON_FS case block on line ~2249 and let it
+> > > continue to fallthrough to the OCON_NETIF block?
 > >
-> > EVM calculates an HMAC of the file metadata (security xattrs, i_ino,
-> > i_generation, i_uid, i_gid, i_mode, s_uuid)  and stores it as
-> > security.evm.  Notrmally this would be used for mutable files, which
-> > cannot be signed.  The i_generation and s_uuid on the lower layer and
-> > the overlay are not the same, causing the EVM HMAC verification to
-> > fail.
-> >
-> 
-> OK, so EVM expects i_ino, i_generation, i_uid, i_gid, i_mode, s_uuid
-> and security xattr to remain stable and persistent (survive umount/mount).
-> Correct?
+> > Bah, nevermind, you need to leave it here because of the 'c->u.name'
+> > in the pr_warn().  If you're okay with me adjusting the deprecation
+> > comment (below) during the merge I'll can merge this now ... ?
+>
+> Yes, please feel free to adjust the inline comment.
 
-Yes
+Okay, done and merged into selinux/next, thanks.
 
-> 
-> You cannot expect that the same EVM xattr will correctly describe both
-> the overlayfs inode and the underlying real fs inode, because they may
-> vary in some of the metadata, so need to decide if you only want to attest
-> overlayfs inodes, real underlying inodes or both.
-
-Understood.  Accessing a file on the overlay filesystem then needs to
-be verified based on the backing file metadata.  Currently that isn't
-being done.  So either all the backing file metadata needs to be copied
-up or some other change(s) need to be made.
-
-> If both, then the same EVM xattr cannot be used, but as it is, overlayfs
-> inode has no "private" xattr version, it stores its xattr on the underlying
-> real inode.
-> 
-> i_uid, i_gid, i_mode:
-> Should be stable and persistent for overlayfs inode and survive copy up.
-> Should be identical to the underlying inode.
-> 
-> security xattr:
-> Overlayfs tries to copy up all security.* xattr and also calls the LSM
-> hook security_inode_copy_up_xattr() to approve each copied xattr.
-> Should be identical to the underlying inode.
-
-> s_uuid:
-> So far, overlayfs sb has a null uuid.
-> With this patch, overlayfs will gain a persistent s_uuid, just like any
-> other disk fs with the opt-in feature index=on:
-> https://lore.kernel.org/linux-unionfs/20230425132223.2608226-4-amir73il@gmail.com/
-> Should be different from the underlying fs uuid when there is more
-> than one underlying fs.
-> We can consider inheriting s_uuid from underlying fs when all layers
-> are on the same fs.
-> 
-> i_ino:
-> As documented in:
-> https://github.com/torvalds/linux/blob/master/Documentation/filesystems/overlayfs.rst#inode-properties
-> It should be persistent and survive copy up with the
-> xino=auto feature (module param or mount option) or
-> CONFIG_OVERLAY_FS_XINO_AUTO=y
-> which is not the kernel default, but already set by some distros.
-> Will be identical to the underlying inode only in some special cases
-> such as pure upper (not copied up) inodes.
-> Will be different from the underlying lower file inode many in other cases.
-> 
-> i_generation:
-> For xino=auto, we could follow the same rules as i_ino and get similar
-> qualities -
-> i_generation will become persistent and survive copy up, but it will not be
-> identical to the real underlying inode i_generation in many cases.
-> 
-> Bottom line:
-> If you only want to attest overlayfs inodes - shouldn't be too hard
-> If you want to attest both overlayfs inodes AND their backing "real" inodes -
-> much more challenging.
-> 
-> Hope that this writeup helps more than it confuses.
-
-Thanks, Amir.   It definitely helps.
-
-To summarize what I'm seeing (IMA hash and EVM HMAC):
-
-- Directly accessing overlay files, "lower" backed file, fails to
-verify without copying all the file metadata up.
-
-- Writing directly to the "upper" backing file properly updates the
-file metadata.
-
-- Writing directly to the overlay file does not write security.ima
-either to the overlayfs  or the "upper" backing file.
-
-policy rules:
-appraise func=FILE_CHECK fsuuid=....
-measure func=FILE_CHECK fsuuid=....
-appraise func=FILE_CHECK fsname=overlay 
-measure func=FILE_CHECK fsname=overlay
-
-Mimi
-
+--=20
+paul-moore.com
