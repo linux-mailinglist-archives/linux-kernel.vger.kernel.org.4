@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60D370D901
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33BA70D923
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbjEWJ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S236090AbjEWJeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjEWJ2q (ORCPT
+        with ESMTP id S235522AbjEWJd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:28:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D864E6;
-        Tue, 23 May 2023 02:28:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A195614B2;
-        Tue, 23 May 2023 09:28:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA2EC433D2;
-        Tue, 23 May 2023 09:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684834124;
-        bh=l6zlO3zrfqNyX7yFpEx6BRzK5yGcYjeoYtH9xlr+994=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HM298nrMQgJkZY147EZroy4PK7mr5PO1OKvTSfI9+RY+oAzcPrhBfxJGv+QtFPmed
-         48Lr8wvAVWllrJRyoY2o/ZZfRNzZma++cSt5/0sb+JoPMoODU5cXuAgxqcA9+xzQPM
-         6BndpH3IdRP5EWrIVVQr7fNn5YalW3kbs5xeLYY0C6BmP2AvrUPSZlrablsQPSfaUj
-         7bwdhbsDaSYMtzxjpOAeNbvemmcDYY/IG4MAG8eBMAb25UBVHzPQsStvWPxUj1cHYJ
-         AdLNaaj9d3KFvldgtPGwAL3TJH3hTm9ocKGCxBLySPlWIifNbTU3OvSXjoV9P92dPb
-         rfzr060cwMPoQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Dave Chinner <dchinner@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: (subset) [PATCH 22/32] vfs: inode cache conversion to hash-bl
-Date:   Tue, 23 May 2023 11:28:38 +0200
-Message-Id: <20230523-zujubeln-heizsysteme-f756eefe663e@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230509165657.1735798-23-kent.overstreet@linux.dev>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev> <20230509165657.1735798-23-kent.overstreet@linux.dev>
+        Tue, 23 May 2023 05:33:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB2E1A6;
+        Tue, 23 May 2023 02:33:48 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QQTXt3WR8z18Lfn;
+        Tue, 23 May 2023 17:29:18 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 23 May 2023 17:33:46 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <jonathan.cameron@huawei.com>, <corbet@lwn.net>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC:     <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
+        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
+        <linuxarm@huawei.com>
+Subject: [PATCH v3 0/4] Improve PTT filter interface
+Date:   Tue, 23 May 2023 17:32:24 +0800
+Message-ID: <20230523093228.48149-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1340; i=brauner@kernel.org; h=from:subject:message-id; bh=l6zlO3zrfqNyX7yFpEx6BRzK5yGcYjeoYtH9xlr+994=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTktNsoO3+5lbI+eNuhP803wtzbZnrxf9y8/bFq4ZNA78kT IqbadpSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzE+CDDf79WZo+Q06qzlzYUXg+KPp VnzWx90LlJXYfJSXuprtKhhQz/M6ILLaZlzozr23v4144mneiNcbWfluy+Eui1+bddz4R2NgA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.50.163.32]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 May 2023 12:56:47 -0400, Kent Overstreet wrote:
-> Because scalability of the global inode_hash_lock really, really
-> sucks.
-> 
-> 32-way concurrent create on a couple of different filesystems
-> before:
-> 
-> -   52.13%     0.04%  [kernel]            [k] ext4_create
->    - 52.09% ext4_create
->       - 41.03% __ext4_new_inode
->          - 29.92% insert_inode_locked
->             - 25.35% _raw_spin_lock
->                - do_raw_spin_lock
->                   - 24.97% __pv_queued_spin_lock_slowpath
-> 
-> [...]
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-This is interesting completely independent of bcachefs so we should give
-it some testing.
+This series tends to improve the PTT's filter interface in 2 aspects (Patch 2&3):
+- Support dynamically filter updating to response to hotplug
+  Previous the supported filter list is settled down once the driver probed and
+  it maybe out-of-date if hotplug events happen later. User need to reload the
+  driver to update list. Patch 1/2 enable the driver to update the list by
+  registering a PCI bus notifier and the filter list will always be the latest.
+- Export the available filters through sysfs
+  Previous user needs to calculate the filters and filter value using device's
+  BDF number, which requires the user to know the hardware well. Patch 3/3 tends
+  to export the available filter information through sysfs attributes, the filter
+  value will be gotten by reading the file. This will be more user friendly.
 
-I updated a few places that had outdated comments.
+In order to support above function, this series also includes a patch 1/4 to factor
+out the allocation and release function of PTT filters.
 
----
+Also includes an improvement. Patch 4 tends to set proper PMU capability to avoid
+collecting unnecessary data to save the storage.
 
-Applied to the vfs.unstable.inode-hash branch of the vfs/vfs.git tree.
-Patches in the vfs.unstable.inode-hash branch should appear in linux-next soon.
+Change since v2:
+- Fix one possible issue for dereferencing a NULL pointer
+Link: https://lore.kernel.org/linux-pci/20230331070310.5465-1-yangyicong@huawei.com/
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Change since v1:
+- Drop the patch for handling the cpumask since it seems to be redundant
+- Refine of the codes per Jonathan
+- Add Patch 1/4 for refactor the filters allocation and release
+- Thanks the review of Jonathan.
+Link: https://lore.kernel.org/linux-pci/d496ee4f-641a-a726-ab3f-62b587422b61@huawei.com/T/#m47e4de552d69920035214b3e91080cdc185f61f5
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+Yicong Yang (4):
+  hwtracing: hisi_ptt: Factor out filter allocation and release
+    operation
+  hwtracing: hisi_ptt: Add support for dynamically updating the filter
+    list
+  hwtracing: hisi_ptt: Export available filters through sysfs
+  hwtracing: hisi_ptt: Advertise PERF_PMU_CAP_NO_EXCLUDE for PTT PMU
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.unstable.inode-hash
+ .../ABI/testing/sysfs-devices-hisi_ptt        |  50 ++
+ Documentation/trace/hisi-ptt.rst              |  12 +-
+ drivers/hwtracing/ptt/hisi_ptt.c              | 426 ++++++++++++++++--
+ drivers/hwtracing/ptt/hisi_ptt.h              |  53 +++
+ 4 files changed, 512 insertions(+), 29 deletions(-)
 
-[22/32] vfs: inode cache conversion to hash-bl
-        https://git.kernel.org/vfs/vfs/c/e3e92d47e6b1
+-- 
+2.24.0
+
