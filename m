@@ -2,124 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEFA70CFD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9AB070CFD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbjEWAsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
+        id S234613AbjEWAvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbjEWArq (ORCPT
+        with ESMTP id S235155AbjEWAvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:47:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEABC4C21;
-        Mon, 22 May 2023 17:36:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQFkV3Gv5z4x4X;
-        Tue, 23 May 2023 10:36:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684802211;
-        bh=C4nGr9EQgURQKOQa9g2l+S3dF21O7wGPd7WXFEN1Xdg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XLUh321ScnIWn/Dcnq8uvD1I+st1WvoqwV60ZP1ZBJdc2rrRQ92N6BdboOst0eVIs
-         DAiVdfjj4c5ESw8NkbNut4h9A8mTynyuk4iB4f8dJd+005dzqYbOrjo6hNxuN68AGb
-         3XiqLtQ182wp65El1ug02LVbOPbgVZEbDeXtDsHw9jAS3sjj9I+hfJkQmq9ji30T4v
-         DV7ay0GhMGx9RpmBOI/14Ttv6a11TwDtSwX+g7w91OrwsRSEUNmTlbrM0RxgASeKrl
-         ie95mZHTuQoSWZpWawot/lvrXR3kYBuDYK4x4FD3sGtU02KGf1eQKTbpyDjQKAa8cA
-         A7WDaVZI/OrBA==
-Date:   Tue, 23 May 2023 10:36:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Jia Jie Ho <jiajie.ho@starfivetech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the crypto tree
-Message-ID: <20230523103637.20175fbc@canb.auug.org.au>
-In-Reply-To: <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
-References: <20230522105257.562cb1ec@canb.auug.org.au>
-        <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8prTCi.GI047Yt2qEAvJrF.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 20:51:38 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D3455A9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:44:54 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-561eb6c66f6so58230817b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684802595; x=1687394595;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SK35moxCE6AhlCZl4FimQ53XrewZjdQKUPUW9jfTNhI=;
+        b=JF9VmGvn6ME+aV3DWd+moD6DHriILl/eHSLrRAVbk557Nfyq2aEPhsaPiGBpDbWYew
+         xfxlvpIcDqTn+OyodXR//4275XAoEeYjxwdP8/SeVRQSlV9QMoEG8a3I0GYpUHbADTXi
+         BO0ai4br/mZs2NpalBibKFHY6KZ4WD2OYLEBP5rVthGV4zZXo73DugZVaCiFg4N10L5J
+         y3ow4VUMSVguwSU9N8aUagGsIBAOX6iR6VVTKqq5fCbzvHjN3f3blh1NFR8W7EXCmsJj
+         sFhkDMgC+eXM3eLCgw3471dz7sjLpCIriVTG3t6mKGIBUQCgosKE3bott3R7ljUVNJdY
+         TnpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684802595; x=1687394595;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SK35moxCE6AhlCZl4FimQ53XrewZjdQKUPUW9jfTNhI=;
+        b=N6XWR515mEelrHyqBaXRqgFZ0/PhZpLS9ucoVwmZonLknH0wEKQuCRHwtt0Z12ygzi
+         75AlaPFOQKDBLa1e+mAfbx16NdVg939PtxhsYOXd3QcSKrMrWBzi6oU51YrV5rj5T68I
+         tLYzEJC5UnHUZIk2cs+YAM6krlURHDAxY9KtEdgxCgLI17f2u5vftNvyoce387H9cMYd
+         wdyNcar5REJtMf32hhGs8Ogxs4dzHTIiKiTZOiVGkguLcIVVGo8PKxt4Hw/PTTqDQD4M
+         p0UG17ZzfZKXxuxdt71rev2IYKR/72s33hzmPiJQqydZcWX82K/Hr9rIEpY6hxCzBt+m
+         iwUw==
+X-Gm-Message-State: AC+VfDztJc/DilLFCrtMGTe8lgExRRI0j0CylK3HnD8WLJ2VEf7f3c3N
+        HGLl7diRj82l1vDtif5peyXOzXU=
+X-Google-Smtp-Source: ACHHUZ56AYrmc0MsawE025S+h8rVdf9CVXEi3oX5IjzyzrBK6rGupgdJl7OAemYukbnsFVJHjsbsG3s=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2d3:205:3d33:90fe:6f02:afdd])
+ (user=pcc job=sendgmr) by 2002:a81:e508:0:b0:552:b607:634b with SMTP id
+ s8-20020a81e508000000b00552b607634bmr7917763ywl.4.1684802594841; Mon, 22 May
+ 2023 17:43:14 -0700 (PDT)
+Date:   Mon, 22 May 2023 17:43:07 -0700
+Message-Id: <20230523004312.1807357-1-pcc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Subject: [PATCH v4 0/3] mm: Fix bug affecting swapping in MTE tagged pages
+From:   Peter Collingbourne <pcc@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        "=?UTF-8?q?Qun-wei=20Lin=20=28=E6=9E=97=E7=BE=A4=E5=B4=B4=29?=" 
+        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "surenb@google.com" <surenb@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "=?UTF-8?q?Chinwen=20Chang=20=28=E5=BC=B5=E9=8C=A6=E6=96=87=29?=" 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "=?UTF-8?q?Kuan-Ying=20Lee=20=28=E6=9D=8E=E5=86=A0=E7=A9=8E=29?=" 
+        <Kuan-Ying.Lee@mediatek.com>,
+        "=?UTF-8?q?Casper=20Li=20=28=E6=9D=8E=E4=B8=AD=E6=A6=AE=29?=" 
+        <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        vincenzo.frascino@arm.com,
+        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        eugenis@google.com, Steven Price <steven.price@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8prTCi.GI047Yt2qEAvJrF.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This patch series reworks the logic that handles swapping in page
+metadata to fix a reported bug [1] where metadata can sometimes not
+be swapped in correctly after commit c145e0b47c77 ("mm: streamline COW
+logic in do_swap_page()").
 
-Hi Herbert,
+- Patch 1 fixes the bug itself, but still requires architectures
+  to restore metadata in both arch_swap_restore() and set_pte_at().
 
-On Mon, 22 May 2023 13:15:20 +0800 Herbert Xu <herbert@gondor.apana.org.au>=
- wrote:
->
-> On Mon, May 22, 2023 at 10:52:57AM +1000, Stephen Rothwell wrote:
-> >=20
-> > After merging the crypto tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this: =20
->=20
-> Sorry, a fix is pending and will be pushed out soon.
+- Patch 2 makes it so that architectures only need to restore metadata
+  in arch_swap_restore().
 
-That did not fix it :-(
+- Patch 3 changes arm64 to remove support for restoring metadata
+  in set_pte_at().
 
-My fix up patch is now:
+[1] https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com/
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 23 May 2023 10:31:28 +1000
-Subject: [PATCH] fixup for "crypto: starfive - Add crypto engine support"
+v4:
+- Rebased onto v6.4-rc3
+- Reverted change to arch/arm64/mm/mteswap.c; this change was not
+  valid because swapcache pages can have arch_swap_restore() called
+  on them multiple times
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/crypto/starfive/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v3:
+- Added patch to call arch_swap_restore() from unuse_pte()
+- Rebased onto arm64/for-next/fixes
 
-diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kcon=
-fig
-index 908c162ba79a..2a15d51534b9 100644
---- a/drivers/crypto/starfive/Kconfig
-+++ b/drivers/crypto/starfive/Kconfig
-@@ -4,7 +4,7 @@
-=20
- config CRYPTO_DEV_JH7110
- 	tristate "StarFive JH7110 cryptographic engine driver"
--	depends on (SOC_STARFIVE || COMPILE_TEST) && DMADEVICES
-+	depends on SOC_STARFIVE && DMADEVICES
- 	select CRYPTO_ENGINE
- 	select CRYPTO_HMAC
- 	select CRYPTO_SHA256
---=20
-2.39.2
+v2:
+- Call arch_swap_restore() directly instead of via arch_do_swap_page()
 
---=20
-Cheers,
-Stephen Rothwell
+Peter Collingbourne (3):
+  mm: Call arch_swap_restore() from do_swap_page()
+  mm: Call arch_swap_restore() from unuse_pte()
+  arm64: mte: Simplify swap tag restoration logic
 
---Sig_/8prTCi.GI047Yt2qEAvJrF.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ arch/arm64/include/asm/mte.h     |  4 ++--
+ arch/arm64/include/asm/pgtable.h | 14 ++----------
+ arch/arm64/kernel/mte.c          | 37 ++++++--------------------------
+ mm/memory.c                      |  7 ++++++
+ mm/swapfile.c                    |  7 ++++++
+ 5 files changed, 25 insertions(+), 44 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.40.1.698.g37aff9b760-goog
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRsCpYACgkQAVBC80lX
-0Gz0Swf/emvGMFeJkGQBY2CxLqqfdhXLSCqa8G3Kes33FT+wP+VuAHJpnh/04aBU
-4rlAxMiJWAtIYG5QWz4VCanT/vIPj+ZvlNJJBq4+UiQf5r9lLeXHrARZIHEKs6ss
-mdSkybWyLYnMFL1A70HFTQDbUFJ/gMFya6v0A7haVbe+UfsQCkUPxGvrmpFlrjXt
-e9SRqYiLbxF/rY2wZbdBkVCLTtMYr9ZCsIoCZLSlBKHQL+mWC7cDmsUSID287y3G
-PmQ9qATUKkQTnfSDCfA4Ko4CN/GnuaJRWuymoZKOXwzOOvhVG12jESELkvKyyNTk
-H9ADh/enexrR9CCS/XgjF4g29sdYCg==
-=KH/1
------END PGP SIGNATURE-----
-
---Sig_/8prTCi.GI047Yt2qEAvJrF.--
