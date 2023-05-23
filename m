@@ -2,182 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2478870E01C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AD670E011
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237003AbjEWPOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
+        id S236962AbjEWPN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237576AbjEWPN6 (ORCPT
+        with ESMTP id S231357AbjEWPNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:13:58 -0400
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FC21A4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:13:41 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4eed764a10cso8178423e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:13:41 -0700 (PDT)
+        Tue, 23 May 2023 11:13:15 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4867E53
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:12:57 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id ada2fe7eead31-43951f7004cso499530137.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684854753; x=1687446753;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pq6A8hjAXuW6QduZxpJjlroh6Zzvo1r22L0X16yWMNU=;
-        b=qrvITLE41FYdRADXj5t2RiPbwfhl/E/Fpj1Ve/+vGVELXDWQW+xXkesUiRGFoBZK7K
-         WHj9XXEwJZ0htvvv7F7gsWmh4Tz8UVtsmGFZp0WtftmwKstEcKmUOKRlPj1cGh39F3PO
-         Zd5cKfsGqWhokLLC7LF3+CvVEjKRUQw43hrk72/wkrzC0GGupeWd+aHRr1ZtnM+a8xmJ
-         SeIOVHy10BPycFAtu4P46FItP2nyQAsGHHtAjKEVuIz1oCXtpj+bwct+90ARazmvl4sm
-         FL4PSaZ2V8UEiI3wkc2HL44zLIs+VYeVjgN9SE0YGtWmKCk6AonEauR7t2phSowt3pXV
-         iZmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684854753; x=1687446753;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1684854776; x=1687446776;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pq6A8hjAXuW6QduZxpJjlroh6Zzvo1r22L0X16yWMNU=;
-        b=Ghc8yBYA35t5re2somWB4ikEDSj2NtywGU++2gt/iiVDWFqM4CSWWITmFLmXbdc46s
-         ArI8cjY9FlbnzrD4jPGSoXNpSC2gFp8G6M1FG5rvn5mNavsrjKDOzyMC3XnB/DMZzZSq
-         SwshomBfUF4Vb3eUvU+V4lwMUxy36ksDNRc4qce2XCQzJtDooBOEd9JvdA7QRnLotuEN
-         w4qJpnQFr23Jq5xF18nF+z8tvgvZZIjQgeFtSKsawAvkBjlZ8OZFware4KCVw+uSzq/t
-         nuo2I8OzZdsKKrPl5CGBTFGC71JQdU9Sg8mnkuVM8l8zXRgN1CtwMltsBvhxAfOgUdmb
-         6dcQ==
-X-Gm-Message-State: AC+VfDxI0jBknab5buVtlBAL7j+AHorj4/pGfIJL6Vxcz4BFb189QS+d
-        Ts15MXtMbottE1KFthFmhkc=
-X-Google-Smtp-Source: ACHHUZ66zIV8ytIKAe460yHt/3Wcypv69k5r3Y0Fc5gQE5tdr5oMlGTwVtmBN98sNrb43tfMilDzAQ==
-X-Received: by 2002:a19:f519:0:b0:4f3:af46:1941 with SMTP id j25-20020a19f519000000b004f3af461941mr3963289lfb.34.1684854753092;
-        Tue, 23 May 2023 08:12:33 -0700 (PDT)
-Received: from pc636 (host-90-235-19-70.mobileonline.telia.com. [90.235.19.70])
-        by smtp.gmail.com with ESMTPSA id c18-20020a197612000000b004f3b520e0adsm1370711lff.107.2023.05.23.08.12.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 08:12:32 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 23 May 2023 17:12:30 +0200
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 0/9] Mitigate a vmap lock contention
-Message-ID: <ZGzX3vRMlGHIcYCe@pc636>
-References: <20230522110849.2921-1-urezki@gmail.com>
- <ZGyqiaRnMJPFhxR6@debian-BULLSEYE-live-builder-AMD64>
+        bh=wM1YKWaacw+NdtLLmBxHfmkkg8JjnMl7i5I7vNTn000=;
+        b=Xl3zO5U/LOWrttVk2f4chMKbB1rCO/AKfFq864Ms06Hlmc5JrbI3mB2CTEhGeh59+A
+         USQ4f2oiGlDP9AgnFTuldw3t6WxaZet6Zc6RkQiFxDbYIuATPISk8qdW/55qKyV8gzaI
+         Mv8bJEJME0nZSBoQYZlmABK/zrCEcsubaR1jY60z2tw0Z2s/hJ6tyCryR981JaCruAYe
+         KK8xsNnwqKJl270pWZzpGLH59OqzRjumnPea2048Sikp8ixh3t3YtwX27XmMh62NpGV0
+         kQ6I1YBdLrSd3vxGXDZTjSbAt8I2iPHIEM7PYpdliVDUPPrmB20w655AbSgrBfSYcmfw
+         gaVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684854776; x=1687446776;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wM1YKWaacw+NdtLLmBxHfmkkg8JjnMl7i5I7vNTn000=;
+        b=eatkkV3hCj88S8Jn6qIEp39TDLgc3Ry+fhZ2HGxXxwx5cVO/65PGeo1ymCc4Usl61j
+         nCRPEkPwqIVYB2NlA7FtjDdzlajejOJCKXkfc8UxnS8l1HLb0y/rfzcGrVpiNnrup8Io
+         jwxBb/H10ZD4aPrRLGpoB3f+Nsmzk/CBTdhr5Y+WTCb1sHkD1zFKZIKKng1VvPRQAiK1
+         PoOOaluCnyXyzsKtf0/yjUp0oZxLC8YyUSvDVOSCJ28/AcAfj86K3WTk/+W5oP2K3kIp
+         lVRzhW2/CdZ5vM1IQxXIoodWkO5PqgXpK/sgIOyRn+CYotTsicxDlqPRXvunDZKbBlcy
+         ktOQ==
+X-Gm-Message-State: AC+VfDwcql4xJoJ0hRafC3rwddwxh5HFe1NAaV6vm6Zhs+dm5fxJKVFw
+        sIPdnNJw6UNnvjVIFoFvOP6kRbdoJBmdUyyfXakSpWTR2uLzSODTHd8aiw==
+X-Google-Smtp-Source: ACHHUZ6Fbls4Hr+vpUcVFLgN7YzytVZUIM9F7tEEsVGhXlMX4agOjAeXZ/SyRR6huCZiw8MmL0k27vvuVmLruG4zkkk=
+X-Received: by 2002:a67:b912:0:b0:430:a6a:a91a with SMTP id
+ q18-20020a67b912000000b004300a6aa91amr4273383vsn.5.1684854776090; Tue, 23 May
+ 2023 08:12:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGyqiaRnMJPFhxR6@debian-BULLSEYE-live-builder-AMD64>
+References: <20230522190354.935300867@linuxfoundation.org>
+In-Reply-To: <20230522190354.935300867@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 23 May 2023 20:42:44 +0530
+Message-ID: <CA+G9fYtdPZMrPWnhj1c-KEM=_tMNYnHuksHCj4wGD4XT4g9QAQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/203] 5.15.113-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 08:59:05PM +0900, Hyeonggon Yoo wrote:
-> On Mon, May 22, 2023 at 01:08:40PM +0200, Uladzislau Rezki (Sony) wrote:
-> > Hello, folk.
-> > 
-> > 1. This is a followup of the vmap topic that was highlighted at the LSFMMBPF-2023
-> > conference. This small serial attempts to mitigate the contention across the
-> > vmap/vmalloc code. The problem is described here:
-> > 
-> 
-> Hello Uladzislau, thank you for the work!
-> 
-> > wget ftp://vps418301.ovh.net/incoming/Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf
-> 
-> I ran the exactly same command but couldn't download the file, did I
-> miss something?
-> 
-wget ftp://vps418301.ovh.net/incoming/Mitigate_a_vmalloc_lock_contention_in_SMP_env_v2.pdf
+On Tue, 23 May 2023 at 00:43, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.113 release.
+> There are 203 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.113-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Sorry, i renamed the file name :)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> $ wget ftp://vps418301.ovh.net/incoming/Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf
-> [...]
-> ==> PASV ... done.    ==> RETR Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf ... 
-> No such file `Fix_a_vmalloc_lock_contention_in_SMP_env_v2.pdf'.
-> 
-> > The material is tagged as a v2 version. It contains extra slides about testing
-> > the throughput, steps and comparison with a current approach.
-> > 
-> > 2. Motivation.
-> > 
-> > - The vmap code is not scalled to number of CPUs and this should be fixed;
-> > - XFS folk has complained several times that vmalloc might be contented on
-> >   their workloads:
-> > 
-> > <snip>
-> > commit 8dc9384b7d75012856b02ff44c37566a55fc2abf
-> > Author: Dave Chinner <dchinner@redhat.com>
-> > Date:   Tue Jan 4 17:22:18 2022 -0800
-> > 
-> >     xfs: reduce kvmalloc overhead for CIL shadow buffers
-> >     
-> >     Oh, let me count the ways that the kvmalloc API sucks dog eggs.
-> >     
-> >     The problem is when we are logging lots of large objects, we hit
-> >     kvmalloc really damn hard with costly order allocations, and
-> >     behaviour utterly sucks:
-> 
-> based on the commit I guess xfs should use vmalloc/kvmalloc is because
-> it allocates large buffers, how large could it be?
-> 
-They use kvmalloc(). When the page allocator is not able to serve a
-request they fallback to vmalloc. At least what i see, the sizes are:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-from 73728 up to 1048576, i.e. 18 pages up to 256 pages.
+## Build
+* kernel: 5.15.113-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 30213a86a6fe2d0296aba978d583ebc81793df40
+* git describe: v5.15.112-204-g30213a86a6fe
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.112-204-g30213a86a6fe
 
-> > 3. Test
-> > 
-> > On my: AMD Ryzen Threadripper 3970X 32-Core Processor, i have below figures:
-> > 
-> >     1-page     1-page-this-patch
-> > 1  0.576131   vs   0.555889
-> > 2   2.68376   vs    1.07895
-> > 3   4.26502   vs    1.01739
-> > 4   6.04306   vs    1.28924
-> > 5   8.04786   vs    1.57616
-> > 6   9.38844   vs    1.78142
-> 
-> <snip>
-> 
-> > 29    20.06   vs    3.59869
-> > 30  20.4353   vs     3.6991
-> > 31  20.9082   vs    3.73028
-> > 32  21.0865   vs    3.82904
-> > 
-> > 1..32 - is a number of jobs. The results are in usec and is a vmallco()/vfree()
-> > pair throughput.
-> 
-> I would be more interested in real numbers than synthetic benchmarks,
-> Maybe XFS folks could help performing profiling similar to commit 8dc9384b7d750
-> with and without this patchset?
-> 
-I added Dave Chinner <david@fromorbit.com> to this thread. But. The
-contention exists. Apart of that per-cpu-KVA allocator can go away
-if we make it generic instead.
+## Test Regressions (compared to v5.15.112)
 
-> By the way looking at the commit, teaching __p?d_alloc() about gfp
-> context (that I'm _slowly_ working on...) could be nice for allowing
-> non-GFP_KERNEL kvmalloc allocations, as Matthew mentioned. [1]
-> 
-> Thanks!
-> 
-> [1] https://lore.kernel.org/linux-mm/Y%2FOHC33YLedMXTlD@casper.infradead.org
-> 
+## Metric Regressions (compared to v5.15.112)
 
-Thanks!
+## Test Fixes (compared to v5.15.112)
+
+## Metric Fixes (compared to v5.15.112)
+
+## Test result summary
+total: 132109, pass: 110178, fail: 3940, skip: 17810, xfail: 181
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 117 total, 116 passed, 1 failed
+* arm64: 45 total, 43 passed, 2 failed
+* i386: 35 total, 32 passed, 3 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 27 total, 26 passed, 1 failed
+* riscv: 11 total, 11 passed, 0 failed
+* s390: 12 total, 11 passed, 1 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 38 total, 36 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
 
 --
-Uladzisdlau Rezki
+Linaro LKFT
+https://lkft.linaro.org
