@@ -2,185 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C48370CF78
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5964370CF74
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbjEWAjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        id S234971AbjEWAjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235552AbjEWAcE (ORCPT
+        with ESMTP id S235549AbjEWAbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:32:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF65E5B
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684801340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mIt6VPJ0y1Ndcra7Hh8sY5ZEea4UepRZahWsTnGZ1jA=;
-        b=XlMa2Ahbvm9b2obv1ujooFWjmGKwSOh1IZE2QD+2V4YOEMc6Rd79d+aScszXw6Q2Ri6ukd
-        irSZFr/B0sP9q6RBvjbjRq6o4F05qjKoBXhMuVegRXbkEvLflJvczPbiPFOs/iNdrnoEPr
-        DExo2LW/SDkbMj5RG4Wk0gvbyAeE9qA=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-306-21_Ld_lwMFqbeFzR85MliQ-1; Mon, 22 May 2023 20:22:18 -0400
-X-MC-Unique: 21_Ld_lwMFqbeFzR85MliQ-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f6ab996ea3so27432231cf.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:22:18 -0700 (PDT)
+        Mon, 22 May 2023 20:31:02 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00AFE5E
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:22:25 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-760dff4b701so19273439f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1684801345; x=1687393345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m1KXf+0oVrec/1jZIsJOSJ4BWkEAOfc45tHTV/llHu0=;
+        b=gygoReIEqd5oXldd2VlxgqzQrKjnHo5hYuGMTw8mK0GGvbdpyKVHIbrEgSRfzcY/NR
+         TV7jiZ8JGzEyZvewrQOwocyebPeIMz8U/fFW0TYr6sJc7azCFSAsuGtt6hhxBBaXpVUl
+         lMaG1G1+u9gAthZREC24zlpfvqEeVg+Rtc73U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684801338; x=1687393338;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mIt6VPJ0y1Ndcra7Hh8sY5ZEea4UepRZahWsTnGZ1jA=;
-        b=T8yr3GKMx/yxeQEefi0VKJf+riwOrCnBSgT0gExjVmQk7SuLDilCwgPCypuCcAltLb
-         eNVNIYx6kMX5oxhWOCTS2zOjGTrAcwRh8UpF2dSGLFRmsG4iRdHMarBW8fj3HptHV/dt
-         TlGlSa9Ihe4ztu21zRDi/dUPpmfFF+PM+2Ml+FRyIo+RYdiZ6eUztNoMqbg8a6KjCcjA
-         KOg2FSaBTMyaAUcb/YU37CxUHDuNz6c0ZoNU+9kRflywosz81ItSiSoRn5i4anwtQDBz
-         HAw6Pd+shBl18jpl7bEOpMS/wRiLb3hLEB8dLzJizszdx5uaRQPABw83a9213cxeiqad
-         7lMQ==
-X-Gm-Message-State: AC+VfDzGVlazrlwsDwTBpxdXaMN/+UGAMv70V8dLxvgnNsQNGtO47sbc
-        gZp8flqXEiQUMWqPSx0ZXDAMJaCt9jZ/rLhfm+s1a12yzD7soPWD7EHPUrIFa8X0rczwFeDAJS4
-        y/+WSIq6lDgxufEXnxBCxEiG7
-X-Received: by 2002:ac8:5a4d:0:b0:3f3:90a8:6906 with SMTP id o13-20020ac85a4d000000b003f390a86906mr21456788qta.17.1684801338229;
-        Mon, 22 May 2023 17:22:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5IHiuUF7WdKpoLIxcdAp2dC2ynXUmyRziuKbBWWi+UBwpzPzyZMNVkTqxG2kw8j9yrr4iA/A==
-X-Received: by 2002:ac8:5a4d:0:b0:3f3:90a8:6906 with SMTP id o13-20020ac85a4d000000b003f390a86906mr21456779qta.17.1684801337984;
-        Mon, 22 May 2023 17:22:17 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id x7-20020a05622a000700b003bf9f9f1844sm2480249qtw.71.2023.05.22.17.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 17:22:17 -0700 (PDT)
-Date:   Mon, 22 May 2023 17:22:16 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        joro@8bytes.org, joao.m.martins@oracle.com,
-        alejandro.j.jimenez@oracle.com, boris.ostrovsky@oracle.com,
-        jon.grimm@amd.com, santosh.shukla@amd.com, vasant.hegde@amd.com,
-        kishon.vijayabraham@amd.com
-Subject: Re: [PATCH v2 5/5] iommu/amd: Improving Interrupt Remapping Table
- Invalidation
-Message-ID: <sxyc5b2ifguf7r3krewwp4o42uzqlkhvshhc4m2nhkumedgy5s@r2arntwzmmpa>
-References: <20230519005529.28171-1-suravee.suthikulpanit@amd.com>
- <20230519005529.28171-6-suravee.suthikulpanit@amd.com>
+        d=1e100.net; s=20221208; t=1684801345; x=1687393345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m1KXf+0oVrec/1jZIsJOSJ4BWkEAOfc45tHTV/llHu0=;
+        b=eBf7aJo3IhtyzsHq+VNUz/mVost2JpAiLuWqckjQUoqrcbembZ+H8x2lmpv0D0ScGl
+         ftj3Mbe2m6LE81xbez4sDX0pzlVBtBPL+208RL8fvqs0PXKS8CwfyprAdz0Hxtd6MWqR
+         4zEmGo3kvaRXqLc8511n4vuXZgJ3m6hKIaf0kpi49JODY374B53ftiJf+XiCQLOWH2aM
+         xMu9uHD6QrZtuInrjCaos2GKK4FO00XjAz860uSlH1iYlti4I8uOEfubShbBVeAosvza
+         HsszH2tHEIFp+ejUWCX///rgjBjEGVEfc6qi/HDRBiubJ2ZIt/ldPc5DwyPq9jUStaag
+         bGUw==
+X-Gm-Message-State: AC+VfDxRhbqqHANQ7Oph23ulYO3LBTiGgp6aIvXzpCc9u0C12sO2u/Dk
+        6R6AVt/Xs6Uh6NfuZu2MGOnX0A==
+X-Google-Smtp-Source: ACHHUZ5hHYo4gV8uQUWKVCRNzARvNo799/v9yRvPua8HHhkGITEqM4LqwLaYBr1k9K3X+T8WgUYW3A==
+X-Received: by 2002:a6b:b40d:0:b0:76c:77b9:b82e with SMTP id d13-20020a6bb40d000000b0076c77b9b82emr6043040iof.0.1684801344995;
+        Mon, 22 May 2023 17:22:24 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b27-20020a05663801bb00b004063510ba0esm2180436jaq.142.2023.05.22.17.22.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 17:22:24 -0700 (PDT)
+Message-ID: <e79352f2-6f16-5fe1-f757-39023ede4fe8@linuxfoundation.org>
+Date:   Mon, 22 May 2023 18:22:23 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519005529.28171-6-suravee.suthikulpanit@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6.1 000/292] 6.1.30-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230522190405.880733338@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230522190405.880733338@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 08:55:29PM -0400, Suravee Suthikulpanit wrote:
-> Invalidating Interrupt Remapping Table (IRT) requires, the AMD IOMMU driver
-> to issue INVALIDATE_INTERRUPT_TABLE and COMPLETION_WAIT commands.
-> Currently, the driver issues the two commands separately, which requires
-> calling raw_spin_lock_irqsave() twice. In addition, the COMPLETION_WAIT
-> could potentially be interleaved with other commands causing delay of
-> the COMPLETION_WAIT command.
+On 5/22/23 13:05, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.30 release.
+> There are 292 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Therefore, combine issuing of the two commands in one spin-lock, and
-> changing struct amd_iommu.cmd_sem_val to use atomic64 to minimize
-> locking.
+> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
+> Anything received after that time might be too late.
 > 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-
-> ---
->  drivers/iommu/amd/amd_iommu_types.h |  2 +-
->  drivers/iommu/amd/init.c            |  2 +-
->  drivers/iommu/amd/iommu.c           | 27 ++++++++++++++++++++++-----
->  3 files changed, 24 insertions(+), 7 deletions(-)
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.30-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
 > 
-> diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
-> index 486a052e37ca..2fa65da2a9a5 100644
-> --- a/drivers/iommu/amd/amd_iommu_types.h
-> +++ b/drivers/iommu/amd/amd_iommu_types.h
-> @@ -744,7 +744,7 @@ struct amd_iommu {
->  
->  	u32 flags;
->  	volatile u64 *cmd_sem;
-> -	u64 cmd_sem_val;
-> +	atomic64_t cmd_sem_val;
->  
->  #ifdef CONFIG_AMD_IOMMU_DEBUGFS
->  	/* DebugFS Info */
-> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-> index fc0392d706db..16737819f79a 100644
-> --- a/drivers/iommu/amd/init.c
-> +++ b/drivers/iommu/amd/init.c
-> @@ -1750,7 +1750,7 @@ static int __init init_iommu_one(struct amd_iommu *iommu, struct ivhd_header *h,
->  	iommu->pci_seg = pci_seg;
->  
->  	raw_spin_lock_init(&iommu->lock);
-> -	iommu->cmd_sem_val = 0;
-> +	atomic64_set(&iommu->cmd_sem_val, 0);
->  
->  	/* Add IOMMU to internal data structures */
->  	list_add_tail(&iommu->list, &amd_iommu_list);
-> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-> index 51c2b018433d..57ae4a8072d3 100644
-> --- a/drivers/iommu/amd/iommu.c
-> +++ b/drivers/iommu/amd/iommu.c
-> @@ -1182,11 +1182,11 @@ static int iommu_completion_wait(struct amd_iommu *iommu)
->  	if (!iommu->need_sync)
->  		return 0;
->  
-> -	raw_spin_lock_irqsave(&iommu->lock, flags);
-> -
-> -	data = ++iommu->cmd_sem_val;
-> +	data = atomic64_add_return(1, &iommu->cmd_sem_val);
->  	build_completion_wait(&cmd, iommu, data);
->  
-> +	raw_spin_lock_irqsave(&iommu->lock, flags);
-> +
->  	ret = __iommu_queue_command_sync(iommu, &cmd, false);
->  	if (ret)
->  		goto out_unlock;
-> @@ -1284,11 +1284,28 @@ static void amd_iommu_flush_irt_all(struct amd_iommu *iommu)
->  
->  static void iommu_flush_irt_and_complete(struct amd_iommu *iommu, u16 devid)
->  {
-> +	int ret;
-> +	u64 data;
-> +	unsigned long flags;
-> +	struct iommu_cmd cmd, cmd2;
-> +
->  	if (iommu->irtcachedis_enabled)
->  		return;
->  
-> -	iommu_flush_irt(iommu, devid);
-> -	iommu_completion_wait(iommu);
-> +	build_inv_irt(&cmd, devid);
-> +	data = atomic64_add_return(1, &iommu->cmd_sem_val);
-> +	build_completion_wait(&cmd2, iommu, data);
-> +
-> +	raw_spin_lock_irqsave(&iommu->lock, flags);
-> +	ret = __iommu_queue_command_sync(iommu, &cmd, true);
-> +	if (ret)
-> +		goto out;
-> +	ret = __iommu_queue_command_sync(iommu, &cmd2, false);
-> +	if (ret)
-> +		goto out;
-> +	wait_on_sem(iommu, data);
-> +out:
-> +	raw_spin_unlock_irqrestore(&iommu->lock, flags);
->  }
->  
->  void iommu_flush_all_caches(struct amd_iommu *iommu)
-> -- 
-> 2.31.1
+> thanks,
+> 
+> greg k-h
 > 
 
+Compiled and booted on my test system. No dmesg regressions.
+
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
