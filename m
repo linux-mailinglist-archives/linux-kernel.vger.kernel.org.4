@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2D970D469
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEFD70D46D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234819AbjEWG6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S234958AbjEWG6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbjEWG6H (ORCPT
+        with ESMTP id S235285AbjEWG63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:58:07 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2B0118;
-        Mon, 22 May 2023 23:58:06 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1ae4e6825e1so5141555ad.1;
-        Mon, 22 May 2023 23:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684825085; x=1687417085;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZM5XT34cBgfv2Ij0f5DaXFjWbPMhSNcnbAxzrFczaLA=;
-        b=enz8Xedziz0f/8RAVBRgSmFDM6ymyjmhV+LSl/7T1SBesmct1vlTDkARGIloJKq1iB
-         v6DidmujpipnUbDrB4/zlqlodRuy+vgpQvzhdJ3PgKDP8opkpONgkOakfFgYxbwBiA4H
-         rOfZGeRQAQHyhnH0P6n+dJQtuLibTWJ6G7JzTynJPOqHNPKAhcZMD01+Mw+GH4dMwloC
-         8U3T265n73yaujLpSRx9cMoQ1EK6MqEUf/apKSY3VUIPT+GwhjtK9SUnstDacjXvxaFG
-         kGQFidS0X01bEvVfkpWfJbVIdW2SAnpSQcgV4T2kVT9HKg3qwwdh+1UZk24Zyr3PgWpc
-         XWKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684825085; x=1687417085;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZM5XT34cBgfv2Ij0f5DaXFjWbPMhSNcnbAxzrFczaLA=;
-        b=BXteiSBw2tlAnO2MVN71Y8PZGBkdHHpTBI/PEU8wM4I9JUHwNOTmVSImN4jODhuymg
-         K1Ul5FrhKtN+u7ps9EodRQcRnHGzGsMCe21BnvuT7Q8WJUlweaQ7o8/oaexMGFcyWcj2
-         JVry6Zu3RmNrrhRINWUh3t9Q4nehlfczP2T/A8l8i5zZsOrtM6rZJKVXuoNIsa8oZd21
-         EtaSM8Vd8zz78I3dQTgvH6We5+vBg0Y7VdnICSnlY3A6Ps4XVyGsjlNZW0V7CqaMxjzm
-         etIvgxofsvhP+NLCSme3/NacaNHFUegeNwGde289h9PMPB+q7KBWwle8Y2z4kvSNgawa
-         1dnQ==
-X-Gm-Message-State: AC+VfDwHElQKXZrJ1qkYFMzyDN2OMrPdqbXjaofPU9bm9C4zJaBzmmYg
-        pXptHzSPEvGFV7B1/A81EqU=
-X-Google-Smtp-Source: ACHHUZ4hoYHbCLeAYftgyfacucJMQaWwahMLBSH7Gx8CpNbTlKgOxp9CsTTNrEsv5eqMP9vKMttLsg==
-X-Received: by 2002:a17:902:daca:b0:1ad:eada:598b with SMTP id q10-20020a170902daca00b001adeada598bmr14938496plx.3.1684825085543;
-        Mon, 22 May 2023 23:58:05 -0700 (PDT)
-Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090282c600b001ac912cac1asm5945593plz.175.2023.05.22.23.58.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 23:58:05 -0700 (PDT)
-From:   aloktiagi <aloktiagi@gmail.com>
-To:     viro@zeniv.linux.org.uk, willy@infradead.org, brauner@kernel.org,
-        David.Laight@ACULAB.COM, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     keescook@chromium.org, hch@infradead.org, tycho@tycho.pizza,
-        aloktiagi@gmail.com
-Subject: [RFC v6 1/2] epoll: Implement eventpoll_replace_file()
-Date:   Tue, 23 May 2023 06:58:01 +0000
-Message-Id: <20230523065802.2253926-1-aloktiagi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 May 2023 02:58:29 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C95139
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 23:58:26 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N5cDbj023991;
+        Tue, 23 May 2023 06:58:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ka4hgeKS4iLi6AZuM7zJORjaH4aXUV4J9FYGU0Q1d+I=;
+ b=LXK9CrYPPeY805u9vOb9VEE2jRLBbMaeB8etHO5MO1Mbl4KdRqGOvAFK7FcuUqsGSXPp
+ IUVjG2IOq6YDCDabvsDQKcXhQVxD69/9cpS8t404fIhTqiUaPxD7O+4SQAUyI4SZ/ggo
+ 1t0b4UbRbe4I2Ok2kjDN1CUtJKSZugTxEicwu/G4dp38XgWFo8MbxR425l0uSBt/Hk6A
+ GA85TNlSm65AIgil+THnt67cjk6izwbDw7Ei+DKdBjd49eJS6Voo8fCZAZlGVKNgZASO
+ Sca2jtJGUWYLc+UQAw1UFjJZzQQbhCEC6tcOao3t443ysNupcxZpHQEllL5D0CE+XN3R QA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qre8p10t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 06:58:09 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N6w87K014082
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 06:58:08 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
+ 2023 23:58:04 -0700
+Message-ID: <94f4a866-6f72-631e-360e-2e43ddcb466c@quicinc.com>
+Date:   Tue, 23 May 2023 12:28:01 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5/5] sched: fair: move unused stub functions to header
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230522195021.3456768-1-arnd@kernel.org>
+ <20230522195021.3456768-6-arnd@kernel.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230522195021.3456768-6-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mDOXb8Cx07sr8keiXBvUXJY_Te-P1dQM
+X-Proofpoint-GUID: mDOXb8Cx07sr8keiXBvUXJY_Te-P1dQM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 adultscore=0 mlxlogscore=878 mlxscore=0 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230056
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,142 +87,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a mechanism to replace a file linked in the epoll interface with a new
-file.
 
-eventpoll_replace() finds all instances of the file to be replaced and replaces
-them with the new file and the interested events.
 
-Signed-off-by: aloktiagi <aloktiagi@gmail.com>
----
-Changes in v6:
-  - incorporate latest changes that get rid of the global epmutex lock.
+On 5/23/2023 1:20 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> These four functions have a normal definition for CONFIG_FAIR_GROUP_SCHED,
+> and empty one that is only referenced when FAIR_GROUP_SCHED is disabled
+> but CGROUP_SCHED is still enabled. If both are turned off, the functions
+> are still defined but the misisng prototype causes a W=1 warning:
 
-Changes in v5:
-  - address review comments and move the call to replace old file in each
-    subsystem (epoll, io_uring, etc.) outside the fdtable helpers like
-    replace_fd().
+missing ?
 
-Changes in v4:
-  - address review comment to remove the redundant eventpoll_replace() function.
-  - removed an extra empty line introduced in include/linux/file.h
+> 
+> kernel/sched/fair.c:12544:6: error: no previous prototype for 'free_fair_sched_group'
+> kernel/sched/fair.c:12546:5: error: no previous prototype for 'alloc_fair_sched_group'
+> kernel/sched/fair.c:12553:6: error: no previous prototype for 'online_fair_sched_group'
+> kernel/sched/fair.c:12555:6: error: no previous prototype for 'unregister_fair_sched_group'
+> 
+> Move the alternatives into the header as static inline functions with
+> the correct combination of #ifdef checks to avoid the warning without
+> adding even more complexity.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Changes in v3:
-  - address review comment and iterate over the file table while holding the
-    spin_lock(&files->file_lock).
-  - address review comment and call filp_close() outside the
-    spin_lock(&files->file_lock).
----
- fs/eventpoll.c            | 76 +++++++++++++++++++++++++++++++++++++++
- include/linux/eventpoll.h |  8 +++++
- 2 files changed, 84 insertions(+)
+LGTM.
 
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index 980483455cc0..9c7bffa8401b 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -973,6 +973,82 @@ void eventpoll_release_file(struct file *file)
- 	spin_unlock(&file->f_lock);
- }
- 
-+static int ep_insert(struct eventpoll *ep, const struct epoll_event *event,
-+			struct file *tfile, int fd, int full_check);
-+
-+/*
-+ * This is called from eventpoll_replace() to replace a linked file in the epoll
-+ * interface with a new file received from another process. This is useful in
-+ * cases where a process is trying to install a new file for an existing one
-+ * that is linked in the epoll interface
-+ */
-+int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd)
-+{
-+	struct file *to_remove = toreplace;
-+	struct epoll_event event;
-+	struct hlist_node *next;
-+	struct eventpoll *ep;
-+	struct epitem *epi;
-+	int error = 0;
-+	bool dispose;
-+	int fd;
-+
-+	if (!file_can_poll(file))
-+		return 0;
-+
-+	spin_lock(&toreplace->f_lock);
-+	if (unlikely(!toreplace->f_ep)) {
-+		spin_unlock(&toreplace->f_lock);
-+		return 0;
-+	}
-+	hlist_for_each_entry_safe(epi, next, toreplace->f_ep, fllink) {
-+		ep = epi->ep;
-+		mutex_lock(&ep->mtx);
-+		fd = epi->ffd.fd;
-+		if (fd != tfd) {
-+			mutex_unlock(&ep->mtx);
-+			continue;
-+		}
-+		event = epi->event;
-+		error = ep_insert(ep, &event, file, fd, 1);
-+		mutex_unlock(&ep->mtx);
-+		if (error != 0) {
-+			break;
-+		}
-+	}
-+	spin_unlock(&toreplace->f_lock);
-+	/*
-+	 * In case of an error remove all instances of the new file in the epoll
-+	 * interface. If no error, remove all instances of the original file.
-+	 */
-+	if (error != 0)
-+		to_remove = file;
-+
-+again:
-+	spin_lock(&to_remove->f_lock);
-+	if (to_remove->f_ep && to_remove->f_ep->first) {
-+		epi = hlist_entry(to_remove->f_ep->first, struct epitem, fllink);
-+		fd = epi->ffd.fd;
-+		if (fd != tfd) {
-+			spin_unlock(&to_remove->f_lock);
-+			goto again;
-+		}
-+		epi->dying = true;
-+		spin_unlock(&to_remove->f_lock);
-+
-+		ep = epi->ep;
-+		mutex_lock(&ep->mtx);
-+		dispose = __ep_remove(ep, epi, true);
-+		mutex_unlock(&ep->mtx);
-+
-+		if (dispose)
-+			ep_free(ep);
-+		goto again;
-+	}
-+	spin_unlock(&to_remove->f_lock);
-+	return error;
-+}
-+
- static int ep_alloc(struct eventpoll **pep)
- {
- 	int error;
-diff --git a/include/linux/eventpoll.h b/include/linux/eventpoll.h
-index 3337745d81bd..2a6c8f52f272 100644
---- a/include/linux/eventpoll.h
-+++ b/include/linux/eventpoll.h
-@@ -25,6 +25,14 @@ struct file *get_epoll_tfile_raw_ptr(struct file *file, int tfd, unsigned long t
- /* Used to release the epoll bits inside the "struct file" */
- void eventpoll_release_file(struct file *file);
- 
-+/*
-+ * This is called from fs/file.c:do_replace() to replace a linked file in the
-+ * epoll interface with a new file received from another process. This is useful
-+ * in cases where a process is trying to install a new file for an existing one
-+ * that is linked in the epoll interface
-+ */
-+int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd);
-+
- /*
-  * This is called from inside fs/file_table.c:__fput() to unlink files
-  * from the eventpoll interface. We need to have this facility to cleanup
--- 
-2.34.1
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
+-- Mukesh
+
+> ---
+>   kernel/sched/fair.c  | 13 -------------
+>   kernel/sched/sched.h | 11 +++++++++++
+>   2 files changed, 11 insertions(+), 13 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index a7a8ccde3bd7..bae8907c1635 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -12602,19 +12602,6 @@ int sched_group_set_idle(struct task_group *tg, long idle)
+>   	return 0;
+>   }
+>   
+> -#else /* CONFIG_FAIR_GROUP_SCHED */
+> -
+> -void free_fair_sched_group(struct task_group *tg) { }
+> -
+> -int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+> -{
+> -	return 1;
+> -}
+> -
+> -void online_fair_sched_group(struct task_group *tg) { }
+> -
+> -void unregister_fair_sched_group(struct task_group *tg) { }
+> -
+>   #endif /* CONFIG_FAIR_GROUP_SCHED */
+>   
+>   
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index d5ac0af1eede..0584fa15ffeb 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -453,10 +453,21 @@ static inline int walk_tg_tree(tg_visitor down, tg_visitor up, void *data)
+>   
+>   extern int tg_nop(struct task_group *tg, void *data);
+>   
+> +#ifdef CONFIG_FAIR_GROUP_SCHED
+>   extern void free_fair_sched_group(struct task_group *tg);
+>   extern int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent);
+>   extern void online_fair_sched_group(struct task_group *tg);
+>   extern void unregister_fair_sched_group(struct task_group *tg);
+> +#else
+> +static inline void free_fair_sched_group(struct task_group *tg) { }
+> +static inline int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+> +{
+> +       return 1;
+> +}
+> +static inline void online_fair_sched_group(struct task_group *tg) { }
+> +static inline void unregister_fair_sched_group(struct task_group *tg) { }
+> +#endif
+> +
+>   extern void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
+>   			struct sched_entity *se, int cpu,
+>   			struct sched_entity *parent);
