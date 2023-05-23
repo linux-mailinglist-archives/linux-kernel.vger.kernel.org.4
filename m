@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AB670D058
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A880070D05B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbjEWBPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S234810AbjEWBQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234018AbjEWBPf (ORCPT
+        with ESMTP id S234018AbjEWBQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:15:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4CE90;
-        Mon, 22 May 2023 18:15:34 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N0sMdU001141;
-        Tue, 23 May 2023 01:15:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=UO1s0M03wTvIPHQ9cNLsV67P1G2h+uyQqJfOCg5+Al0=;
- b=C9/2v1FiRZLgSgnPPejoym+f75lnI0oaCErFFnUuDjkrhSEdzIzplBwk6+ReerB490Hm
- mxYS3rnyW2aPPPTnH+Sbbu4sIOh6vh6Eyxs4mi6kAunvWQ0KdRQ1fVWvH7VhJAcpC0q+
- 4Mtt17qEfFxU/xQ5nJpYQiY8Mq1wROuKcR2YqovZOc6G/l+JKuLvnQW3RyCldsXiD46P
- Cw99jpaWmd0VmUCWrHoV6nkuNthl/li+ah34tdAuwLJ1tPEzJe24aCAkFszqNhxqMDVO
- 2XwVIyW3lX3HMVf+Z51J317emCF7VHrPt1jHaRE4CJABYHK41CUntB5Rwmui4fhEAfhe Lg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmw6ra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 01:15:29 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N1FSK1014500
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 01:15:28 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 22 May 2023 18:15:28 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <johan@kernel.org>,
-        <mani@kernel.org>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sc8280xp: Enable GPU related nodes
-Date:   Mon, 22 May 2023 18:15:22 -0700
-Message-ID: <20230523011522.65351-4-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230523011522.65351-1-quic_bjorande@quicinc.com>
-References: <20230523011522.65351-1-quic_bjorande@quicinc.com>
+        Mon, 22 May 2023 21:16:42 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0984CC1;
+        Mon, 22 May 2023 18:16:18 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QQGbz17bjz4f3l8B;
+        Tue, 23 May 2023 09:16:15 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgCHZQPfE2xkQMLkJA--.15236S3;
+        Tue, 23 May 2023 09:16:16 +0800 (CST)
+Subject: Re: [PATCH v2] md: fix duplicate filename for rdev
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, neilb@suse.de, akpm@linux-foundation.org,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230522133225.2983667-1-yukuai1@huaweicloud.com>
+ <876eb6b4-db0f-02e8-9b24-4db3ebc6962d@molgen.mpg.de>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <06ec466d-398e-5817-7bf9-78b96b3f72e8@huaweicloud.com>
+Date:   Tue, 23 May 2023 09:16:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <876eb6b4-db0f-02e8-9b24-4db3ebc6962d@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: HOn7VQ6-RgtxjRw-NzPAZI1R5lCXk_SR
-X-Proofpoint-ORIG-GUID: HOn7VQ6-RgtxjRw-NzPAZI1R5lCXk_SR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_18,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230008
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-CM-TRANSID: _Ch0CgCHZQPfE2xkQMLkJA--.15236S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3KrW5Zw47WF1fGr1UuryDWrg_yoWkKFy8pr
+        Z5ta45GrWUAwn5Gr1UJr4DWa45Xr1Uta1DtryfX3WUAw43Ar1qgF4UXr1qgFy5ArWkZr1U
+        JF1UWrsrZFyUXr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,125 +67,329 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+Hi,
 
-Add memory reservation for the zap-shader and enable the Adreno SMMU,
-GPU clock controller, GMU and the GPU nodes for the SC8280XP CRD and the
-Lenovo ThinkPad X13s.
+在 2023/05/22 22:03, Paul Menzel 写道:
+> Dear Yu,
+> 
+> 
+> Thank you for your patch. Just a few nits, that can be ignored.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
+Thanks for these sugestions, I'll update them in v3.
 
-Changes since v1:
-- None
-
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     | 26 +++++++++++++++++++
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 26 +++++++++++++++++++
- 2 files changed, 52 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-index 5b25d54b9591..547277924ea3 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-@@ -210,6 +210,11 @@ vreg_wwan: regulator-wwan {
- 	};
- 
- 	reserved-memory {
-+		gpu_mem: gpu-mem@8bf00000 {
-+			reg = <0 0x8bf00000 0 0x2000>;
-+			no-map;
-+		};
-+
- 		linux,cma {
- 			compatible = "shared-dma-pool";
- 			size = <0x0 0x8000000>;
-@@ -259,6 +264,10 @@ usb1_sbu_mux: endpoint {
- 	};
- };
- 
-+&adreno_smmu {
-+	status = "okay";
-+};
-+
- &apps_rsc {
- 	regulators-0 {
- 		compatible = "qcom,pm8350-rpmh-regulators";
-@@ -376,6 +385,23 @@ &dispcc0 {
- 	status = "okay";
- };
- 
-+&gmu {
-+	status = "okay";
-+};
-+
-+&gpu {
-+	status = "okay";
-+
-+	zap-shader {
-+		memory-region = <&gpu_mem>;
-+		firmware-name = "qcom/sc8280xp/qcdxkmsuc8280.mbn";
-+	};
-+};
-+
-+&gpucc {
-+	status = "okay";
-+};
-+
- &mdss0 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index bdcba719fc38..5ef3f4c07d75 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -264,6 +264,11 @@ vreg_wwan: regulator-wwan {
- 	};
- 
- 	reserved-memory {
-+		gpu_mem: gpu-mem@8bf00000 {
-+			reg = <0 0x8bf00000 0 0x2000>;
-+			no-map;
-+		};
-+
- 		linux,cma {
- 			compatible = "shared-dma-pool";
- 			size = <0x0 0x8000000>;
-@@ -359,6 +364,10 @@ usb1_sbu_mux: endpoint {
- 	};
- };
- 
-+&adreno_smmu {
-+	status = "okay";
-+};
-+
- &apps_rsc {
- 	regulators-0 {
- 		compatible = "qcom,pm8350-rpmh-regulators";
-@@ -518,6 +527,23 @@ &dispcc0 {
- 	status = "okay";
- };
- 
-+&gmu {
-+	status = "okay";
-+};
-+
-+&gpu {
-+	status = "okay";
-+
-+	zap-shader {
-+		memory-region = <&gpu_mem>;
-+		firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcdxkmsuc8280.mbn";
-+	};
-+};
-+
-+&gpucc {
-+	status = "okay";
-+};
-+
- &mdss0 {
- 	status = "okay";
- };
--- 
-2.39.2
+Kuai
+> 
+> Am 22.05.23 um 15:32 schrieb Yu Kuai:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> commit 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a device
+> 
+> I’d start with capital letter: Commit ….
+> 
+>> from an md array via sysfs") delay the deleting of rdev, however, this
+> 
+> 1.  delay*s*
+> 2.  s/deleting/deletion/
+> 
+>> introduce a window that rdev can be added again while the deleting is
+> 
+> 1.  introduce*s*
+> 2.  s/deleting/deletion/
+> 
+>> not done yet, and sysfs will complain about duplicate filename.
+>>
+>> Follow up patches try to fix this problem by flush workqueue, however,
+> 
+> flush*ing* the work queue
+> 
+>> flush_rdev_wq() is just dead code, the progress in
+>> md_kick_rdev_from_array():
+> 
+> … is:
+> 
+>> 1) list_del_rcu(&rdev->same_set);
+>> 2) synchronize_rcu();
+>> 3) queue_work(md_rdev_misc_wq, &rdev->del_work);
+>>
+>> So in flush_rdev_wq(), if rdev is found in the list, work_pending() can
+>> never pass, in the meantime, if work is queued, then rdev can never be
+>> found in the list.
+>>
+>> flush_rdev_wq() can be replaced by flush_workqueue() directly, however,
+>> this approach is not good:
+>> - the workqueue is global, this synchronization for all raid disks is
+>>    not necessary.
+> 
+> The work queue …
+> 
+>> - flush_workqueue can't be called under 'reconfig_mutex', there is still
+>>    a small window between flush_workqueue() and mddev_lock() that other
+>>    context can queue new work, hence the problem is not solved 
+>> completely.
+> 
+> context*s*
+> 
+>> sysfs already have apis to support delete itself through writer, and
+> 
+> 1.  s/have/has/
+> 2.  deleting
+> 
+>> these apis, specifically sysfs_break/unbreak_active_protection(), is used
+> 
+> s/is/are/
+> 
+>> to support deleting rdev synchronously. Therefore, the above commit 
+>> can be
+>> reverted, and sysfs duplicate filename can be avoided.
+>>
+>> A new mdadm regression test is proposed as well.
+> 
+> It’s not included, right? Then I’d remove the sentence, or write: … is 
+> going to be proposed …
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> 
+>> Link: 
+>> https://lore.kernel.org/linux-raid/20230428062845.1975462-1-yukuai1@huaweicloud.com/ 
+>>
+>> Fixes: 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a 
+>> device from an md array via sysfs")
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>> Changes in v2:
+>>   - rebase from the latest md-next branch
+>>
+>>   drivers/md/md.c | 84 +++++++++++++++++++++++++------------------------
+>>   drivers/md/md.h |  8 +++++
+>>   2 files changed, 51 insertions(+), 41 deletions(-)
+>>
+>> diff --git a/drivers/md/md.c b/drivers/md/md.c
+>> index 7455bc9d8498..cafb457d614c 100644
+>> --- a/drivers/md/md.c
+>> +++ b/drivers/md/md.c
+>> @@ -92,6 +92,7 @@ static struct workqueue_struct *md_rdev_misc_wq;
+>>   static int remove_and_add_spares(struct mddev *mddev,
+>>                    struct md_rdev *this);
+>>   static void mddev_detach(struct mddev *mddev);
+>> +static void export_rdev(struct md_rdev *rdev);
+>>   /*
+>>    * Default number of read corrections we'll attempt on an rdev
+>> @@ -643,9 +644,11 @@ void mddev_init(struct mddev *mddev)
+>>   {
+>>       mutex_init(&mddev->open_mutex);
+>>       mutex_init(&mddev->reconfig_mutex);
+>> +    mutex_init(&mddev->delete_mutex);
+>>       mutex_init(&mddev->bitmap_info.mutex);
+>>       INIT_LIST_HEAD(&mddev->disks);
+>>       INIT_LIST_HEAD(&mddev->all_mddevs);
+>> +    INIT_LIST_HEAD(&mddev->deleting);
+>>       timer_setup(&mddev->safemode_timer, md_safemode_timeout, 0);
+>>       atomic_set(&mddev->active, 1);
+>>       atomic_set(&mddev->openers, 0);
+>> @@ -747,6 +750,23 @@ static void mddev_free(struct mddev *mddev)
+>>   static const struct attribute_group md_redundancy_group;
+>> +static void md_free_rdev(struct mddev *mddev)
+>> +{
+>> +    struct md_rdev *rdev;
+>> +    struct md_rdev *tmp;
+>> +
+>> +    if (list_empty_careful(&mddev->deleting))
+>> +        return;
+>> +
+>> +    mutex_lock(&mddev->delete_mutex);
+>> +    list_for_each_entry_safe(rdev, tmp, &mddev->deleting, same_set) {
+>> +        list_del_init(&rdev->same_set);
+>> +        kobject_del(&rdev->kobj);
+>> +        export_rdev(rdev);
+>> +    }
+>> +    mutex_unlock(&mddev->delete_mutex);
+>> +}
+>> +
+>>   void mddev_unlock(struct mddev *mddev)
+>>   {
+>>       if (mddev->to_remove) {
+>> @@ -788,6 +808,8 @@ void mddev_unlock(struct mddev *mddev)
+>>       } else
+>>           mutex_unlock(&mddev->reconfig_mutex);
+>> +    md_free_rdev(mddev);
+>> +
+>>       /* As we've dropped the mutex we need a spinlock to
+>>        * make sure the thread doesn't disappear
+>>        */
+>> @@ -2428,13 +2450,6 @@ static int bind_rdev_to_array(struct md_rdev 
+>> *rdev, struct mddev *mddev)
+>>       return err;
+>>   }
+>> -static void rdev_delayed_delete(struct work_struct *ws)
+>> -{
+>> -    struct md_rdev *rdev = container_of(ws, struct md_rdev, del_work);
+>> -    kobject_del(&rdev->kobj);
+>> -    kobject_put(&rdev->kobj);
+>> -}
+>> -
+>>   void md_autodetect_dev(dev_t dev);
+>>   static void export_rdev(struct md_rdev *rdev)
+>> @@ -2452,6 +2467,8 @@ static void export_rdev(struct md_rdev *rdev)
+>>   static void md_kick_rdev_from_array(struct md_rdev *rdev)
+>>   {
+>> +    struct mddev *mddev = rdev->mddev;
+>> +
+>>       bd_unlink_disk_holder(rdev->bdev, rdev->mddev->gendisk);
+>>       list_del_rcu(&rdev->same_set);
+>>       pr_debug("md: unbind<%pg>\n", rdev->bdev);
+>> @@ -2465,15 +2482,17 @@ static void md_kick_rdev_from_array(struct 
+>> md_rdev *rdev)
+>>       rdev->sysfs_unack_badblocks = NULL;
+>>       rdev->sysfs_badblocks = NULL;
+>>       rdev->badblocks.count = 0;
+>> -    /* We need to delay this, otherwise we can deadlock when
+>> -     * writing to 'remove' to "dev/state".  We also need
+>> -     * to delay it due to rcu usage.
+>> -     */
+>> +
+>>       synchronize_rcu();
+>> -    INIT_WORK(&rdev->del_work, rdev_delayed_delete);
+>> -    kobject_get(&rdev->kobj);
+>> -    queue_work(md_rdev_misc_wq, &rdev->del_work);
+>> -    export_rdev(rdev);
+>> +
+>> +    /*
+>> +     * kobject_del() will wait for all in progress writers to be 
+>> done, where
+>> +     * reconfig_mutex is held, hence it can't be called under
+>> +     * reconfig_mutex and it's delayed to mddev_unlock().
+>> +     */
+>> +    mutex_lock(&mddev->delete_mutex);
+>> +    list_add(&rdev->same_set, &mddev->deleting);
+>> +    mutex_unlock(&mddev->delete_mutex);
+>>   }
+>>   static void export_array(struct mddev *mddev)
+>> @@ -3541,6 +3560,7 @@ rdev_attr_store(struct kobject *kobj, struct 
+>> attribute *attr,
+>>   {
+>>       struct rdev_sysfs_entry *entry = container_of(attr, struct 
+>> rdev_sysfs_entry, attr);
+>>       struct md_rdev *rdev = container_of(kobj, struct md_rdev, kobj);
+>> +    struct kernfs_node *kn = NULL;
+>>       ssize_t rv;
+>>       struct mddev *mddev = rdev->mddev;
+>> @@ -3548,6 +3568,10 @@ rdev_attr_store(struct kobject *kobj, struct 
+>> attribute *attr,
+>>           return -EIO;
+>>       if (!capable(CAP_SYS_ADMIN))
+>>           return -EACCES;
+>> +
+>> +    if (entry->store == state_store && cmd_match(page, "remove"))
+>> +        kn = sysfs_break_active_protection(kobj, attr);
+>> +
+>>       rv = mddev ? mddev_lock(mddev) : -ENODEV;
+>>       if (!rv) {
+>>           if (rdev->mddev == NULL)
+>> @@ -3556,6 +3580,10 @@ rdev_attr_store(struct kobject *kobj, struct 
+>> attribute *attr,
+>>               rv = entry->store(rdev, page, length);
+>>           mddev_unlock(mddev);
+>>       }
+>> +
+>> +    if (kn)
+>> +        sysfs_unbreak_active_protection(kn);
+>> +
+>>       return rv;
+>>   }
+>> @@ -4479,20 +4507,6 @@ null_show(struct mddev *mddev, char *page)
+>>       return -EINVAL;
+>>   }
+>> -/* need to ensure rdev_delayed_delete() has completed */
+>> -static void flush_rdev_wq(struct mddev *mddev)
+>> -{
+>> -    struct md_rdev *rdev;
+>> -
+>> -    rcu_read_lock();
+>> -    rdev_for_each_rcu(rdev, mddev)
+>> -        if (work_pending(&rdev->del_work)) {
+>> -            flush_workqueue(md_rdev_misc_wq);
+>> -            break;
+>> -        }
+>> -    rcu_read_unlock();
+>> -}
+>> -
+>>   static ssize_t
+>>   new_dev_store(struct mddev *mddev, const char *buf, size_t len)
+>>   {
+>> @@ -4520,7 +4534,6 @@ new_dev_store(struct mddev *mddev, const char 
+>> *buf, size_t len)
+>>           minor != MINOR(dev))
+>>           return -EOVERFLOW;
+>> -    flush_rdev_wq(mddev);
+>>       err = mddev_lock(mddev);
+>>       if (err)
+>>           return err;
+>> @@ -5590,7 +5603,6 @@ struct mddev *md_alloc(dev_t dev, char *name)
+>>        * removed (mddev_delayed_delete).
+>>        */
+>>       flush_workqueue(md_misc_wq);
+>> -    flush_workqueue(md_rdev_misc_wq);
+>>       mutex_lock(&disks_mutex);
+>>       mddev = mddev_alloc(dev);
+>> @@ -7553,9 +7565,6 @@ static int md_ioctl(struct block_device *bdev, 
+>> fmode_t mode,
+>>       }
+>> -    if (cmd == ADD_NEW_DISK || cmd == HOT_ADD_DISK)
+>> -        flush_rdev_wq(mddev);
+>> -
+>>       if (cmd == HOT_REMOVE_DISK)
+>>           /* need to ensure recovery thread has run */
+>>           wait_event_interruptible_timeout(mddev->sb_wait,
+>> @@ -9618,10 +9627,6 @@ static int __init md_init(void)
+>>       if (!md_misc_wq)
+>>           goto err_misc_wq;
+>> -    md_rdev_misc_wq = alloc_workqueue("md_rdev_misc", 0, 0);
+>> -    if (!md_rdev_misc_wq)
+>> -        goto err_rdev_misc_wq;
+>> -
+>>       ret = __register_blkdev(MD_MAJOR, "md", md_probe);
+>>       if (ret < 0)
+>>           goto err_md;
+>> @@ -9640,8 +9645,6 @@ static int __init md_init(void)
+>>   err_mdp:
+>>       unregister_blkdev(MD_MAJOR, "md");
+>>   err_md:
+>> -    destroy_workqueue(md_rdev_misc_wq);
+>> -err_rdev_misc_wq:
+>>       destroy_workqueue(md_misc_wq);
+>>   err_misc_wq:
+>>       destroy_workqueue(md_wq);
+>> @@ -9937,7 +9940,6 @@ static __exit void md_exit(void)
+>>       }
+>>       spin_unlock(&all_mddevs_lock);
+>> -    destroy_workqueue(md_rdev_misc_wq);
+>>       destroy_workqueue(md_misc_wq);
+>>       destroy_workqueue(md_wq);
+>>   }
+>> diff --git a/drivers/md/md.h b/drivers/md/md.h
+>> index 1eec65cf783c..4d191db831da 100644
+>> --- a/drivers/md/md.h
+>> +++ b/drivers/md/md.h
+>> @@ -531,6 +531,14 @@ struct mddev {
+>>       unsigned int            good_device_nr;    /* good device num 
+>> within cluster raid */
+>>       unsigned int            noio_flag; /* for memalloc scope API */
+>> +    /*
+>> +     * Temporarily store rdev that will be finally removed when
+>> +     * reconfig_mutex is unlocked.
+>> +     */
+>> +    struct list_head        deleting;
+>> +    /* Protect the deleting list */
+>> +    struct mutex            delete_mutex;
+>> +
+>>       bool    has_superblocks:1;
+>>       bool    fail_last_dev:1;
+>>       bool    serialize_policy:1;
+> 
+> .
+> 
 
