@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A4970D445
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E6E70D447
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbjEWGrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S235007AbjEWGsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbjEWGrh (ORCPT
+        with ESMTP id S230404AbjEWGsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:47:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E17118;
-        Mon, 22 May 2023 23:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684824455; x=1716360455;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gVWbWiw/ZDPW0HOBd+nK8L6v2Q4lPpGLd6wth1TKIO8=;
-  b=qKT+hR+Wh+HoFZMgkt1LApFrXNzkvSAUSXGwYUk8HFAeomi1nP/HCwGA
-   WYqg9IGm+Rg2s2WbxcLvO1gxlzamXGz/TWz0lQwq0o7+fo0KwV7OPxkcx
-   SeLFDy7+LZDrdvg+ShpKk/GsAgN7hgQIr3Y35vFGSs6OuN98Wxy54kzfc
-   +mBbtIlPD3aIF+x/g8hFDzQInHUajRBWfCZuQyCu3esGiRJ1zaMiyyGhd
-   ACurkMxOZxPUsqPQDRBQ8FdwBSqjCbqz6jKuxz5VIutb1ph86IUNMuIg2
-   BJpj9KTnjvlsIT79Yu6/dDPBnYpbGU2SveRE01cUZPhWhKbMc1ga+hYIL
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
-   d="asc'?scan'208";a="216790503"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 23:47:29 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 23:47:28 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 22 May 2023 23:47:27 -0700
-Date:   Tue, 23 May 2023 07:47:05 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Jaswinder Singh <jassisinghbrar@gmail.com>,
-        Jaswinder Singh <jassi.brar@samsung.com>,
-        Boojin Kim <boojin.kim@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH] dmaengine: pl330: rename _start to prevent build error
-Message-ID: <20230523-lushly-purr-9a93ea9f3573@wendy>
-References: <20230523000606.9405-1-rdunlap@infradead.org>
+        Tue, 23 May 2023 02:48:10 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C84118
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 23:48:01 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N5GKUZ018328;
+        Tue, 23 May 2023 06:47:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=UkRwBX3upaQasInjTTtl7uZI18qP9LlN//DSxUObA8k=;
+ b=V+cp9ccqRP4kE3cRwhWuuwTXlpMJ5kOstC5Ab1obEXRRf0HIRVgCtixMl0UMZ47ZD71F
+ gnAHn30Q0xr/2lqzoLDP+Bhl7gEhXS/tY+djoCwR+cUwzDE5da0Q4cZiAiRC7bTPhyiv
+ zWexqKYPKgqWijXOV/Oo1BbSczMx1cbh5u8aL+oOqd39ic0d8UGbVaCYxAKnHZfTQGUD
+ 4GMDj6QJuAyzkjnywQb16C9pv6OZd8sWKBUcqS/PBoZONBZni7yfwTQoSueoQP0b6VRa
+ SBtMqmAfUjzrUcMKpbK5GBu6REE0t61Z1hRV10cSosozCSy6iA8q5vjRLxi5bO9F9F0A fw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrq56g5b5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 06:47:42 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N6lfaZ003472
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 06:47:41 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
+ 2023 23:47:38 -0700
+Message-ID: <1d0de89c-db09-0689-2528-5b6d90ad7192@quicinc.com>
+Date:   Tue, 23 May 2023 12:17:35 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Z31axD9H5YaGMLWg"
-Content-Disposition: inline
-In-Reply-To: <20230523000606.9405-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/5] sched: hide unused sched_update_scaling()
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230522195021.3456768-1-arnd@kernel.org>
+ <20230522195021.3456768-2-arnd@kernel.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230522195021.3456768-2-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: iTPmKFj4T7oQkERhZVYTPYKnlt0MLc6m
+X-Proofpoint-ORIG-GUID: iTPmKFj4T7oQkERhZVYTPYKnlt0MLc6m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_03,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 mlxscore=0 impostorscore=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230055
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Z31axD9H5YaGMLWg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey Randy,
 
-On Mon, May 22, 2023 at 05:06:06PM -0700, Randy Dunlap wrote:
-> "_start" is used in several arches and proably should be reserved
-> for ARCH usage. Using it in a driver for a private symbol can cause
-> a build error when it conflicts with ARCH usage of the same symbol.
->=20
-> Therefore rename pl330's "_start" to "_start_thread" so that there
-> is no conflict and no build error.
+On 5/23/2023 1:20 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This function is only used when CONFIG_SMP is enabled, without that there
+> is no caller and no prototype:
+> 
+> kernel/sched/fair.c:688:5: error: no previous prototype for 'sched_update_scaling' [-Werror=missing-prototypes
+> 
+> Hide the definition in the same #ifdef check as the declaration.
+> 
+> Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-_start_thread() seems pretty generic to me too, but there don't appear
-to be any users & it is certainly better than the one causing build
-issues!
+LGTM, thanks.
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+-- Mukesh
 
-Thanks,
-Conor.
-
->=20
-> drivers/dma/pl330.c:1053:13: error: '_start' redeclared as different kind=
- of symbol
->  1053 | static bool _start(struct pl330_thread *thrd)
->       |             ^~~~~~
-> In file included from ../include/linux/interrupt.h:21,
->                  from ../drivers/dma/pl330.c:18:
-> arch/riscv/include/asm/sections.h:11:13: note: previous declaration of '_=
-start' with type 'char[]'
->    11 | extern char _start[];
->       |             ^~~~~~
-
---Z31axD9H5YaGMLWg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGxhZQAKCRB4tDGHoIJi
-0rdIAP0Wabw96Kn9nVf+19fFM6AKRhl6z6gMm92JhKoWeudwbgEA7e0bLMA81R1s
-DRBqxN4TNE5YBg3iPigE5gMne6P0KQ4=
-=sBDX
------END PGP SIGNATURE-----
-
---Z31axD9H5YaGMLWg--
+> ---
+>   kernel/sched/fair.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 48b6f0ca13ac..2c1b345c3b8d 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -684,7 +684,7 @@ struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)
+>   /**************************************************************
+>    * Scheduling class statistics methods:
+>    */
+> -
+> +#ifdef CONFIG_SMP
+>   int sched_update_scaling(void)
+>   {
+>   	unsigned int factor = get_update_sysctl_factor();
+> @@ -702,6 +702,7 @@ int sched_update_scaling(void)
+>   	return 0;
+>   }
+>   #endif
+> +#endif
+>   
+>   /*
+>    * delta /= w
