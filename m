@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B3270E89D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AF970E8A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238773AbjEWWFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S232208AbjEWWKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbjEWWFf (ORCPT
+        with ESMTP id S238794AbjEWWJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:05:35 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5CAC2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:05:31 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f600a6a890so25625e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684879530; x=1687471530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2WG7cm3SOeE/AEmJ5imPtVDm8ujtcFrQwX6MexQOiXA=;
-        b=WgGqTH+fr7xzJ54Wv5q5B/fbZQtGZzIeF7zH10dyE2lfIyMWMk9Sa1co17wzGUEoO1
-         zridCyqqqIDgZ/GPkIsmtLW73lTXaUibio0Nj0nTIPixvhE8xbHOX9EcN57b677hCZyV
-         BL2LQrOmLTap/9v0APYz6LB1h+gj3FfLtp6VJ9v/0dG++AL5BDCC3e+4lmx4aZfPjLG/
-         LVCOC+DO4OfGUk4GgGOFUlcnRMSrErNHsVvuOrUyXnjVuiX6BIuFOMdnyy8bSRtniSgy
-         n1FSM9n3hxf/BsepoPBWGTx8515rjMph8knbc5T5yyM5tzMq+P+Rv0xIxWo2VHTkccHd
-         U66w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684879530; x=1687471530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2WG7cm3SOeE/AEmJ5imPtVDm8ujtcFrQwX6MexQOiXA=;
-        b=WCS9BpX2GACWiePmLlJKTHFljMaDcbVIe8h+rs7PtnTF2hrdAB/Scf/3H76SalETS7
-         T9nHt7uH+bNAjXLHvf0LS3xBUr8IyxdIMA8tKJWVSiSElonto6lmECvvIIK07uhSQELi
-         YDIof4ejT8aydjqSyPUU2r0p1ajsfOndBuf9JuZ/+Bn1AWBxrCZqfDDUwhrUOjOu4YG4
-         Csgp96Vd/8mPgUhVq6OC4cDyJSZXtv35OogbL5PasL8rGcvbM7rEYErMn8MvfS57p+8Y
-         lrGGm5oM+pvEO63OELiptWyecjT13cJ3E8qA4b2wfVvk9OY+3352GVTb0EhfM6S2FXkp
-         vvcg==
-X-Gm-Message-State: AC+VfDxwMCuPMAVa8wnsR2QBq7er+H/zYKn4oXSZGY3c9X84zP153UE1
-        2j7IYWQkYRiu3+sLQSilmF7tk9yVi6nVTbt7dpdfZA==
-X-Google-Smtp-Source: ACHHUZ6uGkm2EnvzV8wfnKBvB7qTrDSxdqvEltJbQAidg1jAdH//992ples+uIUAin3vmMaLJSN5IADG76zb82LC34Q=
-X-Received: by 2002:a05:600c:1c87:b0:3f4:2594:118a with SMTP id
- k7-20020a05600c1c8700b003f42594118amr64682wms.2.1684879530132; Tue, 23 May
- 2023 15:05:30 -0700 (PDT)
+        Tue, 23 May 2023 18:09:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154F383;
+        Tue, 23 May 2023 15:09:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQpQL0vjQz4wj7;
+        Wed, 24 May 2023 08:09:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684879786;
+        bh=iIDoBcVHb/UZ+/Rak8F0hbc2VDnQPKsPhR9nbEg5jnI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nnp3Oh3Ex9T0iHbC+71OsYN52qk0NbIMZlVtGKwcmlDDFxgmOeyi9Jmy/xf4Q3WhK
+         fYRxq6SxWIGMNjoC7uLdu7opYMq7Gymcceo788rFs1Lg+VzO29DqiKtDrvksbPVYPX
+         5JOTFPWEP9plSZ/Sr2d2RRmJVt3//Y5AwDzB+Vbbvj+wMx3UZZVHdRm9fp8F4p5OaV
+         f3x+pstSLxOJsFZx+Uraq8P0eAQU2KFM5xBazecbLjHUHpXyHkOVNGrMeHbKIHLT25
+         6MPH6utA9eYFAXThcdqlpgeyoBChgSqbOl5H5FjA1UcOcgZWn6nXG3E4cqNUXYh4+t
+         6m/WwsYtGaAwA==
+Date:   Wed, 24 May 2023 08:09:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Manuel Lauss <manuel.lauss@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the mips-fixes tree
+Message-ID: <20230524080933.5ed64c2e@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230523205922.3852731-1-kaleshsingh@google.com>
-In-Reply-To: <20230523205922.3852731-1-kaleshsingh@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 23 May 2023 16:04:51 -0600
-Message-ID: <CAOUHufb88CBQibAx=jr7xX7y4Witw4HhCSAd-P4q2qoCKBLZSw@mail.gmail.com>
-Subject: Re: [PATCH] mm-unstable: Multi-gen LRU: Fix workingset accounting
-To:     Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org
-Cc:     surenb@google.com, android-mm@google.com, kernel-team@android.com,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Brian Geffon <bgeffon@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/RDW_oI9pS9cyWTl58Sp9R9d";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 2:59=E2=80=AFPM Kalesh Singh <kaleshsingh@google.co=
-m> wrote:
->
-> On Android app cycle workloads, MGLRU showed a significant reduction
-> in workingset refaults although pgpgin/pswpin remained relatively
-> unchanged. This indicated MGLRU may be undercounting workingset
-> refaults.
->
-> This has impact on userspace programs, like Android's LMKD, that
-> monitor workingset refault statistics to detect thrashing.
->
-> It was found that refaults were only accounted if the MGLRU shadow
-> entry was for a recently evicted folio. However, recently evicted
-> folios should be accounted as workingset activation, and refaults
-> should be accounted regardless of recency.
->
-> Fix MGLRU's workingset refault and activation accounting to more
-> closely match that of the conventional active/inactive LRU.
->
-> Fixes: ac35a4902374 ("mm: multi-gen LRU: minimal implementation")
-> Cc: Yu Zhao <yuzhao@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Reported-by: Charan Teja Kalla <quic_charante@quicinc.com>
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+--Sig_/RDW_oI9pS9cyWTl58Sp9R9d
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Yu Zhao <yuzhao@google.com>
+Hi all,
+
+Commit
+
+  2d645604f69f ("MIPS: Alchemy: fix dbdma2")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RDW_oI9pS9cyWTl58Sp9R9d
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtOZ4ACgkQAVBC80lX
+0Gx21ggAiv4DuI/CtKgi+6DhahoP+hSzCBbfO0Fm4zhBtbeA3XmbphM4hUI7/xpb
+o8EglF9yalMYuKIdC8odsuu70pUcZXBXU3TFfQYskpqazWzR6S9IjQfJnAYE91p0
+4ErEzgEeE+cse/KH5nw84aBxF8IUi42D6CaoC5GiuufeRuctZy2gRNgHeyPpKpPR
+UxsIhKCP1WVeo581RSvyjKfjANqKTXxrNMHOeiI7ydIm8UI9i53+CbYjY6pNko+L
+s25A/zukW4WzkfeQx21LyRpfMQM7klJLivmUMlJGimXUsWVr0mqId5Uch/QdSG4y
+Iw1XYXs03DK9KuGG03RMjiVKgkbjaw==
+=QS4z
+-----END PGP SIGNATURE-----
+
+--Sig_/RDW_oI9pS9cyWTl58Sp9R9d--
