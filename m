@@ -2,119 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B2370E774
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E3C70E778
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238520AbjEWVih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        id S238636AbjEWVjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238615AbjEWVie (ORCPT
+        with ESMTP id S238377AbjEWVjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:38:34 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8682B13E
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:38:33 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d722dac08so55116b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:38:33 -0700 (PDT)
+        Tue, 23 May 2023 17:39:23 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5123011A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:39:22 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba83fed5097so414428276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1684877913; x=1687469913;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y3hgiqpB5zVKDFFdyJMjJwHka3pMf+c6meTRxKFE5Y8=;
-        b=HV0x7zMa3YUbocqLk9aQXetrr9ryZrB2RfV/YHAmZdFJpj+J580kbNoVs4yJlfTFah
-         ckNKve4m5JHJM0d8z9nn7Yqv7jv5UBLUa+T+a8+ebv1Wsbais4D+qvWMEy2jRH4dil9G
-         tJ7wy8o9Lz273r80L/Z1B57YiCRZwsGm+tYwKZyFWJwnBZuZthVeTePg7VZl6oiN2XJ2
-         9GRQt0ScSnlnvSHgMNgKlnibVxl1CRc+bBWnxfS2cgidXqKhWTDIngNLnXI9LrKYMY1f
-         4TvQMgtsNSNAKpHzNi22AtmTavnbUWPICiuWaY95rxXfeRRuU53lRjLfUDp61LpRkgnr
-         H+Hw==
+        d=google.com; s=20221208; t=1684877961; x=1687469961;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DYoP+7y3H6KxflmECkTj0wmu7P4fg+DdkxFWOe2r+Gw=;
+        b=k422eVrA6fDyydzitMAUgA2r/qnrQx3xF/tcqF59GxVqCShRzRg+N7Wq9rm5NbQfWW
+         z5e4qyiz3RDva2Adh70L+JCtIsFJYG8aickJkoE550FSPN29CkPxC5rPZyfxZSyS1E2F
+         UK/7GXhsUVEOGD13zSi5LxupV6swxC/PTX/cqV+07xqwkczw/291xohgRVSL+A4+oH3v
+         ien9Ol3VSQjSSLXfXe/RPaLDPNwIIBUXaTZQkjfWJArf6QeTyxwlPcB0T3wMG9spdZjQ
+         fJL4oADoF5YbWWX2Fe+mm+vB282fG6Kmr/bGIYTDl9mlt/SgcdV7AXH5t0dXoBmmCZA7
+         /2OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684877913; x=1687469913;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y3hgiqpB5zVKDFFdyJMjJwHka3pMf+c6meTRxKFE5Y8=;
-        b=G9fio94B1EKCqA+cpKZ+6tmaKgWHe3DZpHFpZn/+V0s7AsXVx5C/VUhzc+lX3TfqKE
-         uq+5nkqjY1i0ewJicqJI+Ao7j8pJFHLMwXV7KICKMrH/2gLwjCHddNlDE3g2KIcOfsks
-         uAG0ap6GVzaUiSssGr084dgmegmvHnTUF+fd2scswpr2IpZM3Y0iCq0VSoq67lcT4e8B
-         hg0+XHZ9Xm47VhmYlQv76oJgwelqdEwonnSTxJSRUcsUkkc4sjW+NsOQiVxBziajyJwW
-         WcSE/Ot4Ya+8Ik5+bZQGZiMgqgP2OhYCYpA5YmVXkkbFP7ljyONg+AggDb4RkwvCHUpk
-         aQmw==
-X-Gm-Message-State: AC+VfDw0IG+TCmhIfJ6pJUmpB1lyudFhqtx1/bY4qgW6t8FCg6ahSu9e
-        CrsU9nHQ+28B3U067tV4ZmJahw==
-X-Google-Smtp-Source: ACHHUZ7ClhRNdRTJXLeQvAK7QipR6vjidsxzbsGyag+DC7WYvwlkS2VPbAibt93EUTxmMRNaSgC1/Q==
-X-Received: by 2002:a05:6a20:7da6:b0:100:eb1e:3939 with SMTP id v38-20020a056a207da600b00100eb1e3939mr15611360pzj.1.1684877912960;
-        Tue, 23 May 2023 14:38:32 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j12-20020aa78dcc000000b0062de9ef6915sm6168473pfr.216.2023.05.23.14.38.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 14:38:32 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Jason Gunthorpe <jgg@ziepe.ca>
-In-Reply-To: <20230522205744.2825689-1-dhowells@redhat.com>
-References: <20230522205744.2825689-1-dhowells@redhat.com>
-Subject: Re: [PATCH v21 0/6] block: Use page pinning
-Message-Id: <168487791137.449781.3170440352656135902.b4-ty@kernel.dk>
-Date:   Tue, 23 May 2023 15:38:31 -0600
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1684877961; x=1687469961;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DYoP+7y3H6KxflmECkTj0wmu7P4fg+DdkxFWOe2r+Gw=;
+        b=JJ1ziXscigvCbhAl1/GZtWvV8yBWT3FgkAg4mk4TUXbfubzOuLACaff0R9dNWwdbm8
+         Gb7wtGsYKUW1njpVhXvliLRSkuAn2WvBKKziEXmmgK43g2Krz5XZhA9HMMzIOyRFx3tq
+         /ESnb3c4ycEddm2UnNpuQhQd5AsLDTZEqM/TIdbEKvPb6e68rA15V1ATT5D6wRNeLLBm
+         Az6Az42CeQwBDLOg5kMjxskVsxXIbXhLBhHLXy6SsKa10BiBQv7T41e2Yc8w3CWjGZAT
+         pg2bev2DuhjF+sprQB4ODDx4mP63i9K4jd1tsLgbMdC0MDjRGXdx2Zh1wRgU/dznQwI7
+         7WPA==
+X-Gm-Message-State: AC+VfDw+F8yYnYk9h/Bk+kf2QtHjKUtQTD7CmvzxcWngO2bupdRuCEwo
+        0YBR8M1gEnbW1kuHd1oK/CAAZn6RY+sTnQ==
+X-Google-Smtp-Source: ACHHUZ4KOVqeROcsaIln6n/RyrzYJhz0YdaKsjzfxCm5OaISXvJWu4eXlRwxUTJ/QOJv0yXbMHASyg02e/yptA==
+X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
+ (user=pranavpp job=sendgmr) by 2002:a5b:909:0:b0:ba8:736a:5bec with SMTP id
+ a9-20020a5b0909000000b00ba8736a5becmr9228478ybq.6.1684877961612; Tue, 23 May
+ 2023 14:39:21 -0700 (PDT)
+Date:   Tue, 23 May 2023 21:39:10 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230523213912.4006380-1-pranavpp@google.com>
+Subject: [PATCH 0/2]
+From:   Pranav Prasad <pranavpp@google.com>
+To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pranav Prasad <pranavpp@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series adds fatal error checks for pm8001 driver
+functions pm8001_phy_control() and pm8001_lu_reset().
 
-On Mon, 22 May 2023 21:57:38 +0100, David Howells wrote:
-> This patchset rolls page-pinning out to the bio struct and the block layer,
-> using iov_iter_extract_pages() to get pages and noting with BIO_PAGE_PINNED
-> if the data pages attached to a bio are pinned.  If the data pages come
-> from a non-user-backed iterator, then the pages are left unpinned and
-> unref'd, relying on whoever set up the I/O to do the retaining.
-> 
-> This requires the splice-read patchset to have been applied first,
-> otherwise reversion of the ITER_PAGE iterator can race with truncate and
-> return pages to the allocator whilst they're still undergoing DMA[2].
-> 
-> [...]
+1. Added a fatal error check in pm8001_phy_control().
 
-Applied, thanks!
+2. Added a fatal error check in pm8001_lu_reset().
 
-[1/6] iomap: Don't get an reference on ZERO_PAGE for direct I/O block zeroing
-      commit: 9e73bb36b189ec73c7062ec974e0ff287c1aa152
-[2/6] block: Fix bio_flagged() so that gcc can better optimise it
-      commit: b9cc607a7f722c374540b2a7c973382592196549
-[3/6] block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted logic
-      commit: 100ae68dac60a0688082dcaf3e436606ec0fd51f
-[4/6] block: Add BIO_PAGE_PINNED and associated infrastructure
-      commit: 84d9fe8b7ea6a53fd93506583ff33a408f95ac60
-[5/6] block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
-      commit: b7c96963925fe08d4ef175b7d438c0017155807c
-[6/6] block: convert bio_map_user_iov to use iov_iter_extract_pages
-      commit: 36b61bb07963b13de4cc03a945aa25b9ffc7d003
+Changyuan Lyu (1):
+  scsi: pm80xx: Add fatal error check for pm8001_phy_control()
 
-Best regards,
+Igor Pylypiv (1):
+  scsi: pm80xx: Add fatal error check for pm8001_lu_reset()
+
+ drivers/scsi/pm8001/pm8001_sas.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
 -- 
-Jens Axboe
-
-
+2.40.1.698.g37aff9b760-goog
 
