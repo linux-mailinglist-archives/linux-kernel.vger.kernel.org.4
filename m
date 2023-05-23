@@ -2,128 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C748670DD41
+	by mail.lfdr.de (Postfix) with ESMTP id A008D70DD40
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236624AbjEWNM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S236428AbjEWNM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbjEWNMZ (ORCPT
+        with ESMTP id S236562AbjEWNMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:12:25 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19563109
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:12:24 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51190fd46c3so1367155a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:12:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1684847542; x=1687439542;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=0q0Er/yr0XbigUrMhIwfZk39HhWZ+8VHyfxFw7/ahKc=;
-        b=btePMZYW9idGfunVyuEfePLLz8XFXxwvMARByuGFiKJWjj5EKcyKTR618MPirBd/gK
-         wEgg+AoHOL+7Iiv/Pk+PPhMhowKFvg+ke1NhKOHsLC730ldjYzBbb002338TVhfOB7pS
-         cjTyLFddx2V/LfwE/betWSuWcu0lzkTYAZNcy0ciGG1bDeVSaWIDmlE+f94jz/hVWCRd
-         l8ghP/Ffa2G6J+qivDbjHv3GoRs6mzWxvoGuf/fWYefB5XPCLrGxTL+FfMg2BbrygpGT
-         NgE6ph5VZl3J1/D+ZMiLSk4TPxBFkfwLHrFDCNKDT4OW6llxobDUEzNpRAOs0vGkdu6D
-         YFDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684847542; x=1687439542;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0q0Er/yr0XbigUrMhIwfZk39HhWZ+8VHyfxFw7/ahKc=;
-        b=N0CohMyM7t2+heh9nHMTLHdgRVMUcVn6y3b3wITZuQLuIxkiaeSM24z+TbP+Z9hJ3O
-         GNa8Z4AYUzXAarLN+co/IpgWyjaIIBrb4R3oTi/xSmr/G2HvSnO/zH/KU7ZYFm2cMCXY
-         exgzZhIs1WKSxzjwqfJ3S4How0QHmXVnXib9HGFlR4Y1mz+F1sOW1Dxv/dfblYp8itZC
-         sYgSKDuU3zLQsviRikjuXinv5lQaeouYjKe2YVBP24Eoc9ShmiEQlyIVddwL2vZkERnR
-         jLWDIfsBVdS9mcuAxWwCc2ET/ywfORFNkbMY3adQUbW+Z/awV2qe1aKJ1wzqk9Y7tvYx
-         zGWg==
-X-Gm-Message-State: AC+VfDyPeAg1/vqhv27cbE8Ai2+yQdJRD7GGO3qEH7fOxyZDQWdt2UDE
-        TEbhtIFZowvZry0p1GjejMF+Ig==
-X-Google-Smtp-Source: ACHHUZ5kRj4YI64xMUrX7IZ9VgWw2yKzW1DREBH8Y6Ov4ig+VK1Ktgn02UEEIY6ytj+sVlzxsFYwMA==
-X-Received: by 2002:a05:6402:1217:b0:50b:faa1:e1d5 with SMTP id c23-20020a056402121700b0050bfaa1e1d5mr10125374edw.39.1684847542525;
-        Tue, 23 May 2023 06:12:22 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id a36-20020a509ea7000000b0050bd2f16ef5sm4241224edf.84.2023.05.23.06.12.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 06:12:22 -0700 (PDT)
-References: <20230517095905.3548100-1-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v1 1/2] rust: specify when `ARef` is thread safe
-Date:   Tue, 23 May 2023 15:11:13 +0200
-In-reply-to: <20230517095905.3548100-1-aliceryhl@google.com>
-Message-ID: <87y1lfdwei.fsf@metaspace.dk>
+        Tue, 23 May 2023 09:12:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFCA109;
+        Tue, 23 May 2023 06:12:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECC2760B2C;
+        Tue, 23 May 2023 13:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E37BC433EF;
+        Tue, 23 May 2023 13:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684847530;
+        bh=nVNVKCroG2DRvFC/0imQI8MOw3h1mDhbsG3ornLiA1k=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=GDQ+ipEmwgAM4KkwIlbeNpcF11aXBoZgQo5Utfi0u4R24Ktdk9PI/2nImGwpKMJgy
+         TY2Kq121LeNckPgZI3+jbXp/hFaqN6AuNnsW/NAl4TB0SkIgCGkFKpbsDOLjloo8yC
+         0wqQtjGGuH48mrKOuIxWHPK5z/z3JZTjrLN/vP1v+b8vBc2EYyMz14MHooItn26O8w
+         J6KnepEi7B0V8qO2MFl+4gSoluxgckryEyj8g52nDWGC25vLy5O+u9VN+Ssf+h3sRz
+         oEBs6GGZvNEJeSaya5NjS1EWJbN4CQ48t5Z5c3N0P0p4WjS+6V+dZTGosGvFe7QVam
+         DdaBNVOtxuOqw==
+Date:   Tue, 23 May 2023 15:12:06 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Denis Arefev <arefev@swemel.ru>
+cc:     Ping Cheng <ping.cheng@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
+Subject: Re: [PATCH] HID: wacom: Added error check
+In-Reply-To: <20230427114745.53136-1-arefev@swemel.ru>
+Message-ID: <nycvar.YFH.7.76.2305231511590.29760@cbobk.fhfr.pm>
+References: <20230427114745.53136-1-arefev@swemel.ru>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 27 Apr 2023, Denis Arefev wrote:
 
-Alice Ryhl <aliceryhl@google.com> writes:
+>    Added a variable check and
+>    transition in case of an error
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> An `ARef` behaves just like the `Arc` when it comes to thread safety, so
-> we can reuse the thread safety comments from `Arc` here.
->
-> This is necessary because without this change, the Rust compiler will
-> assume that things are not thread safe even though they are.
->
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  rust/kernel/types.rs | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index 29db59d6119a..9c8d94c04deb 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -321,6 +321,17 @@ pub struct ARef<T: AlwaysRefCounted> {
->      _p: PhantomData<T>,
->  }
->  
-> +// SAFETY: It is safe to send `ARef<T>` to another thread when the underlying `T` is `Sync` because
-> +// it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally, it needs
-> +// `T` to be `Send` because any thread that has an `ARef<T>` may ultimately access `T` directly, for
-> +// example, when the reference count reaches zero and `T` is dropped.
-> +unsafe impl<T: AlwaysRefCounted + Sync + Send> Send for ARef<T> {}
-> +
-> +// SAFETY: It is safe to send `&ARef<T>` to another thread when the underlying `T` is `Sync` for the
-> +// same reason as above. `T` needs to be `Send` as well because a thread can clone an `&ARef<T>`
-> +// into an `ARef<T>`, which may lead to `T` being accessed by the same reasoning as above.
-> +unsafe impl<T: AlwaysRefCounted + Sync + Send> Sync for ARef<T> {}
+Applied, thanks.
 
-Nit: I would prefer repeating the safety comment details, in case the
-two drift apart in the future.
-
-
-BR Andreas
-
-> +
->  impl<T: AlwaysRefCounted> ARef<T> {
->      /// Creates a new instance of [`ARef`].
->      ///
->
-> base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+Jiri Kosina
+SUSE Labs
 
