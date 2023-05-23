@@ -2,161 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B10070DF4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C98170DF44
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237058AbjEWOdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        id S236495AbjEWOc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236077AbjEWOdh (ORCPT
+        with ESMTP id S231334AbjEWOcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:33:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE94CFA;
-        Tue, 23 May 2023 07:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684852416; x=1716388416;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=TPVQ0VVbPTaQQmNO3A8vqVnzAiMmj/ojDjpM5LF4vM0=;
-  b=lH60THX/ycnFWvW2dze4HvFfK8PFlqU9k9NIYAHQkeW0iJZiTZ+QVlxh
-   7OhHGJmt/PfSV+XoByjT9mR+RDYNWYPbnEnrKKlOZFyhh6vXEs/hm/rGS
-   lYuwnceYBi0f8eiYfXQliNaw5HzMnwUuv9aDoFsPrB69+aT/e9B4Q5IVw
-   xYiXfpn2WlNB1TPzsi9ufO6cq6myeeSiozwcX+jniRsZTl3CwZGIx8A9y
-   DRFP4Io0My57VkBnohfyXhjJhA0dWVrDx3TnAOCUk2bHy/9+LdWswMNsW
-   xDX7ztlzTUGbV/Cer3Ls0iN4vNUBEXFJUF15/woc2zKhMIkiYhCbz+l42
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="350763382"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="350763382"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 07:32:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="654397638"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="654397638"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.39.37])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 07:31:56 -0700
-Message-ID: <0a325fc8-2945-862a-e6bd-eb7b0ac46fe5@intel.com>
-Date:   Tue, 23 May 2023 17:31:50 +0300
+        Tue, 23 May 2023 10:32:24 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1BCE0;
+        Tue, 23 May 2023 07:32:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Gt6OuL8CneaiBwQzPU5+pzNa/LWBLUojkUkd9+tYBq4=; b=xHpgA035ESTfW6OxAT34YyMjVg
+        3QD1QJ14QSOvqoGqaSie/022MatJ2xBc08jgt91qlusGfFH/jq6MB9VqPBxn+mYulk5n9PtUDuVbr
+        JR6oRIhn6xo44r75orJE3kqgI305+L1Im/LZswAaMzNStks89rMkm0kpgs+Slis0J0R6TBjzn0bUo
+        7EUoKPFZjo2ME2Mz1YFmIOIsqU+BRo7lfTisxa64DCXdlDzxcLgFw7+ixHRoyTS4dqUmicA3DXmZr
+        KsQxfhtoZpQ7bxgA0NQIZhIn9stNWqrnLIVqcLg+zJn4BvHHqapXBjosrDXJb8lLtcWi5H84VwSxR
+        uqkKEkKg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48098)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q1T3d-0000Y0-NF; Tue, 23 May 2023 15:32:13 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q1T3W-0000eE-Np; Tue, 23 May 2023 15:32:06 +0100
+Date:   Tue, 23 May 2023 15:32:06 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net v2 0/3] net: phy: mscc: support VSC8501
+Message-ID: <ZGzOZm0oJimLHCDA@shell.armlinux.org.uk>
+References: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
+ <c613298d-53bc-46ef-9cb2-4b385e21ba7b@lunn.ch>
+ <20230523133236.GA7185@nucnuc.mle>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v1 2/2] perf evsel: for_each_group fixes
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        James Clark <james.clark@arm.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Rob Herring <robh@kernel.org>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230523044446.1020769-1-irogers@google.com>
- <20230523044446.1020769-2-irogers@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230523044446.1020769-2-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523133236.GA7185@nucnuc.mle>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/23 07:44, Ian Rogers wrote:
-> Address/memory sanitizer was reporting issues in evsel__group_pmu_name
-> because the for_each_group_evsel loop didn't terminate when the head
-> was reached, the head would then be cast and accessed as an evsel
-> leading to invalid memory accesses. Fix for_each_group_member and
-> for_each_group_evsel to terminate at the list head. Note,
-> evsel__group_pmu_name no longer iterates the group, but the problem is
-> present regardless.
+On Tue, May 23, 2023 at 03:32:36PM +0200, David Epping wrote:
+> On Tue, May 23, 2023 at 03:16:51PM +0200, Andrew Lunn wrote:
+> > > - I left the mutex_lock(&phydev->lock) in the
+> > >   vsc85xx_update_rgmii_cntl() function, as I'm not sure whether it
+> > >   is required to repeatedly access phydev->interface and
+> > >   phy_interface_is_rgmii(phydev) in a consistent way.
+> > 
+> > Just adding to Russell comment.
+> > 
+> > As a general rule of thumb, if your driver is doing something which no
+> > other driver is doing, you have to consider if it is correct. A PHY
+> > driver taking phydev->lock is very unusual. So at minimum you should
+> > be able to explain why it is needed. And when it comes to locking,
+> > locking is hard, so you really should understand it.
+> > 
+> > Now the mscc is an odd device, because it has multiple PHYs in the
+> > package, and a number of registers are shared between these PHYs. So
+> > it does have different locking requirements to most PHYs. However, i
+> > don't think that is involved here. Those oddities are hidden behind
+> > phy_base_write() and phy_base_read().
+> > 
+> > 	Andrew
 > 
-> Fixes: 717e263fc354 ("perf report: Show group description when event group is enabled")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/evsel.h         | 24 ++++++++++++++++--------
->  tools/perf/util/evsel_fprintf.c |  1 +
->  2 files changed, 17 insertions(+), 8 deletions(-)
+> Russell, Andrew,
 > 
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index 820771a649b2..6a64543c7612 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -462,16 +462,24 @@ static inline int evsel__group_idx(struct evsel *evsel)
->  }
->  
->  /* Iterates group WITHOUT the leader. */
-> -#define for_each_group_member(_evsel, _leader) 					\
-> -for ((_evsel) = list_entry((_leader)->core.node.next, struct evsel, core.node); \
-> -     (_evsel) && (_evsel)->core.leader == (&_leader->core);					\
-> -     (_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-> +#define for_each_group_member_head(_evsel, _leader, _head)				\
-> +for ((_evsel) = list_entry((_leader)->core.node.next, struct evsel, core.node);		\
-> +	(_evsel) && (&(_evsel)->core.node != (_head)) &&				\
+> as you stated, locking is hard, and I am not in detail familiar with
+> the mscc driver and the supported PHYs behavior. Also, I only have
+> VSC8501, the single PHY chip, and none of the multi PHY chips to test.
+> And testing these corner cases and race conditions is hard anyways.
+> Thus my current patch is not touching the locking code at all, and
+> assumes the current mainline code is correct in that regard.
+> Because I don't understand all implications, I'm hesitant to change
+> the existing locking scheme.
+> Maybe this can be a separate patch? In the current patch set I'm not
+> making the situation worse (unlike the first one where I added locks
+> which Russell pointed out).
+> If you insist and all agree the locks should be removed with this
+> patch set, I'll update it of course.
 
-Extra parentheses perhaps not needed e.g. just
+Reading through this driver, IMHO it's clear that the original author
+didn't have much idea about locking.
 
-	&(_evsel)->core.node != (_head)
+Your assumption that taking phydev->lock in vsc85xx_rgmii_set_skews()
+protects phydev->interface is provably false, because:
 
-> +	(_evsel)->core.leader == (&_leader->core);					\
+static int vsc8584_config_init(struct phy_device *phydev)
+{
+...
+        if (phy_interface_is_rgmii(phydev)) {
+                ret = vsc85xx_rgmii_set_skews(phydev, VSC8572_RGMII_CNTL,
+                                              VSC8572_RGMII_RX_DELAY_MASK,
+                                              VSC8572_RGMII_TX_DELAY_MASK);
 
-Parentheses look odd, maybe should be:
+This accesses phydev->interface without holding phydev->lock,
+before entering vsc85xx_rgmii_set_skews().
 
-	&(_leader)->core
+The second place that vsc85xx_rgmii_set_skews() is called from is
+vsc85xx_default_config() which also accesses phydev->interface,
+again without taking the phydev->lock.
 
-> +	(_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-> +
-> +#define for_each_group_member(_evsel, _leader)				\
-> +	for_each_group_member_head(_evsel, _leader, &(_leader)->evlist->core.entries)
+So both paths into vsc85xx_rgmii_set_skews() have already read
+phydev->interface without taking the lock. If this was what the
+lock in vsc85xx_rgmii_set_skews() was protecting, then surely it
+would need to protect those reads as well! It doesn't.
 
-Did you consider using (_leader)->core.nr_members so that it is not
-necessary to assume the evlist back pointer is populated.
+Also, with knowledge of phylib, I can say that this lock is
+completely unnecessary when accessing phydev->interface in any
+PHY driver .config_init method, which is the only place that
+vsc85xx_rgmii_set_skews() is called from.
 
->  
->  /* Iterates group WITH the leader. */
-> -#define for_each_group_evsel(_evsel, _leader) 					\
-> -for ((_evsel) = _leader; 							\
-> -     (_evsel) && (_evsel)->core.leader == (&_leader->core);					\
-> -     (_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-> +#define for_each_group_evsel_head(_evsel, _leader, _head)				\
-> +for ((_evsel) = _leader;								\
-> +	(_evsel) && (&(_evsel)->core.node != (_head)) &&				\
-> +	(_evsel)->core.leader == (&_leader->core);					\
-> +	(_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-> +
-> +#define for_each_group_evsel(_evsel, _leader)				\
-> +	for_each_group_evsel_head(_evsel, _leader, &(_leader)->evlist->core.entries)
->  
->  static inline bool evsel__has_branch_callstack(const struct evsel *evsel)
->  {
-> diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
-> index cc80ec554c0a..036a2171dc1c 100644
-> --- a/tools/perf/util/evsel_fprintf.c
-> +++ b/tools/perf/util/evsel_fprintf.c
-> @@ -2,6 +2,7 @@
->  #include <inttypes.h>
->  #include <stdio.h>
->  #include <stdbool.h>
-> +#include "util/evlist.h"
->  #include "evsel.h"
->  #include "util/evsel_fprintf.h"
->  #include "util/event.h"
 
+Having read the rest of the driver, it would appear that phydev->lock
+is being abused to protect register accesses. This is evidenced by
+the following, where I also set out why it's wrong:
+
+vsc85xx_led_cntl_set()... which should be using phy_modify(), not
+phy_read()..modify..phy_write(), which is open to races e.g. from
+userspace MDIO access. phydev->lock doesn't solve anything there.
+
+vsc85xx_edge_rate_cntl_set()... which correctly uses
+phy_modify_paged() which itself will correctly prevent racy accesses
+by taking the MDIO bus lock. It makes no accesses to anything else,
+so phydev->lock here is entirely unnecessary.
+
+vsc85xx_mac_if_set()... which is another case of racy access in the
+same way as vsc85xx_led_cntl_set().
+
+vsc8531_pre_init_seq_set() and vsc85xx_eee_init_seq_set()... both of
+which IMHO show a complete misunderstanding for locking. At least
+both of these functions are safe from other threads accessing the
+bus because they correctly use phy_select_page()...phy_restore_page()
+(which uses the MDIO bus lock to guarantee no other access will
+happen.) BTW, I'm the author of phy_select_page()...phy_restore_page()
+which were added to ensure that PHY drivers can _safely_ access
+paged registers without fear of anything else disrupting accesses
+to those paged registers, not even from userspace.
+
+Essentially, taking phydev->lock offers absolutely zero protection
+against another thread making accesses to the PHYs registers. The
+*only* lock which prevents concurrent access to registers on devices
+on a MDIO bus is the MDIO bus lock.
+
+The only locking decision that I can see in this driver that is
+correct is in phy_base_(read|write) which correctly demand that the
+MDIO bus lock is held.
+
+
+Oh my, things get even more "fun"...
+
+vsc8574_config_pre_init() requires the MDIO bus lock to be held when
+its called. This function uses request_firmware(), which can call out
+ to userspace and then *block* waiting for userspace to respond. This
+will block *all* access to any device on that MDIO bus until the
+firmware request has been satisfied.
+
+Sorry, but the locking in this driver is nothing but a mess.
+
+I'm sorry that you're the one who's modifying the driver when we've
+spotted this, but please can you add a patch which first removes
+phydev->lock from vsc85xx_rgmii_set_skews() and then your patch on
+top please?
+
+At least that starts to reduce the amount of broken locking in this
+driver.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
