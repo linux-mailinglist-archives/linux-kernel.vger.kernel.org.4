@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FEE70CFD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BF170CFE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234203AbjEWAwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S233570AbjEWA5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbjEWAv5 (ORCPT
+        with ESMTP id S232747AbjEWA5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:51:57 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1071702;
-        Mon, 22 May 2023 17:45:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQFt63zXKz4x48;
-        Tue, 23 May 2023 10:43:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684802607;
-        bh=wR7JFpABtkHvbbbYe13yOqB8fGX0TUQ0Yg/dvCpATgQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aiVkLfrqtzR/YRF1FRXNPa5R0Wo+GriJRGMXbmjmcDt4w8A8idVfKqd2K2hL4Ufn0
-         GtazcmuCp0h5Kq12941imoEtNR2zvBO7VE0xuOxUfI+6KJhcJueSWCCcC/zMk4sd5V
-         fcJy5xl/IIMLeEE1uKUxz5v7Sxnl0gpipGAIYznJsuvNaQfbsDX7HuUeNWJIIIkq0m
-         ify3NYx7rOR1wzdIR7UeCoEbdj00ebmPaJsMWaR/yw6BogXIAOvVU7ZKJCRki7fakb
-         w22uOVC8LM+Nm236sidFl7vfUCcNITaCvNaCAiYmQqnUFUhMKSWRLuHkq7exBHesF8
-         Eo/f67ksSTPjA==
-Date:   Tue, 23 May 2023 10:43:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Artur Weber <aweber.kernel@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
-Message-ID: <20230523104324.602c426a@canb.auug.org.au>
+        Mon, 22 May 2023 20:57:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A248B1BE3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684803149; x=1716339149;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=diFwzbT3OxeffISLG2blwOVUHxqT8mdCxf9vNwSn2po=;
+  b=DeX0J41wV5HA3LnwDjBxVMcqLLYM2G0KUcc3aA3G6rOqsW3pe7NJKlIe
+   lm0zScCP3gcALIzj5Bmq/wlPjD+L/ttebc4Yv82IvlYUBqTh7XoPWe/gF
+   32F4XRmIfAZyLO8rmnOKD+SVY3QJSyYuaNBQkTgOx3bXSFFu3eIm0jbeK
+   CR5x8Bo2UvyKnjAcN7wjePpDfJvmazZOjBMJXxLKVxcE44blA9i4V4prd
+   84A1mDZgxzlLtBb94HqGdyUw64ey9fgXUG1vn+T2SXM+ROGZN+qsvRSnh
+   q+QtNkrDLTyJtP301XucOB8tVnGtFZ/GOEB3E6DyVTme8VLgLATL6t6pW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="381328606"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="381328606"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 17:51:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="848055285"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="848055285"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 17:51:27 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH -V2 3/5] swap: remove __swp_swapcount()
+References: <20230522070905.16773-1-ying.huang@intel.com>
+        <20230522070905.16773-4-ying.huang@intel.com>
+        <200a094f-7ca9-8a64-1c9b-7cf2e546f3eb@redhat.com>
+Date:   Tue, 23 May 2023 08:50:24 +0800
+In-Reply-To: <200a094f-7ca9-8a64-1c9b-7cf2e546f3eb@redhat.com> (David
+        Hildenbrand's message of "Mon, 22 May 2023 14:03:36 +0200")
+Message-ID: <87sfbnyipb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VanIubOJiW/o7W59wYZSUZ=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,94 +71,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/VanIubOJiW/o7W59wYZSUZ=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+David Hildenbrand <david@redhat.com> writes:
 
-Hi all,
+> On 22.05.23 09:09, Huang Ying wrote:
+>> __swp_swapcount() just encloses the calling to swap_swapcount() with
+>> get/put_swap_device().  It is called in __read_swap_cache_async()
+>> only, which encloses the calling with get/put_swap_device() already.
+>> So, __read_swap_cache_async() can call swap_swapcount() directly.
+>
+> The previous patch contained the hunk
+>
+> -		if (!__swp_swapcount(entry) && swap_slot_cache_enabled)
+> -			return NULL;
+> +		if (!swap_swapcount(si, entry) && swap_slot_cache_enabled)
+> +			goto fail;
+>  
+> So something is a bit off here. Either that hunk should go here, or
+> this patch description has to be adjusted.
+>
+>
+> But I guess patch #2 doesn't compile on its own because this patch
+> here adds swap_swapcount() to include/linux/swap.h ?
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+Good catch!  Will change this in the next version.
 
-  MAINTAINERS
+Best Regards,
+Huang, Ying
 
-between commit:
-
-  80e62bc8487b ("MAINTAINERS: re-sort all entries and fields")
-
-from Linus' tree and commit:
-
-  0dd53308f74f ("MAINTAINERS: Add entry for Samsung S6D7AA0 LCD panel contr=
-oller driver")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index 8e18bbafa740,7cc2bfa4af6f..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -6700,6 -6663,35 +6700,12 @@@ S:	Maintaine
-  F:	Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
-  F:	drivers/gpu/drm/panel/panel-samsung-s6d27a1.c
- =20
-+ DRM DRIVER FOR SAMSUNG S6D7AA0 PANELS
-+ M:	Artur Weber <aweber.kernel@gmail.com>
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-+ F:	drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-+=20
- -DRM DRIVER FOR SITRONIX ST7703 PANELS
- -M:	Guido G=C3=BCnther <agx@sigxcpu.org>
- -R:	Purism Kernel Team <kernel@puri.sm>
- -R:	Ondrej Jirman <megous@megous.com>
- -S:	Maintained
- -F:	Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.y=
-aml
- -F:	drivers/gpu/drm/panel/panel-sitronix-st7703.c
- -
- -DRM DRIVER FOR FIRMWARE FRAMEBUFFERS
- -M:	Thomas Zimmermann <tzimmermann@suse.de>
- -M:	Javier Martinez Canillas <javierm@redhat.com>
- -L:	dri-devel@lists.freedesktop.org
- -S:	Maintained
- -T:	git git://anongit.freedesktop.org/drm/drm-misc
- -F:	drivers/gpu/drm/drm_aperture.c
- -F:	drivers/gpu/drm/tiny/ofdrm.c
- -F:	drivers/gpu/drm/tiny/simpledrm.c
- -F:	drivers/video/aperture.c
- -F:	drivers/video/nomodeset.c
- -F:	include/drm/drm_aperture.h
- -F:	include/linux/aperture.h
- -F:	include/video/nomodeset.h
- -
-  DRM DRIVER FOR SITRONIX ST7586 PANELS
-  M:	David Lechner <david@lechnology.com>
-  S:	Maintained
-
---Sig_/VanIubOJiW/o7W59wYZSUZ=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRsDCwACgkQAVBC80lX
-0GxlHwgAoqNefHg17EErrEPKdWYkBzpCztwGe7VJBOBwNT43gcHifK71DiEv10dL
-E0xKvMv3324zlcv6kCaj4dDuPUoQ7KoPVdD7zNNfKepJuFyXNVh1JGbX6fJnkRza
-R32DacwEkHG+ol+yK/2hJA8JjtY/Yz6JghiZBkRiAFj9bOjomDLTUiSz1Kkk+yLG
-mGUvy7o2KFsMISj40q/y5hAW9cyAg2riv7bUvD+Kdk6+HCIm4n2C08Gad1GheEJ4
-MWYFs6P8frtxZpMfmVh7YtuH3ZjPcOU6H0vipIvZWfqVbQ5wJqAJOIwS+SwaVbzJ
-XIv2eodeuJoZgZ5TEz2IIFQS0mpC0Q==
-=HmDe
------END PGP SIGNATURE-----
-
---Sig_/VanIubOJiW/o7W59wYZSUZ=--
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Cc: David Hildenbrand <david@redhat.com>
+>> Cc: Hugh Dickins <hughd@google.com>
+>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Michal Hocko <mhocko@suse.com>
+>> Cc: Minchan Kim <minchan@kernel.org>
+>> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Cc: Yu Zhao <yuzhao@google.com>
+>> ---
+>>   include/linux/swap.h |  4 ++--
+>>   mm/swapfile.c        | 20 +-------------------
+>>   2 files changed, 3 insertions(+), 21 deletions(-)
+>> diff --git a/include/linux/swap.h b/include/linux/swap.h
+>> index 3c69cb653cb9..f6bd51aa05ea 100644
+>> --- a/include/linux/swap.h
+>> +++ b/include/linux/swap.h
+>> @@ -512,7 +512,7 @@ int find_first_swap(dev_t *device);
+>>   extern unsigned int count_swap_pages(int, int);
+>>   extern sector_t swapdev_block(int, pgoff_t);
+>>   extern int __swap_count(swp_entry_t entry);
+>> -extern int __swp_swapcount(swp_entry_t entry);
+>> +extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry);
+>>   extern int swp_swapcount(swp_entry_t entry);
+>>   extern struct swap_info_struct *page_swap_info(struct page *);
+>>   extern struct swap_info_struct *swp_swap_info(swp_entry_t entry);
+>> @@ -590,7 +590,7 @@ static inline int __swap_count(swp_entry_t entry)
+>>   	return 0;
+>>   }
+>>   -static inline int __swp_swapcount(swp_entry_t entry)
+>> +static inline int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+>>   {
+>>   	return 0;
+>>   }
+>> diff --git a/mm/swapfile.c b/mm/swapfile.c
+>> index 8419cba9c192..e9cce775fb25 100644
+>> --- a/mm/swapfile.c
+>> +++ b/mm/swapfile.c
+>> @@ -1443,7 +1443,7 @@ int __swap_count(swp_entry_t entry)
+>>    * This does not give an exact answer when swap count is continued,
+>>    * but does include the high COUNT_CONTINUED flag to allow for that.
+>>    */
+>> -static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+>> +int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+>>   {
+>>   	pgoff_t offset = swp_offset(entry);
+>>   	struct swap_cluster_info *ci;
+>> @@ -1455,24 +1455,6 @@ static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+>>   	return count;
+>>   }
+>>   -/*
+>> - * How many references to @entry are currently swapped out?
+>> - * This does not give an exact answer when swap count is continued,
+>> - * but does include the high COUNT_CONTINUED flag to allow for that.
+>> - */
+>> -int __swp_swapcount(swp_entry_t entry)
+>> -{
+>> -	int count = 0;
+>> -	struct swap_info_struct *si;
+>> -
+>> -	si = get_swap_device(entry);
+>> -	if (si) {
+>> -		count = swap_swapcount(si, entry);
+>> -		put_swap_device(si);
+>> -	}
+>> -	return count;
+>> -}
+>> -
+>>   /*
+>>    * How many references to @entry are currently swapped out?
+>>    * This considers COUNT_CONTINUED so it returns exact answer.
