@@ -2,50 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3041B70D747
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FFF70D744
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236151AbjEWIXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S235700AbjEWIX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbjEWIWi (ORCPT
+        with ESMTP id S236182AbjEWIWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:22:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB55DCA;
-        Tue, 23 May 2023 01:19:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 460586309B;
-        Tue, 23 May 2023 08:19:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AB8C433D2;
-        Tue, 23 May 2023 08:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684829991;
-        bh=A0k4JoNWJBA9S3JzueEEL26tq0QQWLvGW3XSCqvpSaY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=svMPzrcZ6aqyEWn8O2IwjO0F19CyCKHU+2VvTS3vLA35lKrR1Rj7g1nOkSYQfqXkq
-         AHZ4fk1U+MLZRJkaYM7Y1uisI2+9NMOQAS6psMa1n+zL3Fs/+HaJ/hAlyWwg3cHTEi
-         0sqJZGXDmtmxte3YKS83p1nLC3lT3P8PM95nHBUlItFR99DoXSCfcEevj1Hi9/p/nT
-         jK63u7aP3cky+U2AyDyqFB1KhcIL6E7S7M89yRrPifJJSwZxBj7dtHqY8MJLUeDuOw
-         C4FBNhvGliAabn0RsZB3k/vVZC2n//vlhwxA19Zs+YpIZvSJeYEn75F+ag8Qy00wHm
-         UtQ1L2X6SG4vw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Ian Kent <raven@themaw.net>
-Cc:     autofs@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] autofs: use flexible array in ioctl structure
-Date:   Tue, 23 May 2023 10:19:35 +0200
-Message-Id: <20230523081944.581710-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Tue, 23 May 2023 04:22:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B92110E3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:19:54 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <j.zink@pengutronix.de>)
+        id 1q1NFB-00042k-Vn; Tue, 23 May 2023 10:19:46 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <j.zink@pengutronix.de>)
+        id 1q1NFA-002CaN-MA; Tue, 23 May 2023 10:19:44 +0200
+Received: from localhost ([::1] helo=dude03.red.stw.pengutronix.de)
+        by dude03.red.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <j.zink@pengutronix.de>)
+        id 1q1NF9-006uEf-M8; Tue, 23 May 2023 10:19:43 +0200
+From:   Johannes Zink <j.zink@pengutronix.de>
+Subject: [PATCH v2 0/3] Support non-default LVDS data mapping for simple
+ panel
+Date:   Tue, 23 May 2023 10:19:40 +0200
+Message-Id: <20230523-simplepanel_support_nondefault_datamapping-v2-0-87196f0d0b64@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABx3bGQC/03OQQqDMBCF4atI1k21CS3Sq5QSxjjRAU2GTJSCe
+ PdqV13+i/fxNiWYCUU9q01lXEkoxSPMpVJ+hDigpv5oZRpjm7uxWmjmCRkiTk4W5pSLiyn2GGC
+ ZiuuhwAzMFAd9s94Gg2Da0KoD7EBQdxmiH09yfVxtXRKTr/9Q3S2iQ8ozlHPDGQN9fgdf733/A
+ uWrwz+wAAAA
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        patchwork-jzi@pengutronix.de, kernel@pengutronix.de,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Zink <j.zink@pengutronix.de>
+X-Mailer: b4 0.12.2
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: j.zink@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,82 +68,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Some LVDS panels, such as the innolux,g101ice-l01 support multiple LVDS
+data mapping modes, which can be configured by strapping a dataformat
+pin on the display to a specific voltage.
 
-Commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3") introduced a warning
-for the autofs_dev_ioctl structure:
+This can be particularly useful for using the jeida-18 format, which
+requires only 3 instead of 4 LVDS lanes.
 
-In function 'check_name',
-    inlined from 'validate_dev_ioctl' at fs/autofs/dev-ioctl.c:131:9,
-    inlined from '_autofs_dev_ioctl' at fs/autofs/dev-ioctl.c:624:8:
-fs/autofs/dev-ioctl.c:33:14: error: 'strchr' reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-   33 |         if (!strchr(name, '/'))
-      |              ^~~~~~~~~~~~~~~~~
-In file included from include/linux/auto_dev-ioctl.h:10,
-                 from fs/autofs/autofs_i.h:10,
-                 from fs/autofs/dev-ioctl.c:14:
-include/uapi/linux/auto_dev-ioctl.h: In function '_autofs_dev_ioctl':
-include/uapi/linux/auto_dev-ioctl.h:112:14: note: source object 'path' of size 0
-  112 |         char path[0];
-      |              ^~~~
+This series moves the data-mapping property for LVDS panels in a
+separate file and optionally adds it to simple-panel when matching to
+the innolux,g101ice-l01 compatible. This property allows to override
+the default data mapping set in the panel description in simple-panel.
 
-This is easily fixed by changing the gnu 0-length array into a c99
-flexible array. Since this is a uapi structure, we have to be careful
-about possible regressions but this one should be fine as they are
-equivalent here. While it would break building with ancient gcc versions
-that predate c99, it helps building with --std=c99 and -Wpedantic builds
-in user space, as well as non-gnu compilers. This means we probably
-also want it fixed in stable kernels.
+The last patch in this series actually adds the driver support for
+parsing the data format override device tree property and modifying the
+corresponding values for bit per color and media bus format in the panel
+descriptor.
 
-Cc: stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Gustavo A. R. Silva" <gustavoars@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Best regards
+Johannes
+
 ---
- Documentation/filesystems/autofs-mount-control.rst | 2 +-
- Documentation/filesystems/autofs.rst               | 2 +-
- include/uapi/linux/auto_dev-ioctl.h                | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/filesystems/autofs-mount-control.rst b/Documentation/filesystems/autofs-mount-control.rst
-index bf4b511cdbe8..b5a379d25c40 100644
---- a/Documentation/filesystems/autofs-mount-control.rst
-+++ b/Documentation/filesystems/autofs-mount-control.rst
-@@ -196,7 +196,7 @@ information and return operation results::
- 		    struct args_ismountpoint	ismountpoint;
- 	    };
- 
--	    char path[0];
-+	    char path[];
-     };
- 
- The ioctlfd field is a mount point file descriptor of an autofs mount
-diff --git a/Documentation/filesystems/autofs.rst b/Documentation/filesystems/autofs.rst
-index 4f490278d22f..3b6e38e646cd 100644
---- a/Documentation/filesystems/autofs.rst
-+++ b/Documentation/filesystems/autofs.rst
-@@ -467,7 +467,7 @@ Each ioctl is passed a pointer to an `autofs_dev_ioctl` structure::
- 			struct args_ismountpoint	ismountpoint;
- 		};
- 
--                char path[0];
-+                char path[];
-         };
- 
- For the **OPEN_MOUNT** and **IS_MOUNTPOINT** commands, the target
-diff --git a/include/uapi/linux/auto_dev-ioctl.h b/include/uapi/linux/auto_dev-ioctl.h
-index 62e625356dc8..08be539605fc 100644
---- a/include/uapi/linux/auto_dev-ioctl.h
-+++ b/include/uapi/linux/auto_dev-ioctl.h
-@@ -109,7 +109,7 @@ struct autofs_dev_ioctl {
- 		struct args_ismountpoint	ismountpoint;
- 	};
- 
--	char path[0];
-+	char path[];
- };
- 
- static inline void init_autofs_dev_ioctl(struct autofs_dev_ioctl *in)
+Changelog:
+
+v1 -> v2:  - dt bindings: Worked in Rob's review findings (thanks for your
+             review), refactored to use common include instead of duplication
+           - driver: added missing error unwinding goto, as found by Dan
+             Carpenter's test robot:
+             Reported-by: kernel test robot <lkp@intel.com>
+             Reported-by: Dan Carpenter <error27@gmail.com>
+             Link: https://lore.kernel.org/r/202304160359.4LHmFOlU-lkp@intel.com/
+
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Thierry Reding <thierry.reding@gmail.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+To: Sam Ravnborg <sam@ravnborg.org>
+Cc: patchwork-jzi@pengutronix.de
+Cc: kernel@pengutronix.de
+Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
+
+---
+Johannes Zink (3):
+      dt-bindings: display: move LVDS data-mapping definition to separate file
+      dt-bindings: display: simple: support non-default data-mapping
+      drm/panel-simple: allow LVDS format override
+
+ .../bindings/display/lvds-data-mapping.yaml        | 84 ++++++++++++++++++++++
+ .../devicetree/bindings/display/lvds.yaml          | 75 +++----------------
+ .../bindings/display/panel/panel-simple.yaml       | 26 ++++++-
+ drivers/gpu/drm/panel/panel-simple.c               | 39 +++++++++-
+ 4 files changed, 155 insertions(+), 69 deletions(-)
+---
+base-commit: 33a86170888b7e4aa0cea94ebb9c67180139cea9
+change-id: 20230523-simplepanel_support_nondefault_datamapping-13c3f2ea28f8
+
+Best regards,
 -- 
-2.39.2
+Johannes Zink <j.zink@pengutronix.de>
 
