@@ -2,189 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4471870D9E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4193670D9E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236490AbjEWKFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S236154AbjEWKF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236498AbjEWKEw (ORCPT
+        with ESMTP id S236373AbjEWKFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:04:52 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2120.outbound.protection.outlook.com [40.107.237.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7A4119;
-        Tue, 23 May 2023 03:04:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dnYJzrcsq/pwr9ovLPRr18nIP2Bf44TRAp9IWqkvjJSPD/MjryGj9+Fi6c6utXWx38VhiKW7sbvuVBA5FebWl8yjxPPEEt1Pdk9dPq9Ab4Dui2IlI/X+3UdCe/xrS77x8Cr85Z6f/iXFZAl7t5OzAzD7+UhW82Qi6K8a8xT/wmVdiKF9qt+pkyl+RmTXQCAICm2KfXQHysQcyEA4SmYH99A4M4BIXFqhmWDtmOWo/chKzyzcslwykp6xfcQbrVW6r+gzyqcZGhV1pATum0pDVq9x9qBnSe736GyD8qDlbxNn2BqrZaqX/Uzjjxa5YigjgC1yV7Ig3oecXfW9THwl3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KJYBoVzgs6bTKAM+vc0SYbEmT4n8azIWzn4/e1LaoHE=;
- b=X5cK4iuBRSPboPQVGHgcqpq17+qLtneEavvo6TugsiJN54zDxbAMhY+DbfZAA0bgg87e7ptMasPEOHSCAI4eSavdL6HjYGjv3fpnZiazrQSKi4IlQ7m2RIjB8k694HvXE7FUcLdGNYPfHqIpWQjZT1YK88Edbqapzk0cUKRl1L6QvV0NbZzggDtDjgu9CmoZjYSaoi8K+Mj87EMyXpbRfTibMW1CC7ayFm5fIf/hPA+JvitYg8zq2XH4SRiE7y5ft47L/8LQ42wy6dxoK2+qHjkguJQnEptGioF79Hn1j2vFFzQm0ZyL73tG5bYT0s3fkgH2UPpWoY6w/p8ojGeC6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KJYBoVzgs6bTKAM+vc0SYbEmT4n8azIWzn4/e1LaoHE=;
- b=AC5RlLZm02xeLIEK+prdLX7wt206aGWKOZ3j7FV5gsWnIUnrJpefq1O6YFIWrA8m5av/VC0nqdZX413URWjC6H/SgsYM39DJhCwkr2eEWrB5EzCAyZRME0u8+PeQR4LSr0WndwHxYnZ8E58RJ5oM+46cdDenqK3xqvI0D1icsdY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY5PR13MB3652.namprd13.prod.outlook.com (2603:10b6:a03:226::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 10:04:46 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Tue, 23 May 2023
- 10:04:45 +0000
-Date:   Tue, 23 May 2023 12:04:39 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Ying Hsu <yinghsu@chromium.org>
-Cc:     linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2] Bluetooth: Fix l2cap_disconnect_req deadlock
-Message-ID: <ZGyPt1GYGV2C2RQZ@corigine.com>
-References: <20230522234154.2924052-1-yinghsu@chromium.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522234154.2924052-1-yinghsu@chromium.org>
-X-ClientProxiedBy: AS4P191CA0018.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d9::14) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 23 May 2023 06:05:52 -0400
+Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EB2102
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1684836344; x=1687428344;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=UskLcCrsKrlmDgf+wEhylftUOjJIlHLEMaNgOVQRiIo=;
+        b=ozryJPwS0ZmkjEN1X6wrcWdJWI8gDFZnl9RnSaho4sKlZIu72ZDtbtFB6XjORGtr
+        rohVvHuiduiP6IJ/Qcn8ZA9/xM42DXYUAU1STd/z+DCzyRztsJitlbkEf5XMXsRK
+        AK5jR5ZxeBUy2dxKcthahHHIFl1tyHs3h2ushLZXdYs=;
+X-AuditID: ac14000a-917fe70000007ecb-92-646c8ff8acd6
+Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 6E.6C.32459.8FF8C646; Tue, 23 May 2023 12:05:44 +0200 (CEST)
+Received: from [172.25.39.28] (172.25.0.11) by Berlix.phytec.de (172.25.0.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 23 May
+ 2023 12:05:42 +0200
+Message-ID: <a6239983-4ab3-837c-c21c-524cec0f68fa@phytec.de>
+Date:   Tue, 23 May 2023 12:05:41 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY5PR13MB3652:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1806417c-ddf1-4fd3-2bef-08db5b7522b6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tb+RnuQMP+SU6FnkRqeekZjvFPqHLIolbjmHOEuLhWDTYGtzjuPVoV6wxlfjFo1AsWud9OefXFFFKx4CtPFmJTHvxs4gK5LwZ+HiLlyvgbxdndCs8OZ9JsjuMRFcmMFfguGEY9y/8ObUx40XczvPQnP+Njdsmo7UUxUC8BhxHzw25cOfusbcJg3T9uEfipaD8oqP5DlYNptgUXKVzH9yp//uSZ6cq796HhS3Gmtp5JuDhodGmW2FBZJvVFZCDkHJsTo8uZC7NNq14dovxvZ3sScy5yaXyFMEYYd7TrRxH1IfcJ6NOFZKzHKquJrFIkOoShkPfJ/SLgVmqAf9vWU9MODE/ea6NizSBh9OTnqbIzq/dxgzKwlgt5yoPZYr0IlCOsuU4e+gIfs/U3LY7eAYzrkqL1keibs+GLGD8g5VXUOXQplSyyHKsQ+elF739uksrlyvPo1pO677BWjdsu9cAP2ucj9z5OLldKR7KRjsp8HCaBXYSJNkhyV6biG4LY82HKaOZRcwUkbrv/ubLFTnIqWNitsH9JprhDvwNgPZ/BsbYolLyIZIc1349GNOWsjT
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(376002)(366004)(346002)(136003)(396003)(451199021)(41300700001)(66556008)(66476007)(66946007)(2906002)(186003)(44832011)(478600001)(6486002)(316002)(4326008)(6666004)(6916009)(5660300002)(54906003)(6512007)(7416002)(8936002)(8676002)(36756003)(2616005)(6506007)(83380400001)(86362001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QuHXy4h8+Wxdf8SW11T/dw7fqzVTFe4O6KkBmMXfQr9zCQCQ+Tr1VZNMkEHI?=
- =?us-ascii?Q?FnrGlAaGqpIGBrjTIJ9aGO9V9dKH7ck4x/2hI8oXUYdnvFqsOdsr0q5uPWlI?=
- =?us-ascii?Q?X8JOPfSKkzsMxCHP/kRW+qVxqakD92DNG0TjG2E/b7tNg0UlYv4Fea1jY9vE?=
- =?us-ascii?Q?ZhgQ3qHMCQ+UEXRUZQHb+GVxZY7wbgGL4i2hR9oh+sTruxgZPLXHMURcpvCy?=
- =?us-ascii?Q?ywPQT40jMJtbfLwEDSZ5Qwba1xp/44fWq4f5SmDWZwZnZEcMtezLXMHvC4Kv?=
- =?us-ascii?Q?cEz1RQ12C9kxB8oJCDFMKtLv5mEj94sRwklDJveQKqpHlQnaYXNooI87Pr84?=
- =?us-ascii?Q?8aXDPG31Zft0oIE+l5/wvmrtX5aW7RNExLUDqUvUqSB+k7dyv0I8lvfuAtlv?=
- =?us-ascii?Q?wnObv057VyPHQl/cZWEjGOolelLWb5FcQGlERIDGOyUcbX/i11ngUYXoi/Ks?=
- =?us-ascii?Q?WFfHP2EN6LMjslMRjszPxOETrNcFD5dY1FQxoug0ttg/0CVOfFZ4u3HsV9KM?=
- =?us-ascii?Q?KuVknA+YjEwRtiVbqux2vWO3lyMsCj7udeMCuDHtTPOC5n2ODpxSALOHWbSL?=
- =?us-ascii?Q?JVbOiYSY2zh2gtZHbK6bxzakJBSVuhR/iyWkFI//GGxT+AsutTVpAKdbPmF9?=
- =?us-ascii?Q?sykNUykggFzJvIiigaIzhWpUrFPE2dRCDCqeo97qaR0sbhNnQSuwx6QE02Hm?=
- =?us-ascii?Q?NglYWolWhevvy1WDvXo2jVN1c+VCQ8puH/OLxbvpcWUb/U9OnQT3NqMFTaFE?=
- =?us-ascii?Q?biNARQfAd6fNrJFEwlcYEXAQpPlyIPkMej68GbvgR5/qwFNp62Np1UdXFRNf?=
- =?us-ascii?Q?K77hQEyE73C5r3o2LgthG+GD126BPmu7m2cDIRhLH5082VTua6LryVoiI8a5?=
- =?us-ascii?Q?nyDLxkuAWgc0dvP11koByZtRWoUm4HhaAzB81JoTS9VED3XLsX82+tK1wW7G?=
- =?us-ascii?Q?VbvaaJgZWeiJu4PeQdKzwgNJ5KimeadMWJD3f3t1GYEwFW5olJKCKg7B436n?=
- =?us-ascii?Q?GB5YcPwXIKrsIts352SztyihiNsRaIWwOBueizbBOV8LZH/gJS06ex2h4hlw?=
- =?us-ascii?Q?p0Yhmr+t3d6vnHYChEK1AaClmRq3vhFEPm5wBWoBnVBv4rGzj0Hu41dmadNC?=
- =?us-ascii?Q?e+UukQav1v0yksnZEOrT8pbT2Ajo7iKgEODT9yC/DNpKVv9BQU0ksJ7Y2FI2?=
- =?us-ascii?Q?lstCvzC5W2fwOshTtzxErCPwqBXmO0Mi5IiihtkBc2rRQCPod2Mna2XRMGi9?=
- =?us-ascii?Q?Q+zhZvPdeM3iEGfIMU+qNdfbn/kPK8IapWUNRgizXOuN4LmnGaLQ0RfIGOmB?=
- =?us-ascii?Q?1ERD4kF762UBTcWzf4/ObNe0QQp2IlK82cOIy/0q6/2kKwos8r4wqcRk+pFn?=
- =?us-ascii?Q?GuG86o+k+WIEnCbia/5e9taPGJNxSw54jG/G4OUurXDBqzCA/BxCXrXcclqr?=
- =?us-ascii?Q?5ZPolM5BMLfh93lCLyPWwULP8yYOY3W95c647fOIpQOAVlT1xxG9tY1K8KIN?=
- =?us-ascii?Q?lFCyUw0UNB3PKd0K7tnd89r8u46dXQaj8w/1G1cLBOvkZnhFmnPUnNMnNRyz?=
- =?us-ascii?Q?l3q0FVi1VIYKui6fd11q2XrgepHGNIsF+IYLrPkmATAMH33BDRYhBoTd9bdP?=
- =?us-ascii?Q?wv0QKoburULmgg1QQCfyfemIglQoDEhRXbYPKSvsM75Eojqc72PiERFWHYe5?=
- =?us-ascii?Q?jWtgUA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1806417c-ddf1-4fd3-2bef-08db5b7522b6
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 10:04:45.8770
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S3ZK42vw9fY2OwPtq6hnzVSgsW3tFOIc8Yq6TBjVyH9T+ZsVs+Wz/LBgnozkojXtxB5tMjaJnCwOWJYcdQikLAlRc9ZPTOnTr1Jv1gLdVpQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB3652
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: RCU WARNING on 6.4-rc2, TI AM62 and TPS65219
+To:     jerome Neanne <jneanne@baylibre.com>,
+        Francesco Dolcini <francesco@dolcini.it>, <nm@ti.com>,
+        <lee@kernel.org>, <tony@atomide.com>, <vigneshr@ti.com>
+CC:     <afd@ti.com>, <khilman@baylibre.com>, <narmstrong@baylibre.com>,
+        <msp@baylibre.com>, <j-keerthy@ti.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-omap@vger.kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        <linux-i2c@vger.kernel.org>
+References: <ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com>
+ <1a0a796c-497f-41a5-2f76-493c09e29325@baylibre.com>
+Content-Language: en-US
+From:   Wadim Egorov <w.egorov@phytec.de>
+In-Reply-To: <1a0a796c-497f-41a5-2f76-493c09e29325@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.25.0.11]
+X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
+ (172.25.0.12)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAIsWRmVeSWpSXmKPExsWyRpKBR/dHf06KwcxTQhbvT01kt3h7bCWT
+        xantTUwW0x48Y7T42b6FyWJH20IWi02Pr7FadPz9wmhxedccNovZS/pZLFomPWKzONQXbfHm
+        x1kmi/1XvCz+n/3AbnF3/1xGBwGPb18nsXi8v9HK7rFlz08Wj02rOtk8Ni+p9zh+YzuTx+dN
+        cgHsUVw2Kak5mWWpRfp2CVwZt27PZipYblxxeu13pgbGuTpdjJwcEgImEr++TmTtYuTiEBJY
+        wiSx89sBNgjnHqPE7RnbmEGqeAVsJLYv3cMOYrMIqErMmd7IDhEXlDg58wkLiC0qEC2x+vMF
+        VhBbWMBSYtOnuewgg0QE5jBKXJ4yH2wQs8BkJom/T0JAbCGBQomla08yQcTFJW49mQ9mswmo
+        S9zZ8A1sEKeAg8SEDRMYIWosJBa/OcgOYctLNG+dzQwxR17ixaXlLBDvyEtMO/eaGcIOldj6
+        ZTvTBEbhWUhunYVk3SwkY2chGbuAkWUVo1BuZnJ2alFmtl5BRmVJarJeSuomRlCsijBw7WDs
+        m+NxiJGJg/EQowQHs5II74ny7BQh3pTEyqrUovz4otKc1OJDjNIcLErivPd7mBKFBNITS1Kz
+        U1MLUotgskwcnFINjHFFlxTVPhz7O//64kPW1w6UNHd82Pfmwqe8TbrHHHK4JQ6fvjDrw6wv
+        00Ql7BZefmR096bANoez4rvmLr7KuKTVziT32r0Y3vtynq+eLIn2a1CNTct87/o5fJIUq8uP
+        cvOzf/Y/2ST/Oe/svgK7XfHCQuGyCm9VrAL2zf3aq++hPlE721xC6JcSS3FGoqEWc1FxIgAB
+        m8VDwwIAAA==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:41:51PM +0000, Ying Hsu wrote:
-> L2CAP assumes that the locks conn->chan_lock and chan->lock are
-> acquired in the order conn->chan_lock, chan->lock to avoid
-> potential deadlock.
-> For example, l2sock_shutdown acquires these locks in the order:
->   mutex_lock(&conn->chan_lock)
->   l2cap_chan_lock(chan)
-> 
-> However, l2cap_disconnect_req acquires chan->lock in
-> l2cap_get_chan_by_scid first and then acquires conn->chan_lock
-> before calling l2cap_chan_del. This means that these locks are
-> acquired in unexpected order, which leads to potential deadlock:
->   l2cap_chan_lock(c)
->   mutex_lock(&conn->chan_lock)
-> 
-> This patch uses __l2cap_get_chan_by_scid to replace
-> l2cap_get_chan_by_scid and adjusts the locking order to avoid the
-> potential deadlock.
-> 
-> Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-> ---
-> This commit has been tested on a Chromebook device.
-> 
-> Changes in v2:
-> - Adding the prefix "Bluetooth:" to subject line.
-> 
->  net/bluetooth/l2cap_core.c | 26 ++++++++++++++++++++------
->  1 file changed, 20 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-> index 376b523c7b26..8f08192b8fb1 100644
-> --- a/net/bluetooth/l2cap_core.c
-> +++ b/net/bluetooth/l2cap_core.c
-> @@ -4651,8 +4651,16 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
->  
->  	BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
->  
-> -	chan = l2cap_get_chan_by_scid(conn, dcid);
-> +	mutex_lock(&conn->chan_lock);
-> +	chan = __l2cap_get_chan_by_scid(conn, dcid);
-> +	if (chan) {
-> +		chan = l2cap_chan_hold_unless_zero(chan);
-> +		if (chan)
-> +			l2cap_chan_lock(chan);
-> +	}
-> +
->  	if (!chan) {
-> +		mutex_unlock(&conn->chan_lock);
->  		cmd_reject_invalid_cid(conn, cmd->ident, dcid, scid);
->  		return 0;
->  	}
 
-Hi Ying,
+Am 22.05.23 um 11:27 schrieb jerome Neanne:
+>
+>
+> On 19/05/2023 16:26, Francesco Dolcini wrote:
+>> Hello all,
+>> while testing 6.4-rc2 (2d1bcbc6cd70) on a TI K3 AM625 SoC with TPS65219
+>> PMIC I noticed this warning.
+>>
+>> [   80.117502] systemd-shutdown[1]: All loop devices detached.
+>> [   80.123176] systemd-shutdown[1]: Stopping MD devices.
+>> [   80.128700] systemd-shutdown[1]: All MD devices stopped.
+>> [   80.134123] systemd-shutdown[1]: Detaching DM devices.
+>> [   80.139553] systemd-shutdown[1]: All DM devices detached.
+>> [   80.144970] systemd-shutdown[1]: All filesystems, swaps, loop devices, MD 
+>> devices and DM devices detached.
+>> [   80.162682] systemd-shutdown[1]: Syncing filesystems and block devices.
+>> [   80.169602] systemd-shutdown[1]: Rebooting.
+>> [   80.173817] kvm: exiting hardware virtualization
+>> [   80.213016] reboot: Restarting system
+>> [   80.216767] ------------[ cut here ]------------
+>> [   80.221380] Voluntary context switch within RCU read-side critical section!
+>> [   80.221404] WARNING: CPU: 0 PID: 1 at kernel/rcu/tree_plugin.h:318 
+>> rcu_note_context_switch+0x31c/0x390
+>> [   80.237669] Modules linked in: 8021q garp mrp stp llc cfg80211 usb_f_ncm 
+>> u_ether bluetooth ecdh_generic ecc rfkill sp
+>> idev crct10dif_ce snd_soc_simple_card snd_soc_simple_card_utils rtc_ti_k3 
+>> sa2ul sha256_generic libsha256 authenc snd_soc
+>> _davinci_mcasp snd_soc_ti_udma snd_soc_ti_edma snd_soc_ti_sdma ti_ads1015 
+>> ina2xx industrialio_triggered_buffer pwm_tiehr
+>> pwm snd_soc_nau8822 tps65219_pwrbutton lm75 kfifo_buf spi_omap2_mcspi 
+>> rtc_ds1307 libcomposite fuse drm ipv6
+>> [   80.278507] CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 
+>> 6.4.0-rc2-00166-gf932e7bb873b #3
+>> [   80.286938] Hardware name: Toradex Verdin AM62 on Verdin Development Board 
+>> (DT)
+>> [   80.294238] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [   80.301193] pc : rcu_note_context_switch+0x31c/0x390
+>> [   80.306154] lr : rcu_note_context_switch+0x31c/0x390
+>> [   80.311114] sp : ffff80000a71b4c0
+>> [   80.314422] x29: ffff80000a71b4c0 x28: 0000000000000000 x27: ffff000000118000
+>> [   80.321556] x26: 0000000000000000 x25: ffff000000118000 x24: ffff800008fafbd8
+>> [   80.328689] x23: ffff000000118000 x22: 0000000000000000 x21: ffff000000118000
+>> [   80.335822] x20: 0000000000000000 x19: ffff00003fd68cc0 x18: 0000000000000010
+>> [   80.342955] x17: 0000000000000000 x16: 0000000000000000 x15: ffff000000118000
+>> [   80.350087] x14: 00000000000001c5 x13: ffff000000118478 x12: 00000000ffffffea
+>> [   80.357220] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a2a9a98
+>> [   80.364352] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 000000000000bff4
+>> [   80.371485] x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000000
+>> [   80.378617] x2 : ffff80000a251990 x1 : 0000000000000000 x0 : 0000000000000000
+>> [   80.385751] Call trace:
+>> [   80.388193]  rcu_note_context_switch+0x31c/0x390
+>> [   80.392807]  __schedule+0x98/0xa7c
+>> [   80.396214]  schedule+0x5c/0xc4
+>> [   80.399354]  schedule_timeout+0x180/0x25c
+>> [   80.403362]  wait_for_completion_timeout+0x80/0x15c
+>> [   80.408238]  ti_sci_set_device_state+0xb4/0x1e4
+>> [   80.412771]  ti_sci_cmd_get_device_exclusive+0x18/0x24
+>> [   80.417907]  ti_sci_pd_power_on+0x28/0x48
+>> [   80.421914]  _genpd_power_on+0x94/0x154
+>> [   80.425749]  genpd_power_on.part.0+0xa4/0x174
+>> [   80.430104]  genpd_runtime_resume+0x118/0x294
+>> [   80.434457]  __rpm_callback+0x48/0x140
+>> [   80.438206]  rpm_callback+0x6c/0x78
+>> [   80.441692]  rpm_resume+0x3bc/0x59c
+>> [   80.445179]  __pm_runtime_resume+0x4c/0x90
+>> [   80.449272]  omap_i2c_xfer_common+0x38/0x598
+>> [   80.453540]  omap_i2c_xfer_polling+0x14/0x20
+>> [   80.457804]  __i2c_transfer+0x138/0x35c
+>> [   80.461642]  i2c_transfer+0x94/0xf4
+>> [   80.465130]  regmap_i2c_read+0x60/0xa8
+>> [   80.468879]  _regmap_raw_read+0xf0/0x170
+>> [   80.472799]  _regmap_bus_read+0x44/0x7c
+>> [   80.476632]  _regmap_read+0x64/0xf4
+>> [   80.480118]  _regmap_update_bits+0xf4/0x130
+>> [   80.484298]  regmap_update_bits_base+0x64/0x98
+>> [   80.488738]  tps65219_restart+0x38/0x48
+>> [   80.492576]  atomic_notifier_call_chain+0x60/0x90
+>> [   80.497280]  do_kernel_restart+0x24/0x30
+>> [   80.501202]  machine_restart+0x38/0x5c
+>> [   80.504950]  kernel_restart+0x88/0x98
+>> [   80.508612]  __do_sys_reboot+0x1e0/0x264
+>> [   80.512533]  __arm64_sys_reboot+0x24/0x30
+>> [   80.516538]  invoke_syscall+0x44/0x104
+>> [   80.520287]  el0_svc_common.constprop.0+0x44/0xec
+>> [   80.524988]  do_el0_svc+0x38/0x98
+>> [   80.528302]  el0_svc+0x2c/0x84
+>> [   80.531354]  el0t_64_sync_handler+0xb8/0xbc
+>> [   80.535534]  el0t_64_sync+0x190/0x194
+>> [   80.539192] ---[ end trace 0000000000000000 ]---
+>>
+>>
+>> This looks similar to what is described here [1], same issue or
+>> something else? Any suggestion?
+>>
+>> The issue is systematic and happens at every boot. With a TI downstream
+>> 5.10 kernel this issue was never experienced.
+>>
+>> Francesco
+>>
+>> [1] 
+>> https://lore.kernel.org/all/20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com/
+>>
+> I don't have the same board to test and don't experience this boot issue with 
+> the am62 board I'm using (the board version I have is a custom board not 
+> released publicly by TI unfortunately).
 
-The conditional setting of chan and calling l2cap_chan_lock()
-is both non-trivial and repeated. It seems that it ought to be
-in a helper.
+I just want to point out that I can see the exact same issue on our hardware 
+(AM625+TPS65219). But I haven't had time to get into it yet. Btw. the Beagleplay 
+is also using the same PMIC so it may also run into the same issue.
 
-Something like this (I'm sure a better function name can be chosen):
+https://pastebin.ubuntu.com/p/xgnhTsgJxf/
 
-	chan = __l2cap_get_and_lock_chan_by_scid(conn, dcid);
-	if (!chan) {
-		...
-	}
+Regards,
+Wadim
 
-	...
+
+>
+> Notice that: 
+> https://lore.kernel.org/lkml/20230511122100.2225417-1-jneanne@baylibre.com/
+>
+> Is not yet applied and would help handle shutdown/reboot under some conditions.
+>
+> This might help for reboot handling if you are forcing a shutdown/reboot in 
+> your test.
+>
+> But if the problem is your device tries to shutdown at each boot, then this is 
+> just a side effect, not the original root cause.
+>
+> Regards,
+> Jerome
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
