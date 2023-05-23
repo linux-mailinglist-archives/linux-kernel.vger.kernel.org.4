@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9890470E017
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7017070E01D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237458AbjEWPNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S237095AbjEWPOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237533AbjEWPN3 (ORCPT
+        with ESMTP id S237600AbjEWPOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:13:29 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466AEE7C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:13:09 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:b0ac:7afd:272:4cff])
-        by albert.telenet-ops.be with bizsmtp
-        id 0FD72A0010Jkz7G06FD7NG; Tue, 23 May 2023 17:13:07 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1Tgy-002swX-Dr;
-        Tue, 23 May 2023 17:13:06 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1ThC-00CkPC-Rr;
-        Tue, 23 May 2023 17:13:06 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH resend] Input: gpio-keys - convert to dev_err_probe()
-Date:   Tue, 23 May 2023 17:13:05 +0200
-Message-Id: <9fc16eea6fd2c687b69e007e792e8c6338f80e48.1684854670.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 May 2023 11:14:07 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDB2126
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=neW8xWDF9dDcKsZp/aT07RgnmDTayd37jG9hz6hzonQ=; b=EmF0pl3GeWh750bwRO27xgDDcP
+        6hwKFN8pdjjar3LqX5IyDTRbC8dckdXFqEw1oLFlhTQO6B1kHOmveNM9z6CYqvp570+f6fB37a7Wl
+        jFBr06sVP4Uz2T686HXrHyiRKNb4WjcnLeIewSwA4Av2G1L13ek1buPJgJfMIwA776ME5Ky0Wvx93
+        mHrdUJo3qK2BTUWIC7RVID9jdtIrYS7j4FDEhiJOxU0P4Ow4b/h6Gi3sWYq9P53mYP0/xF0obNEPT
+        U9iiR0eHUPw+MSIj1HyfGgvDIEy9VC2/LGuRT9CCDVPnk53+vS36P+x5v4RWaqxUkrcfTKUWWh5Ws
+        13UDhjLg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1Thr-00AbBM-0C;
+        Tue, 23 May 2023 15:13:47 +0000
+Date:   Tue, 23 May 2023 08:13:47 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 4/9] mm: vmalloc: Add a per-CPU-zone infrastructure
+Message-ID: <ZGzYK4x6+anak3Ew@infradead.org>
+References: <20230522110849.2921-1-urezki@gmail.com>
+ <20230522110849.2921-5-urezki@gmail.com>
+ <ZGxYZlLoADBWktT8@infradead.org>
+ <ZGzTZWq/hAYCE3DA@pc636>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGzTZWq/hAYCE3DA@pc636>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the dev_err_probe() helper, instead of open-coding the same
-operation.
+On Tue, May 23, 2023 at 04:53:25PM +0200, Uladzislau Rezki wrote:
+> > > +#define fbl_lock(z, i) spin_lock(&fbl(z, i, lock))
+> > > +#define fbl_unlock(z, i) spin_unlock(&fbl(z, i, lock))
+> > 
+> > Even if it is just temporary, I don't think adding these wrappers
+> > make much sense.
+> > 
+> If open-coded, it looks like:
+> 
+> spin_lock(&z->fbl[BUSY].lock);
 
-While at it, invert the error checking logic to simplify code flow.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/input/keyboard/gpio_keys.c | 21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
-index 93b75d78a9cb882f..5e18ef01b0340f1b 100644
---- a/drivers/input/keyboard/gpio_keys.c
-+++ b/drivers/input/keyboard/gpio_keys.c
-@@ -523,18 +523,15 @@ static int gpio_keys_setup_key(struct platform_device *pdev,
- 						     NULL, GPIOD_IN, desc);
- 		if (IS_ERR(bdata->gpiod)) {
- 			error = PTR_ERR(bdata->gpiod);
--			if (error == -ENOENT) {
--				/*
--				 * GPIO is optional, we may be dealing with
--				 * purely interrupt-driven setup.
--				 */
--				bdata->gpiod = NULL;
--			} else {
--				if (error != -EPROBE_DEFER)
--					dev_err(dev, "failed to get gpio: %d\n",
--						error);
--				return error;
--			}
-+			if (error != -ENOENT)
-+				return dev_err_probe(dev, error,
-+						     "failed to get gpio\n");
-+
-+			/*
-+			 * GPIO is optional, we may be dealing with
-+			 * purely interrupt-driven setup.
-+			 */
-+			bdata->gpiod = NULL;
- 		}
- 	} else if (gpio_is_valid(button->gpio)) {
- 		/*
--- 
-2.34.1
-
+Give the fbl structure a name and you can have a local variable for it,
+which will make all this a lot more readable.  And then unless there is
+a really good reason to iterate over this as an array just have three
+of these structs embedded named free, busy and lazy.
