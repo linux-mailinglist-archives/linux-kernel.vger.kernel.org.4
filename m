@@ -2,76 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EFF70DBD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A8970DBDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236714AbjEWL5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
+        id S236721AbjEWL6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjEWL53 (ORCPT
+        with ESMTP id S233200AbjEWL55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:57:29 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A60E11F;
-        Tue, 23 May 2023 04:57:23 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8CxZ_Ehqmxk6w4AAA--.223S3;
-        Tue, 23 May 2023 19:57:21 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxMuUgqmxkoFFwAA--.55963S3;
-        Tue, 23 May 2023 19:57:20 +0800 (CST)
-Message-ID: <94b7f3d6-e2e1-be0a-cd39-dd1b1f1f607e@loongson.cn>
-Date:   Tue, 23 May 2023 19:57:20 +0800
+        Tue, 23 May 2023 07:57:57 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185E8184
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:57:46 -0700 (PDT)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QQXpS2n9jzLmF4;
+        Tue, 23 May 2023 19:56:16 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 23 May 2023 19:57:43 +0800
+Message-ID: <928a893b-6596-8d40-ce0e-80059a363d11@huawei.com>
+Date:   Tue, 23 May 2023 19:57:42 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
-Content-Language: en-US
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>
-References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
- <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
- <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
- <99371487-717a-64d6-1c3d-aaeaee6f20db@loongson.cn>
- <90b2fc60-af26-4ba6-f775-7db2514a62f4@xen0n.name>
- <1218d3f9-4955-7176-afbd-a0dfa0bd7565@loongson.cn>
- <29a9c6b4-96b8-3fb5-9b7a-2f9dba97e06f@xen0n.name>
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <29a9c6b4-96b8-3fb5-9b7a-2f9dba97e06f@xen0n.name>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     <andersson@kernel.org>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <soc@kernel.org>, <wanghuiqiang@huawei.com>,
+        <tanxiaofei@huawei.com>, <liuyonglong@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <20230522072211.8894-1-lihuisong@huawei.com>
+ <20230522072211.8894-2-lihuisong@huawei.com>
+ <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxMuUgqmxkoFFwAA--.55963S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZF15KFWxXry5Ww47Kw45ZFb_yoW5Cr1fpr
-        1kGr15Ary5Wr1kJr17Xr18Xry3Jw1UK3WDJr1DGFy5tF4UJr10qr4UXr1Y9rnrJr48Jr15
-        Jr1Utw13ur17Jr7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,85 +57,356 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-在 2023/5/23 18:27, WANG Xuerui 写道:
-> On 2023/5/23 10:54, maobibo wrote:
+在 2023/5/23 17:39, Sudeep Holla 写道:
+> On Mon, May 22, 2023 at 03:22:10PM +0800, Huisong Li wrote:
+>> The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
+>> for ensuring cache coherent on HiSilicon SoC. The performance of
+>> the application may be affected if some hccs ports are in non-full
+>> lane status, have a large number of CRC errors and so on.
 >>
->> [snip]
+>> This driver provides the query interface of the health status and
+>> port information of HCCS on Kunpeng SoC.
 >>
->> I hate parse_r helper also, it is hard to understand, the kernel about
->> LoongArch has the same issue. How about using a fixed register like this?
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> ---
+>>   MAINTAINERS                          |    6 +
+>>   drivers/soc/Kconfig                  |    1 +
+>>   drivers/soc/Makefile                 |    1 +
+>>   drivers/soc/hisilicon/Kconfig        |   19 +
+>>   drivers/soc/hisilicon/Makefile       |    2 +
+>>   drivers/soc/hisilicon/kunpeng_hccs.c | 1287 ++++++++++++++++++++++++++
+>>   drivers/soc/hisilicon/kunpeng_hccs.h |  196 ++++
+>>   7 files changed, 1512 insertions(+)
+>>   create mode 100644 drivers/soc/hisilicon/Kconfig
+>>   create mode 100644 drivers/soc/hisilicon/Makefile
+>>   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
+>>   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
 >>
->> /* GCSR */
->> static __always_inline u64 gcsr_read(u32 reg)
->> {
->>     u64 val = 0;
->>
->>     BUILD_BUG_ON(!__builtin_constant_p(reg));
->>     /* Instructions will be available in binutils later */
->>     asm volatile (
->>         "parse_r __reg, %[val]\n\t"
-> 
-> Isn't this still parse_r-ing things? ;-)
-> 
->>         /*
->>          * read val from guest csr register %[reg]
->>          * gcsrrd %[val], %[reg]
->>          */
->>         ".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | __reg\n\t"
->>         : [val] "+r" (val)
->>         : [reg] "i" (reg)
->>         : "memory");
->>
->>     return val;
->> }
->>
->> /* GCSR */
->> static __always_inline u64 gcsr_read(u32 reg)
->> {
->>          register unsigned long val asm("t0");
-> 
-> I got what you're trying to accomplish here. At which point you may just refer to how glibc implements its inline syscall templates and hardcode both the input and output arguments, then simply hard-code the whole instruction word. If others don't have opinions about doing things this way, I wouldn't either.
-> 
-> (CSR operations are not expected to become performance-sensitive in any case, so you may freely choose registers here, and t0 for output seems okay. I'd recommend stuffing "reg" to a temporary value bound to a0 though.)
-a0 is ok for me.
-
-riscv has better method than both parse_r helper and using tmp register
-as follows, maybe we can use the similiar method. 
-
-        .macro insn_r, opcode, func3, func7, rd, rs1, rs2
-        .4byte  ((\opcode << INSN_R_OPCODE_SHIFT) |             \
-                 (\func3 << INSN_R_FUNC3_SHIFT) |               \
-                 (\func7 << INSN_R_FUNC7_SHIFT) |               \
-                 (.L__gpr_num_\rd << INSN_R_RD_SHIFT) |         \
-                 (.L__gpr_num_\rs1 << INSN_R_RS1_SHIFT) |       \
-                 (.L__gpr_num_\rs2 << INSN_R_RS2_SHIFT))
-        .endm
-
-#define HINVAL_VVMA(vaddr, asid)                                \
-        INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(19),              \
-               __RD(0), RS1(vaddr), RS2(asid))
-
-asm volatile(HINVAL_VVMA(%0, %1)
-                        : : "r" (pos), "r" (asid) : "memory");
-
-Regards
-Bibo, Mao
-> 
->>
->>          BUILD_BUG_ON(!__builtin_constant_p(reg));
->>          /* Instructions will be available in binutils later */
->>          asm volatile (
->>                  "parse_r __reg, %[val]\n\t"
->>                  /*
->>                   * read val from guest csr register %[reg]
->>                   * gcsrrd %[val], %[reg]
->>                   */
->>                  ".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | 12 \n\t"
->>                  : : [reg] "i" (reg)
->>                  : "memory", "t0");
->>
->>          return val;
->> }
-> 
-
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index eddbc48c61e9..fe0e796e8445 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -9399,6 +9399,12 @@ S:	Maintained
+>>   W:	http://www.hisilicon.com
+>>   F:	drivers/spi/spi-hisi-sfc-v3xx.c
+>>   
+>> +HISILICON KUNPENG SOC HCCS DRIVER
+> s/HCCS/HCCS INFO or QUERY/ ?
+ From the current features, what you suggest is suitable.
+But this driver will support to the setting feature.
+>
+>> +M:	Huisong Li <lihuisong@huawei.com>
+>> +S:	Maintained
+>> +F:	drivers/soc/hisilicon/kunpeng_hccs.c
+>> +F:	drivers/soc/hisilicon/kunpeng_hccs.h
+>> +
+>>   HMM - Heterogeneous Memory Management
+>>   M:	Jérôme Glisse <jglisse@redhat.com>
+>>   L:	linux-mm@kvack.org
+>> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+>> index 4e176280113a..d21e75d69294 100644
+>> --- a/drivers/soc/Kconfig
+>> +++ b/drivers/soc/Kconfig
+>> @@ -10,6 +10,7 @@ source "drivers/soc/bcm/Kconfig"
+>>   source "drivers/soc/canaan/Kconfig"
+>>   source "drivers/soc/fsl/Kconfig"
+>>   source "drivers/soc/fujitsu/Kconfig"
+>> +source "drivers/soc/hisilicon/Kconfig"
+>>   source "drivers/soc/imx/Kconfig"
+>>   source "drivers/soc/ixp4xx/Kconfig"
+>>   source "drivers/soc/litex/Kconfig"
+>> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+>> index 3b0f9fb3b5c8..531f46f3ad98 100644
+>> --- a/drivers/soc/Makefile
+>> +++ b/drivers/soc/Makefile
+>> @@ -14,6 +14,7 @@ obj-$(CONFIG_MACH_DOVE)		+= dove/
+>>   obj-y				+= fsl/
+>>   obj-y				+= fujitsu/
+>>   obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
+>> +obj-y				+= hisilicon/
+>>   obj-y				+= imx/
+>>   obj-y				+= ixp4xx/
+>>   obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+>> diff --git a/drivers/soc/hisilicon/Kconfig b/drivers/soc/hisilicon/Kconfig
+>> new file mode 100644
+>> index 000000000000..87a1f15cbedb
+>> --- /dev/null
+>> +++ b/drivers/soc/hisilicon/Kconfig
+>> @@ -0,0 +1,19 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +
+>> +menu "Hisilicon SoC drivers"
+>> +	depends on ARCH_HISI || COMPILE_TEST
+>> +
+>> +config KUNPENG_HCCS
+> Ditto, add INFO or QUERY to the name as HCCS alone suggests it is some
+> driver to manage the above bus protocol which is not correct.
+Ditto, the setting feature will be added soon.
+>
+>> +	tristate "HCCS driver on Kunpeng SoC"
+>> +	depends on ACPI
+>> +	depends on ARM64 || COMPILE_TEST
+>> +	help
+>> +	  The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
+>> +	  for ensuring cache coherent on HiSilicon SoC. The performance of
+>> +	  the application may be affected if some hccs ports are in non-full
+>> +	  lane status, have a large number of CRC errors and so on.
+>> +
+>> +	  Say M here if you want to include support for querying the health
+>> +	  status and port information of HCCS on Kunpeng SoC.
+>> +
+>> +endmenu
+>> diff --git a/drivers/soc/hisilicon/Makefile b/drivers/soc/hisilicon/Makefile
+>> new file mode 100644
+>> index 000000000000..226e747e70d6
+>> --- /dev/null
+>> +++ b/drivers/soc/hisilicon/Makefile
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +obj-$(CONFIG_KUNPENG_HCCS)	+= kunpeng_hccs.o
+>> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+>> new file mode 100644
+>> index 000000000000..20a506a04bb7
+>> --- /dev/null
+>> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+>> @@ -0,0 +1,1287 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * The Huawei Cache-Coherent System (HCCS) is a bus protocol standard for
+>> + * ensuring cache coherent on HiSilicon SoC.
+>> + *
+>> + * Copyright (c) 2023 Hisilicon Limited.
+>> + * Author: Huisong Li <lihuisong@huawei.com>
+>> + *
+>> + * HCCS driver for Kunpeng SoC provides the following features:
+>> + * - Retrieve info as belows each port:
+> Can we have something like:
+> "Retrieve the following information about each port:"
+Ok, it's better.
+>
+>> + *    - port type
+>> + *    - lane mode
+>> + *    - using status
+> perhaps just status, "using status" doesn't sound correct to me.
+Ack
+>
+>> + *    - current lane mode
+>> + *    - link state machine
+>> + *    - lane mask
+>> + *    - CRC error count
+>> + *
+>> + * - Retrieve info as belows all ports on die or chip:
+> Similarly:
+> "Retrieve the following information about all the ports on the chip or the die:"
+Ack
+>
+>> + *    - if all used ports are in linked
+>> + *    - if all linked ports are in full lane
+>> + *    - CRC error count sum
+>> + */
+>> +#include <linux/sysfs.h>
+>> +#include <linux/acpi.h>
+>> +#include <linux/io.h>
+>> +#include <linux/kobject.h>
+>> +#include <linux/iopoll.h>
+>> +#include <linux/platform_device.h>
+>> +#include <acpi/pcc.h>
+>> +
+>> +#include "kunpeng_hccs.h"
+>> +
+>> +/* PCC defines */
+>> +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
+>> +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
+> I am not really sure if we keep duplicating this. I will try to cook up
+> a patch consolidating these.
+Yes, these info is better placed in a global header.
+Do I need to do this in this series?
+Or do not modify it, and then process all related code in your patch.
+>
+>> +
+>> +/*
+>> + * Arbitrary retries in case the remote processor is slow to respond
+>> + * to PCC commands
+>> + */
+>> +#define HCCS_PCC_CMD_WAIT_RETRIES_NUM		500ULL
+>> +#define HCCS_POLL_STATUS_TIME_INTERVAL_US	3
+>> +
+>> +static struct hccs_port_info *kobj_to_port_info(struct kobject *k)
+>> +{
+>> +	return container_of(k, struct hccs_port_info, kobj);
+>> +}
+>> +
+>> +static struct hccs_die_info *kobj_to_die_info(struct kobject *k)
+>> +{
+>> +	return container_of(k, struct hccs_die_info, kobj);
+>> +}
+>> +
+>> +static struct hccs_chip_info *kobj_to_chip_info(struct kobject *k)
+>> +{
+>> +	return container_of(k, struct hccs_chip_info, kobj);
+>> +}
+>> +
+>> +struct hccs_register_ctx {
+>> +	struct device *dev;
+>> +	u8 chan_id;
+>> +	int err;
+>> +};
+>> +
+>> +static acpi_status hccs_get_register_cb(struct acpi_resource *ares,
+>> +					void *context)
+>> +{
+>> +	struct acpi_resource_generic_register *reg;
+>> +	struct hccs_register_ctx *ctx = context;
+>> +
+>> +	if (ares->type != ACPI_RESOURCE_TYPE_GENERIC_REGISTER)
+>> +		return AE_OK;
+>> +
+>> +	reg = &ares->data.generic_reg;
+>> +	if (reg->space_id != ACPI_ADR_SPACE_PLATFORM_COMM) {
+>> +		dev_err(ctx->dev, "Bad register resource.\n");
+>> +		ctx->err = -EINVAL;
+>> +		return AE_ERROR;
+>> +	}
+>> +	ctx->chan_id = reg->access_size;
+>> +
+>> +	return AE_OK;
+>> +}
+>> +
+>> +static int hccs_get_pcc_chan_id(struct hccs_dev *hdev)
+>> +{
+>> +	acpi_handle handle = ACPI_HANDLE(hdev->dev);
+>> +	struct hccs_register_ctx ctx = {0};
+>> +	acpi_status status;
+>> +
+>> +	if (!acpi_has_method(handle, METHOD_NAME__CRS))
+>> +		return -ENODEV;
+>> +
+>> +	ctx.dev = hdev->dev;
+>> +	status = acpi_walk_resources(handle, METHOD_NAME__CRS,
+>> +				     hccs_get_register_cb, &ctx);
+>> +	if (ACPI_FAILURE(status))
+>> +		return ctx.err;
+>> +	hdev->chan_id = ctx.chan_id;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void hccs_chan_tx_done(struct mbox_client *cl, void *msg, int ret)
+>> +{
+>> +	if (ret < 0)
+>> +		pr_debug("TX did not complete: CMD sent:0x%x, ret:%d\n",
+>> +			 *(u8 *)msg, ret);
+>> +	else
+>> +		pr_debug("TX completed. CMD sent:0x%x, ret:%d\n",
+>> +			 *(u8 *)msg, ret);
+>> +}
+>> +
+>> +static void hccs_unregister_pcc_channel(struct hccs_dev *hdev)
+>> +{
+>> +	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>> +
+>> +	if (cl_info->pcc_comm_addr)
+>> +		iounmap(cl_info->pcc_comm_addr);
+>> +	pcc_mbox_free_channel(hdev->cl_info.pcc_chan);
+>> +}
+>> +
+>> +static int hccs_register_pcc_channel(struct hccs_dev *hdev)
+>> +{
+>> +	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>> +	struct mbox_client *cl = &cl_info->client;
+>> +	struct pcc_mbox_chan *pcc_chan;
+>> +	struct device *dev = hdev->dev;
+>> +	int rc;
+>> +
+>> +	cl->dev = dev;
+>> +	cl->tx_block = false;
+>> +	cl->knows_txdone = true;
+>> +	cl->tx_done = hccs_chan_tx_done;
+>> +	pcc_chan = pcc_mbox_request_channel(cl, hdev->chan_id);
+>> +	if (IS_ERR(pcc_chan)) {
+>> +		dev_err(dev, "PPC channel request failed.\n");
+>> +		rc = -ENODEV;
+>> +		goto out;
+>> +	}
+>> +	cl_info->pcc_chan = pcc_chan;
+>> +	cl_info->mbox_chan = pcc_chan->mchan;
+>> +
+>> +	/*
+>> +	 * pcc_chan->latency is just a nominal value. In reality the remote
+>> +	 * processor could be much slower to reply. So add an arbitrary amount
+>> +	 * of wait on top of nominal.
+>> +	 */
+>> +	cl_info->deadline_us =
+>> +			HCCS_PCC_CMD_WAIT_RETRIES_NUM * pcc_chan->latency;
+>> +	if (cl_info->mbox_chan->mbox->txdone_irq) {
+>> +		dev_err(dev, "PCC IRQ in PCCT is enabled.\n");
+>> +		rc = -EINVAL;
+>> +		goto err_mbx_channel_free;
+>> +	}
+>> +
+>> +	if (pcc_chan->shmem_base_addr) {
+>> +		cl_info->pcc_comm_addr = (void __force *)ioremap(
+> I would prefer to use acpi_os_ioremap as it has addition checks to ensure
+> it is not in any EFI mappings.
+Agreed. will fix it.
+>
+>> +			pcc_chan->shmem_base_addr, pcc_chan->shmem_size);
+>> +		if (!cl_info->pcc_comm_addr) {
+>> +			dev_err(dev, "Failed to ioremap PCC communication region for channel-%d.\n",
+>> +				hdev->chan_id);
+>> +			rc = -ENOMEM;
+>> +			goto err_mbx_channel_free;
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_mbx_channel_free:
+>> +	pcc_mbox_free_channel(cl_info->pcc_chan);
+>> +out:
+>> +	return rc;
+>> +}
+>> +
+>> +static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
+>> +{
+>> +	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>> +	struct acpi_pcct_shared_memory *comm_base = cl_info->pcc_comm_addr;
+>> +	u16 status;
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * Poll PCC status register every 3us(delay_us) for maximum of
+>> +	 * deadline_us(timeout_us) until PCC command complete bit is set(cond)
+>> +	 */
+>> +	ret = readw_poll_timeout(&comm_base->status, status,
+>> +				 status & HCCS_PCC_STATUS_CMD_COMPLETE,
+>> +				 HCCS_POLL_STATUS_TIME_INTERVAL_US,
+>> +				 cl_info->deadline_us);
+>> +	if (unlikely(ret))
+>> +		dev_err(hdev->dev, "poll PCC status failed, ret = %d.\n", ret);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int hccs_pcc_cmd_send(struct hccs_dev *hdev, u8 cmd,
+>> +			     struct hccs_desc *desc)
+>> +{
+>> +	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>> +	struct acpi_pcct_shared_memory *comm_base = cl_info->pcc_comm_addr;
+>> +	void *comm_space = (void *)(comm_base + 1);
+>> +	struct hccs_fw_inner_head *fw_inner_head;
+>> +	struct acpi_pcct_shared_memory tmp = {0};
+>> +	u16 comm_space_size;
+>> +	int ret;
+>> +
+>> +	/* Write signature for this subspace */
+>> +	tmp.signature = HCCS_PCC_SIGNATURE_MASK | hdev->chan_id;
+> Why do we need to do this every single time ? This is never changed as
+> it is fixed for a channel, so wondering if it can be done once in probe or
+> so ?
+ From the driver side, this will be ok.
+But this initialization from driver will be cleared after firmware reseting.
+And driver doesn't know about it.
+IMO, there's no need to make driver and firmware complicated because of 
+an assignment statement.
+>
