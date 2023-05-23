@@ -2,89 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C77C70E74D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F52B70E760
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbjEWVZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S238595AbjEWVbX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 17:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjEWVZH (ORCPT
+        with ESMTP id S230142AbjEWVbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:25:07 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFE1FA;
-        Tue, 23 May 2023 14:25:05 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2555076e505so202713a91.0;
-        Tue, 23 May 2023 14:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684877105; x=1687469105;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q5BYMWhz99ct1BVJqftSROHmQJIifrp7cLbNcxKiOt8=;
-        b=NOf4c75/pXtCoI04Z7ozZU7to5hRCvzPdhpIFzwLn5/Aoa6VP62ntByUtTZE0bKvq2
-         MxFSGkzim8yx7i+yDSgWmmhLglZOSSp76yp3bTRx5dCsF7ewX5nLVjVl0wmh6qOJKLyk
-         unRRbWJC8ze0jEqBpFaZ2xZScz6mukqYZ8VmFHQxz4NTcDieTToYp1PbHtSFsGNjyGGm
-         OWmJ2gMn8vBFNkOsGv5LzZuyesGNLtpmQd5HoKx9N34CpuSDbA60X3wS2vjLVBvokexw
-         FJEGkd6YxyRwXM1rj/yZPl5qEImpqGtD1eX4dQ755oBEUgTJ3627G7KyXwcWo6uIUfMI
-         mcYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684877105; x=1687469105;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q5BYMWhz99ct1BVJqftSROHmQJIifrp7cLbNcxKiOt8=;
-        b=U1DirLro9K6dJdr8Hh9OFDYeDop5O4AF1T46Ot+upjtNyIcq90NOlAUuvk3xYIhiuU
-         64t8+RHWAwsFLCYXI7t/EZYNSlnLTq4WaRpMb/NJia3ucyDc7VIriwKojsopppBT65I4
-         FW/tbML/71JvGmEvO4CCT3OfLHs6fl9M0wY+MrZBIHbtZhZ7VwQpc9gLmGe1fQR5zO6I
-         p+vq6a3P2kf/MNi7xsvzqab+VyKeVLJ8+MpaAIC/lMk/ecGLjijTle6thyTDEe7BtroV
-         lR5YBDjN88p7Im15l17y1S90YeJmNY6cn9Afg/xlp3WbuvgZcblEYD4v58Sla8/jXCyl
-         lElA==
-X-Gm-Message-State: AC+VfDx+FBEHDPFec3YBwepKnTHZDJLs9khxNL3e5mEEndNb5eCPevWI
-        oGoxK3M5bJpEWUcBT7q30NDjA2fdvUg=
-X-Google-Smtp-Source: ACHHUZ4sEiXIC33OUovdcQu/CVTLLP+aqQjfG9eBiIxzP4xKmrwWvY5ptAtJshd2VvXgb49Sdl8u6g==
-X-Received: by 2002:a17:90b:3555:b0:253:3b2b:2a3 with SMTP id lt21-20020a17090b355500b002533b2b02a3mr14014355pjb.43.1684877104523;
-        Tue, 23 May 2023 14:25:04 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7a1e])
-        by smtp.gmail.com with ESMTPSA id p9-20020a17090a348900b0024df6bbf5d8sm15643pjb.30.2023.05.23.14.25.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 14:25:04 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 23 May 2023 11:25:02 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Ming Qian <ming.qian@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 04/13] media: amphion: Use alloc_ordered_workqueue() to
- create ordered workqueues
-Message-ID: <ZG0vLsNOf7nhQB6W@slm.duckdns.org>
-References: <20230509015032.3768622-1-tj@kernel.org>
- <20230509015032.3768622-5-tj@kernel.org>
- <575f58b9-cf30-a152-8909-7cd827e4cc70@xs4all.nl>
+        Tue, 23 May 2023 17:31:21 -0400
+X-Greylist: delayed 332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 14:31:18 PDT
+Received: from pio-pvt-msa3.bahnhof.se (pio-pvt-msa3.bahnhof.se [79.136.2.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42819E5;
+        Tue, 23 May 2023 14:31:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 53B533F4FA;
+        Tue, 23 May 2023 23:25:43 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Score: -1.91
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xWoa5MYq7N-Q; Tue, 23 May 2023 23:25:42 +0200 (CEST)
+Received: by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 61CCF3F414;
+        Tue, 23 May 2023 23:25:41 +0200 (CEST)
+Received: from [192.168.0.126] (port=60034)
+        by tnonline.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <forza@tnonline.net>)
+        id 1q1ZVk-000GEM-Nn; Tue, 23 May 2023 23:25:40 +0200
+Date:   Tue, 23 May 2023 23:25:38 +0200 (GMT+02:00)
+From:   Forza <forza@tnonline.net>
+To:     Uladzislau Rezki <urezki@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Stable <stable@vger.kernel.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
+        urezki@gmail.com
+Message-ID: <26007e3.faed4a1b.1884a80d9e8@tnonline.net>
+In-Reply-To: <ZGyVVQxnw6Tn7Xb8@pc636>
+References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com> <fcf1d04.faed4a1a.18844d8e78f@tnonline.net> <ZGwcVTpQNBoJHBB+@debian.me> <ZGyVVQxnw6Tn7Xb8@pc636>
+Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
+ kernel 6.3.x
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <575f58b9-cf30-a152-8909-7cd827e4cc70@xs4all.nl>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Mailer: R2Mail2
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied to wq/for-6.5-cleanup-ordered with the suggested description
-updates.
 
-Thanks.
 
--- 
-tejun
+---- From: Uladzislau Rezki <urezki@gmail.com> -- Sent: 2023-05-23 - 12:28 ----
+
+> On Tue, May 23, 2023 at 08:52:21AM +0700, Bagas Sanjaya wrote:
+>> On Mon, May 22, 2023 at 09:04:05PM +0200, Forza wrote:
+>> > I have a similar experience with kernel 6.3 where vmalloc fails in a similar way. I was able to reproduce it in a QEMU VM as well as on my system. 
+>> > 
+>> > https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc0b78@tnonline.net/T/
+>> 
+>> Thanks for your similar report. Telling regzbot about it:
+>> 
+>> #regzbot link: https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc0b78@tnonline.net/
+>> 
+> It is good that you can reproduce it. Could you please test below patch?
+
+Yes, applied it to my test VM and will let it run over night to see how it turns out. I'll post again tomorrow. 
+
+Thanks. 
+> 
+> <snip>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 31ff782d368b..7a06452f7807 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2957,14 +2957,18 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+>                         page = alloc_pages(alloc_gfp, order);
+>                 else
+>                         page = alloc_pages_node(nid, alloc_gfp, order);
+> +
+>                 if (unlikely(!page)) {
+> -                       if (!nofail)
+> -                               break;
+> +                       if (nofail)
+> +                               alloc_gfp |= __GFP_NOFAIL;
+> 
+> -                       /* fall back to the zero order allocations */
+> -                       alloc_gfp |= __GFP_NOFAIL;
+> -                       order = 0;
+> -                       continue;
+> +                       /* Fall back to the zero order allocations. */
+> +                       if (order || nofail) {
+> +                               order = 0;
+> +                               continue;
+> +                       }
+> +
+> +                       break;
+>                 }
+> 
+>                 /*
+> <snip>
+> 
+> Thanks!
+> 
+> --
+> Uladzislau Rezki
+
+
