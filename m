@@ -2,275 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4311770D97E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC6370D983
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236340AbjEWJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S236421AbjEWJtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbjEWJsJ (ORCPT
+        with ESMTP id S236427AbjEWJtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:48:09 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA685E4B;
-        Tue, 23 May 2023 02:47:58 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-39212bf4ff0so3948172b6e.1;
-        Tue, 23 May 2023 02:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684835278; x=1687427278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qq7CNPaF4NbXPimNw4H7TDkWjTz2SdZxq4zob7zuH7s=;
-        b=FPIzkfBl6Z4fOQadR+ItT5mRFzrpgGP30SMMNKl21h6elyzGRKew/4yIP2FBL0GzHh
-         /3YfyDePzf6Sn3TQOi+FnFerc2tvGJuyuCjXBYAPmfukGy1h4Mp48yTVwcvN3mfcDN2x
-         EsKEry9bUgctWJ5RqDJ0UZVrND1hUF7VFNjovcv1j7X6UxVt28k4iHL/2gTLGwWjeXF1
-         Rxjr93lT+rGQZ9HKBMGfHyD3QDi6Ya/f9jJRgKy/qdJvJ5Q4hpZqsyd7GKTz32WERg7x
-         6hA6bQod6AcZeFX4s0H2mvT5TwAINR36WEg0fPy3ncBTWlj2jifXkReTg3aZorgYwFJv
-         6OTw==
+        Tue, 23 May 2023 05:49:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846DAE5C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684835280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wTozs52NGQBBt66G2VZ78itBAYBuBwd2qy/f5JHxcgg=;
+        b=T50ihGO4GuDGVgv6iEaW4bkPMn8EzIHwo9UC4xZ2DRlEvKp/iz6iATXW96Gt4JWom9zVE9
+        2xNuPKVd+aOM0ncOZXyQ0zaiXet8s2wJBZjsgSGTl3m+/q3J9IYs53U8w9RXVl+1fvjmSp
+        evJq6cfe37G86ROMLHlN/wtKdTIXq6k=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-534-0AP6TlEvM2yqYKAovmGz3g-1; Tue, 23 May 2023 05:47:58 -0400
+X-MC-Unique: 0AP6TlEvM2yqYKAovmGz3g-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-306362a1607so4580523f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:47:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684835278; x=1687427278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qq7CNPaF4NbXPimNw4H7TDkWjTz2SdZxq4zob7zuH7s=;
-        b=QDZc6pGqmzlOG5St+bO1VR+UVXUk2WUIveCL0O05GWMZaG+giwFSHXeg7zx8mJx2qy
-         tRgk/O3WPI+IRUiN2fyi5UxoModJxHwqLNO81HIQKudPQaP8oqgB2i7lzbsWkcLgkkdZ
-         TN1hM3qLklofqr/dEdX8YqUgpM0ZZlI0ivhecnzVzEaHIxBo8A5nZ3Zvt8TFzxf20Hxj
-         Dz+U98eqZE31KZYyVEhs6xnEOYexEObfXtVJyzMtH9a2QJz2gG1p4S1ktmzfGxLQJQEm
-         sd4ZjcIGWFokpnlqmaap4al/74pEdraSx61qcatfkuEbtkeRp/pw8oew4cVjIen5Y1a2
-         l30w==
-X-Gm-Message-State: AC+VfDz1tbwnXOk6jwIwBskroNaFCod7aET7bclUj0qkd5iINd4pLC2/
-        znVfIpYhE4amR4Qs0mIvJ5na97dXLb6QB4Dd1APWpjod
-X-Google-Smtp-Source: ACHHUZ4zBGa6aopRQ69KB08F4/g/QRlURihGVyQ02JlWgdGnUnrxk5nRaquQO17MWhgOsTmD0PFDkNIPZNvYviDfjAw=
-X-Received: by 2002:a05:6808:3ce:b0:395:dd8c:f833 with SMTP id
- o14-20020a05680803ce00b00395dd8cf833mr7348653oie.27.1684835277778; Tue, 23
- May 2023 02:47:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684835277; x=1687427277;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wTozs52NGQBBt66G2VZ78itBAYBuBwd2qy/f5JHxcgg=;
+        b=iBX0s+Y2gFFuLkJ9dy3ZIZ+VUBz24JMOYv9y60/cdkKj9Vcc91mg7ulZlQKdD8yKRZ
+         uVKommUCYBDjnO+xXUCa4lKhvu6SAeOPziizbG+aNsb5YSa2xjBieK+BMcaRRe4+JHSY
+         QREcwOgJPfqHugAfIVUpyR0WTsue8+Eelvzd1+uEIY5utnS5rffICz0g7bMs67CVOoPk
+         IL8wLReNpT5JrX0aHEQt3uf/rvDlLay1hDTUTKowc13SAgy8CxBYIjUwqs0ZxLVOTh+F
+         Lyru7i8G9JuB4ZziKkLF2JAjALsSSgJAul9qeh7B37OcX2eDYeWBt6JHBv2VK/tAF87W
+         07ew==
+X-Gm-Message-State: AC+VfDxtWd2zmcnUNPr6hXpgJHUO9zyJzmBK3hcWVcxRNJF3Bu+CcIcV
+        uEG4aQCah4zBv+9aXtqvgA90JM5YcM1kSm3duq5Z8XHWbvvton57wOg/9tjXk1+r9JEiMtzrQ4c
+        nJu+LQVkTtUmOifDYcQPsLH4c
+X-Received: by 2002:adf:fd07:0:b0:309:3b27:9baa with SMTP id e7-20020adffd07000000b003093b279baamr9962696wrr.52.1684835277605;
+        Tue, 23 May 2023 02:47:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Cg0L8GaoEx5zA4nxlysT18P5TkZ7gbabyWFIRjsDKmtvzHzyuCCKmuqWSgjFyU8zQbfpTuA==
+X-Received: by 2002:adf:fd07:0:b0:309:3b27:9baa with SMTP id e7-20020adffd07000000b003093b279baamr9962677wrr.52.1684835277243;
+        Tue, 23 May 2023 02:47:57 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
+        by smtp.gmail.com with ESMTPSA id d16-20020a5d5390000000b00301a351a8d6sm10588479wrv.84.2023.05.23.02.47.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 02:47:56 -0700 (PDT)
+Message-ID: <401a535a-0393-fc7c-66b0-832c061283c7@redhat.com>
+Date:   Tue, 23 May 2023 11:47:55 +0200
 MIME-Version: 1.0
-References: <20230418090312.2818879-1-sergio.paracuellos@gmail.com> <CAMhs-H_yn_76RAFNk4ux_-rn9FdKna9Vsu0raFQXfr3ykkRWPw@mail.gmail.com>
-In-Reply-To: <CAMhs-H_yn_76RAFNk4ux_-rn9FdKna9Vsu0raFQXfr3ykkRWPw@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 23 May 2023 11:47:46 +0200
-Message-ID: <CAMhs-H_NxauVCL7Sc7SWBk4dTQ8CyqLbPnTZO66VAqycPoOyTw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] mips: ralink: add complete clock and reset driver
- for mtmips SoCs
-To:     linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        arinc.unal@arinc9.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 2/6] ksm: count all zero pages placed by KSM
+Content-Language: en-US
+To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
+Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+References: <202305221842587200002@zte.com.cn>
+ <20230522105229.4066-1-yang.yang29@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230522105229.4066-1-yang.yang29@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 4:48=E2=80=AFPM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> On Tue, Apr 18, 2023 at 11:03=E2=80=AFAM Sergio Paracuellos
-> <sergio.paracuellos@gmail.com> wrote:
-> >
-> > Hi all!
-> >
-> > This patchset is a big effort to properly implement a clock and reset
-> > driver for old ralink SoCs. This allow to properly define clocks in
-> > device tree and avoid to use fixed-clocks directly from 'arch/mips/rali=
-nk'
-> > architecture directory code.
-> >
-> > Device tree 'sysc' node will be both clock and reset provider using
-> > 'clock-cells' and 'reset-cells' properties.
-> >
-> > The ralink SoCs we are taking about are RT2880, RT3050, RT3052, RT3350,
-> > RT3352, RT3883, RT5350, MT7620, MT7628 and MT7688. Mostly the code in
-> > this new driver has been extracted from 'arch/mips/ralink' and cleanly
-> > put using kernel clock and reset driver APIs. The clock plans for this
-> > SoCs only talks about relation between CPU frequency and BUS frequency.
-> > This relation is different depending on the particular SoC. CPU clock i=
-s
-> > derived from XTAL frequencies.
-> >
-> >  Depending on the SoC we have the following frequencies:
-> >  * RT2880 SoC:
-> >      - XTAL: 40 MHz.
-> >      - CPU: 250, 266, 280 or 300 MHz.
-> >      - BUS: CPU / 2 MHz.
-> >   * RT3050, RT3052, RT3350:
-> >      - XTAL: 40 MHz.
-> >      - CPU: 320 or 384 MHz.
-> >      - BUS: CPU / 3 MHz.
-> >   * RT3352:
-> >      - XTAL: 40 MHz.
-> >      - CPU: 384 or 400 MHz.
-> >      - BUS: CPU / 3 MHz.
-> >      - PERIPH: 40 MHz.
-> >   * RT3383:
-> >      - XTAL: 40 MHz.
-> >      - CPU: 250, 384, 480 or 500 MHz.
-> >      - BUS: Depends on RAM Type and CPU:
-> >        + RAM DDR2: 125. ELSE 83 MHz.
-> >        + RAM DDR2: 128. ELSE 96 MHz.
-> >        + RAM DDR2: 160. ELSE 120 MHz.
-> >        + RAM DDR2: 166. ELSE 125 MHz.
-> >   * RT5350:
-> >       - XTAL: 40 MHz.
-> >       - CPU: 300, 320 or 360 MHz.
-> >       - BUS: CPU / 3, CPU / 4, CPU / 3 MHz.
-> >       - PERIPH: 40 MHz.
-> >   * MT7628 and MT7688:
-> >      - XTAL: 20 MHz or 40 MHz.
-> >      - CPU: 575 or 580 MHz.
-> >      - BUS: CPU / 3.
-> >      - PCMI2S: 480 MHz.
-> >      - PERIPH: 40 MHz.
-> >   * MT7620:
-> >      - XTAL: 20 MHz or 40 MHz.
-> >      - PLL: XTAL, 480, 600 MHz.
-> >      - CPU: depends on PLL and some mult and dividers.
-> >      - BUS: depends on PLL and some mult and dividers.
-> >      - PERIPH: 40 or XTAL MHz.
-> >
-> > MT7620 is a bit more complex deriving CPU clock from a PLL and an bunch=
- of
-> > register reads and predividers. To derive CPU and BUS frequencies in th=
-e
-> > MT7620 SoC 'mt7620_calc_rate()' helper is used.
-> > In the case XTAL can have different frequencies and we need a different
-> > clock frequency for peripherals 'periph' clock in introduced.
-> > The rest of the peripherals present in the SoC just follow their parent
-> > frequencies.
-> >
-> > I am using 'mtmips' inside for ralink clock driver. This is aligned wit=
-h
-> > pinctrl series recently merged through pinctrl git tree [0].
-> >
-> > I am maintaining ralink as prefix for compatible strings after discussi=
-ons
-> > between Rob and Arinc in v2 of this series [1].
-> >
-> > Changes have been compile tested for:
-> > - RT2880
-> > - RT3883
-> > - MT7620
-> >
-> > Changes have been properly tested in RT5350 SoC based board (ALL5003 bo=
-ard)
-> > resulting in a working platform.
-> >
-> > Dts files for these SoCs in-tree except MT7621 are incomplete. We are
-> > planning to align with openWRT files at some point and add extra needed
-> > changes. Hence I am not touching them at all in these series. If this i=
-s
-> > a problem, please let me know and I will update them.
-> >
-> > Talking about merging this series I'd like all of the patches going thr=
-ough
-> > the MIPS tree if possible.
-> >
-> > Thanks in advance for your time.
-> >
-> > Best regards,
-> >     Sergio Paracuellos
-> >
-> > Changes in v3:
-> > - Address Stephen comments in v2:
-> >     + Drop unsused include '<linux/clk.h>'.
-> >     + Add fixed and factor clocks when it makes sense.
-> >     + Make 'mtmips_periph_clk_ops' named variable.
-> >     + WARN_ON -> WARN_ON_ONCE.
-> >     + Avoid CONFIG_USB dependent code. Introduce new 'mtmips_clk_regs_i=
-nit'.
-> >     + Don't validate the bindings in the driver.
-> >     + Make const 'struct clk_init_data' used inside macros.
-> >     + do_div -> div_u64.
-> >     + Make use of dev_err_probe.
->
-> Hi Stephen,
->
-> Does anything else need to be addressed to have all of these added?
->
-> Philipp, can you please review the reset related code in PATCH 2/9 of
-> these series?
->
-> Thanks in advance for your time!
->
-> Best regards,
->     Sergio Paracuellos
+On 22.05.23 12:52, Yang Yang wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> As pages_sharing and pages_shared don't include the number of zero pages
+> merged by KSM, we cannot know how many pages are zero pages placed by KSM
+> when enabling use_zero_pages, which leads to KSM not being transparent with
+> all actual merged pages by KSM. In the early days of use_zero_pages,
+> zero-pages was unable to get unshared by the ways like MADV_UNMERGEABLE so
+> it's hard to count how many times one of those zeropages was then unmerged.
+> 
+> But now, unsharing KSM-placed zero page accurately has been achieved, so we
+> can easily count both how many times a page full of zeroes was merged with
+> zero-page and how many times one of those pages was then unmerged. and so,
+> it helps to estimate memory demands when each and every shared page could
+> get unshared.
+> 
+> So we add ksm_zero_pages under /sys/kernel/mm/ksm/ to show the number
+> of all zero pages placed by KSM.
+> 
+> v7->v8:
+> Handle the case when khugepaged replaces a shared zeropage by a THP.
+> 
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+> Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+> ---
+>   include/linux/ksm.h | 17 +++++++++++++++++
+>   mm/khugepaged.c     |  3 +++
+>   mm/ksm.c            | 12 ++++++++++++
+>   mm/memory.c         |  7 ++++++-
+>   4 files changed, 38 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+> index 7989200cdbb7..1adcae0205e3 100644
+> --- a/include/linux/ksm.h
+> +++ b/include/linux/ksm.h
+> @@ -29,6 +29,16 @@ void __ksm_exit(struct mm_struct *mm);
+>   /* use pte_mkdirty to track a KSM-placed zero page */
+>   #define set_pte_ksm_zero(pte)	pte_mkdirty(pte_mkspecial(pte))
+>   #define is_ksm_zero_pte(pte)	(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte))
+> +extern unsigned long ksm_zero_pages;
+> +static inline void inc_ksm_zero_pages(void)
+> +{
+> +	ksm_zero_pages++;
+> +}
+> +
 
-Gentle ping for this series :-)
+No need to export the inc, just inline this.
 
+> +static inline void dec_ksm_zero_pages(void)
+> +{
+> +	ksm_zero_pages--;
+> +}
+>   
+>   static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
+>   {
+> @@ -100,6 +110,13 @@ static inline void ksm_exit(struct mm_struct *mm)
+>   
+>   #define set_pte_ksm_zero(pte)	pte_mkspecial(pte)
+>   #define is_ksm_zero_pte(pte)	0
+> +static inline void inc_ksm_zero_pages(void)
+> +{
+> +}
+> +
+> +static inline void dec_ksm_zero_pages(void)
+> +{
+> +}
+>   
+>   #ifdef CONFIG_MEMORY_FAILURE
+>   static inline void collect_procs_ksm(struct page *page,
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 6b9d39d65b73..ba0d077b6951 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/page_table_check.h>
+>   #include <linux/swapops.h>
+>   #include <linux/shmem_fs.h>
+> +#include <linux/ksm.h>
+>   
+>   #include <asm/tlb.h>
+>   #include <asm/pgalloc.h>
+> @@ -711,6 +712,8 @@ static void __collapse_huge_page_copy_succeeded(pte_t *pte,
+>   				spin_lock(ptl);
+>   				ptep_clear(vma->vm_mm, address, _pte);
+>   				spin_unlock(ptl);
+> +				if (is_ksm_zero_pte(pteval))
+> +					dec_ksm_zero_pages();
+>   			}
+>   		} else {
+>   			src_page = pte_page(pteval);
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 9962f5962afd..2ca7e8860faa 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -278,6 +278,9 @@ static unsigned int zero_checksum __read_mostly;
+>   /* Whether to merge empty (zeroed) pages with actual zero pages */
+>   static bool ksm_use_zero_pages __read_mostly;
+>   
+> +/* The number of zero pages which is placed by KSM */
+> +unsigned long ksm_zero_pages;
+> +
+>   #ifdef CONFIG_NUMA
+>   /* Zeroed when merging across nodes is not allowed */
+>   static unsigned int ksm_merge_across_nodes = 1;
+> @@ -1223,6 +1226,7 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+>   	} else {
+>   		newpte = set_pte_ksm_zero(pfn_pte(page_to_pfn(kpage),
+>   					       vma->vm_page_prot));
+> +		inc_ksm_zero_pages();
+>   		/*
+>   		 * We're replacing an anonymous page with a zero page, which is
+>   		 * not anonymous. We need to do proper accounting otherwise we
+> @@ -3350,6 +3354,13 @@ static ssize_t pages_volatile_show(struct kobject *kobj,
+>   }
+>   KSM_ATTR_RO(pages_volatile);
+>   
+> +static ssize_t ksm_zero_pages_show(struct kobject *kobj,
+> +				struct kobj_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%ld\n", ksm_zero_pages);
+> +}
+> +KSM_ATTR_RO(ksm_zero_pages);
+> +
+>   static ssize_t general_profit_show(struct kobject *kobj,
+>   				   struct kobj_attribute *attr, char *buf)
+>   {
+> @@ -3417,6 +3428,7 @@ static struct attribute *ksm_attrs[] = {
+>   	&pages_sharing_attr.attr,
+>   	&pages_unshared_attr.attr,
+>   	&pages_volatile_attr.attr,
+> +	&ksm_zero_pages_attr.attr,
+>   	&full_scans_attr.attr,
+>   #ifdef CONFIG_NUMA
+>   	&merge_across_nodes_attr.attr,
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 8358f3b853f2..058b416adf24 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1415,8 +1415,11 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>   			tlb_remove_tlb_entry(tlb, pte, addr);
+>   			zap_install_uffd_wp_if_needed(vma, addr, pte, details,
+>   						      ptent);
+> -			if (unlikely(!page))
+> +			if (unlikely(!page)) {
+> +				if (is_ksm_zero_pte(ptent))
+> +					dec_ksm_zero_pages();
+>   				continue;
+> +			}
+>   
+>   			delay_rmap = 0;
+>   			if (!PageAnon(page)) {
+> @@ -3120,6 +3123,8 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>   				inc_mm_counter(mm, MM_ANONPAGES);
+>   			}
+>   		} else {
+> +			if (is_ksm_zero_pte(vmf->orig_pte))
+> +				dec_ksm_zero_pages();
+>   			inc_mm_counter(mm, MM_ANONPAGES);
+>   		}
+>   		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+
+Can we maybe avoid exporting the dec semantics and rather add a callback 
+to KSM? Ideally, we'd even distill that down to a single call, and 
+handle the details in ksm.h. Maybe simply:
+
+ksm_notify_unmap_zero_page(vmf->orig_pte);
+
+and then just have in ksm.h
+
+static inline void ksm_notify_unmap_zero_page(pte_t pte)
+{
+	if (is_ksm_zero_pte(pte))
+		ksm_zero_pages--;
+}
+
+-- 
 Thanks,
-    Sergio Paracuellos
->
-> >
-> > Changes in v2:
-> > - Address bindings documentation changes pointed out by Krzysztof:
-> >     + Rename the file into 'mediatek,mtmips-sysc.yaml'.
-> >     + Redo commit subject and log message.
-> >     + Order compatibles alphabetically.
-> >     + Redo bindings description taking into account this is a system
-> >       controller node which provides both clocks and resets to the worl=
-d.
-> >     + Drop label from example.
-> >     + Use 'syscon' as node name in example.
-> >     + Drop no sense 'ralink,rt2880-reset' compatible string
-> > - Squash patches 6 and 7 together as pointed out by Stephen Boyd.
-> >
-> > Previoous series:
-> > v2: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=3DLeJ4vT22uibQ1=
-DnaZsfTrtRxSiv=3D8L5RA@mail.gmail.com/T/#t
-> > v1: https://lore.kernel.org/linux-clk/20230320161823.1424278-1-sergio.p=
-aracuellos@gmail.com/T/#t
-> >
-> > [0]: https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b=
-06185@arinc9.com/T/#t
-> > [1]: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=3DLeJ4vT22uibQ=
-1DnaZsfTrtRxSiv=3D8L5RA@mail.gmail.com/T/#mfe725b6e3382c6fb09736472a846cbbc=
-84f264dc
-> >
-> > Sergio Paracuellos (9):
-> >   dt-bindings: clock: add mtmips SoCs system controller
-> >   clk: ralink: add clock and reset driver for MTMIPS SoCs
-> >   mips: ralink: rt288x: remove clock related code
-> >   mips: ralink: rt305x: remove clock related code
-> >   mips: ralink: rt3883: remove clock related code
-> >   mips: ralink: mt7620: remove clock related code
-> >   mips: ralink: remove reset related code
-> >   mips: ralink: get cpu rate from new driver code
-> >   MAINTAINERS: add Mediatek MTMIPS Clock maintainer
-> >
-> >  .../bindings/clock/mediatek,mtmips-sysc.yaml  |   65 +
-> >  MAINTAINERS                                   |    6 +
-> >  arch/mips/include/asm/mach-ralink/mt7620.h    |   35 -
-> >  arch/mips/include/asm/mach-ralink/rt288x.h    |   10 -
-> >  arch/mips/include/asm/mach-ralink/rt305x.h    |   21 -
-> >  arch/mips/include/asm/mach-ralink/rt3883.h    |    8 -
-> >  arch/mips/ralink/clk.c                        |   26 +-
-> >  arch/mips/ralink/common.h                     |    5 -
-> >  arch/mips/ralink/mt7620.c                     |  226 ----
-> >  arch/mips/ralink/of.c                         |    4 -
-> >  arch/mips/ralink/reset.c                      |   61 -
-> >  arch/mips/ralink/rt288x.c                     |   31 -
-> >  arch/mips/ralink/rt305x.c                     |   78 --
-> >  arch/mips/ralink/rt3883.c                     |   44 -
-> >  drivers/clk/ralink/Kconfig                    |    7 +
-> >  drivers/clk/ralink/Makefile                   |    1 +
-> >  drivers/clk/ralink/clk-mtmips.c               | 1134 +++++++++++++++++
-> >  17 files changed, 1232 insertions(+), 530 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt=
-mips-sysc.yaml
-> >  create mode 100644 drivers/clk/ralink/clk-mtmips.c
-> >
-> > --
-> > 2.25.1
-> >
+
+David / dhildenb
+
