@@ -2,121 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C29470E675
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CF670E682
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238312AbjEWU36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
+        id S238389AbjEWUdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbjEWU3y (ORCPT
+        with ESMTP id S233535AbjEWUc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:29:54 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DE8130
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:29:50 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 60ABC802A978
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:29:50 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 0635610047E3C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:29:50 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 1Ydhq4yqZAiEs1Ydhqs3lV; Tue, 23 May 2023 20:29:50 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=WfrJ12tX c=1 sm=1 tr=0 ts=646d223e
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=P0xRbXHiH_UA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=_TT2BMk-RzcNz2eV-joA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BX2bgvnL1nr1usC7EyU5DjfHYFs+TnCFnW2d055ArI8=; b=WOZLddEY+EsgXjhO9hihs7GLHI
-        KOnHEEmHoQ/B/5vwQSsCICCXkhZPs3Ed2n38eI2ZvPAJpBcgAAwLDr5n2Gr7Ul3dC/pS77a9ICSbZ
-        Y+Iqg7jcpGXqimR/xh5IVoZ4Kkw6FpVSF2i7M174p4/XjnzcS8w51m3zsN1+koMwqySFdCKU8xT5V
-        3OdMbUjHvwRgsH6RzrK9z3KgY8V6gWhClk02WtoyjkUwFD0XG7r8EslztpdtyCuGfnEDZpW14J2nD
-        KIl4Vlje77ahiSFopyui0UM2s6oTZI00yLyD/eUwlOAsZrC5vy7OnciTqU4EWfSCcmhW2h3J7kOsy
-        FRKv+gLA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:41072 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q1Ydg-003gjh-Jg;
-        Tue, 23 May 2023 14:29:48 -0600
-Subject: Re: [PATCH 6.1 000/292] 6.1.30-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230522190405.880733338@linuxfoundation.org>
-In-Reply-To: <20230522190405.880733338@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <1c263436-67a2-696c-5720-edf27596cce2@w6rz.net>
-Date:   Tue, 23 May 2023 13:29:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 23 May 2023 16:32:59 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12A3BB;
+        Tue, 23 May 2023 13:32:57 -0700 (PDT)
+Received: from [127.0.0.1] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 34NKVZvn2821465
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 23 May 2023 13:31:35 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 34NKVZvn2821465
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023051001; t=1684873896;
+        bh=j48OLSwG1gjUAr7jSdrExwOtC18vWxxR2v3o37+/ivU=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=RthoEZm75qRPIUTB89o0F+MAJd3/jy2JpXCa8RhNp7HlSjDG/crOzuR6eSf687wrR
+         o2u+iYhVfw1mpyGKtIv4Am97beqMbAyh/wWR4dbRa/MmJkW5GJ9Q05pADeg8uYwYC7
+         Urfnq3iLfLXh21U82Pk86g+T5ql618qkgLD+ivI8ZB+0RDw80U9ACZ5MQ1tOJW+aGQ
+         xW+MxZg49gKuPBPz9Vj/nk5mWt9WnNsGt6uPXfmCYDbVuO8CfHFCbTfonX7ULfvAR2
+         fQjwgN0X9ZduCLAhGlzOwxO6+km+0Tz5F9s8vYItSdmDslLGHIM9ehg0w+4KMkkwpZ
+         IPjKz/DhKbf6A==
+Date:   Tue, 23 May 2023 13:31:31 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Tim Wiederhake <twiederh@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 2/2] x86/msr: Allow unprivileged read access to some MSRs
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230523194949.96149-2-twiederh@redhat.com>
+References: <20230523194949.96149-1-twiederh@redhat.com> <20230523194949.96149-2-twiederh@redhat.com>
+Message-ID: <25E09D2E-E918-4B1D-B307-54F9A801FCF8@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q1Ydg-003gjh-Jg
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:41072
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 12:05 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.30 release.
-> There are 292 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On May 23, 2023 12:49:49 PM PDT, Tim Wiederhake <twiederh@redhat=2Ecom> wro=
+te:
+>Delaying access control allows unprivileged processes to
+>read specific MSRs, such as IA32_CORE_CAPABILITIES and
+>IA32_ARCH_CAPABILITIES=2E This is helpful for e=2Eg=2E qemu and
+>libvirt who require the raw MSR content to calculate host
+>CPU capabilities=2E Other programs might be interested in
+>IA32_EFER for x86-64-v1 detection=2E
 >
-> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
-> Anything received after that time might be too late.
+>Signed-off-by: Tim Wiederhake <twiederh@redhat=2Ecom>
+>---
+> arch/x86/kernel/msr=2Ec | 38 +++++++++++++++++++++++++++++++++-----
+> 1 file changed, 33 insertions(+), 5 deletions(-)
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.30-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+>diff --git a/arch/x86/kernel/msr=2Ec b/arch/x86/kernel/msr=2Ec
+>index 058f2b67d0c7=2E=2E9485aa7f8161 100644
+>--- a/arch/x86/kernel/msr=2Ec
+>+++ b/arch/x86/kernel/msr=2Ec
+>@@ -50,6 +50,23 @@ enum allow_write_msrs {
+>=20
+> static enum allow_write_msrs allow_writes =3D MSR_WRITES_DEFAULT;
+>=20
+>+static int filter_read(struct file *file, u32 reg)
+>+{
+>+	if (file->private_data)
+>+		return 0;
+>+
+>+	switch (reg) {
+>+	case MSR_IA32_CORE_CAPS:
+>+	case MSR_IA32_ARCH_CAPABILITIES:
+>+	case MSR_EFER:
+>+		return 0;
+>+	default:
+>+		break;
+>+	}
+>+
+>+	return -EPERM;
+>+}
+>+
+> static ssize_t msr_read(struct file *file, char __user *buf,
+> 			size_t count, loff_t *ppos)
+> {
+>@@ -59,6 +76,10 @@ static ssize_t msr_read(struct file *file, char __user=
+ *buf,
+> 	int cpu =3D iminor(file_inode(file));
+> 	int err =3D 0;
+>=20
+>+	err =3D filter_read(file, reg);
+>+	if (err)
+>+		return err;
+>+
+> 	if (count < 8)
+> 		return -EINVAL;	/* Invalid chunk size */
+>=20
+>@@ -71,7 +92,7 @@ static ssize_t msr_read(struct file *file, char __user =
+*buf,
+> 	return 8;
+> }
+>=20
+>-static int filter_write(u32 reg)
+>+static int filter_write(struct file *file, u32 reg)
+> {
+> 	/*
+> 	 * MSRs writes usually happen all at once, and can easily saturate kmsg=
+=2E
+>@@ -83,6 +104,9 @@ static int filter_write(u32 reg)
+> 	 */
+> 	static DEFINE_RATELIMIT_STATE(fw_rs, 30 * HZ, 1);
+>=20
+>+	if (!file->private_data)
+>+		return -EPERM;
+>+
+> 	switch (allow_writes) {
+> 	case MSR_WRITES_ON:  return 0;
+> 	case MSR_WRITES_OFF: return -EPERM;
+>@@ -113,7 +137,7 @@ static ssize_t msr_write(struct file *file, const cha=
+r __user *buf,
+> 	if (err)
+> 		return err;
+>=20
+>-	err =3D filter_write(reg);
+>+	err =3D filter_write(file, reg);
+> 	if (err)
+> 		return err;
+>=20
+>@@ -156,6 +180,9 @@ static long msr_ioctl(struct file *file, unsigned int=
+ ioc, unsigned long arg)
+> 			err =3D -EFAULT;
+> 			break;
+> 		}
+>+		err =3D filter_read(file, regs[1]);
+>+		if (err)
+>+			return err;
+> 		err =3D rdmsr_safe_regs_on_cpu(cpu, regs);
+> 		if (err)
+> 			break;
+>@@ -176,7 +203,7 @@ static long msr_ioctl(struct file *file, unsigned int=
+ ioc, unsigned long arg)
+> 		if (err)
+> 			break;
+>=20
+>-		err =3D filter_write(regs[1]);
+>+		err =3D filter_write(file, regs[1]);
+> 		if (err)
+> 			return err;
+>=20
+>@@ -202,8 +229,7 @@ static int msr_open(struct inode *inode, struct file =
+*file)
+> 	unsigned int cpu =3D iminor(file_inode(file));
+> 	struct cpuinfo_x86 *c;
+>=20
+>-	if (!capable(CAP_SYS_RAWIO))
+>-		return -EPERM;
+>+	file->private_data =3D (void *)(capable(CAP_SYS_RAWIO));
+>=20
+> 	if (cpu >=3D nr_cpu_ids || !cpu_online(cpu))
+> 		return -ENXIO;	/* No such CPU */
+>@@ -245,6 +271,8 @@ static int msr_device_destroy(unsigned int cpu)
+>=20
+> static char *msr_devnode(const struct device *dev, umode_t *mode)
+> {
+>+	if (mode)
+>+		*mode =3D 0644;
+> 	return kasprintf(GFP_KERNEL, "cpu/%u/msr", MINOR(dev->devt));
+> }
+>=20
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+I believe the preferred way to do this is to export "cooked" information i=
+n sysfs=2E /dev/msr really should be considered a legacy, very low-level in=
+terface suitable only for restricted environments=2E
 
-Tested-by: Ron Economos <re@w6rz.net>
+When I wrote this driver, it was a maxim that "root owns the system"; ther=
+e was no way to restrict privileged interfaces like /dev/(k)mem, /dev/iopor=
+ts, or kernel module installation from root; any of these interfaces can be=
+ trivially used to take full command of the hardware=2E
+
+This is no longer the case, and it is better for the kernel to only export=
+ known good information at the semantic level=2E There is no inherent guara=
+ntee that any of these registers may not contain security sensitive informa=
+tion in the future=2E
+
+At this point, /dev/msr should be considered a debugging-only interface (f=
+or which it is quite useful still=2E)
+
+So NAK on allowing any kind of access without CAP_SYS_RAWIO=2E
+
+NAK on your other patch, too, because it is based on an invalid assumption=
+: read/write to /dev/msr does *not* advance the file pointer=2E This is ana=
+logous to /dev/ioports, rather than /dev/mem=2E
+
+Incidentally, you have touched on a potential issue here: I suspect that w=
+e should check CAP_SYS_RAWIO for each access =E2=80=93 the old policy of "i=
+f you can open it you can give someone else a file descriptor" probably no =
+longer makes any sense, at least without some kind of mechanism to filter a=
+ccess control for a specific fd=2E (Then again, the idiom of "open then dro=
+p privileges" might justify caching the capability=2E)
+
+
 
