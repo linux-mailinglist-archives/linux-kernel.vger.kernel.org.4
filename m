@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBFA70E1BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C6C70E1B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbjEWQWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S237379AbjEWQXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjEWQWF (ORCPT
+        with ESMTP id S233067AbjEWQXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:22:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F4112B;
-        Tue, 23 May 2023 09:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=d661uJD3QZyNSbDvh1yODoH87KCKXO6AdQINLMKGe10=; b=PJwJqOx+NIMo9E4oIdJHNzHO4x
-        /I3Fbeijrw9ytebTXP/VjCInxuGEyLhyF7xK8tuhjlfrJL+4miepn6rGuZNMr5lVWDLMP5nLFDN5U
-        VmyWpb0tB51Wm0DRUm1Lw8tWZB8qqHaYAUGYCtJnq2/TMNBM6iuUiGBwsjrKPSeuh/a2hcal0qJXW
-        DnEIJi9jkoA0SIeByrBKFfHDsAiHJqK+NGjeIWf0DXni53eZdO6V8ifabwFhdnzm9a/6VWSPaoo3V
-        QLtDo5B4zTthXQWU4qSrbH9mzvYLHucS9j+5ROtP1vDIK6MooC5a/p+4oDUqZF3eqJi6wnkrKyMeo
-        JASpUFUA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1Ulo-00Amb7-2r;
-        Tue, 23 May 2023 16:21:56 +0000
-Date:   Tue, 23 May 2023 09:21:56 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        cluster-devel@redhat.com, "Darrick J . Wong" <djwong@kernel.org>,
-        linux-kernel@vger.kernel.org, dhowells@redhat.com,
-        linux-bcachefs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>
-Subject: Re: [Cluster-devel] [PATCH 06/32] sched: Add
- task_struct->faults_disabled_mapping
-Message-ID: <ZGzoJLCRLk+pCKAk@infradead.org>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-7-kent.overstreet@linux.dev>
- <20230510010737.heniyuxazlprrbd6@quack3>
- <ZFs3RYgdCeKjxYCw@moria.home.lan>
- <20230523133431.wwrkjtptu6vqqh5e@quack3>
+        Tue, 23 May 2023 12:23:22 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73C9E5;
+        Tue, 23 May 2023 09:23:19 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d2981e3abso4506989b3a.1;
+        Tue, 23 May 2023 09:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684858999; x=1687450999;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BSLFIjazbnmJuk1PaO8RBmpoDwlcGuPVoUx253JXMIg=;
+        b=N/FkLRL7ItTCG2zSsiOw19DAcEG8xYItkOiFi2UcS9XVpCXu1yx7O0eLSb0WpkHhFl
+         IbmPn5zRZBPfJ64YlADS4vKRFXpXfAWaqQBEav+bG6cuUgo8pOMN0o5QYQL/DA8XejEp
+         5jXMdf+YuLLlIys7LGj7n2SkDYMCzHDojBA1BX5/HjWaGfc6gUVrEfICzlKu60q+H6nc
+         6S61SSewNVRlXtbYFZkCC3ie9LaHg5QwVRrvjq0zTkgID6s70HFadVg/DE2ToHheB5wp
+         PkcQfJt+izswOd5mwC7SyTlyV6KgVkGs7Lh3KFDkpWAcjdFA9sTl2NSRk1frfqQWyHmo
+         KNOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684858999; x=1687450999;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BSLFIjazbnmJuk1PaO8RBmpoDwlcGuPVoUx253JXMIg=;
+        b=Z0uHQCJRlD70VKZXyuRgdVq82Jky1ryOyW2rpEqsKQl1HuOJFAH/a8HZcqhU/Od1L5
+         zbt6MASyWiXfyn41lFzliotPzbeZYnp+iCdFAodWISGHQ2d+D5sg9tI2vFMPRTHDVv5D
+         W9F1JYpKxEoVx+J+S/Q69HevLxLfYxZ6dabhTksn/72tICgyKs+VOhsvTteI5Mf2oVgl
+         n6OItlw5nCjddJdwojudW1lQkESdKjg1Xh8hzs8VAEGk5FS8WcZdH/4AKc3QggTr3rXb
+         L3pj7f/MGUnERof2mJe9XPUCvCa1HX2kjUYCTdeQ5EiW2vgm2i16iKtb6hfjK47eQPg3
+         28nw==
+X-Gm-Message-State: AC+VfDxvPyKzlylT7QjSr1BeYmExQ1EK2ucEiz9z4kg6rNxMBgjhVkYk
+        +ZjZXXMO4vFMSOlJoM4b0ik=
+X-Google-Smtp-Source: ACHHUZ5Syl31doGd4JqexDKW+xM/ACKZ5a09sGX7hHRTYCLTLprkN/vhP8DA3KKKLbcs3tbpPXlZFA==
+X-Received: by 2002:a05:6a00:a20:b0:64a:4bfa:6b8d with SMTP id p32-20020a056a000a2000b0064a4bfa6b8dmr20477802pfh.6.1684858998958;
+        Tue, 23 May 2023 09:23:18 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-81-153.dynamic-ip.hinet.net. [36.228.81.153])
+        by smtp.gmail.com with ESMTPSA id n18-20020a62e512000000b0064d6f4c8b0bsm3822212pff.94.2023.05.23.09.23.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 09:23:18 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Min-Hua Chen <minhuadotchen@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: correctly access opcode
+Date:   Wed, 24 May 2023 00:23:12 +0800
+Message-Id: <20230523162314.114274-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523133431.wwrkjtptu6vqqh5e@quack3>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 03:34:31PM +0200, Jan Kara wrote:
-> I've checked the code and AFAICT it is all indeed handled. BTW, I've now
-> remembered that GFS2 has dealt with the same deadlocks - b01b2d72da25
-> ("gfs2: Fix mmap + page fault deadlocks for direct I/O") - in a different
-> way (by prefaulting pages from the iter before grabbing the problematic
-> lock and then disabling page faults for the iomap_dio_rw() call). I guess
-> we should somehow unify these schemes so that we don't have two mechanisms
-> for avoiding exactly the same deadlock. Adding GFS2 guys to CC.
-> 
-> Also good that you've written a fstest for this, that is definitely a useful
-> addition, although I suspect GFS2 guys added a test for this not so long
-> ago when testing their stuff. Maybe they have a pointer handy?
+hdr->opcode is __le32 type, use le32_to_cpu() to cast opcode
+to integer in the switch..case statement to fix the following
+sparse warnings:
 
-generic/708 is the btrfs version of this.
+drivers/usb/typec/ucsi/ucsi_glink.c:248:20: sparse: warning: restricted __le32 degrades to integer
+drivers/usb/typec/ucsi/ucsi_glink.c:248:20: sparse: warning: restricted __le32 degrades to integer
+drivers/usb/typec/ucsi/ucsi_glink.c:248:20: sparse: warning: restricted __le32 degrades to integer
 
-But I think all of the file systems that have this deadlock are actually
-fundamentally broken because they have a mess up locking hierarchy
-where page faults take the same lock that is held over the the direct I/
-operation.  And the right thing is to fix this.  I have work in progress
-for btrfs, and something similar should apply to gfs2, with the added
-complication that it probably means a revision to their network
-protocol.
+No functional change.
 
-I'm absolutely not in favour to add workarounds for thes kind of locking
-problems to the core kernel.  I already feel bad for allowing the
-small workaround in iomap for btrfs, as just fixing the locking back
-then would have avoid massive ratholing.
+Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
+---
+ drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index b454a5159896..1fe9cb5b6bd9 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -245,7 +245,7 @@ static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+ 	struct pmic_glink_ucsi *ucsi = priv;
+ 	const struct pmic_glink_hdr *hdr = data;
+ 
+-	switch (hdr->opcode) {
++	switch (le32_to_cpu(hdr->opcode)) {
+ 	case UC_UCSI_READ_BUF_REQ:
+ 		pmic_glink_ucsi_read_ack(ucsi, data, len);
+ 		break;
+-- 
+2.34.1
+
