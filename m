@@ -2,69 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4439370DFA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB9570DFAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237373AbjEWOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S237308AbjEWOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236810AbjEWOt0 (ORCPT
+        with ESMTP id S232592AbjEWOwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:49:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FFA18B;
-        Tue, 23 May 2023 07:49:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52B8B63356;
-        Tue, 23 May 2023 14:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8529C433EF;
-        Tue, 23 May 2023 14:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684853358;
-        bh=oXOmFChpbfSn0ji1bqaSPr69srXCRms6pIPi5d3extM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RnJ/biP0CNt2CzSCbIf5AInpWLS2/o3mAdml1gU6P8dZI5Svc0H4Kg/0k6HUOTDPR
-         eXUZo/gzxSjSCTyKGI7PT57SRJhvzT+4BdLb+ac5go6P2zZqw6FyoZcLzcV26wzAXr
-         TraGlq925UBUqOYgnfGNx7VPx6BnP8mH6zk+aD0v5THCuz8GjPZh1ALYKHfSQ5MDu7
-         W4xUR2+LIHBNTyaZSOTGH2VQEqWDITM1iHTMysKmRtyak4QwCnGE8EuynGMy3DZXmC
-         hHvQ64sPkPACq17iIp/8wp82Oi9NPWG5kGwN//D8qEld7TVXT7H59Q7AEsE41qeXmV
-         hcUwObqj4XWWA==
-Message-ID: <2f02c9b6-1115-791d-cdaf-049c9eeaee0c@kernel.org>
-Date:   Tue, 23 May 2023 08:49:14 -0600
+        Tue, 23 May 2023 10:52:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECA5FC6;
+        Tue, 23 May 2023 07:52:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC95F139F;
+        Tue, 23 May 2023 07:52:46 -0700 (PDT)
+Received: from [10.57.57.35] (unknown [10.57.57.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C22D03F840;
+        Tue, 23 May 2023 07:51:59 -0700 (PDT)
+Message-ID: <641cb79d-fe79-3873-3698-fec66a4e3253@arm.com>
+Date:   Tue, 23 May 2023 15:51:58 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] net: ioctl: Use kernel memory on protocol ioctl
- callbacks
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V9 10/10] arm64/perf: Implement branch records save on PMU
+ IRQ
 Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
-References: <20230522134735.2810070-1-leitao@debian.org>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230522134735.2810070-1-leitao@debian.org>
+From:   James Clark <james.clark@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+ <20230315051444.1683170-11-anshuman.khandual@arm.com>
+ <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
+In-Reply-To: <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,155 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 7:47 AM, Breno Leitao wrote:
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 5440e67bcfe3..a2cea95aec99 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -114,6 +114,8 @@
->  #include <linux/memcontrol.h>
->  #include <linux/prefetch.h>
->  #include <linux/compat.h>
-> +#include <linux/mroute.h>
-> +#include <linux/mroute6.h>
->  
->  #include <linux/uaccess.h>
->  
-> @@ -138,6 +140,7 @@
->  
->  #include <net/tcp.h>
->  #include <net/busy_poll.h>
-> +#include <net/phonet/phonet.h>
->  
->  #include <linux/ethtool.h>
->  
-> @@ -4106,3 +4109,112 @@ int sock_bind_add(struct sock *sk, struct sockaddr *addr, int addr_len)
->  	return sk->sk_prot->bind_add(sk, addr, addr_len);
->  }
->  EXPORT_SYMBOL(sock_bind_add);
-> +
-> +#ifdef CONFIG_PHONET
-> +/* Copy u32 value from userspace and do not return anything back */
-> +static int sk_ioctl_in(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +	int karg;
-> +
-> +	if (get_user(karg, (u32 __user *)arg))
-> +		return -EFAULT;
-> +
-> +	return sk->sk_prot->ioctl(sk, cmd, &karg);
-> +}
-> +#endif
-> +
-> +#if defined(CONFIG_IP_MROUTE) || defined(CONFIG_IPV6_MROUTE)
-> +/* Copy 'size' bytes from userspace and return `size` back to userspace */
-> +static int sk_ioctl_inout(struct sock *sk, unsigned int cmd,
-> +			  void __user *arg, void *karg, size_t size)
-> +{
-> +	int ret;
-> +
-> +	if (copy_from_user(karg, arg, size))
-> +		return -EFAULT;
-> +
-> +	ret = sk->sk_prot->ioctl(sk, cmd, karg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (copy_to_user(arg, karg, size))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +#endif
-> +
-> +/* This is the most common ioctl prep function, where the result (4 bytes) is
-> + * copied back to userspace if the ioctl() returns successfully. No input is
-> + * copied from userspace as input argument.
-> + */
-> +static int sk_ioctl_out(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +	int ret, karg = 0;
-> +
-> +	ret = sk->sk_prot->ioctl(sk, cmd, &karg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return put_user(karg, (int __user *)arg);
-> +}
-> +
-> +/* A wrapper around sock ioctls, which copies the data from userspace
-> + * (depending on the protocol/ioctl), and copies back the result to userspace.
-> + * The main motivation for this function is to pass kernel memory to the
-> + * protocol ioctl callbacks, instead of userspace memory.
-> + */
-> +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +#ifdef CONFIG_IP_MROUTE
-> +	if (sk->sk_family == PF_INET && sk->sk_protocol == IPPROTO_RAW) {
-> +		switch (cmd) {
-> +		/* These userspace buffers will be consumed by ipmr_ioctl() */
-> +		case SIOCGETVIFCNT: {
-> +			struct sioc_vif_req buffer;
-> +
-> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
-> +					      sizeof(buffer));
-> +			}
-> +		case SIOCGETSGCNT: {
-> +			struct sioc_sg_req buffer;
-> +
-> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
-> +					      sizeof(buffer));
-> +			}
-> +		}
-> +	}
-> +#endif
-> +#ifdef CONFIG_IPV6_MROUTE
-> +	if (sk->sk_family == PF_INET6 && sk->sk_protocol == IPPROTO_RAW) {
-> +		switch (cmd) {
-> +		/* These userspace buffers will be consumed by ip6mr_ioctl() */
-> +		case SIOCGETMIFCNT_IN6: {
-> +			struct sioc_mif_req6 buffer;
-> +
-> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
-> +					      sizeof(buffer));
-> +			}
-> +		case SIOCGETSGCNT_IN6: {
-> +			struct sioc_mif_req6 buffer;
-> +
-> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
-> +					      sizeof(buffer));
-> +			}
-> +		}
-> +	}
-> +#endif
-> +#ifdef CONFIG_PHONET
-> +	if (sk->sk_family == PF_PHONET && sk->sk_protocol == PN_PROTO_PHONET) {
-> +		/* This userspace buffers will be consumed by pn_ioctl() */
-> +		switch (cmd) {
-> +		case SIOCPNADDRESOURCE:
-> +		case SIOCPNDELRESOURCE:
-> +			return sk_ioctl_in(sk, cmd, arg);
-> +		}
-> +	}
-> +#endif
 
-Rather than bleed some of these protocol specific details into core
-code, how about something like this in include net/phonet/phonet.h
 
-static inline bool sk_is_phonet(struct sock *sk)
-{
-	return sk->sk_family == PF_PHONET && \
-		sk->sk_protocol == PN_PROTO_PHONET;
-}
+On 23/05/2023 15:39, James Clark wrote:
+> 
+> 
+> On 15/03/2023 05:14, Anshuman Khandual wrote:
+>> This modifies armv8pmu_branch_read() to concatenate live entries along with
+>> task context stored entries and then process the resultant buffer to create
+>> perf branch entry array for perf_sample_data. It follows the same principle
+>> like task sched out.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+> 
+> [...]
+> 
+>>  void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>  {
+>>  	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>> +	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
+>> +	struct brbe_regset live[BRBE_MAX_ENTRIES];
+>> +	int nr_live, nr_store;
+>>  	u64 brbfcr, brbcr;
+>> -	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
+>>  
+>>  	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>>  	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> @@ -739,36 +743,13 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>  	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>  	isb();
+>>  
+>> -	/* Determine the indices for each loop */
+>> -	loop1_idx1 = BRBE_BANK0_IDX_MIN;
+>> -	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+>> -		loop1_idx2 = brbe_attr->brbe_nr - 1;
+>> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>> -		loop2_idx2 = BRBE_BANK0_IDX_MAX;
+>> -	} else {
+>> -		loop1_idx2 = BRBE_BANK0_IDX_MAX;
+>> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>> -		loop2_idx2 = brbe_attr->brbe_nr - 1;
+>> -	}
+>> -
+>> -	/* Loop through bank 0 */
+>> -	select_brbe_bank(BRBE_BANK_IDX_0);
+>> -	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+>> -		if (!capture_branch_entry(cpuc, event, idx))
+>> -			goto skip_bank_1;
+>> -	}
+>> -
+>> -	/* Loop through bank 1 */
+>> -	select_brbe_bank(BRBE_BANK_IDX_1);
+>> -	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+>> -		if (!capture_branch_entry(cpuc, event, idx))
+>> -			break;
+>> -	}
+>> -
+>> -skip_bank_1:
+>> -	cpuc->branches->branch_stack.nr = idx;
+>> -	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>> +	nr_live = capture_brbe_regset(brbe_attr, live);
+>> +	nr_store = task_ctx->nr_brbe_records;
+>> +	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
+>> +					      nr_live, brbe_attr->brbe_nr);
+>> +	process_branch_entries(cpuc, event, task_ctx->store, nr_store);
+> 
+> Hi Anshuman,
+> 
+> With the following command I get a crash:
+> 
+>   perf record --branch-filter any,save_type -a -- ls
+> 
+> [  101.171822] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000600
+> ...
+> [145380.414654] Call trace:
+> [145380.414739]  armv8pmu_branch_read+0x7c/0x578
+> [145380.414895]  armv8pmu_handle_irq+0x104/0x1c0
+> [145380.415043]  armpmu_dispatch_irq+0x38/0x70
+> [145380.415209]  __handle_irq_event_percpu+0x124/0x3b8
+> [145380.415392]  handle_irq_event+0x54/0xc8
+> [145380.415567]  handle_fasteoi_irq+0x100/0x1e0
+> [145380.415718]  generic_handle_domain_irq+0x38/0x58
+> [145380.415895]  gic_handle_irq+0x5c/0x130
+> [145380.416025]  call_on_irq_stack+0x24/0x58
+> [145380.416173]  el1_interrupt+0x74/0xc0
+> [145380.416321]  el1h_64_irq_handler+0x18/0x28
+> [145380.416475]  el1h_64_irq+0x64/0x68
+> [145380.416604]  smp_call_function_single+0xe8/0x1f0
+> [145380.416745]  event_function_call+0xbc/0x1c8
+> [145380.416919]  _perf_event_enable+0x84/0xa0
+> [145380.417069]  perf_ioctl+0xe8/0xd68
+> [145380.417204]  __arm64_sys_ioctl+0x9c/0xe0
+> [145380.417353]  invoke_syscall+0x4c/0x120
+> [145380.417523]  el0_svc_common+0xd0/0x120
+> [145380.417693]  do_el0_svc+0x3c/0xb8
+> [145380.417859]  el0_svc+0x50/0xc0
+> [145380.418004]  el0t_64_sync_handler+0x84/0xf0
+> [145380.418160]  el0t_64_sync+0x190/0x198
+> 
+> When using --branch-filter any,u without -a it seems to be fine so could
+> be that task_ctx is null in per-cpu mode, or something to do with the
+> userspace only flag?
+> 
+> I'm also wondering if it's possible to collapse some of the last 5
+> commits? They seem to mostly modify things in brbe.c which is a new file
+> so the history probably isn't important at this point it just makes it a
+> bit harder to review.
+> 
 
-And then in net/core/sock.c:
+I realised I just tested V9 instead of V10 but I diffed them and don't
+see anything that would change this issue so it's probably on both versions.
 
-	if (sk_is_phonet(sk)) {
-		rc = phonet_sk_ioctl(...);
-		if (rc <= 0)
-			return rc;
-	}
-
-where < 0 means error, == 0 means handled and > 0 means (keep going).
-Similarly for the other 2 above.
-
+>>  	process_branch_aborts(cpuc);
+>> +	task_ctx->nr_brbe_records = 0;
+>>  
+>>  	/* Unpause the buffer */
+>>  	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
