@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C884870CF98
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C48370CF78
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbjEWAki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S234959AbjEWAjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbjEWAbC (ORCPT
+        with ESMTP id S235552AbjEWAcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:31:02 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49DCE47
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:21:42 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d2d0f5132so2429962b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:21:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684801302; x=1687393302;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2aYdF7DTvHPO7OMZesJvRkwGqhq0minNXqz8wSE/nz4=;
-        b=6hkfuhgDV+Cm6kpsvzWJ48OVTPAuJNbAy//iZV3iTyUkEm0CBAiqKh89/T3iZhHz2Q
-         cS/nl4xPBMzFPSFWoI45FkfXCfhPFhmdrAtsbpG7H2XU7N4TH9lA1jBlH6doK5D5jGF9
-         ssywWHAIrAIm4hg395CyoE06GD7PWLdSA8pWKEnXN5od0s8MM/vGppgN7Y1k1zVrN/5l
-         t+Xuz2ALaAtGJt9hjPyJJtXoDPu6+f2qM+ISuGV3bk/DwEkTviRlnRJWj+jRfCEMNUsw
-         xubELT0MLwIRN2O5A4wXqEY5VMPb6RITikcAhhPQuoPKHRCzm+uZO4JRG5iNINtlxx8O
-         gjCg==
+        Mon, 22 May 2023 20:32:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF65E5B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684801340;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mIt6VPJ0y1Ndcra7Hh8sY5ZEea4UepRZahWsTnGZ1jA=;
+        b=XlMa2Ahbvm9b2obv1ujooFWjmGKwSOh1IZE2QD+2V4YOEMc6Rd79d+aScszXw6Q2Ri6ukd
+        irSZFr/B0sP9q6RBvjbjRq6o4F05qjKoBXhMuVegRXbkEvLflJvczPbiPFOs/iNdrnoEPr
+        DExo2LW/SDkbMj5RG4Wk0gvbyAeE9qA=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-306-21_Ld_lwMFqbeFzR85MliQ-1; Mon, 22 May 2023 20:22:18 -0400
+X-MC-Unique: 21_Ld_lwMFqbeFzR85MliQ-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f6ab996ea3so27432231cf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:22:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684801302; x=1687393302;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2aYdF7DTvHPO7OMZesJvRkwGqhq0minNXqz8wSE/nz4=;
-        b=CFqTd0BDADi/3BEz+HszE2a/DKHArjhu/tkK0e/NZAuhJpRMSZjF7Q2XCnynbBpklP
-         814BtD7aV/Rb+bBwYd60A2MzMs3lgBtHF4DJOZV430BvTidzYl0GMQR5TG+DZL71abql
-         uUx6CwnAyKOfsDhAXv5uIGryEx/4vrE8i/jjRwpE68xDdB28Sdid3YAmNniZeji2vw8Z
-         seQUJqEdiCIQfW0wQT9ce2yMGI+ZJuCZ//02vE8yd43FXEPPA04rdzxMMcrKoyLT2git
-         O+BCYh5gmoqK1MqQGdnkveHbYGfyEqGCGEJxH9UMtZjDZJUrEGVBszOt1XErqkpBld6D
-         HNZA==
-X-Gm-Message-State: AC+VfDwMIpMAvxZo2LwY2r0zj0nkBSc2GjfyG/DeProt0uFWDZgozLMK
-        FfX7HtZGNcY8eVJ1hMyLSa8Sj5AZA+Y=
-X-Google-Smtp-Source: ACHHUZ5nM/K1msH8/300AUBbxABE1arku2Ztm2J+BPfcuobQx6fSnGZtV4PF8qqvQU3SEk0HXC++fnu3Dhw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:986:b0:63d:397a:8fdd with SMTP id
- u6-20020a056a00098600b0063d397a8fddmr5586115pfg.0.1684801302311; Mon, 22 May
- 2023 17:21:42 -0700 (PDT)
-Date:   Tue, 23 May 2023 00:21:40 +0000
-In-Reply-To: <20230522235838.ov3722lcusotzlvo@amd.com>
-Mime-Version: 1.0
-References: <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
- <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
- <ZEM5Zq8oo+xnApW9@google.com> <20230512002124.3sap3kzxpegwj3n2@amd.com>
- <ZF5+5g5hI7xyyIAS@google.com> <20230522135036.wnvsmryhkvstwvw2@amd.com>
- <ZGuh1J6AOw5v2R1W@google.com> <20230522235838.ov3722lcusotzlvo@amd.com>
-Message-ID: <ZGwHFPnNK89/t7wx@google.com>
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, wei.w.wang@intel.com,
-        Mike Rapoport <rppt@kernel.org>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        d=1e100.net; s=20221208; t=1684801338; x=1687393338;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mIt6VPJ0y1Ndcra7Hh8sY5ZEea4UepRZahWsTnGZ1jA=;
+        b=T8yr3GKMx/yxeQEefi0VKJf+riwOrCnBSgT0gExjVmQk7SuLDilCwgPCypuCcAltLb
+         eNVNIYx6kMX5oxhWOCTS2zOjGTrAcwRh8UpF2dSGLFRmsG4iRdHMarBW8fj3HptHV/dt
+         TlGlSa9Ihe4ztu21zRDi/dUPpmfFF+PM+2Ml+FRyIo+RYdiZ6eUztNoMqbg8a6KjCcjA
+         KOg2FSaBTMyaAUcb/YU37CxUHDuNz6c0ZoNU+9kRflywosz81ItSiSoRn5i4anwtQDBz
+         HAw6Pd+shBl18jpl7bEOpMS/wRiLb3hLEB8dLzJizszdx5uaRQPABw83a9213cxeiqad
+         7lMQ==
+X-Gm-Message-State: AC+VfDzGVlazrlwsDwTBpxdXaMN/+UGAMv70V8dLxvgnNsQNGtO47sbc
+        gZp8flqXEiQUMWqPSx0ZXDAMJaCt9jZ/rLhfm+s1a12yzD7soPWD7EHPUrIFa8X0rczwFeDAJS4
+        y/+WSIq6lDgxufEXnxBCxEiG7
+X-Received: by 2002:ac8:5a4d:0:b0:3f3:90a8:6906 with SMTP id o13-20020ac85a4d000000b003f390a86906mr21456788qta.17.1684801338229;
+        Mon, 22 May 2023 17:22:18 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5IHiuUF7WdKpoLIxcdAp2dC2ynXUmyRziuKbBWWi+UBwpzPzyZMNVkTqxG2kw8j9yrr4iA/A==
+X-Received: by 2002:ac8:5a4d:0:b0:3f3:90a8:6906 with SMTP id o13-20020ac85a4d000000b003f390a86906mr21456779qta.17.1684801337984;
+        Mon, 22 May 2023 17:22:17 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id x7-20020a05622a000700b003bf9f9f1844sm2480249qtw.71.2023.05.22.17.22.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 17:22:17 -0700 (PDT)
+Date:   Mon, 22 May 2023 17:22:16 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        joro@8bytes.org, joao.m.martins@oracle.com,
+        alejandro.j.jimenez@oracle.com, boris.ostrovsky@oracle.com,
+        jon.grimm@amd.com, santosh.shukla@amd.com, vasant.hegde@amd.com,
+        kishon.vijayabraham@amd.com
+Subject: Re: [PATCH v2 5/5] iommu/amd: Improving Interrupt Remapping Table
+ Invalidation
+Message-ID: <sxyc5b2ifguf7r3krewwp4o42uzqlkhvshhc4m2nhkumedgy5s@r2arntwzmmpa>
+References: <20230519005529.28171-1-suravee.suthikulpanit@amd.com>
+ <20230519005529.28171-6-suravee.suthikulpanit@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519005529.28171-6-suravee.suthikulpanit@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,112 +82,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023, Michael Roth wrote:
-> On Mon, May 22, 2023 at 10:09:40AM -0700, Sean Christopherson wrote:
-> > On Mon, May 22, 2023, Michael Roth wrote:
-> > > On Fri, May 12, 2023 at 11:01:10AM -0700, Sean Christopherson wrote:
-> > > > On Thu, May 11, 2023, Michael Roth wrote:
-> > > I put together a tree with some fixups that are needed for against the
-> > > kvm_gmem_solo base tree, and a set of hooks to handle invalidations,
-> > > preparing the initial private state as suggested above, and a
-> > > platform-configurable mask that the x86 MMU code can use for determining
-> > > whether a fault is for private vs. shared pages.
-> > > 
-> > >   KVM: x86: Determine shared/private faults using a configurable mask
-> > >   ^ for TDX we could trivially add an inverted analogue of the mask/logic
-> > >   KVM: x86: Use full 64-bit error code for kvm_mmu_do_page_fault
-> > >   KVM: x86: Add platform hooks for private memory invalidations
-> > 
-> > Hrm, I'd prefer to avoid adding another hook for this case, arch code already has
-> > a "hook" in the form of kvm_unmap_gfn_range().  We'd probably just need a
-> > kvm_gfn_range.is_private flag to communicate to arch/vendor code that the memory
-> > being zapped is private.
+On Thu, May 18, 2023 at 08:55:29PM -0400, Suravee Suthikulpanit wrote:
+> Invalidating Interrupt Remapping Table (IRT) requires, the AMD IOMMU driver
+> to issue INVALIDATE_INTERRUPT_TABLE and COMPLETION_WAIT commands.
+> Currently, the driver issues the two commands separately, which requires
+> calling raw_spin_lock_irqsave() twice. In addition, the COMPLETION_WAIT
+> could potentially be interleaved with other commands causing delay of
+> the COMPLETION_WAIT command.
 > 
-> kvm_unmap_gfn_range() does however get called with kvm->mmu_lock held so
-> it might be tricky to tie RMP updates into that path.
+> Therefore, combine issuing of the two commands in one spin-lock, and
+> changing struct amd_iommu.cmd_sem_val to use atomic64 to minimize
+> locking.
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 
-Gah, I caught the mmu_lock issue before the end of my email, but forgot to go back
-and rethink the first half.
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-> > That'd leave a gap for the unbind() case because kvm_unmap_gfn_range() is invoked
-> > if and only if there's an overlapping memslot.  I'll chew on that a bit to see if
-> > there's a way to cleanly handle that case without another hook.  I think it's worth
-> > mapping out exactly what we want unbind() to look like anyways, e.g. right now the
-> > code subtly relies on private memslots being immutable.
-m 
-> I thought the direction you sort of driving at was to completely decouple
-> RMP updates for physical pages from the KVM MMU map/unmap paths since the
-> life-cycles of those backing pages and associated RMP state are somewhat
-> separate from the state of the GFNs and kvm->mem_attr_array. It seems to
-> make sense when dealing with things like this unbind() case.
+> ---
+>  drivers/iommu/amd/amd_iommu_types.h |  2 +-
+>  drivers/iommu/amd/init.c            |  2 +-
+>  drivers/iommu/amd/iommu.c           | 27 ++++++++++++++++++++++-----
+>  3 files changed, 24 insertions(+), 7 deletions(-)
 > 
-> There's also cases like userspaces that opt to not discard memory after
-> conversions because they highly favor performance over memory usage. In
-> those cases it would make sense to defer marking the pages as shared in
-> the RMP until the FALLOC_FL_PUNCH_HOLE, rather than triggering it via
-> KVM MMU invalidation path after a conversion.
+> diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
+> index 486a052e37ca..2fa65da2a9a5 100644
+> --- a/drivers/iommu/amd/amd_iommu_types.h
+> +++ b/drivers/iommu/amd/amd_iommu_types.h
+> @@ -744,7 +744,7 @@ struct amd_iommu {
+>  
+>  	u32 flags;
+>  	volatile u64 *cmd_sem;
+> -	u64 cmd_sem_val;
+> +	atomic64_t cmd_sem_val;
+>  
+>  #ifdef CONFIG_AMD_IOMMU_DEBUGFS
+>  	/* DebugFS Info */
+> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+> index fc0392d706db..16737819f79a 100644
+> --- a/drivers/iommu/amd/init.c
+> +++ b/drivers/iommu/amd/init.c
+> @@ -1750,7 +1750,7 @@ static int __init init_iommu_one(struct amd_iommu *iommu, struct ivhd_header *h,
+>  	iommu->pci_seg = pci_seg;
+>  
+>  	raw_spin_lock_init(&iommu->lock);
+> -	iommu->cmd_sem_val = 0;
+> +	atomic64_set(&iommu->cmd_sem_val, 0);
+>  
+>  	/* Add IOMMU to internal data structures */
+>  	list_add_tail(&iommu->list, &amd_iommu_list);
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index 51c2b018433d..57ae4a8072d3 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -1182,11 +1182,11 @@ static int iommu_completion_wait(struct amd_iommu *iommu)
+>  	if (!iommu->need_sync)
+>  		return 0;
+>  
+> -	raw_spin_lock_irqsave(&iommu->lock, flags);
+> -
+> -	data = ++iommu->cmd_sem_val;
+> +	data = atomic64_add_return(1, &iommu->cmd_sem_val);
+>  	build_completion_wait(&cmd, iommu, data);
+>  
+> +	raw_spin_lock_irqsave(&iommu->lock, flags);
+> +
+>  	ret = __iommu_queue_command_sync(iommu, &cmd, false);
+>  	if (ret)
+>  		goto out_unlock;
+> @@ -1284,11 +1284,28 @@ static void amd_iommu_flush_irt_all(struct amd_iommu *iommu)
+>  
+>  static void iommu_flush_irt_and_complete(struct amd_iommu *iommu, u16 devid)
+>  {
+> +	int ret;
+> +	u64 data;
+> +	unsigned long flags;
+> +	struct iommu_cmd cmd, cmd2;
+> +
+>  	if (iommu->irtcachedis_enabled)
+>  		return;
+>  
+> -	iommu_flush_irt(iommu, devid);
+> -	iommu_completion_wait(iommu);
+> +	build_inv_irt(&cmd, devid);
+> +	data = atomic64_add_return(1, &iommu->cmd_sem_val);
+> +	build_completion_wait(&cmd2, iommu, data);
+> +
+> +	raw_spin_lock_irqsave(&iommu->lock, flags);
+> +	ret = __iommu_queue_command_sync(iommu, &cmd, true);
+> +	if (ret)
+> +		goto out;
+> +	ret = __iommu_queue_command_sync(iommu, &cmd2, false);
+> +	if (ret)
+> +		goto out;
+> +	wait_on_sem(iommu, data);
+> +out:
+> +	raw_spin_unlock_irqrestore(&iommu->lock, flags);
+>  }
+>  
+>  void iommu_flush_all_caches(struct amd_iommu *iommu)
+> -- 
+> 2.31.1
+> 
 
-Hmm, right.  I got overzealous in my desire to avoid new hooks.
-
-> > >   KVM: x86: Add platform hook for initializing private memory
-> > 
-> > This should also be unnecessary.  The call to kvm_gmem_get_pfn() is from arch
-> > code, KVM just needs to ensure the RMP is converted before acquiring mmu_lock,
-> > e.g. KVM has all the necessary info in kvm_tdp_mmu_page_fault().
-> 
-> I think that approach would work fine. The way I was thinking of things
-> is that KVM MMU would necessarily call kvm_gmem_get_pfn() to grab the
-> page before mapping it into the guest, so moving it out into an explicit
-> call should work just as well. That would also drop the need for the
-> __kvm_gmem_get_pfn() stuff I needed to add for the initial case where we
-> need to access the PFN prior to making it private.
-> 
-> > 
-> > The only reason to add another arch hook would be if we wanted to converted the
-> > RMP when _allocating_, e.g. to preconvert in response to fallocate() instead of
-> > waiting until #NPF.  But I think I would rather add a generic ioctl() to allow
-> > userspace to effectively prefault guest memory, e.g. to setup the RMP before
-> > running a vCPU.  Such an ioctl() would potentially be useful in other scenarios,
-> > e.g. on the dest during live migration to reduce jitter.
-> 
-> Agreed, deferring the RMPUPDATE until it's actually needed would give us
-> more flexibility on optimizing for things like lazy-acceptance.
-> 
-> For less-common scenarios like preallocation it makes sense to make that
-> an opt-in sort of thing for userspace to configure explicitly.
-> 
-> > 
-> > >   *fixup (kvm_gmem_solo): KVM: Fix end range calculation for MMU invalidations
-> > 
-> > There was another bug in this path.  The math for handling a non-zero offsets into
-> > the file was wrong.  The code now looks like:
-> > 
-> > 	xa_for_each_range(&gmem->bindings, index, slot, start, end - 1) {
-> > 		struct kvm_gfn_range gfn_range = {
-> > 			.start = slot->base_gfn + start - slot->gmem.index,
-> 
-> Sorry if I'm missing something here, but isn't there a risk that:
-> 
->   start - slot->gmem.index
-> 
-> would be less than zero? E.g. starting GFN was 0, but current slot is bound
-> at some non-zero offset in the same gmem instance. I guess the warning below
-> shouldn't caught that, but it seems like a real scenario.
-
-Heh, only if there's a testcase for it.  Assuming start >= the slot offset does
-seem broken, e.g. if the range-to-invalidate overlaps multiple slots, later slots
-will have index==slot->gmem.index > start.
-
-> Since 'index' corresponds to the gmem offset of the current slot, is there any
-> reason not to do something like this?:
-> 
->   .start = slot->base_gfn + index - slot->gmem.index,
-> 
-> But then, if that's the case, wouldn't index == slot->gmem.index? Suggesting
-> we case just simplify to this?:
-> 
->   .start = slot->base_gfn,
-
-No, e.g. if start is partway through a memslot, there's no need to invalidate
-the entire memslot.  I'll stare at this tomorrow when my brain is hopefully a
-bit more functional, I suspect there is a min() and/or max() needed somewhere.
