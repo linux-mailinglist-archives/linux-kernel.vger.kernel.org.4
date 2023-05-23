@@ -2,159 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C5C70E5D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3457670E5D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238460AbjEWTju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
+        id S237899AbjEWTkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238443AbjEWTjo (ORCPT
+        with ESMTP id S238540AbjEWTkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:39:44 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017FD18D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:39:21 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b9a7e639656so219390276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684870750; x=1687462750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cSklzBjxhZmzMNotdKdz2ZXQTBM+PT0yLU4Hf0qksUo=;
-        b=J1+Lh90+86HHzJ7Ba1MAeG6dBd/GlUnA8IZWFTSpRu1BcxvZ/Bjetmd8L1OCVI7bsG
-         /vHoMAhkCLNIsJXlDFSjuhNK/i92CV1ZcXtHndRLXbtLyo814cuuLTHE4PeWowcDRcE7
-         QT4gwr5ty9kkloUBxcKKqvl+zIm1CqWoNyw4JmxtgZDzEm20RV4X2T44Ai8MBCIkmd9S
-         ayCtjHJW+9kwDX5kcGYBiY2wQwI/UFf7dqbw3XvOKTgV9LxTuSKD2u5scnh5egG2cCDw
-         3LBW5QaprHdfc6uj4l7B5WneoF4V+5PfN9trESHUUh3+M0ec9z4nLh5HOOR5FdJHTIFl
-         KFXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684870750; x=1687462750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cSklzBjxhZmzMNotdKdz2ZXQTBM+PT0yLU4Hf0qksUo=;
-        b=HhHCyzxrvnxqmJYgrRO4joMAmkGfNXnF+4TqYO/SQpb3RlBqhmGGZUTbikJetMsa1Y
-         pNGW7k/Y27hm9tv+xOiC6pkjYYHfytnSEkSIZmtAOhwe7eZvE9AYRVfmagmPM091R2uI
-         +ih6HV8TTkq9TayNg0oY3sbd0q3MlwYVUES5oKcZC/GwDmOaFMl7uYbEcjgUWSyr6LXI
-         BSXepI2TJSrThoD6NsgO8X6QHK7jw1bg3Yh2UtVyBwDtVuBuzsNymAlrZCOWAgo/7Ntz
-         2Cx6YeFYvrSq3yMe0HGAwHCPVPebZE0ES/zwWo5ZffRNVGh7XLZ8K+PNAFnB3koxoobf
-         aGjQ==
-X-Gm-Message-State: AC+VfDwiQQCS6XT46IUUprgvYfI7u7ZO5UgzckMEJ54fzk7opoaiC3WG
-        eupOdMagnLHIbh3zuuYtpw7CH/bmzL6ffSC9xZXP
-X-Google-Smtp-Source: ACHHUZ5t3ISNlc8css/TIbS3nKAqJFZ751H1T5Cj7O+AaEakwztSyfUhzg3HqqZydPeGF3do/inmnStTBrpGIbF5Z2Q=
-X-Received: by 2002:a81:a0d2:0:b0:559:f52b:7c5f with SMTP id
- x201-20020a81a0d2000000b00559f52b7c5fmr15335674ywg.17.1684870750245; Tue, 23
- May 2023 12:39:10 -0700 (PDT)
+        Tue, 23 May 2023 15:40:01 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F425189;
+        Tue, 23 May 2023 12:39:52 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NJCRAt015242;
+        Tue, 23 May 2023 19:39:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=+XmTjIv+4gMelYqGztohMu11DLEQ7AhbNVBdIjHuFUs=;
+ b=my4kBuNb9o/Pk0fHgf96Jn/M1cOXCnQwdPqFHrYNkElbZLRAxWHcatl6KraBWYKKzff0
+ S7+i3lti1yTEYbOCzoWsrOVkLxb7dbwsGImJ9eD9M/swpHbguWbwMiTcL4wwFYEol7VE
+ fg2ysopR5qbO/Q0GQN9e6xKMnSg1JoZ/MYkcrPinZsN/I9TObacmc5drBErGxX89Aq9S
+ DQ1KClznjuQ7dk7mBdFVa6D2oi2BWff0UAIbhOuCvJZFif587Wz8eDyB1YTcEt4yI42v
+ D1RiTlGTChw9kbkf/q5XBrcrEM7jfEKeV8pzZ4JsFFNL6YNjt11CiEmMIpBpprz0pcC4 JQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrpmm2acc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 19:39:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34NJdRlv024539
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 19:39:27 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 23 May 2023 12:39:27 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <leonard@lausen.nl>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/2] enable HDP plug/unpulg interrupts at hpd_enable/disable
+Date:   Tue, 23 May 2023 12:39:12 -0700
+Message-ID: <1684870754-24906-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20230511123213.722912-1-cgzones@googlemail.com>
- <6301fdfd0927df2b2fd7a4f2b384e477.paul@paul-moore.com> <CAHC9VhSSA04wzPFgx_Z4jf1gOdEO40hU-augjMqX1uGd-eHLQA@mail.gmail.com>
- <CAJ2a_DeJhGcXBtVfuOp3xeUNxJyFR4QG-+5=4Q_38go+v6d9-A@mail.gmail.com>
-In-Reply-To: <CAJ2a_DeJhGcXBtVfuOp3xeUNxJyFR4QG-+5=4Q_38go+v6d9-A@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 23 May 2023 15:38:59 -0400
-Message-ID: <CAHC9VhQ_yLL432Ete+ZB3TV-wwG7capXCOE1NKY029evKxQ9DA@mail.gmail.com>
-Subject: Re: [PATCH] selinux: deprecated fs ocon
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: gg5XXhshAt2UUvIHur7VxtzTl17YbGLt
+X-Proofpoint-GUID: gg5XXhshAt2UUvIHur7VxtzTl17YbGLt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_12,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 mlxlogscore=397 spamscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305230159
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 2:25=E2=80=AFPM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
-> On Thu, 18 May 2023 at 22:18, Paul Moore <paul@paul-moore.com> wrote:
-> > On Thu, May 18, 2023 at 1:56=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > > On May 11, 2023 =3D?UTF-8?q?Christian=3D20G=3DC3=3DB6ttsche?=3D <cgzo=
-nes@googlemail.com> wrote:
-> > > >
-> > > > The object context type `fs`, not to be confused with the well used
-> > > > object context type `fscon`, was introduced in the initial git comm=
-it
-> > > > 1da177e4c3f4 ("Linux-2.6.12-rc2") but never actually used since.
-> > > >
-> > > > The paper "A Security Policy Configuration for the Security-Enhance=
-d
-> > > > Linux" [1] mentions it under `7.2 File System Contexts` but also st=
-ates:
-> > > >
-> > > >     Currently, this configuration is unused.
-> > > >
-> > > > The policy statement defining such object contexts is `fscon`, e.g.=
-:
-> > > >
-> > > >     fscon 2 3 gen_context(system_u:object_r:conA_t,s0) gen_context(=
-system_u:object_r:conB_t,s0)
-> > > >
-> > > > It is not documented at selinuxproject.org or in the SELinux notebo=
-ok
-> > > > and not supported by the Reference Policy buildsystem - the stateme=
-nt is
-> > > > not properly sorted - and thus not used in the Reference or Fedora
-> > > > Policy.
-> > > >
-> > > > Print a warning message at policy load for each such object context=
-:
-> > > >
-> > > >     SELinux:  void and deprecated fs ocon 02:03
-> > > >
-> > > > This topic was initially highlighted by Nicolas Iooss [2].
-> > > >
-> > > > [1]: https://media.defense.gov/2021/Jul/29/2002815735/-1/-1/0/SELIN=
-UX-SECURITY-POLICY-CONFIGURATION-REPORT.PDF
-> > > > [2]: https://lore.kernel.org/selinux/CAJfZ7=3DmP2eJaq2BfO3y0VnwUJaY=
-2cS2p=3DHZMN71z1pKjzaT0Eg@mail.gmail.com/
-> > > >
-> > > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> > > > ---
-> > > >  security/selinux/ss/policydb.c | 4 ++++
-> > > >  security/selinux/ss/policydb.h | 2 +-
-> > > >  2 files changed, 5 insertions(+), 1 deletion(-)
-> > >
-> > > Thanks, this is a nice catch, although some minor suggestions below .=
-..
-> > >
-> > > > diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/p=
-olicydb.c
-> > > > index 97c0074f9312..31b08b34c722 100644
-> > > > --- a/security/selinux/ss/policydb.c
-> > > > +++ b/security/selinux/ss/policydb.c
-> > > > @@ -2257,6 +2257,10 @@ static int ocontext_read(struct policydb *p,=
- const struct policydb_compat_info *
-> > > >                               if (rc)
-> > > >                                       goto out;
-> > > >
-> > > > +                             if (i =3D=3D OCON_FS)
-> > > > +                                     pr_warn("SELinux:  void and d=
-eprecated fs ocon %s\n",
-> > > > +                                             c->u.name);
-> > >
-> > > Instead of having to check if 'i =3D=3D OCON_FS', why not simply put =
-the
-> > > pr_warn() call up in the OCON_FS case block on line ~2249 and let it
-> > > continue to fallthrough to the OCON_NETIF block?
-> >
-> > Bah, nevermind, you need to leave it here because of the 'c->u.name'
-> > in the pr_warn().  If you're okay with me adjusting the deprecation
-> > comment (below) during the merge I'll can merge this now ... ?
->
-> Yes, please feel free to adjust the inline comment.
+1) delete enable_irq() and disable_irq()
+2) enable HDP plug/unpulg interrupts at hpd_enable/disable
 
-Okay, done and merged into selinux/next, thanks.
+Kuogee Hsieh (2):
+  drm/msm/dp: no need to disable irq after devm_request_irq()
+  drm/msm/dp: enable HDP plugin/unplugged interrupts at
+    hpd_enable/disable
 
---=20
-paul-moore.com
+ drivers/gpu/drm/msm/dp/dp_catalog.c | 15 +++++++-
+ drivers/gpu/drm/msm/dp/dp_catalog.h |  3 +-
+ drivers/gpu/drm/msm/dp/dp_display.c | 71 ++++++++++---------------------------
+ 3 files changed, 35 insertions(+), 54 deletions(-)
+
+-- 
+2.7.4
+
