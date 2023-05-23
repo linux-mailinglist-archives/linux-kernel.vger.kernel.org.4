@@ -2,255 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D70270D44B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6B170D443
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbjEWGsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
+        id S234943AbjEWGrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjEWGse (ORCPT
+        with ESMTP id S229836AbjEWGrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:48:34 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CCF130;
-        Mon, 22 May 2023 23:48:30 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QQPzF1JvHz4f41VZ;
-        Tue, 23 May 2023 14:48:25 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP4 (Coremail) with SMTP id gCh0CgAXx6q0YWxkEesbKA--.16454S2;
-        Tue, 23 May 2023 14:48:24 +0800 (CST)
-Subject: Re: [PATCH v4] blk-ioprio: Introduce promote-to-rt policy
-To:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Cc:     Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        "houtao1@huawei.com" <houtao1@huawei.com>
-References: <20230428074404.280532-1-houtao@huaweicloud.com>
- <1db53a95-46d3-c906-31a1-0be4992a4b8d@huaweicloud.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <bff92f4c-0f21-9cf2-7135-812a184716b3@huaweicloud.com>
-Date:   Tue, 23 May 2023 14:48:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 23 May 2023 02:47:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6D2109;
+        Mon, 22 May 2023 23:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684824447; x=1716360447;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nPGzOVJo0Gt6rMmPyaGX6LyVhlcwd0uy6tJG10dAewY=;
+  b=kI6smQIdOgeV7CBV7p3qI/iC1t1QWFrs4trONtz9B+pi0MZlhu+Yf+Re
+   eGjeexMycOUfTPcsZrOPQnPvgihC0joB2xJ7SJcJB38W98uBQaut9Bspt
+   TSeT1RVXQ+zv6qn5TEBScVcRP7kf6JPP98kGnH0n6Oess4Na+S/O1JWGN
+   V8hD30rwCt97y/qdyvfCbFsRlXiRCyen5FsaFL2ongHDr44IAo3NWq4Qx
+   0p8iyayXaMHtwdCVBjk6p3GtmEjGPBFMS94fzkcCn+AWC/bU5gkNd3rTU
+   iz+kixOrNcu+DWb4V6xbt+4BvTkrG3VaGu5jdgKDJTSCrR3D2nOFNiLBO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="350658460"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="350658460"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 23:47:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="768865527"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="768865527"
+Received: from nmkenne1-mobl2.ger.corp.intel.com (HELO [10.252.53.154]) ([10.252.53.154])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 23:47:23 -0700
+Message-ID: <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
+Date:   Tue, 23 May 2023 09:48:23 +0300
 MIME-Version: 1.0
-In-Reply-To: <1db53a95-46d3-c906-31a1-0be4992a4b8d@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca
+Cc:     jsnitsel@redhat.com, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
+        lkp@intel.com, peterz@infradead.org, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
 Content-Language: en-US
-X-CM-TRANSID: gCh0CgAXx6q0YWxkEesbKA--.16454S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF1ftF1fWF4xtr4kZw13Arb_yoW3JrykpF
-        4fAFZxur9YqF1xtFnrX3WkXrW8t3s7tw17WFnxKFyF934qyw1DuF4jyF18WFWfArWDXrZx
-        Xr98JFWvkF98Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UWE__UUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+In-Reply-To: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping ?
 
-On 5/8/2023 8:08 PM, Hou Tao wrote:
-> ping ?
->
-> On 4/28/2023 3:44 PM, Hou Tao wrote:
->> From: Hou Tao <houtao1@huawei.com>
->>
->> Since commit a78418e6a04c ("block: Always initialize bio IO priority on
->> submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
->> blkcg_set_ioprio(), so there will be no way to promote the io-priority
->> of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
->> greater than or equals to IOPRIO_CLASS_RT.
->>
->> It seems possible to call blkcg_set_ioprio() first then try to
->> initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
->> for bio in which bi_ioprio is already initialized (e.g., direct-io), so
->> introduce a new promote-to-rt policy to promote the iopriority of bio to
->> IOPRIO_CLASS_RT if the ioprio is not already RT.
->>
->> For none-to-rt policy, although it doesn't work now, but considering
->> that its purpose was also to override the io-priority to RT and allowing
->> for a smoother transition, just keep it and treat it as an alias of
->> the promote-to-rt policy.
->>
->> Acked-by: Tejun Heo <tj@kernel.org>
->> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
->> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
->> Reviewed-by: Jan Kara <jack@suse.cz>
->> Signed-off-by: Hou Tao <houtao1@huawei.com>
->> ---
->> v4:
->>  * rebased on 33afd4b76393
->>  * Add Reviewed-by from Jan Kara
->>
->> v3: https://lore.kernel.org/linux-block/20230223135154.3749088-1-houtao@huaweicloud.com
->>  * Use 'non-RT' instead of 'no-RT' in document (from Bagas)
->>  * Remove repeated sentence in commit message
->>  * Add Reviewed-by and Acked-by tags
->>  
->> v2: https://lore.kernel.org/linux-block/20230220135428.2632906-1-houtao@huaweicloud.com
->>
->>  * Simplify the implementation of promote-to-rt (from Bart)
->>  * Make none-to-rt to work again by treating it as an alias of
->>    the promote-to-rt policy (from Bart & Jan)
->>  * fix the style of new content in cgroup-v2.rst (from Bagas)
->>  * set the default priority level to 4 instead of 0 for promote-to-rt
->>
->> v1: https://lore.kernel.org/linux-block/20230201045227.2203123-1-houtao@huaweicloud.com
->>
->>  Documentation/admin-guide/cgroup-v2.rst | 42 ++++++++++++++-----------
->>  block/blk-ioprio.c                      | 23 ++++++++++++--
->>  2 files changed, 44 insertions(+), 21 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
->> index f67c0829350b..7544ce00e0cb 100644
->> --- a/Documentation/admin-guide/cgroup-v2.rst
->> +++ b/Documentation/admin-guide/cgroup-v2.rst
->> @@ -2024,31 +2024,33 @@ that attribute:
->>    no-change
->>  	Do not modify the I/O priority class.
->>  
->> -  none-to-rt
->> -	For requests that do not have an I/O priority class (NONE),
->> -	change the I/O priority class into RT. Do not modify
->> -	the I/O priority class of other requests.
->> +  promote-to-rt
->> +	For requests that have a non-RT I/O priority class, change it into RT.
->> +	Also change the priority level of these requests to 4. Do not modify
->> +	the I/O priority of requests that have priority class RT.
->>  
->>    restrict-to-be
->>  	For requests that do not have an I/O priority class or that have I/O
->> -	priority class RT, change it into BE. Do not modify the I/O priority
->> -	class of requests that have priority class IDLE.
->> +	priority class RT, change it into BE. Also change the priority level
->> +	of these requests to 0. Do not modify the I/O priority class of
->> +	requests that have priority class IDLE.
->>  
->>    idle
->>  	Change the I/O priority class of all requests into IDLE, the lowest
->>  	I/O priority class.
->>  
->> +  none-to-rt
->> +	Deprecated. Just an alias for promote-to-rt.
->> +
->>  The following numerical values are associated with the I/O priority policies:
->>  
->> -+-------------+---+
->> -| no-change   | 0 |
->> -+-------------+---+
->> -| none-to-rt  | 1 |
->> -+-------------+---+
->> -| rt-to-be    | 2 |
->> -+-------------+---+
->> -| all-to-idle | 3 |
->> -+-------------+---+
->> ++----------------+---+
->> +| no-change      | 0 |
->> ++----------------+---+
->> +| rt-to-be       | 2 |
->> ++----------------+---+
->> +| all-to-idle    | 3 |
->> ++----------------+---+
->>  
->>  The numerical value that corresponds to each I/O priority class is as follows:
->>  
->> @@ -2064,9 +2066,13 @@ The numerical value that corresponds to each I/O priority class is as follows:
->>  
->>  The algorithm to set the I/O priority class for a request is as follows:
->>  
->> -- Translate the I/O priority class policy into a number.
->> -- Change the request I/O priority class into the maximum of the I/O priority
->> -  class policy number and the numerical I/O priority class.
->> +- If I/O priority class policy is promote-to-rt, change the request I/O
->> +  priority class to IOPRIO_CLASS_RT and change the request I/O priority
->> +  level to 4.
->> +- If I/O priorityt class is not promote-to-rt, translate the I/O priority
->> +  class policy into a number, then change the request I/O priority class
->> +  into the maximum of the I/O priority class policy number and the numerical
->> +  I/O priority class.
->>  
->>  PID
->>  ---
->> diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
->> index 055529b9b92b..4051fada01f1 100644
->> --- a/block/blk-ioprio.c
->> +++ b/block/blk-ioprio.c
->> @@ -23,25 +23,28 @@
->>  /**
->>   * enum prio_policy - I/O priority class policy.
->>   * @POLICY_NO_CHANGE: (default) do not modify the I/O priority class.
->> - * @POLICY_NONE_TO_RT: modify IOPRIO_CLASS_NONE into IOPRIO_CLASS_RT.
->> + * @POLICY_PROMOTE_TO_RT: modify no-IOPRIO_CLASS_RT to IOPRIO_CLASS_RT.
->>   * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
->>   *		IOPRIO_CLASS_BE.
->>   * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
->> + * @POLICY_NONE_TO_RT: an alias for POLICY_PROMOTE_TO_RT.
->>   *
->>   * See also <linux/ioprio.h>.
->>   */
->>  enum prio_policy {
->>  	POLICY_NO_CHANGE	= 0,
->> -	POLICY_NONE_TO_RT	= 1,
->> +	POLICY_PROMOTE_TO_RT	= 1,
->>  	POLICY_RESTRICT_TO_BE	= 2,
->>  	POLICY_ALL_TO_IDLE	= 3,
->> +	POLICY_NONE_TO_RT	= 4,
->>  };
->>  
->>  static const char *policy_name[] = {
->>  	[POLICY_NO_CHANGE]	= "no-change",
->> -	[POLICY_NONE_TO_RT]	= "none-to-rt",
->> +	[POLICY_PROMOTE_TO_RT]	= "promote-to-rt",
->>  	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
->>  	[POLICY_ALL_TO_IDLE]	= "idle",
->> +	[POLICY_NONE_TO_RT]	= "none-to-rt",
->>  };
->>  
->>  static struct blkcg_policy ioprio_policy;
->> @@ -189,6 +192,20 @@ void blkcg_set_ioprio(struct bio *bio)
->>  	if (!blkcg || blkcg->prio_policy == POLICY_NO_CHANGE)
->>  		return;
->>  
->> +	if (blkcg->prio_policy == POLICY_PROMOTE_TO_RT ||
->> +	    blkcg->prio_policy == POLICY_NONE_TO_RT) {
->> +		/*
->> +		 * For RT threads, the default priority level is 4 because
->> +		 * task_nice is 0. By promoting non-RT io-priority to RT-class
->> +		 * and default level 4, those requests that are already
->> +		 * RT-class but need a higher io-priority can use ioprio_set()
->> +		 * to achieve this.
->> +		 */
->> +		if (IOPRIO_PRIO_CLASS(bio->bi_ioprio) != IOPRIO_CLASS_RT)
->> +			bio->bi_ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_RT, 4);
->> +		return;
->> +	}
->> +
->>  	/*
->>  	 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
->>  	 * correspond to a lower priority. Hence, the max_t() below selects
-> .
 
+On 22/05/2023 17:31, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
+> interrupts instead of polling on all capable TPMs. Unfortunately, on some
+> products the interrupt line is either never asserted or never deasserted.
+> 
+> The former causes interrupt timeouts and is detected by
+> tpm_tis_core_init(). The latter results in interrupt storms.
+> 
+> Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkPad
+> L490 and Inspur NF5180M6:
+> 
+> https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel@redhat.com/
+> https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org/
+> 
+> The current approach to avoid those storms is to disable interrupts by
+> adding a DMI quirk for the concerned device.
+
+This looked promising, however it looks like the UPX-i11 needs the DMI
+quirk.
+
+> However this is a maintenance burden in the long run, so use a generic
+> approach:
+> 
+> Detect an interrupt storm by counting the number of unhandled interrupts
+> within a 10 ms time interval. In case that more than 1000 were unhandled
+> deactivate interrupts, deregister the handler and fall back to polling.
+> 
+> This equals the implementation that handles interrupt storms in
+> note_interrupt() by means of timestamps and counters in struct irq_desc.
+> However the function to access this structure is private so the logic has
+> to be reimplemented in the TPM TIS core.
+> 
+> Since handler deregistration would deadlock from within the interrupt
+> routine trigger a worker thread that executes the unregistration.
+> 
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 71 +++++++++++++++++++++++++++++++--
+>  drivers/char/tpm/tpm_tis_core.h |  6 +++
+>  2 files changed, 74 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 558144fa707a..458ebf8c2f16 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+>  	return status == TPM_STS_COMMAND_READY;
+>  }
+>  
+> +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
+> +{
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	int intmask = 0;
+> +
+> +	dev_err(&chip->dev, HW_ERR
+> +		"TPM interrupt storm detected, polling instead\n");
+
+Should this be dev_warn or even dev_info level?
+It is done delibaretly and it is handled as planned, so it is not really
+an error?
+
+> +
+> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> +
+> +	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+> +
+> +	tpm_tis_request_locality(chip, 0);
+> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> +	tpm_tis_relinquish_locality(chip, 0);
+> +
+> +	chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+> +
+> +	/*
+> +	 * We must not call devm_free_irq() from within the interrupt handler,
+> +	 * since this function waits for running interrupt handlers to finish
+> +	 * and thus it would deadlock. Instead trigger a worker that does the
+> +	 * unregistration.
+> +	 */
+> +	schedule_work(&priv->free_irq_work);
+> +}
+> +
+> +static void tpm_tis_process_unhandled_interrupt(struct tpm_chip *chip)
+> +{
+> +	const unsigned int MAX_UNHANDLED_IRQS = 1000;
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	/*
+> +	 * The worker to free the TPM interrupt (free_irq_work) may already
+> +	 * be scheduled, so make sure it is not scheduled again.
+> +	 */
+> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+> +		return;
+> +
+> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
+
+unsigned long storm_window;
+..
+storm_window = priv->last_unhandled_irq + msecs_to_jiffies(10);
+if (time_after(jiffies, storm_window))
+	priv->unhandled_irqs = 0;
+
+priv->unhandled_irqs++;
+
+> +		priv->unhandled_irqs = 1;
+> +	else
+> +		priv->unhandled_irqs++;
+> +
+> +	priv->last_unhandled_irq = jiffies;
+> +
+> +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
+> +		tpm_tis_handle_irq_storm(chip);
+
+Will the kernel step in and disbale the IRQ before we would have
+detected the storm?
+I don't know top of my head the trigger in core to stop an interrupt
+storm...
+
+> +}
+> +
+>  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  {
+>  	struct tpm_chip *chip = dev_id;
+> @@ -761,10 +810,10 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  
+>  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	if (interrupt == 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
+> @@ -780,10 +829,14 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
+>  	tpm_tis_relinquish_locality(chip, 0);
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+
+This is more like an error than just unhandled IRQ. Yes, it was ignored,
+probably because it is common?
+
+>  
+>  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	return IRQ_HANDLED;
+> +
+> +unhandled:
+> +	tpm_tis_process_unhandled_interrupt(chip);
+> +	return IRQ_HANDLED;
+>  }
+>  
+>  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+> @@ -804,6 +857,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>  		chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+>  }
+>  
+> +static void tpm_tis_free_irq_func(struct work_struct *work)
+> +{
+> +	struct tpm_tis_data *priv = container_of(work, typeof(*priv), free_irq_work);
+> +	struct tpm_chip *chip = priv->chip;
+> +
+> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
+> +	priv->irq = 0;
+
+Should disable_interrupts() be called instead (with the locality
+request/relinquish)?
+
+Is there a chance of a race or is a race matters?
+
+> +}
+> +
+>  /* Register the IRQ and issue a command that will cause an interrupt. If an
+>   * irq is seen then leave the chip setup for IRQ operation, otherwise reverse
+>   * everything and leave in polling mode. Returns 0 on success.
+> @@ -816,6 +878,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>  	int rc;
+>  	u32 int_status;
+>  
+> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+>  
+>  	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>  				       tis_int_handler, IRQF_ONESHOT | flags,
+> @@ -918,6 +981,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
+>  		interrupt = 0;
+>  
+>  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
+> +	flush_work(&priv->free_irq_work);
+>  
+>  	tpm_tis_clkrun_enable(chip, false);
+>  
+> @@ -1021,6 +1085,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
+>  	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
+>  	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
+> +	priv->chip = chip;
+>  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
+>  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
+>  	priv->phy_ops = phy_ops;
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index e978f457fd4d..6fc86baa4398 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -91,12 +91,18 @@ enum tpm_tis_flags {
+>  };
+>  
+>  struct tpm_tis_data {
+> +	struct tpm_chip *chip;
+>  	u16 manufacturer_id;
+>  	struct mutex locality_count_mutex;
+>  	unsigned int locality_count;
+>  	int locality;
+> +	/* Interrupts */
+>  	int irq;
+> +	struct work_struct free_irq_work;
+> +	unsigned long last_unhandled_irq;
+> +	unsigned int unhandled_irqs;
+>  	unsigned int int_mask;
+> +
+>  	unsigned long flags;
+>  	void __iomem *ilb_base_addr;
+>  	u16 clkrun_enabled;
+> 
+> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+
+-- 
+Péter
