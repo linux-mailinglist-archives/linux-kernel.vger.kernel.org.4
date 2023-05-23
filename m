@@ -2,153 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C4470D472
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164E970D46F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235302AbjEWG7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S235046AbjEWG73 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 02:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbjEWG7c (ORCPT
+        with ESMTP id S231709AbjEWG70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:59:32 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAEC119;
-        Mon, 22 May 2023 23:59:30 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N5wRZp003873;
-        Tue, 23 May 2023 06:59:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Ex1tFxvKrAnpGLQRQ3xEj2hakDnV5kwPAUrcxK4mQsI=;
- b=ZruPuJCtWanF7CwfQcjXF9ptTGyrWWC1pTET0BsUMdfAo3WCvuEAmCfcMQcGAlsr30mZ
- np4urwGv/ado1BliI2rz7sxrOe7UlOUOnk39yN30rbUWeA0Ppb6uVXvousqHWSnvVHYg
- t0Ffrnehp5Yebgf0CJSd7Fyf155DFQffsnrJ5fhoYcuCHZvwGfvQzK/Afn3tf5aVObvh
- Abtun+LdQqJwe0nxrsLfhcGFNl+OTfw+GnwJs5Q4ULDJSQsTD66BUaGr1LAKM2Yq9OJ0
- TQvhLEs+c59504mFMYbh4Xe0aO6lusgNh+WrcYMiPRWCmd9RYNTIwxANVmCrveXGNWJa aA== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrf778wtn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 06:59:01 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N6x0og015738
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 06:59:00 GMT
-Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 23:58:59 -0700
-Message-ID: <1e99521e-1e15-b7ec-30be-1f6a86ea728f@quicinc.com>
-Date:   Mon, 22 May 2023 23:58:59 -0700
+        Tue, 23 May 2023 02:59:26 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5D811A;
+        Mon, 22 May 2023 23:59:25 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-ba80dc46972so10174654276.2;
+        Mon, 22 May 2023 23:59:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684825165; x=1687417165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DNsVXRmG+EgAtae57+cQUpNnpmiDiZt+9c6Bhc+ZY20=;
+        b=jLK18kV4BXbqNB/UGAw8tWdbvZF6Xf++nIL0Q/UQfMrJb3l2YT0ZrVgwvPMHBcpKxp
+         R5MQuBIY4PtFhPZPM0aN65gq24/fNOt45bJdnIf5VvIal+jSbMRqGmkW3XVKx64Q5cLL
+         /8Lu59UW4dOPx1G9hCnqtowGpklEzDHlYOeN2eT9FkjhRLsEQyhAS4qTm48kWRjUcHfA
+         aAKp2EXypaouY6R71VwU7GgzSI883HW/47jO4QPAawEWVLNIhYaNwyUMOp2zUrBhNqKt
+         tkvZEm5fwBxuj485MGFcUThlAVe68rU3uTSq+/27BE8C5btk1KknygSANso7qD2lvR42
+         hheg==
+X-Gm-Message-State: AC+VfDwhDXL6CvW6NK5pnwAEnCgvigKHtPj5gvBeuUTqa2vA5VPiZHYO
+        F2fyk8FgQNBwBuiBmsQHBAfBp1dcxZVXDw==
+X-Google-Smtp-Source: ACHHUZ7MwoTjROpUJONFKLvrZBYoA/P03RqohdlWTIaJ0jIojhWspKe3UJVFWoncld+3/KnINMgHpA==
+X-Received: by 2002:a25:5105:0:b0:b9d:853e:5ceb with SMTP id f5-20020a255105000000b00b9d853e5cebmr12171723ybb.47.1684825164695;
+        Mon, 22 May 2023 23:59:24 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id b10-20020a81670a000000b00555d2944284sm2664885ywc.67.2023.05.22.23.59.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 23:59:23 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-ba80dc46972so10174597276.2;
+        Mon, 22 May 2023 23:59:22 -0700 (PDT)
+X-Received: by 2002:a0d:f407:0:b0:559:ea89:7c2c with SMTP id
+ d7-20020a0df407000000b00559ea897c2cmr12284559ywf.33.1684825162595; Mon, 22
+ May 2023 23:59:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 7/7] ufs: core: Add error handling for MCQ mode
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
-        <quic_cang@quicinc.com>, <mani@kernel.org>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <beanhuo@micron.com>, <avri.altman@wdc.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1683872601.git.quic_nguyenb@quicinc.com>
- <7b884263c9db9a9666086a345ede85bb56d9dfc7.1683872601.git.quic_nguyenb@quicinc.com>
- <5065e9ca-d5ce-22fc-4089-651cfacb7166@acm.org>
-From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-In-Reply-To: <5065e9ca-d5ce-22fc-4089-651cfacb7166@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IfqR3gXU64h5IlsWlu252i4gctquHXUk
-X-Proofpoint-ORIG-GUID: IfqR3gXU64h5IlsWlu252i4gctquHXUk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_03,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- bulkscore=0 clxscore=1015 priorityscore=1501 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230056
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1683365892.git.fthain@linux-m68k.org> <9e66262a754fcba50208aa424188896cc52a1dd1.1683365892.git.fthain@linux-m68k.org>
+ <CAMuHMdX_0F0hSZKqBBCN3876BmfwbQb1_+N3h-V8xs5ouRXF=A@mail.gmail.com> <14e09781-6ffd-0834-fba4-427e5030f2be@gmail.com>
+In-Reply-To: <14e09781-6ffd-0834-fba4-427e5030f2be@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 23 May 2023 08:59:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXnofe1F3EJMkhjUb-hhFD5z0QERLHzpo0R7Ej05W=OWg@mail.gmail.com>
+Message-ID: <CAMuHMdXnofe1F3EJMkhjUb-hhFD5z0QERLHzpo0R7Ej05W=OWg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] m68k: Move signal frame following exception on 68020/030
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Finn Thain <fthain@linux-m68k.org>,
+        Andreas Schwab <schwab@linux-m68k.org>, stable@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/2023 4:03 PM, Bart Van Assche wrote:
-> On 5/11/23 23:28, Bao D. Nguyen wrote:
->> @@ -6378,18 +6407,36 @@ static bool ufshcd_abort_all(struct ufs_hba *hba)
->>       bool needs_reset = false;
->>       int tag, ret;
->> -    /* Clear pending transfer requests */
->> -    for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
->> -        ret = ufshcd_try_to_abort_task(hba, tag);
->> -        dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
->> -            hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
->> -            ret ? "failed" : "succeeded");
->> -        if (ret) {
->> -            needs_reset = true;
->> -            goto out;
->> +    if (is_mcq_enabled(hba)) {
->> +        struct ufshcd_lrb *lrbp;
->> +        int tag;
->> +
->> +        for (tag = 0; tag < hba->nutrs; tag++) {
->> +            lrbp = &hba->lrb[tag];
->> +            if (!ufshcd_cmd_inflight(lrbp->cmd))
->> +                continue;
->> +            ret = ufshcd_try_to_abort_task(hba, tag);
->> +            dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
->> +                hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
->> +                ret ? "failed" : "succeeded");
->> +            if (ret) {
->> +                needs_reset = true;
->> +                goto out;
->> +            }
->> +        }
->> +    } else {
->> +        /* Clear pending transfer requests */
->> +        for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
->> +            ret = ufshcd_try_to_abort_task(hba, tag);
->> +            dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
->> +                hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
->> +                ret ? "failed" : "succeeded");
->> +            if (ret) {
->> +                needs_reset = true;
->> +                goto out;
->> +            }
->>           }
->>       }
-> 
-> Please move the ufshcd_cmd_inflight() check into ufshcd_try_to_abort_task()
-> such that the same code path can be used for MCQ and legacy mode.
-Hi Bart,
-Because the ufshcd_try_to_abort_task() is shared by sdb and mcq modes, I 
-feel a bit uncomfortable using the new function ufshcd_cmd_inflight() in 
-ufshcd_try_to_abort_task(). In this patch series, I am trying to avoid 
-changing the sdb error handling logic as much as possible; only add 
-error handling support for mcq mode. If you feel there is a very good 
-benefit in making the change, I would give it a try. Otherwise, I would 
-prefer not touching sdb error handling code that has been working well. 
-Please let me know.
+Hi Michael,
 
-Thanks,
-Bao
+On Tue, May 23, 2023 at 3:11 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> On 22/05/23 23:41, Geert Uytterhoeven wrote:
+> > On Sat, May 6, 2023 at 11:36 AM Finn Thain <fthain@linux-m68k.org> wrote:
+> >> On 68030/020, an instruction such as, moveml %a2-%a3/%a5,%sp@- may cause
+> >> a stack page fault during instruction execution (i.e. not at an
+> >> instruction boundary) and produce a format 0xB exception frame.
+> >>
+> >> In this situation, the value of USP will be unreliable. If a signal is to
+> >> be delivered following the exception, this USP value is used to calculate
+> >> the location for a signal frame. This can result in a corrupted user
+> >> stack.
+> >>
+> >> The corruption was detected in dash (actually in glibc) where it showed
+> >> up as an intermittent "stack smashing detected" message and crash
+> >> following signal delivery for SIGCHLD.
+> >>
+> >> It was hard to reproduce that failure because delivery of the signal
+> >> raced with the page fault and because the kernel places an unpredictable
+> >> gap of up to 7 bytes between the USP and the signal frame.
+> >>
+> >> A format 0xB exception frame can be produced by a bus error or an address
+> >> error. The 68030 Users Manual says that address errors occur immediately
+> >> upon detection during instruction prefetch. The instruction pipeline
+> >> allows prefetch to overlap with other instructions, which means an
+> >> address error can arise during the execution of a different instruction.
+> >> So it seems likely that this patch may help in the address error case also.
+> >>
+> >> Reported-and-tested-by: Stan Johnson <userm57@yahoo.com>
+> >> Link: https://lore.kernel.org/all/CAMuHMdW3yD22_ApemzW_6me3adq6A458u1_F0v-1EYwK_62jPA@mail.gmail.com/
+> >> Cc: Michael Schmitz <schmitzmic@gmail.com>
+> >> Cc: Andreas Schwab <schwab@linux-m68k.org>
+> >> Cc: stable@vger.kernel.org
+> >> Co-developed-by: Michael Schmitz <schmitzmic@gmail.com>
+> >> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
+> >> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > i.e. will queue as a fix in the m68k for-v6.4 branch.
+> >
+> > I plan to send this upstream later this week, so any additional
+> > testing would be appreciated.
+>
+> I've given this some lengthy stress testing, and haven't seen it fail once.
+>
+> In contrast, various attempts of mine to improve on the concept (by only
+> moving the signal frame away from the USP in case it's likely to clash)
+> sometimes came up against a kernel bus error in setup_frame() when
+> copying the signo to the signal frame. I must be making some incorrect
+> assumptions still ...
+>
+> Limiting the signal frame shift to bus fault exceptions that happen
+> mid-instruction is not too much of an overhead even in low memory
+> settings, and using 256 bytes (the largest possible operand size, i.e.
+> the largest adjustment to USP that might occur on completion of the
+> interrupted instruction) did not seem to cause any issues with stack
+> growth either.
+>
+> I can give this some more testing in ARAnyM (extending the stack shift
+> to format 7 frames) but I'd say it's got as much testing on 030 hardware
+> as we can do.
 
-> 
-> Thanks,
-> 
-> Bart.
+Thank you for your continued testing!
+And thanks a lot to anyone involved in nailing this issue!
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
