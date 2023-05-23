@@ -2,136 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB55E70D001
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CC270D000
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbjEWBDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S234806AbjEWBCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235016AbjEWBCm (ORCPT
+        with ESMTP id S232644AbjEWBCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:02:42 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6512E5B
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:01:26 -0700 (PDT)
+        Mon, 22 May 2023 21:02:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806F6110;
+        Mon, 22 May 2023 18:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684803686; x=1716339686;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=+9pQQnU8oW2SS9zfDiqS0+EStQ/0LzPauo3itGwf9oM=;
-  b=l0OakPr+COUlumjqqC4fDbs6HALAJ6vaACqS1J+a/1GKK3CrwVc4jUOg
-   3/Lfy073S3tpfpN9y5og/S6VivduuPFjD7QslIbiHvrjXO8lMcUDLWNgp
-   OdxZ6OsTWfU1ieP6uJDyHqVC+z77/Vdugy3gyvcGCrBMMfPLaBbCZYh20
-   phbb0avbqfwMkwnKK28btpIP0OFQj1L3eq5a4Dkq9SryIlh5NjKdk4ubG
-   EHpy6QzMmW97MiS9ANpc5mI3r/2T3msMMXZX4f5VZX2B1KSXcPvfebQgr
-   /uiekjxL4hB+zNRMD+UbibPpvIDyd/sCCoMP0aR/DbrmkVAyGFXKKLbKe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="356316326"
+  t=1684803658; x=1716339658;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rtIQBh9F3oyBoHplZAgRHsNnNkZoyG1p6l5/G7ETlYk=;
+  b=g6bHpgGsEu5HkP5I8Kei2teeZIEK2GUqWHJ6GIDDevl/iU0OnxrK2C9E
+   xEHDSh6oC0fk7+Mx1PaI6V5kQKDNx/mI5SVOnM0861AGXivhU+OC6KHOi
+   fKzVsG9d8ulTyXv+1+RPTiGZG1oXRH6h52xWPqYJ5earGNB1PWwaXnA6C
+   bn0Ot/Qdolg/eZT8R0ExGvQCoZDoW24K4DCiDouRE/9X0nUKU7UTr9QbQ
+   I1I9WVGscrnlLgLhzsuUgq8FshzYLSEaiOSjBvE03RZOfFDHlEui1+s87
+   gR5fFRnJMUP2ss6T/1UweiAaWOPpHm2lH8ehe0qnXhQWvNcxd7M/GNFI1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="351935163"
 X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="356316326"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 18:01:26 -0700
+   d="scan'208";a="351935163"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 18:00:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="815907679"
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="734557346"
 X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="815907679"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 18:01:23 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH -V2 5/5] swap: comments get_swap_device() with usage rule
-References: <20230522070905.16773-1-ying.huang@intel.com>
-        <20230522070905.16773-6-ying.huang@intel.com>
-        <2ad811a6-899d-3be8-2bd3-29ebed3308a8@redhat.com>
-Date:   Tue, 23 May 2023 09:00:20 +0800
-In-Reply-To: <2ad811a6-899d-3be8-2bd3-29ebed3308a8@redhat.com> (David
-        Hildenbrand's message of "Mon, 22 May 2023 14:07:07 +0200")
-Message-ID: <87jzwzyi8r.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="734557346"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.209.247]) ([10.254.209.247])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 18:00:53 -0700
+Message-ID: <aa65ec4f-ccf7-a344-692e-61abe9c95b47@intel.com>
+Date:   Tue, 23 May 2023 09:00:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
+Content-Language: en-US
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>
+References: <20230506030435.80262-1-chao.gao@intel.com>
+ <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
+ <ZGZhW/x5OWPmx1qD@google.com> <20230520010237.3tepk3q44j52leuk@desk>
+ <ZGup1TjeqBF7bgWG@google.com>
+ <ff2a97c2-1e8f-4adb-78c2-3cf5037f139f@intel.com>
+ <20230522212328.uwyvp3hpwvte6t6g@desk>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230522212328.uwyvp3hpwvte6t6g@desk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+On 5/23/2023 5:23 AM, Pawan Gupta wrote:
+> On Tue, May 23, 2023 at 03:31:44AM +0800, Xiaoyao Li wrote:
+>> On 5/23/2023 1:43 AM, Sean Christopherson wrote:
+>>>>>     6. Performance aside, KVM should not be speculating (ha!) on what the guest
+>>>>>        will and will not do, and should instead honor whatever behavior is presented
+>>>>>        to the guest.  If the guest CPU model indicates that VERW flushes buffers,
+>>>>>        then KVM damn well needs to let VERW flush buffers.
+>>>> The current implementation allows guests to have VERW flush buffers when
+>>>> they enumerate FB_CLEAR. It only restricts the flush behavior when the
+>>>> guest is trying to mitigate against a vulnerability(like MDS) on a
+>>>> hardware that is not affected. I guess its common for guests to be
+>>>> running with older gen configuration on a newer hardware.
+>>> Right, I'm saying that that behavior is wrong.  KVM shouldn't assume the guest
+>>> the guest will do things a certain way and should instead honor the "architectural"
+>>> definition, in quotes because I realize there probably is no architectural
+>>> definition for any of this.
+>>>
+>>> It might be that the code does (unintentionally?) honor the "architecture", i.e.
+>>> this code might actually be accurrate with respect to when the guest can expect
+>>> VERW to flush buffers.  But the comment is so, so wrong.
+>>
+>> The comment is wrong and the code is wrong in some case as well.
+>>
+>> If none of ARCH_CAP_FB_CLEAR, ARCH_CAP_MDS_NO, ARCH_CAP_TAA_NO,
+>> ARCH_CAP_PSDP_NO, ARCH_CAP_FBSDP_NO and ARCH_CAP_SBDR_SSDP_NO are exposed to
+>> VM, the VM is type of "affected by MDS".
+>>
+>> And accroding to the page https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/processor-mmio-stale-data-vulnerabilities.html
+>>
+>> if the VM enumerates support for both L1D_FLUSH and MD_CLEAR, it implicitly
+>> enumerates FB_CLEAR as part of their MD_CLEAR support.
+> 
+> This is the excerpt from the link that you mentioned:
+> 
+>    "For processors that are affected by MDS and support L1D_FLUSH
+>    operations and MD_CLEAR operations, the VERW instruction flushes fill
+>    buffers."
+> 
+> You are missing an important information here "For the processors
+> _affected_ by MDS". On such processors ...
+> 
+>> However, the code will leave vmx->disable_fb_clear as 1 if hardware supports
+>> it, and VERW intruction doesn't clear FB in the VM, which conflicts
+>> "architectural" definition.
+> 
+> ... Fill buffer clear is not enabled at all:
+> 
+>    vmx_setup_fb_clear_ctrl()
+>    {
+>    	u64 msr;
+>    
+>    	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES) &&
+>    	    !boot_cpu_has_bug(X86_BUG_MDS) &&
+>    	    !boot_cpu_has_bug(X86_BUG_TAA)) {
+>    		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
+>    		if (msr & ARCH_CAP_FB_CLEAR_CTRL)
+>    			vmx_fb_clear_ctrl_available = true;
+>    	}
+>    }
 
-> On 22.05.23 09:09, Huang Ying wrote:
->> The general rule to use a swap entry is as follows.
->> When we get a swap entry, if there isn't some other way to prevent
->> swapoff, such as page lock for swap cache, page table lock, etc., the
->> swap entry may become invalid because of swapoff.  Then, we need to
->> enclose all swap related functions with get_swap_device() and
->> put_swap_device(), unless the swap functions call
->> get/put_swap_device() by themselves.
->> Add the rule as comments of get_swap_device().
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Cc: David Hildenbrand <david@redhat.com>
->> Cc: Hugh Dickins <hughd@google.com>
->> Cc: Johannes Weiner <hannes@cmpxchg.org>
->> Cc: Matthew Wilcox <willy@infradead.org>
->> Cc: Michal Hocko <mhocko@suse.com>
->> Cc: Minchan Kim <minchan@kernel.org>
->> Cc: Tim Chen <tim.c.chen@linux.intel.com>
->> Cc: Yang Shi <shy828301@gmail.com>
->> Cc: Yu Zhao <yuzhao@google.com>
->> ---
->>   mm/swapfile.c | 12 +++++++++---
->>   1 file changed, 9 insertions(+), 3 deletions(-)
->> diff --git a/mm/swapfile.c b/mm/swapfile.c
->> index 4dbaea64635d..0c1cb935b2eb 100644
->> --- a/mm/swapfile.c
->> +++ b/mm/swapfile.c
->> @@ -1219,6 +1219,13 @@ static unsigned char __swap_entry_free_locked(struct swap_info_struct *p,
->>   }
->>     /*
->> + * When we get a swap entry, if there isn't some other way to prevent
->> + * swapoff, such as page lock for swap cache, page table lock, etc.,
->
-> Again "page lock for swap cache" might be imprecise.
+This is the check of bare metal, while the check in 
+vmx_update_fb_clear_dis() is of guest VM.
 
-Sure.  Will revise this.
+For example, if the hardware (host) enumerates ARCH_CAP_TAA_NO, 
+ARCH_CAP_MDS_NO, ARCH_CAP_PSDP_NO, ARCH_CAP_FBSDP_NO, 
+ARCH_CAP_SBDR_SSDP_NO, ARCH_CAP_FB_CLEAR, and ARCH_CAP_FB_CLEAR_CTRL, 
+the VERW on this hardware clears Fill Buffer (if FB_CLEAR_DIS is not 
+enabled in MSR_IA32_MCU_OPT_CTRL). vmx_setup_fb_clear_ctrl() does set 
+vmx_fb_clear_ctrl_available  to true.
 
->> + * the swap entry may become invalid because of swapoff.  Then, we
->> + * need to enclose all swap related functions with get_swap_device()
->> + * and put_swap_device(), unless the swap functions call
->> + * get/put_swap_device() by themselves.
->> + *
->>    * Check whether swap entry is valid in the swap device.  If so,
->>    * return pointer to swap_info_struct, and keep the swap entry valid
->>    * via preventing the swap device from being swapoff, until
->> @@ -1227,9 +1234,8 @@ static unsigned char __swap_entry_free_locked(struct swap_info_struct *p,
->>    * Notice that swapoff or swapoff+swapon can still happen before the
->>    * percpu_ref_tryget_live() in get_swap_device() or after the
->>    * percpu_ref_put() in put_swap_device() if there isn't any other way
->> - * to prevent swapoff, such as page lock, page table lock, etc.  The
->> - * caller must be prepared for that.  For example, the following
->> - * situation is possible.
->> + * to prevent swapoff.  The caller must be prepared for that.  For
->> + * example, the following situation is possible.
->>    *
->>    *   CPU1				CPU2
->>    *   do_swap_page()
->
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-
-Thanks!
-
-Best Regards,
-Huang, Ying
+If a guest is exposed without ARCH_CAP_TAA_NO, ARCH_CAP_MDS_NO, 
+ARCH_CAP_PSDP_NO, ARCH_CAP_FBSDP_NO, ARCH_CAP_SBDR_SSDP_NO and 
+ARCH_CAP_FB_CLEAR, vmx_update_fb_clear_dis() will leave 
+vmx->disable_fb_clear as true. So VERW doesn't clear Fill Buffer for 
+guest. But in the view of guset, it expects VERW to clear Fill Buffer.
