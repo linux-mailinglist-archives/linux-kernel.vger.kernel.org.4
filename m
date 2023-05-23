@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC78F70DE3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAD070DE51
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237057AbjEWN5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S237101AbjEWN6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbjEWN5o (ORCPT
+        with ESMTP id S237146AbjEWN6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:57:44 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F8E5F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:57:14 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id 98e67ed59e1d1-253340db64fso6811218a91.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684850233; x=1687442233;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RE5pljgoQG181tjwuhg4W/JZgWLsjKIcNLZqb+B2pwg=;
-        b=naCmkZ+ge6/s2VO38wiDl4LMWZA24oDqNGbSyjWkqLEEpsSrL2UZfnEbbWaQwyahab
-         djCRmY33ZnhyT4jLZLEdTnPT4HN1BqKmpG5k9BYhUbHqfHj5+jMEvv4jtxX1C1w4b2tW
-         26ufViFYncJYmgNOqcaB8+wh+SlPc5JJlA9PldXPXmaDE5GcogmwOWirr/1Tl2sd/qOT
-         W2g9NUZFJN1hjZqqe9q3iOps0XxyY4T3xAtZk9+T8wr12wn4KptpmrAVBNVaOaUSz4Lu
-         vE+CT3YvLckAixfu21WF+eve7jxbwYOsKeI3eDd7dtO+thGK3Au3oVGzTxB23gcnAAi2
-         gbew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684850233; x=1687442233;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RE5pljgoQG181tjwuhg4W/JZgWLsjKIcNLZqb+B2pwg=;
-        b=SRUl1JKIA3SUZv44Baa0b5TSapnPK4qg/oiDkoYYcBVr4M+3FS6LQVwhJs37DI41No
-         4QhD95DZBmoj96dhqC+PumBA1Z1+o4Hhzw2bm9RuaTMu0RsIgULUJigZxseoZPHAYjou
-         8gliJwO2nhHHUtEZI7ISMabxVIGosRTQxeLWhMaLU+gE6KU9mCZ5f5vvzinLVXM/QhYG
-         KMmKODuHTmI5gSlRZ2miD7GM6h4D6PNMps6hZgAVoLPiuy7Up7K55XsdZDs7EOJrlf4W
-         XBVzI7Ja497op/x4vZiIScM25DjzaCKmEsX2WkLmOKHQXwcbqlCfMMxC2SXtODGqlL3b
-         zr7A==
-X-Gm-Message-State: AC+VfDyRjXpbjMdvLbWIf5FgMAzMDMM0LPoPtWbWxlf7T3+C+Li3QOSw
-        /ICp1LNjc7EDtBdIL9izj+M=
-X-Google-Smtp-Source: ACHHUZ6Id+zBNB8WNjEYqXttPKy16f58rmZEC2yONMtyCsgnTTKt4TcgKh5kBq0/CauftKSKxHUivQ==
-X-Received: by 2002:a17:90a:71c2:b0:255:70e1:e41 with SMTP id m2-20020a17090a71c200b0025570e10e41mr6031679pjs.19.1684850233201;
-        Tue, 23 May 2023 06:57:13 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id s31-20020a17090a69a200b0023a9564763bsm8226319pjj.29.2023.05.23.06.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 06:57:12 -0700 (PDT)
-From:   xu xin <xu.xin.sc@gmail.com>
-X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
-To:     david@redhat.com
-Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
-        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
-        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn
-Subject: Re: [PATCH v8 1/6] ksm: support unsharing KSM-placed zero pages
-Date:   Tue, 23 May 2023 21:57:09 +0800
-Message-Id: <20230523135709.6902-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1925d301-462d-6b33-8867-4e1646b2dbd6@redhat.com>
-References: <1925d301-462d-6b33-8867-4e1646b2dbd6@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 09:58:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FB9130;
+        Tue, 23 May 2023 06:57:44 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NDslAA032160;
+        Tue, 23 May 2023 13:57:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=gW5eRtveF2FwSHEpiEFVed17/QTNq+DA/YTAEZagdJM=;
+ b=N82MzKg8htjWCHvjDQyXPTQ3WFAF26caAALyG7I7tTd1bW1JpvHh8W4z1suYhlvmTO2B
+ xcSRwOSUPMlIdLQRvMUgLlg15mfy1WgjkHPCAgAyD50akjJrAMjALn6zHragn8UiVU0w
+ UC8rE1TBU1ip5vfmgG2VLQZWyZ42f2QPpvBQbYGmithy21GjK4y3PF9sc52d9Bp4KWv1
+ c4hW1jbeGgCblTWf6XDr1matWR2ldSKt9BtxMd8tTSz4NAB3+zjNOWcXLchEAIyUpioU
+ QxVwLcRYlbKwluezLI1yAwYBB6Y0m170vPqTmM/70O4Ie/j+Bcpj6FzgUBSj7hp8DKXW JA== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qr6h0u7aw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 13:57:41 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34NDvaDV032137;
+        Tue, 23 May 2023 13:57:36 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9kjvsv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 23 May 2023 13:57:36 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34NDvart032132;
+        Tue, 23 May 2023 13:57:36 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-kbajaj-hyd.qualcomm.com [10.147.247.189])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34NDvZPN032131;
+        Tue, 23 May 2023 13:57:36 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2340697)
+        id 25C54529754; Tue, 23 May 2023 19:27:35 +0530 (+0530)
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Komal Bajaj <quic_kbajaj@quicinc.com>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3 0/4] arm64: dts: qcom: qdu1000: add SDHCI
+Date:   Tue, 23 May 2023 19:27:29 +0530
+Message-Id: <20230523135733.3852-1-quic_kbajaj@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CiwWHCh7sqbc92iBA0pTR93-5fXN8EQ7
+X-Proofpoint-ORIG-GUID: CiwWHCh7sqbc92iBA0pTR93-5fXN8EQ7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_09,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ spamscore=0 suspectscore=0 clxscore=1015 adultscore=0 phishscore=0
+ mlxscore=0 lowpriorityscore=0 mlxlogscore=756 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230109
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> ---
->>   include/linux/ksm.h | 6 ++++++
->>   mm/ksm.c            | 5 +++--
->>   2 files changed, 9 insertions(+), 2 deletions(-)
->> 
->> diff --git a/include/linux/ksm.h b/include/linux/ksm.h
->> index 899a314bc487..7989200cdbb7 100644
->> --- a/include/linux/ksm.h
->> +++ b/include/linux/ksm.h
->> @@ -26,6 +26,9 @@ int ksm_disable(struct mm_struct *mm);
->>   
->>   int __ksm_enter(struct mm_struct *mm);
->>   void __ksm_exit(struct mm_struct *mm);
->> +/* use pte_mkdirty to track a KSM-placed zero page */
->> +#define set_pte_ksm_zero(pte)	pte_mkdirty(pte_mkspecial(pte))
->
->If there is only a single user (which I assume), please inline it instead.
+Add sdhc instance for supporting eMMC on QDU1000 and
+QRU1000 SoCs.
 
-Excuse me, I'm wondering why using inline here instead of macro is better.
-Thanks! :)
+Changes in v3 -
+ * Removed aliases and dropped "_1" suffix as suggested by Bjorn.
+ * Changed pinconfig names.
 
-Thanks for reviews.
+Changes in v2-
+ * Updated the binding alphabetically.
+ * Removed extra comments as suggested by Bhupesh.
+ * Moved non-removable, no-sd, no-sdio and other properties from
+   soc to board dts file as suggested by Bhupesh and Konrad.
+ * Removed extra newlines and leading zeroes as suggested by Konrad.
+ * Modified sdhc1_opp_table.
+ * Updated the SDHC node entries alphabetically.
+ * Moved the status entry at the end.
+
+Komal Bajaj (4):
+  dt-bindings: mmc: sdhci-msm: Document the QDU1000/QRU1000 compatible
+  arm: dts: qcom: qdu1000: Add SDHCI node
+  arm64: dts: qcom: qdu1000: Add SDHCI pin configuration to DTSI
+  arm64: dts: qcom: qdu1000-idp: add SDHCI for emmc
+
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    |  1 +
+ arch/arm64/boot/dts/qcom/qdu1000-idp.dts      | 23 +++++
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi         | 97 +++++++++++++++++++
+ 3 files changed, 121 insertions(+)
+
+--
+2.17.1
+
