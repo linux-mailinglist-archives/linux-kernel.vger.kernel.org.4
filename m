@@ -2,175 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D738A70E5C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64A170E5A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238347AbjEWTiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S238190AbjEWTfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237945AbjEWTis (ORCPT
+        with ESMTP id S238298AbjEWTfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:38:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F8D11A;
-        Tue, 23 May 2023 12:38:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1AB3B22783;
-        Tue, 23 May 2023 19:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684870700;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uMi+ss+poPmS6xyigWocLe2k9VNr/sSLCv2bSWrlgn8=;
-        b=jqJqsYvGotMjM5QF38JGN+WX5x4Au0hwDXaPkbsuSC6RpijYYUzQZiC6GZSlnSdmr+63I0
-        2NvsiH/DQL+O9eAN6Fb5IIcXg1qJ3I/+hipNOK+YY/BubmbSOlCpiN3+o79UtJ+sjx86jH
-        kmAU3WK0kpumfLm27pg9AWsiYxKUbvQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684870700;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uMi+ss+poPmS6xyigWocLe2k9VNr/sSLCv2bSWrlgn8=;
-        b=V+k19jkJNPuFVixKK6vehU3esd2eCP2vT6+43jwIuXlsDE79f97lqH9TOB1xVXktSNJJ+E
-        Svh5w5WGjEnMlWDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD57113A10;
-        Tue, 23 May 2023 19:38:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id E6BIMSsWbWSrYwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 23 May 2023 19:38:19 +0000
-Date:   Tue, 23 May 2023 21:32:12 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     pengfuyuan <pengfuyuan@kylinos.cn>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: Fix csum_tree_block to avoid tripping on
- -Werror=array-bounds
-Message-ID: <20230523193212.GA32559@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230523070956.674019-1-pengfuyuan@kylinos.cn>
- <a79a7e9d-f6b5-00c8-65c8-f914cf0be0b2@gmx.com>
+        Tue, 23 May 2023 15:35:32 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6A5E6D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:35:05 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id be849199-f9a0-11ed-abf4-005056bdd08f;
+        Tue, 23 May 2023 22:33:50 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Tue, 23 May 2023 22:33:50 +0300
+To:     Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
+Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
+ TPS6594 regulators
+Message-ID: <ZG0VHnEByyMW9i4a@surfacebook>
+References: <20230522163115.2592883-1-eblanc@baylibre.com>
+ <20230522163115.2592883-4-eblanc@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a79a7e9d-f6b5-00c8-65c8-f914cf0be0b2@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230522163115.2592883-4-eblanc@baylibre.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 03:33:22PM +0800, Qu Wenruo wrote:
+Mon, May 22, 2023 at 06:31:15PM +0200, Esteban Blanc kirjoitti:
+> From: Jerome Neanne <jneanne@baylibre.com>
 > 
-> 
-> On 2023/5/23 15:09, pengfuyuan wrote:
-> >
-> > When compiling on a mips 64-bit machine we get these warnings:
-> >
-> >      In file included from ./arch/mips/include/asm/cacheflush.h:13,
-> > 	             from ./include/linux/cacheflush.h:5,
-> > 	             from ./include/linux/highmem.h:8,
-> > 		     from ./include/linux/bvec.h:10,
-> > 		     from ./include/linux/blk_types.h:10,
-> >                       from ./include/linux/blkdev.h:9,
-> > 	             from fs/btrfs/disk-io.c:7:
-> >      fs/btrfs/disk-io.c: In function ‘csum_tree_block’:
-> >      fs/btrfs/disk-io.c:100:34: error: array subscript 1 is above array bounds of ‘struct page *[1]’ [-Werror=array-bounds]
-> >        100 |   kaddr = page_address(buf->pages[i]);
-> >            |                        ~~~~~~~~~~^~~
-> >      ./include/linux/mm.h:2135:48: note: in definition of macro ‘page_address’
-> >       2135 | #define page_address(page) lowmem_page_address(page)
-> >            |                                                ^~~~
-> >      cc1: all warnings being treated as errors
-> >
-> > We can check if i overflows to solve the problem. However, this doesn't make
-> > much sense, since i == 1 and num_pages == 1 doesn't execute the body of the loop.
-> > In addition, i < num_pages can also ensure that buf->pages[i] will not cross
-> > the boundary. Unfortunately, this doesn't help with the problem observed here:
-> > gcc still complains.
-> 
-> So still false alerts, thus this bug should mostly be reported to GCC.
-> 
-> >
-> > To fix this, start the loop at index 0 instead of 1. Also, a conditional was
-> > added to skip the case where the index is 0, so that the loop iterations follow
-> > the desired logic, and it makes all versions of gcc happy.
-> >
-> > Signed-off-by: pengfuyuan <pengfuyuan@kylinos.cn>
-> > ---
-> >   fs/btrfs/disk-io.c | 10 +++++++---
-> >   1 file changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
-> > index fbf9006c6234..8b05d556d747 100644
-> > --- a/fs/btrfs/disk-io.c
-> > +++ b/fs/btrfs/disk-io.c
-> > @@ -96,9 +96,13 @@ static void csum_tree_block(struct extent_buffer *buf, u8 *result)
-> >   	crypto_shash_update(shash, kaddr + BTRFS_CSUM_SIZE,
-> >   			    first_page_part - BTRFS_CSUM_SIZE);
-> >
-> > -	for (i = 1; i < num_pages; i++) {
-> > -		kaddr = page_address(buf->pages[i]);
-> > -		crypto_shash_update(shash, kaddr, PAGE_SIZE);
-> > +	for (i = 0; i < num_pages; i++) {
-> > +		struct page *p = buf->pages[i];
-> > +
-> > +		if (i != 0) {
-> > +			kaddr = page_address(p);
-> > +			crypto_shash_update(shash, kaddr, PAGE_SIZE);
-> 
-> Unfortunately this damages the readability.
-> 
-> If you really want to starts from page index 0, I don't think doing this
-> is the correct way.
-> 
-> Instead, you may take the chance to merge the first
-> crypto_shahs_update() call, so the overall procedure looks like this:
-> 
-> static void csum_tree_block()
-> {
-> 	for (int i = 0; i < num_pages; i++) {
-> 		int page_off = whatever_to_calculate_the_offset;
-> 		int page_len = whatever_to_calculate_the_lengh;
-> 		char *kaddr = page_address(buf->pages[i]) + page_off;
-> 
-> 		crypto_shash_update(shash, kaddr, page_len);
-> 	}
-> 	memset();
-> 	crypto_shash_final();
-> }
-> 
-> Although even with such change, I'm still not sure if it's any better or
-> worse, as most of the calculation can still be bulky.
+> This patch adds support for TPS6594 regulators (bucks and LDOs).
 
-Yeah I think the calculations would have to be conditional or keeping
-some state. I'd like to keep the structure of the first page and the
-rest.
+BUCKs (otherwise $$$?)
 
-Possible ways is to add extra condition
+> The output voltages are configurable and are meant to supply power
+> to the main processor and other components.
+> Bucks can be used in single or multiphase mode, depending on PMIC
 
-	for (i = 1; i < num_pages && i < INLINE_EXTENT_BUFFER_PAGES; i++)
+BUCKs (otherwise $$$?)
 
-which leads to dead code if page size is 64k. It still has to check two
-conditions which is not the best, so could do
+> part number.
 
-	int num_pages = max(num_extent_pages(eb0, INLINE_EXTENT_BUFFER_PAGES);
+...
+
+> +	help
+> +	  This driver supports TPS6594 voltage regulator chips.
+> +	  TPS6594 series of PMICs have 5 BUCKs and 4 LDOs
+> +	  voltage regulators.
+> +	  BUCKs 1,2,3,4 can be used in single phase or multiphase mode.
+> +	  Part number defines which single or multiphase mode is i used.
+
+i?!
+
+> +	  It supports software based voltage control
+> +	  for different voltage domains.
+
+...
+
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+
+> +#include <linux/of_device.h>
+
+Are you sure this one is correct and / or of.h is not missing? of_match_ptr()
+IIRC is defined in of.h.
+
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/driver.h>
+> +#include <linux/regulator/machine.h>
+> +#include <linux/regulator/of_regulator.h>
+
+...
+
+> +/* Operations permitted on BUCK1/2/3/4/5 */
+> +static const struct regulator_ops tps6594_bucks_ops = {
+> +	.is_enabled		= regulator_is_enabled_regmap,
+> +	.enable			= regulator_enable_regmap,
+> +	.disable		= regulator_disable_regmap,
+> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+> +	.list_voltage		= regulator_list_voltage_linear_range,
+> +	.map_voltage		= regulator_map_voltage_linear_range,
+> +	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
+
+> +
+
+Redundant blank line.
+
+> +};
+
+...
+
+> +	int error;
+> +
+> +	for (j = 0; j < REGS_INT_NB; j++) {
+> +		irq_type = &tps6594_regs_irq_types[j];
+> +		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
+> +		if (irq < 0)
+> +			return -EINVAL;
+> +
+> +		irq_data[*irq_idx + j].dev = tps->dev;
+> +		irq_data[*irq_idx + j].type = irq_type;
+> +		irq_data[*irq_idx + j].rdev = rdev;
+> +
+> +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
+> +						  tps6594_regulator_irq_handler,
+> +						  IRQF_ONESHOT,
+> +						  irq_type->irq_name,
+> +						  &irq_data[*irq_idx]);
+
+> +		(*irq_idx)++;
+
+This is interesing. So, even in error case we touch given parameter. Usually
+the pattern is not to touch the output if we know there is an error.
+
+> +		if (error) {
+> +			dev_err(tps->dev, "tps6594 failed to request %s IRQ %d: %d\n",
+> +				irq_type->irq_name, irq, error);
+> +			return error;
+> +		}
+> +	}
+
+...
+
+> +	u8 buck_configured[BUCK_NB] = { 0 };
+> +	u8 buck_multi[MULTI_PHASE_NB] = { 0 };
+
+0:s are not needed but I dunno if it's a style in the regulator subsystem.
+
+> +	static const char * const multiphases[] = {"buck12", "buck123", "buck1234", "buck34"};
+> +	static const char *npname;
+> +	int error, i, irq, multi, delta;
+> +	int irq_idx = 0;
+> +	int buck_idx = 0;
+> +	int ext_reg_irq_nb = 2;
+
+> +
+
+Redundant blank line.
+
+> +	enum {
+> +		MULTI_BUCK12,
+> +		MULTI_BUCK123,
+> +		MULTI_BUCK1234,
+> +		MULTI_BUCK12_34,
+
+> +		MULTI_FIRST = MULTI_BUCK12,
+> +		MULTI_LAST = MULTI_BUCK12_34,
+> +		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
+
+		MULT_NUM
+
+will suffice instead all this.
+
+> +	};
+
+But why enum at all? See below.
+
+...
+
+> +	/*
+> +	 * Switch case defines different possible multi phase config
+> +	 * This is based on dts buck node name.
+> +	 * Buck node name must be chosen accordingly.
+> +	 * Default case is no Multiphase buck.
+> +	 * In case of Multiphase configuration, value should be defined for
+> +	 * buck_configured to avoid creating bucks for every buck in multiphase
+> +	 */
+> +	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
+> +		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
+> +		npname = of_node_full_name(np);
+> +		np_pmic_parent = of_get_parent(of_get_parent(np));
+> +		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
+
+Why not of_node_full_name() in the second case?
+
+
+> +			continue;
+> +		delta = strcmp(npname, multiphases[multi]);
+> +		if (!delta) {
+> +			switch (multi) {
+> +			case MULTI_BUCK12:
+
+This all looks like match_string() reinvention.
+
+> +				buck_multi[0] = 1;
+> +				buck_configured[0] = 1;
+> +				buck_configured[1] = 1;
+> +				break;
+> +			/* multiphase buck34 is supported only with buck12 */
+> +			case MULTI_BUCK12_34:
+> +				buck_multi[0] = 1;
+> +				buck_multi[1] = 1;
+> +				buck_configured[0] = 1;
+> +				buck_configured[1] = 1;
+> +				buck_configured[2] = 1;
+> +				buck_configured[3] = 1;
+> +				break;
+> +			case MULTI_BUCK123:
+> +				buck_multi[2] = 1;
+> +				buck_configured[0] = 1;
+> +				buck_configured[1] = 1;
+> +				buck_configured[2] = 1;
+> +				break;
+> +			case MULTI_BUCK1234:
+> +				buck_multi[3] = 1;
+> +				buck_configured[0] = 1;
+> +				buck_configured[1] = 1;
+> +				buck_configured[2] = 1;
+> +				buck_configured[3] = 1;
+> +				break;
+> +			}
+> +		}
+> +	}
+
+...
+
+> +	irq_data = devm_kmalloc_array(tps->dev,
+> +				REGS_INT_NB * sizeof(struct tps6594_regulator_irq_data),
+> +				ARRAY_SIZE(tps6594_bucks_irq_types) +
+> +				ARRAY_SIZE(tps6594_ldos_irq_types),
+> +				GFP_KERNEL);
+
+Have you checked overflow.h? There are macros to help with the above calculus.
+
+> +	if (!irq_data)
+> +		return -ENOMEM;
+
+...
+
+> +		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
+> +		if (IS_ERR(rdev))
+> +			return dev_err_probe(tps->dev, PTR_ERR(rdev),
+
+Why not &pdev->dev here?
+
+> +					     "failed to register %s regulator\n",
+> +					     pdev->name);
+
+...
+
+> +		rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
+> +		if (IS_ERR(rdev))
+> +			return dev_err_probe(tps->dev, PTR_ERR(rdev),
+> +					     "failed to register %s regulator\n",
+> +					     pdev->name);
+
+Hmm... Again, why the error is printed against different device than regulator
+registration?
+
+...
+
+> +	/* LP8764 dosen't have LDO */
+> +	if (tps->chip_id != LP8764) {
+> +		for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
+> +			rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
+> +			if (IS_ERR(rdev))
+> +				return dev_err_probe(tps->dev, PTR_ERR(rdev),
+> +						     "failed to register %s regulator\n",
+> +						     pdev->name);
+> +
+> +			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
+> +							 tps6594_ldos_irq_types[i],
+> +							 &irq_idx);
+> +			if (error)
+> +				return error;
+> +		}
+> +	}
+> +
+> +	if (tps->chip_id == LP8764)
+
+'else'?
+
+Or actually
+
+	if (tps->chip_id == LP8764) {
+		...
+	} else {
+		the above part
+	}
+
+?
+
+
+> +		ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
+
+...
+
+> +static struct platform_driver tps6594_regulator_driver = {
+> +	.driver = {
+> +		.name = "tps6594-regulator",
+> +	},
+> +	.probe = tps6594_regulator_probe,
+> +};
+
+> +
+
+This blank line is not needed.
+
+> +module_platform_driver(tps6594_regulator_driver);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
