@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA5F70D6C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9D970D7C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235982AbjEWIKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S235707AbjEWInE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236099AbjEWIJm (ORCPT
+        with ESMTP id S232666AbjEWInD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:09:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6526E5C;
-        Tue, 23 May 2023 01:08:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 23 May 2023 04:43:03 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2ABC95
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+hAb4kRapelzMoxcnHi4waxsaptMAYCcKXjFa6xVdds=; b=g5OKGu4DDKQ4W066O2pda+yDrD
+        IViYkKoDGTXgoDCK3zsByERCBTzJjXHuYlgDLnDMvGEhhuTdX66GMHpYZamYu9KpuhZH+Ya0wLSFh
+        okLUgTWGG1wXG2rearRc0nPhI7/5+DxS1q7AV2S9QQgG8JhSb7qtbktYu955L2HxztXpUGeQXHQ6o
+        pet+S173rm9Gdur5PIeSdb3DsfeO76JId2lI0rJCNGL9SVNgIfmZOTqNG7psv9VXqCbCMEO7bnJg/
+        Jv2tEHVr8ZoN37WSF197MCdTN8TGznzqmUCcvb9TKGOHl3J7TG4TpTghSVioe8chchKJ5A8DgaXfQ
+        Out+LR+Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1N6z-003QuN-1y;
+        Tue, 23 May 2023 08:11:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 07E2C2041B;
-        Tue, 23 May 2023 08:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684829325; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+dEVVbvNrEYxHr4b/vv5A6cTh8OogUJDKNko7MtzH3g=;
-        b=aqMp1lCSDbRRddYRBHCTzgZ8x1pcGP1ICj8oT4unMeLI5CnphXMKLrBRpZ8cLmiW5m3sCY
-        WeOiDgGdSZ+NKlLvTwbYdwdBaQAwX1+PsaFg8vEQkHvY/8P4JhZtJMhoc6cmh4zoiyQjew
-        RoTL2lw9yc1D3Ur55S/L9aihQPQo1vo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684829325;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+dEVVbvNrEYxHr4b/vv5A6cTh8OogUJDKNko7MtzH3g=;
-        b=85tYuyPi+5yLNN+ZI7057j42rnEVNsfXfZ4tHlK3EXP7KbqEhAAAAMKpvtPHvPPqQXevj2
-        nQ+SP7q+8zjv1UDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ED42B13A10;
-        Tue, 23 May 2023 08:08:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4o3rOYx0bGTrMQAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 23 May 2023 08:08:44 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 8C0CCA075D; Tue, 23 May 2023 10:08:44 +0200 (CEST)
-Date:   Tue, 23 May 2023 10:08:44 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v21 4/6] block: Add BIO_PAGE_PINNED and associated
- infrastructure
-Message-ID: <20230523080844.uxj3q244bcb3cot3@quack3>
-References: <20230522205744.2825689-1-dhowells@redhat.com>
- <20230522205744.2825689-5-dhowells@redhat.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D20E3300338;
+        Tue, 23 May 2023 10:11:15 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AB9E82012158D; Tue, 23 May 2023 10:11:15 +0200 (CEST)
+Date:   Tue, 23 May 2023 10:11:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, paulmck@kernel.org,
+        rui.zhang@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org,
+        bin.gao@intel.com
+Subject: Re: [PATCH RFC] x86/tsc: Make recalibration default on for
+ TSC_KNOWN_FREQ cases
+Message-ID: <20230523081115.GG4253@hirez.programming.kicks-ass.net>
+References: <20230522033018.1276836-1-feng.tang@intel.com>
+ <87h6s4ye9b.ffs@tglx>
+ <ZGssENXFKmOk/zL7@feng-clx>
+ <87zg5wwppa.ffs@tglx>
+ <ZGtnUQJy+1Nrazhy@feng-clx>
+ <87pm6swi7z.ffs@tglx>
+ <ZGuIL6tyzzZP3kyR@feng-clx>
+ <20230522161158.GA3330346@hirez.programming.kicks-ass.net>
+ <ZGwUXzGcMgbcZVnf@feng-clx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522205744.2825689-5-dhowells@redhat.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <ZGwUXzGcMgbcZVnf@feng-clx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,127 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 22-05-23 21:57:42, David Howells wrote:
-> Add BIO_PAGE_PINNED to indicate that the pages in a bio are pinned
-> (FOLL_PIN) and that the pin will need removing.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Jan Kara <jack@suse.cz>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: Logan Gunthorpe <logang@deltatee.com>
-> cc: linux-block@vger.kernel.org
+On Tue, May 23, 2023 at 09:18:23AM +0800, Feng Tang wrote:
+> On Mon, May 22, 2023 at 06:11:58PM +0200, Peter Zijlstra wrote:
+> > On Mon, May 22, 2023 at 11:20:15PM +0800, Feng Tang wrote:
+> > 
+> > > And I don't understand the commit log: "On Intel GOLDMONT Atom SoC
+> > > TSC is the only reliable clocksource. We mark TSC reliable to avoid
+> > > watchdog on it."
+> > > 
+> > > Clearly the Denventon I found today has both HPET and ACPI_PM timer:
+> > > 
+> > >   [root@dnv0 ~]# grep .  /sys/devices/system/clocksource/clocksource0/*
+> > >   /sys/devices/system/clocksource/clocksource0/available_clocksource:tsc hpet acpi_pm
+> > >   /sys/devices/system/clocksource/clocksource0/current_clocksource:tsc
+> > >   
+> > > The lscpu info is:
+> > >   
+> > >   Architecture:                    x86_64
+> > >   CPU op-mode(s):                  32-bit, 64-bit
+> > >   Address sizes:                   39 bits physical, 48 bits virtual
+> > >   Byte Order:                      Little Endian
+> > >   CPU(s):                          12
+> > >   On-line CPU(s) list:             0-11
+> > >   Vendor ID:                       GenuineIntel
+> > >   BIOS Vendor ID:                  Intel(R) Corporation
+> > >   Model name:                      Intel(R) Atom(TM) CPU C3850 @ 2.10GHz
+> > >   BIOS Model name:                 Intel(R) Atom(TM) CPU C3850 @ 2.10GHz  CPU @ 2.1GHz
+> > >   BIOS CPU family:                 43
+> > >   CPU family:                      6
+> > >   Model:                           95
+> > >   Thread(s) per core:              1
+> > >   Core(s) per socket:              12
+> > >   Socket(s):                       1
+> > >   Stepping:                        1
+> > > 
+> > > Maybe this cpu model (0x5F) has been used by some type of platforms
+> > > which has met the false alarm watchdog issue.
+> > 
+> > It has them; but they are not *reliable*.
+>  
+> Yes, that's possible. I tried to CC the author Bin in case he can
+> provide more background or information for his statement, but his
+> email address is unreachable now.
 
-Looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
-> 
-> Notes:
->     ver #10)
->      - Drop bio_set_cleanup_mode(), open coding it instead.
->     
->     ver #9)
->      - Only consider pinning in bio_set_cleanup_mode().  Ref'ing pages in
->        struct bio is going away.
->      - page_put_unpin() is removed; call unpin_user_page() and put_page()
->        directly.
->      - Use bio_release_page() in __bio_release_pages().
->      - BIO_PAGE_PINNED and BIO_PAGE_REFFED can't both be set, so use if-else
->        when testing both of them.
->     
->     ver #8)
->      - Move the infrastructure to clean up pinned pages to this patch [hch].
->      - Put BIO_PAGE_PINNED before BIO_PAGE_REFFED as the latter should
->        probably be removed at some point.  FOLL_PIN can then be renumbered
->        first.
-> 
->  block/bio.c               |  6 +++---
->  block/blk.h               | 12 ++++++++++++
->  include/linux/bio.h       |  3 ++-
->  include/linux/blk_types.h |  1 +
->  4 files changed, 18 insertions(+), 4 deletions(-)
-> 
-> diff --git a/block/bio.c b/block/bio.c
-> index 8516adeaea26..17bd01ecde36 100644
-> --- a/block/bio.c
-> +++ b/block/bio.c
-> @@ -1169,7 +1169,7 @@ void __bio_release_pages(struct bio *bio, bool mark_dirty)
->  	bio_for_each_segment_all(bvec, bio, iter_all) {
->  		if (mark_dirty && !PageCompound(bvec->bv_page))
->  			set_page_dirty_lock(bvec->bv_page);
-> -		put_page(bvec->bv_page);
-> +		bio_release_page(bio, bvec->bv_page);
->  	}
->  }
->  EXPORT_SYMBOL_GPL(__bio_release_pages);
-> @@ -1489,8 +1489,8 @@ void bio_set_pages_dirty(struct bio *bio)
->   * the BIO and re-dirty the pages in process context.
->   *
->   * It is expected that bio_check_pages_dirty() will wholly own the BIO from
-> - * here on.  It will run one put_page() against each page and will run one
-> - * bio_put() against the BIO.
-> + * here on.  It will unpin each page and will run one bio_put() against the
-> + * BIO.
->   */
->  
->  static void bio_dirty_fn(struct work_struct *work);
-> diff --git a/block/blk.h b/block/blk.h
-> index 45547bcf1119..e1ded2ccb3ca 100644
-> --- a/block/blk.h
-> +++ b/block/blk.h
-> @@ -420,6 +420,18 @@ int bio_add_hw_page(struct request_queue *q, struct bio *bio,
->  		struct page *page, unsigned int len, unsigned int offset,
->  		unsigned int max_sectors, bool *same_page);
->  
-> +/*
-> + * Clean up a page appropriately, where the page may be pinned, may have a
-> + * ref taken on it or neither.
-> + */
-> +static inline void bio_release_page(struct bio *bio, struct page *page)
-> +{
-> +	if (bio_flagged(bio, BIO_PAGE_PINNED))
-> +		unpin_user_page(page);
-> +	else if (bio_flagged(bio, BIO_PAGE_REFFED))
-> +		put_page(page);
-> +}
-> +
->  struct request_queue *blk_alloc_queue(int node_id);
->  
->  int disk_scan_partitions(struct gendisk *disk, fmode_t mode);
-> diff --git a/include/linux/bio.h b/include/linux/bio.h
-> index 0922729acd26..8588bcfbc6ef 100644
-> --- a/include/linux/bio.h
-> +++ b/include/linux/bio.h
-> @@ -488,7 +488,8 @@ void zero_fill_bio(struct bio *bio);
->  
->  static inline void bio_release_pages(struct bio *bio, bool mark_dirty)
->  {
-> -	if (bio_flagged(bio, BIO_PAGE_REFFED))
-> +	if (bio_flagged(bio, BIO_PAGE_REFFED) ||
-> +	    bio_flagged(bio, BIO_PAGE_PINNED))
->  		__bio_release_pages(bio, mark_dirty);
->  }
->  
-> diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
-> index dfd2c2cb909d..8ef209e3aa96 100644
-> --- a/include/linux/blk_types.h
-> +++ b/include/linux/blk_types.h
-> @@ -323,6 +323,7 @@ struct bio {
->   * bio flags
->   */
->  enum {
-> +	BIO_PAGE_PINNED,	/* Unpin pages in bio_release_pages() */
->  	BIO_PAGE_REFFED,	/* put pages in bio_release_pages() */
->  	BIO_CLONED,		/* doesn't own data */
->  	BIO_BOUNCED,		/* bio is a bounce bio */
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+IIRC HPET stops in C10 or something stupid like that, I forgot what the
+problem with ACPI_PM is.
