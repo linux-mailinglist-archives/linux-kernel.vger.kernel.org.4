@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E855F70E37F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E6570E2F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238213AbjEWRaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S238115AbjEWR3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238252AbjEWR3w (ORCPT
+        with ESMTP id S237781AbjEWR3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:29:52 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48A2C2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:29:01 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6238ce8d8f9so31452846d6.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:29:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684862941; x=1687454941;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=88ji2ehp7Y51Xu9y1iJArVPSJqfYf526w71azZN8Kpg=;
-        b=Q2A9BZKLQmvErXWlJ5paOIUE4fYC9HvgNl59AHs2w3cbiP9xMngSYzJl7FlahZVVUa
-         E79eAIBWYJfQnUUdMD/7KnQMA5d0+9GOMad3WMNIiw4G1orExpJR0yASIizk82u8XYOg
-         k4k+EjZGlg+2QDIqBVWVfBSBoUu4bHioc6d1wrA2lu7JHDC6dMuRg2Qh8PfvaBPgRF+v
-         Z9AGvVUQyGuGYnRpCVnH+mwWUJZTTNAIrebjJQSxY1Kd1OUtVtvwsdzeBRhuRBoO5Dso
-         Ef1cfkbTJWe8AyCBwzdnkgK0Qz7V1a3sH17DPaqA4osdm1PtOsfBwW8+wQAj9xZIl7cL
-         IIZw==
-X-Gm-Message-State: AC+VfDxAwB78tfy6XGV/sbsvuKvi0Q1WBPvTUFDKS/GcDiqboK0fwQTv
-        vvlzuBrAFO6mGlR08jI95kSw
-X-Google-Smtp-Source: ACHHUZ6ppaovW6MrAx8+WrlMFkTJ9U/3siFa5SZn2V1/hKufKCBU2/85YLyX7aa4/3GEKAaK2QRmNQ==
-X-Received: by 2002:a05:6214:ac8:b0:5ef:6142:cb05 with SMTP id g8-20020a0562140ac800b005ef6142cb05mr28205100qvi.20.1684862940865;
-        Tue, 23 May 2023 10:29:00 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id mx13-20020a0562142e0d00b0061a2094694fsm2919225qvb.24.2023.05.23.10.29.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 10:29:00 -0700 (PDT)
-Date:   Tue, 23 May 2023 13:28:59 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Du Rui <durui@linux.alibaba.com>
-Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Alasdair Kergon <agk@redhat.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>
-Subject: Re: dm overlaybd: targets mapping OverlayBD image
-Message-ID: <ZGz32yw7ecKhW+lj@redhat.com>
-References: <9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com>
+        Tue, 23 May 2023 13:29:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C683DD;
+        Tue, 23 May 2023 10:29:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0579061662;
+        Tue, 23 May 2023 17:29:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D57C4339B;
+        Tue, 23 May 2023 17:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684862959;
+        bh=nRFEeON5TTeTRfrNJSFYHGfUbaFOG80hxmTyINj72VM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sIBCRYYSV+CIIa78/f/pA/2PZpk18/VXhWbvFvtGd+ayEHshv94B7oyW0TaW8L0Ad
+         HarSzEi7Ftorr2Y4RJkylO08XKlmW6wpMu41X0SfKIHgXsr2BVhp0ONC8LeRlE3q1I
+         jv7emAZOSxPaF226IfFuruduJ3m2gfJnR578EroixBtKnIEA6aueUzD4smB8qR8CC5
+         55Bn0FvoQ539GlfA+C6btkpDqC2nJXef4tie/pzBEt8qW1bA0CDK/6iCGUcPmryHSB
+         6DgJUUB51kdIDgwclRQqUX2VhxVilxbQ2e8crQDN+TUV9gVruKXlm1Rlk0/BvSXgxh
+         Ya/8FwRoGSVVA==
+Date:   Tue, 23 May 2023 18:29:15 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sean =?iso-8859-1?Q?Nyekj=E6r?= <sean@geanix.com>
+Cc:     robh+dt@kernel.org, Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] dt-bindings: mfd: stpmic1: add fsl,pmic-poweroff
+ property
+Message-ID: <20230523-flaccid-fossil-c9d09838dc64@spud>
+References: <20230516132225.3012541-1-sean@geanix.com>
+ <20230516132225.3012541-3-sean@geanix.com>
+ <20230516-footprint-handoff-bcd553ff6146@spud>
+ <9B1EE405-77D3-4980-9A13-9D4F87C1A64F@geanix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="23BiRCaMKPuGXfik"
 Content-Disposition: inline
-In-Reply-To: <9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+In-Reply-To: <9B1EE405-77D3-4980-9A13-9D4F87C1A64F@geanix.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,52 +62,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19 2023 at  6:27P -0400,
-Du Rui <durui@linux.alibaba.com> wrote:
 
-> OverlayBD is a novel layering block-level image format, which is design
-> for container, secure container and applicable to virtual machine,
-> published in USENIX ATC '20
-> https://www.usenix.org/system/files/atc20-li-huiba.pdf
-> 
-> OverlayBD already has a ContainerD non-core sub-project implementation
-> in userspace, as an accelerated container image service
-> https://github.com/containerd/accelerated-container-image
-> 
-> It could be much more efficient when do decompressing and mapping works
-> in the kernel with the framework of device-mapper, in many circumstances,
-> such as secure container runtime, mobile-devices, etc.
-> 
-> This patch contains a module, dm-overlaybd, provides two kinds of targets
-> dm-zfile and dm-lsmt, to expose a group of block-devices contains
-> OverlayBD image as a overlaid read-only block-device.
-> 
-> Signed-off-by: Du Rui <durui@linux.alibaba.com>
+--23BiRCaMKPuGXfik
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-<snip, original patch here: [1] >
+On Tue, May 23, 2023 at 11:55:50AM +0200, Sean Nyekj=E6r wrote:
+> > On 16 May 2023, at 20.06, Conor Dooley <conor@kernel.org> wrote:
+> > On Tue, May 16, 2023 at 03:22:24PM +0200, Sean Nyekjaer wrote:
+> >> Document the new optional "fsl,pmic-poweroff" property.
+> >>=20
+> >> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> >> ---
+> >> Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 8 ++++++++
+> >> 1 file changed, 8 insertions(+)
+> >>=20
+> >> diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b/D=
+ocumentation/devicetree/bindings/mfd/st,stpmic1.yaml
+> >> index 9573e4af949e..5183a7c660d2 100644
+> >> --- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+> >> +++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+> >> @@ -26,6 +26,14 @@ properties:
+> >>=20
+> >>   interrupt-controller: true
+> >>=20
+> >> +  st,pmic-poweroff:
+> >> +    $ref: /schemas/types.yaml#/definitions/flag
+> >> +    description: |
+> >> +      if present, configure the PMIC to shutdown all power rails when
+> >> +      power off sequence have finished.
+> >> +      Use this option if the SoC should be powered off by external po=
+wer management
+> >> +      IC (PMIC).
+> >=20
+> > Just reading this description, this is sounding quite like a "software
+> > behaviour" type of property, which are not permitted, rather than
+> > describing some element of the hardware. Clearly you are trying to solve
+> > an actual problem though, so try re-phrasing the description (and
+> > property name) to focus on what exact hardware configuration it is that
+> > you are trying to special-case.
+> > Krzysztof suggested that the samsung,s2mps11-acokb-ground property in
+> > samsung,s2mps11.yaml is addressing a similar problem, so that could be
+> > good to look at.
+>=20
+> Better wording?
+>       Indicates that the power management IC (PMIC) is used to power off =
+the board.
+>       So as the last step in the power off sequence set the SWOFF bit in =
+the
+>       main control register (MAIN_CR) register, to shutdown all power rai=
+ls.
 
-I appreciate that this work is being done with an eye toward
-containerd "community" and standardization but based on my limited
-research it appears that this format of OCI image storage/use is only
-used by Alibaba? (but I could be wrong...)
+The description for the property that Krzysztof mentioned is
+  samsung,s2mps11-acokb-ground:
+    description: |
+      Indicates that ACOKB pin of S2MPS11 PMIC is connected to the ground so
+      the PMIC must manually set PWRHOLD bit in CTRL1 register to turn off =
+the
+      power. Usually the ACOKB is pulled up to VBATT so when PWRHOLD pin go=
+es
+      low, the rising ACOKB will trigger power off.
 
-But you'd do well to explain why the userspace solution isn't
-acceptable. Are there security issues that moving the implementation
-to kernel addresses?
+In other words, I am asking what (abnormal?) scenario there is that means
+you need the property, rather than what setting the property does.
+Or am I totally off, and this is the only way this PMIC works?
 
-I also have doubts that this solution is _actually_ more performant
-than a proper filesystem based solution that allows page cache sharing
-of container image data across multiple containers.
+Cheers,
+Conor.
 
-There is an active discussion about, and active development effort
-for, using overlayfs + erofs for container images.  I'm reluctant to
-merge this DM based container image approach without wider consensus
-from other container stakeholders.
+--23BiRCaMKPuGXfik
+Content-Type: application/pgp-signature; name="signature.asc"
 
-But short of reaching wider consensus on the need for these DM
-targets: there is nothing preventing you from carrying these changes
-in your alibaba kernel.
+-----BEGIN PGP SIGNATURE-----
 
-Mike
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGz36wAKCRB4tDGHoIJi
+0oHHAP9hYw2Fyk+QQUizn6YRH4cacENB1d9ChPXpsSyLDtFVvwD/aKAC10F+wFva
+WT7XqtDEaJikR4HUtbr8QjftlyFbtwE=
+=Fjiv
+-----END PGP SIGNATURE-----
 
-[1]: https://patchwork.kernel.org/project/dm-devel/patch/9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com/
+--23BiRCaMKPuGXfik--
