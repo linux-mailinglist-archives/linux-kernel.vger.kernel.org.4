@@ -2,144 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164E970D46F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F6570D474
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbjEWG73 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 02:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
+        id S235305AbjEWG7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjEWG70 (ORCPT
+        with ESMTP id S235274AbjEWG7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:59:26 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5D811A;
-        Mon, 22 May 2023 23:59:25 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-ba80dc46972so10174654276.2;
-        Mon, 22 May 2023 23:59:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684825165; x=1687417165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DNsVXRmG+EgAtae57+cQUpNnpmiDiZt+9c6Bhc+ZY20=;
-        b=jLK18kV4BXbqNB/UGAw8tWdbvZF6Xf++nIL0Q/UQfMrJb3l2YT0ZrVgwvPMHBcpKxp
-         R5MQuBIY4PtFhPZPM0aN65gq24/fNOt45bJdnIf5VvIal+jSbMRqGmkW3XVKx64Q5cLL
-         /8Lu59UW4dOPx1G9hCnqtowGpklEzDHlYOeN2eT9FkjhRLsEQyhAS4qTm48kWRjUcHfA
-         aAKp2EXypaouY6R71VwU7GgzSI883HW/47jO4QPAawEWVLNIhYaNwyUMOp2zUrBhNqKt
-         tkvZEm5fwBxuj485MGFcUThlAVe68rU3uTSq+/27BE8C5btk1KknygSANso7qD2lvR42
-         hheg==
-X-Gm-Message-State: AC+VfDwhDXL6CvW6NK5pnwAEnCgvigKHtPj5gvBeuUTqa2vA5VPiZHYO
-        F2fyk8FgQNBwBuiBmsQHBAfBp1dcxZVXDw==
-X-Google-Smtp-Source: ACHHUZ7MwoTjROpUJONFKLvrZBYoA/P03RqohdlWTIaJ0jIojhWspKe3UJVFWoncld+3/KnINMgHpA==
-X-Received: by 2002:a25:5105:0:b0:b9d:853e:5ceb with SMTP id f5-20020a255105000000b00b9d853e5cebmr12171723ybb.47.1684825164695;
-        Mon, 22 May 2023 23:59:24 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id b10-20020a81670a000000b00555d2944284sm2664885ywc.67.2023.05.22.23.59.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 23:59:23 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-ba80dc46972so10174597276.2;
-        Mon, 22 May 2023 23:59:22 -0700 (PDT)
-X-Received: by 2002:a0d:f407:0:b0:559:ea89:7c2c with SMTP id
- d7-20020a0df407000000b00559ea897c2cmr12284559ywf.33.1684825162595; Mon, 22
- May 2023 23:59:22 -0700 (PDT)
+        Tue, 23 May 2023 02:59:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A89011A;
+        Mon, 22 May 2023 23:59:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEE9C614F8;
+        Tue, 23 May 2023 06:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23271C433D2;
+        Tue, 23 May 2023 06:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684825171;
+        bh=8bCyd/iyRVecAb/iC58YqCmI1gFlhQUVWms6GTv8yuU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ODbLFCMWK19Cvwzcmi4OfzXBWpT33XKeSb8OVFEKYmrXDyxzB+3sRqq1FJC57OOLY
+         b6c3/cab8+Ps2E+WntAoBMOl6uV3gBHNC4lu+5UQ8/ndytTzQRF8zWy1z7uKoRJUoh
+         j9vdOStNIh7635iVk6ZZO5wRazE0wwNwah/LLUgPIfhTKjKWUMpp3BKHfktDlnkvDf
+         JpcaCHvV9IO7HKoWYc3U5QaR9un379nIRXyP91omWgZWPofxPyWgLGOoTw8eSPmrBn
+         BdytxxWX3akeKVonuEihGcqcYsvKO4Irj8OVa3NE4QYodgdP1/DWdkYWeWioHBLH5d
+         QT6h81EEXeBuQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D4E7ECE1C03; Mon, 22 May 2023 23:59:28 -0700 (PDT)
+Date:   Mon, 22 May 2023 23:59:28 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Ze Gao <zegao2021@gmail.com>, Jiri Olsa <olsajiri@gmail.com>,
+        Yonghong Song <yhs@meta.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, Ze Gao <zegao@tencent.com>
+Subject: Re: 
+Message-ID: <9dc981d5-e385-4468-9b51-64a10476c86d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20230520094722.5393-1-zegao@tencent.com>
+ <b4f66729-90ab-080a-51ec-bf435ad6199d@meta.com>
+ <CAD8CoPAXse1GKAb15O5tZJwBqMt1N_btH+qRe7c_a-ryUMjx7A@mail.gmail.com>
+ <ZGp+fW855gmWuh9W@krava>
+ <CAD8CoPDASe7hpkFbK+UzJats7j4sbgsCh_P4zaQYVuKD7jWu2w@mail.gmail.com>
+ <20230523133019.ce19932f89585eb10d092896@kernel.org>
 MIME-Version: 1.0
-References: <cover.1683365892.git.fthain@linux-m68k.org> <9e66262a754fcba50208aa424188896cc52a1dd1.1683365892.git.fthain@linux-m68k.org>
- <CAMuHMdX_0F0hSZKqBBCN3876BmfwbQb1_+N3h-V8xs5ouRXF=A@mail.gmail.com> <14e09781-6ffd-0834-fba4-427e5030f2be@gmail.com>
-In-Reply-To: <14e09781-6ffd-0834-fba4-427e5030f2be@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 23 May 2023 08:59:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXnofe1F3EJMkhjUb-hhFD5z0QERLHzpo0R7Ej05W=OWg@mail.gmail.com>
-Message-ID: <CAMuHMdXnofe1F3EJMkhjUb-hhFD5z0QERLHzpo0R7Ej05W=OWg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] m68k: Move signal frame following exception on 68020/030
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Finn Thain <fthain@linux-m68k.org>,
-        Andreas Schwab <schwab@linux-m68k.org>, stable@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523133019.ce19932f89585eb10d092896@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On Tue, May 23, 2023 at 01:30:19PM +0800, Masami Hiramatsu wrote:
+> On Mon, 22 May 2023 10:07:42 +0800
+> Ze Gao <zegao2021@gmail.com> wrote:
+> 
+> > Oops, I missed that. Thanks for pointing that out, which I thought is
+> > conditional use of rcu_is_watching before.
+> > 
+> > One last point, I think we should double check on this
+> >      "fentry does not filter with !rcu_is_watching"
+> > as quoted from Yonghong and argue whether it needs
+> > the same check for fentry as well.
+> 
+> rcu_is_watching() comment says;
+> 
+>  * if the current CPU is not in its idle loop or is in an interrupt or
+>  * NMI handler, return true.
+> 
+> Thus it returns *fault* if the current CPU is in the idle loop and not
+> any interrupt(including NMI) context. This means if any tracable function
+> is called from idle loop, it can be !rcu_is_watching(). I meant, this is
+> 'context' based check, thus fentry can not filter out that some commonly
+> used functions is called from that context but it can be detected.
 
-On Tue, May 23, 2023 at 3:11 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> On 22/05/23 23:41, Geert Uytterhoeven wrote:
-> > On Sat, May 6, 2023 at 11:36 AM Finn Thain <fthain@linux-m68k.org> wrote:
-> >> On 68030/020, an instruction such as, moveml %a2-%a3/%a5,%sp@- may cause
-> >> a stack page fault during instruction execution (i.e. not at an
-> >> instruction boundary) and produce a format 0xB exception frame.
-> >>
-> >> In this situation, the value of USP will be unreliable. If a signal is to
-> >> be delivered following the exception, this USP value is used to calculate
-> >> the location for a signal frame. This can result in a corrupted user
-> >> stack.
-> >>
-> >> The corruption was detected in dash (actually in glibc) where it showed
-> >> up as an intermittent "stack smashing detected" message and crash
-> >> following signal delivery for SIGCHLD.
-> >>
-> >> It was hard to reproduce that failure because delivery of the signal
-> >> raced with the page fault and because the kernel places an unpredictable
-> >> gap of up to 7 bytes between the USP and the signal frame.
-> >>
-> >> A format 0xB exception frame can be produced by a bus error or an address
-> >> error. The 68030 Users Manual says that address errors occur immediately
-> >> upon detection during instruction prefetch. The instruction pipeline
-> >> allows prefetch to overlap with other instructions, which means an
-> >> address error can arise during the execution of a different instruction.
-> >> So it seems likely that this patch may help in the address error case also.
-> >>
-> >> Reported-and-tested-by: Stan Johnson <userm57@yahoo.com>
-> >> Link: https://lore.kernel.org/all/CAMuHMdW3yD22_ApemzW_6me3adq6A458u1_F0v-1EYwK_62jPA@mail.gmail.com/
-> >> Cc: Michael Schmitz <schmitzmic@gmail.com>
-> >> Cc: Andreas Schwab <schwab@linux-m68k.org>
-> >> Cc: stable@vger.kernel.org
-> >> Co-developed-by: Michael Schmitz <schmitzmic@gmail.com>
-> >> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
-> >> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
-> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > i.e. will queue as a fix in the m68k for-v6.4 branch.
-> >
-> > I plan to send this upstream later this week, so any additional
-> > testing would be appreciated.
->
-> I've given this some lengthy stress testing, and haven't seen it fail once.
->
-> In contrast, various attempts of mine to improve on the concept (by only
-> moving the signal frame away from the USP in case it's likely to clash)
-> sometimes came up against a kernel bus error in setup_frame() when
-> copying the signo to the signal frame. I must be making some incorrect
-> assumptions still ...
->
-> Limiting the signal frame shift to bus fault exceptions that happen
-> mid-instruction is not too much of an overhead even in low memory
-> settings, and using 256 bytes (the largest possible operand size, i.e.
-> the largest adjustment to USP that might occur on completion of the
-> interrupted instruction) did not seem to cause any issues with stack
-> growth either.
->
-> I can give this some more testing in ARAnyM (extending the stack shift
-> to format 7 frames) but I'd say it's got as much testing on 030 hardware
-> as we can do.
+It really does return false (rather than faulting?) if the current CPU
+is deep within the idle loop.
 
-Thank you for your continued testing!
-And thanks a lot to anyone involved in nailing this issue!
+In addition, the recent x86/entry rework (thank you Peter and
+Thomas!) mean that the "idle loop" is quite restricted, as can be
+seen by the invocations of ct_cpuidle_enter() and ct_cpuidle_exit().
+For example, in default_idle_call(), these are immediately before and
+after the call to arch_cpu_idle().
 
-Gr{oetje,eeting}s,
+Would the following help?  Or am I missing your point?
 
-                        Geert
+							Thanx, Paul
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+------------------------------------------------------------------------
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 1449cb69a0e0..fae9b4e29c93 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -679,10 +679,14 @@ static void rcu_disable_urgency_upon_qs(struct rcu_data *rdp)
+ /**
+  * rcu_is_watching - see if RCU thinks that the current CPU is not idle
+  *
+- * Return true if RCU is watching the running CPU, which means that this
+- * CPU can safely enter RCU read-side critical sections.  In other words,
+- * if the current CPU is not in its idle loop or is in an interrupt or
+- * NMI handler, return true.
++ * Return @true if RCU is watching the running CPU and @false otherwise.
++ * An @true return means that this CPU can safely enter RCU read-side
++ * critical sections.
++ *
++ * More specifically, if the current CPU is not deep within its idle
++ * loop, return @true.  Note that rcu_is_watching() will return @true if
++ * invoked from an interrupt or NMI handler, even if that interrupt or
++ * NMI interrupted the CPU while it was deep within its idle loop.
+  *
+  * Make notrace because it can be called by the internal functions of
+  * ftrace, and making this notrace removes unnecessary recursion calls.
