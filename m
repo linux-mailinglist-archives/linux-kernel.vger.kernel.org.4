@@ -2,81 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07ABB70D1C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEB170D1CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbjEWCxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
+        id S232367AbjEWCyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjEWCxn (ORCPT
+        with ESMTP id S229605AbjEWCyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:53:43 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E25DCA;
-        Mon, 22 May 2023 19:53:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1684810423; x=1716346423;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wGfPfOgkUe4uOICPdB8msh2VfBA1m4x1APSIg9XveEc=;
-  b=iBJFK5qq/pjt7hDGpyGz6+9+HjRC3xqOMK/9RQqKKenZHwr8/ExPUzcW
-   n5RvLqVz1tLbSKWKNPQ9oZLzMBvMQmzXI9l8r3sZ+fKdqYaZ/66H9sBNF
-   Nj2oMd7Xsmr4Ap83FWXo6E8TVvP6HqiVI5bnZ/e7MJJImVyjqnK3HU8oo
-   4=;
-X-IronPort-AV: E=Sophos;i="6.00,185,1681171200"; 
-   d="scan'208";a="327787396"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:53:31 +0000
-Received: from EX19D020EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com (Postfix) with ESMTPS id 3FA1D40D7B;
-        Tue, 23 May 2023 02:53:29 +0000 (UTC)
-Received: from EX19D026EUB004.ant.amazon.com (10.252.61.64) by
- EX19D020EUA003.ant.amazon.com (10.252.50.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 23 May 2023 02:53:28 +0000
-Received: from uc3ecf78c6baf56.ant.amazon.com (10.119.183.60) by
- EX19D026EUB004.ant.amazon.com (10.252.61.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 23 May 2023 02:53:25 +0000
-From:   Andrew Paniakin <apanyaki@amazon.com>
-To:     Andrew Paniakin <apanyaki@amazon.com>
-CC:     <luizcap@amazon.com>, <benh@amazon.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@blackhole.kfki.hu>,
-        "David S. Miller" <davem@davemloft.net>,
-        <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] netfilter: nf_tables: fix register ordering
-Date:   Mon, 22 May 2023 19:53:12 -0700
-Message-ID: <20230523025312.1690992-1-apanyaki@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230523023514.1672418-1-apanyaki@amazon.com>
-References: 
+        Mon, 22 May 2023 22:54:21 -0400
+Received: from smtp.cecloud.com (unknown [1.203.97.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F78ECA;
+        Mon, 22 May 2023 19:54:20 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.cecloud.com (Postfix) with ESMTP id A3FFB900114;
+        Tue, 23 May 2023 10:54:19 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [111.48.58.11])
+        by smtp.cecloud.com (postfix) whith ESMTP id P2917246T281457863946608S1684810458725600_;
+        Tue, 23 May 2023 10:54:19 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <ca6ab4eec3746a425626c7e38249c131>
+X-RL-SENDER: shaopeijie@cestc.cn
+X-SENDER: shaopeijie@cestc.cn
+X-LOGIN-NAME: shaopeijie@cestc.cn
+X-FST-TO: pmenzel@molgen.mpg.de
+X-RCPT-COUNT: 6
+X-SENDER-IP: 111.48.58.11
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   shaopeijie@cestc.cn
+To:     pmenzel@molgen.mpg.de
+Cc:     jarkko@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v2] tpm_tis_spi: fix:release chip select when flow control fails
+Date:   Tue, 23 May 2023 10:54:08 +0800
+Message-Id: <20230523025408.4319-1-shaopeijie@cestc.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.119.183.60]
-X-ClientProxiedBy: EX19D045UWC001.ant.amazon.com (10.13.139.223) To
- EX19D026EUB004.ant.amazon.com (10.252.61.64)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please ignore this patch as I forgot to add the stable ML.
-I will re-send it.
+Thank you, Paul.
 
-On Mon, 22 May 2023 19:35:14 -0700 Andrew Paniakin <apanyaki@amazon.com> wrote:
+>Dear Peijie,
+>
+>
+>Thank you for your patch.
+>
+>The fix: tag in your commit message summary is uncommon. I suggest:
+>
+>> tpm_tis_spi: Release chip select when flow control fails
+>
 
-> From: Florian Westphal <fw@strlen.de>
-> 
-> commit d209df3e7f7002d9099fdb0f6df0f972b4386a63 upstream
-> 
+I will change it in v3 version.
+
+>
+>Am 22.05.23 um 09:01 schrieb shaopeijie@cestc.cn:
+>> From: Peijie Shao <shaopeijie@cestc.cn>
+>> 
+>> The failure paths in tpm_tis_spi_transfer() do not deactivate
+>> chip select. Send an empty message (cs_select == 0) to overcome
+>> this.
+>
+>Does the standard require to deactivate it?
+
+Yes.
+<TCG_PCClientTPMInterfaceSpecification_TIS__1-3_27_03212013.pdf>, section
+6.4.2 Electrical Specification, Figure 4 Timing Diagram, describes the timing.
+
+Moreover, when multi devices are sharing with the same SPI bus, only one cs can be 
+activated simultaneously. If two or more cs are activated, corresponding devices 
+may response at same time, cause bus conflicts.
+
+>
+>A note on your test setup would be nice to have in the commit message.
+>
+>> Signed-off-by: Peijie Shao <shaopeijie@cestc.cn>
+>> ---
+>> Changes since v1:
+>>      1. Deactive cs all of the failure path, not only flow control.
+>
+>Deactivate
+
+Sorry, will be fixed in v3 version.
+
+>
+>
+>Kind regards,
+>
+>Paul
+>
+>
+>>      2. change and update comments.
+>> ---
+>>   drivers/char/tpm/tpm_tis_spi_main.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>> 
+>> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+>> index 1f5207974..9bfaba092 100644
+>> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+>> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+>> @@ -136,6 +136,14 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+>>   	}
+>>   
+>>   exit:
+>> +	if (ret < 0) {
+>> +		/* Deactivate chip select */
+>> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
+>> +		spi_message_init(&m);
+>> +		spi_message_add_tail(&spi_xfer, &m);
+>> +		spi_sync_locked(phy->spi_device, &m);
+>> +	}
+>> +
+>>   	spi_bus_unlock(phy->spi_device->master);
+>>   	return ret;
+>>   }
+
+Peijie, Shao
+
+
