@@ -2,138 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770C470DF5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D9770E491
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237281AbjEWOfG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 10:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
+        id S234381AbjEWSYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237314AbjEWOfD (ORCPT
+        with ESMTP id S235771AbjEWSYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:35:03 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941831A8;
-        Tue, 23 May 2023 07:34:53 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-96f72e6925cso112270266b.1;
-        Tue, 23 May 2023 07:34:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684852492; x=1687444492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8+VrszNlhxIXM0HmjR1ilVOhQszpK9Ryak4/ZUhq7+o=;
-        b=b0NYHerIBnigHn2COolPwHArVQ7I4K4r0Kc6UUR2yLKgLtKI1en0FFhOOrRaTE4lzI
-         /I3RrxYJ9lcrAlGrgrYR4ex8NS2psAF/8LAJI7pBohMfSlWT58Of5MwiiRHGZ47UOj1I
-         JFUxn+D+1myT5y0GFqaMnHs4pW0U7fce91Ia+Wc9+AQgF4cZIKU3Okw36CIMX79p/Kf6
-         KQpLbgmTM8bwnjGJ9XbAhnsBCh+khN0UvddWnMNkhL7V6mb+mrP0x3S2LwhFgIS8v6b6
-         Y6fmv1w92d2EVX9XJFhg3uBytwmwBKeG43IwCmrw0qODn5pden6m0p/wJfW5ROdzPSjT
-         1fIA==
-X-Gm-Message-State: AC+VfDzDNkM8UXsIiX0OiskRkVibBmotO3noIK1HwCu3HpdmCHjfQhPS
-        qEPrPy1PtbPc/uuhj7mY8S75vhVE3PDV9Nktxk4=
-X-Google-Smtp-Source: ACHHUZ5OwVZKxMwPGesEN+Tn/pHyrdnfO4P2PabcQE9hiq0gFVs9Dwdm8m95lCF6oHXCxky0R0ldgPl1TEwqqbgCWRo=
-X-Received: by 2002:a17:906:8f:b0:965:c518:4681 with SMTP id
- 15-20020a170906008f00b00965c5184681mr12293680ejc.7.1684852492007; Tue, 23 May
- 2023 07:34:52 -0700 (PDT)
+        Tue, 23 May 2023 14:24:37 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC3C11D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684866276; x=1716402276;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bH9DkjwQCDbz6P1wuCe1exqA+AW9HUfS0R7iBFyxoBA=;
+  b=Ci49o+FGUZEufeNagu5T8evfgUuCC3dFmDVfCjASdQN25nhA2plWpdrg
+   MIMv98B+jIWvHpIKF+kgd9U9zIZfe0WKop9fjrLn61P8/bve2qt7qEAE4
+   13rIn4HRcaAQ7OtM2P0vOuphcrxfoGfehnsmavRnGb37wAwheewyDuRdm
+   Gsc40Gz5A7dNHCVBJqHFVihdeiBAEZiDYAIe/fNpy7ShObQzACZiCm8fh
+   MxpEGVIh1Rq9sAAz9xJgO8owKphyfepUthiuK9D9R1b8Up1682GFUhVIh
+   LzU0d1AWrwEpePyWEMUenTVH2AWLMTVBhria/UFNEcepH+pFkPAqWwT9v
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="342786228"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="342786228"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="736974292"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="736974292"
+Received: from srusakov-mobl.amr.corp.intel.com (HELO [10.209.35.87]) ([10.209.35.87])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:35 -0700
+Message-ID: <d1baccf7-c689-fc40-d616-855c253021fc@linux.intel.com>
+Date:   Tue, 23 May 2023 09:34:56 -0500
 MIME-Version: 1.0
-References: <20230523085045.29391-1-kweifat@gmail.com> <CAJZ5v0ifp1088wY7o=7pnBVBm=_3H0M4sfq6=gmyChZD6R9g1g@mail.gmail.com>
- <b5e35f904174905d8f90df3f49944b22389126c7.camel@linux.intel.com>
- <CAJZ5v0ioQm95ZQ5LCCoDtVNX1TVQN_=sgzB_RRe5SAOOucpWJg@mail.gmail.com> <96d81ba4c501134c77869a08b843b39fc1bf7526.camel@linux.intel.com>
-In-Reply-To: <96d81ba4c501134c77869a08b843b39fc1bf7526.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 May 2023 16:34:40 +0200
-Message-ID: <CAJZ5v0gc7x6x+aAic+z=usJY-1nLMOFheEj4-JfPmB5-tWRRbA@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Avoid initializing variables prematurely
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Fieah Lim <kweifat@gmail.com>, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V2 2/9] ASoC: amd: ps: handle SoundWire interrupts in acp
+ pci driver
+Content-Language: en-US
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
+ <20230522133122.166841-3-Vijendar.Mukunda@amd.com>
+ <134a2efd-648a-fb4b-4b61-154173b97f04@linux.intel.com>
+ <2e8d3af4-7d54-becf-1084-c9b07a3436d0@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <2e8d3af4-7d54-becf-1084-c9b07a3436d0@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 4:02 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Tue, 2023-05-23 at 15:37 +0200, Rafael J. Wysocki wrote:
-> > On Tue, May 23, 2023 at 2:20 PM srinivas pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > On Tue, 2023-05-23 at 13:08 +0200, Rafael J. Wysocki wrote:
-> > > > On Tue, May 23, 2023 at 10:51 AM Fieah Lim <kweifat@gmail.com>
-> > > > wrote:
-> > > > >
-> > > > > We should avoid initializing some rather expensive data
-> > > > > when the function has a chance to bail out earlier
-> > > > > before actually using it.
-> > > > > This applies to the following initializations:
-> > > > >
-> > > > >  - cpudata *cpu = all_cpu_data; (in everywhere)
-> > > > >  - this_cpu = smp_processor_id(); (in notify_hwp_interrupt)
-> > > > >  - hwp_cap = READ_ONCE(cpu->hwp_cap_cached); (in
-> > > > > intel_pstate_hwp_boost_up)
-> > > > >
-> > > > > These initializations are premature because there is a chance
-> > > > > that the function will bail out before actually using the data.
-> > > > > I think this qualifies as a micro-optimization,
-> > > > > especially in such a hot path.
-> > > > >
-> > > > > While at it, tidy up how and when we initialize
-> > > > > all of the cpu_data pointers, for the sake of consistency.
-> > > > >
-> > > > > A side note on the intel_pstate_cpu_online change:
-> > > > > we simply don't have to initialize cpudata just
-> > > > > for the pr_debug, while policy->cpu is being there.
-> > > > >
-> > > > > Signed-off-by: Fieah Lim <kweifat@gmail.com>
-> > > > > ---
-> > > > > V1 -> V2: Rewrite changelog for better explanation.
-> > > > >
-> > >
-> > > [...]
-> > >
-> > > > >  void notify_hwp_interrupt(void)
-> > > > >  {
-> > > > > -       unsigned int this_cpu = smp_processor_id();
-> > > > > +       unsigned int this_cpu;
-> > > > >         struct cpudata *cpudata;
-> > > > >         unsigned long flags;
-> > > > >         u64 value;
-> > > > > @@ -1591,6 +1593,8 @@ void notify_hwp_interrupt(void)
-> > > > >         if (!(value & 0x01))
-> > > > >                 return;
-> > > > >
-> > > > > +       this_cpu = smp_processor_id();
-> > > > > +
-> > > > >         spin_lock_irqsave(&hwp_notify_lock, flags);
-> > > > >
-> > > > >         if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
-> > > >
-> > > > This is a place where it may really matter for performance, but
-> > > > how
-> > > > much?  Can you actually estimate this?
-> > >
-> > > If DEBUG_PREEMPT is defined
-> > > ~12 instructions (most of them with latency = 1 in dependency
-> > > chain)
-> >
-> > I really meant "estimate the effect of this change on performance",
-> > because I'm not sure if it is going to be visible in any test.
-> >
-> > But yes, skipping it if not needed at least makes some sense.
-> It will have neglible effect.
 
-Well, I agree.
 
-> I can measure it, but may be next week.
+>>>  static void acp63_disable_interrupts(void __iomem *acp_base)
+>>> @@ -102,23 +103,55 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
+>>>  {
+>>>  	struct acp63_dev_data *adata;
+>>>  	struct pdm_dev_data *ps_pdm_data;
+>>> -	u32 val;
+>>> +	struct amd_sdw_manager *amd_manager;
+>>> +	u32 ext_intr_stat, ext_intr_stat1;
+>>> +	u16 irq_flag = 0;
+>>>  	u16 pdev_index;
+>>>  
+>>>  	adata = dev_id;
+>>>  	if (!adata)
+>>>  		return IRQ_NONE;
+>>> +	ext_intr_stat = readl(adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
+>>> +	if (ext_intr_stat & ACP_SDW0_STAT) {
+>>> +		writel(ACP_SDW0_STAT, adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
+>> [1]
+>>
+>> this is confusing, if this is w1c, should this be:
+>>
+>> writel(ext_intr_stat, adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
+>>
+>> Otherwise you may be clearing fields that have not been set?
+> As per our register spec, writing zero to register fields doesn't
+> have any effect. Only writing 1 to register bit will clear that
+> interrupt.
+> We are handling bit by bit irq check and clearing the irq mask
+> based on irq bit and take an action related to that particular irq
+> bit.
 
-No need really.
+Right, maybe an explanation in the commit message would help.
