@@ -2,75 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20F570DEF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6B670DEEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237122AbjEWOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S236815AbjEWOPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237102AbjEWOPh (ORCPT
+        with ESMTP id S237328AbjEWOPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:15:37 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7FB130
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:15:30 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510e419d701so1844056a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1684851328; x=1687443328;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=FebP/qFHl0Dl67q5FeEHc91aNblS1R2LhUrg1U/Isbo=;
-        b=uVErkesMioUpkrd/1Qe0cl8yRr3/q5pXG3LizEb+fAw1xGGKvxRlfAXannm+NYXVIv
-         tj5m5qgvO4xMFgQmlvarz48n3H+HNZpVVp3iJd6Flp4RLCXyiNKWnFC8UNR3eBPgfVaU
-         X+hBw0yPUQ9Vux563zSj23KxmXRQxlE1Khw2/qD3MPe534UOPkK1cP7n2Wq7z5tOpy5F
-         uBZ4WazFgOesOU2prwsUu3k495ea5HpCLD78qjF8Lzxdwtd2OXuCV/cKcnkdXpoohSLS
-         b662HLi87+xdh6nOpVc83zJjOkgO08TnlbUFy6tAR5YztkQGc3vPa1cvs+O6X15eBSpm
-         Pohg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684851328; x=1687443328;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FebP/qFHl0Dl67q5FeEHc91aNblS1R2LhUrg1U/Isbo=;
-        b=gUtYZ2qPfNwJ7pUoY6FMN5/54aYkoVxaEMyZNEbpUUbFdLrWVdLZTjj5uqEMMTvCn4
-         cDg2gFW84AsundZ8/iDTWibuIt2hk8Aqt3cy3vzyyZt4Sr+EFP4eW0TfE2nE4yH18JDs
-         rteQRjd2g5l8uS9YTwLpAIn8aDlSK+L5SuiC4mVFIqywgmtDTh9xZSZP5e2Jfe498Nyj
-         xa1ZWlAdzxQC33hcnQOb3Rcynd+60akeJe5pD+motCtKXyqzVACoLBikyjX9lPRjACpw
-         ETSvo7E/kjzkQ5oCW4IZ4TWBWQrHSjphFwy+jXh0QglaG8z7QBxPyUG0UIdMGeDyjGc4
-         DWBw==
-X-Gm-Message-State: AC+VfDwcTux5Ry9mbNtDAKojfxzEFhR9Szo1BQ+znet5+BSr+VOgh13z
-        JNnlGK3T9t0rhzM6euBbm/xJNw==
-X-Google-Smtp-Source: ACHHUZ5qSPAcH861872AUO19Y6nXlt6YPQsMjbAHd3u7oOXwHcRCFReFB4UWevnWEwD06EKyPazqcQ==
-X-Received: by 2002:a17:907:1c8b:b0:94e:48ac:9a51 with SMTP id nb11-20020a1709071c8b00b0094e48ac9a51mr16656005ejc.4.1684851328355;
-        Tue, 23 May 2023 07:15:28 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id xa12-20020a170907b9cc00b0096637a19dccsm4510453ejc.210.2023.05.23.07.15.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 07:15:27 -0700 (PDT)
-References: <20230517203119.3160435-1-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v1 0/7] Bindings for the workqueue
-Date:   Tue, 23 May 2023 16:14:37 +0200
-In-reply-to: <20230517203119.3160435-1-aliceryhl@google.com>
-Message-ID: <87ilcjdthc.fsf@metaspace.dk>
+        Tue, 23 May 2023 10:15:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F26BCA;
+        Tue, 23 May 2023 07:15:03 -0700 (PDT)
+Date:   Tue, 23 May 2023 14:14:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684851300;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=Nk3X6BKw3HRCtmi2q1JAJeoY4KAETf3DsT8Z6wEf8Rw=;
+        b=3y0glTUIVtWGDeDInhXGc3UU65t7OkopbpSkRJ8/FRQW03eYuSjt4dcwoizogeDXbIeXd9
+        QADforY/YbWKQG3WU8Lfzyc1fvzcicvQTVlpE/kHSEm4Lb8P652poduyJxXjLmZb2r1pwR
+        yv/PGoqLZKsgxr71Ww4qAUt8WErsQD9Jfc1hyqOwfz/lz2UgCdVb/aiVATDaqinPe4Cyvt
+        ag7ZxktXSoc9Al+D4YmSkR4ntoXP/e9O1s5z0HShoPgMsEXdHClkj7b/L5Qv2LgXywrJDe
+        NHi/NgbtzgX2X5WEeK1afdTSNCFO1gmi5EIqizpb2rpV7G0rTvDfI3xdoTY9fw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684851300;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=Nk3X6BKw3HRCtmi2q1JAJeoY4KAETf3DsT8Z6wEf8Rw=;
+        b=YXFyZN1kcjYigNPEGD02bFcoQMRP4pcg0/+BenAybTqpk+SSmf31/FmDDpusSfU5JeRosA
+        B89XGOU2DrAqSMDA==
+From:   "tip-bot2 for Nikolay Borisov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/tdx] x86/tdx: Wrap exit reason with hcall_func()
+Cc:     Nikolay Borisov <nik.borisov@suse.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Message-ID: <168485129927.404.7998546441150815663.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,55 +60,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/tdx branch of tip:
 
-Alice Ryhl <aliceryhl@google.com> writes:
+Commit-ID:     122333d6bd229af279cdb35d1b874b71b3b9ccfb
+Gitweb:        https://git.kernel.org/tip/122333d6bd229af279cdb35d1b874b71b3b9ccfb
+Author:        Nikolay Borisov <nik.borisov@suse.com>
+AuthorDate:    Fri, 05 May 2023 15:03:32 +03:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Tue, 23 May 2023 07:01:45 -07:00
 
-> This patchset contains bindings for the kernel workqueue.
->
-> One of the primary goals behind the design used in this patch is that we
-> must support embedding the `work_struct` as a field in user-provided
-> types, because this allows you to submit things to the workqueue without
-> having to allocate, making the submission infallible. If we didn't have
-> to support this, then the patch would be much simpler. One of the main
-> things that make it complicated is that we must ensure that the function
-> pointer in the `work_struct` is compatible with the struct it is
-> contained within.
->
-> This patch could be significantly simplified if we already had the field
-> projection bindings. However, we have decided to upstream the current
-> version that does not depend on field projection first - the PR that
-> introduces field projections will then include a commit that simplifies
-> the workqueue implementation. (In particular, it would simplify the 5th
-> patch in this series.)
->
-> The first version of the workqueue bindings was written by Wedson, but
-> I have rewritten much of it so that it uses the pin-init infrastructure
-> and can be used with containers other than `Arc`.
->
-> Alice Ryhl (4):
->   rust: workqueue: add low-level workqueue bindings
->   rust: workqueue: add helper for defining work_struct fields
->   rust: workqueue: add safe API to workqueue
->   rust: workqueue: add `try_spawn` helper method
->
-> Wedson Almeida Filho (3):
->   rust: add offset_of! macro
->   rust: sync: add `Arc::{from_raw, into_raw}`
->   rust: workqueue: define built-in queues
->
->  rust/helpers.c           |   8 +
->  rust/kernel/lib.rs       |  37 ++
->  rust/kernel/sync/arc.rs  |  44 +++
->  rust/kernel/workqueue.rs | 715 +++++++++++++++++++++++++++++++++++++++
->  scripts/Makefile.build   |   2 +-
->  5 files changed, 805 insertions(+), 1 deletion(-)
->  create mode 100644 rust/kernel/workqueue.rs
->
->
-> base-commit: ac9a78681b921877518763ba0e89202254349d1b
+x86/tdx: Wrap exit reason with hcall_func()
 
-This does not compile for me. Could you link dependencies to be applied
-first?
+TDX reuses VMEXIT "reasons" in its guest->host hypercall ABI.  This is
+confusing because there might not be a VMEXIT involved at *all*.
+These instances are supposed to document situation and reduce confusion
+by wrapping VMEXIT reasons with hcall_func().
 
-Best regards,
-Andreas
+The decompression code does not follow this convention.
+
+Unify the TDX decompression code with the other TDX use of VMEXIT reasons.
+No functional changes.
+
+Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Link: https://lore.kernel.org/all/20230505120332.1429957-1-nik.borisov%40suse.com
+---
+ arch/x86/boot/compressed/tdx.c    |  4 ++--
+ arch/x86/coco/tdx/tdx.c           | 11 -----------
+ arch/x86/include/asm/shared/tdx.h | 11 +++++++++++
+ 3 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
+index 2d81d3c..8841b94 100644
+--- a/arch/x86/boot/compressed/tdx.c
++++ b/arch/x86/boot/compressed/tdx.c
+@@ -20,7 +20,7 @@ static inline unsigned int tdx_io_in(int size, u16 port)
+ {
+ 	struct tdx_hypercall_args args = {
+ 		.r10 = TDX_HYPERCALL_STANDARD,
+-		.r11 = EXIT_REASON_IO_INSTRUCTION,
++		.r11 = hcall_func(EXIT_REASON_IO_INSTRUCTION),
+ 		.r12 = size,
+ 		.r13 = 0,
+ 		.r14 = port,
+@@ -36,7 +36,7 @@ static inline void tdx_io_out(int size, u16 port, u32 value)
+ {
+ 	struct tdx_hypercall_args args = {
+ 		.r10 = TDX_HYPERCALL_STANDARD,
+-		.r11 = EXIT_REASON_IO_INSTRUCTION,
++		.r11 = hcall_func(EXIT_REASON_IO_INSTRUCTION),
+ 		.r12 = size,
+ 		.r13 = 1,
+ 		.r14 = port,
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index e146b59..15569bd 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -76,17 +76,6 @@ noinstr void __tdx_hypercall_failed(void)
+ 	panic("TDVMCALL failed. TDX module bug?");
+ }
+ 
+-/*
+- * The TDG.VP.VMCALL-Instruction-execution sub-functions are defined
+- * independently from but are currently matched 1:1 with VMX EXIT_REASONs.
+- * Reusing the KVM EXIT_REASON macros makes it easier to connect the host and
+- * guest sides of these calls.
+- */
+-static __always_inline u64 hcall_func(u64 exit_reason)
+-{
+-	return exit_reason;
+-}
+-
+ #ifdef CONFIG_KVM_GUEST
+ long tdx_kvm_hypercall(unsigned int nr, unsigned long p1, unsigned long p2,
+ 		       unsigned long p3, unsigned long p4)
+diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+index 2631e01..b415a24 100644
+--- a/arch/x86/include/asm/shared/tdx.h
++++ b/arch/x86/include/asm/shared/tdx.h
+@@ -40,5 +40,16 @@ u64 __tdx_hypercall_ret(struct tdx_hypercall_args *args);
+ /* Called from __tdx_hypercall() for unrecoverable failure */
+ void __tdx_hypercall_failed(void);
+ 
++/*
++ * The TDG.VP.VMCALL-Instruction-execution sub-functions are defined
++ * independently from but are currently matched 1:1 with VMX EXIT_REASONs.
++ * Reusing the KVM EXIT_REASON macros makes it easier to connect the host and
++ * guest sides of these calls.
++ */
++static __always_inline u64 hcall_func(u64 exit_reason)
++{
++        return exit_reason;
++}
++
+ #endif /* !__ASSEMBLY__ */
+ #endif /* _ASM_X86_SHARED_TDX_H */
