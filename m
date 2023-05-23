@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC3470D0AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA0D70D0AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjEWBwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S229689AbjEWBwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjEWBv6 (ORCPT
+        with ESMTP id S229655AbjEWBw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:51:58 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82394CF
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:51:56 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96fb45a5258so491415366b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:51:56 -0700 (PDT)
+        Mon, 22 May 2023 21:52:29 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D98CCD;
+        Mon, 22 May 2023 18:52:28 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-53202149ae2so4641266a12.3;
+        Mon, 22 May 2023 18:52:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684806715; x=1687398715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4uHv101NdlG4/nBS5KPCZmbm0+kv1UCtmMJSQ4x9lik=;
-        b=RZ3fUjRVOZUAHcPeP37SIFpXRWZEvJtrFD0DchC5bNxArSQFA43v6c9L3vwU3rovvE
-         7Lzl4hYEqJEg/PGnhML5N9ypVYZ2ZvcJHTleVWFR++qlXY3mLC9IBHJ5oUvmBUcKxbNc
-         jyi8mQxPtZe8gax7v4RAphHZg74ZKxaceIOaM=
+        d=gmail.com; s=20221208; t=1684806748; x=1687398748;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YJHAFjFAFtXjAaqHIvSdrHTyDRtStagvgqxmFGoZrEs=;
+        b=Q1ivivjYzqcZM+FCwjRh4OgXuEHgSTMaQeOeos2jjM79DArhX3fq1r47YUeZwlzF8y
+         JI8PUflxQQlaglrZcf9GQTBU3oKLX/ijR4TCm6GkQNZU9Do4ZBFzRw2LhwsxNkNTGNcS
+         QBKg+Xd0HTDJFKXKsTiXzLXc6z3dWgNT6X4SUX3kdzBlDIbIzDIXMfhUBr0Q8MTgl4b3
+         L63/4sFZNnWGVj95q0ND8i8f9B8z9lBx/OPSdY69PgbDD6/7yfW8NqQ8NipXDX6Q1PJB
+         G4PVfnbbj+VRExEp71iDQtq1oIFe1NVEtaY6kAMP40TNhE8K8/Oy0w/Zjr2bBAi3bsox
+         5WKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684806715; x=1687398715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4uHv101NdlG4/nBS5KPCZmbm0+kv1UCtmMJSQ4x9lik=;
-        b=RrYhwr7M/4Luayz9eKHCd8vnuSby4oL+9F/PaB9IVdVXG6PKCDfb2GXR5qtW4449zg
-         GlhXfKSI4qso2ZZ0jPnnnpPuTPQb2LTRs+yRuovCkWzyXJKCBJI1GR9cOVawbB+ktWqf
-         YqokAmNQ2It+PCSC5DAecdMQ1GPl7Yfsr4PpmFc58SfpH/+AdoDZ+kBkkh8T6/SLMXp4
-         wbFpCd0PPBL3n7nTpN4XwTWo2As1H57WRO1fPIUZZFhu4TjwnLs7OgIpw0BGiKBM8TiI
-         xHuU5yNHg+iwTvDlAbvMBJEPC5LrHuUrU4rLjuuIL0AaUuagcc4NXyNLyA5MY8EeWcp6
-         Suow==
-X-Gm-Message-State: AC+VfDz8KSrfkhEy5HCsEU0nrSo6Ko/xcYSqqXjCmemI61mCOcemlnsA
-        aZ7itBFLduu6MegxKRnwlUGhk5sEq03cQGwrscxWIwXr
-X-Google-Smtp-Source: ACHHUZ4FEu2y9w64KUPHe9MMkk6uEvqMWfaER7kHRxZTr0tmSVS6gMIBVKU412OqcTB1mv9fR0Bexw==
-X-Received: by 2002:a17:907:7ea6:b0:94a:56ec:7f12 with SMTP id qb38-20020a1709077ea600b0094a56ec7f12mr13057200ejc.30.1684806714852;
-        Mon, 22 May 2023 18:51:54 -0700 (PDT)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id xa12-20020a170907b9cc00b0096637a19dccsm3809196ejc.210.2023.05.22.18.51.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 18:51:53 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-96f818c48fbso704017566b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:51:53 -0700 (PDT)
-X-Received: by 2002:a17:906:5d06:b0:96f:f809:1394 with SMTP id
- g6-20020a1709065d0600b0096ff8091394mr4605087ejt.53.1684806712643; Mon, 22 May
- 2023 18:51:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684806748; x=1687398748;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YJHAFjFAFtXjAaqHIvSdrHTyDRtStagvgqxmFGoZrEs=;
+        b=jjdjZEEJ72bPLvYChyupFZ32W29L4XRBSsnEaP4NV2sYVqNE3Z9A6L/HwbShatwq9u
+         +gOmXFlJtvzw2G4We1HBedE+zdiOym0z989rD5lKbQSz8a0OyweSBbCUX7/c6enAN9Eq
+         rxJnuDqM1ByUYXTGuuWGFR83I9gAkjDkAraPR2Px6ZMaGjmclV088na82pDblePADtW1
+         gdspTQt029dHlZh+th0cTemLrdyj19AiByL+YpkjZfyfJjz+UO+95UyDdPpZEuq9Gevt
+         vIyryoDfYcYfQYZwDDe5ByUN0Se0MMVx15nL9A6lp1sgugFCRRneml3n1PyoHcUCZROY
+         pAVA==
+X-Gm-Message-State: AC+VfDyGytqyn0bdtbhlqR+XVJmQVi+vnh3Cv1Ha7dsVN071I37clD3r
+        FMxA+Xn6JMocHRz5lbaTk5I=
+X-Google-Smtp-Source: ACHHUZ65ZrBdnHglzvC2r3og9XZPcPvr1clzbhLbJrV2UUKfcgNkL/RDkzgg80OEUwNJDiuQwvH3LQ==
+X-Received: by 2002:a17:903:1208:b0:1aa:feca:b616 with SMTP id l8-20020a170903120800b001aafecab616mr13317495plh.65.1684806747723;
+        Mon, 22 May 2023 18:52:27 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-65.three.co.id. [180.214.232.65])
+        by smtp.gmail.com with ESMTPSA id jj20-20020a170903049400b001aaf1679c9fsm5423489plb.221.2023.05.22.18.52.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 18:52:27 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 4A973106998; Tue, 23 May 2023 08:52:21 +0700 (WIB)
+Date:   Tue, 23 May 2023 08:52:21 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Forza <forza@tnonline.net>,
+        Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Stable <stable@vger.kernel.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
+Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
+ kernel 6.3.x
+Message-ID: <ZGwcVTpQNBoJHBB+@debian.me>
+References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
+ <fcf1d04.faed4a1a.18844d8e78f@tnonline.net>
 MIME-Version: 1.0
-References: <20230519001709.2563-1-tj@kernel.org> <CAHk-=whA2ztAcVrgsqj39j30LJYhjBSkk6Dju6TY16zGpXpkZQ@mail.gmail.com>
- <ZGf5rfESYhKYzPSY@slm.duckdns.org> <ZGgAKK-c_DZpvNJB@slm.duckdns.org>
-In-Reply-To: <ZGgAKK-c_DZpvNJB@slm.duckdns.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 May 2023 18:51:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whbP8BjGyGyXcSKi32orb+1+cHSC2HoVAMNVKwmbq8pSg@mail.gmail.com>
-Message-ID: <CAHk-=whbP8BjGyGyXcSKi32orb+1+cHSC2HoVAMNVKwmbq8pSg@mail.gmail.com>
-Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
- execution locality
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        joshdon@google.com, brho@google.com, briannorris@chromium.org,
-        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
-        void@manifault.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vilJHAGKshW8eYzU"
+Content-Disposition: inline
+In-Reply-To: <fcf1d04.faed4a1a.18844d8e78f@tnonline.net>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 4:03=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Oh, a bit of addition.
->
-> Once below saturation, latency and bw are mostly the two sides of the sam=
-e
-> coin but just to be sure, here are latency results.
 
-Ok, looks good, consider me convinced.
+--vilJHAGKshW8eYzU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I still would like to hear from the actual arm crowd that caused this
-all and have those odd BIG.little cases.
+On Mon, May 22, 2023 at 09:04:05PM +0200, Forza wrote:
+> I have a similar experience with kernel 6.3 where vmalloc fails in a simi=
+lar way. I was able to reproduce it in a QEMU VM as well as on my system.=
+=20
+>=20
+> https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc0b78@tnonline=
+=2Enet/T/
 
-            Linus
+Thanks for your similar report. Telling regzbot about it:
+
+#regzbot link: https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc=
+0b78@tnonline.net/
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--vilJHAGKshW8eYzU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGwcUgAKCRD2uYlJVVFO
+o3JoAP4i8o9ucMk1qqpBMd8ABO/bcREF3CrJ2WPC/g31f/TX0gEAxA5XA9TJOQcO
+qMAV7/h2Dj3zsyNZYLkYlk+euTGovgM=
+=Jj6d
+-----END PGP SIGNATURE-----
+
+--vilJHAGKshW8eYzU--
