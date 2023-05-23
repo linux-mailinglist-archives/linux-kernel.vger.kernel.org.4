@@ -2,143 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A9470E7A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2326070E79E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238665AbjEWVpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S238639AbjEWVpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238653AbjEWVpw (ORCPT
+        with ESMTP id S232377AbjEWVpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:45:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FB412B
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684878288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nvxqud0FjTLjvGDJMG3+cwcxjpMw4N6HqudGh9PriUk=;
-        b=ZcwTft4TtSS0whDf+ICip3ag6eVcNuE+3796maqH4ASJf5AOCe2hxg0wB6lbgC3zX9+VM0
-        /WOoXg7LVD33VyZmaAcLdPxEifPleg9rhzVoxZLPTzCCJj81FEv8pKiTie8fB52eDn/c+d
-        60L0FcfW6UuMKyGb85Pj7uOOnpMBVXM=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-122-3aKQDNpFOQ2XL471kENhXQ-1; Tue, 23 May 2023 17:44:47 -0400
-X-MC-Unique: 3aKQDNpFOQ2XL471kENhXQ-1
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-76c27782e30so17699139f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:44:47 -0700 (PDT)
+        Tue, 23 May 2023 17:45:15 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B599E64
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:44:56 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1afa6afcf4fso1907045ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684878296; x=1687470296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CVkVzRy2R861oYLkXc/9sZeWaxITTwj/riElsfeea7o=;
+        b=V5MxZuqSgvz2elLCr1QksgqUqrMcfmOJI9p+sKAGOWfK/be0Y0ZZeCbBU8La62IhRz
+         sjAlK/VK5H07s332q/PK+u87XXZ7W37ipT0UZU14CybS8vHBL3G6EsEbwuCCHmHryHAC
+         9Cf/f9LL1YowDu8/BrPfzocZRduDyOyFvEcDjDoVorgQUGJI445mbNzwx42weVA1iKI3
+         jlnq3/lL9fz6U8NrAnvHiU5eqq1VQsrYIjMO43m2YhK4MIkRjTf+zrExqTB6tcfRRgXL
+         wPUI3PFmtxnTZr0ttF2YQZpbJix84WutbspR+92Ppcxax2iMAZDk0fGWv8selUOnHPzY
+         5fug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684878286; x=1687470286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684878296; x=1687470296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Nvxqud0FjTLjvGDJMG3+cwcxjpMw4N6HqudGh9PriUk=;
-        b=YDKHI1Ndmg+T3Crvv5cY0qU0ljjyAZ1YKUjg4C4Q1CjP7KC+lrPLhygKv8WQdpre6X
-         n6eXqLMijTm5y9+SVlkOPZC1GbtdPXjDTpFBZNq6dLD8VFAcHJZmu16b2JYKycYkPPR1
-         pKu559cgIP1T8QbrPPRFOdrIABcqwFcwpvciDzY6hVfHRzLGMDjPm9DD92YZetcov2d7
-         sWepbP4pmdp94QDL5lOAQUJVcQEealzXfORhze+cBGLigbWJwhok6xLL0nIkWM8JeZRV
-         Ep6RyfnklrKjMcQDoJWRxLNA5YB28H3xeRNdnVszZ24PUNm4NR/QrLmfXE0FIzi6QHC5
-         aB3Q==
-X-Gm-Message-State: AC+VfDwIOui4ZgZnjdDU134nquopqNWidZR6zzFpacB2tnq+nRHEQ3Qg
-        lFAArhtpRp3vU/m3dgVbt3ySFioJX3XDS2lltVT86muwUthDjMNVKv7MO+i2vLd+zK2ZhVvq2bv
-        Mtb973nZqgwK40b6XjJpk9LG1
-X-Received: by 2002:a6b:491a:0:b0:76e:748b:e49a with SMTP id u26-20020a6b491a000000b0076e748be49amr9777781iob.5.1684878286600;
-        Tue, 23 May 2023 14:44:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7rDseY1faRRc/pd/upGZpjVZYmrCO9bGux2IbtdYoLRepumcSspUjcz+tMtMzAp8YndrDfWA==
-X-Received: by 2002:a6b:491a:0:b0:76e:748b:e49a with SMTP id u26-20020a6b491a000000b0076e748be49amr9777775iob.5.1684878286345;
-        Tue, 23 May 2023 14:44:46 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id o22-20020a02a1d6000000b0041650ca49casm2767353jah.83.2023.05.23.14.44.45
+        bh=CVkVzRy2R861oYLkXc/9sZeWaxITTwj/riElsfeea7o=;
+        b=Mov/Sll6D9YwvXa3nOlCV2UFXDQZ4/ByhGiQX96MC3GBgHKtL28TEhgCie1fB0RWW7
+         6WPQO2co9ozczseFQUCRH9empuN8eOwhaVRt+rQs1WnbL7+V6ZyVXESyc/QgBQ04WjRX
+         8bodRjyM8cLYh9qaEXzG5mu35j8LCfTMBsv+W+GqWF855tbdIqfT6b+ah3gtQ8XO3fhG
+         w39TRiYP8PPlXxchglQZDP1pyIrC0Qnt58sLI7EBo0w4d0ozQwje0dVvYhIfDuLWVqb/
+         9+QE0ZqEw341Lr5gfwgU+Au0jFzAmZp9fgooiwUNOfqJ+aYP0EyW0n6Zfj5TfYwU/Iep
+         x+AA==
+X-Gm-Message-State: AC+VfDyX5EcJyGRCCYu9RIZrBmRD9rEUBIv0W0aPYE00UGpd0EuPbjT5
+        pVIVNRgktUzAKNhXzVhsLNY=
+X-Google-Smtp-Source: ACHHUZ53mvf2bAuDym1gKE98aROen7CF4/0WaUOLQhSY31NLTm9TIvoIjgQ3BjbgzP4Kbvllp40z/g==
+X-Received: by 2002:a17:902:db03:b0:1ae:6135:a050 with SMTP id m3-20020a170902db0300b001ae6135a050mr19559179plx.19.1684878295547;
+        Tue, 23 May 2023 14:44:55 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:7a1e])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b001ac7c6fd12asm7257510plh.104.2023.05.23.14.44.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 14:44:45 -0700 (PDT)
-Date:   Tue, 23 May 2023 15:44:44 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kevin.tian@intel.com, jgg@nvidia.com,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v2] vfio/type1: check pfn valid before converting to
- struct page
-Message-ID: <20230523154444.46d84950.alex.williamson@redhat.com>
-In-Reply-To: <20230519065843.10653-1-yan.y.zhao@intel.com>
-References: <20230519065843.10653-1-yan.y.zhao@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Tue, 23 May 2023 14:44:55 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 May 2023 11:44:53 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Xiangling Kong <xiangling@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Subject: Re: [PATCH 2/2] sched: add throttled time stat for throttled children
+Message-ID: <ZG0z1enh3TNbsxQh@slm.duckdns.org>
+References: <20230518013414.3053254-1-joshdon@google.com>
+ <20230518013414.3053254-2-joshdon@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518013414.3053254-2-joshdon@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 14:58:43 +0800
-Yan Zhao <yan.y.zhao@intel.com> wrote:
+Hello,
 
-> Check physical PFN is valid before converting the PFN to a struct page
-> pointer to be returned to caller of vfio_pin_pages().
+(cc'ing Johannes)
+
+On Wed, May 17, 2023 at 06:34:14PM -0700, Josh Don wrote:
+> We currently export the total throttled time for cgroups that are given
+> a bandwidth limit. This patch extends this accounting to also account
+> the total time that each children cgroup has been throttled.
 > 
-> vfio_pin_pages() pins user pages with contiguous IOVA.
-> If the IOVA of a user page to be pinned belongs to vma of vm_flags
-> VM_PFNMAP, pin_user_pages_remote() will return -EFAULT without returning
-> struct page address for this PFN. This is because usually this kind of PFN
-> (e.g. MMIO PFN) has no valid struct page address associated.
-> Upon this error, vaddr_get_pfns() will obtain the physical PFN directly.
-> 
-> While previously vfio_pin_pages() returns to caller PFN arrays directly,
-> after commit
-> 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()"),
-> PFNs will be converted to "struct page *" unconditionally and therefore
-> the returned "struct page *" array may contain invalid struct page
-> addresses.
-> 
-> Given current in-tree users of vfio_pin_pages() only expect "struct page *
-> returned, check PFN validity and return -EINVAL to let the caller be
-> aware of IOVAs to be pinned containing PFN not able to be returned in
-> "struct page *" array. So that, the caller will not consume the returned
-> pointer (e.g. test PageReserved()) and avoid error like "supervisor read
-> access in kernel mode".
-> 
-> Fixes: 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()")
-> Cc: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
-> 
-> ---
-> v2: update commit message to explain background/problem clearly. (Sean)
-> ---
->  drivers/vfio/vfio_iommu_type1.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> index 493c31de0edb..0620dbe5cca0 100644
-> --- a/drivers/vfio/vfio_iommu_type1.c
-> +++ b/drivers/vfio/vfio_iommu_type1.c
-> @@ -860,6 +860,11 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
->  		if (ret)
->  			goto pin_unwind;
+> This is useful to understand the degree to which children have been
+> affected by the throttling control. Children which are not runnable
+> during the entire throttled period, for example, will not show any
+> self-throttling time during this period.
+...
+> @@ -11204,20 +11217,24 @@ static int cpu_extra_stat_show(struct seq_file *sf,
+>  	{
+>  		struct task_group *tg = css_tg(css);
+>  		struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
+> -		u64 throttled_usec, burst_usec;
+> +		u64 throttled_usec, burst_usec, throttled_self_usec;
 >  
-> +		if (!pfn_valid(phys_pfn)) {
-> +			ret = -EINVAL;
-> +			goto pin_unwind;
-> +		}
-> +
->  		ret = vfio_add_to_pfn_list(dma, iova, phys_pfn);
->  		if (ret) {
->  			if (put_pfn(phys_pfn, dma->prot) && do_accounting)
-> 
-> base-commit: b3c98052d46948a8d65d2778c7f306ff38366aac
+>  		throttled_usec = cfs_b->throttled_time;
+>  		do_div(throttled_usec, NSEC_PER_USEC);
+> +		throttled_self_usec = throttled_time_self(tg);
+> +		do_div(throttled_self_usec, NSEC_PER_USEC);
+>  		burst_usec = cfs_b->burst_time;
+>  		do_div(burst_usec, NSEC_PER_USEC);
+>  
+>  		seq_printf(sf, "nr_periods %d\n"
+>  			   "nr_throttled %d\n"
+>  			   "throttled_usec %llu\n"
+> +			   "throttled_self_usec %llu\n"
 
-Applied to vfio for-linus branch for v6.4.  Thanks!
+This is fine in principle but I think it'd be better to keep it consistent
+with how non-hierarchical events are in memory.events.local. ie. Can we
+please add cpu.stat.local instead of adding the _self key to cpu.stat?
 
-Alex
+Thanks.
 
+-- 
+tejun
