@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F7270E038
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666E970E03D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237482AbjEWPRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S237475AbjEWPSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237478AbjEWPRK (ORCPT
+        with ESMTP id S237564AbjEWPRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:17:10 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1C1E52;
-        Tue, 23 May 2023 08:16:46 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 4471A100D585B;
-        Tue, 23 May 2023 17:16:42 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 157B3261AB8; Tue, 23 May 2023 17:16:42 +0200 (CEST)
-Date:   Tue, 23 May 2023 17:16:42 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
-        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
-        peterz@infradead.org, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, p.rosenberger@kunbus.com
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-Message-ID: <20230523151642.GA31298@wunner.de>
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
- <20230523074443.GA21236@wunner.de>
- <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
+        Tue, 23 May 2023 11:17:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7522A189;
+        Tue, 23 May 2023 08:17:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07406623F1;
+        Tue, 23 May 2023 15:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6381BC433D2;
+        Tue, 23 May 2023 15:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684855061;
+        bh=D2TI28zRqMeP33qD4AGJWV2hUnE/pn90ek046LImn8g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aCoBt0h0f7NnX7GHkpKHx5gX/kOf9gAf60zsdhyzmiEFf+xCbWPbmRlqVY2L+G3uB
+         qHsIFCdiq1Vo2YL79EGMRddXfA7JRKvA2aXHN0efIAUqdMgUpU70iS9t8yoNaPh4KZ
+         DyrY+bUPUsYjBE6py0YTCxEurL/YMVOizJBEywAwYU5NHi4oUJaHRd+XeYfAgLuyZM
+         0z0XPl9Zw2kcaFZWuqLwG09mIZVspbZef7/Yz3A5M7mw6llm7VBYZ3skX6OCps4Jpx
+         zj9Lh+ZaiZVKPIBANRvV69ER6euCgEo++kYy6qqBNCFycbhItcIyZKJY30Y9NKIhgv
+         Dsmk9u8YB0CZw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1q1Tlg-0007O5-3D; Tue, 23 May 2023 17:17:44 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>
+Subject: [PATCH] Revert "drm/msm/dp: set self refresh aware based on PSR support"
+Date:   Tue, 23 May 2023 17:16:46 +0200
+Message-Id: <20230523151646.28366-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 12:14:28PM +0300, Péter Ujfalusi wrote:
-> On 23/05/2023 10:44, Lukas Wunner wrote:
-> > On Tue, May 23, 2023 at 09:48:23AM +0300, Péter Ujfalusi wrote:
-> >> On 22/05/2023 17:31, Lino Sanfilippo wrote:
-> > [...]
-> >> This looked promising, however it looks like the UPX-i11 needs the DMI
-> >> quirk.
-> > 
-> > Why is that?  Is there a fundamental problem with the patch or is it
-> > a specific issue with that device?
-> 
-> The flood is not detected (if there is a flood at all), interrupt stops
-> working after about 200 interrupts - in the latest boot at 118th.
+This reverts commit 1844e680d56bb0c4e0489138f2b7ba2dc1c988e3.
 
-You've got a variant of the "never asserted interrupt".
+PSR support clearly is not ready for mainline and specifically breaks
+virtual terminals which are no longer updated when PSR is enabled (e.g.
+no keyboard input is echoed, no cursor blink).
 
-That condition is currently tested only once on probe in tpm_tis_core_init().
-The solution would be to disable interrupts whenever they're not (or no
-longer asserted).  
+Disable PSR support for now by reverting commit 1844e680d56b
+("drm/msm/dp: set self refresh aware based on PSR support").
 
-However, that's a distinct issue from the one addressed by the present
-patch, which deals with a "never *de*asserted interrupt".
+Cc: Vinod Polimera <quic_vpolimer@quicinc.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
 
+Bjorn reported that PSR support broke virtual terminals two months ago, 
+but this is still broken in 6.4-rc3:
 
-> >>> +	dev_err(&chip->dev, HW_ERR
-> >>> +		"TPM interrupt storm detected, polling instead\n");
-> >>
-> >> Should this be dev_warn or even dev_info level?
-> > 
-> > The corresponding message emitted in tpm_tis_core_init() for
-> > an interrupt that's *never* asserted uses dev_err(), so using
-> > dev_err() here as well serves consistency:
-> > 
-> > 	dev_err(&chip->dev, FW_BUG
-> > 		"TPM interrupt not working, polling instead\n");
-> > 
-> > That way the same severity is used both for the never asserted and
-> > the never deasserted interrupt case.
-> 
-> Oh, OK.
-> Is there anything the user can do to have a ERROR less boot?
+	https://lore.kernel.org/lkml/20230326162723.3lo6pnsfdwzsvbhj@ripper/
 
-You're right that the user can't do anything about it and that
-toning the message down to KERN_WARN or even KERN_NOTICE severity
-may be appropriate.
+despite the following series that claimed to address this:
 
-However the above-quoted message for the never asserted interrupt
-in tpm_tis_core_init() should then likewise be toned down to the
-same severity.
+	https://lore.kernel.org/lkml/1680271114-1534-1-git-send-email-quic_vpolimer@quicinc.com
 
-I'm wondering why that message uses FW_BUG.  That doesn't make any
-sense to me.  It's typically not a firmware bug, but a hardware issue,
-e.g. an interrupt pin may erroneously not be connected or may be
-connected to ground.  Lino used HW_ERR, which seems more appropriate
-to me.
+Let's revert until this has been fixed properly.
+
+Johan
 
 
-> >>>  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
-> >>>  	tpm_tis_relinquish_locality(chip, 0);
-> >>>  	if (rc < 0)
-> >>> -		return IRQ_NONE;
-> >>> +		goto unhandled;
-> >>
-> >> This is more like an error than just unhandled IRQ. Yes, it was ignored,
-> >> probably because it is common?
-> > 
-> > The interrupt may be shared and then it's not an error.
-> 
-> but this is tpm_tis_write32() failing, no? If it is shared interrupt and
-> we return IRQ_HANDLED unconditionally then I think the core will think
-> that the interrupt was for this device and it was handled.
+ drivers/gpu/drm/msm/dp/dp_drm.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-No.  The IRQ_HANDLED versus IRQ_NONE return values are merely used
-for book-keeping of spurious interrupts.  If IRQ_HANDLED is returned,
-the other handlers will still be invoked.  It is not discernible whether
-a shared interrupt was asserted by a single device or by multiple devices,
-so all handlers need to be called.
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index 785d76639497..029e08c5bb06 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -117,8 +117,6 @@ static int edp_bridge_atomic_check(struct drm_bridge *drm_bridge,
+ 	if (WARN_ON(!conn_state))
+ 		return -ENODEV;
+ 
+-	conn_state->self_refresh_aware = dp->psr_supported;
+-
+ 	if (!conn_state->crtc || !crtc_state)
+ 		return 0;
+ 
+-- 
+2.39.3
 
-Thanks,
-
-Lukas
