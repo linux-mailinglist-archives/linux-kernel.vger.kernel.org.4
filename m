@@ -2,143 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA2670D68C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7280470D70C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbjEWICo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S235646AbjEWIRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbjEWICk (ORCPT
+        with ESMTP id S235398AbjEWIRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:02:40 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20626.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::626])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D015EE0;
-        Tue, 23 May 2023 01:02:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C9me87FJajo6IXHn20ZCWm1uUwznr5jbROCFFnaJHM0VDN/bagrae5iSw6MCl9sAfcWNlIlKz108gCMrrjXrNrlrQMT1InnvHh1vDpKwVuZFAwSpVwyuqUKfHEQ8HIUl0HIBiF8O69crhqb9JMkrJFBUcIsQtMjHxQN04n89PaA82sRl+1kjZbv+2x4RCqV3giWRCUmw2BGJTq/2vcT58sOL/PuCiwDI8Dmvm4bFbiVsHgmQKx7d/UBEffmMmhmB0jvcQktakvw90G15KFaxsNdk2RXDN1XIo9WnDC/oK3Qg+JCXJc5SDbBe5FPOuueP6bU0iQBsK0J6J6QBsusENQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eo81fJmZHsRTyBsEaiVSv7dKeEvtvRcI+ad07KxRIv0=;
- b=QpRPxF5pMfT5qSoqAYyt6+vd5Kag21Qk8uQwJ3WQEo+t269LvjoKjq47yaJ6ybFvgxhhfrO9djX4OE+xZI3Tvy6x/i8WtpZKvFSnHAp4QvR2h2nbvKRN/OVm9A17M/nuId705Wq2N20IVPgxFV8AAKNcoO67OFydli0XayMTXNtf4D3QwXC5SkIJmAY0RRThY4pdQYVS7iAi9JnMeHmZjY6McdfI+wT/8Q2PDET9pV+7+XFIyHoogvyR9YtmMeQlqhxqA14sT84WDiPsJ6JxPV6EsI/avAQkz85CfNHCnMlSv7bfd6tgwSag6ST8XwkdfyTbjGWRA1CArBc4GZ5jhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eo81fJmZHsRTyBsEaiVSv7dKeEvtvRcI+ad07KxRIv0=;
- b=GguUpuf3cniU+by0LzRzZko97+XWx2SrkPVIk2ICNchYkgmtPwC6MgfTCxQ4s/Wju9y9VHxS999i57lloSSnMdOVlWk+eYnUtsW1rmBXqWIzmpq+vvHNb64Rp5558CmEr1tgZFcf+w4XNmMXF+pVhF/OEkA9P/QTTk1jkiilahU=
-Received: from MW4PR03CA0020.namprd03.prod.outlook.com (2603:10b6:303:8f::25)
- by DM4PR12MB5359.namprd12.prod.outlook.com (2603:10b6:5:39e::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 08:00:18 +0000
-Received: from CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8f:cafe::e6) by MW4PR03CA0020.outlook.office365.com
- (2603:10b6:303:8f::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
- Transport; Tue, 23 May 2023 08:00:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT109.mail.protection.outlook.com (10.13.174.176) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.29 via Frontend Transport; Tue, 23 May 2023 08:00:18 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 23 May
- 2023 03:00:11 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>, <piyush.mehta@amd.com>
-CC:     Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH] dt-bindings: usb: xilinx: Replace Manish by Piyush
-Date:   Tue, 23 May 2023 10:00:09 +0200
-Message-ID: <504444f5c2f4e725ac39cba1d72032d5a00c7cda.1684828805.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 23 May 2023 04:17:02 -0400
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510D3173B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:15:01 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4f3edc05aa5so2769546e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684829639; x=1687421639;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=capJIoPbVw/wUCXk40cZbgaaXrIcqRnGSe0xbL+db+Q=;
+        b=iMBKXduOi6sS2XQk2Lh7ixxCzbg+KSz2YwvEIEU1tNsc1i7IwYFoqPgS/ymgwTbm/M
+         kxrPo3qQ6cFYGwYk6lx0ouVyoAMBjCZvrxpXk7BAoPkm9z4UoFB5eCPjltH/lX2yO2jx
+         P/rKr6RAgeDW++MPSXWDVPEQEENsXZwa4kA+urx+r7e72BaUC/0tgiCAiCDqoFk8Km3c
+         GCAoGEqIXsThBBtzdmV0yJ/LuF0xSCRexHKOPHfFJxBr0FKeSNQU0xGu6ng1721jM9um
+         R0dOFY6jyfziWqKunqUsL9I1n0ycil9RbsocU1HIP87ACqWMwjEvfOU9RYnfMRuK+J91
+         EXgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684829639; x=1687421639;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=capJIoPbVw/wUCXk40cZbgaaXrIcqRnGSe0xbL+db+Q=;
+        b=Jnixg4YxrbAAVCjaB3jP+OwcTOfd84xRMMZEWLaSk9+AVaY2CiXKW1QOMS/ZHlOAFf
+         L0WU3oFDXYXZDaVELH4smbeLqUWOvEu1P5zW22Pn8JLXEhh6G9IwCnCiS2xBWQqX47FE
+         HLVrEnwmpqRDYiEGyZdRo15TvDxIauTLsAiOAtmoe71x2O3S+pmwh4M7VlcfOEzuiA0f
+         al4SLPo2z+PRPF3ua+T1afK/jEdkndrr8BUNVsXomJ5VYU1oX9CRv1z+j4el293zt6zg
+         jMIpjPv83eG5LSey6gt05yH21XcWUxgobkfPCtLSPGgpffdJM2WjCTRjz5zUIK8Ws0z7
+         uF8A==
+X-Gm-Message-State: AC+VfDw9HJAuWC8mp+IYPBckDy24L75qkjl49NeagO7gx5lgN3wWuR63
+        lJ9G5YXXTmA26saWWZlJRTUmKfVs5swt1Vzk9g8=
+X-Google-Smtp-Source: ACHHUZ7Zy0icsD3XgqVs/JeyQp2kuA34bSl9w2YmoPyw6uXb5shPW5sEtvpvFoEdh/VstSNXhyNUGA==
+X-Received: by 2002:ac2:5ec2:0:b0:4f3:94b5:3272 with SMTP id d2-20020ac25ec2000000b004f394b53272mr4151735lfq.11.1684828005409;
+        Tue, 23 May 2023 00:46:45 -0700 (PDT)
+Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
+        by smtp.gmail.com with ESMTPSA id t9-20020ac25489000000b004eb0c51780bsm1257070lfk.29.2023.05.23.00.46.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 00:46:44 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v5 00/12] SM63(50|75) DPU support
+Date:   Tue, 23 May 2023 09:46:11 +0200
+Message-Id: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1474; i=michal.simek@amd.com; h=from:subject:message-id; bh=4FKBf7ilNnfh7qAml97Il1ZrBm/4wjR0cwmNGKOvuRo=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhpScorZL/IGeSieLTR79/fy78sZZ5hPCvHcidnWFJ56ut nPpEJ/REcvCIMjEICumyCJtc+XM3soZU4QvHpaDmcPKBDKEgYtTACYyuZZhwczK/hMXajnsDN5w JWVMVPh7LGqRLMP81ChXruZND/MKPm6YMfvyGwmtNJFqAA==
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT109:EE_|DM4PR12MB5359:EE_
-X-MS-Office365-Filtering-Correlation-Id: dec79204-c682-46eb-685e-08db5b63c010
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VmLxZWooxuNXvkRNCH883DwkPxBdJPrr8BP8Q923GZ8rd5Ug2oB+08Ur7j2d+/P394pEtSZ1+gDKnT1iOQitgxxQZhHMyVAcH/dz8C9oZfdjS20W6wQ9EECnC81oFS8UbcYI2rXxL4bbFo6gISsJx/llUWjaFJBg/YHu3ormYVJjskArqYf/Q0SoWEWdjpUlS+LEJJ1nyc0eGHE5cuq7NqA0lU2ZgAZLQ5LpCGp2uc/FTdHThkMsLAQD1zQMWeOmdUGyUss14fSV4vPetbMTXi8AI6bmC8jE624u0/udSiAX0rw+yzHNyLRat7OTl29EjvcHRM/FCEIexBJQU6nwdlGQ36HEUNxqS2KSomzjVMZTYAUitftb4SkJjnOd23gGfwAeHmU0wNaa9tUUd/Y7pZ+PUYR/ahbnMLLP9NeRBwdy9BLZWIl/6aMzfddoCiEkexbFe9QV7VYIghdOsUm0bBNdCYKSCmWVFAqx5USvyF0MkE1RYx1yUep39cOXY/iXkIV8G41UYRfYyWfR6tpcE4ub09lKwBXT3dOWwdWgDfY9EYUGScLMePagrIW/jlWApR9NhQaCybtTRcunR9cPpN6ckpigNxu8d0Es+1mhccuX8vRWidmGR3uKcmYcZXw31vrmR8GznIGqadZo8M1OAxu63+GPJnS+xewJyoSsceDlLpSu08h5NSezapveODqRau/w8lzG6Eudqug27yaiEAtMPQVe+hPbSuZ9FSyKp7ywQw2NlXv6V/yGNyN0qa5IyxlUaeLBuUx/YKNC8LApDo5Z+VwbMjmziRhKLKHA37c=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199021)(46966006)(40470700004)(36840700001)(54906003)(966005)(41300700001)(478600001)(82310400005)(110136005)(316002)(4326008)(6636002)(70586007)(70206006)(86362001)(5660300002)(8936002)(8676002)(40460700003)(44832011)(81166007)(356005)(26005)(7416002)(82740400003)(16526019)(186003)(2906002)(83380400001)(40480700001)(336012)(426003)(2616005)(36756003)(36860700001)(47076005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 08:00:18.3841
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dec79204-c682-46eb-685e-08db5b63c010
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5359
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAENvbGQC/42Oy2rDMBREfyVoXQU9LNnpqv9RQpGlK/uCKwXJN
+ SnB/57rrBK6qJczMOfMjVUoCJW9H26swIIVc6Jg3g7Mjy4NwDFQZkooLRop+Zwv6Hmdi8N5ckP
+ O6es71Mq7qBvvfDCgLKN17yrwvrjkR9qnn2mi8lIg4vWh+zxTHrHOufw+7Iva2v9Fi+KCaxu9J
+ J1VynxMmFzJx1yGTbwPYALEVkcjTp14BmyvFr3ziSbQqdNtsL020oY/oGYnqCGQ7aAFZUIrQL6
+ A1nW9A5FzTFGnAQAA
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684828003; l=3923;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=wUd8UxhGIZ5MEu2s5j0phv4oR4Xxj5lGVeYmXozFFo4=;
+ b=RSTC8JY5rGc03EFCcJfG+pGua+ifpHIQTX3sdOIuwCR1rNguOcc0LKxaUfU9fTq9gyXZ5+GfB
+ rUg66JCOTXNAR//XR8XTHJmFvEpw3OTZJYVl87V1OF0Pww6trBvrdyt
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Manish no longer works for AMD/Xilinx and there is also no activity from
-him. That's why proposing Piyush as the best candidate instead.
+v4 -> v5:
+- Rebase on next-20230522 (drop regdma, drop external dependencies)
+- Reuse sdm845_vbif
+- Resize non-DSI INTFs to 0x280 (no TE block)
+- Fix up 6375 mdss bindings example
+- Rewrite reasoning of dropping the QoS LUT entry in
+  "drm/msm/dpu: Add SM6350 support"
+- pick up tags
+- add DSC blocks for both SoCs
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
+No more dependency on INTFTE (merged)
+
+v4: https://lore.kernel.org/r/20230411-topic-straitlagoon_mdss-v4-0-68e7e25d70e1@linaro.org
+
+v3 -> v4:
+- Drop adding new QoS LUT entries
+- Add safe_lut_tbl for both SoCs
+
+Depends on:
+- https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org/
+
+v3: https://lore.kernel.org/r/20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org
+
+v2 -> v3:
+- Don't duplicate qcm2290_lm_sblk
+- Use DEFAULT_DPU_LINE_WIDTH defines
+- Fix up sspp clk assignments for sm6350
+- Add 6350-6375-common QoS data straight to the common file
+  instead of moving it around after adding it
+- Fix up iommu compatible order before adding new entries
+- Reuse sm6350 msm_mdss_data for sm6375
+- INTF_SC7180_MASK -> INTF_SC7280_MASK (enable HCTL) on 6375
+- use double tabs in catalog headers
+- remove one unused entry in 6350 dpu_qos_lut_entry
+- add missing tear IRQs, drop INTF0 irq on 6375
+- don't overduplicate DPU bindings, reuse 7180
+- Pick up tags
+- Rebase on INTF_TE v4 and next-20230504
+
+Depends on:
+- https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org/
+
+v2: https://lore.kernel.org/r/20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org
+
+v1 -> v2:
+- Rebase on the DPU catalog rework and INTF_TE
+- Fix QSEED(3L/4) discrepancies
+- Fixed DMA/cursor discrepancies for 6350
+- No deduplication, that's gonna be handled in catalogrework 2:
+  "the return of the catalogrework"
+- Split MDSS & DPU binding additions
+- Drop "Allow variable SSPP/INTF_BLK size", that got in w/ the rework
+- Split MDSS and DPU additions
+- Pick up Rob's acks
+
+Depends on (and based on): https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org/T/#t
+
+v1: https://lore.kernel.org/linux-arm-msm/20230211122656.1479141-1-konrad.dybcio@linaro.org/
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
+Konrad Dybcio (12):
+      dt-bindings: display/msm: dsi-controller-main: Add SM6350
+      dt-bindings: display/msm: dsi-controller-main: Add SM6375
+      dt-bindings: display/msm: sc7180-dpu: Describe SM6350 and SM6375
+      dt-bindings: display/msm: Add SM6350 MDSS
+      dt-bindings: display/msm: Add SM6375 MDSS
+      drm/msm/dpu: Add SM6350 support
+      drm/msm: mdss: Add SM6350 support
+      drm/msm/dpu: Add SM6375 support
+      drm/msm: mdss: Add SM6375 support
+      iommu/arm-smmu-qcom: Sort the compatible list alphabetically
+      iommu/arm-smmu-qcom: Add SM6375 DPU compatible
+      iommu/arm-smmu-qcom: Add SM6350 DPU compatible
 
- Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml | 2 +-
- Documentation/devicetree/bindings/usb/xlnx,usb2.yaml   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../bindings/display/msm/dsi-controller-main.yaml  |   4 +
+ .../bindings/display/msm/qcom,sc7180-dpu.yaml      |  23 ++-
+ .../bindings/display/msm/qcom,sm6350-mdss.yaml     | 214 ++++++++++++++++++++
+ .../bindings/display/msm/qcom,sm6375-mdss.yaml     | 216 +++++++++++++++++++++
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h | 173 +++++++++++++++++
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 139 +++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   2 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +
+ drivers/gpu/drm/msm/msm_mdss.c                     |  10 +
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   6 +-
+ 11 files changed, 792 insertions(+), 3 deletions(-)
+---
+base-commit: 9f925874281f7e8855855d6210d6e29d844e4307
+change-id: 20230411-topic-straitlagoon_mdss-8f34cacd5e26
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-index 098b73134a1b..bb373eb025a5 100644
---- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Xilinx SuperSpeed DWC3 USB SoC controller
- 
- maintainers:
--  - Manish Narani <manish.narani@xilinx.com>
-+  - Piyush Mehta <piyush.mehta@amd.com>
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
-index 04c123c7252a..868dffe314bc 100644
---- a/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
-+++ b/Documentation/devicetree/bindings/usb/xlnx,usb2.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Xilinx udc controller
- 
- maintainers:
--  - Manish Narani <manish.narani@xilinx.com>
-+  - Piyush Mehta <piyush.mehta@amd.com>
- 
- properties:
-   compatible:
+Best regards,
 -- 
-2.36.1
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
