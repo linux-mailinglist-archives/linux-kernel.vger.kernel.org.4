@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D0470DBAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9605770DBAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbjEWLox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S236673AbjEWLpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbjEWLov (ORCPT
+        with ESMTP id S233125AbjEWLps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:44:51 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B34133
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:44:46 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25394160fd3so2747065a91.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684842286; x=1687434286;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X3rczHRL3TEcFNjM2ZeD6JpzC77rZYfh2AJXBPeYfd8=;
-        b=bp8lf+1+H9fcwybE8qO4s8I/GtGAMvmZalhQczwbTuLF1Ex6EAG4jwj9MEdLvTHq3b
-         XpZftOWpwmFa/6JKSJfY73W4J3gciDjQLUeRNC0HEE5r9B8igCCXr26hiWcTRGQhy5/k
-         VypACVomDcZ1QuEdFoP0QvyAwWjLwvesRETYkoirbpHytFasF+Y0pGYTB9X0FPpINZ+l
-         0FtY4jLAjC1SYF2+I5Q4MNgbN735IEYQUIoG0G07c2BAZrDLw5w+P21hUb0pRg+Rtbgp
-         /i4WOdSD1pUxMwGhWmcjJ63FjC2OfJY07JQOE7bjXUKT8ggjyqATki1pTpLbEY752GUf
-         zs+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684842286; x=1687434286;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X3rczHRL3TEcFNjM2ZeD6JpzC77rZYfh2AJXBPeYfd8=;
-        b=UPr7b5b8NYt5398jRqmzWjwCsM5kpxaAPKSgShGSOhVLk9bRRtBFaNrrI/2S2VOx6K
-         3qAV7nQkkiBkIL6DFzFNVyYxo7lPBSQwDYqN4Og6UkgHTwPZZwkU0rYkgB2+MRGwGHac
-         ojP/mbtqvdhljTUXdijpOm7OwN+QQ47sY/DhikEy9JpnuD8oIULJDx4035kE4y7Mrds2
-         NV82FCbHcnFJ+MISJyfCnJOB6Dx6r8TvNqKeNH2ynFWSdsrYDd0TxrdCuGM3FzgPfjO2
-         h6kW4DYy+NKmMVcAccg4jGLJC6axmXebtnId3w3uNdyL+YEw+fB1iejCVdfjZ0ulDxw5
-         MLpQ==
-X-Gm-Message-State: AC+VfDzbTijNsbjQw1eltBjzEQE8a61Fe1r8N6A9R55Ad4NRYHxF2HVq
-        v2ayRsc0EvyiTwY0j0rQK7xg7n9H5sQCZi6GX7s=
-X-Google-Smtp-Source: ACHHUZ7Hr+NNN8YO0/gt2hWGVWjb7XQrffZsu/IxO8xn0StMXDdH+Ezd1MRob72HQ3uK4lxg0hCzgUQAyPezhGGwETE=
-X-Received: by 2002:a17:90b:38c8:b0:255:949b:b50d with SMTP id
- nn8-20020a17090b38c800b00255949bb50dmr3390020pjb.4.1684842286203; Tue, 23 May
- 2023 04:44:46 -0700 (PDT)
+        Tue, 23 May 2023 07:45:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4A4FE;
+        Tue, 23 May 2023 04:45:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1B63120540;
+        Tue, 23 May 2023 11:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684842345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bwznIrELPYLWwydAYNIqJzHwi6mbsjXfEygWrt5kgFg=;
+        b=twQpZTwUAduFDvyrn/btduKthKphe6tUYKcM13EM9uQJnnGbA+/tzOdgNDG3JmL4BjSByc
+        n4a8Ke1XYcAI2/M3x+kl4ijn9ob2921LsYwVdvz+1/kST+5Z4rr0578WynqlcrOsM335MR
+        oM5DqKg8Dbes0acQZ55Wc7n8a3+jfXw=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C81E62C141;
+        Tue, 23 May 2023 11:45:40 +0000 (UTC)
+Date:   Tue, 23 May 2023 13:45:40 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
+        npiggin@gmail.com, davem@davemloft.net,
+        Marc Zyngier <maz@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
+        christophe.leroy@csgroup.eu,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
+        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH v5 08/18] watchdog/hardlockup: Move perf hardlockup
+ checking/panic to common watchdog.c
+Message-ID: <ZGynZJ6Kvf1w7Pyu@alley>
+References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
+ <20230519101840.v5.8.Id4133d3183e798122dc3b6205e7852601f289071@changeid>
 MIME-Version: 1.0
-References: <20230523031933.13421-1-qiang.zhang1211@gmail.com>
-In-Reply-To: <20230523031933.13421-1-qiang.zhang1211@gmail.com>
-From:   Z qiang <qiang.zhang1211@gmail.com>
-Date:   Tue, 23 May 2023 19:44:34 +0800
-Message-ID: <CALm+0cX+1B942PytjP9bBuq6SWUQfLG8yC9xZoZLDAubn0mFSw@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: Fix warning triggered when nr_running is
- checked in worker_enter_idle()
-To:     tj@kernel.org, jiangshanlai@gmail.com, naresh.kamboju@linaro.org,
-        qiang.zhang1211@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519101840.v5.8.Id4133d3183e798122dc3b6205e7852601f289071@changeid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Currently, the nr_running can be modified from timer tick, that means
-> the timer tick can run in not-irq-protected critical section to modify
-> nr_runnig, consider the following scenario:
->
-> CPU0
-> kworker/0:2 (events)
->    worker_clr_flags(worker, WORKER_PREP | WORKER_REBOUND);
->    ->pool->nr_running++;  (1)
->
->    process_one_work()
->    ->worker->current_func(work);
->      ->schedule()
->        ->wq_worker_sleeping()
->          ->pool->nr_running--;  (0)
->            ....
->        ->wq_worker_running()
->            ....
->            CPU0 by interrupt:
->            wq_worker_tick()
->            ->worker_set_flags(worker, WORKER_CPU_INTENSIVE);
->              ->pool->nr_running--;  (-1)
->              ->worker->flags |= WORKER_CPU_INTENSIVE;
->            ....
->          ->if (!(worker->flags & WORKER_NOT_RUNNING))
->            ->pool->nr_running++;    (will not execute)
->            ....
->     ->worker_clr_flags(worker, WORKER_CPU_INTENSIVE);
->       ->pool->nr_running++;  (0)
->     ....
->     worker_set_flags(worker, WORKER_PREP);
->     ->pool->nr_running--;   (-1)
->     ....
->     worker_enter_idle()
->     ->WARN_ON_ONCE(pool->nr_workers == pool->nr_idle && pool->nr_running);
->
-> if the nr_workers is equal to nr_idle, due to the nr_running is not zero,
-> will trigger WARN_ON_ONCE().
->
-> [    2.460602] WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999 worker_enter_idle+0xb2/0xc0
-> [    2.462163] Modules linked in:
-> [    2.463401] CPU: 0 PID: 63 Comm: kworker/0:2 Not tainted 6.4.0-rc2-next-20230519 #1
-> [    2.463771] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> [    2.465127] Workqueue:  0x0 (events)
-> [    2.465678] RIP: 0010:worker_enter_idle+0xb2/0xc0
-> ...
-> [    2.472614] Call Trace:
-> [    2.473152]  <TASK>
-> [    2.474182]  worker_thread+0x71/0x430
-> [    2.474992]  ? _raw_spin_unlock_irqrestore+0x28/0x50
-> [    2.475263]  kthread+0x103/0x120
-> [    2.475493]  ? __pfx_worker_thread+0x10/0x10
-> [    2.476355]  ? __pfx_kthread+0x10/0x10
-> [    2.476635]  ret_from_fork+0x2c/0x50
-> [    2.477051]  </TASK>
->
-> This commit therefore add irq protection in wq_worker_running() to
-> block timer tick modify nr_running.
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230519/testrun/17078554/suite/boot/test/clang-nightly-lkftconfig/log
-> Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
-> ---
->  kernel/workqueue.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> index 9c5c1cfa478f..f8d739fef311 100644
-> --- a/kernel/workqueue.c
-> +++ b/kernel/workqueue.c
-> @@ -1060,10 +1060,9 @@ void wq_worker_running(struct task_struct *task)
->          * and leave with an unexpected pool->nr_running == 1 on the newly unbound
->          * pool. Protect against such race.
->          */
-> -       preempt_disable();
+On Fri 2023-05-19 10:18:32, Douglas Anderson wrote:
+> The perf hardlockup detector works by looking at interrupt counts and
+> seeing if they change from run to run. The interrupt counts are
+> managed by the common watchdog code via its watchdog_timer_fn().
+> 
+> Currently the API between the perf detector and the common code is a
+> function: is_hardlockup(). When the hard lockup detector sees that
+> function return true then it handles printing out debug info and
+> inducing a panic if necessary.
+> 
+> Let's change the API a little bit in preparation for the buddy
+> hardlockup detector. The buddy hardlockup detector wants to print
+> nearly the same debug info and have nearly the same panic
+> behavior. That means we want to move all that code to the common
+> file. For now, the code in the common file will only be there if the
+> perf hardlockup detector is enabled, but eventually it will be
+> selected by a common config.
+> 
+> Right now, this _just_ moves the code from the perf detector file to
+> the common file and changes the names. It doesn't make the changes
+> that the buddy hardlockup detector will need and doesn't do any style
+> cleanups. A future patch will do cleanup to make it more obvious what
+> changed.
+> 
+> With the above, we no longer have any callers of is_hardlockup()
+> outside of the "watchdog.c" file, so we can remove it from the header,
+> make it static, and move it to the same "#ifdef" block as our new
+> watchdog_hardlockup_check(). While doing this, it can be noted that
+> even if no hardlockup detectors were configured the existing code used
+> to still have the code for counting/checking "hrtimer_interrupts" even
+> if the perf hardlockup detector wasn't configured. We didn't need to
+> do that, so move all the "hrtimer_interrupts" counting to only be
+> there if the perf hardlockup detector is configured as well.
+> 
+> This change is expected to be a no-op.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Sorry, Here can still be interrupted by wq_worker_tick() before invoke
-local_irq_disbale().
-will resend v2.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-> +       local_irq_disable();
->         if (!(worker->flags & WORKER_NOT_RUNNING))
->                 worker->pool->nr_running++;
-> -       preempt_enable();
->
->         /*
->          * CPU intensive auto-detection cares about how long a work item hogged
-> @@ -1072,6 +1071,7 @@ void wq_worker_running(struct task_struct *task)
->         worker->current_at = worker->task->se.sum_exec_runtime;
->
->         worker->sleeping = 0;
-> +       local_irq_enable();
->  }
->
->  /**
-> --
-> 2.17.1
->
+Best Regards,
+Petr
