@@ -2,58 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFA170D37E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE21D70D384
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbjEWGAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
+        id S232022AbjEWGBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjEWGAv (ORCPT
+        with ESMTP id S234047AbjEWGBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:00:51 -0400
-X-Greylist: delayed 996 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 23:00:49 PDT
-Received: from out-9.mta0.migadu.com (out-9.mta0.migadu.com [91.218.175.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207F9118
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 23:00:48 -0700 (PDT)
-Message-ID: <3cc9f12a-d680-e05c-72c6-d4cb559fe5ee@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684821647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tGELPRx86ep04iXrD8HrqkTjc/I4h979qXOX39g1jec=;
-        b=ncO15s15ZTiwVJSjAUCCczEg/KIQWPixg78CaGWozLn3L0OcWbrU+fsxO4bw5iMvdTxTSB
-        O2aEj1XokqUR7jhIL9/LEDweaMTHYyEZU0HQCLi9HMtGMqDKrQKDT6FqXz1G7dBR+6tl2a
-        S/QhPxlOsmist80tqTVzaeyu6ZV02e0=
-Date:   Tue, 23 May 2023 14:00:43 +0800
+        Tue, 23 May 2023 02:01:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8CC10C;
+        Mon, 22 May 2023 23:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684821707; x=1716357707;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=O7l6nJy89dKsFjQzbXBLt94JHioQXIiYO9qIptdjoiM=;
+  b=jxMPjjk6myanjP1n/EEm+8nX/yf5D5Q4hKKJNfuKboQWEKuECgk4JnD/
+   2e7ADOvcp9AvvrcYPxRrs3IeLidHx2ViJ2tjy7Lsougu56MyuINfrlMk9
+   GuAb9fNMVGSO5bCAbBW70iN5NGTkfpGlCu6M7j+iWxPtlpIH4NHXQUOJn
+   2wD5CxQO3C7py2foQaf9oQnj7Hyt83hMRpYiqvaxq3Ds1xrnYkvWbeJBR
+   Igmlhvo58j47/JmHJu8fatAeI4k3VxIgP0df3BnyokPNtnlld/VL0w3bw
+   FZye7H+H6FT3yWbDaw7bxqgOGKPvet4m64QGblUiUu5Zt9dWt8YcaXzpl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="337729165"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="337729165"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 23:01:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="768852422"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="768852422"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga008.fm.intel.com with ESMTP; 22 May 2023 23:01:46 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 23:01:46 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 23:01:46 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 23:01:46 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 22 May 2023 23:01:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RJVBTrvPfEmzB5az3Ax1OfuHOxbNbpcYSlajkSZZzaNw6ed4CGNVXin8uBL8MNfY19BGH4OXfdx0lpL/TFScvJtngIexwKD0t7RhBqgZshYBzKShZB47LMUmGMl4ExQGa0ugVbLE2n2bYsmB168nR56XuVwNA/MUX5XKfQtAe8szG1oHBTRS4un1MJquNN6Ma33ZwNe7WNgVy6hJnu7oFQVzQO3bbgSsXfmbQT4ink8ewXJ2yjEP+wS6bweSsU005dMUXiI1jTQl1sRAqFVrtiCTeFETLgbIsiaPOVKhBPvvfyW1hsndUsP6PctHFCgjDrFMdjTtnrzchl8shdOBXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HK9KrNet92TEU0WcJt0vP/wDFGFK1vK6114yij4aiTc=;
+ b=KxS7U+NWzItMjG+tdiSi70VofxHXE8cbrA7RVLo6z2GQp3r1Oyt43YcOZPSk38IJ4lKYG9SGV6XUhpuWxScW9ZNbRJt3zSB37+D0r1RflNDWrd+uK8ajsy4Lu79Zmi3HFvIxwKRKJpm+bRWP6SsDDzMOIOh1wAHuKHhZXf5uJ7nJc2L7UoFojYD788IBWh1iYh5Hjt1/Z4/NpYGj11IaG/vWhavN8shlyQeeHGXl89a0CpdoCdKbPF1+xw22ZVAfuKfuvELMwUCLTFpfeVnc9imOJim9rcMA7VeP5C975AUkO+PaH4O2yxlQUdkMb5fTzvab0Y6uloj63K+BzwHXHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3004.namprd11.prod.outlook.com (2603:10b6:5:67::17) by
+ MW4PR11MB6787.namprd11.prod.outlook.com (2603:10b6:303:209::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.28; Tue, 23 May 2023 06:01:38 +0000
+Received: from DM6PR11MB3004.namprd11.prod.outlook.com
+ ([fe80::fa75:e407:ae4e:6f31]) by DM6PR11MB3004.namprd11.prod.outlook.com
+ ([fe80::fa75:e407:ae4e:6f31%7]) with mapi id 15.20.6411.028; Tue, 23 May 2023
+ 06:01:37 +0000
+Date:   Mon, 22 May 2023 23:01:32 -0700
+From:   David Zheng <david.zheng@intel.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>
+Subject: Re: [PATCH] i2c: designware: fix idx_write_cnt in read loop
+Message-ID: <ZGxWvEaKm4isRiZg@davidzhe-DESK>
+References: <ZGZpEyITTuoBUEAM@davidzhe-DESK>
+ <a4d3252d-158d-a7b3-2988-22df39dba24f@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a4d3252d-158d-a7b3-2988-22df39dba24f@linux.intel.com>
+X-ClientProxiedBy: BYAPR07CA0041.namprd07.prod.outlook.com
+ (2603:10b6:a03:60::18) To DM6PR11MB3004.namprd11.prod.outlook.com
+ (2603:10b6:5:67::17)
 MIME-Version: 1.0
-Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
- skb_dequeue (2)
-Content-Language: en-US
-To:     Zhu Yanjun <zyjzyj2000@gmail.com>
-Cc:     syzbot <syzbot+eba589d8f49c73d356da@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <000000000000a589d005fc52ee2d@google.com>
- <13528f21-0f36-4fa2-d34f-eecee6720bc1@linux.dev>
- <CAD=hENeCo=-Pk9TWnqxOWP9Pg-JXWk6n6J19gvPo9_h7drROGg@mail.gmail.com>
- <CAD=hENdoyBZaRz7aTy4mX5Kq1OYmWabx2vx8vPH0gQfHO1grzw@mail.gmail.com>
- <0d515e17-5386-61ba-8278-500620969497@linux.dev>
- <CAD=hENcqa0jQvLjuXw9bMtivCkKpQ9=1e0-y-1oxL23OLjutuw@mail.gmail.com>
- <63b9f740-3762-2ec0-9750-eb8709c886a5@linux.dev>
- <CAD=hENfRW7stx0c_uTh6KXwLwovv3wA9q-hKA6Xz6UNcEPYcNA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-In-Reply-To: <CAD=hENfRW7stx0c_uTh6KXwLwovv3wA9q-hKA6Xz6UNcEPYcNA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3004:EE_|MW4PR11MB6787:EE_
+X-MS-Office365-Filtering-Correlation-Id: 358b6f3d-a141-41dc-3939-08db5b532b31
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +LNouRagfUu1YGMA/BE3Q/fmPS4aKSBQ7pzfqqKqL29+65DZOuUg9NoT62kGzAwLzX0Cf2iIFfzOW2TQPSLcgOgDe22E0VuHHsdV1Ead6nKiVYiN7/2wghChLpir3igL/GQDR8F2bqWMJihK0+xybhD/njcJr7JnUYuTEl+dOax6sSogx3yXY9TZjcUekN13AD0Dzi/4kvkEQrd3uYXvQjb5V3BfQwnhTqBhcy9H1mplc1BtSZthHmTUQZxo+eGGQoyK9oZjm5yqOpoV7Pc5ewCSW3Zh5akUlF57yf+K9oEq3rlAOZUA1439P5zKrX1dbibcN2NZbkp1oeEHDcaje+oJ+qXLNvX1TT0DyaO4PfA2l9BiN3J/DA+KDssZXo/qi68dozZPbsVqMw8MMNqzJ+mQ3uUhq3q4tB8cY0Ado4X7YiSeQMsFYh5oGdN2uDKEe5DJbyt8LSHcr3s0IIjaGKugUrE+RDO6OP5whx6JNCdslaO7I98HzOg0KY+im0ze4ya1rZiQD9JOb8d57a68iKhAtlmzhNP3oiak9Uh+wV0JgPjy27/+d02vxpCwAll9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3004.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(396003)(346002)(366004)(39860400002)(376002)(451199021)(8676002)(8936002)(44832011)(5660300002)(83380400001)(9686003)(186003)(6512007)(6506007)(33716001)(26005)(86362001)(53546011)(82960400001)(38100700002)(66946007)(6666004)(41300700001)(478600001)(66476007)(4326008)(6486002)(66556008)(316002)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v7TVgjfhg6B+J0pmStLbPNc+Q9bvxM5cgVBdjN3XFoFt2mF1gXvuCmn5mEzT?=
+ =?us-ascii?Q?XuMzdEvizfaIZev0rx9I9GGeHMrxDAId7NPYTBAKeiZqwXT3CS2Y49XA94az?=
+ =?us-ascii?Q?pyUj085E2dAOfuduuE91MQaJE3tQdw2rD9nRAODw770N3cfvPdBB/nrOfmOU?=
+ =?us-ascii?Q?PdstgqSkobp3iw/ZVGf4IIRCNsYoLY8m+Z1uq005wnGYZG8LA1mxbHtb1LCM?=
+ =?us-ascii?Q?LQd0jVWsOGwFSC/wDLuDSMs0WKPbgObtBRfvOoBfQx8B1t+M7Cm3VRVpcudm?=
+ =?us-ascii?Q?DsGZfahJThK6P41tC4P+OGw8k5iBKh+Ue/f2VzUcln+6zIJoO+rah6Ouq2Og?=
+ =?us-ascii?Q?xb6u2wbvO3IvQscigf5m8Cgknvk3XbcifBwJBUSmzES7d0SLRm1xFWU9hGfG?=
+ =?us-ascii?Q?pCOQQskbpb8dl4cBmi0R1/y0Oz0xBnJeRPPhr5ciG/Y28u3/e2TGAn1MPIQO?=
+ =?us-ascii?Q?OAJXEKULHznO8OvOz1RE1W1dq4tLz9TKmnXVVAlaeqILHatzbL1vr79W0PMj?=
+ =?us-ascii?Q?T6gdeAxS8WS2+HumvEigSvRhpHuH4CIJu87Akc2PoNuhwh3AbzyrOKheka1A?=
+ =?us-ascii?Q?RlBY0lNkAgZzDhdU2X8VYmW+72bphkAYMgnmX4gpob1hQHVZt1K5zbRwNAkU?=
+ =?us-ascii?Q?2kpvyztAq1hNZOESrCJqlw5olRqrN1v5fWZTM9tB5W9fVWZhMStsp18KT3Fw?=
+ =?us-ascii?Q?lBYXx/SAaup5B+jqDtGEpWczsRGbSUrlIE1acmV1iULb2HADyz1J7YlzYqYw?=
+ =?us-ascii?Q?Lkb1Lk/uyPVCf3dk7IdVYrXCEkgFp0Ort58pKONLevrSKPY8RLetZkd83kZT?=
+ =?us-ascii?Q?L6TfAKMeeXmBpfqHCSDqDKisY30O8IW1EAcGdnGk0h2tHI1V7ms8KhdeUXKn?=
+ =?us-ascii?Q?BU8G+k+M7lYx/mibnm9I/0k+3DYUW3YYDL8sZQDnS3AJrL8VoF2HcdbrBjpO?=
+ =?us-ascii?Q?1rGcCx6FicYcAo2Pv3lM103ZNPjzild9dI+9gBaz3BbYhD+SASeZQvzUYhP6?=
+ =?us-ascii?Q?0Y8o7EFu4m5QgMmoMvml/3v1h3ubFGBHILjP/4kT/A0Ajv07oSww5xcMrPm3?=
+ =?us-ascii?Q?fGj3P62Afa51SzFByF5AvT1oDS2KEJAnVSBQicEC3QIA/wLZTsA0kkavKm8c?=
+ =?us-ascii?Q?LuTKkkChxrBfVnqUAeCKXaMGnM81C+ZjCnp+DBK3M6JrcxmHZlgc6YznDx7q?=
+ =?us-ascii?Q?quCATiFgsmyPXvDKRYQWfMa5CyzH/fOmc3qyBkzuf08rJkw3VegLtyPu4hSE?=
+ =?us-ascii?Q?fiehV+QdmcI8xabgBabb+ZP3pxX5EWTk2sKyDbxFER7a4HuDV7ug7Vb8zZSP?=
+ =?us-ascii?Q?oFXSZvFuqh6L8f3nkhDZJpJVpji+RBUu9h0xFqJL7qT6LAMr7yJ5c6VfUIGi?=
+ =?us-ascii?Q?nDGYqlXQYAPh1GZMnMgwYD/A8hUyNgFmVT0zmdvuMM/pjuZ3oTABCK+z10Tp?=
+ =?us-ascii?Q?UTeWXIRkwVxdBR6Woy5DYKA44kgokJvvM0FUccuxi7uaPldfCMSoJA+D+xg9?=
+ =?us-ascii?Q?xEKnpilS7CsgZhyLqJdHqADwxD0mSr8W0qiw/+7wosX135mT2QQ5nRTqSBX5?=
+ =?us-ascii?Q?0A2FsWGSK0Oeq9M/P7S25snUOglJniDLxp33ZvUeoE/IxiEAf5g3DItnTw6g?=
+ =?us-ascii?Q?YA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 358b6f3d-a141-41dc-3939-08db5b532b31
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3004.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 06:01:37.0327
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BzPF3zy7KcO2IH69tQ7cPQzQYvzHSKH+htiA5UcwqkQaunwFPbOETajI8X5flcxCWgrSI2cMn5dwTPtFEv3gTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6787
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,102 +151,112 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On Mon, May 22, 2023 at 05:58:26PM +0300, Jarkko Nikula wrote:
+> Hi
+> 
+> On 5/18/23 21:06, David Zheng wrote:
+> > With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
+> > RX FIFO is empty. When testing with the slave-eeprom, each transaction
+> > has 2 bytes for address/index and 1 byte for value, the address byte
+> > can be written as data byte due to dropping STOP condition.
+> > 
+> > In the test below, the master continuously writes to the slave, first 2
+> > bytes are index, 3rd byte is value and follow by a STOP condition.
+> > 
+> >   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
+> >   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
+> >   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
+> > 
+> > Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
+> > next 2 bytes can be treated as buffer index for upcoming transaction.
+> > Supposedly the slave eeprom buffer would be written as
+> > 
+> >   EEPROM[0x00D1] = 0xD1
+> >   EEPROM[0x00D2] = 0xD2
+> >   EEPROM[0x00D3] = 0xD3
+> > 
+> > When CPU load is high the slave irq handler may not read fast enough,
+> > the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
+> > (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
+> > the transactions below.
+> > 
+> >   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
+> >   0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
+> >   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> > 
+> > After `D1` is received, read loop continues to read `00` which is the
+> > first bype of next index. Since STOP condition is ignored by the loop,
+> > eeprom buffer index increased to `D2` and `00` is written as value.
+> > 
+> > So the slave eeprom buffer becomes
+> > 
+> >   EEPROM[0x00D1] = 0xD1
+> >   EEPROM[0x00D2] = 0x00
+> >   EEPROM[0x00D3] = 0xD3
+> > 
+> > The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
+> > the transactions. The first index byte in this case would have bit 11
+> > set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
+> > which will reset `idx_write_cnt` in slave eeprom.
+> > 
+> > Signed-off-by: David Zheng <david.zheng@intel.com>
+> > ---
+> >   drivers/i2c/busses/i2c-designware-core.h  | 2 ++
+> >   drivers/i2c/busses/i2c-designware-slave.c | 6 ++++--
+> >   2 files changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+> > index c5d87aae39c6..8b85147bd518 100644
+> > --- a/drivers/i2c/busses/i2c-designware-core.h
+> > +++ b/drivers/i2c/busses/i2c-designware-core.h
+> > @@ -123,6 +123,8 @@
+> >   #define DW_IC_COMP_PARAM_1_SPEED_MODE_HIGH	(BIT(2) | BIT(3))
+> >   #define DW_IC_COMP_PARAM_1_SPEED_MODE_MASK	GENMASK(3, 2)
+> > +#define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
+> > +
+> >   /*
+> >    * Sofware status flags
+> >    */
+> > diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+> > index cec25054bb24..9549cbcf50aa 100644
+> > --- a/drivers/i2c/busses/i2c-designware-slave.c
+> > +++ b/drivers/i2c/busses/i2c-designware-slave.c
+> > @@ -170,12 +170,14 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
+> >   		if (!(dev->status & STATUS_WRITE_IN_PROGRESS)) {
+> >   			dev->status |= STATUS_WRITE_IN_PROGRESS;
+> >   			dev->status &= ~STATUS_READ_IN_PROGRESS;
+> > -			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED,
+> > -					&val);
+> >   		}
+> >   		do {
+> >   			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
+> > +			if (tmp & DW_IC_DATA_CMD_FIRST_DATA_BYTE)
+> > +				i2c_slave_event(dev->slave,
+> > +						I2C_SLAVE_WRITE_REQUESTED,
+> > +						&val);
+> >   			val = tmp;
+> >   			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
+> >   					&val);
+> I fear this might cause regression on some use case on HW that doesn't have
+> the FIRST_DATA_BYTE bit in IC_DATA_CMD. That is available on newer Synopsys
+> I2C IPs only. For example my test HW doesn't have it.
+> 
+> This means the I2C_SLAVE_WRITE_REQUESTED is never delivered on these HWs
+> that don't implement the FIRST_DATA_BYTE.
+> 
+> My quick tests using i2c-slave-eeprom didn't show regression but I'm sure
+> there is a case that will regress because of that.
 
-On 5/23/23 13:55, Zhu Yanjun wrote:
-> On Tue, May 23, 2023 at 1:50 PM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
->>
->>
->> On 5/23/23 12:29, Zhu Yanjun wrote:
->>> On Tue, May 23, 2023 at 12:10 PM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
->>>>
->>>> On 5/23/23 12:02, Zhu Yanjun wrote:
->>>>> On Tue, May 23, 2023 at 11:47 AM Zhu Yanjun <zyjzyj2000@gmail.com> wrote:
->>>>>> On Tue, May 23, 2023 at 10:26 AM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
->>>>>>> On 5/23/23 10:13, syzbot wrote:
->>>>>>>> Hello,
->>>>>>>>
->>>>>>>> syzbot tried to test the proposed patch but the build/boot failed:
->>>>>>>>
->>>>>>>> failed to apply patch:
->>>>>>>> checking file drivers/infiniband/sw/rxe/rxe_qp.c
->>>>>>>> patch: **** unexpected end of file in patch
->>>>>> This is not the root cause. The fix is not good.
->>>>> This problem is about "INFO: trying to register non-static key. The
->>>>> code is fine but needs lockdep annotation, or maybe"
->>> This warning is from "lock is not initialized". This is a
->>> use-before-initialized problem.
->> Right, and it also applies to qp->sq.queue which is set to NULL while do
->> cleanup
->> still de-reference it.
->>
->>> The correct fix is to initialize the lock that is complained before it is used.
->> The thing is it can't be initialized due to error, so I guess you want
->> to always init them
->> even for error cases.
-> The complaining is about "spinlock is not initialized".
+I2C_SLAVE_WRITE_REQUESTED can be sent in the if block. Restoring the
+removed lines should cover the use case for HW does not have FIRST_DATA_BYTE.
 
-There was another null-ptr-deref, no?
+There is no harm to send it again in read loop for FIRST_DATA_BYTE.
+Will resubmit the patch with the change.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
-CPU: 1 PID: 31038 Comm: syz-executor.3 Not tainted 6.3.0-syzkaller-12728-g348551ddaf31 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:flush_send_queue drivers/infiniband/sw/rxe/rxe_comp.c:597 [inline]
-RIP: 0010:rxe_completer+0x255c/0x3cc0 drivers/infiniband/sw/rxe/rxe_comp.c:653
-Code: 80 3c 02 00 0f 85 81 10 00 00 49 8b af 88 03 00 00 48 8d 45 30 48 89 c2 48 89 04 24 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 83 11 00 00 48 8d 45 2c 44 8b
-RSP: 0018:ffffc90003526938 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffffed100e3fe800 RCX: ffffc9000b403000
-RDX: 0000000000000006 RSI: ffffffff877e467a RDI: ffff888071ff4388
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: fffffbfff1cf3682 R11: fffffffffffda5b0 R12: ffff888071ff41a0
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff888071ff4000
-FS:  00007fede029f700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2d822000 CR3: 000000002c7e6000 CR4: 00000000003506e0
-Call Trace:
-  <TASK>
-  rxe_qp_do_cleanup+0x1be/0x820 drivers/infiniband/sw/rxe/rxe_qp.c:761
-  execute_in_process_context+0x3b/0x150 kernel/workqueue.c:3473
-  __rxe_cleanup+0x21e/0x370 drivers/infiniband/sw/rxe/rxe_pool.c:233
-  rxe_create_qp+0x3f6/0x5f0 drivers/infiniband/sw/rxe/rxe_verbs.c:583
-  create_qp+0x5ac/0x970 drivers/infiniband/core/verbs.c:1235
-  ib_create_qp_kernel+0xa1/0x310 drivers/infiniband/core/verbs.c:1346
-  ib_create_qp include/rdma/ib_verbs.h:3743 [inline]
-  create_mad_qp+0x177/0x380 drivers/infiniband/core/mad.c:2905
-  ib_mad_port_open drivers/infiniband/core/mad.c:2986 [inline]
-  ib_mad_init_device+0xf40/0x1a90 drivers/infiniband/core/mad.c:3077
-  add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
-  enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
-  ib_register_device drivers/infiniband/core/device.c:1420 [inline]
-  ib_register_device+0x8b1/0xbc0 drivers/infiniband/core/device.c:1366
-  rxe_register_device+0x302/0x3e0 drivers/infiniband/sw/rxe/rxe_verbs.c:1485
-  rxe_net_add+0x90/0xf0 drivers/infiniband/sw/rxe/rxe_net.c:527
-  rxe_newlink+0xf0/0x1b0 drivers/infiniband/sw/rxe/rxe.c:197
-  nldev_newlink+0x332/0x5e0 drivers/infiniband/core/nldev.c:1731
-  rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
-  rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
-  netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-  netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
-  netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
-  sock_sendmsg_nosec net/socket.c:724 [inline]
-  sock_sendmsg+0xde/0x190 net/socket.c:747
-  ____sys_sendmsg+0x71c/0x900 net/socket.c:2503
-  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2557
-  __sys_sendmsg+0xf7/0x1c0 net/socket.c:2586
-  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7feddf48c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fede029f168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007feddf5abf80 RCX: 00007feddf48c169
-RDX: 0000000000000000 RSI: 0000000020000240 RDI: 0000000000000003
-RBP: 00007feddf4e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe1bb3e01f R14: 00007fede029f300 R15: 0000000000022000
-  </TASK>
-Modules linked in:
-
-
-Guoqing
-
+Thanks
+David
