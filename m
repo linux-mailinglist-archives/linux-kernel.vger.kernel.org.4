@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C19B70E55D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DB270E560
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238163AbjEWT3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S238313AbjEWT34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbjEWT3R (ORCPT
+        with ESMTP id S238331AbjEWT3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:29:17 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2080.outbound.protection.outlook.com [40.107.95.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29806126;
-        Tue, 23 May 2023 12:29:15 -0700 (PDT)
+        Tue, 23 May 2023 15:29:54 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2045.outbound.protection.outlook.com [40.107.223.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F04018C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:29:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RqvLf7hHkdUOqd9NeRlrX5eo0Bk0ykapi7liiXBFz7MdilLDQRqFNECEG6KhZgtvcGeMbuaWhvAuutcdkGx9leLDfYWRnkAd63TSkmkMWuvkRP6lCztKuOQFjZKSjXjDsnrrP4JM9LMnCSauUcU4+qHRweH/neOeeJAiuUnzN0KLO/twwn/yaujA4kqhkRAetP/60pYAav4wzBUv29LZFnnp+grR9HRJNSr9BTchHXD4GkRBVttBUeVL2X7p+21SUa+decgG+J9HCMpOBJjP2tiyJ48Z05HEDOoNAABoPk+MLSyOIfMm6YniywXUJnA/cR84N7kKBiHavQHA4u+Bbg==
+ b=K6k1MuQygX6t2usdE06WTGZLH8win478zVQ9OMBbbCARGgvC1I6SggcjDkaGd0PNkqwRa+cX+P1oUNdZPGiJ2xqx+lwO5WtbW0MKJZy8gZ7vZvKHzIhdELx+FhDfsNwvGwNnL7tl6CVhYlXGEfC70g9ynCpo4qGeXRzKSMImVHP7TvA9wRzqyhtwlBrxq7M5zVUtbw4KYU0ZhvMm5PvzAeq+vPRR8ElcfbjcMtniLfDhAcUlF+0icufkWc+R95EbXQIF/j1lvql8TIgIa43LmJxYW5TJHNV5CmboGkif+P015FcG6XKpE3KhB+lCRgeKmYi5BskuO5HkQbeLBBgqLg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZX/9XDoo0YbDXURDbVwMHkKb4pAE0c5n5ThHdtyEICk=;
- b=J0N0K+LrlQOrmZHaFKwoMJLqS2Q5aX36adakSaHDXizEip66rdUVOrLG7GS4p1JQILp47mUQr2LNytyy2WBKy7ubxsSHh6/qKQfUpURRZRDqC8quwwhgTvBhY+j6I8p35nyEadAaehuGEiG93vQeI8luTTVKqtjfdiJSwYYo+A8/XexKYEnPZTRtDvMmV1xYx0JasoLVeRVqVO2fUTMzYEqOyONYbAddj8ZjSPR6w5QNZyb997ishEP/phnJGsO00gpzWXJn3xz6lHRV7xeZKF3gcpUzviib3NNhPimp1DLmyfH1Proz4+Tg6QAu05wUq+1aKW03k0W+K39abc9OUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
+ bh=hlEQcZkjViCgjwc4rzk4OlHmQDJZSzNrAgvnxOQS6dU=;
+ b=gFIMilJ4CNRMIgrYe7bbZmyQzjvlS/PTJxCVV5HHV2pwJ9YQwnRPMAyotUHx3IfgPUsKxIVk12cvF1dp8YULOgNKgvhIukSNCnah7K3VdBSdOjrC+3a7xzFGJm1/0SWjhYh6j0qoAqxLQ+UJsLnu1niJzYSVlLOQBdJIYG6iDPYPTxjaXf0Iwu7uGj4SGLuqFQNyrVwqGX0QPDPmDhEoeCtmWnbGIG/5ba4xuyRRUSneoVpJKJMoCU8/6gKEZf20UuUL54SOXIA1dnu+R8+ossLpQ5EZ0RXn06oP0kQ88YxHjlYdcSjHM16IuXhYgCDxmTtWXQrNiZH6RNBhQlpEfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZX/9XDoo0YbDXURDbVwMHkKb4pAE0c5n5ThHdtyEICk=;
- b=iB8kAq+wdGfmM3NfFZwbGHOfeo1+LvssWHs5heotT1nz+J7iAg9AAjIs3skCxs8okqdPEKsROHpBURlco6tHK7lQbBEwiGbr+YlIq+gBFuoyeE9RT4hDodMRSlirOBdgeY/cRuOxLGU1k4VnLnYr2UKxZw+8GqGaLlc6FWCHgvU=
-Received: from BN9PR03CA0484.namprd03.prod.outlook.com (2603:10b6:408:130::9)
- by CYYPR12MB8989.namprd12.prod.outlook.com (2603:10b6:930:c2::9) with
+ bh=hlEQcZkjViCgjwc4rzk4OlHmQDJZSzNrAgvnxOQS6dU=;
+ b=145ZQNHnjGtuD9tq3dJvZFLLmn1DQMtMIJ77I6+SzMQGsyNjiuKf2CoOw98U7/0DP6Phqe8E7vpdeOb7VrPnjtbGVLmclk973WuRxUfkrrjLmOg/Cs9uGhWh+Wtw2UszRAq2zQkq0lUAueIikBb6pHmLcx6/Ug/pYR5EKsr8lDA=
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15)
+ by CH3PR12MB9251.namprd12.prod.outlook.com (2603:10b6:610:1bd::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 19:29:12 +0000
-Received: from BN8NAM11FT085.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:130:cafe::c2) by BN9PR03CA0484.outlook.office365.com
- (2603:10b6:408:130::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29 via Frontend
- Transport; Tue, 23 May 2023 19:29:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT085.mail.protection.outlook.com (10.13.176.100) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.30 via Frontend Transport; Tue, 23 May 2023 19:29:11 +0000
-Received: from platform-dev1.pensando.io (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 23 May 2023 14:29:05 -0500
-From:   Brad Larson <blarson@amd.com>
-To:     <michal.simek@amd.com>
-CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
-        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
-        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
-        <broonie@kernel.org>, <catalin.marinas@arm.com>,
-        <conor+dt@kernel.org>, <davidgow@google.com>,
-        <devicetree@vger.kernel.org>, <fancer.lancer@gmail.com>,
-        <gerg@linux-m68k.org>, <gsomlo@gmail.com>,
-        <hal.feng@starfivetech.com>, <hasegawa-hitomi@fujitsu.com>,
-        <j.neuschaefer@gmx.net>, <joel@jms.id.au>, <kernel@esmil.dk>,
-        <krzk@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <lee.jones@linaro.org>, <lee@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.zabel@pengutronix.de>,
-        <rdunlap@infradead.org>, <robh+dt@kernel.org>,
-        <samuel@sholland.org>, <skhan@linuxfoundation.org>,
-        <suravee.suthikulpanit@amd.com>, <thomas.lendacky@amd.com>,
-        <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
-        <vaishnav.a@ti.com>, <walker.chen@starfivetech.com>,
-        <will@kernel.org>, <zhuyinbo@loongson.cn>
-Subject: Re: [PATCH v14 6/8] arm64: dts: Add AMD Pensando Elba SoC support
-Date:   Tue, 23 May 2023 12:28:58 -0700
-Message-ID: <20230523192858.31924-1-blarson@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <e4227418-151d-7222-b439-4ce53bf0fb81@amd.com>
-References: <e4227418-151d-7222-b439-4ce53bf0fb81@amd.com>
+ 2023 19:29:24 +0000
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::723a:4152:5bb0:3763]) by MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::723a:4152:5bb0:3763%2]) with mapi id 15.20.6411.028; Tue, 23 May 2023
+ 19:29:24 +0000
+From:   "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
+To:     "Simek, Michal" <michal.simek@amd.com>,
+        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "git@xilinx.com" <git@xilinx.com>,
+        "Neeli, Srinivas" <srinivas.neeli@amd.com>,
+        "Kiernan, Derek" <derek.kiernan@amd.com>,
+        "Cvetic, Dragan" <dragan.cvetic@amd.com>,
+        "Harsha, Harsha" <harsha.harsha@amd.com>
+Subject: RE: [PATCH] MAINTAINERS: Switch to @amd.com emails
+Thread-Topic: [PATCH] MAINTAINERS: Switch to @amd.com emails
+Thread-Index: AQHZh/0xnwds/Avvhk2n1MQxJAKjX69oSIHQ
+Date:   Tue, 23 May 2023 19:29:23 +0000
+Message-ID: <MN0PR12MB5953895503602BCAE5B01BD0B7409@MN0PR12MB5953.namprd12.prod.outlook.com>
+References: <f7773fdd002f89578b9e5262692a563fe7be4123.1684244928.git.michal.simek@amd.com>
+In-Reply-To: <f7773fdd002f89578b9e5262692a563fe7be4123.1684244928.git.michal.simek@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB5953:EE_|CH3PR12MB9251:EE_
+x-ms-office365-filtering-correlation-id: 6ec7af36-89dc-405f-d59c-08db5bc403e7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aIIDdBhk5mkUp04G+IuUVkaMw2Dq+8FDZwY1gF1tzmB1muaeUnKBamsYosScwxZoLUw8ZvSjVt6KLmyNKREglQH5XJd51Uf69anHmdRnIr0WHtGoe1Nyiq7rrHM8ZopDU3BTkPNj+2gayVKF8aOlgOZKvOEUCnDWza9SOqEK/z7CjmZMM10FL7/veRL4hVXaqig+3G+rD7ScMXXUxJXPO7pCQHa2ZoU4umdb8Dw9VWwYfe7LC6Xw7t1JyKDk1eM33NKmn96bhlsG4nuNEJV487eFdMoYjESUga7hgkqiiI2Yfzeum9zHQRs1yrMiBeRsqZQgpYf0Pcod/JO6sW5vJzJxv/5yluAuTP8xVL2/MQR3xb2ZY/VnvKl3WGbQwsKbIAweTFxvuz/wlF0BSC5nuMcrrUt4mDW1wOhr1HmV8HehVzaKlqSGA2vzAJHa83XnbnLlQwYN1HcMcclIKoVNlr/pFlg3WzYbMGLFJ7WlXFW5HNUukePdr0VEFHsrO4UWBt+9wAYI0+r6pWXRdKtuZRwpGP9yOcenHVVa1B5+hY4HGlcKjVb2rswJHs6FMNNk4ZrC4zyK3X+O4s0hhTkN3bqymrQ4/EYVkhEb95tb74rq82mPwCPcY1a/D8+CrCBLM7aNzrM/F/bcjAgkgXaKxA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5953.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(38070700005)(110136005)(83380400001)(86362001)(478600001)(38100700002)(33656002)(186003)(76116006)(66476007)(66946007)(6636002)(64756008)(66446008)(66556008)(2906002)(71200400001)(316002)(9686003)(53546011)(6506007)(7696005)(41300700001)(52536014)(8676002)(5660300002)(8936002)(55016003)(122000001)(921005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JFpFF2IEMMy8KTXMB/ObrJUfwtZzjSYEz7V9lGIDU76WZLVPbPkYg8IyTMKC?=
+ =?us-ascii?Q?AKgrcK1cduQaxPbdaKmh71bU149pY/o6539VzSGHcMmJbEOlAxJKp4SOnUgF?=
+ =?us-ascii?Q?hVIrTcrOSUmA/nlXPdPaLErqkYMQ1jHn23UbyMxXLazU1SRsxDfalB4SKmkU?=
+ =?us-ascii?Q?wQfSxnNyHjazyR0wO7c0wyKZrdoTDrw/ZdSdJc2BrZQq4tv79t6x7rudnkIB?=
+ =?us-ascii?Q?CC8rGdntIzYWVMDMnjac8iF7L2WVbgZ7tvdHeM0K6iS3XhgvdmDhzYgMuHP+?=
+ =?us-ascii?Q?4U6E+79TothbqIrrY6W/abQmCCLZdnduW3pZXUNLkQq4vr+xdUwXfrrSQCiX?=
+ =?us-ascii?Q?qurUJfWdPV8RoWEig3mLWXs+ncJ+N6P4h3EdjQQWF/azj3t4k1dy3v3gvWKU?=
+ =?us-ascii?Q?HyV/usMG/DZ68uScXv6X5YVlvXiQQLJO2Y2IHU4vU6HREQo7MBEVlk6jqql/?=
+ =?us-ascii?Q?Xht2R32xT8EZghMlgF6L9FpyQgFF7oX7F5skhC3hDzD3TY3bNjtJR2TLfWw5?=
+ =?us-ascii?Q?8Tj1Cd7usrbSSwMVs/1FUW3ZdaYe26dqTYJ1+uk8CbWKXctXoMK9DVTpB4vL?=
+ =?us-ascii?Q?K8JAsxesWco1UdjLVMDe5MIKUK0Fl77X6HWEXtDBQfF98FO8sYYZyYmrOWxa?=
+ =?us-ascii?Q?JbYjtstbSTg4uWiBdswoiamVwcoLpkWVf0WyuzSW41LaGINn5PEyxN7GWqM0?=
+ =?us-ascii?Q?cexxpbI0MmEcgLdQrD44dx9DC8RaLEIxUtY3A3BBK2ktLPdTCmdmOK76VM/L?=
+ =?us-ascii?Q?W9bWbaWQLliDVCv4SUdvkWSdSOf692vhD6qZpurAJvvRVdPt7+2+gm5Wq+Yx?=
+ =?us-ascii?Q?9UdxgBeFeZg5vg0KnrF5EFDcG5iCUvg7OPMfi60F3d43emIONOyu5mFktrYg?=
+ =?us-ascii?Q?JV5PjlKcULzDP78ICkd2GUl40jfg+ZgoM0IT2S5oNLX753LDKGBAfGfSdMav?=
+ =?us-ascii?Q?YN0BcDmA4bwM8JnJmCPhDFHhdH/P+qAjlRmRLPLwjRFR2S/aJp7DVG7fV42d?=
+ =?us-ascii?Q?hLkhqzIqC0SANY+pjUXxYNe+v7meNg5Om9OyPXqAXmUwwW4Omu9MWGeldG/N?=
+ =?us-ascii?Q?gFu/1y9D68Qd+LuV0C9IJSqHkyKsWARw43fLRWvpX1pWSolv1rcVjcinW/3P?=
+ =?us-ascii?Q?4EmEiHDPlME530NvHMNUkgb/1YOOPpur+ubruwRTvoIZwWKLT6/GzkGLASr6?=
+ =?us-ascii?Q?79fdX1BYNzoWRC4Mc6d/DoC+r1azxr+EJqBwJLRraya/YN20W9CCqegmngeh?=
+ =?us-ascii?Q?QChB8osUeijOmsQf9QX+PEgSBCL4gFGqKE+7ajM/d/Zh1U+EdUw/o1hDfBoS?=
+ =?us-ascii?Q?UfRbMdYkwjRhec2gA8SZpNDdu5Z9uAocqB0Misa8ykst/sr2f52v5pdFj2Cm?=
+ =?us-ascii?Q?EE44MnAlV04fdYlkvJ2UmXHYaSt6KZ1jEAGILOo9N2ivkyAMy8EnlNem7jB0?=
+ =?us-ascii?Q?7BF+BuYkACjgMU01s1CFkZI7PS/NJSFsWARg+s32xTYsih+tTvV9wWLM/KHD?=
+ =?us-ascii?Q?YCRNl/eULIwxmB5JtflFLRTlH5qcuW1t8KoEr/t0v9isbS44RhpgLFVSEXSq?=
+ =?us-ascii?Q?5AAo8+w6ZZoeoV+IufqMi1K2FQHKIwWfVDPBw3N8nUO+wnTlgffyyONRwtCn?=
+ =?us-ascii?Q?jS72dquC54gsOVpcwBXgaBc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT085:EE_|CYYPR12MB8989:EE_
-X-MS-Office365-Filtering-Correlation-Id: 86fc750c-6000-4906-b8b2-08db5bc3fcbd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2RVM3gv+CWiMhkH11GcPCtKl/M2Gt0CUt+M27fFpRBAgYD5xb4a2iwPhWZywfdxXl1c/sUrJDcrbtrp4CkrP0mtDE1EBr+Prfnq13Ac3IMKu4Zi+jaRsbf/Gl9qLAV5RXzl6y4Wg/wae9YyiPOQrf2LgLHb5eeeADTmXiO/KTcy2E8p8euThFQXKqpWz2Ub5zxeVRzMKzy+D7BWKEsx5vroDIT3BWFeMl7iCsEW7mZmeCio1LvGLTtqkcnQhS9Nv6ZGZzZkGN5EScw/WNKMqRJ5zIx4QlXP+jaaXe0YGS/pRgzD8LLUusEEWNBeTpn5Jmp2bAckC/xa7QElZfSsHFDixOizZmB2oQ49YZdzrISZ8cDVsxBWNlJtriR88Eq7H9S/RNfOLMmJ9DRqQ4ImkNyZCzbAy/2CAx/4IdhfDqF8CddXTa5actnSRTVlLGpJLIlHyBUQYVc4BR63zY0q6jijEOfW9xEZR8HbYR9qWchbpaC2GvyAFrvkrhFXfJXfLHbHPiWsgY7uFPLs+8F/XHRMl4e5bqLknYZXzm1UIlVbPd1d8+3p4WwB9qN2Vx0tVH7A4oZ/UYgkz0bW/F1LrIq3Hs4XGnbQfwury4p9k4Gpz+HHgTzwjRUcnxdJ4R9KkKhN6R8n4NFRHUvWe0T1WPdlqOBz1tw458eDTGXUkFJ6U8pOUZjP2QjTzoaTzrIBZsQ3sTNjDmvheufA4J+2Pbre7aLO64uQgzoKPpnjOAJihmiopG94lAIbMpPruLqa2JcCQfoszc9lTV/mOdLVG0g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(346002)(451199021)(40470700004)(36840700001)(46966006)(53546011)(356005)(81166007)(1076003)(186003)(26005)(40460700003)(7406005)(82740400003)(7416002)(2616005)(47076005)(36756003)(36860700001)(83380400001)(336012)(426003)(16526019)(2906002)(40480700001)(54906003)(37006003)(316002)(41300700001)(6666004)(82310400005)(478600001)(6636002)(4326008)(70586007)(70206006)(8676002)(8936002)(6862004)(5660300002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 19:29:11.9474
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5953.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec7af36-89dc-405f-d59c-08db5bc403e7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2023 19:29:23.9711
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86fc750c-6000-4906-b8b2-08db5bc3fcbd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT085.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8989
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gctuwubJQMbmbke20WCIzLci5RZUPZjrCR1Q5ILtRYTuqMWGOcJOD6Hzd8TKMTXE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9251
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -117,246 +124,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+> -----Original Message-----
+> From: Simek, Michal <michal.simek@amd.com>
+> Sent: Tuesday, May 16, 2023 7:19 PM
+> To: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>; Datta,
+> Shubhrajyoti <shubhrajyoti.datta@amd.com>; linux-kernel@vger.kernel.org;
+> monstr@monstr.eu; michal.simek@xilinx.com; git@xilinx.com; Neeli,
+> Srinivas <srinivas.neeli@amd.com>; Kiernan, Derek
+> <derek.kiernan@amd.com>; Cvetic, Dragan <dragan.cvetic@amd.com>;
+> Harsha, Harsha <harsha.harsha@amd.com>
+> Subject: [PATCH] MAINTAINERS: Switch to @amd.com emails
+>=20
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
+>=20
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
 
-Thanks for reviewing the patch.
+Acked-by:  Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+>=20
+>  MAINTAINERS | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 60f6effb168c..4b2ef60a4d01 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -23115,7 +23115,7 @@ F:
+> 	Documentation/devicetree/bindings/iio/adc/xlnx,zynqmp-ams.yaml
+>  F:	drivers/iio/adc/xilinx-ams.c
+>=20
+>  XILINX AXI ETHERNET DRIVER
+> -M:	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> +M:	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+>  S:	Maintained
+>  F:	drivers/net/ethernet/xilinx/xilinx_axienet*
+>=20
+> @@ -23128,8 +23128,8 @@ F:
+> 	Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+>  F:	drivers/net/can/xilinx_can.c
+>=20
+>  XILINX GPIO DRIVER
+> -M:	Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> -R:	Srinivas Neeli <srinivas.neeli@xilinx.com>
+> +M:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> +R:	Srinivas Neeli <srinivas.neeli@amd.com>
+>  R:	Michal Simek <michal.simek@amd.com>
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
+> @@ -23138,8 +23138,8 @@ F:	drivers/gpio/gpio-xilinx.c
+>  F:	drivers/gpio/gpio-zynq.c
+>=20
+>  XILINX SD-FEC IP CORES
+> -M:	Derek Kiernan <derek.kiernan@xilinx.com>
+> -M:	Dragan Cvetic <dragan.cvetic@xilinx.com>
+> +M:	Derek Kiernan <derek.kiernan@amd.com>
+> +M:	Dragan Cvetic <dragan.cvetic@amd.com>
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/misc/xlnx,sd-fec.txt
+>  F:	Documentation/misc-devices/xilinx_sdfec.rst
+> @@ -23212,7 +23212,7 @@ F:
+> 	Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
+>  F:	drivers/phy/xilinx/phy-zynqmp.c
+>=20
+>  XILINX ZYNQMP SHA3 DRIVER
+> -M:	Harsha <harsha.harsha@xilinx.com>
+> +M:	Harsha <harsha.harsha@amd.com>
+>  S:	Maintained
+>  F:	drivers/crypto/xilinx/zynqmp-sha.c
+>=20
+> --
+> 2.36.1
 
-On 5/16/23 09:54, Michal Simek wrote:
-> On 5/15/23 20:16, Brad Larson wrote:
->> Add AMD Pensando common and Elba SoC specific device nodes
->> 
->> Signed-off-by: Brad Larson <blarson@amd.com>
->> ---
->> 
->> v14 changes:
->> - Fix dtbs_check l2-cache* property issue by adding required
->>    cache-level and cache-unified properties
->> - Observed the issue after updating dtschema from 2023.1 to 2023.4
->>    and yamllint from 1.26.3 to 1.30.0
->> 
->> v11 changes:
->> - Delete reset-names
->> - Fix spi0 compatible to be specific 'amd,pensando-elba-ctrl'
->> 
->> v9 changes:
->> - Single node for spi0 system-controller and squash
->>    the reset-controller child into parent
->> 
->> ---
->>   arch/arm64/boot/dts/amd/Makefile              |   1 +
->>   arch/arm64/boot/dts/amd/elba-16core.dtsi      | 197 ++++++++++++++++++
->>   arch/arm64/boot/dts/amd/elba-asic-common.dtsi |  80 +++++++
->>   arch/arm64/boot/dts/amd/elba-asic.dts         |  28 +++
->>   arch/arm64/boot/dts/amd/elba-flash-parts.dtsi | 106 ++++++++++
->>   arch/arm64/boot/dts/amd/elba.dtsi             | 191 +++++++++++++++++
->>   6 files changed, 603 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/amd/elba-16core.dtsi
->>   create mode 100644 arch/arm64/boot/dts/amd/elba-asic-common.dtsi
->>   create mode 100644 arch/arm64/boot/dts/amd/elba-asic.dts
->>   create mode 100644 arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
->>   create mode 100644 arch/arm64/boot/dts/amd/elba.dtsi
->> 
->> diff --git a/arch/arm64/boot/dts/amd/Makefile b/arch/arm64/boot/dts/amd/Makefile
->> index 68103a8b0ef5..8502cc2afbc5 100644
->> --- a/arch/arm64/boot/dts/amd/Makefile
->> +++ b/arch/arm64/boot/dts/amd/Makefile
->> @@ -1,2 +1,3 @@
->>   # SPDX-License-Identifier: GPL-2.0
->> +dtb-$(CONFIG_ARCH_PENSANDO) += elba-asic.dtb
->>   dtb-$(CONFIG_ARCH_SEATTLE) += amd-overdrive-rev-b0.dtb amd-overdrive-rev-b1.dtb
->> diff --git a/arch/arm64/boot/dts/amd/elba-16core.dtsi b/arch/arm64/boot/dts/amd/elba-16core.dtsi
->> new file mode 100644
->> index 000000000000..f9f9f5fd5f69
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/amd/elba-16core.dtsi
->> @@ -0,0 +1,197 @@
->> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> +/*
->> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
->
-> 2023 and the same below.
-
-I'll update the copyright in the next submit
-
->> + */
->> +
->> +/ {
->> +	cpus {
->> +		#address-cells = <2>;
->> +		#size-cells = <0>;
->> +
->> +		cpu-map {
->> +			cluster0 {
->> +				core0 { cpu = <&cpu0>; };
->> +				core1 { cpu = <&cpu1>; };
->> +				core2 { cpu = <&cpu2>; };
->> +				core3 { cpu = <&cpu3>; };
->> +			};
->> +
->> +			cluster1 {
->> +				core0 { cpu = <&cpu4>; };
->> +				core1 { cpu = <&cpu5>; };
->> +				core2 { cpu = <&cpu6>; };
->> +				core3 { cpu = <&cpu7>; };
->> +			};
->> +
->> +			cluster2 {
->> +				core0 { cpu = <&cpu8>; };
->> +				core1 { cpu = <&cpu9>; };
->> +				core2 { cpu = <&cpu10>; };
->> +				core3 { cpu = <&cpu11>; };
->> +			};
->> +
->> +			cluster3 {
->> +				core0 { cpu = <&cpu12>; };
->> +				core1 { cpu = <&cpu13>; };
->> +				core2 { cpu = <&cpu14>; };
->> +				core3 { cpu = <&cpu15>; };
->> +			};
->> +		};
->> +
->> +		/* CLUSTER 0 */
->> +		cpu0: cpu@0 {
->> +			device_type = "cpu";
->> +			compatible = "arm,cortex-a72";
->> +			reg = <0 0x0>;
->
-> Do you really need 2/0 split here. The first cell is 0 anyway.
-
-Yes following 64-bit system definition
-
-...
-
->> diff --git a/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
->> new file mode 100644
->> index 000000000000..734893fef2c3
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
->> @@ -0,0 +1,106 @@
->> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> +/*
->> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
->> + */
->> +
->> +&flash0 {
-0xf0000>> +	partitions {
->> +		compatible = "fixed-partitions";
->> +		#address-cells = <1>;
->> +		#size-cells = <1>;
->> +		partition@0 {
->> +			label = "flash";
->> +			reg = <0x10000 0xfff0000>;
->
-> This doesn't fit with partition@0 above.
-> Also size is weird.
-
-This is intended to not expose sector 0.
-
->> +		};
->> +
->> +		partition@f0000 {
->> +			label = "golduenv";
->> +			reg = <0xf0000 0x10000>;
->> +		};
->> +
->> +		partition@100000 {
->> +			label = "boot0";
->> +			reg = <0x100000 0x80000>;
->> +		};
->> +
->> +		partition@180000 {
->> +			label = "golduboot";
->> +			reg = <0x180000 0x200000>;
->> +		};
->> +
->> +		partition@380000 {
->> +			label = "brdcfg0";
->> +			reg = <0x380000 0x10000>;
->> +		};
->> +
->> +		partition@390000 {
->> +			label = "brdcfg1";
->> +			reg = <0x390000 0x10000>;
->> +		};
->> +
->> +		partition@400000 {
->> +			label = "goldfw";
->> +			reg = <0x400000 0x3c00000>;
->
-> This size looks weird.
-
-It's the allocated size for this firmware component.
-
->> +		};
->> +
->> +		partition@4010000 {
->> +			label = "fwmap";
->> +			reg = <0x4010000 0x20000>;
->> +		};
->> +
->> +		partition@4030000 {
->> +			label = "fwsel";
->> +			reg = <0x4030000 0x20000>;
->> +		};
->> +
->> +		partition@4090000 {
->> +			label = "bootlog";
->> +			reg = <0x4090000 0x20000>;
->> +		};
->> +
->> +		partition@40b0000 {
->> +			label = "panicbuf";
->> +			reg = <0x40b0000 0x20000>;
->> +		};
->> +
->> +		partition@40d0000 {
->> +			label = "uservars";
->> +			reg = <0x40d0000 0x20000>;
->> +		};
->> +
->> +		partition@4200000 {
->> +			label = "uboota";
->> +			reg = <0x4200000 0x400000>;
->> +		};
->> +
->> +		partition@4600000 {
->> +			label = "ubootb";
->> +			reg = <0x4600000 0x400000>;
->> +		};
->> +
->> +		partition@4a00000 {
->> +			label = "mainfwa";
->> +			reg = <0x4a00000 0x1000000>;
->> +		};
->> +
->> +		partition@5a00000 {
->> +			label = "mainfwb";
->> +			reg = <0x5a00000 0x1000000>;
->> +		};
->> +
->> +		partition@6a00000 {
->> +			label = "diaguboot";
->> +			reg = <0x6a00000 0x400000>;
->> +		};
->> +
->
-> here is gap
-
-This is intentional for unallocated space.  I'll put in a 'spare' partition.
-
->> +		partition@8000000 {
->> +			label = "diagfw";
->> +			reg = <0x8000000 0x7fe0000>;
->> +		};
->> +
->> +		partition@ffe0000 {
->> +			label = "ubootenv";
->> +			reg = <0xffe0000 0x10000>;
->> +		};
->
-> And this is missing space description.
-
-space description?
-
-Regards,
-Brad
