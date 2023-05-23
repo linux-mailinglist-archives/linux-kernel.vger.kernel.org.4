@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9554370E0BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEC070E0C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237556AbjEWPkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S237516AbjEWPmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237019AbjEWPkt (ORCPT
+        with ESMTP id S237609AbjEWPms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:40:49 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0A8129
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:40:47 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:b0ac:7afd:272:4cff])
-        by laurent.telenet-ops.be with bizsmtp
-        id 0Fgi2A00U0Jkz7G01Fgi8n; Tue, 23 May 2023 17:40:46 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1U7g-002t5B-8n;
-        Tue, 23 May 2023 17:40:42 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1U7u-00CkiL-KO;
-        Tue, 23 May 2023 17:40:42 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-pwm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] backlight: pwm_bl: Remove unneeded checks for valid GPIOs
-Date:   Tue, 23 May 2023 17:40:41 +0200
-Message-Id: <00be8237e0e2bc9b179177b5490f175d657261a2.1684856337.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 May 2023 11:42:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584E5DD;
+        Tue, 23 May 2023 08:42:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1D6860F8B;
+        Tue, 23 May 2023 15:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048B6C433D2;
+        Tue, 23 May 2023 15:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684856566;
+        bh=JqY2JQToRp5CVEzDDydrabhm0dAB49w4rljNNCW/Xlo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=GMwG7gLU/gZuGTMI701TxdPydj/UA0Y5S4V2bn4aupcp7hpHdQ9RtQjiv/gOX5Ol2
+         4AmM+Le4UFHZ+WYsMFp1Dq4CyLN+3NsAsn3Pcg/wQnic7GmqUGbG29GPSp8mQCuFqY
+         QnwGHTzuv/TK7NXliWyobp6ohmcZX9XT69BswwQiRql+9X6yFg1PCoVobm9eQ787tM
+         mgjeZtvb7OpF7ZZjQ6ZUq9I+llpYCujrlyJUluavNXfi1DMSMNH/agSmAJ9I1dyCSk
+         Jv403FV2eu/DNIJIx1FX8wp7f2ViTmn0mFoUA6ZBuc+LLqhQUEp5bUUJHDiGb0iGQ2
+         z6gyOas4JCwDg==
+Date:   Tue, 23 May 2023 10:42:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Igor Mammedov <imammedo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, mst@redhat.com, rafael@kernel.org,
+        lenb@kernel.org, bhelgaas@google.com, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, mika.westerberg@linux.intel.com
+Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
+ necessary
+Message-ID: <ZGze9HyQLKZ89dna@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGvj7aqaY3InNqun@bhelgaas>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All of gpiod_set_value_cansleep() and gpiod_direction_output() handle
-NULL GPIO pointers just fine, so there is no need to check for that in
-the caller.
+On Mon, May 22, 2023 at 04:51:41PM -0500, Bjorn Helgaas wrote:
+> On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:
+> > When using ACPI PCI hotplug, hotplugging a device with
+> > large BARs may fail if bridge windows programmed by
+> > firmware are not large enough.
+> > 
+> > Reproducer:
+> >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+> >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+> >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+> >       disk_image
+> > 
+> >  wait till linux guest boots, then hotplug device
+> >    (qemu) device_add qxl,bus=rp1
+> > 
+> >  hotplug on guest side fails with:
+> >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+> >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+> >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+> >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+> >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+> >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+> >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+> >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+> >    Unable to create vram_mapping
+> >    qxl: probe of 0000:01:00.0 failed with error -12
+> > 
+> > However when using native PCIe hotplug
+> >   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
+> > it works fine, since kernel attempts to reassign unused resources.
+> > Use the same machinery as native PCIe hotplug to (re)assign resources.
+> > 
+> > Signed-off-by: Igor Mammedov <imammedo@redhat.com>
+> 
+> Tentatively applied to pci/hotplug for v6.5.
+> 
+> Tentative only because I'm hoping for your ack or review, Rafael (I
+> see you acked v1, but this one is a little different).
+> 
+> And I think you'd like a stable tag, Michael?  I'm happy to add one,
+> but wasn't sure if you wanted a separate ack for that.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/video/backlight/pwm_bl.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Added stable tag and Rafael's ack.  All set for v6.5, thanks!
 
-diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
-index fce412234d10399a..a51fbab96368053b 100644
---- a/drivers/video/backlight/pwm_bl.c
-+++ b/drivers/video/backlight/pwm_bl.c
-@@ -54,8 +54,7 @@ static void pwm_backlight_power_on(struct pwm_bl_data *pb)
- 	if (pb->post_pwm_on_delay)
- 		msleep(pb->post_pwm_on_delay);
- 
--	if (pb->enable_gpio)
--		gpiod_set_value_cansleep(pb->enable_gpio, 1);
-+	gpiod_set_value_cansleep(pb->enable_gpio, 1);
- 
- 	pb->enabled = true;
- }
-@@ -65,8 +64,7 @@ static void pwm_backlight_power_off(struct pwm_bl_data *pb)
- 	if (!pb->enabled)
- 		return;
- 
--	if (pb->enable_gpio)
--		gpiod_set_value_cansleep(pb->enable_gpio, 0);
-+	gpiod_set_value_cansleep(pb->enable_gpio, 0);
- 
- 	if (pb->pwm_off_delay)
- 		msleep(pb->pwm_off_delay);
-@@ -429,8 +427,7 @@ static int pwm_backlight_initial_power_state(const struct pwm_bl_data *pb)
- 	 * Synchronize the enable_gpio with the observed state of the
- 	 * hardware.
- 	 */
--	if (pb->enable_gpio)
--		gpiod_direction_output(pb->enable_gpio, active);
-+	gpiod_direction_output(pb->enable_gpio, active);
- 
- 	/*
- 	 * Do not change pb->enabled here! pb->enabled essentially
--- 
-2.34.1
-
+> > ---
+> > tested in QEMU with Q35 machine on PCIE root port and also
+> > with nested conventional bridge attached to root port.
+> > 
+> > v2:
+> >   * fixup subject to match expected style
+> >   * drop no longer needed __pci_bus_size_bridges() to avoid
+> >     memory leak (Bjorn Helgaas <helgaas@kernel.org>)
+> > ---
+> >  drivers/pci/hotplug/acpiphp_glue.c | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
+> > index 5b1f271c6034..328d1e416014 100644
+> > --- a/drivers/pci/hotplug/acpiphp_glue.c
+> > +++ b/drivers/pci/hotplug/acpiphp_glue.c
+> > @@ -498,7 +498,6 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+> >  				acpiphp_native_scan_bridge(dev);
+> >  		}
+> >  	} else {
+> > -		LIST_HEAD(add_list);
+> >  		int max, pass;
+> >  
+> >  		acpiphp_rescan_slot(slot);
+> > @@ -512,12 +511,10 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+> >  				if (pass && dev->subordinate) {
+> >  					check_hotplug_bridge(slot, dev);
+> >  					pcibios_resource_survey_bus(dev->subordinate);
+> > -					__pci_bus_size_bridges(dev->subordinate,
+> > -							       &add_list);
+> >  				}
+> >  			}
+> >  		}
+> > -		__pci_bus_assign_resources(bus, &add_list, NULL);
+> > +		pci_assign_unassigned_bridge_resources(bus->self);
+> >  	}
+> >  
+> >  	acpiphp_sanitize_bus(bus);
+> > -- 
+> > 2.39.1
+> > 
