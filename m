@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B046B70D8FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC5770D8FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbjEWJ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
+        id S236341AbjEWJ1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235730AbjEWJ1g (ORCPT
+        with ESMTP id S233008AbjEWJ1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:27:36 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010E2133;
-        Tue, 23 May 2023 02:27:32 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CBD502000C;
-        Tue, 23 May 2023 09:27:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684834051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tWmP+K0uuA6jsYPFxeIuaz/mxhobE31RozhJ+QuYoSM=;
-        b=MLkNf5XJX5xupRjTys0zCJsfk4CyCnGchIZJhXDIN9UveOQS+bjXcKHkw0FkgFdzI/2Fcu
-        U1v6aa8rCqWKAdykDjVKmeMCkOBRwcNNdrPyl2jsqrZvwV63jvo0yxbigG0eegZVxeHZEF
-        aJ4r8+RfJ81gjc5Zt5j4vUeS+NnZ4GIzco1gFar9fJtORIe4dhqldqKGdGmjORPlhesl+l
-        lIJpKxxhXPulS3qCMUJQKquSUY3UVeaWRQHidxrESNYqFSmUsBxfH/iQbVSt4ewKQchVlC
-        3m3KcKuZbhGtlmz3IVO5hHXkbQcIWw+HN+ftUwgW8Y6ImTwI2/Gao9GrwgSFTA==
-Date:   Tue, 23 May 2023 11:27:28 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 2/2] serial: cpm_uart: Fix a COMPILE_TEST dependency
-Message-ID: <20230523112728.00dd5268@bootlin.com>
-In-Reply-To: <012b7c3d-1411-e5e1-662a-33369bfca610@kernel.org>
-References: <20230523085902.75837-1-herve.codina@bootlin.com>
-        <20230523085902.75837-3-herve.codina@bootlin.com>
-        <012b7c3d-1411-e5e1-662a-33369bfca610@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Tue, 23 May 2023 05:27:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29302102;
+        Tue, 23 May 2023 02:27:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1E0961458;
+        Tue, 23 May 2023 09:27:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900DDC433EF;
+        Tue, 23 May 2023 09:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684834065;
+        bh=GxCw8XHZQUNgn/D+d/HLdZIvI8/UxcZX98tov3QuGj8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bsHAyqOH8UJkZXzpSVReuacSD72TtW+QHZeXB4wupk7QE3JOv9zINpvrColtflgJT
+         TIGVGfu8CsGH3uYj20Q+LBEgkakBI8UTll6zs+aaQkmN5HFluFbD3AaNs1UW/BZ4SN
+         3C4u3KZVmBfypshuf9F47ZO7EgUzYCw9WaDPujasCp0bPym+e2dQLVYzYzY+1EwTh6
+         MrkC29E+EKHpwWqAYHywfRUxPQhdw3RI1D9yyskYhSWE8NMjxgOg73vfLg2tBIKmqz
+         GeGAwRlY3HnTwfMv7wchxAqYLH/7ovPk6Vj/KObVjbzpRABJaQi5hOiW2wvoVMa13R
+         KIYa9qXd7nnrw==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Dave Chinner <dchinner@redhat.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Subject: Re: (subset) [PATCH 21/32] hlist-bl: add hlist_bl_fake()
+Date:   Tue, 23 May 2023 11:27:37 +0200
+Message-Id: <20230523-bitumen-misskredit-a5e4ae904d58@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230509165657.1735798-22-kent.overstreet@linux.dev>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev> <20230509165657.1735798-22-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1044; i=brauner@kernel.org; h=from:subject:message-id; bh=GxCw8XHZQUNgn/D+d/HLdZIvI8/UxcZX98tov3QuGj8=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTktDPnfnKdFVK4s6BJUn/Nm+Qv8g7xGeL+juFCEUltCwv0 efs6SlkYxLgYZMUUWRzaTcLllvNUbDbK1ICZw8oEMoSBi1MAJpJ0k5Hh/rED3XsD3ppYTlKwdnG79d rFc0VNsueTDTtXnli82yWOj+GfXeFiz9f3+aMS/8iGf7ZXFXrhWGDj3Taxt7V9Vu96jz5eAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,75 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 11:13:02 +0200
-Jiri Slaby <jirislaby@kernel.org> wrote:
-
-> On 23. 05. 23, 10:59, Herve Codina wrote:
-> > In a COMPILE_TEST configuration, the cpm_uart driver uses symbols from
-> > the cpm_uart_cpm2.c file. This file is compiled only when CONFIG_CPM2 is
-> > set.
-> > 
-> > Without this dependency, the linker fails with some missing symbols for
-> > COMPILE_TEST configuration that needs SERIAL_CPM without enabling CPM2.
-> > 
-> > This lead to:
-> >    depends on CPM2 || CPM1 || (PPC32 && CPM2 && COMPILE_TEST)
-> > 
-> > This dependency does not make sense anymore and can be simplified
-> > removing all the COMPILE_TEST part.  
+On Tue, 09 May 2023 12:56:46 -0400, Kent Overstreet wrote:
+> in preparation for switching the VFS inode cache over the hlist_bl
+> lists, we nee dto be able to fake a list node that looks like it is
+> hased for correct operation of filesystems that don't directly use
+> the VFS indoe cache.
 > 
-> Then it's the same as my revert:
-> https://lore.kernel.org/all/20230518055620.29957-1-jirislaby@kernel.org/
-> 
-> :D
-> 
-> But nevermind.
-
-Sorry, I didn't look at your revert.
-
-Do you want a new iteration adding (same as your revert) ?
-  Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-  Reported-by: Randy Dunlap <rdunlap@infradead.org>
-  Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-
-Best regards,
-Hervé
-
-> 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Link: https://lore.kernel.org/oe-kbuild-all/202305160221.9XgweObz-lkp@intel.com/
-> > Fixes: e3e7b13bffae ("serial: allow COMPILE_TEST for some drivers")
-> > ---
-> >   drivers/tty/serial/Kconfig             | 2 +-
-> >   drivers/tty/serial/cpm_uart/cpm_uart.h | 2 --
-> >   2 files changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> > index 625358f44419..de092bc1289e 100644
-> > --- a/drivers/tty/serial/Kconfig
-> > +++ b/drivers/tty/serial/Kconfig
-> > @@ -769,7 +769,7 @@ config SERIAL_PMACZILOG_CONSOLE
-> >   
-> >   config SERIAL_CPM
-> >   	tristate "CPM SCC/SMC serial port support"
-> > -	depends on CPM2 || CPM1 || (PPC32 && COMPILE_TEST)
-> > +	depends on CPM2 || CPM1
-> >   	select SERIAL_CORE
-> >   	help
-> >   	  This driver supports the SCC and SMC serial ports on Motorola
-> > diff --git a/drivers/tty/serial/cpm_uart/cpm_uart.h b/drivers/tty/serial/cpm_uart/cpm_uart.h
-> > index 0577618e78c0..46c03ed71c31 100644
-> > --- a/drivers/tty/serial/cpm_uart/cpm_uart.h
-> > +++ b/drivers/tty/serial/cpm_uart/cpm_uart.h
-> > @@ -19,8 +19,6 @@ struct gpio_desc;
-> >   #include "cpm_uart_cpm2.h"
-> >   #elif defined(CONFIG_CPM1)
-> >   #include "cpm_uart_cpm1.h"
-> > -#elif defined(CONFIG_COMPILE_TEST)
-> > -#include "cpm_uart_cpm2.h"
-> >   #endif
-> >   
-> >   #define SERIAL_CPM_MAJOR	204  
 > 
 
+This is interesting completely independent of bcachefs so we should give
+it some testing.
+
+---
+
+Applied to the vfs.unstable.inode-hash branch of the vfs/vfs.git tree.
+Patches in the vfs.unstable.inode-hash branch should appear in linux-next soon.
+
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.unstable.inode-hash
+
+[21/32] hlist-bl: add hlist_bl_fake()
+        https://git.kernel.org/vfs/vfs/c/0ef99590b01f
