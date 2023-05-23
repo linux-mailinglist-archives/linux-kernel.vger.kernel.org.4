@@ -2,94 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB9B70DF13
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5174470DF18
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237222AbjEWOTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S237056AbjEWOUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjEWOTq (ORCPT
+        with ESMTP id S236995AbjEWOUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:19:46 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D96118
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:19:45 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1afa6afcef4so14972795ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:19:45 -0700 (PDT)
+        Tue, 23 May 2023 10:20:03 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBBADD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:19:58 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso4530404b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:19:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684851584; x=1687443584;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJTOtttasiWLDEUcufe2rn3c2B61VJIjpPGMO/P/Yds=;
-        b=brwx0PSOMA0wdDk4Q3ZV6Zhimz9MGX1rc3oTrPLZdLDxR99oxRU+kgTiRQZeIUGp/B
-         dyf6U+6YZAZ0UTzApeHQKfgEnBhOiOJ/qXVvQ9J1F3RjGUiuExrD9+BmRrRlbu21nlVD
-         Wx38qijldoSLQu16rAmMxw27fIDqOXmDcc7YNTYCcS5xe37Q9LSgSZUY1x8lcrA4BzR8
-         Gn6XlWuegWj0mDFi1OGEJ901Pjqo4OoenFzAOsc9erWa0V37gRvkLtOzMhqrjLYhuzgg
-         EJnTJnwVBYHzHNPBMQ/b1Fhyc00bJU+3iH49CfEJT1yRwLmSMHit03ZKsytirD36EFwd
-         gllQ==
+        d=heitbaum.com; s=google; t=1684851597; x=1687443597;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qSaB8S6iMPltKJC6OceZ8AkCVMkwLB7jQ5nONfJjJWs=;
+        b=lfNilZeefBWNt84JHJ0el8W+89Vs/JZYfiyTiA6G/aqGvgGwou0+z1E3Os/uHNNnkJ
+         xo6SrNpz6weAKD2G5KaT+YIkQW5aDjDwhC+7sVswOhT8tZh2oybbAwy8QAPlzwOgKNjv
+         6MYnhHXoXKFz3+l+vgrHZXoTfkYyiQpQYeXgk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684851584; x=1687443584;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJTOtttasiWLDEUcufe2rn3c2B61VJIjpPGMO/P/Yds=;
-        b=ECBe5ju552My/WWiGRyEarMHGLZhj+lHcfnrAYFQjvpU8aCNboSlI8CYeEfhdcCjiB
-         QNR8pwE2FCCbRxLm458v5C4lsnpSE+nBjDJXt2QB1Jr0Z6y+rVhodhc80X5I3y6PAru6
-         msS5CF7j4Jseg3lMxZg/PwD3Z4Mg+93RKFAubkQ8SLjV73p9k3IEXzqyDR+M6+SlrzPe
-         ErRC0BX9xF8N4VDOFMclEMdfJ84wh+LpoKWTYdH6PkfpeUit7ruau45FTXbznPu1jwKH
-         Dgq0LOmEVBC2cMPpyMOUdTQzzXT4SAjOJ4AZsAJP/9T7Aggw9oFMuVMTLERt6rVF9pcZ
-         EtDw==
-X-Gm-Message-State: AC+VfDyoh5w6WqGAIey2tmwyJkG+KUonsMJFIFluyalbCbsxaWuBOUw/
-        HBxcB/SgnfePu2zERqGH/gWCIrEhCJg=
-X-Google-Smtp-Source: ACHHUZ7XDfHM+pb9CMgdhxQCTf7TNLGglKW4K4aM789UbMGnxCZDh8BKaFM+lAod2VMVzlBmEBluGi8tvqw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:eb11:b0:1a1:b318:2776 with SMTP id
- l17-20020a170902eb1100b001a1b3182776mr3427854plb.0.1684851584603; Tue, 23 May
- 2023 07:19:44 -0700 (PDT)
-Date:   Tue, 23 May 2023 07:19:43 -0700
-In-Reply-To: <ZGxo9ylqYI8JXjGn@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-Mime-Version: 1.0
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-9-chao.p.peng@linux.intel.com> <ZGxo9ylqYI8JXjGn@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-Message-ID: <ZGzLf4zgxpBjghaF@google.com>
-Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1684851597; x=1687443597;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qSaB8S6iMPltKJC6OceZ8AkCVMkwLB7jQ5nONfJjJWs=;
+        b=M8v9dc4WBTPWJ+8PgHAmNSKSkYjaLU/XagQ2693JLDQ2nHSPRNHyzsxkOrWMqWguZD
+         OIiCzQw4Qlq+k+Xse2ggBbh55HuhnItY+bk9mMaUGfmB0hLJj/AxLugFq0hHe8agyfrp
+         mJCIdnXvQZBbhb3ZFuAxPKtEI+45Qnn4Uzw1dud+cVBwamHPgcNJSGRxqqOYMhBDVbtj
+         I8qB66VaAMQ0C4f7cnStwaewFamu6p4OHpH5N2QPqiAi89kn6oo+OkpjG+IK0ZLa6Cmx
+         bjF0KoGru2LDvhTA7SCMnIEZxmacoCjbKQyKJYyBzjE6DpLbHV8PxupURQK05hHGW+fd
+         AQ/w==
+X-Gm-Message-State: AC+VfDxZA0qXdwhNbCjQu+VOCHK2makjLeyBzDUYNRdiAH2BvcgDLxyL
+        WHZ3kXEggK9NO4ta3kSWaXBaRJI8u61wg56a/gn2Dg==
+X-Google-Smtp-Source: ACHHUZ4KadxoD0Jt037h9tJ9dq8BsTt5jC/AWMCvzI/nuoobmcRmENwU0+79sZ6MvkqPkFPZFv7JbQ==
+X-Received: by 2002:a05:6a20:3953:b0:10c:5745:3f4e with SMTP id r19-20020a056a20395300b0010c57453f4emr3506961pzg.56.1684851597339;
+        Tue, 23 May 2023 07:19:57 -0700 (PDT)
+Received: from d2762026c99c ([122.199.31.3])
+        by smtp.gmail.com with ESMTPSA id b12-20020a17090ae38c00b0025063e893c9sm7577936pjz.55.2023.05.23.07.19.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 07:19:56 -0700 (PDT)
+Date:   Tue, 23 May 2023 14:19:49 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 000/364] 6.3.4-rc1 review
+Message-ID: <20230523141949.GA175285@d2762026c99c>
+References: <20230522190412.801391872@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522190412.801391872@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,54 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023, Kautuk Consul wrote:
-> On 2022-07-06 16:20:10, Chao Peng wrote:
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index e9153b54e2a4..c262ebb168a7 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -765,10 +765,10 @@ struct kvm {
-> >  
-> >  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
-> >  	struct mmu_notifier mmu_notifier;
-> > -	unsigned long mmu_notifier_seq;
-> > -	long mmu_notifier_count;
-> > -	gfn_t mmu_notifier_range_start;
-> > -	gfn_t mmu_notifier_range_end;
-> > +	unsigned long mmu_updating_seq;
-> > +	long mmu_updating_count;
+On Mon, May 22, 2023 at 08:05:05PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.4 release.
+> There are 364 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Can we convert mmu_updating_seq and mmu_updating_count to atomic_t ?
+> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
+> Anything received after that time might be too late.
 
-Heh, can we?  Yes.  Should we?  No.
+Hi Greg,
 
-> I see that not all accesses to these are under the kvm->mmu_lock
-> spinlock.
+I had the same build errors as Chris and Sudip.
 
-Ya, working as intended.  Ignoring gfn_to_pfn_cache for the moment, all accesses
-to mmu_invalidate_in_progress (was mmu_notifier_count / mmu_updating_count above)
-are done under mmu_lock.  And for for mmu_notifier_seq (mmu_updating_seq above),
-all writes and some reads are done under mmu_lock.  The only reads that are done
-outside of mmu_lock are the initial snapshots of the sequence number.
+6.3.4-rc1 tested with the following patch reverted
+ "xhci: Avoid PCI MSI/MSIX interrupt reinitialization at resume"
+  78887e3e5f00fca305670d8f3ba3c0f42b343047
 
-gfn_to_pfn_cache uses a different locking scheme, the comments in
-mmu_notifier_retry_cache() do a good job explaining the ordering.
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
 
-> This will also remove the need for putting separate smp_wmb() and
-> smp_rmb() memory barriers while accessing these structure members.
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-No, the memory barriers aren't there to provide any kind of atomicity.  The barriers
-exist to ensure that stores and loads to/from the sequence and invalidate in-progress
-counts are ordered relative to the invalidation (stores to counts) and creation (loads)
-of SPTEs.  Making the counts atomic changes nothing because atomic operations don't
-guarantee the necessary ordering.
-
-E.g. when handling a page fault, KVM snapshots the sequence outside of mmu_lock
-_before_ touching any state that is involved in resolving the host pfn, e.g. primary
-MMU state (VMAs, host page tables, etc.).   After the page fault task acquires
-mmu_lock, KVM checks that there are no in-progress invalidations and that the sequence
-count is the same.  This ensures that if there is a concurrent page fault and
-invalidation event, the page fault task will either acquire mmu_lock and create SPTEs
-_before_ the invalidation is processed, or the page fault task will observe either an
-elevated mmu_invalidate_in_progress or a different sequence count, and thus retry the
-page fault, if the page fault task acquires mmu_lock after the invalidation event.
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
