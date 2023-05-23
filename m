@@ -2,267 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509FF70DA27
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9553270DA1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236499AbjEWKRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
+        id S236497AbjEWKR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjEWKRh (ORCPT
+        with ESMTP id S235984AbjEWKR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:17:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E344109
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:16:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684837012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 23 May 2023 06:17:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4D894;
+        Tue, 23 May 2023 03:17:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DBA97204B2;
+        Tue, 23 May 2023 10:17:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684837043; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=SQHqTwIHdnGAuCc0miU9eDOkQpjo2/mk/8AwQvJchQc=;
-        b=UB3UCMZEBx11i4AAMCJM5McDS/Qsg1rBZW9k79NtaUEpj4l+t0jM36ADIHnFvdf15HiDVO
-        Hdkf4G/T1xrI0weLHxlo5HhaFqAdPzCG6qss23nOf4XQB9IQs9MLIP8ryY+BmWZ3/XSwPG
-        72Ijo8r839Y5kOapQPzpvCl9q7uzi24=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-271-4AP2RNOdMX6kfCOpaKtGtQ-1; Tue, 23 May 2023 06:16:51 -0400
-X-MC-Unique: 4AP2RNOdMX6kfCOpaKtGtQ-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9715654aba1so80922066b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:16:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684837010; x=1687429010;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SQHqTwIHdnGAuCc0miU9eDOkQpjo2/mk/8AwQvJchQc=;
-        b=YNbaWayXdooYCpD5WKtErP4e6rWQq1lnZbLY/cicySVvua9WbBm8zuWNrgVriLRr05
-         jsJABPXkRywgqeKylZY35pxZC/IFWuQA45fUr/uA1Hnpi1L4DaEtxiLU7DIqckJKaSE/
-         bxydJLDD04mXhXdkVov/TGn62Q1pXpWAqJH0TQ/YRET3kfABJ34IgASzK5pz4GeFQrcg
-         SlOMMQuuObTSnfDXbmdG6QwMWJmasX0vIjujYZBalaRNQx0ocYXS9brGx89JAcs/4QZw
-         YDDkBwwQqLI7lR8z8x6dKxGMt6+4VO/hhpKYRvRAHqFBhhLIm/E7ZkSl3AptEJ7JFAmI
-         CX+A==
-X-Gm-Message-State: AC+VfDyGVBh25wlPpNtWeUT0zagZoEyrJy/8f6tigb/HeoOymqSOlVUg
-        Wbi8Ui6ncK4NnPU8cc1Y6RjNsbkyeeHF742pfQSVvVVf6EH/T12LZIGU0OcH9a9avOsW3GC7Chv
-        8DQhJQgFwGGUIVm5EVLUW02Kf
-X-Received: by 2002:a17:907:ea9:b0:96a:2b4:eb69 with SMTP id ho41-20020a1709070ea900b0096a02b4eb69mr13393998ejc.31.1684837009827;
-        Tue, 23 May 2023 03:16:49 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ49yhK/BvmMprUo2opyxIyuZkHK27opbVXPXsLNZq65QZvQ3zkJiQT66NAQMp6+0niQu0jLDQ==
-X-Received: by 2002:a17:907:ea9:b0:96a:2b4:eb69 with SMTP id ho41-20020a1709070ea900b0096a02b4eb69mr13393965ejc.31.1684837009526;
-        Tue, 23 May 2023 03:16:49 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id s22-20020a170906961600b0096f89c8a2f7sm4209255ejx.90.2023.05.23.03.16.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 03:16:48 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <1693e3e3-c486-80c8-aec0-cca0c9080c34@redhat.com>
-Date:   Tue, 23 May 2023 12:16:46 +0200
+        bh=pJearGp7XvoKQH8r+JXuFUaSaDT86GZEmHPZFyporzw=;
+        b=yJZJT1OgORi5RtyIixB/rOLuR+h4YOf/eNgFYXfGwJwrUNG0IuaqlOt1xJwUh2rdfYfa3z
+        TRq3yl9IzwjdiXabcxYBb7c/VkGt/gWrkXIOV6zWQqw/TlF8q9NzxPsA6vuoHaKhRfDVsx
+        7dDUe7LfbfgHwItCuI47Lu50P+j1AYg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684837043;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pJearGp7XvoKQH8r+JXuFUaSaDT86GZEmHPZFyporzw=;
+        b=smBRmOb08zACD6WGFlZMUpHyGypof+tbliDQZkhMAqleKrtZ7ouMKaKN/V4ftcEBe+q1Hl
+        HJ7kYRewaUgDqADg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C61E113588;
+        Tue, 23 May 2023 10:17:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EVhVMLOSbGQlbAAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 23 May 2023 10:17:23 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 4F79CA075D; Tue, 23 May 2023 12:17:23 +0200 (CEST)
+Date:   Tue, 23 May 2023 12:17:23 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Neil Brown <neilb@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org
+Subject: Re: [PATCH v4 2/9] fs: add infrastructure for multigrain inode
+ i_m/ctime
+Message-ID: <20230523101723.xmy7mylbczhki6aa@quack3>
+References: <20230518114742.128950-1-jlayton@kernel.org>
+ <20230518114742.128950-3-jlayton@kernel.org>
+ <20230523100240.mgeu4y46friv7hau@quack3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     brouer@redhat.com, bpf@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND bpf-next 09/15] xdp: Add VLAN tag hint
-Content-Language: en-US
-To:     Larysa Zaremba <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>
-References: <20230512152607.992209-1-larysa.zaremba@intel.com>
- <20230512152607.992209-10-larysa.zaremba@intel.com>
- <b0694577-e2b3-f6de-cf85-aed99fdf2496@redhat.com> <ZGJZU89AK/3mFZXW@lincoln>
- <094f3178-2797-e297-64f8-aa0f7ef16b5f@redhat.com> <ZGuO6Hk+NcdL9iwi@lincoln>
-In-Reply-To: <ZGuO6Hk+NcdL9iwi@lincoln>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523100240.mgeu4y46friv7hau@quack3>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22/05/2023 17.48, Larysa Zaremba wrote:
-> On Mon, May 22, 2023 at 10:37:33AM +0200, Jesper Dangaard Brouer wrote:
->>
->>
->> On 15/05/2023 18.09, Larysa Zaremba wrote:
->>> On Mon, May 15, 2023 at 05:36:12PM +0200, Jesper Dangaard Brouer wrote:
->>>>
->>>>
->>>> On 12/05/2023 17.26, Larysa Zaremba wrote:
->>>>> Implement functionality that enables drivers to expose VLAN tag
->>>>> to XDP code.
->>>>>
->>>>> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
->>>>> ---
->>>> [...]
->>>>
->>>>> diff --git a/net/core/xdp.c b/net/core/xdp.c
->>>>> index 41e5ca8643ec..eff21501609f 100644
->>>>> --- a/net/core/xdp.c
->>>>> +++ b/net/core/xdp.c
->>>>> @@ -738,6 +738,30 @@ __bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash,
->>>>>     	return -EOPNOTSUPP;
->>>>>     }
->>>>
->>>> Remember below becomes part of main documentation on HW metadata hints:
->>>>    - https://kernel.org/doc/html/latest/networking/xdp-rx-metadata.html
->>>>
->>>> Hint compiling locally I use:
->>>>    make SPHINXDIRS="networking" htmldocs
->>>>
->>>>> +/**
->>>>> + * bpf_xdp_metadata_rx_ctag - Read XDP packet inner vlan tag.
->>>>
->>>> Is bpf_xdp_metadata_rx_ctag a good function name for the inner vlan tag?
->>>> Like wise below "stag".
->>>>
->>>> I cannot remember if the C-tag or S-tag is the inner or outer vlan tag.
->>>>
->>>> When reading BPF code that use these function names, then I would have
->>>> to ask Google for help, or find-and-read this doc.
->>>>
->>>> Can we come-up with a more intuitive name, that e.g. helps when reading
->>>> the BPF-prog code?
->>>
->>> Well, my reasoning for such naming is that if someone can configure s-tag
->>> stripping in ethtool with 'rx-vlan-stag-hw-parse', they shouldn't have any
->>> problem with understanding those function names.
->>>
->>
->> Naming is hard.  My perspective is conveying the meaning without having
->> to be knowledgeable about ethtool VLAN commands.  My perspective is a
->> casual BPF-programmer that reads "bpf_xdp_metadata_rx_stag()".
->> Hopefully we can choose a name that says "vlan" somewhere, such that the
->> person reading this doesn't have to lookup and find the documentation to
->> deduct this code is related to VLANs.
->>
->>> One possible improvement that comes to mind is maybe (similarly ethtool) calling
->>> c-tag just 'tag' and letting s-tag stay 'stag'. Because c-tag is this default
->>> 802.1q tag, which is supported by various hardware, while s-tag is significantly
->>> less widespread.
->>>
->>> But there are many options, really.
->>>
->>> What are your suggestions?
->>>
->>
->> One suggestion is (the symmetrical):
->>   * bpf_xdp_metadata_rx_vlan_inner_tag
->>   * bpf_xdp_metadata_rx_vlan_outer_tag
->>
->> As you say above the first "inner" VLAN tag is just the regular 802.1Q
->> VLAN tag.  The concept of C-tag and S-tag is from 802.1ad that
->> introduced the concept of double tagging.
->>
->> Thus one could argue for shorter names like:
->>   * bpf_xdp_metadata_rx_vlan_tag
->>   * bpf_xdp_metadata_rx_vlan_outer_tag
->>
+On Tue 23-05-23 12:02:40, Jan Kara wrote:
+> On Thu 18-05-23 07:47:35, Jeff Layton wrote:
+> > The VFS always uses coarse-grained timestamp updates for filling out the
+> > ctime and mtime after a change. This has the benefit of allowing
+> > filesystems to optimize away a lot metadata updates, down to around 1
+> > per jiffy, even when a file is under heavy writes.
+> > 
+> > Unfortunately, this has always been an issue when we're exporting via
+> > NFSv3, which relies on timestamps to validate caches. Even with NFSv4, a
+> > lot of exported filesystems don't properly support a change attribute
+> > and are subject to the same problems with timestamp granularity. Other
+> > applications have similar issues (e.g backup applications).
+> > 
+> > Switching to always using fine-grained timestamps would improve the
+> > situation, but that becomes rather expensive, as the underlying
+> > filesystem will have to log a lot more metadata updates.
+> > 
+> > What we need is a way to only use fine-grained timestamps when they are
+> > being actively queried.
+> > 
+> > The kernel always stores normalized ctime values, so only the first 30
+> > bits of the tv_nsec field are ever used. Whenever the mtime changes, the
+> > ctime must also change.
+> > 
+> > Use the 31st bit of the ctime tv_nsec field to indicate that something
+> > has queried the inode for the i_mtime or i_ctime. When this flag is set,
+> > on the next timestamp update, the kernel can fetch a fine-grained
+> > timestamp instead of the usual coarse-grained one.
+> > 
+> > This patch adds the infrastructure this scheme. Filesytems can opt
+> > into it by setting the FS_MULTIGRAIN_TS flag in the fstype.
+> > 
+> > Later patches will convert individual filesystems over to use it.
+> > 
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
 > 
-> AFAIK, outer tag is a broader term, it's pretty often used for stacked 802.1Q
-> headers. I can't find what exactly is an expected behavior for rxvlan and
-> rx-vlan-stag-hw-parse in ethtool, but iavf documentation states that rxvlan
-> "enables outer or single 802.1Q VLAN stripping" and rx-vlan-stag-hw-parse
-> "enables outer or single 802.1ad VLAN stripping". This is in consistent with how
-> ice hardware behaves. More credible sources would be welcome.
+> So there are two things I dislike about this series because I think they
+> are fragile:
 > 
-
-It would be good to figure out how other hardware behaves.
-
-The iavf doc sounds like very similar behavior from both functions, just 
-802.1Q vs 802.1ad.
-Sounds like both will just pop/strip the outer vlan tag.
-I have seen Ethertype 802.1Q being used (in practice) for double tagged
-packets, even-though 802.1ad should have been used to comply with the
-standard.
-
-> What about:
->    * bpf_xdp_metadata_rx_vlan_tag
->    * bpf_xdp_metadata_rx_vlan_qinq_tag
+> 1) If we have a filesystem supporting multigrain ts and someone
+> accidentally directly uses the value of inode->i_ctime, he can get bogus
+> value (with QUERIED flag). This mistake is very easy to do. So I think we
+> should rename i_ctime to something like __i_ctime and always use accessor
+> function for it.
 > 
+> 2) As I already commented in a previous version of the series, the scheme
+> with just one flag for both ctime and mtime and flag getting cleared in
+> current_time() relies on the fact that filesystems always do an equivalent
+> of:
+> 
+> 	inode->i_mtime = inode->i_ctime = current_time();
+> 
+> Otherwise we can do coarse grained update where we should have done a fine
+> grained one. Filesystems often update timestamps like this but not
+> universally. Grepping shows some instances where only inode->i_mtime is set
+> from current_time() e.g. in autofs or bfs. Again a mistake that is rather
+> easy to make and results in subtle issues. I think this would be also
+> nicely solved by renaming i_ctime to __i_ctime and using a function to set
+> ctime. Mtime could then be updated with inode->i_mtime = ctime_peek().
+> 
+> I understand this is quite some churn but a very mechanical one that could
+> be just done with Coccinelle and a few manual fixups. So IMHO it is worth
+> the more robust result.
 
-This sounds good to me.
+Also as I'm thinking about it your current scheme is slightly racy. Suppose
+the filesystem does:
 
-I do wonder if we really need two functions for this?
-Would one function be enough?
+CPU1					CPU2
 
-Given the (iavf) description, the functions basically does the same.
-Looking at your ice driver implementation, they could be merged into one
-function, as it is the same location in the descriptor.
+					statx()
+inode->i_ctime = current_time()
+  current_mg_time()
+    nsec = atomic_long_fetch_andnot(QUERIED, &inode->i_ctime.tv_nsec)
+					  nsec = atomic_long_fetch_or(QUERIED, &inode->i_ctime.tv_nsec)
+    if (nsec & QUERIED) - not set
+      ktime_get_coarse_real_ts64(&now)
+    return timestamp_truncate(now, inode);
+- QUERIED flag in the inode->i_ctime gets overwritten by the assignment
+  => we need not update ctime due to granularity although it was queried
 
->>
->>>>
->>>>> + * @ctx: XDP context pointer.
->>>>> + * @vlan_tag: Return value pointer.
->>>>> + *
->>>>
->>>> IMHO right here, there should be a description.
->>>>
->>>> E.g. for what a VLAN "tag" means.  I assume a "tag" isn't the VLAN id,
->>>> but the raw VLAN tag that also contains the prio numbers etc.
->>>>
->>>> It this VLAN tag expected to be in network-byte-order ?
->>>> IMHO this doc should define what is expected (and driver devel must
->>>> follow this).
->>>
->>> Will specify that.
->>>
->>>>
->>>>> + * Returns 0 on success or ``-errno`` on error.
->>>>> + */
->>>>> +__bpf_kfunc int bpf_xdp_metadata_rx_ctag(const struct xdp_md *ctx, u16 *vlan_tag)
->>>>> +{
->>>>> +	return -EOPNOTSUPP;
->>>>> +}
->>>>> +
->>>>> +/**
->>>>> + * bpf_xdp_metadata_rx_stag - Read XDP packet outer vlan tag.
->>>>> + * @ctx: XDP context pointer.
->>>>> + * @vlan_tag: Return value pointer.
->>>>> + *
->>
->> (p.s. Googling I find multiple definitions of what the "S" in S-tag
->> means. The most reliable or statistically consistent seems to be
->> "Service tag", or "Service provider tag".)
->>
->> The description for the renamed "bpf_xdp_metadata_rx_vlan_outer_tag"
->> should IMHO explain that the outer VLAN tag is often refered to as the S-tag
->> (or Service-tag) in Q-in-Q (802.1ad) terminology.  Perhaps we can even spell
->> out that some hardware support (and must be configured via ethtool) to
->> extract this stag.
->>
->> A dump of the tool rx-vlan related commands:
->>
->>    $ ethtool -k i40e2 | grep rx-vlan
->>    rx-vlan-offload: on
->>    rx-vlan-filter: on [fixed]
->>    rx-vlan-stag-hw-parse: off [fixed]
->>    rx-vlan-stag-filter: off [fixed]
->>
-[...]
+One more reason to use explicit function to update inode->i_ctime ;)
 
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
