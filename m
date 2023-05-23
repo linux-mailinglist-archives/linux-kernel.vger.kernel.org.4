@@ -2,148 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A005370E075
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7519370E078
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237304AbjEWPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S237390AbjEWPbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjEWPbJ (ORCPT
+        with ESMTP id S237112AbjEWPbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:31:09 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66A1FA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:31:07 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:34090)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q1Tyb-00EE6n-4l; Tue, 23 May 2023 09:31:05 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:45292 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q1TyZ-007oCX-Qg; Tue, 23 May 2023 09:31:04 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
-        axboe@kernel.dk, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-In-Reply-To: <20230522025124.5863-2-michael.christie@oracle.com> (Mike
-        Christie's message of "Sun, 21 May 2023 21:51:22 -0500")
-References: <20230522025124.5863-1-michael.christie@oracle.com>
-        <20230522025124.5863-2-michael.christie@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Tue, 23 May 2023 10:30:35 -0500
-Message-ID: <87fs7n9ias.fsf@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1q1TyZ-007oCX-Qg;;;mid=<87fs7n9ias.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1+s/DSlpo+vEYOge0Lgj9pKdKRgJGOmkLw=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+        Tue, 23 May 2023 11:31:31 -0400
+Received: from smtp.missinglinkelectronics.com (smtp.missinglinkelectronics.com [162.55.135.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D38139;
+        Tue, 23 May 2023 08:31:27 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.missinglinkelectronics.com (Postfix) with ESMTP id C66E8206DA;
+        Tue, 23 May 2023 17:31:25 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at missinglinkelectronics.com
+Received: from smtp.missinglinkelectronics.com ([127.0.0.1])
+        by localhost (mail.missinglinkelectronics.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 5wuDeN9folHb; Tue, 23 May 2023 17:31:25 +0200 (CEST)
+Received: from humpen-bionic2.mle (p578c5bfe.dip0.t-ipconnect.de [87.140.91.254])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: david)
+        by smtp.missinglinkelectronics.com (Postfix) with ESMTPSA id 10DD720484;
+        Tue, 23 May 2023 17:31:25 +0200 (CEST)
+From:   David Epping <david.epping@missinglinkelectronics.com>
+To:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        David Epping <david.epping@missinglinkelectronics.com>
+Subject: [PATCH net v3 0/4] net: phy: mscc: support VSC8501
+Date:   Tue, 23 May 2023 17:31:04 +0200
+Message-Id: <20230523153108.18548-1-david.epping@missinglinkelectronics.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Mike Christie <michael.christie@oracle.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 715 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 10 (1.4%), b_tie_ro: 8 (1.2%), parse: 1.52 (0.2%),
-         extract_message_metadata: 22 (3.1%), get_uri_detail_list: 3.0 (0.4%),
-        tests_pri_-2000: 18 (2.5%), tests_pri_-1000: 3.9 (0.5%),
-        tests_pri_-950: 1.86 (0.3%), tests_pri_-900: 1.55 (0.2%),
-        tests_pri_-200: 1.25 (0.2%), tests_pri_-100: 11 (1.5%), tests_pri_-90:
-        67 (9.4%), check_bayes: 62 (8.6%), b_tokenize: 13 (1.8%),
-        b_tok_get_all: 9 (1.3%), b_comp_prob: 3.9 (0.5%), b_tok_touch_all: 31
-        (4.4%), b_finish: 1.04 (0.1%), tests_pri_0: 558 (78.1%),
-        check_dkim_signature: 0.60 (0.1%), check_dkim_adsp: 10 (1.4%),
-        poll_dns_idle: 8 (1.1%), tests_pri_10: 3.9 (0.5%), tests_pri_500: 9
-        (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/3] signal: Don't always put SIGKILL in shared_pending
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Christie <michael.christie@oracle.com> writes:
+Hello,
 
-> When get_pending detects the task has been marked to be killed we try to
-       ^^^^^^^^^^^ get_signal
-> clean up the SIGKLL by doing a sigdelset and recalc_sigpending, but we
-> still leave it in shared_pending. If the signal is being short circuit
-> delivered there is no need to put in shared_pending so this adds a check
-> in complete_signal.
->
-> This patch was modified from Eric Biederman <ebiederm@xmission.com>
-> original patch.
->
-> Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> ---
->  kernel/signal.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 8f6330f0e9ca..3dc99b9aec7f 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -1052,6 +1052,14 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
->  			signal->flags = SIGNAL_GROUP_EXIT;
->  			signal->group_exit_code = sig;
->  			signal->group_stop_count = 0;
-> +
-> +			/*
-> +			 * The signal is being short circuit delivered so
-> +			 * don't set pending.
-> +			 */
-> +			if (type != PIDTYPE_PID)
-> +				sigdelset(&signal->shared_pending.signal, sig);
-> +
->  			t = p;
->  			do {
->  				task_clear_jobctl_pending(t, JOBCTL_PENDING_MASK);
+this updated series of patches adds support for the VSC8501 Ethernet
+PHY and fixes support for the VSC8502 PHY in cases where no other
+software (like U-Boot) has initialized the PHY after power up.
 
-Oleg Nesterov <oleg@redhat.com> writes:
->
-> Eric, sorry. I fail to understand this patch.
->
-> How can it help? And whom?
+The first patch simply adds the VSC8502 to the MODULE_DEVICE_TABLE,
+where I guess it was unintentionally missing. I have no hardware to
+test my change.
 
-You were looking at why recalc_sigpending was resulting in
-TIF_SIGPENDING set.
+The second patch adds the VSC8501 PHY with exactly the same driver
+implementation as the existing VSC8502.
 
-The big bug was that get_signal was getting called by the thread after
-the thread had realized it was part of a group exit.
+The (new) third patch removes phydev locking from
+vsc85xx_rgmii_set_skews(), as discussed for v2 of the patch set.
 
-The minor bug is that SIGKILL was stuck in shared_pending and causing
-recalc_sigpending to set TIF_SIGPENDING after get_signal removed the
-per thread flag that asks the thread to exit.
+The (now) fourth patch fixes the initialization for VSC8501 and VSC8502.
+I have tested this patch with VSC8501 on hardware in RGMII mode only.
+https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/VSC8501-03_Datasheet_60001741A.PDF
+https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/VSC8502-03_Datasheet_60001742B.pdf
+Table 4-42 "RGMII CONTROL, ADDRESS 20E2 (0X14)" Bit 11 for each of
+them.
+By default the RX_CLK is disabled for these PHYs. In cases where no
+other software, like U-Boot, enabled the clock, this results in no
+received packets being handed to the MAC.
+The patch enables this clock output.
+According to Microchip support (case number 01268776) this applies
+to all modes (RGMII, GMII, and MII).
+
+Other PHYs sharing the same register map and code, like
+VSC8530/31/40/41 have the clock enabled and the relevant bit 11 is
+reserved and read-only for them. As per previous discussion the
+patch still clears the bit on these PHYs, too, possibly more easily
+supporting other future PHYs implementing this functionality.
+
+For the VSC8572 family of PHYs, having a different register map,
+no such changes are applied.
+
+Thanks for your feedback,
+David
+
+--
+
+Changes in v3:
+- adjust cover letter and "additional notes"
+- insert new patch to remove phydev locks from set_skews()
+
+Changes in v2:
+- adjust cover letter (U-Boot, PHY families)
+- add reviewed-by tags to patch 1/3 and 2/3
+- patch 3/3: combine vsc85xx_rgmii_set_skews() and
+  vsc85xx_rgmii_enable_rx_clk() into vsc85xx_update_rgmii_cntl()
+  for fewer MDIO accesses
+- patch 3/3: treat all VSC8502 family PHYs the same (regardless of
+  bit 11 reserved status)
+
+Additional notes:
+- If you want to, feel free to add something like
+  Co developed by ...  I did not do that, because the Kernel
+  documentation requires a signed off by to go with it.
+  Significant parts of the new patch are from your emails.
+- For cases of not RGMII mode and not VSC8502 family there is no
+  MDIO access. Same as with the current mainline code.
+
+--
+
+David Epping (4):
+  net: phy: mscc: add VSC8502 to MODULE_DEVICE_TABLE
+  net: phy: mscc: add support for VSC8501
+  net: phy: mscc: remove unnecessary phydev locking
+  net: phy: mscc: enable VSC8501/2 RGMII RX clock
+
+ drivers/net/phy/mscc/mscc.h      |  2 +
+ drivers/net/phy/mscc/mscc_main.c | 82 +++++++++++++++++++++-----------
+ 2 files changed, 55 insertions(+), 29 deletions(-)
 
 
+base-commit: 3632679d9e4f879f49949bb5b050e0de553e4739
+-- 
+2.17.1
 
-The fact is that fatal signals (that pass all of the checks) are
-delivered right there in complete_signal so it does not make sense from
-a data structure consistency standpoint to leave the fatal signal (like
-SIGKILL) in shared_pending.
-
-Outside of this case it will only affect coredumps and other analyzers
-that run at process exit.
-
-
-
-One thing I am looking at is that the vhost code shares a common problem
-with the coredump code to pipes.  There is code that tests
-signal_pending() and does something with it after signal processing has
-completed.
-
-Fixing the data structure to be consistent seems like one way to handle
-that situation.
-
-Eric
