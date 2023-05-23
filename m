@@ -2,101 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD19D70E82F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3F670E837
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbjEWVzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S238158AbjEWV5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233956AbjEWVzS (ORCPT
+        with ESMTP id S229934AbjEWV5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:55:18 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184EB1B1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:55:00 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25377d67da9so52990a91.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684878891; x=1687470891;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C2Khn/X5BFP35sORRUAalqrCWcCg/ZE1zKWkZK2Ints=;
-        b=iH36F7O+tgNNWrXI+fUOzFUcy+LBVneHtL1NhB773zwjkLHUHVcWQdE7N9qZNNuTi9
-         CHuiKHqAyBcprmU1Ve7NVB2pXhRqSpuzubz2w6OPMHGO685f/FYAWBysF2S60we9N2D4
-         KWsC+9/9+X2ySbPGonXS1ZMdAu8Pe2f0igrRvlXjsFsFg/dc9Dv7wrKajg9T0eX8nGWw
-         /m8uF/aPi2wxlI9iAG9TPr0KOZEk4NN7olJG15AruvlShrmqvZ3j9eUuA8KDXJ78NBBv
-         l8RBGp333lXdwSJJEZjftJ1DLAGZ1zFmU7/fBrAQLV8kge6j5qXNzreyzOcCJjAcdkTs
-         PVGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684878891; x=1687470891;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C2Khn/X5BFP35sORRUAalqrCWcCg/ZE1zKWkZK2Ints=;
-        b=djJ4YPKDrExxWBPGKMtjWPZ8bQ16OTDDLDwvW7MI/WXc8z1bdx6QvgjTlX0qQHmVFK
-         nHcmIIOvZMj6AZEN6wacqv0mooShIJx2nDO/rdj0rX/oM7mdluf/2yd7ig4YMvNlkoB+
-         Fq+bWtePQMUY5XaDlGIDAvOPlGmt6+oY9h8HhcpvoOTfEBLB392XevCFdJIP2mKinFb5
-         8QdHr0pF2Fv0cDJ5mGSqc6ib3/muFTzNQWghfEN3DJ4wElqo1/uQHGQ6byPzPg0NBaIN
-         008bvDiYfzeTHqXTi0WPMNdxVrUyyHqDPctc2hKvkSb4jNrR7uwi9uR6oULbiS4Rk2RB
-         i3Jw==
-X-Gm-Message-State: AC+VfDxJxdGPmcAu1pgrP3qgIu4GKzB/imbmqIq2yJoCRtKn1ZkWpVwl
-        p2b+8SJKhNZQfZ+Yp0elYmwiSpgTDnM83KATqgE=
-X-Google-Smtp-Source: ACHHUZ4Rf2HUpFkfUOAkz248KrmtuMFtd0znC08K7WNg0cw80uvvXFQsyQ8f2KTzRpLSPDzBnHCUxN/StxzZNVJ6BiU=
-X-Received: by 2002:a17:90b:1bc1:b0:252:b875:6a57 with SMTP id
- oa1-20020a17090b1bc100b00252b8756a57mr597125pjb.3.1684878890714; Tue, 23 May
- 2023 14:54:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230523212829.2539417-1-otavio@ossystems.com.br>
-In-Reply-To: <20230523212829.2539417-1-otavio@ossystems.com.br>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 23 May 2023 18:54:38 -0300
-Message-ID: <CAOMZO5CuxATFVYJqpQY1kfFCo9rquLu_P2HvqpUPfoMsy_i1cA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: imx_v6_v7_defconfig: Remove KERNEL_LZO config
-To:     Otavio Salvador <otavio@ossystems.com.br>
-Cc:     shawnguo@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alistair Francis <alistair@alistair23.me>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 23 May 2023 17:57:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4499E83;
+        Tue, 23 May 2023 14:57:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F2DDF1FD79;
+        Tue, 23 May 2023 21:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684879053; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nItumo/R75SjxUTXtdEgQf/IfdX5biUd4LbLAPiFOlU=;
+        b=E0JoJBMUYzlRQO4jdFFEotz5psZfFEBWkMs1uDQNHlPtwO+lUawxV5duaW79ARiiNansLs
+        vnX5sf83t5DB/UWAKaYRaCstFb+X+kBk5f/J3kmCFjCcWy0/6cLq6EoQIyF4byEhaMCiL/
+        jXIUJvx+CROVliL5+qLcRhaEaB7LrlI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684879053;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nItumo/R75SjxUTXtdEgQf/IfdX5biUd4LbLAPiFOlU=;
+        b=Uc+JFBFtux4luCT+/81DsEqhg2/Gxis+Qyazkmsu1a99644X6OSZyUG9bMbQWJiYsk1mnH
+        F+SIW331Jo5NYWAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 201C313A10;
+        Tue, 23 May 2023 21:57:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /as7Mco2bWSlEAAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 23 May 2023 21:57:30 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Chuck Lever" <chuck.lever@oracle.com>,
+        "Zhi Li" <yieli@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfsd: make a copy of struct iattr before calling notify_change
+In-reply-to: <d07a0957040ebc3b5689f524e9d3c04cd166c42b.camel@kernel.org>
+References: <20230517162645.254512-1-jlayton@kernel.org>,
+ <168472353748.5298.2381558773846767023@noble.neil.brown.name>,
+ <d07a0957040ebc3b5689f524e9d3c04cd166c42b.camel@kernel.org>
+Date:   Wed, 24 May 2023 07:57:08 +1000
+Message-id: <168487902833.21808.11785299927622002491@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Otavio,
+On Tue, 23 May 2023, Jeff Layton wrote:
+> On Mon, 2023-05-22 at 12:45 +1000, NeilBrown wrote:
+> > On Thu, 18 May 2023, Jeff Layton wrote:
+> > > notify_change can modify the iattr structure. In particular it can can
+> > > end up setting ATTR_MODE when ATTR_KILL_SUID is already set, causing a
+> > > BUG() if the same iattr is passed to notify_change more than once.
+> > >=20
+> > > Make a copy of the struct iattr before calling notify_change.
+> > >=20
+> > > Fixes: 34b91dda7124 NFSD: Make nfsd4_setattr() wait before returning NF=
+S4ERR_DELAY
+> > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2207969
+> > > Reported-by: Zhi Li <yieli@redhat.com>
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  fs/nfsd/vfs.c | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+> > > index c4ef24c5ffd0..ad0c5cd900b1 100644
+> > > --- a/fs/nfsd/vfs.c
+> > > +++ b/fs/nfsd/vfs.c
+> > > @@ -538,7 +538,9 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh =
+*fhp,
+> > > =20
+> > >  	inode_lock(inode);
+> > >  	for (retries =3D 1;;) {
+> > > -		host_err =3D __nfsd_setattr(dentry, iap);
+> > > +		struct iattr attrs =3D *iap;
+> > > +
+> > > +		host_err =3D __nfsd_setattr(dentry, &attrs);
+> >=20
+> > I think this needs something to ensure a well meaning by-passer doesn't
+> > try to "optimise" it back to the way it was.
+> > Maybe make "iap" const?  Or add a comment?  Or both?
+> >=20
+>=20
+> We can't make iap const, as we have to call nfsd_sanitize_attrs on it,
+> and that will change things in it. I think we'll probably have to settle
+> for a comment. Chuck, can we fold the patch below in to this one?
 
-On Tue, May 23, 2023 at 6:28=E2=80=AFPM Otavio Salvador <otavio@ossystems.c=
-om.br> wrote:
->
-> The KERNEL_GZIP is used in most config and is the default, there is no
-> clear reason to diverge so let default be used.
->
-> Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+Thanks :-)
 
-CONFIG_KERNEL_LZO=3Dy was introduced in 2011 by the following commit below:
+NeilBrown
 
-06965c39b4c6 ("ARM i.MX5: update defconfig")
 
-imx_v6_v7_defconfig and sdk7786_defconfig are the only defconfigs that
-select CONFIG_KERNEL_LZO=3Dy,
-so it seems fine to remove it:
+>=20
+> --------------------8<------------------
+>=20
+> diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+> index 2a3687cdf926..817effd63730 100644
+> --- a/fs/nfsd/vfs.c
+> +++ b/fs/nfsd/vfs.c
+> @@ -538,6 +538,11 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *fh=
+p,
+>  	for (retries =3D 1;;) {
+>  		struct iattr attrs;
+> =20
+> +		/*
+> +		 * notify_change can alter the iattr in ways that make it
+> +		 * unsuitable for submission multiple times. Make a copy
+> +		 * for every loop.
+> +		 */
+>  		attrs =3D *iap;
+>  		host_err =3D __nfsd_setattr(dentry, &attrs);
+>  		if (host_err !=3D -EAGAIN || !retries--)
+>=20
+>=20
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
