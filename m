@@ -2,159 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A37570D461
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C1D70D465
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbjEWGzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S232536AbjEWG5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235186AbjEWGzi (ORCPT
+        with ESMTP id S232057AbjEWG5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:55:38 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38008132;
-        Mon, 22 May 2023 23:55:36 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-5344d45bfb0so287944a12.1;
-        Mon, 22 May 2023 23:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684824935; x=1687416935;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AxJRMSjFiU7MHcgUIRL+XqTRWQxV3GgrxAc+FVBvwiU=;
-        b=IhTXUhy9MlNkQnisTrIUcOFqQNGgdSx+hBVH/YuFy8d/mzYynBDeW8bJa7xiGKNQhU
-         6v1dpAsGZuN0zMeAS0wK1xrfdQhwHYbHCr4hySk0N+rLpM9tD0NIxQ1ZGiEs23OOmtLs
-         oLXiq54+DpPHKmBCkOK6SGHg1/JAEv5KCkrBmaKwfzjaJeZf7JsgV+qDQdmsDBPXVsom
-         PnJJQs5aL00sDbVlTobrrbayqpE6VGtZr3rkPM43R3Mz+xZZ4nzEvRjFf2Y7IrCEemq9
-         WQoeNwUGzWl6nRtYdDxlHy6SlddoN93nLs8dEcQM9Z8XTED6390NNktIWJOVoPbj4tFI
-         smdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684824935; x=1687416935;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AxJRMSjFiU7MHcgUIRL+XqTRWQxV3GgrxAc+FVBvwiU=;
-        b=YRXyRvoV8uvkiJxLoQJYAkHXN5BeKirijP3oZ8hJPYp91jCA8oEODUTbx7La/7GKNR
-         epg0mpRVFKGcZWJ0KaAEG8p5VA/OeLzYyOcBIJA4Wp3+N5DTpV8XPtgLrEXchlkistpS
-         7w46vDb8BTe0u0F5wIlAdnImMA1OmlPI/L3u8X7VkdnJuQ61oAKuThBXhc/xlfolF6s5
-         Eim95sbAhLFQzSuYnqG5mJjsOXKArbK19GBUQxS2448zkAl+NDeU3QQ71ISmgc/f2bdJ
-         MvodHRN/6oI4UFHQtvIDsDRL1tjMl+Olxlpwac/lzL0uzAeWdgtmby0L33OogPs45X6+
-         7gKg==
-X-Gm-Message-State: AC+VfDz1DrytRAYR+PD5ifCUGtVdzR3wYrX5Lb+DsLX9lzbLdBm6puQi
-        /a/54w6k4k/vfEaAFA56hUo=
-X-Google-Smtp-Source: ACHHUZ6kdntI+DtUsqVpdBz8wswQttnsDSe0y5zvGoz02fIFOAtzEqDBj9qWrObRCBAW04+R2ukM1A==
-X-Received: by 2002:a17:902:d506:b0:1ae:4a37:d5af with SMTP id b6-20020a170902d50600b001ae4a37d5afmr14773631plg.0.1684824935505;
-        Mon, 22 May 2023 23:55:35 -0700 (PDT)
-Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
-        by smtp.gmail.com with ESMTPSA id bj6-20020a170902850600b001a183ade911sm5954864plb.56.2023.05.22.23.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 23:55:35 -0700 (PDT)
-Date:   Tue, 23 May 2023 06:55:33 +0000
-From:   Alok Tiagi <aloktiagi@gmail.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, willy@infradead.org,
-        David.Laight@aculab.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        hch@infradead.org, tycho@tycho.pizza, aloktiagi@gmail.com
-Subject: Re: [RFC v5 1/2] epoll: Implement eventpoll_replace_file()
-Message-ID: <ZGxjZXHvvJcCafxT@ip-172-31-38-16.us-west-2.compute.internal>
-References: <20230429054955.1957024-1-aloktiagi@gmail.com>
- <20230520-pseudologie-beharren-5c5c440c204e@brauner>
+        Tue, 23 May 2023 02:57:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B04118;
+        Mon, 22 May 2023 23:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684825023; x=1716361023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IjxX5aifWvPwKx2G+wm0DbABvPy6iGFiIpFGJlbl0Q8=;
+  b=jI5jIzMilpIoXQRdrTmG88PgPd15bN9Bvpyeirl/PIylHbYxzAP81Uhg
+   ZXlpwo23mrnAM1OF/odJ8R1GHXWHXc81Bti2bL8LRmje+zg1wWnJUek0y
+   0N7MvFucaNhH2I+YDtBKD6DRfdDUXqeQ1Nh5h51FvOuZrTEbZwzhnsmbQ
+   dvKbko+zfoppP7yXgo7Th6gNPsxMpbYy+y5iuHcdmKYoHYHZAsW4P0bPQ
+   1FNWZhW6ULU8/t+36kFV1cpGhI9U+xCoJ0XhPvkNCeyyfXz04UbWXk0vr
+   gmPLA8TN8cmzUMk913LpkwkIpO15xz1+0O2+Wc5jMs4EnkdJO2yW0VTIj
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="asc'?scan'208";a="153439954"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 23:57:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 23:57:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 22 May 2023 23:57:01 -0700
+Date:   Tue, 23 May 2023 07:56:39 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] crypto: starfive - Depend on AMBA_PL08X instead of
+ selecting it
+Message-ID: <20230523-pelvis-unwritten-bedc9c75d899@wendy>
+References: <20230522105257.562cb1ec@canb.auug.org.au>
+ <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
+ <20230523103637.20175fbc@canb.auug.org.au>
+ <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mwnFscTKPB7TisQY"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230520-pseudologie-beharren-5c5c440c204e@brauner>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 03:03:48PM +0200, Christian Brauner wrote:
-> On Sat, Apr 29, 2023 at 05:49:54AM +0000, aloktiagi wrote:
-> > Introduce a mechanism to replace a file linked in the epoll interface with a new
-> > file.
-> > 
-> > eventpoll_replace() finds all instances of the file to be replaced and replaces
-> > them with the new file and the interested events.
-> > 
-> > Signed-off-by: aloktiagi <aloktiagi@gmail.com>
-> > ---
-> > Changes in v5:
-> >   - address review comments and move the call to replace old file in each
-> >     subsystem (epoll, io_uring, etc.) outside the fdtable helpers like
-> >     replace_fd().
-> > 
-> > Changes in v4:
-> >   - address review comment to remove the redundant eventpoll_replace() function.
-> >   - removed an extra empty line introduced in include/linux/file.h
-> > 
-> > Changes in v3:
-> >   - address review comment and iterate over the file table while holding the
-> >     spin_lock(&files->file_lock).
-> >   - address review comment and call filp_close() outside the
-> >     spin_lock(&files->file_lock).
-> > ---
-> >  fs/eventpoll.c            | 65 +++++++++++++++++++++++++++++++++++++++
-> >  include/linux/eventpoll.h |  8 +++++
-> >  2 files changed, 73 insertions(+)
-> > 
-> > diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> > index 64659b110973..be9d192b223d 100644
-> > --- a/fs/eventpoll.c
-> > +++ b/fs/eventpoll.c
-> > @@ -935,6 +935,71 @@ void eventpoll_release_file(struct file *file)
-> >  	mutex_unlock(&epmutex);
-> >  }
-> >  
-> > +static int ep_insert(struct eventpoll *ep, const struct epoll_event *event,
-> > +			struct file *tfile, int fd, int full_check);
-> > +
-> > +/*
-> > + * This is called from eventpoll_replace() to replace a linked file in the epoll
-> > + * interface with a new file received from another process. This is useful in
-> > + * cases where a process is trying to install a new file for an existing one
-> > + * that is linked in the epoll interface
-> > + */
-> > +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd)
-> > +{
-> > +	int fd;
-> > +	int error = 0;
-> > +	struct eventpoll *ep;
-> > +	struct epitem *epi;
-> > +	struct hlist_node *next;
-> > +	struct epoll_event event;
-> > +	struct hlist_head *to_remove = toreplace->f_ep;
-> > +
-> > +	if (!file_can_poll(file))
-> > +		return 0;
-> > +
-> > +	mutex_lock(&epmutex);
-> 
-> Sorry, I missed that you send a new version somehow.
-> 
-> So, I think I mentioned this last time: The locking has changed to
-> reduce contention on the global mutex. Both epmutex and ep_remove() are
-> gone. So this doesn't even compile anymore...
-> 
->   CC      fs/eventpoll.o
-> ../fs/eventpoll.c: In function ‘eventpoll_replace_file’:
-> ../fs/eventpoll.c:998:21: error: ‘epmutex’ undeclared (first use in this function); did you mean ‘mutex’?
->   998 |         mutex_lock(&epmutex);
->       |                     ^~~~~~~
->       |                     mutex
-> ../fs/eventpoll.c:998:21: note: each undeclared identifier is reported only once for each function it appears in
-> ../fs/eventpoll.c:1034:17: error: implicit declaration of function ‘ep_remove’; did you mean ‘idr_remove’? [-Werror=implicit-function-declaration]
->  1034 |                 ep_remove(ep, epi);
->       |                 ^~~~~~~~~
->       |                 idr_remove
-> 
-> on current mainline. So please send a new version for this.
+--mwnFscTKPB7TisQY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Apologies, I didn't realize the change had been merged. Will send out a new version.
+On Tue, May 23, 2023 at 10:33:38AM +0800, Herbert Xu wrote:
+> On Tue, May 23, 2023 at 10:36:37AM +1000, Stephen Rothwell wrote:
+> >=20
+> > That did not fix it :-(
+>=20
+> OK, this patch should fix it:
+>=20
+> ---8<---
+> A platform option like AMBA should never be selected by a driver.
+> Use a dependency instead.
+
+Randy submitted a patch to change the driver to not conflict with
+the arch symbols:
+https://lore.kernel.org/all/20230523000606.9405-1-rdunlap@infradead.org/
+
+The corresponding change here makes sense to me,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+@StarFive folks, you will need to go and submit a patch for
+arch/riscv/Kconfig.socs that selects ARM_AMBA for your platform.
+
+> Also remove the depenency on DMADEVICES because the driver builds
+> just fine without it.  Instead add a dependency on HAS_DMA for dma
+> mapping support.
+>=20
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported-by: Conor Dooley <conor.dooley@microchip.com>=20
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>=20
+> diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kc=
+onfig
+> index 908c162ba79a..59002abcc0ad 100644
+> --- a/drivers/crypto/starfive/Kconfig
+> +++ b/drivers/crypto/starfive/Kconfig
+> @@ -4,14 +4,13 @@
+> =20
+>  config CRYPTO_DEV_JH7110
+>  	tristate "StarFive JH7110 cryptographic engine driver"
+> -	depends on (SOC_STARFIVE || COMPILE_TEST) && DMADEVICES
+> +	depends on SOC_STARFIVE || AMBA_PL08X || COMPILE_TEST
+
+While we are changing everything, would you mind doing s/SOC/ARCH/ here?
+I didn't notice that while the series was being reviewed. Otherwise,
+I'll send you a patch for it.
+
+Cheers,
+Conor.
+
+--mwnFscTKPB7TisQY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGxjpwAKCRB4tDGHoIJi
+0jkjAQDhW8PL2V0KE7gy+aM8zfT9d7+sVE4zWp5d14k/Y9TMuQEAjrCesmDDqk1M
+S+L8TVRjan4Zjd6DWos/qA629ZRVkwc=
+=A/b4
+-----END PGP SIGNATURE-----
+
+--mwnFscTKPB7TisQY--
