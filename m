@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF9570E709
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4028F70E70D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbjEWU7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S231758AbjEWVCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjEWU72 (ORCPT
+        with ESMTP id S230115AbjEWVCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:59:28 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ED28F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:59:27 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-babb52dbb00so380175276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:59:27 -0700 (PDT)
+        Tue, 23 May 2023 17:02:37 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4181BB
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:02:35 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5621a279cbbso5291677b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:02:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684875567; x=1687467567;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oqzY22DU8hsochaAkiR/zou3nxJkIdpTHuQYEZ4euM0=;
-        b=00x6wRrXLaQc4E3HL5TfDI5wMyAGjsMlESwMz+Ip4SzPcVjGJi/DmFI7yqcmjpIDXU
-         pPCYsg34Ok7Qu3IWjFmttSP2QWAvyZvKR2As9PcQkIbMrWSB0Pqf43q9Fv05dgCWXA90
-         8L/zBV0+LK7j5OKIqtev3NQqSaoWx7+MDW/HMzhoLZWiADmByxFVuQRAUjGTQJ8yZ72u
-         07YFpJeOKKk+Y8azY6PMmooahKyJQF48a6TKVwhqgHWmHi5brLqbLRdX7yLsDCfoplvy
-         gMa+0HxIHAn+ddNOkeS8dOuCqzS4SY/rdq3vouSURnGek+KmjC84DuvNK8RgrObbCYXG
-         r2VA==
+        d=linaro.org; s=google; t=1684875755; x=1687467755;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4gNfZIeekSHs7BohS2Orfq0Se0pBECTdaana4cYqBL4=;
+        b=tOGPzOTXR3ZwhBy1Ic0ihRryuxQqnniw6YqV0SHZ2xEJbKbV79oNg8iSaUODmLcYpc
+         OODVehM/ARBOOUXdzyj94ie3ObrYp2+yDybUY6odfIvlc3vWw4Uu42VIjwf40Qj8jnpv
+         /u6BIYptfcGey8tl64SMGH2ekP+e49xLeKTW8DQrLw1PiekWMDf+SVtkboNYCRCGAok6
+         r3NGmKXQI7IcDYSXwmcTXA1k8cCjELTw9o7nX5Wa7vfMZ2Cbd4X+B/kwzKnE15M8S45G
+         buaYCqxYBK9bQTQOog//pv15RiylJCcZ2FOpBp2rmOQy5OInQOLIQu3TNA64CyDbqbSd
+         lTWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684875567; x=1687467567;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oqzY22DU8hsochaAkiR/zou3nxJkIdpTHuQYEZ4euM0=;
-        b=iK8C8Ksx5060226Hsc9uDOu/qQGaIBe1JUJuOn2yFoVvTWDE3wle/0E27Hr4BgpPpN
-         rep3x4pt4hcq2axKKjxGmI9rcAq9pcc7rJpZythlhC7YB/wnPwgFJC8hle5bupWlivNb
-         jPhecmX5r36G6UQuW+mM4C0vIP9Ovw6mnAj7oVCsXuaeI2F3BONLXCJqOYyNuvNTcZco
-         J6Toa95PzPsN1p0uIuZydeYPg15rEOCqp7mw8mhxGWzkzhx6U30bfCpObfMqvM+1ib1D
-         N0UEgM83vpCNseGO3jpbCswMTi8Jf/n+1alJ+2VUWsV04ynZNqkHATplqOIYvnJ+OS8V
-         Qq6Q==
-X-Gm-Message-State: AC+VfDxX/9oXr7GYpye9Y6nRnLp+bvLXn9gepI1oleDi79c5uFgpo72N
-        Va1C99MCWaoiMhKbFlylcnXyrcatOVH7pKySwQ==
-X-Google-Smtp-Source: ACHHUZ6CXRzlSLLUEil2mIC1MEhVd9KbB1k8BRZTxoZezM54UzgFmX5aoe8mWHGRqKL8xAx7PpFCLEoULxy3kxBITA==
-X-Received: from kalesh.mtv.corp.google.com ([2620:15c:211:201:1c60:f27:f83c:ef25])
- (user=kaleshsingh job=sendgmr) by 2002:a25:9786:0:b0:ba8:939b:3e04 with SMTP
- id i6-20020a259786000000b00ba8939b3e04mr6271389ybo.5.1684875566909; Tue, 23
- May 2023 13:59:26 -0700 (PDT)
-Date:   Tue, 23 May 2023 13:59:21 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Message-ID: <20230523205922.3852731-1-kaleshsingh@google.com>
-Subject: [PATCH] mm-unstable: Multi-gen LRU: Fix workingset accounting
-From:   Kalesh Singh <kaleshsingh@google.com>
-To:     yuzhao@google.com, akpm@linux-foundation.org
-Cc:     surenb@google.com, android-mm@google.com, kernel-team@android.com,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Brian Geffon <bgeffon@google.com>, linux-mm@kvack.org,
+        d=1e100.net; s=20221208; t=1684875755; x=1687467755;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4gNfZIeekSHs7BohS2Orfq0Se0pBECTdaana4cYqBL4=;
+        b=VioXaMjmYOdJFkr5gcNwqPAbnpQ7mMwCVf2gzUbITLgcxuV1Vj9bLpX5PskUpuoRBV
+         DppFnYTY9UIlbcsDiCuiT9sSWpgozLG52XNVjg1WduJYPUAI4uKShpYMfVsdmPfvO6Th
+         eWqIK9agzvoaQZCiBcrU/RR3hqptvYBDby/Z3oo2nZ+rmUbi8u2nEqMae9BUwVPFTmuS
+         v2EOaObVCtbSr5bV2ZLBeJQl4tEVatL2+7/9fScRmcxlLIhwBJ5cisQoUWnFkCU3ojyU
+         TBGOii86uNWdtz5lBayah7M4zJQf83tEf6QuG0dqg5/eOFaQFjguJuXjdHRsNTD7i1hR
+         3F9A==
+X-Gm-Message-State: AC+VfDwpKhB9+4ryHatxjR3aLmfAqZYknFX/fGIWbD8284WA5O+U1F72
+        gUGYyoKW4S7HNAYpADEzB5w8phLB5o5B8Ns3LVK+JA==
+X-Google-Smtp-Source: ACHHUZ7UXQzwb1RIpn2+dG8waBFp9bePM9jRJQJFoANyzIIkMfYS8DmloLszmqODJrAwBGg2Stn1tqrkrSUfUH7FmaQ=
+X-Received: by 2002:a81:1bc8:0:b0:55a:776e:95f3 with SMTP id
+ b191-20020a811bc8000000b0055a776e95f3mr15671135ywb.25.1684875754960; Tue, 23
+ May 2023 14:02:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <1684870754-24906-1-git-send-email-quic_khsieh@quicinc.com> <1684870754-24906-2-git-send-email-quic_khsieh@quicinc.com>
+In-Reply-To: <1684870754-24906-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 24 May 2023 00:02:23 +0300
+Message-ID: <CAA8EJpq0Gh5Wu5S_9aMytghOer_zPKthCZq9-vf7+vHm+sYH5Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] drm/msm/dp: no need to disable irq after devm_request_irq()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, leonard@lausen.nl,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,83 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Android app cycle workloads, MGLRU showed a significant reduction
-in workingset refaults although pgpgin/pswpin remained relatively
-unchanged. This indicated MGLRU may be undercounting workingset
-refaults.
+On Tue, 23 May 2023 at 22:39, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+> devm_request_irq() will allocate irq and return with irq enabled.
+> At current implementation irq are specified disabled after return from
+> devm_request_irq() and re enabled later. It is redundant.
 
-This has impact on userspace programs, like Android's LMKD, that
-monitor workingset refault statistics to detect thrashing.
+This is not correct. The disable_irq / enable_irq pair is not
+redundant. If I understand correctly, it was done so to prevent HPD
+IRQs from being delivered before HPD worker is initialized (which was
+probably correct at the time of the mentioned commit). So this patch
+either can come after the next patch (but then it should not have a
+Fixes tag and the commit message should be changed to mention why
+disable_irq() call is redundant) or it can be squashed together with
+the next patch.
 
-It was found that refaults were only accounted if the MGLRU shadow
-entry was for a recently evicted folio. However, recently evicted
-folios should be accounted as workingset activation, and refaults
-should be accounted regardless of recency.
+>
+> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_display.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 3e13acdf..1af49b6 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1094,12 +1094,6 @@ static void dp_display_config_hpd(struct dp_display_private *dp)
+>                                 DP_DP_HPD_PLUG_INT_MASK |
+>                                 DP_DP_HPD_UNPLUG_INT_MASK,
+>                                 true);
+> -
+> -       /* Enable interrupt first time
+> -        * we are leaving dp clocks on during disconnect
+> -        * and never disable interrupt
+> -        */
+> -       enable_irq(dp->irq);
+>  }
+>
+>  void dp_display_set_psr(struct msm_dp *dp_display, bool enter)
+> @@ -1282,7 +1276,6 @@ int dp_display_request_irq(struct msm_dp *dp_display)
+>                                 dp->irq, rc);
+>                 return rc;
+>         }
+> -       disable_irq(dp->irq);
+>
+>         return 0;
+>  }
+> @@ -1570,7 +1563,6 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
+>                 dp_display_host_init(dp_priv);
+>                 dp_catalog_ctrl_hpd_config(dp_priv->catalog);
+>                 dp_display_host_phy_init(dp_priv);
+> -               enable_irq(dp_priv->irq);
+>
+>                 /*
+>                  * The code below assumes that the panel will finish probing
+> @@ -1612,7 +1604,6 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
+>
+>  error:
+>         if (dp->is_edp) {
+> -               disable_irq(dp_priv->irq);
+>                 dp_display_host_phy_exit(dp_priv);
+>                 dp_display_host_deinit(dp_priv);
+>         }
+> --
+> 2.7.4
+>
 
-Fix MGLRU's workingset refault and activation accounting to more
-closely match that of the conventional active/inactive LRU.
 
-Fixes: ac35a4902374 ("mm: multi-gen LRU: minimal implementation")
-Cc: Yu Zhao <yuzhao@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org> 
-Reported-by: Charan Teja Kalla <quic_charante@quicinc.com>
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
----
- mm/vmscan.c     |  1 -
- mm/workingset.c | 10 +++++++---
- 2 files changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index eeca83e28c9b..ef687f9be13c 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4925,7 +4925,6 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
- 
- 		WRITE_ONCE(lrugen->protected[hist][type][tier - 1],
- 			   lrugen->protected[hist][type][tier - 1] + delta);
--		__mod_lruvec_state(lruvec, WORKINGSET_ACTIVATE_BASE + type, delta);
- 		return true;
- 	}
- 
-diff --git a/mm/workingset.c b/mm/workingset.c
-index 5796e927e6d7..4686ae363000 100644
---- a/mm/workingset.c
-+++ b/mm/workingset.c
-@@ -278,6 +278,7 @@ static bool lru_gen_test_recent(void *shadow, bool file, struct lruvec **lruvec,
- 
- static void lru_gen_refault(struct folio *folio, void *shadow)
- {
-+	bool recent;
- 	int hist, tier, refs;
- 	bool workingset;
- 	unsigned long token;
-@@ -288,10 +289,13 @@ static void lru_gen_refault(struct folio *folio, void *shadow)
- 
- 	rcu_read_lock();
- 
--	if (!lru_gen_test_recent(shadow, type, &lruvec, &token, &workingset))
-+	recent = lru_gen_test_recent(shadow, type, &lruvec, &token, &workingset);
-+	if (lruvec != folio_lruvec(folio))
- 		goto unlock;
- 
--	if (lruvec != folio_lruvec(folio))
-+	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + type, delta);
-+
-+	if (!recent)
- 		goto unlock;
- 
- 	lrugen = &lruvec->lrugen;
-@@ -302,7 +306,7 @@ static void lru_gen_refault(struct folio *folio, void *shadow)
- 	tier = lru_tier_from_refs(refs);
- 
- 	atomic_long_add(delta, &lrugen->refaulted[hist][type][tier]);
--	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + type, delta);
-+	mod_lruvec_state(lruvec, WORKINGSET_ACTIVATE_BASE + type, delta);
- 
- 	/*
- 	 * Count the following two cases as stalls:
-
-base-commit: cd255dae35f51ea33cb85d29720d6b4e5fa16365
 -- 
-2.40.1.698.g37aff9b760-goog
-
+With best wishes
+Dmitry
