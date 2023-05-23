@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBA270D92F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E9770D934
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236366AbjEWJfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S235551AbjEWJf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236377AbjEWJeo (ORCPT
+        with ESMTP id S236326AbjEWJfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:34:44 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EB71AC
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:34:31 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763da06581dso285646339f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:34:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684834471; x=1687426471;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6XhonWAPAu8OTH4owMzaT0fJr80igSY+VEVOwOtFTeA=;
-        b=IoPNwOkQD7O0YgTcffud0oM0HIy5dd6xUiadPqZK7//DzmGw9yn2JTtFLOriIHm5VD
-         HHzsWlxiu1134+rTcsp4DTatdJkmUsIEZgIF/IqSozATKiIBo9f1QKz6B2LDtOPccVNZ
-         88nUq4nMfiVQComo8Nb3FA1MspZ42hQOXf03ykMnAb7wDs/VyA0CkRpErG3yhSCgr+B5
-         CvvbSbi5KLJT2ko8Clnpt4nLYxfJwNAyD+NlbnxvP4FvAbYyrL4izL+rItSiMJW3wBSZ
-         1sRXukmyJOFru1bAhHefEH3IhBMXIczrqHpsthvZlCiOGQBr/QcR59k6BFkq1R6+1fIa
-         pzww==
-X-Gm-Message-State: AC+VfDyA1EXSfr7POyxF/2QI/xrVbsAuXeb0DT0ADehU0OBEwwEDVcf2
-        qC26D4hhTJVw9wRriauTbemmd9ih2IILvldn4UK2UB7Z+AZB
-X-Google-Smtp-Source: ACHHUZ5YZD8fx0KgCTuHpDJe0wpCyOKPizAlCEPgXSRJ4L1EvfuXNi5P5YSJh8gMioCuqsedxNrAggthsCP4xsGho4gpnN+tE5a8
+        Tue, 23 May 2023 05:35:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2620E138;
+        Tue, 23 May 2023 02:35:14 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B6BD41FF45;
+        Tue, 23 May 2023 09:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684834512; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IAYq7YJVS2Hlnl42uVu2goasTRVPRgZ4NqjKSyNxGrQ=;
+        b=KU08sltoiXCpoxueN/xTm1Dj8XgBHSTDWuL90uW147a2/O/Mr6ZoeLyNLFpVJWdIVW5kxX
+        qqA4ifcAtaWSIWN6bnayexKSUglQmxet+EFMnoKUKq4Izsg5nga9Xy+G/qI4h+1EzPAbdY
+        lsmjo1AyUZ4F7lDFhMIZqs6iohgJ0mY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 46EBC2C141;
+        Tue, 23 May 2023 09:35:07 +0000 (UTC)
+Date:   Tue, 23 May 2023 11:35:02 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
+        npiggin@gmail.com, davem@davemloft.net,
+        Marc Zyngier <maz@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
+        christophe.leroy@csgroup.eu,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
+        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH v5 02/18] watchdog/perf: More properly prevent false
+ positives with turbo modes
+Message-ID: <ZGyIxvKhVjr-L8-I@alley>
+References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
+ <20230519101840.v5.2.I843b0d1de3e096ba111a179f3adb16d576bef5c7@changeid>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9285:0:b0:763:5a5a:90e7 with SMTP id
- s5-20020a5d9285000000b007635a5a90e7mr6621320iom.3.1684834471032; Tue, 23 May
- 2023 02:34:31 -0700 (PDT)
-Date:   Tue, 23 May 2023 02:34:31 -0700
-In-Reply-To: <00000000000066a94205fc488445@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000026bdd305fc5918a5@google.com>
-Subject: Re: [syzbot] [block?] [reiserfs?] KASAN: user-memory-access Write in zram_slot_lock
-From:   syzbot <syzbot+b8d61a58b7c7ebd2c8e0@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, axboe@kernel.dk, hch@lst.de,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        reiserfs-devel@vger.kernel.org, senozhatsky@chromium.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519101840.v5.2.I843b0d1de3e096ba111a179f3adb16d576bef5c7@changeid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Fri 2023-05-19 10:18:26, Douglas Anderson wrote:
+> Currently, in the watchdog_overflow_callback() we first check to see
+> if the watchdog had been touched and _then_ we handle the workaround
+> for turbo mode. This order should be reversed.
+> 
+> Specifically, "touching" the hardlockup detector's watchdog should
+> avoid lockups being detected for one period that should be roughly the
+> same regardless of whether we're running turbo or not. That means that
+> we should do the extra accounting for turbo _before_ we look at (and
+> clear) the global indicating that we've been touched.
 
-commit 9fe95babc7420722d39a1ded379027a1e1825d3a
-Author: Christoph Hellwig <hch@lst.de>
-Date:   Tue Apr 11 17:14:44 2023 +0000
+The ideal solution would be to reset the turbo-mode-related
+variables when the watchdog is touched. And keep checking
+watchdog_nmi_touch first.
 
-    zram: remove valid_io_request
+But this ordering change should be good enough. It causes that
+we always check watchdog_nmi_touch when the turbo-more-related
+variables are already reset.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=132fa586280000
-start commit:   44c026a73be8 Linux 6.4-rc3
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10afa586280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=172fa586280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-dashboard link: https://syzkaller.appspot.com/bug?extid=b8d61a58b7c7ebd2c8e0
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1223f7d9280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1245326a280000
+> NOTE: this fix is made based on code inspection. I am not aware of any
+> reports where the old code would have generated false positives. That
+> being said, this order seems more correct and also makes it easier
+> down the line to share code with the "buddy" hardlockup detector.
+> 
+> Fixes: 7edaeb6841df ("kernel/watchdog: Prevent false positives with turbo modes")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Reported-by: syzbot+b8d61a58b7c7ebd2c8e0@syzkaller.appspotmail.com
-Fixes: 9fe95babc742 ("zram: remove valid_io_request")
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Best Regards,
+Petr
