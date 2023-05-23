@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A25F70D648
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A06C70D5A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236030AbjEWH5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
+        id S235687AbjEWHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbjEWH4f (ORCPT
+        with ESMTP id S235184AbjEWHqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:56:35 -0400
-X-Greylist: delayed 642 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 00:55:33 PDT
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCB3129;
-        Tue, 23 May 2023 00:55:33 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id D6AC4280014D1;
-        Tue, 23 May 2023 09:44:43 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id C0B52DDCD0; Tue, 23 May 2023 09:44:43 +0200 (CEST)
-Date:   Tue, 23 May 2023 09:44:43 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
-        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
-        peterz@infradead.org, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, p.rosenberger@kunbus.com
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-Message-ID: <20230523074443.GA21236@wunner.de>
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
+        Tue, 23 May 2023 03:46:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78870C5;
+        Tue, 23 May 2023 00:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=b4caBsqRj9WgFDF1CdiyuIzyBrf32buPv15Igm1OGNU=; b=WhENlxHUIDOj4WfSHpZmeGSqbG
+        vUiinRR9sgFVzAa6AJUpClm6jiechzZRFCFoQOMBZgcgEyyNfTPkP91bAtG69iCrNEq/glQ/uJbNx
+        sAOQ62dPF9soTqb0kTrLOwvxuMSQt5oW6OzozXVmnZvgp/wauMKJRxyVsHuNGgJsCVYGzh7D01TWu
+        caWLwi0NXlp+j+GN8bktnbZRg2OcJyv/uKT1OuzU3MMn/gNrZttHEkMPnvMkbUA53UNwWPOcTb/hS
+        /FeK4JBZmKQY0mPDmXMOVZpL0vVDpadh2lV6EKfqVBTZSgXK5QlkE/1IVOY53AaWwoNvZ6GHaMTIg
+        oj91dTFQ==;
+Received: from [2001:4bb8:188:23b2:6ade:85c9:530f:6eb0] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1Mi9-009GTZ-27;
+        Tue, 23 May 2023 07:45:38 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: fix the name_to_dev_t mess
+Date:   Tue, 23 May 2023 09:45:11 +0200
+Message-Id: <20230523074535.249802-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 09:48:23AM +0300, Péter Ujfalusi wrote:
-> On 22/05/2023 17:31, Lino Sanfilippo wrote:
-[...]
-> This looked promising, however it looks like the UPX-i11 needs the DMI
-> quirk.
+Hi all,
 
-Why is that?  Is there a fundamental problem with the patch or is it
-a specific issue with that device?
+this series tries to sort out accumulated mess around the name_to_dev_t
+function.  This function is intended to allow looking up the dev_t of a
+block device based on a name string before the root file systems is
+mounted and thus the normal path based lookup is available.
 
+Unfortunately a few years ago it managed to get exported and used in
+non-init contexts, leading to the something looking like a path name
+also beeing lookuped up by a different and potential dangerous
+algorithm.
 
-> > --- a/drivers/char/tpm/tpm_tis_core.c
-> > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
-> >  	return status == TPM_STS_COMMAND_READY;
-> >  }
-> >  
-> > +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
-> > +{
-> > +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> > +	int intmask = 0;
-> > +
-> > +	dev_err(&chip->dev, HW_ERR
-> > +		"TPM interrupt storm detected, polling instead\n");
-> 
-> Should this be dev_warn or even dev_info level?
+This series does a fair amount of refactoring and finally ends up with
+the renamed and improved name_to_dev_t only beeing available for the
+early init code again.
 
-The corresponding message emitted in tpm_tis_core_init() for
-an interrupt that's *never* asserted uses dev_err(), so using
-dev_err() here as well serves consistency:
+The series is against Jens' for-6.5/block tree but probably applies
+against current mainline just fine as well.
 
-	dev_err(&chip->dev, FW_BUG
-		"TPM interrupt not working, polling instead\n");
+A git tree is also available here:
 
-That way the same severity is used both for the never asserted and
-the never deasserted interrupt case.
+    git://git.infradead.org/users/hch/block.git blk-init-cleanup
 
+Gitweb:
 
-> > +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
-> > +		tpm_tis_handle_irq_storm(chip);
-> 
-> Will the kernel step in and disbale the IRQ before we would have
-> detected the storm?
+    http://git.infradead.org/users/hch/block.git/shortlog/refs/heads/blk-init-cleanup
 
-No.  The detection of spurious interrupts in note_interrupt()
-hinges on handlers returning IRQ_NONE.  And this patch makes
-tis_int_handler() always return IRQ_HANDLED, thus pretending
-success to genirq code.
-
-
-> >  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
-> >  	tpm_tis_relinquish_locality(chip, 0);
-> >  	if (rc < 0)
-> > -		return IRQ_NONE;
-> > +		goto unhandled;
-> 
-> This is more like an error than just unhandled IRQ. Yes, it was ignored,
-> probably because it is common?
-
-The interrupt may be shared and then it's not an error.
-
-Thanks,
-
-Lukas
+Diffstat:
+ Documentation/admin-guide/kernel-parameters.txt |    2 
+ arch/alpha/kernel/setup.c                       |    2 
+ arch/ia64/kernel/setup.c                        |    2 
+ arch/powerpc/platforms/powermac/setup.c         |    3 
+ block/Makefile                                  |    2 
+ block/early-lookup.c                            |  315 ++++++++++++++++++
+ block/genhd.c                                   |   92 -----
+ drivers/base/dd.c                               |    6 
+ drivers/md/dm-init.c                            |    4 
+ drivers/md/dm-snap.c                            |   14 
+ drivers/md/dm-table.c                           |   26 -
+ drivers/md/md-autodetect.c                      |    3 
+ drivers/mtd/devices/block2mtd.c                 |   62 ++-
+ fs/pstore/blk.c                                 |    4 
+ include/linux/blkdev.h                          |    6 
+ include/linux/device-mapper.h                   |    2 
+ include/linux/device/driver.h                   |    2 
+ include/linux/mount.h                           |    1 
+ include/linux/root_dev.h                        |    9 
+ init/do_mounts.c                                |  416 ++++++------------------
+ init/do_mounts.h                                |   14 
+ init/do_mounts_initrd.c                         |   11 
+ kernel/power/hibernate.c                        |  167 +++++----
+ kernel/power/power.h                            |    3 
+ kernel/power/swap.c                             |    2 
+ 25 files changed, 603 insertions(+), 567 deletions(-)
