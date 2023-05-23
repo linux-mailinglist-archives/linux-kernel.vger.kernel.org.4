@@ -2,88 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5230270DC50
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7FF70DC5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236777AbjEWMQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
+        id S236792AbjEWMS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236688AbjEWMQy (ORCPT
+        with ESMTP id S236120AbjEWMSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:16:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BE02109;
-        Tue, 23 May 2023 05:16:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 103DA139F;
-        Tue, 23 May 2023 05:17:37 -0700 (PDT)
-Received: from [10.57.84.70] (unknown [10.57.84.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2138E3F6C4;
-        Tue, 23 May 2023 05:16:44 -0700 (PDT)
-Message-ID: <b3fef8c7-29d2-e1d3-09c9-7bb97510faf0@arm.com>
-Date:   Tue, 23 May 2023 13:16:40 +0100
+        Tue, 23 May 2023 08:18:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5EE11F;
+        Tue, 23 May 2023 05:18:50 -0700 (PDT)
+Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QQYF46lKwzLpyJ;
+        Tue, 23 May 2023 20:15:52 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.2) by
+ kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 23 May 2023 20:18:48 +0800
+From:   Junxian Huang <huangjunxian6@hisilicon.com>
+To:     <jgg@nvidia.com>, <leon@kernel.org>
+CC:     <linux-rdma@vger.kernel.org>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <huangjunxian6@hisilicon.com>
+Subject: [PATCH for-rc 2/3] RDMA/hns: Fix hns_roce_table_get return value
+Date:   Tue, 23 May 2023 20:16:40 +0800
+Message-ID: <20230523121641.3132102-3-huangjunxian6@hisilicon.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20230523121641.3132102-1-huangjunxian6@hisilicon.com>
+References: <20230523121641.3132102-1-huangjunxian6@hisilicon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v9 5/6] iommu/dma: Allow a single FQ in addition to
- per-CPU FQs
-Content-Language: en-GB
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Julian Ruess <julianr@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230310-dma_iommu-v9-0-65bb8edd2beb@linux.ibm.com>
- <20230310-dma_iommu-v9-5-65bb8edd2beb@linux.ibm.com>
- <b1e53f39-5e0b-a09d-2954-cdc9e8592b67@arm.com>
- <0d9e3f86cf9a1a3d69e650fb631809498c2cd01e.camel@linux.ibm.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <0d9e3f86cf9a1a3d69e650fb631809498c2cd01e.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.2]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500006.china.huawei.com (7.221.188.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,36 +48,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-23 13:02, Niklas Schnelle wrote:
-[...]
->>> +static void fq_flush_single(struct iommu_dma_cookie *cookie)
->>> +{
->>> +	struct iova_fq *fq = cookie->single_fq;
->>> +	unsigned long flags;
->>> +
->>> +	spin_lock_irqsave(&fq->lock, flags);
->>> +	fq_ring_free(cookie, fq);
->>> +	spin_unlock_irqrestore(&fq->lock, flags)
->>
->> Nit: this should clearly just be a self-locked version of fq_ring_free()
->> that takes fq as an argument, then both the new case and the existing
->> loop body become trivial one-line calls.
-> 
-> Sure will do. Just one question about names. As an example
-> pci_reset_function_locked() means that the relevant lock is already
-> taken with pci_reset_function() adding the lock/unlock. In your wording
-> the implied function names sound the other way around. I can't find
-> anything similar in drivers/iommu so would you mind going the PCI way
-> and having:
-> 
-> fq_ring_free_locked(): Called in queue_iova() with the lock held
-> fr_ring_free(): Called in fq_flush_timeout() takes the lock itself
-> 
-> Or maybe I'm just biased because I've used the PCI ..locked() functions
-> before and there is a better convention.
+From: Chengchang Tang <tangchengchang@huawei.com>
 
-Yes, that's the form that's most familiar to me too - sorry I failed to 
-express it clearly :)
+The return value of set_hem has been fixed to ENODEV, which will
+lead a diagnostic information missing.
 
-Thanks,
-Robin.
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Signed-off-by: Chengchang Tang <tangchengchang@huawei.com>
+Signed-off-by: Junxian Huang <huangjunxian6@hisilicon.com>
+---
+ drivers/infiniband/hw/hns/hns_roce_hem.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/infiniband/hw/hns/hns_roce_hem.c b/drivers/infiniband/hw/hns/hns_roce_hem.c
+index aa8a08d1c014..f30274986c0d 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_hem.c
++++ b/drivers/infiniband/hw/hns/hns_roce_hem.c
+@@ -595,11 +595,12 @@ int hns_roce_table_get(struct hns_roce_dev *hr_dev,
+ 	}
+ 
+ 	/* Set HEM base address(128K/page, pa) to Hardware */
+-	if (hr_dev->hw->set_hem(hr_dev, table, obj, HEM_HOP_STEP_DIRECT)) {
++	ret = hr_dev->hw->set_hem(hr_dev, table, obj, HEM_HOP_STEP_DIRECT);
++	if (ret) {
+ 		hns_roce_free_hem(hr_dev, table->hem[i]);
+ 		table->hem[i] = NULL;
+-		ret = -ENODEV;
+-		dev_err(dev, "set HEM base address to HW failed.\n");
++		dev_err(dev, "set HEM base address to HW failed, ret = %d.\n",
++			ret);
+ 		goto out;
+ 	}
+ 
+-- 
+2.30.0
+
