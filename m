@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C094A70D628
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151E470D654
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjEWHzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S236072AbjEWH6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236204AbjEWHzf (ORCPT
+        with ESMTP id S236001AbjEWH45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:55:35 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41B110D1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:55:11 -0700 (PDT)
+        Tue, 23 May 2023 03:56:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500F7184
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:56:00 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BB467219EE;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EF66420411;
         Tue, 23 May 2023 07:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1684828448; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=duuZwN1C9IUQLQQEAFsw/JZ4JxAL3kzU5sIEEpm2/Z8=;
-        b=EUqXzLC0QgGY2mNYInw54Hs0O9Ti2wyrYx1zPwp5ZJnHqF7bq+RQGr7r0NWYKth1JsXRlD
-        Wmtn2Z/18DlKT50ZVuq0ujLJUSnIhKh/49QV6wy0BDW3yFy9hM6ny2TUPXp9H5VszRR15o
-        jDSAAdpo2ZeNse13KJMYTKQLbcpIVnM=
+        bh=pabiQ7OVJjJ/NOtnH4HgaI79pZvmZ7fW1qyAiIkjeV8=;
+        b=f3PzBo9jbSqWA1p0sPMUOW0kAJmylGdpTbM800c+Cz14ois3OKX8hQiUPhjLLweMt11+jc
+        mgGVeElw0dNkjRRYIr7ZJyP8SnBe1lTEe+ZdaBZssdRbrFMpjJwQDqEGKaEOSZVQSOqLBx
+        6b2HD87ZDjS/H/YeX19M0lRAWDRK8to=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1684828448;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=duuZwN1C9IUQLQQEAFsw/JZ4JxAL3kzU5sIEEpm2/Z8=;
-        b=aUmxVBbexQ+QEfvys+3GiVCD2BcAxLFBuvh/IvWCESBt9h97lPmuHSZGjM9gPOTWbmhYsD
-        Pyh6xWc+EdLd5QAA==
+        bh=pabiQ7OVJjJ/NOtnH4HgaI79pZvmZ7fW1qyAiIkjeV8=;
+        b=CSSV1xs87aOdr6CNPqMpG5JvgKsjAItKVeNPn+f1v1sRYlewkG4YmunhnVgb7W67ep9ibd
+        T3gOmRqJd8+jblDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FF0913588;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8B6413A1A;
         Tue, 23 May 2023 07:54:08 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6AueHSBxbGT4KgAAMHmgww
+        id KEYNKiBxbGT4KgAAMHmgww
         (envelope-from <tiwai@suse.de>); Tue, 23 May 2023 07:54:08 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 20/37] ALSA: seq: Drop dead code for the old broadcast support
-Date:   Tue, 23 May 2023 09:53:41 +0200
-Message-Id: <20230523075358.9672-21-tiwai@suse.de>
+Subject: [PATCH v2 21/37] ALSA: seq: Check the conflicting port at port creation
+Date:   Tue, 23 May 2023 09:53:42 +0200
+Message-Id: <20230523075358.9672-22-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230523075358.9672-1-tiwai@suse.de>
 References: <20230523075358.9672-1-tiwai@suse.de>
@@ -70,145 +70,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The broadcast and multicast supports have been never enabled.
-Let's drop the dead code.
+We didn't check if a port with the given port number has been already
+present at creating a new port.  Check it and return -EBUSY properly
+if the port number conflicts.
 
 Reviewed-by: Jaroslav Kysela <perex@perex.cz>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- sound/core/seq/seq_clientmgr.c | 105 +--------------------------------
- 1 file changed, 1 insertion(+), 104 deletions(-)
+ sound/core/seq/seq_clientmgr.c | 12 ++++++++----
+ sound/core/seq/seq_ports.c     | 25 ++++++++++++++++---------
+ sound/core/seq/seq_ports.h     |  5 +++--
+ 3 files changed, 27 insertions(+), 15 deletions(-)
 
 diff --git a/sound/core/seq/seq_clientmgr.c b/sound/core/seq/seq_clientmgr.c
-index 98e8032a32e2..019af1343325 100644
+index 019af1343325..06743114cabf 100644
 --- a/sound/core/seq/seq_clientmgr.c
 +++ b/sound/core/seq/seq_clientmgr.c
-@@ -711,93 +711,6 @@ static int deliver_to_subscribers(struct snd_seq_client *client,
- 	return (result < 0) ? result : num_ev;
+@@ -1194,15 +1194,19 @@ static int snd_seq_ioctl_create_port(struct snd_seq_client *client, void *arg)
+ 	struct snd_seq_port_info *info = arg;
+ 	struct snd_seq_client_port *port;
+ 	struct snd_seq_port_callback *callback;
+-	int port_idx;
++	int port_idx, err;
+ 
+ 	/* it is not allowed to create the port for an another client */
+ 	if (info->addr.client != client->number)
+ 		return -EPERM;
+ 
+-	port = snd_seq_create_port(client, (info->flags & SNDRV_SEQ_PORT_FLG_GIVEN_PORT) ? info->addr.port : -1);
+-	if (port == NULL)
+-		return -ENOMEM;
++	if (info->flags & SNDRV_SEQ_PORT_FLG_GIVEN_PORT)
++		port_idx = info->addr.port;
++	else
++		port_idx = -1;
++	err = snd_seq_create_port(client, port_idx, &port);
++	if (err < 0)
++		return err;
+ 
+ 	if (client->type == USER_CLIENT && info->kernel) {
+ 		port_idx = port->addr.port;
+diff --git a/sound/core/seq/seq_ports.c b/sound/core/seq/seq_ports.c
+index 25fcf5a2c71c..500b1a5a9679 100644
+--- a/sound/core/seq/seq_ports.c
++++ b/sound/core/seq/seq_ports.c
+@@ -107,33 +107,34 @@ static void port_subs_info_init(struct snd_seq_port_subs_info *grp)
  }
  
--
--#ifdef SUPPORT_BROADCAST 
--/*
-- * broadcast to all ports:
-- */
--static int port_broadcast_event(struct snd_seq_client *client,
--				struct snd_seq_event *event,
--				int atomic, int hop)
--{
--	int num_ev = 0, err, result = 0;
--	struct snd_seq_client *dest_client;
--	struct snd_seq_client_port *port;
--
--	dest_client = get_event_dest_client(event, SNDRV_SEQ_FILTER_BROADCAST);
--	if (dest_client == NULL)
--		return 0; /* no matching destination */
--
--	read_lock(&dest_client->ports_lock);
--	list_for_each_entry(port, &dest_client->ports_list_head, list) {
--		event->dest.port = port->addr.port;
--		/* pass NULL as source client to avoid error bounce */
--		err = snd_seq_deliver_single_event(NULL, event,
--						   SNDRV_SEQ_FILTER_BROADCAST,
--						   atomic, hop);
--		if (err < 0) {
--			/* save first error that occurs and continue */
--			if (!result)
--				result = err;
--			continue;
--		}
--		num_ev++;
--	}
--	read_unlock(&dest_client->ports_lock);
--	snd_seq_client_unlock(dest_client);
--	event->dest.port = SNDRV_SEQ_ADDRESS_BROADCAST; /* restore */
--	return (result < 0) ? result : num_ev;
--}
--
--/*
-- * send the event to all clients:
-- * if destination port is also ADDRESS_BROADCAST, deliver to all ports.
-- */
--static int broadcast_event(struct snd_seq_client *client,
--			   struct snd_seq_event *event, int atomic, int hop)
--{
--	int err, result = 0, num_ev = 0;
--	int dest;
--	struct snd_seq_addr addr;
--
--	addr = event->dest; /* save */
--
--	for (dest = 0; dest < SNDRV_SEQ_MAX_CLIENTS; dest++) {
--		/* don't send to itself */
--		if (dest == client->number)
--			continue;
--		event->dest.client = dest;
--		event->dest.port = addr.port;
--		if (addr.port == SNDRV_SEQ_ADDRESS_BROADCAST)
--			err = port_broadcast_event(client, event, atomic, hop);
--		else
--			/* pass NULL as source client to avoid error bounce */
--			err = snd_seq_deliver_single_event(NULL, event,
--							   SNDRV_SEQ_FILTER_BROADCAST,
--							   atomic, hop);
--		if (err < 0) {
--			/* save first error that occurs and continue */
--			if (!result)
--				result = err;
--			continue;
--		}
--		num_ev += err;
--	}
--	event->dest = addr; /* restore */
--	return (result < 0) ? result : num_ev;
--}
--
--
--/* multicast - not supported yet */
--static int multicast_event(struct snd_seq_client *client, struct snd_seq_event *event,
--			   int atomic, int hop)
--{
--	pr_debug("ALSA: seq: multicast not supported yet.\n");
--	return 0; /* ignored */
--}
--#endif /* SUPPORT_BROADCAST */
--
--
- /* deliver an event to the destination port(s).
-  * if the event is to subscribers or broadcast, the event is dispatched
-  * to multiple targets.
-@@ -826,15 +739,6 @@ static int snd_seq_deliver_event(struct snd_seq_client *client, struct snd_seq_e
- 	if (event->queue == SNDRV_SEQ_ADDRESS_SUBSCRIBERS ||
- 	    event->dest.client == SNDRV_SEQ_ADDRESS_SUBSCRIBERS)
- 		result = deliver_to_subscribers(client, event, atomic, hop);
--#ifdef SUPPORT_BROADCAST
--	else if (event->queue == SNDRV_SEQ_ADDRESS_BROADCAST ||
--		 event->dest.client == SNDRV_SEQ_ADDRESS_BROADCAST)
--		result = broadcast_event(client, event, atomic, hop);
--	else if (event->dest.client >= SNDRV_SEQ_MAX_CLIENTS)
--		result = multicast_event(client, event, atomic, hop);
--	else if (event->dest.port == SNDRV_SEQ_ADDRESS_BROADCAST)
--		result = port_broadcast_event(client, event, atomic, hop);
--#endif
- 	else
- 		result = snd_seq_deliver_single_event(client, event, 0, atomic, hop);
  
-@@ -936,14 +840,7 @@ static int snd_seq_client_enqueue_event(struct snd_seq_client *client,
- 	if (event->queue == SNDRV_SEQ_ADDRESS_SUBSCRIBERS) {
- 		event->dest.client = SNDRV_SEQ_ADDRESS_SUBSCRIBERS;
- 		event->queue = SNDRV_SEQ_QUEUE_DIRECT;
--	} else
--#ifdef SUPPORT_BROADCAST
--		if (event->queue == SNDRV_SEQ_ADDRESS_BROADCAST) {
--			event->dest.client = SNDRV_SEQ_ADDRESS_BROADCAST;
--			event->queue = SNDRV_SEQ_QUEUE_DIRECT;
--		}
--#endif
--	if (event->dest.client == SNDRV_SEQ_ADDRESS_SUBSCRIBERS) {
-+	} else if (event->dest.client == SNDRV_SEQ_ADDRESS_SUBSCRIBERS) {
- 		/* check presence of source port */
- 		struct snd_seq_client_port *src_port = snd_seq_port_use_ptr(client, event->source.port);
- 		if (src_port == NULL)
+-/* create a port, port number is returned (-1 on failure);
++/* create a port, port number or a negative error code is returned
+  * the caller needs to unref the port via snd_seq_port_unlock() appropriately
+  */
+-struct snd_seq_client_port *snd_seq_create_port(struct snd_seq_client *client,
+-						int port)
++int snd_seq_create_port(struct snd_seq_client *client, int port,
++			struct snd_seq_client_port **port_ret)
+ {
+ 	struct snd_seq_client_port *new_port, *p;
+-	int num = -1;
++	int num;
+ 	
++	*port_ret = NULL;
++
+ 	/* sanity check */
+ 	if (snd_BUG_ON(!client))
+-		return NULL;
++		return -EINVAL;
+ 
+ 	if (client->num_ports >= SNDRV_SEQ_MAX_PORTS) {
+ 		pr_warn("ALSA: seq: too many ports for client %d\n", client->number);
+-		return NULL;
++		return -EINVAL;
+ 	}
+ 
+ 	/* create a new port */
+ 	new_port = kzalloc(sizeof(*new_port), GFP_KERNEL);
+ 	if (!new_port)
+-		return NULL;	/* failure, out of memory */
++		return -ENOMEM;	/* failure, out of memory */
+ 	/* init port data */
+ 	new_port->addr.client = client->number;
+ 	new_port->addr.port = -1;
+ 	new_port->owner = THIS_MODULE;
+-	sprintf(new_port->name, "port-%d", num);
+ 	snd_use_lock_init(&new_port->use_lock);
+ 	port_subs_info_init(&new_port->c_src);
+ 	port_subs_info_init(&new_port->c_dest);
+@@ -143,6 +144,10 @@ struct snd_seq_client_port *snd_seq_create_port(struct snd_seq_client *client,
+ 	mutex_lock(&client->ports_mutex);
+ 	write_lock_irq(&client->ports_lock);
+ 	list_for_each_entry(p, &client->ports_list_head, list) {
++		if (p->addr.port == port) {
++			num = -EBUSY;
++			goto unlock;
++		}
+ 		if (p->addr.port > num)
+ 			break;
+ 		if (port < 0) /* auto-probe mode */
+@@ -153,10 +158,12 @@ struct snd_seq_client_port *snd_seq_create_port(struct snd_seq_client *client,
+ 	client->num_ports++;
+ 	new_port->addr.port = num;	/* store the port number in the port */
+ 	sprintf(new_port->name, "port-%d", num);
++	*port_ret = new_port;
++ unlock:
+ 	write_unlock_irq(&client->ports_lock);
+ 	mutex_unlock(&client->ports_mutex);
+ 
+-	return new_port;
++	return num;
+ }
+ 
+ /* */
+diff --git a/sound/core/seq/seq_ports.h b/sound/core/seq/seq_ports.h
+index b1f2c4943174..44f0e9e96bbf 100644
+--- a/sound/core/seq/seq_ports.h
++++ b/sound/core/seq/seq_ports.h
+@@ -86,8 +86,9 @@ struct snd_seq_client_port *snd_seq_port_query_nearest(struct snd_seq_client *cl
+ /* unlock the port */
+ #define snd_seq_port_unlock(port) snd_use_lock_free(&(port)->use_lock)
+ 
+-/* create a port, port number is returned (-1 on failure) */
+-struct snd_seq_client_port *snd_seq_create_port(struct snd_seq_client *client, int port_index);
++/* create a port, port number or a negative error code is returned */
++int snd_seq_create_port(struct snd_seq_client *client, int port_index,
++			struct snd_seq_client_port **port_ret);
+ 
+ /* delete a port */
+ int snd_seq_delete_port(struct snd_seq_client *client, int port);
 -- 
 2.35.3
 
