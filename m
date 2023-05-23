@@ -2,212 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C37670E4C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD1870E4C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237827AbjEWSeB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 14:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S237940AbjEWSgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjEWSd6 (ORCPT
+        with ESMTP id S232328AbjEWSgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:33:58 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8E4119;
-        Tue, 23 May 2023 11:33:57 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-96ffba243b1so62410366b.0;
-        Tue, 23 May 2023 11:33:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684866836; x=1687458836;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i2+6ZeOuWaMysW6pOftnvqcNpFa0QK0NSRKjideDKrk=;
-        b=cq5rWfUqMn4qFJsZr/VXv7yONOYg3dfueq+X6jw8TKayt04JcDi0NO/RvLvusKF6uX
-         3BFy8tP/Xb/yp3rW39/PpeBFRNVSH7rcz1yvyWJZa48+vZSuqPq7agoamgXNuaQoJMjq
-         J72O2NSZJBhUFzEGpX/kroRJhPGYj4j8AfExpXPnUbI/GQYKGn0T2BoBNxu/ZgSb0Bt9
-         X5GbeXySslyufFS8eEXqheE5n83+5fYb5MXZ0/wg3VVDglMfsAxy8NBxPAlOFfLfAePB
-         HaboPHFPIhwJ5uCBIGQVa7QbGDey+rUhexE45X+KH1vHQJiNpQ96/Sd3Bw/VNr6umc+S
-         2E5w==
-X-Gm-Message-State: AC+VfDzHXsUN0l2EJUu5OyutNeu9eHLYSSHd/MTpet5P8FFsbBCUJyru
-        y9+FbwL0PPGvr4QpauKggHv3Y5DU2UNEXqMM+64=
-X-Google-Smtp-Source: ACHHUZ74qE46raE7hGqKO0rIs0tcDFMUtKQ9FPO83vqo+TKQ8WKbpVYAKFIYoGywc2NBe5UcG4EZWgMxDbsnjHTCn2U=
-X-Received: by 2002:a17:906:748c:b0:965:9c7d:df96 with SMTP id
- e12-20020a170906748c00b009659c7ddf96mr14578825ejl.1.1684866835592; Tue, 23
- May 2023 11:33:55 -0700 (PDT)
+        Tue, 23 May 2023 14:36:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B4F91
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:36:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2EFA62DA4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 18:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE11DC433EF;
+        Tue, 23 May 2023 18:36:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684866981;
+        bh=85tRnbat52B6IBzDM3UnXuQ+f5nD406kWabSowIdwAA=;
+        h=From:Subject:Date:To:Cc:From;
+        b=IIPoge2fHVVufSr0gZ06zxpDIjv5YJsn/I4U/QOD/sRi2fFXZfxw1ILXz8gsvOxR+
+         qtcQ83SV+TvZNAn8yCUumCfnTEAds7wwR9frdOTG8BTmKujcORuKA1BchglIZONeED
+         aEp2nMnKDfFgTpEkVaUHNku+7dXRNIoszP6stn4ao2F2DgoTMgI/pGAJLhMjD86rJj
+         iFvoDcCgMMgo9diygJKiycelYfhilVwiGCVEUt6OMmpqpAtQiaWQ/EAgwC6rcz/Jaa
+         vOZ+hyQoIqjV+ZiV14CMiZmf+BhEb3CbAXVxKwxnFrvbH9jdGlIKt13pGVMuLTex8M
+         q65LCJo4+yuPg==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/7] b4/sysreg: More conversions to automatic generation
+Date:   Tue, 23 May 2023 19:35:57 +0100
+Message-Id: <20230419-arm64-syreg-gen-v2-0-e0064336e2dd@kernel.org>
 MIME-Version: 1.0
-References: <20230523074535.249802-1-hch@lst.de> <20230523074535.249802-5-hch@lst.de>
-In-Reply-To: <20230523074535.249802-5-hch@lst.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 May 2023 20:33:44 +0200
-Message-ID: <CAJZ5v0jrj3PaC5oZt22DQoJARUcpXaerS-Cmx+34du7=p9WDSw@mail.gmail.com>
-Subject: Re: [PATCH 04/24] PM: hibernate: move finding the resume device out
- of software_resume
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI0HbWQC/3WNQQ6CMBAAv0L27BoopFJP/sNwaMtSGrQ1W4MSw
+ t8t3D3OJJNZIRF7SnAtVmCaffIxZBCnAuyogyP0fWYQpajLplKo+SkbTAuTQ0cBjdC6VdK0epC
+ QK6MToWEd7Lh3n8jTrl9Mg/8eo3uXefTpHXk5vnO12/+LucISVS1tf5HKGkW3iTjQ4xzZQbdt2
+ w8w/8I3xgAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, Mark Brown <broonie@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Shaoqin Huang <shahuang@redhat.com>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1297; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=85tRnbat52B6IBzDM3UnXuQ+f5nD406kWabSowIdwAA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkbQecGcBbJzib3zy+IKJGV2eSsVzML4rJJNXF43EC
+ G1cCFWKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZG0HnAAKCRAk1otyXVSH0Os0B/
+ 9fmX3RhgkJNbVZLHbWMVUPDhvvnbvfMGjXc16xfsyxt8SbWe83plgVOjZT/ePDk3gAN6vHANxo4C/E
+ MzWdzb6THmrYnTnamsSaWYg9wPsGoXuYxV13+BDYbpl+lxs/5MuDM4JQSQAH1jNawG4W2syNZhjFBj
+ upS94YjvTmhhF6iZR29D8JwWGJ10BYEH9D1zThdIonHIUhSa1SCfEdr9ak265KvVXnT0d8bSKUW8Lj
+ N0b79LQw77XVYUlxejM/+SFIPtWQU+1OcxiyYQmekFXMSh6RcFL5tLF491NYDWTfkGlyVKjmIp+Sv6
+ A2MDQR4AZ0wHaqW8WIbTwgSBiYWvwg
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 9:45 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> software_resume can be called either from an init call in the boot code,
-> or from sysfs once the system has finished booting, and the two
-> invocation methods this can't race with each other.
->
-> For the latter case we did just parse the suspend device manually, while
-> the former might not have one.  Split software_resume so that the search
-> only happens for the boot case, which also means the special lockdep
-> nesting annotation can go away as the system transition mutex can be
-> taken a little later and doesn't have the sysfs locking nest inside it.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Continue working through the register defintions, converting them to
+automatic generation.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Also convert OSECCR_EL1, OSDTRRX_EL1 and OSDTRTX_EL1 instead of
+  dropping them.
+- Link to v1: https://lore.kernel.org/r/20230419-arm64-syreg-gen-v1-0-936cd769cb9e@kernel.org
 
-> ---
->  kernel/power/hibernate.c | 80 ++++++++++++++++++++--------------------
->  1 file changed, 39 insertions(+), 41 deletions(-)
->
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 78696aa04f5ca3..45e24b02cd50b6 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -907,7 +907,7 @@ int hibernate_quiet_exec(int (*func)(void *data), void *data)
->  }
->  EXPORT_SYMBOL_GPL(hibernate_quiet_exec);
->
-> -static int find_resume_device(void)
-> +static int __init find_resume_device(void)
->  {
->         if (!strlen(resume_file))
->                 return -ENOENT;
-> @@ -942,53 +942,16 @@ static int find_resume_device(void)
->         return 0;
->  }
->
-> -/**
-> - * software_resume - Resume from a saved hibernation image.
-> - *
-> - * This routine is called as a late initcall, when all devices have been
-> - * discovered and initialized already.
-> - *
-> - * The image reading code is called to see if there is a hibernation image
-> - * available for reading.  If that is the case, devices are quiesced and the
-> - * contents of memory is restored from the saved image.
-> - *
-> - * If this is successful, control reappears in the restored target kernel in
-> - * hibernation_snapshot() which returns to hibernate().  Otherwise, the routine
-> - * attempts to recover gracefully and make the kernel return to the normal mode
-> - * of operation.
-> - */
->  static int software_resume(void)
->  {
->         int error;
->
-> -       /*
-> -        * If the user said "noresume".. bail out early.
-> -        */
-> -       if (noresume || !hibernation_available())
-> -               return 0;
-> -
-> -       /*
-> -        * name_to_dev_t() below takes a sysfs buffer mutex when sysfs
-> -        * is configured into the kernel. Since the regular hibernate
-> -        * trigger path is via sysfs which takes a buffer mutex before
-> -        * calling hibernate functions (which take system_transition_mutex)
-> -        * this can cause lockdep to complain about a possible ABBA deadlock
-> -        * which cannot happen since we're in the boot code here and
-> -        * sysfs can't be invoked yet. Therefore, we use a subclass
-> -        * here to avoid lockdep complaining.
-> -        */
-> -       mutex_lock_nested(&system_transition_mutex, SINGLE_DEPTH_NESTING);
-> -
-> -       if (!swsusp_resume_device) {
-> -               error = find_resume_device();
-> -               if (error)
-> -                       goto Unlock;
-> -       }
-> -
->         pm_pr_dbg("Hibernation image partition %d:%d present\n",
->                 MAJOR(swsusp_resume_device), MINOR(swsusp_resume_device));
->
->         pm_pr_dbg("Looking for hibernation image.\n");
-> +
-> +       mutex_lock(&system_transition_mutex);
->         error = swsusp_check(false);
->         if (error)
->                 goto Unlock;
-> @@ -1035,7 +998,39 @@ static int software_resume(void)
->         goto Finish;
->  }
->
-> -late_initcall_sync(software_resume);
-> +/**
-> + * software_resume_initcall - Resume from a saved hibernation image.
-> + *
-> + * This routine is called as a late initcall, when all devices have been
-> + * discovered and initialized already.
-> + *
-> + * The image reading code is called to see if there is a hibernation image
-> + * available for reading.  If that is the case, devices are quiesced and the
-> + * contents of memory is restored from the saved image.
-> + *
-> + * If this is successful, control reappears in the restored target kernel in
-> + * hibernation_snapshot() which returns to hibernate().  Otherwise, the routine
-> + * attempts to recover gracefully and make the kernel return to the normal mode
-> + * of operation.
-> + */
-> +static int __init software_resume_initcall(void)
-> +{
-> +       /*
-> +        * If the user said "noresume".. bail out early.
-> +        */
-> +       if (noresume || !hibernation_available())
-> +               return 0;
-> +
-> +       if (!swsusp_resume_device) {
-> +               int error = find_resume_device();
-> +
-> +               if (error)
-> +                       return error;
-> +       }
-> +
-> +       return software_resume();
-> +}
-> +late_initcall_sync(software_resume_initcall);
->
->
->  static const char * const hibernation_modes[] = {
-> @@ -1176,6 +1171,9 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
->         char *name;
->         dev_t res;
->
-> +       if (!hibernation_available())
-> +               return 0;
-> +
->         if (len && buf[len-1] == '\n')
->                 len--;
->         name = kstrndup(buf, len, GFP_KERNEL);
-> --
-> 2.39.2
->
+---
+Mark Brown (7):
+      arm64/sysreg: Convert MDCCINT_EL1 to automatic register generation
+      arm64/sysreg: Convert MDSCR_EL1 to automatic register generation
+      arm64/sysreg: Standardise naming of bitfield constants in OSL[AS]R_EL1
+      arm64/sysreg: Convert OSLAR_EL1 to automatic generation
+      arm64/sysreg: Convert OSDTRRX_EL1 to automatic generation
+      arm64/sysreg: Convert OSDTRTX_EL1 to automatic generation
+      arm64/sysreg: Convert OSECCR_EL1 to automatic generation
+
+ arch/arm64/include/asm/kvm_host.h |  2 +-
+ arch/arm64/include/asm/sysreg.h   | 16 +++---------
+ arch/arm64/kvm/sys_regs.c         | 10 +++----
+ arch/arm64/tools/sysreg           | 55 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 65 insertions(+), 18 deletions(-)
+---
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+change-id: 20230419-arm64-syreg-gen-b2aa896b8af6
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
