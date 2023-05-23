@@ -2,104 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F67570E099
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BB470E086
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbjEWPdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        id S237324AbjEWPbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236956AbjEWPdc (ORCPT
+        with ESMTP id S237474AbjEWPbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:33:32 -0400
-Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B006718D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:33:13 -0700 (PDT)
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by gauss.telenet-ops.be (Postfix) with ESMTPS id 4QQdcB00bMz4wxC0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:32:42 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:b0ac:7afd:272:4cff])
-        by xavier.telenet-ops.be with bizsmtp
-        id 0FXf2A00g0Jkz7G01FXfao; Tue, 23 May 2023 17:31:41 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1Tyu-002t3i-L4;
-        Tue, 23 May 2023 17:31:39 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1Tz9-00Ckb1-2w;
-        Tue, 23 May 2023 17:31:39 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v3 4/5] drm: shmobile: Add missing call to drm_fbdev_generic_setup()
-Date:   Tue, 23 May 2023 17:31:36 +0200
-Message-Id: <c836938112fda21762bc9eb2741ccd0cbf1197ef.1684854992.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1684854992.git.geert+renesas@glider.be>
-References: <cover.1684854992.git.geert+renesas@glider.be>
+        Tue, 23 May 2023 11:31:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA06129;
+        Tue, 23 May 2023 08:31:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6093A63304;
+        Tue, 23 May 2023 15:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B50C433D2;
+        Tue, 23 May 2023 15:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684855900;
+        bh=B5vj1o10A+ayLVD82jognpVSNrFBmnFy2ZXqq20SMdA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CJ7tODB1uVoZNjoFH803TVw2OKMh/qY0EUPZuVXpVTr4KW0OqYTU1HwSii+E7cyN5
+         Wbf3heYcvTPHWo08Ketm0eymMPUbxPSt2tj2mcoAMgNKzhkDNdIl9Hmzrd8qIfnSxz
+         9TlPUh3Sdau9q5AizNFoc8ATOvOAV1kg+F+eoUY/d0iq6BSnFIg7bNQGa0+WgBFcG6
+         TgZEaKllL0G6JDOMmapLLXBm/M0nMa5JmOULGNtIsyy4gKyhLI56DmLxbS2lgxFmU2
+         uWUY5M98IENrRD5qprA4gXkQNqS3Nfhj9670N8XbDOUMDvIABRHSY+BDWDmwf5h31M
+         515YbDMka1qvA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D18A6403B5; Tue, 23 May 2023 12:31:37 -0300 (-03)
+Date:   Tue, 23 May 2023 12:31:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, ravi.bangoria@amd.com, sandipan.das@amd.com,
+        ananth.narayan@amd.com, gautham.shenoy@amd.com, eranian@google.com,
+        puwen@hygon.cn
+Subject: Re: [PATCH v4 0/5] perf stat: Add option to aggregate data based on
+ the cache topology
+Message-ID: <ZGzcWb4Z8/P/Dca4@kernel.org>
+References: <20230517172745.5833-1-kprateek.nayak@amd.com>
+ <CAP-5=fUCvQNsW0Tnj7Q8sjFTqTEC9YUbFxAedRFtA=5zUe7BVA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAP-5=fUCvQNsW0Tnj7Q8sjFTqTEC9YUbFxAedRFtA=5zUe7BVA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set up generic fbdev emulation, to enable support for the Linux console.
-
-Use 16 as the preferred depth, as that is a good compromise between
-colorfulness and resource utilization, and the default of the fbdev
-driver.
-
-Suggested-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-v3:
-  - No changes,
-
-v2:
-  - Add Reviewed-by.
----
- drivers/gpu/drm/shmobile/shmob_drm_drv.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/gpu/drm/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/shmobile/shmob_drm_drv.c
-index faacfee24763b1d4..30493ce874192e3e 100644
---- a/drivers/gpu/drm/shmobile/shmob_drm_drv.c
-+++ b/drivers/gpu/drm/shmobile/shmob_drm_drv.c
-@@ -16,6 +16,7 @@
- #include <linux/slab.h>
+Em Wed, May 17, 2023 at 10:58:01AM -0700, Ian Rogers escreveu:
+> On Wed, May 17, 2023 at 10:22 AM K Prateek Nayak <kprateek.nayak@amd.com> wrote:
+> > K Prateek Nayak (5):
+> >   perf: Extract building cache level for a CPU into separate function
+> >   perf stat: Setup the foundation to allow aggregation based on cache
+> >     topology
+> >   perf stat: Save cache level information when running perf stat record
+> >   perf stat: Add "--per-cache" aggregation option and document the same
+> >   pert stat: Add tests for the "--per-cache" option
  
- #include <drm/drm_drv.h>
-+#include <drm/drm_fbdev_generic.h>
- #include <drm/drm_gem_dma_helper.h>
- #include <drm/drm_module.h>
- #include <drm/drm_probe_helper.h>
-@@ -271,6 +272,8 @@ static int shmob_drm_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_irq_uninstall;
- 
-+	drm_fbdev_generic_setup(ddev, 16);
-+
- 	return 0;
- 
- err_irq_uninstall:
--- 
-2.34.1
+> Acked-by: Ian Rogers <irogers@google.com>
+
+Thanks, great, documented, with accompanying 'perf test' entries, applied.
+
+- Arnaldo
 
