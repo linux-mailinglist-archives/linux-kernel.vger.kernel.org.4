@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A93970DBC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1CE70DBCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbjEWLvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
+        id S236700AbjEWLxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjEWLvt (ORCPT
+        with ESMTP id S236698AbjEWLxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:51:49 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFCAFE
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:51:47 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-623921866bfso25717276d6.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:51:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684842707; x=1687434707;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pzz3Krl/1gwfPCERAAjwqn0A7Go/oeUTBfwGr7hxyc0=;
-        b=WcwcWEBRQ3CSQnhggU6sxIuBxcHgb1z+lx8c+3GhWOshgrbqOklav8Q1Zahi/1PQiQ
-         d6LutGzMoyqBMegpqFnALw1q89kQYIhh9kbYo/UcFTx1JxwdnYCST7E90oMsdlGZ+7h+
-         ZfgwfWKblYDhwJFmiYLQIr0x5mz3EarwkS4wthiMdf/jfJHfBhi6APYRUPEI8VA424R4
-         Qg+hiUQmwwa8tGkFNckKAY5X2CLMQdKCiTxdwDV1AjmDcrFy+HNd0NuElPNFjk059aYN
-         oHSz6Pb8WqZNvg89btcoHYQbPWKe1lTv8UvUc4eU89iVRMTLL6RfpXtsdvOuSWm4gf+Y
-         EGsA==
+        Tue, 23 May 2023 07:53:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC48FE
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:52:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684842772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=06VwMlvzR/6CE72qZy68IsZn5wGl4zzgeBN/A6aW1cc=;
+        b=Xw7Jz1qfC1t3Pj5CnhrH3xnAPLRNTKG1XRAIlx28y4GKvjjEKg1DQvS/XosRSeIZIuojC1
+        6XxcNvPj09c3KSvEg717LxWiHQofwLaJAlo1KB84D+QHJr23jcrLsT6OKNCkFutYuCvRAX
+        faQjU88kFAgmhHMIdin6YovFbhGoVHA=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-194-r7OMX_2tOvCrpeWdVa3PrA-1; Tue, 23 May 2023 07:52:51 -0400
+X-MC-Unique: r7OMX_2tOvCrpeWdVa3PrA-1
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2535c34919bso241825a91.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:52:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684842707; x=1687434707;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pzz3Krl/1gwfPCERAAjwqn0A7Go/oeUTBfwGr7hxyc0=;
-        b=N7BHdLEo+p2KzPl7S7cAtWyfHcUofXvd47cCHa7Lv9wqD1WfAAFk9x68wdbkifCncl
-         1uYn36TwHayYJ3awdQx5leKlx8TNd2xCJtvosgyZ/w/ZQ196fVoCajoD+kXXZFmH//EI
-         z0fz6oA3djVf8qjBJcWK02gAE6F54SZIYMX+Ewsw/TuFfaIG5PkKiYWjPnovf3AZ4uTb
-         2Noo1yfabmRcMag0iRA5BmeWPviAGSMP7TOL39aPQ6R7UU9/b9VuGczpK7MX2My8wmFM
-         B9zft6caMXkHGmfzUX55db6gIwG8+kF0t7JR7Na99QO/wmez5LGOQm1YWiHfbpqY3rsG
-         bj8g==
-X-Gm-Message-State: AC+VfDwXftWlsT7U3IotIjnzESvjYKGyCrTEgT9H7NzqG3fpiFz/GyGz
-        +FvKqi6PaCPZLuVAjsyf9sI=
-X-Google-Smtp-Source: ACHHUZ7b8xFy/485iH037f7VjmIresR5S+f7+6OC3F7PeALctFmgHHgkBSyXUU8qSNI2b+Oo7mN6yw==
-X-Received: by 2002:a05:6214:27e6:b0:615:a787:6d31 with SMTP id jt6-20020a05621427e600b00615a7876d31mr22964525qvb.38.1684842706670;
-        Tue, 23 May 2023 04:51:46 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id mi4-20020a056214558400b006210c4ecbdbsm2564904qvb.22.2023.05.23.04.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 04:51:46 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     mazziesaccount@gmail.com
-Cc:     DLG-Adam.Ward.opensource@dm.renesas.com, bbara93@gmail.com,
-        benjamin.bara@skidata.com, broonie@kernel.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, support.opensource@diasemi.com
-Subject: Re: [PATCH RFC v3 1/5] regulator: move monitor handling into own function
-Date:   Tue, 23 May 2023 13:51:01 +0200
-Message-Id: <20230523115101.627722-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <9641aa06-4925-051c-2ebe-22e43bf9dd4f@gmail.com>
-References: <9641aa06-4925-051c-2ebe-22e43bf9dd4f@gmail.com>
+        d=1e100.net; s=20221208; t=1684842770; x=1687434770;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=06VwMlvzR/6CE72qZy68IsZn5wGl4zzgeBN/A6aW1cc=;
+        b=OUs8Yxu4zCoWKWKk1c7KkYMpPWMVViVPEiN/eJJN5Rkh3LioQX/QV68lFoirnBCCix
+         EeGsOrVsh9E/J0bQRBz9wQC8gVJMngDPPluOkpD+2cFL+F1V27gNquNWQ/qfHr3Aq2Cd
+         70PPwTLUj3Nlegqsw/9EecbdGyqJfNtoZg+7KdiF0FXQof3f5soDvI+b21VPvKAxFKbS
+         27YrBUL25FnhaWqJKosM3vDKWDwkF0uMxmuG65RaeDHP31xoRyTLMEX3lyQwW5qx0z4h
+         ukPfbJrz1i54Fzwo/l19/veQCGrSIKnHYq87ThlOl+ZdXVTU6Y3zhjlgpeiitMtBKmYk
+         05ZQ==
+X-Gm-Message-State: AC+VfDy2WEcgzhyt4UgBMjdKPKu0vlF6oHWAhzIG3aJLvAsEBHgBrTeE
+        vbj9c0F1ZIBr0sdSTGDeQcr2DRob3nnNz+9nGdwtfUJtZJkpJmQAxvkQ/IkvDdsx325HKzI7DW2
+        u9tq7lb5H6peU0r5sgFXBjtzS
+X-Received: by 2002:a17:903:2341:b0:1ac:3ebc:af0c with SMTP id c1-20020a170903234100b001ac3ebcaf0cmr14894236plh.1.1684842770673;
+        Tue, 23 May 2023 04:52:50 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6vP9F0VfIfiU5Je8+q5mg6HvhTsJ6AolGVBg5cr9od6knJO5Ku6pDmkpyrmFj/G2NCOZWtlQ==
+X-Received: by 2002:a17:903:2341:b0:1ac:3ebc:af0c with SMTP id c1-20020a170903234100b001ac3ebcaf0cmr14894226plh.1.1684842770366;
+        Tue, 23 May 2023 04:52:50 -0700 (PDT)
+Received: from [10.66.61.39] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id ja2-20020a170902efc200b001ab13f1fa82sm6645521plb.85.2023.05.23.04.52.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 04:52:50 -0700 (PDT)
+Message-ID: <47e5efc6-f635-70a1-83d6-0c1efbd9168b@redhat.com>
+Date:   Tue, 23 May 2023 19:52:45 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/5] arm64/sysreg: Standardise naming of bitfield
+ constants in OSL[AS]R_EL1
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev
+References: <20230419-arm64-syreg-gen-v1-0-936cd769cb9e@kernel.org>
+ <20230419-arm64-syreg-gen-v1-4-936cd769cb9e@kernel.org>
+From:   Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <20230419-arm64-syreg-gen-v1-4-936cd769cb9e@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,50 +88,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matti,
-
-thanks for the feedback!
-
-On Tue, 23 May 2023 at 11:46, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> As far as I see, this changes the existing logic. Previously the
-> monitoring was unconditionally enabled for all regulators, now it gets
-> only enabled for regulators which are marked as enabled.
->
-> Furthermore, if I am not reading this wrong, the code tries to disable
-> all protections if regulator is not enabled at startup(?)
->
-> I am not saying this is wrong. I am just saying that things will
-> change here and likely to break something.
->
-> There are PMICs like ROHM BD9576, where the protection can not be
-> disabled.
-
-Thanks for letting me know! I dropped my initial "disable monitor while
-disabling the regulator" property, and activated it per default instead.
-But this basically means something like that will be required. I guess
-it might make sense to have a property which is called something like
-"monitor always on", to let the driver inform the core that the monitors
-cannot or should not be disabled, instead.
-Except if you think there is a general problem with keeping monitors
-disabled while the regulator is disabled, then I might have to do it
-differently.
 
 
-> I am unsure if we might also have cases where some regulator could
-> really be enabled w/o core knowing it. 
+On 5/23/23 00:22, Mark Brown wrote:
+> Our standard scheme for naming the constants for bitfields in system
+> registers includes _ELx in the name but not the SYS_, update the
+> constants for OSL[AS]R_EL1 to follow this convention.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> ---
+>   arch/arm64/include/asm/kvm_host.h |  2 +-
+>   arch/arm64/include/asm/sysreg.h   | 10 +++++-----
+>   arch/arm64/kvm/sys_regs.c         | 10 +++++-----
+>   3 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index bcd774d74f34..cde4ad590f8c 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -996,7 +996,7 @@ void kvm_arm_clear_debug(struct kvm_vcpu *vcpu);
+>   void kvm_arm_reset_debug_ptr(struct kvm_vcpu *vcpu);
+>   
+>   #define kvm_vcpu_os_lock_enabled(vcpu)		\
+> -	(!!(__vcpu_sys_reg(vcpu, OSLSR_EL1) & SYS_OSLSR_OSLK))
+> +	(!!(__vcpu_sys_reg(vcpu, OSLSR_EL1) & OSLSR_EL1_OSLK))
+>   
+>   int kvm_arm_vcpu_arch_set_attr(struct kvm_vcpu *vcpu,
+>   			       struct kvm_device_attr *attr);
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 4ecae92b56b5..09de958e79ed 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -141,13 +141,13 @@
+>   #define SYS_MDRAR_EL1			sys_reg(2, 0, 1, 0, 0)
+>   
+>   #define SYS_OSLAR_EL1			sys_reg(2, 0, 1, 0, 4)
+> -#define SYS_OSLAR_OSLK			BIT(0)
+> +#define OSLAR_EL1_OSLK			BIT(0)
+>   
+>   #define SYS_OSLSR_EL1			sys_reg(2, 0, 1, 1, 4)
+> -#define SYS_OSLSR_OSLM_MASK		(BIT(3) | BIT(0))
+> -#define SYS_OSLSR_OSLM_NI		0
+> -#define SYS_OSLSR_OSLM_IMPLEMENTED	BIT(3)
+> -#define SYS_OSLSR_OSLK			BIT(1)
+> +#define OSLSR_EL1_OSLM_MASK		(BIT(3) | BIT(0))
+> +#define OSLSR_EL1_OSLM_NI		0
+> +#define OSLSR_EL1_OSLM_IMPLEMENTED	BIT(3)
+> +#define OSLSR_EL1_OSLK			BIT(1)
+>   
+>   #define SYS_OSDLR_EL1			sys_reg(2, 0, 1, 3, 4)
+>   #define SYS_DBGPRCR_EL1			sys_reg(2, 0, 1, 4, 4)
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 53749d3a0996..8a5160a90d3c 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -388,9 +388,9 @@ static bool trap_oslar_el1(struct kvm_vcpu *vcpu,
+>   		return read_from_write_only(vcpu, p, r);
+>   
+>   	/* Forward the OSLK bit to OSLSR */
+> -	oslsr = __vcpu_sys_reg(vcpu, OSLSR_EL1) & ~SYS_OSLSR_OSLK;
+> -	if (p->regval & SYS_OSLAR_OSLK)
+> -		oslsr |= SYS_OSLSR_OSLK;
+> +	oslsr = __vcpu_sys_reg(vcpu, OSLSR_EL1) & ~OSLSR_EL1_OSLK;
+> +	if (p->regval & OSLAR_EL1_OSLK)
+> +		oslsr |= OSLSR_EL1_OSLK;
+>   
+>   	__vcpu_sys_reg(vcpu, OSLSR_EL1) = oslsr;
+>   	return true;
+> @@ -414,7 +414,7 @@ static int set_oslsr_el1(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
+>   	 * The only modifiable bit is the OSLK bit. Refuse the write if
+>   	 * userspace attempts to change any other bit in the register.
+>   	 */
+> -	if ((val ^ rd->val) & ~SYS_OSLSR_OSLK)
+> +	if ((val ^ rd->val) & ~OSLSR_EL1_OSLK)
+>   		return -EINVAL;
+>   
+>   	__vcpu_sys_reg(vcpu, rd->reg) = val;
+> @@ -1760,7 +1760,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>   	{ SYS_DESC(SYS_MDRAR_EL1), trap_raz_wi },
+>   	{ SYS_DESC(SYS_OSLAR_EL1), trap_oslar_el1 },
+>   	{ SYS_DESC(SYS_OSLSR_EL1), trap_oslsr_el1, reset_val, OSLSR_EL1,
+> -		SYS_OSLSR_OSLM_IMPLEMENTED, .set_user = set_oslsr_el1, },
+> +		OSLSR_EL1_OSLM_IMPLEMENTED, .set_user = set_oslsr_el1, },
+>   	{ SYS_DESC(SYS_OSDLR_EL1), trap_raz_wi },
+>   	{ SYS_DESC(SYS_DBGPRCR_EL1), trap_raz_wi },
+>   	{ SYS_DESC(SYS_DBGCLAIMSET_EL1), trap_raz_wi },
+> 
 
-Unfortunately, I am not 100% sure what you mean by that.
-On the da9063, for example, it might be possible that a monitor is
-activated by the OTP, without that the kernel actually activates it.
-I think it is not recommended, but it is possible.
+-- 
+Shaoqin
 
-
-> There can also be a problem if we have hardware where monitoring is
-> common for all regulators, eg either globally enabled / disabled.
-
-Yes, but I think in this case it should be the responsibility of the
-driver to ensure that either all or no regulator is monitored, because
-the same requirement is valid for implementing the protection ops.
-
-Best regards,
-Benjamin
