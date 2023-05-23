@@ -2,159 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DDA70CFD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D48F70CFBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbjEWAtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S234739AbjEWAp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234632AbjEWAsa (ORCPT
+        with ESMTP id S235592AbjEWApS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:48:30 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F407CA7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:33:02 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f608ba2e06so5420245e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user; t=1684801981; x=1687393981;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LrFGl63UuCEpD0/cTn8zK2OoUmxoYf1cLwIERUmWju0=;
-        b=eTt828dUiWmLDNAB9dxn4tYuW5E06NyZpscH/7KYbHvT3H/7gyKD7v0rjwTuwrtiQW
-         NUJxrc4sE+j9UsAJmC0FfdetMEqHf9lZai2ji0gZXVr7gxyVHvN872ikUfMSm+9ukLO2
-         PVXZuLKuIJ3m9Q3JoqHNO6MzDAIh7w8ieL/1/NBdk4OzfdBxMPtioHoLJNar73hHho/H
-         mcesOgI1rZFfIr6dwqHyxNtX5WIdbM3adoCndWrVSUiYwXYXQsDa4isiCAO7aWGt9+hk
-         scm1zheIYZF3iEPPpA335kiav3/+saa/D73Ypsb3YErwfAKAFwdcGFqYnmdJS1sHbvka
-         WzSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684801981; x=1687393981;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LrFGl63UuCEpD0/cTn8zK2OoUmxoYf1cLwIERUmWju0=;
-        b=WLhIS4Rj2J9mdEaWN/nSeDKjRZtVB3RBwyOxSBdyPPKddbbP8mk+3i59sxhpWheh3Y
-         KUlCVdOIGsFjXuvaFYDXiJUuDuucw2hpDChz2x5WaX8XhA6zkt5Ohlvif1PxoqKoGNCn
-         UrDR7e8QLfRT+DAvLv+odSkdYjKxxFkcVehKzcoKjIb8elISArwE0bso25lqnYDpj7bd
-         +Ft4oRO6Ua58oPQNQ/XEuY6FeN9kG06Ywq1zMnW02D+QkiqekahmKdc713MC5RqyP0US
-         7P8kx9OhTVJGso7gzGEZ3IMhMpxt6451MHp7evZbn1qWQhqlpFaZvODGQXFrbbVU+IyB
-         v4GQ==
-X-Gm-Message-State: AC+VfDxftkwZ4GQK9xmwWyObP76wgHmYVvhIXiUDKb2UrPkKwRuYydrP
-        9RjysCI1oUC601NFIN15ZJiBOg==
-X-Google-Smtp-Source: ACHHUZ4CZCrzym57qPoHumfgDh1AfJecnm6yW7KJJLL5ovCAtDUwzXSiFcYUjymp+3V9VRRgsl4rIg==
-X-Received: by 2002:a7b:ca54:0:b0:3f4:3562:f799 with SMTP id m20-20020a7bca54000000b003f43562f799mr8697189wml.28.1684801981473;
-        Mon, 22 May 2023 17:33:01 -0700 (PDT)
-Received: from smtpclient.apple ([131.111.5.246])
-        by smtp.gmail.com with ESMTPSA id 8-20020a05600c22c800b003f4289b18a7sm9924645wmg.5.2023.05.22.17.33.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 May 2023 17:33:00 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH v1] Documentation/process: add soc maintainer handbook
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20230522-concrete-unpeeled-7e4718e61b46@spud>
-Date:   Tue, 23 May 2023 01:32:49 +0100
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        soc@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Olof Johansson <olof@lixom.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3B8DFBEF-9EA1-4375-998D-944EA18D3E4E@jrtc27.com>
-References: <20230515-geometry-olympics-b0556ff8a5f7@spud>
- <cf1c6b8c-8a3f-eca1-948f-e41946d4c34c@linaro.org>
- <20230522-concrete-unpeeled-7e4718e61b46@spud>
-To:     Conor Dooley <conor@kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 20:45:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1359E90;
+        Mon, 22 May 2023 17:33:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B0462CE9;
+        Tue, 23 May 2023 00:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D3D0C4339B;
+        Tue, 23 May 2023 00:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684801986;
+        bh=Wc57SKsFBDE16TH7waBFfpgF5H4uaoIYfuZNE4myOQo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V4LrZz2dEMvGM/CkhAugkjKp5JNmUzSX+WlbBTW4fEqMZ/fzjuXVhXME0AT1hhFqx
+         saI8I2Tl6/aPd2k6zQUQ0nJvmaLaH8Kw51kXjaSWu0yWzd5do0SXJl5VkhcKZBc3nP
+         bLroTTpGqKLxjZ+QU3h1pmSNqRVwuuGSD3b/5mVim3S0KuljSCzj+GKmVIYsh2cOmz
+         7yH84M7+INoTyxVyK4Y/WeA7hObG4hbdnLG6OvbUlrEfbNcMZ03Q+KGFeHJ1RPEWGX
+         2Ad78LOGwjG+a2vZjg1A2sMgJwpkKR0jQTNpxN73GrgbJsgF4e/fbDacxtHJqrs1u9
+         tu7yWqbY+fdzA==
+Date:   Mon, 22 May 2023 17:33:05 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, hch@infradead.org, song@kernel.org,
+        rafael@kernel.org, gregkh@linuxfoundation.org,
+        viro@zeniv.linux.org.uk, bvanassche@acm.org, ebiederm@xmission.com,
+        mchehab@kernel.org, keescook@chromium.org, p.raghav@samsung.com,
+        linux-fsdevel@vger.kernel.org, kernel@tuxforce.de,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xfs <linux-xfs@vger.kernel.org>
+Subject: Re: [RFC v3 03/24] fs: distinguish between user initiated freeze and
+ kernel initiated freeze
+Message-ID: <20230523003305.GD11620@frogsfrogsfrogs>
+References: <20230114003409.1168311-1-mcgrof@kernel.org>
+ <20230114003409.1168311-4-mcgrof@kernel.org>
+ <Y8dYpOyR/jOsO267@magnolia>
+ <20230118092812.2gl3cde6mocbngli@quack3>
+ <ZFckQz3udm48kprc@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFckQz3udm48kprc@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22 May 2023, at 22:34, Conor Dooley <conor@kernel.org> wrote:
->=20
-> On Tue, May 16, 2023 at 10:31:19AM +0200, Krzysztof Kozlowski wrote:
->> On 15/05/2023 21:20, Conor Dooley wrote:
->=20
->>> +devicetree ABI stability
->>> +~~~~~~~~~~~~~~~~~~~~~~~~
->>> +
->>> +Perhaps one of the most important things to highlight is that =
-dt-bindings
->>> +document the ABI between the devicetree and the kernel.  Once =
-dt-bindings have
->>> +been merged (and appear in a release of the kernel) they are set in =
-stone, and
->>> +any changes made must be compatible with existing devicetrees.  =
-This means that,
->>> +when changing properties, a "new" kernel must still be able to =
-handle an old
->>> +devicetree.  For many systems the devicetree is provided by =
-firmware, and
->>> +upgrading to a newer kernel cannot cause regressions.  Ideally, the =
-inverse is
->>> +also true, and a new devicetree will also be compatible with an old =
-kernel,
->>> +although this is often not possible.
->>=20
->> I would prefer to skip it and instead: enhance
->> Documentation/devicetree/bindings/ABI.rst and then reference it here.
->>=20
->>> +
->>> +If changes are being made to a devicetree that are incompatible =
-with old
->>> +kernels, the devicetree patch should not be applied until the =
-driver is, or an
->>> +appropriate time later.  Most importantly, any incompatible changes =
-should be
->>> +clearly pointed out in the patch description and pull request, =
-along with the
->>> +expected impact on existing users.
->=20
-> I'm not really sure that I like this truncated section so much, but =
-here
-> it is... I kept the last paragraph intact as it does not talk about =
-the
-> ABI, but rather exceptions of submaintainers.
->=20
-> devicetree ABI stability
-> ~~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> Perhaps one of the most important things to highlight is that =
-dt-bindings
-> document the ABI between the devicetree and the kernel. Please see
-> :ref:`devicetree-abi` for devicetree ABI rules.
->=20
-> If changes are being made to a devicetree that are incompatible with =
-old
-> kernels, the devicetree patch should not be applied until the driver =
-is, or an
-> appropriate time later.  Most importantly, any incompatible changes =
-should be
-> clearly pointed out in the patch description and pull request, along =
-with the
-> expected impact on existing users.
+On Sat, May 06, 2023 at 09:08:35PM -0700, Luis Chamberlain wrote:
+> On Wed, Jan 18, 2023 at 10:28:12AM +0100, Jan Kara wrote:
+> > On Tue 17-01-23 18:25:40, Darrick J. Wong wrote:
+> > > [add linux-xfs to cc on this one]
+> > > 
+> > > On Fri, Jan 13, 2023 at 04:33:48PM -0800, Luis Chamberlain wrote:
+> > > > Userspace can initiate a freeze call using ioctls. If the kernel decides
+> > > > to freeze a filesystem later it must be able to distinguish if userspace
+> > > > had initiated the freeze, so that it does not unfreeze it later
+> > > > automatically on resume.
+> > > 
+> > > Hm.  Zooming out a bit here, I want to think about how kernel freezes
+> > > should behave...
+> > > 
+> > > > Likewise if the kernel is initiating a freeze on its own it should *not*
+> > > > fail to freeze a filesystem if a user had already frozen it on our behalf.
+> > > 
+> > > ...because kernel freezes can absorb an existing userspace freeze.  Does
+> > > that mean that userspace should be prevented from undoing a kernel
+> > > freeze?  Even in that absorption case?
+> > > 
+> > > Also, should we permit multiple kernel freezes of the same fs at the
+> > > same time?  And if we do allow that, would they nest like freeze used to
+> > > do?
+> > > 
+> > > (My suggestions here are 'yes', 'yes', and '**** no'.)
+> > 
+> > Yeah, makes sense to me. So I think the mental model to make things safe
+> > is that there are two flags - frozen_by_user, frozen_by_kernel - and the
+> > superblock is kept frozen as long as either of these is set.
+> 
+> Makes sense to me.
 
-Do you have an opinion on acknowledging the existence of other OSes =
-here?
+Just sent a patch for this, sorry it took a couple of weeks while I was
+busy merging in parent pointers...
 
-Jess
+--D
 
+>   Luis
