@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF5670DD52
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BB670DD56
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236776AbjEWNRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+        id S236712AbjEWNR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbjEWNRB (ORCPT
+        with ESMTP id S232705AbjEWNR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:17:01 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC255118;
-        Tue, 23 May 2023 06:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=QaJjwNP0byDh2vTB+BfRP2skNBByswtyi4rwwgzOO84=; b=ccExP0nk6kRSUyvuKNMxUTrYp9
-        qZeebMgn0R0JRYDIvCz0au56fuuXA+49zhy5VzSJMeWwKse+BnKbFNywhzvCGoRLfdyIvbTV8b5TJ
-        MWZoxRTa6km5+qDaRcImYnqD/z0HjL0xZwSm2e3JjM1xiKET/dZx3wc4jASsCZdV9SUU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q1Rsh-00Dglg-2T; Tue, 23 May 2023 15:16:51 +0200
-Date:   Tue, 23 May 2023 15:16:51 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net v2 0/3] net: phy: mscc: support VSC8501
-Message-ID: <c613298d-53bc-46ef-9cb2-4b385e21ba7b@lunn.ch>
-References: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
+        Tue, 23 May 2023 09:17:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9F2FF;
+        Tue, 23 May 2023 06:17:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9EC163254;
+        Tue, 23 May 2023 13:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEBAC4339B;
+        Tue, 23 May 2023 13:17:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684847876;
+        bh=vxl5bCUQozOg0lQEVTKyxWkdWVuZfH+OvLvE8rLc2TI=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Njkqwv/YF/gfaD4a7t6Lti63d52FQZzvFS1M/ZRu13pLErKt7d+U0kDdpzBcK1OWC
+         n026yb3PLX6t7X4LNgLHWt882JFw3PRqQFcRNexCFB7eH56ZqhTWvmpUfiadHQ0GHw
+         AoycxfZTWGpjNOb9awfVxS6CuVQuGngLwB3oBTbXly5steCL/7dkvfoDC9HGe/1Q8N
+         QLp6rdfDXqpJKydTPH8+kFKaMlqWOGLc0zx8bYk9bTOgTYPtmKMBpwFQ+QHDbBZdv6
+         GS9zk8j2iiw7SKz7jLnnTXxun+M9ON9E3lqysbbMiwcB+7q1+YKpcS6Mh8oZbNRvsd
+         /02/EzAXrmQEw==
+Date:   Tue, 23 May 2023 15:17:52 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     "Luke D. Jones" <luke@ljones.dev>
+cc:     linux-input@vger.kernel.org, benjamin.tissoires@redhat.com,
+        rydberg@bitmath.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] HID: asus: Add support for ASUS ROG Z13 keyboard
+In-Reply-To: <20230503034711.253439-1-luke@ljones.dev>
+Message-ID: <nycvar.YFH.7.76.2305231517430.29760@cbobk.fhfr.pm>
+References: <20230503034711.253439-1-luke@ljones.dev>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> - I left the mutex_lock(&phydev->lock) in the
->   vsc85xx_update_rgmii_cntl() function, as I'm not sure whether it
->   is required to repeatedly access phydev->interface and
->   phy_interface_is_rgmii(phydev) in a consistent way.
+On Wed, 3 May 2023, Luke D. Jones wrote:
 
-Just adding to Russell comment.
+> Add support for the ROG Z13 keyboard. This is a variant of the last
+> few ASUS ROG keyboards and has much of the same functionality.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
 
-As a general rule of thumb, if your driver is doing something which no
-other driver is doing, you have to consider if it is correct. A PHY
-driver taking phydev->lock is very unusual. So at minimum you should
-be able to explain why it is needed. And when it comes to locking,
-locking is hard, so you really should understand it.
+Applied, thanks Luke.
 
-Now the mscc is an odd device, because it has multiple PHYs in the
-package, and a number of registers are shared between these PHYs. So
-it does have different locking requirements to most PHYs. However, i
-don't think that is involved here. Those oddities are hidden behind
-phy_base_write() and phy_base_read().
+-- 
+Jiri Kosina
+SUSE Labs
 
-	Andrew
