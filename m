@@ -2,182 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF3070D219
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 05:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6327C70D1F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjEWDBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 23:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
+        id S234973AbjEWC7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbjEWDBF (ORCPT
+        with ESMTP id S230402AbjEWC7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 23:01:05 -0400
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD21210E0;
-        Mon, 22 May 2023 20:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1684810831; x=1716346831;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nny6LjxpUW6mJRzHzp9QlRzCPGPnlS5WgOn3BfbgZ8Q=;
-  b=jTVCBqxOe8UffKjtkGpafqUU/E37SRTrD7EOsTm6J9+Clw/O1JTQbbgr
-   jqKTWMLntBqTDMtCA0RfELboOTqvjU+a8rd95tiLxSeEm3Bcv3H2mYKE/
-   dSycnFZeGgiPIzOjUi1spMv8hOvanKyIUdP6DJeonEI+UY8KSke38z0fb
-   g=;
-X-IronPort-AV: E=Sophos;i="6.00,185,1681171200"; 
-   d="scan'208";a="5068788"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-26a610d2.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 03:00:29 +0000
-Received: from EX19D009EUA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-26a610d2.us-west-2.amazon.com (Postfix) with ESMTPS id 99CC040D3F;
-        Tue, 23 May 2023 03:00:28 +0000 (UTC)
-Received: from EX19D026EUB004.ant.amazon.com (10.252.61.64) by
- EX19D009EUA001.ant.amazon.com (10.252.50.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 23 May 2023 03:00:27 +0000
-Received: from uc3ecf78c6baf56.ant.amazon.com (10.119.183.60) by
- EX19D026EUB004.ant.amazon.com (10.252.61.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 23 May 2023 03:00:25 +0000
-From:   Andrew Paniakin <apanyaki@amazon.com>
-To:     <stable@vger.kernel.org>
-CC:     <luizcap@amazon.com>, <benh@amazon.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Andrew Paniakin <apanyaki@amazon.com>,
-        Jozsef Kadlecsik <kadlec@blackhole.kfki.hu>,
-        "David S. Miller" <davem@davemloft.net>,
-        <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4.14] netfilter: nf_tables: fix register ordering
-Date:   Mon, 22 May 2023 19:59:41 -0700
-Message-ID: <20230523025941.1695616-1-apanyaki@amazon.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 22 May 2023 22:59:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BD0CA;
+        Mon, 22 May 2023 19:59:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9179162E66;
+        Tue, 23 May 2023 02:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333FAC433EF;
+        Tue, 23 May 2023 02:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684810770;
+        bh=DA3Uj4Jl/Zw7nwH8jERldx4u4Btolqs/ALOoYkfcr2g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PEcQkErVoVEYjaF2ZbUXkSujT/jrNY4yiTXKObVKvNSFkSFCRlWGqiyyaT6SPEKvs
+         C94azMM3iBBjm7olymFkM7xjvvXQOOrwfJeDH/7A7dQ4lCD91o0wi8IlAR1SkjOIK7
+         dUyXteoNDb9AVoWQtW6LeUpVwy59ttg4vBHFqEaLvkVF8DUxcuIHQLFS3FHwRk0RHW
+         UUF8Vry4APyZsNzj/sxAom0QD6JwYXxiY0jB/1HAiK1puiPbaXLRc++/sLcQV8yVth
+         OY6FZTDhapOhRAp/JYeD4tPR+cOuJTpfVzN0EeDAeBCquVxfsik4v93j49IBXll4LZ
+         basEWXzKo8r6Q==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sm6375-pdx225: Fix remoteproc firmware paths
+Date:   Mon, 22 May 2023 20:03:18 -0700
+Message-Id: <168481094822.1229550.2578857722922936417.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230517-topic-murray-fwname-v1-1-923e87312249@linaro.org>
+References: <20230517-topic-murray-fwname-v1-1-923e87312249@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.119.183.60]
-X-ClientProxiedBy: EX19D045UWC004.ant.amazon.com (10.13.139.203) To
- EX19D026EUB004.ant.amazon.com (10.252.61.64)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+On Wed, 17 May 2023 19:06:13 +0200, Konrad Dybcio wrote:
+> They were previously missing the SoC name. Fix it.
+> 
+> 
 
-commit d209df3e7f7002d9099fdb0f6df0f972b4386a63 upstream
+Applied, thanks!
 
-[ We hit the trace described in commit message with the
-kselftest/nft_trans_stress.sh. This patch diverges from the upstream one
-since kernel 4.14 does not have following symbols:
-nft_chain_filter_init, nf_tables_flowtable_notifier ]
+[1/1] arm64: dts: qcom: sm6375-pdx225: Fix remoteproc firmware paths
+      commit: a14da6144d16ef27e3022835fa282a3740b8ad7b
 
-We must register nfnetlink ops last, as that exposes nf_tables to
-userspace.  Without this, we could theoretically get nfnetlink request
-before net->nft state has been initialized.
-
-Fixes: 99633ab29b213 ("netfilter: nf_tables: complete net namespace support")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-[apanyaki: backport to v4.14-stable]
-Signed-off-by: Andrew Paniakin <apanyaki@amazon.com>
----
-
-[  163.471426] Call Trace:
-[  163.474901]  netlink_dump+0x125/0x2d0
-[  163.479081]  __netlink_dump_start+0x16a/0x1c0
-[  163.483589]  nf_tables_gettable+0x151/0x180 [nf_tables]
-[  163.488561]  ? nf_tables_gettable+0x180/0x180 [nf_tables]
-[  163.493658]  nfnetlink_rcv_msg+0x222/0x250 [nfnetlink]
-[  163.498608]  ? __skb_try_recv_datagram+0x114/0x180
-[  163.503359]  ? nfnetlink_net_exit_batch+0x60/0x60 [nfnetlink]
-[  163.508590]  netlink_rcv_skb+0x4d/0x130
-[  163.512832]  nfnetlink_rcv+0x92/0x780 [nfnetlink]
-[  163.517465]  ? netlink_recvmsg+0x202/0x3e0
-[  163.521801]  ? __kmalloc_node_track_caller+0x31/0x290
-[  163.526635]  ? copy_msghdr_from_user+0xd5/0x150
-[  163.531216]  ? __netlink_lookup+0xd0/0x130
-[  163.535536]  netlink_unicast+0x196/0x240
-[  163.539759]  netlink_sendmsg+0x2da/0x400
-[  163.544010]  sock_sendmsg+0x36/0x40
-[  163.548030]  SYSC_sendto+0x10e/0x140
-[  163.552119]  ? __audit_syscall_entry+0xbc/0x110
-[  163.556741]  ? syscall_trace_enter+0x1df/0x2e0
-[  163.561315]  ? __audit_syscall_exit+0x231/0x2b0
-[  163.565857]  do_syscall_64+0x67/0x110
-[  163.569930]  entry_SYSCALL_64_after_hwframe+0x59/0xbe
-
-Reproduce with debug logs clearly shows the nft initialization issue exactly as
-in ported patch description:
-[   22.600051] nft load start
-[   22.600858] nf_tables: (c) 2007-2009 Patrick McHardy <kaber@trash.net>
-[   22.601241] nf_tables_gettable start: ffff888527c10000
-[   22.601271] register_pernet_subsys ffffffffa02ba0c0
-[   22.601274] netns ops_init ffffffffa02ba0c0 ffffffff821aeec0
-[   22.602506] nf_tables_dump_tables: ffff888527c10000
-[   22.603187] af_info list init done: ffffffff821aeec0
-[   22.604064] nf_tables_dump_tables: afi:           (null)
-[   22.604077] BUG: unable to handle kernel
-[   22.604820] netns ops_init end ffffffffa02ba0c0 ffffffff821aeec0
-[   22.605698] NULL pointer dereference
-[   22.606354] netns ops_init ffffffffa02ba0c0 ffff888527c10000
-
-(gdb) p &init_net
-$2 = (struct net *) 0xffffffff821aeec0 <init_net>
-ffff888527c10000 is a testns1 namespaces
-
-To reproduce this problem and test the fix I scripted following steps:
-- start Qemu VM
-- run nft_trans_stress.sh test
-- check dmesg logs for NULL pointer dereference
-- reboot via QMP and repeat
-
-I tested the fix with our kernel regression tests (including kselftest) also.
-
- net/netfilter/nf_tables_api.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index c683a45b8ae53..65495b528290b 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -6032,18 +6032,25 @@ static int __init nf_tables_module_init(void)
- 		goto err1;
- 	}
- 
--	err = nf_tables_core_module_init();
-+	err = register_pernet_subsys(&nf_tables_net_ops);
- 	if (err < 0)
- 		goto err2;
- 
--	err = nfnetlink_subsys_register(&nf_tables_subsys);
-+	err = nf_tables_core_module_init();
- 	if (err < 0)
- 		goto err3;
- 
-+	/* must be last */
-+	err = nfnetlink_subsys_register(&nf_tables_subsys);
-+	if (err < 0)
-+		goto err4;
-+
- 	pr_info("nf_tables: (c) 2007-2009 Patrick McHardy <kaber@trash.net>\n");
--	return register_pernet_subsys(&nf_tables_net_ops);
--err3:
-+	return err;
-+err4:
- 	nf_tables_core_module_exit();
-+err3:
-+	unregister_pernet_subsys(&nf_tables_net_ops);
- err2:
- 	kfree(info);
- err1:
+Best regards,
 -- 
-2.39.2
-
+Bjorn Andersson <andersson@kernel.org>
