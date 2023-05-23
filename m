@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6158270E65D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED2B70E687
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238547AbjEWURO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S237922AbjEWUdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbjEWURJ (ORCPT
+        with ESMTP id S238050AbjEWUdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:17:09 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC47129;
-        Tue, 23 May 2023 13:17:08 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b2a2bf757so20143585a.2;
-        Tue, 23 May 2023 13:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684873028; x=1687465028;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m69+0U+vf8WBXQfiW8cb5lnrUt7WhgTHWMAX6k595F4=;
-        b=VP0fHtjC3N4hCeuVqyg/C3oO7n9xQXxKL3dUNKvZ1gDMksuTVZyuxUuCYeoc/Gr0gS
-         2KaPT1FqB22o2RpQSu1A7kSB72uDMvOAPxpfFH47lJ9Y9nlrRBS3/GuxrQb2rIVCs/Fs
-         q64me5UewXpu75kHm56eGiV61mfeSEG/GHEscko6K9JD/i9NzzzjSyyST0GIc1cdhvRh
-         ClJI2qEQ+N3eryZTLIlj1H6yt++fiiWlQHm/nroZCswRWTK7Nh3LUAzB8a92qaHMsWLN
-         uK5F8hIxZzIYbiMspMC8L3p+J3+j7aaKSgT2jXWC0OFO8EgmjT2uJ2ip0eySyFrNfWoL
-         qqog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684873028; x=1687465028;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m69+0U+vf8WBXQfiW8cb5lnrUt7WhgTHWMAX6k595F4=;
-        b=A4LJOFtJtECbkFvmlwinYcRuft7wmOIKI5ZsdS1VO5zBJ+iVkhYTb/maI1cJZC7yaw
-         i4zlhyBtYuN7uk9028Lm1Mt6nlRJvKIVb6bosY1Qx5JX+FfpZOHm+Ppn3m3jJbC4H+eq
-         8OrN0/7Hd1jtiv/VpE0QEbrZgzLtgWFC5d3BCj8nI+YpuQ8wHXr7jwulNj/x4X8i45cH
-         +qfYnFkLfcPMs9sIHPSeD8uDYeO34c+fIvQvXvBhcrf5RN2L42NmORUmbv+l70FQNtr0
-         5OtunSUDG/masvARWBlzfNjHlVxp0aPwt36h+3IVjt1+PPbMIHJRbX43Ed0GlVnm+piI
-         B54w==
-X-Gm-Message-State: AC+VfDz8UBpExFhakninHGSOrGZIBLXSnYyRSd1nOoMcoOgqZLThPuEI
-        vMDXuQhfxFCDBkTuBjh52A==
-X-Google-Smtp-Source: ACHHUZ4JvW+edJ5rldUTq3rDNMQKfHeo7Pd4M1OGvKZP+IfR+c7XlRCuBkSO/rxjkLQ97mt2A5qM+g==
-X-Received: by 2002:a37:a914:0:b0:75b:23a1:364b with SMTP id s20-20020a37a914000000b0075b23a1364bmr5512524qke.12.1684873027715;
-        Tue, 23 May 2023 13:17:07 -0700 (PDT)
-Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:c32:b55:eaec:a556])
-        by smtp.gmail.com with ESMTPSA id i28-20020a05620a145c00b00759169d0316sm2743370qkl.40.2023.05.23.13.17.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 13:17:07 -0700 (PDT)
-Date:   Tue, 23 May 2023 13:17:02 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH v4 net 0/6] net/sched: Fixes for sch_ingress and
- sch_clsact
-Message-ID: <ZG0fPks+1/RgwFC1@C02FL77VMD6R.googleapis.com>
-References: <cover.1684825171.git.peilin.ye@bytedance.com>
+        Tue, 23 May 2023 16:33:45 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 13:33:32 PDT
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CFCE5B;
+        Tue, 23 May 2023 13:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1684873066; bh=09CTwGtCwgqIKNSsEvY2eczqQBaTuZs3wRO9EsOKxfQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jSzJuLZGCRCwxDW0kck7iHhJkaWxzX2g50Sf4XlKqSlYzGbcX5y4Ot27bH3UnCuAy
+         xXFzaH/eqQFQdM25pwGVzE77PTPjLENrEanS5Stmh1eiw72HZHu4WyASHV1X4lWRPU
+         Sbvxe56qXNAbmchx3Fgp3rSZV9fdffeY/gKOF2xlaKYrXJg8QmO8ckB88R8JkXgW4p
+         WOW5cah5PDX66QCW4H/t24wBmSn3Qh1jYqOmoGmD5b0yqwjohwRDoNVUqrfrE85px/
+         S/m8vWUEiVua6QGU0I27doLb3zPgqLAkahg7ybRE8nOk3MFv/Gm9r/JoosmYYOqfwf
+         PXgN13JbZhLMQ==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 644274228A9;
+        Tue, 23 May 2023 20:17:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1684873066; bh=09CTwGtCwgqIKNSsEvY2eczqQBaTuZs3wRO9EsOKxfQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jSzJuLZGCRCwxDW0kck7iHhJkaWxzX2g50Sf4XlKqSlYzGbcX5y4Ot27bH3UnCuAy
+         xXFzaH/eqQFQdM25pwGVzE77PTPjLENrEanS5Stmh1eiw72HZHu4WyASHV1X4lWRPU
+         Sbvxe56qXNAbmchx3Fgp3rSZV9fdffeY/gKOF2xlaKYrXJg8QmO8ckB88R8JkXgW4p
+         WOW5cah5PDX66QCW4H/t24wBmSn3Qh1jYqOmoGmD5b0yqwjohwRDoNVUqrfrE85px/
+         S/m8vWUEiVua6QGU0I27doLb3zPgqLAkahg7ybRE8nOk3MFv/Gm9r/JoosmYYOqfwf
+         PXgN13JbZhLMQ==
+Message-ID: <f39da4b5-528b-e389-c0ee-d31add169620@mleia.com>
+Date:   Tue, 23 May 2023 23:17:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1684825171.git.peilin.ye@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH 06/13] ARM: lpc32xx: add missing include
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, soc@kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230516153109.514251-1-arnd@kernel.org>
+ <20230516153109.514251-7-arnd@kernel.org>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+In-Reply-To: <20230516153109.514251-7-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20230523_201746_460868_EF02DC5F 
+X-CRM114-Status: GOOD (  14.88  )
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 12:12:39AM -0700, Peilin Ye wrote:
-> [1,2/6]: ingress and clsact Qdiscs should only be created under ffff:fff1
->   [3/6]: Under ffff:fff1, only create ingress and clsact Qdiscs (for now,
->          at least)
->   [4/6]: After creating ingress and clsact Qdiscs under ffff:fff1, do not
->          graft them again to anywhere else (e.g. as the inner Qdisc of a
->          TBF Qdisc)
->   [5/6]: Prepare for [6/6], do not reuse that for-loop in qdisc_graft()
->          for ingress and clsact Qdiscs
->   [6/6]: Fix use-after-free [a] in mini_qdisc_pair_swap()
+On 5/16/23 18:31, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> lpc32xx_loopback_set() is defined in linux/soc/nxp/lpc32xx-misc.h but
+> this is not included before the function definition.
+> 
+> arch/arm/mach-lpc32xx/serial.c:63:6: error: no previous prototype for 'lpc32xx_loopback_set'
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   arch/arm/mach-lpc32xx/serial.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/mach-lpc32xx/serial.c b/arch/arm/mach-lpc32xx/serial.c
+> index 3e765c4bf986..3b1203db81b2 100644
+> --- a/arch/arm/mach-lpc32xx/serial.c
+> +++ b/arch/arm/mach-lpc32xx/serial.c
+> @@ -15,6 +15,7 @@
+>   #include <linux/serial_8250.h>
+>   #include <linux/clk.h>
+>   #include <linux/io.h>
+> +#include <linux/soc/nxp/lpc32xx-misc.h>
+>   
+>   #include "lpc32xx.h"
+>   #include "common.h"
 
-In v5, I'll improve [6/6] according to Vlad's suggestion [a], and fix
-[1,2/6] according to Pedro's report [b].
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
 
-[a] https://lore.kernel.org/r/87sfbnxhg7.fsf@nvidia.com/
-[b] https://lore.kernel.org/r/e462a91e-8bea-8b72-481c-4a36699e4149@mojatatu.com/
+If you wish, you may consider to add one more tag:
 
-Thanks,
-Peilin Ye
+Fixes: ffba29c9ebd0 ("serial: lpc32xx: allow compile testing")
 
+--
+Best wishes,
+Vladimir
