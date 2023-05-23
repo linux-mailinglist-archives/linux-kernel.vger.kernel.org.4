@@ -2,110 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D9770E491
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DF270DF6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbjEWSYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S237307AbjEWOg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbjEWSYh (ORCPT
+        with ESMTP id S232969AbjEWOgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:24:37 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC3C11D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684866276; x=1716402276;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bH9DkjwQCDbz6P1wuCe1exqA+AW9HUfS0R7iBFyxoBA=;
-  b=Ci49o+FGUZEufeNagu5T8evfgUuCC3dFmDVfCjASdQN25nhA2plWpdrg
-   MIMv98B+jIWvHpIKF+kgd9U9zIZfe0WKop9fjrLn61P8/bve2qt7qEAE4
-   13rIn4HRcaAQ7OtM2P0vOuphcrxfoGfehnsmavRnGb37wAwheewyDuRdm
-   Gsc40Gz5A7dNHCVBJqHFVihdeiBAEZiDYAIe/fNpy7ShObQzACZiCm8fh
-   MxpEGVIh1Rq9sAAz9xJgO8owKphyfepUthiuK9D9R1b8Up1682GFUhVIh
-   LzU0d1AWrwEpePyWEMUenTVH2AWLMTVBhria/UFNEcepH+pFkPAqWwT9v
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="342786228"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="342786228"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="736974292"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="736974292"
-Received: from srusakov-mobl.amr.corp.intel.com (HELO [10.209.35.87]) ([10.209.35.87])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:35 -0700
-Message-ID: <d1baccf7-c689-fc40-d616-855c253021fc@linux.intel.com>
-Date:   Tue, 23 May 2023 09:34:56 -0500
-MIME-Version: 1.0
+        Tue, 23 May 2023 10:36:55 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2065.outbound.protection.outlook.com [40.107.93.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7332DE0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:36:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RZQJEbrQLzsxomB8Vv74XCfidS/5zhW18+1l0DlO1sPOriCVvZ2OfvgigLB3eiKkXv5h7eEdaeaGlSWouHKzDn0YumCYeInvLrKdrReAJidJteX40IPRENo6kPxTp/GbEsif8+cGXIC25qpOfdoCTLDi9/orrnDf/izm7gJdIoXC6/FJQn+pUkdQDDn2fhhCk8CQFinzxDDpq9B0DXYFAhXsUThnkJTbUf6Cc+5ikhnn2gtX9cEbsuxmO32G8moLs1i65f2Ta0xrbrCsodokkAUhfJuu7KUXbf/KlnS0XVOvDrOJsAVTMjS+78LdQbVK8V1r4di2GRqMQxg9eaTEGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FRBXrDPnExFzNFtiFrF5d/kagU00kAvj1SvIkoNHsXo=;
+ b=bi2Ng20v5j8I2f57qSY2GXXTN8ia/H2fA3Jkt/1DiPe6JMGcsbRQbBMk06ucryYwuHJC7/diYgd5WSl4q6Ptcx9CUp+HWrAkdmZFIIjlGW50IOMVwko1Ta1dhFzxAwYN6iRW6jFNgX4E1uNX9OcAFTzoTG1F7xPr8kqOCk7ugkRwPGdrJPFY++t/mJyzdSeGm7hJB4t+7LAFGDHFcMPVrDlX6JPl8g+nVwP++yn1Bg1RdZ8Ad7P7V9zBoyyKE/2IvyfuZoDkluZjDbcqJGgzwf7uD/rRx57k645+VIwGpoi/SrqqezNIWu5M098o4QbQUC0R3x1BMBD1cUSAHtgm8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FRBXrDPnExFzNFtiFrF5d/kagU00kAvj1SvIkoNHsXo=;
+ b=dIA5Xzsamtm68p+CTYKtCTVakaJnAJC6AEjkZmNxPyhNMjv7uznXeex8xfvhU1FSm6Sa5ylIPzQDPNKsKueDXhvZplkPDtNtq5VPqF/YEyg9TpDuKJ+1EqObL/wU0eskYBZ3fDFoxtM/uCYByfeGETPC/EWoSjIMHSm2BF2MAd8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ SN7PR12MB7370.namprd12.prod.outlook.com (2603:10b6:806:299::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Tue, 23 May
+ 2023 14:36:40 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%7]) with mapi id 15.20.6411.028; Tue, 23 May 2023
+ 14:36:39 +0000
+Message-ID: <461a4c29-b60f-a2fc-390b-7a39c9cec451@amd.com>
+Date:   Tue, 23 May 2023 10:36:34 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH V2 2/9] ASoC: amd: ps: handle SoundWire interrupts in acp
- pci driver
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/amd/display: remove unused variables
+ res_create_maximus_funcs and debug_defaults_diags
+To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        qingqing.zhuo@amd.com, wenjing.liu@amd.com,
+        aurabindo.pillai@amd.com, Samson.Tam@amd.com, gpiccoli@igalia.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230523114937.1080767-1-trix@redhat.com>
 Content-Language: en-US
-To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
- <20230522133122.166841-3-Vijendar.Mukunda@amd.com>
- <134a2efd-648a-fb4b-4b61-154173b97f04@linux.intel.com>
- <2e8d3af4-7d54-becf-1084-c9b07a3436d0@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <2e8d3af4-7d54-becf-1084-c9b07a3436d0@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230523114937.1080767-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQZPR01CA0073.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:84::28) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SN7PR12MB7370:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5ac19e4-53d0-4850-e54f-08db5b9b1e77
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I1KomlQSqO4K31Zk7LNxVLSkJ6EJcpy7tNzvKl9hSMDIRWL2B+wuvsViE+3qO6d794aGWSx0gc/AHi6XUnzMTHXNSC9aaEv2Uuw42uY0sXoTlPoxj8z8E1/NLySKIK6GBpZ1eVS/D37/yeFSfesiCxmiZgBtj+DUB3u3MSja23NqWdeJq1v4mR417wbI0lF/3+D9PQtbig+e1nQa70H1LQUUp7CLgVrRM2GwHu4px/4lz/nBcs0zZC3Ir9/SMaYDwbjc3OfYZtXwWIagDsoKN2u1VPLWCQ4NC0nyo4bIVfpclReX4WOo4YV3hPgij6d/dRC7SIFg1IssVcUuVhWvovEq+aBvcfhkKlAgBcKZUuZTGT3wPtHyuiwi508nXv9/XaiC71xfHbqxwfSYs3nywzOiUOYmU8K4oX2WRwwU21ynUxqj81r87clIxmPqCdac/ovN+8wM7bdlugMWwIWZMtxuvd+F7fmWVvV+vPrMhfY0XsgpVPDJjgKh5TQwBEDWssPeWZYF/fSZBRrlu7P7IXRy0GSS4mVu1VLrQUlnvkPkH/ta6Qt0QKXu8FVYNuy06wYsiaBMb1Awe0lBt93dnYJ6LvwhIQz2j3LipUfEildVIq7O2PVdTpcXIcUi10BooLYdWFxeaw1JRgykOcDlx3lUjxvUwqDFHGQc1Qz9fb0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(376002)(346002)(39860400002)(451199021)(6486002)(41300700001)(86362001)(31696002)(316002)(6666004)(2616005)(8936002)(8676002)(36756003)(186003)(53546011)(44832011)(26005)(6506007)(6512007)(5660300002)(2906002)(478600001)(31686004)(921005)(38100700002)(83380400001)(4326008)(66946007)(66476007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UXZ5UjFCV240N1cwNE80ek9KWlAreFRmU2hYOFBYc1M4aGhKVUlWTHRrZFpx?=
+ =?utf-8?B?bFlNcS93aWhkanZBdDAzS3NiQ2dHbWt2Tmo3Q2c0VGdlY2NEZGZWRmYxN3Vh?=
+ =?utf-8?B?UFdCYXh3enhNcW5wdTVwRHh2a3ZmTHJHT1ZOak0yN0x2bjZKY2VkbVRyb2hY?=
+ =?utf-8?B?T201TE01NUZKbnlzanNIR2luSmd0eFRhR1NDNjExWmtOYnR3amhsNUkvSmll?=
+ =?utf-8?B?RjRBV2NqSlJDc1ZLMkVWcTBnWHNPRTVUcytaeWV4aHZQUEw3ejBKUUl2ZUNR?=
+ =?utf-8?B?MldSYzYzdUhKQ1BrejkrQUJ3dFN1Y25yQ2JZYXFTYnJ5TEIxODJ1OHNpVkNo?=
+ =?utf-8?B?N2RJNTVueDdXL1FseTdPNDZHVmRuZ2ZnM3JPMnduSFN0SmdaYUFTeStUVmVU?=
+ =?utf-8?B?MjJRSnlNeEtDbzdHWEF2eFNmZnZNRlNsRVFkTDlVUXgxKzJSc1hVYVVmZC9L?=
+ =?utf-8?B?WDFObjNjU2ZSYTVXcWZBR3R3VVdMbUd5YlVsWG9rZ1dDYzdtQllORHRRazMx?=
+ =?utf-8?B?SXA0dVlISXR3Mnd1UjBIYnVjd3dhZGFucE5zR3QzK0hWWm14NFN1ay8zSFdB?=
+ =?utf-8?B?TVF2ZksvSHVaSk5EK2JPZXdhaU1VMGpyMXpKVnJ2d3R3N01PRkpSMy9Ga09T?=
+ =?utf-8?B?eWlEYjlpTmFyOUhHQ2dwVm1iTFVUSXVHYndoSk9zVHd5UzcyTy9PYjJYRFZ0?=
+ =?utf-8?B?NjEzZ2Fnc1Nmc2t1VmZlZHlBL1RtUy9uM3daMzZiTmc3Qzg4VlBQVDhiY21p?=
+ =?utf-8?B?R2R0cGZVdWxMWUVNZ21obFdWTkJMdC9xc1NRSGhvTlc3VW11Rmd3RWFxNndQ?=
+ =?utf-8?B?SG1aOTNYWVROR1BKSjlaNGNiY0Jadnl0VWpvMFBkTzBWclNOZDBBenM0OWt6?=
+ =?utf-8?B?d2tGMjgxU1BhRlJvTkI0czk3bTRuVjdMU3l2WTFoNGdGekhZd1BkeWx3OS9C?=
+ =?utf-8?B?SVdXVU1hWWtESVgrWGJza0FZUDFNNFdHdzFnQ0hnZVNlNWN0YWJBcTJIOWRz?=
+ =?utf-8?B?SmVDSU0rVm1XeXVZMHFIMjJDZ2J1OU1Qdkh5TFhIT094UHh0NUNkNG9EcXdy?=
+ =?utf-8?B?QjNJc1F6cFdncmpRSmF4ZWVON0s2RUl2VDJJRjVCYkJnYW8xQVhiM1NYTXl6?=
+ =?utf-8?B?Mjc2NWVrSXFLdU8rcjUvY0VGWndFSWxvNEFKSXZqVFFUSnZrbm9sZjNVQnJL?=
+ =?utf-8?B?S1NRZFNCSlQvcngxYWtLOXZ0UXNmTFZiZSszTGsvb0MwZW9FUENvbWRDS1RD?=
+ =?utf-8?B?bmZ1dmE1UWhLMzVoQ3VkN0Fzc0xPbUtKZHhGdzhNK3ZGQkw5dXJDUlk4bVpU?=
+ =?utf-8?B?VXRnWXUwQkNnUzNnV2cvTUpJcnNvbUlRMGRlSjY3clNwVmt1dkc4NDg1Nmtj?=
+ =?utf-8?B?UndXQ0JPcCtTM09PeXVObTdES1pHK3FVNDZIMTBHekF1aFNiOCs4RWV6cFFX?=
+ =?utf-8?B?Ui9Ca0JhbE80MDJnSVFmSlpWcVN4S1lxWVBtN0lCb29EWGJsbHpXTWN0SnIz?=
+ =?utf-8?B?bzhPMVNkdi80MTVMZ3Y0ZzJoUktmL0RpSk1PS2VtZzZPY3gwM0ZuY0RVaXZU?=
+ =?utf-8?B?djZnRWc0Zy9KZzJhZEJPNStMWlJSMnNmaVBaMExaaEd3cnZHbmhWVk9lWEpu?=
+ =?utf-8?B?N0dwWUY4ZnJoRmY0a0lWRUdiaDRvbGExa1dKbzFBTzBiUjdDaSt1bFpSQzNT?=
+ =?utf-8?B?TmdvaklpaWJhZmhtMmdoTWMrLytLWEVQeWhFM1VlUXN0UktGaHdpK2RiR0dN?=
+ =?utf-8?B?L0o2ZzRicGFqdW9LbUV0QUlXMllMSDllUEdmYmJ1RnByQXZISVVFRytrbHlC?=
+ =?utf-8?B?QXBza0ZwRFpiM2U5eE9MMkZ6REN2cC9tYUtoeElZNWpLdzkxbUZtYzUvS25Z?=
+ =?utf-8?B?dWs5cDdEZndLREV1eElyMlluaXNoNXhwZ1FBUUtYZ1ZBTXV6U09ob3owM0Q0?=
+ =?utf-8?B?YzNNQlZLYW1KTEVISWdtWHgxTUN6RFBiWWF1ZEdQdUR1VklmK3RMemVSOWxh?=
+ =?utf-8?B?VnEvaHFTVWUxajJzd1R5dWlhQ0VwUEsvM25QZjdKMWdFSHR2alJLLzdvZ1Y1?=
+ =?utf-8?B?SGFLOUNrM0VGV3pTQWVCZkVnTGJoeDBQSkdqZjV4aHpGdm96WExXZkdVamNB?=
+ =?utf-8?Q?zKkAygrYDUFCAg3L9Brp9YmGE?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5ac19e4-53d0-4850-e54f-08db5b9b1e77
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 14:36:39.5873
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tTKu7IS/WSWfqo8j0ym+2Ym8Ym/qriZ1SAg2HfaXDEt88V3kKdgWnl5YUakFuVq8jfNJxqjG2qy4WeKc44KLdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7370
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/23/23 07:49, Tom Rix wrote:
+> gcc with W=1 reports
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_resource.c:1069:43: error:
+>    ‘res_create_maximus_funcs’ defined but not used [-Werror=unused-const-variable=]
+>   1069 | static const struct resource_create_funcs res_create_maximus_funcs = {
+>        |                                           ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_resource.c:727:38: error:
+>    ‘debug_defaults_diags’ defined but not used [-Werror=unused-const-variable=]
+>    727 | static const struct dc_debug_options debug_defaults_diags = {
+>        |                                      ^~~~~~~~~~~~~~~~~~~~
+> 
+> These variables are not used so remove them.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
+Fixes: 00df97e1df57 ("drm/amd/display: Clean FPGA code in dc")
 
->>>  static void acp63_disable_interrupts(void __iomem *acp_base)
->>> @@ -102,23 +103,55 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
->>>  {
->>>  	struct acp63_dev_data *adata;
->>>  	struct pdm_dev_data *ps_pdm_data;
->>> -	u32 val;
->>> +	struct amd_sdw_manager *amd_manager;
->>> +	u32 ext_intr_stat, ext_intr_stat1;
->>> +	u16 irq_flag = 0;
->>>  	u16 pdev_index;
->>>  
->>>  	adata = dev_id;
->>>  	if (!adata)
->>>  		return IRQ_NONE;
->>> +	ext_intr_stat = readl(adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
->>> +	if (ext_intr_stat & ACP_SDW0_STAT) {
->>> +		writel(ACP_SDW0_STAT, adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
->> [1]
->>
->> this is confusing, if this is w1c, should this be:
->>
->> writel(ext_intr_stat, adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
->>
->> Otherwise you may be clearing fields that have not been set?
-> As per our register spec, writing zero to register fields doesn't
-> have any effect. Only writing 1 to register bit will clear that
-> interrupt.
-> We are handling bit by bit irq check and clearing the irq mask
-> based on irq bit and take an action related to that particular irq
-> bit.
+Applied, thanks!
 
-Right, maybe an explanation in the commit message would help.
+> ---
+>   .../drm/amd/display/dc/dcn20/dcn20_resource.c | 23 -------------------
+>   1 file changed, 23 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
+> index 7dcae3183e07..6ef7e2634991 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
+> @@ -724,22 +724,6 @@ static const struct dc_debug_options debug_defaults_drv = {
+>   		.underflow_assert_delay_us = 0xFFFFFFFF,
+>   };
+>   
+> -static const struct dc_debug_options debug_defaults_diags = {
+> -		.disable_dmcu = false,
+> -		.force_abm_enable = false,
+> -		.timing_trace = true,
+> -		.clock_trace = true,
+> -		.disable_dpp_power_gate = true,
+> -		.disable_hubp_power_gate = true,
+> -		.disable_clock_gate = true,
+> -		.disable_pplib_clock_request = true,
+> -		.disable_pplib_wm_range = true,
+> -		.disable_stutter = true,
+> -		.scl_reset_length10 = true,
+> -		.underflow_assert_delay_us = 0xFFFFFFFF,
+> -		.enable_tri_buf = true,
+> -};
+> -
+>   void dcn20_dpp_destroy(struct dpp **dpp)
+>   {
+>   	kfree(TO_DCN20_DPP(*dpp));
+> @@ -1066,13 +1050,6 @@ static const struct resource_create_funcs res_create_funcs = {
+>   	.create_hwseq = dcn20_hwseq_create,
+>   };
+>   
+> -static const struct resource_create_funcs res_create_maximus_funcs = {
+> -	.read_dce_straps = NULL,
+> -	.create_audio = NULL,
+> -	.create_stream_encoder = NULL,
+> -	.create_hwseq = dcn20_hwseq_create,
+> -};
+> -
+>   static void dcn20_pp_smu_destroy(struct pp_smu_funcs **pp_smu);
+>   
+>   void dcn20_clock_source_destroy(struct clock_source **clk_src)
+-- 
+Hamza
+
