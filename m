@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F0670D7A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACB170D7A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236232AbjEWIhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S235952AbjEWIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235949AbjEWIhA (ORCPT
+        with ESMTP id S235930AbjEWIg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:37:00 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A301BC;
-        Tue, 23 May 2023 01:34:57 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6af6ec6d73bso1145811a34.3;
-        Tue, 23 May 2023 01:34:57 -0700 (PDT)
+        Tue, 23 May 2023 04:36:58 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA141FED;
+        Tue, 23 May 2023 01:34:55 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6af6df7f93aso2232498a34.0;
+        Tue, 23 May 2023 01:34:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684830897; x=1687422897;
+        d=1e100.net; s=20221208; t=1684830895; x=1687422895;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=8Rk/6TkhHiy7aOgeY8F1RdAT5pIvD1dRXseK75IVn/U=;
-        b=Hqbg667QpZT6i+tpbZQBvUV9QawgcKPDqpviIci9kk0C6cQGmcBVeFm/8KwixVbfyB
-         OoDuQgeKNoKQbe0bGRaTTOQOHCZhzJa/7GK1f/jz0uIjB119kMUQqLWO6upP3OlDfMXs
-         dt9I1Vv8I2+ByFSbgAJUnhch6wuemxHKcg8TC14Z6go8MZUJZOmv7wVVXdajl57X/Ocg
-         2MMvA6UOMCZGhw5OXyOfvebKZ+M5wAxwkLTBGTBVhMYRwmDLyn8F1mOdOb+bGiC4YCsq
-         kJ7by7EMM3JrSN5h+Kh/+ZoWH+qqUGHGyksmEt7eVxAfWPwXd/WXynZMWKlQWnVTYT23
-         9fHg==
-X-Gm-Message-State: AC+VfDyVVHEyKOJ6dpilxB1gPHfBS3Lz5B7YT9MEb0uJJlL0Vlzr85O4
-        TielinUWS2j12RLABcAspQ==
-X-Google-Smtp-Source: ACHHUZ5s/vzpTb+9BMMWcelUyV4uhEXM/zWmwl11RKvNss9ted8Bfh3Z6TbSKaa7B4n4vss2ArZacw==
-X-Received: by 2002:a9d:7e9a:0:b0:6af:8743:d5ac with SMTP id m26-20020a9d7e9a000000b006af8743d5acmr1845750otp.29.1684830896813;
-        Tue, 23 May 2023 01:34:56 -0700 (PDT)
+        bh=Fbuuelze6oX5JYOQ10a+DjnQCHnZU9fuAvZCu9bIt5c=;
+        b=ZaRdzWERWur1bBUgPfNoY188xkhwUY3rPwaO0s32lUeTMs1LDsTmgn6uZoZ2k7W8Rg
+         ZW3azk+sJ/SBStFpqKcIsLbRA844wx+rxdNoL8RjIw0WFbVuI3I6jaVMJRBas8IfuODI
+         O8ThxJ8lXU4+26nsKZsA9K/PmfZIzw1fes7aT+r0gqmoWa9J5gZd/2zv3Oqd2JlAtKWC
+         phP7tge7IP9fDjdH8MLbTMyAoV3uxxxG3o/eGpGgBShUVAS3CgeJjK7FcI4tRx1VfrBq
+         I7aBtFzU1L/WUD/iKOuFIm1/BP/NAPk1uaFtXIkIKoNfuD7SmSS+hbpdO7/X6itxQE1f
+         iYkA==
+X-Gm-Message-State: AC+VfDz5O5S4yRWb9LB8AkJhWo85ke3T7xhfhdyugfASC/7eyFygKg+2
+        jq+2485YubwDUB3ErxNhNw==
+X-Google-Smtp-Source: ACHHUZ7/tT2ff11MVD89mp0Uq6HgcF9rMmy1Is5kbzuJKiVecR9PIqUjz5MCk5++W0yN001aVxjPUQ==
+X-Received: by 2002:a9d:6b11:0:b0:6af:85fd:ffff with SMTP id g17-20020a9d6b11000000b006af85fdffffmr2136294otp.25.1684830894792;
+        Tue, 23 May 2023 01:34:54 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g7-20020a9d6c47000000b006ae7c3eaf4esm1353685otq.26.2023.05.23.01.34.55
+        by smtp.gmail.com with ESMTPSA id q25-20020a9d7c99000000b006aaf82bd5a2sm3258395otn.43.2023.05.23.01.34.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 01:34:56 -0700 (PDT)
-Received: (nullmailer pid 140436 invoked by uid 1000);
+        Tue, 23 May 2023 01:34:54 -0700 (PDT)
+Received: (nullmailer pid 140433 invoked by uid 1000);
         Tue, 23 May 2023 08:34:52 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>,
+Cc:     linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+        David Airlie <airlied@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        freedreno@lists.freedesktop.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
         Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Krishna Manikandan <quic_mkrishn@quicinc.com>,
         linux-arm-kernel@lists.infradead.org,
-        Rob Clark <robdclark@gmail.com>, devicetree@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Airlie <airlied@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, iommu@lists.linux.dev
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v5-5-998b4d2f7dd1@linaro.org>
+        Marijn Suijten <marijn.suijten@somainline.org>
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v5-4-998b4d2f7dd1@linaro.org>
 References: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
- <20230411-topic-straitlagoon_mdss-v5-5-998b4d2f7dd1@linaro.org>
-Message-Id: <168483089291.140404.16963046121189730936.robh@kernel.org>
-Subject: Re: [PATCH v5 05/12] dt-bindings: display/msm: Add SM6375 MDSS
+ <20230411-topic-straitlagoon_mdss-v5-4-998b4d2f7dd1@linaro.org>
+Message-Id: <168483089214.140382.17835176497108911988.robh@kernel.org>
+Subject: Re: [PATCH v5 04/12] dt-bindings: display/msm: Add SM6350 MDSS
 Date:   Tue, 23 May 2023 03:34:52 -0500
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -80,13 +80,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 23 May 2023 09:46:16 +0200, Konrad Dybcio wrote:
-> Document the SM6375 MDSS.
+On Tue, 23 May 2023 09:46:15 +0200, Konrad Dybcio wrote:
+> Document the SM6350 MDSS.
 > 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  .../bindings/display/msm/qcom,sm6375-mdss.yaml     | 216 +++++++++++++++++++++
->  1 file changed, 216 insertions(+)
+>  .../bindings/display/msm/qcom,sm6350-mdss.yaml     | 214 +++++++++++++++++++++
+>  1 file changed, 214 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -95,17 +95,17 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.example.dtb: dsi@5e94000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['qcom,sm6375-dsi-ctrl', 'qcom,mdss-dsi-ctrl'] is too long
-	'qcom,sm6375-dsi-ctrl' is not one of ['qcom,apq8064-dsi-ctrl', 'qcom,msm8916-dsi-ctrl', 'qcom,msm8953-dsi-ctrl', 'qcom,msm8974-dsi-ctrl', 'qcom,msm8996-dsi-ctrl', 'qcom,msm8998-dsi-ctrl', 'qcom,qcm2290-dsi-ctrl', 'qcom,sc7180-dsi-ctrl', 'qcom,sc7280-dsi-ctrl', 'qcom,sdm660-dsi-ctrl', 'qcom,sdm845-dsi-ctrl', 'qcom,sm6115-dsi-ctrl', 'qcom,sm8150-dsi-ctrl', 'qcom,sm8250-dsi-ctrl', 'qcom,sm8350-dsi-ctrl', 'qcom,sm8450-dsi-ctrl', 'qcom,sm8550-dsi-ctrl']
-	'qcom,sm6375-dsi-ctrl' is not one of ['qcom,dsi-ctrl-6g-qcm2290', 'qcom,mdss-dsi-ctrl']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.example.dtb: dsi@ae94000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['qcom,sm6350-dsi-ctrl', 'qcom,mdss-dsi-ctrl'] is too long
+	'qcom,sm6350-dsi-ctrl' is not one of ['qcom,apq8064-dsi-ctrl', 'qcom,msm8916-dsi-ctrl', 'qcom,msm8953-dsi-ctrl', 'qcom,msm8974-dsi-ctrl', 'qcom,msm8996-dsi-ctrl', 'qcom,msm8998-dsi-ctrl', 'qcom,qcm2290-dsi-ctrl', 'qcom,sc7180-dsi-ctrl', 'qcom,sc7280-dsi-ctrl', 'qcom,sdm660-dsi-ctrl', 'qcom,sdm845-dsi-ctrl', 'qcom,sm6115-dsi-ctrl', 'qcom,sm8150-dsi-ctrl', 'qcom,sm8250-dsi-ctrl', 'qcom,sm8350-dsi-ctrl', 'qcom,sm8450-dsi-ctrl', 'qcom,sm8550-dsi-ctrl']
+	'qcom,sm6350-dsi-ctrl' is not one of ['qcom,dsi-ctrl-6g-qcm2290', 'qcom,mdss-dsi-ctrl']
 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.example.dtb: dsi@5e94000: Unevaluated properties are not allowed ('compatible' was unexpected)
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.example.dtb: dsi@ae94000: Unevaluated properties are not allowed ('compatible' was unexpected)
 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230411-topic-straitlagoon_mdss-v5-5-998b4d2f7dd1@linaro.org
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230411-topic-straitlagoon_mdss-v5-4-998b4d2f7dd1@linaro.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
