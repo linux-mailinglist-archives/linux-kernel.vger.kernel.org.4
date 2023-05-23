@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515D870D7D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B9670D7D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235916AbjEWIsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S235930AbjEWIss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbjEWIs3 (ORCPT
+        with ESMTP id S235978AbjEWIso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:48:29 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE4095;
-        Tue, 23 May 2023 01:48:27 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30a8c4afa46so1799527f8f.1;
-        Tue, 23 May 2023 01:48:27 -0700 (PDT)
+        Tue, 23 May 2023 04:48:44 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E30E0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:48:42 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-456f7ea8694so1548561e0c.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684831706; x=1687423706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OUOnFkk6LZeuoWYNMWkpPibztQzTwtUuTD5TmD26Q3A=;
-        b=h804rVfO2Bsw5yhvUVlzXRHpaSQ0tIzGlkCXl2QpTqpfPKOWXefSJJdMry1Codj2bW
-         0+Kxg284GAfF6b7SIFtTDOYfPLII2b6IXKQowkZVzm7+hH5sIXc4MpzkCVO9C5yaO6sL
-         VP9jgWUCj5E86UpvFDee1+T0kPOQCgdyAiFY7pN4shnhTv+Fcau1okhmgcky0fVsmss4
-         ZCTG3Tto+avFMlXwACVWVlQd6tjkH3aRB3GUprw9UFrWYYu+3vyUlC+J6JX4kfP4J4D4
-         3PMPp25Q4z7/Ag0r7AaIkj20f4GY8S2nmv726qI9FE852+JonpFbdsUPzu9/f5bNCxHn
-         WOWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684831706; x=1687423706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684831721; x=1687423721;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OUOnFkk6LZeuoWYNMWkpPibztQzTwtUuTD5TmD26Q3A=;
-        b=gLVop/rVekoMAx25RLhQ18R/I0MJtV4x5ebZiRHyjFn9Qg3V+7BAKmDTii+XQNI3/C
-         dYoL+nsemTVNrhfxAAEJAK/qNulrfIhTGkjj2KXUsFZVs9mKWYDwZ2GpIUvC+wVsDkhE
-         gXECbAV0kDVxe0gW31OTXMne3qC2QIycNGTokTDaQH0ZjNN1tXQaCyvA+gopQDoPfFQp
-         tpk7OByc5rIKeV1GkMUi+UfGp7sxGOpFeiTeEinuz+uliSWlSGJM/xLFtmErZ8fN/FD8
-         caseURYiawQnOR3SAWgby2Tz76AxWmZDjffFv5XHdnMTVtdTUxPFYl4IPcqGeULTETxS
-         1bJA==
-X-Gm-Message-State: AC+VfDx9bUuilAJfXqMRCJRdQTpC35EYBwd0AxkKUjo3pRk0H7tghoPi
-        52ssMf+Wzq3sAsfZYtB8JHA5EuwYxw==
-X-Google-Smtp-Source: ACHHUZ4+dENExOL9ouxNlmnW9prFjF7QxPlaiGXyX8HYFXVjVXScfjlBVc09WRvxH5knU3Zfiyi42Q==
-X-Received: by 2002:a5d:63c2:0:b0:306:2d81:341d with SMTP id c2-20020a5d63c2000000b003062d81341dmr11028951wrw.24.1684831705923;
-        Tue, 23 May 2023 01:48:25 -0700 (PDT)
-Received: from p183 ([46.53.250.221])
-        by smtp.gmail.com with ESMTPSA id b21-20020a05600c4e1500b003f4283f5c1bsm2344856wmq.2.2023.05.23.01.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 01:48:25 -0700 (PDT)
-Date:   Tue, 23 May 2023 11:48:23 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        akpm@linux-foundation.org
-Subject: Re: + fix-mult_frac-multiple-argument-evaluation-bug.patch added to
- mm-nonmm-unstable branch
-Message-ID: <6e6b2dc1-1fab-4506-bbad-41edaafd7231@p183>
-References: <20230522211514.E0037C4339C@smtp.kernel.org>
- <87ttw4udzv.ffs@tglx>
+        bh=nsCD0of1x6zAZe4E8ewHElcvWX4G+68HMU5ECsDupIE=;
+        b=1MkyHwpRBLggLehbgS6eNfVckrrq+fSGe5Ml3QKm23i2ADWDBXeDmBN5mQpLixA1L7
+         /STGoEzvvRpB9YR2lAH38LNK5EPoPYKR0USAiTHsMkH6PTlH/4pBmYOjfPYy2J/Y2FcC
+         W0SzIJp0LCOnczI45DnIN/FEU25qCLA55krEq3uZR/TWW0lkWemQI6q2sZ56sLldQeO4
+         d/eXHJjaLnm4UoLa2As4aYZOgyoAXDh3WFoT3NduC98nzH9ryrxihWhELLMp37MvEnu9
+         wTZIKhJ5nO1lXo+qss4xvuc4vmH3GlFD9n7BGgxhyQbeV/BjRa2SUxLokggVFcHHaH+a
+         DmOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684831721; x=1687423721;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nsCD0of1x6zAZe4E8ewHElcvWX4G+68HMU5ECsDupIE=;
+        b=A8JSxsw3keu9x1OzdJD1Nwz+usMCTbaJLHpJtOtAunvkwKcySeHcPY22OtQZSUaoBW
+         SnVJZv6pSeWaK+fMIV6k2hlhvDBO/DWD0g5GJC3vhIhQOkulwe9KuuyffbHsVHSlifmc
+         3JDAb4QEFnePFTckkADe/9LQ8XLGY1yxPK46Z7/pIPSQlRKl8Uaw9jGkO09sxd72SkQA
+         fIymWb7mRBeLJxee712J/KU6od5i56kSqsmFE7+UOeYtZzm8R+fHnvQdd9Cyt71ZhaZY
+         IWPUJoG/x7ZEjuQMfYon3S2or+5EpgY8qTrCM8NDTNOGnE8dhkTX8GTC6rGLTKkdwOw0
+         pUPg==
+X-Gm-Message-State: AC+VfDyoYy9Lsc8q1wQ8TyeN9mBOxr40C9XPunXzZJP/60QLBNwgoM0s
+        z5MdiY2PnmKaPENaPBxsr8tIRQcZL+Z/e/Llv8ztKg==
+X-Google-Smtp-Source: ACHHUZ4g3A8Ho/5ndNryXQpmLu1vYMnDo3U7OPTUNTtRkDJDs/TtPHk0tvFU6g2UWK2DN5PGxRYri4rRpoeNl2oXti8=
+X-Received: by 2002:a1f:4113:0:b0:44f:d1f5:6bec with SMTP id
+ o19-20020a1f4113000000b0044fd1f56becmr4252400vka.4.1684831721544; Tue, 23 May
+ 2023 01:48:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87ttw4udzv.ffs@tglx>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230427152055.18380-1-henning.schild@siemens.com>
+ <20230427152055.18380-2-henning.schild@siemens.com> <ZEuBMCxeWAx9OilV@76cbfcf04d45>
+ <759b2df004e2445e850a01b33e748972@siemens.com> <20230428113332.3a7b9a18@md1za8fc.ad001.siemens.net>
+ <CAMRc=Mdfptr0ZXV=fzBE0T+=vTxhL1tOKxRy+ccFLOqinb0w1A@mail.gmail.com> <20230513115326.0a9f669e@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20230513115326.0a9f669e@md1za8fc.ad001.siemens.net>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 23 May 2023 10:48:30 +0200
+Message-ID: <CAMRc=MegFzyKSW6KAOUHfdMqnZGb3iAqhCbVrn2GFmyEqPTbcw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] gpio-f7188x: fix chip name and pin count on
+ Nuvoton chip
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     "Wu, Xing Tong (DI FA CTR IPC CN PRC4)" <XingTong.Wu@siemens.com>,
+        Simon Guinot <simon.guinot@sequanux.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 01:45:40AM +0200, Thomas Gleixner wrote:
-> On Mon, May 22 2023 at 14:15, Andrew Morton wrote:
-> > ------------------------------------------------------
-> > From: Alexey Dobriyan <adobriyan@gmail.com>
-> > Subject: include/linux/math.h: fix mult_frac() multiple argument evaluation bug
-> > Date: Sat, 20 May 2023 21:25:19 +0300
+On Sat, May 13, 2023 at 11:53=E2=80=AFAM Henning Schild
+<henning.schild@siemens.com> wrote:
+>
+> Am Thu, 11 May 2023 14:52:17 +0200
+> schrieb Bartosz Golaszewski <brgl@bgdev.pl>:
+>
+> > On Fri, Apr 28, 2023 at 11:33=E2=80=AFAM Henning Schild
+> > <henning.schild@siemens.com> wrote:
+> > >
+> > > Am Fri, 28 Apr 2023 10:26:18 +0200
+> > > schrieb "Wu, Xing Tong (DI FA CTR IPC CN PRC4)"
+> > > <XingTong.Wu@siemens.com>:
+> > >
+> > > > Hi all
+> > > >
+> > > > The chip id of NCT6116D is 0XD281, you can refer to
+> > > > NCT6116D_Datasheet_V1_0.pdf, Page 291
+> > >
+> > > Thanks Xing Tong. I think we have come to agree that for now
+> > > NCT6116D 0xD281 will not be supported in the kernel. Maybe until
+> > > someone has access to that very chip and a use-case.
+> > >
+> > > But you managed to somehow get these datasheets, which are still not
+> > > publicly available. Maybe you can use your contacts at Nuvoton to
+> > > kindly ask them to publish those specs on their website for future
+> > > reference. Some specs are there, but not all. That would help
+> > > people to add more chips and avoid mistakes like they happened to
+> > > me.
+> > >
+> > > Henning
+> > >
 > >
-> > mult_frac() evaluates _all_ arguments multiple times in the body.
-> 
-> I'm not opposed to the patch, but to the description.
-> 
-> Multiple evaluation is not a bug per se.
+> > Henning, do you plan to respin this with the ID corrected?
+>
+> Bart, no this one fixes the name of the chip i have at hand, and fixes
+> the size of its last bank. So it is valid on its own and should IMHO be
+> merged as is.
+>
+> Since i do not have a NCT6116D (0xD281) i could basically just guess
+> (not too hard) but not test. And i do not really feel like contributing
+> untested code for which there is no known user/tester.
+>
+> Henning
+>
+> > Bart
+>
 
-It is kind of a bug if a macro pretends to be a function and is spelled in
-lowercase.
+Fair enough, applied.
 
-> Unless there is a reasonable explanation for the alleged bug this is
-> just a cosmetic exercise.
-
-Most usages looks OK, and compiler tend to merge loads so even more
-usages are OK. But formally this is not OK:
-
-	static inline unsigned long vfs_pressure_ratio(unsigned long val)
-	{
-	        return mult_frac(val, sysctl_vfs_cache_pressure, 100);
-	}
-
-> Changelogs have to be self explanatory and if the shortlog, aka
-> $subject, claims "bug" then there has to be a reasonable explanation
-> what the actual bug is.
-> 
-> Seriously.
-> 
-> All this is documented, but obviously documention for changelogs and the
-> acceptance of patches is just there to be ignored, right?
-
-I don't want to return to kindergarten and document problem which every
-C programmer learns exploring MIN(a, b).
+Bart
