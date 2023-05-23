@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13C770DF98
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDBE70DF99
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236220AbjEWOpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S237366AbjEWOqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbjEWOpu (ORCPT
+        with ESMTP id S232856AbjEWOqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:45:50 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC17132
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:45:48 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-babb5e91ab4so6581201276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:45:48 -0700 (PDT)
+        Tue, 23 May 2023 10:46:04 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF659119
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:46:02 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8bab3b392so9966548276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684853147; x=1687445147;
+        d=google.com; s=20221208; t=1684853162; x=1687445162;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cirt2ON6amstA/3YNx8Dl/DrSfD+lKUlEarHqMF6nxw=;
-        b=DqYCWPhParszen3Hd8C6NALzsNq4RE0GYoUKErPQQT/Rk8O/vXKcFFl4bB4qWAWbtP
-         kkux8OKOZOKVkJsvkJ2Ny+BMhW6JZ8Lp8rG5soKSuqkKXV72FR+NUz5qjTBaOP88KeGN
-         H0AC4WDcLBg1UrXmePmLeZyRcirBCEwzjJ7wSBiRt+97j9WoXoaqf2oKm7wLH7DlYFfe
-         1Pv8kbdl6HkciPp6/Wmquuc5gUJx5SC+dKxW9tuwanpD0iX6llPgQm/VSavm+1y3b3PR
-         h/Y217d0niQUL9S2/ueC8YV1UCjcINwLp02CAsb6llA5VM/mPUIIgFMI864kmpC1XiE7
-         d/Fw==
+        bh=r16leosVab/uLX7D74lYCjCyQd2teI7cw9N2TnAgQsA=;
+        b=Hd/uUrDISL30aYgFZm7tT9bNmVfu5Hj5bE8z8pqztEcp7fh7IokeZvyVl4+oOgQpv2
+         1msJ8stWSASsldMCECBLTZSZbmB67D/T7j1oTM2DeUMplouDBShHymsHyviGEf60tBiM
+         d5vZPUEHKU0E12wSNBYOP4P1NYGjDUM5j4FC2jB/qherVgJcq2o2o9Lx9KuA3cUjjFbh
+         fGZSVMVBEzRtgYXzq81Yb06w9UEFGdV9cfI9x14itoTZcmT+hYvViRiWZtK/VEhv4HGE
+         vpDT/Rx7Cux0WO7uyvBET3G0qLUukSAXX6k4OFRmxbn4iL0lJKuXNJeqS7trW8tXqQhC
+         akzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684853147; x=1687445147;
+        d=1e100.net; s=20221208; t=1684853162; x=1687445162;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cirt2ON6amstA/3YNx8Dl/DrSfD+lKUlEarHqMF6nxw=;
-        b=gT4VRumqx1sE+kOPxtag72k6C0sA7veD5KwigwuUfIqKuk5D67Uu5zLpH+zfKu8Lo2
-         2noa3t3koBZXxP7lMmr6095nDBvNLgpUSvB3NzoezcjtMcY0NEiFhukmvNIXRaQm6q+u
-         1yxqukaG+vguechAGSSLf9hcjYYIJPvyxwUmfUZx6BuRHG62Qvd2Ww+LMqQ1CqvPICth
-         0t/kragJAtGjPyMkPbC5gwLeMEwF4aciDnKjKKkGggW/sTnCdWNiDc3j0fpJugfRv79t
-         uc9EbKXViCBrkz/dx+Q7GEDR0P40Y78yGOqbGbv6JD2mm/wM2A4/4ad1vSjRjV0SyWeF
-         UuVw==
-X-Gm-Message-State: AC+VfDxBcU1+Ufe623f6HxrRss8Ws2w+ECHiZ91VOsRhyViKX4bYNAtx
-        P4b9Gp7P5WqIYGThJzuBCovGLAz8bCjeLhE=
-X-Google-Smtp-Source: ACHHUZ5HGv5J4DLwutjlh5WRFIrH9ud/Hd5FtZAOkFZuacDfLlkK3smnxJzIXubwF4Z90tgv7QY8eKQgKy5wLVk=
+        bh=r16leosVab/uLX7D74lYCjCyQd2teI7cw9N2TnAgQsA=;
+        b=VnRpNx//PCRUC6kaSXEDNJ8FdJ4eH801yTEA5aq0Ko3Ebl714GMxqyxLaWj7U4PtFp
+         VGqMt9n5Hu9M+vzrVUGlRdoIvfZ7cfM6RnGol8p8fBc5d507Dj9N0sCpVYfM4qNXipA6
+         SqEIR5TIpCLR8979SWUaeKtG2iyOLzWmgWIItX9xnitrvWCB55qdqN1Utumom4yqQsxR
+         XynjuwjhlDuUZRSpSGGVZ9clB9O2TtMqx+aOd71901m9XIpbG/twLTS5ReYTDQdb4Rth
+         ZbUnBHoJmTin2AXPcdI+zjsTGffcHJhjOlJSTIvlhlMVq4XKHoH0FQQeG7eTGnb2qYOU
+         k7XA==
+X-Gm-Message-State: AC+VfDz50AZaG3GN0VbaW9/M6hqDrCeOOxrbC9havZwxldmQ0oyUp+oA
+        ml+IyI1WuPUCq/uTq2SvMgVDZZCPaIqRbj4=
+X-Google-Smtp-Source: ACHHUZ5GGO9M9zi95iQU/We2rgCa/AZ2NpDuHENeetlWQiYs4A5/3srhvSG4IjsY4UStilvM/k6fLMYqCtGwmFY=
 X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a25:949:0:b0:ba8:6422:bbec with SMTP id
- u9-20020a250949000000b00ba86422bbecmr8780701ybm.4.1684853147290; Tue, 23 May
- 2023 07:45:47 -0700 (PDT)
-Date:   Tue, 23 May 2023 14:44:17 +0000
+ (user=aliceryhl job=sendgmr) by 2002:a25:9989:0:b0:ba2:2d0e:a752 with SMTP id
+ p9-20020a259989000000b00ba22d0ea752mr8278874ybo.6.1684853162123; Tue, 23 May
+ 2023 07:46:02 -0700 (PDT)
+Date:   Tue, 23 May 2023 14:44:18 +0000
 In-Reply-To: <20230523144418.1250547-1-aliceryhl@google.com>
 Mime-Version: 1.0
 References: <20230523144418.1250547-1-aliceryhl@google.com>
 X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Message-ID: <20230523144418.1250547-4-aliceryhl@google.com>
-Subject: [PATCH v2 3/4] rust: specify when `ARef` is thread safe
+Message-ID: <20230523144418.1250547-5-aliceryhl@google.com>
+Subject: [PATCH v2 4/4] rust: task: add `Send` marker to `Task`
 From:   Alice Ryhl <aliceryhl@google.com>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -78,43 +78,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An `ARef` behaves just like the `Arc` when it comes to thread safety, so
-we can reuse the thread safety comments from `Arc` here.
-
-This is necessary because without this change, the Rust compiler will
-assume that things are not thread safe even though they are.
+When a type also implements `Sync`, the meaning of `Send` is just "this
+type may be accessed mutably from threads other than the one it is
+created on". That's ok for this type.
 
 Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- rust/kernel/types.rs | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ rust/kernel/task.rs | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index 29db59d6119a..1e5380b16ed5 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -321,6 +321,19 @@ pub struct ARef<T: AlwaysRefCounted> {
-     _p: PhantomData<T>,
- }
+diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+index 526d29a0ae27..7eda15e5f1b3 100644
+--- a/rust/kernel/task.rs
++++ b/rust/kernel/task.rs
+@@ -64,8 +64,14 @@ macro_rules! current {
+ #[repr(transparent)]
+ pub struct Task(pub(crate) Opaque<bindings::task_struct>);
  
-+// SAFETY: It is safe to send `ARef<T>` to another thread when the underlying `T` is `Sync` because
-+// it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally, it needs
-+// `T` to be `Send` because any thread that has an `ARef<T>` may ultimately access `T` using a
-+// mutable reference, for example, when the reference count reaches zero and `T` is dropped.
-+unsafe impl<T: AlwaysRefCounted + Sync + Send> Send for ARef<T> {}
+-// SAFETY: It's OK to access `Task` through references from other threads because we're either
+-// accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
++// SAFETY: By design, the only way to access a `Task` is via the `current` function or via an
++// `ARef<Task>` obtained through the `AlwaysRefCounted` impl. This means that the only situation in
++// which a `Task` can be accessed mutably is when the refcount drops to zero and the destructor
++// runs. It is safe for that to happen on any thread, so it is ok for this type to be `Send`.
++unsafe impl Send for Task {}
 +
-+// SAFETY: It is safe to send `&ARef<T>` to another thread when the underlying `T` is `Sync`
-+// because it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally,
-+// it needs `T` to be `Send` because any thread that has a `&ARef<T>` may clone it and get an
-+// `ARef<T>` on that thread, so the thread may ultimately access `T` using a mutable reference, for
-+// example, when the reference count reaches zero and `T` is dropped.
-+unsafe impl<T: AlwaysRefCounted + Sync + Send> Sync for ARef<T> {}
-+
- impl<T: AlwaysRefCounted> ARef<T> {
-     /// Creates a new instance of [`ARef`].
-     ///
++// SAFETY: It's OK to access `Task` through shared references from other threads because we're
++// either accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
+ // synchronised by C code (e.g., `signal_pending`).
+ unsafe impl Sync for Task {}
+ 
 -- 
 2.40.1.698.g37aff9b760-goog
 
