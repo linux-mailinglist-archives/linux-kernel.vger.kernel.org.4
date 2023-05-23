@@ -2,75 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFBD70D8B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F6270D88A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235543AbjEWJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S235566AbjEWJNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbjEWJRJ (ORCPT
+        with ESMTP id S229604AbjEWJNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:17:09 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A13794
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:17:05 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 110CA5FD61;
-        Tue, 23 May 2023 12:17:03 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1684833423;
-        bh=+ABvyWQfCXkUi2+uQOAB+8PQel5h0wJF+jP4krYjQWw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=HvZysagfHA7sgcXd41nR5hvCN81dWokfJKKCFbJtvglsoLqWaq2lZGu5f3RFq4D7t
-         o7AYGZMLDm9SQl2CGVu/m9wsInTf/BJLgdhBpHEcY363w04IQyKnYZ8pPx0IH0Phes
-         8wWjJwem+NbJKsHwtCEvC74MwcJSDb4sIiLqiw8RomJwBxlesYeUWf5B5p/SOk7mOx
-         T3UegBFLjm/T+nxR0YwWPIm6L3hnHVeo0HH8vN5gBaqe/LezzPk8nPfNsSID0Y4yGD
-         aOk2Qw6jGwdOBzaVnTmOY1Kco+Cl4o0cL9DUoOKOOdbwkUwWfvI8YY1PdOR1Mz3hAR
-         C4ULRLv+08kmA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 23 May 2023 12:17:00 +0300 (MSK)
-Message-ID: <9013b0e2-c923-43f8-0bd6-979bf0c23ebc@sberdevices.ru>
-Date:   Tue, 23 May 2023 12:12:39 +0300
+        Tue, 23 May 2023 05:13:05 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D13894;
+        Tue, 23 May 2023 02:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=D9zz2EfQHvFlqqWXnKU+7M4y1ladVpq1HHbcIMCV3vs=; b=EzCfXQQYj+5+gv8aimO33Wlymt
+        0omXim2MltSjSqNf9ewvxI6uVWrvwlLoKZyUWYzxIvK0a0K3Cn1p5QghNKzEhiaVTJPz8wwhaYXyO
+        nXPusPy+4LgGTq2TQGOXMp4VW3/juA/sIpZTy5Nbk4/qxGhHrZKCM4Me2h/ONd0sd/Cv59YNUR9yT
+        6Bhc61FAfT6rkX2NsQSOR86LgPImxxQvqon8qzkDm0RXtaZI3T4fbcHGLCnnoV14nNhZE5bKjk0rn
+        p2p31FXJr5v5aN/ybzrMNkpP0cMsz+TqgyBbZ71dpZx4UuXy2ANNg3/nhNxNbmD8v1FRmHYFN6Qa1
+        DPznK8eA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46606)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q1O4b-0008R2-HD; Tue, 23 May 2023 10:12:53 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q1O4Z-0000Ro-90; Tue, 23 May 2023 10:12:51 +0100
+Date:   Tue, 23 May 2023 10:12:51 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net v2 0/3] net: phy: mscc: support VSC8501
+Message-ID: <ZGyDk0Om9Sr3hgLV@shell.armlinux.org.uk>
+References: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/5] mtd: rawnand: meson: fix command sequence for
- read/write
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Liang Yang <liang.yang@amlogic.com>
-CC:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
- <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
- <20230522170526.6486755a@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230522170526.6486755a@xps-13>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/23 05:11:00 #21371280
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,162 +63,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Miquel, Liang
+On Tue, May 23, 2023 at 11:04:02AM +0200, David Epping wrote:
+> Hello,
+> 
+> this updated series of patches adds support for the VSC8501 Ethernet
+> PHY and fixes support for the VSC8502 PHY in cases where no other
+> software (like U-Boot) has initialized the PHY after power up.
+> 
+> The first patch simply adds the VSC8502 to the MODULE_DEVICE_TABLE,
+> where I guess it was unintentionally missing. I have no hardware to
+> test my change.
+> 
+> The second patch adds the VSC8501 PHY with exactly the same driver
+> implementation as the existing VSC8502.
+> 
+> The third patch fixes the initialization for VSC8501 and VSC8502.
+> I have tested this patch with VSC8501 on hardware in RGMII mode only.
+> https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/VSC8501-03_Datasheet_60001741A.PDF
+> https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocuments/DataSheets/VSC8502-03_Datasheet_60001742B.pdf
+> Table 4-42 "RGMII CONTROL, ADDRESS 20E2 (0X14)" Bit 11 for each of
+> them.
+> By default the RX_CLK is disabled for these PHYs. In cases where no
+> other software, like U-Boot, enabled the clock, this results in no
+> received packets being handed to the MAC.
+> The patch enables this clock output.
+> According to Microchip support (case number 01268776) this applies
+> to all modes (RGMII, GMII, and MII).
+> 
+> Other PHYs sharing the same register map and code, like
+> VSC8530/31/40/41 have the clock enabled and the relevant bit 11 is
+> reserved and read-only for them. As per previous discussion the
+> patch still clears the bit on these PHYs, too, possibly more easily
+> supporting other future PHYs implementing this functionality.
+> 
+> For the VSC8572 family of PHYs, having a different register map,
+> no such changes are applied.
+> 
+> Thanks for your feedback,
+> David
+> 
+> --
+> 
+> Changes in v2:
+> - adjust cover letter (U-Boot, PHY families)
+> - add reviewed-by tags to patch 1/3 and 2/3
+> - patch 3/3: combine vsc85xx_rgmii_set_skews() and
+>   vsc85xx_rgmii_enable_rx_clk() into vsc85xx_update_rgmii_cntl()
+>   for fewer MDIO accesses
+> - patch 3/3: treat all VSC8502 family PHYs the same (regardless of
+>   bit 11 reserved status)
+> 
+> Additional notes for review:
+> - If you want to, feel free to add something like
+>   Co developed by Vladimir Oltean <olteanv@gmail.com>.
+>   I did not do that, because the Kernel documentation requires a
+>   signed off by to go with it.
+>   Significant parts of the new patch are from your emails.
+> - I left the mutex_lock(&phydev->lock) in the
+>   vsc85xx_update_rgmii_cntl() function, as I'm not sure whether it
+>   is required to repeatedly access phydev->interface and
+>   phy_interface_is_rgmii(phydev) in a consistent way.
 
-On 22.05.2023 18:05, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> AVKrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:44:35 +0300:
-> 
->> This fixes read/write functionality by:
->> 1) Changing NFC_CMD_RB_INT bit value.
-> 
-> I guess this is a separate fix
-> 
+Nothing should change phydev->interface except:
+1. the PHY driver in its ->read_status method when phylib has been
+   started (via phy_start()).
+2. phylib when the PHY is initially being attached.
 
-Ok, I'll move it to separate patch
+The config_init methods are called during initial attachment and also
+when the phy is being resumed, for neither of which phylib will be in
+the "started" mode so (1) doesn't apply, and (2) doesn't apply because
+phy_attach_direct() will have set ->interface prior to calling the
+config_init method.
 
->> 2) Adding extra NAND_CMD_STATUS command on each r/w request.
-> 
-> Is this really needed? Looks like you're delaying the next op only. Is
-> using a delay enough? If yes, then it's probably the wrong approach.
-> 
->> 3) Adding extra idle commands during r/w request.
-> 
-> Question about this below, might also be a patch on its own?
-> 
->> 4) Adding extra NAND_CMD_READ0 on each read request.
->>
->> Without this patch driver works unstable, for example there are a lot
->> of ECC errors.
-> 
-> I believe all the fixes should be Cc'ed to stable, please add in your
-> commits:
-> 
-> Cc: stable@...
-> 
+As far as a phy driver should be concerned, phydev->interface is
+stable while it's being called.
 
-Ack, after everything will be clear with this patch :)
-
->>
->> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
->> Suggested-by: Liang Yang <liang.yang@amlogic.com>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->>  drivers/mtd/nand/raw/meson_nand.c | 30 +++++++++++++++++++++---------
->>  1 file changed, 21 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->> index 074e14225c06..2f4d8c84186b 100644
->> --- a/drivers/mtd/nand/raw/meson_nand.c
->> +++ b/drivers/mtd/nand/raw/meson_nand.c
->> @@ -37,7 +37,7 @@
->>  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
->>  #define NFC_CMD_SCRAMBLER_DISABLE	0
->>  #define NFC_CMD_SHORTMODE_DISABLE	0
->> -#define NFC_CMD_RB_INT		BIT(14)
->> +#define NFC_CMD_RB_INT ((0xb << 10) | BIT(18) | BIT(16))
->>  
->>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
->>  
->> @@ -392,7 +392,7 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
->>  	}
->>  }
->>  
->> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
->> +static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms, int cmd_read0)
->>  {
->>  	u32 cmd, cfg;
->>  	int ret = 0;
->> @@ -407,17 +407,29 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
->>  
->>  	reinit_completion(&nfc->completion);
->>  
->> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
->> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->> +	meson_nfc_cmd_idle(nfc, 5);
-> 
-> Why 5 and 2 below? They look like magic values. Is this totally
-> experimental?
-
-@Liang, may be change it to defines ?
-
-> 
->> +
->>  	/* use the max erase time as the maximum clock for waiting R/B */
->> -	cmd = NFC_CMD_RB | NFC_CMD_RB_INT
->> -		| nfc->param.chip_select | nfc->timing.tbers_max;
-> 
-> This is not documented in the commit log, is it?
-> 
->> +	cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
->>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->> +	meson_nfc_cmd_idle(nfc, 2);
->>  
->>  	ret = wait_for_completion_timeout(&nfc->completion,
->>  					  msecs_to_jiffies(timeout_ms));
->>  	if (ret == 0)
->> -		ret = -1;
->> +		return -1;
-> 
-> Please use real error codes, such as ETIMEDOUT.
-
-Ack
-
-> 
->>  
->> -	return ret;
->> +	if (!cmd_read0)
->> +		return 0;
->> +
->> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
-> 
-> This looks really wrong, I don't get why you would need to send an
-> expensive READ0 command.
-
-This logic was suggested by @Liang Yang here to fix this driver (suggested as patch):
-https://lore.kernel.org/linux-mtd/8537e736-44a8-d17b-7923-25d5bd406dcc@sberdevices.ru/T/#m0df09d2ab2cac98431fb268a4ce3c00dc5c7a69e
-@Liang, could You please give us more details?
-
-Thanks, Arseniy
-
-> 
->> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->> +	meson_nfc_drain_cmd(nfc);
->> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
->> +
->> +	return 0;
->>  }
->>  
->>  static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
->> @@ -623,7 +635,7 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
->>  	if (in) {
->>  		nfc->cmdfifo.rw.cmd1 = cs | NFC_CMD_CLE | NAND_CMD_READSTART;
->>  		writel(nfc->cmdfifo.rw.cmd1, nfc->reg_base + NFC_REG_CMD);
->> -		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max));
->> +		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max), 1);
->>  	} else {
->>  		meson_nfc_cmd_idle(nfc, nfc->timing.tadl);
->>  	}
->> @@ -669,7 +681,7 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>  
->>  	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
->>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->> -	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
->> +	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max), 0);
->>  
->>  	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
->>  
->> @@ -952,7 +964,7 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
->>  			break;
->>  
->>  		case NAND_OP_WAITRDY_INSTR:
->> -			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms);
->> +			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms, 1);
->>  			if (instr->delay_ns)
->>  				meson_nfc_cmd_idle(nfc, delay_idle);
->>  			break;
-> 
-> 
-> Thanks,
-> Miquèl
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
