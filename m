@@ -2,143 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896D770DE61
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989F070DE6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbjEWOCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S236923AbjEWOEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjEWOCb (ORCPT
+        with ESMTP id S236786AbjEWOEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:02:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DB0CA;
-        Tue, 23 May 2023 07:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684850550; x=1716386550;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=WLNhzR90A7tJzYCLLb9hmz+gz4puSaamVCLyH9bdbTM=;
-  b=Uu7fRLqmMZBvL15fS3vtBFpDqNr7alS16ooWPOLg8JtiMEsbIX88Wzl4
-   fJeDoCO7ARbXGEqYzLSsKoXDgTg1yZJYMKLF4Dg2syHDRXTutYZMT0yeq
-   G7WhBP4osC+rVCn+0fNXhjhuMdS+XF1H/ltbmcPWhx4bqPmzqJC1sg7lt
-   +HjRS4P1LBBX3aEZWrkjiSBPg6yaLyCbZO+0hjPAlpmIDr5bj5KWGjK3C
-   YNwjhGPAtfNBSjGyzRpCj7PJzLyhG92niRHH7ed9iTD1jTF0xcFBxLBP+
-   399t1qTL7q0P3lnAd7ZWQANWZoXRZVC9kvXLAuSPaJuwJAjM0Wz4EwDF5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="332856169"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="332856169"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 07:02:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="878220406"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="878220406"
-Received: from pkgolcon-mobl2.amr.corp.intel.com ([10.209.168.218])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 07:02:27 -0700
-Message-ID: <96d81ba4c501134c77869a08b843b39fc1bf7526.camel@linux.intel.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Avoid initializing variables
- prematurely
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Fieah Lim <kweifat@gmail.com>, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 23 May 2023 07:02:26 -0700
-In-Reply-To: <CAJZ5v0ioQm95ZQ5LCCoDtVNX1TVQN_=sgzB_RRe5SAOOucpWJg@mail.gmail.com>
-References: <20230523085045.29391-1-kweifat@gmail.com>
-         <CAJZ5v0ifp1088wY7o=7pnBVBm=_3H0M4sfq6=gmyChZD6R9g1g@mail.gmail.com>
-         <b5e35f904174905d8f90df3f49944b22389126c7.camel@linux.intel.com>
-         <CAJZ5v0ioQm95ZQ5LCCoDtVNX1TVQN_=sgzB_RRe5SAOOucpWJg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Tue, 23 May 2023 10:04:20 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD05FA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:04:18 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30644c18072so4792438f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684850657; x=1687442657;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LrIEHOXzq9JraARObzFeh9TS5aNcXpmLe7xr6WitOpY=;
+        b=bMyGLKK/jL/EZTxM9FJ1NNAKkUBGI84Wtq5M3wed0BnmCpdyJ4hC4OA9jnxhJogCv+
+         o8HlrUsv+SY/3iT2/pU9OISiE7MZutRMxsHZKRbdn70z8+pldbyTdmZh+DdRfasKYODO
+         TWkwy+IknN6O+F38KaCpK2U5P1Jer0EIZHI1wZhNuyAojXUjDyWq41PTKNn0v/El19zV
+         5/PWnc4ruFtVtO8FLNR1ebzupY14LqU5SQVjaFfg51R5MD05Sl4m5zwk8Hc02AAbqwDu
+         6JO+7Jo71UNHYBzZtAfEzZ8xOHRr3idKPlEG8DbneTAPfF/2FqTQo7iCVxyOdGjEhMs+
+         7OEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684850657; x=1687442657;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LrIEHOXzq9JraARObzFeh9TS5aNcXpmLe7xr6WitOpY=;
+        b=LLRuJErqiPgiimeW1Od41o1ItDB0oMNrMcQxAAOKHor+ToLOpjqyiv2LlJYFx/wzsu
+         gGxhuRC+rKoeZjCHZHYvFl44cmFdzqk89RmD1rLxOH9Rh3JWUGkzJ2ceLk8Nm/qXbVPB
+         NjRv+/ztd4JhTge37NQVpOnnkHUjbjc9XXof/DDgnRA98W7DmkJeW1w0dMNoK+F2E2WH
+         MdgjVF8An+7A2AEXlXUmWPOsTgFkvY2Nu8PEtyheRNfnmb9GvOC9iRhQNwhtGXgiY5VL
+         2/2ox5dU6WMGP8cb1aVxdeQTG84JiguMFIYXsloxJEpLKdB98as+87sO+bMRtuz4zYlb
+         SRXA==
+X-Gm-Message-State: AC+VfDygok7xNbTuK83lRtynX+UEOhrfD5kDwwVHEGkGUPwu6iIpbcSU
+        m7hAKvUOl6Jo50IDskLRbnXjHg==
+X-Google-Smtp-Source: ACHHUZ5vIEd7CZAK4Rjn0VUCza9sZ5l61gd7AUDLobCg5m0u5B2K6imsda/l7ErsIku521ZdhBy99g==
+X-Received: by 2002:adf:e4c5:0:b0:305:e8db:37df with SMTP id v5-20020adfe4c5000000b00305e8db37dfmr10326259wrm.22.1684850656740;
+        Tue, 23 May 2023 07:04:16 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.206])
+        by smtp.gmail.com with ESMTPSA id 22-20020a05600c231600b003f421979398sm14907627wmo.26.2023.05.23.07.04.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 07:04:16 -0700 (PDT)
+Message-ID: <c844877e-feec-6de6-3e4d-ecb658ca7e51@linaro.org>
+Date:   Tue, 23 May 2023 15:04:14 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] dmaengine: at_hdmac: Remove unused field values that
+ do not fit
+Content-Language: en-US
+To:     Peter Rosin <peda@axentia.se>, LKML <linux-kernel@vger.kernel.org>
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org
+References: <dc4834cb-fadf-17a5-fbc7-cf500db88f20@axentia.se>
+ <5070ac45-2f91-c9d7-de7c-31d38750015e@axentia.se>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <5070ac45-2f91-c9d7-de7c-31d38750015e@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-23 at 15:37 +0200, Rafael J. Wysocki wrote:
-> On Tue, May 23, 2023 at 2:20=E2=80=AFPM srinivas pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >=20
-> > On Tue, 2023-05-23 at 13:08 +0200, Rafael J. Wysocki wrote:
-> > > On Tue, May 23, 2023 at 10:51=E2=80=AFAM Fieah Lim <kweifat@gmail.com=
->
-> > > wrote:
-> > > >=20
-> > > > We should avoid initializing some rather expensive data
-> > > > when the function has a chance to bail out earlier
-> > > > before actually using it.
-> > > > This applies to the following initializations:
-> > > >=20
-> > > > =C2=A0- cpudata *cpu =3D all_cpu_data; (in everywhere)
-> > > > =C2=A0- this_cpu =3D smp_processor_id(); (in notify_hwp_interrupt)
-> > > > =C2=A0- hwp_cap =3D READ_ONCE(cpu->hwp_cap_cached); (in
-> > > > intel_pstate_hwp_boost_up)
-> > > >=20
-> > > > These initializations are premature because there is a chance
-> > > > that the function will bail out before actually using the data.
-> > > > I think this qualifies as a micro-optimization,
-> > > > especially in such a hot path.
-> > > >=20
-> > > > While at it, tidy up how and when we initialize
-> > > > all of the cpu_data pointers, for the sake of consistency.
-> > > >=20
-> > > > A side note on the intel_pstate_cpu_online change:
-> > > > we simply don't have to initialize cpudata just
-> > > > for the pr_debug, while policy->cpu is being there.
-> > > >=20
-> > > > Signed-off-by: Fieah Lim <kweifat@gmail.com>
-> > > > ---
-> > > > V1 -> V2: Rewrite changelog for better explanation.
-> > > >=20
-> >=20
-> > [...]
-> >=20
-> > > > =C2=A0void notify_hwp_interrupt(void)
-> > > > =C2=A0{
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int this_cpu =3D smp=
-_processor_id();
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int this_cpu;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cpudata *cpudata;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long flags;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 value;
-> > > > @@ -1591,6 +1593,8 @@ void notify_hwp_interrupt(void)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!(value & 0x01))
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 return;
-> > > >=20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 this_cpu =3D smp_processor_id=
-();
-> > > > +
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_lock_irqsave(&hwp_n=
-otify_lock, flags);
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!cpumask_test_cpu(th=
-is_cpu, &hwp_intr_enable_mask))
-> > >=20
-> > > This is a place where it may really matter for performance, but
-> > > how
-> > > much?=C2=A0 Can you actually estimate this?
-> >=20
-> > If DEBUG_PREEMPT is defined
-> > ~12 instructions (most of them with latency =3D 1 in dependency
-> > chain)
->=20
-> I really meant "estimate the effect of this change on performance",
-> because I'm not sure if it is going to be visible in any test.
->=20
-> But yes, skipping it if not needed at least makes some sense.
-It will have neglible effect. I can measure it, but may be next week.
+Hi, Peter,
 
-Thanks,
-Srinivas
+On 5/23/23 13:42, Peter Rosin wrote:
+> The values are not used, and they do not fit in the intended
+> register field (ATC_FC, 2 bits wide). Kill 'em all.
+> 
+Actually ATC_FC should be set to GENMASK(23, 21) and keep the other
+definitions, see:
+http://ww1.microchip.com/downloads/en/devicedoc/Atmel-6438-32-bit-ARM926-Embedded-Microprocessor-SAM9G45_Datasheet.pdf
+
+After you update the patch you should also add:
+Fixes: d8840a7edcf0 ("dmaengine: at_hdmac: Use bitfield access macros")
+Cc: stable@vger.kernel.org
+so that it gets backported to Linux-stable.
+
+Feel free to add my R-b tag after addressing the comments:
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+
+> Signed-off-by: Peter Rosin <peda@axentia.se>
+> ---
+>  drivers/dma/at_hdmac.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
+> index 6f352160bc3b..51d0a0c7aaf7 100644
+> --- a/drivers/dma/at_hdmac.c
+> +++ b/drivers/dma/at_hdmac.c
+> @@ -137,10 +137,6 @@
+>  #define ATC_FC_MEM2PER		0x1		/* Mem-to-Periph (DMA) */
+>  #define ATC_FC_PER2MEM		0x2		/* Periph-to-Mem (DMA) */
+>  #define ATC_FC_PER2PER		0x3		/* Periph-to-Periph (DMA) */
+> -#define ATC_FC_PER2MEM_PER	0x4		/* Periph-to-Mem (Peripheral) */
+> -#define ATC_FC_MEM2PER_PER	0x5		/* Mem-to-Periph (Peripheral) */
+> -#define ATC_FC_PER2PER_SRCPER	0x6		/* Periph-to-Periph (Src Peripheral) */
+> -#define ATC_FC_PER2PER_DSTPER	0x7		/* Periph-to-Periph (Dst Peripheral) */
+>  #define ATC_SRC_ADDR_MODE	GENMASK(25, 24)
+>  #define ATC_SRC_ADDR_MODE_INCR	0x0		/* Incrementing Mode */
+>  #define ATC_SRC_ADDR_MODE_DECR	0x1		/* Decrementing Mode */
+
