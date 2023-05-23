@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A71A70E103
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7808070E106
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbjEWPwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S237644AbjEWPwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235682AbjEWPwC (ORCPT
+        with ESMTP id S235682AbjEWPwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:52:02 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65AC2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:52:00 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id A024A5C025F;
-        Tue, 23 May 2023 11:51:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 23 May 2023 11:51:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1684857117; x=1684943517; bh=IZt8D0cKx8Wt+SUWyeaYqCgFBquCK/LV/4e
-        dJ17+9iI=; b=fBwNBOmYGjtTwgq9Q1VX6jfJoEWy8CBnDuwNEHAp9jhqr9qMQHz
-        A3b3WFaENpUVbrJdvCTk7fbjydtSajuA/MvSBMasiFnCz7zyZMbyVecqgPrEmzEb
-        YSsjnErn1jguxiuM0DEB4pW+SEsWTbMc2K4bmuNd0CXH9IoB2Mi6XRvh6R8ZNzZ4
-        8z8pr6l2KrhQ08gdCbQSvFCXq71r8OsV3Jb2p7ggRXc3l92WMRq63el6ykmcgUvz
-        0uIhLdH4rdxuRfUWO4kMi7oOiLT8QNhFTu4su+8BvqQ4O9aqG59K41fRRSb54NdO
-        8VACcrDmIRjbDNfieYugnc12cD6JxmKCBxA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684857117; x=1684943517; bh=IZt8D0cKx8Wt+SUWyeaYqCgFBquCK/LV/4e
-        dJ17+9iI=; b=e7qH1cSPxB6LQ4xbfbg5oUULYFO2tJ/actUwD7T9p/st3/i3/jv
-        CyS+s9gmVlyeEk9EUKRjurC/pWzhlaQ2iCPzDh49shKVr2OmUnZz6zfv4TDmu4hJ
-        z6cbkiLvckybwMdYOyWRa+XroN2cBn7UbCFBpo9dvROrSYGZrRg1IZnvhOxFkxOS
-        ONK8TIRyPaWn6u3JRFohV97jJMV+lhfeMn4lKnsleovRArcSUNeTulpmIVAMhZUo
-        CkM43/+Gzq0XGuiMVljkWicf7AmGmJg9BjvgitIOzNGUhWZtb/uOhgIKHW6Hkaac
-        qDDRnsGZquEw1MVTUqiAzx6M/Nh5QcAb4tw==
-X-ME-Sender: <xms:HOFsZLiqoaHbWx0hWl_Caz3mfCEahsOsp0p00-bpmMHcFSUNS19RqQ>
-    <xme:HOFsZIAczUqhYgKNuwaNQDrQU0ReN-cy7G6x6Em0rSsCLarS3weo2fL4LYgVYuoSh
-    jIpHMO3xRKwuctxTAo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:HOFsZLF6UF4MEbmyIKBk5hx_nolOJd6UfHBiMiFzgru51HPhMRVKNw>
-    <xmx:HOFsZISvjlTRxR15pnLf516fmYgJ24tu-D-0rQWh7tVHcedKRBDY6g>
-    <xmx:HOFsZIwXZbQeTJBtkjIl23M4Y34jDmvcpNNEBG2RQPsCKqCJRqiFFQ>
-    <xmx:HeFsZNqksFM2iWY602fjv0NwnUyntLamKo1T4QOfdW15O8ZGRg_kqA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9D697B60086; Tue, 23 May 2023 11:51:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <559288c4-ed44-4d13-80af-6c73ffb6bb47@app.fastmail.com>
-In-Reply-To: <CAD=FV=XS6ZXbZvMVYTm8p46SauE6t_qsE7o2AUOJLbsTzK3Jpw@mail.gmail.com>
-References: <20230522114922.1052421-1-arnd@kernel.org>
- <CAD=FV=XrTVVEP8gLx3e7Sqa_3fod3Ox79Ao5fk3S_ORH7jHS9Q@mail.gmail.com>
- <CAD=FV=XS6ZXbZvMVYTm8p46SauE6t_qsE7o2AUOJLbsTzK3Jpw@mail.gmail.com>
-Date:   Tue, 23 May 2023 17:51:36 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Doug Anderson" <dianders@chromium.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Pingfan Liu" <kernelfans@gmail.com>,
-        "Sumit Garg" <sumit.garg@linaro.org>,
-        "Lecopzer Chen" <lecopzer.chen@mediatek.com>,
-        "Petr Mladek" <pmladek@suse.com>,
-        "Anshuman Khandual" <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: watchdog_hld: provide arm_pmu_irq_is_nmi stub
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 11:52:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3412A91;
+        Tue, 23 May 2023 08:52:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BE94139F;
+        Tue, 23 May 2023 08:52:49 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4AC13F840;
+        Tue, 23 May 2023 08:52:01 -0700 (PDT)
+Date:   Tue, 23 May 2023 16:51:59 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        Steve Clevenger <scclevenger@os.amperecomputing.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH V4 0/6] coresight: etm4x: Migrate ACPI AMBA devices to
+ platform driver
+Message-ID: <20230523155159.na2wfhuhb7fqr3cy@bogus>
+References: <20230523044553.1525048-1-anshuman.khandual@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523044553.1525048-1-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023, at 17:47, Doug Anderson wrote:
-> On Mon, May 22, 2023 at 7:31=E2=80=AFAM Doug Anderson <dianders@chromi=
-um.org> wrote:
->> On Mon, May 22, 2023 at 4:49=E2=80=AFAM Arnd Bergmann <arnd@kernel.or=
-g> wrote:
->
-> Breadcrumbs: since I didn't see a patch this morning and I'd love to
-> get this resolved, I've posted the Kconfig fix:
->
-> https://lore.kernel.org/r/20230523073952.1.I60217a63acc35621e13f10be16=
-c0cd7c363caf8c@changeid
->
-> Assuming people think that's OK, it should land instead of ${SUBJECT} =
-patch.
+On Tue, May 23, 2023 at 10:15:47AM +0530, Anshuman Khandual wrote:
+> CoreSight ETM4x devices could be accessed either via MMIO (handled via
+> amba_driver) or CPU system instructions (handled via platform driver). But
+> this has the following issues :
+> 
+>   - Each new CPU comes up with its own PID and thus we need to keep on
+>     adding the "known" PIDs to get it working with AMBA driver. While
+>     the ETM4 architecture (and CoreSight architecture) defines way to
+>     identify a device as ETM4. Thus older kernels  won't be able to
+>     "discover" a newer CPU, unless we add the PIDs.
+> 
+>   - With ACPI, the ETM4x devices have the same HID to identify the device
+>     irrespective of the mode of access. This creates a problem where two
+>     different drivers (both AMBA based driver and platform driver) would
+>     hook into the "HID" and could conflict. e.g., if AMBA driver gets
+>     hold of a non-MMIO device, the probe fails. If we have single driver
+>     hooked into the given "HID", we could handle them seamlessly,
+>     irrespective of the mode of access.
+> 
+>   - CoreSight is heavily dependent on the runtime power management. With
+>     ACPI, amba_driver doesn't get us anywhere with handling the power
+>     and thus one need to always turn the power ON to use them. Moving to
+>     platform driver gives us the power management for free.
+> 
+> Due to all of the above, we are moving ACPI MMIO based etm4x devices to be
+> supported via tha platform driver. The series makes the existing platform
+> driver generic to handle both type of the access modes. Although existing
+> AMBA driver would still continue to support DT based etm4x MMIO devices.
+> Although some problems still remain, such as manually adding PIDs for all
+> new AMBA DT based devices.
+> 
+> The series applies on 6.4-rc3.
+> 
 
-Looks good to me, I've replaced my patch with yours now in my randconfig
-build setup, I assume it's fine but I'll let you know if another regress=
-ion
-comes up.
+Tested on Juno with some hacked up UEFI f/w.
 
-Thanks for addressing it,
+Tested-by: Sudeep Holla <sudeep.holla@arm.com>
 
-   Arnd
+-- 
+Regards,
+Sudeep
