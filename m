@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CB670DADF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022CC70DAE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236129AbjEWKvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S236655AbjEWKwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjEWKvk (ORCPT
+        with ESMTP id S236637AbjEWKvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:51:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09C6E43;
-        Tue, 23 May 2023 03:49:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 744ED61C63;
-        Tue, 23 May 2023 10:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD2DC433D2;
-        Tue, 23 May 2023 10:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684838984;
-        bh=ZG2CLRp9/Vm9JkeKzPKfnQCU9uZlSunAzgrrZSzYQxs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qr9Jhlurzn9rvXMfUKy34vC9G4ad4qTbUmMQwI4yZaY7jsMPcUbKlPUcZHyMYZD0x
-         //dy1d+B21cIr6UHeE/cIt+9Ucqi+ucJHzQ/j20Ehmv7gewdb/ET1W0WqGMrCAmpEq
-         hWvVVuej26j+f1ttpngy8lycVOcpxlf468YZx46cXYwOWNQZxCwH+b8rP5VOQbNODl
-         seyCYRaoBR1nZQE3cu+kIbAyqlrVWEnp5jTZutEHdyhmQSe7cJtm2g044eed8uP6Ez
-         VmHROZYQl6SB+lCvsqHMSyeljVTToORrPrZ7fGcFYJD/IsCD5qNMXLbThNgXs5ObyL
-         rFrJ8Zp3bdgfg==
-Date:   Tue, 23 May 2023 11:49:38 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
- fpsimd_release_task
-Message-ID: <a174b99c-3b60-410d-b6b3-67e8e792354c@sirena.org.uk>
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <20230516134447.GB30894@willie-the-truck>
- <20230522164117.GA6342@willie-the-truck>
+        Tue, 23 May 2023 06:51:44 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0342E121;
+        Tue, 23 May 2023 03:50:48 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q1PbI-0006Kn-VK; Tue, 23 May 2023 12:50:45 +0200
+Message-ID: <5d871928-dcd5-3f27-e975-d1639525dad0@leemhuis.info>
+Date:   Tue, 23 May 2023 12:50:42 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0WyD5qb6h9pTGLPu"
-Content-Disposition: inline
-In-Reply-To: <20230522164117.GA6342@willie-the-truck>
-X-Cookie: Beware of low-flying butterflies.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH v2] media: verisilicon: Fix crash when probing encoder
+Content-Language: en-US, de-DE
+To:     Diederik de Haas <didi.debian@cknow.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Michael Tretter <m.tretter@pengutronix.de>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
+        m.szyprowski@samsung.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        hverkuil-cisco@xs4all.nl,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
+ <4995215.LvFx2qVVIh@bagend>
+ <7c1bf9c4-f14b-30cd-2610-871f5f512d06@collabora.com>
+ <12724349.O9o76ZdvQC@bagend>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <12724349.O9o76ZdvQC@bagend>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684839048;0acb48cb;
+X-HE-SMSGID: 1q1PbI-0006Kn-VK
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+CCing the Regression list and a bunch of other people that were CCed in
+threads that look related:
 
---0WyD5qb6h9pTGLPu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 23.05.23 00:38, Diederik de Haas wrote:
+> On Monday, 22 May 2023 18:17:39 CEST Benjamin Gaignard wrote:
+>> Le 20/05/2023 à 00:34, Diederik de Haas a écrit :
+>>> On Thursday, 13 April 2023 21:52:50 CEST Nicolas Dufresne wrote:
+> [...]
+>>> When I booted into my 6.4-rc1 (but also rc2) kernel on my
+>>> Pine64 Quartz64 Model A, I noticed a crash which seems the same as
+>>> above, but I didn't have such a crash with my 6.3 kernel.
+>>> Searching for 'hantro' led me to this commit as the most likely culprit
+>>> but when I build a new 6.4-rcX kernel with this commit reverted,
+>>> I still had this crash.
+>>> Do you have suggestions which commit would then be the likely culprit?
+>>
+>> This patch fix the crash at boot time, revert it doesn't seem to be the
+>> solution. Maybe this proposal from Marek can help you ?
+>>
+>> https://patchwork.kernel.org/project/linux-media/patch/20230421104759.2236463-1-m.szyprowski@samsung.com/
+> 
+> That helped :) After applying that patch I no longer have the crash.
+> Thanks!
 
-On Mon, May 22, 2023 at 05:41:17PM +0100, Will Deacon wrote:
-> On Tue, May 16, 2023 at 02:44:49PM +0100, Will Deacon wrote:
-> > On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+That regression fix is now a month old, but not yet merged afaics --
+guess due to Nicolas comment that wasn't addressed yet and likely
+requires a updated patch.
 
-> > > Following kernel BUG noticed while running selftests arm64 fp-stress
-> > > running stable rc kernel versions 6.1.29-rc1 and 6.3.3-rc1.
+Michael afaics a week ago posted a patch that to my *very limited
+understanding of things* (I hope I don't confuse matters here!) seems to
+address the same problem, but slightly differently:
+https://lore.kernel.org/all/20230516091209.3098262-1-m.tretter@pengutronix.de/
 
-> > Is there a known-good build so that we could attempt a bisection?
+No reply yet.
 
-> FWIW, I've been trying (and failing) all day to reproduce this in QEMU.
-> I matched the same VL configuration as you have in the fastmodel and
-> tried enabling additional memory debugging options too, but I'm yet to
-> see a kfence splat (or any other splat fwiw).
+That's all a bit unfortunate, as it's not how regression fixes should be
+dealt with -- and caused multiple people headaches that could have been
+avoided. :-/
 
-> How often do you see this?
+But well, things happen. But it leads to the question:
 
-As I said in another mail I've also been unable to reproduce this.  FWIW
-I *suspect* that it might need to be run in the context of a full
-kselftest run to manifest rather than just running fp-stress in
-isolation, that's mostly a guess but given that the kfence trap appeared
-to be happening on free at a point where the test program shouldn't be
-exiting any tasks and should not be changing vector lengths on tasks
-that have used either of the vector extensions.
+How can we finally address the issue quickly now to ensure is doesn't
+cause headaches for even more people?
 
---0WyD5qb6h9pTGLPu
-Content-Type: application/pgp-signature; name="signature.asc"
+Marek, Michael, could you work on a patch together that we then get
+somewhat fast-tracked to Linus to avoid him getting even more unhappy
+about the state of things[1]?
 
------BEGIN PGP SIGNATURE-----
+Ciao, Thorsten
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRsmkIACgkQJNaLcl1U
-h9BhWAgAgmrfoTxlzsDDX+RDl6E01tBdBvmcEH5N6AgAWSJaMNjla/SYW31Pgos0
-ArDjoqjfyIskP+UZ6T5UXrKxOe1rSaN6fwOovNCiyE+FIZ28Ml6cfp96YM/ElXGH
-DrjHKAelYRTaZndLBq5aNmDGO1A6Fz2w4t0Y/5vUnF6X4dWKo/8udixbbMNPe551
-NWehZoHz9eFNFPop3UDJKQPjZDDA0/LP6yBoAhsSN2ySzt1SuQBrO+NxpHqOA3ZD
-KM5BVVJq51ZQ9FNR8TbylrB7lWkHoR9fDXnM6ukbCNy+giOa1lvDJyDHxMiKxQ6b
-hBi7UdqunNL69HmnoS8jKoS0r0CBEQ==
-=RfVs
------END PGP SIGNATURE-----
-
---0WyD5qb6h9pTGLPu--
+[1] see
+https://lore.kernel.org/all/CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com/
