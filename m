@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C18570DFA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4439370DFA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237328AbjEWOs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
+        id S237373AbjEWOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjEWOs5 (ORCPT
+        with ESMTP id S236810AbjEWOt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:48:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CA7ACD;
-        Tue, 23 May 2023 07:48:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE5CF139F;
-        Tue, 23 May 2023 07:49:39 -0700 (PDT)
-Received: from [10.57.73.71] (unknown [10.57.73.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CB453F840;
-        Tue, 23 May 2023 07:48:52 -0700 (PDT)
-Message-ID: <e2e4b998-e6d8-59e9-fce7-0072954001dd@arm.com>
-Date:   Tue, 23 May 2023 15:48:50 +0100
+        Tue, 23 May 2023 10:49:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FFA18B;
+        Tue, 23 May 2023 07:49:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52B8B63356;
+        Tue, 23 May 2023 14:49:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8529C433EF;
+        Tue, 23 May 2023 14:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684853358;
+        bh=oXOmFChpbfSn0ji1bqaSPr69srXCRms6pIPi5d3extM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RnJ/biP0CNt2CzSCbIf5AInpWLS2/o3mAdml1gU6P8dZI5Svc0H4Kg/0k6HUOTDPR
+         eXUZo/gzxSjSCTyKGI7PT57SRJhvzT+4BdLb+ac5go6P2zZqw6FyoZcLzcV26wzAXr
+         TraGlq925UBUqOYgnfGNx7VPx6BnP8mH6zk+aD0v5THCuz8GjPZh1ALYKHfSQ5MDu7
+         W4xUR2+LIHBNTyaZSOTGH2VQEqWDITM1iHTMysKmRtyak4QwCnGE8EuynGMy3DZXmC
+         hHvQ64sPkPACq17iIp/8wp82Oi9NPWG5kGwN//D8qEld7TVXT7H59Q7AEsE41qeXmV
+         hcUwObqj4XWWA==
+Message-ID: <2f02c9b6-1115-791d-cdaf-049c9eeaee0c@kernel.org>
+Date:   Tue, 23 May 2023 08:49:14 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v4 02/11] coresight-tpda: Add DSB dataset support
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-3-git-send-email-quic_taozha@quicinc.com>
- <444bc278-a3e3-7d99-6020-7c3337371f66@arm.com>
-In-Reply-To: <444bc278-a3e3-7d99-6020-7c3337371f66@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v2] net: ioctl: Use kernel memory on protocol ioctl
+ callbacks
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     leit@fb.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
+References: <20230522134735.2810070-1-leitao@debian.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20230522134735.2810070-1-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,90 +72,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 11:07, Suzuki K Poulose wrote:
-> On 27/04/2023 10:00, Tao Zhang wrote:
->> Read the DSB element size from the device tree. Set the register
->> bit that controls the DSB element size of the corresponding port.
->>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> ---
->>   drivers/hwtracing/coresight/coresight-core.c |  1 +
->>   drivers/hwtracing/coresight/coresight-tpda.c | 92 
->> +++++++++++++++++++++++++---
->>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
->>   drivers/hwtracing/coresight/coresight-tpdm.c |  2 +-
->>   include/linux/coresight.h                    |  1 +
->>   5 files changed, 90 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
->> b/drivers/hwtracing/coresight/coresight-core.c
->> index 2af416b..f1eacbb 100644
->> --- a/drivers/hwtracing/coresight/coresight-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-core.c
->> @@ -1092,6 +1092,7 @@ static int coresight_validate_source(struct 
->> coresight_device *csdev,
->>       if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
->>           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
->> +        subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_TPDM &&
->>           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS) {
->>           dev_err(&csdev->dev, "wrong device subtype in %s\n", function);
->>           return -EINVAL;
-> 
-> Please see the comment at the bottom.
-> 
->> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
->> b/drivers/hwtracing/coresight/coresight-tpda.c
->> index 8d2b9d2..af9c72f 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpda.c
->> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
->> @@ -21,6 +21,56 @@
->>   DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
->> +/* Search and read element data size from the TPDM node in
->> + * the devicetree. Each input port of TPDA is connected to
->> + * a TPDM. Different TPDM supports different types of dataset,
->> + * and some may support more than one type of dataset.
->> + * Parameter "inport" is used to pass in the input port number
->> + * of TPDA, and it is set to 0 in the recursize call.
->> + * Parameter "parent" is used to pass in the original call.
->> + */
->> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
->> +               struct coresight_device *csdev, int inport, bool parent)
+On 5/22/23 7:47 AM, Breno Leitao wrote:
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 5440e67bcfe3..a2cea95aec99 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -114,6 +114,8 @@
+>  #include <linux/memcontrol.h>
+>  #include <linux/prefetch.h>
+>  #include <linux/compat.h>
+> +#include <linux/mroute.h>
+> +#include <linux/mroute6.h>
+>  
+>  #include <linux/uaccess.h>
+>  
+> @@ -138,6 +140,7 @@
+>  
+>  #include <net/tcp.h>
+>  #include <net/busy_poll.h>
+> +#include <net/phonet/phonet.h>
+>  
+>  #include <linux/ethtool.h>
+>  
+> @@ -4106,3 +4109,112 @@ int sock_bind_add(struct sock *sk, struct sockaddr *addr, int addr_len)
+>  	return sk->sk_prot->bind_add(sk, addr, addr_len);
+>  }
+>  EXPORT_SYMBOL(sock_bind_add);
+> +
+> +#ifdef CONFIG_PHONET
+> +/* Copy u32 value from userspace and do not return anything back */
+> +static int sk_ioctl_in(struct sock *sk, unsigned int cmd, void __user *arg)
+> +{
+> +	int karg;
+> +
+> +	if (get_user(karg, (u32 __user *)arg))
+> +		return -EFAULT;
+> +
+> +	return sk->sk_prot->ioctl(sk, cmd, &karg);
+> +}
+> +#endif
+> +
+> +#if defined(CONFIG_IP_MROUTE) || defined(CONFIG_IPV6_MROUTE)
+> +/* Copy 'size' bytes from userspace and return `size` back to userspace */
+> +static int sk_ioctl_inout(struct sock *sk, unsigned int cmd,
+> +			  void __user *arg, void *karg, size_t size)
+> +{
+> +	int ret;
+> +
+> +	if (copy_from_user(karg, arg, size))
+> +		return -EFAULT;
+> +
+> +	ret = sk->sk_prot->ioctl(sk, cmd, karg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (copy_to_user(arg, karg, size))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+> +/* This is the most common ioctl prep function, where the result (4 bytes) is
+> + * copied back to userspace if the ioctl() returns successfully. No input is
+> + * copied from userspace as input argument.
+> + */
+> +static int sk_ioctl_out(struct sock *sk, unsigned int cmd, void __user *arg)
+> +{
+> +	int ret, karg = 0;
+> +
+> +	ret = sk->sk_prot->ioctl(sk, cmd, &karg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return put_user(karg, (int __user *)arg);
+> +}
+> +
+> +/* A wrapper around sock ioctls, which copies the data from userspace
+> + * (depending on the protocol/ioctl), and copies back the result to userspace.
+> + * The main motivation for this function is to pass kernel memory to the
+> + * protocol ioctl callbacks, instead of userspace memory.
+> + */
+> +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+> +{
+> +#ifdef CONFIG_IP_MROUTE
+> +	if (sk->sk_family == PF_INET && sk->sk_protocol == IPPROTO_RAW) {
+> +		switch (cmd) {
+> +		/* These userspace buffers will be consumed by ipmr_ioctl() */
+> +		case SIOCGETVIFCNT: {
+> +			struct sioc_vif_req buffer;
+> +
+> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
+> +					      sizeof(buffer));
+> +			}
+> +		case SIOCGETSGCNT: {
+> +			struct sioc_sg_req buffer;
+> +
+> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
+> +					      sizeof(buffer));
+> +			}
+> +		}
+> +	}
+> +#endif
+> +#ifdef CONFIG_IPV6_MROUTE
+> +	if (sk->sk_family == PF_INET6 && sk->sk_protocol == IPPROTO_RAW) {
+> +		switch (cmd) {
+> +		/* These userspace buffers will be consumed by ip6mr_ioctl() */
+> +		case SIOCGETMIFCNT_IN6: {
+> +			struct sioc_mif_req6 buffer;
+> +
+> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
+> +					      sizeof(buffer));
+> +			}
+> +		case SIOCGETSGCNT_IN6: {
+> +			struct sioc_mif_req6 buffer;
+> +
+> +			return sk_ioctl_inout(sk, cmd, arg, &buffer,
+> +					      sizeof(buffer));
+> +			}
+> +		}
+> +	}
+> +#endif
+> +#ifdef CONFIG_PHONET
+> +	if (sk->sk_family == PF_PHONET && sk->sk_protocol == PN_PROTO_PHONET) {
+> +		/* This userspace buffers will be consumed by pn_ioctl() */
+> +		switch (cmd) {
+> +		case SIOCPNADDRESOURCE:
+> +		case SIOCPNDELRESOURCE:
+> +			return sk_ioctl_in(sk, cmd, arg);
+> +		}
+> +	}
+> +#endif
 
-The name parent is a bit confusing. It could imply parent device ? That
-is kind of inverse ? because, parent = true, indicates the parent device
-of tpda, which is not true. Could we simply say
+Rather than bleed some of these protocol specific details into core
+code, how about something like this in include net/phonet/phonet.h
 
-bool match_inport => When true, the dest_port of the connection from the
-csdev must match the inport ? And ...
+static inline bool sk_is_phonet(struct sock *sk)
+{
+	return sk->sk_family == PF_PHONET && \
+		sk->sk_protocol == PN_PROTO_PHONET;
+}
 
->> +{
->> +    static int nr_inport;
->> +    int i;
->> +    static bool tpdm_found;
->> +    struct coresight_device *in_csdev;
->> +
->> +    if (inport > (TPDA_MAX_INPORTS - 1))
->> +        return -EINVAL;
->> +
->> +    if (parent) {
->> +        nr_inport = inport;
->> +        tpdm_found = false;
->> +    }
->> +
->> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
->> +        in_csdev = csdev->pdata->in_conns[i]->src_dev;
->> +        if (!in_csdev)
->> +            break;
->> +
->> +        if (parent)
->> +            if (csdev->pdata->in_conns[i]->dest_port != inport)
->> +                continue;
+And then in net/core/sock.c:
 
-The above can become :
+	if (sk_is_phonet(sk)) {
+		rc = phonet_sk_ioctl(...);
+		if (rc <= 0)
+			return rc;
+	}
 
-	    if (match_inport &&
-		csdev->pdata->in_conns[i]->dest_port != inport)
-		continue;
-
-Suzuki
+where < 0 means error, == 0 means handled and > 0 means (keep going).
+Similarly for the other 2 above.
 
