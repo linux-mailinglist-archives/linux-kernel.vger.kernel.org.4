@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF5870E10D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4881270E11B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbjEWPw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
+        id S236407AbjEWP4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237653AbjEWPwv (ORCPT
+        with ESMTP id S235434AbjEWP4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:52:51 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0168CE0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:52:49 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:b0ac:7afd:272:4cff])
-        by laurent.telenet-ops.be with bizsmtp
-        id 0Fsn2A00N0Jkz7G01FsnZc; Tue, 23 May 2023 17:52:48 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1UJN-002t6k-At;
-        Tue, 23 May 2023 17:52:47 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1UJb-00CksO-NR;
-        Tue, 23 May 2023 17:52:47 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] PCI: rcar-host: Remove unused static pcie_base and pcie_dev
-Date:   Tue, 23 May 2023 17:52:44 +0200
-Message-Id: <f29a8c37bd906dfbe23208cc2b089da17e339a75.1684857051.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 May 2023 11:56:07 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAD38E;
+        Tue, 23 May 2023 08:56:03 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3982f09df74so478592b6e.0;
+        Tue, 23 May 2023 08:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684857362; x=1687449362;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=feR7RDbEdLIuOxFRuDJ8YtvTuElIb6gfqh0e2jlKlZ4=;
+        b=BQ/BwtssHhbZ5SXgrL5qqcG4DxAtKpPixF+jH7TZmPAC6I3vktKSEdVhZDZ+ztF5Up
+         X3wixHyR4QgoCizXCGPnprd+j9fKQZ8YfRCxcOPlVvd+/TIHG2uLsCxwd83ztdxm/2hq
+         w0SwwSU2mAxn5+9WETXaqT7JLlyeES6GGGpGJGNb7kyYSW32dRzDMH8YQNjcENmueK5H
+         CyukFJtQHtcLKhQn1KZhezhSsFaC0FzrGS6Wy24v5tKB2mfal6IUZwXkXTDl60M9X/re
+         YjrqAi5wA6nuB5HYA4yMhgYBJDsvCPiZz7Tzu9q1ibzAWEX1acOd3gdM2kJpcci6tghO
+         +VEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684857362; x=1687449362;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=feR7RDbEdLIuOxFRuDJ8YtvTuElIb6gfqh0e2jlKlZ4=;
+        b=HbkQ9tYSx905XvU8gSLjarGnK6GXHqEBqR3Y8qY4jEMDIPnxwZENArpJSQ8r16O2Vq
+         bqSobfbRlaxaMwf62lFhKGr/O9BpJMLp1s20B0Bsxcxm1jWq0ggrpIETo05oTJmhhFmK
+         7NcLXqv29PKq8M3UCSZSNaaSG5hiJujo33H29W0+Ikk+3Omu9zOcHS6mZyi5uzgsTC3C
+         xKUTRbslGdAraY7VPJp4sNn+imvPnE+kg0lENTkVUehQ295Zaek6Hq7TjHBVmO9JCDze
+         jWZ+/JT7oK4aT6TphbH1Gz0Vq0AZqkGBa41TwL4dm7nv6K0ys3In7CoGoyWx9QwDvjbQ
+         DwdQ==
+X-Gm-Message-State: AC+VfDwEL7LSz9UUZ9ED6JrRvuTqnCOQ1X4DZ9EZ8UvV3X5l/wQ688sb
+        UjhVTxUOvMdRzy3u4tRQCiNIUCBDwD+uDmLOKajNe2YP
+X-Google-Smtp-Source: ACHHUZ4ZyUpdVtXyIatHPpZHmnxoVWfMnEnl1OVupErapn37R44kVZgKLmbC5muGz5Am7Mmro0S57dh0vvs0jDarnnk=
+X-Received: by 2002:aca:1109:0:b0:383:ca99:c70e with SMTP id
+ 9-20020aca1109000000b00383ca99c70emr6905361oir.59.1684857362565; Tue, 23 May
+ 2023 08:56:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230523021811.122014-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20230523021811.122014-1-jiapeng.chong@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 23 May 2023 11:55:51 -0400
+Message-ID: <CADnq5_OxXz7TSvkarQxC8-342SxO+YE4PU_4mSADYtr0urofvg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Remove duplicate include
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        sumit.semwal@linaro.org, linaro-mm-sig@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the L1 link state transition exception handler rework, the static
-copies of the remapped PCIe controller address and the PCIe device
-pointer became unused.  Remove them.
+Applied.  Thanks!
 
-Fixes: 6e36203bc14ce147 ("PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
-Probably this was not noticed before due to two function parameters with
-the same name, thus shadowing the static globals.
-
-v2:
-  - Add Reviewed-by.
----
- drivers/pci/controller/pcie-rcar-host.c | 21 ---------------------
- 1 file changed, 21 deletions(-)
-
-diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-index e80e56b2a84243e5..7ffcd0f5aa45c989 100644
---- a/drivers/pci/controller/pcie-rcar-host.c
-+++ b/drivers/pci/controller/pcie-rcar-host.c
-@@ -41,21 +41,6 @@ struct rcar_msi {
- 	int irq2;
- };
- 
--#ifdef CONFIG_ARM
--/*
-- * Here we keep a static copy of the remapped PCIe controller address.
-- * This is only used on aarch32 systems, all of which have one single
-- * PCIe controller, to provide quick access to the PCIe controller in
-- * the L1 link state fixup function, called from the ARM fault handler.
-- */
--static void __iomem *pcie_base;
--/*
-- * Static copy of PCIe device pointer, so we can check whether the
-- * device is runtime suspended or not.
-- */
--static struct device *pcie_dev;
--#endif
--
- /* Structure representing the PCIe interface */
- struct rcar_pcie_host {
- 	struct rcar_pcie	pcie;
-@@ -879,12 +864,6 @@ static int rcar_pcie_get_resources(struct rcar_pcie_host *host)
- 	}
- 	host->msi.irq2 = i;
- 
--#ifdef CONFIG_ARM
--	/* Cache static copy for L1 link state fixup hook on aarch32 */
--	pcie_base = pcie->base;
--	pcie_dev = pcie->dev;
--#endif
--
- 	return 0;
- 
- err_irq2:
--- 
-2.34.1
-
+On Mon, May 22, 2023 at 10:18=E2=80=AFPM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> ./drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c: amdgpu_xcp.h is included more =
+than once.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D5281
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c b/drivers/gpu/drm/am=
+d/amdgpu/gfx_v9_4_3.c
+> index e5cfb3adb3b3..7fb2d38b010a 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c
+> @@ -23,7 +23,6 @@
+>  #include <linux/firmware.h>
+>
+>  #include "amdgpu.h"
+> -#include "amdgpu_xcp.h"
+>  #include "amdgpu_gfx.h"
+>  #include "soc15.h"
+>  #include "soc15d.h"
+> --
+> 2.20.1.7.g153144c
+>
