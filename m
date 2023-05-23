@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E509570D4A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A6470D4A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235377AbjEWHPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S235394AbjEWHPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235367AbjEWHPA (ORCPT
+        with ESMTP id S234429AbjEWHPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:15:00 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C8D11F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:14:58 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae3fe67980so67260535ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:14:58 -0700 (PDT)
+        Tue, 23 May 2023 03:15:35 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370EA120;
+        Tue, 23 May 2023 00:15:34 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75b08ceddd1so223432385a.1;
+        Tue, 23 May 2023 00:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684826098; x=1687418098;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSv4qK17upGZVUg1/lq65wOHu9RBsXTrYATpqU4QzkQ=;
-        b=myKSEI+jZuiqf4A2Qqpcoi6jThXBCM7zOXtvBHZm/Orph/5U5tvbkwjUjzZKMacpb0
-         zH1sUe1wjiQS7n4emYwGTo4c2FV8oYFLP4XPeBsKL/gHg99YaZZrg3flTOedeoHpglUs
-         bjIODmdn5LiCFrH/AY5ib4QeliiJIhBnQdNgM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684826098; x=1687418098;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684826133; x=1687418133;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YSv4qK17upGZVUg1/lq65wOHu9RBsXTrYATpqU4QzkQ=;
-        b=P+VVxqecNyccUoYs5Hvjh9uuD+OUBfWYzmHHeWKzSAn/WF0l23Hk5mkHppwU5h4vyG
-         74L7z5pjDv6TL6tMbpEheYJx48VpsSl+xZXqRahIOJ8z6MiTLz1AW+2cURzE8VBqjETA
-         op+qn/V/Mt1PrrzYfESt4gAnrhe9ycg+iUMI360Vo5f/xFF+mEztbHMJ4XQ5uo7+glk5
-         w/OU/PUmBJ0vk2aLPkze0ZGkcxfARgSMCxni+j7avEbh14NIwrN5Aez21rJAncO2RRMX
-         vQSXblJiwf335xewJDXsjV+UPV96t2sj/QjqbIBFDDPlsD+cMiGKdqrYTX2A/L7amU3A
-         q40A==
-X-Gm-Message-State: AC+VfDyLP4LtwqhtiQ0i1R6sBYBASniJihwVAaE9S3eEhzCFWYhiPQYl
-        27TIQus58YSy5USpWdbJngQlQw==
-X-Google-Smtp-Source: ACHHUZ7Q5fYjrnS4KpE9SjvZZHOsPFXdX+PzyZrRhtHHw7hCo0awVxDS79J6i6X3G1Y1kblQa39rZw==
-X-Received: by 2002:a17:902:ab59:b0:1ac:83d1:9246 with SMTP id ij25-20020a170902ab5900b001ac83d19246mr10985091plb.61.1684826098202;
-        Tue, 23 May 2023 00:14:58 -0700 (PDT)
-Received: from chromium.org (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b001ac381f1ce9sm6109823plk.185.2023.05.23.00.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 00:14:57 -0700 (PDT)
-Date:   Tue, 23 May 2023 07:14:52 +0000
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     m.szyprowski@samsung.com, mchehab@kernel.org, ming.qian@nxp.com,
-        shijie.qin@nxp.com, eagle.zhou@nxp.com, bin.liu@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        yunfei.dong@mediatek.com, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, daniel.almeida@collabora.com,
-        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        jernel@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 4/8] media: videobuf2: Stop define VB2_MAX_FRAME as
- global
-Message-ID: <20230523071452.2h2tilwrwejtmmrc@chromium.org>
-References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
- <20230321102855.346732-5-benjamin.gaignard@collabora.com>
+        bh=563KIW1CbzbOZG9uSI1EL/wqRfnJk9ZwfZaE6UMFES0=;
+        b=mn4z2tVM//02hqXXjrXG9gO1+9fntZx7Pztl6I3viEgASGZw9b/LDeZrBjwRpDH+y0
+         vydlCZlOECuydOBQ0EF2Hnvqua1k3BcF5B0vkgkleDs6iiJjHJtqcYXZK1N0io/1CxO1
+         7rtnufvF3wKI4o2xk5m3KnFnWpGK8MqDVJwt1CAGCEPHzoOCP999/P7VUpB35kLyuZZa
+         jkMtpzQTJFLqmKiqv8EfbSwI1oYn5nLUkR3zaCkT/lj4ZwXIpS1ejlGHI/53v3LkCumB
+         eXYaygFCQV7wBWOvDCSUKVwGC8xAj+WZeVLaQaLz57U9bah0Ee0s7O/mIDIx4XuPklPh
+         ZPrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684826133; x=1687418133;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=563KIW1CbzbOZG9uSI1EL/wqRfnJk9ZwfZaE6UMFES0=;
+        b=baje/lPfisOUOiXTFdcqC8av6XtElSTf+0ytywAboOe2Ijgd38+J+qlJ9LDfEMv+WE
+         /D9kJT4DubiqyU6cub5yFX3MxiF6JFS+IoN9mEQOfmAJRbmQsxIwSHH+QV2G8k2aIXmH
+         3TgXuFRph8d2DPl6gA2HK0Zykw13wSphxbjHE7XTYYUEBieNsyOqrscz5NP52pVbyumk
+         yUUzuGVO+4HBfCKMJolHW8iMkM9/J4A38N1xby8CnFLjO7nEUeulNu6+zvTiRBnjs2U6
+         cvsHN1HVbd7c6u/nH+xn2LArvZZriaFkbyC/qmbLWx7RA/wNzyuQGxjMjNrEVUNKvrCz
+         tg/w==
+X-Gm-Message-State: AC+VfDyNgDFyt6FrmeJdJkXPpotRu3KPApmqLAEJmjx23cnoSmtUjAbH
+        BJFwV5fMy1+NA9e8uKFLQw==
+X-Google-Smtp-Source: ACHHUZ57PlqNkIBg85I+Sz/x/Ym+ca7ecOqk9IsCNzBwFQm4mwaufmd0cF2A3WFGzaRq+SqdgbuK/g==
+X-Received: by 2002:a05:620a:8a05:b0:75b:23a0:de84 with SMTP id qt5-20020a05620a8a0500b0075b23a0de84mr2969184qkn.2.1684826133352;
+        Tue, 23 May 2023 00:15:33 -0700 (PDT)
+Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:18c1:dc19:5e29:e9a0])
+        by smtp.gmail.com with ESMTPSA id m9-20020ae9e709000000b0074e21136a77sm2292040qka.127.2023.05.23.00.15.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 May 2023 00:15:33 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH v4 net 3/6] net/sched: Reserve TC_H_INGRESS (TC_H_CLSACT) for ingress (clsact) Qdiscs
+Date:   Tue, 23 May 2023 00:14:57 -0700
+Message-Id: <5e55909fafc7afcde9b7795d39dac0d10f5f45da.1684825171.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <cover.1684825171.git.peilin.ye@bytedance.com>
+References: <cover.1684825171.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321102855.346732-5-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,138 +85,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 11:28:51AM +0100, Benjamin Gaignard wrote:
-> After changing bufs arrays to a dynamic allocated array
-> VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
-> Remove it from the core definitions but keep it for drivers internal
-> needs.
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-This made me think that some drivers could behave really badly if they
-get more than VB2_MAX_FRAME (or VIDEO_MAX_FRAME) buffers. I certainly
-see some having fixed-size arrays of exactly that size. Should we have a
-queue flag that enables more buffers, so it is only available for
-drivers which can handle them?
+Currently it is possible to add e.g. an HTB Qdisc under ffff:fff1
+(TC_H_INGRESS, TC_H_CLSACT):
 
-Best regards,
-Tomasz
+  $ ip link add name ifb0 type ifb
+  $ tc qdisc add dev ifb0 parent ffff:fff1 htb
+  $ tc qdisc add dev ifb0 clsact
+  Error: Exclusivity flag on, cannot modify.
+  $ drgn
+  ...
+  >>> ifb0 = netdev_get_by_name(prog, "ifb0")
+  >>> qdisc = ifb0.ingress_queue.qdisc_sleeping
+  >>> print(qdisc.ops.id.string_().decode())
+  htb
+  >>> qdisc.flags.value_() # TCQ_F_INGRESS
+  2
 
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  drivers/media/common/videobuf2/videobuf2-core.c               | 2 ++
->  drivers/media/platform/amphion/vdec.c                         | 1 +
->  .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c | 2 ++
->  drivers/media/platform/qcom/venus/hfi.h                       | 2 ++
->  drivers/media/platform/verisilicon/hantro_hw.h                | 2 ++
->  drivers/staging/media/ipu3/ipu3-v4l2.c                        | 2 ++
->  include/media/videobuf2-core.h                                | 1 -
->  include/media/videobuf2-v4l2.h                                | 4 ----
->  8 files changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-> index f4da917ccf3f..3c6ced360770 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> @@ -31,6 +31,8 @@
->  
->  #include <trace/events/vb2.h>
->  
-> +#define VB2_MAX_FRAME	32
-> +
->  static int debug;
->  module_param(debug, int, 0644);
->  
-> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-> index 87f9f8e90ab1..bef0c1b869be 100644
-> --- a/drivers/media/platform/amphion/vdec.c
-> +++ b/drivers/media/platform/amphion/vdec.c
-> @@ -28,6 +28,7 @@
->  
->  #define VDEC_MIN_BUFFER_CAP		8
->  #define VDEC_MIN_BUFFER_OUT		8
-> +#define VB2_MAX_FRAME			32
->  
->  struct vdec_fs_info {
->  	char name[8];
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> index f5958b6d834a..ba208caf3043 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> @@ -16,6 +16,8 @@
->  #include "../vdec_drv_if.h"
->  #include "../vdec_vpu_if.h"
->  
-> +#define VB2_MAX_FRAME	32
-> +
->  /* reset_frame_context defined in VP9 spec */
->  #define VP9_RESET_FRAME_CONTEXT_NONE0 0
->  #define VP9_RESET_FRAME_CONTEXT_NONE1 1
-> diff --git a/drivers/media/platform/qcom/venus/hfi.h b/drivers/media/platform/qcom/venus/hfi.h
-> index f25d412d6553..bd5ca5a8b945 100644
-> --- a/drivers/media/platform/qcom/venus/hfi.h
-> +++ b/drivers/media/platform/qcom/venus/hfi.h
-> @@ -10,6 +10,8 @@
->  
->  #include "hfi_helper.h"
->  
-> +#define VB2_MAX_FRAME				32
-> +
->  #define VIDC_SESSION_TYPE_VPE			0
->  #define VIDC_SESSION_TYPE_ENC			1
->  #define VIDC_SESSION_TYPE_DEC			2
-> diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-> index e83f0c523a30..9e8faf7ba6fb 100644
-> --- a/drivers/media/platform/verisilicon/hantro_hw.h
-> +++ b/drivers/media/platform/verisilicon/hantro_hw.h
-> @@ -15,6 +15,8 @@
->  #include <media/v4l2-vp9.h>
->  #include <media/videobuf2-core.h>
->  
-> +#define VB2_MAX_FRAME	32
-> +
->  #define DEC_8190_ALIGN_MASK	0x07U
->  
->  #define MB_DIM			16
-> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> index e530767e80a5..6627b5c2d4d6 100644
-> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> @@ -10,6 +10,8 @@
->  #include "ipu3.h"
->  #include "ipu3-dmamap.h"
->  
-> +#define VB2_MAX_FRAME	32
-> +
->  /******************** v4l2_subdev_ops ********************/
->  
->  #define IPU3_RUNNING_MODE_VIDEO		0
-> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-> index b8b34a993e04..4aa43c5c7c58 100644
-> --- a/include/media/videobuf2-core.h
-> +++ b/include/media/videobuf2-core.h
-> @@ -21,7 +21,6 @@
->  #include <media/media-request.h>
->  #include <media/frame_vector.h>
->  
-> -#define VB2_MAX_FRAME	(32)
->  #define VB2_MAX_PLANES	(8)
->  
->  /**
-> diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
-> index 5a845887850b..88a7a565170e 100644
-> --- a/include/media/videobuf2-v4l2.h
-> +++ b/include/media/videobuf2-v4l2.h
-> @@ -15,10 +15,6 @@
->  #include <linux/videodev2.h>
->  #include <media/videobuf2-core.h>
->  
-> -#if VB2_MAX_FRAME != VIDEO_MAX_FRAME
-> -#error VB2_MAX_FRAME != VIDEO_MAX_FRAME
-> -#endif
-> -
->  #if VB2_MAX_PLANES != VIDEO_MAX_PLANES
->  #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
->  #endif
-> -- 
-> 2.34.1
-> 
+Only allow ingress and clsact Qdiscs under ffff:fff1.  Return -EINVAL
+for everything else.  Make TCQ_F_INGRESS a static flag of ingress and
+clsact Qdiscs.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 1f211a1b929c ("net, sched: add clsact qdisc")
+Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+change since v2:
+  - add in-body From: tag
+
+ net/sched/sch_api.c     | 7 ++++++-
+ net/sched/sch_ingress.c | 4 ++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
+index fdb8f429333d..383195955b7d 100644
+--- a/net/sched/sch_api.c
++++ b/net/sched/sch_api.c
+@@ -1252,7 +1252,12 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
+ 	sch->parent = parent;
+ 
+ 	if (handle == TC_H_INGRESS) {
+-		sch->flags |= TCQ_F_INGRESS;
++		if (!(sch->flags & TCQ_F_INGRESS)) {
++			NL_SET_ERR_MSG(extack,
++				       "Specified parent ID is reserved for ingress and clsact Qdiscs");
++			err = -EINVAL;
++			goto err_out3;
++		}
+ 		handle = TC_H_MAKE(TC_H_INGRESS, 0);
+ 	} else {
+ 		if (handle == 0) {
+diff --git a/net/sched/sch_ingress.c b/net/sched/sch_ingress.c
+index 13218a1fe4a5..caea51e0d4e9 100644
+--- a/net/sched/sch_ingress.c
++++ b/net/sched/sch_ingress.c
+@@ -137,7 +137,7 @@ static struct Qdisc_ops ingress_qdisc_ops __read_mostly = {
+ 	.cl_ops			=	&ingress_class_ops,
+ 	.id			=	"ingress",
+ 	.priv_size		=	sizeof(struct ingress_sched_data),
+-	.static_flags		=	TCQ_F_CPUSTATS,
++	.static_flags		=	TCQ_F_INGRESS | TCQ_F_CPUSTATS,
+ 	.init			=	ingress_init,
+ 	.destroy		=	ingress_destroy,
+ 	.dump			=	ingress_dump,
+@@ -275,7 +275,7 @@ static struct Qdisc_ops clsact_qdisc_ops __read_mostly = {
+ 	.cl_ops			=	&clsact_class_ops,
+ 	.id			=	"clsact",
+ 	.priv_size		=	sizeof(struct clsact_sched_data),
+-	.static_flags		=	TCQ_F_CPUSTATS,
++	.static_flags		=	TCQ_F_INGRESS | TCQ_F_CPUSTATS,
+ 	.init			=	clsact_init,
+ 	.destroy		=	clsact_destroy,
+ 	.dump			=	ingress_dump,
+-- 
+2.20.1
+
