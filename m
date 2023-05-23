@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E332E70E181
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8071970E1A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237083AbjEWQOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S237088AbjEWQOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbjEWQOC (ORCPT
+        with ESMTP id S236660AbjEWQO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:14:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119B8C2;
-        Tue, 23 May 2023 09:14:00 -0700 (PDT)
-Date:   Tue, 23 May 2023 16:13:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684858438;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 23 May 2023 12:14:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819E4E5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:14:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D8B662987
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 16:14:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66727C433D2;
+        Tue, 23 May 2023 16:14:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ho9GhgHN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1684858461;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1o3nB3jocoaLuOI5Obrg0Pu8tnjT0B5WS7aKcG30c3Y=;
-        b=Q4wL1SOb9nb9hZJ1ZPygVvgEoQvInC21KXzRQtsc/lO3otIZhyvgiBCTSA1UYwMD16KNrF
-        zrV8is0x6hkvRMom/DUqX56fqXhwg6iBByudcInyhv5xMTOvmRIjq8Y5ry1Di2UuM/Tb47
-        hM7fWJtDadpsE/FKSCkk4gVJJ7m5ifLyiRnXH7anDyoYRM+xa2i4Tp7TMXibLGmLaVDwsH
-        hEqLP82Rewf2Y6G8wGcqCvnvYokBJR+fPYF1Vg3Ltp6vARkxW90dQzC62i/XioLPljtCgT
-        9Pz8vWVB4IxhhRSvNE8EYDzlWKBlGngsRkDvTHKQNb+8DW1UJ0cpNZ37lmQbRw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684858438;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1o3nB3jocoaLuOI5Obrg0Pu8tnjT0B5WS7aKcG30c3Y=;
-        b=Vmkwzh/2Q4t7kGk6VPI59MRREU6bQWu0aOWjFj/YXYkWApAM2zdfCBYGJvBhBkryOcKayc
-        2ZenPJQsd0wG1AAw==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] cpu/hotplug: Fix off by one in cpuhp_bringup_mask()
-Cc:     Mark Brown <broonie@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <87wn10ufj9.ffs@tglx>
-References: <87wn10ufj9.ffs@tglx>
+        bh=03lmNUAB17A9ca+oGO7O4py68GtfGLSGU69TNAskS4o=;
+        b=ho9GhgHN5EnNp5DUHniUPEBPl6Kqd2MJACQhBAZKWYh9S9hKPioKW4g69yu94yVedbEl6C
+        vj9ET3YZpLf3MWvN+6ydsNB2gLMmUqwQfG2FVNh69dlW3amnHINuZ4Sbd7N2d8T8LldRce
+        y1D3SRzJrxN6QvVk+rSb93V1fl0+h/c=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f9d47816 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 23 May 2023 16:14:21 +0000 (UTC)
+Date:   Tue, 23 May 2023 18:14:18 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     edumazet@google.com,
+        syzbot <syzbot+c2775460db0e1c70018e@syzkaller.appspotmail.com>,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        pabeni@redhat.com, wireguard@lists.zx2c4.com, jann@thejh.net
+Subject: Re: [syzbot] [wireguard?] KASAN: slab-use-after-free Write in
+ enqueue_timer
+Message-ID: <ZGzmWtd7itw6oFsI@zx2c4.com>
+References: <000000000000c0b11d05fa917fe3@google.com>
+ <ZGzfzEs-vJcZAySI@zx2c4.com>
+ <20230523090512.19ca60b6@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168485843734.404.16847199234383553669.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230523090512.19ca60b6@kernel.org>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the smp/core branch of tip:
+On Tue, May 23, 2023 at 09:05:12AM -0700, Jakub Kicinski wrote:
+> On Tue, 23 May 2023 17:46:20 +0200 Jason A. Donenfeld wrote:
+> > > Freed by task 41:
+> > >  __kmem_cache_free+0x264/0x3c0 mm/slub.c:3799
+> > >  device_release+0x95/0x1c0
+> > >  kobject_cleanup lib/kobject.c:683 [inline]
+> > >  kobject_release lib/kobject.c:714 [inline]
+> > >  kref_put include/linux/kref.h:65 [inline]
+> > >  kobject_put+0x228/0x470 lib/kobject.c:731
+> > >  netdev_run_todo+0xe5a/0xf50 net/core/dev.c:10400  
+> > 
+> > So that means the memory in question is actually the one that's
+> > allocated and freed by the networking stack. Specifically, dev.c:10626
+> > is allocating a struct net_device with a trailing struct wg_device (its
+> > priv_data). However, wg_device does not have any struct timer_lists in
+> > it, and I don't see how net_device's watchdog_timer would be related to
+> > the stacktrace which is clearly operating over a wg_peer timer.
+> > 
+> > So what on earth is going on here?
+> 
+> Your timer had the pleasure of getting queued _after_ a dead watchdog
+> timer, no? IOW it tries to update the ->next pointer of a queued
+> watchdog timer. 
 
-Commit-ID:     06c6796e0304234da65e70577f354cb194086521
-Gitweb:        https://git.kernel.org/tip/06c6796e0304234da65e70577f354cb194086521
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 23 May 2023 01:12:26 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Tue, 23 May 2023 18:06:40 +02:00
+Ahh, you're right! Specifically,
 
-cpu/hotplug: Fix off by one in cpuhp_bringup_mask()
+> hlist_add_head include/linux/list.h:945 [inline]
+> enqueue_timer+0xad/0x560 kernel/time/timer.c:605
 
-cpuhp_bringup_mask() iterates over a cpumask and starts all present CPUs up
-to a caller provided upper limit.
+The write on line 945 refers to the side of the timer base, not the
+peer's timer_list being queued. So indeed, the wireguard netdev is still
+alive at this point, but it's being queued to a timer in a different
+netdev that's already been freed (whether watchdog or otherwise in some
+privdata). So, IOW, not a wireguard bug, right?
 
-The limit variable is decremented and checked for 0 before invoking
-cpu_up(), which is obviously off by one and prevents the bringup of the
-last CPU when the limit is equal to the number of present CPUs.
-
-Move the decrement and check after the cpu_up() invocation.
-
-Fixes: 18415f33e2ac ("cpu/hotplug: Allow "parallel" bringup up to CPUHP_BP_KICK_AP_STATE")
-Reported-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/87wn10ufj9.ffs@tglx
----
- kernel/cpu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 005f863..88a7ede 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1770,9 +1770,6 @@ static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned int n
- 	for_each_cpu(cpu, mask) {
- 		struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
- 
--		if (!--ncpus)
--			break;
--
- 		if (cpu_up(cpu, target) && can_rollback_cpu(st)) {
- 			/*
- 			 * If this failed then cpu_up() might have only
-@@ -1781,6 +1778,9 @@ static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned int n
- 			 */
- 			WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
- 		}
-+
-+		if (!--ncpus)
-+			break;
- 	}
- }
- 
+Jason
