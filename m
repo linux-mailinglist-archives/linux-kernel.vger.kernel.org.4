@@ -2,108 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D7870DC84
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2F270DD45
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236796AbjEWMZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S236841AbjEWNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbjEWMZN (ORCPT
+        with ESMTP id S236893AbjEWNNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:25:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F6E1A4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684844610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZcdS5ZYCFqiP7jrSNIfHlTxhn1+gXnyqS/hyK8+OMEQ=;
-        b=TszuQseAkQ0rgSkxBeHkJw6l9NZh8Ej5AegkNxCwk6+3ClfYw0Vweofml7bp2ISB6VU8Gg
-        0FecIaB0pUFd7ethi6tEyTD3e9lQlFW8Ehh1yF8td9kV7uboX0ZioW/BH5aUBLlZ0JxUtA
-        9FXz5g33b/k7BnHIG7TdgakkYtauQYU=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-659-1OEZhNzWOV6RD7ZlSSVdyA-1; Tue, 23 May 2023 08:23:29 -0400
-X-MC-Unique: 1OEZhNzWOV6RD7ZlSSVdyA-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75935a16b8eso578014385a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:23:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684844608; x=1687436608;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZcdS5ZYCFqiP7jrSNIfHlTxhn1+gXnyqS/hyK8+OMEQ=;
-        b=IB7LdDdPnSzWRp2TosX9zdDWLWbpEzWoMo0Pgvj8SjI5j6sygLJtlRMqTkRGKqkmDt
-         prciCgE4aTDDtPD/fYYsl8m4cChGitSVCjKytUSPMqlO+0trCBv2qbY8D7eFXzKVtFKy
-         15qyrSzXtZ+fqba+jKiYxJSXveA2Ixck65EUDIv3ZH8xuo3YttUOoewohsm+lwaamwws
-         tJnYLtLw6We6WOHdAbZ/+jbuZV1a7vwiBokmHx66NtitNUYEoVZLPnBeTFu0S/amKecA
-         yklxbLNeG5nafZHLQ2740c6fC1eHqhC/+Vtui6Ledy5ld92YnDlZxpG16qqvFLx/H4gH
-         QY1A==
-X-Gm-Message-State: AC+VfDwDO1LZc9aqCJU8xE3ehch60akKCSqm0glsVKoQD9kVEXd0vMWJ
-        ubWD1+B54JRnLD7zfJ+iPqwlia3J7oZklDoItRdC/5aP4OTIuoZdCZbhtRs/3Ip/Iut13CLtcH6
-        J4Knjsz0DkXQVh3twij5xBIU8
-X-Received: by 2002:a05:620a:85b:b0:75b:23a0:e7b9 with SMTP id u27-20020a05620a085b00b0075b23a0e7b9mr3925117qku.26.1684844608654;
-        Tue, 23 May 2023 05:23:28 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7OkJ4+ngoCOz2Nvt1fCAFY86/rFVTzN+eippzTrgANV1PkY48JHhCiID6DyJAXgEc1KmZrVA==
-X-Received: by 2002:a05:620a:85b:b0:75b:23a0:e7b9 with SMTP id u27-20020a05620a085b00b0075b23a0e7b9mr3925099qku.26.1684844608408;
-        Tue, 23 May 2023 05:23:28 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id v21-20020ae9e315000000b007594229600csm2465379qkf.81.2023.05.23.05.23.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 05:23:28 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     akpm@linux-foundation.org, dianders@chromium.org, pmladek@suse.com,
-        kernelfans@gmail.com, lecopzer.chen@mediatek.com,
-        ldufour@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] watchdog: set variables watchdog_soft,hardlockup_user_enabled storage-class-specifier to static
-Date:   Tue, 23 May 2023 08:23:24 -0400
-Message-Id: <20230523122324.1668396-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 23 May 2023 09:13:11 -0400
+X-Greylist: delayed 1831 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 06:12:58 PDT
+Received: from bosmailout03.eigbox.net (bosmailout03.eigbox.net [66.96.187.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F40DB
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:12:58 -0700 (PDT)
+Received: from bosmailscan01.eigbox.net ([10.20.15.1])
+        by bosmailout03.eigbox.net with esmtp (Exim)
+        id 1q1R3J-0006uD-7O; Tue, 23 May 2023 08:23:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=anniebear.net; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Cc:To:From:Subject:Date:References:In-Reply-To:Message-ID:
+        Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+        :Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=adHSZYLF1OQRtMEH4XxOr8eL2i1ZMqljhXv2Kh+46aM=; b=ABYqWEpkPQbnM515RlFnjL7mPy
+        MfjU48N8nUTstwiR36FXig82Ga8q2tozoxB2Fa1uigcgjP/xboVSkwS0rNFAuwPaPoU5dOmNHs4Qn
+        em11ktOZwIw8kwq3q6W2wceNljK+/byImueS9Tsw3VNH/ok9YfVxiFkTliSopYUVsGZUMEJipDeWR
+        mYBCdmIMVnaAkevhW4pvf0LqI3oBTDqBcIip8RQ8qdC9pKj8jzVHJsYN+Hgs8rrfzwhWMUqxWPQNn
+        BkPNWwO7pW64HFbvMMBaQUK5WM+Xp7LDMJKh/aXvS1UxOkrWz0iLH8znjQpnenBx6+zRGsDA3TcoD
+        3yXiRYJg==;
+Received: from [10.115.3.32] (helo=bosimpout12)
+        by bosmailscan01.eigbox.net with esmtp (Exim)
+        id 1q1R3I-0001pi-S2; Tue, 23 May 2023 08:23:44 -0400
+Received: from boswebmail11.eigbox.net ([10.20.16.11])
+        by bosimpout12 with 
+        id 0CPh2A00D0EKGQi01CPkGK; Tue, 23 May 2023 08:23:44 -0400
+X-Authority-Analysis: v=2.3 cv=d4VuNSrE c=1 sm=1 tr=0
+ a=arGavn6Z5cgUkMHml6gAfw==:117 a=8nJEP1OIZ-IA:10 a=P0xRbXHiH_UA:10
+ a=QyXUC8HyAAAA:8 a=mrD3klddzif1__fuzFkA:9 a=wPNLvfGTeEIA:10
+Received: from [127.0.0.1] (helo=emailmg.ipower.com)
+        by boswebmail11.eigbox.net with esmtp (Exim)
+        id 1q1R3B-0001GH-Gt; Tue, 23 May 2023 08:23:37 -0400
+Received: from 192.168.151.0
+        (SquirrelMail authenticated user dinh.linux@anniebear.net)
+        by emailmg.ipower.com with HTTP;
+        Tue, 23 May 2023 07:23:37 -0500
+Message-ID: <0a7b6e4775ea8ae3c41cd49c6cd19f90.squirrel@emailmg.ipower.com>
+In-Reply-To: <20230511041221.135527-3-niravkumar.l.rabara@intel.com>
+References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
+    <20230511041221.135527-1-niravkumar.l.rabara@intel.com>
+    <20230511041221.135527-3-niravkumar.l.rabara@intel.com>
+Date:   Tue, 23 May 2023 07:23:37 -0500
+Subject: Re: [PATCH v3 2/2] EDAC/altera: Check previous DDR DBE during 
+ driver probe
+From:   dinh.linux@anniebear.net
+To:     niravkumar.l.rabara@intel.com
+Cc:     niravkumar.l.rabara@intel.com, bp@alien8.de, dinguyen@kernel.org,
+        james.morse@arm.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
+        tony.luck@intel.com
+User-Agent: SquirrelMail/1.4.19
 MIME-Version: 1.0
+Content-Type: text/plain;charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Priority: 3 (Normal)
+Importance: Normal
+X-EN-AuthUser: dinh.linux@anniebear.net
+Sender:  dinh.linux@anniebear.net
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-kernel/watchdog.c:40:19: warning: symbol
-  'watchdog_hardlockup_user_enabled' was not declared. Should it be static?
-kernel/watchdog.c:41:19: warning: symbol
-  'watchdog_softlockup_user_enabled' was not declared. Should it be static?
+Hi,
 
-These variabled are only used in their defining file, so it should be static.
+> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+>
+> Add DDR DBE check during driver probe to notify user if previous
+> reboot cause by DDR DBE and print DBE error related information.
+>
+> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> ---
+>  drivers/edac/altera_edac.c | 29 ++++++++++++++++++++++++-----
+>  1 file changed, 24 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index 8b31cd54bdb6..04c0675adc8c 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct
+> platform_device *pdev)
+>  #ifdef CONFIG_64BIT
+>  	{
+>  		int dberror, err_addr;
+> +		struct arm_smccc_res result;
+>
+>  		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
+>  		atomic_notifier_chain_register(&panic_notifier_list,
+> @@ -2168,11 +2169,29 @@ static int altr_edac_a10_probe(struct
+> platform_device *pdev)
+>  		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
+>  			    &dberror);
+>  		if (dberror) {
+> -			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
+> -				    &err_addr);
+> -			edac_printk(KERN_ERR, EDAC_DEVICE,
+> -				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
+> -				    dberror, err_addr);
+> +			/* Bit-31 is set if previous DDR UE happened */
+> +			if (dberror & (1 << 31)) {
+> +				/* Read previous DDR UE info */
+> +				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
+> +					      0, 0, 0, 0, 0, 0, &result);
+> +
+> +				if (!result.a0) {
+> +					edac_printk(KERN_ERR, EDAC_DEVICE,
+> +						    "Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
+> +						    , (unsigned int)result.a1
+> +						    , (unsigned int)result.a2
+> +						    , (unsigned int)result.a3);
+> +				} else {
+> +					edac_printk(KERN_ERR, EDAC_DEVICE,
+> +						    "INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
+> +				}
+> +			} else {
+> +				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
+> +					    &err_addr);
+> +				edac_printk(KERN_ERR, EDAC_DEVICE,
+> +					    "Previous Boot UE detected[0x%X] @ 0x%X\n",
+> +					    dberror, err_addr);
+> +			}
+>  			/* Reset the sticky registers */
+>  			regmap_write(edac->ecc_mgr_map,
+>  				     S10_SYSMGR_UE_VAL_OFST, 0);
+> --
+> 2.25.1
+>
+>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- kernel/watchdog.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think it would make sense if you combined the 1st patch. This patch
+cannot survive on its own without the defines.
 
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 877d8670f26e..237990e8d345 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -37,8 +37,8 @@ static DEFINE_MUTEX(watchdog_mutex);
- 
- unsigned long __read_mostly watchdog_enabled;
- int __read_mostly watchdog_user_enabled = 1;
--int __read_mostly watchdog_hardlockup_user_enabled = WATCHDOG_HARDLOCKUP_DEFAULT;
--int __read_mostly watchdog_softlockup_user_enabled = 1;
-+static int __read_mostly watchdog_hardlockup_user_enabled = WATCHDOG_HARDLOCKUP_DEFAULT;
-+static int __read_mostly watchdog_softlockup_user_enabled = 1;
- int __read_mostly watchdog_thresh = 10;
- static int __read_mostly watchdog_hardlockup_available;
- 
--- 
-2.27.0
+Dinh
+
 
