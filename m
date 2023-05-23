@@ -2,163 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EEA70DC6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ABC70DC63
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236802AbjEWMVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S236667AbjEWMVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235518AbjEWMVi (ORCPT
+        with ESMTP id S234129AbjEWMVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:21:38 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD436119;
-        Tue, 23 May 2023 05:21:37 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NC85Cd010591;
-        Tue, 23 May 2023 12:20:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=b/N97QNJLbmr+RhSzhUpL7rxH3poMQwYGelaxe/kHjw=;
- b=ikq5fqhiSpAAT0nJmLp0aCj978Av/rRSS20Vc4ULriCHaM0B7e6jTtTZJvoiEszfEp9B
- l7miWEJ49bMuuMf1IpkL0lHjV9aYJAP4k4tugihoSJ+ulamMiXffid3ZMqXCYrOhemca
- b697LrcX3VA2GTXABwyFzt0QEAzH0LWC47K1qa9a190SlVw00sYxpmR3QWCWyn+lMG0w
- O7Vdf1FG9BiZhYoT+2OE9qZxkgvgdDI6gDcQOXIhpLK6HvUP32YP2uq12Ef/ajaAlWoJ
- s1A8hVsg7S/r9zE0ldTpDCJaPMjUrWa79b/rzIwRHbSCz33LjwGjs4zykqMBYji7DN/U 3g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qrw2n8kac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 12:20:34 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34NC85YP010666;
-        Tue, 23 May 2023 12:20:33 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qrw2n8k8b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 12:20:33 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34N2FIwg013811;
-        Tue, 23 May 2023 12:20:30 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qppcu9f06-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 12:20:30 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34NCKRRA11338474
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 May 2023 12:20:27 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E82A02004D;
-        Tue, 23 May 2023 12:20:26 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EA4820040;
-        Tue, 23 May 2023 12:20:24 +0000 (GMT)
-Received: from [9.171.22.235] (unknown [9.171.22.235])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 23 May 2023 12:20:24 +0000 (GMT)
-Message-ID: <b06a47fecf5eab9440c1c35d9c7b83fe87f918a0.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 6/6] iommu/dma: Make flush queue sizes and timeout
- driver configurable
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Julian Ruess <julianr@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Date:   Tue, 23 May 2023 14:20:24 +0200
-In-Reply-To: <ZGuT2R42SWFHmklu@8bytes.org>
-References: <20230310-dma_iommu-v9-0-65bb8edd2beb@linux.ibm.com>
-         <20230310-dma_iommu-v9-6-65bb8edd2beb@linux.ibm.com>
-         <ZGuT2R42SWFHmklu@8bytes.org>
+        Tue, 23 May 2023 08:21:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB2D109;
+        Tue, 23 May 2023 05:21:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85A01631B1;
+        Tue, 23 May 2023 12:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9FCBC433D2;
+        Tue, 23 May 2023 12:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684844471;
+        bh=Dk+Oefw8B7Lb9vgl9ZRqF/0an+LJulEZdFr6w5zv6fk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=e+JmSmBmRQGw9xfebT9cHx0hCmum6Q+v900Hj3hZ8Bx64zP9WGRH0YVr2LcIRqhOi
+         5u4OS+GadiDSR3FLPxX5+3vQx5AMk6nWJfrmb9Xengf4oV0qVVsAHVhe0bxBba8iaN
+         eNZ5CkWGibvHqfNjab7lZSYWUSTObaX41k9iCRVL+l0pHBWjCngUAOnTAL9KT2viCz
+         c9tNIM82n06wmKHfn5r8NtMfkkkw1Mio7CKTx+69SFVY17T1SLTY1s8isSfLekpaEw
+         A9EHf6bkMk8Sawdj6uZGttRmdhoZAv+ZsuPprW0vneBm4IqXv/2xgNdQnpuBaOY6xs
+         vchicLt5O7IOw==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2af20198f20so60203951fa.0;
+        Tue, 23 May 2023 05:21:10 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxWKpyGlzzHpcJw1AIcSUXEaOg89WzpbqxMCQenhXDLtJhtffC0
+        hIOZi5y7APMCGIcTvFsm8b0V8Vn1fiTQXtv0dAk=
+X-Google-Smtp-Source: ACHHUZ4l+S+XLC+qgJiDiEFScegT7sq8enq38bJ7BZRRDA5vRZipY4gP4pEY1MqmRPCHPZJGJEg0ag+Tpe7kEslGDTQ=
+X-Received: by 2002:a2e:9097:0:b0:2a8:d1cd:a04 with SMTP id
+ l23-20020a2e9097000000b002a8d1cd0a04mr4645945ljg.48.1684844468821; Tue, 23
+ May 2023 05:21:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230521160426.1881124-1-masahiroy@kernel.org>
+ <20230521160426.1881124-4-masahiroy@kernel.org> <CAKwvOdmxLrE8VksbsSGirfTqnuhEFT__FuCG53ri3V42UbH5aw@mail.gmail.com>
+ <CAMj1kXGZLn37bchQ8NZy6zPgsMNT=CE7pZ0voTsnu=ytSf2i7g@mail.gmail.com> <CAK7LNASEj618kZn8ANnZwfFC54MuFx3UxgnqG=ByeubD7vUymA@mail.gmail.com>
+In-Reply-To: <CAK7LNASEj618kZn8ANnZwfFC54MuFx3UxgnqG=ByeubD7vUymA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 23 May 2023 14:20:57 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGDBkL4ZyPD-8LzEL=2uA6pSEwhtpG3nwc6esoLuMgRDQ@mail.gmail.com>
+Message-ID: <CAMj1kXGDBkL4ZyPD-8LzEL=2uA6pSEwhtpG3nwc6esoLuMgRDQ@mail.gmail.com>
+Subject: Re: [PATCH v6 03/20] modpost: detect section mismatch for
+ R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Fangrui Song <maskray@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SCHk9GNBzwPXZyeAocq9ZCr1U8UNYoFE
-X-Proofpoint-ORIG-GUID: YIMPkAl4-Wv-r6WPNnYiGonT3FNgmVP_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_08,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- bulkscore=0 mlxscore=0 priorityscore=1501 adultscore=0 spamscore=0
- mlxlogscore=686 impostorscore=0 clxscore=1015 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230095
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-22 at 18:10 +0200, Joerg Roedel wrote:
-> On Mon, May 15, 2023 at 11:15:56AM +0200, Niklas Schnelle wrote:
-> > In the s390 IOMMU driver a large fixed queue size and timeout is then
-> > set together with single queue mode bringing its performance on s390
-> > paged memory guests on par with the previous s390 specific DMA API
-> > implementation.
->=20
-> Hmm, the right flush-queue size and timeout settings are more a function
-> of the endpoint device and device driver than of the iommu driver, no? I
-> think something like this could also help solving the recently reported
-> scalability problems in the fq-code, if done right.
->=20
-> Regards,
->=20
-> 	Joerg
->=20
+On Tue, 23 May 2023 at 13:59, Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Tue, May 23, 2023 at 6:50=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> =
+wrote:
+> >
+> > On Mon, 22 May 2023 at 20:03, Nick Desaulniers <ndesaulniers@google.com=
+> wrote:
+> > >
+> > > + linux-arm-kernel
+> > >
+> > > On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@ke=
+rnel.org> wrote:
+> > > >
+> > > > ARM defconfig misses to detect some section mismatches.
+> > > >
+> > > >   [test code]
+> > > >
+> > > >     #include <linux/init.h>
+> > > >
+> > > >     int __initdata foo;
+> > > >     int get_foo(int x) { return foo; }
+> > > >
+> > > > It is apparently a bad reference, but modpost does not report anyth=
+ing
+> > > > for ARM defconfig (i.e. multi_v7_defconfig).
+> > > >
+> > > > The test code above produces the following relocations.
+> > > >
+> > > >   Relocation section '.rel.text' at offset 0x200 contains 2 entries=
+:
+> > > >    Offset     Info    Type            Sym.Value  Sym. Name
+> > > >   00000000  0000062b R_ARM_MOVW_ABS_NC 00000000   .LANCHOR0
+> > > >   00000004  0000062c R_ARM_MOVT_ABS    00000000   .LANCHOR0
+> > > >
+> > > >   Relocation section '.rel.ARM.exidx' at offset 0x210 contains 2 en=
+tries:
+> > > >    Offset     Info    Type            Sym.Value  Sym. Name
+> > > >   00000000  0000022a R_ARM_PREL31      00000000   .text
+> > > >   00000000  00001000 R_ARM_NONE        00000000   __aeabi_unwind_cp=
+p_pr0
+> > > >
+> > > > Currently, R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS are just skipped.
+> > > >
+> > > > Add code to handle them. I checked arch/arm/kernel/module.c to lear=
+n
+> > > > how the offset is encoded in the instruction.
+> > > >
+> > > > The referenced symbol in relocation might be a local anchor.
+> > > > If is_valid_name() returns false, let's search for a better symbol =
+name.
+> > > >
+> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > ---
+> > > >
+> > > >  scripts/mod/modpost.c | 12 ++++++++++--
+> > > >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > > > index 34fbbd85bfde..ed2301e951a9 100644
+> > > > --- a/scripts/mod/modpost.c
+> > > > +++ b/scripts/mod/modpost.c
+> > > > @@ -1108,7 +1108,7 @@ static inline int is_valid_name(struct elf_in=
+fo *elf, Elf_Sym *sym)
+> > > >  /**
+> > > >   * Find symbol based on relocation record info.
+> > > >   * In some cases the symbol supplied is a valid symbol so
+> > > > - * return refsym. If st_name !=3D 0 we assume this is a valid symb=
+ol.
+> > > > + * return refsym. If is_valid_name() =3D=3D true, we assume this i=
+s a valid symbol.
+> > > >   * In other cases the symbol needs to be looked up in the symbol t=
+able
+> > > >   * based on section and address.
+> > > >   *  **/
+> > > > @@ -1121,7 +1121,7 @@ static Elf_Sym *find_tosym(struct elf_info *e=
+lf, Elf64_Sword addr,
+> > > >         Elf64_Sword d;
+> > > >         unsigned int relsym_secindex;
+> > > >
+> > > > -       if (relsym->st_name !=3D 0)
+> > > > +       if (is_valid_name(elf, relsym))
+> > > >                 return relsym;
+> > > >
+> > > >         /*
+> > > > @@ -1312,11 +1312,19 @@ static int addend_arm_rel(struct elf_info *=
+elf, Elf_Shdr *sechdr, Elf_Rela *r)
+> > > >         unsigned int r_typ =3D ELF_R_TYPE(r->r_info);
+> > > >         Elf_Sym *sym =3D elf->symtab_start + ELF_R_SYM(r->r_info);
+> > > >         unsigned int inst =3D TO_NATIVE(*reloc_location(elf, sechdr=
+, r));
+> > > > +       int offset;
+> > > >
+> > > >         switch (r_typ) {
+> > > >         case R_ARM_ABS32:
+> > > >                 r->r_addend =3D inst + sym->st_value;
+> > > >                 break;
+> > > > +       case R_ARM_MOVW_ABS_NC:
+> > > > +       case R_ARM_MOVT_ABS:
+> > > > +               offset =3D ((inst & 0xf0000) >> 4) | (inst & 0xfff)=
+;
+> > > > +               offset =3D (offset ^ 0x8000) - 0x8000;
+> > >
+> > > The code in arch/arm/kernel/module.c then right shifts the offset by
+> > > 16 for R_ARM_MOVT_ABS. Is that necessary?
+> > >
+> >
+> > MOVW/MOVT pairs are limited to an addend of -/+ 32 KiB, and the same
+> > value must be encoded in both instructions.
+>
+>
+> In my understanding, 'movt' loads the immediate value to
+> the upper 16-bit of the register.
+>
 
-In our case the large flush queue and timeout is needed because the
-IOTLB flushes of the virtualized s390 IOMMU are used by KVM and z/VM to
-synchronize their IOMMU shadow tables thus making them more expensive.
-This then applies to all pass-through PCI devices without their drivers
-knowing about the IOMMU being virtualized like that. But yes of course
-there could be cases where the device driver knows better.
+Correct. It sets the upper 16 bits of a register without corrupting
+the lower 16 bits.
 
-Thanks,
-Niklas
+> I am just curious about the code in arch/arm/kernel/module.c.
+>
+> Please see 'case R_ARM_MOVT_ABS:' part.
+>
+>   [1] 'offset' is the immediate value encoded in instruction
+>   [2] Add sym->st_value
+>   [3] Right-shift 'offset' by 16
+>   [4] Write it back to the instruction
+>
+> So, the immediate value encoded in the instruction
+> is divided by 65536.
+>
+> I guess we need something like the following?
+> (left-shift by 16).
+>
+>   if (ELF32_R_TYPE(rel->r_info) =3D=3D R_ARM_MOVT_ABS ||
+>       ELF32_R_TYPE(rel->r_info) =3D=3D R_ARM_MOVT_PREL)
+>           offset <<=3D 16;
+>
+
+No. The addend is not encoded in the same way as the effective immediate va=
+lue.
+
+The addend is limited to -/+ 32 KiB (range of s16), and the MOVT
+instruction must use the same addend value as the MOVW instruction it
+is paired with, without shifting.
+
+This is necessary because otherwise, there is no way to handle an
+addend/symbol combination that results in a carry between the lower
+and upper 16 bit words. This is a consequence of the use of REL format
+rather than RELA, where the addend is part of the relocation and not
+encoded in the instructions.
+
+>
+>
+>
+> >
+> > When constructing the actual immediate value from the symbol value and
+> > the addend, only the top 16 bits are used in MOVT and the bottom 16
+> > bits in MOVW.
+> >
+> > However, this code seems to borrow the Elf_Rela::addend field (which
+> > ARM does not use natively) to record the intermediate value, which
+> > would need to be split if it is used to fix up instruction opcodes.
+>
+> At first, modpost supported only RELA for section mismatch checks.
+>
+> Later, 2c1a51f39d95 ("[PATCH] kbuild: check SHT_REL sections")
+> added REL support.
+>
+> But, the common code still used Elf_Rela.
+>
+>
+> modpost does not need to write back the fixed instruction.
+> modpost is only interested in the offset address.
+>
+> Currently, modpost saves the offset address in
+> r->r_offset even for Rel. I do not like this code.
+>
+> So, I am trying to reduce the use of Elf_Rela.
+> For example, this patch.
+> https://patchwork.kernel.org/project/linux-kbuild/patch/20230521160426.18=
+81124-8-masahiroy@kernel.org/
+>
+
+Yeah, that looks better to me.
+
+>
+> > Btw the Thumb2 encodings of MOVT and MOVW seem to be missing here.
+>
+> Right, if CONFIG_THUMB2_KERNEL=3Dy, section mismatch check.
+>
+> Several relocation types are just skipped.
+>
+
+Skipped entirely? Or only for the diagnostic print that outputs the symbol =
+name?
