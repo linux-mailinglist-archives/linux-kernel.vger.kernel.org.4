@@ -2,126 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B8E70CF75
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B0170CF6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbjEWAjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S235069AbjEWAj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbjEWAXE (ORCPT
+        with ESMTP id S235630AbjEWAXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 May 2023 20:23:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B721FCA;
-        Mon, 22 May 2023 17:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=fkCEJfb3Xyk1ZV6efA1WasgmQsRQP8Wls6LMXRrock4=; b=0Upe6JIyvZ2C08MzGLCOI8PXTK
-        GUZ+Blmio/BtEuNeH64kTNcu5HiUxZkAtTgsofUeQssPsUljnsQjEzdS5SYDjsSE4Y82pf0gPNBtz
-        MBcwh0n7u8zpaogBBoVTSluRB0lZbxQ/NaLPMmZfTZivqmbGxe5HF3I5/KXvVwuY3ALmwcjpViqao
-        oHT6ojzUW6l76p8umQI83HI++sLkhbk1/xAl9cHoz2+7JkB6FREUxpA+MQhTSke8vDGANt7Rv1mvA
-        Zv/mnnYKtw78FvMKH2TO3JyYLq8w2/Yv0kKDWOhxP4u2qc1SGlZd1vh8TJQVxgKbQ3uFx0ELEfN0l
-        o2BjjNXw==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1FXT-008Q3s-2Y;
-        Tue, 23 May 2023 00:06:08 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jaswinder Singh <jassisinghbrar@gmail.com>,
-        Jaswinder Singh <jassi.brar@samsung.com>,
-        Boojin Kim <boojin.kim@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH] dmaengine: pl330: rename _start to prevent build error
-Date:   Mon, 22 May 2023 17:06:06 -0700
-Message-Id: <20230523000606.9405-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DA3FA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:06:58 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53485aa1972so2298968a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684800418; x=1687392418;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nqpMDrC4KK3NQ6AuoTcuN/aH10d3Gs6pWZJ4L+6LYdI=;
+        b=einRQC06NM+pLkPcWJKuFkA3JrqGZ4jSC+L44hYXq+E/rLb8tn1KKR5KGxdVgGH9fL
+         z4wM40qWv+kR5vQgB2cbnU9DNxDeI2IC0tmcs88RbHAhC13vUSJeJwXY2E2Dld8hrPg3
+         MG3L4X+OVgZf3FszqPcq/K+aN6nVAet/JMgxgQXoHdcBP0my7P2nA29a9lYONLLhRYMZ
+         s2S/qIxe2XDDMncs9mGy6cUgAaVEpju9PTe00dW7/KviwcI5VWtDKN+UuNKlHfU72jrL
+         KU7Iq+8yaRoCE4WlHn45jJU/E5rxEradrcAdgs1h1bhJKao7Ozt805O7vAzm8fUMRQot
+         nQfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684800418; x=1687392418;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nqpMDrC4KK3NQ6AuoTcuN/aH10d3Gs6pWZJ4L+6LYdI=;
+        b=NkHX1/ny0CgDhNU9/6sa5XAdfgVmEChTfGqqejR1qyhCtZftgi4RxT5QxeXkAXiiEq
+         GMQlRtAlDIMIIH+KkFQmWARirgV7JIKIPs4Wl/cvEvpPYCM+mpYMstx+MYvnY/vWITfh
+         qYpzbc3/dNkc33UEaC3aRYp4dLBgHgrnaz85Aaapf3VT30Arwzmdmye0YKNj08q1Y7L2
+         W/uh7rwzvYfBOdUK1WwQtgJe/DkAFxY4rLjXq0MwFeIAJRBRjadYcE83Oieg34XO9XHA
+         yiFaeWQ9OMg56IB/b4zllxjNd2+35IkuejH3oWn8n/HpdG5oiyWzwcuB1BxCH/U37/CT
+         2eIA==
+X-Gm-Message-State: AC+VfDxTJ140nns1MVPIj72Y12MfugOUypC9RCcsZcmSDapVeqiW2LSx
+        FQIKBFqwGjCfchJsG8Ke9q8ezwSJD3U=
+X-Google-Smtp-Source: ACHHUZ6HjllyZzTlaaKR4BoUDyFce04HZ9UhEoY+TcxZpDQZdfHOuNAQJ4T7tsiqCTcoicnwg0ExZ7H4Ffw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:5f91:0:b0:52c:b362:1894 with SMTP id
+ t139-20020a635f91000000b0052cb3621894mr2851167pgb.3.1684800417778; Mon, 22
+ May 2023 17:06:57 -0700 (PDT)
+Date:   Mon, 22 May 2023 17:06:56 -0700
+In-Reply-To: <875y8jappz.fsf@nvidia.com>
+Mime-Version: 1.0
+References: <20230522063725.284686-1-apopple@nvidia.com> <ZGu1vsbscdO48V6h@google.com>
+ <875y8jappz.fsf@nvidia.com>
+Message-ID: <ZGwDoONUFAHi7XKz@google.com>
+Subject: Re: [PATCH] mmu_notifiers: Notify on pte permission upgrades
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        will@kernel.org, nicolinc@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, jgg@nvidia.com,
+        John Hubbard <jhubbard@nvidia.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"_start" is used in several arches and proably should be reserved
-for ARCH usage. Using it in a driver for a private symbol can cause
-a build error when it conflicts with ARCH usage of the same symbol.
+On Tue, May 23, 2023, Alistair Popple wrote:
+> 
+> Sean Christopherson <seanjc@google.com> writes:
+> >> diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
+> >> index d6c06e140277..f14d68f119d8 100644
+> >> --- a/include/linux/mmu_notifier.h
+> >> +++ b/include/linux/mmu_notifier.h
+> >> @@ -31,6 +31,11 @@ struct mmu_interval_notifier;
+> >>   * pages in the range so to mirror those changes the user must inspect the CPU
+> >>   * page table (from the end callback).
+> >>   *
+> >> + * @MMU_NOTIFY_PROTECTION_UPGRAGE: update is due to a change from read-only to
+> >> + * read-write for pages in the range. This must not be used to upgrade
+> >> + * permissions on secondary PTEs, rather it should only be used to invalidate
+> >> + * caches such as secondary TLBs that may cache old read-only entries.
+> >
+> > This is a poor fit for invalidate_range_{start,end}().  All other uses bookend
+> > the primary MMU update, i.e. call start() _before_ changing PTEs.  The comments
+> > are somewhat stale as they talk only about "unmapped", but the contract between
+> > the primary MMU and the secondary MMU is otherwise quite clear on when the primary
+> > MMU will invoke start() and end().
+> >
+> > 	 * invalidate_range_start() is called when all pages in the
+> > 	 * range are still mapped and have at least a refcount of one.
+> > 	 *
+> > 	 * invalidate_range_end() is called when all pages in the
+> > 	 * range have been unmapped and the pages have been freed by
+> > 	 * the VM.
+> >
+> > I'm also confused as to how this actually fixes ARM's SMMU.  Unless I'm looking
+> > at the wrong SMMU implementation, the SMMU implemenents only invalidate_range(),
+> > not the start()/end() variants.
+> 
+> mmu_invalidate_range_end() calls the invalidate_range() callback if
+> the start()/end() variants aren't set.
 
-Therefore rename pl330's "_start" to "_start_thread" so that there
-is no conflict and no build error.
+Ahh, thanks.
 
-drivers/dma/pl330.c:1053:13: error: '_start' redeclared as different kind of symbol
- 1053 | static bool _start(struct pl330_thread *thrd)
-      |             ^~~~~~
-In file included from ../include/linux/interrupt.h:21,
-                 from ../drivers/dma/pl330.c:18:
-arch/riscv/include/asm/sections.h:11:13: note: previous declaration of '_start' with type 'char[]'
-   11 | extern char _start[];
-      |             ^~~~~~
+> > 	static const struct mmu_notifier_ops arm_smmu_mmu_notifier_ops = {
+> > 		.invalidate_range	= arm_smmu_mm_invalidate_range,
+> > 		.release		= arm_smmu_mm_release,
+> > 		.free_notifier		= arm_smmu_mmu_notifier_free,
+> > 	};
+> >
+> > Again from include/linux/mmu_notifier.h, not implementing the start()/end() hooks
+> > is perfectly valid.  And AFAICT, the existing invalidate_range() hook is pretty
+> > much a perfect fit for what you want to achieve.
+> 
+> Right, I didn't take that approach because it doesn't allow an event
+> type to be passed which would allow them to be filtered on platforms
+> which don't require this.
+> 
+> I had also assumed the invalidate_range() callbacks were allowed to
+> sleep, hence couldn't be called under PTL. That's certainly true of mmu
+> interval notifier callbacks, but Catalin reminded me that calls such as
+> ptep_clear_flush_notify() already call invalidate_range() callback under
+> PTL so I guess we already assume drivers don't sleep in their
+> invalidate_range() callbacks. I will update the comments to reflect
+> that.
+> 
+> > 	 * If invalidate_range() is used to manage a non-CPU TLB with
+> > 	 * shared page-tables, it not necessary to implement the
+> > 	 * invalidate_range_start()/end() notifiers, as
+> > 	 * invalidate_range() already catches the points in time when an
+> > 	 * external TLB range needs to be flushed. For more in depth
+> > 	 * discussion on this see Documentation/mm/mmu_notifier.rst
+> >
+> > Even worse, this change may silently regress performance for secondary MMUs that
+> > haven't yet taken advantage of the event type, e.g. KVM will zap all of KVM's PTEs
+> > in response to the upgrade, instead of waiting until the guest actually tries to
+> > utilize the new protections.
+> 
+> Yeah, I like the idea of introducing a
+> ptep_set_access_flags_notify(). That way this won't regress performance
+> on platforms that don't need it. Note this isn't a new feature but
+> rather a bugfix. It's unclear to me why KVM on ARM hasn't already run
+> into this issue, but I'm no KVM expert. Thanks for the feedback.
 
-Fixes: b7d861d93945 ("DMA: PL330: Merge PL330 driver into drivers/dma/")
-Fixes: ae43b3289186 ("ARM: 8202/1: dmaengine: pl330: Add runtime Power Management support v12")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jaswinder Singh <jassisinghbrar@gmail.com>
-Cc: Jaswinder Singh <jassi.brar@samsung.com>
-Cc: Boojin Kim <boojin.kim@samsung.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Russell King <rmk+kernel@arm.linux.org.uk>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: dmaengine@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org
----
- drivers/dma/pl330.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff -- a/drivers/dma/pl330.c b/drivers/dma/pl330.c
---- a/drivers/dma/pl330.c
-+++ b/drivers/dma/pl330.c
-@@ -1050,7 +1050,7 @@ static bool _trigger(struct pl330_thread
- 	return true;
- }
- 
--static bool _start(struct pl330_thread *thrd)
-+static bool _start_thread(struct pl330_thread *thrd)
- {
- 	switch (_state(thrd)) {
- 	case PL330_STATE_FAULT_COMPLETING:
-@@ -1702,7 +1702,7 @@ static int pl330_update(struct pl330_dma
- 			thrd->req_running = -1;
- 
- 			/* Get going again ASAP */
--			_start(thrd);
-+			_start_thread(thrd);
- 
- 			/* For now, just make a list of callbacks to be done */
- 			list_add_tail(&descdone->rqd, &pl330->req_done);
-@@ -2089,7 +2089,7 @@ static void pl330_tasklet(struct tasklet
- 	} else {
- 		/* Make sure the PL330 Channel thread is active */
- 		spin_lock(&pch->thread->dmac->lock);
--		_start(pch->thread);
-+		_start_thread(pch->thread);
- 		spin_unlock(&pch->thread->dmac->lock);
- 	}
- 
-@@ -2107,7 +2107,7 @@ static void pl330_tasklet(struct tasklet
- 			if (power_down) {
- 				pch->active = true;
- 				spin_lock(&pch->thread->dmac->lock);
--				_start(pch->thread);
-+				_start_thread(pch->thread);
- 				spin_unlock(&pch->thread->dmac->lock);
- 				power_down = false;
- 			}
+KVM manages its own page tables and so does its own TLB invalidations as needed,
+e.g. KVM can and does change KVM's stage-2 PTEs from read-only to read/write
+irrespective of mmu_notifiers.  I assume the SMMU issue arises only because the
+SMMU is reusing the host kernel's (stage-1?) page tables.
