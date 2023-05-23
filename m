@@ -2,35 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113C570E6C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6845870E6B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238592AbjEWUmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S238556AbjEWUls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbjEWUmh (ORCPT
+        with ESMTP id S230031AbjEWUlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:42:37 -0400
+        Tue, 23 May 2023 16:41:44 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197DA185;
-        Tue, 23 May 2023 13:42:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BFFCA;
+        Tue, 23 May 2023 13:41:43 -0700 (PDT)
 Received: from [192.168.122.1] (84-115-214-73.cable.dynamic.surfer.at [84.115.214.73])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C4414CFBBB;
-        Tue, 23 May 2023 20:41:39 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id CC7EFCFBBC;
+        Tue, 23 May 2023 20:41:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1684874500; bh=HFBWsBkYn2DBr6AAVznAZpdgrKhwcQeGU1Uuc9j2Tyo=;
+        t=1684874501; bh=TJ542YLeCftA/8fhg2JNrraJTBnWbaZkPbFnUwRol6g=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=aB8Kt7UZQxO2zuc5lflRIrvIhssI9kLblxslBjA+RN7je3JmR/UiM2ESFLmFIYKgC
-         BLrv3dXaEU4K6q35fSHwZQaOx5A+q4OcMPDttVs/wDBEFbp3jgR3DXTRBIFeDpYiFp
-         Q55sOyBTMP7p92bDwE5yE5VRrAfJSPx674LhSiK0=
+        b=R2/gMkK/PfFPy6GWRI1+HF3H+f1tCi0OIO/sVowniDPPouJuJwQ9Qg02BT4pFZNTQ
+         62RRBGYRz2pLtyJFGo+PBzLQRcF/MLppm9OenHSBXUgru6Tp7BE7Oj1xjko+vPGopx
+         /dpPFtqNduCw67zrz2vMp1t7+yuRcQ4/hPHDjisE=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Tue, 23 May 2023 22:41:28 +0200
-Subject: [PATCH v3 1/3] arm64: dts: qcom: Add PMI632 PMIC
+Date:   Tue, 23 May 2023 22:41:29 +0200
+Subject: [PATCH v3 2/3] arm64: dts: qcom: sdm632-fairphone-fp3: Add
+ notification LED
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-pmi632-v3-1-079d2cada699@z3ntu.xyz>
+Message-Id: <20230414-pmi632-v3-2-079d2cada699@z3ntu.xyz>
 References: <20230414-pmi632-v3-0-079d2cada699@z3ntu.xyz>
 In-Reply-To: <20230414-pmi632-v3-0-079d2cada699@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -51,20 +52,20 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-doc@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4065; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=HFBWsBkYn2DBr6AAVznAZpdgrKhwcQeGU1Uuc9j2Tyo=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkbST/jPJnNPzcCOq8KElAPLGfrMhiVGRehOhpa
- HyCVST7TWmJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZG0k/wAKCRBy2EO4nU3X
- VuKyEACpa+TDToJSB3k9vfbSK0mPOS3p3K4/3lzzuNN/GV4sTKmlgw9l3FnApTzXZm0Lg8k3kPx
- eKqAuXb+sf44JFE/6kMRiMFo9brJspUqov02Rl6vbWrz6vfQcVoNC6c9IbmoH2/Q0A+0hGWOGFm
- uO6xdHOKGHaVgUXTzCpCGFcD/EJkXW0a8Vv2k2MmjCUWmoMdFAGd05mvNa6UpU9aIwCghwNLJpn
- VBhg50eaZB7yxxxGFnJb3RuS/78a/A5jb9ikk8B0VrBxVNIWFvmpCC9eEF7oLbh+4N5kaAWhjRV
- hv1UwMvya+ToF2xICEAxPVpQPWzZcr/5PRFVs+krJWfVOntEmxGXWnj1p4+q5pmR+xVtAc3w22t
- RcQDXcaVvsIsXhLoogPBxeDGNTdaScPySQNkkm6qx+FuUKxLauklx301AuYk/RRJIVeW+hCwrxI
- mHHAY+Csy+fYIWkUz6EpiJZ4Any8p63jU2nJ4jvyFYkVXwmIVkL5wNdq1qTiKM0daaQS/SwLVtf
- FOSbthPM9Ra2O/Ddi/Uddba8MNire+o0u2pqTI8O8V8a8IZCE1oen8ZoVwscZfQB0u+1qi7tkSZ
- dzTAerS9gmuQjXJn1GDpXnwrpSmiPM8rEk9uWhwD2RAEayuTkJghYQTgHdPgloNsznHREEMg0fx
- l5xdQP2ofIyuP/Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1343; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=TJ542YLeCftA/8fhg2JNrraJTBnWbaZkPbFnUwRol6g=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkbSUAAyJdMMoOpSMaz9C3Sn99T7YCw8ToXq945
+ 4IsslXJObKJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZG0lAAAKCRBy2EO4nU3X
+ VkJVD/9YaYeyX9jGqe7/y/4fgdOOuMfD8EwIgbX9nwu5DF5ZjmGZB+zBdyGMWhQhLbw7PBh7QYb
+ qIUjbeCRp6yhQUDaQmx7dLIW8EkhYtFnWnpPuZoeJuathLOggZ1LelZn9yoIGSEKNurIL6ZmK9D
+ hg5lRqs5DAmrz7j9MJNLkXad/UoBWdZcyAxUrUOWd3UX2haujPhVkgg7K23qt+hpLKD0TyoBWvU
+ WnYHJ7QME34UHsR0CXpkmVTfIZAugH4gwBgY3joI3S4ejXy/LVU8ibpmMUGdAyG7kgymVqHYmzr
+ gRuW0FH44DHpcNL2ZYZUwbkfnZfHgQyC3gAhPkMvrnJI0Nw8H/DO9ZpqU77uKPsQ40sbKDBgCZ1
+ Y5D7pO1e4kNu9e5cgfK1NoL7GP7YotlpUtWghsrBwfTA9oUedPcKieCFpC2Tktu9jWNTCCA/3z5
+ 4bdNf6/SjiEpypd3+XcJsBuumnPgsjJRNS2qUvT6ebEO7QFiF8YoXad28bEdo1D7HbkA9MyceAr
+ DG3hujx4NyOiqcsG29b58fvG9HIscwL2U08/E3CRUPkMwg8sDsYsc3Mit31pRYxFo+4NIo2r7QK
+ qrdedQ6cMy9rL3rLtagFVgBf2UKuVNpAeDxhXINoG17ON54iHyAFXygKvT+bBNq5+g33ZzaoUmK
+ wjTL3OqBuLjqB1w==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,186 +78,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PMI632, commonly found on SoCs with SDM632 has various standard
-functions like ADC, GPIOs, LPG and more.
+The phone features a notification LED connected to the pmi632. Configure
+the RGB led found on it.
 
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- arch/arm64/boot/dts/qcom/pmi632.dtsi | 165 +++++++++++++++++++++++++++++++++++
- 1 file changed, 165 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 29 +++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/pmi632.dtsi b/arch/arm64/boot/dts/qcom/pmi632.dtsi
-new file mode 100644
-index 000000000000..4eb79e0ce40a
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/pmi632.dtsi
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (C) 2023 Luca Weiss <luca@z3ntu.xyz>
-+ */
+diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+index 70e683b7e4fc..301eca9a4f31 100644
+--- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
++++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+@@ -4,8 +4,10 @@
+  */
+ /dts-v1/;
+ 
++#include <dt-bindings/leds/common.h>
+ #include "sdm632.dtsi"
+ #include "pm8953.dtsi"
++#include "pmi632.dtsi"
+ 
+ / {
+ 	model = "Fairphone 3";
+@@ -83,6 +85,33 @@ &pm8953_resin {
+ 	linux,code = <KEY_VOLUMEDOWN>;
+ };
+ 
++&pmi632_lpg {
++	status = "okay";
 +
-+#include <dt-bindings/iio/qcom,spmi-vadc.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/spmi/spmi.h>
++	multi-led {
++		color = <LED_COLOR_ID_RGB>;
++		function = LED_FUNCTION_STATUS;
 +
-+/ {
-+	thermal-zones {
-+		pmi632-thermal {
-+			polling-delay-passive = <100>;
-+			polling-delay = <0>;
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+			thermal-sensors = <&pmi632_temp>;
++		led@1 {
++			reg = <1>;
++			color = <LED_COLOR_ID_RED>;
++		};
 +
-+			trips {
-+				trip0 {
-+					temperature = <95000>;
-+					hysteresis = <0>;
-+					type = "passive";
-+				};
++		led@2 {
++			reg = <2>;
++			color = <LED_COLOR_ID_GREEN>;
++		};
 +
-+				trip1 {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "hot";
-+				};
-+
-+				trip2 {
-+					temperature = <125000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
++		led@3 {
++			reg = <3>;
++			color = <LED_COLOR_ID_BLUE>;
 +		};
 +	};
 +};
 +
-+&spmi_bus {
-+	pmic@2 {
-+		compatible = "qcom,pmi632", "qcom,spmi-pmic";
-+		reg = <0x2 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pmi632_temp: temp-alarm@2400 {
-+			compatible = "qcom,spmi-temp-alarm";
-+			reg = <0x2400>;
-+			interrupts = <0x2 0x24 0x0 IRQ_TYPE_EDGE_BOTH>;
-+			#thermal-sensor-cells = <0>;
-+		};
-+
-+		pmi632_adc: adc@3100 {
-+			compatible = "qcom,spmi-adc5";
-+			reg = <0x3100>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#io-channel-cells = <1>;
-+			interrupts = <0x2 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
-+
-+			channel@0 {
-+				reg = <ADC5_REF_GND>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_gnd";
-+			};
-+
-+			channel@1 {
-+				reg = <ADC5_1P25VREF>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "vref_1p25";
-+			};
-+
-+			channel@6 {
-+				reg = <ADC5_DIE_TEMP>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "die_temp";
-+			};
-+
-+			channel@7 {
-+				reg = <ADC5_USB_IN_I>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "usb_in_i_uv";
-+			};
-+
-+			channel@8 {
-+				reg = <ADC5_USB_IN_V_16>;
-+				qcom,pre-scaling = <1 16>;
-+				label = "usb_in_v_div_16";
-+			};
-+
-+			channel@9 {
-+				reg = <ADC5_CHG_TEMP>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "chg_temp";
-+			};
-+
-+			channel@4b {
-+				reg = <ADC5_BAT_ID_100K_PU>;
-+				qcom,hw-settle-time = <200>;
-+				qcom,pre-scaling = <1 1>;
-+				qcom,ratiometric;
-+				label = "bat_id";
-+			};
-+
-+			channel@83 {
-+				reg = <ADC5_VPH_PWR>;
-+				qcom,pre-scaling = <1 3>;
-+				label = "vph_pwr";
-+			};
-+
-+			channel@84 {
-+				reg = <ADC5_VBAT_SNS>;
-+				qcom,pre-scaling = <1 3>;
-+				label = "vbat_sns";
-+			};
-+		};
-+
-+		pmi632_adc_tm: adc-tm@3500 {
-+			compatible = "qcom,spmi-adc-tm5";
-+			reg = <0x3500>;
-+			interrupts = <0x2 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
-+			#thermal-sensor-cells = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		pmi632_sdam_7: nvram@b600 {
-+			compatible = "qcom,spmi-sdam";
-+			reg = <0xb600>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0xb600 0x100>;
-+		};
-+
-+		pmi632_gpios: gpio@c000 {
-+			compatible = "qcom,pmi632-gpio", "qcom,spmi-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			gpio-ranges = <&pmi632_gpios 0 0 8>;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pmic@3 {
-+		compatible = "qcom,pmi632", "qcom,spmi-pmic";
-+		reg = <0x3 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pmi632_lpg: pwm {
-+			compatible = "qcom,pmi632-lpg";
-+
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#pwm-cells = <2>;
-+
-+			status = "disabled";
-+		};
-+	};
-+};
+ &sdhc_1 {
+ 	status = "okay";
+ 	vmmc-supply = <&pm8953_l8>;
 
 -- 
 2.40.1
