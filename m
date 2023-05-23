@@ -2,123 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E431A70D00F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835EF70D010
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbjEWBFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S235261AbjEWBF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235230AbjEWBFS (ORCPT
+        with ESMTP id S234984AbjEWBFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:05:18 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8125F107;
-        Mon, 22 May 2023 18:05:02 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N0qCFD029898;
-        Tue, 23 May 2023 01:04:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=kk+v2BXrM1HdfwQCv/50x3jHzLeUveWiQIgeamulje0=;
- b=mqjzwyilgNZm6NFZF93VBVDenn2EwXe5ku7JjHwCFmmhh1YaWv49jlFvcbDRYDvllOUj
- pwEYPc019E5sFZTIckWZzCFOl8uPBOH08ywLhapDsQxEMUX3HAxNa8RRCTdn1f5IGBHp
- JAO8agCDZDhWVx291oZu3rWP1qUhqUd7geNtQQcclS2JDyc1fImEN8W8M2eF8qPtivhh
- 76rg4vr8GZI+EdHKOTPP6ILlVZxdQ5YxJcigZhnYm+h+fTHkozNTTXojSgGEj4vM/qDu
- mOIvNiyEVzgjJnvEIwLOHgT2l68L/lcPK3vfNKZkhDBtDF6NJ4ikqzTDqyc3al0DXY1+ sw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmw6b7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 01:04:47 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N14lbS004543
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 01:04:47 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 22 May 2023 18:04:46 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Joerg Roedel <joro@8bytes.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] dt-bindings: arm-smmu: Fix SC8280XP Adreno binding
-Date:   Mon, 22 May 2023 18:04:41 -0700
-Message-ID: <20230523010441.63236-1-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 22 May 2023 21:05:31 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5921918E;
+        Mon, 22 May 2023 18:05:28 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso2701098e87.1;
+        Mon, 22 May 2023 18:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684803926; x=1687395926;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+cPEvgakMKy8aZ6tk74VpcoeTVjWwOIUcBBI8spB66g=;
+        b=Z/NGPFUGaecALydozi/TCKrIYcXcYTVX90l5U9oYzOU924lK3YAa5dgFpxjm8W7qV3
+         j8Is69+TGKclTLvyKdbchf1VgCqt5v32vSZgaGXH//7R/hGJXGBeaP38OC7VAA+13S2/
+         O2oZLOdb8MbSC38s/tnv2GwmrxCEvWvDhMOfVClYaHgJqkzyU93odXSLp/V0m8jEKahD
+         /6b4Wk7DbcrTOOc5bMijNuLCp9Yx++ZGdVnMwp7Ogzij1QedjCOPll7ki8KJR0qNRXAR
+         YN4oBLtm2lNos8/dnlm7AOQt+XdXaBMSE5fehJRRaG3tuSNFx/0oVDIydAxIgqdYdiDA
+         S8Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684803926; x=1687395926;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+cPEvgakMKy8aZ6tk74VpcoeTVjWwOIUcBBI8spB66g=;
+        b=Yz0oG+BQyJF7qmlALTKJjxoKgsvvlmCbh7gvIp2XVNtB5lwUAcOUTOUyMX7/CpW3wm
+         X+LPs/d3vy/MEn/HFnzITPUD3Yarc2h7vECH2UwjQTU504c8WKzeRHx9DL143x6F4t/T
+         xdmyi9xwLAdEaKVcNfh8kFe7oaIe1opej1ABeHzF0ieF6rVe1YvazGRirgwTviZ0XVBC
+         g3UXssiPadMGae5yIsHjTwWUOwB76C2fqbIUnf1x9aSF0uvoep8CHjLtSAA2/jrpNJhi
+         /uY2DMc1I/DlU3kkjpQAwvxu3cWgpVpSsbI20+UDWSiDUavtMLxjBoqIo3LngRcITKKP
+         m82A==
+X-Gm-Message-State: AC+VfDxOB3QYer9bLxomQ0QmI6AMBuZ7MIIJcwD5cxrGR69LN5Q/ADpT
+        7teZjeBXCLiyqltaxpOHU55/3fbmbuK8LwwMd9c=
+X-Google-Smtp-Source: ACHHUZ6mQJBgPkb3HqOabQYA1hSLgNPEVq7wPHABwM8ZXFt/fEN3HAKp24zyl96sBhqnI2ns5XA75ApWDn48oFqddPE=
+X-Received: by 2002:a19:a402:0:b0:4f4:ba0d:3bbf with SMTP id
+ q2-20020a19a402000000b004f4ba0d3bbfmr280781lfc.60.1684803926066; Mon, 22 May
+ 2023 18:05:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: veIkmCiM05s-ynKUwcIx6ATgx98dA0Ea
-X-Proofpoint-ORIG-GUID: veIkmCiM05s-ynKUwcIx6ATgx98dA0Ea
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_18,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=902 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230006
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230517125617.931437-1-arnd@kernel.org> <20230517125617.931437-2-arnd@kernel.org>
+In-Reply-To: <20230517125617.931437-2-arnd@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 22 May 2023 18:05:14 -0700
+Message-ID: <CAADnVQL+K22KEMu8fkQbsdmDAMcws1Cja3iM=E9zPLhDfDWmqw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] bpf: add bpf_probe_read_kernel declaration
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Yafang Shao <laoar.shao@gmail.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The qcom,sc8280xp-smmu-500 Adreno SMMU binding has clocks, so fix up the
-binding to allow this.
+On Wed, May 17, 2023 at 5:56=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> bpf_probe_read_kernel() has a __weak definition in core.c and another
+> definition with an incompatible prototype in kernel/trace/bpf_trace.c,
+> when CONFIG_BPF_EVENTS is enabled.
+>
+> Since the two are incompatible, there cannot be a shared declaration
+> in a header file, but the lack of a prototype causes a W=3D1 warning:
+>
+> kernel/bpf/core.c:1638:12: error: no previous prototype for 'bpf_probe_re=
+ad_kernel' [-Werror=3Dmissing-prototypes]
+>
+> Add a prototype directly in front of the function instead to shut
+> up the warning. Also, to avoid having an incompatible function override
+> the __weak definition, use an #ifdef to ensure that only one of the
+> two is ever defined.
+>
+> I'm not sure what can be done to make the two prototypes match.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  kernel/bpf/core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 6f5ede31e471..38762a784b86 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1635,11 +1635,14 @@ bool bpf_opcode_in_insntable(u8 code)
+>  }
+>
+>  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+> -u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe=
+_ptr)
+> +u64 bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr);
+> +#ifndef CONFIG_BPF_EVENTS
+> +u64 bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+>  {
+>         memset(dst, 0, size);
+>         return -EFAULT;
+>  }
 
-Fixes: 38db6b41b2f4 ("dt-bindings: arm-smmu: Add compatible for Qualcomm SC8280XP")
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-index ba677d401e24..6cb04f35642a 100644
---- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-+++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-@@ -80,6 +80,7 @@ properties:
-         items:
-           - enum:
-               - qcom,sc7280-smmu-500
-+              - qcom,sc8280xp-smmu-500
-               - qcom,sm6115-smmu-500
-               - qcom,sm6125-smmu-500
-               - qcom,sm8150-smmu-500
-@@ -331,7 +332,9 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: qcom,sc7280-smmu-500
-+            enum:
-+              - qcom,sc7280-smmu-500
-+              - qcom,sc8280xp-smmu-500
-     then:
-       properties:
-         clock-names:
-@@ -416,7 +419,6 @@ allOf:
-               - qcom,sa8775p-smmu-500
-               - qcom,sc7180-smmu-500
-               - qcom,sc8180x-smmu-500
--              - qcom,sc8280xp-smmu-500
-               - qcom,sdm670-smmu-500
-               - qcom,sdm845-smmu-500
-               - qcom,sdx55-smmu-500
--- 
-2.39.2
-
+This is not right, but you've spotted a bug.
+bpf_probe_read_kernel
+It should be BPF_CALL_3(bpf_probe_read_kernel, void *, dst, u32, size,
+           const void *, unsafe_ptr)
+here in kernel/bpf/core.c as well otherwise bpf prog won't
+pass the arguments correctly on 32-bit arches.
+The kconfig without CONFIG_BPF_EVENTS and with BPF_SYSCALL is very odd.
+I suspect the progs will likely refuse to load,
+but still worth fixing it correctly at least to document the calling conven=
+tion.
