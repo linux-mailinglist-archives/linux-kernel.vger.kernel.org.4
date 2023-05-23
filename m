@@ -2,99 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A4270E5D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D94A70E5D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238419AbjEWTkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S237984AbjEWTlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238481AbjEWTkc (ORCPT
+        with ESMTP id S230117AbjEWTlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:40:32 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA62E73
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:40:18 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d577071a6so204079b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684870818; x=1687462818;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t5+vEum+icvRoOsA8RbdszrE+oDIqpAAJx5BE5S3Yrk=;
-        b=b8mDkUonfyAkUSWIM3sTxP1tatTZXVjyQBfJuxQt0M4ezKPu+WCadC1slZTi4BUIW5
-         cXQWuVUkdGHl1SgaZsma1+s+pgwj39A92qswoVpQ/ftNkUW96wEjXWwyQOTB218irSTV
-         MaSRqLki3VnPrJr3ag+X/UkeMIxzvTSuojK8IKPLITAOiXSWalm8+Eb3cCJVHv1Wo8E/
-         tOyjrlgcT8CX+l4jL2twlyHGQyQYlvJ1u1evh+yT+CvDnMHYgCANReAFwMq2Gpktp7I2
-         FIripO9orrDM4zr4dgBhMWwduQZU743lkgF0ahy9D7H9vEjHc78gJ61YcHZKJ7bDwIaU
-         98VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684870818; x=1687462818;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t5+vEum+icvRoOsA8RbdszrE+oDIqpAAJx5BE5S3Yrk=;
-        b=QcEmodV13ZdMl6em9e6YgRN9sOMx+Hfza9ccrO1UxlDXJemngNlLJXtkB218DY8Rpf
-         0df9dHSVaoE8JgRFv7smZrE08Cxs9cBVPc8mKApn7tGA33c/pY1hNwWF6zV696WKmlWE
-         yQVaGMHyPJG9gFlkUocmACCiBzyPMxOakNicT2rYF42QekQVLRPb2ygpgA+bhS3xfT/+
-         4YeGuFCskUjhjHCTAHOJKkm9IDmMMyfxzmJ1VGlAaYC7CaivnnXdrTy2WDXqZbN+o+qf
-         h6VflqQ7nj9IRCCyIzDia43VishOP242Zi+J18GbNHtGBfZ0qM3tpQZNdWOzkV8RWHQk
-         wy5A==
-X-Gm-Message-State: AC+VfDxOD+kbQ/hOFgYzsQxAdTSx51jDwtf549e1w9Euji5OrzztgTh4
-        3NesmozG3OLCJNASmkIl5A8=
-X-Google-Smtp-Source: ACHHUZ6fmN/stE+tIK3VU9YuB7QOmO9Mm6I8b/dV9nu4GkQDSlQ9ZxiTrRFxSh2skG7CI3od0tJP4A==
-X-Received: by 2002:a05:6a00:14d0:b0:639:a518:3842 with SMTP id w16-20020a056a0014d000b00639a5183842mr230904pfu.7.1684870818001;
-        Tue, 23 May 2023 12:40:18 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id a14-20020a62e20e000000b00643889e30c2sm3942573pfi.180.2023.05.23.12.40.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 12:40:17 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 23 May 2023 09:40:16 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Zqiang <qiang.zhang1211@gmail.com>
-Cc:     jiangshanlai@gmail.com, naresh.kamboju@linaro.org,
+        Tue, 23 May 2023 15:41:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA68711A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:41:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47A8D635F9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D8EC433EF;
+        Tue, 23 May 2023 19:41:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684870894;
+        bh=0k+c3qp+hT/FnTIabF/tvyr485sFCPqurohdQ1Wmvg0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YTWYaq3hcBNFbJEBhhlcfrhVNacPYmQemdO5J2oJyFCamj+S9mFXmcLKNMQ4veADS
+         Xh6Az6Ex1dQfeonR2xlXbtxBqnY4UUBlK62T+6JLln+YzuvwbJ8ujowyug7b0L7DsO
+         we9q1cH+VMYZ8W/9YqcnAFGGvAuZ6XGgoFHdXtut2xEAvmu++lAWxDsm9JzgPawolK
+         garDBhdL3brQxCRzbMj1yxZkmF67RAm4zH7VwqOZ0JE1L40AA8/HY2uTQyEFghVYVJ
+         JiMKre9XPM0ByACQ16d0CZIGB3YmSR8Rto9bCXhp2as6lpyK4BcDKFAqlrmQDWl5ad
+         /ejcOqyGF4aVQ==
+Date:   Tue, 23 May 2023 20:41:29 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] workqueue: Fix warning triggered when nr_running is
- checked in worker_enter_idle()
-Message-ID: <ZG0WoOqfr6R5wK1p@slm.duckdns.org>
-References: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
+Subject: Re: [PATCH] ASoC: rt5682: Use a maple tree based register cache
+Message-ID: <92ec3b6d-999e-4b35-8bce-b0213824eb63@sirena.org.uk>
+References: <20230419-asoc-rt5682-maple-v1-1-ed40369c9099@kernel.org>
+ <1ce6bb84-3140-3953-e995-00eb7b16f386@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FkDjINFkwfZZX0BZ"
 Content-Disposition: inline
-In-Reply-To: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1ce6bb84-3140-3953-e995-00eb7b16f386@linux.intel.com>
+X-Cookie: Beware of low-flying butterflies.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:09:41PM +0800, Zqiang wrote:
-> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> index 9c5c1cfa478f..329b84c42062 100644
-> --- a/kernel/workqueue.c
-> +++ b/kernel/workqueue.c
-> @@ -1144,13 +1144,12 @@ void wq_worker_tick(struct task_struct *task)
->  	 * longer than wq_cpu_intensive_thresh_us, it's automatically marked
->  	 * CPU_INTENSIVE to avoid stalling other concurrency-managed work items.
->  	 */
-> -	if ((worker->flags & WORKER_NOT_RUNNING) ||
-> +	if ((worker->flags & WORKER_NOT_RUNNING) || worker->sleeping ||
->  	    worker->task->se.sum_exec_runtime - worker->current_at <
->  	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
->  		return;
 
-Ah, right, this isn't just interrupted read-modify-write. It has to consider
-sleeping. This is subtle. We'll definitely need more comments. Will think
-more about it.
+--FkDjINFkwfZZX0BZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
+On Tue, May 23, 2023 at 02:24:53PM -0500, Pierre-Louis Bossart wrote:
 
--- 
-tejun
+> I don't see any other changes to this codec driver and the first problem
+> detected seemed to happen when we did an upstream merge last week.
+> Unfortunately the last merge was on April 24 (sof-dev-rebase-20230424)
+> which is just the day before this commit was added...
+
+Try this:
+
+=46rom 5953e9de359674ff2d95fe4c241bc7880d6d0d82 Mon Sep 17 00:00:00 2001
+=46rom: Mark Brown <broonie@kernel.org>
+Date: Tue, 23 May 2023 20:40:22 +0100
+Subject: [PATCH] regmap: maple: Drop the RCU read lock while syncing regist=
+ers
+
+Unfortunately the maple tree requires us to explicitly lock it so we need
+to take the RCU read lock while iterating. When syncing this means that we
+end up trying to write out register values while holding the RCU read lock
+which triggers lockdep issues since that is an atomic context but most
+buses can't be used in atomic context. Pause the iteration and drop the
+lock for each register we check to avoid this.
+
+Reported-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/base/regmap/regcache-maple.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/base/regmap/regcache-maple.c b/drivers/base/regmap/reg=
+cache-maple.c
+index 2d2d5d7ee447..14f6f49af097 100644
+--- a/drivers/base/regmap/regcache-maple.c
++++ b/drivers/base/regmap/regcache-maple.c
+@@ -203,15 +203,18 @@ static int regcache_maple_sync(struct regmap *map, un=
+signed int min,
+=20
+ 	mas_for_each(&mas, entry, max) {
+ 		for (r =3D max(mas.index, lmin); r <=3D min(mas.last, lmax); r++) {
++			mas_pause(&mas);
++			rcu_read_unlock();
+ 			ret =3D regcache_sync_val(map, r, entry[r - mas.index]);
+ 			if (ret !=3D 0)
+ 				goto out;
++			rcu_read_lock();
+ 		}
+ 	}
+=20
+-out:
+ 	rcu_read_unlock();
+=20
++out:
+ 	map->cache_bypass =3D false;
+=20
+ 	return ret;
+--=20
+2.30.2
+
+
+--FkDjINFkwfZZX0BZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRtFugACgkQJNaLcl1U
+h9CWcgf9EaTd3BkCsWHJcyaj9CFfx161IAItun5Zers1a7vr2zo5DqQS8H9F2ROL
+oGxOS9shq4q7MFCP0HDlLnI3UI+IkTUZruC777xkOc2mlbsWYGsXIPiaGuCuuUvH
+2iZi9Fl+LPNVCQKMp7aqzSa7atoR34PVvFESsUALPjW9Rqd/y9O5E5XkCf/Nls5Q
+zTfQ+QaTXuBjYgqEEpp6PEY6jug5OJmkjJ+qLBZ2qVgkeDFIyjti0kh/+68sAPwh
+gTHldc2idDqnNAiAqznJ5djh7gMXdolT1RBM+YG1DK6nKrgIB1gpIiy70e0WWcFD
+QXU1H6k0ROA8RdfaJqOxLYyiR++joQ==
+=zZvr
+-----END PGP SIGNATURE-----
+
+--FkDjINFkwfZZX0BZ--
