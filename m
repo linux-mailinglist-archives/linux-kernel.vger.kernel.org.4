@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B139770D63F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C094A70D628
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbjEWH4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
+        id S230062AbjEWHzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbjEWHzh (ORCPT
+        with ESMTP id S236204AbjEWHzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:55:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A9BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:55:13 -0700 (PDT)
+        Tue, 23 May 2023 03:55:35 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41B110D1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:55:11 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7CD8720410;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BB467219EE;
         Tue, 23 May 2023 07:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1684828448; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=l4DZ5woY6gmacraFwH4PrBR7nOGakjNJMIBScTlvDFE=;
-        b=HkjeYC0QuYOlGB79i3zWQ/9nWZoV0V00HmPoZjX8OD3mqJf/3zUTw9Eb//H552FIYpcm9x
-        R9FfayH9I+Xn4sSfIE6He1cX/yhBeKa/6S8syoOB8VSzThoY1S86tUrGg7Yfora7TmCj6O
-        K08n5j33ogHA3gs0vajGR/5etm9bJEQ=
+        bh=duuZwN1C9IUQLQQEAFsw/JZ4JxAL3kzU5sIEEpm2/Z8=;
+        b=EUqXzLC0QgGY2mNYInw54Hs0O9Ti2wyrYx1zPwp5ZJnHqF7bq+RQGr7r0NWYKth1JsXRlD
+        Wmtn2Z/18DlKT50ZVuq0ujLJUSnIhKh/49QV6wy0BDW3yFy9hM6ny2TUPXp9H5VszRR15o
+        jDSAAdpo2ZeNse13KJMYTKQLbcpIVnM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1684828448;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=l4DZ5woY6gmacraFwH4PrBR7nOGakjNJMIBScTlvDFE=;
-        b=XpHHji8S3+L9y7x/IwkdgDVaipr1QtJ8kmLMfx6sxcg2inXZ1uZQA0V1yFFRsC+ChRksAm
-        v6YIzmrwfWxOM0DQ==
+        bh=duuZwN1C9IUQLQQEAFsw/JZ4JxAL3kzU5sIEEpm2/Z8=;
+        b=aUmxVBbexQ+QEfvys+3GiVCD2BcAxLFBuvh/IvWCESBt9h97lPmuHSZGjM9gPOTWbmhYsD
+        Pyh6xWc+EdLd5QAA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4291D13A1A;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FF0913588;
         Tue, 23 May 2023 07:54:08 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id wN89DiBxbGT4KgAAMHmgww
+        id 6AueHSBxbGT4KgAAMHmgww
         (envelope-from <tiwai@suse.de>); Tue, 23 May 2023 07:54:08 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 19/37] ALSA: seq: Treat snd_seq_client object directly in client drivers
-Date:   Tue, 23 May 2023 09:53:40 +0200
-Message-Id: <20230523075358.9672-20-tiwai@suse.de>
+Subject: [PATCH v2 20/37] ALSA: seq: Drop dead code for the old broadcast support
+Date:   Tue, 23 May 2023 09:53:41 +0200
+Message-Id: <20230523075358.9672-21-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230523075358.9672-1-tiwai@suse.de>
 References: <20230523075358.9672-1-tiwai@suse.de>
@@ -70,57 +70,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce the new helpers, snd_seq_kernel_client_get() and _put() for
-kernel client drivers to treat the snd_seq_client more directly.
-This allows us to reduce the exported symbols and APIs at each time we
-need to access some field in future.
+The broadcast and multicast supports have been never enabled.
+Let's drop the dead code.
 
 Reviewed-by: Jaroslav Kysela <perex@perex.cz>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- sound/core/seq/seq_clientmgr.c | 15 +++++++++++++++
- sound/core/seq/seq_clientmgr.h |  4 ++++
- 2 files changed, 19 insertions(+)
+ sound/core/seq/seq_clientmgr.c | 105 +--------------------------------
+ 1 file changed, 1 insertion(+), 104 deletions(-)
 
 diff --git a/sound/core/seq/seq_clientmgr.c b/sound/core/seq/seq_clientmgr.c
-index 2d707afa1ef1..98e8032a32e2 100644
+index 98e8032a32e2..019af1343325 100644
 --- a/sound/core/seq/seq_clientmgr.c
 +++ b/sound/core/seq/seq_clientmgr.c
-@@ -2390,6 +2390,21 @@ int snd_seq_kernel_client_write_poll(int clientid, struct file *file, poll_table
+@@ -711,93 +711,6 @@ static int deliver_to_subscribers(struct snd_seq_client *client,
+ 	return (result < 0) ? result : num_ev;
  }
- EXPORT_SYMBOL(snd_seq_kernel_client_write_poll);
  
-+/* get a sequencer client object; for internal use from a kernel client */
-+struct snd_seq_client *snd_seq_kernel_client_get(int id)
-+{
-+	return snd_seq_client_use_ptr(id);
-+}
-+EXPORT_SYMBOL_GPL(snd_seq_kernel_client_get);
-+
-+/* put a sequencer client object; for internal use from a kernel client */
-+void snd_seq_kernel_client_put(struct snd_seq_client *cptr)
-+{
-+	if (cptr)
-+		snd_seq_client_unlock(cptr);
-+}
-+EXPORT_SYMBOL_GPL(snd_seq_kernel_client_put);
-+
- /*---------------------------------------------------------------------------*/
+-
+-#ifdef SUPPORT_BROADCAST 
+-/*
+- * broadcast to all ports:
+- */
+-static int port_broadcast_event(struct snd_seq_client *client,
+-				struct snd_seq_event *event,
+-				int atomic, int hop)
+-{
+-	int num_ev = 0, err, result = 0;
+-	struct snd_seq_client *dest_client;
+-	struct snd_seq_client_port *port;
+-
+-	dest_client = get_event_dest_client(event, SNDRV_SEQ_FILTER_BROADCAST);
+-	if (dest_client == NULL)
+-		return 0; /* no matching destination */
+-
+-	read_lock(&dest_client->ports_lock);
+-	list_for_each_entry(port, &dest_client->ports_list_head, list) {
+-		event->dest.port = port->addr.port;
+-		/* pass NULL as source client to avoid error bounce */
+-		err = snd_seq_deliver_single_event(NULL, event,
+-						   SNDRV_SEQ_FILTER_BROADCAST,
+-						   atomic, hop);
+-		if (err < 0) {
+-			/* save first error that occurs and continue */
+-			if (!result)
+-				result = err;
+-			continue;
+-		}
+-		num_ev++;
+-	}
+-	read_unlock(&dest_client->ports_lock);
+-	snd_seq_client_unlock(dest_client);
+-	event->dest.port = SNDRV_SEQ_ADDRESS_BROADCAST; /* restore */
+-	return (result < 0) ? result : num_ev;
+-}
+-
+-/*
+- * send the event to all clients:
+- * if destination port is also ADDRESS_BROADCAST, deliver to all ports.
+- */
+-static int broadcast_event(struct snd_seq_client *client,
+-			   struct snd_seq_event *event, int atomic, int hop)
+-{
+-	int err, result = 0, num_ev = 0;
+-	int dest;
+-	struct snd_seq_addr addr;
+-
+-	addr = event->dest; /* save */
+-
+-	for (dest = 0; dest < SNDRV_SEQ_MAX_CLIENTS; dest++) {
+-		/* don't send to itself */
+-		if (dest == client->number)
+-			continue;
+-		event->dest.client = dest;
+-		event->dest.port = addr.port;
+-		if (addr.port == SNDRV_SEQ_ADDRESS_BROADCAST)
+-			err = port_broadcast_event(client, event, atomic, hop);
+-		else
+-			/* pass NULL as source client to avoid error bounce */
+-			err = snd_seq_deliver_single_event(NULL, event,
+-							   SNDRV_SEQ_FILTER_BROADCAST,
+-							   atomic, hop);
+-		if (err < 0) {
+-			/* save first error that occurs and continue */
+-			if (!result)
+-				result = err;
+-			continue;
+-		}
+-		num_ev += err;
+-	}
+-	event->dest = addr; /* restore */
+-	return (result < 0) ? result : num_ev;
+-}
+-
+-
+-/* multicast - not supported yet */
+-static int multicast_event(struct snd_seq_client *client, struct snd_seq_event *event,
+-			   int atomic, int hop)
+-{
+-	pr_debug("ALSA: seq: multicast not supported yet.\n");
+-	return 0; /* ignored */
+-}
+-#endif /* SUPPORT_BROADCAST */
+-
+-
+ /* deliver an event to the destination port(s).
+  * if the event is to subscribers or broadcast, the event is dispatched
+  * to multiple targets.
+@@ -826,15 +739,6 @@ static int snd_seq_deliver_event(struct snd_seq_client *client, struct snd_seq_e
+ 	if (event->queue == SNDRV_SEQ_ADDRESS_SUBSCRIBERS ||
+ 	    event->dest.client == SNDRV_SEQ_ADDRESS_SUBSCRIBERS)
+ 		result = deliver_to_subscribers(client, event, atomic, hop);
+-#ifdef SUPPORT_BROADCAST
+-	else if (event->queue == SNDRV_SEQ_ADDRESS_BROADCAST ||
+-		 event->dest.client == SNDRV_SEQ_ADDRESS_BROADCAST)
+-		result = broadcast_event(client, event, atomic, hop);
+-	else if (event->dest.client >= SNDRV_SEQ_MAX_CLIENTS)
+-		result = multicast_event(client, event, atomic, hop);
+-	else if (event->dest.port == SNDRV_SEQ_ADDRESS_BROADCAST)
+-		result = port_broadcast_event(client, event, atomic, hop);
+-#endif
+ 	else
+ 		result = snd_seq_deliver_single_event(client, event, 0, atomic, hop);
  
- #ifdef CONFIG_SND_PROC_FS
-diff --git a/sound/core/seq/seq_clientmgr.h b/sound/core/seq/seq_clientmgr.h
-index 8cdd0ee53fb1..f05704e45ab4 100644
---- a/sound/core/seq/seq_clientmgr.h
-+++ b/sound/core/seq/seq_clientmgr.h
-@@ -88,4 +88,8 @@ void snd_seq_client_ioctl_unlock(int clientid);
- 
- extern int seq_client_load[15];
- 
-+/* for internal use between kernel sequencer clients */
-+struct snd_seq_client *snd_seq_kernel_client_get(int client);
-+void snd_seq_kernel_client_put(struct snd_seq_client *cptr);
-+
- #endif
+@@ -936,14 +840,7 @@ static int snd_seq_client_enqueue_event(struct snd_seq_client *client,
+ 	if (event->queue == SNDRV_SEQ_ADDRESS_SUBSCRIBERS) {
+ 		event->dest.client = SNDRV_SEQ_ADDRESS_SUBSCRIBERS;
+ 		event->queue = SNDRV_SEQ_QUEUE_DIRECT;
+-	} else
+-#ifdef SUPPORT_BROADCAST
+-		if (event->queue == SNDRV_SEQ_ADDRESS_BROADCAST) {
+-			event->dest.client = SNDRV_SEQ_ADDRESS_BROADCAST;
+-			event->queue = SNDRV_SEQ_QUEUE_DIRECT;
+-		}
+-#endif
+-	if (event->dest.client == SNDRV_SEQ_ADDRESS_SUBSCRIBERS) {
++	} else if (event->dest.client == SNDRV_SEQ_ADDRESS_SUBSCRIBERS) {
+ 		/* check presence of source port */
+ 		struct snd_seq_client_port *src_port = snd_seq_port_use_ptr(client, event->source.port);
+ 		if (src_port == NULL)
 -- 
 2.35.3
 
