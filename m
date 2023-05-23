@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7023C70DEDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B1870DECD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbjEWOMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
+        id S237161AbjEWOLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237229AbjEWOM1 (ORCPT
+        with ESMTP id S237052AbjEWOLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:12:27 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473601BB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:12:07 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d5b4c3ffeso2166892b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684851127; x=1687443127;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=t+G/28MNCXuidnG5AulwelJkxMgzzIsBpPPnC7MtAJ0=;
-        b=VcmTmmhLHRf5xTFBu/ax9SQtxd4sBBDUmL1wGFSR6wYdpRNmAKr/nSwS7AMN5Xlruw
-         +vgu79pnc7vta1MuLSlLL4S7ZLAIpvHqr/P1+BhFKJU/CBV8vrL4wG9mZDuGwBNf3dn6
-         qCNg32U62qRcBu90k/7pDMVuNeFkNg6P4mRMGXVVjRiPkoroAnOB6m6tdQ7NIaRNwv26
-         I9yUhLSyr1vRVVZBGIA9w2Iw9herzhcp0JfX4R5UgdTrl6BhGxtLoMsyQ2vsPbvjqfzE
-         gytwgqhCL3ptEkHmcCliNUWGUf2FQj9MOnuewcdMOiqWf7O6VMoYOv93XesnWaGr1XDN
-         MgTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684851127; x=1687443127;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t+G/28MNCXuidnG5AulwelJkxMgzzIsBpPPnC7MtAJ0=;
-        b=FjO6Wk3J8JCFW0pW7va4mYulOpaRxD7L2ewmMB0s9vhduG361wl+2LIFgcLEyDru3z
-         PUU68I6tku69QEfkk5YZ4zkGqWKc0wKx3WhghONmBSCi5tM6JYzJBPCpsDd2G1qZeCuA
-         9FX3yEsIEnQlOMQC4GQtJHrOtXqKN2L/42g7prA5qpeOdQZU/+pYAbfIVVHrH+z3/MGK
-         LBqTUfWdFXNAYN/UhZo9h+mwX7UNk25xSesUnxc7ftDP8e9wg+eCiwv+yy3iUye11U9f
-         X+6Cj924qzpEmuLLGarI/WVkyW2yVSbE2Ysi1La3CaW3lgSI0QXK9Qylbr/R78G128mO
-         uS1Q==
-X-Gm-Message-State: AC+VfDxcC/1ndC5yfqHY2TQLgyX3H64SpqJsqkuzREgP3N3QbZUNDbU9
-        vLWKcplWcDi+HTlIfkX4YgU=
-X-Google-Smtp-Source: ACHHUZ7w+nf+YbXCQCU34MK1nHjwpTi58817bhgGqJWuUU35TebfIrueX4xz2cALi1VfqSV+Ciz12A==
-X-Received: by 2002:a17:902:e842:b0:1ac:63ac:109d with SMTP id t2-20020a170902e84200b001ac63ac109dmr19122118plg.15.1684851126669;
-        Tue, 23 May 2023 07:12:06 -0700 (PDT)
-Received: from localhost.localdomain ([124.126.151.211])
-        by smtp.gmail.com with ESMTPSA id jl1-20020a170903134100b00194caf3e975sm6789013plb.208.2023.05.23.07.12.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 07:12:06 -0700 (PDT)
-From:   Zqiang <qiang.zhang1211@gmail.com>
-To:     tj@kernel.org, jiangshanlai@gmail.com, naresh.kamboju@linaro.org,
-        qiang.zhang1211@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] workqueue: Disable check CPU-hogging work when set wq_cpu_intensive_thresh_us=0
-Date:   Tue, 23 May 2023 22:09:42 +0800
-Message-Id: <20230523140942.18679-2-qiang.zhang1211@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
-References: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 10:11:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F04D19B0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F11B061924
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:10:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2AFC433D2;
+        Tue, 23 May 2023 14:10:01 +0000 (UTC)
+Date:   Tue, 23 May 2023 15:09:58 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Alexey Izbyshev <izbyshev@ispras.ru>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
+        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
+        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
+Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
+Message-ID: <ZGzJNvKu8h5nDXsa@arm.com>
+References: <20230517150321.2890206-1-revest@chromium.org>
+ <20230517150321.2890206-4-revest@chromium.org>
+ <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
+ <884d131bbc28ebfa0b729176e6415269@ispras.ru>
+ <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
+ <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
+ <c63053b0-5797-504d-7896-c86271b64162@redhat.com>
+ <ZGy6q7v+7jsXb1bV@arm.com>
+ <f47d587fe5a6285f88191fbb13f367c7@ispras.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f47d587fe5a6285f88191fbb13f367c7@ispras.ru>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit disable check CPU-hogging work in wq_worker_tick(), when set
-the 'workqueue.cpu_intensive_thresh_us=0' in bootparams.
+On Tue, May 23, 2023 at 04:25:45PM +0300, Alexey Izbyshev wrote:
+> On 2023-05-23 16:07, Catalin Marinas wrote:
+> > On Tue, May 23, 2023 at 11:12:37AM +0200, David Hildenbrand wrote:
+> > > Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We
+> > > need arg2
+> > > -> arg5 to be 0. But wouldn't the following also just pass a 0 "int" ?
+> > > 
+> > > prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
+> > > 
+> > > I'm easily confused by such (va_args) things, so sorry for the dummy
+> > > questions.
+> > 
+> > Isn't the prctl() prototype in the user headers defined with the first
+> > argument as int while the rest as unsigned long? At least from the man
+> > page:
+> > 
+> > int prctl(int option, unsigned long arg2, unsigned long arg3,
+> > 	  unsigned long arg4, unsigned long arg5);
+> > 
+> > So there are no va_args tricks (which confuse me as well).
+> > 
+> I have explicitly mentioned the problem with man pages in my response to
+> David[1]. Quoting myself:
+> 
+> > This stuff *is* confusing, and note that Linux man pages don't even tell
+> that prctl() is actually declared as a variadic function (and for
+> ptrace() this is mentioned only in the notes, but not in its signature).
 
-Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
----
- kernel/workqueue.c | 1 +
- 1 file changed, 1 insertion(+)
+Ah, thanks for the clarification (I somehow missed your reply).
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index e548b2eda12a..ccbc9f2dafa6 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1145,6 +1145,7 @@ void wq_worker_tick(struct task_struct *task)
- 	 * CPU_INTENSIVE to avoid stalling other concurrency-managed work items.
- 	 */
- 	if ((worker->flags & WORKER_NOT_RUNNING) || worker->sleeping ||
-+						!wq_cpu_intensive_thresh_us ||
- 	    worker->task->se.sum_exec_runtime - worker->current_at <
- 	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
- 		return;
+> The reality:
+> 
+> * glibc: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sys/prctl.h;h=821aeefc1339b35210e8918ecfe9833ed2792626;hb=glibc-2.37#l42
+> 
+> * musl:
+> https://git.musl-libc.org/cgit/musl/tree/include/sys/prctl.h?h=v1.2.4#n180
+> 
+> Though there is a test in the kernel that does define its own prototype,
+> avoiding the issue: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/sched/cs_prctl_test.c?h=v6.3#n77
+
+At least for glibc, it seems that there is a conversion to unsigned
+long:
+
+https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/prctl.c#l28
+
+unsigned long int arg2 = va_arg (arg, unsigned long int);
+
+(does va_arg expand to an actual cast?)
+
+If the libc passes a 32-bit to a kernel ABI that expects 64-bit, I think
+it's a user-space bug and not a kernel ABI issue.
+
 -- 
-2.17.1
-
+Catalin
