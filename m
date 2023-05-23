@@ -2,147 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4F870D2F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 06:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819D670D2F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 06:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbjEWEtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 00:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S231867AbjEWEuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 00:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234826AbjEWEst (ORCPT
+        with ESMTP id S229809AbjEWEuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 00:48:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD43C18B;
-        Mon, 22 May 2023 21:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684817307; x=1716353307;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sFdBUsSJtxlXldo4kXpHA6RwoU8+rIxaTMXMzmlGVxs=;
-  b=W4uoX0W8n9SrAQs2F4R46FFgJEdOkOzI+KFJFxzGBfkhuUpZuK+yPetx
-   HHF7VcFnFI32gX/x+bY+weJuOjGAoC/cOeQ5c3CTJDPQwBd5lvaVrqMm+
-   VMu2ZxLyDk+AtWp5LShQsUTrtv9Uo+9MjbnSLa4VuShPp5xnyB3qySF4O
-   MtHz0ak8bLDakWHlKTfGEcqj3eB7Nd8ccVr5Ldjy95B/LPom+vRAjWI6k
-   3oS92V3/NBwIhzbFi3f7hYHo9+58NeB0dkzvWWMj6I4+DSSt8k6MwRK6v
-   3rUS5HDQwgagjZmkA1J6f45JZTN6fS0BQObNEL3PbAnb43q7a7eRCU58r
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="353153973"
-X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
-   d="scan'208";a="353153973"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 21:47:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="950392617"
-X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
-   d="scan'208";a="950392617"
-Received: from arkaneta-mobl.amr.corp.intel.com (HELO desk) ([10.212.144.239])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 21:47:34 -0700
-Date:   Mon, 22 May 2023 21:47:31 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, Chao Gao <chao.gao@intel.com>,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        asit.k.mallick@intel.com
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-Message-ID: <20230523044731.obkyesjyhwercj2q@desk>
-References: <20230506030435.80262-1-chao.gao@intel.com>
- <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
- <ZGZhW/x5OWPmx1qD@google.com>
- <20230520010237.3tepk3q44j52leuk@desk>
- <ZGup1TjeqBF7bgWG@google.com>
- <20230522205453.kqhvk5aheye22hfa@desk>
+        Tue, 23 May 2023 00:50:17 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5FA0109;
+        Mon, 22 May 2023 21:50:14 -0700 (PDT)
+Received: from m202171703$hust.edu.cn ( [172.16.0.254] ) by
+ ajax-webmail-app1 (Coremail) ; Tue, 23 May 2023 12:49:54 +0800 (GMT+08:00)
+X-Originating-IP: [172.16.0.254]
+Date:   Tue, 23 May 2023 12:49:54 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5byg572R?= <m202171703@hust.edu.cn>
+To:     "andrew lunn" <andrew@lunn.ch>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        "peter korsgaard" <peter@korsgaard.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <cf543f92-af0d-4862-bea6-53a358ee9a31@lunn.ch>
+References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
+ <20230422123253.137368-1-silver_code@hust.edu.cn>
+ <cf543f92-af0d-4862-bea6-53a358ee9a31@lunn.ch>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522205453.kqhvk5aheye22hfa@desk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: FgEQrADnSHryRWxk3XcyAg--.24551W
+X-CM-SenderInfo: rpsqjiqxrxijo6kx23oohg3hdfq/1tbiAQoAAGRrClNO0gAAsB
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 01:54:55PM -0700, Pawan Gupta wrote:
-> On Mon, May 22, 2023 at 10:43:49AM -0700, Sean Christopherson wrote:
-> > On Fri, May 19, 2023, Pawan Gupta wrote:
-> > > On Thu, May 18, 2023 at 10:33:15AM -0700, Sean Christopherson wrote:
-> > > > I made the mistake of digging into why KVM doesn't advertise ARCH_CAP_FB_CLEAR_CTRL...
-> > > > 
-> > > >   1. I see *nothing* in commit 027bbb884be0 ("KVM: x86/speculation: Disable Fill
-> > > >      buffer clear within guests") that justifies 1x RDMSR and 2x WRMSR on every
-> > > >      entry+exit.
-> > > 
-> > > Unnecessary VERWs in guest will have much higher impact than due to MSR
-> > > read/write at vmentry/exit.
-> > 
-> > Can you provide numbers for something closeish to a real world workload?
-> 
-> I am collecting the numbers, will update here soon.
-
-Looks like avoiding VERW flush behavior in guest results in 2-5%
-improvement in performance.
-
-Pybench and CPU bound sysbench test shows minor improvement when
-avoiding reading/writing MSR_MCU_OPT_CTRL at VMentry/VMexit.
-
-Baseline : v6.4-rc3
-Target   : v6.4-rc3 + No read/write to MSR_MCU_OPT_CTRL at VMentry/VMexit
-
-| Test      | Configuration | Relative |
-| --------- | ------------- | -------- |
-| nginx     | 200           | 0.977    |
-| hackbench | 8 - Process   | 0.975    |
-| sysbench  | RAM / Memory  | 0.946    |
-| sysbench  | CPU           | 1.002    |
-| pybench   | T.F.A.T.T     | 1.007    |
-
-Host configuration (Icelake server):
-  CPU family:                      6
-  Model:                           106
-  Stepping:                        6
-  Vulnerability Itlb multihit:     Not affected
-  Vulnerability L1tf:              Not affected
-  Vulnerability Mds:               Not affected
-  Vulnerability Meltdown:          Not affected
-  Vulnerability Mmio stale data:   Mitigation; Clear CPU buffers; SMT vulnerable
-  Vulnerability Retbleed:          Not affected
-  Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl
-  Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization
-  Vulnerability Spectre v2:        Vulnerable: eIBRS with unprivileged eBPF
-  Vulnerability Srbds:             Not affected
-  Vulnerability Tsx async abort:   Not affected
-
-
-Guest configuration (Skylake Client):
-  CPU family:			  6
-  Model:			  94
-  Stepping:			  3
-  Vulnerabilities:
-    Itlb multihit:         KVM: Mitigation: VMX unsupported
-    L1tf:                  Mitigation; PTE Inversion
-    Mds:                   Vulnerable: Clear CPU buffers attempted, no microcode;
-                           SMT Host state unknown
-    Meltdown:              Mitigation; PTI
-    Mmio stale data:       Vulnerable: Clear CPU buffers attempted, no microcode;
-                           SMT Host state unknown
-    Retbleed:              Vulnerable
-    Spec store bypass:     Vulnerable
-    Spectre v1:            Mitigation; usercopy/swapgs barriers and __user pointer
-                            sanitization
-    Spectre v2:            Mitigation; Retpolines, STIBP disabled, RSB filling, PB
-                           RSB-eIBRS Not affected
-    Srbds:                 Unknown: Dependent on hypervisor status
-    Tsx async abort:       Vulnerable: Clear CPU buffers attempted, no microcode;
-                           SMT Host state unknown
+PiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiQW5kcmV3IEx1bm4iIDxhbmRy
+ZXdAbHVubi5jaD4KPiDlj5HpgIHml7bpl7Q6IDIwMjMtMDQtMjUgMTk6NTc6MjYgKOaYn+acn+S6
+jCkKPiDmlLbku7bkuro6ICJXYW5nIFpoYW5nIiA8c2lsdmVyX2NvZGVAaHVzdC5lZHUuY24+Cj4g
+5oqE6YCBOiAiUGV0ZXIgS29yc2dhYXJkIiA8cGV0ZXJAa29yc2dhYXJkLmNvbT4sIGh1c3Qtb3Mt
+a2VybmVsLXBhdGNoZXNAZ29vZ2xlZ3JvdXBzLmNvbSwgbGludXgtaTJjQHZnZXIua2VybmVsLm9y
+ZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZwo+IOS4u+mimDogUmU6IFtQQVRDSCB2M10g
+aTJjOiBvY29yZXM6IHVzZSBkZXZtXyBtYW5hZ2VkIGNsa3MKPiAKPiBPbiBTYXQsIEFwciAyMiwg
+MjAyMyBhdCAwODozMjo1M1BNICswODAwLCBXYW5nIFpoYW5nIHdyb3RlOgo+ID4gSWYgYW55IHdy
+b25nIG9jY3VycyBpbiBvY29yZXNfaTJjX29mX3Byb2JlLCB0aGUgaTJjLT5jbGsgbmVlZHMgdG8g
+YmUKPiA+IHJlbGVhc2VkLiBCdXQgdGhlIGZ1bmN0aW9uIHJldHVybnMgZGlyZWN0bHkgaW4gbGlu
+ZSA3MDEgd2l0aG91dCBmcmVlaW5nCj4gPiB0aGUgY2xvY2suIEV2ZW4gdGhvdWdoIHdlIGNhbiBm
+aXggaXQgYnkgZnJlZWluZyB0aGUgY2xvY2sgbWFudWFsbHkgaWYKPiA+IHBsYXRmb3JtX2dldF9p
+cnFfb3B0aW9uYWwgZmFpbHMsIGl0IG1heSBub3QgYmUgZm9sbG93aW5nIHRoZSBiZXN0IHByYWN0
+aWNlLgo+ID4gVGhlIG9yaWdpbmFsIGNvZGUgZm9yIHRoaXMgZHJpdmVyIGNvbnRhaW5zIGlmIChJ
+U19FUlIoKSkgY2hlY2tzCj4gPiB0aHJvdWdob3V0LCBleHBsaWNpdGx5IGFsbG93aW5nIHRoZSBk
+cml2ZXIgdG8gY29udGludWUgbG9hZGluZyBldmVuIGlmCj4gPiBkZXZtX2Nsa19nZXQoKSBmYWls
+cy4KPiA+IAo+ID4gV2hpbGUgaXQgaXMgbm90IGVudGlyZWx5IGNsZWFyIHdoeSB0aGUgb3JpZ2lu
+YWwgYXV0aG9yIGltcGxlbWVudGVkIHRoaXMKPiA+IGJlaGF2aW9yLCB0aGVyZSBtYXkgaGF2ZSBi
+ZWVuIGNlcnRhaW4gY2lyY3Vtc3RhbmNlcyBvciBpc3N1ZXMgdGhhdCB3ZXJlIG5vdAo+ID4gYXBw
+YXJlbnQgdG8gdXMuIEl0J3MgcG9zc2libGUgdGhhdCB0aGV5IHdlcmUgdHJ5aW5nIHRvIHdvcmsg
+YXJvdW5kIGEgYnVnIGJ5Cj4gPiBlbXBsb3lpbmcgYW4gdW5jb252ZW50aW9uYWwgc29sdXRpb24u
+VXNpbmcgYGRldm1fY2xrX2dldF9lbmFibGVkKClgIHJhdGhlcgo+ID4gdGhhbiBkZXZtX2Nsa19n
+ZXQoKSBjYW4gYXV0b21hdGljYWxseSB0cmFjayB0aGUgdXNhZ2Ugb2YgY2xvY2tzIGFuZCBmcmVl
+Cj4gPiB0aGVtIHdoZW4gdGhleSBhcmUgbm8gbG9uZ2VyIG5lZWRlZCBvciBhbiBlcnJvciBvY2N1
+cnMuCj4gPiAKPiA+IGZpeGluZyBpdCBieSBjaGFuZ2luZyBgb2NvcmVzX2kyY19vZl9wcm9iZWAg
+dG8gdXNlCj4gPiBgZGV2bV9jbGtfZ2V0X29wdGlvbmFsX2VuYWJsZWQoKWAgcmF0aGVyIHRoYW4g
+YGRldm1fY2xrX2dldCgpYCwgY2hhbmdpbmcKPiA+IGBnb3RvIGVycl9jbGsnIHRvIGRpcmVjdCBy
+ZXR1cm4gYW5kIHJlbW92aW5nIGBlcnJfY2xrYC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogV2Fu
+ZyBaaGFuZyA8c2lsdmVyX2NvZGVAaHVzdC5lZHUuY24+Cj4gCj4gUmV2aWV3ZWQtYnk6IEFuZHJl
+dyBMdW5uIDxhbmRyZXdAbHVubi5jaD4KPiAKPiAgICAgQW5kcmV3CgpIaSBBbmRyZXcsCkknbSBj
+aGVja2luZyBpbiBhYm91dCBteSBwYXRjaCBzdWJtaXNzaW9uIGZvciBpMmMgb2NvcmVzIHRoYXQg
+d2FzCiJyZXZpZXcnZWQiIG9uIDQvMjUsIGJ1dCBpdHMgc3RhdHVzIGhhcyBub3QgYmVlbiB1cGRh
+dGVkIHlldC4KSSB3b3VsZCBncmVhdGx5IGFwcHJlY2lhdGUgaXQgaWYgeW91IGNvdWxkIHByb3Zp
+ZGUgbWUgd2l0aCBhbiAKdXBkYXRlIG9uIHRoZSBzdGF0dXMgb2YgbXkgc3VibWlzc2lvbi4gSXMg
+dGhlcmUgYW55IGFkZGl0aW9uYWwgCmluZm9ybWF0aW9uIG9yIGRvY3VtZW50YXRpb24gdGhhdCBJ
+IGNhbiBwcm92aWRlIHRvIGhlbHAgZXhwZWRpdGUgCnRoZSBwcm9jZXNzPwoKVGhhbmsgeW91IHZl
+cnkgbXVjaCBmb3IgeW91ciB0aW1lIGFuZCBhdHRlbnRpb24uIEkgbG9vayBmb3J3YXJkIAp0byBo
+ZWFyaW5nIGZyb20geW91IHNvb24uCgpSZWdhcmRzLApXYW5nIFpoYW5n
