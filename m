@@ -2,70 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6743970DA53
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509FF70DA27
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjEWKVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S236499AbjEWKRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbjEWKVT (ORCPT
+        with ESMTP id S230520AbjEWKRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:21:19 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42289100;
-        Tue, 23 May 2023 03:21:16 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 43CB05FD0D;
-        Tue, 23 May 2023 13:21:14 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1684837274;
-        bh=Bk3y/ekW1k32shYNnUtpGVBff1mL1/GErdcGcnG133Y=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=lwKXK7oVPa99pFr5ap9b7ja++6PtDMIXjDCpGU/xv4LmfZ2hR/K6JfTWEjCYWHv6J
-         hcMRdn9plF+Wm+iqMZSjrugYxKYP18B6zg91Sb/2EAD0jMOJdv5dTtwaCp/16vZdLT
-         HWTnQaqTUK5sRkM1sYKbHBQfGXqKp5GDRIsxBu9WjRY508kYm4YCJxw1kg2cyJdRec
-         LqQLH1bsu3BLVi8f7gV0+UV31PoJbGorJuipU2Yf2HHjAWmap92xEMLPQuZTDavWPo
-         PZdqdPHs8WMglGgtdJeml2rzofoHoZHnDcGjR8k1TA5EXq7ER34zBb8hiYgyC0aP5W
-         w8aif/SqwgkfQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 23 May 2023 13:21:10 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Jaime Liao <jaimeliao.tw@gmail.com>,
-        Jaime Liao <jaimeliao@mxic.com.tw>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH v4] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-Date:   Tue, 23 May 2023 13:16:34 +0300
-Message-ID: <20230523101637.3009746-1-AVKrasnov@sberdevices.ru>
-X-Mailer: git-send-email 2.35.0
+        Tue, 23 May 2023 06:17:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E344109
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684837012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SQHqTwIHdnGAuCc0miU9eDOkQpjo2/mk/8AwQvJchQc=;
+        b=UB3UCMZEBx11i4AAMCJM5McDS/Qsg1rBZW9k79NtaUEpj4l+t0jM36ADIHnFvdf15HiDVO
+        Hdkf4G/T1xrI0weLHxlo5HhaFqAdPzCG6qss23nOf4XQB9IQs9MLIP8ryY+BmWZ3/XSwPG
+        72Ijo8r839Y5kOapQPzpvCl9q7uzi24=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-271-4AP2RNOdMX6kfCOpaKtGtQ-1; Tue, 23 May 2023 06:16:51 -0400
+X-MC-Unique: 4AP2RNOdMX6kfCOpaKtGtQ-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9715654aba1so80922066b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:16:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684837010; x=1687429010;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SQHqTwIHdnGAuCc0miU9eDOkQpjo2/mk/8AwQvJchQc=;
+        b=YNbaWayXdooYCpD5WKtErP4e6rWQq1lnZbLY/cicySVvua9WbBm8zuWNrgVriLRr05
+         jsJABPXkRywgqeKylZY35pxZC/IFWuQA45fUr/uA1Hnpi1L4DaEtxiLU7DIqckJKaSE/
+         bxydJLDD04mXhXdkVov/TGn62Q1pXpWAqJH0TQ/YRET3kfABJ34IgASzK5pz4GeFQrcg
+         SlOMMQuuObTSnfDXbmdG6QwMWJmasX0vIjujYZBalaRNQx0ocYXS9brGx89JAcs/4QZw
+         YDDkBwwQqLI7lR8z8x6dKxGMt6+4VO/hhpKYRvRAHqFBhhLIm/E7ZkSl3AptEJ7JFAmI
+         CX+A==
+X-Gm-Message-State: AC+VfDyGVBh25wlPpNtWeUT0zagZoEyrJy/8f6tigb/HeoOymqSOlVUg
+        Wbi8Ui6ncK4NnPU8cc1Y6RjNsbkyeeHF742pfQSVvVVf6EH/T12LZIGU0OcH9a9avOsW3GC7Chv
+        8DQhJQgFwGGUIVm5EVLUW02Kf
+X-Received: by 2002:a17:907:ea9:b0:96a:2b4:eb69 with SMTP id ho41-20020a1709070ea900b0096a02b4eb69mr13393998ejc.31.1684837009827;
+        Tue, 23 May 2023 03:16:49 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ49yhK/BvmMprUo2opyxIyuZkHK27opbVXPXsLNZq65QZvQ3zkJiQT66NAQMp6+0niQu0jLDQ==
+X-Received: by 2002:a17:907:ea9:b0:96a:2b4:eb69 with SMTP id ho41-20020a1709070ea900b0096a02b4eb69mr13393965ejc.31.1684837009526;
+        Tue, 23 May 2023 03:16:49 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id s22-20020a170906961600b0096f89c8a2f7sm4209255ejx.90.2023.05.23.03.16.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 03:16:48 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <1693e3e3-c486-80c8-aec0-cca0c9080c34@redhat.com>
+Date:   Tue, 23 May 2023 12:16:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/23 05:11:00 #21371280
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     brouer@redhat.com, bpf@vger.kernel.org,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND bpf-next 09/15] xdp: Add VLAN tag hint
+Content-Language: en-US
+To:     Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>
+References: <20230512152607.992209-1-larysa.zaremba@intel.com>
+ <20230512152607.992209-10-larysa.zaremba@intel.com>
+ <b0694577-e2b3-f6de-cf85-aed99fdf2496@redhat.com> <ZGJZU89AK/3mFZXW@lincoln>
+ <094f3178-2797-e297-64f8-aa0f7ef16b5f@redhat.com> <ZGuO6Hk+NcdL9iwi@lincoln>
+In-Reply-To: <ZGuO6Hk+NcdL9iwi@lincoln>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,272 +103,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for OTP area access on MX30LFxG18AC chip series.
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
-  v1 -> v2:
-  * Add slab.h include due to kernel test robot error.
-  v2 -> v3:
-  * Use 'uint64_t' as input argument for 'do_div()' instead
-    of 'unsigned long' due to kernel test robot error.
-  v3 -> v4:
-  * Use 'dev_err()' instead of 'WARN()'.
-  * Call 'match_string()' before checking 'supports_set_get_features'
-    in 'macronix_nand_setup_otp().
-  * Use 'u8' instead of 'uint8_t' as ./checkpatch.pl wants.
 
- drivers/mtd/nand/raw/nand_macronix.c | 216 +++++++++++++++++++++++++++
- 1 file changed, 216 insertions(+)
+On 22/05/2023 17.48, Larysa Zaremba wrote:
+> On Mon, May 22, 2023 at 10:37:33AM +0200, Jesper Dangaard Brouer wrote:
+>>
+>>
+>> On 15/05/2023 18.09, Larysa Zaremba wrote:
+>>> On Mon, May 15, 2023 at 05:36:12PM +0200, Jesper Dangaard Brouer wrote:
+>>>>
+>>>>
+>>>> On 12/05/2023 17.26, Larysa Zaremba wrote:
+>>>>> Implement functionality that enables drivers to expose VLAN tag
+>>>>> to XDP code.
+>>>>>
+>>>>> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+>>>>> ---
+>>>> [...]
+>>>>
+>>>>> diff --git a/net/core/xdp.c b/net/core/xdp.c
+>>>>> index 41e5ca8643ec..eff21501609f 100644
+>>>>> --- a/net/core/xdp.c
+>>>>> +++ b/net/core/xdp.c
+>>>>> @@ -738,6 +738,30 @@ __bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash,
+>>>>>     	return -EOPNOTSUPP;
+>>>>>     }
+>>>>
+>>>> Remember below becomes part of main documentation on HW metadata hints:
+>>>>    - https://kernel.org/doc/html/latest/networking/xdp-rx-metadata.html
+>>>>
+>>>> Hint compiling locally I use:
+>>>>    make SPHINXDIRS="networking" htmldocs
+>>>>
+>>>>> +/**
+>>>>> + * bpf_xdp_metadata_rx_ctag - Read XDP packet inner vlan tag.
+>>>>
+>>>> Is bpf_xdp_metadata_rx_ctag a good function name for the inner vlan tag?
+>>>> Like wise below "stag".
+>>>>
+>>>> I cannot remember if the C-tag or S-tag is the inner or outer vlan tag.
+>>>>
+>>>> When reading BPF code that use these function names, then I would have
+>>>> to ask Google for help, or find-and-read this doc.
+>>>>
+>>>> Can we come-up with a more intuitive name, that e.g. helps when reading
+>>>> the BPF-prog code?
+>>>
+>>> Well, my reasoning for such naming is that if someone can configure s-tag
+>>> stripping in ethtool with 'rx-vlan-stag-hw-parse', they shouldn't have any
+>>> problem with understanding those function names.
+>>>
+>>
+>> Naming is hard.  My perspective is conveying the meaning without having
+>> to be knowledgeable about ethtool VLAN commands.  My perspective is a
+>> casual BPF-programmer that reads "bpf_xdp_metadata_rx_stag()".
+>> Hopefully we can choose a name that says "vlan" somewhere, such that the
+>> person reading this doesn't have to lookup and find the documentation to
+>> deduct this code is related to VLANs.
+>>
+>>> One possible improvement that comes to mind is maybe (similarly ethtool) calling
+>>> c-tag just 'tag' and letting s-tag stay 'stag'. Because c-tag is this default
+>>> 802.1q tag, which is supported by various hardware, while s-tag is significantly
+>>> less widespread.
+>>>
+>>> But there are many options, really.
+>>>
+>>> What are your suggestions?
+>>>
+>>
+>> One suggestion is (the symmetrical):
+>>   * bpf_xdp_metadata_rx_vlan_inner_tag
+>>   * bpf_xdp_metadata_rx_vlan_outer_tag
+>>
+>> As you say above the first "inner" VLAN tag is just the regular 802.1Q
+>> VLAN tag.  The concept of C-tag and S-tag is from 802.1ad that
+>> introduced the concept of double tagging.
+>>
+>> Thus one could argue for shorter names like:
+>>   * bpf_xdp_metadata_rx_vlan_tag
+>>   * bpf_xdp_metadata_rx_vlan_outer_tag
+>>
+> 
+> AFAIK, outer tag is a broader term, it's pretty often used for stacked 802.1Q
+> headers. I can't find what exactly is an expected behavior for rxvlan and
+> rx-vlan-stag-hw-parse in ethtool, but iavf documentation states that rxvlan
+> "enables outer or single 802.1Q VLAN stripping" and rx-vlan-stag-hw-parse
+> "enables outer or single 802.1ad VLAN stripping". This is in consistent with how
+> ice hardware behaves. More credible sources would be welcome.
+> 
 
-diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
-index 1472f925f386..be1ffa93bebb 100644
---- a/drivers/mtd/nand/raw/nand_macronix.c
-+++ b/drivers/mtd/nand/raw/nand_macronix.c
-@@ -6,6 +6,7 @@
-  * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
-  */
- 
-+#include <linux/slab.h>
- #include "linux/delay.h"
- #include "internals.h"
- 
-@@ -31,6 +32,20 @@
- 
- #define MXIC_CMD_POWER_DOWN 0xB9
- 
-+#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
-+#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
-+#define MACRONIX_30LFXG18AC_OTP_PAGES		30
-+#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
-+#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
-+	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
-+	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-+#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
-+	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
-+	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-+
-+#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
-+#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
-+
- struct nand_onfi_vendor_macronix {
- 	u8 reserved;
- 	u8 reliability_func;
-@@ -316,6 +331,206 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
- 	chip->ops.resume = mxic_nand_resume;
- }
- 
-+static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
-+					    size_t *retlen,
-+					    struct otp_info *buf)
-+{
-+	if (len < sizeof(*buf))
-+		return -EINVAL;
-+
-+	/* Don't know how to check that OTP is locked. */
-+	buf->locked = 0;
-+	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
-+	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
-+
-+	*retlen = sizeof(*buf);
-+
-+	return 0;
-+}
-+
-+static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
-+{
-+	u8 feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-+
-+	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
-+	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-+				 feature_buf);
-+}
-+
-+static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
-+{
-+	u8 feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-+
-+	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-+				 feature_buf);
-+}
-+
-+static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
-+					loff_t offs_in_flash,
-+					size_t len, size_t *retlen,
-+					u_char *buf, bool write)
-+{
-+	struct nand_chip *nand;
-+	size_t bytes_handled;
-+	off_t offs_in_page;
-+	void *dma_buf;
-+	u64 page;
-+	int ret;
-+
-+	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
-+	 * so allocate properly aligned memory for it. This is
-+	 * needed because cross page accesses may lead to unaligned
-+	 * buffer address for DMA.
-+	 */
-+	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-+	if (!dma_buf)
-+		return -ENOMEM;
-+
-+	nand = mtd_to_nand(mtd);
-+	nand_select_target(nand, 0);
-+
-+	ret = macronix_30lfxg18ac_otp_enable(nand);
-+	if (ret)
-+		goto out_otp;
-+
-+	page = offs_in_flash;
-+	/* 'page' will be result of division. */
-+	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-+	bytes_handled = 0;
-+
-+	while (bytes_handled < len &&
-+	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
-+		size_t bytes_to_handle;
-+
-+		bytes_to_handle = min_t(size_t, len - bytes_handled,
-+					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
-+					offs_in_page);
-+
-+		if (write) {
-+			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
-+			ret = nand_prog_page_op(nand, page, offs_in_page,
-+						dma_buf, bytes_to_handle);
-+		} else {
-+			ret = nand_read_page_op(nand, page, offs_in_page,
-+						dma_buf, bytes_to_handle);
-+			if (!ret)
-+				memcpy(&buf[bytes_handled], dma_buf,
-+				       bytes_to_handle);
-+		}
-+		if (ret)
-+			goto out_otp;
-+
-+		bytes_handled += bytes_to_handle;
-+		offs_in_page = 0;
-+		page++;
-+	}
-+
-+	*retlen = bytes_handled;
-+
-+out_otp:
-+	if (ret)
-+		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
-+
-+	ret = macronix_30lfxg18ac_otp_disable(nand);
-+	if (ret)
-+		dev_err(&mtd->dev, "failed to leave OTP mode after %s\n",
-+			write ? "write" : "read");
-+
-+	nand_deselect_target(nand);
-+	kfree(dma_buf);
-+
-+	return ret;
-+}
-+
-+static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
-+					 size_t len, size_t *rlen,
-+					 const u_char *buf)
-+{
-+	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
-+					    true);
-+}
-+
-+static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
-+					size_t len, size_t *rlen,
-+					u_char *buf)
-+{
-+	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
-+}
-+
-+static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
-+					size_t len)
-+{
-+	u8 feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-+	struct nand_chip *nand;
-+	int ret;
-+
-+	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
-+	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
-+		return -EINVAL;
-+
-+	dev_dbg(&mtd->dev, "locking OTP\n");
-+
-+	nand = mtd_to_nand(mtd);
-+	nand_select_target(nand, 0);
-+
-+	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
-+			 MACRONIX_30LFXG18AC_OTP_LOCKED;
-+	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-+				feature_buf);
-+	if (ret) {
-+		dev_err(&mtd->dev,
-+			"failed to lock OTP (set features): %i\n", ret);
-+		nand_deselect_target(nand);
-+		return ret;
-+	}
-+
-+	/* Do dummy page prog with zero address. */
-+	feature_buf[0] = 0;
-+	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
-+	if (ret)
-+		dev_err(&mtd->dev,
-+			"failed to lock OTP (page prog): %i\n", ret);
-+
-+	ret = macronix_30lfxg18ac_otp_disable(nand);
-+	if (ret)
-+		dev_err(&mtd->dev, "failed to leave OTP mode after lock\n");
-+
-+	nand_deselect_target(nand);
-+
-+	return ret;
-+}
-+
-+static void macronix_nand_setup_otp(struct nand_chip *chip)
-+{
-+	static const char * const supported_otp_models[] = {
-+		"MX30LF1G18AC",
-+		"MX30LF2G18AC",
-+		"MX30LF4G18AC",
-+	};
-+	struct mtd_info *mtd;
-+
-+	if (match_string(supported_otp_models,
-+			 ARRAY_SIZE(supported_otp_models),
-+			 chip->parameters.model) < 0)
-+		return;
-+
-+	if (!chip->parameters.supports_set_get_features)
-+		return;
-+
-+	bitmap_set(chip->parameters.get_feature_list,
-+		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-+	bitmap_set(chip->parameters.set_feature_list,
-+		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-+
-+	mtd = nand_to_mtd(chip);
-+	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
-+	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
-+	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
-+	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
-+	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
-+	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
-+}
-+
- static int macronix_nand_init(struct nand_chip *chip)
- {
- 	if (nand_is_slc(chip))
-@@ -325,6 +540,7 @@ static int macronix_nand_init(struct nand_chip *chip)
- 	macronix_nand_onfi_init(chip);
- 	macronix_nand_block_protection_support(chip);
- 	macronix_nand_deep_power_down_support(chip);
-+	macronix_nand_setup_otp(chip);
- 
- 	return 0;
- }
--- 
-2.35.0
+It would be good to figure out how other hardware behaves.
+
+The iavf doc sounds like very similar behavior from both functions, just 
+802.1Q vs 802.1ad.
+Sounds like both will just pop/strip the outer vlan tag.
+I have seen Ethertype 802.1Q being used (in practice) for double tagged
+packets, even-though 802.1ad should have been used to comply with the
+standard.
+
+> What about:
+>    * bpf_xdp_metadata_rx_vlan_tag
+>    * bpf_xdp_metadata_rx_vlan_qinq_tag
+> 
+
+This sounds good to me.
+
+I do wonder if we really need two functions for this?
+Would one function be enough?
+
+Given the (iavf) description, the functions basically does the same.
+Looking at your ice driver implementation, they could be merged into one
+function, as it is the same location in the descriptor.
+
+>>
+>>>>
+>>>>> + * @ctx: XDP context pointer.
+>>>>> + * @vlan_tag: Return value pointer.
+>>>>> + *
+>>>>
+>>>> IMHO right here, there should be a description.
+>>>>
+>>>> E.g. for what a VLAN "tag" means.  I assume a "tag" isn't the VLAN id,
+>>>> but the raw VLAN tag that also contains the prio numbers etc.
+>>>>
+>>>> It this VLAN tag expected to be in network-byte-order ?
+>>>> IMHO this doc should define what is expected (and driver devel must
+>>>> follow this).
+>>>
+>>> Will specify that.
+>>>
+>>>>
+>>>>> + * Returns 0 on success or ``-errno`` on error.
+>>>>> + */
+>>>>> +__bpf_kfunc int bpf_xdp_metadata_rx_ctag(const struct xdp_md *ctx, u16 *vlan_tag)
+>>>>> +{
+>>>>> +	return -EOPNOTSUPP;
+>>>>> +}
+>>>>> +
+>>>>> +/**
+>>>>> + * bpf_xdp_metadata_rx_stag - Read XDP packet outer vlan tag.
+>>>>> + * @ctx: XDP context pointer.
+>>>>> + * @vlan_tag: Return value pointer.
+>>>>> + *
+>>
+>> (p.s. Googling I find multiple definitions of what the "S" in S-tag
+>> means. The most reliable or statistically consistent seems to be
+>> "Service tag", or "Service provider tag".)
+>>
+>> The description for the renamed "bpf_xdp_metadata_rx_vlan_outer_tag"
+>> should IMHO explain that the outer VLAN tag is often refered to as the S-tag
+>> (or Service-tag) in Q-in-Q (802.1ad) terminology.  Perhaps we can even spell
+>> out that some hardware support (and must be configured via ethtool) to
+>> extract this stag.
+>>
+>> A dump of the tool rx-vlan related commands:
+>>
+>>    $ ethtool -k i40e2 | grep rx-vlan
+>>    rx-vlan-offload: on
+>>    rx-vlan-filter: on [fixed]
+>>    rx-vlan-stag-hw-parse: off [fixed]
+>>    rx-vlan-stag-filter: off [fixed]
+>>
+[...]
 
