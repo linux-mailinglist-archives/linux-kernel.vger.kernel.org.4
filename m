@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F52B70E760
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A2270E750
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238595AbjEWVbX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 17:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S232824AbjEWVZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbjEWVbV (ORCPT
+        with ESMTP id S229520AbjEWVZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:31:21 -0400
-X-Greylist: delayed 332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 14:31:18 PDT
-Received: from pio-pvt-msa3.bahnhof.se (pio-pvt-msa3.bahnhof.se [79.136.2.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42819E5;
-        Tue, 23 May 2023 14:31:18 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 53B533F4FA;
-        Tue, 23 May 2023 23:25:43 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Score: -1.91
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xWoa5MYq7N-Q; Tue, 23 May 2023 23:25:42 +0200 (CEST)
-Received: by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 61CCF3F414;
-        Tue, 23 May 2023 23:25:41 +0200 (CEST)
-Received: from [192.168.0.126] (port=60034)
-        by tnonline.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <forza@tnonline.net>)
-        id 1q1ZVk-000GEM-Nn; Tue, 23 May 2023 23:25:40 +0200
-Date:   Tue, 23 May 2023 23:25:38 +0200 (GMT+02:00)
-From:   Forza <forza@tnonline.net>
-To:     Uladzislau Rezki <urezki@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Stable <stable@vger.kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
-        urezki@gmail.com
-Message-ID: <26007e3.faed4a1b.1884a80d9e8@tnonline.net>
-In-Reply-To: <ZGyVVQxnw6Tn7Xb8@pc636>
-References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com> <fcf1d04.faed4a1a.18844d8e78f@tnonline.net> <ZGwcVTpQNBoJHBB+@debian.me> <ZGyVVQxnw6Tn7Xb8@pc636>
-Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
- kernel 6.3.x
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8BIT
-X-Mailer: R2Mail2
+        Tue, 23 May 2023 17:25:53 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8169611A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:25:52 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2532c2c41f7so91036a91.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684877152; x=1687469152;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XhkFXCVK7IIddxQvfyYvbxUVBVCNC01wPMYY5cCrGec=;
+        b=QivLoo6aTt7ePCsCuUzSciGYVzVkNfEjQJObWk6rpXU0sQA/5e38aC/9Y/PAkp2ug6
+         xMWTUG/8Jy0fzXiJMXWLVH/2rVCwS+5FBaOqeTSeqZo1/FNi9GWe43UA8o7gqrfGQ8fD
+         B54VINXLIXwdoIoca2En2IUUNyT/l3WlMum1E8gltNqbL5Z4hcKLehaG9sWO2KqSSzyA
+         b7/g/E7x9ZZRL2I+Gz0s8J6m5FdZexmUb08Q/y9M4iO66z0oaX5yNjop6Zgy8VSJpFMw
+         aAl7J7cA1POhuz8TBmQYDJftF5bHnS7NV8PDY71EFtuzMKacBOHhvc/JiBVPVvV2zE+2
+         1iNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684877152; x=1687469152;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XhkFXCVK7IIddxQvfyYvbxUVBVCNC01wPMYY5cCrGec=;
+        b=gazKoj7iy0hdWCdxECAFiXtIgHtri4xiu0/2z7f/eb0pEfl/7vhDQNmcM0U5ivVcNK
+         JjliZ7cEgdNactyJF5a3qePmYannedx7BmlQdc+Od6y6ZFdMnzCUHZbZo3VY5QnGv1Az
+         DgtnV9YWR98gljZkWDrhkW30Vp3/Kq4DuYDHPgc5R/cJc+jD9ep35YzqMjyFMsjK1Bop
+         gp1QQ43QfSFARopd5S9/8qkLYazBsHUDGUBr25BpFidwrbBYIalXO6TVWJMquxxQ+7bY
+         uElhpEmOhq3u/AgP4+JJK8QSuu3Q0M9RKO4zvETd0SC0ZVhJqMns5YjvSUsxvYPg95ty
+         pDzg==
+X-Gm-Message-State: AC+VfDxUYgeDAiW5vV+UjcezZDtqd9+G6YijQnjK27B9Fu/arBK40Zs5
+        2Kt89bJueenUdtpvF4GfBphpzrH2bC0=
+X-Google-Smtp-Source: ACHHUZ6cDaf5azT55gDV/yqP4cbXNitd7JzyJe1bVaEXt9rD11LqMO7WDye75MvNzuOMX6Fy8++PMZfD+g0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:890:b0:255:5a01:cc48 with SMTP id
+ bj16-20020a17090b089000b002555a01cc48mr2274966pjb.3.1684877151953; Tue, 23
+ May 2023 14:25:51 -0700 (PDT)
+Date:   Tue, 23 May 2023 14:25:50 -0700
+In-Reply-To: <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
+Mime-Version: 1.0
+References: <20230504225351.10765-1-decui@microsoft.com> <20230504225351.10765-3-decui@microsoft.com>
+ <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
+Message-ID: <ZG0vXlQpXgll+YJ1@google.com>
+Subject: Re: [PATCH v6 2/6] x86/tdx: Support vmalloc() for tdx_enc_status_changed()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, mikelley@microsoft.com,
+        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
----- From: Uladzislau Rezki <urezki@gmail.com> -- Sent: 2023-05-23 - 12:28 ----
-
-> On Tue, May 23, 2023 at 08:52:21AM +0700, Bagas Sanjaya wrote:
->> On Mon, May 22, 2023 at 09:04:05PM +0200, Forza wrote:
->> > I have a similar experience with kernel 6.3 where vmalloc fails in a similar way. I was able to reproduce it in a QEMU VM as well as on my system. 
->> > 
->> > https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc0b78@tnonline.net/T/
->> 
->> Thanks for your similar report. Telling regzbot about it:
->> 
->> #regzbot link: https://lore.kernel.org/all/d11418b6-38e5-eb78-1537-c39245dc0b78@tnonline.net/
->> 
-> It is good that you can reproduce it. Could you please test below patch?
-
-Yes, applied it to my test VM and will let it run over night to see how it turns out. I'll post again tomorrow. 
-
-Thanks. 
+On Tue, May 23, 2023, Dave Hansen wrote:
+> On 5/4/23 15:53, Dexuan Cui wrote:
+> > When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
+> > allocates buffers using vzalloc(), and needs to share the buffers with the
+> > host OS by calling set_memory_decrypted(), which is not working for
+> > vmalloc() yet. Add the support by handling the pages one by one.
 > 
-> <snip>
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 31ff782d368b..7a06452f7807 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -2957,14 +2957,18 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
->                         page = alloc_pages(alloc_gfp, order);
->                 else
->                         page = alloc_pages_node(nid, alloc_gfp, order);
-> +
->                 if (unlikely(!page)) {
-> -                       if (!nofail)
-> -                               break;
-> +                       if (nofail)
-> +                               alloc_gfp |= __GFP_NOFAIL;
-> 
-> -                       /* fall back to the zero order allocations */
-> -                       alloc_gfp |= __GFP_NOFAIL;
-> -                       order = 0;
-> -                       continue;
-> +                       /* Fall back to the zero order allocations. */
-> +                       if (order || nofail) {
-> +                               order = 0;
-> +                               continue;
-> +                       }
-> +
-> +                       break;
->                 }
-> 
->                 /*
-> <snip>
-> 
-> Thanks!
-> 
-> --
-> Uladzislau Rezki
+> I think this sets a bad precedent.
 
++1 
 
+> There are consequences for converting pages between shared and private.
+> Doing it on a vmalloc() mapping is guaranteed to fracture the underlying
+> EPT/SEPT mappings.
+> 
+> How does this work with load_unaligned_zeropad()?  Couldn't it be
+> running around poking at one of these vmalloc()'d pages via the direct
+> map during a shared->private conversion before the page has been accepted?
+
+Would it be feasible and sensible to add a GFP_SHARED or whatever, to communicate
+to the core allocators that the page is destined to be converted to a shared page?
+I assume that would provide a common place (or two) for initiating conversions,
+and would hopefully allow for future optimizations, e.g. to keep shared allocation
+in the same pool or whatever.  Sharing memory without any intelligence as to what
+memory is converted is going to make both the guest and host sad.
