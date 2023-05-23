@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D9A70E3D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DBE70E3C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238311AbjEWRpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S235368AbjEWRpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238307AbjEWRou (ORCPT
+        with ESMTP id S238320AbjEWRox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:44:50 -0400
+        Tue, 23 May 2023 13:44:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64CF97;
-        Tue, 23 May 2023 10:44:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1D197;
+        Tue, 23 May 2023 10:44:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 341A763564;
-        Tue, 23 May 2023 17:44:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 642FBC433D2;
-        Tue, 23 May 2023 17:44:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04D7863571;
+        Tue, 23 May 2023 17:44:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD2BC4339B;
+        Tue, 23 May 2023 17:44:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684863887;
-        bh=ilvKubt4M+tI9BEkBeyxjS9nZpmPWWkvlzUOJ9vM89c=;
+        s=k20201202; t=1684863890;
+        bh=I75jhz8De3NPiqlgBoHOa8UPruFRWJnxpiQkId7IjnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZzSwZSa5Lqj4f7mWfUTyrmcmMEFeZEvn3TBO1QGeDIO8D43r9UumEdCi6R7QugYKf
-         yWjHnQD+isg8xnXGkehnZudSvIAxQJy0UQASb4cnqw6xyK3Dkw3wPWlZXyZqkLjao1
-         GX+68n0B1W/+A67046dvZy99CID2cZYA7jRxHGKpNHuVTugULEh1ak3Dy/EUwgGZwc
-         wM2yuL+SIDgj8KDXf26Ae10Q/ISyQ+ER3dGmkOwBvRr+bi+Msd3OxKQkg9w6wsVyCx
-         6lPoVzfOmhzhj7ndJvsD6hcf8Wp3lBj+DP7gUoNProgqj11Z4Y6pF1llA6+nLQ/EVh
-         0xH+sJ1gdPH0g==
+        b=O1VD3oHb0/IyMuEtPFzUOvEHiNtzhZCp4mtbHGOPcoDllUpUyDSwVQrCvaX1O2fvh
+         n9qYHbMEDqgjF1VIce51yXjvQjFpJ28aTzca2PfTkUsPmheSGlUcBTqrBCD1tc0fcA
+         znlHzknbtm56gM1A6vRRqkLHP9Axs8R11NcJfQvLMh/NNeZfsEB5qlm/yb33q9KvKu
+         3bF48i3XqteEgEB7kxw3Hlnja0jtg8hDBifRkcdfieuqp1jLNqajcGq1otF+dxsoR7
+         0MwpCT8xvw7sPghtUGty3qoWDpxQNERrWN6wUy4IfNacqWuuGr0PItH2gZX9QHslS6
+         bJ74iwmDYxBsQ==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>
@@ -40,9 +40,9 @@ Cc:     linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
         Daniel Bristot de Oliveira <bristot@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH V2 3/9] rtla: Change monitored_cpus from char * to cpu_set_t
-Date:   Tue, 23 May 2023 19:44:25 +0200
-Message-Id: <82b94186866ff109058c8d9b8154845fe3bc69b2.1684863094.git.bristot@kernel.org>
+Subject: [PATCH V2 4/9] rtla: Automatically move rtla to a house-keeping cpu
+Date:   Tue, 23 May 2023 19:44:26 +0200
+Message-Id: <2a9c16fedbef08d483f92c5af08a9b637d396056.1684863094.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1684863094.git.bristot@kernel.org>
 References: <cover.1684863094.git.bristot@kernel.org>
@@ -58,9 +58,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a cpumask instead of a char *, reducing memory footprint and code.
+When the user sets -c <cpu-list> try to move rtla out of the <cpu-list>,
+even without an -H option. This is useful to avoid having rtla
+interfering with the workload.
 
-No functional change, and in preparation for auto house-keeping.
+This works by removing <cpu-list> from rtla's current affinity.
+
+If rtla fails to move itself away it is not that of a problem as this
+is an automatic measure.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
@@ -68,319 +73,164 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- tools/tracing/rtla/src/osnoise_hist.c  | 18 ++++----
- tools/tracing/rtla/src/osnoise_top.c   |  6 +--
- tools/tracing/rtla/src/timerlat_hist.c | 18 ++++----
- tools/tracing/rtla/src/timerlat_top.c  |  6 +--
- tools/tracing/rtla/src/utils.c         | 63 --------------------------
- 5 files changed, 24 insertions(+), 87 deletions(-)
+ tools/tracing/rtla/src/osnoise_hist.c  |  9 +++++
+ tools/tracing/rtla/src/osnoise_top.c   |  9 +++++
+ tools/tracing/rtla/src/timerlat_hist.c |  9 +++++
+ tools/tracing/rtla/src/timerlat_top.c  |  9 +++++
+ tools/tracing/rtla/src/utils.c         | 50 ++++++++++++++++++++++++++
+ tools/tracing/rtla/src/utils.h         |  1 +
+ 6 files changed, 87 insertions(+)
 
 diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
-index d2b68177ffac..b616a72d5c0a 100644
+index b616a72d5c0a..dfbcb5ca7ecb 100644
 --- a/tools/tracing/rtla/src/osnoise_hist.c
 +++ b/tools/tracing/rtla/src/osnoise_hist.c
-@@ -19,7 +19,7 @@
+@@ -753,6 +753,15 @@ osnoise_hist_apply_config(struct osnoise_tool *tool, struct osnoise_hist_params
+ 			err_msg("Failed to set rtla to the house keeping CPUs\n");
+ 			goto out_err;
+ 		}
++	} else if (params->cpus) {
++		/*
++		 * Even if the user do not set a house-keeping CPU, try to
++		 * move rtla to a CPU set different to the one where the user
++		 * set the workload to run.
++		 *
++		 * No need to check results as this is an automatic attempt.
++		 */
++		auto_house_keeping(&params->monitored_cpus);
+ 	}
  
- struct osnoise_hist_params {
- 	char			*cpus;
--	char			*monitored_cpus;
-+	cpu_set_t		monitored_cpus;
- 	char			*trace_output;
- 	char			*cgroup_name;
- 	unsigned long long	runtime;
-@@ -274,7 +274,7 @@ static void osnoise_hist_header(struct osnoise_tool *tool)
- 		trace_seq_printf(s, "Index");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].count)
-@@ -305,7 +305,7 @@ osnoise_print_summary(struct osnoise_hist_params *params,
- 		trace_seq_printf(trace->seq, "count:");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].count)
-@@ -319,7 +319,7 @@ osnoise_print_summary(struct osnoise_hist_params *params,
- 		trace_seq_printf(trace->seq, "min:  ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].count)
-@@ -334,7 +334,7 @@ osnoise_print_summary(struct osnoise_hist_params *params,
- 		trace_seq_printf(trace->seq, "avg:  ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].count)
-@@ -352,7 +352,7 @@ osnoise_print_summary(struct osnoise_hist_params *params,
- 		trace_seq_printf(trace->seq, "max:  ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].count)
-@@ -387,7 +387,7 @@ osnoise_print_stats(struct osnoise_hist_params *params, struct osnoise_tool *too
- 					 bucket * data->bucket_size);
- 
- 		for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--			if (params->cpus && !params->monitored_cpus[cpu])
-+			if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 				continue;
- 
- 			if (!data->hist[cpu].count)
-@@ -411,7 +411,7 @@ osnoise_print_stats(struct osnoise_hist_params *params, struct osnoise_tool *too
- 		trace_seq_printf(trace->seq, "over: ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].count)
-@@ -559,7 +559,7 @@ static struct osnoise_hist_params
- 				osnoise_hist_usage("Bucket size needs to be > 0 and <= 1000000\n");
- 			break;
- 		case 'c':
--			retval = parse_cpu_list(optarg, &params->monitored_cpus);
-+			retval = parse_cpu_set(optarg, &params->monitored_cpus);
- 			if (retval)
- 				osnoise_hist_usage("\nInvalid -c cpu list\n");
- 			params->cpus = optarg;
+ 	return 0;
 diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
-index fcf6c14ce1bc..0e2f3b216d34 100644
+index 0e2f3b216d34..0833537bb2eb 100644
 --- a/tools/tracing/rtla/src/osnoise_top.c
 +++ b/tools/tracing/rtla/src/osnoise_top.c
-@@ -26,7 +26,7 @@ enum osnoise_mode {
-  */
- struct osnoise_top_params {
- 	char			*cpus;
--	char			*monitored_cpus;
-+	cpu_set_t		monitored_cpus;
- 	char			*trace_output;
- 	char			*cgroup_name;
- 	unsigned long long	runtime;
-@@ -263,7 +263,7 @@ osnoise_print_stats(struct osnoise_top_params *params, struct osnoise_tool *top)
- 	osnoise_top_header(top);
- 
- 	for (i = 0; i < nr_cpus; i++) {
--		if (params->cpus && !params->monitored_cpus[i])
-+		if (params->cpus && !CPU_ISSET(i, &params->monitored_cpus))
- 			continue;
- 		osnoise_top_print(top, i);
+@@ -582,6 +582,15 @@ osnoise_top_apply_config(struct osnoise_tool *tool, struct osnoise_top_params *p
+ 			err_msg("Failed to set rtla to the house keeping CPUs\n");
+ 			goto out_err;
+ 		}
++	} else if (params->cpus) {
++		/*
++		 * Even if the user do not set a house-keeping CPU, try to
++		 * move rtla to a CPU set different to the one where the user
++		 * set the workload to run.
++		 *
++		 * No need to check results as this is an automatic attempt.
++		 */
++		auto_house_keeping(&params->monitored_cpus);
  	}
-@@ -397,7 +397,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
  
- 			break;
- 		case 'c':
--			retval = parse_cpu_list(optarg, &params->monitored_cpus);
-+			retval = parse_cpu_set(optarg, &params->monitored_cpus);
- 			if (retval)
- 				osnoise_top_usage(params, "\nInvalid -c cpu list\n");
- 			params->cpus = optarg;
+ 	return 0;
 diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
-index d48c05d238f9..00287e96f22e 100644
+index 00287e96f22e..1675d54cae81 100644
 --- a/tools/tracing/rtla/src/timerlat_hist.c
 +++ b/tools/tracing/rtla/src/timerlat_hist.c
-@@ -19,7 +19,7 @@
+@@ -776,6 +776,15 @@ timerlat_hist_apply_config(struct osnoise_tool *tool, struct timerlat_hist_param
+ 			err_msg("Failed to set rtla to the house keeping CPUs\n");
+ 			goto out_err;
+ 		}
++	} else if (params->cpus) {
++		/*
++		 * Even if the user do not set a house-keeping CPU, try to
++		 * move rtla to a CPU set different to the one where the user
++		 * set the workload to run.
++		 *
++		 * No need to check results as this is an automatic attempt.
++		 */
++		auto_house_keeping(&params->monitored_cpus);
+ 	}
  
- struct timerlat_hist_params {
- 	char			*cpus;
--	char			*monitored_cpus;
-+	cpu_set_t		monitored_cpus;
- 	char			*trace_output;
- 	char			*cgroup_name;
- 	unsigned long long	runtime;
-@@ -227,7 +227,7 @@ static void timerlat_hist_header(struct osnoise_tool *tool)
- 		trace_seq_printf(s, "Index");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
-@@ -263,7 +263,7 @@ timerlat_print_summary(struct timerlat_hist_params *params,
- 		trace_seq_printf(trace->seq, "count:");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
-@@ -283,7 +283,7 @@ timerlat_print_summary(struct timerlat_hist_params *params,
- 		trace_seq_printf(trace->seq, "min:  ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
-@@ -303,7 +303,7 @@ timerlat_print_summary(struct timerlat_hist_params *params,
- 		trace_seq_printf(trace->seq, "avg:  ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
-@@ -331,7 +331,7 @@ timerlat_print_summary(struct timerlat_hist_params *params,
- 		trace_seq_printf(trace->seq, "max:  ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
-@@ -371,7 +371,7 @@ timerlat_print_stats(struct timerlat_hist_params *params, struct osnoise_tool *t
- 					 bucket * data->bucket_size);
- 
- 		for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--			if (params->cpus && !params->monitored_cpus[cpu])
-+			if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 				continue;
- 
- 			if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
-@@ -405,7 +405,7 @@ timerlat_print_stats(struct timerlat_hist_params *params, struct osnoise_tool *t
- 		trace_seq_printf(trace->seq, "over: ");
- 
- 	for (cpu = 0; cpu < data->nr_cpus; cpu++) {
--		if (params->cpus && !params->monitored_cpus[cpu])
-+		if (params->cpus && !CPU_ISSET(cpu, &params->monitored_cpus))
- 			continue;
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
-@@ -565,7 +565,7 @@ static struct timerlat_hist_params
- 
- 			break;
- 		case 'c':
--			retval = parse_cpu_list(optarg, &params->monitored_cpus);
-+			retval = parse_cpu_set(optarg, &params->monitored_cpus);
- 			if (retval)
- 				timerlat_hist_usage("\nInvalid -c cpu list\n");
- 			params->cpus = optarg;
+ 	return 0;
 diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
-index 5395d1c5921e..920f2f6ef842 100644
+index 920f2f6ef842..f0c6d9735e2a 100644
 --- a/tools/tracing/rtla/src/timerlat_top.c
 +++ b/tools/tracing/rtla/src/timerlat_top.c
-@@ -21,7 +21,7 @@
- 
- struct timerlat_top_params {
- 	char			*cpus;
--	char			*monitored_cpus;
-+	cpu_set_t		monitored_cpus;
- 	char			*trace_output;
- 	char			*cgroup_name;
- 	unsigned long long	runtime;
-@@ -271,7 +271,7 @@ timerlat_print_stats(struct timerlat_top_params *params, struct osnoise_tool *to
- 	timerlat_top_header(top);
- 
- 	for (i = 0; i < nr_cpus; i++) {
--		if (params->cpus && !params->monitored_cpus[i])
-+		if (params->cpus && !CPU_ISSET(i, &params->monitored_cpus))
- 			continue;
- 		timerlat_top_print(top, i);
+@@ -619,6 +619,15 @@ timerlat_top_apply_config(struct osnoise_tool *top, struct timerlat_top_params *
+ 			err_msg("Failed to set rtla to the house keeping CPUs\n");
+ 			goto out_err;
+ 		}
++	} else if (params->cpus) {
++		/*
++		 * Even if the user do not set a house-keeping CPU, try to
++		 * move rtla to a CPU set different to the one where the user
++		 * set the workload to run.
++		 *
++		 * No need to check results as this is an automatic attempt.
++		 */
++		auto_house_keeping(&params->monitored_cpus);
  	}
-@@ -422,7 +422,7 @@ static struct timerlat_top_params
- 			params->aa_only = 1;
- 			break;
- 		case 'c':
--			retval = parse_cpu_list(optarg, &params->monitored_cpus);
-+			retval = parse_cpu_set(optarg, &params->monitored_cpus);
- 			if (retval)
- 				timerlat_top_usage("\nInvalid -c cpu list\n");
- 			params->cpus = optarg;
+ 
+ 	return 0;
 diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-index ee6fab09acae..8f9ad8f01e0f 100644
+index 8f9ad8f01e0f..3e25f0277fb9 100644
 --- a/tools/tracing/rtla/src/utils.c
 +++ b/tools/tracing/rtla/src/utils.c
-@@ -88,69 +88,6 @@ void get_duration(time_t start_time, char *output, int output_size)
- 			tm_info->tm_sec);
+@@ -709,3 +709,53 @@ int set_comm_cgroup(const char *comm_prefix, const char *cgroup)
+ 	close(cg_fd);
+ 	return 0;
  }
++
++/**
++ * auto_house_keeping - Automatically move rtla out of measurement threads
++ *
++ * Try to move rtla away from the tracer, if possible.
++ *
++ * Returns 1 on success, 0 otherwise.
++ */
++int auto_house_keeping(cpu_set_t *monitored_cpus)
++{
++	cpu_set_t rtla_cpus, house_keeping_cpus;
++	int retval;
++
++	/* first get the CPUs in which rtla can actually run. */
++	retval = sched_getaffinity(getpid(), sizeof(rtla_cpus), &rtla_cpus);
++	if (retval == -1) {
++		debug_msg("Could not get rtla affinity, rtla might run with the threads!\n");
++		return 0;
++	}
++
++	/* then check if the existing setup is already good. */
++	CPU_AND(&house_keeping_cpus, &rtla_cpus, monitored_cpus);
++	if (!CPU_COUNT(&house_keeping_cpus)) {
++		debug_msg("rtla and the monitored CPUs do not share CPUs.");
++		debug_msg("Skipping auto house-keeping\n");
++		return 1;
++	}
++
++	/* remove the intersection */
++	CPU_XOR(&house_keeping_cpus, &rtla_cpus, monitored_cpus);
++
++	/* get only those that rtla can run */
++	CPU_AND(&house_keeping_cpus, &house_keeping_cpus, &rtla_cpus);
++
++	/* is there any cpu left? */
++	if (!CPU_COUNT(&house_keeping_cpus)) {
++		debug_msg("Could not find any CPU for auto house-keeping\n");
++		return 0;
++	}
++
++	retval = sched_setaffinity(getpid(), sizeof(house_keeping_cpus), &house_keeping_cpus);
++	if (retval == -1) {
++		debug_msg("Could not set affinity for auto house-keeping\n");
++		return 0;
++	}
++
++	debug_msg("rtla automatically moved to an auto house-keeping cpu set\n");
++
++	return 1;
++}
+diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/utils.h
+index 9ab2f0d7bc1c..dec59163cfbc 100644
+--- a/tools/tracing/rtla/src/utils.h
++++ b/tools/tracing/rtla/src/utils.h
+@@ -60,6 +60,7 @@ int parse_cpu_set(char *cpu_list, cpu_set_t *set);
+ int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr);
+ int set_comm_cgroup(const char *comm_prefix, const char *cgroup);
+ int set_cpu_dma_latency(int32_t latency);
++int auto_house_keeping(cpu_set_t *monitored_cpus);
  
--/*
-- * parse_cpu_list - parse a cpu_list filling a char vector with cpus set
-- *
-- * Receives a cpu list, like 1-3,5 (cpus 1, 2, 3, 5), and then set the char
-- * in the monitored_cpus.
-- *
-- * XXX: convert to a bitmask.
-- */
--int parse_cpu_list(char *cpu_list, char **monitored_cpus)
--{
--	char *mon_cpus;
--	const char *p;
--	int end_cpu;
--	int nr_cpus;
--	int cpu;
--	int i;
--
--	nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
--
--	mon_cpus = calloc(nr_cpus, sizeof(char));
--	if (!mon_cpus)
--		goto err;
--
--	for (p = cpu_list; *p; ) {
--		cpu = atoi(p);
--		if (cpu < 0 || (!cpu && *p != '0') || cpu >= nr_cpus)
--			goto err;
--
--		while (isdigit(*p))
--			p++;
--		if (*p == '-') {
--			p++;
--			end_cpu = atoi(p);
--			if (end_cpu < cpu || (!end_cpu && *p != '0') || end_cpu >= nr_cpus)
--				goto err;
--			while (isdigit(*p))
--				p++;
--		} else
--			end_cpu = cpu;
--
--		if (cpu == end_cpu) {
--			debug_msg("cpu_list: adding cpu %d\n", cpu);
--			mon_cpus[cpu] = 1;
--		} else {
--			for (i = cpu; i <= end_cpu; i++) {
--				debug_msg("cpu_list: adding cpu %d\n", i);
--				mon_cpus[i] = 1;
--			}
--		}
--
--		if (*p == ',')
--			p++;
--	}
--
--	*monitored_cpus = mon_cpus;
--
--	return 0;
--
--err:
--	debug_msg("Error parsing the cpu list %s", cpu_list);
--	return 1;
--}
--
- /*
-  * parse_cpu_set - parse a cpu_list filling cpu_set_t argument
-  *
+ #define ns_to_usf(x) (((double)x/1000))
+ #define ns_to_per(total, part) ((part * 100) / (double)total)
 -- 
 2.38.1
 
