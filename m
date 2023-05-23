@@ -2,95 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D86970CFC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E18970CFC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234947AbjEWArP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        id S234997AbjEWAq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234913AbjEWAq4 (ORCPT
+        with ESMTP id S234979AbjEWAqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:46:56 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D62423C;
-        Mon, 22 May 2023 17:30:01 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-253340db64fso6198705a91.2;
-        Mon, 22 May 2023 17:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684801801; x=1687393801;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HEifJEBSj843qwkcWh042z8MQfZIbIFpzgNR/nZXc5s=;
-        b=PjMYjRIziDSPvIlo9uMabR3TcCLJABTa7b5x2+c2JcD3JRZ60jrEAQafRzLNHwwV+I
-         enUO/HEFYmmQgZcCuq6wb/35dF/6jUolpkPPW34vPT3AOfBIGogDIIo9cqrjHY90XTY+
-         PXZGtxAta++G1i94Z4nT9DOtmrPiCRZ8iQrqgyYfpyHqWs9v804Y7btk9ga1u/gxoRfI
-         DJCUc0PyN4ZTEBXIYLQ5kRorIvYr0Pa2R2HgCFz4UDUwWgm5Q90LGBID+8D0W2Aiss9D
-         1iQE6V2mqAGOj7mwKTMjKWZpUyzMDjTa/NKWCWypDA0WsqpeffcdGvaXLuG+CfuC8wzY
-         nqig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684801801; x=1687393801;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HEifJEBSj843qwkcWh042z8MQfZIbIFpzgNR/nZXc5s=;
-        b=Vba19XvgG6OcRW8gyi4eLLnVTUgnJaFz1Zmj5FcSDsuIh1KhYVvXnqGSzS9b8JY8c5
-         GkJ/IHo+wJO9ehPHvld/kOnZI+yVkV+KMHW7PLM5ndInGjTCZVy6pSfTN3XntVZl1b3B
-         Ng4velwVTX5hdPaHsXYajn3SHuz49GjtAdTT5HOPiKLXnqWQOC46OxmFHB180+uy/zpQ
-         HfIGoRRBynllV12qNJ9Ivmz/7J5x+LSoq2lnjFXDligJHs5OeloWemxsUDHChjzn8kXP
-         ahbPSvEXvufMH/YFr1sULCjcZwNrDu2cX0JWJ+J+nHVFWDvcUfK1/e91npqVoyAqTMdq
-         HPmA==
-X-Gm-Message-State: AC+VfDwxaQL2015z7FFFpo4W8SCrXIFNxyq/9UCdhxFskBRY/jevhqQt
-        7oYo03XwyeBrVwTCR9tOFho=
-X-Google-Smtp-Source: ACHHUZ7wWyVCJpxZmHsghH/6/RZ4D9JiWJJ7UL2PxapwGvf1T3n3EcRWA2L20zNwu0GC2oCe+8joqg==
-X-Received: by 2002:a17:90b:2292:b0:253:83d8:e487 with SMTP id kx18-20020a17090b229200b0025383d8e487mr10976879pjb.0.1684801800788;
-        Mon, 22 May 2023 17:30:00 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:54fa:e8a7:76de:888d])
-        by smtp.gmail.com with ESMTPSA id gj13-20020a17090b108d00b00250ad795d72sm4590532pjb.44.2023.05.22.17.29.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 17:30:00 -0700 (PDT)
-Date:   Mon, 22 May 2023 17:29:57 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-input@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cameron Gutman <aicommander@gmail.com>,
-        Marcos Alano <marcoshalano@gmail.com>
-Subject: Re: [PATCH v2] xpad: Spelling fixes for "Xbox", improve and
- proofread the listed xpad device names
-Message-ID: <ZGwJBTFd4JRKzocu@google.com>
-References: <401b1d94-1348-15fd-b48f-a80e8885c7a4@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <401b1d94-1348-15fd-b48f-a80e8885c7a4@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 20:46:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE084234
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:30:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A0B8611DA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3459EC433AF;
+        Tue, 23 May 2023 00:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684801804;
+        bh=8SLIjka9j0UfSy9jb2OdugDq1Rhkh0/hM6dT/+2Q5B8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=kyVYo03sYavGuR5wPQJjMGAcyGbsCoTvn2QE/kHLf+ZTWuD5YLJ2OMEtFpO6kJBrR
+         qu4vtl14bU1zL67vEoAjhHlSF8ogPpeaMt2emB86/aoePO8tJO99s2kCyCbmBp4fe1
+         WVpTwpbbfhVTeUpRFzc0toO6mM6dHBeLrVBNQWXMl/B/xK0+QnEzNpkv0GLm3aO/aN
+         CLclp8Ea8i1uJMbEzoPx+daVO6tAGGtl/LsnM9Uq93ZzXYRuhkbBwAtedbNJiTCktY
+         HQoiMachEC4qgUa9BDELsXBlKUWJ8ucnG1nxFoRelXJFlGv1QweySkc3MNDPaovFtA
+         3xv8qtCe3IllQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F1BDBE22AEB;
+        Tue, 23 May 2023 00:30:03 +0000 (UTC)
+Subject: Re: [GIT PULL] x86/urgent for 6.4-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230522231548.1511061-1-dave.hansen@linux.intel.com>
+References: <20230522231548.1511061-1-dave.hansen@linux.intel.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230522231548.1511061-1-dave.hansen@linux.intel.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_6.4-rc4
+X-PR-Tracked-Commit-Id: ce0b15d11ad837fbacc5356941712218e38a0a83
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ae8373a5add4ea39f032563cf12a02946d1e3546
+Message-Id: <168480180392.28619.7366740216303666306.pr-tracker-bot@kernel.org>
+Date:   Tue, 23 May 2023 00:30:03 +0000
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     torvalds@linux-foundation.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 12:30:20AM +0100, Ismael Ferreras Morezuelas wrote:
-> The Linux kernel is notorious for misspelling X-Box, X-box, XBox or XBOX;
-> the official spelling is actually just Xbox. Plain and simple.
-> 
-> Tried to respect the existing notes but still following the style guide.
-> No functional changes intended. This only affects ancillary parts.
-> 
-> Sounds trivial, but this makes it easier to search the correct
-> entries in xmenu by name. It has always been a pet peeve of mine.
-> 
-> Signed-off-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
-> ---
+The pull request you sent on Mon, 22 May 2023 16:15:48 -0700:
 
-Adjusted the patch description a little to remove mention searching by
-name (since user-visible names are not touched), and applied.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_6.4-rc4
 
-Thanks.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ae8373a5add4ea39f032563cf12a02946d1e3546
+
+Thank you!
 
 -- 
-Dmitry
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
