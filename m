@@ -2,85 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A2F70D8F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B488670D8F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbjEWJ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
+        id S235875AbjEWJ1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236156AbjEWJ1Z (ORCPT
+        with ESMTP id S235812AbjEWJ1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:27:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAA6102;
-        Tue, 23 May 2023 02:27:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD0DB62EB0;
-        Tue, 23 May 2023 09:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69DFCC433EF;
-        Tue, 23 May 2023 09:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684834044;
-        bh=IUrdaNLqIx/2k/BkZ+Swg4n2KP9d9NG4z8/sFcd3UFw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K9p8/R/2GOLJ+gglD8sAEXiHT3l92ycui7awQIL+0u634XoNaf+VS3sPMuzloNS+D
-         w3KYTh+U+MARjO8FnTnp93zK1rUlP1JC2Wf3GV6iEmQ7tFLxsVA6WNeh4B2gO6A5A9
-         QDqgYxw44mJwg2reUkVgDWAaXGXgpboVLlQ4fgXgW10ZM5kZS9/EbhHiVWjphhUkmK
-         Tcu/d2668TFe8b9fnCqtPBGmBnjVE+TD3bFapyad+d2yU+8PN7L4G9LQi5dqOmIRfP
-         76/08+oJtkGSjpwqyj3OYuw+pKUA3SeFpocQqnaxo1S1Uj0VvaBMef70MLvrP+LiRW
-         4GUJNlQMyKQug==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Dave Chinner <dchinner@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: (subset) [PATCH 20/32] vfs: factor out inode hash head calculation
-Date:   Tue, 23 May 2023 11:27:06 +0200
-Message-Id: <20230523-plakat-kleeblatt-007077ebabb6@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230509165657.1735798-21-kent.overstreet@linux.dev>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev> <20230509165657.1735798-21-kent.overstreet@linux.dev>
+        Tue, 23 May 2023 05:27:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8951E119;
+        Tue, 23 May 2023 02:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684834033; x=1716370033;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=4pmQFILBmz2f/mXPtC0/un3f6702ACX81f16N8rZ8rA=;
+  b=XK89COV7/PaQju0iv+jiVFWvsr1MjtgaXCFQlp7O1Yo4f3kvBpLZvxzG
+   dC5qfjvD+7Z6zHqyrLR6Z8FZW85GSOdj50Pbg3tRF03YmXJklD08eWtm7
+   1UWvmQbBjlTtV+fnuGxhDV81YjP+hZ+dIQ/xulqcCpJpdJaBCKnQEv3rh
+   om9WFBcUJrloGU+eXNlgJDWNJBp68C6U0TUb7Bt6AJlGFUgXJjfEFe/jn
+   LNJ+jmOHKaVXllPN2mFDoFyyYDOnhrN3O/dtVZu+I+Wyt70+Ve8T9Q5OI
+   7z+ABFa33Nj6idN45LyZOKHlFaTagwE5DHkajM1nMTg8yEb4bWvUYor67
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="381429767"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="381429767"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:27:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="734683883"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="734683883"
+Received: from oodnolex-mobl1.ccr.corp.intel.com ([10.252.55.104])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 02:27:11 -0700
+Date:   Tue, 23 May 2023 12:27:08 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Steve Wahl <steve.wahl@hpe.com>
+cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] platform/x86: ISST: Remove 8 socket limit
+In-Reply-To: <20230519160420.2588475-1-steve.wahl@hpe.com>
+Message-ID: <bf9a2943-f4eb-eb24-e18b-1b1c1959fe31@linux.intel.com>
+References: <20230519160420.2588475-1-steve.wahl@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=889; i=brauner@kernel.org; h=from:subject:message-id; bh=IUrdaNLqIx/2k/BkZ+Swg4n2KP9d9NG4z8/sFcd3UFw=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTktD1MkmSOvBvDGd7YnhPg3nj0/9WP9pd/Pr2ibmqWWGxy zSW3o5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCIyuxgZFjxfFJHp7Nf0WHRDtMdCwZ +cWX/tjARO/rs99Re3S47Od4a/Ym8mrPAQ5jybq3/9z+qFXH4W9yoMGPy+Xa1p28i6x+wUOwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1415302906-1684834032=:3565"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 May 2023 12:56:45 -0400, Kent Overstreet wrote:
-> In preparation for changing the inode hash table implementation.
->
->
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This is interesting completely independent of bcachefs so we should give
-it some testing.
+--8323329-1415302906-1684834032=:3565
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
----
+On Fri, 19 May 2023, Steve Wahl wrote:
 
-Applied to the vfs.unstable.inode-hash branch of the vfs/vfs.git tree.
-Patches in the vfs.unstable.inode-hash branch should appear in linux-next soon.
+> Stop restricting the PCI search to a range of PCI domains fed to
+> pci_get_domain_bus_and_slot().  Instead, use for_each_pci_dev() and
+> look at all PCI domains in one pass.
+> 
+> On systems with more than 8 sockets, this avoids error messages like
+> "Information: Invalid level, Can't get TDP control information at
+> specified levels on cpu 480" from the intel speed select utility.
+> 
+> Fixes: aa2ddd242572 ("platform/x86: ISST: Use numa node id for cpu pci dev mapping")
+> Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
+> ---
+>  .../x86/intel/speed_select_if/isst_if_common.c       | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> index e0572a29212e..02fe360a59c7 100644
+> --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> @@ -304,14 +304,13 @@ struct isst_if_pkg_info {
+>  static struct isst_if_cpu_info *isst_cpu_info;
+>  static struct isst_if_pkg_info *isst_pkg_info;
+>  
+> -#define ISST_MAX_PCI_DOMAINS	8
+> -
+>  static struct pci_dev *_isst_if_get_pci_dev(int cpu, int bus_no, int dev, int fn)
+>  {
+>  	struct pci_dev *matched_pci_dev = NULL;
+>  	struct pci_dev *pci_dev = NULL;
+> +	struct pci_dev *_pci_dev = NULL;
+>  	int no_matches = 0, pkg_id;
+> -	int i, bus_number;
+> +	int bus_number;
+>  
+>  	if (bus_no < 0 || bus_no >= ISST_MAX_BUS_NUMBER || cpu < 0 ||
+>  	    cpu >= nr_cpu_ids || cpu >= num_possible_cpus())
+> @@ -323,12 +322,11 @@ static struct pci_dev *_isst_if_get_pci_dev(int cpu, int bus_no, int dev, int fn
+>  	if (bus_number < 0)
+>  		return NULL;
+>  
+> -	for (i = 0; i < ISST_MAX_PCI_DOMAINS; ++i) {
+> -		struct pci_dev *_pci_dev;
+> +	for_each_pci_dev(_pci_dev) {
+>  		int node;
+>  
+> -		_pci_dev = pci_get_domain_bus_and_slot(i, bus_number, PCI_DEVFN(dev, fn));
+> -		if (!_pci_dev)
+> +		if (_pci_dev->bus->number != bus_number ||
+> +		    _pci_dev->devfn != PCI_DEVFN(dev, fn))
+>  			continue;
+>  
+>  		++no_matches;
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+With the note that _pci_dev is not a good variable name (but the rename 
+would make this fix larger than it needs to be).
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.unstable.inode-hash
+-- 
+ i.
 
-[20/32] vfs: factor out inode hash head calculation
-        https://git.kernel.org/vfs/vfs/c/b54a4516146d
+--8323329-1415302906-1684834032=:3565--
