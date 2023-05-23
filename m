@@ -2,82 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05AC470D3DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B5470D3DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbjEWGUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S235169AbjEWGUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbjEWGTz (ORCPT
+        with ESMTP id S235170AbjEWGTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:19:55 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D152F119;
-        Mon, 22 May 2023 23:19:54 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-6238386eb9cso59272966d6.1;
-        Mon, 22 May 2023 23:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684822794; x=1687414794;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9o/AkYCvO3tV2BU0V8GNdESZ1hmHFfJ/JAYYnq2G7Ts=;
-        b=ltSNDHag4sBJXgnPrLe1CebvaUqaao+DR+zTyCo5AHases8sTOQVIaeH85q1QXnnAY
-         lQw9vk7fkxQB7hrKCsNxtdOX+J9HbTj13D7yi4YjM3s+ZmhpaOSygpboeXXoyboMMK9v
-         DU0++lebgnMKXewdizqARwdvl5VQSujfrfDX1D/6Ka1h/IPNHjbP045rveIPdQ0xat//
-         Qb9F0P3aECjUjlNGFDZ9o5MqW62U6ezv9UB4cl20RNuVouXEA7ZcyP6Fc+5fyWWHmJFb
-         742h42pMC68PBgRJWiB7RLMXIcTPuENNXj4lXCCdUa0rZCXki+JwsBhCq6LewsvB8uBB
-         27Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684822794; x=1687414794;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9o/AkYCvO3tV2BU0V8GNdESZ1hmHFfJ/JAYYnq2G7Ts=;
-        b=HmFgx9fVRVIwmZ/BH3feVS6xSwLhp/NJkvToI/URFNlqB1gqQmmnJqRh+SX0+obN+L
-         yyFDTScUbeed5t8S7vdaoD4oDHZ42e5ABWmDfT4o41y/KjrAVRk/MQL13a/JPn4ba+ra
-         Da0AUksm5Iss8ppPjvRV+l+PeE+cgwIH+ADLJLIFE4joKMPLJ7YrrWso+Rwoayl/vQ5/
-         /RFnNVGY7pMY8MKEDI9/OYFFSV+Ozx5h9ZrYCZUjSpe8FtAe749m8+0Mhn3zPQefYxhM
-         ImBSSm3GnGmN5qyAZre/idpPeE5wnZyhyZdXU89PpPfx/V9WbRKbtSRBqVjyh+S9pRnK
-         6sUA==
-X-Gm-Message-State: AC+VfDwS2ml/hQ3Br7e72BoFFhgAZ4rJrPMkN1Uq8y2x2vhe9V9bRyR5
-        NHxGpgbPGUdtafzI9cmiyw==
-X-Google-Smtp-Source: ACHHUZ5/l+u9V0ZEoDbPOfnGgrn6JxSlQeOvcewZ/8UgiMcfjyKlE3y3IUjhKeYxNZqgrMWLcZcq6w==
-X-Received: by 2002:a05:6214:29e9:b0:625:8b9a:b426 with SMTP id jv9-20020a05621429e900b006258b9ab426mr3639169qvb.46.1684822793931;
-        Mon, 22 May 2023 23:19:53 -0700 (PDT)
-Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:18c1:dc19:5e29:e9a0])
-        by smtp.gmail.com with ESMTPSA id ev18-20020a0562140a9200b0062363e7dac5sm2502043qvb.104.2023.05.22.23.19.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 May 2023 23:19:53 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <peilin.ye@bytedance.com>
-Subject: [PATCH v3 net 1/6] net/sched: sch_ingress: Only create under TC_H_INGRESS
-Date:   Mon, 22 May 2023 23:19:44 -0700
-Message-Id: <72c5a2b8ae1c3301175419a18da18f186818fa7c.1684821877.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <cover.1684821877.git.peilin.ye@bytedance.com>
-References: <cover.1684821877.git.peilin.ye@bytedance.com>
+        Tue, 23 May 2023 02:19:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F316C130
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 23:19:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 896D062F72
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72211C433EF;
+        Tue, 23 May 2023 06:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684822789;
+        bh=KAVEqt/JEohCVjW0sfFZBs2E7jSKgH4ZExSL2rRnJAk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RkChh1nRR4XlzI5dz24Hqt59N6RTFlEQXytCmNL9YEZsM/KhIgwR1LRC0pQJlUNNs
+         64ihtB8stMuIt/XiOZNQIB/carbXmWibAIAX/K33ptqF+X2KRx8qDNkuGrgmmQEht9
+         EHXyyzZ+dGwFQYTmB9UxufWmi5PJYhngfvRBG2z52C9FNRI+yIcYlQmrJiirFDJDUy
+         Gh9Le41b1nHwcyGIKuHID3in3tYB7BNwEnavhM+Z5PGvVeCgJ6QVCzpxWDb29kNVOc
+         YJ8tfVvev3Ui7ItwVpze18qSxFXqlQRYlVPo+E4QPKtRDl/gvNvkMXFQTisaaA+foG
+         KU+0qxcdUmZJg==
+Message-ID: <b183ca8b-7292-7d6c-e267-0e10bd32ba8c@kernel.org>
+Date:   Tue, 23 May 2023 14:19:46 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] erofs: avoid pcpubuf.c inclusion if CONFIG_EROFS_FS_ZIP
+ is off
+Content-Language: en-US
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
+        linux-kernel@vger.kernel.org
+References: <20230515095758.10391-1-zbestahu@gmail.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230515095758.10391-1-zbestahu@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,41 +59,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <yepeilin.cs@gmail.com>
+On 2023/5/15 17:57, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
+> 
+> The function of pcpubuf.c is just for low-latency decompression
+> algorithms (e.g. lz4).
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-ingress Qdiscs are only supposed to be created under TC_H_INGRESS.
-Similar to mq_init(), return -EOPNOTSUPP if 'parent' is not
-TC_H_INGRESS.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/r/0000000000006cf87705f79acf1a@google.com/
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-change in v3:
-  - add in-body From: tag
-
- net/sched/sch_ingress.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/net/sched/sch_ingress.c b/net/sched/sch_ingress.c
-index 84838128b9c5..3d71f7a3b4ad 100644
---- a/net/sched/sch_ingress.c
-+++ b/net/sched/sch_ingress.c
-@@ -80,6 +80,9 @@ static int ingress_init(struct Qdisc *sch, struct nlattr *opt,
- 	struct net_device *dev = qdisc_dev(sch);
- 	int err;
- 
-+	if (sch->parent != TC_H_INGRESS)
-+		return -EOPNOTSUPP;
-+
- 	net_inc_ingress_queue();
- 
- 	mini_qdisc_pair_init(&q->miniqp, sch, &dev->miniq_ingress);
--- 
-2.20.1
-
+Thanks,
