@@ -2,64 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91DB70E554
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B7970E576
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238283AbjEWTY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S238318AbjEWTbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjEWTY4 (ORCPT
+        with ESMTP id S230027AbjEWTb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:24:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1003AFA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684869896; x=1716405896;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IEyG284yltYb9FSRi5HqYAoWA0nmo4cXvLBD26DsZN8=;
-  b=HXVZwLVNYgdVe69+Al1LPid2PuunAXabElHA2P0lEf1dUreKXo05vP7u
-   PfFqhmAgyZL9d604O2fk202baWkpjdnsjMkWAArPhIpnTGfzB/vOpCuH1
-   oTGEDVR4+jt20TLM584PK8vKZPpUdDD7GIyVuexs9trn0D4Ca3CmyGHwy
-   paVhLdblDT6mEoFmgg3DVOiTAKw9bzmsjXhfksuYPesUPDBbxrcwMTYV+
-   Kmtjz3TojKc3jUln/O3ZQ47V9qIY+EBkHxWFQcjTsJsWSnqBQt6XCtnUd
-   rGagC8an4w/1LQQDbObN5N+jgGHRfBbJDSE+ejclwsE6Z6BTlzUA9y0bB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="350847606"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="350847606"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 12:24:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="816254807"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="816254807"
-Received: from srusakov-mobl.amr.corp.intel.com (HELO [10.209.35.87]) ([10.209.35.87])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 12:24:54 -0700
-Message-ID: <1ce6bb84-3140-3953-e995-00eb7b16f386@linux.intel.com>
-Date:   Tue, 23 May 2023 14:24:53 -0500
+        Tue, 23 May 2023 15:31:29 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC33E46
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:31:08 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae4c5e12edso243125ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684870268; x=1687462268;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=da7xHElmRhs7yLWfdeHx4hSBX9WK1oPzedpFeX43g5E=;
+        b=LzUeez59b5Pg0Ump+sB4OM8jCT2gUu+L3cHDGuYq6KxKNdbWzzUcYfIjiAl9CHb7/y
+         Zd/xCwCoNFjhdzyDFQL7kt91TMpOZffzujd6HC05iDlXlLzNfOfWBkCHqD6ablJniuG1
+         PQBLx18VMf6dlXe/RbYmWDRnV0qm5puEiOYyw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684870268; x=1687462268;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=da7xHElmRhs7yLWfdeHx4hSBX9WK1oPzedpFeX43g5E=;
+        b=V9XpEbC0iPF9orJiRva2Yl+x9Ctao6vQgqN4DbqEPsraeQ+7cRrcJOBzHQa5Sgi3I+
+         3dgjcpFr/Slo55PU7ObPog5HZ6/aHfuF3nFj+vzhmn+51WQhtKO7TCjnZrUgeTBahdHq
+         Eflz0NeFq45+Z4cduYpsfuW4poloc80vL5+qX4fi4eKk2GyHZF17ty+mNkcqh/J76TTf
+         3K6cc30kmIKLAR/EmrHnrRwp+YkUeYxmXUA6uY0vrRZA8BhvXXqyQKNhG89g0eKaNME9
+         mcMIwYIoR1Uzd1nx0rKS6m7sKxq3KWDlWT1OM5hm7RShDYR1UKvMcKeqb4FT5CVqYU9H
+         pOUw==
+X-Gm-Message-State: AC+VfDzntIEDeaYUurkCLy8XKAOJgu0QOyNDvIutkJm9AZCwjXjfIL53
+        N62x26TWW3cnyJrNOCLXScSLpA==
+X-Google-Smtp-Source: ACHHUZ4/GhcYkmDFF4G/tiyzD+WQyx75cWfu4Fa2ANvrz/NLC/goHxpAkTJKe2ReitBreL7vc+KZpA==
+X-Received: by 2002:a17:902:c151:b0:1aa:cf25:41d0 with SMTP id 17-20020a170902c15100b001aacf2541d0mr14164593plj.33.1684870268211;
+        Tue, 23 May 2023 12:31:08 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:af98:af9d:ed15:f8b3])
+        by smtp.gmail.com with ESMTPSA id y18-20020a170902b49200b001aaef9d0102sm7109947plr.197.2023.05.23.12.31.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 12:31:07 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>, hsinyi@google.com,
+        devicetree@vger.kernel.org,
+        yangcong5@huaqin.corp-partner.google.com,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-msm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH 0/9] drm/panel and i2c-hid: Allow panels and touchscreens to power sequence together
+Date:   Tue, 23 May 2023 12:27:54 -0700
+Message-ID: <20230523193017.4109557-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH] ASoC: rt5682: Use a maple tree based register cache
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20230419-asoc-rt5682-maple-v1-1-ed40369c9099@kernel.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230419-asoc-rt5682-maple-v1-1-ed40369c9099@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,70 +83,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+The big motivation for this patch series is mostly described in the patch
+("drm/panel: Add a way for other devices to follow panel state"), but to
+quickly summarize here: for touchscreens that are connected to a panel we
+need the ability to power sequence the two device together. This is not a
+new need, but so far we've managed to get by through a combination of
+inefficiency, added costs, or perhaps just a little bit of brokenness.
+It's time to do better. This patch series allows us to do better.
 
-On 4/25/23 12:22, Mark Brown wrote:
-> regmap has introduced a maple tree based register cache which makes use of
-> this more advanced data structure which has been added to the kernel
-> recently. Maple trees are much flatter than rbtrees, meaning that they do
-> not grow to such depths when the register map is sparse which makes access
-> a bit more efficient. The maple tree cache type is still a bit of a work
-> in progress but should be effective for some devices already.
-> 
-> RT5682 seems like a good candidate for maple tree. It only supports single
-> register read/write operations so will gain minimal benefit from storing
-> the register data in device native format like rbtree does (none for
-> SoundWire) and has some sparsity in the register map which is a good fit
-> for maple tree.
-> 
-> Convert to use maple tree. There should be little if any visible difference
-> at runtime.
+Assuming that people think this patch series looks OK, we'll have to
+figure out the right way to land it. The panel patches and i2c-hid
+patches will go through very different trees and so either we'll need
+an Ack from one side or the other or someone to create a tag for the
+other tree to pull in. This will _probably_ require the true drm-misc
+maintainers to get involved, not a lowly committer. ;-)
 
-Wondering if this is the root cause of the regression we're seeing in
-[1] on a Chromebook with rt5682 in SoundWire mode?
 
-I don't see any other changes to this codec driver and the first problem
-detected seemed to happen when we did an upstream merge last week.
-Unfortunately the last merge was on April 24 (sof-dev-rebase-20230424)
-which is just the day before this commit was added...
+Douglas Anderson (9):
+  dt-bindings: HID: i2c-hid: Add "panel" property to i2c-hid backed
+    panels
+  drm/panel: Check for already prepared/enabled in drm_panel
+  drm/panel: Add a way for other devices to follow panel state
+  HID: i2c-hid: Switch to SYSTEM_SLEEP_PM_OPS()
+  HID: i2c-hid: Rearrange probe() to power things up later
+  HID: i2c-hid: Make suspend and resume into helper functions
+  HID: i2c-hid: Support being a panel follower
+  HID: i2c-hid: Do panel follower work on the system_wq
+  arm64: dts: qcom: sc7180: Link trogdor touchscreens to the panels
 
-[1] https://github.com/thesofproject/linux/issues/4371
+ .../bindings/input/elan,ekth6915.yaml         |   6 +
+ .../bindings/input/goodix,gt7375p.yaml        |   6 +
+ .../bindings/input/hid-over-i2c.yaml          |   6 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |   1 +
+ .../dts/qcom/sc7180-trogdor-homestar.dtsi     |   1 +
+ .../boot/dts/qcom/sc7180-trogdor-lazor.dtsi   |   1 +
+ .../boot/dts/qcom/sc7180-trogdor-pompom.dtsi  |   1 +
+ .../qcom/sc7180-trogdor-quackingstick.dtsi    |   1 +
+ .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |   1 +
+ drivers/gpu/drm/drm_panel.c                   | 194 +++++++++-
+ drivers/hid/i2c-hid/i2c-hid-core.c            | 330 +++++++++++++-----
+ include/drm/drm_panel.h                       |  89 +++++
+ 12 files changed, 542 insertions(+), 95 deletions(-)
 
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  sound/soc/codecs/rt5682-sdw.c | 2 +-
->  sound/soc/codecs/rt5682s.c    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/sound/soc/codecs/rt5682-sdw.c b/sound/soc/codecs/rt5682-sdw.c
-> index 5f80a5d59b65..fb7951f11c92 100644
-> --- a/sound/soc/codecs/rt5682-sdw.c
-> +++ b/sound/soc/codecs/rt5682-sdw.c
-> @@ -79,7 +79,7 @@ static const struct regmap_config rt5682_sdw_indirect_regmap = {
->  	.max_register = RT5682_I2C_MODE,
->  	.volatile_reg = rt5682_volatile_register,
->  	.readable_reg = rt5682_readable_register,
-> -	.cache_type = REGCACHE_RBTREE,
-> +	.cache_type = REGCACHE_MAPLE,
->  	.reg_defaults = rt5682_reg,
->  	.num_reg_defaults = RT5682_REG_NUM,
->  	.use_single_read = true,
-> diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
-> index 9c34dca58f54..36102fa2b806 100644
-> --- a/sound/soc/codecs/rt5682s.c
-> +++ b/sound/soc/codecs/rt5682s.c
-> @@ -3046,7 +3046,7 @@ static const struct regmap_config rt5682s_regmap = {
->  	.max_register = RT5682S_MAX_REG,
->  	.volatile_reg = rt5682s_volatile_register,
->  	.readable_reg = rt5682s_readable_register,
-> -	.cache_type = REGCACHE_RBTREE,
-> +	.cache_type = REGCACHE_MAPLE,
->  	.reg_defaults = rt5682s_reg,
->  	.num_reg_defaults = ARRAY_SIZE(rt5682s_reg),
->  	.use_single_read = true,
-> 
-> ---
-> base-commit: 4a670ac3e75e517c96cbd01ef870dbd598c3ce71
-> change-id: 20230419-asoc-rt5682-maple-7da060991ca4
-> 
-> Best regards,
+-- 
+2.40.1.698.g37aff9b760-goog
+
