@@ -2,119 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BE770D99B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9691D70D99A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbjEWJyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S236277AbjEWJxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbjEWJxt (ORCPT
+        with ESMTP id S236411AbjEWJx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:53:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D421713
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684835476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Utz9GyNMlitUDGZqJTc8z9BwJtSeQQS1zcXV/HWkrQc=;
-        b=CdGJEDrC5wADtlgFM92J75c9km4i2mFFl0comEtugNjfp51eRs74SdQ/CrzRfTOZkjTE3w
-        c4L+NvjGqpvJsgnxtvDINBMhc/xfsdOo9COIVTidADTW8wKXxnpETRPB/OO6BRkfn/FvCy
-        8+CbVJxYr0f3nPlgva7AnMm1EIpwvi8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-606-P7RPP7_ePear06HrJI6E7Q-1; Tue, 23 May 2023 05:51:12 -0400
-X-MC-Unique: P7RPP7_ePear06HrJI6E7Q-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f6038dc351so8307085e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:51:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684835471; x=1687427471;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Utz9GyNMlitUDGZqJTc8z9BwJtSeQQS1zcXV/HWkrQc=;
-        b=hcmxUSbpkbnaXjfAZdIXFKjY+SkNPc32Bn3VeKK5bYjuRiT3n25+ukONR5asbC7RTI
-         bkbT3JB2ehtA76yC7D4P7xclYl83Gn1Qsp2vu+TnKfo6DlJeBLGG6ug09la/8juYTFYj
-         b11uPcLpfW4zbP1Qpni+ZThz0Y6pDWjxjfkSwAw9/UWHLBanomBBtOxOp2AX9+vFJvf5
-         VRsiLjM3o9RMZ6AB5XCUuNOud55+2L9Okg6hWGLV4fccoGDymnQ2KZIC6nVKUStfuh2m
-         KhdkEXtFBLGn1DUSDyBcfPbu06y17TIM/+8IUldmNeCHEbfCsyc114Rn40E18XEjrY0j
-         kYqw==
-X-Gm-Message-State: AC+VfDx0jKmhpFB/KWX4rzVxXZDdOJm/ZAj54tYTH8LOUoQYJdlfwc1V
-        2W75x68+Zl71f2S+tMOjSSfEF0JHmHN9uMSEeC6b8MalI5/stdzlTyj2jyrnj+jcIFgNzM5+BEB
-        RrO9ZMLoxuigM4xwrGmVvB7CV
-X-Received: by 2002:a7b:ce95:0:b0:3f4:2b13:f0fb with SMTP id q21-20020a7bce95000000b003f42b13f0fbmr4348318wmj.13.1684835471413;
-        Tue, 23 May 2023 02:51:11 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6qNSzaVQMTj006xrZmNmFSzew8J6RqPIk3CxqLL4G+jJQqoKMsg5evkWGjoS+PFJnOZ5AJQw==
-X-Received: by 2002:a7b:ce95:0:b0:3f4:2b13:f0fb with SMTP id q21-20020a7bce95000000b003f42b13f0fbmr4348305wmj.13.1684835471048;
-        Tue, 23 May 2023 02:51:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
-        by smtp.gmail.com with ESMTPSA id u20-20020a05600c00d400b003f42894ebe2sm14284952wmm.23.2023.05.23.02.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 02:51:10 -0700 (PDT)
-Message-ID: <27ca0db1-2648-3ea7-3a26-208bc580b72f@redhat.com>
-Date:   Tue, 23 May 2023 11:51:09 +0200
+        Tue, 23 May 2023 05:53:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BA71B4;
+        Tue, 23 May 2023 02:53:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E292C61C35;
+        Tue, 23 May 2023 09:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3B7C433EF;
+        Tue, 23 May 2023 09:53:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684835598;
+        bh=ITjVrCt2ytXcSsWvzm9MEzJEwLJBTz4OoB4cdobCwkw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ItRFkTvu7MXDEaipiS+Z1VWDK6eyyA8SeDsdyRRPfxAo7Le9zLA8x+h8WiEhlTyMJ
+         YX58kTIPE1sG2oJWLU97LnaxxsE/euQHtS0jhLXjrsTjFppWRqAj41yLtaCGIH87lr
+         2oDu6YsI6IAs1ewOJhd5XNSJwKouDNnNpZpCTdLKfcr8RWwMFuy3RkOrdz3V49FE8A
+         ndXGPRJGnbewoL9GioCBOTVGPGhfhGOasfxjAlDqLi/QDfh4JDCNkqX9C66FCtb9J1
+         xPmB96rJVRSfWCgdgS8l6aYYQU8zy3/G/iIGmHTN7aTH0zLJc1t6g4al9MnwI7nqRB
+         3LkvfdKxYU3Mw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1q1Ohl-0006Yo-8z; Tue, 23 May 2023 11:53:21 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     "Bjorn Andersson" <andersson@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH RESEND v2] interconnect: drop unused icc_get() interface
+Date:   Tue, 23 May 2023 11:52:48 +0200
+Message-Id: <20230523095248.25211-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v8 2/6] ksm: count all zero pages placed by KSM
-Content-Language: en-US
-To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
-Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
-References: <202305221842587200002@zte.com.cn>
- <20230522105229.4066-1-yang.yang29@zte.com.cn>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230522105229.4066-1-yang.yang29@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.05.23 12:52, Yang Yang wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> As pages_sharing and pages_shared don't include the number of zero pages
-> merged by KSM, we cannot know how many pages are zero pages placed by KSM
-> when enabling use_zero_pages, which leads to KSM not being transparent with
-> all actual merged pages by KSM. In the early days of use_zero_pages,
-> zero-pages was unable to get unshared by the ways like MADV_UNMERGEABLE so
-> it's hard to count how many times one of those zeropages was then unmerged.
-> 
-> But now, unsharing KSM-placed zero page accurately has been achieved, so we
-> can easily count both how many times a page full of zeroes was merged with
-> zero-page and how many times one of those pages was then unmerged. and so,
-> it helps to estimate memory demands when each and every shared page could
-> get unshared.
-> 
-> So we add ksm_zero_pages under /sys/kernel/mm/ksm/ to show the number
-> of all zero pages placed by KSM.
-> 
-> v7->v8:
-> Handle the case when khugepaged replaces a shared zeropage by a THP.
-> 
+The icc_get() interface can be used to lookup an interconnect path based
+on global node ids. There has never been any users of this interface and
+all lookups are currently done from the devicetree.
 
-Oh, and just a note, such version comments should go below the "--", 
-such that they will automatically get dropped when applying the patch.
+Remove the unused icc_get() interface.
 
-(Usually, version information in the cover letter is sufficient :) )
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
 
+Hi Georgi,
+
+I just noticed that this patch never made it into 6.4 along with the
+rest of the series:
+
+	https://lore.kernel.org/lkml/20230306075651.2449-23-johan+linaro@kernel.org/
+
+This interface is still unused in mainline and should be removed so
+resending the patch again.
+
+Johan
+
+
+ drivers/interconnect/core.c  | 52 ++----------------------------------
+ include/linux/interconnect.h |  8 ------
+ 2 files changed, 2 insertions(+), 58 deletions(-)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index ec46bcb16d5e..5fac448c28fd 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -587,7 +587,7 @@ EXPORT_SYMBOL_GPL(icc_set_tag);
+ 
+ /**
+  * icc_get_name() - Get name of the icc path
+- * @path: reference to the path returned by icc_get()
++ * @path: interconnect path
+  *
+  * This function is used by an interconnect consumer to get the name of the icc
+  * path.
+@@ -605,7 +605,7 @@ EXPORT_SYMBOL_GPL(icc_get_name);
+ 
+ /**
+  * icc_set_bw() - set bandwidth constraints on an interconnect path
+- * @path: reference to the path returned by icc_get()
++ * @path: interconnect path
+  * @avg_bw: average bandwidth in kilobytes per second
+  * @peak_bw: peak bandwidth in kilobytes per second
+  *
+@@ -704,54 +704,6 @@ int icc_disable(struct icc_path *path)
+ }
+ EXPORT_SYMBOL_GPL(icc_disable);
+ 
+-/**
+- * icc_get() - return a handle for path between two endpoints
+- * @dev: the device requesting the path
+- * @src_id: source device port id
+- * @dst_id: destination device port id
+- *
+- * This function will search for a path between two endpoints and return an
+- * icc_path handle on success. Use icc_put() to release
+- * constraints when they are not needed anymore.
+- * If the interconnect API is disabled, NULL is returned and the consumer
+- * drivers will still build. Drivers are free to handle this specifically,
+- * but they don't have to.
+- *
+- * Return: icc_path pointer on success, ERR_PTR() on error or NULL if the
+- * interconnect API is disabled.
+- */
+-struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
+-{
+-	struct icc_node *src, *dst;
+-	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+-
+-	mutex_lock(&icc_lock);
+-
+-	src = node_find(src_id);
+-	if (!src)
+-		goto out;
+-
+-	dst = node_find(dst_id);
+-	if (!dst)
+-		goto out;
+-
+-	path = path_find(dev, src, dst);
+-	if (IS_ERR(path)) {
+-		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+-		goto out;
+-	}
+-
+-	path->name = kasprintf(GFP_KERNEL, "%s-%s", src->name, dst->name);
+-	if (!path->name) {
+-		kfree(path);
+-		path = ERR_PTR(-ENOMEM);
+-	}
+-out:
+-	mutex_unlock(&icc_lock);
+-	return path;
+-}
+-EXPORT_SYMBOL_GPL(icc_get);
+-
+ /**
+  * icc_put() - release the reference to the icc_path
+  * @path: interconnect path
+diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+index 2b0e784ba771..97ac253df62c 100644
+--- a/include/linux/interconnect.h
++++ b/include/linux/interconnect.h
+@@ -40,8 +40,6 @@ struct icc_bulk_data {
+ 
+ #if IS_ENABLED(CONFIG_INTERCONNECT)
+ 
+-struct icc_path *icc_get(struct device *dev, const int src_id,
+-			 const int dst_id);
+ struct icc_path *of_icc_get(struct device *dev, const char *name);
+ struct icc_path *devm_of_icc_get(struct device *dev, const char *name);
+ int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths);
+@@ -61,12 +59,6 @@ void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths);
+ 
+ #else
+ 
+-static inline struct icc_path *icc_get(struct device *dev, const int src_id,
+-				       const int dst_id)
+-{
+-	return NULL;
+-}
+-
+ static inline struct icc_path *of_icc_get(struct device *dev,
+ 					  const char *name)
+ {
 -- 
-Thanks,
-
-David / dhildenb
+2.39.3
 
