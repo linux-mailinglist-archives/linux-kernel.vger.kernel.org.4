@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D0E70E43E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8970E431
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237855AbjEWR7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S231433AbjEWRsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 13:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237890AbjEWR7h (ORCPT
+        with ESMTP id S234547AbjEWRsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:59:37 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1893DC5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:59:35 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 1W6BqAVKjamWk1W6BqhlwN; Tue, 23 May 2023 19:47:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684864024;
-        bh=yZg3vSPw9MSkRNTDiEkp+0nv0E0aqm0TK0XFzp9sGd0=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=hoD51IRCfXNwOIunLVcGpHx4XMxeGsVYQ6IwFU8kp+JsSbq/+G/8xmkbL9fe2jnkh
-         M9RcacChxTaOVsCCImmNd6bgxcERFMSGsaj0OSvBZiMyLcWDs/E6RYTT2hYMd1wHQF
-         Omy5eUv7x5SJIPazBXOi+u1LLOC7tEREyW9vANQ3g1INzpMeD4kDT1Im6LGDiAmpNi
-         WV+Mm4wn85MXXMc2aG+HOiCaVi2EMfQ5iDjOWf6WFGVPb7QG1aGKQtuZtnFCC/BBRh
-         YqPPSwGdD91WqNfAIAkmebWdMF7kHaaK7NICSx+yUsKZ5Grf7P7THp22X9P8SneQlf
-         4GrI+5CDk3sbw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 23 May 2023 19:47:04 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <98460663-eff1-6f42-1371-6c44ec6dc288@wanadoo.fr>
-Date:   Tue, 23 May 2023 19:47:03 +0200
+        Tue, 23 May 2023 13:48:08 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8AA10C4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:47:36 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-3357e69c49dso795075ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1684864039; x=1687456039;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P83mAP3794Qc2rx7etTG0J7GguJCN4lGoQQUE7E+dSE=;
+        b=tyOtJD0kR7qpzgP6TZz2YGZvIE22hlgwPOcC0vjn0WYZTw5f7XQauSd7ykjRZUFyuu
+         8paXzMFZhGldAxCIkNg/pQ788ENJ24nBPHjMn77GDP0VyZSdhI+4aa8BfgsIeNDiCviv
+         SgQCLjTyWjfy66Nsnb3MP7Jt3UYm436C6GsDSd4BGFbAvE7F12ro8mKw7aKHjt04uIx3
+         42FhcrYkh6RZ5wUeK4U78CQ68YY8n+UQ12eTjno6fCdOCoQrTBCM8lI6pchKt/j8cQn/
+         jneP+KYNEn0S4n9P3D29xLvzZA37NUDBcCu4dzPrQBGTAW+trW8Rl9mwPeHN1d71iYZn
+         OMhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684864039; x=1687456039;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P83mAP3794Qc2rx7etTG0J7GguJCN4lGoQQUE7E+dSE=;
+        b=RBY4mUnKkMiE8USm6Bu61oQbkLS72V2KDDlWvC3W2wHSbRZIcp8gGNKbD1jWV51Nua
+         3cE9VfNvdiCItR+yGYBaz4Z1ZvuBwg+I5DlWimvyeTtNIqzgD691CO1kCAdZHTBrQ04S
+         JkCzEC8MIF/r5ZGjLfar43trO2pAllksQjXL09+5tcU/5ImDdQ3ygvdpzZ8TcimtGSVW
+         Qyh3ORsazpNckZHXuhq9VZptf8+cQxDXXItSxSIpuqXf9qwhwcgh8jFy0aN7PfyCOo37
+         i+/H6J4ltxW0OUYIZka1E4Mc5aALHmv4VNJRZ2xeMnj6BXg0iuyc2CDrzzvjTVA9tKg0
+         p2yw==
+X-Gm-Message-State: AC+VfDxnvH7TBy+XKmDBY/WNRd0vsy+0S2J+DMKSnjijV0vfW/57hw3C
+        jcj3pdnxQNWZKuB1rPBw1Y6u5g==
+X-Google-Smtp-Source: ACHHUZ5OySrMNAz1XiCBBtDjl7AkkhqaS7h6N4Sd7quyROgP6/P28x+ycv20Wf9Hh2GweO/SHUqbow==
+X-Received: by 2002:a6b:b20f:0:b0:774:8351:89ac with SMTP id b15-20020a6bb20f000000b00774835189acmr1448217iof.1.1684864039207;
+        Tue, 23 May 2023 10:47:19 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id x10-20020a6bfe0a000000b00763ae96e71bsm2790656ioh.41.2023.05.23.10.47.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 10:47:18 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jason Gunthorpe <jgg@ziepe.ca>
+In-Reply-To: <20230522135018.2742245-1-dhowells@redhat.com>
+References: <20230522135018.2742245-1-dhowells@redhat.com>
+Subject: Re: [PATCH v22 00/31] splice: Kill ITER_PIPE
+Message-Id: <168486403802.409251.16946238913512642087.b4-ty@kernel.dk>
+Date:   Tue, 23 May 2023 11:47:18 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2][next] vfio/ccw: Replace one-element array with
- flexible-array member
-Content-Language: fr
-From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <cover.1684805398.git.gustavoars@kernel.org>
- <3c10549ebe1564eade68a2515bde233527376971.1684805398.git.gustavoars@kernel.org>
- <c3a473c2-1d4a-1b8a-648f-7f75b800ecd7@wanadoo.fr>
-In-Reply-To: <c3a473c2-1d4a-1b8a-648f-7f75b800ecd7@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,65 +84,89 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On Mon, 22 May 2023 14:49:47 +0100, David Howells wrote:
+> I've split off splice patchset and moved the block patches to a separate
+> branch (though they are dependent on this one).
+> 
+> This patchset kills off ITER_PIPE to avoid a race between truncate,
+> iov_iter_revert() on the pipe and an as-yet incomplete DMA to a bio with
+> unpinned/unref'ed pages from an O_DIRECT splice read.  This causes memory
+> corruption[2].  Instead, we use filemap_splice_read(), which invokes the
+> buffered file reading code and splices from the pagecache into the pipe;
+> copy_splice_read(), which bulk-allocates a buffer, reads into it and then
+> pushes the filled pages into the pipe; or handle it in filesystem-specific
+> code.
+> 
+> [...]
 
-Le 23/05/2023 à 19:45, Christophe JAILLET a écrit :
-> Le 23/05/2023 à 03:35, Gustavo A. R. Silva a écrit :
->> One-element arrays are deprecated, and we are replacing them with 
->> flexible
->> array members instead. So, replace one-element array with flexible-array
->> member in struct vfio_ccw_parent and refactor the the rest of the code
->> accordingly.
->>
->> Link: https://github.com/KSPP/linux/issues/79
->> Link: https://github.com/KSPP/linux/issues/297
->> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->> ---
->>   drivers/s390/cio/vfio_ccw_drv.c     | 3 ++-
->>   drivers/s390/cio/vfio_ccw_private.h | 2 +-
->>   2 files changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/s390/cio/vfio_ccw_drv.c 
->> b/drivers/s390/cio/vfio_ccw_drv.c
->> index ff538a086fc7..57906a9c6324 100644
->> --- a/drivers/s390/cio/vfio_ccw_drv.c
->> +++ b/drivers/s390/cio/vfio_ccw_drv.c
->> @@ -171,7 +171,8 @@ static int vfio_ccw_sch_probe(struct subchannel *sch)
->>           return -ENODEV;
->>       }
->> -    parent = kzalloc(sizeof(*parent), GFP_KERNEL);
->> +    parent = kzalloc(sizeof(*parent) + sizeof(struct mdev_type *),
-> 
-> Hi, wouldn't:
-> 
->     parent = kzalloc(struct_size(parent, mdev_types, 1)),
-> 
-> be more informative and in the spirit of flexible array use?
+Applied, thanks!
 
-Ok, patch 2/2.
+[01/31] splice: Fix filemap_splice_read() to use the correct inode
+        commit: 5c1a3db1ad679a504d31f8d7520b8d143cff4a81
+[02/31] splice: Make filemap_splice_read() check s_maxbytes
+        commit: f4d4a116512e2184461016bd5a4f1b5c659ab52c
+[03/31] splice: Rename direct_splice_read() to copy_splice_read()
+        commit: 49bfda41ae98a5b55a4638a085202e92c2d82bb3
+[04/31] splice: Clean up copy_splice_read() a bit
+        commit: 005ccb384566faf30cf9a45b624944d29917a9bb
+[05/31] splice: Make do_splice_to() generic and export it
+        commit: d4e52f54da56fb95a0fb9c55a2fedca009ba27b2
+[06/31] splice: Check for zero count in vfs_splice_read()
+        commit: 1c619a3aa1b5432e9c8451d27f92682557f6e995
+[07/31] splice: Make splice from an O_DIRECT fd use copy_splice_read()
+        commit: 27c3a9bd19a862b051d0249c1434c27b532064fb
+[08/31] splice: Make splice from a DAX file use copy_splice_read()
+        commit: 1e9022b9b150fe37293e78b6a4d1ef3b6cccf4c0
+[09/31] shmem: Implement splice-read
+        commit: 680cf0d89c54866599dad4144b35b3b9b38da036
+[10/31] overlayfs: Implement splice-read
+        commit: b9c516b37fc7cc930882b59713264e16d13dc195
+[11/31] coda: Implement splice-read
+        commit: e0187fb3198e0822afb6d95efb64825493d831df
+[12/31] tty, proc, kernfs, random: Use copy_splice_read()
+        commit: 703670cb841af4c3499db72e79f70d1afd27aa24
+[13/31] net: Make sock_splice_read() use copy_splice_read() by default
+        commit: 7e678ad3bda2c466ff5cb074a60069e341736196
+[14/31] 9p: Add splice_read wrapper
+        commit: 23f9131befc8292677cd83aff12b4362c6d2b0ff
+[15/31] afs: Provide a splice-read wrapper
+        commit: 1210eadcfd9cc1e9c0b23c6c55c85ff1106eae63
+[16/31] ceph: Provide a splice-read wrapper
+        commit: ecca566b1bc58e7ba3cd0ac745a1f4567a5dd6b7
+[17/31] ecryptfs: Provide a splice-read wrapper
+        commit: a8b8d669b744bcf965fd2b46ddfa4c94cd8a1d3a
+[18/31] ext4: Provide a splice-read wrapper
+        commit: 22d3afaa35b8dfe3dedd5c1eba7c68cd1001f8a3
+[19/31] f2fs: Provide a splice-read wrapper
+        commit: 10f3bb0832bccf47808bdd1517bc32f2241009f0
+[20/31] nfs: Provide a splice-read wrapper
+        commit: 51bea4c9f43e367166ad799e0a338fef8b7d360e
+[21/31] ntfs3: Provide a splice-read wrapper
+        commit: e0f80cb19e7d8a5b7d0891ae4079e9cd08ce1a21
+[22/31] ocfs2: Provide a splice-read wrapper
+        commit: dbf9b0577f7b08a46c769a0c5cbc497e9b48d238
+[23/31] orangefs: Provide a splice-read wrapper
+        commit: ec1498f4199e4b276ed9a897126873dba663f1fb
+[24/31] xfs: Provide a splice-read wrapper
+        commit: eba8fd3970721ee4059e509b5f1db512de8486cc
+[25/31] zonefs: Provide a splice-read wrapper
+        commit: a73aa694dae34eba02296ecba7a2b815ed492f25
+[26/31] trace: Convert trace/seq to use copy_splice_read()
+        commit: 580fc3965524b2dbd0472d52392a4d78e2e865a7
+[27/31] cifs: Use filemap_splice_read()
+        commit: 641403a99879bb4f08698d8bb1ac1dfa752c8dd8
+[28/31] splice: Use filemap_splice_read() instead of generic_file_splice_read()
+        commit: 69d1253f516798fbce0a6d2b693112cc02cb46a4
+[29/31] splice: Remove generic_file_splice_read()
+        commit: 0e67da77774ad90fd4a28d5f852687e7562882b8
+[30/31] iov_iter: Kill ITER_PIPE
+        commit: 6569c1d1c210d15ac0c402aeaada217f3b197737
+[31/31] splice: kdoc for filemap_splice_read() and copy_splice_read()
+        commit: 4e240fcf3a7572c1743b24b4d7e1aeec4a8f56b7
 
-Sorry for the noise.
+Best regards,
+-- 
+Jens Axboe
 
-CJ
 
-> 
-> Just my 2c,
-> 
-> CJ
-> 
->> +             GFP_KERNEL);
->>       if (!parent)
->>           return -ENOMEM;
->> diff --git a/drivers/s390/cio/vfio_ccw_private.h 
->> b/drivers/s390/cio/vfio_ccw_private.h
->> index b441ae6700fd..b62bbc5c6376 100644
->> --- a/drivers/s390/cio/vfio_ccw_private.h
->> +++ b/drivers/s390/cio/vfio_ccw_private.h
->> @@ -79,7 +79,7 @@ struct vfio_ccw_parent {
->>       struct mdev_parent    parent;
->>       struct mdev_type    mdev_type;
->> -    struct mdev_type    *mdev_types[1];
->> +    struct mdev_type    *mdev_types[];
->>   };
->>   /**
-> 
-> 
+
