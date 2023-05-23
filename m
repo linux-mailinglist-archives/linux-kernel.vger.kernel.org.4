@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8C070DD4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF5670DD52
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236801AbjEWNP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S236776AbjEWNRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236694AbjEWNPX (ORCPT
+        with ESMTP id S232705AbjEWNRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:15:23 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13A109;
-        Tue, 23 May 2023 06:15:18 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1ae454844edso51648465ad.1;
-        Tue, 23 May 2023 06:15:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684847718; x=1687439718;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xAthNGXLDTLFcaxsW4zu97G9PTQI3Egsf4QBteoBFtY=;
-        b=k54tFE0GkEBjf/zrY3JjRi8VDYwp8E+3GAYXupXplX8za+1IayFvBWHCVbDls837R+
-         JNq0uAXf2GbEMmI9RxqmH8HtLETJDEeBh6QXsA6HoBXk2qOEvpadkkOJBl/qxmOCKEdo
-         YmdZrBqosWNTYEJ/HlDuNfk1hoaZIaycuUroLWYqQe6uLMeg4zOtKvpo4Wd9YWtWAm5I
-         sIWb9GuOWxgUizztqM90e5Pz9zbz6HK2wwgflPtGTQ4E59qlAag5w7r0sFWvbETAAnNa
-         nD26tG9kIFWyG0vtOyccW1xmppO8PddX9mnat6kN4lIh8030qSQijHYbR91uD6QZc3+Z
-         ulWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684847718; x=1687439718;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xAthNGXLDTLFcaxsW4zu97G9PTQI3Egsf4QBteoBFtY=;
-        b=b9rvqgW08OaokIDhsSpwpGXkN6m963Zm8D2JpBB20BEpjQL21/vjN77kEx/TzlO7R4
-         68bzyYd8yv+edsOYHV68FFAGFLWgRqzsk98QRAtECg3yNcKRvN/rXQ5rbSjvVtcJMAnh
-         VqDm4xvw96EUF4VSVkCrzlNUSssltT+TSo/A5DldJqleRAfv3VAkOp6fHIF9pqXCB8yH
-         CVq5/kN8tXQqzAUTrlGKu+ezhoiD0PK140a/cLL/hWGtdNlV88PFYWeQJLkpfAt4fLQm
-         j1ywVoOpV46UUdcg92/JqiQa7mO9aV/xFrWk+1RZ4iYNirzKbJXWEt2HjBSDBteLKgs9
-         SmzQ==
-X-Gm-Message-State: AC+VfDzUuUFDN2iFs10InOPlv77f6Ojeow0N7QVGD7LuFFkLn4ItvE88
-        EVejV2Gaeyw64ZAGouR9QRWhlbzcM7aSnv6ZETnH7XQ9e3Av7UQZ
-X-Google-Smtp-Source: ACHHUZ7KTF9oE7T8/4WiMrCIodaYHqKpBC3WJusdH6hQSHqcdXqYltDBhbMGd2WupaCMpxDTB9gubLMUzaAPwetXRQ8=
-X-Received: by 2002:a17:903:1247:b0:1ae:8b4b:327d with SMTP id
- u7-20020a170903124700b001ae8b4b327dmr15537129plh.42.1684847717661; Tue, 23
- May 2023 06:15:17 -0700 (PDT)
+        Tue, 23 May 2023 09:17:01 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC255118;
+        Tue, 23 May 2023 06:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=QaJjwNP0byDh2vTB+BfRP2skNBByswtyi4rwwgzOO84=; b=ccExP0nk6kRSUyvuKNMxUTrYp9
+        qZeebMgn0R0JRYDIvCz0au56fuuXA+49zhy5VzSJMeWwKse+BnKbFNywhzvCGoRLfdyIvbTV8b5TJ
+        MWZoxRTa6km5+qDaRcImYnqD/z0HjL0xZwSm2e3JjM1xiKET/dZx3wc4jASsCZdV9SUU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q1Rsh-00Dglg-2T; Tue, 23 May 2023 15:16:51 +0200
+Date:   Tue, 23 May 2023 15:16:51 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net v2 0/3] net: phy: mscc: support VSC8501
+Message-ID: <c613298d-53bc-46ef-9cb2-4b385e21ba7b@lunn.ch>
+References: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
 MIME-Version: 1.0
-References: <20230519142456.2588145-1-pavacic.p@gmail.com> <c0932a06-175c-3294-98ec-b26e961e34c1@linaro.org>
-In-Reply-To: <c0932a06-175c-3294-98ec-b26e961e34c1@linaro.org>
-From:   Paulo Pavacic <pavacic.p@gmail.com>
-Date:   Tue, 23 May 2023 15:15:06 +0200
-Message-ID: <CAO9szn3gnX62OPHp66Mm74BAOe5UCG1kOS7xub682RU7aozC0Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] drm/panel: add fannal c3004 panel
-To:     neil.armstrong@linaro.org
-Cc:     sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523090405.10655-1-david.epping@missinglinkelectronics.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+> - I left the mutex_lock(&phydev->lock) in the
+>   vsc85xx_update_rgmii_cntl() function, as I'm not sure whether it
+>   is required to repeatedly access phydev->interface and
+>   phy_interface_is_rgmii(phydev) in a consistent way.
 
-pon, 22. svi 2023. u 10:55 <neil.armstrong@linaro.org> napisao je:
->
-> On 19/05/2023 16:24, Paulo Pavacic wrote:
-> > Fannal C3004 is a 2 lane MIPI DSI 480x800 panel which requires initialization with DSI DCS commands. After some commands delay is required.
->
-> By curiosity, on which board is this panel used ?
->
-We are using custom board with IMX8MM.
-> Neil
+Just adding to Russell comment.
 
-Paulo
+As a general rule of thumb, if your driver is doing something which no
+other driver is doing, you have to consider if it is correct. A PHY
+driver taking phydev->lock is very unusual. So at minimum you should
+be able to explain why it is needed. And when it comes to locking,
+locking is hard, so you really should understand it.
+
+Now the mscc is an odd device, because it has multiple PHYs in the
+package, and a number of registers are shared between these PHYs. So
+it does have different locking requirements to most PHYs. However, i
+don't think that is involved here. Those oddities are hidden behind
+phy_base_write() and phy_base_read().
+
+	Andrew
