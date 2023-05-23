@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF7170DA5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C3E70DA56
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236544AbjEWKW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S236531AbjEWKWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236516AbjEWKWV (ORCPT
+        with ESMTP id S232621AbjEWKWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:22:21 -0400
+        Tue, 23 May 2023 06:22:20 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EFE0100;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E5B4FD;
         Tue, 23 May 2023 03:22:17 -0700 (PDT)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxR_HYk2xknQgAAA--.130S3;
+        by gateway (Coremail) with SMTP id _____8Bx2fHYk2xkoAgAAA--.124S3;
         Tue, 23 May 2023 18:22:16 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrDWk2xk3CNwAA--.57318S2;
-        Tue, 23 May 2023 18:22:14 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrDWk2xk3CNwAA--.57318S3;
+        Tue, 23 May 2023 18:22:15 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -34,28 +34,31 @@ To:     Peter Zijlstra <peterz@infradead.org>,
 Cc:     Hans-Peter Nilsson <hp@axis.com>, Leo Yan <leo.yan@linaro.org>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH 0/2] perf tools: Modify mksyscalltbl
-Date:   Tue, 23 May 2023 18:22:05 +0800
-Message-Id: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH 1/2] perf arm64: Handle __NR3264_ prefixed syscall number
+Date:   Tue, 23 May 2023 18:22:06 +0800
+Message-Id: <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8BxkrDWk2xk3CNwAA--.57318S2
+In-Reply-To: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf8BxkrDWk2xk3CNwAA--.57318S3
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
-        67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+X-Coremail-Antispam: 1Uk129KBjvJXoW7trWxur1DKr43Xr1kCr1UGFg_yoW8JF4kpr
+        s5C34DtayrWF1Iyw1xursIqFZ3Ca1kJF1Ygry0yrZakrnxJ3WrKryFq3Z0kFWxX34xK3yj
+        vFyrtFy5XF48XrJanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
         ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
-        IYc2Ij64vIr41l4c8EcI0En4kS14v26r1q6r43MxAqzxv26xkF7I0En4kS14v26r1q6r43
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8gAw7UUUU
-        U==
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -65,14 +68,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tiezhu Yang (2):
-  perf arm64: Handle __NR3264_ prefixed syscall number
-  perf LoongArch: Simplify mksyscalltbl
+After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
+in the generated syscall table file syscalls.c, there exist some
+__NR3264_ prefixed syscall numbers such as [__NR3264_ftruncate],
+it looks like not so good, just do some small filter operations
+to handle __NR3264_ prefixed syscall number as a digital number.
 
- tools/perf/arch/arm64/entry/syscalls/mksyscalltbl  |  7 +++--
- .../arch/loongarch/entry/syscalls/mksyscalltbl     | 32 ++++++----------------
- 2 files changed, 12 insertions(+), 27 deletions(-)
+Without this patch:
 
+  [__NR3264_ftruncate] = "ftruncate",
+
+With this patch:
+
+  [46] = "ftruncate",
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+index 22cdf91..59ab7939 100755
+--- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
++++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+@@ -39,7 +39,8 @@ create_table()
+ 	echo "};"
+ }
+ 
+-$gcc -E -dM -x c -I $incpath/include/uapi $input \
+-	|sed -ne 's/^#define __NR_//p' \
+-	|sort -t' ' -k2 -n	       \
++$gcc -E -dM -x c -I $incpath/include/uapi $input		\
++	|awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'	\
++	|sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'	\
++	|sort -t' ' -k2 -n					\
+ 	|create_table
 -- 
 2.1.0
 
