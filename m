@@ -2,117 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C75470D2CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 06:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A559170D2DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 06:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjEWE3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 00:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S229447AbjEWEpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 00:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjEWE3s (ORCPT
+        with ESMTP id S232646AbjEWEpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 00:29:48 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4EBFA;
-        Mon, 22 May 2023 21:29:47 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-510ddeab704so595961a12.3;
-        Mon, 22 May 2023 21:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684816186; x=1687408186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=53F7nqwqQEhqsr+wrxJIasUQcBALYUEWV178mBfizlk=;
-        b=mXWaKofF+P7YXx9mx6Iha/Royl4mFZDvYnnSjPTO2lbPB/HOrkgGkPivIos4HyZC1P
-         McYXQvdn9zT+1IXuxt98SkvBKh/YH0jxKYSba+tJxUmVkEkghtQeNXVlBDZKlajwS476
-         b3ZQiYndgLu5/VwJRugLFbETdL0HyPUZeB0EEtks0pjnxMwUvPDMXyUc1JUtDReLLh4K
-         n70kO8VAR2Lwl+ImWjxTX6n8aDGrJFAbMDkULYlbhXFRPmz07veNg0gUL4un5ZO185iU
-         JlWchEhPkhHxTtBZe1DcaSdW+fsb6xQV6NpZH5ymE+4e1jDavV/+PCCOvIEP2PPnjARk
-         d+qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684816186; x=1687408186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=53F7nqwqQEhqsr+wrxJIasUQcBALYUEWV178mBfizlk=;
-        b=T/91hPptw8JLAP+2wsxOKd4Nqj7rJ1TlObaGfD00jbSM7HH/PIqCq6WysfdmAKgKPp
-         jkZJOdI8vPYkI22hBAzqA/vRXi4K2vFGHhA4zQc0pedAyv3ByOD/hTod2jb4GkTTdMRX
-         E17GisO5PsQCc0QdgjpHDqC55IN3Dbm91xFNVdGqKL1vePJnimdn8ZUAWhD0FhKP5Q0X
-         qOgZqvkxxUUNdYJrk92wF+IqTiHQYJY0zLwoB6Eq+927DjsFLi7FC7Bjbvi3VeaoEq8J
-         6wghJKjTQgLqsZGexC+mgLvrd/JnbUZvJ0820HJ11zmSeF6nssEP2aHubSGKnfun73Pw
-         LxKA==
-X-Gm-Message-State: AC+VfDyCgsuXIpcAIHN2ozoEfTsyLaHI7k74I+GdihAkOC3YjEOjU1Xv
-        OcaqrebrSWLpVepsXtZJRh3vN+swLHNHUr7g1O0=
-X-Google-Smtp-Source: ACHHUZ7dVojBJEzxlc7n6PZs/RU6pQT5Zh3lWMe/BsWCAK4ykUBeokawONhnXtSWvLqERwKzfl/SYvJmpOaDP0578s0=
-X-Received: by 2002:a17:907:a4c:b0:94e:e30e:7245 with SMTP id
- be12-20020a1709070a4c00b0094ee30e7245mr9463484ejc.8.1684816185754; Mon, 22
- May 2023 21:29:45 -0700 (PDT)
+        Tue, 23 May 2023 00:45:38 -0400
+X-Greylist: delayed 781 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 21:45:22 PDT
+Received: from smtp.tom.com (smtprz25.163.net [106.38.219.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0ABE4B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 21:45:22 -0700 (PDT)
+Received: from my-app02.tom.com (my-app02.tom.com [127.0.0.1])
+        by freemail02.tom.com (Postfix) with ESMTP id 3F2FBB00CC4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:32:16 +0800 (CST)
+Received: from my-app02.tom.com (HELO smtp.tom.com) ([127.0.0.1])
+          by my-app02 (TOM SMTP Server) with SMTP ID 1290408498
+          for <linux-kernel@vger.kernel.org>;
+          Tue, 23 May 2023 12:32:16 +0800 (CST)
+Received: from antispam1.tom.com (unknown [172.25.16.55])
+        by freemail02.tom.com (Postfix) with ESMTP id 3AC0DB00D35
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:32:16 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
+        t=1684816336; bh=bducTInpco5KGSyT4rn1iVcipwFmeZQnhzZHoILU29k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HBdBSRULTgV1xT1tC3NUnstd1+fTQHQSeqr130EfMDztIxZV12venkAz4vAEVLLi5
+         JgoOHrUU0CWoTFtAfcx8fYZJnU6a0u4vwo8rcCWtnXsZhDxwJTmtqVS2SooSeBeNFb
+         3jNdW6uXow9FAUraMj/q0J38N8HeRCKge161mE/s=
+Received: from antispam1.tom.com (antispam1.tom.com [127.0.0.1])
+        by antispam1.tom.com (Postfix) with ESMTP id 15B77D41AD7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:32:16 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at antispam1.tom.com
+Received: from antispam1.tom.com ([127.0.0.1])
+        by antispam1.tom.com (antispam1.tom.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ceNeNmUP-dEn for <linux-kernel@vger.kernel.org>;
+        Tue, 23 May 2023 12:32:12 +0800 (CST)
+Received: from [172.30.38.103] (unknown [180.167.10.98])
+        by antispam1.tom.com (Postfix) with ESMTPA id ED4B9D41551;
+        Tue, 23 May 2023 12:32:11 +0800 (CST)
+Message-ID: <7f1cd0ad-7991-af0c-a31a-84c261d4ca18@tom.com>
+Date:   Tue, 23 May 2023 12:32:11 +0800
 MIME-Version: 1.0
-References: <000000000000a589d005fc52ee2d@google.com> <13528f21-0f36-4fa2-d34f-eecee6720bc1@linux.dev>
- <CAD=hENeCo=-Pk9TWnqxOWP9Pg-JXWk6n6J19gvPo9_h7drROGg@mail.gmail.com>
- <CAD=hENdoyBZaRz7aTy4mX5Kq1OYmWabx2vx8vPH0gQfHO1grzw@mail.gmail.com> <0d515e17-5386-61ba-8278-500620969497@linux.dev>
-In-Reply-To: <0d515e17-5386-61ba-8278-500620969497@linux.dev>
-From:   Zhu Yanjun <zyjzyj2000@gmail.com>
-Date:   Tue, 23 May 2023 12:29:33 +0800
-Message-ID: <CAD=hENcqa0jQvLjuXw9bMtivCkKpQ9=1e0-y-1oxL23OLjutuw@mail.gmail.com>
-Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
- skb_dequeue (2)
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>
-Cc:     syzbot <syzbot+eba589d8f49c73d356da@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drivers/fsi/scom: Return -EFAULT if copy fails
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, Su Hui <suhui@nfschina.com>
+Cc:     Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Alistar Popple <alistair@popple.id.au>,
+        Eddie James <eajames@linux.ibm.com>, eajames@us.ibm.com,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cbostic@linux.vnet.ibm.com, linux-fsi@lists.ozlabs.org
+References: <20230519013710.34954-1-suhui@nfschina.com>
+ <de9a7ffe-bedd-4181-886d-c9a3006b7be8@roeck-us.net>
+From:   Longsuhui <Jack_sun@tom.com>
+In-Reply-To: <de9a7ffe-bedd-4181-886d-c9a3006b7be8@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 12:10=E2=80=AFPM Guoqing Jiang <guoqing.jiang@linux=
-.dev> wrote:
->
->
->
-> On 5/23/23 12:02, Zhu Yanjun wrote:
-> > On Tue, May 23, 2023 at 11:47=E2=80=AFAM Zhu Yanjun <zyjzyj2000@gmail.c=
-om> wrote:
-> >> On Tue, May 23, 2023 at 10:26=E2=80=AFAM Guoqing Jiang <guoqing.jiang@=
-linux.dev> wrote:
-> >>>
-> >>>
-> >>> On 5/23/23 10:13, syzbot wrote:
-> >>>> Hello,
-> >>>>
-> >>>> syzbot tried to test the proposed patch but the build/boot failed:
-> >>>>
-> >>>> failed to apply patch:
-> >>>> checking file drivers/infiniband/sw/rxe/rxe_qp.c
-> >>>> patch: **** unexpected end of file in patch
-> >> This is not the root cause. The fix is not good.
-> > This problem is about "INFO: trying to register non-static key. The
-> > code is fine but needs lockdep annotation, or maybe"
 
-This warning is from "lock is not initialized". This is a
-use-before-initialized problem.
-The correct fix is to initialize the lock that is complained before it is u=
-sed.
+On 2023/5/23 06:30, Guenter Roeck wrote:
+> On Fri, May 19, 2023 at 09:37:10AM +0800, Su Hui wrote:
+>> The copy_to/from_user() functions return the number of bytes remaining
+>> to be copied, but we want to return -EFAULT to the user.
+>>
+> Why ? EFAULT means that a bad address was provided, and it is not
+> immediately obvious why that would be the case.
 
-Zhu Yanjun
+When copy_to/from_user() functions failed, the error code is  -EFAULT in most case.
+	
+	git grep -A1 "copy_from_user" | grep EFAULT | wc -l
+     1985
+	git grep -A1 "copy_to_user" | grep EFAULT | wc -l
+      1871
+
+I think return -EFAULT is also right in this case.
+
+Su Hui
+
+> Guenter
 >
-> Which is caused by  "skb_queue_head_init(&qp->resp_pkts)" is not called
-> given rxe_qp_init_resp returns error, but the cleanup still trigger the
-> chain.
->
-> rxe_qp_do_cleanup -> rxe_completer -> drain_resp_pkts ->
-> skb_dequeue(&qp->resp_pkts)
->
-> But I might misunderstood it ...
->
-> Thanks,
-> Guoqing
+>> Fixes: 680ca6dcf5c2 ("drivers/fsi: Add SCOM FSI client device driver")
+>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>> ---
+>>   drivers/fsi/fsi-scom.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
+>> index bcb756dc9866..caaf7738eb98 100644
+>> --- a/drivers/fsi/fsi-scom.c
+>> +++ b/drivers/fsi/fsi-scom.c
+>> @@ -335,7 +335,7 @@ static ssize_t scom_read(struct file *filep, char __user *buf, size_t len,
+>>   	if (rc)
+>>   		dev_dbg(dev, "copy to user failed:%d\n", rc);
+>>   
+>> -	return rc ? rc : len;
+>> +	return rc ? -EFAULT : len;
+>>   }
+>>   
+>>   static ssize_t scom_write(struct file *filep, const char __user *buf,
+>> -- 
+>> 2.30.2
+>>
