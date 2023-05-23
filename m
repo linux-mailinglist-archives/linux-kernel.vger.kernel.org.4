@@ -2,150 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA3B70E4D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA12E70E4D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238223AbjEWSiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S238198AbjEWSiE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 14:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238224AbjEWSiN (ORCPT
+        with ESMTP id S237928AbjEWShf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:38:13 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15811E66
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:37:48 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1ae8a684f70so23644155ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684867065; x=1687459065;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kT8nh0a8qE7iApgG/WqGXKFWbJPIePlSK9niqbotYPE=;
-        b=aTpW5smB5TQGvTi6WvjyPhcuRFe3gsUBAmXHCfFrOJukCc2WCwDjdSj06tUVnj0xPp
-         +AwJ9LJ6GAwJJtOmqtxZ6sZetREqspqTjeOhQTX3NbsoLYT4TnVL0yUY70Fwi1Gq2AjA
-         xqom3x6gBKPyJ7oRJ4reQ0X6Iq7zMqWUp6Gm3NZW3jiHHCvABt66ZonA0cy/zxqJ2hf8
-         Vnm4Cbq0UcBoAiTCmmKEDAnV8553Z///RH6nG56mWcL3f9Lg7eJW4X/QWbaoqOqVreO1
-         oHOg/GAbsLkGpRtD9F6T3GC61Y9XiU3OXDIWHQBQzEwvKn098cd94aeAYwXF3gZXiHhL
-         +AKg==
+        Tue, 23 May 2023 14:37:35 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA13018B;
+        Tue, 23 May 2023 11:37:20 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso108858166b.0;
+        Tue, 23 May 2023 11:37:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684867065; x=1687459065;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kT8nh0a8qE7iApgG/WqGXKFWbJPIePlSK9niqbotYPE=;
-        b=kGhjRVmZx7YbXBn0qfJvrnXFcvYLGMHB0GY+RJebOh0ovSGuwjaIDuPYcXEMys2uuL
-         kcJBhsDltVk9nxfnMf18Sdn3oQ2SX3MlRs6P1MOvEpmtVZyhtj1Uvr0lBEJF/nyq5MxY
-         LeoSx+3pYaqpFO0nkvAQ1wKbxTwuGZrKfQRGXDM9mU5e+C5lLhYri72GqzA/gKWoILwg
-         3SuAkC//H+51ciwj/pV5zl+dq4wnYvU2foJ9ZVLTDazybCeXci/aB+UqZ8uf0ngT0ouT
-         kz9M2fi1y3Vjw5cCHcsq+7K41s1E23t1h04oVaghcjGBV8WXVqdwFy2F0Pr4GM3MgYyi
-         7jfg==
-X-Gm-Message-State: AC+VfDwQd6gLxhZzq21iar0L4rX0V+Ejk1WyRPgEj2xeb6bemWU/CB7s
-        HpBNCHvlO5NFzCHtRrJfQ9Otygn7vV8a
-X-Google-Smtp-Source: ACHHUZ4PQFKtv729+iCwOEUgki+Ep3H2gS/hh1ENMY3MysqOnf+Gwmo96GodgAsnd6U7LzPdmk8gBPJmpRcJ
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:235b:5195:e7b8:a5c2])
- (user=irogers job=sendgmr) by 2002:a17:902:eb11:b0:1a1:b318:2776 with SMTP id
- l17-20020a170902eb1100b001a1b3182776mr3599522plb.0.1684867065225; Tue, 23 May
- 2023 11:37:45 -0700 (PDT)
-Date:   Tue, 23 May 2023 11:36:20 -0700
-In-Reply-To: <20230523183620.1147607-1-irogers@google.com>
-Message-Id: <20230523183620.1147607-3-irogers@google.com>
-Mime-Version: 1.0
-References: <20230523183620.1147607-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Subject: [PATCH v2 2/2] perf evsel: for_each_group fixes
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        James Clark <james.clark@arm.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Rob Herring <robh@kernel.org>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20221208; t=1684867022; x=1687459022;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FOckud4CsGpi42vHzY/iN1xEHfyZzu8tYLlnQmf3XXU=;
+        b=lPIgigwZ11iBv8vgKFH9/Ir3BNZpyjgySuC1i1WFp3quETnbhTdcsMvkIczDcTNYXs
+         Pd/Z8dqB3bXIgfzQEQ2gaCjus3zjd2VQpsCl3e28JeeWkdo2jchb8a3ch7rE1EVwV+Er
+         +mnJ9B4tkQA43cmK/bai/cAhBdGZvaBg82H3mUtr96fkuiW28UO2N8i6Vp6b+r09xNpe
+         9OJvJ6pUihSJAalsJ9NV5vCB+z4UPZ8H3dkRG1JHzjEG7MGk9n88r/BiFrzw5bz9fjs/
+         BSeEEf0KexWhWQYPpncR+Sxk+z026FBT8tq9RdQyg4GZpNXBAsddQPYlrcqAR89whnfV
+         K2Ag==
+X-Gm-Message-State: AC+VfDxukIGenn0F+ZJeCtjC39DSnGkh4hpB0K4wMr7pAMkiOkl3qwdV
+        OtfdQUgRPGCsKQ9egjDQ59DGRpmOYlloeHGjcaw=
+X-Google-Smtp-Source: ACHHUZ6nbFDPqkJycDJLopbKTUzhoYKAgpRsCSCy+ygpw6i+jItGXHdrxW/6BlRArGGvUIQ7qUgo8pqVVYhtrNaQv8U=
+X-Received: by 2002:a17:906:6495:b0:966:2210:4065 with SMTP id
+ e21-20020a170906649500b0096622104065mr14890560ejm.4.1684867022285; Tue, 23
+ May 2023 11:37:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230523074535.249802-1-hch@lst.de> <20230523074535.249802-22-hch@lst.de>
+In-Reply-To: <20230523074535.249802-22-hch@lst.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 May 2023 20:36:51 +0200
+Message-ID: <CAJZ5v0grAY02dx__4=ezxT=HuPU=2gD6bErV2fYTQiv5mRL1yg@mail.gmail.com>
+Subject: Re: [PATCH 21/24] PM: hibernate: don't use early_lookup_bdev in resume_store
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Address/memory sanitizer was reporting issues in evsel__group_pmu_name
-because the for_each_group_evsel loop didn't terminate when the head
-was reached, the head would then be cast and accessed as an evsel
-leading to invalid memory accesses. Fix for_each_group_member and
-for_each_group_evsel to terminate at the list head. Note,
-evsel__group_pmu_name no longer iterates the group, but the problem is
-present regardless.
+On Tue, May 23, 2023 at 9:46 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> resume_store is a sysfs attribute written during normal kernel runtime,
+> and it should not use the early_lookup_bdev API that bypasses all normal
+> path based permission checking, and might cause problems with certain
+> container environments renaming devices.
+>
+> Switch to lookup_bdev, which does a normal path lookup instead, and fall
+> back to trying to parse a numeric dev_t just like early_lookup_bdev did.
+>
+> Note that this strictly speaking changes the kernel ABI as the PARTUUID=
+> and PARTLABEL= style syntax is now not available during a running
+> systems.  They never were intended for that, but this breaks things
+> we'll have to figure out a way to make them available again.  But if
+> avoidable in any way I'd rather avoid that.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Fixes: 421a5fa1a6cf ("PM / hibernate: use name_to_dev_t to parse resume")
 
-Fixes: 717e263fc354 ("perf report: Show group description when event group is enabled")
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/evsel.h         | 24 ++++++++++++++++--------
- tools/perf/util/evsel_fprintf.c |  1 +
- 2 files changed, 17 insertions(+), 8 deletions(-)
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 820771a649b2..b3ed360194a1 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -462,16 +462,24 @@ static inline int evsel__group_idx(struct evsel *evsel)
- }
- 
- /* Iterates group WITHOUT the leader. */
--#define for_each_group_member(_evsel, _leader) 					\
--for ((_evsel) = list_entry((_leader)->core.node.next, struct evsel, core.node); \
--     (_evsel) && (_evsel)->core.leader == (&_leader->core);					\
--     (_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-+#define for_each_group_member_head(_evsel, _leader, _head)				\
-+for ((_evsel) = list_entry((_leader)->core.node.next, struct evsel, core.node);		\
-+	(_evsel) && &(_evsel)->core.node != (_head) &&					\
-+	(_evsel)->core.leader == &(_leader)->core;					\
-+	(_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-+
-+#define for_each_group_member(_evsel, _leader)				\
-+	for_each_group_member_head(_evsel, _leader, &(_leader)->evlist->core.entries)
- 
- /* Iterates group WITH the leader. */
--#define for_each_group_evsel(_evsel, _leader) 					\
--for ((_evsel) = _leader; 							\
--     (_evsel) && (_evsel)->core.leader == (&_leader->core);					\
--     (_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-+#define for_each_group_evsel_head(_evsel, _leader, _head)				\
-+for ((_evsel) = _leader;								\
-+	(_evsel) && &(_evsel)->core.node != (_head) &&					\
-+	(_evsel)->core.leader == &(_leader)->core;					\
-+	(_evsel) = list_entry((_evsel)->core.node.next, struct evsel, core.node))
-+
-+#define for_each_group_evsel(_evsel, _leader)				\
-+	for_each_group_evsel_head(_evsel, _leader, &(_leader)->evlist->core.entries)
- 
- static inline bool evsel__has_branch_callstack(const struct evsel *evsel)
- {
-diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
-index cc80ec554c0a..036a2171dc1c 100644
---- a/tools/perf/util/evsel_fprintf.c
-+++ b/tools/perf/util/evsel_fprintf.c
-@@ -2,6 +2,7 @@
- #include <inttypes.h>
- #include <stdio.h>
- #include <stdbool.h>
-+#include "util/evlist.h"
- #include "evsel.h"
- #include "util/evsel_fprintf.h"
- #include "util/event.h"
--- 
-2.40.1.698.g37aff9b760-goog
-
+> ---
+>  kernel/power/hibernate.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index c52dedb9f7c8e8..7ae95ec72f9902 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -1178,7 +1178,23 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
+>         if (!name)
+>                 return -ENOMEM;
+>
+> -       error = early_lookup_bdev(name, &dev);
+> +       error = lookup_bdev(name, &dev);
+> +       if (error) {
+> +               unsigned maj, min, offset;
+> +               char *p, dummy;
+> +
+> +               if (sscanf(name, "%u:%u%c", &maj, &min, &dummy) == 2 ||
+> +                   sscanf(name, "%u:%u:%u:%c", &maj, &min, &offset,
+> +                               &dummy) == 3) {
+> +                       dev = MKDEV(maj, min);
+> +                       if (maj != MAJOR(dev) || min != MINOR(dev))
+> +                               error = -EINVAL;
+> +               } else {
+> +                       dev = new_decode_dev(simple_strtoul(name, &p, 16));
+> +                       if (*p)
+> +                               error = -EINVAL;
+> +               }
+> +       }
+>         kfree(name);
+>         if (error)
+>                 return error;
+> --
+> 2.39.2
+>
