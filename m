@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4028F70E70D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A170B70E710
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjEWVCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S238278AbjEWVCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjEWVCh (ORCPT
+        with ESMTP id S238377AbjEWVCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:02:37 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4181BB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:02:35 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5621a279cbbso5291677b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:02:35 -0700 (PDT)
+        Tue, 23 May 2023 17:02:45 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4050212B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:02:43 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5619032c026so2667597b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:02:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684875755; x=1687467755;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4gNfZIeekSHs7BohS2Orfq0Se0pBECTdaana4cYqBL4=;
-        b=tOGPzOTXR3ZwhBy1Ic0ihRryuxQqnniw6YqV0SHZ2xEJbKbV79oNg8iSaUODmLcYpc
-         OODVehM/ARBOOUXdzyj94ie3ObrYp2+yDybUY6odfIvlc3vWw4Uu42VIjwf40Qj8jnpv
-         /u6BIYptfcGey8tl64SMGH2ekP+e49xLeKTW8DQrLw1PiekWMDf+SVtkboNYCRCGAok6
-         r3NGmKXQI7IcDYSXwmcTXA1k8cCjELTw9o7nX5Wa7vfMZ2Cbd4X+B/kwzKnE15M8S45G
-         buaYCqxYBK9bQTQOog//pv15RiylJCcZ2FOpBp2rmOQy5OInQOLIQu3TNA64CyDbqbSd
-         lTWg==
+        d=paul-moore.com; s=google; t=1684875762; x=1687467762;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cqYu2kG5xNu6n0LsPQ2y+Hn9CqO07QzD6a31cQFnFZg=;
+        b=RDGN8oh67okemzzbGB26nSaBtKdF1uA4bAnZXDDKRWTRvgpXw9siHajY2l5TldDPFK
+         8q17RZJdGq156wB2Y4vWX4zYnnQD08fHBVQdxdugUMSXzlH2nhXQ+nESzi7Z1GoRWzNY
+         7KGVgdgW4KhKhbAiVmWYy0h6jUKF67D3ivYKBiEz+Kzab+rzsg7pzQ3hcMIygr1Ys2W/
+         KBGqmW5ARTDL4gk72T7uJrky94iLJHHHPO2Pz9gDYBcQKUnSZZz800Xhz8bIssjEJtp0
+         DwKN0tfGaE5Go7Vus7W61LTrpciE+jusU07S/nc5Sn3pvw1nsgx+Rk5V1lCQltemqXzP
+         k1tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684875755; x=1687467755;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4gNfZIeekSHs7BohS2Orfq0Se0pBECTdaana4cYqBL4=;
-        b=VioXaMjmYOdJFkr5gcNwqPAbnpQ7mMwCVf2gzUbITLgcxuV1Vj9bLpX5PskUpuoRBV
-         DppFnYTY9UIlbcsDiCuiT9sSWpgozLG52XNVjg1WduJYPUAI4uKShpYMfVsdmPfvO6Th
-         eWqIK9agzvoaQZCiBcrU/RR3hqptvYBDby/Z3oo2nZ+rmUbi8u2nEqMae9BUwVPFTmuS
-         v2EOaObVCtbSr5bV2ZLBeJQl4tEVatL2+7/9fScRmcxlLIhwBJ5cisQoUWnFkCU3ojyU
-         TBGOii86uNWdtz5lBayah7M4zJQf83tEf6QuG0dqg5/eOFaQFjguJuXjdHRsNTD7i1hR
-         3F9A==
-X-Gm-Message-State: AC+VfDwpKhB9+4ryHatxjR3aLmfAqZYknFX/fGIWbD8284WA5O+U1F72
-        gUGYyoKW4S7HNAYpADEzB5w8phLB5o5B8Ns3LVK+JA==
-X-Google-Smtp-Source: ACHHUZ7UXQzwb1RIpn2+dG8waBFp9bePM9jRJQJFoANyzIIkMfYS8DmloLszmqODJrAwBGg2Stn1tqrkrSUfUH7FmaQ=
-X-Received: by 2002:a81:1bc8:0:b0:55a:776e:95f3 with SMTP id
- b191-20020a811bc8000000b0055a776e95f3mr15671135ywb.25.1684875754960; Tue, 23
- May 2023 14:02:34 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684875762; x=1687467762;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cqYu2kG5xNu6n0LsPQ2y+Hn9CqO07QzD6a31cQFnFZg=;
+        b=XqzR4gWHAnGMJ0rRnVQ6nejrVXqLa24EB9ROEo0SSy9o8UC1qhQSj2PPtKZB3fvoFp
+         v4lrZAVleyIHEUfSBhP4+gTZgzEW2lf0bFa3bPgz8SBlVzNjqneRc2O2+4Iyeqi8v4JQ
+         THpz26K60Ix/HeT0v9Nqencoysd1TbgBuGulE2s63GVY+nPSxAEh+RKQ6nca2EeNmtCh
+         PiDUlvGdHwK7X+7umLaGVnAZaaKnMTnIDTthwHbJlXjvyjMxdtva9ScxEzSOPkEVuy31
+         ZQtIv6psrtckN+fgwgvOMtJ5gJg3CRyDu8+uuytM0FoUaGLt2wXH9/d7CpVmugLWh8yI
+         9ucA==
+X-Gm-Message-State: AC+VfDzyxTzpwEZbnP+ZY9IBfUBG6ZpB4osxnI9XlWfV7HDU3u0OE1wn
+        JUJKsar9d+qzjOk1IYAUIBcVSLXLg9ZVwAjiKLjS
+X-Google-Smtp-Source: ACHHUZ65SJfuq0V/FHHNcH0cR+Hwp3609WEhUnTS8CyVuEWu3e5N3J5NMtidlcC8+4PmQudZYS+a9E2yFTxPf7OoSIE=
+X-Received: by 2002:a0d:de81:0:b0:565:3da9:2bc1 with SMTP id
+ h123-20020a0dde81000000b005653da92bc1mr3735984ywe.1.1684875762379; Tue, 23
+ May 2023 14:02:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <1684870754-24906-1-git-send-email-quic_khsieh@quicinc.com> <1684870754-24906-2-git-send-email-quic_khsieh@quicinc.com>
-In-Reply-To: <1684870754-24906-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 24 May 2023 00:02:23 +0300
-Message-ID: <CAA8EJpq0Gh5Wu5S_9aMytghOer_zPKthCZq9-vf7+vHm+sYH5Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] drm/msm/dp: no need to disable irq after devm_request_irq()
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        marijn.suijten@somainline.org, leonard@lausen.nl,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230511052116.19452-5-eiichi.tsukata@nutanix.com>
+ <1b4c3d51624547d0bda6dae93c5ae407.paul@paul-moore.com> <368B6D67-26A0-4A05-B404-395C5990A9A2@nutanix.com>
+In-Reply-To: <368B6D67-26A0-4A05-B404-395C5990A9A2@nutanix.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 23 May 2023 17:02:31 -0400
+Message-ID: <CAHC9VhS1dNV2NE7F9mgfLuWVeK8P_KYqNd3m_2U_vrq670sNiQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] audit: check if audit_queue is full after prepare_to_wait_exclusive()
+To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Cc:     "eparis@redhat.com" <eparis@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "audit@vger.kernel.org" <audit@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -73,74 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 at 22:39, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+On Mon, May 22, 2023 at 12:28=E2=80=AFAM Eiichi Tsukata
+<eiichi.tsukata@nutanix.com> wrote:
+> > On May 20, 2023, at 5:54, Paul Moore <paul@paul-moore.com> wrote:
+> > On May 11, 2023 Eiichi Tsukata <eiichi.tsukata@nutanix.com> wrote:
+> >>
+> >> Commit 7ffb8e317bae ("audit: we don't need to
+> >> __set_current_state(TASK_RUNNING)") accidentally moved queue full chec=
+k
+> >> before add_wait_queue_exclusive() which introduced the following race:
+> >>
+> >>    CPU1                           CPU2
+> >>  =3D=3D=3D=3D=3D=3D=3D=3D                       =3D=3D=3D=3D=3D=3D=3D=
+=3D
+> >>  (in audit_log_start())         (in kauditd_thread())
+> >>
+> >>  @audit_queue is full
+> >>                                 wake_up(&audit_backlog_wait)
+> >>                                 wait_event_freezable()
+> >>  add_wait_queue_exclusive()
+> >>  ...
+> >>  schedule_timeout()
+> >>
+> >> Once this happens, both audit_log_start() and kauditd_thread() can cau=
+se
+> >> deadlock for up to backlog_wait_time waiting for each other. To preven=
+t
+> >> the race, this patch adds @audit_queue full check after
+> >> prepare_to_wait_exclusive() and call schedule_timeout() only if the
+> >> queue is full.
+> >>
+> >> Fixes: 7ffb8e317bae ("audit: we don't need to __set_current_state(TASK=
+_RUNNING)")
+> >> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+> >> ---
+> >> kernel/audit.c | 12 ++++++++++--
+> >> 1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > I discussed my concerns with this patch in the last patchset, and I
+> > believe they still apply here.
+> >
 >
-> devm_request_irq() will allocate irq and return with irq enabled.
-> At current implementation irq are specified disabled after return from
-> devm_request_irq() and re enabled later. It is redundant.
+> Please refer to the implementation of ___wait_event().
+> It checks the condition *after* prepare_to_wait_event().
+>
+> Another similar example in the kernel code is unix_wait_for_peer().
+> It checks unix_recvq_full() after prepare_to_wait_exclusive().
+>
+> I=E2=80=99m assuming this is a logical bug needs to be fixed.
 
-This is not correct. The disable_irq / enable_irq pair is not
-redundant. If I understand correctly, it was done so to prevent HPD
-IRQs from being delivered before HPD worker is initialized (which was
-probably correct at the time of the mentioned commit). So this patch
-either can come after the next patch (but then it should not have a
-Fixes tag and the commit message should be changed to mention why
-disable_irq() call is redundant) or it can be squashed together with
-the next patch.
+I disagree, see my previous comments.  The fixes you've presented do
+not eliminate the possibility of rescheduling which could result in
+some of the issues you've described.  The proper fix for systems which
+are sensitive to long scheduling delays such as this is to adjust your
+audit runtime configuration so that audit does not block userspace.
+Suggestions include removing the backlog limit and/or shortening the
+wait time.
 
->
-> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_display.c | 9 ---------
->  1 file changed, 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 3e13acdf..1af49b6 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1094,12 +1094,6 @@ static void dp_display_config_hpd(struct dp_display_private *dp)
->                                 DP_DP_HPD_PLUG_INT_MASK |
->                                 DP_DP_HPD_UNPLUG_INT_MASK,
->                                 true);
-> -
-> -       /* Enable interrupt first time
-> -        * we are leaving dp clocks on during disconnect
-> -        * and never disable interrupt
-> -        */
-> -       enable_irq(dp->irq);
->  }
->
->  void dp_display_set_psr(struct msm_dp *dp_display, bool enter)
-> @@ -1282,7 +1276,6 @@ int dp_display_request_irq(struct msm_dp *dp_display)
->                                 dp->irq, rc);
->                 return rc;
->         }
-> -       disable_irq(dp->irq);
->
->         return 0;
->  }
-> @@ -1570,7 +1563,6 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
->                 dp_display_host_init(dp_priv);
->                 dp_catalog_ctrl_hpd_config(dp_priv->catalog);
->                 dp_display_host_phy_init(dp_priv);
-> -               enable_irq(dp_priv->irq);
->
->                 /*
->                  * The code below assumes that the panel will finish probing
-> @@ -1612,7 +1604,6 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
->
->  error:
->         if (dp->is_edp) {
-> -               disable_irq(dp_priv->irq);
->                 dp_display_host_phy_exit(dp_priv);
->                 dp_display_host_deinit(dp_priv);
->         }
-> --
-> 2.7.4
->
-
-
--- 
-With best wishes
-Dmitry
+--=20
+paul-moore.com
