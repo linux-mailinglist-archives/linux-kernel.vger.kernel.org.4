@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A48370E723
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B894E70E728
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbjEWVHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S238166AbjEWVIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjEWVHl (ORCPT
+        with ESMTP id S229574AbjEWVIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:07:41 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22970DD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:07:40 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-56204ac465fso2592757b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684876059; x=1687468059;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bVP5LzI/ve6jH4tK/34zZWM+53m2j3w2mH0VmjtpPeA=;
-        b=BfOSh5wSWWFyUGOELRl6BA8JloMrd9gWi6XndKWHrmOVB5kj5WEP34HTYQDJ9svaJl
-         TCBbGCVgjgvMYBYMZRpiYR2GyoNTtlbh2ZI+2FYb+Us3BFX5qwLFUfBqzJ1uVw3HRgWv
-         rsOAQWREV1qadXXmHnJIrlCZRJV2Wdg5RDl2tF4Nb6qtELTj0Z5noRMAIEhD6CoCRAzl
-         SH1VMw49JC4YVgu6nut/Gz/9U8JH/90UEKQMV8GBQBSNy/sZ96uT6dxGr+KztfWC9kTn
-         yw+N8XIxDkbtkOvC4ZkqNxhbH68wTiYNDOcyDUppC5EgSdSllj7ipLr1kudbcR0W6Fjr
-         Bs1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684876059; x=1687468059;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bVP5LzI/ve6jH4tK/34zZWM+53m2j3w2mH0VmjtpPeA=;
-        b=BQ9HHTEhVLumdISvSs0PlRjcn7DE+TmOK2fnBtqS7HoEn8BoaN+AMKDWmkRaM4Dw7U
-         Ql3plgeCx+RIAKP76/tmdO9osweTo32KmP3fBtRHyFVtbOFQtLzeb8Mm7axHfEAsOJjh
-         Y94dSY5cf02BUUX6JQ0WgYs2V7k50RbRpE+Cfyo6z9Qjy+fJ4kyPzZclTVOejuQ1bL/O
-         ylt7B5YlbojfI4sueiAmW4OOWfOARoBbS8rHN9CzR/pJAT6H3IwufGx/nO/p/P5v0gye
-         bXkswdXgCSyDO0PvLwYihvLtfUhAWCcx+7jaXNeKV20JHqC1z+f7oTadWCMlbckuWz3a
-         Cp5Q==
-X-Gm-Message-State: AC+VfDwQpawaLQPdr0yp8krbE5g5C7eTKCO6oUgzrS5vlhQu+4bp+KuB
-        xEMJ+4A2Pq5MZk5CSdQHWTVWX1mvOD4IkOShAF5F
-X-Google-Smtp-Source: ACHHUZ5rK3Ve6yCeCDSShfAm6OgVIhvIZmYYhAR1Cqf2UEFL4h8UfkO54aX2mwgZ58gCQ2Lrv0I6QYLEffpa3imx3Rk=
-X-Received: by 2002:a81:9206:0:b0:55a:2ce1:2353 with SMTP id
- j6-20020a819206000000b0055a2ce12353mr15770843ywg.2.1684876059326; Tue, 23 May
- 2023 14:07:39 -0700 (PDT)
+        Tue, 23 May 2023 17:08:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141CEBB;
+        Tue, 23 May 2023 14:08:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4C4F61D80;
+        Tue, 23 May 2023 21:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B732C433EF;
+        Tue, 23 May 2023 21:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684876126;
+        bh=t4leSM84mfYsgogyyDTg6ovfFaEJHHtHZJXOO19zbLs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ucDXjYViKyH2WU35ZLkIAGU/3peB1OBW0tLipFJolAd84E5J+l51ss5bL0x9W7k5N
+         I9gLNb1xrKkiqEmPbtGz7tv2q9xj8E8f8VOL5ZpFtswDPFhbgaakPAD79m6Kcn3p7y
+         DfdrvwuXoRBhTut4Xs/c5Z/zi2GbzoSfck7KK9nFyoIEPoJlDhNnOhOsPjAW8qFw31
+         hCRLi7M/TV7haEgMMEQ23HkpvyPN66iT4y9e9djI57Jc6ejIiWKIEDzMYMRsCZFr9V
+         WLPs+i22UEw/hxO6qnuDIKkhAXyyV0ESeJLlLMzFU8K6X4cdJnWAKaE6ECIwXozxGs
+         b3dFyJoeeq9VA==
+Date:   Tue, 23 May 2023 14:08:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Luca Boccassi <bluca@debian.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <20230523140844.5895d645@kernel.org>
+In-Reply-To: <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+        <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+        <20230522133409.5c6e839a@kernel.org>
+        <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+        <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230511052116.19452-6-eiichi.tsukata@nutanix.com>
- <e9edf9db340cbf753fce43772abdef4e.paul@paul-moore.com> <CB4B209E-8931-4FEC-A967-F3D50C0D7B1C@nutanix.com>
- <F900B719-7760-4E22-82A2-933ED775AA19@nutanix.com>
-In-Reply-To: <F900B719-7760-4E22-82A2-933ED775AA19@nutanix.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 23 May 2023 17:07:28 -0400
-Message-ID: <CAHC9VhQ73CcDtO7DAaRaN3aJiSBn_XQLAO83iGuGchky5hOvDg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] audit: do not use exclusive wait in audit_receive()
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     "eparis@redhat.com" <eparis@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "audit@vger.kernel.org" <audit@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:58=E2=80=AFPM Eiichi Tsukata
-<eiichi.tsukata@nutanix.com> wrote:
-> > On May 22, 2023, at 13:44, Eiichi Tsukata <eiichi.tsukata@nutanix.com> =
-wrote:
-> >> On May 20, 2023, at 5:54, Paul Moore <paul@paul-moore.com> wrote:
-> >> On May 11, 2023 Eiichi Tsukata <eiichi.tsukata@nutanix.com> wrote:
-> >>>
-> >>> kauditd thread issues wake_up() before it goes to sleep. The wake_up(=
-)
-> >>> call wakes up only one process as waiter side uses exclusive wait.
-> >>> This can be problematic when there are multiple processes (one is in
-> >>> audit_receive() and others are in audit_log_start()) waiting on
-> >>> audit_backlog_wait queue.
-> >>>
-> >>> For example, if there are two processes waiting:
-> >>>
-> >>> Process (A): in audit_receive()
-> >>> Process (B): in audit_log_start()
-> >>>
-> >>> And (A) is at the head of the wait queue. Then kauditd's wake_up() on=
-ly
-> >>> wakes up (A) leaving (B) as it is even if @audit_queue is drained. As=
- a
-> >>> result, (B) can be blocked for up to backlog_wait_time.
-> >>>
-> >>> To prevent the issue, use non-exclusive wait in audit_receive() so th=
-at
-> >>> kauditd can wake up all waiters in audit_receive().
-> >>>
-> >>> Fixes: 8f110f530635 ("audit: ensure userspace is penalized the same a=
-s the kernel when under pressure")
-> >>> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-> >>> ---
-> >>> kernel/audit.c | 17 +++++++++++------
-> >>> 1 file changed, 11 insertions(+), 6 deletions(-)
-> >>
-> >> This was also discussed in the last patchset.
+On Tue, 23 May 2023 11:44:01 +0100 Luca Boccassi wrote:
+> > I really would like to avoid that because it will just mean that someone
+> > else will abuse that function and then make an argument why we should
+> > export the other function.
 > >
-> > This bug is much easily reproducible on real environments and can cause=
- problematic
-> > user space failure like SSH connection timeout.
-> > Let=E2=80=99s not keep the bug unfixed.
-> > (Of course we=E2=80=99ve already carefully tuned audit related params a=
-nd user space auditd config so that our product won=E2=80=99t hit backlog f=
-ull.)
+> > I think it would be ok if we required that unix support is built in
+> > because it's not unprecedented either and we're not breaking anything.
+> > Bpf has the same requirement:
+> >
+> >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
+> >   struct bpf_unix_iter_state {
+> >           struct seq_net_private p;
+> >           unsigned int cur_sk;
+> >           unsigned int end_sk;
+> >           unsigned int max_sk;
+> >           struct sock **batch;
+> >           bool st_bucket_done;
+> >   };
+> >
+> > and
+> >
+> >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+> >   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
+> >                        struct unix_sock *unix_sk, uid_t uid)  
 
-Good.  Resolving your issues through audit runtime configuration is
-the proper solution to this.
+Don't think we should bring BPF into arguments about uAPI consistency :S
 
-> > BTW, the default backlog_wait_time is 60 * HZ which seems pretty large.
-> > I=E2=80=99d appreciate if you could tell me the reason behind that valu=
-e.
+> Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
+> ship with CONFIG_UNIX=y, so a missing SCM_PIDFD in unlikely to have a
+> widespread impact, and if it does, it might encourage someone to
+> review their kconfig.
 
-I do not recall the original logic behind that value.  It is likely
-that the original value predated my maintenance of the audit
-subsystem.
+IDK how you can argue that everyone sets UNIX to =y so hiding SCM_PIDFD
+is fine and at the same time not be okay with making UNIX a bool :S
 
---=20
-paul-moore.com
+> As mentioned on the v5 thread, we are waiting for this API to get the
+> userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
+> really grateful if we could start with the simplest and most
+> conservative approach (which seems to be the current one in v6 to me),
+> and then eventually later decide whether to export more functions, or
+> to deprecate CONFIG_UNIX=m, or something else entirely, as that
+> doesn't really affect the shape of the UAPI, just the details of its
+> availability. Thank you.
+
+Just throw in a patch to make UNIX a bool and stop arguing then.
