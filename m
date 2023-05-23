@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7990E70D62B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E4270D64D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235884AbjEWHz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S236049AbjEWH5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235918AbjEWHyz (ORCPT
+        with ESMTP id S235903AbjEWH4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:54:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F9010EB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:54:30 -0700 (PDT)
+        Tue, 23 May 2023 03:56:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F09E6F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:55:38 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6A25F2040C;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C6DE5219D2;
         Tue, 23 May 2023 07:54:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1684828446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cxnmOhq+hNE1bnrwoap3xaZVrhnrAGTCoSHtcTlVz/U=;
-        b=VwK8endsKeeUiW3ovXy9mmmdXp0nQDmndTyzdj7Q8VBlBJVE4kWMqxLkCAv9TLj6OQSjuj
-        sKeRV639IxN2VG7actZPdyG+WxppmpjKa3+LqvRMFdLSOgLzNNJXZa2pzXUP5ICXbGfn4D
-        Iab7K/diKlTqTtiZOBWIOzWPFfNXdcQ=
+        bh=rBljb7tTyeyRFOU5zBjiuTcOaaBXGLatx/YtsSA+dkA=;
+        b=yT+GCP17WIK+5B3mcEPjOjIo6S30779rgp3Hz2mTkK5S3dm5P/GEt6Zf6+zIxZenIh23rh
+        SQCcxmlKLb5HPXcDYLj7pAQNrLPCvsshF/J6wIllXRwjNaCr5LOVHPg9c5uefTI8GvPMVD
+        9Lb06JLhP7glrBXr0Ynhbfvv0AePRXU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1684828446;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cxnmOhq+hNE1bnrwoap3xaZVrhnrAGTCoSHtcTlVz/U=;
-        b=hrqlcv+ZUVDteACAVDImOuE1NZQqe5ky+mTIEyteLt3XU3tgRUCVeAntJrycvPIKNLhdVZ
-        0ajCWtIUsw9V0zCw==
+        bh=rBljb7tTyeyRFOU5zBjiuTcOaaBXGLatx/YtsSA+dkA=;
+        b=SRE2J/phZtrG7vXQqXoeNfl02sav/XroeaKt2syQ6/mpGDkKJSAx4KNdNJsEY1oQchgM++
+        MYtRDYiJYxtBkiAA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23CF813588;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6141213A1A;
         Tue, 23 May 2023 07:54:06 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id sHokBh5xbGT4KgAAMHmgww
+        id cOLmFh5xbGT4KgAAMHmgww
         (envelope-from <tiwai@suse.de>); Tue, 23 May 2023 07:54:06 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/37] ALSA: usb-audio: Create UMP blocks from USB MIDI GTBs
-Date:   Tue, 23 May 2023 09:53:33 +0200
-Message-Id: <20230523075358.9672-13-tiwai@suse.de>
+Subject: [PATCH v2 13/37] ALSA: ump: Redirect rawmidi substream access via own helpers
+Date:   Tue, 23 May 2023 09:53:34 +0200
+Message-Id: <20230523075358.9672-14-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230523075358.9672-1-tiwai@suse.de>
 References: <20230523075358.9672-1-tiwai@suse.de>
@@ -70,144 +70,384 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB MIDI spec defines the Group Terminal Blocks (GTB) that associate
-multiple UMP Groups.  Those correspond to snd_ump_block entities in
-ALSA UMP abstraction, and now we create those UMP Block objects for
-each UMP Endpoint from the parsed GTB information.
+This is a code refactoring for abstracting the rawmidi access to the
+UMP's own helpers.  It's a preliminary work for the later code
+refactoring of the UMP layer.
+
+Until now, we access to the rawmidi substream directly from the
+driver via rawmidi access helpers, but after this change, the driver
+is supposed to access via the newly introduced snd_ump_ops and
+receive/transmit via snd_ump_receive() and snd_ump_transmit() helpers.
+As of this commit, those are merely wrappers for the rawmidi
+substream, and no much function change is seen here.
 
 Reviewed-by: Jaroslav Kysela <perex@perex.cz>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- sound/usb/midi2.c | 100 +++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 94 insertions(+), 6 deletions(-)
+ include/sound/ump.h |  14 ++++++
+ sound/core/ump.c    | 111 ++++++++++++++++++++++++++++++++++++++++++++
+ sound/usb/midi2.c   |  71 ++++++++++------------------
+ 3 files changed, 149 insertions(+), 47 deletions(-)
 
+diff --git a/include/sound/ump.h b/include/sound/ump.h
+index 8a3ac97cd1d3..6f786b462f16 100644
+--- a/include/sound/ump.h
++++ b/include/sound/ump.h
+@@ -9,18 +9,30 @@
+ 
+ struct snd_ump_endpoint;
+ struct snd_ump_block;
++struct snd_ump_ops;
+ 
+ struct snd_ump_endpoint {
+ 	struct snd_rawmidi core;	/* raw UMP access */
+ 
+ 	struct snd_ump_endpoint_info info;
+ 
++	const struct snd_ump_ops *ops;	/* UMP ops set by the driver */
++	struct snd_rawmidi_substream *substreams[2];	/* opened substreams */
++
+ 	void *private_data;
+ 	void (*private_free)(struct snd_ump_endpoint *ump);
+ 
+ 	struct list_head block_list;	/* list of snd_ump_block objects */
+ };
+ 
++/* ops filled by UMP drivers */
++struct snd_ump_ops {
++	int (*open)(struct snd_ump_endpoint *ump, int dir);
++	void (*close)(struct snd_ump_endpoint *ump, int dir);
++	void (*trigger)(struct snd_ump_endpoint *ump, int dir, int up);
++	void (*drain)(struct snd_ump_endpoint *ump, int dir);
++};
++
+ struct snd_ump_block {
+ 	struct snd_ump_block_info info;
+ 	struct snd_ump_endpoint *ump;
+@@ -39,6 +51,8 @@ int snd_ump_endpoint_new(struct snd_card *card, char *id, int device,
+ int snd_ump_block_new(struct snd_ump_endpoint *ump, unsigned int blk,
+ 		      unsigned int direction, unsigned int first_group,
+ 		      unsigned int num_groups, struct snd_ump_block **blk_ret);
++int snd_ump_receive(struct snd_ump_endpoint *ump, const u32 *buffer, int count);
++int snd_ump_transmit(struct snd_ump_endpoint *ump, u32 *buffer, int count);
+ 
+ /*
+  * Some definitions for UMP
+diff --git a/sound/core/ump.c b/sound/core/ump.c
+index 651cd3752719..46ec297a786c 100644
+--- a/sound/core/ump.c
++++ b/sound/core/ump.c
+@@ -23,6 +23,11 @@ static long snd_ump_ioctl(struct snd_rawmidi *rmidi, unsigned int cmd,
+ 			  void __user *argp);
+ static void snd_ump_proc_read(struct snd_info_entry *entry,
+ 			      struct snd_info_buffer *buffer);
++static int snd_ump_rawmidi_open(struct snd_rawmidi_substream *substream);
++static int snd_ump_rawmidi_close(struct snd_rawmidi_substream *substream);
++static void snd_ump_rawmidi_trigger(struct snd_rawmidi_substream *substream,
++				    int up);
++static void snd_ump_rawmidi_drain(struct snd_rawmidi_substream *substream);
+ 
+ static const struct snd_rawmidi_global_ops snd_ump_rawmidi_ops = {
+ 	.dev_register = snd_ump_dev_register,
+@@ -31,6 +36,19 @@ static const struct snd_rawmidi_global_ops snd_ump_rawmidi_ops = {
+ 	.proc_read = snd_ump_proc_read,
+ };
+ 
++static const struct snd_rawmidi_ops snd_ump_rawmidi_input_ops = {
++	.open = snd_ump_rawmidi_open,
++	.close = snd_ump_rawmidi_close,
++	.trigger = snd_ump_rawmidi_trigger,
++};
++
++static const struct snd_rawmidi_ops snd_ump_rawmidi_output_ops = {
++	.open = snd_ump_rawmidi_open,
++	.close = snd_ump_rawmidi_close,
++	.trigger = snd_ump_rawmidi_trigger,
++	.drain = snd_ump_rawmidi_drain,
++};
++
+ static void snd_ump_endpoint_free(struct snd_rawmidi *rmidi)
+ {
+ 	struct snd_ump_endpoint *ump = rawmidi_to_ump(rmidi);
+@@ -104,6 +122,12 @@ int snd_ump_endpoint_new(struct snd_card *card, char *id, int device,
+ 
+ 	ump->core.private_free = snd_ump_endpoint_free;
+ 	ump->core.ops = &snd_ump_rawmidi_ops;
++	if (input)
++		snd_rawmidi_set_ops(&ump->core, SNDRV_RAWMIDI_STREAM_INPUT,
++				    &snd_ump_rawmidi_input_ops);
++	if (output)
++		snd_rawmidi_set_ops(&ump->core, SNDRV_RAWMIDI_STREAM_OUTPUT,
++				    &snd_ump_rawmidi_output_ops);
+ 
+ 	ump_dbg(ump, "Created a UMP EP #%d (%s)\n", device, id);
+ 	*ump_ret = ump;
+@@ -137,6 +161,93 @@ snd_ump_get_block(struct snd_ump_endpoint *ump, unsigned char id)
+ 	return NULL;
+ }
+ 
++/*
++ * rawmidi ops for UMP endpoint
++ */
++static int snd_ump_rawmidi_open(struct snd_rawmidi_substream *substream)
++{
++	struct snd_ump_endpoint *ump = rawmidi_to_ump(substream->rmidi);
++	int dir = substream->stream;
++	int err;
++
++	if (ump->substreams[dir])
++		return -EBUSY;
++	err = ump->ops->open(ump, dir);
++	if (err < 0)
++		return err;
++	ump->substreams[dir] = substream;
++	return 0;
++}
++
++static int snd_ump_rawmidi_close(struct snd_rawmidi_substream *substream)
++{
++	struct snd_ump_endpoint *ump = rawmidi_to_ump(substream->rmidi);
++	int dir = substream->stream;
++
++	ump->substreams[dir] = NULL;
++	ump->ops->close(ump, dir);
++	return 0;
++}
++
++static void snd_ump_rawmidi_trigger(struct snd_rawmidi_substream *substream,
++				    int up)
++{
++	struct snd_ump_endpoint *ump = rawmidi_to_ump(substream->rmidi);
++	int dir = substream->stream;
++
++	ump->ops->trigger(ump, dir, up);
++}
++
++static void snd_ump_rawmidi_drain(struct snd_rawmidi_substream *substream)
++{
++	struct snd_ump_endpoint *ump = rawmidi_to_ump(substream->rmidi);
++
++	if (ump->ops->drain)
++		ump->ops->drain(ump, SNDRV_RAWMIDI_STREAM_OUTPUT);
++}
++
++/**
++ * snd_ump_receive - transfer UMP packets from the device
++ * @ump: the UMP endpoint
++ * @buffer: the buffer pointer to transfer
++ * @count: byte size to transfer
++ *
++ * Called from the driver to submit the received UMP packets from the device
++ * to user-space.  It's essentially a wrapper of rawmidi_receive().
++ * The data to receive is in CPU-native endianness.
++ */
++int snd_ump_receive(struct snd_ump_endpoint *ump, const u32 *buffer, int count)
++{
++	struct snd_rawmidi_substream *substream =
++		ump->substreams[SNDRV_RAWMIDI_STREAM_INPUT];
++
++	if (!substream)
++		return 0;
++	return snd_rawmidi_receive(substream, (const char *)buffer, count);
++}
++EXPORT_SYMBOL_GPL(snd_ump_receive);
++
++/**
++ * snd_ump_transmit - transmit UMP packets
++ * @ump: the UMP endpoint
++ * @buffer: the buffer pointer to transfer
++ * @count: byte size to transfer
++ *
++ * Called from the driver to obtain the UMP packets from user-space to the
++ * device.  It's essentially a wrapper of rawmidi_transmit().
++ * The data to transmit is in CPU-native endianness.
++ */
++int snd_ump_transmit(struct snd_ump_endpoint *ump, u32 *buffer, int count)
++{
++	struct snd_rawmidi_substream *substream =
++		ump->substreams[SNDRV_RAWMIDI_STREAM_OUTPUT];
++
++	if (!substream)
++		return -ENODEV;
++	return snd_rawmidi_transmit(substream, (char *)buffer, count);
++}
++EXPORT_SYMBOL_GPL(snd_ump_transmit);
++
+ /**
+  * snd_ump_block_new - Create a UMP block
+  * @ump: UMP object
 diff --git a/sound/usb/midi2.c b/sound/usb/midi2.c
-index 790e4cd5d35c..5ffee06ac746 100644
+index 5ffee06ac746..7e849b2384ee 100644
 --- a/sound/usb/midi2.c
 +++ b/sound/usb/midi2.c
-@@ -599,14 +599,8 @@ find_group_terminal_block(struct snd_usb_midi2_interface *umidi, int id)
- static int parse_group_terminal_block(struct snd_usb_midi2_ump *rmidi,
- 				      const struct usb_ms20_gr_trm_block_descriptor *desc)
+@@ -52,7 +52,8 @@ struct snd_usb_midi2_endpoint {
+ 	struct usb_device *dev;
+ 	const struct usb_ms20_endpoint_descriptor *ms_ep; /* reference to EP descriptor */
+ 	struct snd_usb_midi2_endpoint *pair;	/* bidirectional pair EP */
+-	struct snd_usb_midi2_ump *rmidi;	/* assigned UMP EP */
++	struct snd_usb_midi2_ump *rmidi;	/* assigned UMP EP pair */
++	struct snd_ump_endpoint *ump;		/* assigned UMP EP */
+ 	int direction;			/* direction (STR_IN/OUT) */
+ 	unsigned int endpoint;		/* EP number */
+ 	unsigned int pipe;		/* URB pipe */
+@@ -133,12 +134,8 @@ static int prepare_output_urb(struct snd_usb_midi2_endpoint *ep,
  {
--	struct snd_usb_audio *chip = rmidi->umidi->chip;
- 	struct snd_ump_endpoint *ump = rmidi->ump;
+ 	int count;
  
--	usb_audio_dbg(chip,
--		      "GTB id %d: groups = %d / %d, type = %d\n",
--		      desc->bGrpTrmBlkID, desc->nGroupTrm, desc->nNumGroupTrm,
--		      desc->bGrpTrmBlkType);
--
- 	/* set default protocol */
- 	switch (desc->bMIDIProtocol) {
- 	case USB_MS_MIDI_PROTO_1_0_64:
-@@ -798,6 +792,94 @@ static int find_matching_ep_partner(struct snd_usb_midi2_interface *umidi,
+-	if (ep->substream)
+-		count = snd_rawmidi_transmit(ep->substream,
+-					     urb->transfer_buffer,
+-					     ep->packets);
+-	else
+-		count = -ENODEV;
++	count = snd_ump_transmit(ep->ump, urb->transfer_buffer,
++				 ep->packets);
+ 	if (count < 0) {
+ 		dev_dbg(&ep->dev->dev, "rawmidi transmit error %d\n", count);
+ 		return count;
+@@ -197,9 +194,9 @@ static void input_urb_complete(struct urb *urb)
+ 	len &= ~3; /* align UMP */
+ 	if (len > ep->packets)
+ 		len = ep->packets;
+-	if (len > 0 && ep->substream) {
++	if (len > 0) {
+ 		le32_to_cpu_array((u32 *)urb->transfer_buffer, len >> 2);
+-		snd_rawmidi_receive(ep->substream, urb->transfer_buffer, len);
++		snd_ump_receive(ep->ump, (u32 *)urb->transfer_buffer, len);
+ 	}
+  dequeue:
+ 	set_bit(ctx->index, &ep->urb_free);
+@@ -330,68 +327,58 @@ static int alloc_midi_urbs(struct snd_usb_midi2_endpoint *ep)
+ }
+ 
+ static struct snd_usb_midi2_endpoint *
+-substream_to_endpoint(struct snd_rawmidi_substream *substream)
++ump_to_endpoint(struct snd_ump_endpoint *ump, int dir)
+ {
+-	struct snd_ump_endpoint *ump = rawmidi_to_ump(substream->rmidi);
+ 	struct snd_usb_midi2_ump *rmidi = ump->private_data;
+ 
+-	return rmidi->eps[substream->stream];
++	return rmidi->eps[dir];
+ }
+ 
+-/* rawmidi open callback */
+-static int snd_usb_midi_v2_open(struct snd_rawmidi_substream *substream)
++/* ump open callback */
++static int snd_usb_midi_v2_open(struct snd_ump_endpoint *ump, int dir)
+ {
+-	struct snd_usb_midi2_endpoint *ep = substream_to_endpoint(substream);
++	struct snd_usb_midi2_endpoint *ep = ump_to_endpoint(ump, dir);
+ 	int err = 0;
+ 
+ 	if (!ep || !ep->endpoint)
+ 		return -ENODEV;
+ 	if (ep->disconnected)
+ 		return -EIO;
+-	if (ep->substream)
+-		return -EBUSY;
+ 	if (ep->direction == STR_OUT) {
+ 		err = alloc_midi_urbs(ep);
+ 		if (err)
+ 			return err;
+ 	}
+-	spin_lock_irq(&ep->lock);
+-	ep->substream = substream;
+-	spin_unlock_irq(&ep->lock);
  	return 0;
  }
  
-+/* create a UMP block from a GTB entry */
-+static int create_gtb_block(struct snd_usb_midi2_ump *rmidi, int dir, int blk)
-+{
-+	struct snd_usb_midi2_interface *umidi = rmidi->umidi;
-+	const struct usb_ms20_gr_trm_block_descriptor *desc;
-+	struct snd_ump_block *fb;
-+	int type, err;
-+
-+	desc = find_group_terminal_block(umidi, blk);
-+	if (!desc)
-+		return 0;
-+
-+	usb_audio_dbg(umidi->chip,
-+		      "GTB %d: type=%d, group=%d/%d, protocol=%d, in bw=%d, out bw=%d\n",
-+		      blk, desc->bGrpTrmBlkType, desc->nGroupTrm,
-+		      desc->nNumGroupTrm, desc->bMIDIProtocol,
-+		      __le16_to_cpu(desc->wMaxInputBandwidth),
-+		      __le16_to_cpu(desc->wMaxOutputBandwidth));
-+
-+	/* assign the direction */
-+	switch (desc->bGrpTrmBlkType) {
-+	case USB_MS_GR_TRM_BLOCK_TYPE_BIDIRECTIONAL:
-+		type = SNDRV_UMP_DIR_BIDIRECTION;
-+		break;
-+	case USB_MS_GR_TRM_BLOCK_TYPE_INPUT_ONLY:
-+		type = SNDRV_UMP_DIR_INPUT;
-+		break;
-+	case USB_MS_GR_TRM_BLOCK_TYPE_OUTPUT_ONLY:
-+		type = SNDRV_UMP_DIR_OUTPUT;
-+		break;
-+	default:
-+		usb_audio_dbg(umidi->chip, "Unsupported GTB type %d\n",
-+			      desc->bGrpTrmBlkType);
-+		return 0; /* unsupported */
-+	}
-+
-+	/* guess work: set blk-1 as the (0-based) block ID */
-+	err = snd_ump_block_new(rmidi->ump, blk - 1, type,
-+				desc->nGroupTrm, desc->nNumGroupTrm,
-+				&fb);
-+	if (err == -EBUSY)
-+		return 0; /* already present */
-+	else if (err)
-+		return err;
-+
-+	if (desc->iBlockItem)
-+		usb_string(rmidi->dev, desc->iBlockItem,
-+			   fb->info.name, sizeof(fb->info.name));
-+
-+	if (__le16_to_cpu(desc->wMaxInputBandwidth) == 1 ||
-+	    __le16_to_cpu(desc->wMaxOutputBandwidth) == 1)
-+		fb->info.flags |= SNDRV_UMP_BLOCK_IS_MIDI1 |
-+			SNDRV_UMP_BLOCK_IS_LOWSPEED;
-+
-+	usb_audio_dbg(umidi->chip,
-+		      "Created a UMP block %d from GTB, name=%s\n",
-+		      blk, fb->info.name);
-+	return 0;
-+}
-+
-+/* Create UMP blocks for each UMP EP */
-+static int create_blocks_from_gtb(struct snd_usb_midi2_interface *umidi)
-+{
-+	struct snd_usb_midi2_ump *rmidi;
-+	int i, blk, err, dir;
-+
-+	list_for_each_entry(rmidi, &umidi->rawmidi_list, list) {
-+		if (!rmidi->ump)
-+			continue;
-+		/* Blocks have been already created? */
-+		if (rmidi->ump->info.num_blocks)
-+			continue;
-+		/* loop over GTBs */
-+		for (dir = 0; dir < 2; dir++) {
-+			if (!rmidi->eps[dir])
-+				continue;
-+			for (i = 0; i < rmidi->eps[dir]->ms_ep->bNumGrpTrmBlock; i++) {
-+				blk = rmidi->eps[dir]->ms_ep->baAssoGrpTrmBlkID[i];
-+				err = create_gtb_block(rmidi, dir, blk);
-+				if (err < 0)
-+					return err;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static void snd_usb_midi_v2_free(struct snd_usb_midi2_interface *umidi)
+-/* rawmidi close callback */
+-static int snd_usb_midi_v2_close(struct snd_rawmidi_substream *substream)
++/* ump close callback */
++static void snd_usb_midi_v2_close(struct snd_ump_endpoint *ump, int dir)
  {
- 	free_all_midi2_endpoints(umidi);
-@@ -1009,6 +1091,12 @@ int snd_usb_midi_v2_create(struct snd_usb_audio *chip,
- 		goto error;
+-	struct snd_usb_midi2_endpoint *ep = substream_to_endpoint(substream);
++	struct snd_usb_midi2_endpoint *ep = ump_to_endpoint(ump, dir);
+ 
+-	spin_lock_irq(&ep->lock);
+-	ep->substream = NULL;
+-	spin_unlock_irq(&ep->lock);
+ 	if (ep->direction == STR_OUT) {
+ 		kill_midi_urbs(ep, false);
+ 		drain_urb_queue(ep);
+ 		free_midi_urbs(ep);
+ 	}
+-	return 0;
+ }
+ 
+-/* rawmidi trigger callback */
+-static void snd_usb_midi_v2_trigger(struct snd_rawmidi_substream *substream,
++/* ump trigger callback */
++static void snd_usb_midi_v2_trigger(struct snd_ump_endpoint *ump, int dir,
+ 				    int up)
+ {
+-	struct snd_usb_midi2_endpoint *ep = substream_to_endpoint(substream);
++	struct snd_usb_midi2_endpoint *ep = ump_to_endpoint(ump, dir);
+ 
+ 	atomic_set(&ep->running, up);
+ 	if (up && ep->direction == STR_OUT && !ep->disconnected)
+ 		submit_io_urbs(ep);
+ }
+ 
+-/* rawmidi drain callback */
+-static void snd_usb_midi_v2_drain(struct snd_rawmidi_substream *substream)
++/* ump drain callback */
++static void snd_usb_midi_v2_drain(struct snd_ump_endpoint *ump, int dir)
+ {
+-	struct snd_usb_midi2_endpoint *ep = substream_to_endpoint(substream);
++	struct snd_usb_midi2_endpoint *ep = ump_to_endpoint(ump, dir);
+ 
+ 	drain_urb_queue(ep);
+ }
+@@ -426,19 +413,13 @@ static int start_input_streams(struct snd_usb_midi2_interface *umidi)
+ 	return err;
+ }
+ 
+-static const struct snd_rawmidi_ops output_ops = {
++static const struct snd_ump_ops snd_usb_midi_v2_ump_ops = {
+ 	.open = snd_usb_midi_v2_open,
+ 	.close = snd_usb_midi_v2_close,
+ 	.trigger = snd_usb_midi_v2_trigger,
+ 	.drain = snd_usb_midi_v2_drain,
+ };
+ 
+-static const struct snd_rawmidi_ops input_ops = {
+-	.open = snd_usb_midi_v2_open,
+-	.close = snd_usb_midi_v2_close,
+-	.trigger = snd_usb_midi_v2_trigger,
+-};
+-
+ /* create a USB MIDI 2.0 endpoint object */
+ static int create_midi2_endpoint(struct snd_usb_midi2_interface *umidi,
+ 				 struct usb_host_endpoint *hostep,
+@@ -729,23 +710,19 @@ static int create_midi2_ump(struct snd_usb_midi2_interface *umidi,
+ 	umidi->chip->num_rawmidis++;
+ 
+ 	ump->private_data = rmidi;
+-
+-	if (input)
+-		snd_rawmidi_set_ops(&ump->core, SNDRV_RAWMIDI_STREAM_INPUT,
+-				    &input_ops);
+-	if (output)
+-		snd_rawmidi_set_ops(&ump->core, SNDRV_RAWMIDI_STREAM_OUTPUT,
+-				    &output_ops);
++	ump->ops = &snd_usb_midi_v2_ump_ops;
+ 
+ 	rmidi->eps[STR_IN] = ep_in;
+ 	rmidi->eps[STR_OUT] = ep_out;
+ 	if (ep_in) {
+ 		ep_in->pair = ep_out;
+ 		ep_in->rmidi = rmidi;
++		ep_in->ump = ump;
+ 	}
+ 	if (ep_out) {
+ 		ep_out->pair = ep_in;
+ 		ep_out->rmidi = rmidi;
++		ep_out->ump = ump;
  	}
  
-+	err = create_blocks_from_gtb(umidi);
-+	if (err < 0) {
-+		usb_audio_err(chip, "Failed to create GTB blocks\n");
-+		goto error;
-+	}
-+
- 	set_fallback_rawmidi_names(umidi);
- 	return 0;
- 
+ 	list_add_tail(&rmidi->list, &umidi->rawmidi_list);
 -- 
 2.35.3
 
