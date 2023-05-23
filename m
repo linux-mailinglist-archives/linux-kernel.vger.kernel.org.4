@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6CF70D250
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 05:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F4D70D251
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 05:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjEWDWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 23:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S229468AbjEWDWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 23:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbjEWDW2 (ORCPT
+        with ESMTP id S232318AbjEWDWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 23:22:28 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C304E99;
-        Mon, 22 May 2023 20:22:26 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae3fe67980so65790265ad.3;
-        Mon, 22 May 2023 20:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684812146; x=1687404146;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wScoHaonyaq/nmwLXnQrRcEsJtUPZNvmHqQ+3wj1c7Y=;
-        b=PGty89Z194hNfiRlVhgeX2AaQq3OVyfFULNfonJ6mlfknlljXlzXi6aZf+7yeqmgD9
-         JgixV2UXkyo63B2ZYVuQrSJmrFvQArIOcPK1Z5MLAjfp8cGgkX0B0hDziHHK7drAeWHB
-         mBSzvTLk4YUJCavERSUoandUq+OERa60xyLRm8111POdSPfJA9uug7c+nRkt1brRriad
-         hTH8fwRm95YQUXWVvgVFadgydxBIpq9o8WXVRZFWjz/m/se8BRLJU0yCGyYecqcnLzBO
-         5F4ugfImLZYHu9x17+7pMkzCSJiRvkyzb9QXaAYTrstGQ5Mo3KOZfq4Z4rXHKlvzLARi
-         cZKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684812146; x=1687404146;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wScoHaonyaq/nmwLXnQrRcEsJtUPZNvmHqQ+3wj1c7Y=;
-        b=Oo5+Zq/arv32NX6Ews8FZGcNbwH/M/+hlfgG4HH4OHoWg4REj2iiK3mMM8KpSommgv
-         NC+CShvcnEOYlPxA4F4wBqldJyTcvH7ZaPch1X39aKHHTpbxmo0DE8Rc5HpXzpj+R1dx
-         k7/nRNh8zhKjl4e+B16aJca9T03OUr9xQaovInmrQuxr44QA+K8f2iPsIMVheb35sTXB
-         w4rbGFHx9l5GSGzdBIL9I8Laa+QJigjdlgvCZp1i1uShhD1Ee2RbmwVrxer1IYkOQq9b
-         TWCJssIgPVSGq33OLt9IYUP0aGnhAcCXcfCpetoySNZKjhhg/4ALWTPcLa/u0QOzHWDH
-         e0mA==
-X-Gm-Message-State: AC+VfDyt1ngkyd0hYQkDn64L4DBpX9uhFWntRXl2NLVx/MMoxXhV5995
-        fRTbwlSV92C8fd+0TgWjBX35tYfpbPw=
-X-Google-Smtp-Source: ACHHUZ72t5zWk7QJMTtxie0kNq6tAKOoMnBbsO+nG0/0A7HkPGcLXoLkFKtP/PT+OFsHQOl+AfDkDA==
-X-Received: by 2002:a17:902:e314:b0:1af:cbb1:845 with SMTP id q20-20020a170902e31400b001afcbb10845mr831019plc.16.1684812146132;
-        Mon, 22 May 2023 20:22:26 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-65.three.co.id. [180.214.232.65])
-        by smtp.gmail.com with ESMTPSA id p12-20020a170902eacc00b00199203a4fa3sm5506843pld.203.2023.05.22.20.22.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 20:22:25 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id DEE6B1069CE; Tue, 23 May 2023 10:22:22 +0700 (WIB)
-Date:   Tue, 23 May 2023 10:22:22 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/292] 6.1.30-rc1 review
-Message-ID: <ZGwxbvrafHvGQHme@debian.me>
-References: <20230522190405.880733338@linuxfoundation.org>
+        Mon, 22 May 2023 23:22:31 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51EE8B6;
+        Mon, 22 May 2023 20:22:29 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxI_B0MWxkficLAA--.18907S3;
+        Tue, 23 May 2023 11:22:28 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuRwMWxkvdtvAA--.57042S3;
+        Tue, 23 May 2023 11:22:25 +0800 (CST)
+Subject: Re: [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522093156.7108-1-zhuyinbo@loongson.cn>
+ <20230522093156.7108-3-zhuyinbo@loongson.cn>
+ <20230522-kooky-outbid-82662b45d305@wendy>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <d88c0965-8f72-7be1-b67f-1bcf3be60da3@loongson.cn>
+Date:   Tue, 23 May 2023 11:22:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xyvu2VAPqSGMtjFj"
-Content-Disposition: inline
-In-Reply-To: <20230522190405.880733338@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230522-kooky-outbid-82662b45d305@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxHuRwMWxkvdtvAA--.57042S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxAr45tr1fWw1xZF17WrWkXrb_yoW5tr1fpa
+        n7Ca1Ykr48ZF13uws5JFy8Aw1Y9rZakFsrXFZrJry0kr98u3WFq3y7KF98ZFW3ArykGFW2
+        vFyIgw4jgF4DCFJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYnmiUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,35 +82,106 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---xyvu2VAPqSGMtjFj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 22, 2023 at 08:05:57PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.30 release.
-> There are 292 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+在 2023/5/22 下午8:47, Conor Dooley 写道:
+> Hey!
+> 
+> On Mon, May 22, 2023 at 05:31:55PM +0800, Yinbo Zhu wrote:
+>> Add the Loongson-2 SoC Power Management Controller binding with DT
+>> schema format using json-schema.
+> 
+> Grabbing thread from lore.kernel.org/all/20230522093156.7108-3-zhuyinbo%40loongson.cn/t.mbox.gz
+> Checking for newer revisions
+> Grabbing search results from lore.kernel.org
+> Analyzing 3 messages in the thread
+> Checking attestation on all messages, may take a moment...
+> ---
+>    [PATCH v2 1/3] loongarch: export loongarch pm interface
+>      + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>    [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
+>      + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>    ERROR: missing [3/3]!
+> ---
+> Total patches: 2
+> ---
+> WARNING: Thread incomplete!
+> Applying: loongarch: export loongarch pm interface
+> Applying: dt-bindings: soc: add loongson-2 pm
+> 
+> Looks like the user for these bindings got lost somewhere along the way?
+> Please make sure to keep a series threaded.
 
-Successfully compiled and installed bindeb-pkgs on my computer (Acer
-Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+okay, I got it.  I will use a thread to send a series patch.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../soc/loongson/loongson,ls2k-pmc.yaml       | 51 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+>>   2 files changed, 57 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>> new file mode 100644
+>> index 000000000000..ddad62889c60
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>> @@ -0,0 +1,51 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson-2 Power Manager controller
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - loongson,ls2k-pmc
+>> +      - const: syscon
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  suspend-address:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
+>> +      firmware entry address which was jumped from kernel and it's
+>> +      value was dependent on specific platform firmware code. In
+>> +      addition, the PM need according to it to indicate that current
+>> +      SoC whether support Suspend To RAM.
+> 
+> I (still) think this property is rather odd, maybe I am just not really
+> understanding the property as it seems to be described partly in terms
+> of operating system behaviour rather than its actual function. "was
+> jumped from kernel" I don't get.
 
---=20
-An old man doll... just what I always wanted! - Clara
+The function Suspend-To-RAM include kernel logic and firmware logic and
+if no define "suspend-address" that kernel will can't into firmware 
+after suspend to ram and the Suspend-To-RAM function will not be 
+finished in LoongArch.
 
---xyvu2VAPqSGMtjFj
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+> 
+> The whole setup here seems a bit odd, but that's for the loongson arch
+> folks reviewing the actual code to comment on!
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGwxawAKCRD2uYlJVVFO
-o8UEAP0fJDfOXL6dJV+IDtNwbj0q1DmsvnKafWz2X9fVDX5FhgEA6qLBfKb0Eilc
-5l1zOnsWbs1I86zF8AXAv/LkTnamGAU=
-=r88Q
------END PGP SIGNATURE-----
+okay, I got it.
 
---xyvu2VAPqSGMtjFj--
+Thanks
+Yinbo.
+> 
+> Thanks,
+> Conor.
+> 
+
