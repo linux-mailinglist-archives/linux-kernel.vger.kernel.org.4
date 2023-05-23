@@ -2,112 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463FD70DABE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FB970DAC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbjEWKmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
+        id S236595AbjEWKnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbjEWKmm (ORCPT
+        with ESMTP id S236243AbjEWKmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:42:42 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861B8FD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:42:40 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 23 May 2023 06:42:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46513133;
+        Tue, 23 May 2023 03:42:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 55C266606E75;
-        Tue, 23 May 2023 11:42:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684838559;
-        bh=k5mp+NPuC3+C8fsMCLAcwWhJ5WFcu3o02Q0hZe0dwhM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kh9Nd6T/8k3VroYVDmlTaX9A4m+npPH+O9zAx3WHJpRFbk+pgK0L0UUpGM3/Fs4Kn
-         OTjzxp0TjpGa0DEVfUchWsh+VDDnBlpQoTHdufvsnfQLl8MaRs/cSywPTY067VrSwe
-         GeFKVBhciJSweTohL+O2FGr8iZYTziU0eqXZPZoPl0DqH2+vTTKEf9/EyTCbQ8SA1X
-         6NPgp4cGiXEiivriAE7wy6TuQTLRzw1hFpf55St20SMQvlFwbfB6aR2BUu1bqEpMkp
-         /FNhW68+w8IHtHpiYTEI37DjUfqtpA8k4smcp820azJ9sKU/YSNIr52QYtwiTTBvE+
-         ZWpAw39yMbftQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        jitao.shi@mediatek.com, ck.hu@mediatek.com,
-        shaoming.chen@mediatek.com, yt.shen@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] drm: mediatek: mtk_dsi: Fix NO_EOT_PACKET settings/handling
-Date:   Tue, 23 May 2023 12:42:34 +0200
-Message-Id: <20230523104234.7849-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCC14630F6;
+        Tue, 23 May 2023 10:42:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91EB8C433D2;
+        Tue, 23 May 2023 10:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684838572;
+        bh=dAZtfPEcdx8w0xksIc+4VYD58Jm8oMxQ7+S7bRplZvM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dc34T6TA2Jylxa+Ta17oKWHKcRWTtyg7v2ias+mVnUeGa6ugVmCGvGQBzxYBOBsnB
+         gVR8bMa+mAb/WmZBAJg4ZHPAQ2lJgy5r/HWYoS1qTIWV7SORr49MZxUzhIN2LkQ7k4
+         h2gCx3ek59wOr/O+LFTOpCQhvbXw+OrWCwXSIAQ4DjUvaJI+cZAOeKsnOOmK+h4inJ
+         bve2yOEnB29XSuZUjPe686uTQO6OQajO+gMeiz429QS1MKh9QXJEuwOs6aTTiroEGa
+         WMKJd1eOsA7UJBH8COgqfZsl7uTMdscQ8GmfjbyYAYj+UqAG2S0CQuIatxOWFZDFTK
+         E692WpXj+M8Mw==
+Date:   Tue, 23 May 2023 12:42:46 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Jiri Wiesner <jwiesner@suse.de>
+Subject: Re: [RFC PATCH 2/3] cgroup: Rely on namespace_sem in
+ current_cgns_cgroup_from_root explicitly
+Message-ID: <20230523-radar-gleich-781fd4006057@brauner>
+References: <20230502133847.14570-1-mkoutny@suse.com>
+ <20230502133847.14570-3-mkoutny@suse.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230502133847.14570-3-mkoutny@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the initial confusion about MIPI_DSI_MODE_EOT_PACKET, properly
-renamed to MIPI_DSI_MODE_NO_EOT_PACKET, reflecting its actual meaning,
-both the DSI_TXRX_CON register setting for bit (HSTX_)DIS_EOT and the
-later calculation for horizontal sync-active (HSA), back (HBP) and
-front (HFP) porches got incorrect due to the logic being inverted.
+On Tue, May 02, 2023 at 03:38:46PM +0200, Michal Koutný wrote:
+> The function current_cgns_cgroup_from_root() expects a stable
+> cgroup_root, which is currently ensured with RCU read side paired with
+> cgroup_destroy_root() called after RCU period.
+> 
+> The particular current_cgns_cgroup_from_root() is called from VFS code
+> and cgroup_root stability can be also ensured by namespace_sem. Mark it
+> explicitly as a preparation for further rework.
+> 
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> ---
+>  fs/namespace.c         | 5 ++++-
+>  include/linux/mount.h  | 4 ++++
+>  kernel/cgroup/cgroup.c | 7 +++----
+>  3 files changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/namespace.c b/fs/namespace.c
+> index 54847db5b819..0d2333832064 100644
+> --- a/fs/namespace.c
+> +++ b/fs/namespace.c
+> @@ -71,7 +71,10 @@ static DEFINE_IDA(mnt_group_ida);
+>  static struct hlist_head *mount_hashtable __read_mostly;
+>  static struct hlist_head *mountpoint_hashtable __read_mostly;
+>  static struct kmem_cache *mnt_cache __read_mostly;
+> -static DECLARE_RWSEM(namespace_sem);
+> +DECLARE_RWSEM(namespace_sem);
+> +#ifdef CONFIG_LOCKDEP
+> +EXPORT_SYMBOL_GPL(namespace_sem);
+> +#endif
+>  static HLIST_HEAD(unmounted);	/* protected by namespace_sem */
+>  static LIST_HEAD(ex_mountpoints); /* protected by namespace_sem */
+>  
+> diff --git a/include/linux/mount.h b/include/linux/mount.h
+> index 1ea326c368f7..6277435f6748 100644
+> --- a/include/linux/mount.h
+> +++ b/include/linux/mount.h
+> @@ -80,6 +80,10 @@ static inline struct mnt_idmap *mnt_idmap(const struct vfsmount *mnt)
+>  	return smp_load_acquire(&mnt->mnt_idmap);
+>  }
+>  
+> +#ifdef CONFIG_LOCKDEP
+> +extern struct rw_semaphore namespace_sem;
+> +#endif
 
-This means that a number of settings were wrong because....:
- - DSI_TXRX_CON register setting: bit (HSTX_)DIS_EOT should be
-   set in order to disable the End of Transmission packet;
- - Horizontal Sync and Back/Front porches: The delta used to
-   calculate all of HSA, HBP and HFP should account for the
-   additional EOT packet.
-
-Before this change...
- - Bit (HSTX_)DIS_EOT was being set when EOT packet was enabled;
- - For HSA/HBP/HFP delta... all three were wrong, as words were
-   added when EOT disabled, instead of when EOT packet enabled!
-
-Invert the logic around flag MIPI_DSI_MODE_NO_EOT_PACKET in the
-MediaTek DSI driver to fix the aforementioned issues.
-
-Fixes: 8b2b99fd7931 ("drm/mediatek: dsi: Fine tune the line time caused by EOTp")
-Fixes: 2d52bfba09d1 ("drm/mediatek: add non-continuous clock mode and EOT packet control")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 7d5250351193..b0ab38e59db9 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -407,7 +407,7 @@ static void mtk_dsi_rxtx_control(struct mtk_dsi *dsi)
- 	if (dsi->mode_flags & MIPI_DSI_CLOCK_NON_CONTINUOUS)
- 		tmp_reg |= HSTX_CKLP_EN;
- 
--	if (!(dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET))
-+	if (dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET)
- 		tmp_reg |= DIS_EOT;
- 
- 	writel(tmp_reg, dsi->regs + DSI_TXRX_CTRL);
-@@ -484,7 +484,7 @@ static void mtk_dsi_config_vdo_timing(struct mtk_dsi *dsi)
- 			  timing->da_hs_zero + timing->da_hs_exit + 3;
- 
- 	delta = dsi->mode_flags & MIPI_DSI_MODE_VIDEO_BURST ? 18 : 12;
--	delta += dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET ? 2 : 0;
-+	delta += dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET ? 0 : 2;
- 
- 	horizontal_frontporch_byte = vm->hfront_porch * dsi_tmp_buf_bpp;
- 	horizontal_front_back_byte = horizontal_frontporch_byte + horizontal_backporch_byte;
--- 
-2.40.1
-
+Nope, we're not putting namespace_sem in a header. The code it protects
+is massively sensitive and it interacts with mount_lock and other locks.
+This stays private to fs/namespace.c as far as I'm concerned.
