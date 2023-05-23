@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA9B70E031
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F8770E037
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237335AbjEWPRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S237152AbjEWPR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237299AbjEWPQa (ORCPT
+        with ESMTP id S237238AbjEWPRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:16:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED201B0;
-        Tue, 23 May 2023 08:16:05 -0700 (PDT)
+        Tue, 23 May 2023 11:17:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917C41A4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:16:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7415B60AE7;
-        Tue, 23 May 2023 15:16:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFDFEC433D2;
-        Tue, 23 May 2023 15:16:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEADA62958
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B97C433D2;
+        Tue, 23 May 2023 15:16:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684854960;
-        bh=wTYbPYYFeklCoO9d6aa3rN/4GrvAtM3y6lLrAxut7Fc=;
+        s=k20201202; t=1684854976;
+        bh=riyQcmwRS50LvfDOvBnaSn1Pdsx6qcjiuaUwj4oD9K8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hysE0ePBNGSAufB+1US8ANtTXFVCrllLsskMvwmssPsojOQY8rFJgpgjVFnjw0rF9
-         cxGiRqDOF43y7nmC1qOjWh68Bd1TyCv8ruh5OwAAn/oMEoiuAM2sSt4kb81+NreZpO
-         ajwzSTgXfieJTB2eT76sxptz3OdcDGx6fVYyA4bODUhXtsf3YVfQ0Xb9/jHFI3lkpV
-         a3WSf7ZQBEuy3gCGNWbciduG1Eu+9QLnyscIqfOpTBXatmiXUpoxt8Kf+f81dNByEp
-         3DbO/JDXt1dvOWRw197IVJexsj+3H1tYJJheqXciCOwQ5Txix8pdXssPhMcZB2RfzJ
-         p0NF4yEAZhBjA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 22CB6403B5; Tue, 23 May 2023 12:15:58 -0300 (-03)
-Date:   Tue, 23 May 2023 12:15:58 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 14/15] perf jevents: Add support for metricgroup
- descriptions
-Message-ID: <ZGzYroXZUsPTNZVE@kernel.org>
-References: <20230517173805.602113-1-irogers@google.com>
- <20230517173805.602113-15-irogers@google.com>
+        b=O3ienv9QYvR22eXv7mQP4lqOeMTSsWjgQ/0LPFw3YUCN0aoUBUANjfT43qNLZf2c/
+         L2eCBHlF+3l7EDTaFk6r29N8hxn6wLQ7yR5WNvNl/R1jj6jMsNbL8AC1UnwazaWjA0
+         wXvCeTR5wWi3v8rIZJkhRDz3V9PEkUzSqH+s2Eo71u7TKNzwSMJ1bNwVcHFHOxyJ3n
+         U6OaD9DORpKh+yJJGGlUberzFUi0FYFqkocTtqExroS/LWmG3ndvD/pHxcXdkTZvuU
+         3Wl+3TR4sZ4A/TDxMUT6PV3VMwjMAp7/XaVBdo9P8Cp7kFaVmD/kU+1Bsdh7nsO3A3
+         56PU2QqTaMprw==
+Date:   Tue, 23 May 2023 16:16:11 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Osama Muhammad <osmtendev@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] regulator: core: Streamline debugfs operations
+Message-ID: <2c26f143-47ae-4c2f-bd55-2e3b7a6300f0@sirena.org.uk>
+References: <587f259fb8634daa268595f60fa52c3c4d9bbec2.1684854090.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oesjpCYrzZPeXfzW"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517173805.602113-15-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <587f259fb8634daa268595f60fa52c3c4d9bbec2.1684854090.git.geert+renesas@glider.be>
+X-Cookie: Beware of low-flying butterflies.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,53 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, May 17, 2023 at 10:38:03AM -0700, Ian Rogers escreveu:
-> Metrics have a field where the groups they belong to are listed like
-> the following from
-> tools/perf/pmu-events/arch/x86/skylakex/skx-metrics.json:
-> 
->         "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
->         "MetricName": "tma_frontend_bound",
 
-  LD      /tmp/build/perf-tools-next/util/perf-in.o
-  LD      /tmp/build/perf-tools-next/perf-in.o
-  CC      /tmp/build/perf-tools-next/pmu-events/pmu-events.o
-In file included from /var/home/acme/git/perf-tools-next/tools/include/linux/bitmap.h:9,
-                 from /var/home/acme/git/perf-tools-next/tools/perf/util/header.h:10,
-                 from /tmp/build/perf-tools-next/pmu-events/pmu-events.c:3:
-/tmp/build/perf-tools-next/pmu-events/pmu-events.c: In function ‘describe_metricgroup’:
-/var/home/acme/git/perf-tools-next/tools/include/linux/kernel.h:102:25: error: overflow in conversion from ‘long unsigned int’ to ‘int’ changes value from ‘18446744073709551615’ to ‘-1’ [-Werror=overflow]
-  102 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-      |                         ^
-/tmp/build/perf-tools-next/pmu-events/pmu-events.c:61603:29: note: in expansion of macro ‘ARRAY_SIZE’
-61603 |         int low = 0, high = ARRAY_SIZE(metricgroups) - 1;
-      |                             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[3]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:98: /tmp/build/perf-tools-next/pmu-events/pmu-events.o] Error 1
-make[2]: *** [Makefile.perf:679: /tmp/build/perf-tools-next/pmu-events/pmu-events-in.o] Error 2
-make[1]: *** [Makefile.perf:236: sub-make] Error 2
-make: *** [Makefile:113: install-bin] Error 2
-make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
+--oesjpCYrzZPeXfzW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- Performance counter stats for 'make -k BUILD_BPF_SKEL=1 CORESIGHT=1 O=/tmp/build/perf-tools-next -C tools/perf install-bin':
+On Tue, May 23, 2023 at 05:03:58PM +0200, Geert Uytterhoeven wrote:
 
-      241752971879      cycles:u
-      296060193784      instructions:u                   #    1.22  insn per cycle
+> -	if (!regulator->debugfs) {
+> +	if (IS_ERR(regulator->debugfs))
+>  		rdev_dbg(rdev, "Failed to create debugfs directory\n");
+> -	} else {
+> -		debugfs_create_u32("uA_load", 0444, regulator->debugfs,
+> -				   &regulator->uA_load);
+> -	}
+> +
+> +	debugfs_create_u32("uA_load", 0444, regulator->debugfs,
+> +			   &regulator->uA_load);
 
-       6.129451072 seconds time elapsed
+No, it's actually useful to not just dump these files in the root
+directory if we fail to create the per regulator directory.
 
-      59.018259000 seconds user
-      12.132871000 seconds sys
+--oesjpCYrzZPeXfzW
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-⬢[acme@toolbox perf-tools-next]$ fg
-git rebase -i HEAD~15
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRs2LoACgkQJNaLcl1U
+h9CMzAf7B1M/cVgldQf+MV8yOCmHAz0pR7PVoZ4CkYyqq8BfE4QH1jT4Vn3hxoS4
+y5spa1SALFIrMxhJ9bzncMgjtzjmWOdySywKZ6/szCtHlqm5n2GqlkqYfDAGGkZS
+BbWdv9OhnQfNkmIrtN3/qxV//yt/h+0+3ATJxJ2NnvpAdc2FxTK+MpDYYR0JuJHF
+Wjf9vpLRWW14FdboWXFzIxf9CpY+Tdw1iPBSz9BISDNjmVsWJ0tA02PXyir/1aAb
+GkO29pZaNLkavhoxaHkI4sQGUk0MaeW1JmOlbWlXmJtAWmXHDHyfZCneqN2RPo1R
+dvUpobtbZZvUighl/T1ruJcbgLMMQQ==
+=Encs
+-----END PGP SIGNATURE-----
 
-[1]+  Stopped                 git rebase -i HEAD~15
-⬢[acme@toolbox perf-tools-next]$ git log --oneline -1
-995a2beaa64deb7b (HEAD) perf jevents: Add support for metricgroup descriptions
-⬢[acme@toolbox perf-tools-next]$
-
-Applied 1-13, pushing to tmp.perf-tools-next,
-
-- Arnaldo
+--oesjpCYrzZPeXfzW--
