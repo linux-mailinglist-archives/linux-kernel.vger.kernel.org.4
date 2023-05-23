@@ -2,181 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0281970DF70
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68D570DF7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237320AbjEWOhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S237329AbjEWOiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjEWOhK (ORCPT
+        with ESMTP id S237322AbjEWOiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:37:10 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2070.outbound.protection.outlook.com [40.107.93.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F91138
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:37:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GSeqWpJDjzHtgyPIe5NNyM2FALqTOKNvbCQbmP5kydXts+WSRaUsTi5/la0ihlWyRmy0oZRAhW608uD1sOqMl+fj5lIidDsAHW+IDlReWExM7u5XJ1Qnq/Omr9+48v9IIkjF12kphUkXzBaMBJhBoqfJOWVnkXLF7El5RBhivN310UMAxSzD20ZGsfOXZo7zClS9RDJJwTIYYmvFlx+rVcNR4AUzCrAeP0RYT+DjtqyNHRi3EY+ARdCWBQxqaJblFSRb0nxwwVDKcx0702Y0A6Vybw230hY16t/zCodG3gJJbYs7RZpRA9xxyH7GIX4O/KQGiRa2yk/Ejy47UvTm1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uKNtgjPyUJS5OUzsZ7mG6yCgBEcqUJ+tjF8IA4mEAGw=;
- b=iCcBM6AJ7u6ZQ0qpta+zV2pUMhO419B+EkQ/9Bz+H9NmFVnmfbXDaj1gLLqcyBo8uyaVBhBtDUOWqFgA2/uoY87GTb71k0KQYZ0Qitu9GaDfkR4Ra0hZDunCfDMFuu59vTLB/JqXdG/4XOpDbSKhbLFokCO7+SRk3Sxj58/o4SWABBjJb/BQ6LztbBiOWpnwYHAXL6tfA6Tk7eV+nVvVc0xFG6ucKYuwB5JonNYPQQBg6V4JAqcPD3kEWZebLfwHODu9C6A1FYt470AgbqD8z+cO4LlMvC0xwpYJqlOnNGkctL5RX/dj7yf2z0N+D+PRvJP/N2vuedE4OD6xmyhMpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uKNtgjPyUJS5OUzsZ7mG6yCgBEcqUJ+tjF8IA4mEAGw=;
- b=X93iULl7bkUsuNcPt+vSKb0veKk3B9mtNte8h3MeadYPbxYrpBuA0Q0KidyGI9EmJF+l1vLYESKJAtihoHQE9kG2FPgzgjfRAQENOXmXyyDgkdbXVF5Yz889F2ctyGlpOeUuoQDvSSkg2lS/xWuFlyJg4cxUehGjaUQnsryoBHc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- SN7PR12MB7370.namprd12.prod.outlook.com (2603:10b6:806:299::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Tue, 23 May
- 2023 14:37:06 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%7]) with mapi id 15.20.6411.028; Tue, 23 May 2023
- 14:37:06 +0000
-Message-ID: <63817b59-90f7-9881-fb69-42da00ccaeed@amd.com>
-Date:   Tue, 23 May 2023 10:37:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/amd/display: avoid calling missing
- .resync_fifo_dccg_dio()
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tom Chung <chiahsuan.chung@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Saaem Rizvi <syedsaaem.rizvi@amd.com>
-Cc:     Charlene Liu <Charlene.Liu@amd.com>,
-        Jingwen Zhu <Jingwen.Zhu@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Nagulendran, Iswara" <Iswara.Nagulendran@amd.com>,
-        dri-devel@lists.freedesktop.org, Wenjing Liu <wenjing.liu@amd.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Alvin Lee <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <20230523083437.986490-1-arnd@kernel.org>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230523083437.986490-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQZPR01CA0083.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:84::24) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Tue, 23 May 2023 10:38:19 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A8F121;
+        Tue, 23 May 2023 07:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=NLFTS+w5hN7WpRmvWgLF3ouUkJg9vy2d77yR3EYCI6E=; b=vQoDp++IV6aKY7+NungSxOllYP
+        0VTb4wQNDcsShENSioFKWXCiphToj+oP50h3oGWELjS0Ag/qUVDhX9wRy7/+8zBZGmKCHDn9hWur9
+        z988b4Dcsr3vEEASm3F+Cb4TQNm6DrwJ5MfahReo6uptxBpWX41cThDRmpXjsX8fSrZtymq+jYjpk
+        5fHmMxw52M6xdRTKsOwAR2bX5ZQCcGiA5TYm4f1I2fnoTi5Ee9+k/zRzsI+ejq8fm+okRWgajVyq6
+        9oJwSWgxF0fHKtwOtXO3PeztPI0gum4Xd8Rk2Q7F4n6gFNgVWPY/R4NnxZ4eUV+Vn4jgk6MNfVC91
+        X8w+4Kag==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45946)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q1T9P-0000Yd-QN; Tue, 23 May 2023 15:38:11 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q1T9O-0000eQ-O2; Tue, 23 May 2023 15:38:10 +0100
+Date:   Tue, 23 May 2023 15:38:10 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] dsa: marvell: Define .set_max_frame_size()
+ function for mv88e6250 SoC family
+Message-ID: <ZGzP0qEjQkCFnXnr@shell.armlinux.org.uk>
+References: <20230523142912.2086985-1-lukma@denx.de>
+ <20230523142912.2086985-2-lukma@denx.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SN7PR12MB7370:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1aa98c4b-b5b0-405f-5ea0-08db5b9b2e2d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MmTIsuunCkHvbKSdoVq8V/nYfRgflR5wJMB2IxGuMvqcR9BZiqFKuQ0Daqb5M8njEOQmaZzdfLSfzkLBrWeryV2DoNwL+mDSVFOB8I/fjqGSPAADE3GRpIXmy7K5w2wYVPeQUJIGiQDf8KefsPbV6OqMUgLLOlSmFcJy+jW+MQVfIFlEjFqpZf8r6coim/lGPhkfZqdapeavB58ozPKtTIzMd6wasgKoo27doatT52RtaMz4Fvgf+8NuJMuJjlc57X+u455iabof8xefC/b7o5YPV7EWlJWfHeDUBLV9PZW5lBHum64Tmc9vxgXXDywr6w8A8nOn+Br4dw891mcamBzEj+yAAow4XqzLa4NvHrxsC/Y9M3xj7i9nE0tRYFfPjZzfsTrEJoky//QH2W1ccxv6LdIa9sohnXOzOjIBczvjtM5hKCEzc3Zi9hDlYT2ogYHdJiHvBCtZoINkqQRWf/th+pxjJNtJBKlrxz5MBl2C5eE+QS1hjpjOggj/K3x5VyHoS/J94JbMR8JaxR3wmaV2KKd4JP62p2rpgjKQnrvgdebMjmVfysaIrosdiCgwQc+ivZzreMnKOCOd/eYatjhf5C29ENed/cKyjkIYf9tXrcZXyxS0AiMBAbojfKqfpIHh2oA5g+izm4wXL/A8k0jXG47d28QS/KwW/BdZXD6QYGAcfJn51gkROG3zb/Lj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(376002)(346002)(39860400002)(451199021)(6486002)(41300700001)(86362001)(31696002)(316002)(6666004)(2616005)(8936002)(8676002)(36756003)(186003)(53546011)(44832011)(26005)(6506007)(6512007)(5660300002)(2906002)(478600001)(31686004)(921005)(38100700002)(54906003)(110136005)(83380400001)(6636002)(4326008)(66946007)(66476007)(66556008)(142923001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djh6VHJrd2ZranFmOHRMd3dpdXlTU28zZWNFcUlRVlFzNXJnMzNDTkt4UDh6?=
- =?utf-8?B?eGtVazBKSlBDUzlVb3VKSkpGOXRzcDFzVXRvbkZNUDdmVVd4Q2ZRQVdXcjNk?=
- =?utf-8?B?dU9HbkNjRXR4R2FEWks5YkZtOWJrTUNUSXF6aW1ORG5tSnJBcDZnYklMTHg4?=
- =?utf-8?B?YndKUzR6Z2YyVVJxVTdsYlhxaVpBVUZLS3pGVzZrNUgrdGU2YWJCUGNoZnow?=
- =?utf-8?B?eG9SV2k5NnU1ODZtREpHUHF5SEIwUnpYSW5Bb0pOdlRVL2xxNzJjeGoyd2V6?=
- =?utf-8?B?UzViZlJQQWNNdUM4TUU5MVFWYUh5RWxpcTJhd0l3WitaODgrUExXaG8wTGpa?=
- =?utf-8?B?UUNWY0NTVHEzVXBuUk1tVFMrYXBjdUdSWDdKVVBGaTNWQW5RcmdDckYvZEgr?=
- =?utf-8?B?Ti94aWFHUkllaFVaNW9TNXJ6YWVUbTE2eFhaamZSQjdBTC9wR2ZmREJDNjNH?=
- =?utf-8?B?SW1xVEQ4clpyRkxRaWhmY0srbmIvT1E0dXBSNWNMem9hd3B0a0Z2K2JQM0NQ?=
- =?utf-8?B?SkY2cVpEUjFzRHpBNVFUZmM3b0NTTUE5YlUxTG1Hc0RXWVpEYUVEQkxNRXNW?=
- =?utf-8?B?dFFmOXdOZzQ5V1MvSzhJUUNZWk8wWEo5UjlhSTBrRUN2OWo3c1Z1OHJQMmFk?=
- =?utf-8?B?SVpsK1FlNmN6M1JpYU5kemJhaWMyb3hmQ3EzMFVZcnkzV0pqTU5ZMzBnNmpm?=
- =?utf-8?B?S1V1Z24yQTkremNwVWNoUC9YZmU4eW4ybDJxajhvNFhySWcvMU1uRzNoSk9j?=
- =?utf-8?B?a0pwc0pLUmV5bXhOcFpJOXhNYWhNM043WVZaOTZEVVFxZlMxeW1Sd0FqOGxq?=
- =?utf-8?B?bVdKNUtBKzhZcE04YlZzN1djODhtVkZWTkhIc1F5VVk5L2F3TW0wczdHejI4?=
- =?utf-8?B?WHJPMFoyS1dnM1pqZldEQnI5emRGTEhkUU9HTE5XU3ZyaUt1aWNnQ0ZtNEJJ?=
- =?utf-8?B?RmJOSk4xbkFuWDRCTE91Y0lUNU15UnRydjlmN2FCcUU1Yk85T1NpTElVQ3d3?=
- =?utf-8?B?aXNNek5sNE9veWQ2MzlqbURCb082Q3RGb2htczVML21BUjVYdEtSVkhnNkdn?=
- =?utf-8?B?NFdlSFBUNWFSRVMvcFdVWUNxeHJJMit1VEg5ZS9XWEo1dldIb1hwajRyUERO?=
- =?utf-8?B?bUZFZEo0QW5WYXhvK3l5WnJEUHVBYXFaODlUVFVJZWt3amNoN3RUYWdlVno4?=
- =?utf-8?B?eVpaQk1vVnFqNlRwQ3IvUVNxN3hPc3JjTlVwZjMvMUhCanZQVm1LSU5aN1pO?=
- =?utf-8?B?REdQSVVaOHI4L212RTNPeXVWaFRyQTdtUnBsNHJ2OEJuNGNwOUZuM214ckJo?=
- =?utf-8?B?SXpmSm1CdFBWSlo0cFZoYjZNN0taalpDOERlS3d1c2VsUXFieFV0aUI4Mk5y?=
- =?utf-8?B?Vm5Yd2pieC9aYXZLNVZWVjlVdTBmSCt1ay9wSUEwZVBsQXRTYkF6N3Z3Q05j?=
- =?utf-8?B?MWdmY3dNeDMxcmFacW1BYmdOMDVSTjBMWHhDd0diVkc4dXpHT2xFVjJFQ2xT?=
- =?utf-8?B?cHhmUmdOZWhkaS9OVHMvMUh4c1ZWVXhjR0dzWUtrRHRHTndMYlNZTnk5TmRF?=
- =?utf-8?B?c29KRjhvcUdQNGViWGhPM2VlOXgvR2h0Q3lwUTdnWEExcFF1VnZ1VlQyVmxj?=
- =?utf-8?B?ZVQxREVaWGhRZnErVFNHajlUQkVnTFlKaG1RSHdLTy9YOWdLUE90eVJwSENi?=
- =?utf-8?B?bnl6OEo3N1pCVkYrdlFxQURiZEpEaklaNHhKczZRODFCRldQZm1CVUJwVWpJ?=
- =?utf-8?B?Y0VRa2p0N2RqTS95Q2lLYnlOZUZlWHJPZ2dzNTFQcGZ3OERwaE53Y3NJd2Fv?=
- =?utf-8?B?Q1NJZWM4SC9DWVNyRENjSERkRU43T1RNcmtEeUhaR3VXZ3d5bU9LQ2hWRFA1?=
- =?utf-8?B?YkE4K1dxWjRScU9rOHIvS2RIWnBncFkzNWJCNHc1RnlXZHRMc1RhYS9OQWNv?=
- =?utf-8?B?UEtiR0grSXN2TmhhQytKbEJuU0J3RTg2NGJCelVrSWg2QlJQRkdFeENaKzNu?=
- =?utf-8?B?eTJIaEcvSStjZVpFdXJHTUtiQVUxRC9mUEhrSzVqa1FGZjFuQjQ4UEJrN0lo?=
- =?utf-8?B?eExvSlF1QzVvanZjWjBCbU5QSlpFZmtUSkIyWHdwdjFSQkFkVnVkQVppVTRQ?=
- =?utf-8?Q?ncDgkUrtsu5uVMGVMdhUmGSmB?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1aa98c4b-b5b0-405f-5ea0-08db5b9b2e2d
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 14:37:05.8780
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RybnmDGKmF/nczn9d3lXn1662Ws90bE2nc43hk/HI9u4v0o6W2MXP1CPeJrHIBXxF4JSWgt51G4uZqyDrpHSWA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7370
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523142912.2086985-2-lukma@denx.de>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 04:34, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, May 23, 2023 at 04:29:10PM +0200, Lukasz Majewski wrote:
+> Switches from mv88e6250 family (the marketing name - "Link Street",
+> including mv88e6020 and mv88e6071) need the possibility to setup the
+> maximal frame size, as they support frames up to 2048 bytes.
 > 
-> The .resync_fifo_dccg_dio() callback pointer was added in an #ifdef block,
-> but is called unconditionally:
-> 
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dce110/dce110_hw_sequencer.c:2292:31: error: 'struct hwseq_private_funcs' has no member named 'resync_fifo_dccg_dio'
-> 
-> Add the same #ifdef around the caller as well.
-> 
-> Fixes: 6354b0dc3a7a ("drm/amd/display: Trigger DIO FIFO resync on commit streams")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Lukasz Majewski <lukma@denx.de>
 
-Applied, thanks!
+Adding this function doesn't allow the "possibility" for a larger frame
+size. Adding it changes the value returned from mv88e6xxx_get_max_mtu()
+to be a larger frame size, so all switches that make use of
+mv88e6250_ops will be expected to support this larger frame size. Do
+we know whether that is true?
 
-> ---
->   drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-> index c6fe2c00aedb..d4cacb8df631 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-> @@ -2289,8 +2289,10 @@ enum dc_status dce110_apply_ctx_to_hw(
->   		if (DC_OK != status)
->   			return status;
->   
-> +#ifdef CONFIG_DRM_AMD_DC_FP
->   		if (hws->funcs.resync_fifo_dccg_dio)
->   			hws->funcs.resync_fifo_dccg_dio(hws, dc, context);
-> +#endif
->   	}
->   
->   	if (dc->fbc_compressor)
+There were patches floating about a while ago that specified the
+maximum size in struct mv88e6xxx_info, but it seems those died a death.
+
 -- 
-Hamza
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
