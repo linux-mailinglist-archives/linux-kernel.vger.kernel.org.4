@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31ABB70E043
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951E870E045
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237500AbjEWPUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        id S237396AbjEWPUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237446AbjEWPUQ (ORCPT
+        with ESMTP id S231152AbjEWPUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:20:16 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A96130;
-        Tue, 23 May 2023 08:20:13 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 59E1E280138CF;
-        Tue, 23 May 2023 17:19:56 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 4A91127FF31; Tue, 23 May 2023 17:19:56 +0200 (CEST)
-Date:   Tue, 23 May 2023 17:19:56 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
-        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
-        peterz@infradead.org, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, p.rosenberger@kunbus.com
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-Message-ID: <20230523151956.GB31298@wunner.de>
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
- <20230523074443.GA21236@wunner.de>
- <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
- <4a94b44d-1b51-2656-786e-07bf97063c3f@linux.intel.com>
+        Tue, 23 May 2023 11:20:31 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA398185;
+        Tue, 23 May 2023 08:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=IwWt8vm7YxokOuC3jq5/50QuiT4RbHvoQwVnGhf4iNQ=; b=txnGef5Iy6+K4m6cCJI53kCfJP
+        9YlrYhFEVXZ/e+zxsxl6tGrvVyceNIKnqDpS6+PYQMuAVxmyUln+aNkK9Pqwj+xRzrtoGmNZWFOED
+        lbIrvSLhGFUY7BbZY6/U8sC8FYX+rZJjgtHHJ58wZ0D3e0NWUuCyX6qNDH91/dCPmDvN1IiiW260m
+        gmgUfCTu1oJB6m8J0tp3phRE+ZprQB6o9Xnq8oqzqR/KomVZ3iNGMw6sQZ7ch7DodmS8/rX2p9Gtv
+        1LBIcROOWkEWmexLOBE5xHfOGNPTfIyvjOVix/YpDeBPCokMEigpmol8FWSRAZimBArIe88uS16yi
+        DFGxlLZQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1ToI-00AcZ9-0L;
+        Tue, 23 May 2023 15:20:26 +0000
+Message-ID: <09f31255-e214-01d7-318a-13d712f73837@infradead.org>
+Date:   Tue, 23 May 2023 08:20:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4a94b44d-1b51-2656-786e-07bf97063c3f@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dmaengine: pl330: rename _start to prevent build error
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Jaswinder Singh <jassisinghbrar@gmail.com>,
+        Jaswinder Singh <jassi.brar@samsung.com>,
+        Boojin Kim <boojin.kim@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        dmaengine@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20230523000606.9405-1-rdunlap@infradead.org>
+ <ZGzI+gsYdF6kEHFk@matsya>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ZGzI+gsYdF6kEHFk@matsya>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 12:35:09PM +0300, Péter Ujfalusi wrote:
-> In some boot I don't get a print at all and reboot takes
-> 2 minutes (tpm timeout), or as it happened now:
+
+
+On 5/23/23 07:08, Vinod Koul wrote:
+> On 22-05-23, 17:06, Randy Dunlap wrote:
+>> "_start" is used in several arches and proably should be reserved
+>> for ARCH usage. Using it in a driver for a private symbol can cause
+>> a build error when it conflicts with ARCH usage of the same symbol.
+>>
+>> Therefore rename pl330's "_start" to "_start_thread" so that there
+>> is no conflict and no build error.
 > 
-> # dmesg | grep tpm
-> [    4.306999] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1B, rev-id 22)
-> [    4.325868] [PETER] tpm_tis_process_unhandled_interrupt: unhandled_irqs: 1
-> [    4.325908] [PETER] tpm_tis_process_unhandled_interrupt: unhandled_irqs: 2
-> ...
-> [    4.329579] [PETER] tpm_tis_process_unhandled_interrupt: unhandled_irqs: 91
-> [    5.129056] [PETER] tpm_tis_process_unhandled_interrupt: unhandled_irqs: 1
-> ...
-> [    5.129561] [PETER] tpm_tis_process_unhandled_interrupt: unhandled_irqs: 10
+> Why not rename to pl330_start or pl330_start_thread to ensure we will
+> might not conflict ever!
+> 
 
-This looks like the interrupt line may be floating and any interrupts
-you get are probably caused by induced static or something.
+Ok, will do. Thanks.
 
-Thanks,
-
-Lukas
+-- 
+~Randy
