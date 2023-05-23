@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F8070DD68
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C6D70DD6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbjEWNZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S236570AbjEWN0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjEWNZx (ORCPT
+        with ESMTP id S233843AbjEWN0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:25:53 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C490BFF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:25:48 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id C32A140755F6;
-        Tue, 23 May 2023 13:25:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C32A140755F6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1684848345;
-        bh=0iLXMfAG64un1bK4+l+r1HB734Vlmbk2PlPOZutpnzg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ixefp+5MZcH+kctUKLe0AiWgkUNjiEgHLEXGQtRJysEMRDXjf+YAA55EOmQnCiF3S
-         INbiWJ5fn2erFqwXBZultwEE+1oUW1BP/4jD/RfiDlvGJd8ezSn4dEd8wyoWphMMPY
-         5dVqQEQhqMUeZNqMNDA2hwVWKmD/epQY4xOX0GPw=
+        Tue, 23 May 2023 09:26:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AB811A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:26:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684848398; x=1716384398;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=mlzsDVTQ49ZT9Ot+UB3j8Va0JllC8yQ20xKDPFFUyu0=;
+  b=aaR+XTjFDtlQuSKDfNHwoq/O+x1dKQiJC4zjSFaiAcWVWbok63CLwybi
+   /6H4syiWaUePyQAquaQFif1htGU/i18exiIeQyRVjc/ZHQuks/uFkBkn8
+   gis/rm+XyvyjVYo32HDvSBpIq1877t9ZBzPSx7u3Et7U8hnVS4jv0YN/d
+   Pzcxf23WX/ZO5p14DFPrybvF1Ke9HjONxGDXrhSL+X+xGtWmubzM1pciW
+   CVwjseVNLT9KtkcMQer8uXwXFnjelZigBCkohP59+3ewAzIlEElcCcRAU
+   fJFyenEj1WmBy65kz5AoJ9SdWqO+xyrRUx2Uyg9in1dYYHybWwgCGM5LK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="342693227"
+X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
+   d="scan'208";a="342693227"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 06:26:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="878204268"
+X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
+   d="scan'208";a="878204268"
+Received: from chauvina-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.70])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 06:26:32 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Tom Rix <trix@redhat.com>, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+        ndesaulniers@google.com, ville.syrjala@linux.intel.com,
+        imre.deak@intel.com, arun.r.murthy@intel.com,
+        lucas.demarchi@intel.com
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH] drm/i915: simplify switch to if-elseif
+In-Reply-To: <20230523125116.1669057-1-trix@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230523125116.1669057-1-trix@redhat.com>
+Date:   Tue, 23 May 2023 16:26:29 +0300
+Message-ID: <874jo3kwl6.fsf@intel.com>
 MIME-Version: 1.0
-Date:   Tue, 23 May 2023 16:25:45 +0300
-From:   Alexey Izbyshev <izbyshev@ispras.ru>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
-        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
-Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
-In-Reply-To: <ZGy6q7v+7jsXb1bV@arm.com>
-References: <20230517150321.2890206-1-revest@chromium.org>
- <20230517150321.2890206-4-revest@chromium.org>
- <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
- <884d131bbc28ebfa0b729176e6415269@ispras.ru>
- <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
- <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
- <c63053b0-5797-504d-7896-c86271b64162@redhat.com> <ZGy6q7v+7jsXb1bV@arm.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <f47d587fe5a6285f88191fbb13f367c7@ispras.ru>
-X-Sender: izbyshev@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,54 +68,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-23 16:07, Catalin Marinas wrote:
-> On Tue, May 23, 2023 at 11:12:37AM +0200, David Hildenbrand wrote:
->> Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We 
->> need arg2
->> -> arg5 to be 0. But wouldn't the following also just pass a 0 "int" ?
->> 
->> prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
->> 
->> I'm easily confused by such (va_args) things, so sorry for the dummy
->> questions.
-> 
-> Isn't the prctl() prototype in the user headers defined with the first
-> argument as int while the rest as unsigned long? At least from the man
-> page:
-> 
-> int prctl(int option, unsigned long arg2, unsigned long arg3,
-> 	  unsigned long arg4, unsigned long arg5);
-> 
-> So there are no va_args tricks (which confuse me as well).
-> 
-I have explicitly mentioned the problem with man pages in my response to 
-David[1]. Quoting myself:
+On Tue, 23 May 2023, Tom Rix <trix@redhat.com> wrote:
+> clang with W=1 reports
+> drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated
+>   fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>                 case I915_FORMAT_MOD_X_TILED:
+>                 ^
+>
+> Only one case and the default does anything in this switch, so it should
+> be changed to an if-elseif.
 
-> This stuff *is* confusing, and note that Linux man pages don't even 
-> tell
-that prctl() is actually declared as a variadic function (and for
-ptrace() this is mentioned only in the notes, but not in its signature).
+Thanks for the patch.
 
-The reality:
+If I wanted to fix this quickly, I'd just add the break in there.
 
-* glibc: 
-https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sys/prctl.h;h=821aeefc1339b35210e8918ecfe9833ed2792626;hb=glibc-2.37#l42
+If I wanted to fix this properly, I'd add a function
+modifier_supports_async_flips() or something, and replace the switch
+with:
 
-* musl: 
-https://git.musl-libc.org/cgit/musl/tree/include/sys/prctl.h?h=v1.2.4#n180
+	if (!modifier_supports_async_flips(i915, new_plane_state->hw.fb->modifier)) {
+		drm_dbg_kms(&i915->drm, "[PLANE:%d:%s] Modifier does not support async flips\n",
+			plane->base.base.id, plane->base.name);
+		return -EINVAL;
+	}
 
-Though there is a test in the kernel that does define its own prototype, 
-avoiding the issue: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/sched/cs_prctl_test.c?h=v6.3#n77
+But I wouldn't just replace the switch with if-elseif. It doesn't help
+with the overall feeling that intel_async_flip_check_hw() is too long.
 
-Thanks,
-Alexey
+BR,
+Jani.
 
-[1] 
-https://lore.kernel.org/lkml/7c572622c0d8e283fc880fe3f4ffac27@ispras.ru//lkml/7c572622c0d8e283fc880fe3f4ffac27@ispras.ru
 
-> Any int passed to arg[2-5] would be converted by the compiler to an
-> unsigned long before being passed to the kernel. So I think the change
-> in this patch is harmless as the conversion is happening anyway.
-> 
-> (well, unless I completely missed what the problem is)
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/i915/display/intel_display.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
+> index 0490c6412ab5..1f852e49fc20 100644
+> --- a/drivers/gpu/drm/i915/display/intel_display.c
+> +++ b/drivers/gpu/drm/i915/display/intel_display.c
+> @@ -5994,8 +5994,7 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
+>  		 * Need to verify this for all gen9 platforms to enable
+>  		 * this selectively if required.
+>  		 */
+> -		switch (new_plane_state->hw.fb->modifier) {
+> -		case DRM_FORMAT_MOD_LINEAR:
+> +		if (new_plane_state->hw.fb->modifier == DRM_FORMAT_MOD_LINEAR) {
+>  			/*
+>  			 * FIXME: Async on Linear buffer is supported on ICL as
+>  			 * but with additional alignment and fbc restrictions
+> @@ -6008,13 +6007,10 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
+>  					    plane->base.base.id, plane->base.name);
+>  				return -EINVAL;
+>  			}
+> -
+> -		case I915_FORMAT_MOD_X_TILED:
+> -		case I915_FORMAT_MOD_Y_TILED:
+> -		case I915_FORMAT_MOD_Yf_TILED:
+> -		case I915_FORMAT_MOD_4_TILED:
+> -			break;
+> -		default:
+> +		} else if (!(new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_X_TILED ||
+> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Y_TILED ||
+> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Yf_TILED ||
+> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_4_TILED)) {
+>  			drm_dbg_kms(&i915->drm,
+>  				    "[PLANE:%d:%s] Modifier does not support async flips\n",
+>  				    plane->base.base.id, plane->base.name);
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
