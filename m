@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9583D70E305
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D98870E389
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbjEWQzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S237543AbjEWQ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbjEWQzq (ORCPT
+        with ESMTP id S237870AbjEWQ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:55:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1518FDD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:55:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D72161626
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 16:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0243AC4339B;
-        Tue, 23 May 2023 16:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684860945;
-        bh=pomwoSPiBagnqeBo1aMvvY7T/pCTXzc7pVKQDxkbTdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BJ0MuBn8tEKDAW+Ohjeh71k2Z/7EieejwAIdQ7soPsQyLyaqBKuRhd9TX4x/w5XmB
-         qNRZJAH0VWH+Gz7ha0agE97H0Z4A1AxQ2JQNLE0DYtrOQWziAmMoxUlBvXpF+fu6h8
-         wg3Flh+X5sjlC1GdNZXFfUdGhddTXMzvQ/iolm1McnIdrn/HgRy7DVYHk3R8MVGbHm
-         QqM+etwfEE2M2cAEyV2qfwO/W4Tq6By4WAtf5V/w6WbS+ps3Xaq4tBZ38saaRcM/vX
-         wjOaQMp1e2iKN3TMR8OAWbPpx4lRxbx98ccKOEJ4cgvxdeCTxk2L0dX6xUwPOvpmWo
-         rs9rfEjuZWA7A==
-Date:   Tue, 23 May 2023 17:55:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
-        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 1/2] ASoC: codecs: wsa883x: do not set can_multi_write
- flag
-Message-ID: <00283665-e44f-457b-b2c9-1acf59d1cbd8@sirena.org.uk>
-References: <20230523154605.4284-1-srinivas.kandagatla@linaro.org>
+        Tue, 23 May 2023 12:56:56 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46C91A6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:56:02 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6239ab2b8e0so47797816d6.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:56:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684860961; x=1687452961;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I895gSBgpzDKKLUi/M3iUfQpFGQN//aYkK8LK5AguTA=;
+        b=H+8q953rBaCtbUBjtds4ypyS04rSQaWtkupNxKF2/A1Oudwsu6VeqeyNmNE4ZQVPyb
+         jWGEsoy0Lv6ucIcP5cotvcq8WKJIqTktmE15usRCzFDxUKQp/qICd5lZnytTNXDM0sxr
+         J9YAC0rBXQ8cnhdY6mrSauYpFGl9+uxiK5x1mPug3eVr6GqJfWM1lx/CWRi7UiUiwdKY
+         Se5TDi/HDCGdbWNS1bO1iGau23MQ1RmeGFceohaQzictltml2naSWeb0rrWguoYDD0o4
+         VTZ0D6xqYHiNLuWGip0QGBDa1C4nzVeO3d0tuLwJ5VUSpANZ/+k71/rR2onzK/ZUZDsb
+         zW6g==
+X-Gm-Message-State: AC+VfDx32nSxaMT6/Qib4Y4QDRdaeTp3uncHPu4/R0KpKPCRvOJQG72y
+        v9OBWl+WWfz+G7ejXIq/CLGQ
+X-Google-Smtp-Source: ACHHUZ7flOXCsLoBxKovnaaX/oi0L/ZSk0yhITAbxyTXaocIhbpqrKl1r3JlMCNYZavegSmc6yz+9Q==
+X-Received: by 2002:a05:6214:2aa4:b0:5ef:a772:2731 with SMTP id js4-20020a0562142aa400b005efa7722731mr22618918qvb.11.1684860961501;
+        Tue, 23 May 2023 09:56:01 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id cz10-20020a056214088a00b0062120b054easm2895666qvb.20.2023.05.23.09.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 09:56:01 -0700 (PDT)
+Date:   Tue, 23 May 2023 12:56:00 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 17/24] dm-snap: simplify the origin_dev == cow_dev check
+ in snapshot_ctr
+Message-ID: <ZGzwIGPfRggsU0Ek@redhat.com>
+References: <20230523074535.249802-1-hch@lst.de>
+ <20230523074535.249802-18-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2MlvJV6gocLMBKO+"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230523154605.4284-1-srinivas.kandagatla@linaro.org>
-X-Cookie: Beware of low-flying butterflies.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230523074535.249802-18-hch@lst.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,35 +70,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 23 2023 at  3:45P -0400,
+Christoph Hellwig <hch@lst.de> wrote:
 
---2MlvJV6gocLMBKO+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Use the block_device acquired in dm_get_device for the check instead
+> of doing an extra lookup.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-On Tue, May 23, 2023 at 04:46:04PM +0100, Srinivas Kandagatla wrote:
-> regmap-sdw does not support multi register writes, so there is
-> no point in setting this flag. This also leads to incorrect
-> programming of WSA codecs with regmap_multi_reg_write() call.
-
-> This invalid configuration should have been rejected by regmap-sdw.
-
-Does the CODEC support mulitple writes?  If so it seems better to leave
-the flag set and just do the appropriate fix in the regmap code until
-such time as it's updated to be able to exercise it.
-
---2MlvJV6gocLMBKO+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRs8AoACgkQJNaLcl1U
-h9AWNQf+IPYCRW1gnzWLgW1rC4g+MrykjJLRYtWWmcSWeEZXIsXOZOOTd+SIspbF
-xq5Zao7SjZqfhKbAzBKNw7KCRc65si32UyccKO+iIhrRUQ3kKn3cCuX4sOuiCWmk
-H22WwBb93WnP51cQAMiTMtBa1x+i/W05l4f155sDsj5g/FrP8CqQK/TFxTrGYGLd
-nysG9PKq74NEmvYUeOMkGxprnyGeRbfeT7PWTtQJMCfkkNc7DK3mvCWiCrmX2X7k
-xDPMDocsnGHBs8b0/sw/+e7w40F77Jxn/vlZQs7jiURWnyocxMGcW9qOMhv/aZhb
-GbCKKHEDuCLpeEFOQlarMbKJXRsSiw==
-=qDCW
------END PGP SIGNATURE-----
-
---2MlvJV6gocLMBKO+--
+Reviewed-by: Mike Snitzer <snitzer@kernel.org>
