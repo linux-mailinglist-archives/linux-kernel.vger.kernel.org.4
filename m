@@ -2,113 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022CC70DAE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC77E70DAEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236655AbjEWKwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S236450AbjEWKxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236637AbjEWKvo (ORCPT
+        with ESMTP id S230024AbjEWKxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:51:44 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0342E121;
-        Tue, 23 May 2023 03:50:48 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q1PbI-0006Kn-VK; Tue, 23 May 2023 12:50:45 +0200
-Message-ID: <5d871928-dcd5-3f27-e975-d1639525dad0@leemhuis.info>
-Date:   Tue, 23 May 2023 12:50:42 +0200
+        Tue, 23 May 2023 06:53:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF4EFD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:52:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684839159;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IRwLpBjF3y771Oa2kRIVwXk75u6DRLRrsAa1LNU04Go=;
+        b=a4KlVZ+HIcYMT57oa2hIkwLI28nSkcONROtDIegUThIIEP0vRmGWgXbNjDd+Px6xir/MfQ
+        wipvVOrKAEocmZaSIXhox9lTgJIIx7GmZmJqn3fGerBqrSXmUQ+StFWhOOoEPVfPG8RkJu
+        JEdC80AhRBo4sJF2iVbmEXj3/XD5CSI=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-P4dT9dHEO5me3MiiCxTciA-1; Tue, 23 May 2023 06:52:36 -0400
+X-MC-Unique: P4dT9dHEO5me3MiiCxTciA-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-96fb396ee3dso297993366b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:52:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684839155; x=1687431155;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IRwLpBjF3y771Oa2kRIVwXk75u6DRLRrsAa1LNU04Go=;
+        b=cBOlzpg48hXdIjASBGJUj38yFu8kLdJTOgOgUhw5CSJ37eu9Sj0k2CJFYz98IleFQi
+         NJGhzQxUdBaLOq3HprNAnt4ApenWfNkQHKeVa2S/hKmSq9YCGHQvl8y+USbIF5C1KtQ5
+         Es9m93zlCtdogQ2HyV/31UvfQedHj0SL3j4FoZUGLk2fPhAnWw8joj5aU8leTAcFf8gW
+         sDje4kwRzZ+vWR0MA5fKd4CxhwIMjeaJsnPMe3ThA64ddvPm5PgkzMxKCvaS8kH9KalT
+         L1XkfB9vS1dk2aCaSY5P8Mabwxe8Hp3TdCIXeHBvT+Tz5u4AghrRRa3x0JaNXDYVhoO/
+         zezw==
+X-Gm-Message-State: AC+VfDwKotF9gFUc6OHQLKMpYfrb6xSL9ZGrhBow+JyRqKgNGKpF8EUh
+        mp99sMWud49UrGTb1zX0jVzw2lDSdVmXQY3+dNfDHPL0mc4flg70pBCvi1j/bbimF0aRkqzKoIR
+        stIXtZaEvQW2mYjcs2LT7Zq4E
+X-Received: by 2002:a17:907:8a03:b0:96f:912e:5ec4 with SMTP id sc3-20020a1709078a0300b0096f912e5ec4mr11425489ejc.16.1684839155030;
+        Tue, 23 May 2023 03:52:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5Nbl1Vghh5ZdHqZZ5iGGQDxRmXaZZtG9X7gxBAsJ5YfMawF4xYsFX55IGJIy3Jewaqh9qB7Q==
+X-Received: by 2002:a17:907:8a03:b0:96f:912e:5ec4 with SMTP id sc3-20020a1709078a0300b0096f912e5ec4mr11425469ejc.16.1684839154706;
+        Tue, 23 May 2023 03:52:34 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id gr6-20020a170906e2c600b009658264076asm4247104ejb.45.2023.05.23.03.52.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 03:52:34 -0700 (PDT)
+Message-ID: <7c075199-df5a-2136-8bed-b2be102ed02e@redhat.com>
+Date:   Tue, 23 May 2023 12:52:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [PATCH v2] media: verisilicon: Fix crash when probing encoder
-Content-Language: en-US, de-DE
-To:     Diederik de Haas <didi.debian@cknow.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Michael Tretter <m.tretter@pengutronix.de>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        m.szyprowski@samsung.com, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        hverkuil-cisco@xs4all.nl,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-References: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
- <4995215.LvFx2qVVIh@bagend>
- <7c1bf9c4-f14b-30cd-2610-871f5f512d06@collabora.com>
- <12724349.O9o76ZdvQC@bagend>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <12724349.O9o76ZdvQC@bagend>
+Subject: Re: [PATCH] platform/x86: ISST: Remove 8 socket limit
+Content-Language: en-US, nl
+To:     Steve Wahl <steve.wahl@hpe.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230519160420.2588475-1-steve.wahl@hpe.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230519160420.2588475-1-steve.wahl@hpe.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684839048;0acb48cb;
-X-HE-SMSGID: 1q1PbI-0006Kn-VK
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CCing the Regression list and a bunch of other people that were CCed in
-threads that look related:
+Hi,
 
-On 23.05.23 00:38, Diederik de Haas wrote:
-> On Monday, 22 May 2023 18:17:39 CEST Benjamin Gaignard wrote:
->> Le 20/05/2023 à 00:34, Diederik de Haas a écrit :
->>> On Thursday, 13 April 2023 21:52:50 CEST Nicolas Dufresne wrote:
-> [...]
->>> When I booted into my 6.4-rc1 (but also rc2) kernel on my
->>> Pine64 Quartz64 Model A, I noticed a crash which seems the same as
->>> above, but I didn't have such a crash with my 6.3 kernel.
->>> Searching for 'hantro' led me to this commit as the most likely culprit
->>> but when I build a new 6.4-rcX kernel with this commit reverted,
->>> I still had this crash.
->>> Do you have suggestions which commit would then be the likely culprit?
->>
->> This patch fix the crash at boot time, revert it doesn't seem to be the
->> solution. Maybe this proposal from Marek can help you ?
->>
->> https://patchwork.kernel.org/project/linux-media/patch/20230421104759.2236463-1-m.szyprowski@samsung.com/
+On 5/19/23 18:04, Steve Wahl wrote:
+> Stop restricting the PCI search to a range of PCI domains fed to
+> pci_get_domain_bus_and_slot().  Instead, use for_each_pci_dev() and
+> look at all PCI domains in one pass.
 > 
-> That helped :) After applying that patch I no longer have the crash.
-> Thanks!
+> On systems with more than 8 sockets, this avoids error messages like
+> "Information: Invalid level, Can't get TDP control information at
+> specified levels on cpu 480" from the intel speed select utility.
+> 
+> Fixes: aa2ddd242572 ("platform/x86: ISST: Use numa node id for cpu pci dev mapping")
+> Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
 
-That regression fix is now a month old, but not yet merged afaics --
-guess due to Nicolas comment that wasn't addressed yet and likely
-requires a updated patch.
+Thank you for your patch, I've applied this patch to my fixes
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
 
-Michael afaics a week ago posted a patch that to my *very limited
-understanding of things* (I hope I don't confuse matters here!) seems to
-address the same problem, but slightly differently:
-https://lore.kernel.org/all/20230516091209.3098262-1-m.tretter@pengutronix.de/
+Note it will show up in my fixes branch once I've pushed my
+local branch there, which might take a while.
 
-No reply yet.
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
 
-That's all a bit unfortunate, as it's not how regression fixes should be
-dealt with -- and caused multiple people headaches that could have been
-avoided. :-/
+Regards,
 
-But well, things happen. But it leads to the question:
+Hans
 
-How can we finally address the issue quickly now to ensure is doesn't
-cause headaches for even more people?
 
-Marek, Michael, could you work on a patch together that we then get
-somewhat fast-tracked to Linus to avoid him getting even more unhappy
-about the state of things[1]?
 
-Ciao, Thorsten
+> ---
+>  .../x86/intel/speed_select_if/isst_if_common.c       | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> index e0572a29212e..02fe360a59c7 100644
+> --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> @@ -304,14 +304,13 @@ struct isst_if_pkg_info {
+>  static struct isst_if_cpu_info *isst_cpu_info;
+>  static struct isst_if_pkg_info *isst_pkg_info;
+>  
+> -#define ISST_MAX_PCI_DOMAINS	8
+> -
+>  static struct pci_dev *_isst_if_get_pci_dev(int cpu, int bus_no, int dev, int fn)
+>  {
+>  	struct pci_dev *matched_pci_dev = NULL;
+>  	struct pci_dev *pci_dev = NULL;
+> +	struct pci_dev *_pci_dev = NULL;
+>  	int no_matches = 0, pkg_id;
+> -	int i, bus_number;
+> +	int bus_number;
+>  
+>  	if (bus_no < 0 || bus_no >= ISST_MAX_BUS_NUMBER || cpu < 0 ||
+>  	    cpu >= nr_cpu_ids || cpu >= num_possible_cpus())
+> @@ -323,12 +322,11 @@ static struct pci_dev *_isst_if_get_pci_dev(int cpu, int bus_no, int dev, int fn
+>  	if (bus_number < 0)
+>  		return NULL;
+>  
+> -	for (i = 0; i < ISST_MAX_PCI_DOMAINS; ++i) {
+> -		struct pci_dev *_pci_dev;
+> +	for_each_pci_dev(_pci_dev) {
+>  		int node;
+>  
+> -		_pci_dev = pci_get_domain_bus_and_slot(i, bus_number, PCI_DEVFN(dev, fn));
+> -		if (!_pci_dev)
+> +		if (_pci_dev->bus->number != bus_number ||
+> +		    _pci_dev->devfn != PCI_DEVFN(dev, fn))
+>  			continue;
+>  
+>  		++no_matches;
 
-[1] see
-https://lore.kernel.org/all/CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com/
