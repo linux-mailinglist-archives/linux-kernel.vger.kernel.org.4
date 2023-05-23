@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA1670E65B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DAD70E651
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238193AbjEWURK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S238021AbjEWUPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbjEWURH (ORCPT
+        with ESMTP id S234164AbjEWUPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:17:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29523120
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684872979;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yBM2BC/T1ufxa3+rehpISkT4UVTxaMeNKJrdmGcTYHE=;
-        b=FZF2+7PmxesyVLocBcwttVDErpJT8dN6QzIyP3wf2P2HgR5wX1ofkRKoIfbaOp4S4++aPr
-        dDbzpY89OLMwM0g6zd1coJDbgRHNFJWLGs/nu4iGQDqiVPv5BR4nrV91YDH6c9ybCWOWfC
-        oJMxVCWQIYZ6PsETdOpOv90r7F2vYYI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-ZyBG9gwjMIOeTqnxB5ImZQ-1; Tue, 23 May 2023 16:16:16 -0400
-X-MC-Unique: ZyBG9gwjMIOeTqnxB5ImZQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 23 May 2023 16:15:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2D5129;
+        Tue, 23 May 2023 13:15:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 367763C0F660;
-        Tue, 23 May 2023 20:16:15 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D0E5B1121314;
-        Tue, 23 May 2023 20:16:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZGxfrOLZ4aN9/MvE@infradead.org>
-References: <ZGxfrOLZ4aN9/MvE@infradead.org> <20230522205744.2825689-1-dhowells@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Extending page pinning into fs/direct-io.c
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA75461272;
+        Tue, 23 May 2023 20:15:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10F5C433EF;
+        Tue, 23 May 2023 20:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684872921;
+        bh=bY6N2RxrtkdOJFb0NaV4w4DW0/gqoN0tnW3Zao2HvYs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VtH6B7WzLJnkm8MmBMlZKipm/TbzeB4OX83fSJgoGJ5oQ2CUPK9ftS5U+bOcPV2NY
+         K36tlHrkzJQ7hIKjyEP6+eMmgQucr12O4S8p2F9b4ZW/qy6kcOC0yIpMF36HuWlPgL
+         erqzRg86D56gfnFn66FoSvOhR935/mVd1ep2Qul4MTE5AXfZomouGrlHCUt8Q1VdO1
+         VnzGJj4jYVVecWXH8HALGANFWejiL0IhawonWUGH6apKlvrtXPCqV3xzzEemT6Nqtx
+         keZtujjY5IBag47VzYQHcwZmf0abFZM3rWG79aMOVjeCVRhn4P5j6evgtZfzUdPRrj
+         IWga5Zh5hVcUg==
+Date:   Tue, 23 May 2023 14:16:13 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [PATCH v2][next] scsi: lpfc: Use struct_size() helper
+Message-ID: <ZG0fDdY/PPQ/ijlt@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3068544.1684872971.1@warthog.procyon.org.uk>
-Date:   Tue, 23 May 2023 21:16:11 +0100
-Message-ID: <3068545.1684872971@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+Prefer struct_size() over open-coded versions of idiom:
 
-> But can you please also take care of the legacy direct I/O code?  I'd really
-> hate to leave yet another unfinished transition around.
+sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
 
-I've been poking at it this afternoon, but it doesn't look like it's going to
-be straightforward, unfortunately.  The mm folks have been withdrawing access
-to the pinning API behind the ramparts of the mm/ dir.  Further, the dio code
-will (I think), under some circumstances, arbitrarily insert the zero_page
-into a list of things that are maybe pinned or maybe unpinned, but I can (I
-think) also be given a pinned zero_page from the GUP code if the page tables
-point to one and a DIO-write is requested - so just doing if page == zero_page
-isn't sufficient.
+where count is the max number of items the flexible array is supposed to
+contain.
 
-What I'd like to do is to make the GUP code not take a ref on the zero_page
-if, say, FOLL_DONT_PIN_ZEROPAGE is passed in, and then make the bio cleanup
-code always ignore the zero_page.
+Link: https://github.com/KSPP/linux/issues/160
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v2:
+ - Use literal 1 in call to struct_size(), instead of rap->no_of_objects
+   (Kees Cook). 
 
-Alternatively, I can drop the pin immediately if I get given one on the
-zero_page - it's not going anywhere, after all.
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/99e06733f5f35c6cd62e05f530b93107bfd03362.1684358315.git.gustavoars@kernel.org/
 
-I also need to be able to take an additional pin on a folio that gets split
-across multiple bio submissions to replace the get_page() that's there now.
+ drivers/scsi/lpfc/lpfc_ct.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Alternatively to that, I can decide how much data I'm willing to read/write in
-one batch, call something like netfs_extract_user_iter() to decant that
-portion of the parameter iterator into an bvec[] and let that look up the
-overlapping page multiple times.  However, I'm not sure if this would work
-well for a couple of reasons: does a single bio have to refer to a contiguous
-range of disk blocks?  and we might expend time on getting pages we then have
-to give up because we hit a hole.
-
-Something that I noticed is that the dio code seems to wangle to page bits on
-the target pages for a DIO-read, which seems odd, but I'm not sure I fully
-understand the code yet.
-
-David
+diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
+index e880d127d7f5..f52aeb73af8d 100644
+--- a/drivers/scsi/lpfc/lpfc_ct.c
++++ b/drivers/scsi/lpfc/lpfc_ct.c
+@@ -3747,9 +3747,7 @@ lpfc_vmid_cmd(struct lpfc_vport *vport,
+ 		rap->no_of_objects = cpu_to_be32(1);
+ 		rap->obj[0].entity_id_len = vmid->vmid_len;
+ 		memcpy(rap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
+-		size = RAPP_IDENT_OFFSET +
+-			sizeof(struct lpfc_vmid_rapp_ident_list) +
+-			sizeof(struct entity_id_object);
++		size = RAPP_IDENT_OFFSET + struct_size(rap, obj, 1);
+ 		retry = 1;
+ 		break;
+ 
+@@ -3767,9 +3765,7 @@ lpfc_vmid_cmd(struct lpfc_vport *vport,
+ 		dap->no_of_objects = cpu_to_be32(1);
+ 		dap->obj[0].entity_id_len = vmid->vmid_len;
+ 		memcpy(dap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
+-		size = DAPP_IDENT_OFFSET +
+-			sizeof(struct lpfc_vmid_dapp_ident_list) +
+-			sizeof(struct entity_id_object);
++		size = DAPP_IDENT_OFFSET + struct_size(dap, obj, 1);
+ 		write_lock(&vport->vmid_lock);
+ 		vmid->flag &= ~LPFC_VMID_REGISTERED;
+ 		write_unlock(&vport->vmid_lock);
+-- 
+2.34.1
 
