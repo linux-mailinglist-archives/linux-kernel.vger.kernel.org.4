@@ -2,104 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B1570E9D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 01:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E144670E9D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 01:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbjEWX4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 19:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S238838AbjEWX6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 19:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjEWX4T (ORCPT
+        with ESMTP id S232416AbjEWX6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 19:56:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6ECB5;
-        Tue, 23 May 2023 16:56:17 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQrnC3D1Wz4x2j;
-        Wed, 24 May 2023 09:56:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684886176;
-        bh=L/HSCzAJRUnfX/VKm3lfNCVOb/8Hr3+vA2626SExfiU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tMKrGj+g1XDd6OilaKFpFg/eh3IdfIuVWInAup0NDZx7gE9nl5lcB1dtbObYzWn3w
-         QrFP4iN3Nxs4UZXv2qZDmfvZvszftyCYXQcL2PxS2LFcyQgZeC2Ay6gXF+oCYBnlxa
-         IWFGFuFOShNzjHJs+RjJ1WqyC3a9KXMcZl1OAhRK4PbuMyAELm9w6oNepE2OgigsCY
-         ABdF/DsGCNobIy6GF0bG4VSNgt7UOJ/xzkhpdcsjSYtx8HqN0SdfyHQvPeszubH+J+
-         BebHbXVXZboSb4t0EUmLBUapXnuIviuWgj+jO6AshTXL2sbhpo8+3/m5j35BveZFMA
-         dL/Ni8f4Fbp9g==
-Date:   Wed, 24 May 2023 09:56:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <brauner@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        "J. Bruce Fields" <bfields@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs-brauner tree with the nfsd tree
-Message-ID: <20230524095545.0f70a1e7@canb.auug.org.au>
+        Tue, 23 May 2023 19:58:44 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0440E5;
+        Tue, 23 May 2023 16:58:42 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b33c72686so176069a12.1;
+        Tue, 23 May 2023 16:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684886322; x=1687478322;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7kGogYwbeBpGrkLOt20ejXjOaJrdpOttOMird93sj9w=;
+        b=NdEOGO3k6l7wBWhJ4+HL/Sv/zDh7pgICXiFYQqGANln9esGUDlw4naqTPMyMC3yYT9
+         aTvlCOxmhZ6EWVtnrSsRQ0k2fM7faVnHge/PmuTNLpvWI6SXsXUIrFDDv5Uk0DoIR0lX
+         pi4GBYqo5lRvKWKrUbBbAEK/VGJl5gRYnrM/8KnjgRLyxvLGmY8HMavDJfP/HpP0N8Tq
+         8NdB0hdSFICvUwWu84bjokTr2uG14kUM1OGGLEWj497a13Rf2TIbBzbCqyHP0PjhXT2U
+         htSo7OAHIOKdD9DHO3m1nczKYP4iVqwI2vIo1Y0gbAM4WoYLOltanTDbvlvHg7jpnGE4
+         oHow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684886322; x=1687478322;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7kGogYwbeBpGrkLOt20ejXjOaJrdpOttOMird93sj9w=;
+        b=SqGWriyOeYuyzCB7mMmOoFSjJg2gUG+raEG7gt1yFvobxe3co6kkavdVbcjiO8JIvF
+         INmkM/5RZWTqtzK4bPMTOmdqGduQohphvs+cZ+mIk13UdDK44S+sVp1BCRnPo0POn0rj
+         +Hc+nm8Xl9ukq9DpJWB48fIl+o46ujT5hVY5ElBEH70zKvZd/Ai+ZPcchJwbbc5dfSQt
+         6Zkp1zvnlO/7HF+KoAeKS3RkBjClpDZF5P6nQeSz/aeLJF/mWec6eCOtjFGQCgOExZtq
+         O9bOngR+e0rPTtE5YhA/4/SrOVnQCcqxiWMtBBAmy5FsVwOjiRYYsIMc7g9GoY23vAwX
+         j6tQ==
+X-Gm-Message-State: AC+VfDyWtZmJ3AfAtFz0dE98Wh8rJzXYLTY3WGj7oE4waTDZ/egUgQ5B
+        kVMt5G7zxdFv2xr/ewjBnXwMPeicVSk=
+X-Google-Smtp-Source: ACHHUZ4HVcUZT28fltGJKpZZxxCYxUoPVXGHh/AwKO2FS0XZ/wJJn7C6vCcTiZcyvZdxelWxGwY04g==
+X-Received: by 2002:a17:90b:3146:b0:255:8063:c8dd with SMTP id ip6-20020a17090b314600b002558063c8ddmr5932499pjb.18.1684886322009;
+        Tue, 23 May 2023 16:58:42 -0700 (PDT)
+Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
+        by smtp.gmail.com with ESMTPSA id l11-20020a17090a598b00b002532ddc3a00sm118416pji.15.2023.05.23.16.58.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 16:58:41 -0700 (PDT)
+Date:   Wed, 24 May 2023 07:58:36 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpio: cdev: fix a crash on line-request release
+Message-ID: <ZG1TLBsOy4mZQlW3@sol>
+References: <20230523155101.196853-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ejuOwkyWS6CyxdpTGoG7tsu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523155101.196853-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ejuOwkyWS6CyxdpTGoG7tsu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 23, 2023 at 05:51:01PM +0200, Bartosz Golaszewski wrote:
+> When a GPIO device is forcefully unregistered, we are left with an
+> inactive object. If user-space kept an open file descriptor to a line
+> request associated with such a structure, upon closing it, we'll see the
+> kernel crash due to freeing unexistent GPIO descriptors.
+> 
 
-Hi all,
+nonexistent
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+But I'm not sure that works - gpiod_free() is null aware, so strictly
+speaking "freeing nonexistent GPIO descriptors" isn't the problem.
+You mean orphaned GPIO descriptors?
 
-  fs/nfsd/nfsfh.c
+> Fix it by checking if chip is still alive before calling gpiod_free() in
+> release callbacks for both v2 and v1 ABI.
+> 
+> Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
 
-between commit:
+The problem is also in v1, so do we want to consider backporting a fix
+for that too?
 
-  fed41678532c ("nfsd: don't provide pre/post-op attrs if fh_getattr fails")
+> Reported-by: Kent Gibson <warthog618@gmail.com>
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> ---
+>  drivers/gpio/gpiolib-cdev.c | 22 ++++++++++++++++------
+>  1 file changed, 16 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+> index 0a33971c964c..6830f668a1b0 100644
+> --- a/drivers/gpio/gpiolib-cdev.c
+> +++ b/drivers/gpio/gpiolib-cdev.c
+> @@ -315,13 +315,19 @@ static long linehandle_ioctl_compat(struct file *file, unsigned int cmd,
+>  
+>  static void linehandle_free(struct linehandle_state *lh)
+>  {
+> +	struct gpio_device *gdev = lh->gdev;
 
-from the nfsd tree and commit:
+It isn't clear to me what this is for.
+The flow below now calls gpiod_free() less often, so not that.
+It is there for the normal case??
 
-  1a6f4cbffdf5 ("nfsd: ensure we use ctime_peek to grab the inode->i_ctime")
+>  	int i;
+>  
+> -	for (i = 0; i < lh->num_descs; i++)
+> -		if (lh->descs[i])
+> -			gpiod_free(lh->descs[i]);
+> +	for (i = 0; i < lh->num_descs; i++) {
+> +		if (lh->descs[i]) {
+> +			down_write(&gdev->sem);
+> +			if (gdev->chip)
+> +				gpiod_free(lh->descs[i]);
+> +			up_write(&gdev->sem);
+> +		}
+> +	}
+>  	kfree(lh->label);
+> -	gpio_device_put(lh->gdev);
+> +	gpio_device_put(gdev);
+>  	kfree(lh);
+>  }
+>  
 
-from the vfs-brauner tree.
+lineevent_free() needs the fix too?
 
-I fixed it up (I just used the version from the nsfd tree - which
-removed the code modified by the latter) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+> @@ -1565,17 +1571,21 @@ static ssize_t linereq_read(struct file *file, char __user *buf,
+>  
+>  static void linereq_free(struct linereq *lr)
+>  {
+> +	struct gpio_device *gdev = lr->gdev;
+>  	unsigned int i;
+>  
+>  	for (i = 0; i < lr->num_lines; i++) {
+>  		if (lr->lines[i].desc) {
+>  			edge_detector_stop(&lr->lines[i]);
+> -			gpiod_free(lr->lines[i].desc);
+> +			down_write(&gdev->sem);
+> +			if (gdev->chip)
+> +				gpiod_free(lr->lines[i].desc);
+> +			up_write(&gdev->sem);
+>  		}
+>  	}
+>  	kfifo_free(&lr->events);
+>  	kfree(lr->label);
+> -	gpio_device_put(lr->gdev);
+> +	gpio_device_put(gdev);
+>  	kfree(lr);
+>  }
+>  
 
---=20
+TBH the fact you have to mess with sems here indicates to me the problem
+lies in gpiolib itself.  As a gpiolib client, cdev should just be able to
+release the desc back to gpiolib and have it cleanup the mess.
+
+Not that I ever got my head around the whole gpiolib object lifecycle here
+- for v2 I just followed what v1 did.
+
+Also, gpiolib still reports an error when forceably removing chips that
+have open requests:
+
+    dev_crit(&gdev->dev,
+			 "REMOVING GPIOCHIP WITH GPIOS STILL REQUESTED\n");
+
+Any other gpiolib clients out there that this might impact?
+Else why report that crit error if you expect it is dealt with?
+
+So while this may fix the crash, I can't say I'm happy with it.
+
 Cheers,
-Stephen Rothwell
-
---Sig_/ejuOwkyWS6CyxdpTGoG7tsu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtUp4ACgkQAVBC80lX
-0GyEBwf+I8XMGKNktgTLIrfhhukPptgomuinAmZ0vxij3gc1Z4qbZRgQqXghFvxR
-Sn9utNu/k7l6w3ooCx2novKedVAH2BnikrvgKJK3P7+j9jxa0xVRH7RNnfS38bAZ
-AN16OUf/Lit26AkdeWlT9UUtqMmYy9Ki/4XEQ2IKMNd8QrHqvvM+x+VzgsT3QBG9
-4WYdDXSK4FBcqnvoJUmHKMhYQF7mKqr5cb5u70ruvMhcn5lQTZfTAyUbdx/eiFhn
-IFpt/MIMAqu9Nmq//NQmAR2dEn0WuVaNFuXgKpRr0SDVr7Bb/tsCm4VZhnvaVTWE
-7dLgsK8fJ4dhNpwZ0jxOcoTqTR7vdw==
-=KBXc
------END PGP SIGNATURE-----
-
---Sig_/ejuOwkyWS6CyxdpTGoG7tsu--
+Kent.
