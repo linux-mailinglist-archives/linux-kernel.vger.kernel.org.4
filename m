@@ -2,269 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4EA70D511
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F0470D568
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbjEWHdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S235178AbjEWHmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235502AbjEWHcx (ORCPT
+        with ESMTP id S230146AbjEWHmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:32:53 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20624.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::624])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF5F196
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:32:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ie6I188o0IqWK/Ae+JMNpe1u8zXqGGktrU3OtgJHHmF77xnCeDYYpOB/YcOx70iVq0S64i4YtnK1cBJD8z8EXJLcgKajtzlgiAKeRkqokwB8oMTz4gzR187cEApRG9ArWlASV6l3FUNrZwJYiZZVAIQDHD2oMg8d/yvWHEw96a/fibhcj6tXjTg8+WJ47vf8exmudblXLOwWwOAaJTo0QqIKGhGrPQZuKA5AwauBauOW0umsxYixAVgR+YLp4pdlba2dH/vaequNVwpA381Y17bpyC9nAHFWGPxdKCTQZWt5FknzJ/e/Cvfu1ekK9OtY4/AKW/luu6R4SVEOwnLJSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bWaYzCvZ4TCdv+bfI+ekVDIDQhIJ5QNTtAK6cm16YQM=;
- b=KfJo8ZGz9bR+iDnRYq/5dLMnc9C+93pEV1Oihym+5FGETh6TXreZ9VdzW6K88DwJ92HAIk/XtK6Lnzq/+fjh7Hb1pBTgk57OlUOiORE4yZ94/E0fwQrZU1gGfMjrpOZ111OhBaujBu2v7ZDlwEBp3LnMU4jJB+ylNEoz8gPyRrVMyRUgCV6zbNPT2Z/EclAmwlW65n2xeu6f0Eo34KG4g0SZYey7b5NiFwnQ8skw1XoYpS1duEJ/89/bwmmhvgJVPizYO/cWDV0ELVJo9O4/ERJyGhdrEu8vIOTFFBUCddY56grezpC5RDSXaX36spsIg8ylzKFx8if9D4DC4+NnPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bWaYzCvZ4TCdv+bfI+ekVDIDQhIJ5QNTtAK6cm16YQM=;
- b=DvgKQsBtWuAT3wdT12FxqqPgo9yTvNAJAXqghepnzlWb39FV2jfG0RAxq3dO+eFrGUzQ3h+XbcN3HCXi4FNZakA39Uxck2XaLefUYx+awoxUwUGznm2CPXZq1fduz/O1Zq8xkKVTLD52B1Yshydj/JvfxvEVDeW22AsbG224B1A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by DM6PR12MB4944.namprd12.prod.outlook.com (2603:10b6:5:1ba::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 07:32:00 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::7c50:6c99:76d:f952]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::7c50:6c99:76d:f952%7]) with mapi id 15.20.6411.028; Tue, 23 May 2023
- 07:32:00 +0000
-Message-ID: <2dfeee7c-32bd-c054-22ff-3a2266e62c90@amd.com>
-Date:   Tue, 23 May 2023 13:06:59 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V2 5/9] ASoC: amd: ps: add support for SoundWire DMA
- interrupts
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
- <20230522133122.166841-6-Vijendar.Mukunda@amd.com>
- <fea3c862-1470-7911-ff77-5d945b1d77cf@linux.intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <fea3c862-1470-7911-ff77-5d945b1d77cf@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0216.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:ea::14) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+        Tue, 23 May 2023 03:42:11 -0400
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70730C1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:42:09 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f24d8440c9so5584734e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684827668; x=1687419668;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4wZyjaUrYO5Xjw/wFo4BPyGwBdlavFgudyahjF6yn2E=;
+        b=iWBzBq238XPZUmgsNRYGXz3eUkBALPXoSF5tq6UD5ZSiiI0RZImSYX/ai0fnobWIej
+         1QlymsnXwEC/5sUyfPBB3pfAuxJeUXpoTLj6bzfzqgajfWy/s7vU9xDoxsSJeSRbBJMI
+         6mMR2C0eFpiPNnZ0d4XwtqhJktS6dneCCpyX93XnVkmemajJBq9y3N2c9dFw4Uv/8NNX
+         QlHanj20d4qnUEFX3oUFDtGLlsz+S7MF7TPxvDmHxHMvnj7fwU9gdJRtRAUHyBUwTUnO
+         euaewO/IyPs0+2dWkptCqx+PezhtE1TYdsi3SUtiRKz/VQj6krVE0tR8zJW6ymPT2KOv
+         +smg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684827668; x=1687419668;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4wZyjaUrYO5Xjw/wFo4BPyGwBdlavFgudyahjF6yn2E=;
+        b=UInqTa0p4XJFjVz1zg54DyUmBp8gCoVTT0YPC1Os9c3tRZkwAWxYk6og4etJONYBWJ
+         E899kqZ6Jt07FDVL8op7cg1RvxCyCtL7zn2nkkIPlIS44yPq1CZW39fuRAF7l7bOJw6J
+         s5JefX46sKsErSMb987V4RFqOPj4IjGamDcH52lq1lfJCNA/cy25nGqi1BTBldzecVv8
+         SUTsVS6aMAhj9zxTIWfSCVBXxVjBdrGEq7zcZcRVmGQ02If3dU+Cm//UiUKP+uX7L11g
+         TDqkbc/d1CbMOktTWKYnFKK75YI8OCUcI4Sz3wD8cbs9dwqYWzRARwRbkbgg3AxZMv4M
+         /mcw==
+X-Gm-Message-State: AC+VfDzHIuDFXP/8PdvJrznaScbYHs7r3ulA/kOHhUnXMfZjdpXviia4
+        95WiSA+YMVhDDDR2L64fiHmrvA==
+X-Google-Smtp-Source: ACHHUZ5JTApYb0aX/9JNfjCJOmkANU5UytByVYObQE9VintkX5szjtP2ZvEkmjuLhCCfB97Jd1ZdKQ==
+X-Received: by 2002:ac2:4151:0:b0:4f2:147b:7ee with SMTP id c17-20020ac24151000000b004f2147b07eemr4696431lfi.20.1684827667765;
+        Tue, 23 May 2023 00:41:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
+        by smtp.gmail.com with ESMTPSA id d1-20020ac244c1000000b004f0199e8770sm1270533lfm.65.2023.05.23.00.41.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 00:41:07 -0700 (PDT)
+Message-ID: <2a787639-4fde-0cf2-1dc3-3ed939f9819b@linaro.org>
+Date:   Tue, 23 May 2023 09:41:05 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|DM6PR12MB4944:EE_
-X-MS-Office365-Filtering-Correlation-Id: 778a200b-d8ad-4df0-65f6-08db5b5fcb6a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e9OwTc9KxwvqBq7hSym1aVFUUqbRNS5fFHNELVlymYJCeG+RNEOFr12hPBh7v41HNZ5cVfPAkDfyRzd0y+fGhLtUU9sOju68yQEiuiBRqP5rLxYTTNKNNgbR1TdGj4GM8juZkuWeYOSkpPE0YH2mfVK2A6p0Y0yHa7czQxhqLpLfivMY6Lb/c0jlbTZTjNRmAhWcL64UNXI++Fijv6DLcNS5XGx6KBwjuU+KCeQRbMP2d5ErGmZQzNLoKtVzU1ALiGLSN4wwLumA+JPZi0QE84JIqed7Qu9LVOMimU3el7qdRZF7gl4ZXhmiant1jwkeOPR0jTVm4eBRT9MCywOM/o8MKauIhR9vZzJMziyK8XgrijiAps4j+XgAKXXjGmzrSCZd5CLbbQrnIv/sGOc8TVk/MKM7vHMCg8TuO8USwEuE1jx5Cx055BDu6b4iLfMi2ZUDnNKZdhztr5/C+FVi0bjb6NcMMzsIlQTqFMwJcMMZ01nCFIvvCHw2aoNeXAoBhqN2DcpYzSF/1yv0+zeMiw+7YA9+XQem5miOwOC6FvtdZo1/es1bTED0AT+Z27guf7RNBBuB3FQbTGiuBxr8JS4g4KwTZDUfHGjtMA36DZvi/thPltRgkB/tqNOGKWnNBTvIZjPr4hkvqnPXC5qOiQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(451199021)(41300700001)(66556008)(66476007)(66946007)(2906002)(186003)(478600001)(26005)(6486002)(4326008)(316002)(31686004)(5660300002)(54906003)(6512007)(8936002)(8676002)(53546011)(36756003)(2616005)(6506007)(83380400001)(86362001)(31696002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3pacEdmcGRiOVVGM0U5aWdTS3c0a3JnczVmSlppeTQvdDJKTFpzQXB4UDJk?=
- =?utf-8?B?ZmJQQ3dCQVlkaWdBd0lBQXlCVDQvcDlVVnFiM0o3RU91WEZPRFZJNXZDMk5u?=
- =?utf-8?B?MDF3eUM3dVNDaTZxc1hmMUI4WUI5NWJOUzdNT3VZWXJkUERpZ0U0WHBBT0Jj?=
- =?utf-8?B?blVCOHJSM1NTZVpROVYwU0ZZNTdMRlRpVmRJeU1BQk5tS2hTODJqWEhtdzdj?=
- =?utf-8?B?NXVYY0k1VEVKbWV3aW5UaHo5cUx0RnlPOEtNS3FYUG1MdTdmeTBYRHU1WVc2?=
- =?utf-8?B?UktyakhGTDg3dEdIYUMzTEhmZ0x0N3hwNzZtbUNVVEdjTmFNanM2K3grbERR?=
- =?utf-8?B?MzVMczFlMHFlREc0ZWJOc1JodXNwVkdlWTlkUU9TS1hJMEppOGxKQno5ZEtK?=
- =?utf-8?B?QWVnYnJrNzRnV0JlMWwxbUllOGIrZFZucVlMRUE3a1lIbEJmaUprWFF5b2ll?=
- =?utf-8?B?TllnakRYSVJjU2hUZm54NEJqNVlMUUR1VlB4cFU3SDB2a3FRS1ZmRmdreThR?=
- =?utf-8?B?NmZvNzQyKzAzZUoxSDd0eTFjbXQ0dllBVmh2RTRjREhwREZQUmplVDVSa0E3?=
- =?utf-8?B?RDNjNUgyaXQvWitaYUFXMFVwNXR3WWdXWC9ySXVUS1djenRqUGVqWXE5RThD?=
- =?utf-8?B?emUwQ3N4SDI1bFU0TTgvUGpQZTl1YjlITG92NFBCQllNODFlQlNYNnc0NjRi?=
- =?utf-8?B?cWFrcngyOVBJWGNrME5GeWs2aXdWci9WRlhUaWozZDhkQUNaV01PYk5ibitH?=
- =?utf-8?B?ZWJwUVZ3a0EveFNoMkk0bXdaZUtIdmM3TVp1bE95MlR3NndFbjN3UEo1cmFl?=
- =?utf-8?B?MEtqazRzSlpmL0dza1B5QnZlaXpKSks3bXh5OEt1YTN1TWJUV0VjSkpiZlkz?=
- =?utf-8?B?bkdOYkFnWmdiaEpGeC80VTk4NmR2UGRNclJIZ0ordlFuY3dzdWhpWElzdmNw?=
- =?utf-8?B?VzJkWm1JYnp0NmJEd2VPVUZod1VsMzVpejRVSlZMR2dQZk0rNXhsOEl6NjBV?=
- =?utf-8?B?aXVXQVE1QUVRRzl5T2NXMmRpcElMNUNSaFg5VGd6ZGZqa2RTT3BRd0JrSkxL?=
- =?utf-8?B?VG9PSTBaR1JEeXZITWJsUmlyNVhScWpCNmtpVU5Kc3RsdHVaSDcyT0lKazMv?=
- =?utf-8?B?YWhGN1lqZmJVdE9lTHJTUllvbUtWV2VMZzJDdytqMnNkTVQyOWRUSFJ0eUl4?=
- =?utf-8?B?cERzdTkvWUFGY2M3eFY0RzdBWkFVeXp4cmEvcUdyZnVFUmxBKzJhTEl2OTl0?=
- =?utf-8?B?eUtCUDNzc1dzbkxlYlZXZnRzN2IrYmkxVGV5emUwLzdWSytzUkkxWHBEVmdE?=
- =?utf-8?B?dFJlL2drdkIwdTVFMExQeWhXbitZd2VpR0JqQ2FYblNFcjFxZThXMDFCbmlP?=
- =?utf-8?B?TjZWSEs1Z3llQ1JCSTM3ZDc4d2RzK3NNUkQxT05zWXVIT2IyVGVZYW5NMVRw?=
- =?utf-8?B?MGIwcjJ2YmNVeUU3YXVQaFAwY2Rta2Foem5ocEE4TDBWaWNlRVdqRm5kcEhl?=
- =?utf-8?B?blAvVjd4YXNUank5THl6RzAxUjNRWm5NNktKUnRBRmhLdDlXdnVRTkVNSFdC?=
- =?utf-8?B?MWRyRmZQQTNZaUlLUmY4YmtXeGNhblNUWkJCbWhJeHBja2ZKWU5TRWtMZzNs?=
- =?utf-8?B?WSs3MFMzZ25MWlgxQ25sU2o0M01TUGl4U21aU2dXbGZKSjRzTjV3dzYzQ3JY?=
- =?utf-8?B?MHpMM3dySEg2dU5WQXR5RXZET0V2aTdFKzNyRDNJR0FsL2lYeXNaRW16ZkRU?=
- =?utf-8?B?R0dVQzc3Z3BwU0thZUZJNC9aWGNIa3FFSVNOdXZvQnFPTFROTlpuT0dEamov?=
- =?utf-8?B?S1gxVThieXdMT1o4emErUG5zTXU0N0JhTWwxSStQZDdLQXVCai9nUkt0SWVK?=
- =?utf-8?B?QncrN3dTTjJmT1NnWmtoRmUrd3N4RlhXR1BFL1l2NEw0WkUvQmNKTmV0bDkr?=
- =?utf-8?B?NW5Ec3JsVHNWV29waW9XaGxTcGtobC9JdWZTWXdrbm5GVGliUmxhN2x2MFJv?=
- =?utf-8?B?YXpRM1lBZVhOWU9OcWFFNE15czJlQ2VOZTd2L0VyS2Rjd2RVWk1GTWJiQUJ0?=
- =?utf-8?B?V1V5UDRwZ2djVG9OemJQaWpLY1RkV1pYWUJIRjNVbnRDQU1FSU5yY3N5RFcx?=
- =?utf-8?Q?CY9pTZEpimHTGDvGKZzhuK4VV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 778a200b-d8ad-4df0-65f6-08db5b5fcb6a
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 07:31:59.7872
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3Xqb1nEIjZf4+kbPMST6mlHfZPARfPHYthrw101W+NnSBQnsQFj93T3I/UMC8bbGmqY79LOzXQId9CZNwgCmrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4944
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 08/12] drm/msm/dpu: Add SM6375 support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev
+References: <20230411-topic-straitlagoon_mdss-v4-0-68e7e25d70e1@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v4-8-68e7e25d70e1@linaro.org>
+ <233b9b14-999d-b96f-3a5e-4eb84b1d053b@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <233b9b14-999d-b96f-3a5e-4eb84b1d053b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/23 23:42, Pierre-Louis Bossart wrote:
->
-> On 5/22/23 08:31, Vijendar Mukunda wrote:
->> Initialize workqueue for SoundWire DMA interrupts handling.
->> Whenever audio data equal to the SoundWire FIFO watermark level
->> are produced/consumed, interrupt is generated.
->> Acknowledge the interrupt and schedule the workqueue.
-> It would help to explain why a work queue is needed is the first place,
-> as opposed to handling periods in the interrupt thread.
-For SoundWire DAI link, we are setting nonatomic flag to true.
-If we return period elapsed from hard irq handler instead of workqueue,
-soft lock up is observed during stream closure.
 
-We can use interrupt thread as well. To have a symmetry with
-SoundWire manager work queues, we have used workqueue for
-DMA interrupts.
 
->> +static void acp63_sdw_dma_workthread(struct work_struct *work)
->> +{
->> +	struct acp63_dev_data *adata = container_of(work, struct acp63_dev_data,
->> +						    acp_sdw_dma_work);
->> +	struct sdw_dma_dev_data *sdw_dma_data;
->> +	u32 stream_index;
->> +	u16 pdev_index;
+On 21.05.2023 18:10, Dmitry Baryshkov wrote:
+> On 19/05/2023 20:04, Konrad Dybcio wrote:
+>> Add basic SM6375 support to the DPU1 driver to enable display output.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 153 +++++++++++++++++++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   1 +
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+>>   4 files changed, 156 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+>> new file mode 100644
+>> index 000000000000..5085e7409ff6
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+>> @@ -0,0 +1,153 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+>> + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2023, Linaro Limited
+>> + */
 >> +
->> +	pdev_index = adata->sdw_dma_dev_index;
->> +	sdw_dma_data = dev_get_drvdata(&adata->pdev[pdev_index]->dev);
+>> +#ifndef _DPU_6_9_SM6375_H
+>> +#define _DPU_6_9_SM6375_H
 >> +
->> +	for (stream_index = 0; stream_index < ACP63_SDW0_DMA_MAX_STREAMS; stream_index++) {
->> +		if (adata->sdw0_dma_intr_stat[stream_index]) {
->> +			if (sdw_dma_data->sdw0_dma_stream[stream_index])
->> +				snd_pcm_period_elapsed(sdw_dma_data->sdw0_dma_stream[stream_index]);
->> +			adata->sdw0_dma_intr_stat[stream_index] = 0;
->> +		}
->> +	}
->> +	for (stream_index = 0; stream_index < ACP63_SDW1_DMA_MAX_STREAMS; stream_index++) {
->> +		if (adata->sdw1_dma_intr_stat[stream_index]) {
->> +			if (sdw_dma_data->sdw1_dma_stream[stream_index])
->> +				snd_pcm_period_elapsed(sdw_dma_data->sdw1_dma_stream[stream_index]);
->> +			adata->sdw1_dma_intr_stat[stream_index] = 0;
->> +		}
->> +	}
-> I am not clear on the benefits of the workqueue which only tests a flag
-> that's set ...
-In top half, we are checking all stream irq mask and setting
-corresponding stream id index in interrupt status array when dma
-irq is raised.
+>> +static const struct dpu_caps sm6375_dpu_caps = {
+>> +    .max_mixer_width = DEFAULT_DPU_LINE_WIDTH,
+>> +    .max_mixer_blendstages = 0x4,
+>> +    .qseed_type = DPU_SSPP_SCALER_QSEED4,
+>> +    .has_dim_layer = true,
+>> +    .has_idle_pc = true,
+>> +    .max_linewidth = 2160,
+>> +    .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+>> +};
+>> +
+>> +static const struct dpu_ubwc_cfg sm6375_ubwc_cfg = {
+>> +    .ubwc_version = DPU_HW_UBWC_VER_20,
+>> +    .ubwc_swizzle = 6,
+>> +    .highest_bank_bit = 1,
+>> +};
+>> +
+>> +static const struct dpu_mdp_cfg sm6375_mdp[] = {
+>> +    {
+>> +    .name = "top_0", .id = MDP_TOP,
+>> +    .base = 0x0, .len = 0x494,
+>> +    .features = 0,
+>> +    .clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+>> +    .clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
+>> +    },
+>> +};
+>> +
+>> +static const struct dpu_ctl_cfg sm6375_ctl[] = {
+>> +    {
+>> +    .name = "ctl_0", .id = CTL_0,
+>> +    .base = 0x1000, .len = 0x1dc,
+>> +    .features = BIT(DPU_CTL_ACTIVE_CFG),
+>> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+>> +    },
+>> +};
+>> +
+>> +static const struct dpu_sspp_cfg sm6375_sspp[] = {
+>> +    SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+>> +        sm6115_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+>> +    SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+>> +        sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+>> +};
+>> +
+>> +static const struct dpu_lm_cfg sm6375_lm[] = {
+>> +    LM_BLK("lm_0", LM_0, 0x44000, MIXER_QCM2290_MASK,
+>> +        &qcm2290_lm_sblk, PINGPONG_0, 0, DSPP_0),
+>> +};
+>> +
+>> +static const struct dpu_dspp_cfg sm6375_dspp[] = {
+>> +    DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+>> +        &sm8150_dspp_sblk),
+>> +};
+>> +
+>> +static const struct dpu_pingpong_cfg sm6375_pp[] = {
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+>> +        DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> +        -1),
+>> +};
+>> +
+>> +static const struct dpu_intf_cfg sm6375_intf[] = {
+>> +    INTF_BLK("intf_0", INTF_0, 0x00000, 0x2c0, INTF_NONE, 0, 0, 0, 0, 0),
+> 
+> I think this is 0x280. Or maybe even better would be to drop it (and in sm6350 too).
+It should be 0x280, as other forks of the same base platform have dp here
+(sm6350 is a separate design and has a working dp controller)
 
-Our intention is to handle snd_pcm_period_elapsed in process context.
-if the flag is set, call the period elapsed for the substream based on stream
-id in work queue.
->
->> +}
+> 
+>> +    INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 24, INTF_SC7280_MASK,
+>> +        DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
+>> +        DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
+>> +        DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
+>> +};
 >> +
->>  static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
->>  {
->>  	struct acp63_dev_data *adata;
->>  	struct pdm_dev_data *ps_pdm_data;
->>  	struct amd_sdw_manager *amd_manager;
->>  	u32 ext_intr_stat, ext_intr_stat1;
->> +	u32 stream_id = 0;
->>  	u16 irq_flag = 0;
->> +	u16 sdw_dma_irq_flag = 0;
->>  	u16 pdev_index;
->> +	u16 index;
->>  
->>  	adata = dev_id;
->>  	if (!adata)
->> @@ -148,7 +178,57 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
->>  			snd_pcm_period_elapsed(ps_pdm_data->capture_stream);
->>  		irq_flag = 1;
->>  	}
->> -	if (irq_flag)
->> +	if (ext_intr_stat & ACP_SDW_DMA_IRQ_MASK) {
->> +		for (index = ACP_AUDIO2_RX_THRESHOLD; index <= ACP_AUDIO0_TX_THRESHOLD; index++) {
->> +			if (ext_intr_stat & BIT(index)) {
->> +				writel(BIT(index), adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
->> +				switch (index) {
->> +				case ACP_AUDIO0_TX_THRESHOLD:
->> +					stream_id = ACP_SDW0_AUDIO0_TX;
->> +					break;
->> +				case ACP_AUDIO1_TX_THRESHOLD:
->> +					stream_id = ACP_SDW0_AUDIO1_TX;
->> +					break;
->> +				case ACP_AUDIO2_TX_THRESHOLD:
->> +					stream_id = ACP_SDW0_AUDIO2_TX;
->> +					break;
->> +				case ACP_AUDIO0_RX_THRESHOLD:
->> +					stream_id = ACP_SDW0_AUDIO0_RX;
->> +					break;
->> +				case ACP_AUDIO1_RX_THRESHOLD:
->> +					stream_id = ACP_SDW0_AUDIO1_RX;
->> +					break;
->> +				case ACP_AUDIO2_RX_THRESHOLD:
->> +					stream_id = ACP_SDW0_AUDIO2_RX;
->> +					break;
->> +				}
->> +
->> +				adata->sdw0_dma_intr_stat[stream_id] = 1;
-> .. here ...
-Please refer above comment.
->> +				sdw_dma_irq_flag = 1;
->> +			}
->> +		}
->> +	}
->> +
->> +	/* SDW1 BT RX */
->> +	if (ext_intr_stat1 & ACP_P1_AUDIO1_RX_THRESHOLD) {
->> +		writel(ACP_P1_AUDIO1_RX_THRESHOLD,
->> +		       adata->acp63_base + ACP_EXTERNAL_INTR_STAT1);
->> +		adata->sdw1_dma_intr_stat[ACP_SDW1_AUDIO1_RX] = 1;
-> ... and here ...
->
->> +		sdw_dma_irq_flag = 1;
->> +	}
->> +
->> +	/* SDW1 BT TX*/
->> +	if (ext_intr_stat1 & ACP_P1_AUDIO1_TX_THRESHOLD) {
->> +		writel(ACP_P1_AUDIO1_TX_THRESHOLD,
->> +		       adata->acp63_base + ACP_EXTERNAL_INTR_STAT1);
->> +		adata->sdw1_dma_intr_stat[ACP_SDW1_AUDIO1_TX] = 1;
-> ... or here ...
->
->> +		sdw_dma_irq_flag = 1;
->> +	}
->> +
->> +	if (sdw_dma_irq_flag)
->> +		schedule_work(&adata->acp_sdw_dma_work);
->> +
->> +	if (irq_flag || sdw_dma_irq_flag)
->>  		return IRQ_HANDLED;
->>  	else
->>  		return IRQ_NONE;
+>> +static const struct dpu_vbif_cfg sm6375_vbif[] = {
+> 
+> Please use sdm845_vbif
+Ack
 
+Konrad
+> 
+>> +    {
+>> +    .name = "vbif_0", .id = VBIF_RT,
+>> +    .base = 0, .len = 0x2008,
+>> +    .features = BIT(DPU_VBIF_QOS_REMAP),
+>> +    .xin_halt_timeout = 0x4000,
+>> +    .qos_rp_remap_size = 0x40,
+>> +    .qos_rt_tbl = {
+>> +        .npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
+>> +        .priority_lvl = sdm845_rt_pri_lvl,
+>> +        },
+>> +    .qos_nrt_tbl = {
+>> +        .npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
+>> +        .priority_lvl = sdm845_nrt_pri_lvl,
+>> +        },
+>> +    .memtype_count = 14,
+>> +    .memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+>> +    },
+>> +};
+>> +
+>> +static const struct dpu_perf_cfg sm6375_perf_data = {
+>> +    .max_bw_low = 5200000,
+>> +    .max_bw_high = 6200000,
+>> +    .min_core_ib = 2500000,
+>> +    .min_llcc_ib = 0, /* No LLCC on this SoC */
+>> +    .min_dram_ib = 1600000,
+>> +    .min_prefill_lines = 24,
+>> +    /* TODO: confirm danger_lut_tbl */
+>> +    .danger_lut_tbl = {0xffff, 0xffff, 0x0},
+>> +    .safe_lut_tbl = {0xfe00, 0xfe00, 0xffff},
+>> +    .qos_lut_tbl = {
+>> +        {.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+>> +        .entries = sm6350_qos_linear_macrotile
+>> +        },
+>> +        {.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+>> +        .entries = sm6350_qos_linear_macrotile
+>> +        },
+>> +        {.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+>> +        .entries = sc7180_qos_nrt
+>> +        },
+>> +    },
+>> +    .cdp_cfg = {
+>> +        {.rd_enable = 1, .wr_enable = 1},
+>> +        {.rd_enable = 1, .wr_enable = 0}
+>> +    },
+>> +    .clk_inefficiency_factor = 105,
+>> +    .bw_inefficiency_factor = 120,
+>> +};
+>> +
+>> +const struct dpu_mdss_cfg dpu_sm6375_cfg = {
+>> +    .caps = &sm6375_dpu_caps,
+>> +    .ubwc = &sm6375_ubwc_cfg,
+>> +    .mdp_count = ARRAY_SIZE(sm6375_mdp),
+>> +    .mdp = sm6375_mdp,
+>> +    .ctl_count = ARRAY_SIZE(sm6375_ctl),
+>> +    .ctl = sm6375_ctl,
+>> +    .sspp_count = ARRAY_SIZE(sm6375_sspp),
+>> +    .sspp = sm6375_sspp,
+>> +    .mixer_count = ARRAY_SIZE(sm6375_lm),
+>> +    .mixer = sm6375_lm,
+>> +    .dspp_count = ARRAY_SIZE(sm6375_dspp),
+>> +    .dspp = sm6375_dspp,
+>> +    .pingpong_count = ARRAY_SIZE(sm6375_pp),
+>> +    .pingpong = sm6375_pp,
+>> +    .intf_count = ARRAY_SIZE(sm6375_intf),
+>> +    .intf = sm6375_intf,
+>> +    .vbif_count = ARRAY_SIZE(sm6375_vbif),
+>> +    .vbif = sm6375_vbif,
+>> +    .perf = &sm6375_perf_data,
+>> +    .mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
+>> +             BIT(MDP_SSPP_TOP0_INTR2) | \
+>> +             BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>> +             BIT(MDP_INTF1_INTR) | \
+>> +             BIT(MDP_INTF1_TEAR_INTR),
+>> +};
+>> +
+>> +#endif
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 5ef1dffc27dc..7577572a5ef4 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -809,6 +809,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
+>>   #include "catalog/dpu_6_3_sm6115.h"
+>>   #include "catalog/dpu_6_4_sm6350.h"
+>>   #include "catalog/dpu_6_5_qcm2290.h"
+>> +#include "catalog/dpu_6_9_sm6375.h"
+>>     #include "catalog/dpu_7_0_sm8350.h"
+>>   #include "catalog/dpu_7_2_sc7280.h"
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> index 67ff78e7bc99..3d35fcfaf446 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> @@ -882,6 +882,7 @@ extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
+>> +extern const struct dpu_mdss_cfg dpu_sm6375_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sc8280xp_cfg;
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> index 46be7ad8d615..980c3c8f8269 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> @@ -1287,6 +1287,7 @@ static const struct of_device_id dpu_dt_match[] = {
+>>       { .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
+>>       { .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
+>>       { .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
+>> +    { .compatible = "qcom,sm6375-dpu", .data = &dpu_sm6375_cfg, },
+>>       { .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
+>>       { .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
+>>       { .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
+>>
+> 
