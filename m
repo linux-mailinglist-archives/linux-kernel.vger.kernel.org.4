@@ -2,330 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64A170E5A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4552270E5A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238190AbjEWTfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S238282AbjEWTgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238298AbjEWTfc (ORCPT
+        with ESMTP id S233459AbjEWTgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:35:32 -0400
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6A5E6D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:35:05 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id be849199-f9a0-11ed-abf4-005056bdd08f;
-        Tue, 23 May 2023 22:33:50 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 23 May 2023 22:33:50 +0300
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
-Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
- TPS6594 regulators
-Message-ID: <ZG0VHnEByyMW9i4a@surfacebook>
-References: <20230522163115.2592883-1-eblanc@baylibre.com>
- <20230522163115.2592883-4-eblanc@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522163115.2592883-4-eblanc@baylibre.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 15:36:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CC8184;
+        Tue, 23 May 2023 12:35:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C286635F7;
+        Tue, 23 May 2023 19:35:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A7A3C433D2;
+        Tue, 23 May 2023 19:35:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684870543;
+        bh=8UAWbMOvWVlLXA/9nZRNOtM83fge0RgtLqk1AKszgiM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eox9NlFKpx9DQ9qZDiOfGD014YFndCguOTBgs14k7GKu4oV60R34IIZLhS47P1Ck6
+         gENWYYFrAp3kSW2ANucrEt3EDJoqMOVt+JvP+E6rTzSWmnMa3kTSMoPYCnv3M9xDmx
+         9nub8BSbW4ee6aFGxCnv5c0GS80dtWlzhJowqG3pJv2FeZkt+fXC+g6RyQufhJnqwD
+         lxi8AGG3Isbjgkg7jfZ4ytABoFZiNB42a4MoD6uPWiBNA0EiZIZQKXka3WwWAfFRIW
+         +RoEZO+KUvfspc8Vq18h+ZmqNY1D1BQteFRt1VumM6RY7/wbiJ8w/6kZk0WgFNxjdb
+         qpIXkAhnOLJWA==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 23 May 2023 22:35:38 +0300
+Message-Id: <CSTWRBU7DGSV.3490IUZBBV5P7@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     =?utf-8?q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>
+Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
+        <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <peterz@infradead.org>,
+        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
+        <lukas@wunner.de>, <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+X-Mailer: aerc 0.14.0
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
+In-Reply-To: <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, May 22, 2023 at 06:31:15PM +0200, Esteban Blanc kirjoitti:
-> From: Jerome Neanne <jneanne@baylibre.com>
-> 
-> This patch adds support for TPS6594 regulators (bucks and LDOs).
-
-BUCKs (otherwise $$$?)
-
-> The output voltages are configurable and are meant to supply power
-> to the main processor and other components.
-> Bucks can be used in single or multiphase mode, depending on PMIC
-
-BUCKs (otherwise $$$?)
-
-> part number.
-
-...
-
-> +	help
-> +	  This driver supports TPS6594 voltage regulator chips.
-> +	  TPS6594 series of PMICs have 5 BUCKs and 4 LDOs
-> +	  voltage regulators.
-> +	  BUCKs 1,2,3,4 can be used in single phase or multiphase mode.
-> +	  Part number defines which single or multiphase mode is i used.
-
-i?!
-
-> +	  It supports software based voltage control
-> +	  for different voltage domains.
-
-...
-
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-
-> +#include <linux/of_device.h>
-
-Are you sure this one is correct and / or of.h is not missing? of_match_ptr()
-IIRC is defined in of.h.
-
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/driver.h>
-> +#include <linux/regulator/machine.h>
-> +#include <linux/regulator/of_regulator.h>
-
-...
-
-> +/* Operations permitted on BUCK1/2/3/4/5 */
-> +static const struct regulator_ops tps6594_bucks_ops = {
-> +	.is_enabled		= regulator_is_enabled_regmap,
-> +	.enable			= regulator_enable_regmap,
-> +	.disable		= regulator_disable_regmap,
-> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-> +	.list_voltage		= regulator_list_voltage_linear_range,
-> +	.map_voltage		= regulator_map_voltage_linear_range,
-> +	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
-
-> +
-
-Redundant blank line.
-
-> +};
-
-...
-
-> +	int error;
-> +
-> +	for (j = 0; j < REGS_INT_NB; j++) {
-> +		irq_type = &tps6594_regs_irq_types[j];
-> +		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-> +		if (irq < 0)
-> +			return -EINVAL;
-> +
-> +		irq_data[*irq_idx + j].dev = tps->dev;
-> +		irq_data[*irq_idx + j].type = irq_type;
-> +		irq_data[*irq_idx + j].rdev = rdev;
-> +
-> +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-> +						  tps6594_regulator_irq_handler,
-> +						  IRQF_ONESHOT,
-> +						  irq_type->irq_name,
-> +						  &irq_data[*irq_idx]);
-
-> +		(*irq_idx)++;
-
-This is interesing. So, even in error case we touch given parameter. Usually
-the pattern is not to touch the output if we know there is an error.
-
-> +		if (error) {
-> +			dev_err(tps->dev, "tps6594 failed to request %s IRQ %d: %d\n",
-> +				irq_type->irq_name, irq, error);
-> +			return error;
-> +		}
-> +	}
-
-...
-
-> +	u8 buck_configured[BUCK_NB] = { 0 };
-> +	u8 buck_multi[MULTI_PHASE_NB] = { 0 };
-
-0:s are not needed but I dunno if it's a style in the regulator subsystem.
-
-> +	static const char * const multiphases[] = {"buck12", "buck123", "buck1234", "buck34"};
-> +	static const char *npname;
-> +	int error, i, irq, multi, delta;
-> +	int irq_idx = 0;
-> +	int buck_idx = 0;
-> +	int ext_reg_irq_nb = 2;
-
-> +
-
-Redundant blank line.
-
-> +	enum {
-> +		MULTI_BUCK12,
-> +		MULTI_BUCK123,
-> +		MULTI_BUCK1234,
-> +		MULTI_BUCK12_34,
-
-> +		MULTI_FIRST = MULTI_BUCK12,
-> +		MULTI_LAST = MULTI_BUCK12_34,
-> +		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
-
-		MULT_NUM
-
-will suffice instead all this.
-
-> +	};
-
-But why enum at all? See below.
-
-...
-
-> +	/*
-> +	 * Switch case defines different possible multi phase config
-> +	 * This is based on dts buck node name.
-> +	 * Buck node name must be chosen accordingly.
-> +	 * Default case is no Multiphase buck.
-> +	 * In case of Multiphase configuration, value should be defined for
-> +	 * buck_configured to avoid creating bucks for every buck in multiphase
-> +	 */
-> +	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
-> +		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
-> +		npname = of_node_full_name(np);
-> +		np_pmic_parent = of_get_parent(of_get_parent(np));
-> +		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
-
-Why not of_node_full_name() in the second case?
-
-
-> +			continue;
-> +		delta = strcmp(npname, multiphases[multi]);
-> +		if (!delta) {
-> +			switch (multi) {
-> +			case MULTI_BUCK12:
-
-This all looks like match_string() reinvention.
-
-> +				buck_multi[0] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
-> +				break;
-> +			/* multiphase buck34 is supported only with buck12 */
-> +			case MULTI_BUCK12_34:
-> +				buck_multi[0] = 1;
-> +				buck_multi[1] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
-> +				buck_configured[2] = 1;
-> +				buck_configured[3] = 1;
-> +				break;
-> +			case MULTI_BUCK123:
-> +				buck_multi[2] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
-> +				buck_configured[2] = 1;
-> +				break;
-> +			case MULTI_BUCK1234:
-> +				buck_multi[3] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
-> +				buck_configured[2] = 1;
-> +				buck_configured[3] = 1;
-> +				break;
-> +			}
-> +		}
-> +	}
-
-...
-
-> +	irq_data = devm_kmalloc_array(tps->dev,
-> +				REGS_INT_NB * sizeof(struct tps6594_regulator_irq_data),
-> +				ARRAY_SIZE(tps6594_bucks_irq_types) +
-> +				ARRAY_SIZE(tps6594_ldos_irq_types),
-> +				GFP_KERNEL);
-
-Have you checked overflow.h? There are macros to help with the above calculus.
-
-> +	if (!irq_data)
-> +		return -ENOMEM;
-
-...
-
-> +		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
-> +		if (IS_ERR(rdev))
-> +			return dev_err_probe(tps->dev, PTR_ERR(rdev),
-
-Why not &pdev->dev here?
-
-> +					     "failed to register %s regulator\n",
-> +					     pdev->name);
-
-...
-
-> +		rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
-> +		if (IS_ERR(rdev))
-> +			return dev_err_probe(tps->dev, PTR_ERR(rdev),
-> +					     "failed to register %s regulator\n",
-> +					     pdev->name);
-
-Hmm... Again, why the error is printed against different device than regulator
-registration?
-
-...
-
-> +	/* LP8764 dosen't have LDO */
-> +	if (tps->chip_id != LP8764) {
-> +		for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
-> +			rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
-> +			if (IS_ERR(rdev))
-> +				return dev_err_probe(tps->dev, PTR_ERR(rdev),
-> +						     "failed to register %s regulator\n",
-> +						     pdev->name);
-> +
-> +			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-> +							 tps6594_ldos_irq_types[i],
-> +							 &irq_idx);
-> +			if (error)
-> +				return error;
-> +		}
-> +	}
-> +
-> +	if (tps->chip_id == LP8764)
-
-'else'?
-
-Or actually
-
-	if (tps->chip_id == LP8764) {
-		...
-	} else {
-		the above part
-	}
-
-?
-
-
-> +		ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
-
-...
-
-> +static struct platform_driver tps6594_regulator_driver = {
-> +	.driver = {
-> +		.name = "tps6594-regulator",
-> +	},
-> +	.probe = tps6594_regulator_probe,
-> +};
-
-> +
-
-This blank line is not needed.
-
-> +module_platform_driver(tps6594_regulator_driver);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+On Tue May 23, 2023 at 9:48 AM EEST, P=C3=A9ter Ujfalusi wrote:
+>
+>
+> On 22/05/2023 17:31, Lino Sanfilippo wrote:
+> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> >=20
+> > Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
+> > interrupts instead of polling on all capable TPMs. Unfortunately, on so=
+me
+> > products the interrupt line is either never asserted or never deasserte=
+d.
+> >=20
+> > The former causes interrupt timeouts and is detected by
+> > tpm_tis_core_init(). The latter results in interrupt storms.
+> >=20
+> > Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkP=
+ad
+> > L490 and Inspur NF5180M6:
+> >=20
+> > https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel=
+@redhat.com/
+> > https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa=
+3a78af5a6.camel@kernel.org/
+> >=20
+> > The current approach to avoid those storms is to disable interrupts by
+> > adding a DMI quirk for the concerned device.
+>
+> This looked promising, however it looks like the UPX-i11 needs the DMI
+> quirk.
+
+My take is this:
+
+1. Keep calmd and add DMI quirks (for some time).
+2. Let's reconsider if this becomes a too pressuring issue.
+3. If there is need for IRQ detection, let's pick a parameter that
+   would be also *intuitive* tuning parameter [1].
+
+[1] https://lore.kernel.org/linux-integrity/CSTW9UX4ERDZ.VBD1QIWLBM75@suppi=
+lovahvero/
+
+BR, Jarkko
