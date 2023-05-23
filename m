@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6224970CFF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C185170CFF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234773AbjEWBBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        id S234361AbjEWBBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234560AbjEWBAo (ORCPT
+        with ESMTP id S233801AbjEWBB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:00:44 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ACC196;
-        Mon, 22 May 2023 17:58:34 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-534696e4e0aso3863748a12.0;
-        Mon, 22 May 2023 17:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684803514; x=1687395514;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m/TN5H2z3LpXN/tgkrSVUCXuSpR0rK3XhYwk0PjuaCI=;
-        b=SIwN3J9dLeEEUFNtNtwBysRaT7B//5MeVsP8eyBLenB9tLtdAzIMNcTrapemETi0lu
-         f1Cl5tIL63VPLJx5Q4LKuB75//+F2jh8mbJ1zUsBqcsOwmUTvolshbVb+UArw5bCYJtY
-         nR1UAg5TqImG47wr6VeaWs+oPgbunaMFFcpx8C/tHeyQ/jMkpa1LLA81tlUTjMNy6v2/
-         1bOMr1PAY2Xg/TarKOHVxPAf+Z2BhYkonq/Nr8yStZ8kZqgFN9B1CoCX5shd0QpEz5ee
-         UrceODeCBkUTnIcd7TCgqTiKbZatsGgAWuIqz2+pdr8856jkJI9JgitwY0ks2V4JS5C0
-         JAIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684803514; x=1687395514;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m/TN5H2z3LpXN/tgkrSVUCXuSpR0rK3XhYwk0PjuaCI=;
-        b=Yzx57jCBkXQV8S8HGN/lKMLGWqhGyEX8IsxuZvjAuS1JRuOlCOlJiCz0K6ekwA2o1A
-         q25gtVnHlNyL/2bV6ua+E7EF1/4LHm3uXkxpSS9jN/Vmsyl3YhMI9zOFL7gcq0JaGgxI
-         X0cVGNoM6RfRjT4kM3pwB1mpZQS7mO/xhXl56UsAY1UhYjFeX5kycaBtslCf6HSYEBY3
-         9Vr31tx3KNg9w7jtToyNxunXjbwTFQdORn9/wgTPZCJIiAYqojRvtbAH4syttrgxnY/k
-         ZuT5c15PaanB8hEW0X01/eD75s+fsViRpXEAvuZHDaF+Ef+m7En1ILJKf9zCNjmdO5Xh
-         AlAg==
-X-Gm-Message-State: AC+VfDwvJXIBeqUI00hfgsQr8m42Mu75/37kQp0hPIg+VAEowBZ/7qSv
-        2wv4gnO7KyEYUgBJsf+Yq5o=
-X-Google-Smtp-Source: ACHHUZ5pW0WgPZKvATk/xZ1Socp7ec7BFUpiko1vlkAvxBEG7EBNK6x9a9f/nA9U72TmTSC+B7koQQ==
-X-Received: by 2002:a17:902:c153:b0:1ac:988e:2624 with SMTP id 19-20020a170902c15300b001ac988e2624mr13628616plj.37.1684803513520;
-        Mon, 22 May 2023 17:58:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:39c])
-        by smtp.gmail.com with ESMTPSA id i1-20020a635401000000b0051b36aee4f6sm4914044pgb.83.2023.05.22.17.58.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 17:58:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 22 May 2023 14:58:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Finn Thain <fthain@linux-m68k.org>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH RESEND 01/13] scsi: ncr53c8xx: Use default @max_active
- for hostdata->work_q
-Message-ID: <ZGwPt4VNs1RhWpvn@slm.duckdns.org>
-References: <20230509015032.3768622-1-tj@kernel.org>
- <20230509015032.3768622-2-tj@kernel.org>
- <ZGmGZxYmN0En7wAB@slm.duckdns.org>
- <yq1v8gkm3aq.fsf@ca-mkp.ca.oracle.com>
+        Mon, 22 May 2023 21:01:26 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BB61FE5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:59:34 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 34N0wVrm004304
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 20:58:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1684803515; bh=ymmSexEkCD0tfWO58p9Lq+Z1QefxVwW0r/fcykmyXek=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=H6gAtjsQgMcmk5aJVQgnBL1f+4JZW6DpUL1rUsQDkrAdNIVeAfcrzUN58ULgYU9tn
+         h08rXJwLOsL3vIx4+1pew7qVUvsIWPzAaeKbosdSaUcaBKidY1OcamN6bGvIzijurp
+         dKTitmCa4ASwTyoBTimLoPPtafgVLlFDe2+y1Uy3au/xEseaPerlPI/1hPdb1qdJZW
+         O+/M/Upy2msYQ+LHvEPK8rheF8zVbJV1CaMj7G54cpEHVgL7ExzOp8imVsq5L2/YNn
+         xzJU5QsCk2/SbYoMJlyfFhaGozlJSb2N98LHueRHOKs9MfH0tjnM4aQGrIWDIkyHIn
+         INrBvKm62N/eA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id C2BCC15C052B; Mon, 22 May 2023 20:58:31 -0400 (EDT)
+Date:   Mon, 22 May 2023 20:58:31 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/292] 6.1.30-rc1 review
+Message-ID: <20230523005831.GE230989@mit.edu>
+References: <20230522190405.880733338@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <yq1v8gkm3aq.fsf@ca-mkp.ca.oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230522190405.880733338@linuxfoundation.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 06:06:56PM -0400, Martin K. Petersen wrote:
-> 
-> Hi Tejun!
-> 
-> > Subject: scsi: ncr53c8xx: Use default @max_active for hostdata->work_q
-> >
-> > hostdata->work_q only hosts a single work item, hostdata->main_task, and
-> > thus doesn't need explicit concurrency limit. Let's use the default
-> > @max_active. This doesn't cost anything and clearly expresses that
-> > @max_active doesn't matter.
-> 
-> > It's not a must but it'd be great if I can route this through the workqueue
-> > tree so that it can go together with other related and followup cleanups.
-> 
-> As Finn pointed out, please make sure it's tagged NCR5380: instead of
-> ncr53c8xx:. Otherwise OK.
-> 
-> Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
+On Mon, May 22, 2023 at 08:05:57PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.30 release.
+> There are 292 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-Will update and apply to wq/for-6.5-cleanup-ordered.
+Tested-by: Theodore Ts'o <tytso@mit.edu>
 
-Thank you.
+No regressions found for ext4.
 
--- 
-tejun
+				- Ted
+
+TESTRUNID: ltm-20230522173053
+KERNEL:    kernel 6.1.30-rc1-xfstests-00293-ge00a3d96f756 #26 SMP PREEMPT_DYNAMIC Mon May 22 17:25:13 EDT 2023 x86_64
+CMDLINE:   full --kernel gs://gce-xfstests/kernel.deb
+CPUS:      2
+MEM:       7680
+
+ext4/4k: 530 tests, 32 skipped, 4755 seconds
+ext4/1k: 526 tests, 1 failures, 45 skipped, 5810 seconds
+  Flaky: generic/475: 80% (4/5)
+ext4/ext3: 522 tests, 1 failures, 121 skipped, 4805 seconds
+  Failures: generic/347
+ext4/encrypt: 508 tests, 3 failures, 139 skipped, 2729 seconds
+  Failures: generic/681 generic/682 generic/691
+ext4/nojournal: 525 tests, 3 failures, 100 skipped, 4619 seconds
+  Failures: ext4/301 ext4/304 generic/455
+ext4/ext3conv: 527 tests, 3 failures, 33 skipped, 4535 seconds
+  Failures: generic/347
+  Flaky: generic/475: 40% (2/5)   generic/645: 20% (1/5)
+ext4/adv: 527 tests, 4 failures, 40 skipped, 4432 seconds
+  Failures: generic/477
+  Flaky: generic/455: 60% (3/5)   generic/475: 80% (4/5)   
+    generic/482: 40% (2/5)
+ext4/dioread_nolock: 528 tests, 1 failures, 32 skipped, 5437 seconds
+  Flaky: generic/475: 20% (1/5)
+ext4/data_journal: 526 tests, 3 failures, 100 skipped, 4571 seconds
+  Failures: generic/231 generic/347 generic/455
+ext4/bigalloc_4k: 502 tests, 1 failures, 37 skipped, 4430 seconds
+  Flaky: generic/077: 20% (1/5)
+ext4/bigalloc_1k: 502 tests, 1 failures, 55 skipped, 5167 seconds
+  Failures: shared/298
+ext4/dax: 517 tests, 135 skipped, 2763 seconds
+Totals: 6324 tests, 869 skipped, 83 failures, 0 errors, 53773s
+
+FSTESTIMG: gce-xfstests/xfstests-amd64-202303031351
+FSTESTPRJ: gce-xfstests
+FSTESTVER: blktests 676d42c (Thu, 2 Mar 2023 15:25:44 +0900)
+FSTESTVER: fio  fio-3.31 (Tue, 9 Aug 2022 14:41:25 -0600)
+FSTESTVER: fsverity v1.5-6-g5d6f7c4 (Mon, 30 Jan 2023 23:22:45 -0800)
+FSTESTVER: ima-evm-utils v1.3.2 (Wed, 28 Oct 2020 13:18:08 -0400)
+FSTESTVER: nvme-cli v1.16 (Thu, 11 Nov 2021 13:09:06 -0800)
+FSTESTVER: quota  v4.05-53-gd90b7d5 (Tue, 6 Dec 2022 12:59:03 +0100)
+FSTESTVER: util-linux v2.38.1 (Thu, 4 Aug 2022 11:06:21 +0200)
+FSTESTVER: xfsprogs v6.1.1 (Fri, 13 Jan 2023 19:06:37 +0100)
+FSTESTVER: xfstests-bld 2e60cef3 (Thu, 23 Feb 2023 15:02:58 -0500)
+FSTESTVER: xfstests v2023.02.26-8-g821ef4889 (Thu, 2 Mar 2023 10:23:51 -0500)
+FSTESTVER: zz_build-distro bullseye
+FSTESTSET: -g auto
+FSTESTOPT: aex
