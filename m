@@ -2,124 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA12E70E4D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5D170E4CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238198AbjEWSiE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 14:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S237901AbjEWSh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbjEWShf (ORCPT
+        with ESMTP id S237047AbjEWShZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:37:35 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA13018B;
-        Tue, 23 May 2023 11:37:20 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso108858166b.0;
-        Tue, 23 May 2023 11:37:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684867022; x=1687459022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FOckud4CsGpi42vHzY/iN1xEHfyZzu8tYLlnQmf3XXU=;
-        b=lPIgigwZ11iBv8vgKFH9/Ir3BNZpyjgySuC1i1WFp3quETnbhTdcsMvkIczDcTNYXs
-         Pd/Z8dqB3bXIgfzQEQ2gaCjus3zjd2VQpsCl3e28JeeWkdo2jchb8a3ch7rE1EVwV+Er
-         +mnJ9B4tkQA43cmK/bai/cAhBdGZvaBg82H3mUtr96fkuiW28UO2N8i6Vp6b+r09xNpe
-         9OJvJ6pUihSJAalsJ9NV5vCB+z4UPZ8H3dkRG1JHzjEG7MGk9n88r/BiFrzw5bz9fjs/
-         BSeEEf0KexWhWQYPpncR+Sxk+z026FBT8tq9RdQyg4GZpNXBAsddQPYlrcqAR89whnfV
-         K2Ag==
-X-Gm-Message-State: AC+VfDxukIGenn0F+ZJeCtjC39DSnGkh4hpB0K4wMr7pAMkiOkl3qwdV
-        OtfdQUgRPGCsKQ9egjDQ59DGRpmOYlloeHGjcaw=
-X-Google-Smtp-Source: ACHHUZ6nbFDPqkJycDJLopbKTUzhoYKAgpRsCSCy+ygpw6i+jItGXHdrxW/6BlRArGGvUIQ7qUgo8pqVVYhtrNaQv8U=
-X-Received: by 2002:a17:906:6495:b0:966:2210:4065 with SMTP id
- e21-20020a170906649500b0096622104065mr14890560ejm.4.1684867022285; Tue, 23
- May 2023 11:37:02 -0700 (PDT)
+        Tue, 23 May 2023 14:37:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168C41B5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:37:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCB6B62DAD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 18:37:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E45A2C433D2;
+        Tue, 23 May 2023 18:37:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684867032;
+        bh=85tRnbat52B6IBzDM3UnXuQ+f5nD406kWabSowIdwAA=;
+        h=From:Subject:Date:To:Cc:From;
+        b=HY+7SGEPmz+PnYzd1K19s5ZCB3+KfWVyYeEwSBtbkUaxVK7rl8J+bKYn6GJGHnzaS
+         AczhTNPG9As3HLTI4bQuSHVUoFLRQjcSfYx1XyuvUIK8xR4OvlAVTgcKBcZNqd2xuE
+         AO5kvpF5ZyJVoNhMnXzwvutuNHjk93lVS1dmv6frNerMjbHVEJca8Qq/UBMtGKZK7G
+         ietkpOULcJhaeUApHmlvRn1Ct9tEEdaya6lgyUOS7XV7XaDxCGoy10kYlGNeQcZ0y7
+         ZsggIjgS81MWC07h764HkakYr45DUIk4slMSm9QaxCV4sxl/inKRZ83kSUSYq7AcEV
+         A5EmeN+DtUQnQ==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/7] arm64/sysreg: More conversions to automatic
+ generation
+Date:   Tue, 23 May 2023 19:36:58 +0100
+Message-Id: <20230419-arm64-syreg-gen-v2-0-4c6add1f6257@kernel.org>
 MIME-Version: 1.0
-References: <20230523074535.249802-1-hch@lst.de> <20230523074535.249802-22-hch@lst.de>
-In-Reply-To: <20230523074535.249802-22-hch@lst.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 May 2023 20:36:51 +0200
-Message-ID: <CAJZ5v0grAY02dx__4=ezxT=HuPU=2gD6bErV2fYTQiv5mRL1yg@mail.gmail.com>
-Subject: Re: [PATCH 21/24] PM: hibernate: don't use early_lookup_bdev in resume_store
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMoHbWQC/3WNQQ6CMBAAv0L27BoopFJP/sNwaMtSGrQ1W4MSw
+ t8t3D3OJJNZIRF7SnAtVmCaffIxZBCnAuyogyP0fWYQpajLplKo+SkbTAuTQ0cBjdC6VdK0epC
+ QK6MToWEd7Lh3n8jTrl9Mg/8eo3uXefTpHXk5vnO12/+LucISVS1tf5HKGkW3iTjQ4xzZQbdt2
+ w8w/8I3xgAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, Mark Brown <broonie@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Shaoqin Huang <shahuang@redhat.com>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1297; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=85tRnbat52B6IBzDM3UnXuQ+f5nD406kWabSowIdwAA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkbQfPNZeWD+F+ZKEYK9wEDhAlMa3SfFD2Oh7/dB2S
+ xAkMEVCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZG0HzwAKCRAk1otyXVSH0HxVB/
+ 43QaDputTKF3OtYBvgFUGwvbT4F88iC4/286aS8jpxDLBL22TKRy8grVT/EGGi3SXKNBsCCYKofvgs
+ nQtKK1axKn8Ks/CIcMluLJAyz80IIre0WlpjgMd3Ma3cYB9ZvktetN5uWDHsa2vMCpVKKELSRkHUxl
+ 8CjAWObXBwOVX/3odXCeQHvH9xvsBbYiQiUaCOAuF4LvYcOXakGGiNjFcVGP+WcTxZU9uifITYDrTA
+ TvLC+Yfv64kQyz5Pxgaw8F3ZSYRcUDTVscFBgEo9MOv8xbmQoFs3fT5bRrmuJLTILMewFvB67aApVW
+ g/c7S+YI5yvsz9kmCYnVLv9nNwalIs
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 9:46 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> resume_store is a sysfs attribute written during normal kernel runtime,
-> and it should not use the early_lookup_bdev API that bypasses all normal
-> path based permission checking, and might cause problems with certain
-> container environments renaming devices.
->
-> Switch to lookup_bdev, which does a normal path lookup instead, and fall
-> back to trying to parse a numeric dev_t just like early_lookup_bdev did.
->
-> Note that this strictly speaking changes the kernel ABI as the PARTUUID=
-> and PARTLABEL= style syntax is now not available during a running
-> systems.  They never were intended for that, but this breaks things
-> we'll have to figure out a way to make them available again.  But if
-> avoidable in any way I'd rather avoid that.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Fixes: 421a5fa1a6cf ("PM / hibernate: use name_to_dev_t to parse resume")
+Continue working through the register defintions, converting them to
+automatic generation.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Also convert OSECCR_EL1, OSDTRRX_EL1 and OSDTRTX_EL1 instead of
+  dropping them.
+- Link to v1: https://lore.kernel.org/r/20230419-arm64-syreg-gen-v1-0-936cd769cb9e@kernel.org
 
-> ---
->  kernel/power/hibernate.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index c52dedb9f7c8e8..7ae95ec72f9902 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -1178,7 +1178,23 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
->         if (!name)
->                 return -ENOMEM;
->
-> -       error = early_lookup_bdev(name, &dev);
-> +       error = lookup_bdev(name, &dev);
-> +       if (error) {
-> +               unsigned maj, min, offset;
-> +               char *p, dummy;
-> +
-> +               if (sscanf(name, "%u:%u%c", &maj, &min, &dummy) == 2 ||
-> +                   sscanf(name, "%u:%u:%u:%c", &maj, &min, &offset,
-> +                               &dummy) == 3) {
-> +                       dev = MKDEV(maj, min);
-> +                       if (maj != MAJOR(dev) || min != MINOR(dev))
-> +                               error = -EINVAL;
-> +               } else {
-> +                       dev = new_decode_dev(simple_strtoul(name, &p, 16));
-> +                       if (*p)
-> +                               error = -EINVAL;
-> +               }
-> +       }
->         kfree(name);
->         if (error)
->                 return error;
-> --
-> 2.39.2
->
+---
+Mark Brown (7):
+      arm64/sysreg: Convert MDCCINT_EL1 to automatic register generation
+      arm64/sysreg: Convert MDSCR_EL1 to automatic register generation
+      arm64/sysreg: Standardise naming of bitfield constants in OSL[AS]R_EL1
+      arm64/sysreg: Convert OSLAR_EL1 to automatic generation
+      arm64/sysreg: Convert OSDTRRX_EL1 to automatic generation
+      arm64/sysreg: Convert OSDTRTX_EL1 to automatic generation
+      arm64/sysreg: Convert OSECCR_EL1 to automatic generation
+
+ arch/arm64/include/asm/kvm_host.h |  2 +-
+ arch/arm64/include/asm/sysreg.h   | 16 +++---------
+ arch/arm64/kvm/sys_regs.c         | 10 +++----
+ arch/arm64/tools/sysreg           | 55 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 65 insertions(+), 18 deletions(-)
+---
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+change-id: 20230419-arm64-syreg-gen-b2aa896b8af6
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
