@@ -2,123 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9CE70DD9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAFD70DD9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236752AbjEWNhm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 09:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S236746AbjEWNjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236664AbjEWNhj (ORCPT
+        with ESMTP id S235887AbjEWNjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:37:39 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F61DCA;
-        Tue, 23 May 2023 06:37:38 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-96ffba243b1so52377366b.0;
-        Tue, 23 May 2023 06:37:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684849057; x=1687441057;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        Tue, 23 May 2023 09:39:09 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236E1E9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:39:08 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-439494cbfedso676099137.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684849147; x=1687441147;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lTOVQSwHwdcqFwCeAzjs0914zunxaGgHWWXc+AF0OJE=;
-        b=QQ5PZ3+lerpuhhbqdaubz2QdUnxhcypeTEJz/CRiK7FNamO14RJ4Gt+BSJdrH/8+5U
-         MfeeBaOsklbULdmTPG4n60tya8i1Fl6wcsqJSNm2vUJ275xHq8vZfxUg0xXMko0CRFh6
-         19cDoB/uxyES+6w7FOZf6O4koJYDzetPHt/Kel+b2dBw4x4akrqIT8RknLkVEUWSkQi8
-         B2AMBq3XKlKHfU9NN9SdIej4+mIHCAnjCP9Ws3PwcD39jrV798DrS5BJAXX5NXXuEvBi
-         aqRZBpcvpZKL9WmorwP39kdwbQAh7+glGm9E8s/hTtmAcLWfdVEtRtuypTNNl2Llo3e5
-         HA4A==
-X-Gm-Message-State: AC+VfDwNYFrz5KHoKrZFnIRUgZKA50qPUlTMLUSVljY3ATrX75oCWq5i
-        PCf8oFFwczOTpXhHmr0KrJ1sNrEm5i0hwMz8cZk=
-X-Google-Smtp-Source: ACHHUZ7+vL++Xxy2h/4Tq46DRc3VvN3aqVV1T9mjBb/FJbkyCUkTal8gSVhHA2wxAoSPqFqdJQ4R3BHuW288pLHbZN0=
-X-Received: by 2002:a17:906:7a50:b0:94a:5f0d:d9d6 with SMTP id
- i16-20020a1709067a5000b0094a5f0dd9d6mr10904249ejo.4.1684849056661; Tue, 23
- May 2023 06:37:36 -0700 (PDT)
+        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
+        b=seB0BW52cIqQpYVG1g9Ozjia0uoZ6SCPaIZCwJ8LzHphPCtCJJtu7UhiMw1Wddc/LN
+         6l6mqKbI6VN7605L38yMh/N6fuR5xsvwl3v5q8rq2ciQQhtP7xzhUMmxl88D3bRjPTTO
+         oyvBQekd7g9s/cIkcZN2rSp4Yy9LhxPyqMyYU6AU1G/OmgRvkAn37wR/PnrImgoRQtGB
+         ZcWWNP+xCe1e3HsLW8DeSZCKwaDSG96uWV6GimrHSc0xPMtlE0emauQ50cujf06HCCiM
+         +OU+7NYA1CfFEzoDacpYVOHL/XlbOSvWM8yLO+CmA8szkVqu5VCVkCMGbh+nhJLmFtjK
+         WMig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684849147; x=1687441147;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
+        b=hAJkKIQmdhLJXahMgxpZ5QNdk6D1PnY3+WXmi2hW8K50xc8OoLOVrlogcPbFoEBw92
+         rJpLxHsVC6Fm/LHnSBAk7c1T4bp+y2vIN+qrsRovtMur2cmFJHi+UEOLnFgm6vUWWIAv
+         HWavcxwH1vNryfq79uheNbAao2XIM4fdVPXwRZedrpQwsm2j8mgo8DR1M0Xbp0amQTsB
+         LUgqTF0VZcSgaWpIwCy1AkuJeN0DMvyXMaRtaSFtqW2LQPd4YyAW8lGtvkLz+0E6AT+h
+         tK5ddFoW+C5l1+66wort1XO65pdD3NUZtIC/JAeONAdDTPKadhdZr5xQsV/axMLt/JXu
+         AbFQ==
+X-Gm-Message-State: AC+VfDxtY6N+hlgU5AwRt9zdBfTsgDAWvXcgTNShjyLPKOWG8T4I3s/p
+        Q3loWI71JIDYhcTAj+arkuyySS/SHMRCyeg75GQ=
+X-Google-Smtp-Source: ACHHUZ4AsxV58LUXd5LZn53JxGE7OlAAD74m+1dt0zr+vpwcvKojg1gL6TmaXq408b6mCOgZjZXgi8+SYjZSUrDEdCw=
+X-Received: by 2002:a67:fc8a:0:b0:434:66e3:74b4 with SMTP id
+ x10-20020a67fc8a000000b0043466e374b4mr3534108vsp.8.1684849146914; Tue, 23 May
+ 2023 06:39:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230523085045.29391-1-kweifat@gmail.com> <CAJZ5v0ifp1088wY7o=7pnBVBm=_3H0M4sfq6=gmyChZD6R9g1g@mail.gmail.com>
- <b5e35f904174905d8f90df3f49944b22389126c7.camel@linux.intel.com>
-In-Reply-To: <b5e35f904174905d8f90df3f49944b22389126c7.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 May 2023 15:37:25 +0200
-Message-ID: <CAJZ5v0ioQm95ZQ5LCCoDtVNX1TVQN_=sgzB_RRe5SAOOucpWJg@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Avoid initializing variables prematurely
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Fieah Lim <kweifat@gmail.com>, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Received: by 2002:a59:b9b0:0:b0:3d6:a455:74b7 with HTTP; Tue, 23 May 2023
+ 06:39:06 -0700 (PDT)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <abudumimi920@gmail.com>
+Date:   Tue, 23 May 2023 15:39:06 +0200
+Message-ID: <CAFNbOJST9XjSc5oi+e93VXk3BQ4tzNxav=JxeS1zwPDkq1bqXw@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 2:20 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Tue, 2023-05-23 at 13:08 +0200, Rafael J. Wysocki wrote:
-> > On Tue, May 23, 2023 at 10:51 AM Fieah Lim <kweifat@gmail.com> wrote:
-> > >
-> > > We should avoid initializing some rather expensive data
-> > > when the function has a chance to bail out earlier
-> > > before actually using it.
-> > > This applies to the following initializations:
-> > >
-> > >  - cpudata *cpu = all_cpu_data; (in everywhere)
-> > >  - this_cpu = smp_processor_id(); (in notify_hwp_interrupt)
-> > >  - hwp_cap = READ_ONCE(cpu->hwp_cap_cached); (in
-> > > intel_pstate_hwp_boost_up)
-> > >
-> > > These initializations are premature because there is a chance
-> > > that the function will bail out before actually using the data.
-> > > I think this qualifies as a micro-optimization,
-> > > especially in such a hot path.
-> > >
-> > > While at it, tidy up how and when we initialize
-> > > all of the cpu_data pointers, for the sake of consistency.
-> > >
-> > > A side note on the intel_pstate_cpu_online change:
-> > > we simply don't have to initialize cpudata just
-> > > for the pr_debug, while policy->cpu is being there.
-> > >
-> > > Signed-off-by: Fieah Lim <kweifat@gmail.com>
-> > > ---
-> > > V1 -> V2: Rewrite changelog for better explanation.
-> > >
->
-> [...]
->
-> > >  void notify_hwp_interrupt(void)
-> > >  {
-> > > -       unsigned int this_cpu = smp_processor_id();
-> > > +       unsigned int this_cpu;
-> > >         struct cpudata *cpudata;
-> > >         unsigned long flags;
-> > >         u64 value;
-> > > @@ -1591,6 +1593,8 @@ void notify_hwp_interrupt(void)
-> > >         if (!(value & 0x01))
-> > >                 return;
-> > >
-> > > +       this_cpu = smp_processor_id();
-> > > +
-> > >         spin_lock_irqsave(&hwp_notify_lock, flags);
-> > >
-> > >         if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
-> >
-> > This is a place where it may really matter for performance, but how
-> > much?  Can you actually estimate this?
->
-> If DEBUG_PREEMPT is defined
-> ~12 instructions (most of them with latency = 1 in dependency chain)
-
-I really meant "estimate the effect of this change on performance",
-because I'm not sure if it is going to be visible in any test.
-
-But yes, skipping it if not needed at least makes some sense.
+-- 
+Hello Dear
+My name is Dr Ava Smith,a medical doctor from United States.
+I have Dual citizenship which is English and French.
+I will share pictures and more details about me as soon as i get
+a response from you
+Thanks
+Ava
