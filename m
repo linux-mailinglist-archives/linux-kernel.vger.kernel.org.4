@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5E670E5ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3115670E612
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238483AbjEWTsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S229666AbjEWTzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjEWTsM (ORCPT
+        with ESMTP id S229614AbjEWTzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:48:12 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6F7119
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:48:11 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so170682b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684871291; x=1687463291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gh8j09IDsIastTGK+qUQekVYXvc0e9ghy+aokO8ek64=;
-        b=W9xFM/f2wG4wJ1XqimQRGjAZPjNIZDk0zqHNwAfaL2L6+GT/GKtwSsGy4ZbPYkddyI
-         a81kW4q1x9unuM8EEvYoYc7sZjn1xl8Hvk55euaZRb42OHIKNrrbAnAkAKcaxYj/+m8F
-         yZQAETL4r5IoMBlblG9DCo8hcoIU5wvty+aW3bKZC2Xt6zxNE/VOXoIO+Z1M7BClhsC4
-         moh9Kz0jY4Ff2Xn0lZRlxkqh/ygHpbSm+TFT3Vdii1FUjY/q8mYWR1Wyr0cUVAyEvr1J
-         vCjbTD0q9Zg9TUNJIWMILwcSLMwaPbVzvsuJXJCe0qn5Xw/0eeVVZtfdCCwTbiaS1dqZ
-         aDTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684871291; x=1687463291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gh8j09IDsIastTGK+qUQekVYXvc0e9ghy+aokO8ek64=;
-        b=WdxYAj+1ZDjSX5c0/iAuv1v1qkcvRs27pbqsMgKu7fwS6FnqxhXgoJM8H7GDNCg8xY
-         2v+Gp2JzaV7L8X9nY1vO7v/uGg7YEdcEHyL47Iv/xjku9G4/xDhcZo5im52MIcOnsQyl
-         nrBM/B7srGcb/NW4rZXw75Pk+EtupNEtLAelEVXtU76ZSDOZNLejURnxOzGX+DAT/VsS
-         bwVL51KPzMdrsg6Ku/GwfQ03jHSySWPTFuQ3u3SAyTwuasvHseRtgYIl6s2GinvNj7WG
-         3xl7XScH53MAR1uGZW//9qcqMCaNTDk+kfBf+7hbeZ4MhWOb6Qf3HOs2SDwSzpfhdyRx
-         75nw==
-X-Gm-Message-State: AC+VfDyegbenUZ3C5jXOOTtw7ZQB8Fr6L+tFoSrk8HzMp5sPJKHjP9wo
-        gd8j5n8UsIPPYImDaUdUecA=
-X-Google-Smtp-Source: ACHHUZ6JDKKFT83gO/cAC16Eg14RrI7fQKz2iGQ8UaXaInuQjbRH1+AxteAJNly09N8IRr9SyjsSNw==
-X-Received: by 2002:a05:6a20:3953:b0:10c:2fe0:b3d with SMTP id r19-20020a056a20395300b0010c2fe00b3dmr5608260pzg.33.1684871290987;
-        Tue, 23 May 2023 12:48:10 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id d22-20020a631d16000000b0050be8e0b94csm6312497pgd.90.2023.05.23.12.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 12:48:10 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 23 May 2023 09:48:09 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Zqiang <qiang.zhang1211@gmail.com>
-Cc:     jiangshanlai@gmail.com, naresh.kamboju@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] workqueue: Fix warning triggered when nr_running is
- checked in worker_enter_idle()
-Message-ID: <ZG0YeeTZNox8YB25@slm.duckdns.org>
-References: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
- <ZG0WoOqfr6R5wK1p@slm.duckdns.org>
+        Tue, 23 May 2023 15:55:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22042E5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:54:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684871691;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IUxmQ5P+MH9SvOjqUd5l2+YQ2XDFMIly2tHjSWnRkr0=;
+        b=JkAGHIDyuP8mRGOIu37kVJXBN6ruA6E4p+Nk1lJ9MiLNCpfruNb1ryMZnabSJxtANmnUsr
+        p2FZVAhIChI8gbjYp9p+CzZoK9qTj8RIGtmknoetJHk+brq/vYAqBHBI/uKVaTxrTtjnh0
+        788mBWHFohUHw5C3wbL325udH5yxfy0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-gNeZnkYYM_a-OP0OnxG1Tw-1; Tue, 23 May 2023 15:54:47 -0400
+X-MC-Unique: gNeZnkYYM_a-OP0OnxG1Tw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 06664185A78B;
+        Tue, 23 May 2023 19:54:47 +0000 (UTC)
+Received: from work.redhat.com (unknown [10.39.193.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 794E4492B00;
+        Tue, 23 May 2023 19:54:45 +0000 (UTC)
+From:   Tim Wiederhake <twiederh@redhat.com>
+To:     "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@redhat.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Tim Wiederhake <twiederh@redhat.com>
+Subject: [PATCH 1/2] x86/msr: Read MSRs individually
+Date:   Tue, 23 May 2023 21:49:48 +0200
+Message-Id: <20230523194949.96149-1-twiederh@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG0WoOqfr6R5wK1p@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Reading from /dev/cpu/*/msr with buffer size > 8 would read the data
+of the same msr repeatedly instead of the data for consecutive msrs,
+as one might expect.
 
-On Tue, May 23, 2023 at 09:40:16AM -1000, Tejun Heo wrote:
-> On Tue, May 23, 2023 at 10:09:41PM +0800, Zqiang wrote:
-> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> > index 9c5c1cfa478f..329b84c42062 100644
-> > --- a/kernel/workqueue.c
-> > +++ b/kernel/workqueue.c
-> > @@ -1144,13 +1144,12 @@ void wq_worker_tick(struct task_struct *task)
-> >  	 * longer than wq_cpu_intensive_thresh_us, it's automatically marked
-> >  	 * CPU_INTENSIVE to avoid stalling other concurrency-managed work items.
-> >  	 */
-> > -	if ((worker->flags & WORKER_NOT_RUNNING) ||
-> > +	if ((worker->flags & WORKER_NOT_RUNNING) || worker->sleeping ||
-> >  	    worker->task->se.sum_exec_runtime - worker->current_at <
-> >  	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
-> >  		return;
-> 
-> Ah, right, this isn't just interrupted read-modify-write. It has to consider
-> sleeping. This is subtle. We'll definitely need more comments. Will think
-> more about it.
+Solve by restricting MSR reads to one per call.
 
-So, there already are enough barriers to make this safe but that's kinda
-brittle because e.g. it'd depend on the barrier in preempt_disable() which
-is there for an unrelated reason. Can you please change ->sleeping accesses
-to use WRITE/READ_ONCE() and explain in wq_worker_tick() that the worker
-doesn't contribute to ->nr_running while ->sleeping regardless of
-NOT_RUNNING and thus the operation shouldn't proceed? We probably need to
-make it prettier but I think that should do for now.
+Signed-off-by: Tim Wiederhake <twiederh@redhat.com>
+---
+ arch/x86/kernel/msr.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-Thanks.
-
+diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
+index 7bb17d37db01..058f2b67d0c7 100644
+--- a/arch/x86/kernel/msr.c
++++ b/arch/x86/kernel/msr.c
+@@ -58,24 +58,17 @@ static ssize_t msr_read(struct file *file, char __user *buf,
+ 	u32 reg = *ppos;
+ 	int cpu = iminor(file_inode(file));
+ 	int err = 0;
+-	ssize_t bytes = 0;
+ 
+-	if (count % 8)
++	if (count < 8)
+ 		return -EINVAL;	/* Invalid chunk size */
+ 
+-	for (; count; count -= 8) {
+-		err = rdmsr_safe_on_cpu(cpu, reg, &data[0], &data[1]);
+-		if (err)
+-			break;
+-		if (copy_to_user(tmp, &data, 8)) {
+-			err = -EFAULT;
+-			break;
+-		}
+-		tmp += 2;
+-		bytes += 8;
+-	}
++	err = rdmsr_safe_on_cpu(cpu, reg, &data[0], &data[1]);
++	if (err)
++		return err;
++	if (copy_to_user(tmp, &data, 8))
++		return -EFAULT;
+ 
+-	return bytes ? bytes : err;
++	return 8;
+ }
+ 
+ static int filter_write(u32 reg)
 -- 
-tejun
+2.39.2
+
