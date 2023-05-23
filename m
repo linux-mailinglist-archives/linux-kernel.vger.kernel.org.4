@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BB270E634
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEAD70E638
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238337AbjEWUF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S238429AbjEWUGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjEWUFz (ORCPT
+        with ESMTP id S238394AbjEWUGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:05:55 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79422119
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 13:05:53 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 1YGTqQZli8SAU1YGUqtl2T; Tue, 23 May 2023 22:05:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684872351;
-        bh=/qnVISKWAXZmn6jEXPdze5Xj6qd0T4Dgd6h8vC+mfcc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=t1dh+jmR482GRURFMLHX3TH45TMiVwJO/YRzPkTDZBW9mml9ATt7EUN01FeX4eOlM
-         Pzsznu124bZpiSGr8FwOmeXtcSvV5bxO1zjLQ7JyjfZixW0UNAouvatqe4VaGYJIhi
-         lzzeo+/OPIvnFSUytrqD0OiXa4EB0YG4nrE9ihdWTqkuQPOqaI4fzNWKNPkHgwC42w
-         I09+0uPof0sFrJJbggdkeeok57kvZLO2kL7x0kfpGg0m1pUGF/p6GFgPcashr9G23C
-         xIZzG3OGtcCdl+scHMt0SYzVTHhRFRzE7UiCka5tROJV8jG+BjWLagBsNd23kfMQB0
-         oj5GiiKHuCV2Q==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 23 May 2023 22:05:51 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <b9207257-b04f-ee2e-7025-015b0f22358a@wanadoo.fr>
-Date:   Tue, 23 May 2023 22:05:49 +0200
+        Tue, 23 May 2023 16:06:30 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C203129;
+        Tue, 23 May 2023 13:06:28 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-75b2a2bf757so18941185a.2;
+        Tue, 23 May 2023 13:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684872387; x=1687464387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qSW6rXyGbQGmEN3ktoptl4ak25Rdgx7VmobuefrY3YY=;
+        b=aJEi+7FrI3UOyZ7DbnigoJO6CoihKNoxOGkQzE2nhOrhmVaSalsssq1715aEqkQoaa
+         IS815EgmFiaUcPC1HMZ7EhxZSsPOUocHKxNOHDXRoe6+PsTOqt3VX9fCz0FHi3u9gnSt
+         dfdOAa+wlsPs1Qqv4jHwU6Fl/p22DaoS30zit/hjfMp9oICsxmeMDPpDhxduJZAZ8Ze5
+         13x436B/m0WtPi4bfuSm7YHer8wydH0/W+PR3p0NJC6I7wVRWt76y5mp/XbtUTI8J83u
+         mbHNVDo+mSPGbVOZE5TfWwAauFfjUyrsWDQkRFicxFZfYxMqwcpVS+XNaebJHNUUl3HU
+         1TUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684872387; x=1687464387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qSW6rXyGbQGmEN3ktoptl4ak25Rdgx7VmobuefrY3YY=;
+        b=ZYL1lzM7AzMs9VJJ0ilS/xRmC9LciCqlTI5pzGvLsiKF/UHe+7YiU7F1YXhhxVVWbL
+         fRxAInHHg2zPTjaQ/pdsrYfIgTLGTbLjxaK71LNIoFZwSEAttkXeDsMQJquNmOT2tS2S
+         P+bxw2+NTzfh/EPAMDWzdkb5KDAk3sjYF8G/536KVEFpqq5RUWZcXWvYOU7eqsm2KBke
+         xPfs5+133KfSR9blrNT6IuAex0PrxH2Gw47DWf8wINFmGK/sgq0mzAYSOqpvsx4l+j6K
+         HxiOcrP0beCXP3ndf8tZyKqYiqAnWyaZMPBVZyxhh7omMsTVeY/U2vhFsfQMN/5S6pf2
+         Z7fA==
+X-Gm-Message-State: AC+VfDyX5Xe7gaGPX2JcBWq8DApiDGDB2H85zmVhXoxVOo22d1Vxbdn5
+        jWpptCo80UeHtl8ivRqiwQ==
+X-Google-Smtp-Source: ACHHUZ7B3IUuwCKszv5APiktFZhDjNZsHNfvFxrXDzxHR5FhVHSeoU5KBwP4KdDGQVCgfr6ksMnWNg==
+X-Received: by 2002:a05:620a:2b2e:b0:75b:23a1:3649 with SMTP id do46-20020a05620a2b2e00b0075b23a13649mr5464137qkb.10.1684872387249;
+        Tue, 23 May 2023 13:06:27 -0700 (PDT)
+Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:c32:b55:eaec:a556])
+        by smtp.gmail.com with ESMTPSA id p5-20020a05620a15e500b0074def53eca5sm2724975qkm.53.2023.05.23.13.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 13:06:26 -0700 (PDT)
+Date:   Tue, 23 May 2023 13:06:22 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Pedro Tammela <pctammela@mojatatu.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Vlad Buslov <vladbu@nvidia.com>
+Subject: Re: [PATCH v2 net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+Message-ID: <ZG0cvurl/jqU4DdE@C02FL77VMD6R.googleapis.com>
+References: <cover.1684796705.git.peilin.ye@bytedance.com>
+ <8e3383d0bacd084f0e33d9158d24bd411f1bf6ba.1684796705.git.peilin.ye@bytedance.com>
+ <5b28cd6f-d921-b095-1190-474bcce89e53@mojatatu.com>
+ <ZGxD1U4fI8SNSNOW@C02FL77VMD6R.googleapis.com>
+ <e462a91e-8bea-8b72-481c-4a36699e4149@mojatatu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] pinctrl:sunplus: Add check for kmalloc
-Content-Language: fr, en-US
-To:     andy.shevchenko@gmail.com,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Cc:     Wells Lu <wellslutw@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1684836688-9204-1-git-send-email-wellslutw@gmail.com>
- <ZGztCHNr1jmpFq0A@surfacebook>
- <1560e9c0e5154802ab020b9da846d65f@sphcmbx02.sunplus.com.tw>
- <ZG0V6_bUaz3Thy0q@surfacebook>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <ZG0V6_bUaz3Thy0q@surfacebook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e462a91e-8bea-8b72-481c-4a36699e4149@mojatatu.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 23/05/2023 à 21:37, andy.shevchenko@gmail.com a écrit :
-> Tue, May 23, 2023 at 05:39:51PM +0000, Wells Lu 呂芳騰 kirjoitti:
->>>> Fix Smatch static checker warning:
->>>> potential null dereference 'configs'. (kmalloc returns null)
+On Tue, May 23, 2023 at 08:36:35AM -0300, Pedro Tammela wrote:
+> > Thanks for testing this, but the syzbot reproducer creates ingress Qdiscs
+> > under TC_H_ROOT, which isn't covered by [6/6] i.e. it exercises the
+> > "!ingress" path in qdisc_graft().  I think that's why you are still seeing
+> > the oops.  Adding sch_{ingress,clsact} to TC_H_ROOT is no longer possible
+> > after [1,2/6], and I think we'll need a different reproducer for [5,6/6].
 > 
-> ...
+> I was still able to trigger an oops with the full patchset:
 > 
->>>>   			configs = kmalloc(sizeof(*configs), GFP_KERNEL);
->>>> +			if (!configs)
->>>
->>>> +				return -ENOMEM;
->>>
->>> "Fixing" by adding a memory leak is not probably a good approach.
->>
->> Do you mean I need to free all memory which are allocated in this subroutine before
->> return -ENOMEM?
-> 
-> This is my understanding of the code. But as I said... (see below)
-> 
-> ...
-> 
->>>>   			configs = kmalloc(sizeof(*configs), GFP_KERNEL);
->>>> +			if (!configs)
->>>> +				return -ENOMEM;
->>>
->>> Ditto.
-> 
-> ...
-> 
->>> It might be that I'm mistaken. In this case please add an explanation why in the commit
->>> message.
-> 
-> ^^^
-> 
+> [  104.944353][ T6588] ------------[ cut here ]------------
+> [  104.944896][ T6588] jump label: negative count!
+> [  104.945780][ T6588] WARNING: CPU: 0 PID: 6588 at kernel/jump_label.c:263
+> static_key_slow_try_dec+0xf2/0x110
+> [  104.946795][ T6588] Modules linked in:
+> [  104.947111][ T6588] CPU: 0 PID: 6588 Comm: repro Not tainted
+> 6.4.0-rc2-00191-g4a3f9100193d #3
+> [  104.947765][ T6588] Hardware name: QEMU Standard PC (i440FX + PIIX,
+> 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> [  104.948557][ T6588] RIP: 0010:static_key_slow_try_dec+0xf2/0x110
+> [  104.949064][ T6588] Code: d5 ff e8 c1 33 d5 ff 44 89 e8 5b 5d 41 5c 41 5d
+> c3 44 89 e5 e9 66 ff ff ff e8 aa 33 d5 ff 48 c7 c7 00 9c 56 8a e8 4e ce 9c
+> ff <0f> 0b eb ae 48 89 df e8 02 4b 28 00 e9 42 ff ff ff 66 66 2e 0f 1f
+> [  104.951134][ T6588] RSP: 0018:ffffc900079cf2c0 EFLAGS: 00010286
+> [  104.951646][ T6588] RAX: 0000000000000000 RBX: ffffffff9213a160 RCX:
+> 0000000000000000
+> [  104.952269][ T6588] RDX: ffff888112f83b80 RSI: ffffffff814c7747 RDI:
+> 0000000000000001
+> [  104.952901][ T6588] RBP: 00000000ffffffff R08: 0000000000000001 R09:
+> 0000000000000000
+> [  104.953523][ T6588] R10: 0000000000000001 R11: 0000000000000001 R12:
+> 00000000ffffffff
+> [  104.954133][ T6588] R13: ffff88816a514001 R14: 0000000000000001 R15:
+> ffffffff8e7b0680
+> [  104.954746][ T6588] FS:  00007f76c65d56c0(0000) GS:ffff8881f5a00000(0000)
+> knlGS:0000000000000000
+> [  104.955430][ T6588] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  104.955941][ T6588] CR2: 00007f9a40357a50 CR3: 000000011461e000 CR4:
+> 0000000000350ef0
+> [  104.956559][ T6588] Call Trace:
+> [  104.956829][ T6588]  <TASK>
+> [  104.957062][ T6588]  ? clsact_egress_block_get+0x40/0x40
+> [  104.957507][ T6588]  static_key_slow_dec+0x60/0xc0
+> [  104.957906][ T6588]  qdisc_create+0xa45/0x1090
+> [  104.958274][ T6588]  ? tc_get_qdisc+0xb70/0xb70
+> [  104.958646][ T6588]  tc_modify_qdisc+0x491/0x1b70
+> [  104.959031][ T6588]  ? qdisc_create+0x1090/0x1090
+> [  104.959420][ T6588]  ? bpf_lsm_capable+0x9/0x10
+> [  104.959797][ T6588]  ? qdisc_create+0x1090/0x1090
 
-Hmmm, not so sure.
+Ah, qdisc_create() calls ->destroy() even "if ops->init() failed".  We
+should check sch->parent in {ingress,clsact}_destroy() too.  I'll update
+[1,2/6] in v5.
 
-Should be looked at more carefully, but
-   dt_to_map_one_config		(in /drivers/pinctrl/devicetree.c)
-     .dt_node_to_map
-       --> sppctl_dt_node_to_map
+Thanks for reporting this!  Seems like I should've run the reproducer
+nevertheless.  I'll run it before posting v5.
 
-Should dt_to_map_one_config() fail, pinctrl_dt_free_maps() is called
-(see 
-https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/devicetree.c#L281)
-
-pinctrl_dt_free_maps() calls dt_free_map(), which calls .dt_free_map, so 
-pinctrl_utils_free_map()
-(see 
-https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/sunplus/sppctl.c#L978)
-
-Finally the needed kfree seem to be called from here.
-(see 
-https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/pinctrl-utils.c#L119)
-
-
-*This should obviously be double checked*, but looks safe to me.
-
-
-BUT, in the same function, the of_get_parent() should be undone in case 
-of error, as done at the end of the function, in the normal path.
-This one seems to be missing, should a memory allocation error occur.
-
-
-Just my 2c,
-
-CJ
+Thanks,
+Peilin Ye
 
