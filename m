@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB9570DFAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5018070DFB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237308AbjEWOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S237381AbjEWOwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbjEWOwD (ORCPT
+        with ESMTP id S229906AbjEWOwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:52:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECA5FC6;
-        Tue, 23 May 2023 07:52:01 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC95F139F;
-        Tue, 23 May 2023 07:52:46 -0700 (PDT)
-Received: from [10.57.57.35] (unknown [10.57.57.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C22D03F840;
-        Tue, 23 May 2023 07:51:59 -0700 (PDT)
-Message-ID: <641cb79d-fe79-3873-3698-fec66a4e3253@arm.com>
-Date:   Tue, 23 May 2023 15:51:58 +0100
+        Tue, 23 May 2023 10:52:34 -0400
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B98CD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:52:31 -0700 (PDT)
+Received: by mail-vk1-xa2c.google.com with SMTP id 71dfb90a1353d-4573e1e6cb9so2183889e0c.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684853550; x=1687445550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ov2Oc5u8alrp0ryIFZXMwNl4tyhrsxmBV9Vytekedzo=;
+        b=UJRngDC45gNZB0uv4K61y64oN3KbgM3BohvZdO5c08tcvtp9hK4Bl2BP7/PikIv+0F
+         s++3/65K8/zgPQMqnPLkaze8pMY6d4YDZU0X2MUDL0GOA5otArPyKJ1l5aVzame8PfqE
+         FM5XVVdClec9fPtFuagtmYRAS9KANqaS47w1O3AKGYAXaYIupJ0pW5p1gjF409MfvX9q
+         Pa5UCgM15Sy5H8OtP4/eZ6PS91vgLV0AquMhmYEGzeIVCuuYFsPVY1TsxNHbfDQWXzyt
+         bcfk3SiSZkXxRtYWSc/wooRw0gIVqwY/AJIY7PYoTFZFpWVTy2uRVdypDhGrKVrEvGtb
+         CW5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684853550; x=1687445550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ov2Oc5u8alrp0ryIFZXMwNl4tyhrsxmBV9Vytekedzo=;
+        b=idEsVWv6ojGD5XWtXVy2VuOBnahzyKeARJUqs9/BOSk1fu/ZxJ8Q16su1V6+LpiBxb
+         dwo6G1nYvA0c/D1wCBYIDdY6e4uhFS4ItUbsB32w72ChM28+tdYNvyu8wCeriUH/Eqe0
+         inGzKoRAhS6rzYyLcDYhBDgyzFU8x1CsG9kdHgojqxS2P53VD11W87Y23g95gQx0KWxf
+         M3hHzTgJyeK3nB2qgNLOyGf4cAx4/cy4w7DYPb980MH8RJLm10uwKuv9panq0c61uo50
+         D00HrKA66p1MDd13Ss1zxdN/FkUmqssOJzolAPtqrduW0PuKDRNRvRHNRs/nAkhSewDU
+         eyfw==
+X-Gm-Message-State: AC+VfDx974RpMIOwqK+H87sI5NGUBvr1bC0frmOoOZ7M4YvSq/9eI7K6
+        u9Kn+SHw2V1xMo4mVIIFKYZLIC5f7iAY4bkovssg/w==
+X-Google-Smtp-Source: ACHHUZ4rLhiSLlZC6XKl4l8eJWxiJ974uFE/cyJULYWv7+FRJPNbBowssp4UizoTjhEOG2R8fSqVsglW7XwIgDYE27M=
+X-Received: by 2002:a05:6102:3d95:b0:436:108e:b1e9 with SMTP id
+ h21-20020a0561023d9500b00436108eb1e9mr4451381vsv.12.1684853550200; Tue, 23
+ May 2023 07:52:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V9 10/10] arm64/perf: Implement branch records save on PMU
- IRQ
-Content-Language: en-US
-From:   James Clark <james.clark@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
- <20230315051444.1683170-11-anshuman.khandual@arm.com>
- <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
-In-Reply-To: <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230522190405.880733338@linuxfoundation.org>
+In-Reply-To: <20230522190405.880733338@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 23 May 2023 20:22:18 +0530
+Message-ID: <CA+G9fYs4zoTUQUnkvncEpPWvfGD6sDSXi94KXji+udMrvfm5Rg@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/292] 6.1.30-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        LTP List <ltp@lists.linux.it>, Netdev <netdev@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,126 +76,318 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 23 May 2023 at 00:53, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.30 release.
+> There are 292 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.30-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-On 23/05/2023 15:39, James Clark wrote:
-> 
-> 
-> On 15/03/2023 05:14, Anshuman Khandual wrote:
->> This modifies armv8pmu_branch_read() to concatenate live entries along with
->> task context stored entries and then process the resultant buffer to create
->> perf branch entry array for perf_sample_data. It follows the same principle
->> like task sched out.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
-> 
-> [...]
-> 
->>  void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->>  {
->>  	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
->> +	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
->> +	struct brbe_regset live[BRBE_MAX_ENTRIES];
->> +	int nr_live, nr_store;
->>  	u64 brbfcr, brbcr;
->> -	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
->>  
->>  	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->>  	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> @@ -739,36 +743,13 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->>  	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->>  	isb();
->>  
->> -	/* Determine the indices for each loop */
->> -	loop1_idx1 = BRBE_BANK0_IDX_MIN;
->> -	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
->> -		loop1_idx2 = brbe_attr->brbe_nr - 1;
->> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->> -		loop2_idx2 = BRBE_BANK0_IDX_MAX;
->> -	} else {
->> -		loop1_idx2 = BRBE_BANK0_IDX_MAX;
->> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->> -		loop2_idx2 = brbe_attr->brbe_nr - 1;
->> -	}
->> -
->> -	/* Loop through bank 0 */
->> -	select_brbe_bank(BRBE_BANK_IDX_0);
->> -	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
->> -		if (!capture_branch_entry(cpuc, event, idx))
->> -			goto skip_bank_1;
->> -	}
->> -
->> -	/* Loop through bank 1 */
->> -	select_brbe_bank(BRBE_BANK_IDX_1);
->> -	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
->> -		if (!capture_branch_entry(cpuc, event, idx))
->> -			break;
->> -	}
->> -
->> -skip_bank_1:
->> -	cpuc->branches->branch_stack.nr = idx;
->> -	cpuc->branches->branch_stack.hw_idx = -1ULL;
->> +	nr_live = capture_brbe_regset(brbe_attr, live);
->> +	nr_store = task_ctx->nr_brbe_records;
->> +	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
->> +					      nr_live, brbe_attr->brbe_nr);
->> +	process_branch_entries(cpuc, event, task_ctx->store, nr_store);
-> 
-> Hi Anshuman,
-> 
-> With the following command I get a crash:
-> 
->   perf record --branch-filter any,save_type -a -- ls
-> 
-> [  101.171822] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000600
-> ...
-> [145380.414654] Call trace:
-> [145380.414739]  armv8pmu_branch_read+0x7c/0x578
-> [145380.414895]  armv8pmu_handle_irq+0x104/0x1c0
-> [145380.415043]  armpmu_dispatch_irq+0x38/0x70
-> [145380.415209]  __handle_irq_event_percpu+0x124/0x3b8
-> [145380.415392]  handle_irq_event+0x54/0xc8
-> [145380.415567]  handle_fasteoi_irq+0x100/0x1e0
-> [145380.415718]  generic_handle_domain_irq+0x38/0x58
-> [145380.415895]  gic_handle_irq+0x5c/0x130
-> [145380.416025]  call_on_irq_stack+0x24/0x58
-> [145380.416173]  el1_interrupt+0x74/0xc0
-> [145380.416321]  el1h_64_irq_handler+0x18/0x28
-> [145380.416475]  el1h_64_irq+0x64/0x68
-> [145380.416604]  smp_call_function_single+0xe8/0x1f0
-> [145380.416745]  event_function_call+0xbc/0x1c8
-> [145380.416919]  _perf_event_enable+0x84/0xa0
-> [145380.417069]  perf_ioctl+0xe8/0xd68
-> [145380.417204]  __arm64_sys_ioctl+0x9c/0xe0
-> [145380.417353]  invoke_syscall+0x4c/0x120
-> [145380.417523]  el0_svc_common+0xd0/0x120
-> [145380.417693]  do_el0_svc+0x3c/0xb8
-> [145380.417859]  el0_svc+0x50/0xc0
-> [145380.418004]  el0t_64_sync_handler+0x84/0xf0
-> [145380.418160]  el0t_64_sync+0x190/0x198
-> 
-> When using --branch-filter any,u without -a it seems to be fine so could
-> be that task_ctx is null in per-cpu mode, or something to do with the
-> userspace only flag?
-> 
-> I'm also wondering if it's possible to collapse some of the last 5
-> commits? They seem to mostly modify things in brbe.c which is a new file
-> so the history probably isn't important at this point it just makes it a
-> bit harder to review.
-> 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-I realised I just tested V9 instead of V10 but I diffed them and don't
-see anything that would change this issue so it's probably on both versions.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
->>  	process_branch_aborts(cpuc);
->> +	task_ctx->nr_brbe_records = 0;
->>  
->>  	/* Unpause the buffer */
->>  	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+
+NOTE:
+Following are the list of intermittent failures.
+
+LTP syscalls msync04 started failing intermittently on 6.3, 6.1 and 5.15 on
+arm64 devices which are using NFS mounted rootfs and external mounted drive=
+.
+Where as on arm x15 device it is always fails from 6.3.2-rc1, 6.1.28-rc1
+and 5.15.111-rc1.
+
+Test log:
+=3D=3D=3D=3D=3D=3D=3D=3D
+
+tst_test.c:1634: TINFO: =3D=3D=3D Testing on vfat =3D=3D=3D
+tst_test.c:1093: TINFO: Formatting /dev/loop0 with vfat opts=3D'' extra opt=
+s=3D''
+msync04.c:72: TPASS: msync() working correctly
+tst_test.c:1634: TINFO: =3D=3D=3D Testing on ntfs =3D=3D=3D
+tst_test.c:1093: TINFO: Formatting /dev/loop0 with ntfs opts=3D'' extra opt=
+s=3D''
+The partition start sector was not specified for /dev/loop0 and it
+could not be obtained automatically.  It has been set to 0.
+The number of sectors per track was not specified for /dev/loop0 and
+it could not be obtained automatically.  It has been set to 0.
+The number of heads was not specified for /dev/loop0 and it could not
+be obtained automatically.  It has been set to 0.
+To boot from a device, Windows needs the 'partition start sector', the
+'sectors per track' and the 'number of heads' to be set.
+Windows will not be able to boot from this device.
+tst_test.c:1107: TINFO: Trying FUSE...
+msync04.c:59: TFAIL: Expected dirty bit to be set after writing to
+mmap()-ed area
+
+
+log:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.=
+3.3-365-g20efcce0526d/testrun/17163865/suite/ltp-syscalls/test/msync04/log
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.=
+3.3-365-g20efcce0526d/testrun/17163865/suite/ltp-syscalls/test/msync04/hist=
+ory/
+
+Test results compare across 6.3, 6.1 and 5.15.
+ - https://qa-reports.linaro.org/_/comparetest/?project=3D1764&project=3D15=
+97&project=3D1022&suite=3Dltp-syscalls&test=3Dmsync04
+
+
+=3D=3D=3D=3D=3D
+Following Perf CoreSight test cases failing intermittently on arm64
+Qualcomm dragonboard 410c.
+
+
+ 78: CoreSight / Thread Loop 10 Threads - Check TID                  :
+--- start ---
+test child forked, pid 1196
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 6.477 MB
+./perf-thread_loop-check-tid-10th.data ]
+Thread IDs  1211 not found in perf AUX data
+test child finished with -1
+---- end ----
+CoreSight / Thread Loop 10 Threads - Check TID: FAILED!
+
+
+ 79: CoreSight / Thread Loop 2 Threads - Check TID                   :
+--- start ---
+test child forked, pid 1285
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.005 MB
+./perf-thread_loop-check-tid-2th.data ]
+Thread IDs  1290 1290 not found in perf AUX data
+test child finished with -1
+---- end ----
+CoreSight / Thread Loop 2 Threads - Check TID: FAILED!
+
+
+logs:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
+1.29-293-ge00a3d96f756/testrun/17164102/suite/perf/test/CoreSight_Thread_Lo=
+op_10_Threads__Check_TID/history/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
+1.29-293-ge00a3d96f756/testrun/17164102/suite/perf/test/CoreSight_Thread_Lo=
+op_10_Threads__Check_TID/log
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
+1.29-293-ge00a3d96f756/testrun/17164102/suite/perf/test/CoreSight_Thread_Lo=
+op_10_Threads__Check_TID/details/
+
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
+1.29-293-ge00a3d96f756/testrun/17164102/suite/perf/test/CoreSight_Thread_Lo=
+op_2_Threads__Check_TID/history/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
+1.29-293-ge00a3d96f756/testrun/17164102/suite/perf/test/CoreSight_Thread_Lo=
+op_2_Threads__Check_TID/details/
+
+
+=3D=3D=3D=3D=3D
+
+selftests: net/mptcp: diag.sh started failing on 6.1.30-rc1 but
+passed on 6.3.4-rc1. This is due to changes in latest kselftest
+(6.3) running on 6.1.
+
+test logs:
+=3D=3D=3D=3D=3D=3D=3D
+# selftests: net/mptcp: diag.sh
+# no msk on netns creation                          [  ok  ]
+# listen match for dport 10000                      [  ok  ]
+# listen match for sport 10000                      [  ok  ]
+# listen match for saddr and sport                  [  ok  ]
+# all listen sockets                                [  ok  ]
+# after MPC handshake                               [  ok  ]
+# ....chk remote_key                                [  ok  ]
+# ....chk no fallback                               [  ok  ]
+# ....chk 2 msk in use                              [ fail ] expected 2 fou=
+nd 0
+# ....chk 0 msk in use after flush                  [  ok  ]
+# check fallback                                    [  ok  ]
+# ....chk 1 msk in use                              [ fail ] expected 1 fou=
+nd 0
+# ....chk 0 msk in use after flush                  [  ok  ]
+# many msk socket present                           [  ok  ]
+# ....chk many msk in use                           [ fail ] expected
+254 found 0
+# ....chk 0 msk in use after flush                  [  ok  ]
+not ok 4 selftests: net/mptcp: diag.sh # exit=3D11
+
+logs:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
+1.29-293-ge00a3d96f756/testrun/17163977/suite/kselftest-net-mptcp/test/net_=
+mptcp_diag_sh/history/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
+1.29-293-ge00a3d96f756/testrun/17163977/suite/kselftest-net-mptcp/test/net_=
+mptcp_diag_sh/details/
+
+
+## Build
+* kernel: 6.1.30-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: e00a3d96f756a884ab864ae21c22bc1b86d0844d
+* git describe: v6.1.29-293-ge00a3d96f756
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
+9-293-ge00a3d96f756
+
+## Test Regressions (compared to v6.1.29)
+* bcm2711-rpi-4-b, ltp-syscalls - intermittent failures
+  - msync04
+
+* dragonboard-410c, perf - intermittent failures
+  - CoreSight_Thread_Loop_10_Threads__Check_TID
+  - CoreSight_Thread_Loop_2_Threads__Check_TID
+
+* qemu_i386, kselftest-net-mptcp - fails only on 32-bit architectures.
+  - net_mptcp_diag_sh
+
+## Metric Regressions (compared to v6.1.29)
+
+## Test Fixes (compared to v6.1.29)
+
+## Metric Fixes (compared to v6.1.29)
+
+## Test result summary
+total: 171342, pass: 147295, fail: 4403, skip: 19372, xfail: 272
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 150 passed, 1 failed
+* arm64: 54 total, 53 passed, 1 failed
+* i386: 41 total, 38 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 36 passed, 2 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 46 total, 46 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
