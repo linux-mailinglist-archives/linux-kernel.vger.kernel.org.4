@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA40070D08F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C799370D08A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbjEWBfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S234944AbjEWBeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234895AbjEWBey (ORCPT
+        with ESMTP id S232046AbjEWBeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:34:54 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A849B92;
-        Mon, 22 May 2023 18:34:52 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QQGwG6MzRz18Ldb;
-        Tue, 23 May 2023 09:30:22 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 23 May 2023 09:34:49 +0800
-Message-ID: <0d3aeb09-5bc9-31bd-4f84-675ebddd9f03@huawei.com>
-Date:   Tue, 23 May 2023 09:34:49 +0800
+        Mon, 22 May 2023 21:34:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445868E;
+        Mon, 22 May 2023 18:34:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79B4662D89;
+        Tue, 23 May 2023 01:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F37C433EF;
+        Tue, 23 May 2023 01:34:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684805660;
+        bh=BmXuXL/UqVGFg/YhKou0jzuTdayluGE9Gf9Xkd6BVDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VfscvJfn2ijg4fxrfryZM+rU1I0wnEP4MwW1JE7SHohU7DE9kVcS4HjalgALAffN7
+         8d3CKw/1b4BibMj/OUI75yQbJGV5kDG8GAs28Y/i/LwoUTP43GmqVQiin9IEBL7JT+
+         Xmz1mTEKTvhmGB7FPfUDnTcYPIfjOHqoBp7H+ZE4I80oyDsXaUFeXuZXZGUVinrSTf
+         SFkCl0DqANpM+H5LZz7G2s0dorWeznI8JXT0BmR3lkJMtRGu7o4ICJLS7QaFsACoR2
+         bDsXg84vGUHdtQZ1C4lvtpAQzHyZZmdApp6/9eVz3rt80/+kYS/y8ZMtoiTbAqsfLr
+         sJD7l6zWlkVNA==
+Date:   Mon, 22 May 2023 19:35:12 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH 1/2][next] vfio/ccw: Replace one-element array with
+ flexible-array member
+Message-ID: <3c10549ebe1564eade68a2515bde233527376971.1684805398.git.gustavoars@kernel.org>
+References: <cover.1684805398.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "chu, jane" <jane.chu@oracle.com>
-References: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
- <d13b2730-bc20-3e32-a6c0-44c525ca9f0b@huawei.com>
- <SJ1PR11MB6083194699B63B199A2B5199FC7C9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <75d8452c-695b-b22a-30d0-15302cd072ef@huawei.com>
- <SJ1PR11MB608309996658741A534D39D6FC439@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <SJ1PR11MB608309996658741A534D39D6FC439@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1684805398.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+One-element arrays are deprecated, and we are replacing them with flexible
+array members instead. So, replace one-element array with flexible-array
+member in struct vfio_ccw_parent and refactor the the rest of the code
+accordingly.
 
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/297
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/s390/cio/vfio_ccw_drv.c     | 3 ++-
+ drivers/s390/cio/vfio_ccw_private.h | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On 2023/5/23 2:02, Luck, Tony wrote:
->>> Is this patch in addition to, or instead of, the earlier core dump patch?
->>
->> This is an addition, in previous coredump patch, manually call
->> memory_failure_queue()
->> to be asked to cope with corrupted page, and it is similar to your
->> "Copy-on-write poison recovery"[1], but after some discussion, I think
->> we could add MCE_IN_KERNEL_COPYIN to all MC-safe copy, which will
->> cope with corrupted page in the core do_machine_check() instead of
->> do it one-by-one.
-> 
-> Thanks for the context. I see how this all fits together now).
-> 
-> Your patch looks good.
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
+diff --git a/drivers/s390/cio/vfio_ccw_drv.c b/drivers/s390/cio/vfio_ccw_drv.c
+index ff538a086fc7..57906a9c6324 100644
+--- a/drivers/s390/cio/vfio_ccw_drv.c
++++ b/drivers/s390/cio/vfio_ccw_drv.c
+@@ -171,7 +171,8 @@ static int vfio_ccw_sch_probe(struct subchannel *sch)
+ 		return -ENODEV;
+ 	}
+ 
+-	parent = kzalloc(sizeof(*parent), GFP_KERNEL);
++	parent = kzalloc(sizeof(*parent) + sizeof(struct mdev_type *),
++			 GFP_KERNEL);
+ 	if (!parent)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/s390/cio/vfio_ccw_private.h b/drivers/s390/cio/vfio_ccw_private.h
+index b441ae6700fd..b62bbc5c6376 100644
+--- a/drivers/s390/cio/vfio_ccw_private.h
++++ b/drivers/s390/cio/vfio_ccw_private.h
+@@ -79,7 +79,7 @@ struct vfio_ccw_parent {
+ 
+ 	struct mdev_parent	parent;
+ 	struct mdev_type	mdev_type;
+-	struct mdev_type	*mdev_types[1];
++	struct mdev_type	*mdev_types[];
+ };
+ 
+ /**
+-- 
+2.34.1
 
-Thanks for your confirm.
-
-> 
-> -Tony
-> 
-> One small observation from testing. I injected to an application which consumed
-> the poisoned data and was sent a SIGBUS.
-> 
-> Kernel did not crash (hurrah!)
-
-Yes, no crash is always great.
-
-> 
-> Console log said:
-> 
-> [  417.610930] mce: [Hardware Error]: Machine check events logged
-> [  417.618372] Memory failure: 0x89167f: recovery action for dirty LRU page: Recovered
-> ... EDAC messages
-> [  423.666918] MCE: Killing testprog:4770 due to hardware memory corruption fault at 7f8eccf35000
-> 
-> A core file was generated and saved in /var/lib/systemd/coredump
-> 
-> But my shell (/bin/bash) only said:
-> 
-> Bus error
-> 
-> not
-> 
-> Bus error (core dumped)
-
-No sure about the effect, but since there is kernel message and mcelog,
-it seems that there is no big deal for the different :)
-
-> 
-> -Tony
->   
