@@ -2,158 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BA570E518
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E742E70E51C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238231AbjEWTGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S238239AbjEWTHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233642AbjEWTGS (ORCPT
+        with ESMTP id S232417AbjEWTHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:06:18 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF1391;
-        Tue, 23 May 2023 12:06:17 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af2c7f2883so2387411fa.3;
-        Tue, 23 May 2023 12:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684868775; x=1687460775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RJFRYUGcMe7LMj5nBQpYtgVrgLs7P4vK7RG89WbfsGw=;
-        b=QykgS/BuU4h6WbXj5oxEQBuW/llGtZooI+t2jrzEc3uCX0FbFyX35iB08ErewuwgSv
-         g06/wJj+S2AJM47CRYdHYcuir6o7TikahuilCfRoaNDRAGvIGPDmBO0nv8JKsgL6FXWL
-         uU9B+DPEUZinciiYM3A+zy7z9lU9QqBs3Rh0TuNi5l5qPwUTcWqXGud3fGL0disLNoWJ
-         lCWFct1xh8iQEQcI3OtMMXKccGve06VX2VLWbdNws5F77kAX5/F9+05fuaNhDeIcJjAr
-         xLO3/tnD406WklSCJBffDIE2e0vxAUvAp/8p+wZrj161qok6bXhktnkWofb8+NOMkr/w
-         G5sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684868775; x=1687460775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RJFRYUGcMe7LMj5nBQpYtgVrgLs7P4vK7RG89WbfsGw=;
-        b=HQQAigm12wmney6PEZZM8HwiC7aMdlTFDZ8+vhK1rAWde8wP866hYUEPElzlT8amOX
-         cgbaQ4oSSCp7aV8vxJOO3wOCUxppxBmzEeW0KZIcGL6REkHCtmsuuhHWY5lODpafEuqT
-         /U/aW1o698f7SWOiGFCyAfS0hlolYyM8ChBtXm3jvqX/UQILx2xR6ZUTYVyz3IpdBPem
-         h4UkpBY/DxbMP8kb4KKzyS3Mq9UQkibi5Jx1+ICrKYtXEy4Qc3QYxXXv/KbUxaEkwtnK
-         RWGh7jLw/GIOetnEeRm+YsJ61ybnZba1hEBmiYsbVVsimWEio05ZcxHVqwk16AwPwWOH
-         IC2w==
-X-Gm-Message-State: AC+VfDyPktge34G9Pt1nUwYTdHZ5x3Avc0dVpom6T8Y849StF82SFShR
-        +STTAVOHMfM4On9c/OBZRLEyXV/xd7ExKfzRaCU=
-X-Google-Smtp-Source: ACHHUZ5Dqy8PO9xAS5RwVatcVQ043ssA5OHL/miSfayNbt0ml63GT8tXDcAaFVduhgz7JdKugblqhac3WEm/RmQvIso=
-X-Received: by 2002:a2e:8788:0:b0:2ad:8929:e8f4 with SMTP id
- n8-20020a2e8788000000b002ad8929e8f4mr5370076lji.43.1684868775466; Tue, 23 May
- 2023 12:06:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522234154.2924052-1-yinghsu@chromium.org> <ZGyPt1GYGV2C2RQZ@corigine.com>
-In-Reply-To: <ZGyPt1GYGV2C2RQZ@corigine.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 23 May 2023 12:06:02 -0700
-Message-ID: <CABBYNZ+by-OQH2aPEMHpQ5cOLoKNpR7k111rJj6iOd2PGLx3gg@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Fix l2cap_disconnect_req deadlock
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Ying Hsu <yinghsu@chromium.org>, linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 23 May 2023 15:07:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560C8119;
+        Tue, 23 May 2023 12:07:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1407601D7;
+        Tue, 23 May 2023 19:07:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737D4C433EF;
+        Tue, 23 May 2023 19:07:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684868868;
+        bh=UjoI8KoEuWKKny/a0/2Y5UC4GhbSgwmY9f8yoNGDBVE=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=HsU4mJiq0+kQivmSwVpMkf5uxpXXhoM+pBA1jUMtHg5go78AmqSu7l72l92zJRXpv
+         RJDDMwBOfFz/CMHXXIo7nw/p0IR76yzwBSAQHGT+YpvEYdq5kR6jiFQdNlP3aY6fWG
+         fS7oB7GkQF8kmMaALLK7SQVAlHbOYD4SZPNVZxrMIXLMFWSxVz7EibcX9xCtyERUtD
+         VRHWI0/3US9byvmSj06WSC17q7A7FutLewiIrWw/99uoSyvNf+fclRo2Ot8VD0qtjo
+         QjuRcKLW2Fy4Kd66uIecU9w9pGA/kNL4iLARhPA+Cq4f/Jwwl6E4ThioYaT0FOqoMR
+         w42g9stpb0+dA==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 23 May 2023 22:07:43 +0300
+Message-Id: <CSTW5YGZ50O1.16RYO14HOQRH2@suppilovahvero>
+Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
+        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
+        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
+        <lukas@wunner.de>, <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH 2/2] tpm, tpm_tis: reuse code in disable_interrupts()
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>
+X-Mailer: aerc 0.14.0
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <20230522143105.8617-2-LinoSanfilippo@gmx.de>
+In-Reply-To: <20230522143105.8617-2-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon, Ying,
-
-On Tue, May 23, 2023 at 3:04=E2=80=AFAM Simon Horman <simon.horman@corigine=
-.com> wrote:
+On Mon May 22, 2023 at 5:31 PM EEST, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 >
-> On Mon, May 22, 2023 at 11:41:51PM +0000, Ying Hsu wrote:
-> > L2CAP assumes that the locks conn->chan_lock and chan->lock are
-> > acquired in the order conn->chan_lock, chan->lock to avoid
-> > potential deadlock.
-> > For example, l2sock_shutdown acquires these locks in the order:
-> >   mutex_lock(&conn->chan_lock)
-> >   l2cap_chan_lock(chan)
-> >
-> > However, l2cap_disconnect_req acquires chan->lock in
-> > l2cap_get_chan_by_scid first and then acquires conn->chan_lock
-> > before calling l2cap_chan_del. This means that these locks are
-> > acquired in unexpected order, which leads to potential deadlock:
-> >   l2cap_chan_lock(c)
-> >   mutex_lock(&conn->chan_lock)
-> >
-> > This patch uses __l2cap_get_chan_by_scid to replace
-> > l2cap_get_chan_by_scid and adjusts the locking order to avoid the
-> > potential deadlock.
-
-This needs the fixes tag so we can backport it properly.
-
-> > Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-> > ---
-> > This commit has been tested on a Chromebook device.
-> >
-> > Changes in v2:
-> > - Adding the prefix "Bluetooth:" to subject line.
-> >
-> >  net/bluetooth/l2cap_core.c | 26 ++++++++++++++++++++------
-> >  1 file changed, 20 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-> > index 376b523c7b26..8f08192b8fb1 100644
-> > --- a/net/bluetooth/l2cap_core.c
-> > +++ b/net/bluetooth/l2cap_core.c
-> > @@ -4651,8 +4651,16 @@ static inline int l2cap_disconnect_req(struct l2=
-cap_conn *conn,
-> >
-> >       BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
-> >
-> > -     chan =3D l2cap_get_chan_by_scid(conn, dcid);
-> > +     mutex_lock(&conn->chan_lock);
-> > +     chan =3D __l2cap_get_chan_by_scid(conn, dcid);
-> > +     if (chan) {
-> > +             chan =3D l2cap_chan_hold_unless_zero(chan);
-> > +             if (chan)
-> > +                     l2cap_chan_lock(chan);
-> > +     }
-> > +
-> >       if (!chan) {
-> > +             mutex_unlock(&conn->chan_lock);
-> >               cmd_reject_invalid_cid(conn, cmd->ident, dcid, scid);
-> >               return 0;
-> >       }
+> Avoid code redundancy by shifting part of the code in disable_interrupts(=
+)
+> into a subfunction and reusing this function in tpm_tis_handle_irq_storm(=
+).
+> Make sure that in the subfunction the INT_ENABLE register is written with=
+ a
+> claimed locality even if the caller did not claim it before.
 >
-> Hi Ying,
+> In the shifted code get rid of the variable "rc" by initializing the
+> interrupt mask to zero at variable declaration.
 >
-> The conditional setting of chan and calling l2cap_chan_lock()
-> is both non-trivial and repeated. It seems that it ought to be
-> in a helper.
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 36 ++++++++++++++++-----------------
+>  1 file changed, 17 insertions(+), 19 deletions(-)
 >
-> Something like this (I'm sure a better function name can be chosen):
->
->         chan =3D __l2cap_get_and_lock_chan_by_scid(conn, dcid);
->         if (!chan) {
->                 ...
->         }
->
->         ...
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
+ore.c
+> index 458ebf8c2f16..8f4f2cb5520f 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -468,25 +468,32 @@ static int tpm_tis_send_data(struct tpm_chip *chip,=
+ const u8 *buf, size_t len)
+>  	return rc;
+>  }
+> =20
+> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
+> +{
+> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> +	u32 intmask =3D 0;
+> +
+> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> +	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
+> +
+> +	tpm_tis_request_locality(chip, 0);
+> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> +	tpm_tis_relinquish_locality(chip, 0);
+> +
+> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
+> +}
+> +
+>  static void disable_interrupts(struct tpm_chip *chip)
+>  {
+>  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> -	u32 intmask;
+> -	int rc;
+> =20
+>  	if (priv->irq =3D=3D 0)
+>  		return;
+> =20
+> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> -	if (rc < 0)
+> -		intmask =3D 0;
+> -
+> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
+> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> +	__tpm_tis_disable_interrupts(chip);
+> =20
+>  	devm_free_irq(chip->dev.parent, priv->irq, chip);
+>  	priv->irq =3D 0;
+> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
+>  }
+> =20
+>  /*
+> @@ -755,20 +762,11 @@ static bool tpm_tis_req_canceled(struct tpm_chip *c=
+hip, u8 status)
+>  static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
+>  {
+>  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> -	int intmask =3D 0;
+> =20
+>  	dev_err(&chip->dev, HW_ERR
+>  		"TPM interrupt storm detected, polling instead\n");
+> =20
+> -	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> -
+> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
+> -
+> -	tpm_tis_request_locality(chip, 0);
+> -	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> -	tpm_tis_relinquish_locality(chip, 0);
+> -
+> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
+> +	__tpm_tis_disable_interrupts(chip);
+> =20
+>  	/*
+>  	 * We must not call devm_free_irq() from within the interrupt handler,
+> --=20
+> 2.40.1
 
-Or perhaps we could do something like l2cap_del_chan_by_scid:
+NAK as invidual change w/o further discussion.
 
-https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
+Would need to be seen in context. This does not change kernel for
+better.
 
---=20
-Luiz Augusto von Dentz
+If you want to wrap, please do it in 1/2 and then we can evaluate
+whether it makes sense or not.
+
+BR, Jarkko
