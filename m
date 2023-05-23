@@ -2,97 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3297070E1BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3648270E265
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjEWQ0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S237514AbjEWQcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjEWQ0R (ORCPT
+        with ESMTP id S231770AbjEWQck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:26:17 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAF1DD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:26:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f60dfc6028so432615e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684859169; x=1687451169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0hWDKOTssM4FQyfGCYtsz+cR6mie3Z18WQlIfyIGgK4=;
-        b=mYu0SEk+RZXENY1xtpNmWBrgNsZdpZ9O4tniZ/Wkwa+8dCOI8W1i2GmjzsBImvf2OQ
-         /+0iD2cM8wt7vw7Z1a9jbaHadU1iIPqQ+lAaExnbAISEjZ6PCHUEpy3M+fVk3gzuUz0P
-         j71SEkbgQu3MPnS5Cd7/uCdBfthCcWCXn3ZW2U37PSQAQQskcFiAL506vrhnYsinXa7S
-         ZIwAKdhOixG1Yf0s3lGwng3Olx2HfN+e/WYGEDBAAQGd9SsnaVnw9c5a0YRZOpJ2SiqM
-         gYFiTjkYtzop1yt1Lws4oD6AmMb4rB/5f/w7gz2OKk7yIDmOvByd3ZqDv7fNav2iirnd
-         iISg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684859169; x=1687451169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0hWDKOTssM4FQyfGCYtsz+cR6mie3Z18WQlIfyIGgK4=;
-        b=HQUGMjjp+7htuesq456pA9DFtAzEN9h6Pr46zWZPFxfMK02LGBmJmpsFCFfq6EDvw3
-         yXVLHdm6h0QlCwqmrKe2/ijbWd9SVqer0Buo7m8JRUW7OjT9M1tf8eseCzRlgjGIuZp1
-         eDuEU6YuxYfrr2cUUg4fCmT9tf+fCasP01/iv256c6xD+jZ34P+8TDLRXhNBFiNqdg5h
-         fjJ6yA5ZrhcojZmXfBwRnch0QLL35aaJxxKUspRcLoghEaEKxXZeR+JA9iwfHDp7eg+1
-         PLL2B/CJClGzY2mKdIr9YbW5gnMLjdI2Ff+h8nTOVY5DMzMoavHr0VlPHmFFluTFurtI
-         RggA==
-X-Gm-Message-State: AC+VfDz5Gxzewf8UfIZWhKZA0Zq1Xpj9TK3LX5SSNof8CWAypyXKm90+
-        Qz7QliSN54M0AllazwvFbJZndA==
-X-Google-Smtp-Source: ACHHUZ7wvkNksRRlhJ5pqhiWSVhwW+UQHRyyp9zUBWS/rshrEORKyWRTxRCw2le4JdEfLngvcdm3lg==
-X-Received: by 2002:a7b:c4ce:0:b0:3f5:b4e:944b with SMTP id g14-20020a7bc4ce000000b003f50b4e944bmr9335119wmk.18.1684859169598;
-        Tue, 23 May 2023 09:26:09 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id p24-20020a05600c205800b003f6041f5a6csm7729571wmg.12.2023.05.23.09.26.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 09:26:08 -0700 (PDT)
-Message-ID: <cb69dbab-0966-8ecb-d9b9-017f430fd7ea@baylibre.com>
-Date:   Tue, 23 May 2023 18:26:07 +0200
+        Tue, 23 May 2023 12:32:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43C1DD;
+        Tue, 23 May 2023 09:32:38 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 893EA22925;
+        Tue, 23 May 2023 16:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684859557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Jgln17Itx5qPVoKJlWMfz4FJb2LjDNqFHYWInznf3aw=;
+        b=QxkQFOSxtNEoEdH1bnrO66HEJd2Zwin6JvwUuTU958yG6YUL/HVKt6sZtMzjDsMZkim/dK
+        YxsYK8Cc6Xh/N+RfWa8wkbvwHEgw7p6sLLYPQdv5sCRY6PX8pGWaTcGTf6SKaezCcWLP+b
+        bBctfzPkyZVIDTqf32NnLE+p5XNIV00=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 65ADE2C141;
+        Tue, 23 May 2023 16:32:37 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id DECACDA7D7; Tue, 23 May 2023 18:26:30 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     viro@zeniv.linux.org.uk, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH] fs: use UB-safe check for signed addition overflow in remap_verify_area
+Date:   Tue, 23 May 2023 18:26:28 +0200
+Message-Id: <20230523162628.17071-1-dsterba@suse.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/7] ASoC: dt-bindings: mediatek,mt8188-mt6359: remove
- ADDA_BE from link-name
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230523021933.3422-1-trevor.wu@mediatek.com>
- <20230523021933.3422-3-trevor.wu@mediatek.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230523021933.3422-3-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 04:19, Trevor Wu wrote:
-> ADDA_BE is used to connect to mt6359. For machine mt8188-mt6359, codec
-> for ADDA_BE must be mt6359 which are configured on the machine driver.
-> Besides, ADDA_BE is divided into two dais, UL_SRC_BE and DL_SRC_BE.
-> As a result, remove ADDA_BE from items of link-name.
-> 
-> Signed-off-by: Trevor Wu<trevor.wu@mediatek.com>
+The following warning pops up with enabled UBSAN in tests fstests/generic/303:
 
-I don't understand how "DL_SRC_BE" and "UL_SRC_BE" links are done.
-Why these dais don't replace "ADDA_BE" in this binding ?
+  [23127.529395] UBSAN: Undefined behaviour in fs/read_write.c:1725:7
+  [23127.529400] signed integer overflow:
+  [23127.529403] 4611686018427322368 + 9223372036854775807 cannot be represented in type 'long long int'
+  [23127.529412] CPU: 4 PID: 26180 Comm: xfs_io Not tainted 5.2.0-rc2-1.ge195904-vanilla+ #450
+  [23127.556999] Hardware name: empty empty/S3993, BIOS PAQEX0-3 02/24/2008
+  [23127.557001] Call Trace:
+  [23127.557060]  dump_stack+0x67/0x9b
+  [23127.557070]  ubsan_epilogue+0x9/0x40
+  [23127.573496]  handle_overflow+0xb3/0xc0
+  [23127.573514]  do_clone_file_range+0x28f/0x2a0
+  [23127.573547]  vfs_clone_file_range+0x35/0xb0
+  [23127.573564]  ioctl_file_clone+0x8d/0xc0
+  [23127.590144]  do_vfs_ioctl+0x300/0x700
+  [23127.590160]  ksys_ioctl+0x70/0x80
+  [23127.590203]  ? trace_hardirqs_off_thunk+0x1a/0x1c
+  [23127.590210]  __x64_sys_ioctl+0x16/0x20
+  [23127.590215]  do_syscall_64+0x5c/0x1d0
+  [23127.590224]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+  [23127.590231] RIP: 0033:0x7ff6d7250327
+  [23127.590241] RSP: 002b:00007ffe3a38f1d8 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
+  [23127.590246] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007ff6d7250327
+  [23127.590249] RDX: 00007ffe3a38f220 RSI: 000000004020940d RDI: 0000000000000003
+  [23127.590252] RBP: 0000000000000000 R08: 00007ffe3a3c80a0 R09: 00007ffe3a3c8080
+  [23127.590255] R10: 000000000fa99fa0 R11: 0000000000000206 R12: 0000000000000000
+  [23127.590260] R13: 0000000000000000 R14: 3fffffffffff0000 R15: 00007ff6d750a20c
 
-Regards,
-Alexandre
+As loff_t is a signed type, we should use the safe overflow checks
+instead of relying on compiler implementation.
+
+The bogus values are intentional and the test is supposed to verify the
+boundary conditions.
+
+Signed-off-by: David Sterba <dsterba@suse.com>
+---
+
+ fs/remap_range.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/fs/remap_range.c b/fs/remap_range.c
+index 1331a890f2f2..87ae4f0dc3aa 100644
+--- a/fs/remap_range.c
++++ b/fs/remap_range.c
+@@ -15,6 +15,7 @@
+ #include <linux/mount.h>
+ #include <linux/fs.h>
+ #include <linux/dax.h>
++#include <linux/overflow.h>
+ #include "internal.h"
+ 
+ #include <linux/uaccess.h>
+@@ -101,10 +102,12 @@ static int generic_remap_checks(struct file *file_in, loff_t pos_in,
+ static int remap_verify_area(struct file *file, loff_t pos, loff_t len,
+ 			     bool write)
+ {
++	loff_t tmp;
++
+ 	if (unlikely(pos < 0 || len < 0))
+ 		return -EINVAL;
+ 
+-	if (unlikely((loff_t) (pos + len) < 0))
++	if (unlikely(check_add_overflow(pos, len, &tmp)))
+ 		return -EINVAL;
+ 
+ 	return security_file_permission(file, write ? MAY_WRITE : MAY_READ);
+-- 
+2.40.0
 
