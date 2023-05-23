@@ -2,147 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1EC70D043
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C0870D04A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbjEWBN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S233692AbjEWBPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjEWBN0 (ORCPT
+        with ESMTP id S232634AbjEWBPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:13:26 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2088.outbound.protection.outlook.com [40.107.237.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267B68E;
-        Mon, 22 May 2023 18:13:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nbHNQjAMmChJkvVgLS9PoW3/qaWCkionlKMpJOfxxUQOUOSE+vH94chEzjD4YKEYRCYxeC39JOeBFB84BA+/Ro4VT1C1O/RFbl3f+g7c+12iX8Gt475kghp6zXJwAmpYKcTIENNC9bT4bfuDNRewBnupngDXFo+R1G1IXTcbsnopLdwf7oIbGsPuk7GMBCTZmhT/sg+JR/fn5xpaoyNACp6EqIh/IYgeyac0uF9698ChlOvTl/ccpq8MJWT5HloZWNjqRc7LW5+s9wuI0Yoy7r+W0/MHdMSCrtdtJs9dR5sSe0cQVkDGagHk79QEA+phqxya8AwTo6aNf5EtgfjP5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GaoZvZ7PcsODjM4YbsLX41nX5qKGCjGV/V1YgToBNFc=;
- b=a2F7Av761ATbD1W3cdi/9nGkJHxStAttqO1SLIw7xsEj0gtdcoLZ+Yjlo1aSZSez9PNNFs62S3D3yaRcacQ9MQXBOFvcRagyRjwsrk3V/Emiu7/dLAHaogkPMl09nweFuYpt9fp3vSclJfO4OPm59/KJvpHF9Xirxa2hzSAqlH+vds8YFlOK5Ey4b3df1M1x5avl2j/Zv6E36DGV/u1ZayJAEfE5B6nrCmwQ3P3zVt+ZMmL6CC9Nxqfld6+xtwVt9QJYLBs7YUP2D0fQDE7f1NYN+UyKeBB8zcSpegYkCkXLr+lIzldN5mb2m69z91gMRiE+12l4Ij9C9gMCfeQTgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GaoZvZ7PcsODjM4YbsLX41nX5qKGCjGV/V1YgToBNFc=;
- b=XZ4V3Eg/4F9hmGgHzkeozEmwLvG/RQRdgu96bpli/uqEWMYERs6T478w2hfJIYSD87lSrn/wBZbyV+zpA9U8kG4FkTdu7M8t7lZzRfHvecL8afrmBAGHRkR9CVtzlpm9gNn+REyXMBaGcR9b+9U1R0fJChq0e0H6Lg1VMSEKknsR0P+fZbtid6wBv7ERPCwJxtEVCSRpCqybph36Mer8NTVQTcmloxYLHRgBa9u0xu+FJM1Sa04Dl5wlTwsPZqXGF1kMfxY+qTOsZfqR0GQIEoqeNRqgCD2FW+/QDL6WF7dyzCM48hiZUaw7vyITMu/SBxRg99TsP/wA6ZNrf0Teyg==
-Received: from DM6PR06CA0010.namprd06.prod.outlook.com (2603:10b6:5:120::23)
- by SJ0PR12MB6943.namprd12.prod.outlook.com (2603:10b6:a03:44b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 01:13:22 +0000
-Received: from DM6NAM11FT095.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:120:cafe::f) by DM6PR06CA0010.outlook.office365.com
- (2603:10b6:5:120::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
- Transport; Tue, 23 May 2023 01:13:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT095.mail.protection.outlook.com (10.13.172.180) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.28 via Frontend Transport; Tue, 23 May 2023 01:13:22 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 22 May 2023
- 18:13:10 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 22 May
- 2023 18:13:09 -0700
-Message-ID: <b99d20a4-ab1e-4e67-37ae-cb22777317ba@nvidia.com>
-Date:   Mon, 22 May 2023 18:13:09 -0700
+        Mon, 22 May 2023 21:15:34 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F41291;
+        Mon, 22 May 2023 18:15:33 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N0VfJa025455;
+        Tue, 23 May 2023 01:15:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=NJsnDXG7NP3VGxheSNXVdJdP+EBMt4Bc6FXxE1MXp08=;
+ b=OYEQ++LrCbetZqIEfkVzbNaa1vfx8WoNVSlCkWR1B0TLcCApsFa4HVuvxqfXksr6Vylv
+ TQGAy2ImXwyP83rw0H4IoMP/JT6o8krMlT7FnY/XWO+uu09JmYNaYwKX8m2wd8y02doI
+ M/fMMc7G8lMXWmq5HRHDVbW0Xqm6kwFYhHcrR3Qvhl5Xcwp3esdCZb7S+YEmNtu3xdRL
+ oWBhfMmHXUy8i8pQA2Rc9UemGGhMWn5EoG5d0vhVFaPdSIBcs0XPNd7jTQzWx7Ajast8
+ +YcjLpgZfoxva6xniLchIRtjYHkxTfafq9dpnRGEYbMczeLFqH9ikUTWkAOarPTEpo3Q Lg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qr53w9tec-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 01:15:28 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N1FRpq006804
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 01:15:27 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 22 May 2023 18:15:27 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <johan@kernel.org>,
+        <mani@kernel.org>
+Subject: [PATCH v2 0/3] drm/msm/adreno: GPU support on SC8280XP
+Date:   Mon, 22 May 2023 18:15:19 -0700
+Message-ID: <20230523011522.65351-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] mmu_notifiers: Notify on pte permission upgrades
-Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>,
-        Sean Christopherson <seanjc@google.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <robin.murphy@arm.com>,
-        <will@kernel.org>, <nicolinc@nvidia.com>,
-        <linux-arm-kernel@lists.infradead.org>, <kvm@vger.kernel.org>,
-        <kvmarm@lists.cs.columbia.edu>, <jgg@nvidia.com>
-References: <20230522063725.284686-1-apopple@nvidia.com>
- <ZGu1vsbscdO48V6h@google.com> <875y8jappz.fsf@nvidia.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <875y8jappz.fsf@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT095:EE_|SJ0PR12MB6943:EE_
-X-MS-Office365-Filtering-Correlation-Id: 13fa6ebe-0428-4031-8866-08db5b2ae6d9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rczXf/qmpC7OWWSOaotbJDL0r9ucVIF+1pGzmDPZXXUW3JAfYIbVgzhXmFy2pJd+Ti/CJXma9LASIpAr66/qv14QHL56WkMF/X29MfTBNn0/eYKQqJ+G4o/NTReuUKE/bigLXFxvuH35dL4HsZ5mfCVV7FeLBWvU6sKrYDLkgjOtVQCXh55K6VPTbfXRMQsl6Gjy7fx4vELVW6uXgWNAHwEQXu+o/L5XwrWCTo5YGq2FG8Yyqi1Onj9dXSxy31GULRE9rKs7NL5wlcd59bpetw8hEkZnRCE5goy8kLGyhHSuhZSf3eFSlaNDS1SrXmMyPu56XTjdnyWIuYonuOKPLU2I72p4GMhMrJUeVGX6jJnZWy1zoL7sil7jPovBj4/kuzGD1MrJuZzif0Ao1aVzLisIeDoOdMibNxUl1yz0SyGc6hBJRATrpcVfXKqiIugDoZNOdM30Tqoskjf03KCVkFK+POOb1BLnasVyMdKOcnzQkSOW5PXuhNEJT3avd75ac3ms4x0pAK5z3DsM0PTCRxRLYU/7SsoSq/GaPQ00FuQDWtupDXmKvdmUUVMIlcT23fZMJr48U0znZhXKuGb2ZmoplQcbEhCFCUEiANPeO4mHFTYLLKtWL7nNVPhIYHbJ32Xr6b6pjhxRstz3KTegAISO7nDrRyFCcLouSaJv69UeqQjHaGtIZe3JIcC6lf+VWQSnX/Ep4EzH8qi2Pxf3KV6ZDNfCXBjmqe9aUGBdPsc3Ae3ywPkCnQ6unLElP3GM7YdpVh6Nu2NK2yzdmNj+uQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199021)(40470700004)(46966006)(36840700001)(31686004)(2906002)(16576012)(66899021)(5660300002)(83380400001)(47076005)(8676002)(8936002)(70206006)(41300700001)(4326008)(70586007)(316002)(54906003)(82310400005)(36756003)(110136005)(40480700001)(478600001)(426003)(336012)(2616005)(7636003)(356005)(86362001)(31696002)(26005)(186003)(107886003)(53546011)(16526019)(40460700003)(36860700001)(82740400003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 01:13:22.1420
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13fa6ebe-0428-4031-8866-08db5b2ae6d9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT095.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6943
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rcbLYq7Q68gYXqClC25bKcpds3uNCBW9
+X-Proofpoint-ORIG-GUID: rcbLYq7Q68gYXqClC25bKcpds3uNCBW9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-22_18,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 mlxlogscore=719
+ spamscore=0 bulkscore=0 malwarescore=0 adultscore=0 clxscore=1011
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230008
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 16:50, Alistair Popple wrote:
-...
->> Again from include/linux/mmu_notifier.h, not implementing the start()/end() hooks
->> is perfectly valid.  And AFAICT, the existing invalidate_range() hook is pretty
->> much a perfect fit for what you want to achieve.
-> 
-> Right, I didn't take that approach because it doesn't allow an event
-> type to be passed which would allow them to be filtered on platforms
-> which don't require this.
-> 
-> I had also assumed the invalidate_range() callbacks were allowed to
-> sleep, hence couldn't be called under PTL. That's certainly true of mmu
-> interval notifier callbacks, but Catalin reminded me that calls such as
-> ptep_clear_flush_notify() already call invalidate_range() callback under
-> PTL so I guess we already assume drivers don't sleep in their
-> invalidate_range() callbacks. I will update the comments to reflect
+This series introduces support for A690 in the DRM/MSM driver and
+enables it for the two SC8280XP laptops.
 
-This line of reasoning feels very fragile. The range notifiers generally
-do allow sleeping. They are using srcu (sleepable RCU) protection, btw.
+Bjorn Andersson (3):
+  drm/msm/adreno: Add Adreno A690 support
+  arm64: dts: qcom: sc8280xp: Add GPU related nodes
+  arm64: dts: qcom: sc8280xp: Enable GPU related nodes
 
-The fact that existing callers are calling these under PTL just means
-that so far, that has sorta worked. And yes, we can probably make this
-all work. That's not really the ideal way to deduce the API rules, though,
-and it would be good to clarify what they really are.
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |  26 +++
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |  26 +++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 169 ++++++++++++++++++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c         | 113 +++++++++++-
+ drivers/gpu/drm/msm/adreno/a6xx_hfi.c         |  33 ++++
+ drivers/gpu/drm/msm/adreno/adreno_device.c    |  14 ++
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h       |  11 +-
+ 7 files changed, 387 insertions(+), 5 deletions(-)
 
-Aside from those use cases, I don't see anything justifying a "not allowed
-to sleep" rule for .invalidate_range(), right?
-
-thanks,
 -- 
-John Hubbard
-NVIDIA
-
+2.39.2
 
