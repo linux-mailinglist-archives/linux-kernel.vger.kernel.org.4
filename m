@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F407470DF2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D99570E490
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237270AbjEWOaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S236973AbjEWSYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237271AbjEWOaG (ORCPT
+        with ESMTP id S233373AbjEWSYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:30:06 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EAA133;
-        Tue, 23 May 2023 07:30:03 -0700 (PDT)
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id DA750859F2;
-        Tue, 23 May 2023 16:29:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1684852171;
-        bh=bP+bcaDzdQP+Oo+ZLuCx4BZqoPSyMeSyqmyMd8Bg6H8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B2SSx9qovhk+7bHcjYSF26x7FQuhdgrrrNkpCLPMITmcEvqKt6yOqCP7F/Dfyj5WF
-         a0fOGNK9SEfI1/7ZozoDRoeVY+/+NbJfHEgHX+9xvAzN/MOInFNVRcyhdPWg6ljLYs
-         UYCDqfrq7WreHnxHW56J/mn2Y0ur8tEVWGWWi7HBAQzTLLhZl/IwqkVb+CH/MRGZl+
-         GSelbqG+yLMAiv3KRRiMWfdD5RGaIKUwaSBClwpINt0RZxou3IbkSHmwanK2v6O3F/
-         a9BjW56mzQ6KYN31OyRlU0Va8i+RryWYTkltbeGAJrVFOPt9uLY3mQ6xybbbB/AMRh
-         pU5qJ5JhpEMjQ==
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH v7 3/3] net: dsa: mv88e6xxx: add support for MV88E6071 switch
-Date:   Tue, 23 May 2023 16:29:12 +0200
-Message-Id: <20230523142912.2086985-4-lukma@denx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230523142912.2086985-1-lukma@denx.de>
-References: <20230523142912.2086985-1-lukma@denx.de>
+        Tue, 23 May 2023 14:24:36 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE948F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684866275; x=1716402275;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tuFnnzUtO+j+G9zdngej++eyid3nUrqyPHqy1/mTfTQ=;
+  b=WdhUW8h4i+WYX3aVQxUwQGq+wO1hmidmyefcmmjyr7o6JPHWHQp7oEQ+
+   OAnN44fA7fEpY61Bj7yyJVZQHmg0kwl5LpKWPL2p1oLEcy3S0smwC8OOo
+   pNzHGWPuUuxzDa+y0PEiFfWH97FUTwWKwli3NX7eAII1pLEKrj6IL1Rla
+   maUrUZw8Rdvc9QiDtYeg7RkdM4e0Ms1itNPfZ5PdSy8PbPDTkGkUOeQNO
+   1H47YvDEkWya5ZvMUER8OtDbFp68jpg0r9gQHfNGl6BDMKh5chU09ZhXc
+   XXNpuhoDXOAXPANBHIXtXF1g60NJFILdkpBknZ9lmelUlPZ0vwuIOHbF8
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="342786210"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="342786210"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="736974290"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="736974290"
+Received: from srusakov-mobl.amr.corp.intel.com (HELO [10.209.35.87]) ([10.209.35.87])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 11:24:33 -0700
+Message-ID: <dd93f315-79ef-5108-0cae-fbfafafb9a12@linux.intel.com>
+Date:   Tue, 23 May 2023 09:29:34 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V2 1/9] ASoC: amd: ps: create platform devices based on
+ acp config
+Content-Language: en-US
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
+ <20230522133122.166841-2-Vijendar.Mukunda@amd.com>
+ <1d73963a-de26-a147-6ccb-e5c8c65f579b@linux.intel.com>
+ <a9723614-2ee8-279c-8a95-28535ca47709@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <a9723614-2ee8-279c-8a95-28535ca47709@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,91 +75,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A mv88e6250 family (i.e. "LinkStreet") switch with 5 internal PHYs,
-2 RMIIs and no PTP support.
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
----
-Changes for v2:
-- Update commit message
-- Add information about max frame size
+>>> +static int get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
+>>>  {
+>>>  	struct acpi_device *dmic_dev;
+>>> +	struct acpi_device *sdw_dev;
+>>>  	const union acpi_object *obj;
+>>>  	bool is_dmic_dev = false;
+>> useless init
+> We are checking is_dmic_dev & is_sdw_dev flags in same code.
+> Either we need to explicitly update value as false when no ACP PDM
+> /SoundWire manager instances not found.
 
-Changes for v3:
-- None
+please discard my comment, I read this sideways
 
-Changes for v4:
-- None
+>>
+>>> +	bool is_sdw_dev = false;
+>> and useless init as well...
 
-Changes for v5:
-- None
+same here.
+>>
+>>> +	int ret;
+>>>  
+>>>  	dmic_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_DMIC_ADDR, 0);
+>>>  	if (dmic_dev) {
+>>> +		/* is_dmic_dev flag will be set when ACP PDM controller device exists */
+>>>  		if (!acpi_dev_get_property(dmic_dev, "acp-audio-device-type",
+>>>  					   ACPI_TYPE_INTEGER, &obj) &&
+>>>  					   obj->integer.value == ACP_DMIC_DEV)
+>>>  			is_dmic_dev = true;
+>>>  	}
+>>>  
+>>> +	sdw_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_SDW_ADDR, 0);
+>>> +	if (sdw_dev) {
+>>> +		acp_data->sdw_fw_node = acpi_fwnode_handle(sdw_dev);
+>>> +		ret = sdw_amd_scan_controller(&pci->dev);
+>>> +		/* is_sdw_dev flag will be set when SoundWire Manager device exists */
+>>> +		if (!ret)
+>>> +			is_sdw_dev = true;
+>> sdw_amd_scan_controller() can return -EINVAL, how is this handled?
+>> Shouldn't you stop execution and return here in the < 0 case?
+> As per our design, ACP PCI driver probe should be successful, even
+> there are no ACP PDM or Soundwire Manager instance configuration
+> related platform devices.
+> 
+> The ACP PCI driver is multi-use and that even if SoundWire manager
+> instances or PDM controller is not found, it will still be used to set the
+> hardware to proper low power states. i.e ACP should enter D3 state
+> after successful execution of probe sequence.
 
-Changes for v6:
-- Reorder patches for better readiness
+Ah ok, maybe a reworded comment would make sense then, e.g.
 
-Changes for v7:
-- Provide just support for this IC (remove the part with setting
-  max frame info as it is not needed anymore)
----
- drivers/net/dsa/mv88e6xxx/chip.c | 20 ++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/chip.h |  1 +
- drivers/net/dsa/mv88e6xxx/port.h |  1 +
- 3 files changed, 22 insertions(+)
+"continue probe and discard errors if SoundWire Manager is not described
+in ACPI tables"
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 9cb76a5b8ff5..8d4c1ab4c85d 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -5663,6 +5663,26 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
- 		.ops = &mv88e6250_ops,
- 	},
- 
-+	[MV88E6071] = {
-+		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6071,
-+		.family = MV88E6XXX_FAMILY_6250,
-+		.name = "Marvell 88E6071",
-+		.num_databases = 64,
-+		.num_ports = 7,
-+		.num_internal_phys = 5,
-+		.max_vid = 4095,
-+		.port_base_addr = 0x08,
-+		.phy_base_addr = 0x00,
-+		.global1_addr = 0x0f,
-+		.global2_addr = 0x07,
-+		.age_time_coeff = 15000,
-+		.g1_irqs = 9,
-+		.g2_irqs = 5,
-+		.atu_move_port_mask = 0xf,
-+		.dual_chip = true,
-+		.ops = &mv88e6250_ops,
-+	},
-+
- 	[MV88E6085] = {
- 		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6085,
- 		.family = MV88E6XXX_FAMILY_6097,
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index 4cfb16375deb..128715df5772 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -55,6 +55,7 @@ enum mv88e6xxx_frame_mode {
- /* List of supported models */
- enum mv88e6xxx_model {
- 	MV88E6020,
-+	MV88E6071,
- 	MV88E6085,
- 	MV88E6095,
- 	MV88E6097,
-diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
-index 56efba08abdc..e423ef13a827 100644
---- a/drivers/net/dsa/mv88e6xxx/port.h
-+++ b/drivers/net/dsa/mv88e6xxx/port.h
-@@ -112,6 +112,7 @@
- #define MV88E6XXX_PORT_SWITCH_ID		0x03
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_MASK	0xfff0
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6020	0x0200
-+#define MV88E6XXX_PORT_SWITCH_ID_PROD_6071	0x0710
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6085	0x04a0
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6095	0x0950
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6097	0x0990
--- 
-2.20.1
-
+Same for DMIC above
