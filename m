@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD00B70E445
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2FA70E44F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbjEWSDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S235873AbjEWSEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238045AbjEWSDH (ORCPT
+        with ESMTP id S238028AbjEWSEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:03:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5477D119
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:03:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4FC86358A
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 18:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F932C433D2;
-        Tue, 23 May 2023 18:03:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684864984;
-        bh=/P/Osjoc4z4Yu1N3CgNlw0iuscbguTL7v6pbGCgQbH4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=b99bd4Xjdm1odCryN2qdU5WbBTcWoU0sFMQvQwhAHVzlDLAoyYhXLH3LI1CmpxtAo
-         XVc4H2Jn8h4YdYHfozN82i8iyvZroRwmkVIyb5cNkbNyP87mas94y0n/Z30OuPLGSQ
-         xJqpiS49RGxh+WM2FAiV6yApwsuPYXESmY1i72RclZpB6/KTtKAndKZ1PTaMvS40MM
-         zpRzPVCPJe3SUj7ExGcZvKVur9O2pSr9X0EmLfwzXD5HQNbizL5v9e1sleZwslA52z
-         5/D+hA8BvhqJ0/1uadLTC4BjFfXCKv6vTQ3cdS+9uj+ChglV9eICLcxk+QZ79ry3+F
-         osUtEQ35VsPIQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3114FE22AEC;
-        Tue, 23 May 2023 18:03:04 +0000 (UTC)
-Subject: Re: [GIT PULL] erofs fixes for 6.4-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZGz1wpqyI+lfCaUA@debian>
-References: <ZGz1wpqyI+lfCaUA@debian>
-X-PR-Tracked-List-Id: Development of Linux EROFS file system <linux-erofs.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <ZGz1wpqyI+lfCaUA@debian>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.4-rc4-fixes
-X-PR-Tracked-Commit-Id: cf7f2732b4b83026842832e7e4e04bf862108ac2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5fe326b4467689ef3690491ee2ad25ff4d81fe59
-Message-Id: <168486498418.10175.448428344867124366.pr-tracker-bot@kernel.org>
-Date:   Tue, 23 May 2023 18:03:04 +0000
-To:     Gao Xiang <xiang@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Sandeep Dhavale <dhavale@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@coolpad.com>,
-        linux-erofs@lists.ozlabs.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Tue, 23 May 2023 14:04:02 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2194AC2;
+        Tue, 23 May 2023 11:03:58 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1684865022tcxah01h
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 24 May 2023 02:03:41 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000B00A0000000
+X-QQ-FEAT: swyrzWPvyR0MduXpVglWqnX/F5HbgaaQRtAemZVP+sG0/GJZ2D1Y/ShFZ8m7+
+        ziR3C6JHZMUzvcAn2FwvU648OVTDIxR4ZJYfKygUbbeMPfvz3ccq3CKNE64aCcEq9+CCn0q
+        CiFhW82vl2CW0rnJ89xQJLaOf4AnSnB1nFzruLcHLazA5iZHRefcLmVGCSnfLohCMb14uh8
+        Dqy6oCARHkBhf58RZyuHqP6VQj6FGIG91XExRJffbaM0xxWFA/56fJYzS6hgl9URmJQjHup
+        1/AB5I3hQEDTSVrksGlevBahKLR8aiEtXT6GhGb816t/Pepo2YvLvONJFiXjl7YaO6A3oX1
+        n5T+gFHCX3N7qPbIcZCvkprKTpJHw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17320655173653481143
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, aou@eecs.berkeley.edu, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, shuah@kernel.org
+Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
+Date:   Wed, 24 May 2023 02:03:40 +0800
+Message-Id: <20230523180340.466619-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230521180823.164289-1-falcon@tinylab.org>
+References: <20230521180823.164289-1-falcon@tinylab.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,15 +53,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 24 May 2023 01:20:02 +0800:
+Hi, Willy, Thomas
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.4-rc4-fixes
+Good news, I just fixed up all of the time32 syscalls related build and
+test failures for rv32 and plan to send out the whole patchset tomorrow.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5fe326b4467689ef3690491ee2ad25ff4d81fe59
+The patchset is based on 20230520-nolibc-rv32+stkp2 of [1] and the new
+statckprotect patchset [2] (If v2 is ready, I prefer to rebase on v2).
 
-Thank you!
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
+[2]: https://lore.kernel.org/linux-riscv/20230521100818.GA29408@1wt.eu/T/#t
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+For the fstat compile issue, I prefer to use a __NR_statx for rv32
+instead of using fstatfs, because of different fstatfs* have different
+errno's, it is ugly to use lots of macros ;-) what's your suggestion?
+
+Here is the __NR_statx version:
+
+    +static int test_syscall_args(void)
+    +{
+    +#ifdef __NR_statx
+    +	return syscall(__NR_statx, 0, NULL, 0, 0, NULL);
+    +#elif defined(__NR_fstat)
+    +	return syscall(__NR_fstat, 0, NULL);
+    +#else
+    +#error Neither __NR_statx nor __NR_fstat defined, cannot implement syscall_args test
+    +#endif
+    +}
+
+And the fstatfs version:
+
+    +#ifdef __NR_fstatfs64
+    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs64, 0, 0, NULL), -1, EINVAL)
+    +#elif defined(__NR_fstatfs)
+    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs, 0, NULL), -1, EFAULT)
+    +#elif defined(__NR_fstat)
+    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT)
+    +#else
+    +#error None of __NR_fstatfs64, __NR_fstatfs and __NR_fstat defined, cannot implement syscall_args test
+    +#endif
+
+And I plan to move __NR_fstat as the first branch to make sure it works
+as before on the other platforms.
+
+>     30 fork = 1 ENOSYS                                              [FAIL]
+>     33 gettimeofday_null = -1 ENOSYS                                [FAIL]
+>     35 gettimeofday_bad1 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+>     36 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+>     37 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+>     51 poll_null = -1 ENOSYS                                        [FAIL]
+>     52 poll_stdout = -1 ENOSYS                                      [FAIL]
+>     53 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
+>     56 select_null = -1 ENOSYS                                      [FAIL]
+>     57 select_stdout = -1 ENOSYS                                    [FAIL]
+>     58 select_fault = -1 ENOSYS  != (-1 EFAULT)                     [FAIL]
+>     64 wait_child = -1 ENOSYS  != (-1 ECHILD)                       [FAIL]
+>     65 waitpid_min = -1 ENOSYS  != (-1 ESRCH)                       [FAIL]
+>     66 waitpid_child = -1 ENOSYS  != (-1 ECHILD)                    [FAIL]
+>
+
+All of the above failures have been fixed up, some of them are very
+easy, some of them are a little hard.
+
+1. 30, 64-66 depends on wait4, use waitid instead
+2. 33-37 depends on gettimeofday, use clock_gettime64 instead
+3. 51-53 depends on ppoll, use ppoll_time64 instead
+4. 56-58 depends on pselect*, use pselect_time64 instead
+
+And I have found there are two same 'gettimeofday_bad2', is it designed?
+If no, I will send a patch to dedup it:
+
+    CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+    CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+
+> 
+> My suggestion is directly fix up the failures one by one in current stage,
+> because nolibc currently only uses part of the time32 syscalls, it may be not
+> that complex to fix up them. Have read the code of musl and glibc today, both
+> of them have good time64 syscalls support, I plan to fix up the above failures
+> in several days, hope so but no promise ;-)
+>
+
+both musl and glibc help a lot, but also encounter some critical issues, for
+example, to pass some test cases, it is required to emulate the same path of
+the target syscalls and return the same errno's for them, the code comment will
+exaplain the details.
+
+> And another question: for the new changes, If a platform support both of the
+> 32bit and 64bit syscalls, do we need to put the 64bit syscalls at first?
+>
+
+To make sure not touch too much on the code and reduce test cost, the patchset
+just kept the default code order and let the old code in the first branch.
+
+I plan to send the whole patchset tomorrow.
+
+Thanks,
+Zhangjin
