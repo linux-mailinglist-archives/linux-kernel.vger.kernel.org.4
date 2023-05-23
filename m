@@ -2,77 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBAF70E5B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A4270E5D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238438AbjEWTgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S238419AbjEWTkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238396AbjEWTge (ORCPT
+        with ESMTP id S238481AbjEWTkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:36:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AE6198;
-        Tue, 23 May 2023 12:36:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4FFC63601;
-        Tue, 23 May 2023 19:36:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53F3CC433D2;
-        Tue, 23 May 2023 19:36:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684870578;
-        bh=JYLPBRrpHknapscwDa20NqpaHmoXAwkDo65KNIj3lMY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1yAu6cdBqmotndVC6762F8yOEu75ie9Uu1hCRJxU9xFJS4xkzbVxS1UteRK1cGNB
-         lu4fqjKRxHqIn2SmSIVjjU/IHQqtSCBXsEEloLXeKOEc2EofpTlA/yJecOC62Da8hY
-         nu8mCCdzA8oRoB+kWq9V9PWBaFaxCVLQy0xJ9I7vqGutk+Gbd1MFKcJZZ+9g7UYhya
-         1TU3ry1sIl/zMNg953q+Q1AQB7XeOil/ZOhrmSsUgK8DO7lkFU9IGlQIocHyyDluqD
-         TiSECSCdAQKCL0/PMyl7ps/PFrP13rTDjbOucYzL9x4Ijfgt6PAmBobUW4GPtV8fj2
-         sehe6L65LL+lg==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: clock: qcom: Accept power-domains for GPUCC
-Date:   Tue, 23 May 2023 12:40:07 -0700
-Message-Id: <168487080174.3522253.8223523756874721928.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230523010348.63043-1-quic_bjorande@quicinc.com>
-References: <20230523010348.63043-1-quic_bjorande@quicinc.com>
+        Tue, 23 May 2023 15:40:32 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA62E73
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:40:18 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d577071a6so204079b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684870818; x=1687462818;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t5+vEum+icvRoOsA8RbdszrE+oDIqpAAJx5BE5S3Yrk=;
+        b=b8mDkUonfyAkUSWIM3sTxP1tatTZXVjyQBfJuxQt0M4ezKPu+WCadC1slZTi4BUIW5
+         cXQWuVUkdGHl1SgaZsma1+s+pgwj39A92qswoVpQ/ftNkUW96wEjXWwyQOTB218irSTV
+         MaSRqLki3VnPrJr3ag+X/UkeMIxzvTSuojK8IKPLITAOiXSWalm8+Eb3cCJVHv1Wo8E/
+         tOyjrlgcT8CX+l4jL2twlyHGQyQYlvJ1u1evh+yT+CvDnMHYgCANReAFwMq2Gpktp7I2
+         FIripO9orrDM4zr4dgBhMWwduQZU743lkgF0ahy9D7H9vEjHc78gJ61YcHZKJ7bDwIaU
+         98VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684870818; x=1687462818;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t5+vEum+icvRoOsA8RbdszrE+oDIqpAAJx5BE5S3Yrk=;
+        b=QcEmodV13ZdMl6em9e6YgRN9sOMx+Hfza9ccrO1UxlDXJemngNlLJXtkB218DY8Rpf
+         0df9dHSVaoE8JgRFv7smZrE08Cxs9cBVPc8mKApn7tGA33c/pY1hNwWF6zV696WKmlWE
+         yQVaGMHyPJG9gFlkUocmACCiBzyPMxOakNicT2rYF42QekQVLRPb2ygpgA+bhS3xfT/+
+         4YeGuFCskUjhjHCTAHOJKkm9IDmMMyfxzmJ1VGlAaYC7CaivnnXdrTy2WDXqZbN+o+qf
+         h6VflqQ7nj9IRCCyIzDia43VishOP242Zi+J18GbNHtGBfZ0qM3tpQZNdWOzkV8RWHQk
+         wy5A==
+X-Gm-Message-State: AC+VfDxOD+kbQ/hOFgYzsQxAdTSx51jDwtf549e1w9Euji5OrzztgTh4
+        3NesmozG3OLCJNASmkIl5A8=
+X-Google-Smtp-Source: ACHHUZ6fmN/stE+tIK3VU9YuB7QOmO9Mm6I8b/dV9nu4GkQDSlQ9ZxiTrRFxSh2skG7CI3od0tJP4A==
+X-Received: by 2002:a05:6a00:14d0:b0:639:a518:3842 with SMTP id w16-20020a056a0014d000b00639a5183842mr230904pfu.7.1684870818001;
+        Tue, 23 May 2023 12:40:18 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id a14-20020a62e20e000000b00643889e30c2sm3942573pfi.180.2023.05.23.12.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 12:40:17 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 May 2023 09:40:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Zqiang <qiang.zhang1211@gmail.com>
+Cc:     jiangshanlai@gmail.com, naresh.kamboju@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] workqueue: Fix warning triggered when nr_running is
+ checked in worker_enter_idle()
+Message-ID: <ZG0WoOqfr6R5wK1p@slm.duckdns.org>
+References: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 18:03:48 -0700, Bjorn Andersson wrote:
-> In many designs the power-domains provided by the GPU clock controller
-> are powered by some GFX rail, add power-domains as a valid property to
-> allow this to be specified.
-> 
-> 
+On Tue, May 23, 2023 at 10:09:41PM +0800, Zqiang wrote:
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 9c5c1cfa478f..329b84c42062 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -1144,13 +1144,12 @@ void wq_worker_tick(struct task_struct *task)
+>  	 * longer than wq_cpu_intensive_thresh_us, it's automatically marked
+>  	 * CPU_INTENSIVE to avoid stalling other concurrency-managed work items.
+>  	 */
+> -	if ((worker->flags & WORKER_NOT_RUNNING) ||
+> +	if ((worker->flags & WORKER_NOT_RUNNING) || worker->sleeping ||
+>  	    worker->task->se.sum_exec_runtime - worker->current_at <
+>  	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
+>  		return;
 
-Applied, thanks!
+Ah, right, this isn't just interrupted read-modify-write. It has to consider
+sleeping. This is subtle. We'll definitely need more comments. Will think
+more about it.
 
-[1/1] dt-bindings: clock: qcom: Accept power-domains for GPUCC
-      commit: de6d1f0c4919852514459f1876d7168212e5e1cd
+Thanks.
 
-Best regards,
 -- 
-Bjorn Andersson <andersson@kernel.org>
+tejun
