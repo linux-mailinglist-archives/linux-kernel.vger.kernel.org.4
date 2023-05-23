@@ -2,148 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA16B70DD29
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD5E70DD2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236835AbjEWNGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S236577AbjEWNHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjEWNGB (ORCPT
+        with ESMTP id S230283AbjEWNHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:06:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501D9DB;
-        Tue, 23 May 2023 06:05:59 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684847157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GBL3D+wogzuI8WLqpWBwi6Hq40B1ocjEWy9bOCL1HEU=;
-        b=DvF0LG/QWQOQtNEw6TXLSXLTLB0Q++LzGot9sn3/DolyN3Rh9tKi9FQdTxxZ7BONT2Two+
-        JLKQ3KRlGAP7dVpsNdEXGXszjV/fPRaa4Bl3om2Y1SisHI8vXrrtqc8p122wKUT1GF6nUQ
-        7SJRXPdeeYDzkNhcPznU5xlTLhVa3BV+36CsQxObZK3qdPW5TtOqAT1dbXvFZvMZTk+noq
-        ndStmIRUL9pCJTyd0EYit5BL/x0emtqybT9Zl0npZkRwpUJMpbR3uuuKiexQ29nAzpHNdt
-        /hMeEIzpajCjRYXm2lv1dqbLw+I7cOW2hrjk7bI29soy/l+adM/r4YNbwkVWfw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684847157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GBL3D+wogzuI8WLqpWBwi6Hq40B1ocjEWy9bOCL1HEU=;
-        b=/yLHLe0a0jCoLPVWFG7TWRFGNU4Ud9jp/+LNbF5xN68sSPBGXFDQWnUYdfrFKVjThgfM1l
-        j9uy1vMw6Vntt4CA==
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, Sinan Kaya <okaya@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Anna-Maria Behnsen <anna-maria.behnsen@linutronix.de>
-Subject: Re: [patch V2 06/40] PCI/MSI: Provide static key for parent
- mask/unmask
-In-Reply-To: <86r0r7cpks.wl-maz@kernel.org>
-References: <20221121135653.208611233@linutronix.de>
- <20221121140048.659849460@linutronix.de> <8635a8o65q.wl-maz@kernel.org>
- <87bkowcx0z.ffs@tglx> <86zgcgmpzl.wl-maz@kernel.org> <87v8n3c2qy.ffs@tglx>
- <87ttw4wiro.ffs@tglx> <86r0r7cpks.wl-maz@kernel.org>
-Date:   Tue, 23 May 2023 15:05:56 +0200
-Message-ID: <87lehfurij.ffs@tglx>
+        Tue, 23 May 2023 09:07:48 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A760DB;
+        Tue, 23 May 2023 06:07:46 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB96F6000A;
+        Tue, 23 May 2023 13:07:40 +0000 (UTC)
+Message-ID: <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
+Date:   Tue, 23 May 2023 15:07:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor@kernel.org>
+References: <20230515141235.0777c631@canb.auug.org.au>
+ <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
+ <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
+ <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
+ <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23 2023 at 11:25, Marc Zyngier wrote:
-> On Mon, 22 May 2023 15:19:39 +0100,
-> Thomas Gleixner <tglx@linutronix.de> wrote:
->> On the other hand for PCI/MSI[x] the mask/unmask operations are not in
->> the hot path as PCI/MSI[x] are strictly edge. Mask/unmask is only
->> happening on startup, shutdown and when an interrupt arrives after
->> disable_irq() incremented the lazy disable counter.
->> 
->> For regular interrupt handling mask/unmask is not involved.
->> 
->> So to avoid that global key we can let the parent domain set a new flag,
->> e.g. MSI_FLAG_PCI_MSI_MASK_PARENT, in msi_parent_ops::supported_flags
->> and let the PCI/MSI core code query that information when the per device
->> domain is created and select the appropriate template or fixup the
->> callbacks after the domain is created.
->> 
->> Does that address your concerns?
+
+On 23/05/2023 04:28, Randy Dunlap wrote:
+> Hi,
 >
-> It does to a certain extent.
+> On 5/19/23 03:42, Alexandre Ghiti wrote:
+>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
+>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
+>>>
+>>> I'll check this one too which seems to be related to kernel/pi introduction.
+>>
+>> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
+> Does this mean exclude XIP_KERNEL or something else from randconfigs?
+
+
+I meant excluding XIP_KERNEL from randconfigs: it has very strict 
+constraints regarding what can/can't be enabled then it needs human 
+intervention to make sure the error above does not happen. So I would 
+not bother testing this in randconfigs if possible.
+
+
 >
-> But what I'd really like is that in the most common case where the
-> interrupt controller is capable of masking MSIs, the PCI/MSI
-> *enabling* becomes the responsibility of the PCI core code and not the
-> IRQ code.
->
-> The IRQ code should ideally only be concerned with the masking of the
-> interrupt at the irqchip level, and not beyond that. And that'd solve
-> the Xen problem by merely ignoring it.
->
-> If we have HW out there that cannot mask MSIs at the interrupt
-> controller level, then we'd have to fallback to device-side masking,
-> which doesn't really work in general (MultiMSI being my favourite
-> example). My gut feeling is that this is rare, but I'm pretty sure it
-> exists.
-
-Sure. There are 3 parts involved:
-
-      [Device]--->[PCI/MSI]---->[GIC]
-                   irqchip      irqchip
-
-Controlling the interrupt machinery in the device happens at the device
-driver level and is conceptually independent of the interrupt
-manangement code. The device driver has no access to the PCI/MSI irqchip
-and all it can do is to enable/disable the source of the interrupt in
-the device.
-
-For the interrupt management code the job is to ensure that an interrupt
-can be prevented from disrupting the OS operation independent of the
-device driver correctness.
-
-As a matter of fact we know that PCI/MSI masking ranges from not
-possible over flaky to properly working. So we can't reliably prevent
-that a rougue device spams the PCIe bus with messages.
-
-Which means that we should utilize the fact that the next interrupt chip
-in the hierarchy can mask reliably. I wish I could disable individual
-vectors at the local APIC level on x86...
-
-Now the question is whether we want to make this conditional depending
-on what the PCI/MSI[X] hardware advertises or just keep it simple and do
-it unconditionally.
-
-Thanks,
-
-        tglx
+> thanks.
