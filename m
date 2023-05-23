@@ -2,74 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E9F70DC0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B197270DC0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236757AbjEWMKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
+        id S232993AbjEWMKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbjEWMKu (ORCPT
+        with ESMTP id S232688AbjEWMKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:10:50 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D1111A;
+        Tue, 23 May 2023 08:10:49 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95F211F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:10:47 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-309382efe13so4591460f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684843846; x=1687435846;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mGk02VW36o8oi9xKpds5rY0RuBS6XODiauPH5sa2EDk=;
+        b=1+hx8JRMv8bN6bR9C5NNLW6j3oMCk8dl5nP2zPiCTdzFTyYS6CMOWzYCAiyr2LbJKq
+         stWoCqsYd1ZFVflnqCQlsMXyKLScSJgyNJfWrF8oy3pkxaPTIpyLGGrB5Pble1GU5YbF
+         2eS4IGtUlX3yflBdysz+r7R63PGwkXLgQ84zSRvb07Kh8UBAqV4thC5UN2FaoD9Vu6M9
+         FszYXip6ViB509VU11lVE1QKqOfqcMft+qzm4ZM6dAhDfnZK8vfdlk8PGmKDSJC58IG6
+         w30vkFHRYKAmLbtlms+ciDK/pCVgcWb9Vd0i0bB+IqDOLVFdnLSjFVYeWXQE6wWQyzOW
+         a1fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684843846; x=1687435846;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mGk02VW36o8oi9xKpds5rY0RuBS6XODiauPH5sa2EDk=;
+        b=DA9W4OJKK/Nv66t0WRaevTy5JYcngI+mCSlkh3w1RdQ2GTvOqXhTVGby4Qgn8rqBMs
+         eiV9F2i1M1xWwzBiqpS1xdao4JlhIsA/vIxS5Yp+M5JPclaomUAaLxuiuVNWp7tx+/lB
+         hli5f1wfu5HdJetkjy/bwuadfwGp6N9mBudK22wfoCAoWWqy6rgmqmi2JAA4zeQa6/7l
+         AhzpmAqq8WxsHCqnhgbGR54ZxOGJtbr2c/ypPVCCoWMDbSnTph3n6AZDq7+IOr1o2s3F
+         hIwygxFgt5jQovA7PJaBB8O6RB6LchnYDUgmV3kCn9bStvO5khiIYbUgm/hoL844wx6e
+         30Sw==
+X-Gm-Message-State: AC+VfDyTCsHNrpxQtUCrOoBUFSOUz9WMwbaFJzt1LJtuALsUBrxXdEmh
+        QV4GVnfnM38/tw4aPowP8IDcsg==
+X-Google-Smtp-Source: ACHHUZ42YAfaQnb/Yc6os9IZAlXJp0vBw8ve0qBJR7shOA52HC7aoC6d1NzgFID1WFdnGb+5LV4Qkw==
+X-Received: by 2002:a5d:6b4c:0:b0:2f5:83a8:a9a9 with SMTP id x12-20020a5d6b4c000000b002f583a8a9a9mr10876277wrw.16.1684843846192;
         Tue, 23 May 2023 05:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=axlCGPqa+QD9bXHQ+8rchdfcg+msG+OHVPT/ggPIoMY=; b=Wtv3c/k/hJ2GtAQOKir/TwZNMc
-        sekfS7FHJYW2qszKuZPxRNwh07FROVXCxlQNP6efZnaqhtDL3Jk24PQYSFzqcW+OQW3AVZzUd+T4x
-        uZPpjmOjjhuxR0i05KN0q9rWg7wFconQdOWukvWzGsmvPrEXBvHuPWWszqRe4gO6NWgc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q1QqY-00DgQL-Gz; Tue, 23 May 2023 14:10:34 +0200
-Date:   Tue, 23 May 2023 14:10:34 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?utf-8?B?5byg572R?= <m202171703@hust.edu.cn>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        peter korsgaard <peter@korsgaard.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
-Message-ID: <c5c8d9f7-ed50-4650-a5ac-b481999212cf@lunn.ch>
-References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
- <20230422123253.137368-1-silver_code@hust.edu.cn>
- <cf543f92-af0d-4862-bea6-53a358ee9a31@lunn.ch>
- <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id k6-20020adfe8c6000000b003095a329e90sm10788563wrn.97.2023.05.23.05.10.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 05:10:45 -0700 (PDT)
+Message-ID: <2a22b9e1-a828-8a88-e125-f8e603bf1796@baylibre.com>
+Date:   Tue, 23 May 2023 14:10:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] media: mediatek: vcodec: mtk_vcodec_dec_hw: Use
+ devm_pm_runtime_enable()
+Content-Language: en-US
+To:     Fei Shao <fshao@chromium.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        linux-media@vger.kernel.org,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20230515141610.v2.1.I0d1657be3fea5870f797e975a7aa490291e17993@changeid>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230515141610.v2.1.I0d1657be3fea5870f797e975a7aa490291e17993@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Andrew,
-> I'm checking in about my patch submission for i2c ocores that was
-> "review'ed" on 4/25, but its status has not been updated yet.
-> I would greatly appreciate it if you could provide me with an 
-> update on the status of my submission. Is there any additional 
-> information or documentation that I can provide to help expedite 
-> the process?
+On 15/05/2023 08:16, Fei Shao wrote:
+> Convert pm_runtime_enable() to the managed version, and clean up error
+> handling and unnecessary .remove() callback accordingly.
+> 
+> Signed-off-by: Fei Shao<fshao@chromium.org>
 
-I think your patch was submitted during the merge window. This is the
-point in time when subsystems give Linus patches for the next
-release. During those two weeks new patches are not accepted.
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-https://www.kernel.org/doc/html/latest/process/2.Process.html
+-- 
+Regards,
+Alexandre
 
-Now that the merge window is closed, please rebase your patch on
-
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-
-and resubmit. Include my Reviewed-by tag.
-
-	Andrew
