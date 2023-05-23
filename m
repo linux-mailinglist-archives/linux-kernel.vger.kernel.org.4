@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3C170D60C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5858F70D615
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235797AbjEWHxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S235393AbjEWHyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235795AbjEWHxh (ORCPT
+        with ESMTP id S235868AbjEWHyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:53:37 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F75ECD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:52:55 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-253e0edc278so2551311a91.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684828353; x=1687420353;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=biZznb0Xm/1DWPiuZzuhHeJPwNpmTYnggMdIxod5k6A=;
-        b=CjmJJ502dj5MxpnI+/+7GZ1YGXKQlrMLkGIlJx04OsOP+BZxvhn1bIM1xLN2msTeJG
-         SOxDMSKfqu0K3V0dj+2gF7GrDSlHSOyQkGHctpYFHaz3X/PQ+7dNS89I00JUyr7GMHs+
-         u7JGYamJ2WthHKg82/toPPtFvJeDgmGJnJBGpgZ79I1bPwwsJTqHoM9uzcZbCScD3i4R
-         ZVsskzS9VANaBunSn4zZXzdmXT8gIWE8D4TzIrIYE7mBI52qNVRGLIIKNRfI+qfEPveW
-         qNdtlNg6gcdq66xsP6ta3kS+kQPXKpvUDVlPGMNUZ4hYZ1Z2dKoo60S7B9++a5IG+AsN
-         CTnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684828353; x=1687420353;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=biZznb0Xm/1DWPiuZzuhHeJPwNpmTYnggMdIxod5k6A=;
-        b=Ga2HUVTnufo27MSB23vWWB63qm/ZokvqhI2As6GgcKWd5y6LMAaLj8ZTa+3K+zWXXT
-         keeDTuZm+st9hIwVEuLcfFeuChr/X7bmANMpOjaR4rrRJeDXpqsoHzzhT7e/26cceNOD
-         nzIRzSabJa3rOuNR8QcgodwHQo8gWM5NdgVAstxvNxeQk3p0r07HnakhuExSXWy/t33I
-         igbysgwKpvhF+XmSykzzVy2InQ9qVUilKNur1EoUy28rSoMgU5UdLuCePRcCffHXPCDn
-         WqThuEgrecC2ueTWHsSmlTTKROXKQQRVxFRnl8jLBIp7JOtQ6jEEFKpYhy7B4vr9gf7K
-         1CUw==
-X-Gm-Message-State: AC+VfDxVeeHqxwCxBQKd2Pd+PoBLee0YburaABHYRgWmfV5qPLVCcazf
-        De0ok0JJFAZgXtqjBWlsSRpACQ==
-X-Google-Smtp-Source: ACHHUZ6GWkFoVFClX9gWH+TJaVR7Jyz0WLL/88XuhJopenRTtkC/LpdAuZ29qrHjstFWpYBoTSd4Uw==
-X-Received: by 2002:a17:902:d34a:b0:1a9:f425:5409 with SMTP id l10-20020a170902d34a00b001a9f4255409mr10452296plk.49.1684828352822;
-        Tue, 23 May 2023 00:52:32 -0700 (PDT)
-Received: from [10.85.115.102] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id x4-20020a170902ea8400b001a1adbe215asm6088809plb.142.2023.05.23.00.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 00:52:32 -0700 (PDT)
-Message-ID: <a67af05b-8386-f4ec-c5da-623ce30032a5@bytedance.com>
-Date:   Tue, 23 May 2023 15:52:11 +0800
+        Tue, 23 May 2023 03:54:18 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388BFC5;
+        Tue, 23 May 2023 00:54:04 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N5mBK6016579;
+        Tue, 23 May 2023 07:53:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=lMTsWnIdpB+KcIi0KcEG0a0vP17nRieN0vuG7xoW+8c=;
+ b=Sha68fJamuXwHbZxcDIPqg7xF74W/JzmlWJPP72dHDfN7lkvtsSIoHjK8HlREFG0yOAH
+ 1WGeBMO0ftWj/9gimS5msvQVBe+tyOUuxZzPynacODV94+yhajPPJyyXyKDd4ftVtkpK
+ GzGTsCORSuOiOLpSS/SxvJWJgDzDhQEL4DXRZ4VIvGmaChr8/4hlswbl3sHe3OuLlKZM
+ Bu9vne2Gh/Oz74chTHd1uNUxkzzLJ8gUGRVeGcFE19SLlgJO6acvPc+iAlQLzqhX1P4V
+ wzKa1GbcOZxG+zss+cyHZqjY4naTJG4NgVl/2XYV2n6IGEumMEYy6ZA9qHeiT8V+OhZt ow== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qraasst87-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 07:53:22 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N7rLtM016883
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 07:53:21 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
+ 2023 00:53:18 -0700
+Message-ID: <bdef28ed-20f5-3996-55a5-0e955d4c6317@quicinc.com>
+Date:   Tue, 23 May 2023 13:23:15 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v3 0/4] Fix some warnings about rq clock
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org
-References: <20230515063848.77947-1-jiahao.os@bytedance.com>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <20230515063848.77947-1-jiahao.os@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] Revert "firmware: qcom_scm: Clear download bit during
+ reboot"
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Robert Marko <robimarko@gmail.com>
+CC:     <agross@kernel.org>, <konrad.dybcio@linaro.org>,
+        <p.zabel@pengutronix.de>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1684408823-5898-1-git-send-email-quic_mojha@quicinc.com>
+ <20230520021201.t2zeermogm4s5fgq@ripper>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230520021201.t2zeermogm4s5fgq@ripper>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: THWoRExtuJUhawgntRkudD-WzIKCHRhF
+X-Proofpoint-ORIG-GUID: THWoRExtuJUhawgntRkudD-WzIKCHRhF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230064
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,45 +83,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kindly ping...
++Robert
 
+On 5/20/2023 7:42 AM, Bjorn Andersson wrote:
+> On Thu, May 18, 2023 at 04:50:23PM +0530, Mukesh Ojha wrote:
+>> This reverts commit 781d32d1c970 as it causes regression(reboot
+>> does not work) for target like IPQ4019 that does not support
+>> download mode scm calls end to end.
+>>
+> 
+> What do you mean with "reboot does not work"?
+> 
+> Does qcom_scm_set_download_mode() crash the board? Does the reboot
+> always end up in download mode? Or some other form of "not work"?
 
-On 2023/5/15 Hao Jia wrote:
-> These four patches fix some warnings about rq clock.
+As per the discussion here, it seems qcom_scm_set_download_mode()
+does not work on some legacy target like IPQ4019..may be because
+firmware does not have the support..
+
+https://lore.kernel.org/lkml/76943268-3982-deaf-9736-429dd51e01b0@gmail.com/
+
+-- Mukesh
+
 > 
-> Patch1 fixes the warning of using the old rq clock caused by
-> missing update rq clock.
+> Regards,
+> Bjorn
 > 
-> Patch2-4 fixes the warning that the rq clock was updated multiple
-> times while holding the rq lock.
-> 
-> v2->v3:
->      - Modify the commit information of patch1 to make the description clearer.
->      - Split v2 patch2 into 3 separate patches.
-> 
-> v1->v2:
->      - Vincent Guittot suggested using rq_clock_start_loop_update()
->        to prevent multiple calls to update_rq_clock() in unthrottle_cfs_rq()
->        instead of removing update_rq_clock() from unthrottle_cfs_rq()
->        and updating the rq clock before unthrottle_cfs_rq() for patch2.
-> 
-> [v2] https://lore.kernel.org/all/20230510083450.62334-1-jiahao.os@bytedance.com
-> [v1] https://lore.kernel.org/all/20230410081206.23441-1-jiahao.os@bytedance.com
-> 
-> 
-> Hao Jia (4):
->    sched/core: Fixed missing rq clock update before calling
->      set_rq_offline()
->    sched/core: Avoid double calling update_rq_clock() in
->      __balance_push_cpu_stop()
->    sched/core: Avoid multiple calling update_rq_clock() in
->      __cfsb_csd_unthrottle()
->    sched/core: Avoid multiple calling update_rq_clock() in
->      unthrottle_offline_cfs_rqs()
-> 
->   kernel/sched/core.c     |  7 ++++---
->   kernel/sched/fair.c     | 18 ++++++++++++++++++
->   kernel/sched/sched.h    | 21 +++++++++++++++++++++
->   kernel/sched/topology.c | 10 ++++++----
->   4 files changed, 49 insertions(+), 7 deletions(-)
-> 
+>> Fixes: 781d32d1c970 ("firmware: qcom_scm: Clear download bit during reboot")
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>>   drivers/firmware/qcom_scm.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index fde33acd46b7..a4bb9265d9c0 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -1508,7 +1508,8 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>>   static void qcom_scm_shutdown(struct platform_device *pdev)
+>>   {
+>>   	/* Clean shutdown, disable download mode to allow normal restart */
+>> -	qcom_scm_set_download_mode(false);
+>> +	if (download_mode)
+>> +		qcom_scm_set_download_mode(false);
+>>   }
+>>   
+>>   static const struct of_device_id qcom_scm_dt_match[] = {
+>> -- 
+>> 2.7.4
+>>
