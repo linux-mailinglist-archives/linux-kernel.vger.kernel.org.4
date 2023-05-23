@@ -2,250 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8006170E89B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D032B70E897
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238768AbjEWWEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S238774AbjEWWDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238773AbjEWWEF (ORCPT
+        with ESMTP id S238768AbjEWWDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:04:05 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53275E5D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:03:34 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96f53c06babso22722466b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:03:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684879412; x=1687471412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S3/mPMNJ7/h7rqHqGun24hHWu5NE/mF12cbPJ8Cl0jU=;
-        b=aYxN790+J554PL0/3OW2aefHRP/LSi7dZW7T3QLjGyI+bv2qU5rZXasC8nFYcaWe/L
-         f4tj7bCOgnpk7pykJqTG7i0bvAT3Cwvxwj9ptsiN8D9EF85TPt34UlwDIZq9c5B5WBID
-         zHHRH7mkSLFlokOVMW/o+eQMmw0wJ1qPFzziAw5IPd3ps19BxBzmdreH87NRIWktCC5j
-         ch/f5Z07n0h36ceShdVSLYfr9dRshXuNWnV+ObT4M5ha3OqQBOFPTpr8JwAlDS6KVafo
-         Tzq8nlvl0ck3HYb1AF64mhDlW8dj8rAGBVTikzzLKDzmWRN1IsfUqgZoQFeyVURJTMsW
-         3UHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684879412; x=1687471412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S3/mPMNJ7/h7rqHqGun24hHWu5NE/mF12cbPJ8Cl0jU=;
-        b=Vew30tQ7MUNOBmVnKg2ckrksv5VXmL/lcK4IKyOxmzVBQx8FqQwJFpVw2G6BS3Y1LC
-         +WqahHeMIVoA+l3okjxLqrbbwTpY5RArzjKfxpL8E83U9PTY3VqasqOmFFjzKq7nt5Nk
-         o9BwsO8XuVXoDzCEuK+BjyKIkdTJ6S5nC1ULOxpyoXVUbW+JXjnNccfcXFzYvuGopRRA
-         Xk9o1lpJkN/lLMa5Uuw8ZCfuUmJWRP8+MVhC/U5+Jwgo2KHBodZKu/8Of2r4OP+i03h5
-         EXp0RNl30OxHmETbVTsX8FD5AtqGkILHcsngWJE0IJt5CHeO7DWv4lASESlmG9o4B4Uf
-         BRmA==
-X-Gm-Message-State: AC+VfDwOpN7d1TNDpCvSgSGUb4DRgtXxJN5YQ2G+3Fmf+1TzSUMoJIce
-        uw5911Ra5dLtoLFeh0C0cVTcr4aVsLDhEWVntNJg7A==
-X-Google-Smtp-Source: ACHHUZ6bWQQJTpzhU6WaLsUhzz2pNvgVXRIJ+sev91yWzcFsyqudHvKqDOT3DIyvGufJlx5Q87lN+jnd33841n6FhuY=
-X-Received: by 2002:a17:907:8a26:b0:96f:a0ee:113c with SMTP id
- sc38-20020a1709078a2600b0096fa0ee113cmr13953384ejc.19.1684879412141; Tue, 23
- May 2023 15:03:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJD7tkb7zSFT5VnZ-00CA0mBE8dFmVqwPwvMpCYG9c-J3ovjyA@mail.gmail.com>
- <B55000F8-BD65-432F-8430-F58054611474@didiglobal.com>
-In-Reply-To: <B55000F8-BD65-432F-8430-F58054611474@didiglobal.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 23 May 2023 15:02:55 -0700
-Message-ID: <CAJD7tkZwCreOS_XxDM_9mOTBo=Gatr12r1xtc64B_e5+HJhRqg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] memcontrol: support cgroup level OOM protection
-To:     =?UTF-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
-        <chengkaitao@didiglobal.com>
-Cc:     "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Tue, 23 May 2023 18:03:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D45C1;
+        Tue, 23 May 2023 15:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684879387; x=1716415387;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=vJ/bTjEbxLtVYl/o3FixfUJ9JmA1zzE2dgJW/2Hjg6Y=;
+  b=Sz7vimCnRoRdiI2ouD5RkG5NrV/p3DqPBj1r63uZf43NSS/HZaREWzVJ
+   PR/XaRaGG9HUOIf16Ez6MNUcylIjo6V7PxxRReWMvwxiXIEUANPU0TjmJ
+   hZ5IDWsSY48B/t6Z/GTCYXVxhbirsjmNT+djn9+Aq2qrmfP+ZYJ0fmend
+   eIr3i2vkjLRufmG4GUoqHY32gmPFoqpwGdA847r5nbwVn/3teXtwflKXl
+   AEaTaaRBcJJNsGEdzcva0QVnH3htNeDSnSeniCRwz+Y/dEtWlb+Ycy8Wy
+   oMojLmnxOFrd+/w225tVsVr3FLn4aE0QsKtKzZ4vT5zP/6JC8OKFHmedk
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="416834603"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="416834603"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 15:03:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="1034226331"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="1034226331"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 23 May 2023 15:03:02 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 23 May 2023 15:03:02 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 23 May 2023 15:03:02 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 23 May 2023 15:03:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CXlnwwW0FfFYhaKuvzI9L88yHugUWmhq/hxmodRn5IYX5Nk6+81v7NBc4HgtWqCbkLF4qEGHGCg/jPqoKOpK4OOZYUIPEdnApUJKv/JCaRPiYsGyw8DWqaaXVfxsrnPVufGHwGkhDcD1JomYGYABzeu31k16BRLE73YWG9JTa/OtidDo1i5Px+8h/xkAMOjJk1CaD18lMdU7Rvsp3/bhi89QDWGsS4PiVPivz1M9X0M7pXM3kQ/DroQWaDkGzgQYK/wT8wbf4/hd84zaXvrd8ls3vz+PfgG4Ae0LSt998KdyZaNlEerDSyTzoy+zrsA/oUv2T3hnRuzuSS/t5ubaXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vJ/bTjEbxLtVYl/o3FixfUJ9JmA1zzE2dgJW/2Hjg6Y=;
+ b=RHxKF9cS5wQ4To6KeuvKDR8jm5MNhmd6hxIkAJri9JpfZojfFqz4TS4tUCBIuVnsIaH3RsaTIUyM8dIAV5El7nLHKruPclrkVHUUHCoSVQiliZvTYUVoavUF0IDKC1hrsJuUQTfxbNYn12MwFHTi6R1iOtA4RPHc4xcm1nyNHVJzfXhbawr2yfWPKL5zb6mcVwo/kRtIsMqjIAjx0eb+qHlTPg2Kl+goO+2vJ59b9Q7vyb2WwFWif4vtdaRc+61iR+1LVgpZ8L/VZ/OPTAyP8qx9IUDogf+9LyJi/f/udTXrznDN10mhBz3rsXqsRcSR8rY7y3eCftqhCUx7pbryyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ0PR11MB5600.namprd11.prod.outlook.com (2603:10b6:a03:3ab::16)
+ by PH0PR11MB5579.namprd11.prod.outlook.com (2603:10b6:510:e6::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
+ 2023 22:03:00 +0000
+Received: from SJ0PR11MB5600.namprd11.prod.outlook.com
+ ([fe80::fa7f:e19b:bdfc:4af]) by SJ0PR11MB5600.namprd11.prod.outlook.com
+ ([fe80::fa7f:e19b:bdfc:4af%7]) with mapi id 15.20.6411.028; Tue, 23 May 2023
+ 22:03:00 +0000
+From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        David Rientjes <rientjes@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "Brandt, Todd E" <todd.e.brandt@intel.com>
+Subject: Re: [PATCH 0/2] ACPI PSVT table exported to userspace
+Thread-Topic: [PATCH 0/2] ACPI PSVT table exported to userspace
+Thread-Index: AQHZjcIf6bo7i5cctkO4of+LtzcgNq9oaSeA
+Date:   Tue, 23 May 2023 22:03:00 +0000
+Message-ID: <e175d1b19472ecfa3adccea6c3be52aa38d91232.camel@intel.com>
+References: <20230523220102.2377173-1-srinivas.pandruvada@linux.intel.com>
+         <cover.1432082423.git.todd.e.brandt@linux.intel.com>
+In-Reply-To: <cover.1432082423.git.todd.e.brandt@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR11MB5600:EE_|PH0PR11MB5579:EE_
+x-ms-office365-filtering-correlation-id: 9a9d52cb-c9c4-43f9-1b45-08db5bd97932
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: U3pow4FxdCRvvAA6EmekHH+1EQSIuSECKezqHY8ZtWzvegPdU/dWdEn9YO98yq9rZfFEDy8f2agKpYomAZjZOM5KOV2T3WWY8daOwTWvxMdWdgbtyv/x+8/qXWC9dw5qlQIzVfB3VoEDEuImLswekHfUUVc+AXuZJU+SbpDMRVODNwyVwB0u3rz/cpkwhbt3nNoGfnRkCMhoG9JDw8oo2pchS12YsO+XuJQsC5OovYO6BAht8/eagjnmMWEOPrBf/h7i4iZVDsf1OLRmUO/uK+StEf8Ws6bcvemCxc16a2tn9qabspwUGthF1kTi9Nw/BZmsr2CDZ+Sky8Bvh/fKp0N5SKHp2QqFJhpXTh2M2tK7u1JDcu2ZQKYc3oVTAIjqdRS+DMFKZLavPSki+fcOOQ8T8D7gpoPUN7S1pikt2HUeDtoc5pJn7LAGfJruWNlxZGFi14j/dUX9LlwuQ3Jt5n8NRmU7caJK2CC1XWd65BrMY1Umrp8nwEH6SxYaPDGEjG4rE2CfZXXGFXqjwrOf4X8AUqPd2Tz0VUxdU1ov/KFDv6uDA8ipJ75WYC4+Km+ekuEMQAp674Ui2agD7h0jKS4znM5fHiN8fRS8pSbG0vY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5600.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(396003)(39860400002)(136003)(376002)(451199021)(4744005)(2906002)(5660300002)(186003)(122000001)(38070700005)(86362001)(6506007)(82960400001)(6512007)(38100700002)(2616005)(83380400001)(8936002)(36756003)(8676002)(76116006)(478600001)(316002)(71200400001)(6486002)(64756008)(4326008)(66446008)(66556008)(66476007)(66946007)(41300700001)(54906003)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SDd4WkY4eElhSWQwZHdVT08wOHd1elZ3NXBaNE9CQ09rNHBnWWwveUE2ak9n?=
+ =?utf-8?B?MktGSWhpZWpDL1hPTzJZV3hSRDE0eFdEZTE3NXYxNzRlZ09iZnh4emUxcXZi?=
+ =?utf-8?B?VkVHalA4dk9sT1YrNFRhRUd2UmFGbStFVWJYaW5FL0ZwS3hRaTIwdWsxOC9B?=
+ =?utf-8?B?akh1MWNtMUtBb3o0dWxBUnpvWjJnSDRGakYzR0krTThBZ1BuWmttM0hPWUh6?=
+ =?utf-8?B?ZU85ZzZmMm5qY1RBakQ4ek9Md1ZkR2p5TWVCYkowbjFHdGM0RVFIS0RCNDVV?=
+ =?utf-8?B?WEUxb3V6NHI4ZDhVTzhDSUNha0ZxdkVHZEljZmxBcSs2dDdUeC9oSW1tdzZz?=
+ =?utf-8?B?R1lXeHJOMlY1dmpDaE1CeE05cE04YS9oemNVSVZ3S25nWUhBS08yQjJrKzl4?=
+ =?utf-8?B?eGNZSzNVZ2Rsc0lYeTNyVUtLaHYyUXJmcHJ4WlVnZDRLdTlwZ01OMnoyUDdC?=
+ =?utf-8?B?Z01kdU0wMnRuSmRvc1RTYzBwVHJqL2tmSXpLbGlvdVdXdzdRbDhyOGRicHox?=
+ =?utf-8?B?dEdGa0UrS1NtVUNHMndYLzNWMk9Qdm1YSER2NkNZMDVrSy9rMWEzMzdzNlhN?=
+ =?utf-8?B?N1JjWDIzTzM0NkwrUEFYQXV5VGxhenVzdnVkN0dGK3Y2bXd0blQ4V0NybENF?=
+ =?utf-8?B?Mk1rQ0xHOUZXMWxZVGRnRHN5NjRTSGZnMjU0TWpsRUxwOGpDWFVJZHFiYkkw?=
+ =?utf-8?B?dHphMUJqampNN05WU1dOSEJLUjEvMjRzcVMvVlN5R21DYUg3dEczdjNiQ1VS?=
+ =?utf-8?B?QlRvT3Q5b2xBZGovVEMzSUZ3VUtIeXV5eTVzbVZpNmlNai9DaEhDQXFRTXFY?=
+ =?utf-8?B?VEJ0SHhtdGF4U3lLdlp4NlZDM0h4UFJvUG52ZG15UG1oSXF1M1IrYml1bm9h?=
+ =?utf-8?B?UWpFZExoWnMzdmV0aFVqUXVKVHZWdVR3QkMvTUUvNk5IM2VJWXlsV2QzL0I3?=
+ =?utf-8?B?bmZ3NVBjZHF5a2F4MDQxUjloNCswTlZqL0kyRlhtT25mdUhBUy9NT2JhZEFK?=
+ =?utf-8?B?QUhHYnBNazVERk5lSHdiTmdmQlR0VVRXWXdGSWtNSDdxOXp0SzczMC8rMnZ5?=
+ =?utf-8?B?TW5VQjhwZFpFaEwwcGhYVGphandUQWF4d3BNdGZqWGF2dmVvbFBkNkxqRWFr?=
+ =?utf-8?B?dEVUZW9kajNjQ3FmNnZpbjhjZUhPZXloNzJrV0huVlZWMWowR1dKM0JEejhF?=
+ =?utf-8?B?UEl4WUJxTHJsWVlMN2I1ZUVKSlROVkk4T3lCM1pmYjlNM1lOT1NuWWtqVld3?=
+ =?utf-8?B?MlFERjZPMHdKb09HL0xtTFhhSDhmNWVZZ1ZOUHQrTFpaWGk1U3daRUZpQVVu?=
+ =?utf-8?B?aW9RS2tGNW5PaThqS0xpSGUvSEpmK0FwU1cvQ3FKaVdZNk9zZ0dpUG5OMC9u?=
+ =?utf-8?B?SjJLNmllUmpzQmVLRlhFam5hbjdJM3RZTjRBOFFKbUxTSmZRTVdWL0lySnBT?=
+ =?utf-8?B?UWNBMUJoVHp3OWFsS1dROXEzcW9LenVJVGRHVzh6dFVnUU9hUzlkRUN6OU03?=
+ =?utf-8?B?dThYckhYSm9vRmRmYnp3aHhCdm1zUWF3Z0wrdlcyeTdWWUZnMjMyQk9vTkpL?=
+ =?utf-8?B?UXVnaWFucUgwbHk4M3RpOGhSSnNmTkJLOElaU3NxaTcwZXFCNTl4ZHVRMnBz?=
+ =?utf-8?B?Y1BUekJFT1Ayb3RiSXZWWU02TW9yUHRpRnlHZk5KV3FwMHR2eXFoSkpESk44?=
+ =?utf-8?B?MXZQV2lOY1ZBN2NoTTdlN0g5d0tNa1U1aDRoajJJTmFJK2l1Kzd1QVNiNU9J?=
+ =?utf-8?B?ellmN21qNkNhZWYvQndXMlppc1IyalhWUTlxeHFrYXVDYmpQcEZiZkkyU1BC?=
+ =?utf-8?B?ZFVTQzczYnp0S3I5QzJqb05qOXhjQzM3ajU2eCswYWpySktVaVhERFZRaGg4?=
+ =?utf-8?B?NW9DNG9udFZiRlY1dVJsSVNLQ1BYTHJGVVZSWng3d3RRVWVubVdrM28yS0xF?=
+ =?utf-8?B?SEs5R1ZUV0Fhb0FadkNCWkpCcWRsRGhEZTJvVkFrK0lvQWFqNHZpRldXbVZs?=
+ =?utf-8?B?TWREdDJkT20wOS9uSy9hdWFoSUw5R2pCMnRKNXVJNkM3WTVhOG4wN0lWSDFE?=
+ =?utf-8?B?VnV5SHY5WEE0bUUyZDhSbWRQeWM5RjFmWUZlbFowaEdqM0R5TU13QjVkWlJv?=
+ =?utf-8?B?dzBlckU1ZkZaL1Y5bFBWVmlYSXdDLzIvd0p2LzkyckZRem5ETWFqMGlETTZ4?=
+ =?utf-8?B?ZDBTZ1ovTWVaZmQrVWVTNEx6eXk0MjBSV25OcXliOFhtalNPM3J3RkVVeVVF?=
+ =?utf-8?Q?UbpS2bQcI6CNJ0qLE+t+lj4fEx+AFbenrfl1IE9BWE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F36DC665F07D474B90DB4748A28020B7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5600.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a9d52cb-c9c4-43f9-1b45-08db5bd97932
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2023 22:03:00.2079
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nAEo9ccLi44Uzco/U++FGlktPraqEqlUYaXZgk2jlTIugOw0xNjwWVKEhX1I8Njjdrkjiz0hQDsRUR0Wcu+L5HjzHZ/rn/+KP2LOEu5upSQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5579
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 2:52=E2=80=AFAM =E7=A8=8B=E5=9E=B2=E6=B6=9B Chengka=
-itao Cheng
-<chengkaitao@didiglobal.com> wrote:
->
-> At 2023-05-20 06:04:26, "Yosry Ahmed" <yosryahmed@google.com> wrote:
-> >On Wed, May 17, 2023 at 10:12=E2=80=AFPM =E7=A8=8B=E5=9E=B2=E6=B6=9B Che=
-ngkaitao Cheng
-> ><chengkaitao@didiglobal.com> wrote:
-> >>
-> >> At 2023-05-18 04:42:12, "Yosry Ahmed" <yosryahmed@google.com> wrote:
-> >> >On Wed, May 17, 2023 at 3:01=E2=80=AFAM =E7=A8=8B=E5=9E=B2=E6=B6=9B C=
-hengkaitao Cheng
-> >> ><chengkaitao@didiglobal.com> wrote:
-> >> >>
-> >> >> At 2023-05-17 16:09:50, "Yosry Ahmed" <yosryahmed@google.com> wrote=
-:
-> >> >> >On Wed, May 17, 2023 at 1:01=E2=80=AFAM =E7=A8=8B=E5=9E=B2=E6=B6=
-=9B Chengkaitao Cheng
-> >> >> ><chengkaitao@didiglobal.com> wrote:
-> >> >> >>
-> >> >>
-> >> >> Killing processes in order of memory usage cannot effectively prote=
-ct
-> >> >> important processes. Killing processes in a user-defined priority o=
-rder
-> >> >> will result in a large number of OOM events and still not being abl=
-e to
-> >> >> release enough memory. I have been searching for a balance between
-> >> >> the two methods, so that their shortcomings are not too obvious.
-> >> >> The biggest advantage of memcg is its tree topology, and I also hop=
-e
-> >> >> to make good use of it.
-> >> >
-> >> >For us, killing processes in a user-defined priority order works well=
-.
-> >> >
-> >> >It seems like to tune memory.oom.protect you use oom_kill_inherit to
-> >> >observe how many times this memcg has been killed due to a limit in a=
-n
-> >> >ancestor. Wouldn't it be more straightforward to specify the priority
-> >> >of protections among memcgs?
-> >> >
-> >> >For example, if you observe multiple memcgs being OOM killed due to
-> >> >hitting an ancestor limit, you will need to decide which of them to
-> >> >increase memory.oom.protect for more, based on their importance.
-> >> >Otherwise, if you increase all of them, then there is no point if all
-> >> >the memory is protected, right?
-> >>
-> >> If all memory in memcg is protected, its meaning is similar to that of=
- the
-> >> highest priority memcg in your approach, which is ultimately killed or
-> >> never killed.
-> >
-> >Makes sense. I believe it gets a bit trickier when you want to
-> >describe relative ordering between memcgs using memory.oom.protect.
->
-> Actually, my original intention was not to use memory.oom.protect to
-> achieve relative ordering between memcgs, it was just a feature that
-> happened to be achievable. My initial idea was to protect a certain
-> proportion of memory in memcg from being killed, and through the
-> method, physical memory can be reasonably planned. Both the physical
-> machine manager and container manager can add some unimportant
-> loads beyond the oom.protect limit, greatly improving the oversold
-> rate of memory. In the worst case scenario, the physical machine can
-> always provide all the memory limited by memory.oom.protect for memcg.
->
-> On the other hand, I also want to achieve relative ordering of internal
-> processes in memcg, not just a unified ordering of all memcgs on
-> physical machines.
-
-For us, having a strict priority ordering-based selection is
-essential. We have different tiers of jobs of different importance,
-and a job of higher priority should not be killed before a lower
-priority task if possible, no matter how much memory either of them is
-using. Protecting memcgs solely based on their usage can be useful in
-some scenarios, but not in a system where you have different tiers of
-jobs running with strict priority ordering.
-
->
-> >> >In this case, wouldn't it be easier to just tell the OOM killer the
-> >> >relative priority among the memcgs?
-> >> >
-> >> >>
-> >> >> >If this approach works for you (or any other audience), that's gre=
-at,
-> >> >> >I can share more details and perhaps we can reach something that w=
-e
-> >> >> >can both use :)
-> >> >>
-> >> >> If you have a good idea, please share more details or show some cod=
-e.
-> >> >> I would greatly appreciate it
-> >> >
-> >> >The code we have needs to be rebased onto a different version and
-> >> >cleaned up before it can be shared, but essentially it is as
-> >> >described.
-> >> >
-> >> >(a) All processes and memcgs start with a default score.
-> >> >(b) Userspace can specify scores for memcgs and processes. A higher
-> >> >score means higher priority (aka less score gets killed first).
-> >> >(c) The OOM killer essentially looks for the memcg with the lowest
-> >> >scores to kill, then among this memcg, it looks for the process with
-> >> >the lowest score. Ties are broken based on usage, so essentially if
-> >> >all processes/memcgs have the default score, we fallback to the
-> >> >current OOM behavior.
-> >>
-> >> If memory oversold is severe, all processes of the lowest priority
-> >> memcg may be killed before selecting other memcg processes.
-> >> If there are 1000 processes with almost zero memory usage in
-> >> the lowest priority memcg, 1000 invalid kill events may occur.
-> >> To avoid this situation, even for the lowest priority memcg,
-> >> I will leave him a very small oom.protect quota.
-> >
-> >I checked internally, and this is indeed something that we see from
-> >time to time. We try to avoid that with userspace OOM killing, but
-> >it's not 100% effective.
-> >
-> >>
-> >> If faced with two memcgs with the same total memory usage and
-> >> priority, memcg A has more processes but less memory usage per
-> >> single process, and memcg B has fewer processes but more
-> >> memory usage per single process, then when OOM occurs, the
-> >> processes in memcg B may continue to be killed until all processes
-> >> in memcg B are killed, which is unfair to memcg B because memcg A
-> >> also occupies a large amount of memory.
-> >
-> >I believe in this case we will kill one process in memcg B, then the
-> >usage of memcg A will become higher, so we will pick a process from
-> >memcg A next.
->
-> If there is only one process in memcg A and its memory usage is higher
-> than any other process in memcg B, but the total memory usage of
-> memcg A is lower than that of memcg B. In this case, if the OOM-killer
-> still chooses the process in memcg A. it may be unfair to memcg A.
->
-> >> Dose your approach have these issues? Killing processes in a
-> >> user-defined priority is indeed easier and can work well in most cases=
-,
-> >> but I have been trying to solve the cases that it cannot cover.
-> >
-> >The first issue is relatable with our approach. Let me dig more info
-> >from our internal teams and get back to you with more details.
->
-> --
-> Thanks for your comment!
-> chengkaitao
->
->
+U2VudCBieSBtaXN0YWtlLiBQbGVhc2UgaWdub3JlLg0KDQpUaGFua3MsDQpTcmluaXZhcw0KDQpP
+biBUdWUsIDIwMjMtMDUtMjMgYXQgMTU6MDEgLTA3MDAsIFNyaW5pdmFzIFBhbmRydXZhZGEgd3Jv
+dGU6DQo+IEZyb206IFRvZGQgQnJhbmR0IDx0b2RkLmUuYnJhbmR0QGxpbnV4LmludGVsLmNvbT4N
+Cj4gDQo+IEkndmUgY29tcGxldGVkIGFuIHVwZGF0ZSB0byB0aGUgYWNwaV90aGVybWFsX3JlbCBk
+cml2ZXINCj4gd2hpY2ggcHJvdmlkZXMgdGhlIFBTVlQgdGFibGUgdG8gdXNlcnNwYWNlLiBJdCBp
+bmNsdWRlcyBhIHB5dGhvbg0KPiB0ZXN0IHNjcmlwdCBmb3IgdGVzdGluZyBhbmQgdG8gaGVscCBl
+eHBsYWluIGhvdyB0byB1c2UgaXQuDQo+IEkndmUgdGVzdGVkIGl0IG9uIG15IEJyb2Fkd2VsbCBz
+eXN0ZW0gYW5kIGl0IHNlZW1zIHRvIHdvcmsgd2VsbC4NCj4gDQo+IFRvZGQgQnJhbmR0ICgyKToN
+Cj4gwqAgQWRkZWQgUFNWVCB0YWJsZSB0byBhY3BpX3RoZXJtYWxfcmVsIGRyaXZlci4gSXRzIGV4
+cG9ydGVkIHRvDQo+IHVzZXJzcGFjZQ0KPiDCoMKgwqDCoMKgwqDCoCB2aWEgYW4gaW9jdGwgdG8g
+dGhlIGFjcGlfdGhlcm1hbF9yZWwgZGV2aWNlLiBUaGUgUFNWVCB0YWJsZQ0KPiDCoMKgwqAgY29u
+c2lzdHMgb2bCoMKgwqDCoCAxMiBmaWVsZHM6DQo+IMKgIEFkZGVkIGEgc2ltcGxlIHB5dGhvbiBz
+Y3JpcHQgZm9yIHRlc3RpbmcgdGhlIHRoZXJtYWwgdGFibGVzLg0KPiANCj4gwqBkcml2ZXJzL3Ro
+ZXJtYWwvaW50MzQweF90aGVybWFsL2FjcGlfdGhlcm1hbF9yZWwuYyB8IDE4OA0KPiArKysrKysr
+KysrKysrKysrKysrKysNCj4gwqBkcml2ZXJzL3RoZXJtYWwvaW50MzQweF90aGVybWFsL2FjcGlf
+dGhlcm1hbF9yZWwuaCB8wqAgNTUgKysrKysrDQo+IMKgc2NyaXB0cy9hY3BpLXRoZXJtYWwtcmVs
+LXRlc3QucHnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAxNDgNCj4gKysr
+KysrKysrKysrKysrKw0KPiDCoDMgZmlsZXMgY2hhbmdlZCwgMzkxIGluc2VydGlvbnMoKykNCj4g
+wqBjcmVhdGUgbW9kZSAxMDA2NDQgc2NyaXB0cy9hY3BpLXRoZXJtYWwtcmVsLXRlc3QucHkNCj4g
+DQoNCg==
