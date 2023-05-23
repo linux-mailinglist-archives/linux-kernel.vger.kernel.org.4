@@ -2,139 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F6570D474
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A15670D47A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235305AbjEWG7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S234154AbjEWHBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235274AbjEWG7d (ORCPT
+        with ESMTP id S231948AbjEWHBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:59:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A89011A;
-        Mon, 22 May 2023 23:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEE9C614F8;
-        Tue, 23 May 2023 06:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23271C433D2;
-        Tue, 23 May 2023 06:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684825171;
-        bh=8bCyd/iyRVecAb/iC58YqCmI1gFlhQUVWms6GTv8yuU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ODbLFCMWK19Cvwzcmi4OfzXBWpT33XKeSb8OVFEKYmrXDyxzB+3sRqq1FJC57OOLY
-         b6c3/cab8+Ps2E+WntAoBMOl6uV3gBHNC4lu+5UQ8/ndytTzQRF8zWy1z7uKoRJUoh
-         j9vdOStNIh7635iVk6ZZO5wRazE0wwNwah/LLUgPIfhTKjKWUMpp3BKHfktDlnkvDf
-         JpcaCHvV9IO7HKoWYc3U5QaR9un379nIRXyP91omWgZWPofxPyWgLGOoTw8eSPmrBn
-         BdytxxWX3akeKVonuEihGcqcYsvKO4Irj8OVa3NE4QYodgdP1/DWdkYWeWioHBLH5d
-         QT6h81EEXeBuQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D4E7ECE1C03; Mon, 22 May 2023 23:59:28 -0700 (PDT)
-Date:   Mon, 22 May 2023 23:59:28 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Ze Gao <zegao2021@gmail.com>, Jiri Olsa <olsajiri@gmail.com>,
-        Yonghong Song <yhs@meta.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, Ze Gao <zegao@tencent.com>
-Subject: Re: 
-Message-ID: <9dc981d5-e385-4468-9b51-64a10476c86d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20220515203653.4039075-1-jolsa@kernel.org>
- <20230520094722.5393-1-zegao@tencent.com>
- <b4f66729-90ab-080a-51ec-bf435ad6199d@meta.com>
- <CAD8CoPAXse1GKAb15O5tZJwBqMt1N_btH+qRe7c_a-ryUMjx7A@mail.gmail.com>
- <ZGp+fW855gmWuh9W@krava>
- <CAD8CoPDASe7hpkFbK+UzJats7j4sbgsCh_P4zaQYVuKD7jWu2w@mail.gmail.com>
- <20230523133019.ce19932f89585eb10d092896@kernel.org>
+        Tue, 23 May 2023 03:01:32 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319F6109;
+        Tue, 23 May 2023 00:01:31 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N4r0C1018820;
+        Tue, 23 May 2023 07:01:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=t6Uul4VkYvxZcqwnoeIttlKJ75AG53EJBrFHqmB54w0=;
+ b=PJpR7G5uz3HcBQ9i0zgSt8GGSp8fvgqtX6/+2FhN2C11cWI00TxDoFoH2tCmFLa9CZaD
+ qU/FgkK3B/lbLvTZzedsF/tWzRZDATkh3myKCcsvUcV3CwWtbM8y5ilxeIk+CQX1t8V8
+ DRGvMG6IShnypeyV0a9UOtjDBpdyvGA0lDlV4y2hNVptFsjuL9rRIt0fpnHmUduFjfvT
+ 1DICPtUE9tcvyFdF6rPYP5jlagh5jmIvC8KEKNZPqbZPurrvKAYaAizVjjEckm71eXf2
+ VguLBCubMIyAhfJNz57VVgsjIlS2q3yYgFQ+HvZMxaPfVCx0mEGbawk/hZxQlsWGlnhN Iw== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrpmm084w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 07:01:11 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N71AN1002468
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 07:01:10 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
+ 2023 00:01:10 -0700
+Message-ID: <a9352709-b9c8-065e-cca8-33e4cde55ff1@quicinc.com>
+Date:   Tue, 23 May 2023 00:01:09 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523133019.ce19932f89585eb10d092896@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 7/7] ufs: core: Add error handling for MCQ mode
+Content-Language: en-US
+To:     Stanley Chu <chu.stanley@gmail.com>
+CC:     <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
+        <bvanassche@acm.org>, <mani@kernel.org>,
+        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
+        <beanhuo@micron.com>, <avri.altman@wdc.com>,
+        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "open list" <linux-kernel@vger.kernel.org>
+References: <cover.1683872601.git.quic_nguyenb@quicinc.com>
+ <7b884263c9db9a9666086a345ede85bb56d9dfc7.1683872601.git.quic_nguyenb@quicinc.com>
+ <CAGaU9a8t9CHcGvJk+GFaTO=pDQA+PwEjCWH8sMo=T6-oKvTrsw@mail.gmail.com>
+ <CAGaU9a8+mDgVu9-rmH944NhbSCGocADUhbdin5gQkrc_FD1xMQ@mail.gmail.com>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <CAGaU9a8+mDgVu9-rmH944NhbSCGocADUhbdin5gQkrc_FD1xMQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AlSrd92oLc9IXbv54LCDeg7fNDI3iais
+X-Proofpoint-GUID: AlSrd92oLc9IXbv54LCDeg7fNDI3iais
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_04,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305230057
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 01:30:19PM +0800, Masami Hiramatsu wrote:
-> On Mon, 22 May 2023 10:07:42 +0800
-> Ze Gao <zegao2021@gmail.com> wrote:
+On 5/21/2023 11:56 PM, Stanley Chu wrote:
+> On Mon, May 22, 2023 at 2:48 PM Stanley Chu <chu.stanley@gmail.com> wrote:
+>>
+>> Hi Bao,
+>>
+>> Bao D. Nguyen <quic_nguyenb@quicinc.com> 於 2023年5月12日 週五 下午2:34寫道：
+>>>
+>>> Add support for error handling for MCQ mode.
+>>>
+>>> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+>>> ---
+>>>   drivers/ufs/core/ufshcd.c | 85 +++++++++++++++++++++++++++++++++++++++++------
+>>>   1 file changed, 74 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>>> index ec07e49..9345118 100644
+>>> --- a/drivers/ufs/core/ufshcd.c
+>>> +++ b/drivers/ufs/core/ufshcd.c
+>>> @@ -3148,6 +3148,16 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
+>>>                  err = -ETIMEDOUT;
+>>>                  dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
+>>>                          __func__, lrbp->task_tag);
+>>> +
+>>> +               /* MCQ mode */
+>>> +               if (is_mcq_enabled(hba)) {
+>>> +                       err = ufshcd_clear_cmd(hba, lrbp->task_tag);
+>>> +                       if (!err)
+>>> +                               hba->dev_cmd.complete = NULL;
+>>
+>> How about always clearing hba->dev_cmd.complete? If ufshcd_clear_cmd()
+>> fails (for example, times out), "complete" should be cleared, similar
+>> to the "pending" case in the SDB path.
+>>
+>>> +                       return err;
+>>> +               }
+>>> +
+>>> +               /* SDB mode */
+>>>                  if (ufshcd_clear_cmd(hba, lrbp->task_tag) == 0) {
+>>>                          /* successfully cleared the command, retry if needed */
+>>>                          err = -EAGAIN;
+>>> @@ -5581,6 +5591,10 @@ static int ufshcd_poll(struct Scsi_Host *shost, unsigned int queue_num)
+>>>    */
+>>>   static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
+>>>   {
+>>> +       struct ufshcd_lrb *lrbp;
+>>> +       u32 hwq_num, utag;
+>>> +       int tag;
+>>> +
+>>>          /* Resetting interrupt aggregation counters first and reading the
+>>>           * DOOR_BELL afterward allows us to handle all the completed requests.
+>>>           * In order to prevent other interrupts starvation the DB is read once
+>>> @@ -5599,7 +5613,22 @@ static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
+>>>           * Ignore the ufshcd_poll() return value and return IRQ_HANDLED since we
+>>>           * do not want polling to trigger spurious interrupt complaints.
+>>>           */
+>>> -       ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
+>>> +       if (!is_mcq_enabled(hba)) {
+>>> +               ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
+>>> +               goto out;
+>>> +       }
+>>> +
+>>> +       /* MCQ mode */
+>>> +       for (tag = 0; tag < hba->nutrs; tag++) {
+>>> +               lrbp = &hba->lrb[tag];
+>>> +               if (ufshcd_cmd_inflight(lrbp->cmd)) {
+>>> +                       utag = blk_mq_unique_tag(scsi_cmd_to_rq(lrbp->cmd));
+>>> +                       hwq_num = blk_mq_unique_tag_to_hwq(utag);
+>>> +                       ufshcd_poll(hba->host, hwq_num);
+>>> +               }
+>>> +       }
+>>
+>> In SDB mode, the DOOR_BELL is reset by ufshcd_hba_stop(). All bits
+>> that were previously set in DOOR_BELL are also set in "completed_reqs"
+>> in ufshcd_poll(). This allows ufshcd_poll() to handle all outstanding
+>> requests properly.
+>>
+>> However, in MCQ mode, the CQ tail registers cannot provide the same
+>> information after they are reset. Hence, they cannot be properly
+>> referenced by ufshcd_poll().
 > 
-> > Oops, I missed that. Thanks for pointing that out, which I thought is
-> > conditional use of rcu_is_watching before.
-> > 
-> > One last point, I think we should double check on this
-> >      "fentry does not filter with !rcu_is_watching"
-> > as quoted from Yonghong and argue whether it needs
-> > the same check for fentry as well.
+> A fixed version sample is as follows and has been tested on our end.
+Thank you Stanley. I will make the change.
+
 > 
-> rcu_is_watching() comment says;
+> struct scsi_cmnd *cmd;
 > 
->  * if the current CPU is not in its idle loop or is in an interrupt or
->  * NMI handler, return true.
+> for (tag = 0; tag < hba->nutrs; tag++) {
+>          lrbp = &hba->lrb[tag];
+>          cmd = lrbp->cmd;
+>          if (ufshcd_cmd_inflight(cmd)) {
+>                  set_host_byte(cmd, DID_ERROR);
+>                  ufshcd_release_scsi_cmd(hba, lrbp);
+>                  scsi_done(cmd);
+>          }
+> }
 > 
-> Thus it returns *fault* if the current CPU is in the idle loop and not
-> any interrupt(including NMI) context. This means if any tracable function
-> is called from idle loop, it can be !rcu_is_watching(). I meant, this is
-> 'context' based check, thus fentry can not filter out that some commonly
-> used functions is called from that context but it can be detected.
+> Thanks,
+> Stanley Chu
 
-It really does return false (rather than faulting?) if the current CPU
-is deep within the idle loop.
-
-In addition, the recent x86/entry rework (thank you Peter and
-Thomas!) mean that the "idle loop" is quite restricted, as can be
-seen by the invocations of ct_cpuidle_enter() and ct_cpuidle_exit().
-For example, in default_idle_call(), these are immediately before and
-after the call to arch_cpu_idle().
-
-Would the following help?  Or am I missing your point?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 1449cb69a0e0..fae9b4e29c93 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -679,10 +679,14 @@ static void rcu_disable_urgency_upon_qs(struct rcu_data *rdp)
- /**
-  * rcu_is_watching - see if RCU thinks that the current CPU is not idle
-  *
-- * Return true if RCU is watching the running CPU, which means that this
-- * CPU can safely enter RCU read-side critical sections.  In other words,
-- * if the current CPU is not in its idle loop or is in an interrupt or
-- * NMI handler, return true.
-+ * Return @true if RCU is watching the running CPU and @false otherwise.
-+ * An @true return means that this CPU can safely enter RCU read-side
-+ * critical sections.
-+ *
-+ * More specifically, if the current CPU is not deep within its idle
-+ * loop, return @true.  Note that rcu_is_watching() will return @true if
-+ * invoked from an interrupt or NMI handler, even if that interrupt or
-+ * NMI interrupted the CPU while it was deep within its idle loop.
-  *
-  * Make notrace because it can be called by the internal functions of
-  * ftrace, and making this notrace removes unnecessary recursion calls.
