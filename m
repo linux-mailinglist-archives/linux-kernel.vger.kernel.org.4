@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6594370E81F
+	by mail.lfdr.de (Postfix) with ESMTP id B05AC70E820
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 23:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238747AbjEWVyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 17:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S238744AbjEWVyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 17:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238742AbjEWVx6 (ORCPT
+        with ESMTP id S238743AbjEWVyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:53:58 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1984C1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:53:57 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d2ca9ef0cso24646b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:53:57 -0700 (PDT)
+        Tue, 23 May 2023 17:54:01 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2ECBBF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:53:59 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so35147b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 14:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684878837; x=1687470837;
+        d=broadcom.com; s=google; t=1684878839; x=1687470839;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=lQFqk5tM+BbTqLu00jJUZXwxOwTwIR2BZEs1Yt+uPUk=;
-        b=Qq9KFOHAKlTXfIdq5oonMNe340bv/xvBAkLUI1RB//dNFr1f9AFutriOtkD1M2cBW6
-         6Mj6XQw5mi3HLb93hCfjzM67z0rUlls4w/F+YBWjQzLKOseJzENs/JOTQggqZSPXMU5k
-         ndH3qgKAI6MRTi3Sr9OsS8pOUZIP56SJGe+2U=
+        bh=aUZmayXr6lOcW/0UzamRikvAlWBbNA3J2k2unJN1ANA=;
+        b=NNgzzDmZRPvpYNE6bs4Pb6jJVQAJjmq/O2vXlVmHsFNrjqW19nn/u63at16sealT+r
+         Pp0rZzN3n/nfJNevI9+opw+V2YmpADmlViT8Yypm37GFwJK+z70PHFYoOdMD6JuSVeQa
+         BYDh6wNwtq+f3l7XtMO0xbsfa0Tac+rgK6ob0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684878837; x=1687470837;
+        d=1e100.net; s=20221208; t=1684878839; x=1687470839;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lQFqk5tM+BbTqLu00jJUZXwxOwTwIR2BZEs1Yt+uPUk=;
-        b=gNlX/d3pWQh4FeJUJbnORjBWpzVfI667k8VQbgpLa+Z0qWqY3Fajo3vQsp8xpeoqBX
-         iNiEnbvMtpl0XSr+3hYcgGP6ZgBcm060a30vK8CPEuJ0P7uTvrUTyweWxOinp2/Nff4Z
-         Hr/tL3J/UHdI5tkGxYNDvijC6Us9a1Wt7KFThbdHYdj7zUSoClOfV/1maYwl2w7R4mQn
-         eAx6dTJUCvGHXNc7Uhoiln21OrJYIhuSQu6Dlw7aYeiWODjQwtoDXYozs9SndyqgsTT0
-         h6/ABYdnAFpga/lFZ/A16p1LQ2NmI/FK8E5Hbrm3rJ1AX96K5ML4y5ss4puM1MOjZJF6
-         mJzQ==
-X-Gm-Message-State: AC+VfDy57Ak8AYG/xQ0wiymlPzBH6K6l7o8GdB/JVfmBu93xakMRb8SZ
-        Vu7TZSnStoz40UJ/kjRA3XTjFA==
-X-Google-Smtp-Source: ACHHUZ6NGpmTeAfXRA7+OQm2IB5EU7bj5l/SkRxX0CzcN6yT3YUWjIskbCRMgYSK5LIAYdC4eCzP+w==
-X-Received: by 2002:a17:903:41cf:b0:1ad:bb89:16f6 with SMTP id u15-20020a17090341cf00b001adbb8916f6mr18109919ple.50.1684878837126;
-        Tue, 23 May 2023 14:53:57 -0700 (PDT)
+        bh=aUZmayXr6lOcW/0UzamRikvAlWBbNA3J2k2unJN1ANA=;
+        b=aBWhe1R9ix5ahUNXangb3zHE9NipbiVspJ+mBN3qjKBW25CVSgFWNpoTslHjI3q1NV
+         6c7qkPjqI/H01oWbhXqckkrIWkLEumvZG+a7qPGGfKwJ6P5dPrOFwKCEaU3pD9bvu1X6
+         3IkJUI42+4+cNxkyHpLK3cEtqtavE8ikHFxow2NP7cbtZNQOX2lwCVT5N/7zU464p0HC
+         fLnAOVgHklevu1RvPntIGg3rLmwvhufW3Bde91iYP2m4ydV5cj4pGfyFQTpThOE0z3Eb
+         yU9Kvq8W4V+EP3U6nf2whkFAK1mAriE+d+feHB5Jes/qnrxpl5LvmS+tcWFxhUnTXiIt
+         9rrg==
+X-Gm-Message-State: AC+VfDw/CWqZYShQCJUtjM9NhKOGe/ImP9Mv9Okkyjx75R9gbpJWwHw6
+        snJnBmj7N0kBYD/zfW2JhzqHTg==
+X-Google-Smtp-Source: ACHHUZ7AmSBlU/Hd0Hai5K5aI0MMCPhXJdl2nZVhD/LqT37vgiqoZThbv397FHeLU5DVez1itEHGrQ==
+X-Received: by 2002:a17:902:d2c2:b0:1ac:b4db:6a62 with SMTP id n2-20020a170902d2c200b001acb4db6a62mr16196725plc.65.1684878839320;
+        Tue, 23 May 2023 14:53:59 -0700 (PDT)
 Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e4-20020a170902744400b001ae62d7cb2bsm7189820plt.199.2023.05.23.14.53.54
+        by smtp.gmail.com with ESMTPSA id e4-20020a170902744400b001ae62d7cb2bsm7189820plt.199.2023.05.23.14.53.57
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 May 2023 14:53:56 -0700 (PDT)
+        Tue, 23 May 2023 14:53:59 -0700 (PDT)
 From:   Justin Chen <justin.chen@broadcom.com>
 To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -58,14 +58,14 @@ Cc:     justinpopo6@gmail.com, justin.chen@broadcom.com,
         christian.koenig@amd.com, conor@kernel.org,
         simon.horman@corigine.com,
         Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: [PATCH net-next v4 1/6] dt-bindings: net: brcm,unimac-mdio: Add asp-v2.0
-Date:   Tue, 23 May 2023 14:53:42 -0700
-Message-Id: <1684878827-40672-2-git-send-email-justin.chen@broadcom.com>
+Subject: [PATCH net-next v4 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet controller
+Date:   Tue, 23 May 2023 14:53:43 -0700
+Message-Id: <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
 References: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000098e90605fc636c16"
+        boundary="000000000000ba67db05fc636cdb"
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
@@ -77,35 +77,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000098e90605fc636c16
+--000000000000ba67db05fc636cdb
 
-The ASP 2.0 Ethernet controller uses a brcm unimac.
+From: Florian Fainelli <florian.fainelli@broadcom.com>
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Add a binding document for the Broadcom ASP 2.0 Ethernet
+controller.
+
 Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Signed-off-by: Justin Chen <justin.chen@broadcom.com>
 ---
- Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+v3
+	- Adjust compatible string example to reference SoC and HW ver
 
-diff --git a/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml b/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
-index 0be426ee1e44..6684810fcbf0 100644
---- a/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
-+++ b/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
-@@ -22,6 +22,8 @@ properties:
-       - brcm,genet-mdio-v3
-       - brcm,genet-mdio-v4
-       - brcm,genet-mdio-v5
-+      - brcm,asp-v2.0-mdio
-+      - brcm,asp-v2.1-mdio
-       - brcm,unimac-mdio
- 
-   reg:
+v3
+        - Minor formatting issues
+        - Change channel prop to brcm,channel for vendor specific format
+        - Removed redundant v2.0 from compat string
+        - Fix ranges field
+
+v2
+        - Minor formatting issues
+
+ .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 145 +++++++++++++++++++++
+ 1 file changed, 145 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+
+diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+new file mode 100644
+index 000000000000..07f7373b9d64
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+@@ -0,0 +1,145 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom ASP 2.0 Ethernet controller
++
++maintainers:
++  - Justin Chen <justin.chen@broadcom.com>
++  - Florian Fainelli <florian.fainelli@broadcom.com>
++
++description: Broadcom Ethernet controller first introduced with 72165
++
++properties:
++  '#address-cells':
++    const: 1
++  '#size-cells':
++    const: 1
++
++  compatible:
++    enum:
++      - brcm,asp-v2.0
++      - brcm,bcm72165-asp
++      - brcm,asp-v2.1
++      - brcm,bcm74165-asp
++
++  reg:
++    maxItems: 1
++
++  ranges: true
++
++  interrupts:
++    minItems: 1
++    items:
++      - description: RX/TX interrupt
++      - description: Port 0 Wake-on-LAN
++      - description: Port 1 Wake-on-LAN
++
++  clocks:
++    maxItems: 1
++
++  ethernet-ports:
++    type: object
++    properties:
++      '#address-cells':
++        const: 1
++      '#size-cells':
++        const: 0
++
++    patternProperties:
++      "^port@[0-9]+$":
++        type: object
++
++        $ref: ethernet-controller.yaml#
++
++        properties:
++          reg:
++            maxItems: 1
++            description: Port number
++
++          brcm,channel:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: ASP channel number
++
++        required:
++          - reg
++          - brcm,channel
++
++    additionalProperties: false
++
++patternProperties:
++  "^mdio@[0-9a-f]+$":
++    type: object
++    $ref: brcm,unimac-mdio.yaml
++
++    description:
++      ASP internal UniMAC MDIO bus
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - ranges
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    ethernet@9c00000 {
++        compatible = "brcm,bcm72165-asp", "brcm,asp-v2.0";
++        reg = <0x9c00000 0x1fff14>;
++        interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++        ranges = <0x0 0x9c00000 0x1fff14>;
++        clocks = <&scmi 14>;
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        mdio@c614 {
++            compatible = "brcm,asp-v2.0-mdio";
++            reg = <0xc614 0x8>;
++            reg-names = "mdio";
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            phy0: ethernet-phy@1 {
++                reg = <1>;
++            };
++       };
++
++        mdio@ce14 {
++            compatible = "brcm,asp-v2.0-mdio";
++            reg = <0xce14 0x8>;
++            reg-names = "mdio";
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            phy1: ethernet-phy@1 {
++                reg = <1>;
++            };
++        };
++
++        ethernet-ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++                brcm,channel = <8>;
++                phy-mode = "rgmii";
++                phy-handle = <&phy0>;
++            };
++
++            port@1 {
++                reg = <1>;
++                brcm,channel = <9>;
++                phy-mode = "rgmii";
++                phy-handle = <&phy1>;
++            };
++        };
++    };
 -- 
 2.7.4
 
 
---00000000000098e90605fc636c16
+--000000000000ba67db05fc636cdb
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -176,13 +329,13 @@ sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
 VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
 ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICW13CvdkmX3kriUm8MYev0WyYuU2+kaR8i7
-vK5zUGJcMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUyMzIx
-NTM1N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIP++RyIACGRzcDCUnwA5UNOPmrPtSK7NbQqq
+0GqfhUbOMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUyMzIx
+NTM1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
 AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQBdefBbl9OPMr+gFqYIxZ2pggAxnCqXSZI8OSwqKTqsCLROEUxNdrJf
-5Cw2SbUjVv8iTgAG2y7/AscY9gJULyGSZjmxDTEsEvMAwakHpVTOeitJs7gDXT0jmdHXq3BtMQVX
-OrI68LNgRDSwp9EWr9mL7UEQkB4Ptl1vuY2kw1/jPpLd1jJeWlROZzpPP20qWIvsFnVVr0obAGZk
-EOs/vB7o7BT+ldMjMVfSCIWegE8ILohn0sZYKTaBvQfXCBBF1ZmJS5cu6q62ZVd1le57pKYgurJi
-hvxlQu7JEFmOnTxUHRoIc3WBxsseXdBPihE5VBrkr86FU5YyQ7OukOHbVCXq
---00000000000098e90605fc636c16--
+BgkqhkiG9w0BAQEFAASCAQBdvjRoO5lJeWxGTT42FdBtpP6lnDZozoG9yor6KaLd2x8xqOup04DV
+kPTUExRK0TB8Z62r32PipQCVVcKJxJu/kjcZ5UOZwx/d52xf3GgptJ4JgtH8UNZtzRlj3oU63YYL
+7ydHdJm3y0AvlY1TeanhTwGTzCu3TH5PIcVxqzFFAFqRmE1I7BkqDijLTdvpDJguJwuAUMicWdfj
+ZOcmXCeMnt5ExI+lav4CZ5cvYKemg+uBO0/UlO3l698av7F91g5n8PyvRgdKW3gCS3ET0jYAMBUr
+o/labzG8h+vVStuSt20wEUN2pZQ5HnQCGtS9gx0J2tfUHQWrn/lLp6uW9sXY
+--000000000000ba67db05fc636cdb--
