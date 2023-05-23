@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DAD70E651
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6158270E65D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbjEWUPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
+        id S238547AbjEWURO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbjEWUPX (ORCPT
+        with ESMTP id S233032AbjEWURJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:15:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2D5129;
-        Tue, 23 May 2023 13:15:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA75461272;
-        Tue, 23 May 2023 20:15:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10F5C433EF;
-        Tue, 23 May 2023 20:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684872921;
-        bh=bY6N2RxrtkdOJFb0NaV4w4DW0/gqoN0tnW3Zao2HvYs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VtH6B7WzLJnkm8MmBMlZKipm/TbzeB4OX83fSJgoGJ5oQ2CUPK9ftS5U+bOcPV2NY
-         K36tlHrkzJQ7hIKjyEP6+eMmgQucr12O4S8p2F9b4ZW/qy6kcOC0yIpMF36HuWlPgL
-         erqzRg86D56gfnFn66FoSvOhR935/mVd1ep2Qul4MTE5AXfZomouGrlHCUt8Q1VdO1
-         VnzGJj4jYVVecWXH8HALGANFWejiL0IhawonWUGH6apKlvrtXPCqV3xzzEemT6Nqtx
-         keZtujjY5IBag47VzYQHcwZmf0abFZM3rWG79aMOVjeCVRhn4P5j6evgtZfzUdPRrj
-         IWga5Zh5hVcUg==
-Date:   Tue, 23 May 2023 14:16:13 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [PATCH v2][next] scsi: lpfc: Use struct_size() helper
-Message-ID: <ZG0fDdY/PPQ/ijlt@work>
+        Tue, 23 May 2023 16:17:09 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC47129;
+        Tue, 23 May 2023 13:17:08 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b2a2bf757so20143585a.2;
+        Tue, 23 May 2023 13:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684873028; x=1687465028;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m69+0U+vf8WBXQfiW8cb5lnrUt7WhgTHWMAX6k595F4=;
+        b=VP0fHtjC3N4hCeuVqyg/C3oO7n9xQXxKL3dUNKvZ1gDMksuTVZyuxUuCYeoc/Gr0gS
+         2KaPT1FqB22o2RpQSu1A7kSB72uDMvOAPxpfFH47lJ9Y9nlrRBS3/GuxrQb2rIVCs/Fs
+         q64me5UewXpu75kHm56eGiV61mfeSEG/GHEscko6K9JD/i9NzzzjSyyST0GIc1cdhvRh
+         ClJI2qEQ+N3eryZTLIlj1H6yt++fiiWlQHm/nroZCswRWTK7Nh3LUAzB8a92qaHMsWLN
+         uK5F8hIxZzIYbiMspMC8L3p+J3+j7aaKSgT2jXWC0OFO8EgmjT2uJ2ip0eySyFrNfWoL
+         qqog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684873028; x=1687465028;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m69+0U+vf8WBXQfiW8cb5lnrUt7WhgTHWMAX6k595F4=;
+        b=A4LJOFtJtECbkFvmlwinYcRuft7wmOIKI5ZsdS1VO5zBJ+iVkhYTb/maI1cJZC7yaw
+         i4zlhyBtYuN7uk9028Lm1Mt6nlRJvKIVb6bosY1Qx5JX+FfpZOHm+Ppn3m3jJbC4H+eq
+         8OrN0/7Hd1jtiv/VpE0QEbrZgzLtgWFC5d3BCj8nI+YpuQ8wHXr7jwulNj/x4X8i45cH
+         +qfYnFkLfcPMs9sIHPSeD8uDYeO34c+fIvQvXvBhcrf5RN2L42NmORUmbv+l70FQNtr0
+         5OtunSUDG/masvARWBlzfNjHlVxp0aPwt36h+3IVjt1+PPbMIHJRbX43Ed0GlVnm+piI
+         B54w==
+X-Gm-Message-State: AC+VfDz8UBpExFhakninHGSOrGZIBLXSnYyRSd1nOoMcoOgqZLThPuEI
+        vMDXuQhfxFCDBkTuBjh52A==
+X-Google-Smtp-Source: ACHHUZ4JvW+edJ5rldUTq3rDNMQKfHeo7Pd4M1OGvKZP+IfR+c7XlRCuBkSO/rxjkLQ97mt2A5qM+g==
+X-Received: by 2002:a37:a914:0:b0:75b:23a1:364b with SMTP id s20-20020a37a914000000b0075b23a1364bmr5512524qke.12.1684873027715;
+        Tue, 23 May 2023 13:17:07 -0700 (PDT)
+Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:c32:b55:eaec:a556])
+        by smtp.gmail.com with ESMTPSA id i28-20020a05620a145c00b00759169d0316sm2743370qkl.40.2023.05.23.13.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 13:17:07 -0700 (PDT)
+Date:   Tue, 23 May 2023 13:17:02 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH v4 net 0/6] net/sched: Fixes for sch_ingress and
+ sch_clsact
+Message-ID: <ZG0fPks+1/RgwFC1@C02FL77VMD6R.googleapis.com>
+References: <cover.1684825171.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1684825171.git.peilin.ye@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prefer struct_size() over open-coded versions of idiom:
+On Tue, May 23, 2023 at 12:12:39AM -0700, Peilin Ye wrote:
+> [1,2/6]: ingress and clsact Qdiscs should only be created under ffff:fff1
+>   [3/6]: Under ffff:fff1, only create ingress and clsact Qdiscs (for now,
+>          at least)
+>   [4/6]: After creating ingress and clsact Qdiscs under ffff:fff1, do not
+>          graft them again to anywhere else (e.g. as the inner Qdisc of a
+>          TBF Qdisc)
+>   [5/6]: Prepare for [6/6], do not reuse that for-loop in qdisc_graft()
+>          for ingress and clsact Qdiscs
+>   [6/6]: Fix use-after-free [a] in mini_qdisc_pair_swap()
 
-sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
+In v5, I'll improve [6/6] according to Vlad's suggestion [a], and fix
+[1,2/6] according to Pedro's report [b].
 
-where count is the max number of items the flexible array is supposed to
-contain.
+[a] https://lore.kernel.org/r/87sfbnxhg7.fsf@nvidia.com/
+[b] https://lore.kernel.org/r/e462a91e-8bea-8b72-481c-4a36699e4149@mojatatu.com/
 
-Link: https://github.com/KSPP/linux/issues/160
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes in v2:
- - Use literal 1 in call to struct_size(), instead of rap->no_of_objects
-   (Kees Cook). 
-
-v1:
- - Link: https://lore.kernel.org/linux-hardening/99e06733f5f35c6cd62e05f530b93107bfd03362.1684358315.git.gustavoars@kernel.org/
-
- drivers/scsi/lpfc/lpfc_ct.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index e880d127d7f5..f52aeb73af8d 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -3747,9 +3747,7 @@ lpfc_vmid_cmd(struct lpfc_vport *vport,
- 		rap->no_of_objects = cpu_to_be32(1);
- 		rap->obj[0].entity_id_len = vmid->vmid_len;
- 		memcpy(rap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
--		size = RAPP_IDENT_OFFSET +
--			sizeof(struct lpfc_vmid_rapp_ident_list) +
--			sizeof(struct entity_id_object);
-+		size = RAPP_IDENT_OFFSET + struct_size(rap, obj, 1);
- 		retry = 1;
- 		break;
- 
-@@ -3767,9 +3765,7 @@ lpfc_vmid_cmd(struct lpfc_vport *vport,
- 		dap->no_of_objects = cpu_to_be32(1);
- 		dap->obj[0].entity_id_len = vmid->vmid_len;
- 		memcpy(dap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
--		size = DAPP_IDENT_OFFSET +
--			sizeof(struct lpfc_vmid_dapp_ident_list) +
--			sizeof(struct entity_id_object);
-+		size = DAPP_IDENT_OFFSET + struct_size(dap, obj, 1);
- 		write_lock(&vport->vmid_lock);
- 		vmid->flag &= ~LPFC_VMID_REGISTERED;
- 		write_unlock(&vport->vmid_lock);
--- 
-2.34.1
+Thanks,
+Peilin Ye
 
