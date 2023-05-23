@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEFE70DC9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE2170DC9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbjEWMcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S236862AbjEWMbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236863AbjEWMcF (ORCPT
+        with ESMTP id S236863AbjEWMbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:32:05 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5763109;
-        Tue, 23 May 2023 05:31:44 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f60dfc5f93so3266745e9.2;
-        Tue, 23 May 2023 05:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684845103; x=1687437103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G+XmU9cW6dJqezkxpvVuKdHpfUq+glTTnVbU9jQUiIY=;
-        b=BDsW8NKXWqnFAViuFEK3+DwmsJ3XA06LSPv9HjHVs5GKyo1yV/SucJ936S6bNsIhJh
-         jTj4G9coN/rwe0OPxC1VlrWDIKgASIOfXqvRpTg6yP4NWUYkOGD9W4oeQpNYfYgutB4e
-         nj3tjodWahVPM2ZwAtnq+Nww6bHEbAwBK3vg6OysQWDqMNoDtG37mh6vGzCaH5ZdCAnr
-         UIra1foqagU/c/HW8F3S8UplRlbt91wPrgvKSbB6t5XKeTVtae9Yscrd+YXyb88dzuXe
-         johacs49XetzbV6WqEcwrprsN9kXEFVP51o5EN967GFxi+EHmn1AulV9lc7dyc1Fv1XP
-         InUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684845103; x=1687437103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G+XmU9cW6dJqezkxpvVuKdHpfUq+glTTnVbU9jQUiIY=;
-        b=DKxKoVk2sjtfOsCspoQlAq2E4YJFA8+2odOzEOwm0p6+j0WvEJHz4TNrLJVQwIgDOY
-         1s3muN8U14jiNlkmRJ/Po43CzBpxjM++sBSghjZwHOumhI+4OOechi8zkRw09Ia01ovz
-         Bey9SCIon+GIr9AXThhWvwAFuo4KI8DpjuCjKY78U2iJrA2XKeI7XkCwYysTBqYCIo74
-         2DsmbeViaQcGVBJYOHnxVgZn9xQBun6D9C0D1j/0AP5+6YcgOWT1b5UT9kz3Jy3ueTcF
-         fILFsiz9aGwsMNpEMQiZEjnlP6mRBNj0phAFE+DTYChsaBLKN9eLIsFdcxEG8d+3zFVn
-         jbQA==
-X-Gm-Message-State: AC+VfDytxBJoU1KillKFdc6nf625rm0S4St5Ya4/QmPXSYIW2PT+9a3x
-        8p6Tt/8hgKoS2aucafvYSEZqXW7gMU4VsTFE6tZJeht8Dn0tGgsh
-X-Google-Smtp-Source: ACHHUZ7eyHVelDYqGRcyV5GEaa5qgxyRZz2b4R38sbUlVVncJAHgy5N45wc0X6Zmj95p6Lf77UFhSQw+36FXBfxCi9M=
-X-Received: by 2002:a05:600c:259:b0:3f4:f0c2:125 with SMTP id
- 25-20020a05600c025900b003f4f0c20125mr9235031wmj.23.1684845102963; Tue, 23 May
- 2023 05:31:42 -0700 (PDT)
+        Tue, 23 May 2023 08:31:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A516D126;
+        Tue, 23 May 2023 05:31:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33F5C631DA;
+        Tue, 23 May 2023 12:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4987C433EF;
+        Tue, 23 May 2023 12:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684845079;
+        bh=g2m24cQ4gdROItmruRoaFFe92RJLnSrCp+y/ymODJ8s=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=L+0fOCK34D1zmuin8Wl7I2gS8xbpwc+/hTe4sw9jiQW0h2b20dbAJPF0a34lmLh/F
+         XmrAxb1GibB/Dxs3YT6w0dZlJyUOmhUwbidEUmlevoXGzRk38O/ww9tnPxgB0HkyJl
+         ae0ROulk07UdRyR5wjzJ2IbmfQhdWXvdaGIfFRJfllboDOkuiBfNj3dUAQ1GESJcxR
+         2t2wxumoQwJTHLWFtHU/ZTtOholkBfcBLDm62TGI6it7X1TYjcZWCPeR9PnSccK4nH
+         MgoI7Mi7VM5x6dPhpms9OWUTA4srYIpad+p/SuyT8FPt59/rj/vNoR5hulsmjWYKZn
+         VSPTIjGlA+krQ==
+Date:   Tue, 23 May 2023 14:31:15 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>,
+        Bastien Nocera <hadess@hadess.net>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
+Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
+ working properly
+In-Reply-To: <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
+Message-ID: <nycvar.YFH.7.76.2305231422180.29760@cbobk.fhfr.pm>
+References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info> <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info> <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com> <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
+ <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info> <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn> <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
-From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
-Date:   Tue, 23 May 2023 15:31:06 +0300
-Message-ID: <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf arm64: Handle __NR3264_ prefixed syscall number
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Hans-Peter Nilsson <hp@axis.com>, Leo Yan <leo.yan@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 1:22=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
-> in the generated syscall table file syscalls.c, there exist some
-> __NR3264_ prefixed syscall numbers such as [__NR3264_ftruncate],
-> it looks like not so good, just do some small filter operations
-> to handle __NR3264_ prefixed syscall number as a digital number.
->
-> Without this patch:
->
->   [__NR3264_ftruncate] =3D "ftruncate",
->
-> With this patch:
->
->   [46] =3D "ftruncate",
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools/pe=
-rf/arch/arm64/entry/syscalls/mksyscalltbl
-> index 22cdf91..59ab7939 100755
-> --- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
-> +++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
-> @@ -39,7 +39,8 @@ create_table()
->         echo "};"
->  }
->
-> -$gcc -E -dM -x c -I $incpath/include/uapi $input \
-> -       |sed -ne 's/^#define __NR_//p' \
-> -       |sort -t' ' -k2 -n             \
-> +$gcc -E -dM -x c -I $incpath/include/uapi $input               \
-> +       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
-> +       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
-> +       |sort -t' ' -k2 -n                                      \
->         |create_table
-> --
-> 2.1.0
->
+On Mon, 22 May 2023, Linus Torvalds wrote:
 
-As an aside, the awk + sed + sort parts of the command line may be
-reduced to the following awk script, if desired:
-awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
-        sub("^#define __NR_", "")
-        sub("^#define __NR3264_", "")
-        print | "sort -k2 -n"
-}'
+> > FWIW, in case anybody is interested in a status update: one reporter
+> > bisected the problem down to 586e8fede79 ("HID: logitech-hidpp: Retry
+> > commands when device is busy"); reverting that commit on-top of 6.3
+> > fixes the problem for that reporter. For that reporter things also work
+> > on 6.4-rc; but for someone else that is affected that's not the case.
+
+FWIW, I was pretty much away for past few weeks as well, same as Benjamin 
+as Bastien. Which is unfortunate timing, but that's how things pan out 
+sometimes.
+
+> Hmm. It's likely timing-dependent.
+> 
+> But that code is clearly buggy.
+> 
+> If the wait_event_timeout() returns early, the device hasn't replied,
+> but the code does
+> 
+>                 if (!wait_event_timeout(hidpp->wait, hidpp->answer_available,
+>                                         5*HZ)) {
+>                         dbg_hid("%s:timeout waiting for response\n", __func__);
+>                         memset(response, 0, sizeof(struct hidpp_report));
+>                         ret = -ETIMEDOUT;
+>                 }
+> 
+> and then continues to look at the response _anyway_.
+
+Yeah; we are zeroing it out, but that doesn't really make things any 
+better in principle, given all the dereferences later.
+
+The issue seems to be existing ever since 2f31c52529 ("HID: Introduce 
+hidpp, a module to handle Logitech hid++ devices") when this whole driver 
+was introduced, as far as I can tell.
+
+> Now, depending on out hardening options, that response may have been 
+> initialized by the compiler, or may just be random stack contents.
+
+Again, as in case of timeout the buffer is just zeroed out, I'd just much 
+more expect NULL pointer dereference in such case. Which is not what we 
+are seeing here.
+
+> That bug is pre-existing (ie the problem was not introduced by that 
+> commit), but who knows if the retry makes things worse (ie if it then 
+> triggers on a retry, the response data will be the *previous* response).
+> 
+> The whole "goto exit" games should be removed too, because we're in a
+> for-loop, and instead of "goto exit" it should just do "break".
+> 
+> IOW, something like this might be worth testing.
+> 
+> That said, while I think the code is buggy, I doubt this is the actual
+> cause of the problem people are reporting. But it would be lovely to
+> hear if the attached patch makes any difference, and I think this is
+> fixing a real - but unlikely - problem anyway.
+> 
+> And obviously it might be helpful to actually enable those dbg_hid()
+> messages, but I didn't look at what the magic config option to do so
+> was.
+
+dbg_hid() is just pr_debug(), which means that on kernels with 
+CONFIG_DYNAMIC_DEBUG, this makes use of the dynamic debug facility; 
+otherwsie it just becomes printk(KERN_DEBUG...).
+
+Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
+
