@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5D170E4CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D500A70E4CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237901AbjEWSh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S237988AbjEWShb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237047AbjEWShZ (ORCPT
+        with ESMTP id S237843AbjEWSh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 14:37:25 -0400
+        Tue, 23 May 2023 14:37:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168C41B5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:37:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E89130
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 11:37:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCB6B62DAD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 18:37:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E45A2C433D2;
-        Tue, 23 May 2023 18:37:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DDE462F33
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 18:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9DF1C4339B;
+        Tue, 23 May 2023 18:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684867032;
-        bh=85tRnbat52B6IBzDM3UnXuQ+f5nD406kWabSowIdwAA=;
-        h=From:Subject:Date:To:Cc:From;
-        b=HY+7SGEPmz+PnYzd1K19s5ZCB3+KfWVyYeEwSBtbkUaxVK7rl8J+bKYn6GJGHnzaS
-         AczhTNPG9As3HLTI4bQuSHVUoFLRQjcSfYx1XyuvUIK8xR4OvlAVTgcKBcZNqd2xuE
-         AO5kvpF5ZyJVoNhMnXzwvutuNHjk93lVS1dmv6frNerMjbHVEJca8Qq/UBMtGKZK7G
-         ietkpOULcJhaeUApHmlvRn1Ct9tEEdaya6lgyUOS7XV7XaDxCGoy10kYlGNeQcZ0y7
-         ZsggIjgS81MWC07h764HkakYr45DUIk4slMSm9QaxCV4sxl/inKRZ83kSUSYq7AcEV
-         A5EmeN+DtUQnQ==
+        s=k20201202; t=1684867035;
+        bh=NuUDB+s2fxCd02gyUF/+pz6UWNHOrX4UeDzZX2n8uUc=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=jb64CtckOVDO9vFs6WnqaZNl5WT+Qk31uMGRTBE5NG4XbLqcg2VG7UhusOLZ7Tusd
+         /g8OQKZzSBIYWCJWNZGhHdP6/UNtZqQwVewFDbqIrI424d8BMRRD+Eo+uhP+L/SwpY
+         uIJJb0MLnLoqERU8oCLVmZ54DrQNskMghgo8PELsQjq+MZL8UhtFx81bbVe32WRFP3
+         pseL7ICbga8zpP/qjIojbk5P/wQfI8xTJphHVT7yaMoiKJ4I2zcgQvkUBaNATYfU9o
+         0f5mH1wsJ+zIG+f33S2Pi0AijRxOagw2Kb4FNwUPR9TrxBfksUv0FBlN6Y4Ja5xd6U
+         CSfqh6j/9iYpQ==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 0/7] arm64/sysreg: More conversions to automatic
- generation
-Date:   Tue, 23 May 2023 19:36:58 +0100
-Message-Id: <20230419-arm64-syreg-gen-v2-0-4c6add1f6257@kernel.org>
+Date:   Tue, 23 May 2023 19:36:59 +0100
+Subject: [PATCH v2 1/7] arm64/sysreg: Convert MDCCINT_EL1 to automatic
+ register generation
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMoHbWQC/3WNQQ6CMBAAv0L27BoopFJP/sNwaMtSGrQ1W4MSw
- t8t3D3OJJNZIRF7SnAtVmCaffIxZBCnAuyogyP0fWYQpajLplKo+SkbTAuTQ0cBjdC6VdK0epC
- QK6MToWEd7Lh3n8jTrl9Mg/8eo3uXefTpHXk5vnO12/+LucISVS1tf5HKGkW3iTjQ4xzZQbdt2
- w8w/8I3xgAAAA==
+Message-Id: <20230419-arm64-syreg-gen-v2-1-4c6add1f6257@kernel.org>
+References: <20230419-arm64-syreg-gen-v2-0-4c6add1f6257@kernel.org>
+In-Reply-To: <20230419-arm64-syreg-gen-v2-0-4c6add1f6257@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -54,15 +52,15 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Shaoqin Huang <shahuang@redhat.com>
 X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1297; i=broonie@kernel.org;
- h=from:subject:message-id; bh=85tRnbat52B6IBzDM3UnXuQ+f5nD406kWabSowIdwAA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkbQfPNZeWD+F+ZKEYK9wEDhAlMa3SfFD2Oh7/dB2S
- xAkMEVCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZG0HzwAKCRAk1otyXVSH0HxVB/
- 43QaDputTKF3OtYBvgFUGwvbT4F88iC4/286aS8jpxDLBL22TKRy8grVT/EGGi3SXKNBsCCYKofvgs
- nQtKK1axKn8Ks/CIcMluLJAyz80IIre0WlpjgMd3Ma3cYB9ZvktetN5uWDHsa2vMCpVKKELSRkHUxl
- 8CjAWObXBwOVX/3odXCeQHvH9xvsBbYiQiUaCOAuF4LvYcOXakGGiNjFcVGP+WcTxZU9uifITYDrTA
- TvLC+Yfv64kQyz5Pxgaw8F3ZSYRcUDTVscFBgEo9MOv8xbmQoFs3fT5bRrmuJLTILMewFvB67aApVW
- g/c7S+YI5yvsz9kmCYnVLv9nNwalIs
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1459; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=NuUDB+s2fxCd02gyUF/+pz6UWNHOrX4UeDzZX2n8uUc=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkbQfQZoWKoFheLxPnfIx0K0In9gctV14ESDTvug+4
+ yW9j8NCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZG0H0AAKCRAk1otyXVSH0KyOB/
+ 9t1lYVk2E7tat2LWCSzqMBwPHuDyPWfJk6jeFbFVyx1RGf2WnE0upBMjfaV9i21kg2WSw4Jt8/uaiy
+ bldL02V6xo8mOz1afM2YEs48cACz0bRdvckQSiAtSKZeKkhFotgM/iFQIQlg7vnvB3l4UaBF5aHacN
+ hLFH5CnMXqlvdz28y9pR6DiI/05iPunQEe+JOpHkjr5/+q/cWNsEhL24cFE5V0jHibvhBYxBw2gfA8
+ G+J7OZXmTbPoMDWZLwnwhctD/Wjh+M0LUI3c6C9wMyoC/a5fAlVvWd1GCrUqhJ5btQJ9RuSM03OM/f
+ QQy/5rnvIA6L2Mw9j9N3eMjDxTi3bi
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,36 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Continue working through the register defintions, converting them to
-automatic generation.
+Convert MDCCINT_EL1 to automatic register generation as per DDI0616
+2023-03. No functional change.
 
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Changes in v2:
-- Also convert OSECCR_EL1, OSDTRRX_EL1 and OSDTRTX_EL1 instead of
-  dropping them.
-- Link to v1: https://lore.kernel.org/r/20230419-arm64-syreg-gen-v1-0-936cd769cb9e@kernel.org
+ arch/arm64/include/asm/sysreg.h | 1 -
+ arch/arm64/tools/sysreg         | 7 +++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
----
-Mark Brown (7):
-      arm64/sysreg: Convert MDCCINT_EL1 to automatic register generation
-      arm64/sysreg: Convert MDSCR_EL1 to automatic register generation
-      arm64/sysreg: Standardise naming of bitfield constants in OSL[AS]R_EL1
-      arm64/sysreg: Convert OSLAR_EL1 to automatic generation
-      arm64/sysreg: Convert OSDTRRX_EL1 to automatic generation
-      arm64/sysreg: Convert OSDTRTX_EL1 to automatic generation
-      arm64/sysreg: Convert OSECCR_EL1 to automatic generation
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index e72d9aaab6b1..3d69bda0e608 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -135,7 +135,6 @@
+ #define SYS_SVCR_SMSTOP_SMZA_EL0	sys_reg(0, 3, 4, 6, 3)
+ 
+ #define SYS_OSDTRRX_EL1			sys_reg(2, 0, 0, 0, 2)
+-#define SYS_MDCCINT_EL1			sys_reg(2, 0, 0, 2, 0)
+ #define SYS_MDSCR_EL1			sys_reg(2, 0, 0, 2, 2)
+ #define SYS_OSDTRTX_EL1			sys_reg(2, 0, 0, 3, 2)
+ #define SYS_OSECCR_EL1			sys_reg(2, 0, 0, 6, 2)
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index c9a0d1fa3209..df7a7ba97b43 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -48,6 +48,13 @@
+ # feature that introduces them (eg, FEAT_LS64_ACCDATA introduces enumeration
+ # item ACCDATA) though it may be more taseful to do something else.
+ 
++Sysreg	MDCCINT_EL1	2	0	0	2	0
++Res0	63:31
++Field	30	RX
++Field	29	TX
++Res0	28:0
++EndSysreg
++
+ Sysreg ID_PFR0_EL1	3	0	0	1	0
+ Res0	63:32
+ UnsignedEnum	31:28	RAS
 
- arch/arm64/include/asm/kvm_host.h |  2 +-
- arch/arm64/include/asm/sysreg.h   | 16 +++---------
- arch/arm64/kvm/sys_regs.c         | 10 +++----
- arch/arm64/tools/sysreg           | 55 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 65 insertions(+), 18 deletions(-)
----
-base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
-change-id: 20230419-arm64-syreg-gen-b2aa896b8af6
-
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
