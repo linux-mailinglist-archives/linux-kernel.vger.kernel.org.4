@@ -2,93 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C17870D6E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F11370D6F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbjEWIOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
+        id S235552AbjEWIP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236124AbjEWINi (ORCPT
+        with ESMTP id S236156AbjEWIOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:13:38 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3968E1709
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:12:17 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:50830.1110848198
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 2E6421002CE;
-        Tue, 23 May 2023 16:12:14 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-xwndj with ESMTP id 44015d2c06d047de9aca08dcafbd25d6 for 15330273260@189.cn;
-        Tue, 23 May 2023 16:12:16 CST
-X-Transaction-ID: 44015d2c06d047de9aca08dcafbd25d6
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <5d7f9d1a-10c5-5b55-c7d8-24183f5a09ee@189.cn>
-Date:   Tue, 23 May 2023 16:12:14 +0800
+        Tue, 23 May 2023 04:14:55 -0400
+Received: from out-62.mta0.migadu.com (out-62.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755381BC8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:13:06 -0700 (PDT)
+Date:   Tue, 23 May 2023 08:13:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684829584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lo+8u5rwataPck7mvk/JQ6bPb50N+x5IthJ2AVYj7TE=;
+        b=T5pEjF+rE92i+/I/aK5r3XFh/21/ovkhnZi11b8TR+6H0j1dSUORt9wRBEWHqUDnRiD6Z6
+        mpYeaJNiFi+aqKaOpLxZX5SWooZ0yiOPOZXr3wKe5SVOr3vHoFfRRkHS4jLX0qkvdiiuOX
+        zve6banWIftcCrPi7Jf4gPt2hb1A1gY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev
+Subject: Re: [PATCH 5/5] arm64/sysreg: Convert OSLAR_EL1 to automatic
+ generation
+Message-ID: <ZGx1jT4nQ9HEVWSE@linux.dev>
+References: <20230419-arm64-syreg-gen-v1-0-936cd769cb9e@kernel.org>
+ <20230419-arm64-syreg-gen-v1-5-936cd769cb9e@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/drm_vblank.c: avoid unsigned int to signed int cast
-Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Li Yi <liyi@loongson.cn>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "loongson-kernel@lists.loongnix.cn" 
-        <loongson-kernel@lists.loongnix.cn>
-References: <20230516173026.2990705-1-15330273260@189.cn>
- <f6bd362145124f34a1af800dd330f8e9@AcuMS.aculab.com>
- <b23c41b1-e177-c81d-5327-fce5511cb97d@189.cn> <871qj8ob7z.fsf@intel.com>
- <4c9c0897-5e3a-1469-3d87-ff7723ac160c@189.cn>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <4c9c0897-5e3a-1469-3d87-ff7723ac160c@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419-arm64-syreg-gen-v1-5-936cd769cb9e@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 22, 2023 at 05:22:44PM +0100, Mark Brown wrote:
+> Convert OSLAR_EL1 to automatic generation as per DDI0601 2023-03. No
+> functional change.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/sysreg.h | 3 ---
+>  arch/arm64/tools/sysreg         | 5 +++++
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 09de958e79ed..3b51e532caa9 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -140,9 +140,6 @@
+>  #define SYS_DBGWCRn_EL1(n)		sys_reg(2, 0, 0, n, 7)
+>  #define SYS_MDRAR_EL1			sys_reg(2, 0, 1, 0, 0)
+>  
+> -#define SYS_OSLAR_EL1			sys_reg(2, 0, 1, 0, 4)
+> -#define OSLAR_EL1_OSLK			BIT(0)
+> -
+>  #define SYS_OSLSR_EL1			sys_reg(2, 0, 1, 1, 4)
+>  #define OSLSR_EL1_OSLM_MASK		(BIT(3) | BIT(0))
+>  #define OSLSR_EL1_OSLM_NI		0
 
-On 2023/5/23 12:26, Sui Jingfeng wrote:
-> Hi,
->
-> On 2023/5/22 19:29, Jani Nikula wrote:
->> In general, do not use unsigned types in arithmethic to avoid negative
->> values, because most people will be tripped over by integer promotion
->> rules, and you'll get negative values anyway.
->
->
-> Here I'm sure about this,
->
-Here, I'm NOT sure about this
+Should the OSLSR_EL1 definitions be rolled over to the generated scheme
+as well?
 
+> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+> index a5ae0e19fc9f..84df0b7feb45 100644
+> --- a/arch/arm64/tools/sysreg
+> +++ b/arch/arm64/tools/sysreg
+> @@ -83,6 +83,11 @@ Res0	5:1
+>  Field	0	SS
+>  EndSysreg
+>  
+> +Sysreg	OSLAR_EL1	2	0	1	0	4
+> +Res0	63:1
+> +Field	0	OSLK
+> +EndSysreg
+> +
+>  Sysreg ID_PFR0_EL1	3	0	0	1	0
+>  Res0	63:32
+>  UnsignedEnum	31:28	RAS
+> 
+> -- 
+> 2.30.2
+> 
 
-> but there are plenty unsigned types arithmetic in the kernel.
->
-> take kmalloc_array() function as an example in 
-> /tools/virto/linux/kernel.h
->
->
-> static inline void *kmalloc_array(unsigned n, size_t s, gfp_t gfp)
-> {
->     return kmalloc(n * s, gfp);
-> }
->
->
-> NOTE that *size_t* is an unsigned integral data type.
+-- 
+Thanks,
+Oliver
