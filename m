@@ -2,164 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E742E70E51C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A7670E520
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238239AbjEWTHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S238069AbjEWTJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjEWTHw (ORCPT
+        with ESMTP id S232990AbjEWTJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:07:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560C8119;
-        Tue, 23 May 2023 12:07:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1407601D7;
-        Tue, 23 May 2023 19:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737D4C433EF;
-        Tue, 23 May 2023 19:07:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684868868;
-        bh=UjoI8KoEuWKKny/a0/2Y5UC4GhbSgwmY9f8yoNGDBVE=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=HsU4mJiq0+kQivmSwVpMkf5uxpXXhoM+pBA1jUMtHg5go78AmqSu7l72l92zJRXpv
-         RJDDMwBOfFz/CMHXXIo7nw/p0IR76yzwBSAQHGT+YpvEYdq5kR6jiFQdNlP3aY6fWG
-         fS7oB7GkQF8kmMaALLK7SQVAlHbOYD4SZPNVZxrMIXLMFWSxVz7EibcX9xCtyERUtD
-         VRHWI0/3US9byvmSj06WSC17q7A7FutLewiIrWw/99uoSyvNf+fclRo2Ot8VD0qtjo
-         QjuRcKLW2Fy4Kd66uIecU9w9pGA/kNL4iLARhPA+Cq4f/Jwwl6E4ThioYaT0FOqoMR
-         w42g9stpb0+dA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 23 May 2023 22:07:43 +0300
-Message-Id: <CSTW5YGZ50O1.16RYO14HOQRH2@suppilovahvero>
-Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
-        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
-        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
-        <lukas@wunner.de>, <p.rosenberger@kunbus.com>
-Subject: Re: [PATCH 2/2] tpm, tpm_tis: reuse code in disable_interrupts()
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>
-X-Mailer: aerc 0.14.0
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <20230522143105.8617-2-LinoSanfilippo@gmx.de>
-In-Reply-To: <20230522143105.8617-2-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 15:09:24 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CF7119;
+        Tue, 23 May 2023 12:09:23 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so6971773a12.2;
+        Tue, 23 May 2023 12:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684868963; x=1687460963;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6z5OxRlNGFDksqOxV/WuukP5r2QPiQu+c1cFCQeYYDE=;
+        b=Fjq2/r2eJg8sxpSURL2bskZvWvE/vaukNbU7Hr8dfPIbfks/WfaA/iyDBHVTG8qLJU
+         JSB9bDnVnCl6OVMYqZUoI+EesTtZdzvDLno5/pKHSv4+GsSV1bcnjjfj7Ek3iCEzQGeD
+         frvVPGI/tA0gYTokSJptMu17N3CwYUDVFjP4tIkW+2vZeXRxUbpm1G9O/qun6DmIua58
+         Y2L0+Gn9PNMJaTqxqjoWTBqgutnxtV7+35UlkNhouHeG1VXbNcd23UnjO1m244dz3LO/
+         AMXiW6ga2oIQmmzpTL3V8d749fuuxrZfi8lvkmeN8VHijWOZAnMsJGSESis1fSslZ2/J
+         10lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684868963; x=1687460963;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6z5OxRlNGFDksqOxV/WuukP5r2QPiQu+c1cFCQeYYDE=;
+        b=MFY5nvCfIF6TYsIZKhymqRw1UR7fyvC4WCxvFj2SfLdzU0YZs7bDHrKfVQgpv6T8/q
+         Emg/yB4lHrQ0gCi0cagRqEQNNx4kangSZNmeUjdUQ06NfRMvp05yPJ7J0hEeCw5r5Kas
+         iG0LFbdOoMuvIGVDYNJGKQOhU2qHiSP7lLyHcw/dG2nyhS2F6LX0RcoIY3IwxVIrSbKm
+         liTXxa1+dOIqd1aPLfjgUHTl6d7+9hk96ilYKN81h0YEznhFk2K4SPP9fcATpIf4DGUd
+         6PwphhlmEMLB45Mj9cOVFTdQYXijg7zFNy7xfBfYFXScnsLov6a2gmcNfxCSA/NxcvRd
+         ZqIw==
+X-Gm-Message-State: AC+VfDxPwqL/BGI5Zvo65uCuOXik8b2RHoUCa5rQKKjGDAYvMjyByHTo
+        b1ygYKJipKpfl+CXhrU0sI8C4ykXma0=
+X-Google-Smtp-Source: ACHHUZ4nT41nFzlegruYDpteeblhOJMzXV3S2Bdu9AyXupuk00ajCc+oq0WNPbSPSJFkGLjrSdyK3Q==
+X-Received: by 2002:a17:90a:6444:b0:255:99c0:9f2 with SMTP id y4-20020a17090a644400b0025599c009f2mr3845341pjm.1.1684868962416;
+        Tue, 23 May 2023 12:09:22 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id s4-20020a17090a6e4400b0025271247ab8sm6012254pjm.11.2023.05.23.12.09.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 12:09:21 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 May 2023 09:09:20 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] cgroup: Remove out-of-date comment in
+ cgroup_migrate()
+Message-ID: <ZG0PYH7a9Mw50bEl@slm.duckdns.org>
+References: <20230523111456.146053-1-xiujianfeng@huaweicloud.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523111456.146053-1-xiujianfeng@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon May 22, 2023 at 5:31 PM EEST, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->
-> Avoid code redundancy by shifting part of the code in disable_interrupts(=
-)
-> into a subfunction and reusing this function in tpm_tis_handle_irq_storm(=
-).
-> Make sure that in the subfunction the INT_ENABLE register is written with=
- a
-> claimed locality even if the caller did not claim it before.
->
-> In the shifted code get rid of the variable "rc" by initializing the
-> interrupt mask to zero at variable declaration.
->
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 36 ++++++++++++++++-----------------
->  1 file changed, 17 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index 458ebf8c2f16..8f4f2cb5520f 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -468,25 +468,32 @@ static int tpm_tis_send_data(struct tpm_chip *chip,=
- const u8 *buf, size_t len)
->  	return rc;
->  }
-> =20
-> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	u32 intmask =3D 0;
-> +
-> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> +	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> +
-> +	tpm_tis_request_locality(chip, 0);
-> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	tpm_tis_relinquish_locality(chip, 0);
-> +
-> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
-> +}
-> +
->  static void disable_interrupts(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> -	u32 intmask;
-> -	int rc;
-> =20
->  	if (priv->irq =3D=3D 0)
->  		return;
-> =20
-> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> -	if (rc < 0)
-> -		intmask =3D 0;
-> -
-> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	__tpm_tis_disable_interrupts(chip);
-> =20
->  	devm_free_irq(chip->dev.parent, priv->irq, chip);
->  	priv->irq =3D 0;
-> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
-> =20
->  /*
-> @@ -755,20 +762,11 @@ static bool tpm_tis_req_canceled(struct tpm_chip *c=
-hip, u8 status)
->  static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> -	int intmask =3D 0;
-> =20
->  	dev_err(&chip->dev, HW_ERR
->  		"TPM interrupt storm detected, polling instead\n");
-> =20
-> -	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> -
-> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> -
-> -	tpm_tis_request_locality(chip, 0);
-> -	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> -	tpm_tis_relinquish_locality(chip, 0);
-> -
-> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
-> +	__tpm_tis_disable_interrupts(chip);
-> =20
->  	/*
->  	 * We must not call devm_free_irq() from within the interrupt handler,
-> --=20
-> 2.40.1
+On Tue, May 23, 2023 at 07:14:56PM +0800, Xiu Jianfeng wrote:
+> From: Xiu Jianfeng <xiujianfeng@huawei.com>
+> 
+> Commit 674b745e22b3 ("cgroup: remove rcu_read_lock()/rcu_read_unlock()
+> in critical section of spin_lock_irq()") has removed the rcu_read_lock,
+> which makes the comment out-of-date, so remove it.
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-NAK as invidual change w/o further discussion.
+So, that removed rcu_read_lock() because it's implied by the irq disable but
+the comment content is still useful in describing what's preventing
+use-after-free. Can you please update the comment accordingly instead?
 
-Would need to be seen in context. This does not change kernel for
-better.
+Thanks.
 
-If you want to wrap, please do it in 1/2 and then we can evaluate
-whether it makes sense or not.
-
-BR, Jarkko
+-- 
+tejun
