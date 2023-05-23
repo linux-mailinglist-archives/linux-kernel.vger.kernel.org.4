@@ -2,96 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CBA70DE3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F0A70DD7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236875AbjEWN5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
+        id S236737AbjEWNcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 09:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237038AbjEWN5q (ORCPT
+        with ESMTP id S229628AbjEWNcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:57:46 -0400
-X-Greylist: delayed 1374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 06:57:11 PDT
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCB3E5B
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=y2wJywGMXAg5Rl4zmKdJvnE9yWsAlKB6eSvxlDxCSBo=; b=IxctZ5iTliTKUn52gnBzfNMZRZ
-        +qy6wO6boaePW4GOeZ1YyLHlH+4zFx+t1fHBvVrq1oTBMdBwSW7vdczXMaq2Ngiq9pr4qQIUYbCfv
-        1qKND1pQDz9xGUfTAF0VGa321Ochw8r45iBUVHIFuPCPLksIsqxHVVjYPgXtNhbCAz+C3/vEGE74w
-        KoPr2OVptIkezVncRKsSUGSW3Cb8AFfJQjIlg1KeYWwRYFH6PiGcFwRhhbM3XB7CRqDGqx7AQkS2E
-        rbTSQ0JVXqHoNbhl0ymljVXal7v44hcOSJtWNEGnhDP3Fy1rKUheEp8pN7fTqORnzKqtJ0rQYZAWc
-        lngK3EXg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q1S7K-00AFpO-ND; Tue, 23 May 2023 13:31:58 +0000
-Date:   Tue, 23 May 2023 14:31:58 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     aloktiagi <aloktiagi@gmail.com>
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
-        David.Laight@aculab.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        hch@infradead.org, tycho@tycho.pizza
-Subject: Re: [RFC v6 1/2] epoll: Implement eventpoll_replace_file()
-Message-ID: <ZGzATlGu7mh6EFUi@casper.infradead.org>
-References: <20230523065802.2253926-1-aloktiagi@gmail.com>
+        Tue, 23 May 2023 09:32:45 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10ABE9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:32:43 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-331430faba8so1873035ab.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684848763; x=1687440763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qO7uVfTZIwTK5eWidHNY3IE4aDCiaYIaf7Mtd0r6B0Y=;
+        b=DnYbbxF8qWvdVMmjdAIOmFm/8GXYYrr+L+3jVS4o5/ftLIaCAA7GyXMraADoLxCa7b
+         YFobYJODZ6BwDSjiPrwXbN5jjmHgi0Iqv1BCRydt37gKEX2KwRFSkmSnoq/9sWCud7zx
+         2ZevSqOVnSEei+es+V1DzYU1apxZfOGr9/l+U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684848763; x=1687440763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qO7uVfTZIwTK5eWidHNY3IE4aDCiaYIaf7Mtd0r6B0Y=;
+        b=G7ZRjqN3f/zdxe8vRL5+joiXzsv3wOXoeVMs/GNTLE41SBhw6FqcdBnxtkDvYgtLco
+         sGkR3hzS9dISfAovf5ZBpChSeWVYdrCI+RWGbhEZ9MbKP1EDYUJizFN/AY0GbWqk8UXd
+         Flxxeo3K37Ks4wAA8i+S+ScdIKVCGahX9248k8zPSoF0AS8n8Nngjzr8HAAS19em0O68
+         a68dPvbsAdfDdPX9+dmj+qCds8WVhE8vh62G9V+JgjgVesBhGR5Ag1iQnbc7V8mo1VFB
+         ZSaa4a/S+q7FcYp55kpsOd3k+A8bKu/hs3+A2Lo2yZ3Epe8aAdpwvkDNspdYWTfnAU0o
+         4qgw==
+X-Gm-Message-State: AC+VfDxvPIzrKR8RJpTIly84PsWLV91ODt2kbcmYheaK5fFvy/niRh5J
+        fWhLUmXfJ2mP5Q1Orrvtpe9QnOKx9FdOqb9zF78=
+X-Google-Smtp-Source: ACHHUZ7QuoI+Z0DTXFy8smR5pjO30aSayOA3cCazqF4LvaqXyL7XpZgSFXaZq6gpJXVTNDxNJ4HF/Q==
+X-Received: by 2002:a92:c011:0:b0:33a:7100:81ee with SMTP id q17-20020a92c011000000b0033a710081eemr505072ild.11.1684848763049;
+        Tue, 23 May 2023 06:32:43 -0700 (PDT)
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com. [209.85.166.182])
+        by smtp.gmail.com with ESMTPSA id bo14-20020a056638438e00b00418af04e405sm190058jab.116.2023.05.23.06.32.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 06:32:42 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-33828a86ee2so168365ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:32:42 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1d0f:b0:329:333e:4e79 with SMTP id
+ i15-20020a056e021d0f00b00329333e4e79mr252495ila.1.1684848762023; Tue, 23 May
+ 2023 06:32:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523065802.2253926-1-aloktiagi@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230427035656.1962698-1-fshao@chromium.org> <CAD=FV=XVubT-ozs7JssBPz+9UcsZb+q0My8Aq6HNs-nFiJnogg@mail.gmail.com>
+ <nycvar.YFH.7.76.2305231510270.29760@cbobk.fhfr.pm>
+In-Reply-To: <nycvar.YFH.7.76.2305231510270.29760@cbobk.fhfr.pm>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 23 May 2023 06:32:30 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UyEw5xViGreQb6+cLNLrMcT27ts5P87aR=FEYWNOBM_w@mail.gmail.com>
+Message-ID: <CAD=FV=UyEw5xViGreQb6+cLNLrMcT27ts5P87aR=FEYWNOBM_w@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] Fix Goodix touchscreen power leakage for MT8186 boards
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Fei Shao <fshao@chromium.org>, Jeff LaBundy <jeff@labundy.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Kitt <steve@sk2.org>, devicetree@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 06:58:01AM +0000, aloktiagi wrote:
-> +/*
-> + * This is called from eventpoll_replace() to replace a linked file in the epoll
-> + * interface with a new file received from another process. This is useful in
-> + * cases where a process is trying to install a new file for an existing one
-> + * that is linked in the epoll interface
-> + */
-> +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd)
+Hi,
 
-Functions do not control where they are called from.  Just take that
-clause out:
+On Tue, May 23, 2023 at 6:11=E2=80=AFAM Jiri Kosina <jikos@kernel.org> wrot=
+e:
+>
+> On Fri, 19 May 2023, Doug Anderson wrote:
+>
+> > > These changes are based on the series in [1], which modified the
+> > > i2c-hid-of-goodix driver and removed the workaround for a power leaka=
+ge
+> > > issue, so the issue revisits on Mediatek MT8186 boards (Steelix).
+> > >
+> > > The root cause is that the touchscreen can be powered in different wa=
+ys
+> > > depending on the hardware designs, and it's not as easy to come up wi=
+th
+> > > a solution that is both simple and elegant for all the known designs.
+> > >
+> > > To address the issue, I ended up adding a new boolean property for th=
+e
+> > > driver so that we can control the power up/down sequence depending on
+> > > that.
+> > >
+> > > Adding a new property might not be the cleanest approach for this, bu=
+t
+> > > at least the intention would be easy enough to understand, and it
+> > > introduces relatively small change to the code and fully preserves th=
+e
+> > > original control flow.
+> > > I hope this is something acceptable, and I'm open to any better
+> > > approaches.
+> > >
+> > > [1] https://lore.kernel.org/all/20230207024816.525938-1-dianders@chro=
+mium.org/
+> > >
+> > > Changes in v4:
+> > > - Minor coding style improvement
+> > >
+> > > Changes in v3:
+> > > - In power-down, only skip the GPIO but not the regulator calls if th=
+e
+> > >   flag is set
+> > >
+> > > Changes in v2:
+> > > - Use a more accurate property name and with "goodix," prefix.
+> > > - Do not change the regulator_enable logic during power-up.
+> > >
+> > > Fei Shao (2):
+> > >   dt-bindings: input: goodix: Add "goodix,no-reset-during-suspend"
+> > >     property
+> > >   HID: i2c-hid: goodix: Add support for "goodix,no-reset-during-suspe=
+nd"
+> > >     property
+> > >
+> > >  .../bindings/input/goodix,gt7375p.yaml           |  9 +++++++++
+> > >  drivers/hid/i2c-hid/i2c-hid-of-goodix.c          | 16 ++++++++++++++=
++-
+> > >  2 files changed, 24 insertions(+), 1 deletion(-)
+> >
+> > Just double-checking if there is any work needed on this series. I
+> > think it's ready to land but I wanted to double-check.
+>
+> I don't think I've been CCed on the dt-binding part (patch 1/2 I guess).
+> Has it been Acked? If so, I will happily take it through hid.git, but
+> please send it my way.
 
-/*
- * Replace a linked file in the epoll interface with a new file received
- * from another process. This allows a process to
- * install a new file for an existing one that is linked in the epoll
- * interface
- */
+Yeah, Rob Acked it:
 
-But, erm, aren't those two sentences basically saying the same thing?
-So simplify again:
+https://lore.kernel.org/r/168261692866.3205353.5077242811275926416.robh@ker=
+nel.org/
 
-/*
- * Replace a linked file in the epoll interface with a new file
- */
+Fei: can you repost the series with collected tags and make sure to CC Jiri=
+?
 
-> diff --git a/include/linux/eventpoll.h b/include/linux/eventpoll.h
-> index 3337745d81bd..2a6c8f52f272 100644
-> --- a/include/linux/eventpoll.h
-> +++ b/include/linux/eventpoll.h
-> @@ -25,6 +25,14 @@ struct file *get_epoll_tfile_raw_ptr(struct file *file, int tfd, unsigned long t
->  /* Used to release the epoll bits inside the "struct file" */
->  void eventpoll_release_file(struct file *file);
->  
-> +/*
-> + * This is called from fs/file.c:do_replace() to replace a linked file in the
-> + * epoll interface with a new file received from another process. This is useful
-> + * in cases where a process is trying to install a new file for an existing one
-> + * that is linked in the epoll interface
-> + */
-> +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd);
+Thanks!
 
-No need to repeat the comment again.  Just delete it here.
+-Doug
