@@ -2,97 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A28370D6BB
+	by mail.lfdr.de (Postfix) with ESMTP id 7497270D6BC
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236034AbjEWIIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        id S236057AbjEWIIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236102AbjEWIIS (ORCPT
+        with ESMTP id S236110AbjEWIIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:08:18 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADB1110C3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:07:50 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [218.12.19.251])
-        by mail-app2 (Coremail) with SMTP id by_KCgDX_n1Ccmxk1PiyAw--.43277S2;
-        Tue, 23 May 2023 15:59:07 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] dm crypt: fix sleep-in-atomic-context bug in kcryptd_crypt_tasklet
-Date:   Tue, 23 May 2023 15:58:57 +0800
-Message-Id: <20230523075857.76520-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgDX_n1Ccmxk1PiyAw--.43277S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr18ur45Ww47Wr1kXFyrWFg_yoW8Xw47pF
-        WruF95CFy8Gr4Ygw1DKF18tFy5Gw4kGFW3GFW8Wa43AF15Xr1vvFy2krWUtr4UZF95ZFy7
-        ZFWkAay5WF1qy37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU52NtUUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwQEAWRrhN4LtgAxsb
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 04:08:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A143AE77
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684829166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c/I/wqsAUZDwVaD1e7Awdsb6/q2Rvw3zvRXvMlz6NW0=;
+        b=Y1wPTmEHdDuqJcR894gJGUz9g7ViCy5yrPih7RpbmcyKrAwh1oYJGefDY4HPT63IbUyf/m
+        Wnk5dcTjmZz4LIUXJfwXGF5ZR9VE0JGZZ747chok3cH1H/R8GDry1PAMRfZeBaczH3aVdg
+        JddTIBPlA/nViNwZ+XDSg1KP6Anisus=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-397-ZPjnPHSNODaJrOUkx0WvWw-1; Tue, 23 May 2023 03:59:56 -0400
+X-MC-Unique: ZPjnPHSNODaJrOUkx0WvWw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30a5d4e5731so1068946f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 00:59:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684828795; x=1687420795;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c/I/wqsAUZDwVaD1e7Awdsb6/q2Rvw3zvRXvMlz6NW0=;
+        b=UHWyXsjQqfJFdc6pZv5u/gjGU02qUDegIj0iWnn0C9LP42QH75ddh40oS5IlJxrjVD
+         b85wDejXMR7m0bLikgeFrCoTALDvGpx6EaFBsmlzUWU4xxw7e2JVar1j16f3//u0rk1/
+         Eos93LQtaFjIE0DmGvwyerzTzLPW27MoqYQNzI/GqL643z6iBkU6rxHoBZEuQD8NA/yj
+         hqfodXMUu6NtXbAQv80KTY5VJlgTQxBhtTH7DEydw2F52D9qBSfgd4RuIyKYJHR9bWHC
+         N3fCZJ5mkAKsUmUjFaDy1GGq2zQxt+YSoP/yy8redaOy+PR3oK/F0xd5jZYzvil67VPU
+         vHhg==
+X-Gm-Message-State: AC+VfDw8ouhioXr6rrrZxpXvksX1sBEPMEbYkKaq3vtK6w2lb8ifI7wg
+        TgalZGOU9vQvE7ibcsER3kOlPQBYni2YLkQXk5+8bZ1tAKxxhaqYUUU8waDMq26/igUtaRYw1zi
+        gNxGEyKseQI31VZHc/UybYmjw
+X-Received: by 2002:adf:e401:0:b0:309:4176:702 with SMTP id g1-20020adfe401000000b0030941760702mr9786032wrm.37.1684828795459;
+        Tue, 23 May 2023 00:59:55 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ63Bb25pawnjsloN5gp3/r6DIpPxmC+hDZy27hfHmyipn66Vb2ESk2diwsR0KgQ5gEy6CPgrA==
+X-Received: by 2002:adf:e401:0:b0:309:4176:702 with SMTP id g1-20020adfe401000000b0030941760702mr9786013wrm.37.1684828795083;
+        Tue, 23 May 2023 00:59:55 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
+        by smtp.gmail.com with ESMTPSA id c10-20020a5d414a000000b00304ae802f02sm10148229wrq.66.2023.05.23.00.59.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 00:59:54 -0700 (PDT)
+Message-ID: <e0bdc23d-b2f3-4c36-c658-b5d914555cb7@redhat.com>
+Date:   Tue, 23 May 2023 09:59:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH -V2 4/5] swap: remove get/put_swap_device() in
+ __swap_duplicate()
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
+References: <20230522070905.16773-1-ying.huang@intel.com>
+ <20230522070905.16773-5-ying.huang@intel.com>
+ <9cbd93e0-721a-01c2-14dd-87f89363a830@redhat.com>
+ <87o7mbyifo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <87o7mbyifo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to improve the IO performance of the dm-crypt
-implementation, the commit 39d42fa96ba1 ("dm crypt:
-add flags to optionally bypass kcryptd workqueues")
-adds tasklet to do the crypto operations.
+On 23.05.23 02:56, Huang, Ying wrote:
+> David Hildenbrand <david@redhat.com> writes:
+> 
+>> On 22.05.23 09:09, Huang Ying wrote:
+>>> __swap_duplicate() is called by
+>>> - swap_shmem_alloc(): the page lock of the swap cache is held.
+>>
+>> page lock of the swap cache? Did you really mean to say that or am I
+>> confused?
+>>
+>> "Page lock of the page that is in the swap cache?"
+> 
+> Sorry for my poor English. Or make it shorter?
+> 
+> "the folio in the swap cache is locked"
 
-The tasklet callback function kcryptd_crypt_tasklet()
-calls kcryptd_crypt() which is an original workqueue
-callback function that may sleep. As a result, the
-sleep-in-atomic-context bug may happen. The process
-is shown below.
+Much clearer, thanks.
 
-   (atomic context)
-kcryptd_crypt_tasklet()
-  kcryptd_crypt()
-    kcryptd_crypt_write_convert()
-      wait_for_completion() //may sleep
-
-The wait_for_completion() is a function that may sleep.
-In order to mitigate the bug, this patch changes
-wait_for_completion() to try_wait_for_completion().
-
-Fixes: 39d42fa96ba1 ("dm crypt: add flags to optionally bypass kcryptd workqueues")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/md/dm-crypt.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 8b47b913ee8..5e2b2463d87 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -2085,7 +2085,8 @@ static void kcryptd_crypt_write_convert(struct dm_crypt_io *io)
- 	crypt_finished = atomic_dec_and_test(&ctx->cc_pending);
- 	if (!crypt_finished && kcryptd_crypt_write_inline(cc, ctx)) {
- 		/* Wait for completion signaled by kcryptd_async_done() */
--		wait_for_completion(&ctx->restart);
-+		while (!try_wait_for_completion(&ctx->restart))
-+			;
- 		crypt_finished = 1;
- 	}
- 
 -- 
-2.17.1
+Thanks,
+
+David / dhildenb
 
