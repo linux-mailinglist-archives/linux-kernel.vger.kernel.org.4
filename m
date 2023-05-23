@@ -2,121 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A422670D8C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF57370D8CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235827AbjEWJST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S236185AbjEWJVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236342AbjEWJSI (ORCPT
+        with ESMTP id S235398AbjEWJVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:18:08 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8E11B5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:17:51 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-4573697b2cdso838406e0c.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684833470; x=1687425470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pk8OMJU/i+DL9domkx1SxECiIr/Cw8hUh9Jh7kwNm3g=;
-        b=Bdx1POUAqFJkjBgUi/GS0mdhya6BUMSBtxOpkjIYslelvZMDyOxdXjpHp6KFSmNEva
-         DoOqH5YE55cxw/OsjFJJBF7wk+RyoXA8VtxHSZvBNTT0mSO8EX9QoDi84yUx7KqeYkWM
-         oqiwIFlMfqGgdQYrLVnv/dQdV1Exbu+tyWFoImqXR8cukKC/BBLWaXTz+7CeDZc5dyUO
-         mv7Iigd20c11CjpzH0Rhi20M4szWE9i55a9Z3Y0CGMM6wTnhtwEoBPSPVTp1v1eRPpOD
-         jaQYgGUuWkjbZD8Ehm6yhyBOBpTB0prxNiEUCIpa25Ccs88q+Ero7ifnfv/B6SOMwhQ2
-         e/aw==
+        Tue, 23 May 2023 05:21:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E77126
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684833613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fn6/Mg38CazICzLvvCRl9KTjMS04MbP9e/f9SZahjis=;
+        b=Givdtjht+aKKBB8Vr63U4tcEgt1hs7HdgR1SmJz/5zrBebelP8GExms3UNSVVxQOKaG8Qy
+        ukQtNc+l1vj2vFnlW29YVxq5rG2Jlm3QYhPm2xASS9cmE3n0gHU2wNKW7/YdVbydlbDU0/
+        UsxTniXWevPNMeJiDmiydvHTAcsBRg8=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-646-VUKuREUuMKiiZ2Xt7IBIew-1; Tue, 23 May 2023 05:20:06 -0400
+X-MC-Unique: VUKuREUuMKiiZ2Xt7IBIew-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-96fd3757bd1so288458066b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:20:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684833470; x=1687425470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pk8OMJU/i+DL9domkx1SxECiIr/Cw8hUh9Jh7kwNm3g=;
-        b=XIZKvcwUg9gcX9/FJokrnTuIKQ8oesWH93j1EoohN4Q01FgWCPdzx201ZLwlyOeuCy
-         obHujvciXlfNrloN9nGQ1Y7tMVJpPBnPPEpq+tvrHxlAvpcLj/50z2W9hW4oJSSMgADV
-         ZTSR6Km4UcnQxjNREbbaC+I2oNLc+a0TWpfgb4a5X39A+lUkIHJnT5MT+7zlNHeUSOEg
-         yPrursKAPt9OnjgVVb7Z5YqppFtyXubH17lf8c1/grM0AF9SqkaTPeQW1PuGQSFC26QD
-         TINtIAEpN+mGBj7r1XOqAe/cx/2OH2FuJHsyR9EqRwNFXCzVt0+VDUL85BuZO77gE72s
-         pBlg==
-X-Gm-Message-State: AC+VfDwgVi1LrmIuM85PaiEnnLzj3tqSjJDxyDm7EnAJLd+K8myW/+We
-        OaWhG830TPMcQaL0hTk3bJidYSOojmgBVquBGlZYfA==
-X-Google-Smtp-Source: ACHHUZ7CHtarrucWGhxACF3S5WCro6uTcboj0GJAKcNxdbnYzGOU1NsbYTqH38dbQghvd72lmfdBvFudK2a6RwnqVzQ=
-X-Received: by 2002:a05:6102:2f4:b0:437:e5d1:a0e0 with SMTP id
- j20-20020a05610202f400b00437e5d1a0e0mr3647966vsj.19.1684833470145; Tue, 23
- May 2023 02:17:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684833605; x=1687425605;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fn6/Mg38CazICzLvvCRl9KTjMS04MbP9e/f9SZahjis=;
+        b=lCSJxcSt8kM9dkTkz+H0mOQRdeUGmoIfyO4FnUWlb9VNBy6CJKEswhYUwt4uailvhL
+         hOAVQ7gSOtVKSlggyQLtTo1xPrXSK0GuMP067Q7sJoKT6bvVWEoMTf16k4LnstOmukZb
+         7xlSVZZpZQ/+4x4RnE1aUgg1/+CEYoNx5QGexNG1nYQ3ugJL6uwJQoIsYcXaGtt/DIub
+         +jxee3VzFPoaKN6vS/v7iMef/IFqCZhTInu4XQA10lg0p99hCD5Wd4M0VeTUEakBZscf
+         niWRriHeg7J7RwZycdk2tQjPEsQLnqAohzq6r7uQ7BugoSrqsXeg6XOHrF3Q07E3Yjhh
+         XN2g==
+X-Gm-Message-State: AC+VfDzeTgRk8Ws2Ewd3QoPWHaSzewayYG8k1Gm7Q0vHd6vsKv67/jIm
+        KpLk2HRAK9m0WumtkHeJ0QfwKxk2s3Htv7ds+wzLCEtIdvA1jvdEGijqXrsDsyljVhPwEiwXAqO
+        +OxObMQ/FNLhOOYKOXsBkSxOB
+X-Received: by 2002:a17:906:dc90:b0:96f:cf04:82a3 with SMTP id cs16-20020a170906dc9000b0096fcf0482a3mr7124246ejc.70.1684833604953;
+        Tue, 23 May 2023 02:20:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5QVxXgvr8hupi6y88smfN74RETs+4H065rSKm8uwDXUIIaBa/cxhH4Mj1EY+5no2GOcncMNA==
+X-Received: by 2002:a17:906:dc90:b0:96f:cf04:82a3 with SMTP id cs16-20020a170906dc9000b0096fcf0482a3mr7124217ejc.70.1684833604525;
+        Tue, 23 May 2023 02:20:04 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id y2-20020a170906914200b0094e597f0e4dsm4152574ejw.121.2023.05.23.02.20.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 02:20:03 -0700 (PDT)
+Message-ID: <2fae3c48-c9d6-7251-1692-7365f9d0cfa7@redhat.com>
+Date:   Tue, 23 May 2023 11:20:03 +0200
 MIME-Version: 1.0
-References: <Yz62XmiH8YG3Dtsf@orome> <20221007055936.5446-1-pshete@nvidia.com>
- <CACRpkdYkJdZ67kyTnDg3xFzO8MJhC0nHK98O+KJwCLBqV_5f-Q@mail.gmail.com> <1de5b7fb-a39e-183a-1407-7d6489f706b4@nvidia.com>
-In-Reply-To: <1de5b7fb-a39e-183a-1407-7d6489f706b4@nvidia.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 23 May 2023 11:17:39 +0200
-Message-ID: <CAMRc=MdCiieaYR3BeATm+2o8UDz+9D5vs=dTNDAavi19BmKZ8w@mail.gmail.com>
-Subject: Re: [PATCH v3] gpio: tegra186: Check GPIO pin permission before access.
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Prathamesh Shete <pshete@nvidia.com>, thierry.reding@gmail.com,
-        bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        smangipudi@nvidia.com, kyarlagadda@nvidia.com,
-        Manish Bhardwaj <mbhardwaj@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Content-Language: en-US, nl
+To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
+        oe-lkp@lists.linux.dev, lkp@intel.com, peterz@infradead.org,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        p.rosenberger@kunbus.com
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
+ <20230523074443.GA21236@wunner.de>
+ <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 8:22=E2=80=AFAM Jon Hunter <jonathanh@nvidia.com> w=
-rote:
->
->
-> On 17/10/2022 10:31, Linus Walleij wrote:
-> > On Fri, Oct 7, 2022 at 7:59 AM Prathamesh Shete <pshete@nvidia.com> wro=
-te:
-> >
-> >> This change checks if we have the necessary permission to
-> >> access the GPIO. For devices that have support for virtualisation
-> >> we need to check both the TEGRA186_GPIO_VM_REG and the
-> >> TEGRA186_GPIO_SCR_REG registers. For device that do not have
-> >> virtualisation support for GPIOs we only need to check the
-> >> TEGRA186_GPIO_SCR_REG register.
-> >>
-> >> Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
-> >> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
-> >
-> > Very nice patch!
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
->
-> I did not see this anywhere in the mainline/next. However, I also
-> noticed that we don't have the correct email address for Bartosz (again).
->
+Hi,
 
-I have only ever changed my address in MAINTAINERS once, so "again" is
-not really the right term. And scripts/get_maintainer.pl should be
-used anyway every time when submitting patches.
+On 5/23/23 11:14, Péter Ujfalusi wrote:
+> 
+> 
+> On 23/05/2023 10:44, Lukas Wunner wrote:
+>> On Tue, May 23, 2023 at 09:48:23AM +0300, Péter Ujfalusi wrote:
+>>> On 22/05/2023 17:31, Lino Sanfilippo wrote:
+>> [...]
+>>> This looked promising, however it looks like the UPX-i11 needs the DMI
+>>> quirk.
+>>
+>> Why is that?  Is there a fundamental problem with the patch or is it
+>> a specific issue with that device?
+> 
+> The flood is not detected (if there is a flood at all), interrupt stops
+> working after about 200 interrupts - in the latest boot at 118th.
+> I can check this later, likely tomorrow.
+> 
+>>>> --- a/drivers/char/tpm/tpm_tis_core.c
+>>>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>>>> @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+>>>>  	return status == TPM_STS_COMMAND_READY;
+>>>>  }
+>>>>  
+>>>> +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
+>>>> +{
+>>>> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>>>> +	int intmask = 0;
+>>>> +
+>>>> +	dev_err(&chip->dev, HW_ERR
+>>>> +		"TPM interrupt storm detected, polling instead\n");
+>>>
+>>> Should this be dev_warn or even dev_info level?
+>>
+>> The corresponding message emitted in tpm_tis_core_init() for
+>> an interrupt that's *never* asserted uses dev_err(), so using
+>> dev_err() here as well serves consistency:
+>>
+>> 	dev_err(&chip->dev, FW_BUG
+>> 		"TPM interrupt not working, polling instead\n");
+>>
+>> That way the same severity is used both for the never asserted and
+>> the never deasserted interrupt case.
+> 
+> Oh, OK.
+> Is there anything the user can do to have a ERROR less boot?
 
-> Bartosz, let me know if you can pick this up? Thierry also ack'ed
-> previously for Tegra too.
->
-> FWIW ...
->
-> Acked-by: Jon Hunter <jonathanh@nvidia.com>
->
+That is a good point. Even though the typical dmesg has at least some false-positive error messages I believe we should still strive to not log errors in cases where there is not e.g. an actual error which the user needs to care about (e.g. disk IO errors).
 
-This doesn't apply to v6.4-rc1. Prathmesh: could you rebase and resend?
+Usually in similar cases like this, where we are basically correcting for firmware bugs (1) we use:
 
-Bart
+	dev_warn(dev, FW_BUG "...", ...);
 
-> Thanks
-> Jon
->
-> --
-> nvpublic
+maybe we should switch both messages here to this ?
+
+FW_BUG is: defined in linux/printk as:
+
+#define FW_BUG		"[Firmware Bug]: "
+
+And we are trying to use this in places like this both for uniformity of reporting these kinda bugs and to allow grepping for it.
+
+Regards,
+
+Hans
+
+
+
+1) providing wrong / non working ACPI IRQ resources in this case
+
