@@ -2,128 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773C670E5EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5E670E5ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238479AbjEWTrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        id S238483AbjEWTsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjEWTre (ORCPT
+        with ESMTP id S229515AbjEWTsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:47:34 -0400
-X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 12:47:33 PDT
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D96E5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:47:33 -0700 (PDT)
-Received: from eig-obgw-6018a.ext.cloudfilter.net ([10.0.30.233])
-        by cmsmtp with ESMTP
-        id 1VRpqAf4AbK1V1XxKqRIm3; Tue, 23 May 2023 19:46:02 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id 1XxJqUP6ky1hc1XxJqzSQA; Tue, 23 May 2023 19:46:01 +0000
-X-Authority-Analysis: v=2.4 cv=cqSILn0i c=1 sm=1 tr=0 ts=646d17f9
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10
- a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8 a=kxGpGzF3zFx1SGUESVUA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ljMdlDdx5J+18DhoS8j4K1VQdJl1syC7905CE3fxYNA=; b=Z6e4ETW7+WGTJoQk8juniRCmgr
-        IfMLlfnM8z86BSWy81Z2wZqu6Qleuoj1q5/a+xsO7Wxqh4sTzrUpwQPI9VZZEIq3kkNczH00G0qBn
-        9CA6KqwjkjkC8O5VWHmfjLbJmEq+WM/0LSEmooPD4U4LMHg7xDDy+GZVF4DD2RFJ8iGfT2tAvPwtf
-        Kum244yx6WE0kMVyHIiBSBdgKRp1wfcq4ZD83t0FsHyh8bow7GYqC0pnFgSlQmo4FcE2pPVAYdDpa
-        fheb+OMtYLyQfg0YXaSoUaeEUN7EYc8JGw2/l4hDGMihz1ctWtClFJbEgRN1TM6WcWZoLNoruHQbY
-        ic0Z+YFA==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:58740 helo=[192.168.15.7])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1q1XxI-003bHK-HH;
-        Tue, 23 May 2023 14:46:00 -0500
-Message-ID: <3d298c36-cdd8-62bd-2fef-c2ce63e662ef@embeddedor.com>
-Date:   Tue, 23 May 2023 13:46:54 -0600
+        Tue, 23 May 2023 15:48:12 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6F7119
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:48:11 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so170682b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684871291; x=1687463291;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gh8j09IDsIastTGK+qUQekVYXvc0e9ghy+aokO8ek64=;
+        b=W9xFM/f2wG4wJ1XqimQRGjAZPjNIZDk0zqHNwAfaL2L6+GT/GKtwSsGy4ZbPYkddyI
+         a81kW4q1x9unuM8EEvYoYc7sZjn1xl8Hvk55euaZRb42OHIKNrrbAnAkAKcaxYj/+m8F
+         yZQAETL4r5IoMBlblG9DCo8hcoIU5wvty+aW3bKZC2Xt6zxNE/VOXoIO+Z1M7BClhsC4
+         moh9Kz0jY4Ff2Xn0lZRlxkqh/ygHpbSm+TFT3Vdii1FUjY/q8mYWR1Wyr0cUVAyEvr1J
+         vCjbTD0q9Zg9TUNJIWMILwcSLMwaPbVzvsuJXJCe0qn5Xw/0eeVVZtfdCCwTbiaS1dqZ
+         aDTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684871291; x=1687463291;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gh8j09IDsIastTGK+qUQekVYXvc0e9ghy+aokO8ek64=;
+        b=WdxYAj+1ZDjSX5c0/iAuv1v1qkcvRs27pbqsMgKu7fwS6FnqxhXgoJM8H7GDNCg8xY
+         2v+Gp2JzaV7L8X9nY1vO7v/uGg7YEdcEHyL47Iv/xjku9G4/xDhcZo5im52MIcOnsQyl
+         nrBM/B7srGcb/NW4rZXw75Pk+EtupNEtLAelEVXtU76ZSDOZNLejURnxOzGX+DAT/VsS
+         bwVL51KPzMdrsg6Ku/GwfQ03jHSySWPTFuQ3u3SAyTwuasvHseRtgYIl6s2GinvNj7WG
+         3xl7XScH53MAR1uGZW//9qcqMCaNTDk+kfBf+7hbeZ4MhWOb6Qf3HOs2SDwSzpfhdyRx
+         75nw==
+X-Gm-Message-State: AC+VfDyegbenUZ3C5jXOOTtw7ZQB8Fr6L+tFoSrk8HzMp5sPJKHjP9wo
+        gd8j5n8UsIPPYImDaUdUecA=
+X-Google-Smtp-Source: ACHHUZ6JDKKFT83gO/cAC16Eg14RrI7fQKz2iGQ8UaXaInuQjbRH1+AxteAJNly09N8IRr9SyjsSNw==
+X-Received: by 2002:a05:6a20:3953:b0:10c:2fe0:b3d with SMTP id r19-20020a056a20395300b0010c2fe00b3dmr5608260pzg.33.1684871290987;
+        Tue, 23 May 2023 12:48:10 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id d22-20020a631d16000000b0050be8e0b94csm6312497pgd.90.2023.05.23.12.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 12:48:10 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 May 2023 09:48:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Zqiang <qiang.zhang1211@gmail.com>
+Cc:     jiangshanlai@gmail.com, naresh.kamboju@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] workqueue: Fix warning triggered when nr_running is
+ checked in worker_enter_idle()
+Message-ID: <ZG0YeeTZNox8YB25@slm.duckdns.org>
+References: <20230523140942.18679-1-qiang.zhang1211@gmail.com>
+ <ZG0WoOqfr6R5wK1p@slm.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2][next] scsi: lpfc: Replace one-element array with
- flexible-array member
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Smart <james.smart@broadcom.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <cover.1684358315.git.gustavoars@kernel.org>
- <6c6dcab88524c14c47fd06b9332bd96162656db5.1684358315.git.gustavoars@kernel.org>
- <yq11qj8nhy7.fsf@ca-mkp.ca.oracle.com> <202305231031.C9E6124@keescook>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <202305231031.C9E6124@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1q1XxI-003bHK-HH
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.7]) [187.162.21.192]:58740
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfHSLqbsEI4XYmqErvjbzgvVIY1zgLB9q2k08Imppv54JFI9OEkpgRbfFAUiN0AorQfZUrXjv5lVZ2+4p4VJgeDU34VvQzzp2CKiPOrKpMq4Okufk0v3W
- Ctf1lpCnILRSWzq/y4ifFMYx4x7cTFbDwY1/s/D0j/noV5EX8GuOcnEXjfbAeamS9ihUGdWlWVSE0n7P0mCYn6Zo5+N8wAIzaaszQRuJPIJESmLUJkTMaDra
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG0WoOqfr6R5wK1p@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-
-On 5/23/23 11:31, Kees Cook wrote:
-> On Mon, May 22, 2023 at 06:02:21PM -0400, Martin K. Petersen wrote:
->>
->> Gustavo,
->>
->>> One-element arrays are deprecated, and we are replacing them with flexible
->>> array members instead. So, replace one-element arrays with flexible-array
->>> members in a couple of structures, and refactor the rest of the code,
->>> accordingly.
->>>
->>> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
->>> routines on memcpy() and help us make progress towards globally
->>> enabling -fstrict-flex-arrays=3 [1].
->>>
->>> This results in no differences in binary output.
->>
->> Applied to 6.5/scsi-staging, thanks!
+On Tue, May 23, 2023 at 09:40:16AM -1000, Tejun Heo wrote:
+> On Tue, May 23, 2023 at 10:09:41PM +0800, Zqiang wrote:
+> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > index 9c5c1cfa478f..329b84c42062 100644
+> > --- a/kernel/workqueue.c
+> > +++ b/kernel/workqueue.c
+> > @@ -1144,13 +1144,12 @@ void wq_worker_tick(struct task_struct *task)
+> >  	 * longer than wq_cpu_intensive_thresh_us, it's automatically marked
+> >  	 * CPU_INTENSIVE to avoid stalling other concurrency-managed work items.
+> >  	 */
+> > -	if ((worker->flags & WORKER_NOT_RUNNING) ||
+> > +	if ((worker->flags & WORKER_NOT_RUNNING) || worker->sleeping ||
+> >  	    worker->task->se.sum_exec_runtime - worker->current_at <
+> >  	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
+> >  		return;
 > 
-> Martin, I think this patch is not right -- can you drop this from
-> staging for the moment?
+> Ah, right, this isn't just interrupted read-modify-write. It has to consider
+> sleeping. This is subtle. We'll definitely need more comments. Will think
+> more about it.
 
-Martin just took patch 1/2, which is correct:
+So, there already are enough barriers to make this safe but that's kinda
+brittle because e.g. it'd depend on the barrier in preempt_disable() which
+is there for an unrelated reason. Can you please change ->sleeping accesses
+to use WRITE/READ_ONCE() and explain in wq_worker_tick() that the worker
+doesn't contribute to ->nr_running while ->sleeping regardless of
+NOT_RUNNING and thus the operation shouldn't proceed? We probably need to
+make it prettier but I think that should do for now.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/commit/?h=6.5/scsi-staging&id=e90644b0ce2d700a65579ac74ff594414e8ba30f
+Thanks.
 
---
-Gustavo
+-- 
+tejun
