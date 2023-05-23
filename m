@@ -2,50 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7092A70D372
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 07:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFA870D375
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 07:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234712AbjEWF4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 01:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S231882AbjEWF5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 01:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234624AbjEWFz5 (ORCPT
+        with ESMTP id S231280AbjEWF46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 01:55:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10905120;
-        Mon, 22 May 2023 22:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eLhUu8UCBd/YYLdOP3ui5b1tEMg7x/uUoMmk7djKCEM=; b=bKvOSi6aMPy7rYVrte/3XLeNHl
-        qkBujmdDFFQ6BARVEU2twgXyiyjAwlKGIordV0kMs0H2djtSnYmE8ZurAQqKDqI0qLTOV2imQXtqf
-        biZFkYTJUwIarcadZT7ASdLzrmK3LWv4PL6zZPNaPUgMMS//rpRx9e6Hkb0yegUH2yJBZVnZ6LDKt
-        GAEfmKpNqlTQ4Kxftj1nvSA2L+Y7YTTWSsKFYBpfUYI5IDz0c8S1LLRY+TasePE9OosWa++5TvrgP
-        EjKnONZcCvS0q7YOiTlHucKoDFPzVO94VQc36ZZzPTt2KTXs14OOkW+bF1X9528rtXg8n9y0yGfDE
-        AT4p5gAg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1Kzy-0091NL-0x;
-        Tue, 23 May 2023 05:55:54 +0000
-Date:   Mon, 22 May 2023 22:55:54 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Song Liu <song@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] md/raid5: Convert stripe_head's "dev" to flexible
- array member
-Message-ID: <ZGxVatFgD1u1x+5c@infradead.org>
-References: <20230522212114.gonna.589-kees@kernel.org>
+        Tue, 23 May 2023 01:56:58 -0400
+Received: from out-17.mta1.migadu.com (out-17.mta1.migadu.com [IPv6:2001:41d0:203:375::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E8B11A
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 22:56:56 -0700 (PDT)
+Message-ID: <e2a3a27e-9c12-f180-4bb6-1906aa1a1844@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684821414;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m07o5exswnKt8yK6ZsQ/L7uRf4eL52Y1KwKINSNdTZ0=;
+        b=i36xmLc4j5aax91r2DKNDfB//n/KSwCav6OEvS8EKfaP874Un9M5dgmWfNHOQmWeCdcMND
+        P/4w7yrxHVuBzGvq0SJAiEk802KFLYnP3eNGX/YhPMQJwDQw1k9Wv5GYWtgGrbzZRkwghz
+        fi1P8D7SUQHFIDl5y8kgk5mf3sLzU5k=
+Date:   Tue, 23 May 2023 13:56:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522212114.gonna.589-kees@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
+ skb_dequeue (2)
+Content-Language: en-US
+To:     Zhu Yanjun <zyjzyj2000@gmail.com>
+Cc:     syzbot <syzbot+eba589d8f49c73d356da@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000a589d005fc52ee2d@google.com>
+ <13528f21-0f36-4fa2-d34f-eecee6720bc1@linux.dev>
+ <CAD=hENeCo=-Pk9TWnqxOWP9Pg-JXWk6n6J19gvPo9_h7drROGg@mail.gmail.com>
+ <CAD=hENdoyBZaRz7aTy4mX5Kq1OYmWabx2vx8vPH0gQfHO1grzw@mail.gmail.com>
+ <0d515e17-5386-61ba-8278-500620969497@linux.dev>
+ <CAD=hENcqa0jQvLjuXw9bMtivCkKpQ9=1e0-y-1oxL23OLjutuw@mail.gmail.com>
+ <CAD=hENdXdqfcxjNrNnP8CoaDy6sUJ4g5uxcWE0mj3HtNohDUzw@mail.gmail.com>
+ <CAD=hENda4MxgEsgT-GUhYHH66m79wi8yxBQS8CYnxc_DsQKGwg@mail.gmail.com>
+ <5b6b8431-92c7-62df-299b-28f3a5f61d5f@linux.dev>
+ <CAD=hENc72B+gLLd_Xn7w8bd_qDw=mFd5sC0RKEsHpNA=85a9KA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+In-Reply-To: <CAD=hENc72B+gLLd_Xn7w8bd_qDw=mFd5sC0RKEsHpNA=85a9KA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,17 +62,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 02:21:15PM -0700, Kees Cook wrote:
-> -	} dev[1]; /* allocated with extra space depending of RAID geometry */
-> +	} dev[]; /* allocated with extra space depending of RAID geometry */
 
-I still think this should be:
 
-	/* allocated depending of RAID geometry */
+On 5/23/23 13:52, Zhu Yanjun wrote:
+> On Tue, May 23, 2023 at 1:44 PM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
+>>
+>>
+>> On 5/23/23 13:18, Zhu Yanjun wrote:
+>>> On Tue, May 23, 2023 at 1:08 PM Zhu Yanjun <zyjzyj2000@gmail.com> wrote:
+>>>> On Tue, May 23, 2023 at 12:29 PM Zhu Yanjun <zyjzyj2000@gmail.com> wrote:
+>>>>> On Tue, May 23, 2023 at 12:10 PM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
+>>>>>>
+>>>>>> On 5/23/23 12:02, Zhu Yanjun wrote:
+>>>>>>> On Tue, May 23, 2023 at 11:47 AM Zhu Yanjun <zyjzyj2000@gmail.com> wrote:
+>>>>>>>> On Tue, May 23, 2023 at 10:26 AM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
+>>>>>>>>> On 5/23/23 10:13, syzbot wrote:
+>>>>>>>>>> Hello,
+>>>>>>>>>>
+>>>>>>>>>> syzbot tried to test the proposed patch but the build/boot failed:
+>>>>>>>>>>
+>>>>>>>>>> failed to apply patch:
+>>>>>>>>>> checking file drivers/infiniband/sw/rxe/rxe_qp.c
+>>>>>>>>>> patch: **** unexpected end of file in patch
+>>>>>>>> This is not the root cause. The fix is not good.
+>>>>>>> This problem is about "INFO: trying to register non-static key. The
+>>>>>>> code is fine but needs lockdep annotation, or maybe"
+>>>>> This warning is from "lock is not initialized". This is a
+>>>>> use-before-initialized problem.
+>>>>> The correct fix is to initialize the lock that is complained before it is used.
+>>>>>
+>>>>> Zhu Yanjun
+>>>> Based on the call trace, the followings are the order of this call trace.
+>>>>
+>>>> 291 /* called by the create qp verb */
+>>>> 292 int rxe_qp_from_init(struct rxe_dev *rxe, struct rxe_qp *qp,
+>>>> struct rxe_pd *pd,
+>>>> 297 {
+>>>>               ...
+>>>> 317         rxe_qp_init_misc(rxe, qp, init);
+>>>>               ...
+>>>> 322
+>>>> 323         err = rxe_qp_init_resp(rxe, qp, init, udata, uresp);
+>>>> 324         if (err)
+>>>> 325                 goto err2;   <--- error
+>>>>
+>>>>               ...
+>>>>
+>>>> 334 err2:
+>>>> 335         rxe_queue_cleanup(qp->sq.queue); <--- Goto here
+>>>> 336         qp->sq.queue = NULL;
+>>>>
+>>>> In rxe_qp_init_resp, the error occurs before skb_queue_head_init.
+>>>> So this call trace appeared.
+>>> 250 static int rxe_qp_init_resp(struct rxe_dev *rxe, struct rxe_qp *qp,
+>>> 254 {
+>>>                           ...
+>>> 264
+>>> 265                 type = QUEUE_TYPE_FROM_CLIENT;
+>>> 266                 qp->rq.queue = rxe_queue_init(rxe, &qp->rq.max_wr,
+>>> 267                                         wqe_size, type);
+>>> 268                 if (!qp->rq.queue)
+>>> 269                         return -ENOMEM;    <---Error here
+>>> 270
+>>>
+>>> ...
+>>>
+>>> 282         skb_queue_head_init(&qp->resp_pkts); <-this is not called.
+>>> ...
+>>> This will make spin_lock of resp_pkts is used before initialized.
+>> IMHO, the above is same as
+>>
+>>> Which is caused by  "skb_queue_head_init(&qp->resp_pkts)" is not called
+>>> given rxe_qp_init_resp returns error, but the cleanup still trigger the
+>>> chain.
+>>>
+>>> rxe_qp_do_cleanup -> rxe_completer -> drain_resp_pkts ->
+>>> skb_dequeue(&qp->resp_pkts)
+>> my previous analysis. If not, could you provide another better way to
+>> fix it?
+> Move the initialization to the beginning. This can fix this problem.
+> See below:
+>
+> "
+> diff --git a/drivers/infiniband/sw/rxe/rxe_qp.c
+> b/drivers/infiniband/sw/rxe/rxe_qp.c
+> index c5451a4488ca..22ef6188d7b1 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_qp.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_qp.c
+> @@ -176,6 +176,9 @@ static void rxe_qp_init_misc(struct rxe_dev *rxe,
+> struct rxe_qp *qp,
+>          spin_lock_init(&qp->rq.producer_lock);
+>          spin_lock_init(&qp->rq.consumer_lock);
+>
+> +       skb_queue_head_init(&qp->req_pkts);
+> +       skb_queue_head_init(&qp->resp_pkts);
+> +
+>          atomic_set(&qp->ssn, 0);
+>          atomic_set(&qp->skb_out, 0);
+>   }
+> @@ -234,8 +237,6 @@ static int rxe_qp_init_req(struct rxe_dev *rxe,
+> struct rxe_qp *qp,
+>          qp->req.opcode          = -1;
+>          qp->comp.opcode         = -1;
+>
+> -       skb_queue_head_init(&qp->req_pkts);
+> -
+>          rxe_init_task(&qp->req.task, qp, rxe_requester);
+>          rxe_init_task(&qp->comp.task, qp, rxe_completer);
+>
+> @@ -279,8 +280,6 @@ static int rxe_qp_init_resp(struct rxe_dev *rxe,
+> struct rxe_qp *qp,
+>                  }
+>          }
+>
+> -       skb_queue_head_init(&qp->resp_pkts);
+> -
+>          rxe_init_task(&qp->resp.task, qp, rxe_responder);
+>
+>          qp->resp.opcode         = OPCODE_NONE;
+> "
 
-now or dropped entirely, as the extra only made sense when it always
-had that magic one.
+It is weird to me that init them in init_misc instead of init_req/resp, 
+given they
+are dedicated/used for the different purpose. But just my 0.02$.
 
-The actual code changes looks good to me:
-
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Guoqing
