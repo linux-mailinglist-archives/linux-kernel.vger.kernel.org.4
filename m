@@ -2,137 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A80070E69A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C451370E69E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 22:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238360AbjEWUiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 16:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S238459AbjEWUjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 16:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEWUix (ORCPT
+        with ESMTP id S238388AbjEWUjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 16:38:53 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AEEBB;
-        Tue, 23 May 2023 13:38:51 -0700 (PDT)
-Date:   Tue, 23 May 2023 22:38:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1684874329; bh=EzkLbhrC+w2OHgZZPK1VzhL1OpNxKF9uCao3nLNFGQE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OkiCp/f/WcjXebLhKmGBjaI9UfKba2EtzzbH5NFZAV03LDzy4JIWStGV+sR0+MVpP
-         2YWSp641l7CS2ajocZmmrQZAkKRITRSYcwAiuwS0U1Wv1uJAaCxiZMr8txraiFBdNI
-         C1uHUgA1EsCjXHSD5rRoO8/RmGYqYYsD5gCEx8JI=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7/7] tools/nolibc: simplify stackprotector compiler flags
-Message-ID: <7126afac-3914-435a-852a-41703bc668ea@t-8ch.de>
-References: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
- <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
- <ZG0eNtYH1VvXdLBN@1wt.eu>
+        Tue, 23 May 2023 16:39:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5A6FA;
+        Tue, 23 May 2023 13:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684874354; x=1716410354;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OWSHPRO5HnlWet7EfvINZiwK0k+1sxDkGfdhBdgkUzI=;
+  b=kem5xjOuEtFfSDh1iiXybWq2WZoHYKp+mWUDroCbAKm9CnAd5MKpfL5V
+   X7UeViHgG/xHbGXb3F25DL3oD3rxGORwMTm0VSumYrTetPvAhZ46aO80E
+   52k3ZUEgsS3pDmtdSHrk5t0eVY2M3wXJY/pTNJ+gSPRQM4GhC8ralXkfw
+   Ag/knK6HQJ+pqMHFCflVfVVrPzaotN/9eQ2Ay0DXY9d+8/8qKWvrRkTgh
+   KKvG1V9sWVSkI4Rud5sTuGZ0c2cliHTI1MYCiazlyVHZ6QiSvSVWux9OP
+   37bwpA5mOf5/nIpsjoyTtyhVVz1i9ISgd496jGGlujghArhNIxhlLykjD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="419068151"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="419068151"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 13:39:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="793868392"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="793868392"
+Received: from kroconn-mobl2.amr.corp.intel.com (HELO [10.251.1.84]) ([10.251.1.84])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 13:39:11 -0700
+Message-ID: <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
+Date:   Tue, 23 May 2023 13:39:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZG0eNtYH1VvXdLBN@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 2/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        wei.liu@kernel.org, x86@kernel.org, mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
+References: <20230504225351.10765-1-decui@microsoft.com>
+ <20230504225351.10765-3-decui@microsoft.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230504225351.10765-3-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-23 22:12:38+0200, Willy Tarreau wrote:
-> Hi Thomas, Zhangjin,
-> 
-> I merged and pushed this series on top of the previous series, it's in
-> branch 20230523-nolibc-rv32+stkp3.
-> 
-> However, Thomas, I found an issue with this last patch that I partially
-> reverted in a last patch I pushed as well so that we can discuss it:
-> 
-> On Sun, May 21, 2023 at 11:36:35AM +0200, Thomas Weißschuh wrote:
-> >  
-> > -CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
-> > -			$(call cc-option,-mstack-protector-guard=global) \
-> > -			$(call cc-option,-fstack-protector-all)
-> > -CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
-> > -CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
-> > -CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
-> > -CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
-> > -CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
-> > -CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
-> > -CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
-> > -CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
-> > +CFLAGS_STACKPROTECTOR = $(call cc-option,-mstack-protector-guard=global -fstack-protector-all)
-> >  CFLAGS_s390 = -m64
-> >  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-> >  		$(call cc-option,-fno-stack-protector) \
-> > +		$(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all)) \
-> >  		$(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
-> 
-> By doing so, we reintroduce the forced stack-protector mechanism
-> that cannot be disabled anymore. The ability to disable it was the
-> main point of the options above. In fact checking __SSP__* was a
-> solution to save the user from having to set -DNOLIBC_STACKPROTECTOR
-> to match their compiler's flags, but here in the nolibc-test we still
-> want to be able to forcefully disable stkp for a run (at least to
-> unbreak gcc-9, and possibly to confirm that non-stkp builds still
-> continue to work when your local toolchain has it by default).
+On 5/4/23 15:53, Dexuan Cui wrote:
+> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
+> allocates buffers using vzalloc(), and needs to share the buffers with the
+> host OS by calling set_memory_decrypted(), which is not working for
+> vmalloc() yet. Add the support by handling the pages one by one.
 
-Wouldn't this work?
+I think this sets a bad precedent.
 
-make CFLAGS_x86=-fno-stack-protector nolibc-test
+There are consequences for converting pages between shared and private.
+Doing it on a vmalloc() mapping is guaranteed to fracture the underlying
+EPT/SEPT mappings.
 
-Or we do 
-
-CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
-CFLAGS ?= ... $(CFLAGS_STACKPROTECTOR)
-
-And then it is always:
-
-make CFLAGS_STACKPROTECTOR= nolibc-test
-
-An alternative would also be to use a GCC 9 compatible mechanism:
-
-#if __has_attribute(no_stack_protector)
-#define __no_stack_protector __attribute__((no_stack_protector))
-#else
-#define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
-#endif
-
-Or we combine CFLAGS_STACKPROTECTOR and __no_stack_protector.
-
-> So I reverted that part and only dropped -DNOLIBC_STACKPROTECTOR.
-> This way I could run the test on all archs with gcc-9 by forcing
-> CFLAGS_STACKPROTECTOR= and verified it was still possible to
-> disable it for a specific arch only by setting CFLAGS_STKP_$ARCH.
-> 
-> If you're fine with this we can squash this one into your cleanup
-> patch.
-
-To be honest I was happy to get rid of all these architecture specific
-variables.
-
-> Zhangjin I think this branch should work well enough for you to
-> serve as a base for your upcoming series. We'll clean it up later
-> once we all agree on the stat() replacement for syscall() and on
-> the various remaining points including your time32 alternatives.
-> 
-> Thanks to you both,
-> Willy
-> 
-> PS: we're still carrying a long CC list of individuals who are likely
->     not that much interested in our discussion, I propose that we trim
->     it on next exchanges and only keep us 3 and the lists, in order to
->     remove some of their e-mail pollution.
-
-I trimmed the list a bit.
-
-Thomas
+How does this work with load_unaligned_zeropad()?  Couldn't it be
+running around poking at one of these vmalloc()'d pages via the direct
+map during a shared->private conversion before the page has been accepted?
