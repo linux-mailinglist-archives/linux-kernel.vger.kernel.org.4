@@ -2,42 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CDC70DD90
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9CE70DD9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 15:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbjEWNhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 09:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S236752AbjEWNhm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 09:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjEWNhE (ORCPT
+        with ESMTP id S236664AbjEWNhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 09:37:04 -0400
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5685EFD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 06:37:02 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id e485e3fa-f96e-11ed-b972-005056bdfda7;
-        Tue, 23 May 2023 16:37:00 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 23 May 2023 16:36:59 +0300
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
-Subject: Re: [PATCH v5 1/3] rtc: tps6594: Add driver for TPS6594 RTC
-Message-ID: <ZGzBe6O_mw_pdSkH@surfacebook>
-References: <20230522163115.2592883-1-eblanc@baylibre.com>
- <20230522163115.2592883-2-eblanc@baylibre.com>
+        Tue, 23 May 2023 09:37:39 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F61DCA;
+        Tue, 23 May 2023 06:37:38 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-96ffba243b1so52377366b.0;
+        Tue, 23 May 2023 06:37:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684849057; x=1687441057;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lTOVQSwHwdcqFwCeAzjs0914zunxaGgHWWXc+AF0OJE=;
+        b=QQ5PZ3+lerpuhhbqdaubz2QdUnxhcypeTEJz/CRiK7FNamO14RJ4Gt+BSJdrH/8+5U
+         MfeeBaOsklbULdmTPG4n60tya8i1Fl6wcsqJSNm2vUJ275xHq8vZfxUg0xXMko0CRFh6
+         19cDoB/uxyES+6w7FOZf6O4koJYDzetPHt/Kel+b2dBw4x4akrqIT8RknLkVEUWSkQi8
+         B2AMBq3XKlKHfU9NN9SdIej4+mIHCAnjCP9Ws3PwcD39jrV798DrS5BJAXX5NXXuEvBi
+         aqRZBpcvpZKL9WmorwP39kdwbQAh7+glGm9E8s/hTtmAcLWfdVEtRtuypTNNl2Llo3e5
+         HA4A==
+X-Gm-Message-State: AC+VfDwNYFrz5KHoKrZFnIRUgZKA50qPUlTMLUSVljY3ATrX75oCWq5i
+        PCf8oFFwczOTpXhHmr0KrJ1sNrEm5i0hwMz8cZk=
+X-Google-Smtp-Source: ACHHUZ7+vL++Xxy2h/4Tq46DRc3VvN3aqVV1T9mjBb/FJbkyCUkTal8gSVhHA2wxAoSPqFqdJQ4R3BHuW288pLHbZN0=
+X-Received: by 2002:a17:906:7a50:b0:94a:5f0d:d9d6 with SMTP id
+ i16-20020a1709067a5000b0094a5f0dd9d6mr10904249ejo.4.1684849056661; Tue, 23
+ May 2023 06:37:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522163115.2592883-2-eblanc@baylibre.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+References: <20230523085045.29391-1-kweifat@gmail.com> <CAJZ5v0ifp1088wY7o=7pnBVBm=_3H0M4sfq6=gmyChZD6R9g1g@mail.gmail.com>
+ <b5e35f904174905d8f90df3f49944b22389126c7.camel@linux.intel.com>
+In-Reply-To: <b5e35f904174905d8f90df3f49944b22389126c7.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 May 2023 15:37:25 +0200
+Message-ID: <CAJZ5v0ioQm95ZQ5LCCoDtVNX1TVQN_=sgzB_RRe5SAOOucpWJg@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: intel_pstate: Avoid initializing variables prematurely
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Fieah Lim <kweifat@gmail.com>, lenb@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,168 +60,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, May 22, 2023 at 06:31:13PM +0200, Esteban Blanc kirjoitti:
-> TPS6594 PMIC is a MFD. This patch adds support for
-> the RTC found inside TPS6594 family of PMIC.
-> 
-> Alarm is also supported.
+On Tue, May 23, 2023 at 2:20 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Tue, 2023-05-23 at 13:08 +0200, Rafael J. Wysocki wrote:
+> > On Tue, May 23, 2023 at 10:51 AM Fieah Lim <kweifat@gmail.com> wrote:
+> > >
+> > > We should avoid initializing some rather expensive data
+> > > when the function has a chance to bail out earlier
+> > > before actually using it.
+> > > This applies to the following initializations:
+> > >
+> > >  - cpudata *cpu = all_cpu_data; (in everywhere)
+> > >  - this_cpu = smp_processor_id(); (in notify_hwp_interrupt)
+> > >  - hwp_cap = READ_ONCE(cpu->hwp_cap_cached); (in
+> > > intel_pstate_hwp_boost_up)
+> > >
+> > > These initializations are premature because there is a chance
+> > > that the function will bail out before actually using the data.
+> > > I think this qualifies as a micro-optimization,
+> > > especially in such a hot path.
+> > >
+> > > While at it, tidy up how and when we initialize
+> > > all of the cpu_data pointers, for the sake of consistency.
+> > >
+> > > A side note on the intel_pstate_cpu_online change:
+> > > we simply don't have to initialize cpudata just
+> > > for the pr_debug, while policy->cpu is being there.
+> > >
+> > > Signed-off-by: Fieah Lim <kweifat@gmail.com>
+> > > ---
+> > > V1 -> V2: Rewrite changelog for better explanation.
+> > >
+>
+> [...]
+>
+> > >  void notify_hwp_interrupt(void)
+> > >  {
+> > > -       unsigned int this_cpu = smp_processor_id();
+> > > +       unsigned int this_cpu;
+> > >         struct cpudata *cpudata;
+> > >         unsigned long flags;
+> > >         u64 value;
+> > > @@ -1591,6 +1593,8 @@ void notify_hwp_interrupt(void)
+> > >         if (!(value & 0x01))
+> > >                 return;
+> > >
+> > > +       this_cpu = smp_processor_id();
+> > > +
+> > >         spin_lock_irqsave(&hwp_notify_lock, flags);
+> > >
+> > >         if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
+> >
+> > This is a place where it may really matter for performance, but how
+> > much?  Can you actually estimate this?
+>
+> If DEBUG_PREEMPT is defined
+> ~12 instructions (most of them with latency = 1 in dependency chain)
 
-...
+I really meant "estimate the effect of this change on performance",
+because I'm not sure if it is going to be visible in any test.
 
-> +	help
-> +	  TI Power Management IC TPS6594 supports RTC functionality
-> +	  along with alarm. This driver supports the RTC driver for
-> +	  the TPS6594 RTC module.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called tps6594-rtc
-
-Grammar period at the end?
-
-...
-
-> +#define TPS6594_GET_TIME_ON TPS6594_BIT_GET_TIME
-> +#define TPS6594_GET_TIME_OFF 0
-
-Not used.
-
-> +#define TPS6594_IT_ALARM_ON TPS6594_BIT_IT_ALARM
-> +#define TPS6594_IT_ALARM_OFF 0
-
-Used only once.
-
-> +#define TPS6594_AUTO_COMP_ON TPS6594_BIT_IT_ALARM
-
-No _OFF counterpart.
-
-That said the _OFF can be dropped completely. And the rest I see no value to
-have, just use those bit definitions directly?
-
-...
-
-> +static int tps6594_rtc_alarm_irq_enable(struct device *dev,
-> +					unsigned int enabled)
-> +{
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	u8 val = 0;
-
-Redundant assignment.
-
-> +	val = enabled ? TPS6594_IT_ALARM_ON : TPS6594_IT_ALARM_OFF;
-> +
-> +	return regmap_update_bits(tps->regmap, TPS6594_REG_RTC_INTERRUPTS,
-> +				  TPS6594_BIT_IT_ALARM, val);
-> +}
-
-...
-
-> +	// Read shadowed RTC registers.
-> +	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_RTC_SECONDS, rtc_data,
-> +			       NUM_TIME_REGS);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	tm->tm_sec = bcd2bin(rtc_data[0]);
-> +	tm->tm_min = bcd2bin(rtc_data[1]);
-> +	tm->tm_hour = bcd2bin(rtc_data[2]);
-> +	tm->tm_mday = bcd2bin(rtc_data[3]);
-> +	tm->tm_mon = bcd2bin(rtc_data[4]) - 1;
-> +	tm->tm_year = bcd2bin(rtc_data[5]) + 100;
-> +	tm->tm_wday = bcd2bin(rtc_data[6]);
-> +
-> +	return ret;
-
-	return 0;
-
-No?
-
-...
-
-> +static int tps6594_rtc_set_calibration(struct device *dev, int calibration)
-> +{
-> +	unsigned char comp_data[NUM_COMP_REGS];
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	__le16 value;
-> +	int ret;
-> +
-> +	/*
-> +	 * TPS6594 uses two's complement 16 bit value for compensation of RTC
-> +	 * crystal inaccuracies. One time every hour when seconds counter
-> +	 * increments from 0 to 1 compensation value will be added to internal
-> +	 * RTC counter value.
-> +	 *
-> +	 * Valid range for compensation value: [-32767 .. 32767].
-
-This is defined naturally by the bits available, correct?
-
-> +	 */
-> +	if (calibration < -32767 || calibration > 32767) {
-
-So, this can be S16_MIN / S16_MAX range. The question here is what the
--32768 meaning is and why it can't be used.
-
-> +		dev_err(dev, "RTC calibration value out of range: %d\n",
-> +			calibration);
-> +		return -EINVAL;
-
--ERANGE
-
-> +	}
-
-> +	value = (__le16)calibration;
-> +
-> +	comp_data[0] = value & 0xFF;
-> +	comp_data[1] = (value >> 8) & 0xFF;
-
-Of course these three lines is not what expected.
-
-	value = cpu_to_le16();
-
-> +	// Update all the compensation registers in one shot.
-> +	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_RTC_COMP_LSB,
-> +				comp_data, NUM_COMP_REGS);
-
-				&value, sizeof(value) ?
-
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// Enable automatic compensation.
-> +	return regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +			       TPS6594_BIT_AUTO_COMP);
-> +}
-
-...
-
-> +	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_RTC_COMP_LSB, comp_data,
-> +			       NUM_COMP_REGS);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	value = (__le16)comp_data[0] | ((__le16)comp_data[1] << 8);
-> +
-> +	*calibration = value;
-
-In the similar (complementary API) way as above.
-
-...
-
-> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-
-Having
-
-	struct device *dev = &pdev->dev;
-
-might make this and other lines shorter / neater.
-
-> +					tps6594_rtc_interrupt, IRQF_ONESHOT,
-> +					TPS6594_IRQ_NAME_ALARM, &pdev->dev);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Failed to request_threaded_irq\n");
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+But yes, skipping it if not needed at least makes some sense.
