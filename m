@@ -2,105 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A530770D584
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A25F70D648
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbjEWHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S236030AbjEWH5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235164AbjEWHo2 (ORCPT
+        with ESMTP id S235395AbjEWH4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:44:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D7995;
-        Tue, 23 May 2023 00:44:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F1A662FDC;
-        Tue, 23 May 2023 07:44:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E05FC433EF;
-        Tue, 23 May 2023 07:44:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684827866;
-        bh=YYPt1zyTJKiH8Fltff0MHnchssuoppFK1zFRpoB3bk4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LNBonFNY3gVrFDiX0bbqfRZrpCLiYh/vNwi1w3OMBdQdqeReLkWDxdXIhzQ6ERnSG
-         Cb29lpTW8/e8Z6OdUG9YPmkOED1X8C3KHcP7GsPJ48C/8EBJoTKmb8Cl3WLjG1IP1i
-         3mwuUqhQQDFk/yrH8PEGK0K8zj4Tg3Ndth1GAWzaxoMcYxdRJ9aJfSiVmgoQUWtv8O
-         c3G2Y7y83JZzt5PP+nCf15X3iF89YoB67OTxyrKoQ1Wp5G3m/G9S/0uF8zg7LGwCwx
-         sOmb0GNu3KLK3Cew2fumCxRHDG1WB27VpWFH/nFrq1Du9CCjTjo9AOFjJn/CBNDllB
-         8eCITwhUkSG4Q==
-Date:   Tue, 23 May 2023 08:44:16 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, corbet@lwn.net, arnd@arndb.de,
-        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com, macro@orcam.me.uk,
-        baolu.lu@linux.intel.com, yi.l.liu@intel.com, jirislaby@kernel.org,
-        rostedt@goodmis.org, revest@chromium.org, gehao@kylinos.cn,
-        akpm@linux-foundation.org, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, prabhakar.csengg@gmail.com,
-        contact@emersion.fr, alex.williamson@redhat.com,
-        akrowiak@linux.ibm.com, mark.rutland@arm.com,
-        ye.xingchen@zte.com.cn, ojeda@kernel.org, me@kloenk.de,
-        milan@mdaverde.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com
-Subject: [GIT PULL] Immutable branch containing TPS6594 core (MFD) support
- due for the v6.5 merge window
-Message-ID: <20230523074416.GA2174496@google.com>
-References: <20230511095126.105104-1-jpanis@baylibre.com>
+        Tue, 23 May 2023 03:56:35 -0400
+X-Greylist: delayed 642 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 May 2023 00:55:33 PDT
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCB3129;
+        Tue, 23 May 2023 00:55:33 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id D6AC4280014D1;
+        Tue, 23 May 2023 09:44:43 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id C0B52DDCD0; Tue, 23 May 2023 09:44:43 +0200 (CEST)
+Date:   Tue, 23 May 2023 09:44:43 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
+        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
+        peterz@infradead.org, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, p.rosenberger@kunbus.com
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Message-ID: <20230523074443.GA21236@wunner.de>
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511095126.105104-1-jpanis@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As promised.
+On Tue, May 23, 2023 at 09:48:23AM +0300, P�ter Ujfalusi wrote:
+> On 22/05/2023 17:31, Lino Sanfilippo wrote:
+[...]
+> This looked promising, however it looks like the UPX-i11 needs the DMI
+> quirk.
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+Why is that?  Is there a fundamental problem with the patch or is it
+a specific issue with that device?
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-are available in the Git repository at:
+> > --- a/drivers/char/tpm/tpm_tis_core.c
+> > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+> >  	return status == TPM_STS_COMMAND_READY;
+> >  }
+> >  
+> > +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
+> > +{
+> > +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> > +	int intmask = 0;
+> > +
+> > +	dev_err(&chip->dev, HW_ERR
+> > +		"TPM interrupt storm detected, polling instead\n");
+> 
+> Should this be dev_warn or even dev_info level?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-tps6594-core-v6.5
+The corresponding message emitted in tpm_tis_core_init() for
+an interrupt that's *never* asserted uses dev_err(), so using
+dev_err() here as well serves consistency:
 
-for you to fetch changes up to 325bec7157b3859b45b9471447f5d130ab8a8723:
+	dev_err(&chip->dev, FW_BUG
+		"TPM interrupt not working, polling instead\n");
 
-  mfd: tps6594: Add driver for TI TPS6594 PMIC (2023-05-18 16:06:14 +0100)
+That way the same severity is used both for the never asserted and
+the never deasserted interrupt case.
 
-----------------------------------------------------------------
-Immutable branch containing TPS6594 core (MFD) support due for the v6.5 merge window
 
-----------------------------------------------------------------
-Julien Panis (1):
-      mfd: tps6594: Add driver for TI TPS6594 PMIC
+> > +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
+> > +		tpm_tis_handle_irq_storm(chip);
+> 
+> Will the kernel step in and disbale the IRQ before we would have
+> detected the storm?
 
- drivers/mfd/Kconfig         |   32 ++
- drivers/mfd/Makefile        |    3 +
- drivers/mfd/tps6594-core.c  |  462 ++++++++++++++++++++
- drivers/mfd/tps6594-i2c.c   |  244 +++++++++++
- drivers/mfd/tps6594-spi.c   |  129 ++++++
- include/linux/mfd/tps6594.h | 1020 +++++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 1890 insertions(+)
- create mode 100644 drivers/mfd/tps6594-core.c
- create mode 100644 drivers/mfd/tps6594-i2c.c
- create mode 100644 drivers/mfd/tps6594-spi.c
- create mode 100644 include/linux/mfd/tps6594.h
+No.  The detection of spurious interrupts in note_interrupt()
+hinges on handlers returning IRQ_NONE.  And this patch makes
+tis_int_handler() always return IRQ_HANDLED, thus pretending
+success to genirq code.
 
--- 
-Lee Jones [李琼斯]
+
+> >  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
+> >  	tpm_tis_relinquish_locality(chip, 0);
+> >  	if (rc < 0)
+> > -		return IRQ_NONE;
+> > +		goto unhandled;
+> 
+> This is more like an error than just unhandled IRQ. Yes, it was ignored,
+> probably because it is common?
+
+The interrupt may be shared and then it's not an error.
+
+Thanks,
+
+Lukas
