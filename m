@@ -2,156 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC77E70DAEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F4970DAE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbjEWKxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        id S236258AbjEWKxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjEWKxd (ORCPT
+        with ESMTP id S232450AbjEWKxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:53:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF4EFD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684839159;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IRwLpBjF3y771Oa2kRIVwXk75u6DRLRrsAa1LNU04Go=;
-        b=a4KlVZ+HIcYMT57oa2hIkwLI28nSkcONROtDIegUThIIEP0vRmGWgXbNjDd+Px6xir/MfQ
-        wipvVOrKAEocmZaSIXhox9lTgJIIx7GmZmJqn3fGerBqrSXmUQ+StFWhOOoEPVfPG8RkJu
-        JEdC80AhRBo4sJF2iVbmEXj3/XD5CSI=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-651-P4dT9dHEO5me3MiiCxTciA-1; Tue, 23 May 2023 06:52:36 -0400
-X-MC-Unique: P4dT9dHEO5me3MiiCxTciA-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-96fb396ee3dso297993366b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:52:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684839155; x=1687431155;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IRwLpBjF3y771Oa2kRIVwXk75u6DRLRrsAa1LNU04Go=;
-        b=cBOlzpg48hXdIjASBGJUj38yFu8kLdJTOgOgUhw5CSJ37eu9Sj0k2CJFYz98IleFQi
-         NJGhzQxUdBaLOq3HprNAnt4ApenWfNkQHKeVa2S/hKmSq9YCGHQvl8y+USbIF5C1KtQ5
-         Es9m93zlCtdogQ2HyV/31UvfQedHj0SL3j4FoZUGLk2fPhAnWw8joj5aU8leTAcFf8gW
-         sDje4kwRzZ+vWR0MA5fKd4CxhwIMjeaJsnPMe3ThA64ddvPm5PgkzMxKCvaS8kH9KalT
-         L1XkfB9vS1dk2aCaSY5P8Mabwxe8Hp3TdCIXeHBvT+Tz5u4AghrRRa3x0JaNXDYVhoO/
-         zezw==
-X-Gm-Message-State: AC+VfDwKotF9gFUc6OHQLKMpYfrb6xSL9ZGrhBow+JyRqKgNGKpF8EUh
-        mp99sMWud49UrGTb1zX0jVzw2lDSdVmXQY3+dNfDHPL0mc4flg70pBCvi1j/bbimF0aRkqzKoIR
-        stIXtZaEvQW2mYjcs2LT7Zq4E
-X-Received: by 2002:a17:907:8a03:b0:96f:912e:5ec4 with SMTP id sc3-20020a1709078a0300b0096f912e5ec4mr11425489ejc.16.1684839155030;
-        Tue, 23 May 2023 03:52:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5Nbl1Vghh5ZdHqZZ5iGGQDxRmXaZZtG9X7gxBAsJ5YfMawF4xYsFX55IGJIy3Jewaqh9qB7Q==
-X-Received: by 2002:a17:907:8a03:b0:96f:912e:5ec4 with SMTP id sc3-20020a1709078a0300b0096f912e5ec4mr11425469ejc.16.1684839154706;
-        Tue, 23 May 2023 03:52:34 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id gr6-20020a170906e2c600b009658264076asm4247104ejb.45.2023.05.23.03.52.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 03:52:34 -0700 (PDT)
-Message-ID: <7c075199-df5a-2136-8bed-b2be102ed02e@redhat.com>
-Date:   Tue, 23 May 2023 12:52:33 +0200
+        Tue, 23 May 2023 06:53:14 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75F011A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:53:11 -0700 (PDT)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 7EFDB4076265;
+        Tue, 23 May 2023 10:53:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 7EFDB4076265
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1684839189;
+        bh=RMMF/TIJahmFqopd2qxNaPFmrmsiIjxi/vD3Y9rzttM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rnA8PS7r5OC0HUVXFetZ0ldVcZbaRzcXsw1p9kwWVk9I7Ciwxx5x1VwVF+JkuoknT
+         yXUn/KV0QjUeCqwAdJ29jEGulbUk+7SfcBLnYgX/+2QNbxR4FzAWXypByPcEpBmwcu
+         T4MPsQInZc8Dne4aUf0AXoqzspzjRzuNSmGQhR5Q=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] platform/x86: ISST: Remove 8 socket limit
-Content-Language: en-US, nl
-To:     Steve Wahl <steve.wahl@hpe.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230519160420.2588475-1-steve.wahl@hpe.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230519160420.2588475-1-steve.wahl@hpe.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 23 May 2023 13:53:09 +0300
+From:   Alexey Izbyshev <izbyshev@ispras.ru>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Florent Revest <revest@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, anshuman.khandual@arm.com,
+        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
+        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
+        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
+Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
+In-Reply-To: <c63053b0-5797-504d-7896-c86271b64162@redhat.com>
+References: <20230517150321.2890206-1-revest@chromium.org>
+ <20230517150321.2890206-4-revest@chromium.org>
+ <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
+ <884d131bbc28ebfa0b729176e6415269@ispras.ru>
+ <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
+ <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
+ <c63053b0-5797-504d-7896-c86271b64162@redhat.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <7c572622c0d8e283fc880fe3f4ffac27@ispras.ru>
+X-Sender: izbyshev@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_BTC_ID,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/19/23 18:04, Steve Wahl wrote:
-> Stop restricting the PCI search to a range of PCI domains fed to
-> pci_get_domain_bus_and_slot().  Instead, use for_each_pci_dev() and
-> look at all PCI domains in one pass.
+On 2023-05-23 12:12, David Hildenbrand wrote:
+> On 22.05.23 20:58, Alexey Izbyshev wrote:
+>> On 2023-05-22 19:22, David Hildenbrand wrote:
+>>> On 22.05.23 12:35, Alexey Izbyshev wrote:
+>>>> On 2023-05-22 11:55, David Hildenbrand wrote:
+>>>>> On 17.05.23 17:03, Florent Revest wrote:
+>>>>>> Alexey pointed out that defining a prctl flag as an int is a 
+>>>>>> footgun
+>>>>>> because, under some circumstances, when used as a flag to prctl, 
+>>>>>> it
+>>>>>> can
+>>>>>> be casted to long with garbage upper bits which would result in
+>>>>>> unexpected behaviors.
+>>>>>> 
+>>>>>> This patch changes the constant to a UL to eliminate these
+>>>>>> possibilities.
+>>>>>> 
+>>>>>> Signed-off-by: Florent Revest <revest@chromium.org>
+>>>>>> Suggested-by: Alexey Izbyshev <izbyshev@ispras.ru>
+>>>>>> ---
+>>>>>>     include/uapi/linux/prctl.h       | 2 +-
+>>>>>>     tools/include/uapi/linux/prctl.h | 2 +-
+>>>>>>     2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>>> 
+>>>>>> diff --git a/include/uapi/linux/prctl.h 
+>>>>>> b/include/uapi/linux/prctl.h
+>>>>>> index f23d9a16507f..6e9af6cbc950 100644
+>>>>>> --- a/include/uapi/linux/prctl.h
+>>>>>> +++ b/include/uapi/linux/prctl.h
+>>>>>> @@ -283,7 +283,7 @@ struct prctl_mm_map {
+>>>>>>       /* Memory deny write / execute */
+>>>>>>     #define PR_SET_MDWE			65
+>>>>>> -# define PR_MDWE_REFUSE_EXEC_GAIN	1
+>>>>>> +# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
+>>>>>>       #define PR_GET_MDWE			66
+>>>>>>     diff --git a/tools/include/uapi/linux/prctl.h
+>>>>>> b/tools/include/uapi/linux/prctl.h
+>>>>>> index 759b3f53e53f..6e6563e97fef 100644
+>>>>>> --- a/tools/include/uapi/linux/prctl.h
+>>>>>> +++ b/tools/include/uapi/linux/prctl.h
+>>>>>> @@ -283,7 +283,7 @@ struct prctl_mm_map {
+>>>>>>       /* Memory deny write / execute */
+>>>>>>     #define PR_SET_MDWE			65
+>>>>>> -# define PR_MDWE_REFUSE_EXEC_GAIN	1
+>>>>>> +# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
+>>>>>>       #define PR_GET_MDWE			66
+>>>>>> 
+>>>>> 
+>>>>> Both are changing existing uapi, so you'll already have existing 
+>>>>> user
+>>>>> space using the old values, that your kernel code has to deal with
+>>>>> no?
+>>>> 
+>>>> I'm the one who suggested this change, so I feel the need to 
+>>>> clarify.
+>>>> 
+>>>> For any existing 64-bit user space code using the kernel and the 
+>>>> uapi
+>>>> headers before this patch and doing the wrong prctl(PR_SET_MDWE,
+>>>> PR_MDWE_REFUSE_EXEC_GAIN) call instead of the correct
+>>>> prctl(PR_SET_MDWE,
+>>>> (unsigned long)PR_MDWE_REFUSE_EXEC_GAIN), there are two 
+>>>> possibilities
+>>>> when prctl() implementation extracts the second argument via
+>>>> va_arg(op,
+>>>> unsigned long):
+>>>> 
+>>>> * It gets lucky, and the upper 32 bits of the argument are zero. The
+>>>> call does what is expected by the user.
+>>>> 
+>>>> * The upper 32 bits are non-zero junk. The flags argument is 
+>>>> rejected
+>>>> by
+>>>> the kernel, and the call fails with EINVAL (unexpectedly for the
+>>>> user).
+>>>> 
+>>>> This change is intended to affect only the second case, and only 
+>>>> after
+>>>> the program is recompiled with the new uapi headers. The currently
+>>>> wrong, but naturally-looking prctl(PR_SET_MDWE,
+>>>> PR_MDWE_REFUSE_EXEC_GAIN) call becomes correct.
+>>>> 
+>>>> The kernel ABI is unaffected by this change, since it has been 
+>>>> defined
+>>>> in terms of unsigned long from the start.
+>>> 
+>>> The thing I'm concerned about is the following: old user space (that
+>>> would fail) on new kernel where we define some upper 32bit to 
+>>> actually
+>>> have a meaning (where it would succeed with wrong semantics).
+>>> 
+>>> IOW, can we ever really "use" these upper 32bit, or should we instead
+>>> only consume the lower 32bit in the kernel and effectively ignore the
+>>> upper 32bit?
+>>> 
+>> I see, thanks. But I think this question is mostly independent from 
+>> this
+>> patch. The patch removes a footgun, but it doesn't change the flags
+>> check in the kernel, and nothing stops the user from doing
+>> 
+>> int flags = PR_MDWE_REFUSE_EXEC_GAIN;
+>> prctl(PR_SET_MDWE, flags);
+>> 
+>> So we have to decide whether to ignore the upper 32 bits or not even 
+>> if
+>> this patch is not applied (actually *had to* when PR_SET_MDWE op was
+>> being added).
 > 
-> On systems with more than 8 sockets, this avoids error messages like
-> "Information: Invalid level, Can't get TDP control information at
-> specified levels on cpu 480" from the intel speed select utility.
+> Well, an alternative to this patch would be to say "well, for this
+> prctl we ignore any upper 32bit. Then, this change would not be
+> needed. Yes, I also don't like that :)
 > 
-> Fixes: aa2ddd242572 ("platform/x86: ISST: Use numa node id for cpu pci dev mapping")
-> Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
-
-Thank you for your patch, I've applied this patch to my fixes
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
-
-Note it will show up in my fixes branch once I've pushed my
-local branch there, which might take a while.
-
-I will include this patch in my next fixes pull-req to Linus
-for the current kernel development cycle.
-
-Regards,
-
-Hans
-
-
-
-> ---
->  .../x86/intel/speed_select_if/isst_if_common.c       | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+> Bu unrelated, I looked at some other random prctl.
 > 
-> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> index e0572a29212e..02fe360a59c7 100644
-> --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> @@ -304,14 +304,13 @@ struct isst_if_pkg_info {
->  static struct isst_if_cpu_info *isst_cpu_info;
->  static struct isst_if_pkg_info *isst_pkg_info;
->  
-> -#define ISST_MAX_PCI_DOMAINS	8
-> -
->  static struct pci_dev *_isst_if_get_pci_dev(int cpu, int bus_no, int dev, int fn)
->  {
->  	struct pci_dev *matched_pci_dev = NULL;
->  	struct pci_dev *pci_dev = NULL;
-> +	struct pci_dev *_pci_dev = NULL;
->  	int no_matches = 0, pkg_id;
-> -	int i, bus_number;
-> +	int bus_number;
->  
->  	if (bus_no < 0 || bus_no >= ISST_MAX_BUS_NUMBER || cpu < 0 ||
->  	    cpu >= nr_cpu_ids || cpu >= num_possible_cpus())
-> @@ -323,12 +322,11 @@ static struct pci_dev *_isst_if_get_pci_dev(int cpu, int bus_no, int dev, int fn
->  	if (bus_number < 0)
->  		return NULL;
->  
-> -	for (i = 0; i < ISST_MAX_PCI_DOMAINS; ++i) {
-> -		struct pci_dev *_pci_dev;
-> +	for_each_pci_dev(_pci_dev) {
->  		int node;
->  
-> -		_pci_dev = pci_get_domain_bus_and_slot(i, bus_number, PCI_DEVFN(dev, fn));
-> -		if (!_pci_dev)
-> +		if (_pci_dev->bus->number != bus_number ||
-> +		    _pci_dev->devfn != PCI_DEVFN(dev, fn))
->  			continue;
->  
->  		++no_matches;
+> #define SUID_DUMP_USER           1
+> 
+> And in kernel/sys.c:
+> 
+> 	case PR_SET_DUMPABLE:
+> 		if (arg2 != SUID_DUMP_DISABLE && arg2 != SUID_DUMP_USER)
+> 	...
+> 
+> Wouldn't that also suffer from the same issue, or how is this 
+> different?
+> 
+Yes, it is the same issue, so e.g. prctl(PR_SET_DUMPABLE, 
+SUID_DUMP_DISABLE ) may wrongly fail with EINVAL on 64-bit targets.
 
+> Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We
+> need arg2 -> arg5 to be 0. But wouldn't the following also just pass a
+> 0 "int" ?
+> 
+> prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
+> 
+Yes, this is not reliable on 64-bit targets too. The simplest fix is to 
+use "0L", as done in MDWE self-tests (but many other tests get this 
+wrong).
+
+Florent also expressed surprise[1] that we don't see a lot of failures 
+due to such issues, and I tried to provide some reasons. To elaborate on 
+the x86-64 thing, for prctl(PR_SET_DUMPABLE, 0) the compiler will likely 
+generate "xorl %esi, %esi" to pass zero, but this instruction will also 
+clear the upper 32 bits of %rsi, so the problem is masked (and I believe 
+CPU vendors are motivated to do such zeroing to reduce false 
+dependencies). But this zeroing is not required by the ABI, so in a more 
+complex situation junk might get through.
+
+Real-world examples of very similar breakage in variadic functions 
+involving NULL sentinels are mentioned in [2] (the musl bug report is 
+[3]). In short, musl defined NULL as plain 0 for C++, so when people do 
+e.g. execl("/bin/true", "true", NULL), junk might prevent detection of 
+the sentinel in execl() impl. (Though if the sentinel is passed via 
+stack because there are a lot of preceding arguments, the breakage 
+becomes more apparent because auto-zeroing of registers doesn't come 
+into play anymore.)
+
+> 
+> I'm easily confused by such (va_args) things, so sorry for the dummy 
+> questions.
+
+This stuff *is* confusing, and note that Linux man pages don't even tell 
+that prctl() is actually declared as a variadic function (and for 
+ptrace() this is mentioned only in the notes, but not in its signature).
+
+Thanks,
+Alexey
+
+[1] 
+https://lore.kernel.org/lkml/3a38319a3b241e578729ffa5484ad24b@ispras.ru
+[2] https://ewontfix.com/11
+[3] https://www.openwall.com/lists/musl/2013/01/09/1
