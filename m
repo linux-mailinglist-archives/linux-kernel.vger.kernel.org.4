@@ -2,134 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEB170D1CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0263470D1CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbjEWCyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S234953AbjEWCyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjEWCyV (ORCPT
+        with ESMTP id S229605AbjEWCy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:54:21 -0400
-Received: from smtp.cecloud.com (unknown [1.203.97.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F78ECA;
-        Mon, 22 May 2023 19:54:20 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.cecloud.com (Postfix) with ESMTP id A3FFB900114;
-        Tue, 23 May 2023 10:54:19 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [111.48.58.11])
-        by smtp.cecloud.com (postfix) whith ESMTP id P2917246T281457863946608S1684810458725600_;
-        Tue, 23 May 2023 10:54:19 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <ca6ab4eec3746a425626c7e38249c131>
-X-RL-SENDER: shaopeijie@cestc.cn
-X-SENDER: shaopeijie@cestc.cn
-X-LOGIN-NAME: shaopeijie@cestc.cn
-X-FST-TO: pmenzel@molgen.mpg.de
-X-RCPT-COUNT: 6
-X-SENDER-IP: 111.48.58.11
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   shaopeijie@cestc.cn
-To:     pmenzel@molgen.mpg.de
-Cc:     jarkko@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH v2] tpm_tis_spi: fix:release chip select when flow control fails
-Date:   Tue, 23 May 2023 10:54:08 +0800
-Message-Id: <20230523025408.4319-1-shaopeijie@cestc.cn>
-X-Mailer: git-send-email 2.39.1
+        Mon, 22 May 2023 22:54:28 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84B45CD;
+        Mon, 22 May 2023 19:54:26 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Cx_erhKmxkAyYLAA--.18826S3;
+        Tue, 23 May 2023 10:54:25 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqrbfKmxkK9ZvAA--.56532S3;
+        Tue, 23 May 2023 10:54:24 +0800 (CST)
+Message-ID: <1218d3f9-4955-7176-afbd-a0dfa0bd7565@loongson.cn>
+Date:   Tue, 23 May 2023 10:54:23 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
+ <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
+ <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
+ <99371487-717a-64d6-1c3d-aaeaee6f20db@loongson.cn>
+ <90b2fc60-af26-4ba6-f775-7db2514a62f4@xen0n.name>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <90b2fc60-af26-4ba6-f775-7db2514a62f4@xen0n.name>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8CxqrbfKmxkK9ZvAA--.56532S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxCw17XFWUJrWktF4xJFWrXwb_yoWrJFyDpa
+        y5uF4akF4vgFnYkwnFyr48u34akrWxGrW5Zr98Kwn7u3Z8AryxKr17tFs0kas8J3Z3CF1Y
+        qr4UtF1UCF4UA3DanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, Paul.
 
->Dear Peijie,
->
->
->Thank you for your patch.
->
->The fix: tag in your commit message summary is uncommon. I suggest:
->
->> tpm_tis_spi: Release chip select when flow control fails
->
 
-I will change it in v3 version.
+在 2023/5/22 10:37, WANG Xuerui 写道:
+> On 2023/5/22 09:39, maobibo wrote:
+>>
+>>
+>> 在 2023/5/21 18:22, WANG Xuerui 写道:
+>>> On 2023/5/18 10:56, maobibo wrote:
+>>>> <snip>
+>>> (BTW, how do people usually deal with pre-release hardware wit documentation not out yet? I suppose similar situations like this should turn up fairly often.)
+>> Manual is actually one issue, however it does not prevent the review
+>> process. There are some drivers for *fruit* devices, I can not find
+>> the hw manual also.  With the manual, it helps to review and points
+>> out the further and detailed issues.
+> 
+> There's a *slight* difference: the certain vendor you've mentioned is historically uncooperative in providing the documentation, so outside contributors had to reverse-engineer and document the HW themselves; but in Loongson's case, you *are* the vendor, so you are probably in a position that can make everyone's life easier by at least pushing for the docs release...
+> 
+>>>
+>>> Aside from this, there's another point: use of undocumented instructions in raw form with ".word". This currently doesn't work in LLVM/Clang <snip>
+>> As for one new architecture, it is normal to use .word or .insn, instruction
+>> will update for the first few years and also compiler may be not supported
+>> timely. The other arch has the same phenomenon if you grep "\.insn", also
+>> llvm on LoongArch supports ".word" directives.
+>>
+>> After three or five years, we will remove these ".insn" macro when hw and
+>> compiler is matured.
+> 
+> Sorry for the confusion at my side; `.word` certainly works, what doesn't work currently seems to be the `parse_r` helper. I know because I've tried in the last week with latest LLVM/Clang snapshot. And you can't write ergonomic inline asm with proper register allocator awareness without the helper; the LoongArch assembler isn't capable of assembling in a certain encoding format. With RISC-V `.insn` you can do things like `.insn r 0xNN, 0, 0, a0, a1, a2`, but you cannot simply e.g. express gcsrxchg with `.insn DJK 0x05000000, a0, a1, a2` because no such instruction format convention has been standardized. (The notation demonstrated here is taken from [1].)
 
->
->Am 22.05.23 um 09:01 schrieb shaopeijie@cestc.cn:
->> From: Peijie Shao <shaopeijie@cestc.cn>
->> 
->> The failure paths in tpm_tis_spi_transfer() do not deactivate
->> chip select. Send an empty message (cs_select == 0) to overcome
->> this.
->
->Does the standard require to deactivate it?
+I hate parse_r helper also, it is hard to understand, the kernel about
+LoongArch has the same issue. How about using a fixed register like this?
 
-Yes.
-<TCG_PCClientTPMInterfaceSpecification_TIS__1-3_27_03212013.pdf>, section
-6.4.2 Electrical Specification, Figure 4 Timing Diagram, describes the timing.
+/* GCSR */
+static __always_inline u64 gcsr_read(u32 reg)
+{
+	u64 val = 0;
 
-Moreover, when multi devices are sharing with the same SPI bus, only one cs can be 
-activated simultaneously. If two or more cs are activated, corresponding devices 
-may response at same time, cause bus conflicts.
+	BUILD_BUG_ON(!__builtin_constant_p(reg));
+	/* Instructions will be available in binutils later */
+	asm volatile (
+		"parse_r __reg, %[val]\n\t"
+		/*
+		 * read val from guest csr register %[reg]
+		 * gcsrrd %[val], %[reg]
+		 */
+		".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | __reg\n\t"
+		: [val] "+r" (val)
+		: [reg] "i" (reg)
+		: "memory");
 
->
->A note on your test setup would be nice to have in the commit message.
->
->> Signed-off-by: Peijie Shao <shaopeijie@cestc.cn>
->> ---
->> Changes since v1:
->>      1. Deactive cs all of the failure path, not only flow control.
->
->Deactivate
+	return val;
+}
 
-Sorry, will be fixed in v3 version.
+/* GCSR */
+static __always_inline u64 gcsr_read(u32 reg)
+{
+        register unsigned long val asm("t0");
 
->
->
->Kind regards,
->
->Paul
->
->
->>      2. change and update comments.
->> ---
->>   drivers/char/tpm/tpm_tis_spi_main.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->> 
->> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
->> index 1f5207974..9bfaba092 100644
->> --- a/drivers/char/tpm/tpm_tis_spi_main.c
->> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
->> @@ -136,6 +136,14 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
->>   	}
->>   
->>   exit:
->> +	if (ret < 0) {
->> +		/* Deactivate chip select */
->> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
->> +		spi_message_init(&m);
->> +		spi_message_add_tail(&spi_xfer, &m);
->> +		spi_sync_locked(phy->spi_device, &m);
->> +	}
->> +
->>   	spi_bus_unlock(phy->spi_device->master);
->>   	return ret;
->>   }
+        BUILD_BUG_ON(!__builtin_constant_p(reg));
+        /* Instructions will be available in binutils later */
+        asm volatile (
+                "parse_r __reg, %[val]\n\t"
+                /*
+                 * read val from guest csr register %[reg]
+                 * gcsrrd %[val], %[reg]
+                 */
+                ".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | 12 \n\t"
+                : : [reg] "i" (reg)
+                : "memory", "t0");
 
-Peijie, Shao
+        return val;
+} 
 
+Regards
+Bibo, Mao
+> 
+> In any case, it seems best to at least wait for the documentation release a little bit, or you should state clearly that this is not going to happen soon, so people can properly manage their expectation and prioritize. (For example, if I know docs and/or assembler support for the virtualization extension won't come soon, then I'd work on supporting the .word idiom before other things. Otherwise there are more important things than that.)
+> 
+> [1]: https://github.com/loongson/LoongArch-Documentation/pull/56
+> 
 
