@@ -2,160 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08E170E3B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0973E70E3BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 19:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238025AbjEWRGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 13:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S229753AbjEWQzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237980AbjEWRGZ (ORCPT
+        with ESMTP id S237395AbjEWQzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:06:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFCCDA;
-        Tue, 23 May 2023 10:06:24 -0700 (PDT)
+        Tue, 23 May 2023 12:55:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC72119;
+        Tue, 23 May 2023 09:55:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B91634C3;
-        Tue, 23 May 2023 17:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BE7C4339B;
-        Tue, 23 May 2023 17:06:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4C8960FE4;
+        Tue, 23 May 2023 16:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03121C433A0;
+        Tue, 23 May 2023 16:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684861583;
-        bh=J4geLF9/wB/nci7eyTPzHGp1IQrIjTH306iCGvwIsQw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tzqNIne/apjydPkehRRhk/0O0hkReo4pjcZtGnV4WX7abAD5K4e3kuBRAVahk8os8
-         NaRieZa7LqgDjJyjU1AXbv8j08bEFYKRnT2K5WaUoYsQG7u6dbZmYRa4w1lrVkLGKk
-         AfNwCokEOjU34OHzwDt15ZOWzmY2EYcrAgK1lSiNg/G/2OrctV9LzlJcKjD0Xx2O5K
-         5QLRx+rWuzOuVStoft7q68LYRA02Ic6uHJtnWRJcDd5b682rKLWJKDIChj3ot3PNGU
-         Oph96bKhybNTihKFHNrXw/h8maDWRzFbCZ2O4FrUuNE1nqNc9I2eedAOXS8Uji5dXA
-         KoeOlvBux09Rg==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>,
-        Guo Ren <guoren@kernel.org>, Bin Meng <bmeng@tinylab.org>
-Subject: [PATCH v2 4/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Date:   Wed, 24 May 2023 00:55:02 +0800
-Message-Id: <20230523165502.2592-5-jszhang@kernel.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230523165502.2592-1-jszhang@kernel.org>
-References: <20230523165502.2592-1-jszhang@kernel.org>
+        s=k20201202; t=1684860905;
+        bh=2LzcOiQLC5olbdkH1iNnRq1VU9n6cqrsWV+BKWk4NLM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hblGAen6ACc5znsH46OJeOvOTTKnoaGyl/L/5b9VASCmGoYHPc4CKnBI2AFekmZCz
+         ZrDu44bpy9c01OheLjM07rLfRImBoj6ZNbjAYwWqTbIVjmZKh9L4CamU29ADsB46XQ
+         YwX98pxdVWQtFqhCxMwUerZMU5FRVrW2Kf4WJQROuL3QLnqdXnbMZP5PACvY8dxj9w
+         pZNkmyrCl6J2BkRvaxNMBklGII5j4NRwbS7r/4Yr1/JB4z4DMr/Dwa40CU4aWsRqgk
+         gXBpGlPj4AnOSQdNXBzwcU7G9tNeHjhhEuODgAwBGFVhw7XHHN/eo/6+GBH3puTR9r
+         uPdRTQAP/tC3w==
+Date:   Tue, 23 May 2023 16:55:03 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     meenakshi.aggarwal@nxp.com
+Cc:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
+        gaurav.jain@nxp.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iuliana.prodan@nxp.com
+Subject: Re: [PATCH 0/5] Remove CRYPTO_ALG_ALLOCATES_MEMORY flag
+Message-ID: <20230523165503.GA864814@google.com>
+References: <20230523153421.1528359-1-meenakshi.aggarwal@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523153421.1528359-1-meenakshi.aggarwal@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhangjin Wu <falcon@tinylab.org>
+On Tue, May 23, 2023 at 05:34:16PM +0200, meenakshi.aggarwal@nxp.com wrote:
+> CRYPTO_ALG_ALLOCATES_MEMORY flag is limited only to dm-crypt use-cases,
+> which seems to be 4 entries maximum.
 
-Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
-the user to enable dead code elimination. In order for this to work,
-ensure that we keep the alternative table by annotating them with KEEP.
+This isn't mentioned in the documentation for CRYPTO_ALG_ALLOCATES_MEMORY.  So
+it's not part of the contract of CRYPTO_ALG_ALLOCATES_MEMORY currently.
 
-This boots well on qemu with both rv32_defconfig & rv64 defconfig, but
-it only shrinks their builds by ~1%, a smaller config is thereforce
-customized to test this feature:
+Please don't make this change without updating the documentation.
 
-          | rv32                   | rv64
-  --------|------------------------|---------------------
-   No DCE | 4460684                | 4893488
-      DCE | 3986716                | 4376400
-   Shrink |  473968 (~10.6%)       |  517088 (~10.5%)
+If you'd like to make this change, please update the documentation for
+CRYPTO_ALG_ALLOCATES_MEMORY to mention this additional exception.
 
-The config used above only reserves necessary options to boot on qemu
-with serial console, more like the size-critical embedded scenes:
-
-  - rv64 config: https://pastebin.com/crz82T0s
-  - rv32 config: rv64 config + 32-bit.config
-
-Here is Jisheng's original commit-msg:
-When trying to run linux with various opensource riscv core on
-resource limited FPGA platforms, for example, those FPGAs with less
-than 16MB SDRAM, I want to save mem as much as possible. One of the
-major technologies is kernel size optimizations, I found that riscv
-does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
-passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
---gc-sections flag to the linker.
-
-This not only benefits my case on FPGA but also benefits defconfigs.
-Here are some notable improvements from enabling this with defconfigs:
-
-nommu_k210_defconfig:
-   text    data     bss     dec     hex
-1112009  410288   59837 1582134  182436     before
- 962838  376656   51285 1390779  1538bb     after
-
-rv32_defconfig:
-   text    data     bss     dec     hex
-8804455 2816544  290577 11911576 b5c198     before
-8692295 2779872  288977 11761144 b375f8     after
-
-defconfig:
-   text    data     bss     dec     hex
-9438267 3391332  485333 13314932 cb2b74     before
-9285914 3350052  483349 13119315 c82f53     after
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-Co-developed-by: Jisheng Zhang <jszhang@kernel.org>
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Tested-by: Bin Meng <bmeng@tinylab.org>
----
- arch/riscv/Kconfig              | 1 +
- arch/riscv/kernel/vmlinux.lds.S | 6 +++---
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 8f55aa4aae34..62e84fee2cfd 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -115,6 +115,7 @@ config RISCV
- 	select HAVE_KPROBES if !XIP_KERNEL
- 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
- 	select HAVE_KRETPROBES if !XIP_KERNEL
-+	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PCI
-diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-index e5f9f4677bbf..492dd4b8f3d6 100644
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -85,11 +85,11 @@ SECTIONS
- 	INIT_DATA_SECTION(16)
- 
- 	.init.pi : {
--		*(.init.pi*)
-+		KEEP(*(.init.pi*))
- 	}
- 
- 	.init.bss : {
--		*(.init.bss)	/* from the EFI stub */
-+		KEEP(*(.init.bss*))	/* from the EFI stub */
- 	}
- 	.exit.data :
- 	{
-@@ -112,7 +112,7 @@ SECTIONS
- 	. = ALIGN(8);
- 	.alternative : {
- 		__alt_start = .;
--		*(.alternative)
-+		KEEP(*(.alternative))
- 		__alt_end = .;
- 	}
- 	__init_end = .;
--- 
-2.40.1
-
+- Eric
