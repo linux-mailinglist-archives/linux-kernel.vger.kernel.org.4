@@ -2,106 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D996C70CF85
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C884870CF98
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbjEWAkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S234975AbjEWAki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235470AbjEWAa6 (ORCPT
+        with ESMTP id S235540AbjEWAbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:30:58 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846241AD
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:21:09 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-772b5e664c9so16451139f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:21:09 -0700 (PDT)
+        Mon, 22 May 2023 20:31:02 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49DCE47
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:21:42 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d2d0f5132so2429962b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 17:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1684801269; x=1687393269;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CRFXlgXqQMif9nrEGkoBNsCSy0LwutHy0WRVkrR+E6w=;
-        b=WlcUP3WVgbUHJQoC7PtFlFyVnD5zH5f8zdyRMWatTe1mFVYOwK7qeYbzVBQdfyGGQI
-         rftjHNbopiQKa6nsWV8ZqMUUMyOzSFNwkkR5h+1SUVZUa3k1TfvVS/S1G6YVEuHmKO4S
-         gf+Ac04PFHqb0PQDIyC25HjOebLwsF/+mLgXY=
+        d=google.com; s=20221208; t=1684801302; x=1687393302;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2aYdF7DTvHPO7OMZesJvRkwGqhq0minNXqz8wSE/nz4=;
+        b=6hkfuhgDV+Cm6kpsvzWJ48OVTPAuJNbAy//iZV3iTyUkEm0CBAiqKh89/T3iZhHz2Q
+         cS/nl4xPBMzFPSFWoI45FkfXCfhPFhmdrAtsbpG7H2XU7N4TH9lA1jBlH6doK5D5jGF9
+         ssywWHAIrAIm4hg395CyoE06GD7PWLdSA8pWKEnXN5od0s8MM/vGppgN7Y1k1zVrN/5l
+         t+Xuz2ALaAtGJt9hjPyJJtXoDPu6+f2qM+ISuGV3bk/DwEkTviRlnRJWj+jRfCEMNUsw
+         xubELT0MLwIRN2O5A4wXqEY5VMPb6RITikcAhhPQuoPKHRCzm+uZO4JRG5iNINtlxx8O
+         gjCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684801269; x=1687393269;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CRFXlgXqQMif9nrEGkoBNsCSy0LwutHy0WRVkrR+E6w=;
-        b=jD6cc+wRS1C07WWmy0oVu7yYbkHLT8dhKz0zc8xVpvPPSIt3wwr0/dkvyTNT2Do/93
-         nRkU8X++VCBKUm77QcdrVjn8CXVcPR3GCvQUKYJFclMKAWvsequ0jfz0uB1b2Z2tRHXX
-         taUCibQjbzfS+or5R1k08G0OD/wnfVVV/Eq2vkUDTKRsl604mTsMF3E9jKtppSbpfl6c
-         /9R5Di0eznunPioxKikAalBOlNcR5IShSM9IwjaCbi5dGBbiIX58Eg4pFVIOSoQnixFF
-         rQguOw0uhoLKDfBn7l23bBEE5he49sksvCIeoQ4YtwuLAzlIiYbVW3bE8ApQJt6WCimH
-         qDuQ==
-X-Gm-Message-State: AC+VfDyItNS4AO7oUanmJGj80hzejkqYcnkH5cO9ZFxjnywGTZQQolZ4
-        vpyIVWmHWWuij8VmWBxQTdA60A==
-X-Google-Smtp-Source: ACHHUZ60Ia7zbZE8PgUpAPNdPWJiuAdXYd7zgT7guq5W/LEHzbR2z7He3IYx2okds6kq4Gb7OXySpg==
-X-Received: by 2002:a6b:5a0c:0:b0:76c:6fa4:4df4 with SMTP id o12-20020a6b5a0c000000b0076c6fa44df4mr6196582iob.2.1684801268807;
-        Mon, 22 May 2023 17:21:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id n13-20020a6b590d000000b0076c81425d9asm2290113iob.49.2023.05.22.17.21.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 17:21:08 -0700 (PDT)
-Message-ID: <a8713c0a-8fe1-88e6-107a-fd9a94ac7e78@linuxfoundation.org>
-Date:   Mon, 22 May 2023 18:21:07 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6.3 000/364] 6.3.4-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230522190412.801391872@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230522190412.801391872@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684801302; x=1687393302;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2aYdF7DTvHPO7OMZesJvRkwGqhq0minNXqz8wSE/nz4=;
+        b=CFqTd0BDADi/3BEz+HszE2a/DKHArjhu/tkK0e/NZAuhJpRMSZjF7Q2XCnynbBpklP
+         814BtD7aV/Rb+bBwYd60A2MzMs3lgBtHF4DJOZV430BvTidzYl0GMQR5TG+DZL71abql
+         uUx6CwnAyKOfsDhAXv5uIGryEx/4vrE8i/jjRwpE68xDdB28Sdid3YAmNniZeji2vw8Z
+         seQUJqEdiCIQfW0wQT9ce2yMGI+ZJuCZ//02vE8yd43FXEPPA04rdzxMMcrKoyLT2git
+         O+BCYh5gmoqK1MqQGdnkveHbYGfyEqGCGEJxH9UMtZjDZJUrEGVBszOt1XErqkpBld6D
+         HNZA==
+X-Gm-Message-State: AC+VfDwMIpMAvxZo2LwY2r0zj0nkBSc2GjfyG/DeProt0uFWDZgozLMK
+        FfX7HtZGNcY8eVJ1hMyLSa8Sj5AZA+Y=
+X-Google-Smtp-Source: ACHHUZ5nM/K1msH8/300AUBbxABE1arku2Ztm2J+BPfcuobQx6fSnGZtV4PF8qqvQU3SEk0HXC++fnu3Dhw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:986:b0:63d:397a:8fdd with SMTP id
+ u6-20020a056a00098600b0063d397a8fddmr5586115pfg.0.1684801302311; Mon, 22 May
+ 2023 17:21:42 -0700 (PDT)
+Date:   Tue, 23 May 2023 00:21:40 +0000
+In-Reply-To: <20230522235838.ov3722lcusotzlvo@amd.com>
+Mime-Version: 1.0
+References: <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+ <ZEM5Zq8oo+xnApW9@google.com> <20230512002124.3sap3kzxpegwj3n2@amd.com>
+ <ZF5+5g5hI7xyyIAS@google.com> <20230522135036.wnvsmryhkvstwvw2@amd.com>
+ <ZGuh1J6AOw5v2R1W@google.com> <20230522235838.ov3722lcusotzlvo@amd.com>
+Message-ID: <ZGwHFPnNK89/t7wx@google.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, wei.w.wang@intel.com,
+        Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 13:05, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.4 release.
-> There are 364 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, May 22, 2023, Michael Roth wrote:
+> On Mon, May 22, 2023 at 10:09:40AM -0700, Sean Christopherson wrote:
+> > On Mon, May 22, 2023, Michael Roth wrote:
+> > > On Fri, May 12, 2023 at 11:01:10AM -0700, Sean Christopherson wrote:
+> > > > On Thu, May 11, 2023, Michael Roth wrote:
+> > > I put together a tree with some fixups that are needed for against the
+> > > kvm_gmem_solo base tree, and a set of hooks to handle invalidations,
+> > > preparing the initial private state as suggested above, and a
+> > > platform-configurable mask that the x86 MMU code can use for determining
+> > > whether a fault is for private vs. shared pages.
+> > > 
+> > >   KVM: x86: Determine shared/private faults using a configurable mask
+> > >   ^ for TDX we could trivially add an inverted analogue of the mask/logic
+> > >   KVM: x86: Use full 64-bit error code for kvm_mmu_do_page_fault
+> > >   KVM: x86: Add platform hooks for private memory invalidations
+> > 
+> > Hrm, I'd prefer to avoid adding another hook for this case, arch code already has
+> > a "hook" in the form of kvm_unmap_gfn_range().  We'd probably just need a
+> > kvm_gfn_range.is_private flag to communicate to arch/vendor code that the memory
+> > being zapped is private.
 > 
-> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> kvm_unmap_gfn_range() does however get called with kvm->mmu_lock held so
+> it might be tricky to tie RMP updates into that path.
 
-Compiled and booted on my test system. No dmesg regressions.
+Gah, I caught the mmu_lock issue before the end of my email, but forgot to go back
+and rethink the first half.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+> > That'd leave a gap for the unbind() case because kvm_unmap_gfn_range() is invoked
+> > if and only if there's an overlapping memslot.  I'll chew on that a bit to see if
+> > there's a way to cleanly handle that case without another hook.  I think it's worth
+> > mapping out exactly what we want unbind() to look like anyways, e.g. right now the
+> > code subtly relies on private memslots being immutable.
+m 
+> I thought the direction you sort of driving at was to completely decouple
+> RMP updates for physical pages from the KVM MMU map/unmap paths since the
+> life-cycles of those backing pages and associated RMP state are somewhat
+> separate from the state of the GFNs and kvm->mem_attr_array. It seems to
+> make sense when dealing with things like this unbind() case.
+> 
+> There's also cases like userspaces that opt to not discard memory after
+> conversions because they highly favor performance over memory usage. In
+> those cases it would make sense to defer marking the pages as shared in
+> the RMP until the FALLOC_FL_PUNCH_HOLE, rather than triggering it via
+> KVM MMU invalidation path after a conversion.
 
-thanks,
--- Shuah
+Hmm, right.  I got overzealous in my desire to avoid new hooks.
 
+> > >   KVM: x86: Add platform hook for initializing private memory
+> > 
+> > This should also be unnecessary.  The call to kvm_gmem_get_pfn() is from arch
+> > code, KVM just needs to ensure the RMP is converted before acquiring mmu_lock,
+> > e.g. KVM has all the necessary info in kvm_tdp_mmu_page_fault().
+> 
+> I think that approach would work fine. The way I was thinking of things
+> is that KVM MMU would necessarily call kvm_gmem_get_pfn() to grab the
+> page before mapping it into the guest, so moving it out into an explicit
+> call should work just as well. That would also drop the need for the
+> __kvm_gmem_get_pfn() stuff I needed to add for the initial case where we
+> need to access the PFN prior to making it private.
+> 
+> > 
+> > The only reason to add another arch hook would be if we wanted to converted the
+> > RMP when _allocating_, e.g. to preconvert in response to fallocate() instead of
+> > waiting until #NPF.  But I think I would rather add a generic ioctl() to allow
+> > userspace to effectively prefault guest memory, e.g. to setup the RMP before
+> > running a vCPU.  Such an ioctl() would potentially be useful in other scenarios,
+> > e.g. on the dest during live migration to reduce jitter.
+> 
+> Agreed, deferring the RMPUPDATE until it's actually needed would give us
+> more flexibility on optimizing for things like lazy-acceptance.
+> 
+> For less-common scenarios like preallocation it makes sense to make that
+> an opt-in sort of thing for userspace to configure explicitly.
+> 
+> > 
+> > >   *fixup (kvm_gmem_solo): KVM: Fix end range calculation for MMU invalidations
+> > 
+> > There was another bug in this path.  The math for handling a non-zero offsets into
+> > the file was wrong.  The code now looks like:
+> > 
+> > 	xa_for_each_range(&gmem->bindings, index, slot, start, end - 1) {
+> > 		struct kvm_gfn_range gfn_range = {
+> > 			.start = slot->base_gfn + start - slot->gmem.index,
+> 
+> Sorry if I'm missing something here, but isn't there a risk that:
+> 
+>   start - slot->gmem.index
+> 
+> would be less than zero? E.g. starting GFN was 0, but current slot is bound
+> at some non-zero offset in the same gmem instance. I guess the warning below
+> shouldn't caught that, but it seems like a real scenario.
+
+Heh, only if there's a testcase for it.  Assuming start >= the slot offset does
+seem broken, e.g. if the range-to-invalidate overlaps multiple slots, later slots
+will have index==slot->gmem.index > start.
+
+> Since 'index' corresponds to the gmem offset of the current slot, is there any
+> reason not to do something like this?:
+> 
+>   .start = slot->base_gfn + index - slot->gmem.index,
+> 
+> But then, if that's the case, wouldn't index == slot->gmem.index? Suggesting
+> we case just simplify to this?:
+> 
+>   .start = slot->base_gfn,
+
+No, e.g. if start is partway through a memslot, there's no need to invalidate
+the entire memslot.  I'll stare at this tomorrow when my brain is hopefully a
+bit more functional, I suspect there is a min() and/or max() needed somewhere.
