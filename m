@@ -2,110 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FB970DAC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D679F70DAC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236595AbjEWKnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S236243AbjEWKoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236243AbjEWKmz (ORCPT
+        with ESMTP id S230319AbjEWKoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:42:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46513133;
-        Tue, 23 May 2023 03:42:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCC14630F6;
-        Tue, 23 May 2023 10:42:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91EB8C433D2;
-        Tue, 23 May 2023 10:42:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684838572;
-        bh=dAZtfPEcdx8w0xksIc+4VYD58Jm8oMxQ7+S7bRplZvM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dc34T6TA2Jylxa+Ta17oKWHKcRWTtyg7v2ias+mVnUeGa6ugVmCGvGQBzxYBOBsnB
-         gVR8bMa+mAb/WmZBAJg4ZHPAQ2lJgy5r/HWYoS1qTIWV7SORr49MZxUzhIN2LkQ7k4
-         h2gCx3ek59wOr/O+LFTOpCQhvbXw+OrWCwXSIAQ4DjUvaJI+cZAOeKsnOOmK+h4inJ
-         bve2yOEnB29XSuZUjPe686uTQO6OQajO+gMeiz429QS1MKh9QXJEuwOs6aTTiroEGa
-         WMKJd1eOsA7UJBH8COgqfZsl7uTMdscQ8GmfjbyYAYj+UqAG2S0CQuIatxOWFZDFTK
-         E692WpXj+M8Mw==
-Date:   Tue, 23 May 2023 12:42:46 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Jiri Wiesner <jwiesner@suse.de>
-Subject: Re: [RFC PATCH 2/3] cgroup: Rely on namespace_sem in
- current_cgns_cgroup_from_root explicitly
-Message-ID: <20230523-radar-gleich-781fd4006057@brauner>
-References: <20230502133847.14570-1-mkoutny@suse.com>
- <20230502133847.14570-3-mkoutny@suse.com>
+        Tue, 23 May 2023 06:44:21 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9272C119;
+        Tue, 23 May 2023 03:44:16 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-562108900acso67007487b3.2;
+        Tue, 23 May 2023 03:44:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684838655; x=1687430655;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wAGJ7K0eTZatSWk95P2dmmFxGdpx5RiAx15TGeRGBa0=;
+        b=FMRb7F2wf/7W58fsIYB46aD0jdmmCDrPqyyaWOFxdwwRyqahxxaNCKzpT80e5SURNQ
+         klZU5fa16Isidz8x3vNPWVPgy0mO34i1fxus7ZHgV8E1v42UGSA3VyqDFbOQA97WMdat
+         azp3XfE8P3CwajWf4F/BMl30/6gT8Qn9IequFLjyqesnc3WKgDE42iAm0g53T47nTvQa
+         sXKU0AiJmlncjP6apVbmtjHvjZvegPpWocJN+UQpdbWzjgwTDz20fQwAWO+BQ4nwqIzi
+         qomjM3UqwG70pWAew5WjWaoifAmqskTQxSif76FmOWQ2Sm6A4cGvxOqX9gVdbcnTyAHK
+         mWJQ==
+X-Gm-Message-State: AC+VfDxFFTC+Zyo2pxtR1h0TQvItSUiSpVzuYCCOJpn0tEitNLDCfeUh
+        /FnvO49VHlTTiHrZrPzvC2dWX7udZNvqFg==
+X-Google-Smtp-Source: ACHHUZ6YJ9zJvN0qE9S2BBzG8oNGio26IxwbglPykZdld8mltIWkKyzmWudRDShNKc3aUAXo7iiOsA==
+X-Received: by 2002:a81:8283:0:b0:565:310:f615 with SMTP id s125-20020a818283000000b005650310f615mr6461794ywf.32.1684838654814;
+        Tue, 23 May 2023 03:44:14 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id n14-20020a819e4e000000b00552ccda9bb3sm2704819ywj.92.2023.05.23.03.44.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 03:44:13 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-565014fc2faso25513187b3.1;
+        Tue, 23 May 2023 03:44:13 -0700 (PDT)
+X-Received: by 2002:a81:4603:0:b0:55a:7d83:7488 with SMTP id
+ t3-20020a814603000000b0055a7d837488mr13085744ywa.9.1684838652890; Tue, 23 May
+ 2023 03:44:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230502133847.14570-3-mkoutny@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+ <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+In-Reply-To: <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+From:   Luca Boccassi <bluca@debian.org>
+Date:   Tue, 23 May 2023 11:44:01 +0100
+X-Gmail-Original-Message-ID: <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+Message-ID: <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 03:38:46PM +0200, Michal Koutný wrote:
-> The function current_cgns_cgroup_from_root() expects a stable
-> cgroup_root, which is currently ensured with RCU read side paired with
-> cgroup_destroy_root() called after RCU period.
-> 
-> The particular current_cgns_cgroup_from_root() is called from VFS code
-> and cgroup_root stability can be also ensured by namespace_sem. Mark it
-> explicitly as a preparation for further rework.
-> 
-> Signed-off-by: Michal Koutný <mkoutny@suse.com>
-> ---
->  fs/namespace.c         | 5 ++++-
->  include/linux/mount.h  | 4 ++++
->  kernel/cgroup/cgroup.c | 7 +++----
->  3 files changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index 54847db5b819..0d2333832064 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -71,7 +71,10 @@ static DEFINE_IDA(mnt_group_ida);
->  static struct hlist_head *mount_hashtable __read_mostly;
->  static struct hlist_head *mountpoint_hashtable __read_mostly;
->  static struct kmem_cache *mnt_cache __read_mostly;
-> -static DECLARE_RWSEM(namespace_sem);
-> +DECLARE_RWSEM(namespace_sem);
-> +#ifdef CONFIG_LOCKDEP
-> +EXPORT_SYMBOL_GPL(namespace_sem);
-> +#endif
->  static HLIST_HEAD(unmounted);	/* protected by namespace_sem */
->  static LIST_HEAD(ex_mountpoints); /* protected by namespace_sem */
->  
-> diff --git a/include/linux/mount.h b/include/linux/mount.h
-> index 1ea326c368f7..6277435f6748 100644
-> --- a/include/linux/mount.h
-> +++ b/include/linux/mount.h
-> @@ -80,6 +80,10 @@ static inline struct mnt_idmap *mnt_idmap(const struct vfsmount *mnt)
->  	return smp_load_acquire(&mnt->mnt_idmap);
->  }
->  
-> +#ifdef CONFIG_LOCKDEP
-> +extern struct rw_semaphore namespace_sem;
-> +#endif
+On Tue, 23 May 2023 at 10:49, Christian Brauner <brauner@kernel.org> wrote:
+>
+> On Mon, May 22, 2023 at 01:34:09PM -0700, Jakub Kicinski wrote:
+> > On Mon, 22 May 2023 15:24:37 +0200 Alexander Mikhalitsyn wrote:
+> > > v6:
+> > >     - disable feature when CONFIG_UNIX=n/m (pidfd_prepare API is not exported to modules)
+> >
+> > IMHO hiding the code under #if IS_BUILTIN(CONFIG_UNRELATED) is
+> > surprising to the user and.. ugly?
+> >
+> > Can we move scm_pidfd_recv() into a C source and export that?
+> > That should be less controversial than exporting pidfd_prepare()
+> > directly?
+>
+> I really would like to avoid that because it will just mean that someone
+> else will abuse that function and then make an argument why we should
+> export the other function.
+>
+> I think it would be ok if we required that unix support is built in
+> because it's not unprecedented either and we're not breaking anything.
+> Bpf has the same requirement:
+>
+>   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
+>   struct bpf_unix_iter_state {
+>           struct seq_net_private p;
+>           unsigned int cur_sk;
+>           unsigned int end_sk;
+>           unsigned int max_sk;
+>           struct sock **batch;
+>           bool st_bucket_done;
+>   };
+>
+> and
+>
+>   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+>   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
+>                        struct unix_sock *unix_sk, uid_t uid)
 
-Nope, we're not putting namespace_sem in a header. The code it protects
-is massively sensitive and it interacts with mount_lock and other locks.
-This stays private to fs/namespace.c as far as I'm concerned.
+Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
+ship with CONFIG_UNIX=y, so a missing SCM_PIDFD in unlikely to have a
+widespread impact, and if it does, it might encourage someone to
+review their kconfig.
+
+As mentioned on the v5 thread, we are waiting for this API to get the
+userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
+really grateful if we could start with the simplest and most
+conservative approach (which seems to be the current one in v6 to me),
+and then eventually later decide whether to export more functions, or
+to deprecate CONFIG_UNIX=m, or something else entirely, as that
+doesn't really affect the shape of the UAPI, just the details of its
+availability. Thank you.
+
+Kind regards,
+Luca Boccassi
