@@ -2,188 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFA870D375
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 07:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9356D70D378
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 07:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjEWF5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 01:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S234560AbjEWF6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 01:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjEWF46 (ORCPT
+        with ESMTP id S229459AbjEWF6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 01:56:58 -0400
-Received: from out-17.mta1.migadu.com (out-17.mta1.migadu.com [IPv6:2001:41d0:203:375::11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E8B11A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 22:56:56 -0700 (PDT)
-Message-ID: <e2a3a27e-9c12-f180-4bb6-1906aa1a1844@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684821414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m07o5exswnKt8yK6ZsQ/L7uRf4eL52Y1KwKINSNdTZ0=;
-        b=i36xmLc4j5aax91r2DKNDfB//n/KSwCav6OEvS8EKfaP874Un9M5dgmWfNHOQmWeCdcMND
-        P/4w7yrxHVuBzGvq0SJAiEk802KFLYnP3eNGX/YhPMQJwDQw1k9Wv5GYWtgGrbzZRkwghz
-        fi1P8D7SUQHFIDl5y8kgk5mf3sLzU5k=
-Date:   Tue, 23 May 2023 13:56:51 +0800
+        Tue, 23 May 2023 01:58:06 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00215109
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 22:58:03 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34N5vQws007257;
+        Tue, 23 May 2023 00:57:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684821446;
+        bh=fLhXm7MAl34Q5I5NLYYhvJbO/6H/V++mvuilVVfegw0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=pROeYgfcgxo3Bu9JRW2d6n+sF3OiEyAxL+5H4Qy8iilHxdcbnEx+d9hz8E8aOvcbc
+         5ewFdv5TRX1cc9bqt+BaBYuoL+kZ7+qu5YEgUhqjdfXBCI0B2/5QqaJmepUpCkOonf
+         HL1eHqnEs2yb0Z0cu1SIx9+beBXb6vQM3tvJaPRQ=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34N5vQOX027712
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 23 May 2023 00:57:26 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 23
+ May 2023 00:57:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 23 May 2023 00:57:26 -0500
+Received: from [172.24.216.116] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34N5vJpd018318;
+        Tue, 23 May 2023 00:57:20 -0500
+Message-ID: <1eb4b838-4f9c-6e95-925a-69487060ec55@ti.com>
+Date:   Tue, 23 May 2023 11:27:19 +0530
 MIME-Version: 1.0
-Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
- skb_dequeue (2)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 4/8] drm/bridge: mhdp8546: Set input_bus_flags from
+ atomic_check
+To:     <neil.armstrong@linaro.org>, Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230509093036.3303-1-a-bhatia1@ti.com>
+ <20230509093036.3303-5-a-bhatia1@ti.com>
+ <b43f0808-8ac8-746f-6cbc-5396722261aa@linaro.org>
+ <1b95b75d-1b81-806b-7b7f-34cd93c9d0ec@ti.com>
+ <cc84cc53-53b6-1ab2-7053-36b3d3d3c423@linaro.org>
 Content-Language: en-US
-To:     Zhu Yanjun <zyjzyj2000@gmail.com>
-Cc:     syzbot <syzbot+eba589d8f49c73d356da@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <000000000000a589d005fc52ee2d@google.com>
- <13528f21-0f36-4fa2-d34f-eecee6720bc1@linux.dev>
- <CAD=hENeCo=-Pk9TWnqxOWP9Pg-JXWk6n6J19gvPo9_h7drROGg@mail.gmail.com>
- <CAD=hENdoyBZaRz7aTy4mX5Kq1OYmWabx2vx8vPH0gQfHO1grzw@mail.gmail.com>
- <0d515e17-5386-61ba-8278-500620969497@linux.dev>
- <CAD=hENcqa0jQvLjuXw9bMtivCkKpQ9=1e0-y-1oxL23OLjutuw@mail.gmail.com>
- <CAD=hENdXdqfcxjNrNnP8CoaDy6sUJ4g5uxcWE0mj3HtNohDUzw@mail.gmail.com>
- <CAD=hENda4MxgEsgT-GUhYHH66m79wi8yxBQS8CYnxc_DsQKGwg@mail.gmail.com>
- <5b6b8431-92c7-62df-299b-28f3a5f61d5f@linux.dev>
- <CAD=hENc72B+gLLd_Xn7w8bd_qDw=mFd5sC0RKEsHpNA=85a9KA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-In-Reply-To: <CAD=hENc72B+gLLd_Xn7w8bd_qDw=mFd5sC0RKEsHpNA=85a9KA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <cc84cc53-53b6-1ab2-7053-36b3d3d3c423@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Neil,
 
+On 22-May-23 13:35, neil.armstrong@linaro.org wrote:
+> On 17/05/2023 07:48, Aradhya Bhatia wrote:
+>> Hi Neil,
+>>
+>> On 16-May-23 12:54, Neil Armstrong wrote:
+>>> On 09/05/2023 11:30, Aradhya Bhatia wrote:
+>>>> From: Nikhil Devshatwar <nikhil.nd@ti.com>
+>>>>
+>>>> input_bus_flags are specified in drm_bridge_timings (legacy) as well
+>>>> as drm_bridge_state->input_bus_cfg.flags
+>>>>
+>>>> The flags from the timings will be deprecated. Bridges are supposed
+>>>> to validate and set the bridge state flags from atomic_check.
+>>>>
+>>>> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+>>>> [a-bhatia1: replace timings in cdns_mhdp_platform_info by
+>>>> input_bus_flags]
+>>>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>>>> ---
+>>>>
+>>>> Notes:
+>>>>
+>>>>       changes from v5:
+>>>>       * removed the wrongly addded return statement in tfp410 driver.
+>>>>       * replaced the timings field in cdns_mhdp_platform_info by
+>>>>         input_bus_flags field, in order to get rid of bridge->timings
+>>>>         altogether.
+>>>>
+>>>>    drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c  | 11
+>>>> ++++++++---
+>>>>    drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h  |  2 +-
+>>>>    drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c |  9 ++++-----
+>>>>    drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h |  2 +-
+>>>>    4 files changed, 14 insertions(+), 10 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>> index 623e4235c94f..a677b1267525 100644
+>>>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>> @@ -2189,6 +2189,13 @@ static int cdns_mhdp_atomic_check(struct
+>>>> drm_bridge *bridge,
+>>>>            return -EINVAL;
+>>>>        }
+>>>>    +    /*
+>>>> +     * There might be flags negotiation supported in future.
+>>>> +     * Set the bus flags in atomic_check statically for now.
+>>>> +     */
+>>>> +    if (mhdp->info)
+>>>> +        bridge_state->input_bus_cfg.flags =
+>>>> *mhdp->info->input_bus_flags;
+>>>> +
+>>>>        mutex_unlock(&mhdp->link_mutex);
+>>>>        return 0;
+>>>>    }
+>>>> @@ -2554,8 +2561,6 @@ static int cdns_mhdp_probe(struct
+>>>> platform_device *pdev)
+>>>>        mhdp->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
+>>>>                   DRM_BRIDGE_OP_HPD;
+>>>>        mhdp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
+>>>> -    if (mhdp->info)
+>>>> -        mhdp->bridge.timings = mhdp->info->timings;
+>>>
+>>> Won't this cause a breakage because at this point in time
+>>> bridge.timings->input_bus_flags
+>>> seems to be still used by tidss right ?
+>>>
+>>
+>> tidss was using the bridge.timings->input_bus_flags before the 7th
+>> patch[1] in this series.
+>>
+>> After the patch, it only relies on bridge_state and display_info for bus
+>> flags and formats.
+> 
+> OK thanks, then:
+> 
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> if you resend a new version, please add this info in the commit message.
 
-On 5/23/23 13:52, Zhu Yanjun wrote:
-> On Tue, May 23, 2023 at 1:44 PM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
+Thank you! Will do so.
+
+Regards
+Aradhya
+
+> 
+> Neil
+> 
 >>
 >>
->> On 5/23/23 13:18, Zhu Yanjun wrote:
->>> On Tue, May 23, 2023 at 1:08 PM Zhu Yanjun <zyjzyj2000@gmail.com> wrote:
->>>> On Tue, May 23, 2023 at 12:29 PM Zhu Yanjun <zyjzyj2000@gmail.com> wrote:
->>>>> On Tue, May 23, 2023 at 12:10 PM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
->>>>>>
->>>>>> On 5/23/23 12:02, Zhu Yanjun wrote:
->>>>>>> On Tue, May 23, 2023 at 11:47 AM Zhu Yanjun <zyjzyj2000@gmail.com> wrote:
->>>>>>>> On Tue, May 23, 2023 at 10:26 AM Guoqing Jiang <guoqing.jiang@linux.dev> wrote:
->>>>>>>>> On 5/23/23 10:13, syzbot wrote:
->>>>>>>>>> Hello,
->>>>>>>>>>
->>>>>>>>>> syzbot tried to test the proposed patch but the build/boot failed:
->>>>>>>>>>
->>>>>>>>>> failed to apply patch:
->>>>>>>>>> checking file drivers/infiniband/sw/rxe/rxe_qp.c
->>>>>>>>>> patch: **** unexpected end of file in patch
->>>>>>>> This is not the root cause. The fix is not good.
->>>>>>> This problem is about "INFO: trying to register non-static key. The
->>>>>>> code is fine but needs lockdep annotation, or maybe"
->>>>> This warning is from "lock is not initialized". This is a
->>>>> use-before-initialized problem.
->>>>> The correct fix is to initialize the lock that is complained before it is used.
->>>>>
->>>>> Zhu Yanjun
->>>> Based on the call trace, the followings are the order of this call trace.
->>>>
->>>> 291 /* called by the create qp verb */
->>>> 292 int rxe_qp_from_init(struct rxe_dev *rxe, struct rxe_qp *qp,
->>>> struct rxe_pd *pd,
->>>> 297 {
->>>>               ...
->>>> 317         rxe_qp_init_misc(rxe, qp, init);
->>>>               ...
->>>> 322
->>>> 323         err = rxe_qp_init_resp(rxe, qp, init, udata, uresp);
->>>> 324         if (err)
->>>> 325                 goto err2;   <--- error
->>>>
->>>>               ...
->>>>
->>>> 334 err2:
->>>> 335         rxe_queue_cleanup(qp->sq.queue); <--- Goto here
->>>> 336         qp->sq.queue = NULL;
->>>>
->>>> In rxe_qp_init_resp, the error occurs before skb_queue_head_init.
->>>> So this call trace appeared.
->>> 250 static int rxe_qp_init_resp(struct rxe_dev *rxe, struct rxe_qp *qp,
->>> 254 {
->>>                           ...
->>> 264
->>> 265                 type = QUEUE_TYPE_FROM_CLIENT;
->>> 266                 qp->rq.queue = rxe_queue_init(rxe, &qp->rq.max_wr,
->>> 267                                         wqe_size, type);
->>> 268                 if (!qp->rq.queue)
->>> 269                         return -ENOMEM;    <---Error here
->>> 270
->>>
->>> ...
->>>
->>> 282         skb_queue_head_init(&qp->resp_pkts); <-this is not called.
->>> ...
->>> This will make spin_lock of resp_pkts is used before initialized.
->> IMHO, the above is same as
+>> Regards
+>> Aradhya
 >>
->>> Which is caused by  "skb_queue_head_init(&qp->resp_pkts)" is not called
->>> given rxe_qp_init_resp returns error, but the cleanup still trigger the
->>> chain.
+>> [1]: https://lore.kernel.org/all/20230509093036.3303-8-a-bhatia1@ti.com/
+>>
+>>
 >>>
->>> rxe_qp_do_cleanup -> rxe_completer -> drain_resp_pkts ->
->>> skb_dequeue(&qp->resp_pkts)
->> my previous analysis. If not, could you provide another better way to
->> fix it?
-> Move the initialization to the beginning. This can fix this problem.
-> See below:
->
-> "
-> diff --git a/drivers/infiniband/sw/rxe/rxe_qp.c
-> b/drivers/infiniband/sw/rxe/rxe_qp.c
-> index c5451a4488ca..22ef6188d7b1 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_qp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_qp.c
-> @@ -176,6 +176,9 @@ static void rxe_qp_init_misc(struct rxe_dev *rxe,
-> struct rxe_qp *qp,
->          spin_lock_init(&qp->rq.producer_lock);
->          spin_lock_init(&qp->rq.consumer_lock);
->
-> +       skb_queue_head_init(&qp->req_pkts);
-> +       skb_queue_head_init(&qp->resp_pkts);
-> +
->          atomic_set(&qp->ssn, 0);
->          atomic_set(&qp->skb_out, 0);
->   }
-> @@ -234,8 +237,6 @@ static int rxe_qp_init_req(struct rxe_dev *rxe,
-> struct rxe_qp *qp,
->          qp->req.opcode          = -1;
->          qp->comp.opcode         = -1;
->
-> -       skb_queue_head_init(&qp->req_pkts);
-> -
->          rxe_init_task(&qp->req.task, qp, rxe_requester);
->          rxe_init_task(&qp->comp.task, qp, rxe_completer);
->
-> @@ -279,8 +280,6 @@ static int rxe_qp_init_resp(struct rxe_dev *rxe,
-> struct rxe_qp *qp,
->                  }
->          }
->
-> -       skb_queue_head_init(&qp->resp_pkts);
-> -
->          rxe_init_task(&qp->resp.task, qp, rxe_responder);
->
->          qp->resp.opcode         = OPCODE_NONE;
-> "
-
-It is weird to me that init them in init_misc instead of init_req/resp, 
-given they
-are dedicated/used for the different purpose. But just my 0.02$.
-
-Guoqing
+>>>>          ret = phy_init(mhdp->phy);
+>>>>        if (ret) {
+>>>> @@ -2642,7 +2647,7 @@ static const struct of_device_id mhdp_ids[] = {
+>>>>    #ifdef CONFIG_DRM_CDNS_MHDP8546_J721E
+>>>>        { .compatible = "ti,j721e-mhdp8546",
+>>>>          .data = &(const struct cdns_mhdp_platform_info) {
+>>>> -          .timings = &mhdp_ti_j721e_bridge_timings,
+>>>> +          .input_bus_flags = &mhdp_ti_j721e_bridge_input_bus_flags,
+>>>>              .ops = &mhdp_ti_j721e_ops,
+>>>>          },
+>>>>        },
+>>>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>>>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>>>> index bedddd510d17..bad2fc0c7306 100644
+>>>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>>>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>>>> @@ -336,7 +336,7 @@ struct cdns_mhdp_bridge_state {
+>>>>    };
+>>>>      struct cdns_mhdp_platform_info {
+>>>> -    const struct drm_bridge_timings *timings;
+>>>> +    const u32 *input_bus_flags;
+>>>>        const struct mhdp_platform_ops *ops;
+>>>>    };
+>>>>    diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>>>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>>>> index dfe1b59514f7..12d04be4e242 100644
+>>>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>>>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>>>> @@ -71,8 +71,7 @@ const struct mhdp_platform_ops mhdp_ti_j721e_ops = {
+>>>>        .disable = cdns_mhdp_j721e_disable,
+>>>>    };
+>>>>    -const struct drm_bridge_timings mhdp_ti_j721e_bridge_timings = {
+>>>> -    .input_bus_flags = DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE |
+>>>> -               DRM_BUS_FLAG_SYNC_SAMPLE_NEGEDGE |
+>>>> -               DRM_BUS_FLAG_DE_HIGH,
+>>>> -};
+>>>> +const u32
+>>>> +mhdp_ti_j721e_bridge_input_bus_flags =
+>>>> DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE |
+>>>> +                       DRM_BUS_FLAG_SYNC_SAMPLE_NEGEDGE |
+>>>> +                       DRM_BUS_FLAG_DE_HIGH;
+>>>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>>>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>>>> index 97d20d115a24..5ddca07a4255 100644
+>>>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>>>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>>>> @@ -14,6 +14,6 @@
+>>>>    struct mhdp_platform_ops;
+>>>>      extern const struct mhdp_platform_ops mhdp_ti_j721e_ops;
+>>>> -extern const struct drm_bridge_timings mhdp_ti_j721e_bridge_timings;
+>>>> +extern const u32 mhdp_ti_j721e_bridge_input_bus_flags;
+>>>>      #endif /* !CDNS_MHDP8546_J721E_H */
+>>>
+> 
