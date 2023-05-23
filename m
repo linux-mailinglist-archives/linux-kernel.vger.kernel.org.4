@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28F470D2C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 06:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0902870D2C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 06:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjEWETp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 00:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
+        id S231168AbjEWE0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 00:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjEWETn (ORCPT
+        with ESMTP id S229469AbjEWE0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 00:19:43 -0400
-Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [IPv6:2001:41d0:203:375::39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC385FA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 21:19:42 -0700 (PDT)
-Date:   Tue, 23 May 2023 00:19:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684815581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cMAr9JP2hoTAH+Bide6gNNQRYXdTO7ObonfjjJc9oAw=;
-        b=oXT0gBS0u1+rwwEAfPnn9QDggZKtT2BAOBV7RLC3zSDszYSfm4EuvaQgdu7QcBnDUYC9lQ
-        KhWQE+igjycWN7q3usgRZ2GkTp3wusMtP5h7YCqfcMEksGjEJsLkYtwuJUpTSUuHPruATl
-        /iak359vRwlqxuUyXeUYAlFaaWmgu0s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Dave Chinner <dchinner@redhat.com>
-Subject: Re: [PATCH v2] locking: SIX locks (shared/intent/exclusive)
-Message-ID: <ZGw+2abYSDohPG2E@moria.home.lan>
-References: <20230522171314.1953699-1-kent.overstreet@linux.dev>
- <ZGvnJZYQfAmgdsqr@boqun-archlinux>
+        Tue, 23 May 2023 00:26:37 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5CFFFA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 21:26:35 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:35904.1415243224
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id B8F6B1001EF;
+        Tue, 23 May 2023 12:26:32 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id 8ceb7444fc6a4c1d905d08bc2382ec42 for jani.nikula@linux.intel.com;
+        Tue, 23 May 2023 12:26:33 CST
+X-Transaction-ID: 8ceb7444fc6a4c1d905d08bc2382ec42
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <4c9c0897-5e3a-1469-3d87-ff7723ac160c@189.cn>
+Date:   Tue, 23 May 2023 12:26:32 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGvnJZYQfAmgdsqr@boqun-archlinux>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/drm_vblank.c: avoid unsigned int to signed int cast
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "loongson-kernel@lists.loongnix.cn" 
+        <loongson-kernel@lists.loongnix.cn>
+References: <20230516173026.2990705-1-15330273260@189.cn>
+ <f6bd362145124f34a1af800dd330f8e9@AcuMS.aculab.com>
+ <b23c41b1-e177-c81d-5327-fce5511cb97d@189.cn> <871qj8ob7z.fsf@intel.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <871qj8ob7z.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:05:25PM -0700, Boqun Feng wrote:
-> > + * bits 29-30		has read waiters
-> > + * bits 30-31		has intent waiters
-> > + * bits 31-32		has write waiters
-> > + */
-> > +
-> > +#define SIX_LOCK_HELD_read_OFFSET	0
-> > +#define SIX_LOCK_HELD_read		~(~0U << 26)
-> > +#define SIX_LOCK_HELD_intent		(1U << 26)
-> > +#define SIX_LOCK_HELD_write		(1U << 27)
-> > +#define SIX_LOCK_WAITING_read		(1U << (28 + SIX_LOCK_read))
-> > +#define SIX_LOCK_WAITING_intent		(1U << (28 + SIX_LOCK_intent))
-> > +#define SIX_LOCK_WAITING_write		(1U << (28 + SIX_LOCK_write))
-> > +#define SIX_LOCK_NOSPIN			(1U << 31)
-> 
-> ^ NOSPIN is the 31st bit.
+Hi,
 
-Thanks - I think I'll just delete that comment, it's out of date and
-the state bits have simplified a bit :)
+On 2023/5/22 19:29, Jani Nikula wrote:
+> In general, do not use unsigned types in arithmethic to avoid negative
+> values, because most people will be tripped over by integer promotion
+> rules, and you'll get negative values anyway.
+
+
+Here I'm sure about this,
+
+but there are plenty unsigned types arithmetic in the kernel.
+
+take kmalloc_array() function as an example in /tools/virto/linux/kernel.h
+
+
+static inline void *kmalloc_array(unsigned n, size_t s, gfp_t gfp)
+{
+     return kmalloc(n * s, gfp);
+}
+
+
+NOTE that *size_t* is an unsigned integral data type.
+
