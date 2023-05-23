@@ -2,133 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC9F70D498
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6D570D49C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235344AbjEWHNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S235352AbjEWHN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjEWHM7 (ORCPT
+        with ESMTP id S235349AbjEWHNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:12:59 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1505109;
-        Tue, 23 May 2023 00:12:58 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75affe9d7feso284133585a.0;
-        Tue, 23 May 2023 00:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684825978; x=1687417978;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xZio8i4os+gLoYXTEzFCmPH/ORb8tIGBKsfZ/7cCq7c=;
-        b=JWw9npV1kf2wKf7B+Jw4ftA08GL1o2tZ04iTcoa93iBqVTLDGkBX8UGWRB7Tpizwkw
-         laQjJFgGI2oAqiNkcAPXAw7+uP230SgwH6xMECF3u+h+IxOCGOUP+VskIG7xxplZReJK
-         J2IrKYN4ccB4DZVfvo3hUTrPrtkAsxKiyY+WssNI4joPzXMccgWG0jU/rH9s4mUg526q
-         EYpzlUt2OZX1WAg4i28hoMI57bLj5BK1qVhTJCRk4xOeXWiTsKsvW5keN1XI7T04VY0a
-         c7Y8Po0Del6DNrnKpnZ03uPFPKJO5OAeKZldFojN9Iu9I3+wAJKw94hxecKiSAAfrJpV
-         /bYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684825978; x=1687417978;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xZio8i4os+gLoYXTEzFCmPH/ORb8tIGBKsfZ/7cCq7c=;
-        b=MvXFDPN8dn3mXogQOg7gYv8BHtoq6b+K1V4+kmA3biN3Wvamhf6yaTOab+zcrRYlAY
-         qU9fdnMrVM09s9GpLyPVXnpwK36nw2YwxG4yYmu5MPdffGn8+a1HV8VpvY8MvlpgnwSr
-         G+5ngEaqq2aWZgsLAhLMO4JYthKe+lfwEXwlh8JdD8Wmx6pDcnThvfwhe/Q59at7oHDs
-         ezd8sU1h7a0aIZWzTP64un1MuiNlrLAVPaj9ZGZAKMgmXTDwVgPstn7ZlhwL2DnI7wWq
-         f8ZZyHACR20rgxq66os6TdF6E+YNm08QqiMtYeDYmlFrWoi5SJ0gGgOgK7lnmCXyPD5o
-         N+Pg==
-X-Gm-Message-State: AC+VfDwC3P3/Y57gJtIRJu45Lc4XSHmGvEIQHRXFnlxMMH3Q01Iu3QtM
-        OW3bQ/uU7GLhd9Ch1ZDsCg==
-X-Google-Smtp-Source: ACHHUZ4bKn6c0cGvb8XoCuxJIx1z5ZufZMLTCw5EGwuwjRbps/XikWFVh1iZ574IYItLkMeWc8KDHQ==
-X-Received: by 2002:a37:6c7:0:b0:75b:23a0:de9c with SMTP id 190-20020a3706c7000000b0075b23a0de9cmr3193975qkg.26.1684825977798;
-        Tue, 23 May 2023 00:12:57 -0700 (PDT)
-Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:18c1:dc19:5e29:e9a0])
-        by smtp.gmail.com with ESMTPSA id d24-20020a05620a159800b0074fb15e2319sm2307342qkk.122.2023.05.23.00.12.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 May 2023 00:12:57 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH v4 net 0/6] net/sched: Fixes for sch_ingress and sch_clsact
-Date:   Tue, 23 May 2023 00:12:39 -0700
-Message-Id: <cover.1684825171.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Tue, 23 May 2023 03:13:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D48211F;
+        Tue, 23 May 2023 00:13:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7785062FDA;
+        Tue, 23 May 2023 07:13:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D36F3C4339C;
+        Tue, 23 May 2023 07:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684826000;
+        bh=f5z4FLxDPgETOy7aL9gv81CZdcHctDIyTnnjcI7c4f0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hUsQn6aLonY9QrGoN/zY5Fy2gZNRNBSW17CCHjQJRjGNfe1+UtWCrahIqFnZNwuDt
+         P1XHTx3D6qacQEP3cu7oPLlUoeTBYY3PVpdmeUER2QxvELZnHYkWE1lU7pcU4EUFIA
+         2PHDwNEHGL+nP3lfvl5ltufWbZUawa3YAlogmd+e5+/2BUUD/sfnJ11IlyiVduINSj
+         tC8TR1VplD9R73elsuEmug4gjeusw4oP48jMH3pcZib8nsUKhAF7CAfIrny5Ylbsgv
+         nxb50lKNX6nCy4D3xxaRgE5IIeanrg8ss/1E/6F2ic6zSxEt2YkmryMjx1jAlGhJIE
+         eb8AJtbFuM9iQ==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4f3b9e54338so3266667e87.0;
+        Tue, 23 May 2023 00:13:20 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyKOlrH/9A4QgWUIUIWDdKlKx/3t7+qSfkP37xcol1p86pVT2hH
+        k/OHH6gmfon1LrXNw0jBgI0X/qn6j8+TREvtSBU=
+X-Google-Smtp-Source: ACHHUZ5PGTufHZh9JgDs5/lwQ2p3AfnnpUDv5F0tTXSLMY6xHuamj5wVGctCTZj6/XjlSNmvF/8oO1zHS2w418fpJQo=
+X-Received: by 2002:a2e:9097:0:b0:2a8:d1cd:a04 with SMTP id
+ l23-20020a2e9097000000b002a8d1cd0a04mr4353123ljg.48.1684825998766; Tue, 23
+ May 2023 00:13:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230521160426.1881124-1-masahiroy@kernel.org>
+ <20230521160426.1881124-3-masahiroy@kernel.org> <CAKwvOd=B+dKWjxD-K-8btROvywp_Nei=CREeYZdCvKSGuHHJOA@mail.gmail.com>
+ <CAMj1kXEYZdsE8A2izGbb4HWYT3a8HN9Ocw=pb3d64Zu0441RgA@mail.gmail.com> <CAK7LNASFLnB9svCf6QvVPSMyXhHRzv9teAmZqXkTw629=_xo=A@mail.gmail.com>
+In-Reply-To: <CAK7LNASFLnB9svCf6QvVPSMyXhHRzv9teAmZqXkTw629=_xo=A@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 23 May 2023 09:13:07 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGuJwDBQakz8aV5TR0Y=KPDMjNcJ0wf=YLrsxB=m35_Kg@mail.gmail.com>
+Message-ID: <CAMj1kXGuJwDBQakz8aV5TR0Y=KPDMjNcJ0wf=YLrsxB=m35_Kg@mail.gmail.com>
+Subject: Re: [PATCH v6 02/20] modpost: fix section mismatch message for R_ARM_ABS32
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Link to v3 (incomplete): https://lore.kernel.org/r/cover.1684821877.git.peilin.ye@bytedance.com/
-Link to v2: https://lore.kernel.org/r/cover.1684796705.git.peilin.ye@bytedance.com/
-Link to v1: https://lore.kernel.org/r/cover.1683326865.git.peilin.ye@bytedance.com/
+On Tue, 23 May 2023 at 07:08, Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Tue, May 23, 2023 at 6:36=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> =
+wrote:
+> >
+> > On Mon, 22 May 2023 at 19:56, Nick Desaulniers <ndesaulniers@google.com=
+> wrote:
+> > >
+> > > + linux-arm-kernel and some folks who might know another idea.
+> > >
+> > > On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@ke=
+rnel.org> wrote:
+> > > >
+> > > > addend_arm_rel() processes R_ARM_ABS32 in a wrong way.
+> > > >
+> > > > Here, simple test code.
+> > > >
+> > > >   [test code 1]
+> > > >
+> > > >     #include <linux/init.h>
+> > > >
+> > > >     int __initdata foo;
+> > > >     int get_foo(int x) { return foo; }
+> > > >
+> > > > If you compile it with ARM versatile_defconfig, modpost will show t=
+he
+> > > > symbol name, (unknown).
+> > > >
+> > > >   WARNING: modpost: vmlinux.o: section mismatch in reference: get_f=
+oo (section: .text) -> (unknown) (section: .init.data)
+> > > >
+> > > > If you compile it for other architectures, modpost will show the co=
+rrect
+> > > > symbol name.
+> > > >
+> > > >   WARNING: modpost: vmlinux.o: section mismatch in reference: get_f=
+oo (section: .text) -> foo (section: .init.data)
+> > > >
+> > > > For R_ARM_ABS32, addend_arm_rel() sets r->r_addend to a wrong value=
+.
+> > > >
+> > > > I just mimicked the code in arch/arm/kernel/module.c.
+> > > >
+> > > > However, there is more difficulty for ARM.
+> > > >
+> > > > Here, test code.
+> > > >
+> > > >   [test code 2]
+> > > >
+> > > >     #include <linux/init.h>
+> > > >
+> > > >     int __initdata foo;
+> > > >     int get_foo(int x) { return foo; }
+> > > >
+> > > >     int __initdata bar;
+> > > >     int get_bar(int x) { return bar; }
+> > > >
+> > > > With this commit applied, modpost will show the following messages
+> > > > for ARM versatile_defconfig:
+> > > >
+> > > >   WARNING: modpost: vmlinux.o: section mismatch in reference: get_f=
+oo (section: .text) -> foo (section: .init.data)
+> > > >   WARNING: modpost: vmlinux.o: section mismatch in reference: get_b=
+ar (section: .text) -> foo (section: .init.data)
+> > > >
+> > > > The reference from 'get_bar' to 'foo' seems wrong.
+> > > >
+> > > > I have no solution for this because it is true in assembly level.
+> > > >
+> > > > In the following output, relocation at 0x1c is no longer associated
+> > > > with 'bar'. The two relocation entries point to the same symbol, an=
+d
+> > > > the offset to 'bar' is encoded in the instruction 'r0, [r3, #4]'.
+> > > >
+> >
+> > These are section relative relocations - this is unusual but not
+> > incorrect. Normally, you only see this if the symbols in question have
+> > static linkage.
+>
+>
+> I noticed this usually happens in reference to 'static',
+> but on ARM, it happens even without 'static'.
+> See the [test code 1].
+>
+>
+> > It does mean that the symbol is not preemptible, which is what makes
+> > this somewhat surprising.
+> >
+> > Generally, you cannot resolve a relocation to a symbol without taking
+> > the addend into account, so looking up the address of .init.data in
+> > the symbol table is not quite the right approach here. If anything,
+> > the symbol should be reported as [.init.data+0x4] in the second case.
+>
+>
+> In the old days, section mismatch warnings showed
+> only the referenced section name.
+>
+> Since [1], modpost started to show the referenced symbol name too.
+> Modpost did it in the past 17 years.
+> It sometimes shows a wrong name, but works in most architectures.
+> Unfortunately, I noticed ARM was an unfortunate case.
+>
+> Do you suggest removing it entirely?
+>
 
-Hi all,
+No, not at all. But resolving the symbol should take the addend into
+account, and this is essentially what you are doing in your patch.
 
-These are v4 fixes for ingress and clsact Qdiscs.
+The point is really that the relocation in question does not refer to
+the symbol - it refers to a section+offset that we /think/ corresponds
+with a certain symbol. But for example, if the symbol is weak and
+another definition exists, the section based relocation will refer to
+one version, and a relocation that references the symbol name will
+refer to the other version.
 
-Change since v2:
-  - add in-body From: tags
 
-Changes in v2:
-  - for [1-5/6], include tags from Jamal and Pedro
-  - for [6/6], as suggested by Vlad, replay the request if the current
-    Qdisc has any ongoing (RTNL-unlocked) filter requests, instead of
-    returning -EBUSY to the user
-  - use Closes: tag as warned by checkpatch
+>
+> If (elf->symtab_start + ELF_R_SYM(r.r_info)) has a sensible
+> symbol name, print it. Otherwise, print only the section name.
+> Is this what you mean?
+>
+> That means, we will lose the symbol name info of 'static'
+> (and even global symbols on ARM)
+>
+>
+> That is what I wrote in the commit description.
+>
+> "I am keeping the current logic because it is useful in many architecture=
+s,
+> but the symbol name is not always correct depending on the optimization
+> of the relocation. I left some comments in find_tosym()."
+>
 
-[1,2/6]: ingress and clsact Qdiscs should only be created under ffff:fff1
-  [3/6]: Under ffff:fff1, only create ingress and clsact Qdiscs (for now,
-         at least)
-  [4/6]: After creating ingress and clsact Qdiscs under ffff:fff1, do not
-         graft them again to anywhere else (e.g. as the inner Qdisc of a
-         TBF Qdisc)
-  [5/6]: Prepare for [6/6], do not reuse that for-loop in qdisc_graft()
-         for ingress and clsact Qdiscs
-  [6/6]: Fix use-after-free [a] in mini_qdisc_pair_swap()
-
-[a] https://syzkaller.appspot.com/bug?extid=b53a9c0d1ea4ad62da8b
-
-Thanks,
-Peilin Ye (6):
-  net/sched: sch_ingress: Only create under TC_H_INGRESS
-  net/sched: sch_clsact: Only create under TC_H_CLSACT
-  net/sched: Reserve TC_H_INGRESS (TC_H_CLSACT) for ingress (clsact)
-    Qdiscs
-  net/sched: Prohibit regrafting ingress or clsact Qdiscs
-  net/sched: Refactor qdisc_graft() for ingress and clsact Qdiscs
-  net/sched: qdisc_destroy() old ingress and clsact Qdiscs before
-    grafting
-
- include/net/sch_generic.h |  8 ++++++
- net/sched/sch_api.c       | 60 +++++++++++++++++++++++++++++----------
- net/sched/sch_generic.c   | 14 +++++++--
- net/sched/sch_ingress.c   | 10 +++++--
- 4 files changed, 72 insertions(+), 20 deletions(-)
-
--- 
-2.20.1
-
+Fair enough.
