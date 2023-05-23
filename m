@@ -2,190 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BF970E913
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D502F70E91B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbjEWW1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S237819AbjEWWdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237819AbjEWW1U (ORCPT
+        with ESMTP id S230006AbjEWWdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:27:20 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B89C5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:27:18 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d24136685so41847b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684880837; x=1687472837;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+Mu9QUDJUPxCQ+nxaGfODHItInO1Mx21+1cY8P0+ko=;
-        b=myd4lDfvuaaTHVDxIZueGM+k5E70olrh5Bi4kawJ2EqxlzdG3jx2hNsJKzBv1ExQrZ
-         aZIqungadEPCy/hk+arz6SCHAhumLQ2exHtv9ezxiuWyl92MWzYKy8HK8quRSz97EAMo
-         8HDOmtAd6fKra/CsSjrI/dK+pfZCIsI+1uCq1qHYsi0xHo3WYArXZwYWudExTIr6Fj27
-         3dDJ033Vg+M4TLAaJI5DgBCEbpaEmjNrP7x2LDAEYwxTkMPe/qI246iat844prVielH/
-         N1rZ8XOfFOa41MmZaZKsz9PVPHf7hGTl1NypGa83NrTRXoIwS26AGhLJnHwQKKez3ITY
-         DvPQ==
+        Tue, 23 May 2023 18:33:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AB1BF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684881174;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CfRD3GZSe/po2Yvx+fZzXZZZfdk+kXJVJcq8DZsV4Kg=;
+        b=NWHMKun8dl+ocNZby2V22xrhGysTrP1XoEhYvPa8NenEl3zsyg4avSE/7MzFqp9FiE80nL
+        2M8oiVM3gy3kORHn3uXTEqujoWE1zbdTgCUI8FNeNJYtki9GSX5UVmS1K9ySP1z1/iveEi
+        cCGlrJ5TOyIa/xDK7iHfa72JFkB/+Yc=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-271-lNOpGVaZNdqeabcbheZEgA-1; Tue, 23 May 2023 18:32:53 -0400
+X-MC-Unique: lNOpGVaZNdqeabcbheZEgA-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-62386d1f3ecso1139166d6.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:32:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684880837; x=1687472837;
+        d=1e100.net; s=20221208; t=1684881172; x=1687473172;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o+Mu9QUDJUPxCQ+nxaGfODHItInO1Mx21+1cY8P0+ko=;
-        b=UQoivvSCmwI5RX9WS22IUxN1BClJHyz37CpLbpJ8iWtmhKy09iwvEzlU8oJZSz7efE
-         rdrCXhK48Nzn8bW9qRn/5OWa2NYVFrVybgftue8AtHXP8ODG0pfl2u1QZKKK7glSimt2
-         wdnaBEb+AyBeZYgFdQ+X/tg0xveuTVCSQD3IQKkSjtq1czy7bIxmL4vqfRIoeANuI9Sy
-         B8Q7vWWu1gknxgNCqN/Ma4L+6mj37FkubncTXongx6JY2sHmUXbR9oEV6KJGujbiJw85
-         0PdxuGi8hlCJv8S87SqgIoraAXqi3EP0C/FN81o9mfjhMDKkK8yx7gZf/hLwBgTJViX3
-         Cjzg==
-X-Gm-Message-State: AC+VfDyBUoyRXcfhyXZZm/UxIgly/DGAAFLd5PPad3HxPtZepaEzRLjN
-        r/H28hwu9GN8GStSEU0pXO27l3JS551Z5QZhRXA=
-X-Google-Smtp-Source: ACHHUZ5+wDLkzWl5hqADeJv/K/pEdU5ftVoYvaXjN5yUsSSnEKzwjNvqAoa0WrZdkbq9aiPARCtcUw==
-X-Received: by 2002:a05:6a20:3c8d:b0:10c:d5dd:c223 with SMTP id b13-20020a056a203c8d00b0010cd5ddc223mr1532145pzj.15.1684880837655;
-        Tue, 23 May 2023 15:27:17 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id d11-20020a63fd0b000000b005308b255502sm6443395pgh.68.2023.05.23.15.27.16
+        bh=CfRD3GZSe/po2Yvx+fZzXZZZfdk+kXJVJcq8DZsV4Kg=;
+        b=WR6dtIOM+MByxd+gYq2s4HwlGSBCO7nHIHKvYBFg3m5fDQ5p2618NPc680X/HTIYa7
+         UNkPwUg1zXtCnru266KeXBxLqwzEairEp6PEHVy7BRPTz7dc0niauSjd1usrhVUlRomb
+         Ih85BacxtCcczEYnZNT42nQojPRl9toEywnWg7RhKZm3wu1uh26Tehuldd/F7G32iFWH
+         yK6gRbLQUrG0EAPAKfsNppcQS1t5yEWWHLWC4fwbkq7VJQCL2BR9NIwP4/6Q4YvxydQk
+         92cDaRmdfcWoTU2aNT7mB+yrLwBS21j11L8tNx1X0gFoeKDOx61gIDise4wV2N2eYnwb
+         /Jpw==
+X-Gm-Message-State: AC+VfDz+QvFbqPzKNc8q/L97+pKV59mMpvu+3yZhilU8mXL+DGIz3len
+        BrovFape4mIefTBJgmj2+Vu1nDm2nualKXjhGdvrhYyiuO8KXhCv0K4DG+u091Bmz8T3429BViJ
+        nspn0C1L+1afLlbJiMYSYgzxeQbl9aQDO
+X-Received: by 2002:a05:6214:1251:b0:623:690c:3cd7 with SMTP id r17-20020a056214125100b00623690c3cd7mr26478319qvv.47.1684881172542;
+        Tue, 23 May 2023 15:32:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6pYBvrUPTIq4QFiKkKAkrD+OA0TF1qdjuEuroSHzONcos03Kg+SYc3DmzKyVVjvCUN1HrLag==
+X-Received: by 2002:a05:6214:1251:b0:623:690c:3cd7 with SMTP id r17-20020a056214125100b00623690c3cd7mr26478302qvv.47.1684881172259;
+        Tue, 23 May 2023 15:32:52 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id v16-20020a0ccd90000000b00604ee171d99sm3043919qvm.106.2023.05.23.15.32.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 15:27:16 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q1aTJ-0036Bu-2Z;
-        Wed, 24 May 2023 08:27:13 +1000
-Date:   Wed, 24 May 2023 08:27:13 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/17] block: use iomap for writes to block devices
-Message-ID: <ZG09wR4WOI8zDxJK@dread.disaster.area>
-References: <20230424054926.26927-1-hch@lst.de>
- <20230424054926.26927-17-hch@lst.de>
- <b96b397e-2f5e-7910-3bb3-7405d0e293a7@suse.de>
+        Tue, 23 May 2023 15:32:51 -0700 (PDT)
+Date:   Tue, 23 May 2023 15:32:50 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
+        lkp@intel.com, peter.ujfalusi@linux.intel.com,
+        peterz@infradead.org, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Message-ID: <kxb36qqgtnyqed4cgd5fpvmwway2v4watcfg3vdj3okm76scsy@prcbk5pjv4gk>
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
+ <CSTW9UX4ERDZ.VBD1QIWLBM75@suppilovahvero>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b96b397e-2f5e-7910-3bb3-7405d0e293a7@suse.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CSTW9UX4ERDZ.VBD1QIWLBM75@suppilovahvero>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 04:22:01PM +0200, Hannes Reinecke wrote:
-> On 4/24/23 07:49, Christoph Hellwig wrote:
-> > Use iomap in buffer_head compat mode to write to block devices.
-> > 
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > ---
-> >   block/Kconfig |  1 +
-> >   block/fops.c  | 33 +++++++++++++++++++++++++++++----
-> >   2 files changed, 30 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/block/Kconfig b/block/Kconfig
-> > index 941b2dca70db73..672b08f0096ab4 100644
-> > --- a/block/Kconfig
-> > +++ b/block/Kconfig
-> > @@ -5,6 +5,7 @@
-> >   menuconfig BLOCK
-> >          bool "Enable the block layer" if EXPERT
-> >          default y
-> > +       select IOMAP
-> >          select SBITMAP
-> >          help
-> >   	 Provide block layer support for the kernel.
-> > diff --git a/block/fops.c b/block/fops.c
-> > index 318247832a7bcf..7910636f8df33b 100644
-> > --- a/block/fops.c
-> > +++ b/block/fops.c
-> > @@ -15,6 +15,7 @@
-> >   #include <linux/falloc.h>
-> >   #include <linux/suspend.h>
-> >   #include <linux/fs.h>
-> > +#include <linux/iomap.h>
-> >   #include <linux/module.h>
-> >   #include "blk.h"
-> > @@ -386,6 +387,27 @@ static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
-> >   	return __blkdev_direct_IO(iocb, iter, bio_max_segs(nr_pages));
-> >   }
-> > +static int blkdev_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
-> > +		unsigned int flags, struct iomap *iomap, struct iomap *srcmap)
-> > +{
-> > +	struct block_device *bdev = I_BDEV(inode);
-> > +	loff_t isize = i_size_read(inode);
-> > +
-> > +	iomap->bdev = bdev;
-> > +	iomap->offset = ALIGN_DOWN(offset, bdev_logical_block_size(bdev));
-> > +	if (WARN_ON_ONCE(iomap->offset >= isize))
-> > +		return -EIO;
+On Tue, May 23, 2023 at 10:12:49PM +0300, Jarkko Sakkinen wrote:
+> On Tue May 23, 2023 at 9:53 PM EEST, Jarkko Sakkinen wrote:
+> > On Mon May 22, 2023 at 5:31 PM EEST, Lino Sanfilippo wrote:
+> > > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > >
+> > > Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
+> > > interrupts instead of polling on all capable TPMs. Unfortunately, on some
+> > > products the interrupt line is either never asserted or never deasserted.
+> > >
+> > > The former causes interrupt timeouts and is detected by
+> > > tpm_tis_core_init(). The latter results in interrupt storms.
+> > >
+> > > Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkPad
+> > > L490 and Inspur NF5180M6:
+> > >
+> > > https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel@redhat.com/
+> > > https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org/
+> > >
+> > > The current approach to avoid those storms is to disable interrupts by
+> > > adding a DMI quirk for the concerned device.
+> > >
+> > > However this is a maintenance burden in the long run, so use a generic
+> > > approach:
+> >
+> > I'm trying to comprehend how you evaluate, how big maintenance burden
+> > this would be. Adding even a few dozen table entries is not a
+> > maintenance burden.
+
+I do worry about how many cases will be reported once 6.4 is released,
+and this eventually makes its way into distributions. In either case
+the dmi table will need to be maintained. The UPX-11i case is a
+different issue, and IIRC the L490 it needed a DMI entry, because
+trying to catch the irq storm wasn't solving the issue there. I
+imagine other odd cases will be popping up as well.
+
+So far we have 2 irq storm reports with peterz's P360 Tiny, and I
+guess that Inspur system reported by the kernel test robot. Then there
+is whatever is going on with Peter Ujfalusi's UPX-11i.
+
+> >
+> > On the other hand any new functionality is objectively a maintanance
+> > burden of some measure (applies to any functionality). So how do we know
+> > that taking this change is less of a maintenance burden than just add
+> > new table entries, as they come up?
+> >
+> > > Detect an interrupt storm by counting the number of unhandled interrupts
+> > > within a 10 ms time interval. In case that more than 1000 were unhandled
+> > > deactivate interrupts, deregister the handler and fall back to polling.
+> >
+> > I know it can be sometimes hard to evaluate but can you try to explain
+> > how you came up to the 10 ms sampling period and 1000 interrupt
+> > threshold? I just don't like abritrary numbers.
 > 
-> I'm hitting this during booting:
-> [    5.016324]  <TASK>
-> [    5.030256]  iomap_iter+0x11a/0x350
-> [    5.030264]  iomap_readahead+0x1eb/0x2c0
-> [    5.030272]  read_pages+0x5d/0x220
-> [    5.030279]  page_cache_ra_unbounded+0x131/0x180
-> [    5.030284]  filemap_get_pages+0xff/0x5a0
-
-Why is filemap_get_pages() using unbounded readahead? Surely
-readahead should be limited to reading within EOF....
-
-> [    5.030292]  filemap_read+0xca/0x320
-> [    5.030296]  ? aa_file_perm+0x126/0x500
-> [    5.040216]  ? touch_atime+0xc8/0x150
-> [    5.040224]  blkdev_read_iter+0xb0/0x150
-> [    5.040228]  vfs_read+0x226/0x2d0
-> [    5.040234]  ksys_read+0xa5/0xe0
-> [    5.040238]  do_syscall_64+0x5b/0x80
+> Also here I wonder how you came up with this computational model. This
+> is not same as saying it is wrong. There's just whole stack of options.
 > 
-> Maybe we should consider this patch:
+> Out of top of my head you could e.g. window average the duration between
+> IRQs. When the average goes beyond threshold, then you shutdown
+> interrupts.
+
+Just to make sure I have it clear in my head, you mean when the
+average is shorter than the threshold duration between interrupts,
+yes? My brain wants to read 'When the average goes beyond threshold'
+as 'threshold < average'.
+
+Does the check need to be a rolling window like 1/2 currently has? I
+expect that if the problem exists it will be noticed in the first
+window checked. I think what I originally tried was to check over some
+interval from when the handler first ran, disable interrupts if
+needed, and then skip the check from then on when the handler ran.
+
+Regards,
+Jerry
+
 > 
-> diff --git a/block/fops.c b/block/fops.c
-> index 524b8a828aad..d202fb663f25 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -386,10 +386,13 @@ static int blkdev_iomap_begin(struct inode *inode,
-> loff_t offset, loff_t length,
+> The pro I would see in this that it is much easier intuitively discuss
+> how much there should be time in-between interrupts that the kernel
+> handles it, than how many IRQs you can stack into time interval, which
+> blows my head tbh.
 > 
->         iomap->bdev = bdev;
->         iomap->offset = ALIGN_DOWN(offset, bdev_logical_block_size(bdev));
-> -       if (WARN_ON_ONCE(iomap->offset >= isize))
-> -               return -EIO;
-> -       iomap->type = IOMAP_MAPPED;
-> -       iomap->addr = iomap->offset;
-> +       if (WARN_ON_ONCE(iomap->offset >= isize)) {
-> +               iomap->type = IOMAP_HOLE;
-> +               iomap->addr = IOMAP_NULL_ADDR;
-> +       } else {
-> +               iomap->type = IOMAP_MAPPED;
-> +               iomap->addr = iomap->offset;
-> +       }
+> BR, Jarkko
 
-I think Christoph's code is correct. IMO, any attempt to read beyond
-the end of the device should throw out a warning and return an
-error, not silently return zeros.
-
-If readahead is trying to read beyond the end of the device, then it
-really seems to me like the problem here is readahead, not the iomap
-code detecting the OOB read request....
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
