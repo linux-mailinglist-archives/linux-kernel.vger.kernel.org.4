@@ -2,103 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B512270DB0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D041870DB9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbjEWK6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S236611AbjEWLkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbjEWK6h (ORCPT
+        with ESMTP id S236568AbjEWLkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:58:37 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DA8FD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:58:36 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f608074b50so15153825e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684839515; x=1687431515;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i6w3sPrSomaK6vYQVMgu/kzGmiGHSmd5gsIIpynPqCg=;
-        b=ZqWAbyEakVKPpFD/J/z3kYo7lHMPrxJjYYN7fnLelta0e/YR9Xmz3GMlu5Ym+Zr2pK
-         ouFcbNJFQknKe98Zw+zI8kbqTwTPY6eLMWhFxiCcav6cBhxAlYya8e7aJifoqv0YAQzU
-         fqpJjF/TVcp938OLCWo5wRRGjYd1aLzQskm3YZ/H1fsua80DSr8LOwtPOSAFSfUcYw3z
-         LSIYmux9uryyokaXuXLYEvDl5CAxAu4mGn9Kb6kFhXm+Zq+FUdatjGkmMo43fAjnaKD3
-         Sj39zh1BKS0x+qo2iOwFlMoYkW3UXJZ1dgius2stQHDAsri6U35E6rETfSLp0N6DFzc9
-         sYKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684839515; x=1687431515;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i6w3sPrSomaK6vYQVMgu/kzGmiGHSmd5gsIIpynPqCg=;
-        b=iTroyqSM2ucBRYHUT/vnNJugxnz7oYGlHQ2ZkXHlTi0gdsv1fi1AcsPkUyr4VmS5EL
-         y25p/yJfRua9yX8HQAAQMpIhW7GnXJuvHoYGnNebj23tkKI3PUjU8CIdqRty2k006Mb5
-         G9tBIvL3tK8oGEYkbBxGo3kQMV2ld9x6PIWp5XW774Ofqyit8BMApPzsSOXQ6WhZAiB5
-         lnLguKn9cQyM6JyrsPE8UVf3Wk12PXRhgb6vXvlYznG/bHL+zAFSueu0dhwQE9ro7mmL
-         vNNow1LLP3nZtLWaDxof617YPTVBKuxh5fZUS1sLDAY9PLiYvI8R4AIhOsGkD3Vm3INf
-         nxdg==
-X-Gm-Message-State: AC+VfDxIGvli7UQx6SrR8Lc3Fnvlql3TeApeJHBss2Q9vjaPCiR4B05H
-        YtuNHWbzXbxDqL1mRSxip7xLnQ==
-X-Google-Smtp-Source: ACHHUZ7S/7Vokqqrj6HwXGeGDqC/4hlfaVpowDnOSEx8UktgQIfdViz/chTBaLrC2s80+i7yUZqCxA==
-X-Received: by 2002:a1c:f402:0:b0:3f4:23a4:7a93 with SMTP id z2-20020a1cf402000000b003f423a47a93mr10738378wma.25.1684839514687;
-        Tue, 23 May 2023 03:58:34 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id y21-20020a7bcd95000000b003f4e8530696sm11286717wmj.46.2023.05.23.03.58.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 03:58:34 -0700 (PDT)
-Message-ID: <af25cbbe-bfa9-3d29-360e-e4f932d286c8@baylibre.com>
-Date:   Tue, 23 May 2023 12:58:32 +0200
+        Tue, 23 May 2023 07:40:13 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5BE118;
+        Tue, 23 May 2023 04:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=u58gKGYImk19qWRxWKlrjAh5POyCRjifFqBhEoUWksk=; b=lYt51G6qfsyAQCtCCDMJ8pDclW
+        04RPhDEpqBfjX7FDBwBQWngCk5Yxv6NjbE3gnd7tjLDDPdE8BRS3NA0NeuUBc83FgM9BfxCtzCNF9
+        7/Zc50lwtiUDeH3HdQ0aOltxQZh6eSMz249+cnx4SgTAyMCGxf6KjUyOGI8oRfP8INZgC2MoUmTZd
+        iJG9OUWHGd7wSAS5y1PQFgZxX7ttHCgYwXcksJYvkfOmywILB/BwVU7K07RH42xCQ/cHN24XWASYO
+        Udd4D7WL0bwAl+Dnl7fh6oCy9nez0GLjgMgxZqscBmwe1WGYj4RU1f5pFGS2gxIoBlpq2gd9rn+kI
+        WED2RC8w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1Pjt-003UQV-1Q;
+        Tue, 23 May 2023 10:59:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 83490300338;
+        Tue, 23 May 2023 12:59:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3571220A99311; Tue, 23 May 2023 12:59:35 +0200 (CEST)
+Date:   Tue, 23 May 2023 12:59:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-tip-commits@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Len Brown <len.brown@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org
+Subject: Re: [tip: sched/core] sched/topology: Introduce sched_group::flags
+Message-ID: <20230523105935.GN83892@hirez.programming.kicks-ass.net>
+References: <20210911011819.12184-3-ricardo.neri-calderon@linux.intel.com>
+ <163344312261.25758.16010066552550079330.tip-bot2@tip-bot2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/2] clk: mediatek: Remove CLK_SET_PARENT from all MSDC
- core clocks
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, wenst@chromium.org,
-        chun-jie.chen@mediatek.com, mandyjh.liu@mediatek.com,
-        miles.chen@mediatek.com, zhaojh329@gmail.com,
-        daniel@makrotopia.org, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, Garmin.Chang@mediatek.com,
-        msp@baylibre.com, yangyingliang@huawei.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230516135205.372951-1-angelogioacchino.delregno@collabora.com>
- <20230516135205.372951-3-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230516135205.372951-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <163344312261.25758.16010066552550079330.tip-bot2@tip-bot2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 15:52, AngeloGioacchino Del Regno wrote:
-> Various MSDC core clocks, used for multiple MSDC controller instances,
-> share the same parent(s): in order to add parents selection in the
-> mtk-sd driver to achieve an accurate clock rate for all modes, remove
-> the CLK_SET_RATE_PARENT flag from all MSDC clocks for all SoCs: this
-> will make sure that a clk_set_rate() call performed for a clock on
-> a secondary controller will not change the rate of a common parent,
-> which would result in an overclock or underclock of one of the
-> controllers.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Matthias Brugger<matthias.bgg@gmail.com>
-> Reviewed-by: Markus Schneider-Pargmann<msp@baylibre.com>
+On Tue, Oct 05, 2021 at 02:12:02PM -0000, tip-bot2 for Ricardo Neri wrote:
 
-Tested on mt8365-evk board.
+> index 4e8698e..c56faae 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -716,8 +716,20 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
+>  		tmp = sd;
+>  		sd = sd->parent;
+>  		destroy_sched_domain(tmp);
+> -		if (sd)
+> +		if (sd) {
+> +			struct sched_group *sg = sd->groups;
+> +
+> +			/*
+> +			 * sched groups hold the flags of the child sched
+> +			 * domain for convenience. Clear such flags since
+> +			 * the child is being destroyed.
+> +			 */
+> +			do {
+> +				sg->flags = 0;
+> +			} while (sg != sd->groups);
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
-Tested-by: Alexandre Mergnat <amergnat@baylibre.com>
+
+I happened to be reading this here code and aren't we missing:
+
+	sg = sg->next;
+
+somewhere in that loop?
