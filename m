@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A0370D96C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508F470D978
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjEWJqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S236387AbjEWJrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232466AbjEWJq1 (ORCPT
+        with ESMTP id S236365AbjEWJrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:46:27 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2564B94;
-        Tue, 23 May 2023 02:46:26 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N9e2Jf018498;
-        Tue, 23 May 2023 09:46:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=owNN41mPBR4N6l5tMzylyQVvAepv02meg5SqhJakPBg=;
- b=exjbTfH+ETzR2x2fc7QmvqgWFotckieBXfIIFZhWM8w9jQl0uMbY2AxFnuEKWuTqGAsI
- bkABHwL+BIRatKuRkT8HQ5uGOtNMOMb+ffWroK8D1XI62sRjIsWx6MMDkE0s9EpX9rPP
- Pir8MjRmf+zWxgIA0VM3x89PWJUCeiZTL0oAu/OygdTWUi3/JcUfJPJBUWK2N5T/cOT+
- ogtf612/wGUWMg1gsp/3IlOcMKuu5VwH4Qdn8pPV0RnMaq5PcaEzv4r9M0vbaGJ124pq
- lr8ThJWJatc/GVyP/eXPd2U2EdqtnQNZKEyHqrIF4Eyh2cp7ztj7nWkvXJy+UAspibgd YA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qre8p1hht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 09:46:22 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34N9kLfV024196
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 09:46:21 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
- 2023 02:46:18 -0700
-Message-ID: <3fc567f6-613c-1e03-c679-2c550a5eaac6@quicinc.com>
-Date:   Tue, 23 May 2023 15:16:10 +0530
+        Tue, 23 May 2023 05:47:45 -0400
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A3A198
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:47:42 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f3af4295ddso4697155e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684835201; x=1687427201;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jX16/0rr81PfoyBcbhxvSU8kcPmdWqcVtTOE6rNVtKA=;
+        b=EY5l+r0xz+NAiuduyh4wKecXT7+gMK6MNDn5rmz9/kZTp3Rne4Sd1nK3hALIDICkY2
+         1b7/IQ7TVetGW8A8zs+oSSEAX8aBA2yEvGf43iBh5x8tPtCbjd+70s/0aw0+6UFH+ytr
+         Bbo9ywpheDhgXFt/5XF7aVCwGhA5aC9rwGZfZPPQLVwd4vEQAOV0ITZDYz1948GBbrNN
+         +n1lkH/w9rU0SOaM1t6VjOBe0rxx+nzmnSuKPyoMwKvAO3uFqll4TBAXTnnLI1YMEovD
+         fdOm0GyT1roMY+jd6tDJ3vF5I8QSBFQQqnAGAAPpK12WJQGP8WXaGs+AKGuTlmVLage9
+         wmPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684835201; x=1687427201;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jX16/0rr81PfoyBcbhxvSU8kcPmdWqcVtTOE6rNVtKA=;
+        b=HGJjkQzE0ZzkRoXkrmdjO/F7r1VrWRI+eF+j8qEtESr8C4tVItMH+nYroVLijxWCdQ
+         Sj16L3SrSJxpk43GS1u3YG3oAVgAAdm0PSyCPounjFh+z8YYdi+pE7MRfXfnRHMrV4lC
+         68e0TUeBZTEy7qSlWKPpybG+XC/p8FSsl2dR4G8EaPP4wjWqYD+ZsPY7B4BskSaTiI0G
+         1dEVQzdgdhRPPbEB7VqvQDoKRkprQEtetGhiAfN7s2j0pH+31dDCw6qOmmbixfNuzaUs
+         KxR9JV2MslCGy0/GqI9wTLI3ei4Q8O+rhlnhaF76eQcHuH80SNhCe/yb1bAtpoLSGCuh
+         l8Wg==
+X-Gm-Message-State: AC+VfDwtaRVpIIn6Nqss2u3lJfbwgF8O7EoSMHM2DstJsUog6yqzoDS6
+        MGL0vFYsd+cadkmT4QlAEDJ63VmN7jo=
+X-Google-Smtp-Source: ACHHUZ4ZhxHDMYjlNF24azrKOrmoZqMQf7u7GvXlcuG4S59OoYBDLZzPDeQ2bBpSIHxPKF/+EkVXdg==
+X-Received: by 2002:ac2:5333:0:b0:4f3:a4ad:ef30 with SMTP id f19-20020ac25333000000b004f3a4adef30mr4807032lfh.22.1684835200676;
+        Tue, 23 May 2023 02:46:40 -0700 (PDT)
+Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id i15-20020a056512006f00b004f38fef80e7sm1285953lfo.208.2023.05.23.02.46.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 02:46:40 -0700 (PDT)
+Message-ID: <9641aa06-4925-051c-2ebe-22e43bf9dd4f@gmail.com>
+Date:   Tue, 23 May 2023 12:46:39 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] firmware: qcom_scm: use the SCM_CONVENTION based on ARM /
- ARM64
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_eberman@quicinc.com>
-References: <20230522044512.4787-1-quic_kathirav@quicinc.com>
- <CAH=2NtydsLsTRhWEqocg4AQPzk5QURHeKNe7N-DhhV2-qnic6Q@mail.gmail.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <CAH=2NtydsLsTRhWEqocg4AQPzk5QURHeKNe7N-DhhV2-qnic6Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Language: en-US, en-GB
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     support.opensource@diasemi.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com,
+        linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+References: <20230419-dynamic-vmon-v3-0-4179b586d8a1@skidata.com>
+ <20230419-dynamic-vmon-v3-1-4179b586d8a1@skidata.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH RFC v3 1/5] regulator: move monitor handling into own
+ function
+In-Reply-To: <20230419-dynamic-vmon-v3-1-4179b586d8a1@skidata.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Oj-fhDeVTA6RYdLIrQG0zMtYoyechcFz
-X-Proofpoint-GUID: Oj-fhDeVTA6RYdLIrQG0zMtYoyechcFz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_06,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 adultscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230080
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Benjamin,
+
+Thanks for working on this. :)
+
+On 5/21/23 14:39, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
+> 
+> Similar to the existing implementation, the new function does not handle
+> EOPNOTSUPP as an error. The initial monitoring state is set to the
+> regulator state.
 
 
-On 5/22/2023 12:03 PM, Bhupesh Sharma wrote:
-> Hi,
-> 
-> On Mon, 22 May 2023 at 10:15, Kathiravan T <quic_kathirav@quicinc.com> wrote:
->>
->> During SCM probe, to identify the SCM convention, scm call is made with
->> SMC_CONVENTION_ARM_64 followed by SMC_CONVENTION_ARM_32. Based on the
->> result what convention to be used is decided.
->>
->> IPQ chipsets starting from IPQ807x, supports both 32bit and 64bit kernel
->> variants, however TZ firmware runs in 64bit mode. When running on 32bit
->> kernel, scm call is made with SMC_CONVENTION_ARM_64 is causing the
->> system crash, due to the difference in the register sets between ARM and
->> AARCH64, which is accessed by the TZ.
-> 
-> If a crash is being fixed, should we use a Fixes tag as well?
-> 
->> To avoid this, use SMC_CONVENTION_ARM_64 only on ARM64 builds.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
->>   drivers/firmware/qcom_scm.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index fde33acd46b7..db6754db48a0 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -171,6 +171,7 @@ static enum qcom_scm_convention __get_convention(void)
->>          if (likely(qcom_scm_convention != SMC_CONVENTION_UNKNOWN))
->>                  return qcom_scm_convention;
->>
->> +#if IS_ENABLED(CONFIG_ARM64)
->>          /*
->>           * Device isn't required as there is only one argument - no device
->>           * needed to dma_map_single to secure world
->> @@ -191,6 +192,7 @@ static enum qcom_scm_convention __get_convention(void)
->>                  forced = true;
->>                  goto found;
->>          }
->> +#endif
-> 
-> If we are already inside a 'CONFIG_ARM64' define here ^^^, do we even
-> need the following snippet now:
-> 
-> /*
->       * Some SC7180 firmwares didn't implement the
->       * QCOM_SCM_INFO_IS_CALL_AVAIL call, so we fallback to forcing ARM_64
->       * calling conventions on these firmwares. Luckily we don't make any
->       * early calls into the firmware on these SoCs so the device pointer
->       * will be valid here to check if the compatible matches.
->       */
->      if (of_device_is_compatible(__scm ? __scm->dev->of_node : NULL,
-> "qcom,scm-sc7180")) {
->          forced = true;
->          goto found;
->      }
-> 
-> 'forced' will always be 'true' now that we are inside the CONFIG_ARM64
-> check above, right?
+As far as I see, this changes the existing logic. Previously the 
+monitoring was unconditionally enabled for all regulators, now it gets 
+only enabled for regulators which are marked as enabled.
 
-Well, i think you can't get rid off the variable here as main purpose
-of the variable seems to be print the mode is being forced here
-(kind of workaround for a firmware) here and not natural.
+Furthermore, if I am not reading this wrong, the code tries to disable 
+all protections if regulator is not enabled at startup(?)
 
-is not that ?
+I am not saying this is wrong. I am just saying that things will change 
+here and likely to break something.
 
--- Mukesh
+There are PMICs like ROHM BD9576, where the protection can not be disabled.
 
-> So, maybe you can clean-up that path as well.
-> 
-> Thanks,
-> Bhupesh
+For example, the bd9576_set_uvp() has:
+         if (severity == REGULATOR_SEVERITY_PROT) {
+                 if (!enable || lim_uV)
+                         return -EINVAL;
+                 return 0;
+         }
+
+I am unsure if we might also have cases where some regulator could 
+really be enabled w/o core knowing it. There can also be a problem if we 
+have hardware where monitoring is common for all regulators, eg either 
+globally enabled / disabled.
+
+Yours,
+	-- Matti
+
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
