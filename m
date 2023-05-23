@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C9770D9AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22C970D9B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236327AbjEWJ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S236328AbjEWJ6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 05:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjEWJ54 (ORCPT
+        with ESMTP id S236267AbjEWJ56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:57:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EF2E6;
+        Tue, 23 May 2023 05:57:58 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 822EC94;
         Tue, 23 May 2023 02:57:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88AF262F6B;
-        Tue, 23 May 2023 09:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3D4C433D2;
-        Tue, 23 May 2023 09:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684835875;
-        bh=Lo5iC0IBKszoRhVHalozzYt7yMV352ePXrHUk7RuLkY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tCEDJ2Yef9wgjbGlDXXmOVigYGxMK1+atTQEqCdQHYU27mGwJHhOh1e0P/mPtPNuL
-         O4TgqsVsoQVRNNdwHY9/y52oNE+ETCkkm423ZwlVdIKDgWVbEQaaBvIOLy+iWu6PUy
-         dfVdbza/BqgluAKa5zarlPgRQIRW8fuZRMkfc+ecMG0QBtD+7KFQsPVZy9XpICpqt6
-         5F3pZtVuYichIEj6vmtv0aBP1NT7oZG0jjSRd3s37LAPet3eSJUQcZU1GXXfl4vrF6
-         NPakRBwbGaUb2lzw7WLaxb5JuNbIKXm9ZPTG34DpFxTzS3IGww4CmB26liqi715iYq
-         O2KAR6Sb6M/Rw==
-Date:   Tue, 23 May 2023 10:57:49 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxqPEijmxkHwYAAA--.94S3;
+        Tue, 23 May 2023 17:57:54 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_7MhjmxkvhxwAA--.56731S2;
+        Tue, 23 May 2023 17:57:54 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
- spi
-Message-ID: <8405acaa-4684-4b81-9839-b24d35d61013@sirena.org.uk>
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
- <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
- <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
- <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
- <9f6672a2-4a39-4a34-9c2a-0257b05c9699@sirena.org.uk>
- <5bbc1f55-1e1c-8c74-f9df-2ec950091ba4@loongson.cn>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rL8/Sd4Ohh6l6kLJ"
-Content-Disposition: inline
-In-Reply-To: <5bbc1f55-1e1c-8c74-f9df-2ec950091ba4@loongson.cn>
-X-Cookie: Beware of low-flying butterflies.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: [PATCH v2] perf symbol: Add LoongArch case in get_plt_sizes()
+Date:   Tue, 23 May 2023 17:57:53 +0800
+Message-Id: <1684835873-15956-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Dx_7MhjmxkvhxwAA--.56731S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7WF4fJFy7Cr4fKw4UWFy8Zrb_yoW8Gry5pw
+        nxuFW8K3WDtFnxG3WrJF4rXF4fWFsavFy2gFy3XrWv9Fs7uw10grWxAFyY9FWUXFykXa40
+        vr1qk3yxuF10qr7anT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2
+        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I
+        0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCI
+        bckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
+        I_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
+        6r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj4
+        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
+        JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0L0ePUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,32 +66,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We can see the following definitions in bfd/elfnn-loongarch.c:
 
---rL8/Sd4Ohh6l6kLJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  #define PLT_HEADER_INSNS 8
+  #define PLT_HEADER_SIZE (PLT_HEADER_INSNS * 4)
 
-On Tue, May 23, 2023 at 10:08:25AM +0800, zhuyinbo wrote:
+  #define PLT_ENTRY_INSNS 4
+  #define PLT_ENTRY_SIZE (PLT_ENTRY_INSNS * 4)
 
-> okay, I got it.  thanks!  and I noticed my v11 patch already exists in
-> your ci tree that contain the title change and I whether need send the
-> v12 that for fix the binding patch title ?
+so plt header size is 32 and plt entry size is 16 on LoongArch,
+let us add LoongArch case in get_plt_sizes().
 
-No, it's fine.
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elfnn-loongarch.c
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
---rL8/Sd4Ohh6l6kLJ
-Content-Type: application/pgp-signature; name="signature.asc"
+v2: Add EM_LOONGARCH definition to avoid build error
 
------BEGIN PGP SIGNATURE-----
+ tools/perf/util/symbol-elf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRsjhwACgkQJNaLcl1U
-h9AG6wf/ei9O002a1IBwIiaUxrHjJIvWYtoI+Y6hfvK10jxNALl9VbncSk89oClS
-mTRqYSNNGeOE9XxehNerydK3LvjS+nBqt+QeIbqsmbnhTcJJuintFcp6NVqP62A2
-TIw6Pj1qXTifVOFHeobsVIcywB0H2XYCi6FPF7RhfuMZj61ToQ/M/KFzsU47Vq2s
-xDQ2LM4fJ3HyQ6SvpQ7AYtX/dbsY1XSI582GodZjNV3dacGBNo32j0aJH3HzLtam
-mklx+1guw3Nwa+6XRGxsiBdPUJQexjvfLIrIKg3osp3cNqI4rPxgFds4348wb1dw
-4h7j3IeL9RyVexYCHNKGmWNPspfJcA==
-=6HnO
------END PGP SIGNATURE-----
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index b2ed9cc..b3dbf6c 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -35,6 +35,10 @@
+ #define EM_AARCH64	183  /* ARM 64 bit */
+ #endif
+ 
++#ifndef EM_LOONGARCH
++#define EM_LOONGARCH	258
++#endif
++
+ #ifndef ELF32_ST_VISIBILITY
+ #define ELF32_ST_VISIBILITY(o)	((o) & 0x03)
+ #endif
+@@ -411,6 +415,10 @@ static bool get_plt_sizes(struct dso *dso, GElf_Ehdr *ehdr, GElf_Shdr *shdr_plt,
+ 		*plt_header_size = 32;
+ 		*plt_entry_size = 16;
+ 		return true;
++	case EM_LOONGARCH:
++		*plt_header_size = 32;
++		*plt_entry_size = 16;
++		return true;
+ 	case EM_SPARC:
+ 		*plt_header_size = 48;
+ 		*plt_entry_size = 12;
+-- 
+2.1.0
 
---rL8/Sd4Ohh6l6kLJ--
