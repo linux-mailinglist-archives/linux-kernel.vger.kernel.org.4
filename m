@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C6770E5AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A202570E5B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238341AbjEWTgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
+        id S238392AbjEWTge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjEWTg3 (ORCPT
+        with ESMTP id S233459AbjEWTgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:36:29 -0400
+        Tue, 23 May 2023 15:36:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427591BD;
-        Tue, 23 May 2023 12:36:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309D4E42;
+        Tue, 23 May 2023 12:36:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB330635E2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBE9260BE9;
+        Tue, 23 May 2023 19:36:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 718C4C4339E;
         Tue, 23 May 2023 19:36:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F3D8C433EF;
-        Tue, 23 May 2023 19:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684870574;
-        bh=byeLrJ5QqBdhPYvwjWOCFyw8OwXSqWI7cTainSrSzzs=;
+        s=k20201202; t=1684870575;
+        bh=YpLNa9GI5B0k97SFnyAPA6gdmqxiWuHNv94RrcTFvPs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XRmZe1CebK6G/YM94sfP6ZEx0RrLtpoJDVQbXGqzfqmp0VuTCpC/A2qZ9EsMVHV6O
-         E6/ZRIehMResdpQJ/N3EqagIfTbhYWMMjpUC/K9/osWozVV0+p77od5eZdWT0vguJY
-         ql9bOlBP5LCegnzrY5ixsojXdT/1jRH+PqdgNhCokR1bwO+Ok/tcFeiCo9gu2HwA0o
-         rVUrPzco7lRYaiY7v9lCRZkOExg7lAKhrhzLp8xBYjiCvxKCXk9gdG0aUn7U+pug1E
-         ZsyrP+CPF7vFgOBVE7KsnuvdOOhd3LmvkFHG6qkWwXSIbKNWrgjV/veFUXnuyPBS63
-         0kcKNBmHzoMqA==
+        b=ZrpZ8ZRlbn+tUXbyGw5dPexoUoiSLkzUyVEorM6Ll35qLzs4BcuivRQLx56oUTjQx
+         cDP1wlMiEtSu7Y8hWM4JQUhHtTKXllrdT/3O16pI7Vc2gdjTjmmbUrrrYzRaOtB37k
+         aA0qT8JIOBAR+1hQvUVRB7Gmq2CmBF9Luc8+qr7ZmFqE1swmc5T7i2NUDjpJbBpT5A
+         /MEj3W69/kNR8r51EACFiKQUnz86AYsH6rxro79CdCGwkAI1y6QURRIL/RNG4Nw1I5
+         gGZxekiEoRB1/J5+mrIyF15S2J6uHHQSuah1QcX/GTly+Gv2RNoM1cpUchy2vntZYf
+         NqFNnwatbbEHA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
-        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH v4 0/3] arm64: dts: qcom: QRB4210-RB2 board: Enable more peripherals
-Date:   Tue, 23 May 2023 12:40:03 -0700
-Message-Id: <168487080174.3522253.4844936486806688277.b4-ty@kernel.org>
+To:     Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Subject: Re: [PATCH 0/5] QTI RB2 features
+Date:   Tue, 23 May 2023 12:40:04 -0700
+Message-Id: <168487080174.3522253.18438283481936566941.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516075908.2323372-1-bhupesh.sharma@linaro.org>
-References: <20230516075908.2323372-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20230515-topic-rb2-bits-v1-0-a52d154a639d@linaro.org>
+References: <20230515-topic-rb2-bits-v1-0-a52d154a639d@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,29 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 13:29:05 +0530, Bhupesh Sharma wrote:
-> Changes since v3:
-> -----------------
-> - v3 can be seen here: https://lore.kernel.org/lkml/20230505075354.1634547-1-bhupesh.sharma@linaro.org/
-> - Use explicit qrb4210 .mbn files instead of qrb4210-rb2 .mbn ones.
-> - Collected R-Bs from Dmitry.
+On Mon, 15 May 2023 15:04:11 +0200, Konrad Dybcio wrote:
+> This short series brings a couple of fixes and features
+> (such as display out) for the QTI RB2 board. Similar patches
+> for the RB1 should be expected soon.
 > 
-> Changes since v2:
-> -----------------
-> - v2 can be seen here: https://lore.kernel.org/linux-arm-msm/20230501105832.1185477-1-bhupesh.sharma@linaro.org/
-> - Use explicit qrb4210-rb2 .mbn files instead of sm6115 .mdt ones.
-> - Collected Acks and R-Bs from Konrad and Krzysztof.
+> Depends on and based atop (in order):
+> 
+> 20230505075354.1634547-1-bhupesh.sharma@linaro.org
+> 20230502053534.1240553-1-bhupesh.sharma@linaro.org
+> 20230505064039.1630025-1-bhupesh.sharma@linaro.org
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] arm64: dts: qcom: qrb4210-rb2: Add SD pinctrl states
-      commit: 10254fb73fdadec81e47a776e149863a13030291
-[2/3] arm64: dts: qcom: qrb4210-rb2: Fix CD gpio for SDHC2
-      commit: 14e6c47b628788a8c8634bc59b2dd50d68a74de3
-[3/3] arm64: dts: qcom: qrb4210-rb2: Enable aDSP and cDSP remoteproc nodes
-      commit: 50931b44dc751784cdc5721bf30a79093c2c9fe9
+[1/5] arm64: dts: qcom: qrb4210-rb2: Describe fixed regulators
+      commit: e130889286881e561a2904c5da44c3cbf5d5cd79
+[2/5] arm64: dts: qcom: qrb4210-rb2: Enable display out
+      commit: f7b01e07e89ced85975345b12cb63538ee07e91c
+[3/5] arm64: dts: qcom: qrb4210-rb2: Add GPIO LEDs
+      commit: fd888ed763415c31cf0ea7f044bd6cf429832f0e
+[4/5] arm64: dts: qcom: qrb4210-rb2: Enable load setting on SDHCI VQMMC
+      commit: 42be4edd8910a5f998a5bd993f42ea7112dd8f80
+[5/5] arm64: dts: qcom: qrb4210-rb2: Enable CAN bus controller
+      commit: 34a7cdf075410c30ca88c85627520dda74d3bd30
 
 Best regards,
 -- 
