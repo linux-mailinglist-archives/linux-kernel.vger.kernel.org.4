@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE96370DF27
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D01A70DF29
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237243AbjEWO1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
+        id S237100AbjEWO22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbjEWO1g (ORCPT
+        with ESMTP id S233081AbjEWO20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:27:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E2EDD;
-        Tue, 23 May 2023 07:27:35 -0700 (PDT)
+        Tue, 23 May 2023 10:28:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A67E9;
+        Tue, 23 May 2023 07:28:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3B9F63313;
-        Tue, 23 May 2023 14:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A79D9C433EF;
-        Tue, 23 May 2023 14:27:32 +0000 (UTC)
-Date:   Tue, 23 May 2023 10:27:30 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v21 26/30] splice: Convert trace/seq to use
- copy_splice_read()
-Message-ID: <20230523102730.6deaca47@rorschach.local.home>
-In-Reply-To: <20230520000049.2226926-27-dhowells@redhat.com>
-References: <20230520000049.2226926-1-dhowells@redhat.com>
-        <20230520000049.2226926-27-dhowells@redhat.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B322F6158A;
+        Tue, 23 May 2023 14:28:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5D0C433EF;
+        Tue, 23 May 2023 14:28:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684852104;
+        bh=YV/fSjveRhxaxPVhHKWJb6aaBFirYi5GNXQxhdG0qsQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=p/V5oFoDjTdncti0gFXfVQac01Vf63UAW60svjZkcpmmLo/YSSWE7fCgsc5kloD9g
+         Hi8KFNuu5apH1I+JAjSOhiPYscItU5Hc7CvnAAc/XU8Gi/+YDoKH0nZHH27ERipxfl
+         gn/n/zLdx7+vkNMJQHrWI3UyDd2EnXeI3pIcFb06myhBWbeqaWJHz/2Ui3L5m6+E1B
+         eVO38Ur804tkZdPqO54Z5B7x0Sm30JmY6e8w76ndkX8bMBWRapDLtTHaF9uWPBNzPT
+         bqnaHuFk3pCmxwI4kkUa1qaLRDk4a1seSqmk8O8br7iTkfKV7rIU0XAY53qjTqtQav
+         c0Ktiu8ggCuIQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     srinivas.goud@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+In-Reply-To: <20230523090124.3132-1-ckeepax@opensource.cirrus.com>
+References: <20230523090124.3132-1-ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH v3] spi: spi-cadence: Add missing kernel doc for
+ clk_rate in cdns_spi
+Message-Id: <168485210277.188599.652228420789425195.b4-ty@kernel.org>
+Date:   Tue, 23 May 2023 15:28:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 May 2023 01:00:45 +0100
-David Howells <dhowells@redhat.com> wrote:
-
-> For the splice from the trace seq buffer, just use copy_splice_read().
+On Tue, 23 May 2023 10:01:24 +0100, Charles Keepax wrote:
+> Add the missing kernel documentation to silence the build warning.
 > 
-> In the future, something better can probably be done by gifting pages from
-> seq->buf into the pipe, but that would require changing seq->buf into a
-> vmap over an array of pages.
 > 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Steven Rostedt <rostedt@goodmis.org>
-> cc: Masami Hiramatsu <mhiramat@kernel.org>
-> cc: linux-kernel@vger.kernel.org
-> cc: linux-trace-kernel@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-mm@kvack.org
-> ---
->  kernel/trace/trace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index ebc59781456a..c210d02fac97 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -5171,7 +5171,7 @@ static const struct file_operations tracing_fops = {
->  	.open		= tracing_open,
->  	.read		= seq_read,
->  	.read_iter	= seq_read_iter,
-> -	.splice_read	= generic_file_splice_read,
-> +	.splice_read	= copy_splice_read,
 
-Anyway, for this change:
+Applied to
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
--- Steve
+Thanks!
 
->  	.write		= tracing_write_stub,
->  	.llseek		= tracing_lseek,
->  	.release	= tracing_release,
+[1/1] spi: spi-cadence: Add missing kernel doc for clk_rate in cdns_spi
+      commit: b6e4686ca8c3932ed0eee66c016c05c870e44f5d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
