@@ -2,72 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EDD70D437
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A4970D445
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 08:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbjEWGpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 02:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S235039AbjEWGrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 02:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbjEWGpV (ORCPT
+        with ESMTP id S235007AbjEWGrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 02:45:21 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C43511F;
-        Mon, 22 May 2023 23:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0gea6RehJXx9DE2mUeb9T6tvlF6DNioynOY2MO8ezuc=; b=Ox6CC6l+zWAZhhJfa1q2YddRlq
-        2ayM85IfKhwJ7m7JOwrnDLaSuCDKOUjUTefjigDVLII9Gxxj+V8ccY38we9x92Pr5r8dO6iOL+4Ih
-        1fdJZzuoNBNQlL7XWpuLlVk1bH0uWrjppmcokLoVbI/+UzoRe5VHZK8pW02pU3wcDIEiXRdwBMV1Y
-        Lr8xIHXBdJukeHW7sAll5I0I/wv4bW/xiDLY1YqFSDkNzlIoGAikETRPs/gJ6TPccCHabdLt1aCji
-        OOMfKZo6fH6J4HqKV7RZ8LMFKYc0AB7GvZgwDw0MsXGxXo7PMrHR4jfSzflJcCeM0nRL+nJhm9U8U
-        HAiIL7WA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1Llg-0096va-27;
-        Tue, 23 May 2023 06:45:12 +0000
-Date:   Mon, 22 May 2023 23:45:12 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        will@kernel.org, nicolinc@nvidia.com,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, jgg@nvidia.com,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH] mmu_notifiers: Notify on pte permission upgrades
-Message-ID: <ZGxg+I8FWz3YqBMk@infradead.org>
-References: <20230522063725.284686-1-apopple@nvidia.com>
+        Tue, 23 May 2023 02:47:37 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E17118;
+        Mon, 22 May 2023 23:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684824455; x=1716360455;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gVWbWiw/ZDPW0HOBd+nK8L6v2Q4lPpGLd6wth1TKIO8=;
+  b=qKT+hR+Wh+HoFZMgkt1LApFrXNzkvSAUSXGwYUk8HFAeomi1nP/HCwGA
+   WYqg9IGm+Rg2s2WbxcLvO1gxlzamXGz/TWz0lQwq0o7+fo0KwV7OPxkcx
+   SeLFDy7+LZDrdvg+ShpKk/GsAgN7hgQIr3Y35vFGSs6OuN98Wxy54kzfc
+   +mBbtIlPD3aIF+x/g8hFDzQInHUajRBWfCZuQyCu3esGiRJ1zaMiyyGhd
+   ACurkMxOZxPUsqPQDRBQ8FdwBSqjCbqz6jKuxz5VIutb1ph86IUNMuIg2
+   BJpj9KTnjvlsIT79Yu6/dDPBnYpbGU2SveRE01cUZPhWhKbMc1ga+hYIL
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="asc'?scan'208";a="216790503"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 23:47:29 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 23:47:28 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 22 May 2023 23:47:27 -0700
+Date:   Tue, 23 May 2023 07:47:05 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Jaswinder Singh <jassisinghbrar@gmail.com>,
+        Jaswinder Singh <jassi.brar@samsung.com>,
+        Boojin Kim <boojin.kim@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH] dmaengine: pl330: rename _start to prevent build error
+Message-ID: <20230523-lushly-purr-9a93ea9f3573@wendy>
+References: <20230523000606.9405-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Z31axD9H5YaGMLWg"
 Content-Disposition: inline
-In-Reply-To: <20230522063725.284686-1-apopple@nvidia.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230523000606.9405-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 04:37:25PM +1000, Alistair Popple wrote:
-> This problem was discovered during testing of an ARM SMMU
-> implementation that does not support broadcast TLB maintenance
-> (BTM). In this case the SMMU driver uses notifiers to issue TLB
-> invalidates. For read-only to read-write pte upgrades the SMMU
-> continually returned a read-only PTE to the device, even though the
-> CPU had a read-write PTE installed.
-> 
-> Sending a mmu notifier event to the SMMU driver fixes the problem by
-> flushing secondary TLB entries. A new notifier event type is added so
-> drivers may filter out these invalidations if not required. Note a
-> driver should never upgrade or install a PTE in response to this mmu
-> notifier event as it is not synchronised against other PTE operations.
+--Z31axD9H5YaGMLWg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I don't see these SMMU driver changes anywhere.  I.e. you're adding dead
-code as far as I can tell.
+Hey Randy,
+
+On Mon, May 22, 2023 at 05:06:06PM -0700, Randy Dunlap wrote:
+> "_start" is used in several arches and proably should be reserved
+> for ARCH usage. Using it in a driver for a private symbol can cause
+> a build error when it conflicts with ARCH usage of the same symbol.
+>=20
+> Therefore rename pl330's "_start" to "_start_thread" so that there
+> is no conflict and no build error.
+
+_start_thread() seems pretty generic to me too, but there don't appear
+to be any users & it is certainly better than the one causing build
+issues!
+
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+>=20
+> drivers/dma/pl330.c:1053:13: error: '_start' redeclared as different kind=
+ of symbol
+>  1053 | static bool _start(struct pl330_thread *thrd)
+>       |             ^~~~~~
+> In file included from ../include/linux/interrupt.h:21,
+>                  from ../drivers/dma/pl330.c:18:
+> arch/riscv/include/asm/sections.h:11:13: note: previous declaration of '_=
+start' with type 'char[]'
+>    11 | extern char _start[];
+>       |             ^~~~~~
+
+--Z31axD9H5YaGMLWg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGxhZQAKCRB4tDGHoIJi
+0rdIAP0Wabw96Kn9nVf+19fFM6AKRhl6z6gMm92JhKoWeudwbgEA7e0bLMA81R1s
+DRBqxN4TNE5YBg3iPigE5gMne6P0KQ4=
+=sBDX
+-----END PGP SIGNATURE-----
+
+--Z31axD9H5YaGMLWg--
