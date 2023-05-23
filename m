@@ -2,168 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264AC70DED7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FF670DED3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237230AbjEWOMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S237295AbjEWOLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237062AbjEWOML (ORCPT
+        with ESMTP id S237107AbjEWOL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:12:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94C01BDA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684851017;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A1C8usowa2pgKunQ7Y0kEci+NwOJdReFKzh3ExUrheY=;
-        b=UIdI3n7VjSU8U7N1VIbMpeR9HwwfxqL9rNkNVH4OduHKQb/tx8O53P2KVOeFh9n5ip+X2O
-        ClxecUIm/tAln9pRaNODYLHcvW9nE74kMGxq3Rp/RY4vaOiYrkSka8U4KyxXnVKGSHaXxp
-        Z7zp7MaZlkU66D8fqE0N7DklmoG37FU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-651-rmEtxuW9O6mGZJYZGMEtUg-1; Tue, 23 May 2023 10:10:15 -0400
-X-MC-Unique: rmEtxuW9O6mGZJYZGMEtUg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f4f2f5098bso42821975e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:10:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684851014; x=1687443014;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A1C8usowa2pgKunQ7Y0kEci+NwOJdReFKzh3ExUrheY=;
-        b=B+kiXP7KCNaLwb4r35EukxZKHySvVhYUJpNripaEF5opIRDqDEtJz1rhPLr83LXYJJ
-         EChYBQ50OV+KYiygQExvO2HGlpEck011r6LNlgjpg1UHUSOM6j3l0mz23cDLJrEeNPci
-         xscLOCvHxkaQ8nk2+xp7a0T8c8f3rrBNhqCQwgcnGj5GGUgQ1rT57mWpjUI7mwguocmQ
-         S3iCLFwij9yPNld9Rs+T1zCRF5i0f7RsRya+OLEUJNgO+oW02fyKRZ0C4bpFdJxP3bpk
-         1pCZkg8Nq395Uv2Ebn7ONuS3IIcvyt2FmakQVAmgUDJ1h804amyzYeHRxwVpjt/TzQNf
-         BxYQ==
-X-Gm-Message-State: AC+VfDzVc2eIhbTUhQ4GkQ/R1yG4piE0bTfTqyuYM/Qr/fhANir0ttkp
-        +utsTkBeyPnQfLYsQeufgt3+Cc+U6UfvTp53wbBt6j8sDGXoYJJ8WX2JKxKEsobctMl9E9V8mv1
-        VyhOZsvGxwh84/4+5F13xHDVn
-X-Received: by 2002:adf:e60a:0:b0:2f9:61b5:7796 with SMTP id p10-20020adfe60a000000b002f961b57796mr10943783wrm.29.1684851014400;
-        Tue, 23 May 2023 07:10:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6NSL8riuboTPFlh9jPmS1Q+b3+kyv16SjRb+BhFJwza6MlsDIn0PSByLRqUU0fiMIlxmhoyw==
-X-Received: by 2002:adf:e60a:0:b0:2f9:61b5:7796 with SMTP id p10-20020adfe60a000000b002f961b57796mr10943759wrm.29.1684851014003;
-        Tue, 23 May 2023 07:10:14 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
-        by smtp.gmail.com with ESMTPSA id y9-20020a05600c364900b003f4266965fbsm15162163wmq.5.2023.05.23.07.10.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 07:10:13 -0700 (PDT)
-Message-ID: <c3530ffb-c004-98cd-2651-280c391aca92@redhat.com>
-Date:   Tue, 23 May 2023 16:10:12 +0200
+        Tue, 23 May 2023 10:11:28 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782E6118;
+        Tue, 23 May 2023 07:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1684851033;
+        bh=PDHlcbL/ejRZ6x1/yL0bJ5WxIRJfwNls+CNLgnDmnoc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CqOxg9u7+LhkH/4oJBHp8uQ6loDLQkuRwGE7kR8nuFhALbOo3p//YQhVB5GHYUf5C
+         yqpgAoNf50tTrCWflYlTjPYY+l/ntso4hGewgyjsUo0KrnU55cem672vwdB4rL7tcg
+         qdv+zJNA8EfKwNGBRh4wnZKaqhsaaosjSViNLTdqAUPPFl+UhBMhbjIfDtKyycVoOM
+         eYAsA+3+qdQzBdjxUBzdiee1LFJj1RvPUUeKSSXXyKYFWOdDV+CKMD9XAJwBEK1Lkh
+         xRwbHCqkT4+9FT663T9+/3VOguij/tQ0RWOiTi4Jr0OMiD8Ynx4hM0DD77OGIA337G
+         sw+87KXXQMPFQ==
+Received: from [172.16.0.117] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QQbnN6J69z13My;
+        Tue, 23 May 2023 10:10:32 -0400 (EDT)
+Message-ID: <18286958-df67-f5c8-157a-9b0e8764a299@efficios.com>
+Date:   Tue, 23 May 2023 10:10:40 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH 1/4] rseq: Add sched_state field to struct rseq
 Content-Language: en-US
-To:     Alexey Izbyshev <izbyshev@ispras.ru>
-Cc:     Florent Revest <revest@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
-        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
-References: <20230517150321.2890206-1-revest@chromium.org>
- <20230517150321.2890206-4-revest@chromium.org>
- <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
- <884d131bbc28ebfa0b729176e6415269@ispras.ru>
- <d7e3749c-a718-df94-92af-1cb0fecab772@redhat.com>
- <3c2e210b75bd56909322e8a3e5086d91@ispras.ru>
- <c63053b0-5797-504d-7896-c86271b64162@redhat.com>
- <7c572622c0d8e283fc880fe3f4ffac27@ispras.ru>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
-In-Reply-To: <7c572622c0d8e283fc880fe3f4ffac27@ispras.ru>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        libc-alpha@sourceware.org, Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Florian Weimer <fweimer@redhat.com>
+References: <20230517152654.7193-1-mathieu.desnoyers@efficios.com>
+ <20230517152654.7193-2-mathieu.desnoyers@efficios.com>
+ <ZGaddGcHw7nJE+Gh@boqun-archlinux>
+ <06ee47e0-99e0-4b6a-ab67-239fccf2777d@efficios.com>
+ <ZGevZxOjJLMO9zlM@boqun-archlinux>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <ZGevZxOjJLMO9zlM@boqun-archlinux>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Wouldn't that also suffer from the same issue, or how is this
->> different?
+On 2023-05-19 13:18, Boqun Feng wrote:
+[...]
+> 
+> The case in my mind is the opposite direction: the loads from other
+> threads delay the stores to rseq_cs on the current thread, which I
+> assume are usually a fast path. For example:
+
+Yes, OK, you are correct. And I just validated on my end that busy-waiting
+repeatedly loading from a cache line does slow down the concurrent stores
+to other variables on that cache line significantly (at least on my
+Intel(R) Core(TM) i7-8650U). Small reproducer provided at the end of
+this email. Results:
+
+compudj@thinkos:~/test$ time ./test-cacheline -d
+thread id : 140242706274048, pid 16940
+thread id : 140242697881344, pid 16940
+
+real	0m4.145s
+user	0m8.289s
+sys	0m0.000s
+
+compudj@thinkos:~/test$ time ./test-cacheline -s
+thread id : 139741482387200, pid 16950
+thread id : 139741473994496, pid 16950
+
+real	0m4.573s
+user	0m9.147s
+sys	0m0.000s
+
+
+> 
+> 	CPU 1				CPU 2
+> 
+> 	lock(foo); // holding a lock
+> 	rseq_start():
+> 	  <CPU 1 own the cache line exclusively>
+> 	  				lock(foo):
+> 					  <fail to get foo>
+> 					  <check whether the lock owner is on CPU>
+> 					  <cache line becames shared>
+> 	  ->rseq_cs = .. // Need to invalidate the cache line on other CPU
+> 
+> But as you mentioned, there is only one updater here (the current
+> thread), so maybe it doesn't matter... but since it's a userspace ABI,
+> so I cannot help thinking "what if there is another bit that has a
+> different usage pattern introduced in the future", so..
+
+Yes, however we have to be careful about how we introduce this considering
+that the rseq feature extensions are "append only" to the structure feature
+size exported by the kernel to userspace through getauxval(3).
+
+So if we decide that we create a big hole right in the middle of the rseq_abi
+for cacheline alignment, that's a possibility, but we'd really be wasting an
+entire cacheline for a single bit.
+
+Another possibility would be to add a level of indirection: we could have a field
+in struct rseq which is either a pointer or offset from the thread_pointer() to
+the on-cpu bit, which would sit in a different cache line. It would be up to
+glibc to allocate space for it, possibly at the end of the rseq_abi field.
+
+> 
+>> Note that the heavy cache-line bouncing in my test-case happens on the lock
+>> structure (cmpxchg expecting NULL, setting the current thread rseq_get_abi()
+>> pointer on success). There are probably better ways to implement that part,
+>> it is currently just a simple prototype showcasing the approach.
 >>
-> Yes, it is the same issue, so e.g. prctl(PR_SET_DUMPABLE,
-> SUID_DUMP_DISABLE ) may wrongly fail with EINVAL on 64-bit targets.
 > 
->> Also, how is passing "0"s to e.g., PR_GET_THP_DISABLE reliable? We
->> need arg2 -> arg5 to be 0. But wouldn't the following also just pass a
->> 0 "int" ?
->>
->> prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0)
->>
-> Yes, this is not reliable on 64-bit targets too. The simplest fix is to
-> use "0L", as done in MDWE self-tests (but many other tests get this
-> wrong).
-
-Oh, it's even worse than I thought, then. :)
-
-Even in our selftest most of
-	$ git grep prctl tools/testing/selftests/ | grep "0"
-
-gets it wrong.
-
+> Yeah.. that's a little strange, I guess you can just read the lock
+> owner's rseq_abi, for example:
 > 
-> Florent also expressed surprise[1] that we don't see a lot of failures
-> due to such issues, and I tried to provide some reasons. To elaborate on
-
-Yes, I'm also surprised!
-
-> the x86-64 thing, for prctl(PR_SET_DUMPABLE, 0) the compiler will likely
-> generate "xorl %esi, %esi" to pass zero, but this instruction will also
-> clear the upper 32 bits of %rsi, so the problem is masked (and I believe
-> CPU vendors are motivated to do such zeroing to reduce false
-> dependencies). But this zeroing is not required by the ABI, so in a more
-> complex situation junk might get through.
-
-:/
-
+> 	rseq_lock_slowpath() {
+> 		struct rseq_abi *other_rseq = lock->owner;
 > 
-> Real-world examples of very similar breakage in variadic functions
-> involving NULL sentinels are mentioned in [2] (the musl bug report is
-> [3]). In short, musl defined NULL as plain 0 for C++, so when people do
-> e.g. execl("/bin/true", "true", NULL), junk might prevent detection of
-> the sentinel in execl() impl. (Though if the sentinel is passed via
-> stack because there are a lot of preceding arguments, the breakage
-> becomes more apparent because auto-zeroing of registers doesn't come
-> into play anymore.)
+> 		if (RSEQ_ACCESS_ONCE(other_rseq->sched_state)) {
+> 			...
+> 		}
+> 	}
 
-Yes, I heard about the "fun" with NULL already. Thanks for the musl 
-pointer. And thanks for the confirmation/explanation.
+Yes, I don't think the load of the owner pointer needs to be part of the
+cmpxchg per se. It could be done from a load on the slow-path.
 
-> 
->>
->> I'm easily confused by such (va_args) things, so sorry for the dummy
->> questions.
-> 
-> This stuff *is* confusing, and note that Linux man pages don't even tell
-> that prctl() is actually declared as a variadic function (and for
-> ptrace() this is mentioned only in the notes, but not in its signature).
+This way we would not require that the owner id and the lock state be the
+same content, and this would allow much more freedom for the fast-path
+semantic.
 
-Agreed, that's easy to miss (and probably many people missed it).
-
-
-Anyhow, for this patch as is (although it feels like drops in the ocean 
-after our discussion)
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
 Thanks,
 
-David / dhildenb
+Mathieu
+
+> 
+> ?
+> 
+> Regards,
+> Boqun
+> 
+>> Thanks,
+>>
+>> Mathieu
+>>
+>> -- 
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> https://www.efficios.com
+>>
+
+Reproducer:
+
+/*
+  * cacheline testing (exclusive vs shared store speed)
+  *
+  * build with gcc -O2 -pthread -o test-cacheline test-cacheline.c
+  *
+  * Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+  * License: MIT
+  */
+
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <rseq/rseq.h>
+
+#define NR_THREADS 2
+
+struct test {
+	int a;
+	int b;
+} __attribute__((aligned(256)));
+
+enum testcase {
+	TEST_SAME_CACHELINE,
+	TEST_OTHER_CACHELINE,
+};
+
+static enum testcase testcase;
+static int test_stop, test_go;
+static struct test test, test2;
+
+static
+void *testthread(void *arg)
+{
+	long nr = (long)arg;
+
+         printf("thread id : %lu, pid %lu\n", pthread_self(), getpid());
+
+	__atomic_add_fetch(&test_go, 1, __ATOMIC_RELAXED);
+	while (RSEQ_READ_ONCE(test_go) < NR_THREADS)
+		rseq_barrier();
+	if (nr == 0) {
+		switch (testcase) {
+		case TEST_SAME_CACHELINE:
+			while (!RSEQ_READ_ONCE(test_stop))
+				(void) RSEQ_READ_ONCE(test.a);
+			break;
+		case TEST_OTHER_CACHELINE:
+			while (!RSEQ_READ_ONCE(test_stop))
+				(void) RSEQ_READ_ONCE(test2.a);
+			break;
+		}
+	} else if (nr == 1) {
+		unsigned long long i;
+
+		for (i = 0; i < 16000000000UL; i++)
+			RSEQ_WRITE_ONCE(test.b, i);
+		RSEQ_WRITE_ONCE(test_stop, 1);
+	}
+         return ((void*)0);
+}
+
+static
+void show_usage(char **argv)
+{
+	fprintf(stderr, "Usage: %s <OPTIONS>\n", argv[0]);
+	fprintf(stderr, "OPTIONS:\n");
+	fprintf(stderr, "	[-s] Same cacheline\n");
+	fprintf(stderr, "	[-d] Different cacheline\n");
+}
+
+static
+int parse_args(int argc, char **argv)
+{
+	if (argc != 2 || argv[1][0] != '-') {
+		show_usage(argv);
+		return -1;
+	}
+	switch (argv[1][1]) {
+	case 's':
+		testcase = TEST_SAME_CACHELINE;
+		break;
+	case 'd':
+		testcase = TEST_OTHER_CACHELINE;
+		break;
+	default:
+		show_usage(argv);
+		return -1;
+	}
+	return 0;
+}
+
+int main(int argc, char **argv)
+{
+         pthread_t testid[NR_THREADS];
+         void *tret;
+         int i, err;
+
+	if (parse_args(argc, argv))
+		exit(1);
+
+         for (i = 0; i < NR_THREADS; i++) {
+                 err = pthread_create(&testid[i], NULL, testthread,
+                         (void *)(long)i);
+                 if (err != 0)
+                         exit(1);
+         }
+
+         for (i = 0; i < NR_THREADS; i++) {
+                 err = pthread_join(testid[i], &tret);
+                 if (err != 0)
+                         exit(1);
+         }
+
+         return 0;
+}
+
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
