@@ -2,92 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C372570D14D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B9670D14F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234681AbjEWCd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S234691AbjEWCe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbjEWCdz (ORCPT
+        with ESMTP id S232034AbjEWCe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:33:55 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BFF185;
-        Mon, 22 May 2023 19:33:51 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1q1HqE-00C99V-IG; Tue, 23 May 2023 10:33:39 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 23 May 2023 10:33:38 +0800
-Date:   Tue, 23 May 2023 10:33:38 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Jia Jie Ho <jiajie.ho@starfivetech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] crypto: starfive - Depend on AMBA_PL08X instead of selecting
- it
-Message-ID: <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
-References: <20230522105257.562cb1ec@canb.auug.org.au>
- <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
- <20230523103637.20175fbc@canb.auug.org.au>
+        Mon, 22 May 2023 22:34:27 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222D4CA;
+        Mon, 22 May 2023 19:34:26 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QQJDz4mTWzqTNG;
+        Tue, 23 May 2023 10:29:55 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 23 May
+ 2023 10:34:23 +0800
+Subject: Re: [PATCH net] page_pool: fix inconsistency for
+ page_pool_ring_[un]lock()
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        <davem@davemloft.net>, <pabeni@redhat.com>, <brouer@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>
+References: <20230522031714.5089-1-linyunsheng@huawei.com>
+ <1fc46094-a72a-f7e4-ef18-15edb0d56233@redhat.com>
+ <CAC_iWjJaNuDFZuv1Rv4Yr5Kaj1Wq69txAoLGepvnJT=pY1gaRw@mail.gmail.com>
+ <cc64a349-aaf4-9d80-3653-75eeb3032baf@huawei.com>
+ <20230522192238.28837d1d@kernel.org>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <e36a2091-82be-6071-245e-0cdd068ff857@huawei.com>
+Date:   Tue, 23 May 2023 10:34:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523103637.20175fbc@canb.auug.org.au>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+In-Reply-To: <20230522192238.28837d1d@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:36:37AM +1000, Stephen Rothwell wrote:
+On 2023/5/23 10:22, Jakub Kicinski wrote:
+> On Tue, 23 May 2023 10:13:14 +0800 Yunsheng Lin wrote:
+>> On 2023/5/22 19:45, Ilias Apalodimas wrote:
+>>>> Thanks for spotting and fixing this! :-)  
+>>
+>> It was spotted when implementing the below patch:)
+>>
+>> https://patchwork.kernel.org/project/netdevbpf/patch/168269857929.2191653.13267688321246766547.stgit@firesoul/#25325801
+>>
+>> Do you still working on optimizing the page_pool destroy
+>> process? If not, do you mind if I carry it on based on
+>> that?
 > 
-> That did not fix it :-(
+> Not sure what you mean, this patch is a fix and the destroy
+> optimizations where targeted at net-next. Fix goes in first,
+> and then after the tree merge on Thu the work in net-next can 
+> progress.
 
-OK, this patch should fix it:
-
----8<---
-A platform option like AMBA should never be selected by a driver.
-Use a dependency instead.
-
-Also remove the depenency on DMADEVICES because the driver builds
-just fine without it.  Instead add a dependency on HAS_DMA for dma
-mapping support.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Reported-by: Conor Dooley <conor.dooley@microchip.com> 
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kconfig
-index 908c162ba79a..59002abcc0ad 100644
---- a/drivers/crypto/starfive/Kconfig
-+++ b/drivers/crypto/starfive/Kconfig
-@@ -4,14 +4,13 @@
- 
- config CRYPTO_DEV_JH7110
- 	tristate "StarFive JH7110 cryptographic engine driver"
--	depends on (SOC_STARFIVE || COMPILE_TEST) && DMADEVICES
-+	depends on SOC_STARFIVE || AMBA_PL08X || COMPILE_TEST
-+	depends on HAS_DMA
- 	select CRYPTO_ENGINE
- 	select CRYPTO_HMAC
- 	select CRYPTO_SHA256
- 	select CRYPTO_SHA512
- 	select CRYPTO_SM3_GENERIC
--	select ARM_AMBA
--	select AMBA_PL08X
- 	help
- 	  Support for StarFive JH7110 crypto hardware acceleration engine.
- 	  This module provides acceleration for public key algo,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Sure, it will be sent as RFC if this patch is not merged to
+net-next yet:)
