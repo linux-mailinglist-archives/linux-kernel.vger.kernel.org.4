@@ -2,85 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6D070E932
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D20670E936
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238641AbjEWWlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S238675AbjEWWnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233956AbjEWWlv (ORCPT
+        with ESMTP id S233956AbjEWWnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:41:51 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B658483
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:41:49 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-510d92184faso845240a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684881708; x=1687473708;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ifpOcrk0dnFQvX+gTUm82nSRdqd7ZH4Wq+ze4WxqeuE=;
-        b=XROk+kdGbO8BnEEy5xmHH6mdhMmVynUxazY5lULeccGHJtCswlb3+L9JEtmrtfX1m1
-         BCZKJaPehCmj+O3vhkDtk6ySYZ7BdfrPNaWbB4K0lRoNGTs+cqwmopSK2zSNDNcf8h4r
-         Tka+FIoq0R4Ia50P2Ler9dmGOwglSm+x14P/g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684881708; x=1687473708;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ifpOcrk0dnFQvX+gTUm82nSRdqd7ZH4Wq+ze4WxqeuE=;
-        b=WmBvkLMLqGMUq4sjXO6jDpvoBfgTHuCRTc75aWdObCk/w3Z75ASW9MAvLu3YUpL4Jb
-         8Sw7s9jS9vAT1FYZOmCldYIJJ/Dtjr6IYCs1vC2om3j/+Lpl4oJFSh3jjBrXV38GMqt6
-         ecfOBim+Pdygf0n6L0CvO8aBbJ2pcP/69kXtR4o3LCEKmPtz5yT/q89czgsHb78C8AjY
-         AXj/nkUF+TfTeX6lnas43b2e5o4XpD87TJ0Ld/4JuoLJE0Zo7OKvFRPzuFPa4TDgxq/U
-         J5pX06TGJinPaEPoTbia3pFYxMCW+mVaPmisC6gW79nqM85bZ0km2IamsZ48jmLK4TlM
-         C+aQ==
-X-Gm-Message-State: AC+VfDw3oCk2Ijp2H6W70oR/d45x8cI/n4U9opmf1AWYwoOUCj2wAQZw
-        4PB4UMOoIxx0+ainljVbosKnlz0jQw668nKUPfNosQ==
-X-Google-Smtp-Source: ACHHUZ5kRXSla0tC8gV+ZspgFmTGS/YQ5fE/DfXEXe6fCkRsgrDUX1eRWmrDHEo9KSq1OJnJ+hGhzA==
-X-Received: by 2002:aa7:d9ce:0:b0:50b:5dbe:e0f6 with SMTP id v14-20020aa7d9ce000000b0050b5dbee0f6mr385679eds.25.1684881708149;
-        Tue, 23 May 2023 15:41:48 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id g26-20020aa7c85a000000b0050690bc07a3sm4356145edt.18.2023.05.23.15.41.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 15:41:47 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-513fea21228so824270a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:41:47 -0700 (PDT)
-X-Received: by 2002:a17:907:3605:b0:973:7252:1779 with SMTP id
- bk5-20020a170907360500b0097372521779mr1128578ejc.8.1684881707170; Tue, 23 May
- 2023 15:41:47 -0700 (PDT)
+        Tue, 23 May 2023 18:43:11 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A72CA;
+        Tue, 23 May 2023 15:43:10 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NMRkUk007808;
+        Tue, 23 May 2023 22:42:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=DPxFy0kgkp15W/17/zrdeqdPMfusaYNP5aDhFAM4+Ck=;
+ b=FPjsUBN9nNGZxtrvceZMhyx11qP5uJy8pzzwpeC9oLlBM9/LvQ7FlK7WFu0ZeqAom7lE
+ 5aUT5UdzxmhOuyWxqoHZR9Jd5MhGBe8W9T34DzHhY4ZoUKRdLh6KFE44KOA7Fb7A/Ixi
+ 22++KFIvzqWQwuxuTAoH6ROj3gZjOax4rWUsHOgYW7nWOkHfv/NHGVL07i28VUqEdVxF
+ +uXknIPwUF69YDCYJvtc9vsbStzNljIZ8ZAun3vfhH4jlzECyzMBiGElBlHodp2P+QyG
+ TwQDacojcvBNrKDC4WsmxiOOHIuOFlBO2/dMIfNXKWdZj3peLZ21t8Zr0Ay/nQGjqX0X uQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qs6a0r8k5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 22:42:33 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34NMZtCl027793;
+        Tue, 23 May 2023 22:42:32 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qs6a0r8jq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 22:42:32 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34NLABhg016521;
+        Tue, 23 May 2023 22:42:30 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3qppdswdnb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 22:42:30 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34NMgTr549611192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 May 2023 22:42:29 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B92735805A;
+        Tue, 23 May 2023 22:42:29 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CBD5458056;
+        Tue, 23 May 2023 22:42:28 +0000 (GMT)
+Received: from [9.211.103.243] (unknown [9.211.103.243])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 23 May 2023 22:42:28 +0000 (GMT)
+Message-ID: <4c6723df-5d40-2504-fcdc-dfdc2047f92c@linux.vnet.ibm.com>
+Date:   Tue, 23 May 2023 15:42:28 -0700
 MIME-Version: 1.0
-References: <20230523204131.1898839-1-jcmvbkbc@gmail.com>
-In-Reply-To: <20230523204131.1898839-1-jcmvbkbc@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 23 May 2023 15:41:30 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjxoT4Soph5qg6zbGkumnVHaBKA4DWwAkM4-au2e0fmHw@mail.gmail.com>
-Message-ID: <CAHk-=wjxoT4Soph5qg6zbGkumnVHaBKA4DWwAkM4-au2e0fmHw@mail.gmail.com>
-Subject: Re: [PULL 0/2] Xtensa fixes for v6.4
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Chris Zankel <chris@zankel.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH net-next 08/11] iavf: switch to Page Pool
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+ <20230516161841.37138-9-aleksander.lobakin@intel.com>
+Content-Language: en-US
+From:   David Christensen <drc@linux.vnet.ibm.com>
+In-Reply-To: <20230516161841.37138-9-aleksander.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SevONVa19cfGb6wVMoCGcEghTdYgfyUF
+X-Proofpoint-ORIG-GUID: JrrJtm8H54URjr6Drg0Je3S2Jk_G02FA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_14,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ mlxscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=883 suspectscore=0
+ spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305230181
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 1:41=E2=80=AFPM Max Filippov <jcmvbkbc@gmail.com> w=
-rote:
->
-> - add __bswap{si,di}2 helpers
 
-That assembly is funky. I had to look up what the "src" instruction
-did because it looked so crazy.
 
-                 Linus
+On 5/16/23 9:18 AM, Alexander Lobakin wrote:
+> Now that the IAVF driver simply uses dev_alloc_page() + free_page() with
+> no custom recycling logics and one whole page per frame, it can easily
+> be switched to using Page Pool API instead.
+
+Any plans to add page pool fragmentation support (i.e. 
+PP_FLAG_PAGE_FRAG) in the future to better support architectures with 
+larger page sizes such as 64KB on ppc64le?
+
+Dave
