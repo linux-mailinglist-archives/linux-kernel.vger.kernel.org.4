@@ -2,504 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE8270E435
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F1270E45D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 20:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238078AbjEWSAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 14:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S238024AbjEWSAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 14:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238045AbjEWR7t (ORCPT
+        with ESMTP id S238207AbjEWR7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 13:59:49 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1682F185
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:59:42 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75b17b80834so15095885a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:59:42 -0700 (PDT)
+        Tue, 23 May 2023 13:59:54 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A89DD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 10:59:49 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NHx6Qn006606;
+        Tue, 23 May 2023 17:59:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=dhmJqgtDOox7FfHdA54uZa13fDK7Aw/wkh8qswLmoxo=;
+ b=cGyTkyQ/6ETka83X7KZqLXXRyjoQ8vpw0OnIjTpUNKZvwr9i+WO8/UJdBy3bF0DZrnxL
+ +Mi8p2bktz5H3UN9J+2pPySddVz7hH4Tzi8eZu05dFMRdYXJMI56Dk0npZYt5wtNOkNN
+ f+vPYVFgN4i6NmL166QgELExfOEVMu+LO3eEkjMeCnDanyD5s8Zf10R33QYLZnlLMWNK
+ L3+fS1xIMkL8mjoYPjOVyQloxjTXP8N3FkPFC1TFcFgURfC2EfvdbVbZ4f0E9cnQAjN/
+ ZNCrhWWgaZfQz7sdFHpJzD4djs1MKWD8BdW9mDsI6E+T3O1jIlL2+RwXEQC2DLZcL+dQ 5Q== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp3qnsu1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 May 2023 17:59:28 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34NHnEKd029093;
+        Tue, 23 May 2023 17:59:27 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2177.outbound.protection.outlook.com [104.47.57.177])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk2b6g5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 May 2023 17:59:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jF4CB8ZXzGVosX1xWBoCPFN1EdL+mkL8wQg/LtSLs4jcGLJ32pTMRtEm0sKhOgCdO1Qc2zqrz//gRPzEUILkM+nmylNzSwUWsX+wi1GzrsxuPlv0CZxsDN8ukAUGLzXSvwFzdBuNpfpBTOm3zQfkCAPoZn7QVTgOZ5dXO9tZ7k2ymF9OkRuhl5RH1lovb8vt6E3ttmT2ONDvt3s8ZJqR+a6/pLYeSA6IfcieZjKNg6bi5eZGbnxcCnHmaxeKYYZG6CleSaPR6vgNr9w9IgSI3OhB4XbjQqmmuoh+LbTUP+/1nW1AWCAAstYOx+tKbWWLxfwKBB+T05OqgJlGpu8QpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dhmJqgtDOox7FfHdA54uZa13fDK7Aw/wkh8qswLmoxo=;
+ b=I4dwztHjvMqnwKJLqtj0vmcNLboJ8P90PduCTgOeXxE+2qX16ZcyOwjHbHwAaW+NZyT/78BE3KA/mZYSeNHpoGzuMbKnZRtFP9jUG6lZ2xv7VVFkyJvmR6zzWQPhiPuREFH3PXwyEx1SAOyjSlDixO/qDWYOyrPlvPKxedCF0874uJ/xufX4ZMdtRTtqDK6RJVnkkWdIyOb+Go0iDEj2d9HxFu3rEbP0l7zdjShsK0iyD2B4nZgoxCPuyk1lGjsJrorbzSTCSqyuCbNHuvqmV/bt9bLnDyNdsVHhdCqlVxLNF2cU2eYU1LCMhAmTWRbVJ6esTG+CMG39VRq/0DU6ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684864781; x=1687456781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=00YNi4Cu7qALK7ZrE5+b3vbAtwriNVrLEo9f8Doh2Cg=;
-        b=XK9WQE+qexCqRZ0FDIoJQ7d+N+HRkZwHaHYZhFGQQbQbSNcl0hlwtFeZEKbJkyONJc
-         kwZaf5eUSDPwXz9paBCTr+GV4EvYGs/TS9XbXiMc43GAX4Y6ZOmCx9IGwPGZa4Q4HPPI
-         GxSVFSfuL1V+BkuvA8H/svHj5aAXf/UevD4TtKveDcsvSr9gMQoC/ZcE5VfF5Gi6+Qa4
-         i64JSyTTKKISD1fyz9nWHaXUpfQtsTUFEg038V0P5+JJrC03eypdufGMpoo35ir9wnVw
-         ZX1dDiULB2JyV+vBYrFK3wZIvrWRnoHfHAUvZ6JW8ScHnUNrEemBGfurDgW7GlPbV+zS
-         L+kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684864781; x=1687456781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=00YNi4Cu7qALK7ZrE5+b3vbAtwriNVrLEo9f8Doh2Cg=;
-        b=fCSxnnvL+DuOlChjelosbTzPCdnd5z822cbCyY86WM90PWG2PDVFTZbIyUS84S1ygB
-         OlwC9GEcL/Xtjxz93Xin+FeRdUtZ9tdwsQb4jzla784+Jnx6dxOnYCBeFl7daMzfqFku
-         sXzj9D3XbeW0f8k9Klk32Y9QzyoZgyH2bJ00UPOa3JXKmagFAyBC2Qrhan3O6UAC+Ve0
-         Gmrlp80jWYOqzAFM+6oTxGMdTbNys/httd+V2VFbeQhA9E3Vx74MQUdeC3cCShPJkwks
-         1kpy/SJHQO2snWtknyTYy00TvEcGggCqIeakELAz9+doSkVDHjdhS/exqbOwYF/GxQbc
-         vjig==
-X-Gm-Message-State: AC+VfDz7uxDpF+J26HQqF+1FbdARCb4wvoOCkVS2F/lTG8wRi6n0GPJ1
-        x4R2sw66sWxlYkYoNq1KWjQm2cXTHuOtVK8HJq86Qg==
-X-Google-Smtp-Source: ACHHUZ4Nv8x86rr9l/ohMFat+iBcBygRbKiiC6l/gOvLEN61ygVOQv1Ay/qDZ66B/YCydqw3RtZS0p6/wjBwLrEVCdY=
-X-Received: by 2002:a05:6214:27e9:b0:56f:796e:c3a5 with SMTP id
- jt9-20020a05621427e900b0056f796ec3a5mr21564373qvb.4.1684864781187; Tue, 23
- May 2023 10:59:41 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dhmJqgtDOox7FfHdA54uZa13fDK7Aw/wkh8qswLmoxo=;
+ b=B50G4LDeRVztC3k0myxCI/js2enR5qVFbZuLQpAqGsc1MZbxSX2SmOzTs3fiSvnuBylS2Z6Hzs5OfAwRgLS5cQBaK/LT2PKbcu9OD4V3uS+pAgGrUoMX8mVNX7/WfOyjQ+q50Cf7ZyaVaxEhAQ4WYTO5cscUk/uvU1vszzaoNE4=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by SJ2PR10MB7787.namprd10.prod.outlook.com (2603:10b6:a03:56c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
+ 2023 17:59:25 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6411.027; Tue, 23 May 2023
+ 17:59:25 +0000
+Date:   Tue, 23 May 2023 13:59:22 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
+Subject: Re: [PATCH v3 10/10] maple_tree: Relocate the declaration of
+ mas_empty_area_rev().
+Message-ID: <20230523175922.7jf2yfwt7h7xagwp@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org
+References: <20230522050656.96215-1-zhangpeng.00@bytedance.com>
+ <20230522050656.96215-11-zhangpeng.00@bytedance.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522050656.96215-11-zhangpeng.00@bytedance.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0315.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10a::28) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
 MIME-Version: 1.0
-References: <20230511182426.1898675-1-axelrasmussen@google.com> <ZGz3LeRyghnv4wwZ@x1n>
-In-Reply-To: <ZGz3LeRyghnv4wwZ@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 23 May 2023 10:59:05 -0700
-Message-ID: <CAJHvVcjh6hOrZyr1t92v07+PVNVJH-BnPDs+ZSUWsLVjpLEuHA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        James Houghton <jthoughton@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|SJ2PR10MB7787:EE_
+X-MS-Office365-Filtering-Correlation-Id: fee4305c-3318-40ed-f803-08db5bb771d0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dMpOk3eOodiOAopFlGCKXhpBVR7CI/PCRIyHvI0n9PB7lO2M6h9Nt7DWgKl2v4/YP5uyMPiQo+bPq3zzvdCM3kpMVdF1G6uiXUIkhyLLBDbno1ZEOgm0IJKGPQmL3TVh74K9mmlqpoG+R2RSYHiAio86M179YquLdbsjbYbp+fD6UBe0/5mVts+3O08qAfjVwZsPL13O429yrnio2PvkrTrFPKDBaUfzy/pPs9Mdl0DLh0g+uBFhFrOjlO+AB6VSCAdyWOhGD+QlvRjgaMZYtVopzE1ChhvbZ9Y9fXFb8zLu16BT9p68V2FVTHXQuXRfKhgOTe7gh7FVi5yiL8xRCU+XgjJwLghfyvbDlq6lF+7HwoCcODAZroGVH/VeHmnDXVf8BVzGG/4b2ZKc6/mBYocGaCG5SHfOkwgQY/GVndd7NuKKvV7s9XclJk8aFWe/Q1/Un1p9GXNqafK5tP0Hk9UBl8Y4/EobE5PNbUV/CJASM+HZRVykUJVxvl4u3ZLHtTxjZ17h/JpOkFyS9gVOJuHpLN/g+CahYcTeEjpw+LMeSBKmO3sjVpN2id4kSM/U
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(39860400002)(376002)(136003)(396003)(346002)(451199021)(186003)(2906002)(83380400001)(6486002)(478600001)(4326008)(6916009)(66556008)(66946007)(41300700001)(6666004)(316002)(66476007)(26005)(6506007)(5660300002)(6512007)(1076003)(9686003)(8676002)(8936002)(33716001)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h4ve2PaGyoufrfzgWCDkwQyktvN1pxAX5RG0+rX/6iPmXPiNWHck7LGE82iR?=
+ =?us-ascii?Q?huuCadUfPsn2oigbVBjneqlshWb3GGcEhrvIN4czE55Q6otcCPd7LhPsxi/B?=
+ =?us-ascii?Q?45AHWN4jtPOH0F7CNrjatlAbEqs2vbC5crFf6MfGcJ4R2iKz0PHj87gjPPV1?=
+ =?us-ascii?Q?D7d1sCfO2kbT2vZ6B9jcLx+3tqbwfArCEiik3p46P49XPOcBmI4Jt8QCfrEI?=
+ =?us-ascii?Q?evx1hM2epdqphiymLaTV1lzmRUm5P15bUhNTaucQiWtdj6otQMsdO+RTfyrL?=
+ =?us-ascii?Q?mLfIMTN/1fMrICLo/eW/YKUiLNe8diG1n7lUza1wKx/fD4uZjoHOtp64c0tn?=
+ =?us-ascii?Q?KB/2kHB2wyzveE1g7P4CeTdTwz0lsl+7VKB+xldlcA0ZU7m81yPk/p9cFWvi?=
+ =?us-ascii?Q?KDbV4jV8K3AGJIbmjcP6iY31M0vQb/XO/0vso8Z8/fwp0qzbgSzv0dZ/Tfz1?=
+ =?us-ascii?Q?atySU+xLkFCXi3zeLQBEa9HsVvX/koq351ue9HOOL7Y5AvVmsAXWZPqdmvCL?=
+ =?us-ascii?Q?XdU7dKr0T7t6s7OTezIcl4eousXIVdFQw2or5fJFEyzb0sTelU1IfqT+eRgX?=
+ =?us-ascii?Q?lEWglkRp6GfRJw6AxaGI2mxWu9khCjbjmXGKYFm1nad94N6ajA4Q2ImwqWM3?=
+ =?us-ascii?Q?3v6WEGIpuYlOxUGhZksz+y7tNxYwocvwC3kPj/dBBEDBhDd0fx4gvobHNfSh?=
+ =?us-ascii?Q?EXpHb8d7X7MOJ9ZeCKjstgUR0c47Y4UdavLCxHCCBnMMIGkDdcqM8e58zo5A?=
+ =?us-ascii?Q?JHAU1tDkAuKZwjHZVqOY6yKuMS5wtZn4u42gQTTEZR0gMxuQmvAQbBBi5X1u?=
+ =?us-ascii?Q?1JnU5u9gAyd4aU1OhQjNazmwtDcQF1YBih7Fa9dr2AUElfiKLZ6uUQQV2bBV?=
+ =?us-ascii?Q?eAVqQV9kBrLdJjCiuUNXZRT0NvIOQ62/5VihXAYAwKtvMA08Le8niUPF7+eA?=
+ =?us-ascii?Q?ehPUIQY0K4TluPbK0+nsnaZJsKaQHkIoLOxRFONpoc/ZoaqJgWbxuvIQbBYd?=
+ =?us-ascii?Q?2hiRv08ekR6d1F/ZIG8vgApDk9bFHFHluG49IBDmA+n1beCd2OfN9T4p1O8/?=
+ =?us-ascii?Q?x5dvXHYqkOFF8hwqenMxXLkz/62vRxbtcjFBauKWAvIvYNgq+0bwZkYW2aUO?=
+ =?us-ascii?Q?41mosQkjSTM+y/DwI6tYTZdeMRt3LkMfoFvEewcRXDqoIrSQo8OFADMSL7yi?=
+ =?us-ascii?Q?pRe+fwq305quBrRSg9iZAUV2BKfoWMPLwXKc021mXA0875qoy+pADAyEZqJb?=
+ =?us-ascii?Q?uPZuayXm/9vHDcICELBH7GwbCzfluSfFqqbV1dDcTRp33gGXUuTb1kdvPF/W?=
+ =?us-ascii?Q?NGgh8HL8+1dO8pkg04r/ojnuJvT9cUN48PKLo11fsGfn/X80SUBG1zfnpgBL?=
+ =?us-ascii?Q?LmMVRKUEMSwM6Zp6HH6ijPl6O3sI/WootpL0kEpUy92yPCMLJCOEj9wNPmoV?=
+ =?us-ascii?Q?dKMSdiQ3uu/3PqDonIsoDEAesZEsbUHrfhHujHPrMB4fuViu7/LG4MHGT7Qh?=
+ =?us-ascii?Q?doU6JMqXtEPMs/hUKFE88xR/VF65vCMKsmMSj/5rQzhWrINqA04miUdVKeVy?=
+ =?us-ascii?Q?URIzRwNd/yFd+JqpxTHQKcdA79KadprN6T/cDYjUWL54LgxcIaqNAM/daYsx?=
+ =?us-ascii?Q?BA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?bls0DZQR63HLOZTRqmj+1DWadxI/d17TWKStO4d5AD//VMBUMqYwwQO5mMs6?=
+ =?us-ascii?Q?4XpXZbdjS05YKKZsVdWFtuPUrYYvIxSNlrWF7na91em7ou76ROd6VzNYqi7X?=
+ =?us-ascii?Q?BbTcLlhNWZTGpPaeP6gAZSq5fQfYy6vNLH3S4fIdCRPWMGPyCO4DIOumJ8U1?=
+ =?us-ascii?Q?tzVot46t0zb8F6oBzpZJzlI61cNJo8LubbBTIfruCezEuTkJ6lqOog6kw8ZK?=
+ =?us-ascii?Q?hoUxzZ03ZdnTgbLtbsqiNINPf2nV9WawUPPrUxrbZcAYGJsWBi+wbQHV12vR?=
+ =?us-ascii?Q?tiUtqzNmC8DhRLchZVpuZDYZT+7uuge9/CGE1px036lTzMY+wXLWlXalWt7p?=
+ =?us-ascii?Q?1XYv9Tj3Q1WgUzKWj0dt+IIVM1NVfbd1cymNFSxpda0iUzpr2fdJ962w+4Rk?=
+ =?us-ascii?Q?QQd76zeR2Sg8UgQZYtvNhPkTRePKY4J5uLsNvO3uaNnMnMuKHK1f5rjWkVWt?=
+ =?us-ascii?Q?+LJHrrbGDXx7O2dJaEiyvd4X9kNu+7lCr5x340Kp4kzbrflARWcnr4v4MXR4?=
+ =?us-ascii?Q?SwB8Tklu2ivUul8Y6xZsW3bkF/9F7CqIESSn0W52ViV8LuXRJ96v0oaGtr8S?=
+ =?us-ascii?Q?orTHSfyOPxVzClQ/9cU1KcqCqwXGoCDqnm9hcPxBSbktqXgsaqSaOd5KRd1S?=
+ =?us-ascii?Q?7aHGqT0tqVNzNoS9/y1YzDMmnv7m3FI74cNyb3k5dC6uCGuKamwlqnaSjLtu?=
+ =?us-ascii?Q?prNzF26BUAbYws/AzqsJgetRlsvsMnTFi0yxJKp6rpQH0p6NjknrEjwqLYfK?=
+ =?us-ascii?Q?iZfhv/vYGAnUOsNjcr7AXDfJL4DaFEOwP2Nv2Z8Hq8DVZ1EfurOOsbiL6FvR?=
+ =?us-ascii?Q?DOb+vyFZWBzO2ogLF95UEtJV/KVDmf8ZXTB+bBfz1nUS4WjGiWGdE4Cmr8/x?=
+ =?us-ascii?Q?xMpdZ0t8mvZVFR2wkOvK7YWpP/FSNPKB0632Jwui5S3rwsOrO+7nIsR54e9Z?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fee4305c-3318-40ed-f803-08db5bb771d0
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 17:59:25.3898
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ta0Qr7MJ7Xdd8RbFXjiW5xeIl1ZzlsnG/9qdos95qTTLneXsa6etWI65F4mujxG4WkIMVwkRDgj1qt5v4Upj8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7787
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_11,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230145
+X-Proofpoint-GUID: 3n59_1lTXwk324m_jTnDaqOA0wvP5tOx
+X-Proofpoint-ORIG-GUID: 3n59_1lTXwk324m_jTnDaqOA0wvP5tOx
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:26=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
-:
->
-> On Thu, May 11, 2023 at 11:24:24AM -0700, Axel Rasmussen wrote:
-> > The basic idea here is to "simulate" memory poisoning for VMs. A VM
-> > running on some host might encounter a memory error, after which some
-> > page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
-> > once poisoned, pages can never become "un-poisoned". So, when we live
-> > migrate the VM, we need to preserve the poisoned status of these pages.
-> >
-> > When live migrating, we try to get the guest running on its new host as
-> > quickly as possible. So, we start it running before all memory has been
-> > copied, and before we're certain which pages should be poisoned or not.
-> >
-> > So the basic way to use this new feature is:
-> >
-> > - On the new host, the guest's memory is registered with userfaultfd, i=
-n
-> >   either MISSING or MINOR mode (doesn't really matter for this purpose)=
-.
-> > - On any first access, we get a userfaultfd event. At this point we can
-> >   communicate with the old host to find out if the page was poisoned.
-> > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marke=
-r
->
-> [as used to suggest..] maybe UFFDIO_POISON sounds better.
->
-> >   so any future accesses will SIGBUS. Because the pte is now "present",
-> >   future accesses won't generate more userfaultfd events, they'll just
-> >   SIGBUS directly.
-> >
-> > UFFDIO_SIGBUS does not handle unmapping previously-present PTEs. This
-> > isn't needed, because during live migration we want to intercept
-> > all accesses with userfaultfd (not just writes, so WP mode isn't useful
-> > for this). So whether minor or missing mode is being used (or both), th=
-e
-> > PTE won't be present in any case, so handling that case isn't needed.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >  fs/userfaultfd.c                 | 63 ++++++++++++++++++++++++++++++++
-> >  include/linux/swapops.h          |  3 +-
-> >  include/linux/userfaultfd_k.h    |  4 ++
-> >  include/uapi/linux/userfaultfd.h | 25 +++++++++++--
-> >  mm/memory.c                      |  4 ++
-> >  mm/userfaultfd.c                 | 62 ++++++++++++++++++++++++++++++-
-> >  6 files changed, 156 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > index 0fd96d6e39ce..edc2928dae2b 100644
-> > --- a/fs/userfaultfd.c
-> > +++ b/fs/userfaultfd.c
-> > @@ -1966,6 +1966,66 @@ static int userfaultfd_continue(struct userfault=
-fd_ctx *ctx, unsigned long arg)
-> >       return ret;
-> >  }
-> >
-> > +static inline int userfaultfd_sigbus(struct userfaultfd_ctx *ctx, unsi=
-gned long arg)
-> > +{
-> > +     __s64 ret;
-> > +     struct uffdio_sigbus uffdio_sigbus;
-> > +     struct uffdio_sigbus __user *user_uffdio_sigbus;
-> > +     struct userfaultfd_wake_range range;
-> > +
-> > +     user_uffdio_sigbus =3D (struct uffdio_sigbus __user *)arg;
-> > +
-> > +     ret =3D -EAGAIN;
-> > +     if (atomic_read(&ctx->mmap_changing))
-> > +             goto out;
-> > +
-> > +     ret =3D -EFAULT;
-> > +     if (copy_from_user(&uffdio_sigbus, user_uffdio_sigbus,
-> > +                        /* don't copy the output fields */
-> > +                        sizeof(uffdio_sigbus) - (sizeof(__s64))))
-> > +             goto out;
-> > +
-> > +     ret =3D validate_range(ctx->mm, uffdio_sigbus.range.start,
-> > +                          uffdio_sigbus.range.len);
-> > +     if (ret)
-> > +             goto out;
-> > +
-> > +     ret =3D -EINVAL;
-> > +     /* double check for wraparound just in case. */
-> > +     if (uffdio_sigbus.range.start + uffdio_sigbus.range.len <=3D
-> > +         uffdio_sigbus.range.start) {
-> > +             goto out;
-> > +     }
-> > +     if (uffdio_sigbus.mode & ~UFFDIO_SIGBUS_MODE_DONTWAKE)
-> > +             goto out;
-> > +
-> > +     if (mmget_not_zero(ctx->mm)) {
-> > +             ret =3D mfill_atomic_sigbus(ctx->mm, uffdio_sigbus.range.=
-start,
-> > +                                       uffdio_sigbus.range.len,
-> > +                                       &ctx->mmap_changing, 0);
-> > +             mmput(ctx->mm);
-> > +     } else {
-> > +             return -ESRCH;
-> > +     }
-> > +
-> > +     if (unlikely(put_user(ret, &user_uffdio_sigbus->updated)))
-> > +             return -EFAULT;
-> > +     if (ret < 0)
-> > +             goto out;
-> > +
-> > +     /* len =3D=3D 0 would wake all */
-> > +     BUG_ON(!ret);
-> > +     range.len =3D ret;
-> > +     if (!(uffdio_sigbus.mode & UFFDIO_SIGBUS_MODE_DONTWAKE)) {
-> > +             range.start =3D uffdio_sigbus.range.start;
-> > +             wake_userfault(ctx, &range);
-> > +     }
-> > +     ret =3D range.len =3D=3D uffdio_sigbus.range.len ? 0 : -EAGAIN;
-> > +
-> > +out:
-> > +     return ret;
-> > +}
-> > +
-> >  static inline unsigned int uffd_ctx_features(__u64 user_features)
-> >  {
-> >       /*
-> > @@ -2067,6 +2127,9 @@ static long userfaultfd_ioctl(struct file *file, =
-unsigned cmd,
-> >       case UFFDIO_CONTINUE:
-> >               ret =3D userfaultfd_continue(ctx, arg);
-> >               break;
-> > +     case UFFDIO_SIGBUS:
-> > +             ret =3D userfaultfd_sigbus(ctx, arg);
-> > +             break;
-> >       }
-> >       return ret;
-> >  }
-> > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> > index 3a451b7afcb3..fa778a0ae730 100644
-> > --- a/include/linux/swapops.h
-> > +++ b/include/linux/swapops.h
-> > @@ -405,7 +405,8 @@ typedef unsigned long pte_marker;
-> >
-> >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
-> >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
-> > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
-> > +#define  PTE_MARKER_UFFD_SIGBUS                      BIT(2)
-> > +#define  PTE_MARKER_MASK                     (BIT(3) - 1)
->
-> [as used to suggest..] I'd consider reusing SWAPIN_ERROR directly.
->
-> Actually.. I think maybe we should have 1 patch changing SWAPIN_ERROR fro=
-m
-> VM_FAULT_SIGBUS to VM_FAULT_HWPOISON.
->
-> Let's imagine a VM having anonymous page backing and got a swapin error
-> when faulted on one of the guest page.  Instead of crashing the hyperviso=
-r
-> with sigbus we should probably make it a MCE injected into the guest too,
-> because there's no page corrupt in bare metal in this specific case,
-> however to the guest it's the same as having one page corrupted just like=
- a
-> real MCE.
+* Peng Zhang <zhangpeng.00@bytedance.com> [230522 01:07]:
+> Relocate the declaration of mas_empty_area_rev() so that
+> mas_empty_area() and mas_empty_area_rev() are together.
+> 
+> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 
-This is a great idea, you're right that injecting an MCE into the
-guest is exactly the end goal, and it seems like VM_FAULT_HWPOISON
-will "just work". Also the name UFFDIO_POISON resolves any confusion
-with UFFD_FEATURE_SIGBUS, so that's a nice side benefit.
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-I'll make this change in v2, thanks for the idea Peter!
-
->
-> >
-> >  static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
-> >  {
-> > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_=
-k.h
-> > index d78b01524349..6de1084939c5 100644
-> > --- a/include/linux/userfaultfd_k.h
-> > +++ b/include/linux/userfaultfd_k.h
-> > @@ -46,6 +46,7 @@ enum mfill_atomic_mode {
-> >       MFILL_ATOMIC_COPY,
-> >       MFILL_ATOMIC_ZEROPAGE,
-> >       MFILL_ATOMIC_CONTINUE,
-> > +     MFILL_ATOMIC_SIGBUS,
-> >       NR_MFILL_ATOMIC_MODES,
-> >  };
-> >
-> > @@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct=
- *dst_mm,
-> >  extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigne=
-d long dst_start,
-> >                                    unsigned long len, atomic_t *mmap_ch=
-anging,
-> >                                    uffd_flags_t flags);
-> > +extern ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned =
-long start,
-> > +                                unsigned long len, atomic_t *mmap_chan=
-ging,
-> > +                                uffd_flags_t flags);
-> >  extern int mwriteprotect_range(struct mm_struct *dst_mm,
-> >                              unsigned long start, unsigned long len,
-> >                              bool enable_wp, atomic_t *mmap_changing);
-> > diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/user=
-faultfd.h
-> > index 66dd4cd277bd..616e33d3db97 100644
-> > --- a/include/uapi/linux/userfaultfd.h
-> > +++ b/include/uapi/linux/userfaultfd.h
-> > @@ -39,7 +39,8 @@
-> >                          UFFD_FEATURE_MINOR_SHMEM |           \
-> >                          UFFD_FEATURE_EXACT_ADDRESS |         \
-> >                          UFFD_FEATURE_WP_HUGETLBFS_SHMEM |    \
-> > -                        UFFD_FEATURE_WP_UNPOPULATED)
-> > +                        UFFD_FEATURE_WP_UNPOPULATED |        \
-> > +                        UFFD_FEATURE_SIGBUS_IOCTL)
-> >  #define UFFD_API_IOCTLS                              \
-> >       ((__u64)1 << _UFFDIO_REGISTER |         \
-> >        (__u64)1 << _UFFDIO_UNREGISTER |       \
-> > @@ -49,12 +50,14 @@
-> >        (__u64)1 << _UFFDIO_COPY |             \
-> >        (__u64)1 << _UFFDIO_ZEROPAGE |         \
-> >        (__u64)1 << _UFFDIO_WRITEPROTECT |     \
-> > -      (__u64)1 << _UFFDIO_CONTINUE)
-> > +      (__u64)1 << _UFFDIO_CONTINUE |         \
-> > +      (__u64)1 << _UFFDIO_SIGBUS)
-> >  #define UFFD_API_RANGE_IOCTLS_BASIC          \
-> >       ((__u64)1 << _UFFDIO_WAKE |             \
-> >        (__u64)1 << _UFFDIO_COPY |             \
-> > +      (__u64)1 << _UFFDIO_WRITEPROTECT |     \
-> >        (__u64)1 << _UFFDIO_CONTINUE |         \
-> > -      (__u64)1 << _UFFDIO_WRITEPROTECT)
-> > +      (__u64)1 << _UFFDIO_SIGBUS)
-> >
-> >  /*
-> >   * Valid ioctl command number range with this API is from 0x00 to
-> > @@ -71,6 +74,7 @@
-> >  #define _UFFDIO_ZEROPAGE             (0x04)
-> >  #define _UFFDIO_WRITEPROTECT         (0x06)
-> >  #define _UFFDIO_CONTINUE             (0x07)
-> > +#define _UFFDIO_SIGBUS                       (0x08)
-> >  #define _UFFDIO_API                  (0x3F)
-> >
-> >  /* userfaultfd ioctl ids */
-> > @@ -91,6 +95,8 @@
-> >                                     struct uffdio_writeprotect)
-> >  #define UFFDIO_CONTINUE              _IOWR(UFFDIO, _UFFDIO_CONTINUE, \
-> >                                     struct uffdio_continue)
-> > +#define UFFDIO_SIGBUS                _IOWR(UFFDIO, _UFFDIO_SIGBUS, \
-> > +                                   struct uffdio_sigbus)
-> >
-> >  /* read() structure */
-> >  struct uffd_msg {
-> > @@ -225,6 +231,7 @@ struct uffdio_api {
-> >  #define UFFD_FEATURE_EXACT_ADDRESS           (1<<11)
-> >  #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM              (1<<12)
-> >  #define UFFD_FEATURE_WP_UNPOPULATED          (1<<13)
-> > +#define UFFD_FEATURE_SIGBUS_IOCTL            (1<<14)
-> >       __u64 features;
-> >
-> >       __u64 ioctls;
-> > @@ -321,6 +328,18 @@ struct uffdio_continue {
-> >       __s64 mapped;
-> >  };
-> >
-> > +struct uffdio_sigbus {
-> > +     struct uffdio_range range;
-> > +#define UFFDIO_SIGBUS_MODE_DONTWAKE          ((__u64)1<<0)
-> > +     __u64 mode;
-> > +
-> > +     /*
-> > +      * Fields below here are written by the ioctl and must be at the =
-end:
-> > +      * the copy_from_user will not read past here.
-> > +      */
-> > +     __s64 updated;
-> > +};
-> > +
-> >  /*
-> >   * Flags for the userfaultfd(2) system call itself.
-> >   */
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index f69fbc251198..e4b4207c2590 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -3675,6 +3675,10 @@ static vm_fault_t handle_pte_marker(struct vm_fa=
-ult *vmf)
-> >       if (WARN_ON_ONCE(!marker))
-> >               return VM_FAULT_SIGBUS;
-> >
-> > +     /* SIGBUS explicitly requested for this PTE. */
-> > +     if (marker & PTE_MARKER_UFFD_SIGBUS)
-> > +             return VM_FAULT_SIGBUS;
-> > +
-> >       /* Higher priority than uffd-wp when data corrupted */
-> >       if (marker & PTE_MARKER_SWAPIN_ERROR)
-> >               return VM_FAULT_SIGBUS;
-> > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> > index e97a0b4889fc..933587eebd5d 100644
-> > --- a/mm/userfaultfd.c
-> > +++ b/mm/userfaultfd.c
-> > @@ -278,6 +278,51 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pm=
-d,
-> >       goto out;
-> >  }
-> >
-> > +/* Handles UFFDIO_SIGBUS for all non-hugetlb VMAs. */
-> > +static int mfill_atomic_pte_sigbus(pmd_t *dst_pmd,
-> > +                                struct vm_area_struct *dst_vma,
-> > +                                unsigned long dst_addr,
-> > +                                uffd_flags_t flags)
-> > +{
-> > +     int ret;
-> > +     struct mm_struct *dst_mm =3D dst_vma->vm_mm;
-> > +     pte_t _dst_pte, *dst_pte;
-> > +     spinlock_t *ptl;
-> > +
-> > +     _dst_pte =3D make_pte_marker(PTE_MARKER_UFFD_SIGBUS);
-> > +     dst_pte =3D pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
-> > +
-> > +     if (vma_is_shmem(dst_vma)) {
-> > +             struct inode *inode;
-> > +             pgoff_t offset, max_off;
-> > +
-> > +             /* serialize against truncate with the page table lock */
-> > +             inode =3D dst_vma->vm_file->f_inode;
-> > +             offset =3D linear_page_index(dst_vma, dst_addr);
-> > +             max_off =3D DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-> > +             ret =3D -EFAULT;
-> > +             if (unlikely(offset >=3D max_off))
-> > +                     goto out_unlock;
-> > +     }
-> > +
-> > +     ret =3D -EEXIST;
-> > +     /*
-> > +      * For now, we don't handle unmapping pages, so only support fill=
-ing in
-> > +      * none PTEs, or replacing PTE markers.
-> > +      */
-> > +     if (!pte_none_mostly(*dst_pte))
-> > +             goto out_unlock;
-> > +
-> > +     set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> > +
-> > +     /* No need to invalidate - it was non-present before */
-> > +     update_mmu_cache(dst_vma, dst_addr, dst_pte);
-> > +     ret =3D 0;
-> > +out_unlock:
-> > +     pte_unmap_unlock(dst_pte, ptl);
-> > +     return ret;
-> > +}
-> > +
-> >  static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address=
-)
-> >  {
-> >       pgd_t *pgd;
-> > @@ -328,8 +373,12 @@ static __always_inline ssize_t mfill_atomic_hugetl=
-b(
-> >        * supported by hugetlb.  A PMD_SIZE huge pages may exist as used
-> >        * by THP.  Since we can not reliably insert a zero page, this
-> >        * feature is not supported.
-> > +      *
-> > +      * PTE marker handling for hugetlb is a bit special, so for now
-> > +      * UFFDIO_SIGBUS is not supported.
->
-> Can you be more specific on this?
->
-> What's the plan when HGM will be merged?  Is it possible that all memory
-> just support this always so we only need 1 feature flag?
-
-We'll want hugetlbfs support for this operation too, but it's only
-really useful (at least for our use case) after HGM is merged. But,
-there's no strong reason not to just implement both all at once - I'll
-extend v2 to also work properly with hugetlbfs. Probably it isn't too
-hard, I just need to do a bit more reading of how swap markers are
-handled in hugetlbfs.
-
-
->
-> >        */
-> > -     if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
-> > +     if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE) ||
-> > +         uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
-> >               mmap_read_unlock(dst_mm);
-> >               return -EINVAL;
-> >       }
-> > @@ -473,6 +522,9 @@ static __always_inline ssize_t mfill_atomic_pte(pmd=
-_t *dst_pmd,
-> >       if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE)) {
-> >               return mfill_atomic_pte_continue(dst_pmd, dst_vma,
-> >                                                dst_addr, flags);
-> > +     } else if (uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
-> > +             return mfill_atomic_pte_sigbus(dst_pmd, dst_vma,
-> > +                                            dst_addr, flags);
-> >       }
-> >
-> >       /*
-> > @@ -694,6 +746,14 @@ ssize_t mfill_atomic_continue(struct mm_struct *ds=
-t_mm, unsigned long start,
-> >                           uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTI=
-NUE));
-> >  }
-> >
-> > +ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned long st=
-art,
-> > +                         unsigned long len, atomic_t *mmap_changing,
-> > +                         uffd_flags_t flags)
-> > +{
-> > +     return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
-> > +                         uffd_flags_set_mode(flags, MFILL_ATOMIC_SIGBU=
-S));
-> > +}
-> > +
-> >  long uffd_wp_range(struct vm_area_struct *dst_vma,
-> >                  unsigned long start, unsigned long len, bool enable_wp=
-)
-> >  {
-> > --
-> > 2.40.1.606.ga4b1b128d6-goog
-> >
->
-> --
-> Peter Xu
->
+> ---
+>  include/linux/maple_tree.h | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
+> index 85559a34a098..c4681cb8414f 100644
+> --- a/include/linux/maple_tree.h
+> +++ b/include/linux/maple_tree.h
+> @@ -474,6 +474,12 @@ void *mas_next_range(struct ma_state *mas, unsigned long max);
+>  
+>  int mas_empty_area(struct ma_state *mas, unsigned long min, unsigned long max,
+>  		   unsigned long size);
+> +/*
+> + * This finds an empty area from the highest address to the lowest.
+> + * AKA "Topdown" version,
+> + */
+> +int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
+> +		       unsigned long max, unsigned long size);
+>  
+>  static inline void mas_init(struct ma_state *mas, struct maple_tree *tree,
+>  			    unsigned long addr)
+> @@ -497,12 +503,6 @@ static inline bool mas_is_paused(const struct ma_state *mas)
+>  	return mas->node == MAS_PAUSE;
+>  }
+>  
+> -/*
+> - * This finds an empty area from the highest address to the lowest.
+> - * AKA "Topdown" version,
+> - */
+> -int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
+> -		       unsigned long max, unsigned long size);
+>  /**
+>   * mas_reset() - Reset a Maple Tree operation state.
+>   * @mas: Maple Tree operation state.
+> -- 
+> 2.20.1
+> 
