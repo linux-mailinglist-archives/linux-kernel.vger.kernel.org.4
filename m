@@ -2,53 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D3B70D9C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C963970D9CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236461AbjEWKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 06:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S236451AbjEWKDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236316AbjEWKCv (ORCPT
+        with ESMTP id S236442AbjEWKC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 06:02:51 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539EC126
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:02:44 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1D6351BF205;
-        Tue, 23 May 2023 10:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684836162;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 23 May 2023 06:02:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B69F18B;
+        Tue, 23 May 2023 03:02:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 32D0220355;
+        Tue, 23 May 2023 10:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684836161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=W5M/vHgzuPPKaMo5s10MhzrRN3WWq1fY96XvfFQ3nlE=;
-        b=YeqwowiJ0aVl/brGpwQk1/8hi9PNM7WuD/z6nzr759He76pNZrB9RQtpWdq/Js4SGfWkKA
-        Z8BPIjub1xWK39MaRo3NtcjizsE3BJhSYVEiHjzFmiDtn0skvlt09APzxAuxSa12mKa7nS
-        HzyaMirNlPtZ63WIVyM+BIhagBgXcF71GusghkOYf9a0q55/OpsEh/zU4w6YWluoIw2j9x
-        r1mBF/gCcThjgFOc5OLKxIFsHiTqHRjKx4jAuPRHPLsetDvVnGzRdHCAK5OGIni1VEiH1f
-        43F24UOjTUCtyRb4dzJKkMFSP4hi6ahuQLfbhsYpQ9a5ozmOBrkWAde4KzQeGA==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 2/2] nvmem: core: Expose cells through sysfs
-Date:   Tue, 23 May 2023 12:02:39 +0200
-Message-Id: <20230523100239.307574-3-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230523100239.307574-1-miquel.raynal@bootlin.com>
-References: <20230523100239.307574-1-miquel.raynal@bootlin.com>
+        bh=6C4JQXjcp8+xqNPx3JTb2B5ixIfG+Z8YxMqNpQGherU=;
+        b=UQkTsQu7xiV+E65Co+o0xcYshZRBebuGbcp2/gMLqn5xrzkHKwvzV9/ONgdLnAYLtBPkKF
+        dhKDn+4ZKn3e+TbHGUeHJBICVIw+CqNPwJv1lWdX04/xr72IEdvgCfA6o5SacXlcP/D24K
+        tFU7nzMS3GX2ymWgl+8LyFvxgVi//p8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684836161;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6C4JQXjcp8+xqNPx3JTb2B5ixIfG+Z8YxMqNpQGherU=;
+        b=CWIwKCxOLkfZhMbk+fg/CJ+su0xIgrFAvWIdMkADnj0GFoRZfq8sleU0kJ0ZOu0qudjyKd
+        cbc8DuFaflpRWaAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C66813588;
+        Tue, 23 May 2023 10:02:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xK3iBkGPbGR4ZQAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 23 May 2023 10:02:41 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 9D000A075D; Tue, 23 May 2023 12:02:40 +0200 (CEST)
+Date:   Tue, 23 May 2023 12:02:40 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Neil Brown <neilb@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org
+Subject: Re: [PATCH v4 2/9] fs: add infrastructure for multigrain inode
+ i_m/ctime
+Message-ID: <20230523100240.mgeu4y46friv7hau@quack3>
+References: <20230518114742.128950-1-jlayton@kernel.org>
+ <20230518114742.128950-3-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518114742.128950-3-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,215 +94,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The binary content of nvmem devices is available to the user so in the
-easiest cases, finding the content of a cell is rather easy as it is
-just a matter of looking at a known and fixed offset. However, nvmem
-layouts have been recently introduced to cope with more advanced
-situations, where the offset and size of the cells is not known in
-advance or is dynamic. When using layouts, more advanced parsers are
-used by the kernel in order to give direct access to the content of each
-cell regardless of their position/size in the underlying device, but
-these information were not accessible to the user without re-writing the
-parser logic in userland.
+On Thu 18-05-23 07:47:35, Jeff Layton wrote:
+> The VFS always uses coarse-grained timestamp updates for filling out the
+> ctime and mtime after a change. This has the benefit of allowing
+> filesystems to optimize away a lot metadata updates, down to around 1
+> per jiffy, even when a file is under heavy writes.
+> 
+> Unfortunately, this has always been an issue when we're exporting via
+> NFSv3, which relies on timestamps to validate caches. Even with NFSv4, a
+> lot of exported filesystems don't properly support a change attribute
+> and are subject to the same problems with timestamp granularity. Other
+> applications have similar issues (e.g backup applications).
+> 
+> Switching to always using fine-grained timestamps would improve the
+> situation, but that becomes rather expensive, as the underlying
+> filesystem will have to log a lot more metadata updates.
+> 
+> What we need is a way to only use fine-grained timestamps when they are
+> being actively queried.
+> 
+> The kernel always stores normalized ctime values, so only the first 30
+> bits of the tv_nsec field are ever used. Whenever the mtime changes, the
+> ctime must also change.
+> 
+> Use the 31st bit of the ctime tv_nsec field to indicate that something
+> has queried the inode for the i_mtime or i_ctime. When this flag is set,
+> on the next timestamp update, the kernel can fetch a fine-grained
+> timestamp instead of the usual coarse-grained one.
+> 
+> This patch adds the infrastructure this scheme. Filesytems can opt
+> into it by setting the FS_MULTIGRAIN_TS flag in the fstype.
+> 
+> Later patches will convert individual filesystems over to use it.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-The current implementation only adds the 'cells' attributes if cells are
-found within the device, otherwise the folder does not appear.
+So there are two things I dislike about this series because I think they
+are fragile:
 
-Exposed cells are read-only. There is in practice everything in the core
-to support a write path, but as I don't see any need for that, I prefer
-to keep the interface simple (and probably safer). The interface is
-documented as being in the "testing" state which means we can later add
-a write attribute if though relevant.
+1) If we have a filesystem supporting multigrain ts and someone
+accidentally directly uses the value of inode->i_ctime, he can get bogus
+value (with QUERIED flag). This mistake is very easy to do. So I think we
+should rename i_ctime to something like __i_ctime and always use accessor
+function for it.
 
-Of course the relevant NVMEM sysfs Kconfig option must be enabled for
-this support to be compiled-in.
+2) As I already commented in a previous version of the series, the scheme
+with just one flag for both ctime and mtime and flag getting cleared in
+current_time() relies on the fact that filesystems always do an equivalent
+of:
 
-There is one limitation though: if a layout is built as a module but is
-not properly installed in the system and loaded manually with insmod
-while the nvmem device driver was built-in, the cells won't appear in
-sysfs. But if done like that, the cells won't be usable by the built-in
-kernel drivers anyway.
+	inode->i_mtime = inode->i_ctime = current_time();
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- drivers/nvmem/core.c | 135 +++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 131 insertions(+), 4 deletions(-)
+Otherwise we can do coarse grained update where we should have done a fine
+grained one. Filesystems often update timestamps like this but not
+universally. Grepping shows some instances where only inode->i_mtime is set
+from current_time() e.g. in autofs or bfs. Again a mistake that is rather
+easy to make and results in subtle issues. I think this would be also
+nicely solved by renaming i_ctime to __i_ctime and using a function to set
+ctime. Mtime could then be updated with inode->i_mtime = ctime_peek().
 
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 342cd380b420..234b2f232854 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -325,6 +325,61 @@ static umode_t nvmem_bin_attr_is_visible(struct kobject *kobj,
- 	return nvmem_bin_attr_get_umode(nvmem);
- }
- 
-+static struct nvmem_cell *nvmem_create_cell(struct nvmem_cell_entry *entry,
-+					    const char *id, int index);
-+
-+static ssize_t nvmem_cell_attr_read(struct file *filp, struct kobject *kobj,
-+				    struct bin_attribute *attr, char *buf,
-+				    loff_t pos, size_t count)
-+{
-+	struct nvmem_cell_entry *entry;
-+	struct nvmem_cell *cell = NULL;
-+	struct nvmem_device *nvmem;
-+	size_t cell_sz, read_len;
-+	struct device *dev;
-+	void *content;
-+
-+	if (attr->private)
-+		dev = attr->private;
-+	else
-+		dev = kobj_to_dev(kobj);
-+	nvmem = to_nvmem_device(dev);
-+
-+	mutex_lock(&nvmem_mutex);
-+	list_for_each_entry(entry, &nvmem->cells, node) {
-+		if (strncmp(entry->name, attr->attr.name, XATTR_NAME_MAX))
-+			continue;
-+
-+		cell = nvmem_create_cell(entry, entry->name, 0);
-+		if (IS_ERR(cell)) {
-+			mutex_unlock(&nvmem_mutex);
-+			return PTR_ERR(cell);
-+		}
-+
-+		break;
-+	}
-+	mutex_unlock(&nvmem_mutex);
-+
-+	if (!cell)
-+		return -EINVAL;
-+
-+	content = nvmem_cell_read(cell, &cell_sz);
-+	if (IS_ERR(content)) {
-+		count = PTR_ERR(content);
-+		goto destroy_cell;
-+	}
-+
-+	read_len = min_t(unsigned int, cell_sz - pos, count);
-+	memcpy(buf, content + pos, read_len);
-+	kfree(content);
-+
-+destroy_cell:
-+	kfree_const(cell->id);
-+	kfree(cell);
-+
-+	return read_len;
-+}
-+
- /* default read/write permissions */
- static struct bin_attribute bin_attr_rw_nvmem = {
- 	.attr	= {
-@@ -346,8 +401,14 @@ static const struct attribute_group nvmem_bin_group = {
- 	.is_bin_visible = nvmem_bin_attr_is_visible,
- };
- 
-+/* Cell attributes will be dynamically allocated */
-+static struct attribute_group nvmem_cells_group = {
-+	.name		= "cells",
-+};
-+
- static const struct attribute_group *nvmem_dev_groups[] = {
- 	&nvmem_bin_group,
-+	NULL, /* Reserved for exposing cells, if any */
- 	NULL,
- };
- 
-@@ -406,6 +467,66 @@ static void nvmem_sysfs_remove_compat(struct nvmem_device *nvmem,
- 		device_remove_bin_file(nvmem->base_dev, &nvmem->eeprom);
- }
- 
-+static int nvmem_populate_sysfs_cells(struct nvmem_device *nvmem)
-+{
-+	struct bin_attribute **cells_attrs, *attrs;
-+	struct nvmem_cell_entry *entry;
-+	unsigned int ncells = 0, i = 0;
-+	int ret = 0;
-+
-+	mutex_lock(&nvmem_mutex);
-+
-+	/* Allocate an array of attributes */
-+	list_for_each_entry(entry, &nvmem->cells, node)
-+		ncells++;
-+
-+	if (!ncells)
-+		goto unlock_mutex;
-+
-+	cells_attrs = devm_kcalloc(&nvmem->dev, ncells + 1, sizeof(struct bin_attribute *),
-+				   GFP_KERNEL);
-+	if (!cells_attrs) {
-+		ret = -ENOMEM;
-+		goto unlock_mutex;
-+	}
-+
-+	attrs = devm_kcalloc(&nvmem->dev, ncells, sizeof(struct bin_attribute),
-+			     GFP_KERNEL);
-+	if (!attrs) {
-+		ret = -ENOMEM;
-+		goto unlock_mutex;
-+	}
-+
-+	/* Initialize each attribute to have the name of a cell */
-+	list_for_each_entry(entry, &nvmem->cells, node) {
-+		sysfs_bin_attr_init(&attrs[i]);
-+		attrs[i].attr.name = kstrdup(entry->name, GFP_KERNEL);
-+		attrs[i].attr.mode = 0444;
-+		attrs[i].size = entry->bytes;
-+		attrs[i].read = &nvmem_cell_attr_read;
-+		if (!attrs[i].attr.name) {
-+			ret = -ENOMEM;
-+			goto unlock_mutex;
-+		}
-+
-+		cells_attrs[i] = &attrs[i];
-+		i++;
-+	}
-+
-+	nvmem_cells_group.bin_attrs = cells_attrs;
-+
-+	/* Fill the attribute group structure with the cells member */
-+	for (i = 0;; i++)
-+		if (!nvmem_dev_groups[i])
-+			break;
-+	nvmem_dev_groups[i] = &nvmem_cells_group;
-+
-+unlock_mutex:
-+	mutex_unlock(&nvmem_mutex);
-+
-+	return ret;
-+}
-+
- #else /* CONFIG_NVMEM_SYSFS */
- 
- static int nvmem_sysfs_setup_compat(struct nvmem_device *nvmem,
-@@ -976,16 +1097,22 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 	if (rval)
- 		goto err_remove_cells;
- 
-+	rval = nvmem_add_cells_from_layout(nvmem);
-+	if (rval)
-+		goto err_remove_cells;
-+
-+#ifdef CONFIG_NVMEM_SYSFS
-+	rval = nvmem_populate_sysfs_cells(nvmem);
-+	if (rval)
-+		goto err_remove_cells;
-+#endif
-+
- 	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
- 
- 	rval = device_add(&nvmem->dev);
- 	if (rval)
- 		goto err_remove_cells;
- 
--	rval = nvmem_add_cells_from_layout(nvmem);
--	if (rval)
--		goto err_remove_cells;
--
- 	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
- 
- 	return nvmem;
+I understand this is quite some churn but a very mechanical one that could
+be just done with Coccinelle and a few manual fixups. So IMHO it is worth
+the more robust result.
+
+Some more nits below.
+
+> +/**
+> + * current_mg_time - Return FS time (possibly fine-grained)
+> + * @inode: inode.
+> + *
+> + * Return the current time truncated to the time granularity supported by
+> + * the fs, as suitable for a ctime/mtime change. If the ctime is flagged
+> + * as having been QUERIED, get a fine-grained timestamp.
+> + */
+
+The comment should also mention that QUERIED flag is cleared from the ctime.
+
+> +static struct timespec64 current_mg_time(struct inode *inode)
+> +{
+> +	struct timespec64 now;
+> +	atomic_long_t *pnsec = (atomic_long_t *)&inode->i_ctime.tv_nsec;
+> +	long nsec = atomic_long_fetch_andnot(I_CTIME_QUERIED, pnsec);
+> +
+> +	if (nsec & I_CTIME_QUERIED) {
+> +		ktime_get_real_ts64(&now);
+> +	} else {
+> +		struct timespec64 ctime;
+> +
+> +		ktime_get_coarse_real_ts64(&now);
+> +
+> +		/*
+> +		 * If we've recently fetched a fine-grained timestamp
+> +		 * then the coarse-grained one may still be earlier than the
+> +		 * existing one. Just keep the existing ctime if so.
+> +		 */
+> +		ctime = ctime_peek(inode);
+> +		if (timespec64_compare(&ctime, &now) > 0)
+> +			now = ctime;
+> +	}
+> +
+> +	return now;
+> +}
+> +
+
+...
+
+> +/**
+> + * ctime_nsec_peek - peek at (but don't query) the ctime tv_nsec field
+> + * @inode: inode to fetch the ctime from
+> + *
+> + * Grab the current ctime tv_nsec field from the inode, mask off the
+> + * I_CTIME_QUERIED flag and return it. This is mostly intended for use by
+> + * internal consumers of the ctime that aren't concerned with ensuring a
+> + * fine-grained update on the next change (e.g. when preparing to store
+> + * the value in the backing store for later retrieval).
+> + *
+> + * This is safe to call regardless of whether the underlying filesystem
+> + * is using multigrain timestamps.
+> + */
+> +static inline long ctime_nsec_peek(const struct inode *inode)
+> +{
+> +	return inode->i_ctime.tv_nsec &~ I_CTIME_QUERIED;
+
+This is somewhat unusual spacing. I'd use:
+
+	inode->i_ctime.tv_nsec & ~I_CTIME_QUERIED
+
+> +}
+> +
+> +/**
+> + * ctime_peek - peek at (but don't query) the ctime
+> + * @inode: inode to fetch the ctime from
+> + *
+> + * Grab the current ctime from the inode, sans I_CTIME_QUERIED flag. For
+> + * use by internal consumers that don't require a fine-grained update on
+> + * the next change.
+> + *
+> + * This is safe to call regardless of whether the underlying filesystem
+> + * is using multigrain timestamps.
+> + */
+> +static inline struct timespec64 ctime_peek(const struct inode *inode)
+> +{
+> +	struct timespec64 ctime;
+> +
+> +	ctime.tv_sec = inode->i_ctime.tv_sec;
+> +	ctime.tv_nsec = ctime_nsec_peek(inode);
+> +
+> +	return ctime;
+> +}
+
+Given this is in a header that gets included in a lot of places, maybe we
+should call it like inode_ctime_peek() or inode_ctime_get() to reduce
+chances of a name clash?
+
+								Honza
 -- 
-2.34.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
