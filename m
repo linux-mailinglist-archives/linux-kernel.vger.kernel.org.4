@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FD370DF81
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A1B70DF87
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237160AbjEWOkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S236925AbjEWOlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjEWOk2 (ORCPT
+        with ESMTP id S237343AbjEWOk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:40:28 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBB2E9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:40:27 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d41763796so2950962b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684852827; x=1687444827;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zEbJUA2VY3P1Gw/9E3ZC2zbULYIeWfglzaOBedvnWVU=;
-        b=NFeLY3SkA8AC3qhDYso7wMcli0cn4QwrTfP1yc8JJHOY+KU7eeYHu6Y5qgeh9CLKOH
-         RIjeh7iU5NLc9qaleOGDBNFgmHHWAFHhCEfTd50q93OvDiKqgC4CafhCUG+QkavJWOF6
-         dMJFbEQ0nrQJvt+lBesUHD0pW6muhDoZzvjx0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684852827; x=1687444827;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zEbJUA2VY3P1Gw/9E3ZC2zbULYIeWfglzaOBedvnWVU=;
-        b=DGFGs6RF8lG2+w5G/WN0w+CcI6AzPW2KWNwY+OzzWVBqMIVNG8kcoO4tj91hDDOhVN
-         3BSyGh+a/AfxN6hH2e59HVohmUB1lYzvrzRRpkNfPPRxHOpTDIcP+hNKZfQwhQuYk5Dy
-         WtuQNLNwBDoR+aP3N44sMKhsWDr1g4kDE9kz0G9NkA0NQ9yNG9L/ttZkdv3oCfiUbm/x
-         Uq9JKYIe0DXkxBtaVMgzyeGGtU2HWJ+kJgsyiYW+uru6QMWbAnRB/svYrO/JqgDO9QyI
-         nVa5FQlwd9l6u3BjUeXvgMh36Q54PvH6hQibzMEUFvoLWO/sziyiacgfYhx15LRv4+Nh
-         Vkzg==
-X-Gm-Message-State: AC+VfDybefhFinw4kH+Utc0nNbE953c2TJdcP3xjgR6G3UWRocjiK731
-        wUfLzktJQZRregfSgSv0l4gW5g==
-X-Google-Smtp-Source: ACHHUZ4teF8qs4STLyE0zOA8dYn9fz0SS7kmHOjPAUtFeNbBav3U28Ed6thHQ2NIkTRalg4X4AnOFA==
-X-Received: by 2002:a05:6a00:140b:b0:63d:3339:e967 with SMTP id l11-20020a056a00140b00b0063d3339e967mr18303483pfu.19.1684852826764;
-        Tue, 23 May 2023 07:40:26 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:ed64:17be:457a:f5e4])
-        by smtp.gmail.com with ESMTPSA id a14-20020a62e20e000000b00643889e30c2sm3701402pfi.180.2023.05.23.07.40.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 07:40:25 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: Only HAVE_HARDLOCKUP_DETECTOR_PERF if the PMU config is enabled
-Date:   Tue, 23 May 2023 07:39:53 -0700
-Message-ID: <20230523073952.1.I60217a63acc35621e13f10be16c0cd7c363caf8c@changeid>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+        Tue, 23 May 2023 10:40:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAE7FA;
+        Tue, 23 May 2023 07:40:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 11270229F9;
+        Tue, 23 May 2023 14:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684852848; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nGlr9RSvSIRIegvdJA3tDbcOz/gxFk1P8G5vHNFFvdw=;
+        b=Uxk2np0yuV6dsJAJsvbMA15zF96rjED8fP2akEhLxsmTpt+feyN2T/XT2pX2L8XeAZ4ZNd
+        x/FzKx4vRGic0qaTq8sE2kEc12gKEby+NSQYZAjT9a/i9yg98rtiR1IHPVBAP/QqZKzzcp
+        /LSS2uf6XfVEVLuRagQgPj5k0Vkwt7U=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA1DA13588;
+        Tue, 23 May 2023 14:40:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tCdyNG/QbGRaawAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 23 May 2023 14:40:47 +0000
+Date:   Tue, 23 May 2023 16:40:46 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, hannes@cmpxchg.org,
+        shakeelb@google.com, akpm@linux-foundation.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests: cgroup: fix unexpected failure on
+ test_memcg_low
+Message-ID: <r5owzlvxbx22gqmw2cnmykvrzzhhw3hkoffk3f4wbvv7lmqzod@wbbmnt4a76cu>
+References: <20230522095233.4246-2-haifeng.xu@shopee.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qrfw5lltt6r2lzen"
+Content-Disposition: inline
+In-Reply-To: <20230522095233.4246-2-haifeng.xu@shopee.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If you try to enable the arm64 perf-based hardlockup detector but you
-don't enable CONFIG_ARM_PMU then you'll get an error:
 
-arch/arm64/kernel/watchdog_hld.c: In function 'arch_perf_nmi_is_available':
-arch/arm64/kernel/watchdog_hld.c:35:16: error: implicit declaration of function 'arm_pmu_irq_is_nmi' [-Werror=implicit-function-declaration]
-   35 |         return arm_pmu_irq_is_nmi();
+--qrfw5lltt6r2lzen
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It doesn't make sense to enable HAVE_HARDLOCKUP_DETECTOR_PERF if the
-PMU isn't enabled. Let's add a dependency. HW_PERF_EVENTS is a synonum
-for ARM_PMU and makes the most logical sense here, so add the
-dependency on that.
+On Mon, May 22, 2023 at 09:52:33AM +0000, Haifeng Xu <haifeng.xu@shopee.com=
+> wrote:
+> Since commit f079a020ba95 ("selftests: memcg: factor out common parts
+> of memory.{low,min} tests"), the value used in second alloc_anon has
+> changed from 148M to 170M. Because memory.low allows reclaiming page
+> cache in child cgroups, so the memory.current is close to 30M instead
+> of 50M. Therefore, adjust the expected value of parent cgroup.
+>=20
+> Fixes: f079a020ba95 ("selftests: memcg: factor out common parts of memory=
+=2E{low,min} tests")
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> ---
+>  tools/testing/selftests/cgroup/test_memcontrol.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Closes: https://lore.kernel.org/r/20230522114922.1052421-1-arnd@kernel.org
-Fixes: 02ea35ee19d9 ("arm64: enable perf events based hard lockup detector")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-This is an alternative fix to the one Arnd proposed. I think it's a
-little cleaner / more correct.
+Yes, the expected value should be complement of the allocation to the
+limit when reclaim is allowed.
 
-I'm not sure the exact way to mark "Fixes" for things in Andrew's tree
-these days. I don't think the git hash is stable? I wouldn't object to
-this being squashed into the patch it's fixing.
+Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
 
- arch/arm64/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+FTR, the test_memcg_low fails after the fix still (6.3.1-2-default)
+because of nonzero memory.events:low in the unprotected A/B/E group
+(with memory_recursiveprot).
+(That's another and long standing issues -- perhaps the reason why this
+issue was hidden.)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 3eacf40da850..0b055e6cda00 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -203,7 +203,8 @@ config ARM64
- 	select HAVE_FUNCTION_ERROR_INJECTION
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_GCC_PLUGINS
--	select HAVE_HARDLOCKUP_DETECTOR_PERF if PERF_EVENTS && HAVE_PERF_EVENTS_NMI
-+	select HAVE_HARDLOCKUP_DETECTOR_PERF if PERF_EVENTS && \
-+		HW_PERF_EVENTS && HAVE_PERF_EVENTS_NMI
- 	select HAVE_HW_BREAKPOINT if PERF_EVENTS
- 	select HAVE_IOREMAP_PROT
- 	select HAVE_IRQ_TIME_ACCOUNTING
--- 
-2.40.1.698.g37aff9b760-goog
+Thanks,
+Michal
 
+--qrfw5lltt6r2lzen
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZGzQbAAKCRAkDQmsBEOq
+uZ7BAQCh/IzL0Y/nVUwN/zZJm3gzAUIYiiYkjKXr3IdIi/nEEAD8CrjZAUCERkWq
+My0modfCN7u48OMYoc2a0660bD9tYww=
+=er1S
+-----END PGP SIGNATURE-----
+
+--qrfw5lltt6r2lzen--
