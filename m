@@ -2,265 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55ABC70DC63
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB2770DC6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236667AbjEWMVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S236811AbjEWMWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234129AbjEWMVN (ORCPT
+        with ESMTP id S235518AbjEWMWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:21:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB2D109;
-        Tue, 23 May 2023 05:21:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85A01631B1;
-        Tue, 23 May 2023 12:21:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9FCBC433D2;
-        Tue, 23 May 2023 12:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684844471;
-        bh=Dk+Oefw8B7Lb9vgl9ZRqF/0an+LJulEZdFr6w5zv6fk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=e+JmSmBmRQGw9xfebT9cHx0hCmum6Q+v900Hj3hZ8Bx64zP9WGRH0YVr2LcIRqhOi
-         5u4OS+GadiDSR3FLPxX5+3vQx5AMk6nWJfrmb9Xengf4oV0qVVsAHVhe0bxBba8iaN
-         eNZ5CkWGibvHqfNjab7lZSYWUSTObaX41k9iCRVL+l0pHBWjCngUAOnTAL9KT2viCz
-         c9tNIM82n06wmKHfn5r8NtMfkkkw1Mio7CKTx+69SFVY17T1SLTY1s8isSfLekpaEw
-         A9EHf6bkMk8Sawdj6uZGttRmdhoZAv+ZsuPprW0vneBm4IqXv/2xgNdQnpuBaOY6xs
-         vchicLt5O7IOw==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2af20198f20so60203951fa.0;
-        Tue, 23 May 2023 05:21:10 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxWKpyGlzzHpcJw1AIcSUXEaOg89WzpbqxMCQenhXDLtJhtffC0
-        hIOZi5y7APMCGIcTvFsm8b0V8Vn1fiTQXtv0dAk=
-X-Google-Smtp-Source: ACHHUZ4l+S+XLC+qgJiDiEFScegT7sq8enq38bJ7BZRRDA5vRZipY4gP4pEY1MqmRPCHPZJGJEg0ag+Tpe7kEslGDTQ=
-X-Received: by 2002:a2e:9097:0:b0:2a8:d1cd:a04 with SMTP id
- l23-20020a2e9097000000b002a8d1cd0a04mr4645945ljg.48.1684844468821; Tue, 23
- May 2023 05:21:08 -0700 (PDT)
+        Tue, 23 May 2023 08:22:31 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768BC118
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:22:28 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230523122225euoutp01e3f92fe31135e5f92b400310d51be571~hxS-hKQ_a1695716957euoutp01a
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 12:22:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230523122225euoutp01e3f92fe31135e5f92b400310d51be571~hxS-hKQ_a1695716957euoutp01a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1684844545;
+        bh=KKnox84nz8ObagGJPU3G322Rrgqy3RZM5XV3FY0Rc18=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=qMTW5bVElvt5z+/ccYJGUUsueSMv01/dhg4Z0/vDErExxwlcW41hR9VQkcXDyP0xv
+         I1lTg02b/t63Z6hZ5jNtjjdXLMQssNFsuPXmot+v674NtqV16id/p+nau4OCSIjp2S
+         tvE4PxoXq6u/TSUwKjJjyojKrFZDSrBDOBhs5bnY=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230523122224eucas1p1529a287e2c7858ac18f2c3829037fb4a~hxS-Rkmke1811518115eucas1p1k;
+        Tue, 23 May 2023 12:22:24 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 1E.B8.42423.000BC646; Tue, 23
+        May 2023 13:22:24 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230523122224eucas1p1834662efdd6d8e6f03db5c52b6e0a7ea~hxS_1iiMX2655526555eucas1p11;
+        Tue, 23 May 2023 12:22:24 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230523122224eusmtrp2c2e5aa8ca093710a85929e4b2f411125~hxS_0-V7w0635006350eusmtrp2U;
+        Tue, 23 May 2023 12:22:24 +0000 (GMT)
+X-AuditID: cbfec7f2-a51ff7000002a5b7-d7-646cb0002714
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 45.BF.10549.000BC646; Tue, 23
+        May 2023 13:22:24 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230523122224eusmtip25a5de66ce416436d30c4481fc39b77cd~hxS_pbyzI2761627616eusmtip28;
+        Tue, 23 May 2023 12:22:24 +0000 (GMT)
+Received: from localhost (106.210.248.82) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Tue, 23 May 2023 13:22:23 +0100
+From:   Joel Granados <j.granados@samsung.com>
+To:     <mcgrof@kernel.org>
+CC:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Joel Granados <j.granados@samsung.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH v4 0/8] sysctl: Completely remove register_sysctl_table from
+ sources
+Date:   Tue, 23 May 2023 14:22:12 +0200
+Message-ID: <20230523122220.1610825-1-j.granados@samsung.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230521160426.1881124-1-masahiroy@kernel.org>
- <20230521160426.1881124-4-masahiroy@kernel.org> <CAKwvOdmxLrE8VksbsSGirfTqnuhEFT__FuCG53ri3V42UbH5aw@mail.gmail.com>
- <CAMj1kXGZLn37bchQ8NZy6zPgsMNT=CE7pZ0voTsnu=ytSf2i7g@mail.gmail.com> <CAK7LNASEj618kZn8ANnZwfFC54MuFx3UxgnqG=ByeubD7vUymA@mail.gmail.com>
-In-Reply-To: <CAK7LNASEj618kZn8ANnZwfFC54MuFx3UxgnqG=ByeubD7vUymA@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 23 May 2023 14:20:57 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGDBkL4ZyPD-8LzEL=2uA6pSEwhtpG3nwc6esoLuMgRDQ@mail.gmail.com>
-Message-ID: <CAMj1kXGDBkL4ZyPD-8LzEL=2uA6pSEwhtpG3nwc6esoLuMgRDQ@mail.gmail.com>
-Subject: Re: [PATCH v6 03/20] modpost: detect section mismatch for
- R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [106.210.248.82]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDKsWRmVeSWpSXmKPExsWy7djPc7oMG3JSDFa90rJ4ffgTo8WZ7lyL
+        PXtPslhc3jWHzeLGhKeMFgdOT2G2OP/3OKvFsp1+DhwesxsusnjsnHWX3WPBplKPTas62Tw+
+        b5Lz2PTkLVMAWxSXTUpqTmZZapG+XQJXxtpvbcwFs8QqVn4/wdjAOFGoi5GTQ0LAROLK1a+M
+        XYxcHEICKxglfiy5xwiSEBL4wijx5TwbhP2ZUeLOISeYhpsXTrJBNCxnlHi4t5kZwgEqerrw
+        IBOEs4VRYua2RewgLWwCOhLn39xhBrFFBMQlTpzeDLaPWWAnk0R/5y2wHcICYRILNlwD280i
+        oCpxYfdPJhCbV8BW4nDDBiaI3fISbdenM0LEBSVOznzCAmIzA8Wbt85mhrAlJA6+eMEMUa8k
+        sbrrDxuEXStxasstsOskBO5wSKxZOJMdIuEicbO/FapBWOLV8S1QcRmJ/zvnQzVMZpTY/+8D
+        O4SzmlFiWeNXqJOsJVquPIHqcJSY2joVaBIHkM0nceOtIMRFfBKTtk2HCvNKdLRBQ15NYvW9
+        NywTGJVnIflnFpJ/ZiH5ZwEj8ypG8dTS4tz01GLDvNRyveLE3OLSvHS95PzcTYzABHT63/FP
+        Oxjnvvqod4iRiYPxEKMEB7OSCO+J8uwUId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rzatieThQTS
+        E0tSs1NTC1KLYLJMHJxSDUzye50PuVfYSEmpzLe7pF145GP/WbNFxR9tpC/nyD2VkDBdopB2
+        sXZre2qJkMyJH0u6l3ytNtLQmvT9vuIs0/kPZ29eJZgm3Vjv8KNFVidE/+qtN89cjGYdKA3f
+        68vx8GeG6ZzLrj8cVSM+3BBUlTm8bKG/yLJe2U3nQhTYXC9aGZ+7utr1y619E3jPGEZ7rIzz
+        /2Gx67zGstvHPtb2aZgaPDjl4/os+6lGR47MP3Fv7wdR+1OlNLJlHB9//y9xOTB7wXzfMyz8
+        Xr+//V9pbheZ42kc0ife7zbB6P0KvZzCwE+Hr82+denLyXklD8WlZ+UoS09QFCpk35HEP+vO
+        cyWem7NSJj0QMdwaJemjulaJpTgj0VCLuag4EQAbZ0l6rwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsVy+t/xe7oMG3JSDNrn8lq8PvyJ0eJMd67F
+        nr0nWSwu75rDZnFjwlNGiwOnpzBbnP97nNVi2U4/Bw6P2Q0XWTx2zrrL7rFgU6nHplWdbB6f
+        N8l5bHrylimALUrPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7Ms
+        tUjfLkEvY+23NuaCWWIVK7+fYGxgnCjUxcjJISFgInHzwkk2EFtIYCmjxOfDUhBxGYmNX66y
+        QtjCEn+udQHVcAHVfGSUOPJ2HyNEwxZGifurfUBsNgEdifNv7jCD2CIC4hInTm9mBGlgFtjO
+        JDHh7y6wDcICIRJ3Fq8BK2IRUJW4sPsnE4jNK2ArcbhhAxPENnmJtuvTGSHighInZz5hAbGZ
+        geLNW2czQ9gSEgdfvGCGqFeSWN31hw3CrpX4/PcZ4wRGoVlI2mchaZ+FpH0BI/MqRpHU0uLc
+        9NxiQ73ixNzi0rx0veT83E2MwFjbduzn5h2M81591DvEyMTBeIhRgoNZSYT3RHl2ihBvSmJl
+        VWpRfnxRaU5q8SFGU6B/JjJLiSbnA6M9ryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2xJDU7
+        NbUgtQimj4mDU6qBKbNaVtBq03udvk3f2GwcvQs4NtwrP/ni21Z/7bZd8v99TzxUid8e9bDc
+        38ApyHZaK1+c4Ab7M4/jph5rq+5cM903YMldxnm8Uhf/M86M3HSoNK5kR9PJ9kuBrw5fcLvU
+        E/BhxiHbb2f6tY9O+x80/5Pubq5HHGpPCy9Pc9jU/N9v5tVnVVXCHhterDQvNnOwi8+UvSal
+        9unfzVsdPPYu6zfNr/JddXCuu2BYcdZtDYPrDmasny5PybAPWSw4L26K2aXwxKcFSp3vtv58
+        eOfAIZWXChOCNmyYsD1r84Tg+szH1xTnTrMscFeys9D0VFoj9nK6SKcm/6texyWKM5b8F0rp
+        OTCZQbL1lkrnyf5oJiWW4oxEQy3mouJEAN2B6so+AwAA
+X-CMS-MailID: 20230523122224eucas1p1834662efdd6d8e6f03db5c52b6e0a7ea
+X-Msg-Generator: CA
+X-RootMTR: 20230523122224eucas1p1834662efdd6d8e6f03db5c52b6e0a7ea
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230523122224eucas1p1834662efdd6d8e6f03db5c52b6e0a7ea
+References: <CGME20230523122224eucas1p1834662efdd6d8e6f03db5c52b6e0a7ea@eucas1p1.samsung.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 at 13:59, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Tue, May 23, 2023 at 6:50=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> =
-wrote:
-> >
-> > On Mon, 22 May 2023 at 20:03, Nick Desaulniers <ndesaulniers@google.com=
-> wrote:
-> > >
-> > > + linux-arm-kernel
-> > >
-> > > On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@ke=
-rnel.org> wrote:
-> > > >
-> > > > ARM defconfig misses to detect some section mismatches.
-> > > >
-> > > >   [test code]
-> > > >
-> > > >     #include <linux/init.h>
-> > > >
-> > > >     int __initdata foo;
-> > > >     int get_foo(int x) { return foo; }
-> > > >
-> > > > It is apparently a bad reference, but modpost does not report anyth=
-ing
-> > > > for ARM defconfig (i.e. multi_v7_defconfig).
-> > > >
-> > > > The test code above produces the following relocations.
-> > > >
-> > > >   Relocation section '.rel.text' at offset 0x200 contains 2 entries=
-:
-> > > >    Offset     Info    Type            Sym.Value  Sym. Name
-> > > >   00000000  0000062b R_ARM_MOVW_ABS_NC 00000000   .LANCHOR0
-> > > >   00000004  0000062c R_ARM_MOVT_ABS    00000000   .LANCHOR0
-> > > >
-> > > >   Relocation section '.rel.ARM.exidx' at offset 0x210 contains 2 en=
-tries:
-> > > >    Offset     Info    Type            Sym.Value  Sym. Name
-> > > >   00000000  0000022a R_ARM_PREL31      00000000   .text
-> > > >   00000000  00001000 R_ARM_NONE        00000000   __aeabi_unwind_cp=
-p_pr0
-> > > >
-> > > > Currently, R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS are just skipped.
-> > > >
-> > > > Add code to handle them. I checked arch/arm/kernel/module.c to lear=
-n
-> > > > how the offset is encoded in the instruction.
-> > > >
-> > > > The referenced symbol in relocation might be a local anchor.
-> > > > If is_valid_name() returns false, let's search for a better symbol =
-name.
-> > > >
-> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > ---
-> > > >
-> > > >  scripts/mod/modpost.c | 12 ++++++++++--
-> > > >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > > > index 34fbbd85bfde..ed2301e951a9 100644
-> > > > --- a/scripts/mod/modpost.c
-> > > > +++ b/scripts/mod/modpost.c
-> > > > @@ -1108,7 +1108,7 @@ static inline int is_valid_name(struct elf_in=
-fo *elf, Elf_Sym *sym)
-> > > >  /**
-> > > >   * Find symbol based on relocation record info.
-> > > >   * In some cases the symbol supplied is a valid symbol so
-> > > > - * return refsym. If st_name !=3D 0 we assume this is a valid symb=
-ol.
-> > > > + * return refsym. If is_valid_name() =3D=3D true, we assume this i=
-s a valid symbol.
-> > > >   * In other cases the symbol needs to be looked up in the symbol t=
-able
-> > > >   * based on section and address.
-> > > >   *  **/
-> > > > @@ -1121,7 +1121,7 @@ static Elf_Sym *find_tosym(struct elf_info *e=
-lf, Elf64_Sword addr,
-> > > >         Elf64_Sword d;
-> > > >         unsigned int relsym_secindex;
-> > > >
-> > > > -       if (relsym->st_name !=3D 0)
-> > > > +       if (is_valid_name(elf, relsym))
-> > > >                 return relsym;
-> > > >
-> > > >         /*
-> > > > @@ -1312,11 +1312,19 @@ static int addend_arm_rel(struct elf_info *=
-elf, Elf_Shdr *sechdr, Elf_Rela *r)
-> > > >         unsigned int r_typ =3D ELF_R_TYPE(r->r_info);
-> > > >         Elf_Sym *sym =3D elf->symtab_start + ELF_R_SYM(r->r_info);
-> > > >         unsigned int inst =3D TO_NATIVE(*reloc_location(elf, sechdr=
-, r));
-> > > > +       int offset;
-> > > >
-> > > >         switch (r_typ) {
-> > > >         case R_ARM_ABS32:
-> > > >                 r->r_addend =3D inst + sym->st_value;
-> > > >                 break;
-> > > > +       case R_ARM_MOVW_ABS_NC:
-> > > > +       case R_ARM_MOVT_ABS:
-> > > > +               offset =3D ((inst & 0xf0000) >> 4) | (inst & 0xfff)=
-;
-> > > > +               offset =3D (offset ^ 0x8000) - 0x8000;
-> > >
-> > > The code in arch/arm/kernel/module.c then right shifts the offset by
-> > > 16 for R_ARM_MOVT_ABS. Is that necessary?
-> > >
-> >
-> > MOVW/MOVT pairs are limited to an addend of -/+ 32 KiB, and the same
-> > value must be encoded in both instructions.
->
->
-> In my understanding, 'movt' loads the immediate value to
-> the upper 16-bit of the register.
->
+This is part of the general push to deprecate register_sysctl_paths and
+register_sysctl_table. It contains 2 patchsets that were originally sent
+separately. I have put them together because the second followed the first.
 
-Correct. It sets the upper 16 bits of a register without corrupting
-the lower 16 bits.
+Parport driver uses the "CHILD" pointer in the ctl_table structure to create
+its directory structure. We move to the newer register_sysctl call and remove
+the pointer madness. I have separated the parport into 5 patches to clarify the
+different changes needed for the 3 calls to register_sysctl_paths.
 
-> I am just curious about the code in arch/arm/kernel/module.c.
->
-> Please see 'case R_ARM_MOVT_ABS:' part.
->
->   [1] 'offset' is the immediate value encoded in instruction
->   [2] Add sym->st_value
->   [3] Right-shift 'offset' by 16
->   [4] Write it back to the instruction
->
-> So, the immediate value encoded in the instruction
-> is divided by 65536.
->
-> I guess we need something like the following?
-> (left-shift by 16).
->
->   if (ELF32_R_TYPE(rel->r_info) =3D=3D R_ARM_MOVT_ABS ||
->       ELF32_R_TYPE(rel->r_info) =3D=3D R_ARM_MOVT_PREL)
->           offset <<=3D 16;
->
+We no longer export the register_sysctl_table call as parport was the
+last user from outside proc_sysctl.c. Also modified documentation slightly
+so register_sysctl_table is no longer mentioned.
 
-No. The addend is not encoded in the same way as the effective immediate va=
-lue.
+Replace register_sysctl_table with register_sysctl effectively effectively
+transitioning 5 base paths ("kernel", "vm", "fs", "dev" and "debug") to the new
+call. Besides removing the actual function, I also removed it from the checks
+done in check-sysctl-docs. @mcgrof went a bit further and removed 2 more
+functions.
 
-The addend is limited to -/+ 32 KiB (range of s16), and the MOVT
-instruction must use the same addend value as the MOVW instruction it
-is paired with, without shifting.
+Testing for this change was done in the same way as with previous sysctl
+replacement patches: I made sure that the result of `find /proc/sys/ | sha1sum`
+was the same before and after the patchset.
 
-This is necessary because otherwise, there is no way to handle an
-addend/symbol combination that results in a carry between the lower
-and upper 16 bit words. This is a consequence of the use of REL format
-rather than RELA, where the addend is part of the relocation and not
-encoded in the instructions.
+V4:
+* (mcgrof) : use of register_sysctl_init instead of register_sysctl
+* (mcgrof) : removed register_sysctl_table and __register_sysctl_base
+* Added a unregister call to properly unwind things when there is an error
+* Added kernel proc subdirectories "kernel/usermodehelper" and "kernel/keys"
 
->
->
->
-> >
-> > When constructing the actual immediate value from the symbol value and
-> > the addend, only the top 16 bits are used in MOVT and the bottom 16
-> > bits in MOVW.
-> >
-> > However, this code seems to borrow the Elf_Rela::addend field (which
-> > ARM does not use natively) to record the intermediate value, which
-> > would need to be split if it is used to fix up instruction opcodes.
->
-> At first, modpost supported only RELA for section mismatch checks.
->
-> Later, 2c1a51f39d95 ("[PATCH] kbuild: check SHT_REL sections")
-> added REL support.
->
-> But, the common code still used Elf_Rela.
->
->
-> modpost does not need to write back the fixed instruction.
-> modpost is only interested in the offset address.
->
-> Currently, modpost saves the offset address in
-> r->r_offset even for Rel. I do not like this code.
->
-> So, I am trying to reduce the use of Elf_Rela.
-> For example, this patch.
-> https://patchwork.kernel.org/project/linux-kbuild/patch/20230521160426.18=
-81124-8-masahiroy@kernel.org/
->
+V3:
+* Added a return error value when register fails
+* Made sure to free the memory on error when calling parport_proc_register
+* Added a bloat-o-meter output to measure bloat
+* Replaced kmalloc with kzalloc
+* Added comments about testing
+* Improved readability when using snprintf
 
-Yeah, that looks better to me.
+Have pushed this through 0-day. Waiting on results..
 
->
-> > Btw the Thumb2 encodings of MOVT and MOVW seem to be missing here.
->
-> Right, if CONFIG_THUMB2_KERNEL=3Dy, section mismatch check.
->
-> Several relocation types are just skipped.
->
+Best
+Joel
 
-Skipped entirely? Or only for the diagnostic print that outputs the symbol =
-name?
+Joel Granados (8):
+  parport: Move magic number "15" to a define
+  parport: Remove register_sysctl_table from parport_proc_register
+  parport: Remove register_sysctl_table from
+    parport_device_proc_register
+  parport: Remove register_sysctl_table from
+    parport_default_proc_register
+  parport: Removed sysctl related defines
+  sysctl: stop exporting register_sysctl_table
+  sysctl: Refactor base paths registrations
+  sysctl: Remove register_sysctl_table
+
+ drivers/parport/procfs.c  | 174 ++++++++++++++++++++------------------
+ drivers/parport/share.c   |   2 +-
+ fs/proc/proc_sysctl.c     | 162 +----------------------------------
+ fs/sysctls.c              |   5 +-
+ include/linux/parport.h   |   2 +
+ include/linux/sysctl.h    |  31 +------
+ kernel/sysctl.c           |  30 ++-----
+ scripts/check-sysctl-docs |  10 ---
+ 8 files changed, 110 insertions(+), 306 deletions(-)
+
+-- 
+2.30.2
+
