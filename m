@@ -2,213 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE8A70D74F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CB970D75D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 10:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235728AbjEWIZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 04:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S232661AbjEWI0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 04:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbjEWIYT (ORCPT
+        with ESMTP id S236271AbjEWIZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 04:24:19 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA401FD6
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:21:54 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-33832eab83cso9253095ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:21:54 -0700 (PDT)
+        Tue, 23 May 2023 04:25:00 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A0C10C6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:23:02 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-783dd1c02c9so1995590241.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 01:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684830181; x=1687422181;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zjHyckPwHHuHdgFwE4qh1Wuuo7Eui8vMfceM9MrdK3M=;
+        b=BpBVeot8lz9XSq6BLLeP3wEqoobHJUn796yDM96dEXkgFKzt/WVfVnu/GJzzIDTdlR
+         7dAM/Sao3nmyL/rK8wq3ckAFCz3I+1FXErRhiUQihy10UdIHhdl5O6+oiUtBO3UYQlu9
+         TxkEqbTGkx7aVkXjsv52vWz/0tOe7c43oCwrCTnQ9S0jNu3zMQHMEvgdnOp6wY6f6eBl
+         hmmka9i3d0h+L/K5Azjgk/ifxKw1SiGynhRaOAl6sDud1VNWqNVJ2ANenxSk5zh3CNg3
+         pzEjVkZFoi/QOwgMN+L54gTeGnRIQ+yqYrubqDBKlSB1P3+BQkpyYT7aVbBRudjx1Pk7
+         ++DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684830113; x=1687422113;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nfQJF7F8CzCgiPg/FnTyOygU1Zd7mTMmLMNUmA85cTM=;
-        b=YCJDzDv/QMZpQbWJ8b+HHIyWuPDA9qQFbIKkkE0EoEav5SuPmn5ro/8XiL84SYAPxO
-         coFsfk/Yee9ROPLCwm/UP7QgypNqW4FH3pYl9oIADfZxHXAFDcJG7kUVNQ4drHng+3kZ
-         v4Y3Ul+DnwzisRlhZFrYgg8FdV6SOSFbEx68WAm6ffZGk3YUR3qyraWET2sYtntrIFqf
-         N0qjwEF79VAcVQJHNmpreHZOg+TR3nza86yJT+PLfLxm/IGTWvWfX5+38/4EygMk+R1e
-         N7T0Nf6zMDrwjcIvqXZNjTzKqQa9Yvg+K30j2JLzE04y9Sk0ecgJOBnlcbUm+n7aoeud
-         fh0w==
-X-Gm-Message-State: AC+VfDxy+2/wFu2gf+bn+y8D8BC9Ufml4lu/+SX0Y2vln7UlIdqIRysu
-        t17eeQIkmgshqBbQl9KdvSh/RIbApyvXBW+KaDXCagDNfq4A
-X-Google-Smtp-Source: ACHHUZ4k/UIBy+giPbPZfgPd2/UC8NWsnFtdZ6aJTckEDvRGfUd7BCwc2olkamKsj4h2UtljgsuKUz69dFwQR3KrbK2RR4Zr9R/l
+        d=1e100.net; s=20221208; t=1684830181; x=1687422181;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zjHyckPwHHuHdgFwE4qh1Wuuo7Eui8vMfceM9MrdK3M=;
+        b=UZGVrxXaG992CYle4FkAyP+oZmg/UyHTPwkMFsYsoLlfKZgLLcENRM94MF8GKubMcZ
+         +vpT3TEs1F9I6Lt4lbB/TUYADmJf3mbQJfmD6XP0VDVeB8xKHBKGzrtnOhTlmVajqnMI
+         3zxpUevj6nhSAKQQybLmu+RlqmeOFhPmqUUFsUqo1vsa3y+EXiS67LzrMk2R3LDQ726L
+         ZoR6sIQfCuVQVay8IY3OmK5+vGx6Twd/v/1vi1JN1Xo+AA4bbBNDfZiuX589dPtweP41
+         VXPc4RqV0U7/mCw0317YhxiUUCU81Z4OSZ+FgsBGU+rBJEtV0POTP5I9Ffyxgu3m5NDV
+         LJjQ==
+X-Gm-Message-State: AC+VfDz4zzH/fMyAqS2laHq97GJCHZ89J5V01eEVD+nmfKjX1G9HFwWV
+        8SnhYp7BUed+qKc+Po1NaBF6zNQ6zBcDUumne/lq0A==
+X-Google-Smtp-Source: ACHHUZ4iPAvS59ILj+lu+sbEKfdq9a4KR6lTtU7qvfK/yCnM3pI2xhNyoXwwv1yfH73cwDrG8ZAUn65SoQU6/vIyFWI=
+X-Received: by 2002:a67:e2c7:0:b0:439:558f:4cd2 with SMTP id
+ i7-20020a67e2c7000000b00439558f4cd2mr536465vsm.11.1684830181717; Tue, 23 May
+ 2023 01:23:01 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:cf49:0:b0:33a:557c:402a with SMTP id
- c9-20020a92cf49000000b0033a557c402amr695444ilr.6.1684830113525; Tue, 23 May
- 2023 01:21:53 -0700 (PDT)
-Date:   Tue, 23 May 2023 01:21:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006c771505fc581417@google.com>
-Subject: [syzbot] [reiserfs?] KASAN: use-after-free Read in leaf_copy_items_entirely
-From:   syzbot <syzbot+7e4b621ae0852681c6e3@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230522045806.3442-1-raag.jadav@intel.com>
+In-Reply-To: <20230522045806.3442-1-raag.jadav@intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 23 May 2023 10:22:50 +0200
+Message-ID: <CAMRc=McL-yuUSTMiWn56Q26ZYKoLTx1yYTRsygLQsKRbAgsR5Q@mail.gmail.com>
+Subject: Re: [PATCH v1] gpio: tangier: calculate number of ctx using temporary variable
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     linus.walleij@linaro.org, andriy.shevchenko@linux.intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, May 22, 2023 at 6:58=E2=80=AFAM Raag Jadav <raag.jadav@intel.com> w=
+rote:
+>
+> Utilize a temporary variable to calculate number of ctx from ngpio
+> inside ->probe() implementation.
+> While at it, include math.h for using DIV_ROUND_UP().
+>
+> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> ---
+>  drivers/gpio/gpio-tangier.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpio-tangier.c b/drivers/gpio/gpio-tangier.c
+> index e990781935ba..7ce3eddaed25 100644
+> --- a/drivers/gpio/gpio-tangier.c
+> +++ b/drivers/gpio/gpio-tangier.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/irq.h>
+> +#include <linux/math.h>
+>  #include <linux/module.h>
+>  #include <linux/pinctrl/pinconf-generic.h>
+>  #include <linux/spinlock.h>
+> @@ -428,10 +429,11 @@ static int tng_gpio_add_pin_ranges(struct gpio_chip=
+ *chip)
+>  int devm_tng_gpio_probe(struct device *dev, struct tng_gpio *gpio)
+>  {
+>         const struct tng_gpio_info *info =3D &gpio->info;
+> +       size_t nctx =3D DIV_ROUND_UP(info->ngpio, 32);
+>         struct gpio_irq_chip *girq;
+>         int ret;
+>
+> -       gpio->ctx =3D devm_kcalloc(dev, DIV_ROUND_UP(info->ngpio, 32), si=
+zeof(*gpio->ctx), GFP_KERNEL);
+> +       gpio->ctx =3D devm_kcalloc(dev, nctx, sizeof(*gpio->ctx), GFP_KER=
+NEL);
+>         if (!gpio->ctx)
+>                 return -ENOMEM;
+>
+> --
+> 2.17.1
+>
 
-syzbot found the following issue on:
+Applied, thanks!
 
-HEAD commit:    44c026a73be8 Linux 6.4-rc3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=111d1bf9280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-dashboard link: https://syzkaller.appspot.com/bug?extid=7e4b621ae0852681c6e3
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/51c970de1750/disk-44c026a7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/799aacdbebeb/vmlinux-44c026a7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0afc45e7f608/bzImage-44c026a7.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7e4b621ae0852681c6e3@syzkaller.appspotmail.com
-
-REISERFS (device loop2): checking transaction log (loop2)
-REISERFS (device loop2): Using r5 hash to sort names
-REISERFS (device loop2): using 3.5.x disk format
-REISERFS (device loop2): Created .reiserfs_priv - reserved for xattr storage.
-==================================================================
-BUG: KASAN: use-after-free in leaf_copy_items_entirely+0x1c2/0xee0 fs/reiserfs/lbalance.c:358
-Read of size 48 at addr ffff88803e8d9fe8 by task syz-executor.2/17244
-
-CPU: 1 PID: 17244 Comm: syz-executor.2 Not tainted 6.4.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:351 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:462
- kasan_report+0x176/0x1b0 mm/kasan/report.c:572
- kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
- __asan_memcpy+0x29/0x70 mm/kasan/shadow.c:105
- leaf_copy_items_entirely+0x1c2/0xee0 fs/reiserfs/lbalance.c:358
- leaf_copy_items fs/reiserfs/lbalance.c:610 [inline]
- leaf_move_items+0x101c/0x2960 fs/reiserfs/lbalance.c:726
- balance_leaf_new_nodes_paste_whole fs/reiserfs/do_balan.c:1162 [inline]
- balance_leaf_new_nodes_paste fs/reiserfs/do_balan.c:1215 [inline]
- balance_leaf_new_nodes fs/reiserfs/do_balan.c:1246 [inline]
- balance_leaf+0x6519/0x12510 fs/reiserfs/do_balan.c:1450
- do_balance+0x30d/0x8f0 fs/reiserfs/do_balan.c:1888
- reiserfs_paste_into_item+0x732/0x870 fs/reiserfs/stree.c:2157
- reiserfs_get_block+0x2250/0x5130 fs/reiserfs/inode.c:1069
- __block_write_begin_int+0x548/0x1a50 fs/buffer.c:2064
- reiserfs_write_begin+0x24d/0x520 fs/reiserfs/inode.c:2773
- generic_cont_expand_simple+0x18b/0x2a0 fs/buffer.c:2425
- reiserfs_setattr+0x57d/0x1140 fs/reiserfs/inode.c:3303
- notify_change+0xc8b/0xf40 fs/attr.c:483
- do_truncate+0x220/0x300 fs/open.c:66
- do_sys_ftruncate+0x2e4/0x380 fs/open.c:194
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb0fa88c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fb0f93fe168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 00007fb0fa9abf80 RCX: 00007fb0fa88c169
-RDX: 0000000000000000 RSI: 0000000002007fff RDI: 0000000000000004
-RBP: 00007fb0fa8e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffee3e87cdf R14: 00007fb0f93fe300 R15: 0000000000022000
- </TASK>
-
-The buggy address belongs to the physical page:
-page:ffffea0000fa3640 refcount:1 mapcount:0 mapping:ffff888037946198 index:0x1df1 pfn:0x3e8d9
-memcg:ffff8880219c8000
-aops:shmem_aops ino:3a7 dentry name:"memfd:syzkaller"
-flags: 0xfff0000008001e(referenced|uptodate|dirty|lru|swapbacked|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff0000008001e ffffea0000fa3608 ffffea0000c5e408 ffff888037946198
-raw: 0000000000001df1 0000000000000000 00000001ffffffff ffff8880219c8000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Movable, gfp_mask 0x140cca(GFP_HIGHUSER_MOVABLE|__GFP_COMP), pid 17223, tgid 17221 (syz-executor.0), ts 846949096444, free_ts 845261892059
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1731
- prep_new_page mm/page_alloc.c:1738 [inline]
- get_page_from_freelist+0x321c/0x33a0 mm/page_alloc.c:3502
- __alloc_pages+0x255/0x670 mm/page_alloc.c:4768
- __folio_alloc+0x13/0x30 mm/page_alloc.c:4800
- vma_alloc_folio+0x48a/0x9a0 mm/mempolicy.c:2240
- shmem_alloc_folio mm/shmem.c:1579 [inline]
- shmem_alloc_and_acct_folio+0x5e7/0xe10 mm/shmem.c:1603
- shmem_get_folio_gfp+0x120f/0x3470 mm/shmem.c:1948
- shmem_get_folio mm/shmem.c:2079 [inline]
- shmem_write_begin+0x172/0x4e0 mm/shmem.c:2573
- generic_perform_write+0x300/0x5e0 mm/filemap.c:3923
- __generic_file_write_iter+0x17a/0x400 mm/filemap.c:4051
- generic_file_write_iter+0xaf/0x310 mm/filemap.c:4083
- call_write_iter include/linux/fs.h:1868 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x790/0xb20 fs/read_write.c:584
- ksys_write+0x1a0/0x2c0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1302 [inline]
- free_unref_page_prepare+0x903/0xa30 mm/page_alloc.c:2564
- free_unref_page_list+0x596/0x830 mm/page_alloc.c:2705
- release_pages+0x2193/0x2470 mm/swap.c:1042
- __pagevec_release+0x84/0x100 mm/swap.c:1062
- pagevec_release include/linux/pagevec.h:63 [inline]
- folio_batch_release include/linux/pagevec.h:132 [inline]
- shmem_undo_range+0x6af/0x1ba0 mm/shmem.c:954
- shmem_truncate_range mm/shmem.c:1049 [inline]
- shmem_evict_inode+0x258/0x9f0 mm/shmem.c:1164
- evict+0x2a4/0x620 fs/inode.c:665
- __dentry_kill+0x436/0x650 fs/dcache.c:607
- dentry_kill+0xbb/0x290
- dput+0x1f3/0x420 fs/dcache.c:913
- __fput+0x5e4/0x890 fs/file_table.c:329
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0xd9/0x100 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
-
-Memory state around the buggy address:
- ffff88803e8d9e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88803e8d9f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff88803e8d9f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                                                          ^
- ffff88803e8da000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88803e8da080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Bartosz
