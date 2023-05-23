@@ -2,144 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E2E70E26B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6172F70E259
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 18:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbjEWQeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 12:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S233800AbjEWQeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 12:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbjEWQdv (ORCPT
+        with ESMTP id S236334AbjEWQeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 12:33:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FCE1B5;
-        Tue, 23 May 2023 09:33:33 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:1ba:3e91:de16:9b34] (unknown [IPv6:2a01:e0a:120:3210:1ba:3e91:de16:9b34])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B2D16605961;
-        Tue, 23 May 2023 17:33:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684859610;
-        bh=hm9GXI++V1p38wPBhy077rjD8CVi06sRryeA4cCqMHg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kVuXKut9UkTmyvKnD09JMb0Aq3PPcm1cOV6Wrxmksx+I+PGRLsexTAkGogbN0VeYU
-         5qxJy63D8psw8n37zasdU1AIY+kHJ1NE+yycRw/HRZHZnkhi7FaVy1d2KrIjTnHQ7G
-         bJkHMMLfpW4FqauR+X3+15sXQkxtVPLEkDdWuA0cqifCsY4ELOto3+OsW4Sn95MMJC
-         VXdH4cuLcZZRAO4ft4pMWk+RANhrzjBuO6R5U0l8SqGK5W34HsiYKb+3/tfoy7A3h7
-         YsCsydvzJ+B+ReYqKGggxjLxZfrSItSI2T3hp27bYvuU09zReWzP6bpcXy4mek54Hs
-         BTXcVF0Nf7woA==
-Message-ID: <50d751a5-c6bb-0b4b-4d4f-2a5d87be3dd4@collabora.com>
-Date:   Tue, 23 May 2023 18:33:28 +0200
+        Tue, 23 May 2023 12:34:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C0DC2;
+        Tue, 23 May 2023 09:34:05 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NFpH8E029591;
+        Tue, 23 May 2023 16:33:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=yLQUjASuD0Wzz5ADqgfqMAhs+2Y8p1wr3eeG8IYvX74=;
+ b=s/X/T9RNu/ayUnMW5BVA8OU8elWdAQGYll0z9DZ3STopDBIazbSn8f7LKgsjy8SwQxuO
+ SPrKM4B7Vm4FqHD8WdOwn28a2+fPoaUX2BrM/49gSfBXbVs4kcvYGEabULqmKJJ/Uukk
+ Jc6RlnGAiItAOFcGH8MnMW0Jg6ggmwxI/U0AJL6QdJa5dl63/zIuMcNncld5bv/lqI2a
+ DPdUiKozejevP32CMZiVt53j91U39WvGLMWrEeNXLkGzZOgGuUozD1GBq21Vxoxs+hs3
+ 74/6C0fRnIsqiwkzPC0ec9xyXpu0+YTuQck78Devw0IADWi22eAullhm62rx73wRTQHm aA== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qs0gc0ypc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 16:33:58 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34NEHcAH030404;
+        Tue, 23 May 2023 16:33:58 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3qppcd3y7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 May 2023 16:33:57 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34NGXt1E63439306
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 May 2023 16:33:56 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC78A58056;
+        Tue, 23 May 2023 16:33:55 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC3EF58052;
+        Tue, 23 May 2023 16:33:54 +0000 (GMT)
+Received: from li-479af74c-31f9-11b2-a85c-e4ddee11713b.ibm.com (unknown [9.61.95.28])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 23 May 2023 16:33:54 +0000 (GMT)
+Message-ID: <fa2905e329f2e723228eb4750b305ae54be2a1ad.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/2][next] vfio/ccw: Replace one-element array with
+ flexible-array member
+From:   Eric Farman <farman@linux.ibm.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Tue, 23 May 2023 12:33:54 -0400
+In-Reply-To: <3c10549ebe1564eade68a2515bde233527376971.1684805398.git.gustavoars@kernel.org>
+References: <cover.1684805398.git.gustavoars@kernel.org>
+         <3c10549ebe1564eade68a2515bde233527376971.1684805398.git.gustavoars@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0Ei0tlkdwj_V9c4MJxUtPHDu7Z6hbHnT
+X-Proofpoint-GUID: 0Ei0tlkdwj_V9c4MJxUtPHDu7Z6hbHnT
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] media: verisilicon: Additional fix for the crash when
- opening the driver
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     nicolas.dufresne@collabora.com, p.zabel@pengutronix.de,
-        mchehab@kernel.org, m.szyprowski@samsung.com,
-        m.tretter@pengutronix.de, didi.debian@cknow.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
-        regressions@lists.linux.dev
-References: <20230523162515.993862-1-benjamin.gaignard@collabora.com>
- <CAAEAJfDgJM++zHzR9ez94ZgRSr7H6NrohsG8=+8722ZEjC1gRg@mail.gmail.com>
-Content-Language: en-US
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <CAAEAJfDgJM++zHzR9ez94ZgRSr7H6NrohsG8=+8722ZEjC1gRg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_10,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=763 priorityscore=1501 impostorscore=0
+ mlxscore=0 spamscore=0 clxscore=1011 suspectscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305230132
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2023-05-22 at 19:35 -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with
+> flexible
+> array members instead. So, replace one-element array with flexible-
+> array
+> member in struct vfio_ccw_parent and refactor the the rest of the
 
-Le 23/05/2023 à 18:28, Ezequiel Garcia a écrit :
-> Hi Benjamin,
->
-> Thanks for the patch.
->
-> On Tue, May 23, 2023 at 1:25 PM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
->> This fixes the following issue observed on Odroid-M1 board:
->>
->>   Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-> What pointer is NULL? ctx->src_fmt ?
+s/the the/the/
 
-yes ctx->vpu_src_fmt pointer was NULL when probing the encoder.
+> code
+> accordingly.
+>=20
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/297
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
->
->>   Mem abort info:
->>   ...
->>   Modules linked in: crct10dif_ce hantro_vpu snd_soc_simple_card snd_soc_simple_card_utils v4l2_vp9 v4l2_h264 rockchip_saradc v4l2_mem2mem videobuf2_dma_contig videobuf2_memops rtc_rk808 videobuf2_v4l2 industrialio_triggered_buffer rockchip_thermal dwmac_rk stmmac_platform stmmac videodev kfifo_buf display_connector videobuf2_common pcs_xpcs mc rockchipdrm analogix_dp dw_mipi_dsi dw_hdmi drm_display_helper panfrost drm_shmem_helper gpu_sched ip_tables x_tables ipv6
->>   CPU: 3 PID: 176 Comm: v4l_id Not tainted 6.3.0-rc7-next-20230420 #13481
->>   Hardware name: Hardkernel ODROID-M1 (DT)
->>   pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>   pc : hantro_try_fmt+0xa0/0x278 [hantro_vpu]
->>   lr : hantro_try_fmt+0x94/0x278 [hantro_vpu]
->>   ...
->>   Call trace:
->>    hantro_try_fmt+0xa0/0x278 [hantro_vpu]
->>    hantro_set_fmt_out+0x3c/0x298 [hantro_vpu]
->>    hantro_reset_raw_fmt+0x98/0x128 [hantro_vpu]
->>    hantro_set_fmt_cap+0x240/0x254 [hantro_vpu]
->>    hantro_reset_encoded_fmt+0x94/0xcc [hantro_vpu]
->>    hantro_reset_fmts+0x18/0x38 [hantro_vpu]
->>    hantro_open+0xd4/0x20c [hantro_vpu]
->>    v4l2_open+0x80/0x120 [videodev]
->>    chrdev_open+0xc0/0x22c
->>    do_dentry_open+0x13c/0x48c
->>    vfs_open+0x2c/0x38
->>    path_openat+0x550/0x934
->>    do_filp_open+0x80/0x12c
->>    do_sys_openat2+0xb4/0x168
->>    __arm64_sys_openat+0x64/0xac
->>    invoke_syscall+0x48/0x114
->>    el0_svc_common+0x100/0x120
->>    do_el0_svc+0x3c/0xa8
->>    el0_svc+0x40/0xa8
->>    el0t_64_sync_handler+0xb8/0xbc
->>    el0t_64_sync+0x190/0x194
->>   Code: 97fc8a7f f940aa80 52864a61 72a686c1 (b9400800)
->>   ---[ end trace 0000000000000000 ]---
->>
->> Fixes: db6f68b51e5c ("media: verisilicon: Do not set context src/dst formats in reset functions")
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->>   drivers/media/platform/verisilicon/hantro_v4l2.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
->> index 835518534e3b..61cfaaf4e927 100644
->> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
->> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
->> @@ -397,10 +397,12 @@ hantro_reset_raw_fmt(struct hantro_ctx *ctx, int bit_depth)
->>          if (!raw_vpu_fmt)
->>                  return -EINVAL;
->>
->> -       if (ctx->is_encoder)
->> +       if (ctx->is_encoder) {
->>                  encoded_fmt = &ctx->dst_fmt;
->> -       else
->> +               ctx->vpu_src_fmt = raw_vpu_fmt;
->> +       } else {
->>                  encoded_fmt = &ctx->src_fmt;
->> +       }
->>
->>          hantro_reset_fmt(&raw_fmt, raw_vpu_fmt);
->>          raw_fmt.width = encoded_fmt->width;
->> --
->> 2.34.1
->>
+Reviewed-by: Eric Farman <farman@linux.ibm.com>
+
+> ---
+> =C2=A0drivers/s390/cio/vfio_ccw_drv.c=C2=A0=C2=A0=C2=A0=C2=A0 | 3 ++-
+> =C2=A0drivers/s390/cio/vfio_ccw_private.h | 2 +-
+> =C2=A02 files changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/s390/cio/vfio_ccw_drv.c
+> b/drivers/s390/cio/vfio_ccw_drv.c
+> index ff538a086fc7..57906a9c6324 100644
+> --- a/drivers/s390/cio/vfio_ccw_drv.c
+> +++ b/drivers/s390/cio/vfio_ccw_drv.c
+> @@ -171,7 +171,8 @@ static int vfio_ccw_sch_probe(struct subchannel
+> *sch)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0parent =3D kzalloc(sizeof(*par=
+ent), GFP_KERNEL);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0parent =3D kzalloc(sizeof(*par=
+ent) + sizeof(struct mdev_type
+> *),
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 GFP_KERN=
+EL);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!parent)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return -ENOMEM;
+> =C2=A0
+> diff --git a/drivers/s390/cio/vfio_ccw_private.h
+> b/drivers/s390/cio/vfio_ccw_private.h
+> index b441ae6700fd..b62bbc5c6376 100644
+> --- a/drivers/s390/cio/vfio_ccw_private.h
+> +++ b/drivers/s390/cio/vfio_ccw_private.h
+> @@ -79,7 +79,7 @@ struct vfio_ccw_parent {
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mdev_parent=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0parent;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mdev_type=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mdev_type;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mdev_type=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*mdev_types[1];
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mdev_type=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*mdev_types[];
+> =C2=A0};
+> =C2=A0
+> =C2=A0/**
+
