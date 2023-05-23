@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B197270DC0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6E470DC13
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbjEWMKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S236460AbjEWMPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbjEWMKt (ORCPT
+        with ESMTP id S231621AbjEWMPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:10:49 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95F211F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:10:47 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-309382efe13so4591460f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684843846; x=1687435846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mGk02VW36o8oi9xKpds5rY0RuBS6XODiauPH5sa2EDk=;
-        b=1+hx8JRMv8bN6bR9C5NNLW6j3oMCk8dl5nP2zPiCTdzFTyYS6CMOWzYCAiyr2LbJKq
-         stWoCqsYd1ZFVflnqCQlsMXyKLScSJgyNJfWrF8oy3pkxaPTIpyLGGrB5Pble1GU5YbF
-         2eS4IGtUlX3yflBdysz+r7R63PGwkXLgQ84zSRvb07Kh8UBAqV4thC5UN2FaoD9Vu6M9
-         FszYXip6ViB509VU11lVE1QKqOfqcMft+qzm4ZM6dAhDfnZK8vfdlk8PGmKDSJC58IG6
-         w30vkFHRYKAmLbtlms+ciDK/pCVgcWb9Vd0i0bB+IqDOLVFdnLSjFVYeWXQE6wWQyzOW
-         a1fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684843846; x=1687435846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mGk02VW36o8oi9xKpds5rY0RuBS6XODiauPH5sa2EDk=;
-        b=DA9W4OJKK/Nv66t0WRaevTy5JYcngI+mCSlkh3w1RdQ2GTvOqXhTVGby4Qgn8rqBMs
-         eiV9F2i1M1xWwzBiqpS1xdao4JlhIsA/vIxS5Yp+M5JPclaomUAaLxuiuVNWp7tx+/lB
-         hli5f1wfu5HdJetkjy/bwuadfwGp6N9mBudK22wfoCAoWWqy6rgmqmi2JAA4zeQa6/7l
-         AhzpmAqq8WxsHCqnhgbGR54ZxOGJtbr2c/ypPVCCoWMDbSnTph3n6AZDq7+IOr1o2s3F
-         hIwygxFgt5jQovA7PJaBB8O6RB6LchnYDUgmV3kCn9bStvO5khiIYbUgm/hoL844wx6e
-         30Sw==
-X-Gm-Message-State: AC+VfDyTCsHNrpxQtUCrOoBUFSOUz9WMwbaFJzt1LJtuALsUBrxXdEmh
-        QV4GVnfnM38/tw4aPowP8IDcsg==
-X-Google-Smtp-Source: ACHHUZ42YAfaQnb/Yc6os9IZAlXJp0vBw8ve0qBJR7shOA52HC7aoC6d1NzgFID1WFdnGb+5LV4Qkw==
-X-Received: by 2002:a5d:6b4c:0:b0:2f5:83a8:a9a9 with SMTP id x12-20020a5d6b4c000000b002f583a8a9a9mr10876277wrw.16.1684843846192;
-        Tue, 23 May 2023 05:10:46 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id k6-20020adfe8c6000000b003095a329e90sm10788563wrn.97.2023.05.23.05.10.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 05:10:45 -0700 (PDT)
-Message-ID: <2a22b9e1-a828-8a88-e125-f8e603bf1796@baylibre.com>
-Date:   Tue, 23 May 2023 14:10:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] media: mediatek: vcodec: mtk_vcodec_dec_hw: Use
- devm_pm_runtime_enable()
-Content-Language: en-US
-To:     Fei Shao <fshao@chromium.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        linux-media@vger.kernel.org,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20230515141610.v2.1.I0d1657be3fea5870f797e975a7aa490291e17993@changeid>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230515141610.v2.1.I0d1657be3fea5870f797e975a7aa490291e17993@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 08:15:09 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C67C109
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:15:08 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 19DE95C0067;
+        Tue, 23 May 2023 08:15:06 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 23 May 2023 08:15:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684844106; x=1684930506; bh=kA
+        Ht+x8T70GQYnDSilrxwAJfF+iMwu+ILOsuFlWX27k=; b=deLIeor9mA+9amW33f
+        LaNq3Uiu0xp+FUf1hZdSkFIRcPBUtbIsfchH0AydLqLdoO2ctMhAmFaCmDnLxxB5
+        EeMzSuJPZic4ghBaYZQHCFy0x7janEbDESDGPmcacHdoLNVwPrMfcLswdu6rRx3W
+        Qbcjp1tPGLq9TpikHCwma6ZceEaY6n37Km2aTq0gS3AZXADrq9ERsHWQQaMth0eK
+        8SJ+ggMEJRoc5ygZb3BZGxNLfZ63AVTqsSGhWmgAYNOQrC5UFBemSDyKQmZwWsCG
+        35k7evKNcjNlJsGTJQwz59GArwjDYSge9a32hMOssx1eBgziy1ki+J6+HqD40lHD
+        x0VQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684844106; x=1684930506; bh=kAHt+x8T70GQY
+        nDSilrxwAJfF+iMwu+ILOsuFlWX27k=; b=J/X0Rp5vSLHvL02D95wXQVdpyufk4
+        fPZqG90TzuBX+ls/kl0eOMjQqmIm9/BcAfskIOILBZc0PjscaPOJMbjR4JmgNtl9
+        qiMfKeYqJfEOA5SmHvy2DK7I8uvCqiZTZhCIK5SZR+8sg37SljFNYR3kBfULLiGY
+        M/UMdDHURRcsVS4L1BT43v9BfupXZ5RdZGw5+XGlNIwpfM5LpDmGUn+IbA8cRXbs
+        htB1LANzq/nTDXUQsACGnK/8q1M/btmR6PmZ6JdludD1s1S28otDREPeUYHcXC4n
+        +Mpgy5sr4/9jldOgnh/Zr2cxay/eOcO/2noaQ1lW3JOVNqym740SjwemQ==
+X-ME-Sender: <xms:Sa5sZLms-AerBjtHcDsFovCAxL1bnO_DEBtDWD0o_C9NZFJdm6AjtA>
+    <xme:Sa5sZO3ckcCcLQ6axu3pVpQx31YJ-OUgU8ndwMp9b7CS1uyFXv2u8k_ul7WwGK1uz
+    HDKhB_BuDK3dVMtj2M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Sa5sZBpXdDJgpmhr-SxGBtktcWW4AN4ltXRJ5YmnBTKWRGoKk_gCwg>
+    <xmx:Sa5sZDnepR50fV5yc4DEpnFI7-XV0HJVupo0wl8rMwzukkFyIqiJVg>
+    <xmx:Sa5sZJ2YFplueT419rIsYwfqgpJKdJihAtq6bQb2xJfSPx3i6lTViA>
+    <xmx:Sq5sZEQ7vMTV343nx7kcUSnmGN1N32jAeNmvX9WvwMMdY42q0iTTkw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 69D27B60089; Tue, 23 May 2023 08:15:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <688172c5-fedf-42bb-9fcc-5ec28e83b164@app.fastmail.com>
+In-Reply-To: <20230522174635.7acfb42c@xps-13>
+References: <20230417205654.1982368-1-arnd@kernel.org>
+ <20230522174635.7acfb42c@xps-13>
+Date:   Tue, 23 May 2023 14:14:45 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Richard Weinberger" <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        =?UTF-8?Q?Micha=C5=82_K=C4=99pie=C5=84?= <kernel@kempniu.pl>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtdchar: mark bits of ioctl handler noinline
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 08:16, Fei Shao wrote:
-> Convert pm_runtime_enable() to the managed version, and clean up error
-> handling and unnecessary .remove() callback accordingly.
-> 
-> Signed-off-by: Fei Shao<fshao@chromium.org>
+On Mon, May 22, 2023, at 17:46, Miquel Raynal wrote:
+>
+> I am about to take this as part of my next fixes PR, should we Cc:
+> stable? What is the current policy wrt gcc version issues?
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+I think in general we do want stable kernels to work with the latest
+gcc, so please add the Cc:stable annotation.
 
--- 
-Regards,
-Alexandre
-
+      Arnd
