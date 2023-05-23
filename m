@@ -2,78 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C5270DB52
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9048870DB5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbjEWLPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S236279AbjEWLSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjEWLPG (ORCPT
+        with ESMTP id S229653AbjEWLSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:15:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164D3119;
-        Tue, 23 May 2023 04:15:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DA5063144;
-        Tue, 23 May 2023 11:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86034C433EF;
-        Tue, 23 May 2023 11:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684840503;
-        bh=t7q3eN4BhkELHpTr8DtxIodckxoWL2ElEdGhZ8MHRXA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=kkOoNXpsxbLfCboBMvGQ0TZ495A4EkCqbOAhscv082uZWwcELAtlQYSschubrdr7e
-         s41Z0KfV1nRirJQ+AXcuUlwXITW7dG+QbnBqsROCo7fnGawbuOSiV1H/jac4LP62Px
-         DgTNYFrlEMVh15PHU0jwip1npMemwKtmdPYAnnIQUUIw09adZ4/j4VXr9V1mp039FO
-         8zxW1TPfGEf3AnApU6fmuw7BVmsLam15SH3gzqm4qmy+oakOHWJck/MpVclOMnuvBR
-         A+fjefks4366G9TneC0ktxH2ISCrf7eEdYApxB2Uw2EdkseBJW/MvR3OvEYUKuZ2ix
-         9aYZU2cyS5TdA==
-Message-ID: <c350ae1b689ef325561ba3443ff841c4d22e5791.camel@kernel.org>
-Subject: Re: [PATCH v4 2/9] fs: add infrastructure for multigrain inode
- i_m/ctime
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Neil Brown <neilb@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org
-Date:   Tue, 23 May 2023 07:15:00 -0400
-In-Reply-To: <20230523-undicht-antihelden-b1a98aa769be@brauner>
-References: <20230518114742.128950-1-jlayton@kernel.org>
-         <20230518114742.128950-3-jlayton@kernel.org>
-         <20230523100240.mgeu4y46friv7hau@quack3>
-         <20230523101723.xmy7mylbczhki6aa@quack3>
-         <ef75ac7c96f309b8f080a717f260247f69988d4a.camel@kernel.org>
-         <20230523-undicht-antihelden-b1a98aa769be@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Tue, 23 May 2023 07:18:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3216BC4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=V1J0Y/GZcMpx8weVZkJ4F9rLuT21EnsgcCTnK29Bs7w=; b=KvWE3zEQEaAJ93p+ygeu5nw84r
+        cq5bmfhrq/P3sikIYToafCdmBFun/j1H8mERDMVf9A5geE2aVokt6PennG69yvO1RHXTisEXn1fi1
+        NqkgJik0Z1nNsTdDfF5Z3I7HONO1EV4kYH5Lz2wnTTDK9k0SWSFsCVhL2XldWxsR+NQFygdBQAPJS
+        6PzjOxGmDjWBtSkYhLlTl9q3MwW4bMtfUS4pX8Y5TKgd0M3sIUK0mY5pwuvidscbmfnw6uJhgLidS
+        CG8c4vHMN/FhthpLr4ek/zAHOCUBBOfXLfdRgY53fOpAq4nekfTRueJIdVzCZV0p0IhSHQULOerfd
+        uXfcdSUQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1Q1z-003Unp-2J;
+        Tue, 23 May 2023 11:18:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A5BF5300338;
+        Tue, 23 May 2023 13:18:18 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7F9332012158D; Tue, 23 May 2023 13:18:18 +0200 (CEST)
+Date:   Tue, 23 May 2023 13:18:18 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        joshdon@google.com, brho@google.com, briannorris@chromium.org,
+        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
+        void@manifault.com, gautham.shenoy@amd.com,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
+ execution locality
+Message-ID: <20230523111818.GH4253@hirez.programming.kicks-ass.net>
+References: <20230519001709.2563-1-tj@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230519001709.2563-1-tj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,152 +65,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-23 at 13:01 +0200, Christian Brauner wrote:
-> On Tue, May 23, 2023 at 06:56:11AM -0400, Jeff Layton wrote:
-> > On Tue, 2023-05-23 at 12:17 +0200, Jan Kara wrote:
-> > > On Tue 23-05-23 12:02:40, Jan Kara wrote:
-> > > > On Thu 18-05-23 07:47:35, Jeff Layton wrote:
-> > > > > The VFS always uses coarse-grained timestamp updates for filling =
-out the
-> > > > > ctime and mtime after a change. This has the benefit of allowing
-> > > > > filesystems to optimize away a lot metadata updates, down to arou=
-nd 1
-> > > > > per jiffy, even when a file is under heavy writes.
-> > > > >=20
-> > > > > Unfortunately, this has always been an issue when we're exporting=
- via
-> > > > > NFSv3, which relies on timestamps to validate caches. Even with N=
-FSv4, a
-> > > > > lot of exported filesystems don't properly support a change attri=
-bute
-> > > > > and are subject to the same problems with timestamp granularity. =
-Other
-> > > > > applications have similar issues (e.g backup applications).
-> > > > >=20
-> > > > > Switching to always using fine-grained timestamps would improve t=
-he
-> > > > > situation, but that becomes rather expensive, as the underlying
-> > > > > filesystem will have to log a lot more metadata updates.
-> > > > >=20
-> > > > > What we need is a way to only use fine-grained timestamps when th=
-ey are
-> > > > > being actively queried.
-> > > > >=20
-> > > > > The kernel always stores normalized ctime values, so only the fir=
-st 30
-> > > > > bits of the tv_nsec field are ever used. Whenever the mtime chang=
-es, the
-> > > > > ctime must also change.
-> > > > >=20
-> > > > > Use the 31st bit of the ctime tv_nsec field to indicate that some=
-thing
-> > > > > has queried the inode for the i_mtime or i_ctime. When this flag =
-is set,
-> > > > > on the next timestamp update, the kernel can fetch a fine-grained
-> > > > > timestamp instead of the usual coarse-grained one.
-> > > > >=20
-> > > > > This patch adds the infrastructure this scheme. Filesytems can op=
-t
-> > > > > into it by setting the FS_MULTIGRAIN_TS flag in the fstype.
-> > > > >=20
-> > > > > Later patches will convert individual filesystems over to use it.
-> > > > >=20
-> > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > >=20
-> > > > So there are two things I dislike about this series because I think=
- they
-> > > > are fragile:
-> > > >=20
-> > > > 1) If we have a filesystem supporting multigrain ts and someone
-> > > > accidentally directly uses the value of inode->i_ctime, he can get =
-bogus
-> > > > value (with QUERIED flag). This mistake is very easy to do. So I th=
-ink we
-> > > > should rename i_ctime to something like __i_ctime and always use ac=
-cessor
-> > > > function for it.
-> > > >=20
-> > > > 2) As I already commented in a previous version of the series, the =
-scheme
-> > > > with just one flag for both ctime and mtime and flag getting cleare=
-d in
-> > > > current_time() relies on the fact that filesystems always do an equ=
-ivalent
-> > > > of:
-> > > >=20
-> > > > 	inode->i_mtime =3D inode->i_ctime =3D current_time();
-> > > >=20
-> > > > Otherwise we can do coarse grained update where we should have done=
- a fine
-> > > > grained one. Filesystems often update timestamps like this but not
-> > > > universally. Grepping shows some instances where only inode->i_mtim=
-e is set
-> > > > from current_time() e.g. in autofs or bfs. Again a mistake that is =
-rather
-> > > > easy to make and results in subtle issues. I think this would be al=
-so
-> > > > nicely solved by renaming i_ctime to __i_ctime and using a function=
- to set
-> > > > ctime. Mtime could then be updated with inode->i_mtime =3D ctime_pe=
-ek().
-> > > >=20
-> > > > I understand this is quite some churn but a very mechanical one tha=
-t could
-> > > > be just done with Coccinelle and a few manual fixups. So IMHO it is=
- worth
-> > > > the more robust result.
-> > >=20
-> > > Also as I'm thinking about it your current scheme is slightly racy. S=
-uppose
-> > > the filesystem does:
-> > >=20
-> > > CPU1					CPU2
-> > >=20
-> > > 					statx()
-> > > inode->i_ctime =3D current_time()
-> > >   current_mg_time()
-> > >     nsec =3D atomic_long_fetch_andnot(QUERIED, &inode->i_ctime.tv_nse=
-c)
-> > > 					  nsec =3D atomic_long_fetch_or(QUERIED, &inode->i_ctime.tv_nsec=
-)
-> > >     if (nsec & QUERIED) - not set
-> > >       ktime_get_coarse_real_ts64(&now)
-> > >     return timestamp_truncate(now, inode);
-> > > - QUERIED flag in the inode->i_ctime gets overwritten by the assignme=
-nt
-> > >   =3D> we need not update ctime due to granularity although it was qu=
-eried
-> > >=20
-> > > One more reason to use explicit function to update inode->i_ctime ;)
-> >=20
-> > When we store the new time in the i_ctime field, the flag gets cleared
-> > because at that point we're storing a new (unseen) time.
-> >=20
-> > However, you're correct: if the i_ctime in your above example starts at
-> > the same value that is currently being returned by
-> > ktime_get_coarse_real_ts64, then we'll lose the flag set in statx.
-> >=20
-> > I think the right fix there would be to not update the ctime at all if
-> > it's a coarse grained time, and the value wouldn't have an apparent
-> > change to an observer. That would leave the flag intact.
-> >=20
-> > That does mean we'd need to move to a function that does clock fetch an=
-d
-> > assigns it to i_ctime in one go (like you suggest). Something like:
-> >=20
-> >     inode_update_ctime(inode);
-> >=20
-> > How we do that with atomic operations over two values (the tv_sec and
-> > tv_nsec) is a bit tricky. I'll have to think about it.
-> >=20
-> > Christian, given Jan's concerns do you want to drop this series for now
-> > and let me respin it?
->=20
-> I deliberately put it into a vfs.unstable.* branch. I would leave it
-> there until you send a new one then drop it. If we get lucky the bots
-> that run on -next will have time to report potential perf issues while
-> it's not currently causing conflicts.
+On Thu, May 18, 2023 at 02:16:45PM -1000, Tejun Heo wrote:
 
-Sounds good to me. Thanks!
---=20
-Jeff Layton <jlayton@kernel.org>
+> Most of the patchset are workqueue internal plumbing and probably aren't
+> terribly interesting. Howver, the performance picture turned out less
+> straight-forward than I had hoped, mostly likely due to loss of
+> work-conservation from scheduler in high fan-out scenarios. I'll describe it
+> in this cover letter. Please read on.
+
+> Here's the relevant part of the experiment setup.
+> 
+> * Ryzen 9 3900x - 12 cores / 24 threads spread across 4 L3 caches.
+>   Core-to-core latencies across L3 caches are ~2.6x worse than within each
+>   L3 cache. ie. it's worse but not hugely so. This means that the impact of
+>   L3 cache locality is noticeable in these experiments but may be subdued
+>   compared to other setups.
+
+*blink*, 12 cores with 4 LLCs ? that's a grand total of 3 cores / 6
+threads per LLC. That's puny.
+
+/me goes google a bit.. So these are Zen2 things which nominally have 4
+cores per CCX which has 16M of L3, but these must binned parts with only
+3 functional cores per CCX.
+
+Zen3 then went to 8 cores per CCX with double the L3.
+
+> 2. MED: Fewer issuers, enough work for saturation
+> 
+>                   Bandwidth (MiBps)    CPU util (%)    vs. SYSTEM BW (%)
+>   ----------------------------------------------------------------------
+>   SYSTEM             1155.40  ±0.89     97.41 ±0.05                 0.00
+>   CACHE              1154.40  ±1.14     96.15 ±0.09                -0.09
+>   CACHE+STRICT       1112.00  ±4.64     93.26 ±0.35                -3.76
+>   SYSTEM+LOCAL       1066.80  ±2.17     86.70 ±0.10                -7.67
+>   CACHE+LOCAL        1034.60  ±1.52     83.00 ±0.07               -10.46
+> 
+> There are still eight issuers and plenty of work to go around. However, now,
+> depending on the configuration, we're starting to see a significant loss of
+> work-conservation where CPUs sit idle while there's work to do.
+> 
+> * CACHE is doing okay. It's just a bit slower. Further testing may be needed
+>   to definitively confirm the bandwidth gap but the CPU util difference
+>   seems real, so while minute, it did lose a bit of work-conservation.
+>   Comparing it to CACHE+STRICT, it's starting to show the benefits of
+>   non-strict scopes.
+
+So wakeup based placement is mostly all about LLC, and given this thing
+has dinky small LLCs it will pile up on the one LLC you target and leave
+the others idle until the regular idle balancer decides to make an
+appearance and move some around.
+
+But if these are fairly short running tasks, I can well see that not
+going to help much.
+
+
+Much of this was tuned back when there was 1 L3 per Node; something
+which is still more or less true for Intel but clearly not for these
+things.
+
+
+The below is a bit crude and completely untested, but it might help. The
+flip side of that coin is of course that people are going to complain
+about how selecting a CPU is more expensive now and how this hurts their
+performance :/
+
+Basically it will try and iterate all L3s in a node; wakeup will still
+refuse to cross node boundaries.
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 48b6f0ca13ac..ddb7f16a07a9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7027,6 +7027,33 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+ 	return idle_cpu;
+ }
+ 
++static int
++select_idle_node(struct task_struct *p, struct sched_domain *sd, int target)
++{
++	struct sched_domain *sd_node = rcu_dereference(per_cpu(sd_node, target));
++	struct sched_group *sg;
++
++	if (!sd_node || sd_node == sd)
++		return -1;
++
++	sg = sd_node->groups;
++	do {
++		int cpu = cpumask_first(sched_group_span(sg));
++		struct sched_domain *sd_child;
++
++		sd_child = per_cpu(sd_llc, cpu);
++		if (sd_child != sd) {
++			int i = select_idle_cpu(p, sd_child, test_idle_cores(cpu), cpu);
++			if ((unsigned int)i < nr_cpumask_bits)
++				return i;
++		}
++
++		sg = sg->next;
++	} while (sg != sd_node->groups);
++
++	return -1;
++}
++
+ /*
+  * Scan the asym_capacity domain for idle CPUs; pick the first idle one on which
+  * the task fits. If no CPU is big enough, but there are idle ones, try to
+@@ -7199,6 +7226,12 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	if ((unsigned)i < nr_cpumask_bits)
+ 		return i;
+ 
++	if (sched_feat(SIS_NODE)) {
++		i = select_idle_node(p, sd, target);
++		if ((unsigned)i < nr_cpumask_bits)
++			return i;
++	}
++
+ 	return target;
+ }
+ 
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index ee7f23c76bd3..f965cd4a981e 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -62,6 +62,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+  */
+ SCHED_FEAT(SIS_PROP, false)
+ SCHED_FEAT(SIS_UTIL, true)
++SCHED_FEAT(SIS_NODE, true)
+ 
+ /*
+  * Issue a WARN when we do multiple update_rq_clock() calls
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 678446251c35..d2e0e2e496a6 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1826,6 +1826,7 @@ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+ DECLARE_PER_CPU(int, sd_llc_size);
+ DECLARE_PER_CPU(int, sd_llc_id);
+ DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
++DECLARE_PER_CPU(struct sched_domain __rcu *, sd_node);
+ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index ca4472281c28..d94cbc2164ca 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -667,6 +667,7 @@ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+ DEFINE_PER_CPU(int, sd_llc_size);
+ DEFINE_PER_CPU(int, sd_llc_id);
+ DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
++DEFINE_PER_CPU(struct sched_domain __rcu *, sd_node);
+ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+@@ -691,6 +692,18 @@ static void update_top_cache_domain(int cpu)
+ 	per_cpu(sd_llc_id, cpu) = id;
+ 	rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
+ 
++	while (sd && sd->parent) {
++		/*
++		 * SD_NUMA is the first domain spanning nodes, therefore @sd
++		 * must be the domain that spans a single node.
++		 */
++		if (sd->parent->flags & SD_NUMA)
++			break;
++
++		sd = sd->parent;
++	}
++	rcu_assign_pointer(per_cpu(sd_node, cpu), sd);
++
+ 	sd = lowest_flag_domain(cpu, SD_NUMA);
+ 	rcu_assign_pointer(per_cpu(sd_numa, cpu), sd);
+ 
