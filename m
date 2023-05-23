@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A8A70E902
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FE570E903
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238807AbjEWWSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 18:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S238805AbjEWWSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238702AbjEWWSW (ORCPT
+        with ESMTP id S238702AbjEWWSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 18:18:22 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEF1CA;
-        Tue, 23 May 2023 15:18:19 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6af81142b6dso123424a34.2;
-        Tue, 23 May 2023 15:18:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684880299; x=1687472299;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0/95G6TtWDMqnJqi09q4BRdDKrrrr1cl8z6kSG/6bRA=;
-        b=iyfRk4+jac99E2ssWFn52x2OBo4w2YytZkiwRSJ9EzfYkSsWyGi9+WX5b5WCq4P2Zo
-         UG0CYbxEIx4QtFJVvXqI1/pltOsBOtahzGRdVcPlvMIq3CrzVoHuI0gUJErXK61pgqIt
-         if8n6hHi3w7DwRGk8ZURnYT+P5m5qUqRT618Z+kxMxh8DPxxw1JVAPIFBEExfPxDUEwo
-         yO7UKyNBv221wESeWJk8uN7CyloCu/UedFCqmiDJD8vTevIR2O15RFPKNBpdnGGYNere
-         kM+60TdCH+EUMDEJ6uDsWh7ucxwVRW27fSEI/58C99gx63bss+aEtHQzpZTlDlOV3baZ
-         oTYg==
-X-Gm-Message-State: AC+VfDxWV/Mj8ccTREtkt5PXGVTrZInEooYmYBLV6o2OVQAYHPjfgdeS
-        Qk8M/+AsrelfQzZhvqYWvw==
-X-Google-Smtp-Source: ACHHUZ4QOOvthD3w2RdBiE5VTT3ti9m94NuJVi4/VOv1vNaUnI/8iObgUbyNTlHl5zM/LlxIgDjLdA==
-X-Received: by 2002:a05:6830:1d66:b0:6a5:ea63:b9e6 with SMTP id l6-20020a0568301d6600b006a5ea63b9e6mr7643237oti.16.1684880298905;
-        Tue, 23 May 2023 15:18:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v26-20020a05683018da00b006a5db4474c8sm3909647ote.33.2023.05.23.15.18.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 15:18:18 -0700 (PDT)
-Received: (nullmailer pid 2003240 invoked by uid 1000);
-        Tue, 23 May 2023 22:18:17 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Tue, 23 May 2023 18:18:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8188B18B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:18:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2CF6636A1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 22:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55445C433D2;
+        Tue, 23 May 2023 22:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684880307;
+        bh=veuGFlBxvJfC7X2QtcsRIS3sb0+f5+8pwpEBphVcea0=;
+        h=From:Date:Subject:To:Cc:From;
+        b=JR708gZp1IuCASbi+tDPkn5+t1JnIHoMs9mSTcig2R+T9CxxXkdHsf9XBy+XyjTMv
+         yYwWMFkESn+z5kokf/CGwqfLEeIsN15IZBhIhmrFXtQ9gBrmiwb+43+q9nCPr0eYvF
+         PTXJUdA/APWCtM7dK3DXD1X1sLP39HdwmrCRUrtsL1mZQTPDQW26H49PNClitjQ+WM
+         tzXIciRH24k2j0G55oHXFX2pxazGzoc/q0Yvm8xc5aHKw54H7TUsjowK/GEjEyApLD
+         PHp1WQs8I3B/t57U0PuaTX1DZBrBBP7WFFZsM7Pv7vgUPgd3B0RYQcBVp2lAkkEK3y
+         joL3vYR+Z+10A==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 23 May 2023 23:18:19 +0100
+Subject: [PATCH] regmap: maple: Drop the RCU read lock while syncing
+ registers
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Justin Chen <justin.chen@broadcom.com>
-Cc:     kuba@kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
-        sumit.semwal@linaro.org, netdev@vger.kernel.org,
-        linux@armlinux.org.uk, bcm-kernel-feedback-list@broadcom.com,
-        christian.koenig@amd.com, opendmb@gmail.com, robh+dt@kernel.org,
-        conor@kernel.org, justinpopo6@gmail.com, richardcochran@gmail.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        f.fainelli@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        edumazet@google.com, andrew@lunn.ch, simon.horman@corigine.com,
-        devicetree@vger.kernel.org, pabeni@redhat.com
-In-Reply-To: <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
-References: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
- <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
-Message-Id: <168488029701.2003121.3742030688630968396.robh@kernel.org>
-Subject: Re: [PATCH net-next v4 2/6] dt-bindings: net: Brcm ASP 2.0
- Ethernet controller
-Date:   Tue, 23 May 2023 17:18:17 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230523-regcache-maple-sync-lock-v1-1-530e4d68dfab@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKo7bWQC/x2NSwrDMAwFrxK0rsC1cQq9SulCVtTYJLWDDP0Qc
+ vc4Wc6DebNCFU1S4d6toPJJNZXc4HrpgCPlUTANjcEa64y3DlVGJo6Cb1pmwfrPjHPhCf1NyPl
+ +4N4EaHqgKhiUMsfj4Ft0OuZF5ZV+Z/Hx3LYdNbKb+IEAAAA=
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1507; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=veuGFlBxvJfC7X2QtcsRIS3sb0+f5+8pwpEBphVcea0=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkbTux4oldhXQTi6/rzUziSGq1Bbp/Z2NlJcHmVfx7
+ fiVpr36JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZG07sQAKCRAk1otyXVSH0LrfB/
+ wLlMLGMlNDljolW7vhDGSgSVC1ef3/0xxRYT7v8CnysolmzHP09D4O5rX4blrw9D7+pL81KrAAc0Ht
+ 4lHCGE18Z4FCHuKpEkul+vpL9FrhysJMxVh0QKwCXZ0bXuqU9xoPWAlI1sUQcG/Po8uJJLvXFg5tVF
+ 3pBPGhev+JPpfl2wZqH+CR8R4l7NgSZ90syYXXAnYL1Q7uCaxbiA3nkpUAmahZCPNku9jlJw6NIPC4
+ 3vHz4xm7SGYbsvnhiJ/P1taHJH+93gUh5qCRxUcWumlg2wpXu3Y2MeL/hNbnSY4cFjI5K/7d4HqeAm
+ a5l6fPwiwaFf5V8hfh/7zgbxGqCfZh
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Unfortunately the maple tree requires us to explicitly lock it so we need
+to take the RCU read lock while iterating. When syncing this means that we
+end up trying to write out register values while holding the RCU read lock
+which triggers lockdep issues since that is an atomic context but most
+buses can't be used in atomic context. Pause the iteration and drop the
+lock for each register we check to avoid this.
 
-On Tue, 23 May 2023 14:53:43 -0700, Justin Chen wrote:
-> From: Florian Fainelli <florian.fainelli@broadcom.com>
-> 
-> Add a binding document for the Broadcom ASP 2.0 Ethernet
-> controller.
-> 
-> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
-> ---
-> v3
-> 	- Adjust compatible string example to reference SoC and HW ver
-> 
-> v3
->         - Minor formatting issues
->         - Change channel prop to brcm,channel for vendor specific format
->         - Removed redundant v2.0 from compat string
->         - Fix ranges field
-> 
-> v2
->         - Minor formatting issues
-> 
->  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 145 +++++++++++++++++++++
->  1 file changed, 145 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-> 
+Reported-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/base/regmap/regcache-maple.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+diff --git a/drivers/base/regmap/regcache-maple.c b/drivers/base/regmap/regcache-maple.c
+index 9b1b559107ef..c2e3a0f6c218 100644
+--- a/drivers/base/regmap/regcache-maple.c
++++ b/drivers/base/regmap/regcache-maple.c
+@@ -203,15 +203,18 @@ static int regcache_maple_sync(struct regmap *map, unsigned int min,
+ 
+ 	mas_for_each(&mas, entry, max) {
+ 		for (r = max(mas.index, lmin); r <= min(mas.last, lmax); r++) {
++			mas_pause(&mas);
++			rcu_read_unlock();
+ 			ret = regcache_sync_val(map, r, entry[r - mas.index]);
+ 			if (ret != 0)
+ 				goto out;
++			rcu_read_lock();
+ 		}
+ 	}
+ 
+-out:
+ 	rcu_read_unlock();
+ 
++out:
+ 	map->cache_bypass = false;
+ 
+ 	return ret;
 
-yamllint warnings/errors:
+---
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+change-id: 20230523-regcache-maple-sync-lock-57ea356dc60b
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: ethernet@9c00000: compatible: ['brcm,bcm72165-asp', 'brcm,asp-v2.0'] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1684878827-40672-3-git-send-email-justin.chen@broadcom.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
