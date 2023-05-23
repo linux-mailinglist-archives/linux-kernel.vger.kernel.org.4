@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2316F70DB29
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BB570DB31
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236466AbjEWLHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S236613AbjEWLIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjEWLHN (ORCPT
+        with ESMTP id S236580AbjEWLI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:07:13 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AC3FF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:07:11 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-babb51cb4d4so6170146276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:07:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684840031; x=1687432031;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2XgBvS7Dq5efKHkw7EY0MhJdVq0k/8wvd67gGiWjjGY=;
-        b=I2NuidGBI/ZeU95AgQL5cjDLDKnFCRQhwK80Fgf6TjZTKTEC8DC+X9iSKW1+OGmbCQ
-         tbEmvSculz37Vxh4nZ+cGSlHBgBO+BNMCsFePd5i1XJRDStdsKgK2UhycHnP+uIjq3W+
-         BGyXzdow/jD99f7ks6jbRs3YPyEn9XKtXB5BCAq7dsIV69FSVOllw9B/Z6WxozOHMNKv
-         t1K98BdYWNjYgpKjmlUphUPoSDarlKaAZqPfv1Cr5pG2PTQYcqrpkj/yspAUFjppThcr
-         dyxC630dpbZ2K0/yAlqfREb9rNAl58QGE6cRxvMiBJbtqW6UqM/Prd0ERjsPmpm5adrD
-         Queg==
+        Tue, 23 May 2023 07:08:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0BFFF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684840060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TgAfeWGrsZZYnBL05wn3YJIuhT7jiDrtSHb3+2pNJ5c=;
+        b=TTlnBzLXCbyiO7ZBf5AN18ieEyD4DNR859GiI9qbuh6taxDdJmy7KmIBofpVSefvPRmIbf
+        ZHuRgmaDR2zGvat2vzGeuNVDODm9d704aKlnmhxnAtmu0Umr5Zq3gTBt7/+WkbGcqS3dxj
+        q+ilDIdiweCd/weWZOg09etJNDCQi2I=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-323-n4skp68vPwy-mXIErCYJiA-1; Tue, 23 May 2023 07:07:39 -0400
+X-MC-Unique: n4skp68vPwy-mXIErCYJiA-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-96f4d917e06so620830966b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 04:07:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684840031; x=1687432031;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2XgBvS7Dq5efKHkw7EY0MhJdVq0k/8wvd67gGiWjjGY=;
-        b=k0EfLX1WdXpCtVtXNdF26O+79Pjd8zYg38JCLky1B/yzWl2L5kpXJoexpTF2x/3YYl
-         7MhuCTdnAsD2hu4TE21lJX4skskrzXOEnZj85g2z/w0CL/j1cPeKYqAAqn+rkQ8uhujP
-         OGyZLHF9IDhyHDAKHbfc0ELLbZm8XuQkmZG/nQPkPhXWq3U6tsivg3JXNPSm5TEIJVzj
-         ey8Nx0RWQH1fqOrBVjjbztAFSBkKNkIeUQ0J8n8NDlDWV8P2vbZn7YMnxGI+1osmgfmz
-         lm23nL7raxoY9Frc6uSULm88VsMvd9wpnq7n1Pt1Gt9qADdkuKuN92phmJJHOGNcqUku
-         LkGQ==
-X-Gm-Message-State: AC+VfDwZNVB9LVI7fkM1VSTDmPRr19xiqYLsUUQKWq2VkI2W/OWCBBkR
-        gVL1NcTgaaZuflqMrx+hNcrlgFm9jbxTUyQ=
-X-Google-Smtp-Source: ACHHUZ5fQNzXetN18AMOrqlYgjbM0rPXw1HVQJvrLv1Yjb1M1/QRmptg+hoYr/BXIrxgTx0GNavoIajsv9nwQ0I=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a25:d48e:0:b0:ba8:9653:c948 with SMTP id
- m136-20020a25d48e000000b00ba89653c948mr5747400ybf.3.1684840031253; Tue, 23
- May 2023 04:07:11 -0700 (PDT)
-Date:   Tue, 23 May 2023 11:07:09 +0000
-In-Reply-To: <b54801cd-1afb-2190-3b8a-4a095d04fdff@gmail.com>
-Mime-Version: 1.0
-References: <b54801cd-1afb-2190-3b8a-4a095d04fdff@gmail.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Message-ID: <20230523110709.4077557-1-aliceryhl@google.com>
-Subject: Re: [PATCH v1 6/7] rust: workqueue: add safe API to workqueue
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     yakoyoku@gmail.com
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        tj@kernel.org, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684840058; x=1687432058;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TgAfeWGrsZZYnBL05wn3YJIuhT7jiDrtSHb3+2pNJ5c=;
+        b=KAUU0Qmps23Cwmd8b1hjopfrBDebqxfSNBaa0fTl365kNXzyYdMbYNuKplfgnCHFKs
+         9uGjdFwaYRuKRHrpBUF4NcG6Ze6XtT0BO6TKX7L68vB8/XGBmM5NjN8IqLsuuwaZ6Pe3
+         ccbzPZW/r/MMR/GtDDJnxE2meOArLikVLRvyUGpMEOYzexnFNvDisCGzy/GaLC+AxjIp
+         o4v5pnpwQ3E5nHlLhvQWBYw3HD2EGzLKyIa3lnQAw2OmCwuHrnIA5Dz2pG7VnVP+LoFM
+         VDBTN+LA0fibCg8HHHMol9iy9o7V0ioTDZYLHpp70FfKK3zHqtQng1MfLW3xJQ54p5B+
+         i/ag==
+X-Gm-Message-State: AC+VfDzlTfnhuqqKnXnrSDTdgFZm6rAbxofDlDv9bWsUgfGs0a/MQrcw
+        kw8XRoRVXcD5haXSmnuhrFOSJYOGqXOVltOQfQSdX1LU76TCnt67ps/CAQ2elUEe5NzCCtteu0d
+        5+dGNJrTA3omf0LrhovRpu+L/
+X-Received: by 2002:a17:907:6287:b0:966:a691:55f9 with SMTP id nd7-20020a170907628700b00966a69155f9mr11068567ejc.30.1684840057966;
+        Tue, 23 May 2023 04:07:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4caVLW/8Ni1Ot2OEe8VHt0hfZFf8rele1i6QgoUF5MCgzUhu+7eQSnBFXZ045menh2EQYUAw==
+X-Received: by 2002:a17:907:6287:b0:966:a691:55f9 with SMTP id nd7-20020a170907628700b00966a69155f9mr11068553ejc.30.1684840057699;
+        Tue, 23 May 2023 04:07:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id j26-20020a17090686da00b0096f7500502csm4299108ejy.199.2023.05.23.04.07.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 04:07:37 -0700 (PDT)
+Message-ID: <e9eb526d-84fe-b814-67a3-6f7977aa0078@redhat.com>
+Date:   Tue, 23 May 2023 13:07:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for suspend
+ related messages
+Content-Language: en-US, nl
+To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org,
+        linus.walleij@linaro.org
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, Shyam-sundar.S-k@amd.com,
+        Basavaraj.Natikar@amd.com
+References: <20230522200033.2605-1-mario.limonciello@amd.com>
+ <20230522200033.2605-4-mario.limonciello@amd.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230522200033.2605-4-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/23 21:17, Martin Rodriguez Reboredo wrote:
-> On 5/17/23 17:31, Alice Ryhl wrote:
->> +unsafe impl<T> WorkItem for Arc<T>
->> +where
->> +    T: ArcWorkItem + HasWork<Self> + ?Sized,
->> +{
->> +    type EnqueueOutput = Result<(), Self>;
->> +
->> +    unsafe fn __enqueue<F>(self, queue_work_on: F) -> Self::EnqueueOutput
->> +    where
->> +        F: FnOnce(*mut bindings::work_struct) -> bool,
->> +    {
->> +        let ptr = Arc::into_raw(self);
->> +
->> +        // Using `get_work_offset` here for object-safety.
->> +        //
->> +        // SAFETY: The pointer is valid since we just got it from `into_raw`.
->> +        let off = unsafe { (&*ptr).get_work_offset() };
->> +
->> +        // SAFETY: The `HasWork` impl promises that this offset gives us a field of type
->> +        // `Work<Self>` in the same allocation.
->> +        let work_ptr = unsafe { (ptr as *const u8).add(off) as *const Work<Self> };
->> +        // SAFETY: The pointer is not dangling.
->> +        let work_ptr = unsafe { Work::raw_get(work_ptr) };
->> +
->> +        match (queue_work_on)(work_ptr) {
+Hi Mario,
+
+On 5/22/23 22:00, Mario Limonciello wrote:
+> Using pm_pr_dbg() allows users to toggle `/sys/power/pm_debug_messages`
+> as a single knob to turn on messages that amd-pmc can emit to aid in
+> any s2idle debugging.
 > 
-> Match for boolean is not a good pattern in my eyes, if-else should be
-> used instead.
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/platform/x86/amd/pmc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
+> index 427905714f79..1304cd6f13f6 100644
+> --- a/drivers/platform/x86/amd/pmc.c
+> +++ b/drivers/platform/x86/amd/pmc.c
+> @@ -543,7 +543,7 @@ static int amd_pmc_idlemask_read(struct amd_pmc_dev *pdev, struct device *dev,
+>  	}
+>  
+>  	if (dev)
+> -		dev_dbg(pdev->dev, "SMU idlemask s0i3: 0x%x\n", val);
+> +		pm_pr_dbg("SMU idlemask s0i3: 0x%x\n", val);
+>  
+>  	if (s)
+>  		seq_printf(s, "SMU idlemask : 0x%x\n", val);
 
-I think this is a question of style. For a comparison:
+This does not compile, amd/pmc.c may be build as an amd-pmc.ko module
+and currently the pm_debug_messages_on flag used by pm_pr_dbg()
+is not exported to modules:
 
-match (queue_work_on)(work_ptr) {
-    true => Ok(()),
-    // SAFETY: The work queue has not taken ownership of the pointer.
-    false => Err(unsafe { Arc::from_raw(ptr) }),
-}
+  CC [M]  drivers/platform/x86/amd/pmc.o
+  LD [M]  drivers/platform/x86/amd/amd-pmc.o
+  MODPOST Module.symvers
+ERROR: modpost: "pm_debug_messages_on" [drivers/platform/x86/amd/amd-pmc.ko] undefined!
+make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+make: *** [Makefile:1978: modpost] Error 2
 
-vs
+Regards,
 
-if (queue_work_on)(work_ptr) {
-    Ok(())
-} else {
-    // SAFETY: The work queue has not taken ownership of the pointer.
-    Err(unsafe { Arc::from_raw(ptr) }),
-}
+Hans
 
-I'm happy to change it if others disagree, but when the branches
-evaluate to a short expression like they do here, I quite like the first
-version.
 
-> Also aren't the parens around the closure unnecessary?
-
-Hmm, parenthesises are often required around closures, but it's possible
-that it is only required for stuff like `self.closure(args)` to
-disambiguate between a `closure` field (of pointer type) and a `closure`
-method. I can check and remove them if they are not necessary.
