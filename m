@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACC770D5E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7EF70D5EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 09:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235611AbjEWHru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 03:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
+        id S235663AbjEWHrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 03:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235618AbjEWHqx (ORCPT
+        with ESMTP id S235658AbjEWHqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 03:46:53 -0400
+        Tue, 23 May 2023 03:46:54 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D28318B;
-        Tue, 23 May 2023 00:46:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D768011A;
+        Tue, 23 May 2023 00:46:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=V2F5GAusl5v7Z9/ExFrBk16K4LK9JB6Nzuc1XGdQbDM=; b=q/awHJ0UGEBFLhqS/Kem21dFO8
-        UrqUe7X6+VcibSuQ3U/6iaJ4woeliYVvU0gW2bL/94CXeRxfA3EXW5LhqQb+MK1hK5Dbt/TlbF9SF
-        Nd2c35vTILMWnyNRiYbVXTocVbw+/PIrVmFw/srfaU9oPOWlYa2zrHdfdWhp/2Beb9tFARP4ORdYg
-        g728oGvlQXRZj/YuOp2rdn62vjBOElOLy4m/EEgNW9Mocbiti4f2V0yQ0Z+Lr//+t3PcFQSxYjyti
-        +ifFE8gU2xVLNYMCH1shCmOQEulB/a3q4Zep9xvhE9LzmaDehvFq5ME3AusCR0JZle+QNJ3/qCAom
-        KVt7hBeQ==;
+        bh=BOtvo2QkhpnKNrqVZX60VmJ53d8jKRahCxNIQR8Da1k=; b=VJ7bzvqRzAknKL8HckX4vSg28u
+        XVN0Nn6Q5RMRGID0IU1iNT7xuFOy/iGqFqXvFP0jDsjFuR7hl9SEUNbqoLBA1CMA0ngC2JFqOx0L1
+        MZqtHp3RJ6L+HLgDygEC3Yarhx6JEHZgA7nBDqqpxKRczJUFvJBR3ksCqiW2llzT4aiFc7K5mLs+H
+        hhZP2DpK6VXsj9vaXqI7jQe4UB4eu4xp6THLqLROh7dX0qihSfnWi3/5qRyc5YgcDkorsm6nDD1nq
+        yngrtl+ugiHEjMfgkPcWXw9q2pWGObpvhvVbPb5rBELOgqpuC0GV4gH/j/lcfktgz8cDRA4Bqq8aW
+        x64HC7+A==;
 Received: from [2001:4bb8:188:23b2:6ade:85c9:530f:6eb0] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1Mj1-009HBv-1X;
-        Tue, 23 May 2023 07:46:31 +0000
+        id 1q1Mj4-009HEh-16;
+        Tue, 23 May 2023 07:46:34 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,9 +41,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
         linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH 19/24] dm: remove dm_get_dev_t
-Date:   Tue, 23 May 2023 09:45:30 +0200
-Message-Id: <20230523074535.249802-20-hch@lst.de>
+Subject: [PATCH 20/24] dm: only call early_lookup_bdev from early boot context
+Date:   Tue, 23 May 2023 09:45:31 +0200
+Message-Id: <20230523074535.249802-21-hch@lst.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230523074535.249802-1-hch@lst.de>
 References: <20230523074535.249802-1-hch@lst.de>
@@ -60,66 +60,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Open code dm_get_dev_t in the only remaining caller, and propagate the
-exact error code from lookup_bdev and early_lookup_bdev.
+early_lookup_bdev is supposed to only be called from the early boot
+code, but dm_get_device calls it as a general fallback when lookup_bdev
+fails, which is problematic because early_lookup_bdev bypasses all normal
+path based permission checking, and might cause problems with certain
+container environments renaming devices.
+
+Switch to only call early_lookup_bdev when dm is built-in and the system
+state in not running yet.  This means it is still available when tables
+are constructed by dm-init.c from the kernel command line, but not
+otherwise.
+
+Note that this strictly speaking changes the kernel ABI as the PARTUUID=
+and PARTLABEL= style syntax is now not available during a running
+systems.  They never were intended for that, but this breaks things
+we'll have to figure out a way to make them available again.  But if
+avoidable in any way I'd rather avoid that.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/md/dm-table.c         | 20 ++++----------------
- include/linux/device-mapper.h |  2 --
- 2 files changed, 4 insertions(+), 18 deletions(-)
+ drivers/md/dm-table.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
-index 05aa16da43b0d5..e997f4322a9967 100644
+index e997f4322a9967..c230241a76b374 100644
 --- a/drivers/md/dm-table.c
 +++ b/drivers/md/dm-table.c
-@@ -323,20 +323,6 @@ static int upgrade_mode(struct dm_dev_internal *dd, fmode_t new_mode,
- 	return 0;
- }
- 
--/*
-- * Convert the path to a device
-- */
--dev_t dm_get_dev_t(const char *path)
--{
--	dev_t dev;
--
--	if (lookup_bdev(path, &dev) &&
--	    early_lookup_bdev(path, &dev))
--		return 0;
--	return dev;
--}
--EXPORT_SYMBOL_GPL(dm_get_dev_t);
--
+@@ -326,8 +326,11 @@ static int upgrade_mode(struct dm_dev_internal *dd, fmode_t new_mode,
  /*
   * Add a device to the list, or just increment the usage count if
   * it's already present.
-@@ -359,8 +345,10 @@ int dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
- 		if (MAJOR(dev) != major || MINOR(dev) != minor)
++ *
++ * Note: the __ref annotation is because this function can call the __init
++ * marked early_lookup_bdev when called during early boot code from dm-init.c.
+  */
+-int dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
++int __ref dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
+ 		  struct dm_dev **result)
+ {
+ 	int r;
+@@ -346,8 +349,10 @@ int dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
  			return -EOVERFLOW;
  	} else {
--		dev = dm_get_dev_t(path);
--		if (!dev)
-+		r = lookup_bdev(path, &dev);
-+		if (r)
-+			r = early_lookup_bdev(path, &dev);
-+		if (r)
+ 		r = lookup_bdev(path, &dev);
+-		if (r)
++#ifndef MODULE
++		if (r && system_state < SYSTEM_RUNNING)
+ 			r = early_lookup_bdev(path, &dev);
++#endif
+ 		if (r)
  			return -ENODEV;
  	}
- 	if (dev == disk_devt(t->md->disk))
-diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
-index a52d2b9a68460a..c27b84002d8382 100644
---- a/include/linux/device-mapper.h
-+++ b/include/linux/device-mapper.h
-@@ -170,8 +170,6 @@ struct dm_dev {
- 	char name[16];
- };
- 
--dev_t dm_get_dev_t(const char *path);
--
- /*
-  * Constructors should call these functions to ensure destination devices
-  * are opened/closed correctly.
 -- 
 2.39.2
 
