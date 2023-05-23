@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B8670D097
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0886470D09B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 03:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjEWBiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 21:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S232342AbjEWBj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 21:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjEWBiA (ORCPT
+        with ESMTP id S230131AbjEWBjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 21:38:00 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591088E
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:37:59 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so524683a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:37:59 -0700 (PDT)
+        Mon, 22 May 2023 21:39:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8FA90
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:39:43 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1285614466b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 18:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684805878; x=1687397878;
+        d=google.com; s=20221208; t=1684805982; x=1687397982;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0NL8vu8VBVPDg4x9BcHt1EVriPSKQTsOTL4qlCVnshw=;
-        b=wTpwRB6UoOOPzch2bukvysP5VjZ+AbcBIlgsG/SqE45ZxBbf2nXV/11IP7HP820SNT
-         93OmpccUwJkgBtq9us2bSqCgpb1OwgY4s7QsmOsCl74L/3x30+K+4oUS1JUyzjor16jA
-         RAbdPGALr9MG0L2IHsZTCCXmSWkm/BaWovUgIhpfU2hFoinM+ztpxEw/WYN0p1v3dnt5
-         1VR6zDRIZfxuNy1GPP36jnvmwVy1DULydYrh+i+PqpJsr9yOfIFrDlsTUQN0LVoQ+ops
-         pNS1PKyDTG+Y+rdm7zbHPiget97OyE9ueAWrzs1PGND9mGRBVbexxMmkUNwI4PXzaqyr
-         ocgw==
+        bh=GrcX1CSiLCXeFc2H8bMb+WXn6DJRSUX5JYbVI8Ce8+Q=;
+        b=m/aDe7Z8+MwMc0JlHAOIYgvj/qIESOpABmRKmKOfl5e7SfUra0W1xbgUv84ZOB58P/
+         /lKH0zLU80c+fAWrKlJSQcpvGWUnfUX8SzoKYTsgK/qq+FL8dSwmW3YUrLhBdKwHNOIz
+         TZ6mqbiPAtXC0kS4paOtDd/55crKjPAqqs/VGjWGPRwhM4iFfxuRiqzygT53mHbDr4Ud
+         jEz+uLFBEkslB4HqDrl0/19IjKiG0Bum4dEyTSTk3VqMxeKWyG5MLQK/1Di3zT2NY+aw
+         mz7sQXfIjt8uZFuB7W5ARadesmjM+t7axKd74dlHmh4rAmsv1pTdxDv8z9FWxCUeokHI
+         LrwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684805878; x=1687397878;
+        d=1e100.net; s=20221208; t=1684805982; x=1687397982;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0NL8vu8VBVPDg4x9BcHt1EVriPSKQTsOTL4qlCVnshw=;
-        b=XoRdm+MZztdqqwwh9ulAcdjhOMeUp6tLNKDpUgOv9GAn4JNCU5VmIpo1h3Sbs4zXMN
-         ztsW4SqE3okWP9X1QOSBJNtnGpM0wktxigk44mjAl9HFEgn3T/hj3VZNoJ6+RTEXmFIm
-         GgVuoihQrKrNqBTdLUSv5LTFGkGNVy/O/f8pInNCOaDJBWkbKBuHeurHOuFSsvzXCW4z
-         TLr/YJONhd4hM2Yd0GAWDSZO4anvWsE4PcCbStcRzuoxdG6hehe6MrkKJidshpkZtNbj
-         Hz2qtaCgVZK1w49D3nIgW1M1Fke6wWUSjSkTwEzl8hexbiz9nvo55PcKkKMTy3ln1ESB
-         gqEg==
-X-Gm-Message-State: AC+VfDzLe9A2XMqLaOvmeoneokvb0LrzhA/g5HEd1x2J66NVRBonIEa2
-        Eu2bpUD6zwJVIx0WrgT9Cr6sY1sEB6+DphS98e3ZeA==
-X-Google-Smtp-Source: ACHHUZ5kUzwUSGf4F6uXfzN4mxvSFIq6nOPaFYpP9NQsoqdanwYd4KHOtQf1Ky9F8NwZItK6VPWk7oPjCtqDRvAoQ5s=
-X-Received: by 2002:a17:907:2d28:b0:970:d85:59e9 with SMTP id
- gs40-20020a1709072d2800b009700d8559e9mr3706447ejc.5.1684805877754; Mon, 22
- May 2023 18:37:57 -0700 (PDT)
+        bh=GrcX1CSiLCXeFc2H8bMb+WXn6DJRSUX5JYbVI8Ce8+Q=;
+        b=E2ILiKA+XSqAAU5J+oiMkE3Tpt4qk3akMOCJ9KjQr8J5edJeAxZgLdEoyZMOQI0Wqb
+         0u5YBcbXNPQrjdABgaUoIuhX/SfDF65zVoBnmC8QYdIA7B0t2EVZwzeObgwvOf8B//fp
+         vfdCdyT+9goOnmw5fqMrwZebp0uy9JkPzqJw5yJ+YELqrr37VZn1n3ouPM7b2ZhpEsnJ
+         2R6lSkA6w6yTb3NEWO4MVKFmcpkfugDK5m/AOvuHWwlYZm5Hp0dsatauTbZJR1Uigj+V
+         OW0Km5+n+WuweTYKpw4JpNcj3oi56dscecltXmt3zZTo4aI4JxdyVdB7UOzQOxT/2Y+4
+         vgDA==
+X-Gm-Message-State: AC+VfDy8ntYX0bLjvN7oYPcvcBGmxwK3BXfYzM8on1YNdWzno2wsXr2z
+        lTQBbg6301a14+dYOKy5SMKwGAq6y+ufEHe0YLMrtA==
+X-Google-Smtp-Source: ACHHUZ4oTAFpYmzEnxnqIpP3J/+qMbmQqG5Hjz2KbdOplyMhgUeFHEcGjCybPEmifB0Lu9OWBHnMmKNWEK7R9VMhEdE=
+X-Received: by 2002:a17:907:a407:b0:96f:daf3:c66b with SMTP id
+ sg7-20020a170907a40700b0096fdaf3c66bmr6073621ejc.30.1684805982125; Mon, 22
+ May 2023 18:39:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230522070905.16773-1-ying.huang@intel.com> <20230522070905.16773-6-ying.huang@intel.com>
-In-Reply-To: <20230522070905.16773-6-ying.huang@intel.com>
+References: <20230522070905.16773-1-ying.huang@intel.com> <20230522070905.16773-5-ying.huang@intel.com>
+In-Reply-To: <20230522070905.16773-5-ying.huang@intel.com>
 From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 22 May 2023 18:37:21 -0700
-Message-ID: <CAJD7tkaTm+YRPyh2ew2KoL=vruFnAMb6TM1OR1g0u-CqdUYi0w@mail.gmail.com>
-Subject: Re: [PATCH -V2 5/5] swap: comments get_swap_device() with usage rule
+Date:   Mon, 22 May 2023 18:39:05 -0700
+Message-ID: <CAJD7tkYnN23h0N3chqEu_DesSsOaFE6MTQ4Yw3eAZZb=ohWM4g@mail.gmail.com>
+Subject: Re: [PATCH -V2 4/5] swap: remove get/put_swap_device() in __swap_duplicate()
 To:     Huang Ying <ying.huang@intel.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
@@ -80,16 +80,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Mon, May 22, 2023 at 12:09=E2=80=AFAM Huang Ying <ying.huang@intel.com> =
 wrote:
 >
-> The general rule to use a swap entry is as follows.
+> __swap_duplicate() is called by
 >
-> When we get a swap entry, if there isn't some other way to prevent
-> swapoff, such as page lock for swap cache, page table lock, etc., the
-> swap entry may become invalid because of swapoff.  Then, we need to
-> enclose all swap related functions with get_swap_device() and
-> put_swap_device(), unless the swap functions call
-> get/put_swap_device() by themselves.
+> - swap_shmem_alloc(): the page lock of the swap cache is held.
 >
-> Add the rule as comments of get_swap_device().
+> - copy_nonpresent_pte() -> swap_duplicate() and try_to_unmap_one() ->
+>   swap_duplicate(): the page table lock is held.
+>
+> - __read_swap_cache_async() -> swapcache_prepare(): enclosed with
+>   get/put_swap_device() in __read_swap_cache_async() already.
+>
+> So, it's safe to remove get/put_swap_device() in __swap_duplicate().
 >
 > Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 > Cc: David Hildenbrand <david@redhat.com>
@@ -102,47 +103,44 @@ wrote:
 > Cc: Yang Shi <shy828301@gmail.com>
 > Cc: Yu Zhao <yuzhao@google.com>
 > ---
->  mm/swapfile.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+>  mm/swapfile.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 >
 > diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 4dbaea64635d..0c1cb935b2eb 100644
+> index e9cce775fb25..4dbaea64635d 100644
 > --- a/mm/swapfile.c
 > +++ b/mm/swapfile.c
-> @@ -1219,6 +1219,13 @@ static unsigned char __swap_entry_free_locked(stru=
-ct swap_info_struct *p,
+> @@ -3264,9 +3264,7 @@ static int __swap_duplicate(swp_entry_t entry, unsi=
+gned char usage)
+
+I would add a comment above this function stating that the caller
+needs to provide protection against swapoff, and refer to the comment
+above get_swap_device().
+
+Otherwise, LGTM with David's comment.
+
+Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+
+>         unsigned char has_cache;
+>         int err;
+>
+> -       p =3D get_swap_device(entry);
+> -       if (!p)
+> -               return -EINVAL;
+> +       p =3D swp_swap_info(entry);
+>
+>         offset =3D swp_offset(entry);
+>         ci =3D lock_cluster_or_swap_info(p, offset);
+> @@ -3313,7 +3311,6 @@ static int __swap_duplicate(swp_entry_t entry, unsi=
+gned char usage)
+>
+>  unlock_out:
+>         unlock_cluster_or_swap_info(p, ci);
+> -       put_swap_device(p);
+>         return err;
 >  }
 >
->  /*
-> + * When we get a swap entry, if there isn't some other way to prevent
-> + * swapoff, such as page lock for swap cache, page table lock, etc.,
-> + * the swap entry may become invalid because of swapoff.  Then, we
-> + * need to enclose all swap related functions with get_swap_device()
-> + * and put_swap_device(), unless the swap functions call
-> + * get/put_swap_device() by themselves.
-> + *
->   * Check whether swap entry is valid in the swap device.  If so,
->   * return pointer to swap_info_struct, and keep the swap entry valid
->   * via preventing the swap device from being swapoff, until
-> @@ -1227,9 +1234,8 @@ static unsigned char __swap_entry_free_locked(struc=
-t swap_info_struct *p,
->   * Notice that swapoff or swapoff+swapon can still happen before the
->   * percpu_ref_tryget_live() in get_swap_device() or after the
->   * percpu_ref_put() in put_swap_device() if there isn't any other way
-> - * to prevent swapoff, such as page lock, page table lock, etc.  The
-> - * caller must be prepared for that.  For example, the following
-> - * situation is possible.
-> + * to prevent swapoff.  The caller must be prepared for that.  For
-> + * example, the following situation is possible.
->   *
->   *   CPU1                              CPU2
->   *   do_swap_page()
 > --
 > 2.39.2
 >
 >
-
-Thanks for clarifying the code!
-
-With David's comments:
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
