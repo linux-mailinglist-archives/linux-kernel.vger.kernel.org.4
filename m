@@ -2,191 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9EA70DE59
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E0870DE5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 16:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbjEWOAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 10:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S235099AbjEWOBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 10:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbjEWOAk (ORCPT
+        with ESMTP id S229628AbjEWOBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 10:00:40 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D872B1A1;
-        Tue, 23 May 2023 07:00:07 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8CEBF580505;
-        Tue, 23 May 2023 09:59:50 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 23 May 2023 09:59:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1684850390; x=1684857590; bh=gdE+dcQizuRxq92HvxIoxB/lQE+OMVaJSaN
-        1azoGowA=; b=gyq0KLu4ecjEB700eaXqIb0RGHwJwmYw3knHSbLSuHo5Ux+Bz9q
-        NlDeyKsvMmROIO5uctFDUEVKCRg5uGopgOPJlKaDyGUNSOVAmvbGmb9SEXoiDk08
-        HRtVhZ7gHTgplc6CIVkWWWDcUZxD5s85YqOXqDpj/VEQpKQNwtGRMbX2UJ2FPBoC
-        d/VqG1fejyo+H0bPP3cetk+uW/ETvSR80Kd2f2kgO2A7bcpkeoZ0+qNVv/yrJLsR
-        +K1PsGNPeSxwgXH8MsqSW35WsbJybrbwtE/vbXq9OkZKSICOT8inMjDKLGhAE0wp
-        y2n/NElZ0LrgXHSt+WgkRUk0sUkL+6PqDHQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684850390; x=1684857590; bh=gdE+dcQizuRxq92HvxIoxB/lQE+OMVaJSaN
-        1azoGowA=; b=Uw6UiliXmZiS8O9zPo71IzFPgJOg78eZm/2yzWHd3pryQlrC7Rq
-        B3AxYa4rQKOd1icpu71L8vTiHyOxJ0M/ohRln51qcDgD5tAtn6G7oDOu3ZRYGvSd
-        17EiZEdvZ0J6KsJxgOzK+/PJN5ZnCx7Hpf1K4FWih01pyvD354DyoXCchuzGR1YA
-        2mja5nDjPZ8/2eB0Rtxqp2t89B/p1zhfOajiJkHiOpnGaFM6OHtEre6syavoGSQA
-        4wDDlWNivDl+nIdW7BL45HcxRAuxvq88yM+XENsY2SINaPemwB0qZDPNWa+L6oWl
-        AFVYaT/ByGroxV+0zpCd5dJgHr3IPt0n1jg==
-X-ME-Sender: <xms:1cZsZAr0HBto61r2LeJPGUEZrpebrWkBSyPmk-j0YzasXnb5s2aWJA>
-    <xme:1cZsZGoAw3sz_k6KUjAiQSpjmKNsf3GcJvDIMejgxuMPoj_lux41A4xJYgHdAb_F1
-    xKmcHf1rZJ40CEaaiw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejfedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:1cZsZFPBfimrVNtytYiLAqPcuQeJuSDEXKolyB_Q_oyUNhBP8QOVBg>
-    <xmx:1cZsZH5OEATTsBe0AcSov-Z1Khu32SJNKHAbrhhzMwyNx2w2ZC4_MA>
-    <xmx:1cZsZP5j4j2JRhXl5qEAlKf-2coe1G-m77XtPIB5Ug_STxvJyL1H3Q>
-    <xmx:1sZsZMzQbm8rXpsyzTEFwzRPMPjEEVSNgLW3GIpYC3p9PStkF97byw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 716F3B6008D; Tue, 23 May 2023 09:59:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <60d76601-de3a-498b-9ebd-e09add11f96f@app.fastmail.com>
-In-Reply-To: <CAADnVQL+K22KEMu8fkQbsdmDAMcws1Cja3iM=E9zPLhDfDWmqw@mail.gmail.com>
-References: <20230517125617.931437-1-arnd@kernel.org>
- <20230517125617.931437-2-arnd@kernel.org>
- <CAADnVQL+K22KEMu8fkQbsdmDAMcws1Cja3iM=E9zPLhDfDWmqw@mail.gmail.com>
-Date:   Tue, 23 May 2023 15:59:27 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        "Song Liu" <song@kernel.org>, "Yonghong Song" <yhs@fb.com>,
-        "KP Singh" <kpsingh@kernel.org>,
-        "Stanislav Fomichev" <sdf@google.com>,
-        "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-        "Delyan Kratunov" <delyank@fb.com>,
-        "Ilya Leoshkevich" <iii@linux.ibm.com>,
-        "Menglong Dong" <imagedong@tencent.com>,
-        "Yafang Shao" <laoar.shao@gmail.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] bpf: add bpf_probe_read_kernel declaration
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 10:01:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5AF198
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684850444;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7/Nf0TavLbEChUWmWGM/CuAX+Plidrx/xwsde+Gi6m0=;
+        b=RozitKxoqbgSsHlFmGve1t9uoorYVFEtuSu/t2WahQEUofDYu1ped3sw6g3iK5USWA+bNu
+        MPEeCLS/zEEyi9hQVnzIa0gjhrQaHQ1I+pNTMQV9DAvjThkzPc7taTYx0p6VFfSCeqahT/
+        Xn+rBMDxVLtMn+1yqymvY8fBtT92O0I=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-627-DXwhFf2uNqadwI33wfjivA-1; Tue, 23 May 2023 10:00:42 -0400
+X-MC-Unique: DXwhFf2uNqadwI33wfjivA-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f604687a23so10047625e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 07:00:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684850441; x=1687442441;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7/Nf0TavLbEChUWmWGM/CuAX+Plidrx/xwsde+Gi6m0=;
+        b=CbAgskN6BfNU6mc3zIxeh/V3HRZlqY1NvKUCMzpVtjo9pwi9tGm6fi1Y7fBfmm4nqm
+         /dEbGf3n4hrDOaVvBHNOWa9N54SPNrwPlu9DxO6DlH+yEXS3klSZEag23/3tHbIgxpIX
+         cFaV9IQCVvbD/1PseX1E3e8THmP+WW/86XJnCsDHf/DusSCgEM14XhKgyVFP6KWdPOGi
+         460tNONrifi32Qqx1l05C3v28y1xhdo75oi7JMPmxfNRCuvPaQOVDsMjpvwshgcRUlO4
+         N36M3V7Ar7bWOAYYXVVLpHL+tyr3eMPl7in45YkLQsYbZAYlT9FkwK5OwM6aehdk5jMG
+         f9kg==
+X-Gm-Message-State: AC+VfDy4ATsFuOennMS0tqK+DnekO+RwoARcrSdj/ThiusxIf/4tRXYn
+        zMHkDrk/DH//FaHhAi3aILAkTRxAaFVzFTDYkd45OJZpiBq2ElwemfjexHoT98bdTVV3ckPLYaX
+        uRvy9Y9SZnNzHrzgX+k9+gfCx
+X-Received: by 2002:a5d:4d4b:0:b0:309:4289:91c9 with SMTP id a11-20020a5d4d4b000000b00309428991c9mr11771030wru.17.1684850441406;
+        Tue, 23 May 2023 07:00:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5tAvOtRXffvj1RZ0LbID8208d/vIh6WNXAn638Wa4VSjKA9mSnvfnq5oThGvWGfLVVCZMYhQ==
+X-Received: by 2002:a5d:4d4b:0:b0:309:4289:91c9 with SMTP id a11-20020a5d4d4b000000b00309428991c9mr11770997wru.17.1684850441041;
+        Tue, 23 May 2023 07:00:41 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
+        by smtp.gmail.com with ESMTPSA id z4-20020a056000110400b00307972e46fasm8983024wrw.107.2023.05.23.07.00.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 07:00:40 -0700 (PDT)
+Message-ID: <4b7e4d48-f0f9-c0b0-e8e1-2678d0306252@redhat.com>
+Date:   Tue, 23 May 2023 16:00:39 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 1/6] ksm: support unsharing KSM-placed zero pages
+Content-Language: en-US
+To:     xu xin <xu.xin.sc@gmail.com>
+Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin16@zte.com.cn,
+        yang.yang29@zte.com.cn
+References: <1925d301-462d-6b33-8867-4e1646b2dbd6@redhat.com>
+ <20230523135709.6902-1-xu.xin16@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230523135709.6902-1-xu.xin16@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023, at 03:05, Alexei Starovoitov wrote:
-> On Wed, May 17, 2023 at 5:56=E2=80=AFAM Arnd Bergmann <arnd@kernel.org=
-> wrote:
->> @@ -1635,11 +1635,14 @@ bool bpf_opcode_in_insntable(u8 code)
->>  }
+On 23.05.23 15:57, xu xin wrote:
+>>> ---
+>>>    include/linux/ksm.h | 6 ++++++
+>>>    mm/ksm.c            | 5 +++--
+>>>    2 files changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+>>> index 899a314bc487..7989200cdbb7 100644
+>>> --- a/include/linux/ksm.h
+>>> +++ b/include/linux/ksm.h
+>>> @@ -26,6 +26,9 @@ int ksm_disable(struct mm_struct *mm);
+>>>    
+>>>    int __ksm_enter(struct mm_struct *mm);
+>>>    void __ksm_exit(struct mm_struct *mm);
+>>> +/* use pte_mkdirty to track a KSM-placed zero page */
+>>> +#define set_pte_ksm_zero(pte)	pte_mkdirty(pte_mkspecial(pte))
 >>
->>  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
->> -u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *un=
-safe_ptr)
->> +u64 bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_pt=
-r);
->> +#ifndef CONFIG_BPF_EVENTS
->> +u64 bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_pt=
-r)
->>  {
->>         memset(dst, 0, size);
->>         return -EFAULT;
->>  }
->
-> This is not right, but you've spotted a bug.
-> bpf_probe_read_kernel
-> It should be BPF_CALL_3(bpf_probe_read_kernel, void *, dst, u32, size,
->            const void *, unsafe_ptr)
-> here in kernel/bpf/core.c as well otherwise bpf prog won't
-> pass the arguments correctly on 32-bit arches.
+>> If there is only a single user (which I assume), please inline it instead.
+> 
+> Excuse me, I'm wondering why using inline here instead of macro is better.
+> Thanks! :)
 
-I tried that before and again now, but could not figure out how
-to do this correctly though.
+Just to clarify: not an inline function but removing the macro 
+completely and just place that code directly into the single caller.
 
-With this patch on top:
+Single user, no need to put that into ksm.h -- and I'm not super happy 
+about the set_pte_ksm_zero() name ;) because we get the zero-pte already 
+passed in from the caller ...
 
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1635,9 +1635,8 @@ bool bpf_opcode_in_insntable(u8 code)
- }
-=20
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
--u64 bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr);
- #ifndef CONFIG_BPF_EVENTS
--u64 bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-+BPF_CALL_3(bpf_probe_read_kernel, void *, dst, u32, size, const void *,=
- unsafe_ptr)
- {
-        memset(dst, 0, size);
-        return -EFAULT;
+-- 
+Thanks,
 
-I see a ton of other build failures, for every function calling
-bpf_probe_read_kernel() from kernel/bpf:
+David / dhildenb
 
-kernel/bpf/core.c: In function '___bpf_prog_run':
-kernel/bpf/core.c:1936:39: error: passing argument 1 of 'bpf_probe_read_=
-kernel' makes integer from pointer without a cast [-Werror=3Dint-convers=
-ion]
- 1936 |                 bpf_probe_read_kernel(&DST, sizeof(SIZE),       =
-        \
-      |                                       ^
-      |                                       |
-      |                                       u64 * {aka long long unsig=
-ned int *}
-kernel/bpf/core.c:1937:39: error: passing argument 3 of 'bpf_probe_read_=
-kernel' makes integer from pointer without a cast [-Werror=3Dint-convers=
-ion
- 1937 |                                       (const void *)(long) (SRC =
-+ insn->off));  \
-
-
-Though the code from samples/bpf seems to be able to call this
-without problems.
-
-If you have a suggestion for how to do it correctly, can you send
-that as a patch yourself? Let me know if you'd like me to run that
-through my test builds.
-
-> The kconfig without CONFIG_BPF_EVENTS and with BPF_SYSCALL is very odd.
-> I suspect the progs will likely refuse to load, but still worth
-> fixing it correctly at least to document the calling convention.
-
-Do you think there should be a change to the Kconfig files as well then?
-I see a lot of features depend on BPF_SYSCALL but not BPF_EVENTS:
-HID_BPF, BPF_LIRC_MODE2, CGROUP_BPF, BPF_PRELOAD, DEBUG_INFO_BTF,
-BPF_STREAM_PARSER, AF_KCM, XDP_SOCKETS and NETFILTER_BPF_LINK.
-
-Right now, these can all be enabled when {KPROBE,UPROBE,PERF,BPF}_EVENTS
-are disabled.
-
-    Arnd
