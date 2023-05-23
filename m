@@ -2,118 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C52670D9BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 11:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D4D70D9C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 12:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236413AbjEWJ7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 05:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S236270AbjEWKCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 06:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235887AbjEWJ7h (ORCPT
+        with ESMTP id S230082AbjEWKC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 05:59:37 -0400
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38E2120
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 02:59:34 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 498641004BFFB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 09:59:34 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 1OnmqZ7wEo8yQ1OnmqKwWE; Tue, 23 May 2023 09:59:34 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=IbhC5Uma c=1 sm=1 tr=0 ts=646c8e86
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=P0xRbXHiH_UA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=_TT2BMk-RzcNz2eV-joA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=p6l073W1H14VRvH/3qDVIKzIoUiWlZ6V1q4jFM65G4w=; b=pTugLCBkYeRjXr09yfK5brUA2Y
-        jGpu9b4LcG5wXRL1aDH4nIPWS18Fbi8GOQfpJ+reHobWLBqdHlW2sJ4LhGc//6vI6EEt/1J+sL+9J
-        q4Y3lMnmcI6AMo+aVeneXMWdwWogSrrat7kb9UDBEII77Z85g4oKEH2BSX1FEwwg7r+5ggS4hPCmd
-        KB979ogXI9SXxG2RBLmOZmtF/QeeGaFxXuelzJXDXgTs8b6M8CCzi8R6XAQMCMJaNaxeUtzGOMnUM
-        P/nfY9d6/AIJRyun/8T9tzwGGJxFtbLYWftn8ZQM7FEzvDYdId+DxeJk9cFvnNGMWuoGmKY0FYZvZ
-        A2MmCoyA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:40970 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q1Onl-003vXU-B3;
-        Tue, 23 May 2023 03:59:33 -0600
-Subject: Re: [PATCH 6.3 000/364] 6.3.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230522190412.801391872@linuxfoundation.org>
-In-Reply-To: <20230522190412.801391872@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <44f75b57-d26f-c284-825c-19bcc7e2ac7e@w6rz.net>
-Date:   Tue, 23 May 2023 02:59:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 23 May 2023 06:02:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960AB94
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684836101;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0jmiNORGiyZJFJpIfdvkwSlqYGBcl3FERUWYSXrFwYI=;
+        b=ZO7fQ6mBTOb+mJ3bDAQUpjpM4JSPuWeiXBpAxiZ/Hsqxax5h33EGVFRgo2eh948Scl1jpE
+        pE/mLttgKddT9f5pUGxPxo2cQQVhVWtsJX/o6GdvvKJniV3gHz7dsxnKFYaZ/q5hjZ+GWj
+        iTPaO5TUqS2VSY+ABfGGi8XrYjcA/MU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-652-xpY8084LNcW37PPM-kaKRw-1; Tue, 23 May 2023 06:01:40 -0400
+X-MC-Unique: xpY8084LNcW37PPM-kaKRw-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-306362a1607so4588921f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 03:01:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684836099; x=1687428099;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0jmiNORGiyZJFJpIfdvkwSlqYGBcl3FERUWYSXrFwYI=;
+        b=XENchiDzSmVDfIxt4jVCSeEwsbO+9+fUgPuuleNxk15IPxImBISfbio8EIeEQl52+r
+         XjGxi8KZOfK/bjOMBAWYTUmjjA/zOk5yOMjhI5cjatlkxJ59ycWfsAC++C1jFpuA2eoa
+         M3laodRPo0opf6eKGMikPG1/ETWJFBn+1i3xX4672hFeE5JBH1LtpT/UuPrxnkpvGo6I
+         A6HpdV1RrOjZjRyuy3JfgpfZnhT5GFF8gyW9UwoQrvdkEfEu4ocHU26p5AKXTJ5o4Szv
+         zgyhixJSoQDSpNsk4shwPF1JDdYbaaQv0uJ7AScS4R0mk7rCjhQ3JwP82UI9C/iHY/Q1
+         vghA==
+X-Gm-Message-State: AC+VfDz4ropkbf8v00az57jQMmELgYsU/GwZ8lsly/PZORRRah1ngKIh
+        cfyG7P/KabQLs5/1hU4OQdif34yQJC6JT+JeSmMLlpGOu3pTryM09J/K5T48JSOEvxuFWqOKdPv
+        jFVbBQHO3ijGhhbIADOImuiqT
+X-Received: by 2002:adf:f711:0:b0:306:35d2:c33a with SMTP id r17-20020adff711000000b0030635d2c33amr10262719wrp.50.1684836098808;
+        Tue, 23 May 2023 03:01:38 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6dmiDzcAlZXASpNOPRlqAvR9hodclk6X/X9b13ab7q3ukclNqy80UuPoTsUr3GxPBont2EMg==
+X-Received: by 2002:adf:f711:0:b0:306:35d2:c33a with SMTP id r17-20020adff711000000b0030635d2c33amr10262694wrp.50.1684836098441;
+        Tue, 23 May 2023 03:01:38 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd? (p200300cbc74cb4005c8ba0b2f57ee1cd.dip0.t-ipconnect.de. [2003:cb:c74c:b400:5c8b:a0b2:f57e:e1cd])
+        by smtp.gmail.com with ESMTPSA id o2-20020a056000010200b002ca864b807csm10836709wrx.0.2023.05.23.03.01.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 03:01:38 -0700 (PDT)
+Message-ID: <04d3ffe2-46ce-db30-8f1b-cb05cd21d328@redhat.com>
+Date:   Tue, 23 May 2023 12:01:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 5/6] ksm: update the calculation of KSM profit
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q1Onl-003vXU-B3
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:40970
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
+Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn,
+        Stefan Roesch <shr@devkernel.io>
+References: <202305221842587200002@zte.com.cn>
+ <20230522105402.4225-1-yang.yang29@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230522105402.4225-1-yang.yang29@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 12:05 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.4 release.
-> There are 364 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 24 May 2023 19:03:25 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 22.05.23 12:54, Yang Yang wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+I suggest changing the subject to
 
-Tested-by: Ron Economos <re@w6rz.net>
+"ksm: consider KSM-placed zeropages when calculating KSM profit"
+
+> When use_zero_pages is enabled, the calculation of ksm profit is not
+> correct because ksm zero pages is not counted in. So update the
+> calculation of KSM profit including the documentation.
+> 
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+> Cc: Yang Yang <yang.yang29@zte.com.cn>
+> Cc: Jiang Xuexin <jiang.xuexin@zte.com.cn>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> ---
+>   Documentation/admin-guide/mm/ksm.rst | 18 +++++++++++-------
+>   mm/ksm.c                             |  2 +-
+>   2 files changed, 12 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
+> index 019dc40a0d3c..dde7c152f0ae 100644
+> --- a/Documentation/admin-guide/mm/ksm.rst
+> +++ b/Documentation/admin-guide/mm/ksm.rst
+> @@ -204,21 +204,25 @@ several times, which are unprofitable memory consumed.
+>   1) How to determine whether KSM save memory or consume memory in system-wide
+>      range? Here is a simple approximate calculation for reference::
+>   
+> -	general_profit =~ pages_sharing * sizeof(page) - (all_rmap_items) *
+> +	general_profit =~ ksm_saved_pages * sizeof(page) - (all_rmap_items) *
+>   			  sizeof(rmap_item);
+>   
+> -   where all_rmap_items can be easily obtained by summing ``pages_sharing``,
+> -   ``pages_shared``, ``pages_unshared`` and ``pages_volatile``.
+> +   where ksm_saved_pages equals to the sum of ``pages_sharing`` +
+> +   ``ksm_zero_pages`` of the system, and all_rmap_items can be easily
+> +   obtained by summing ``pages_sharing``, ``pages_shared``, ``pages_unshared``
+> +   and ``pages_volatile``.
+>   
+>   2) The KSM profit inner a single process can be similarly obtained by the
+>      following approximate calculation::
+>   
+> -	process_profit =~ ksm_merging_pages * sizeof(page) -
+> +	process_profit =~ ksm_saved_pages * sizeof(page) -
+>   			  ksm_rmap_items * sizeof(rmap_item).
+>   
+> -   where ksm_merging_pages is shown under the directory ``/proc/<pid>/``,
+> -   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process profit
+> -   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
+> +   where ksm_saved_pages equals to the sum of ``ksm_merging_pages`` and
+> +   ``ksm_zero_pages``, both of which are shown under the directory
+> +   ``/proc/<pid>/ksm_stat``, and ksm_rmap_items is alos shown in
+
+s/alos/also/
+
+> +   ``/proc/<pid>/ksm_stat``. The process profit is also shown in
+> +   ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
+>   
+>   From the perspective of application, a high ratio of ``ksm_rmap_items`` to
+>   ``ksm_merging_pages`` means a bad madvise-applied policy, so developers or
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 4e510f5c5938..d23a240c2519 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -3085,7 +3085,7 @@ static void wait_while_offlining(void)
+>   #ifdef CONFIG_PROC_FS
+>   long ksm_process_profit(struct mm_struct *mm)
+>   {
+> -	return mm->ksm_merging_pages * PAGE_SIZE -
+> +	return (long)(mm->ksm_merging_pages + mm->ksm_zero_pages) * PAGE_SIZE -
+>   		mm->ksm_rmap_items * sizeof(struct ksm_rmap_item);
+>   }
+>   #endif /* CONFIG_PROC_FS */
+
+Apart from that LGTM. CCing Stefan R.
+
+-- 
+Thanks,
+
+David / dhildenb
 
