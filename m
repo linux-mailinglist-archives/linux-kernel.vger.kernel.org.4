@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C3670E524
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5337B70E527
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 21:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238252AbjEWTMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 15:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S238153AbjEWTNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 15:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238241AbjEWTMf (ORCPT
+        with ESMTP id S237742AbjEWTNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 15:12:35 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3AA91;
-        Tue, 23 May 2023 12:12:34 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so134212b3a.0;
-        Tue, 23 May 2023 12:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684869154; x=1687461154;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WDHOuli6LQC21PVL1jIVJHkKd4nR+BXbovWUBQJSo5E=;
-        b=nnt2ZPVfDdLgMsE9DXatFeQI53mTIFlO7r2+Zrd8elz107npuksySY3Ik1QMx5QeNX
-         HuOBQsQNrA/4wYyDJaFh9NPUg8lo6sK8UdVOIgh+yku9tcUmeqEKa1bmSLkHCTZpNAtZ
-         phaeSMPxMN6d+QDQDOK5pKidVFhjxa9v8JZl8GD2g18uY+eHydQG8lOel3kyJgBZ2CuN
-         xouiWeZ9l9EroDXJDxzAli1p9aGcoARKs2ChHGPIQKpLGakbEcGpuWxumVEiUfOrzOai
-         PFDoRS2Y0B6VOAwv/BIKMqp47OYcP++4oJc4kvO3xaJx4T5OdMssVkhoz1Hwoer8UTyA
-         uzzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684869154; x=1687461154;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WDHOuli6LQC21PVL1jIVJHkKd4nR+BXbovWUBQJSo5E=;
-        b=hRAd/cXMa+GHJlQCQiWGE6lpe+5zKktB5KEA3KMml7a2lnBANqvGYOnDy463WLjqff
-         athMrzjAgYqlE251/XomK5F0or8hwKmmERxfHqTHtGy8mTDT/qV2ZohAa4/RCwPGAwN0
-         xGC6XkxvDun9+eUTkstqQ6W/TLHUWjRpGK7QCuVZxkN4Ui5/iDEJK5ZyGz/3M8trVLSJ
-         BMbHe9TRFH+fB/0uLJTKPVb8CH6CR/JDz/WmHgnHMN7hMGCH7d648gl72BHxZlMx32ZP
-         SVM4C7BJ/icOjxw1zuyRQ4DS9Cd5vkzVDkzkivG7DG+fBa2WBwWxe4qw2kely62KcCLm
-         LnDg==
-X-Gm-Message-State: AC+VfDzq+XkK5HhB4FaxMiFj/sSBHGEQJJTvTDF+yMZA/NYSAPZRGoub
-        NsjvzFc6mbvA3A8+TQyK8yY=
-X-Google-Smtp-Source: ACHHUZ5MioFk87y9tahP+5F0UfZ0Z5nT1k2lXSVKi3g9FB/0Hr97Jo8X1g94AfYyFrspRxMk9j3cIA==
-X-Received: by 2002:a05:6a00:2d87:b0:64d:fd0:dd1a with SMTP id fb7-20020a056a002d8700b0064d0fd0dd1amr79254pfb.16.1684869153506;
-        Tue, 23 May 2023 12:12:33 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id g17-20020aa78751000000b0063b89300347sm6279088pfo.142.2023.05.23.12.12.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 12:12:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 23 May 2023 09:12:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Jiri Wiesner <jwiesner@suse.de>
-Subject: Re: [RFC PATCH 2/3] cgroup: Rely on namespace_sem in
- current_cgns_cgroup_from_root explicitly
-Message-ID: <ZG0QH7gvKNFj0n34@slm.duckdns.org>
-References: <20230502133847.14570-1-mkoutny@suse.com>
- <20230502133847.14570-3-mkoutny@suse.com>
- <20230523-radar-gleich-781fd4006057@brauner>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523-radar-gleich-781fd4006057@brauner>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 23 May 2023 15:13:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BA1119;
+        Tue, 23 May 2023 12:12:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 148E161D46;
+        Tue, 23 May 2023 19:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 734AFC433D2;
+        Tue, 23 May 2023 19:12:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684869174;
+        bh=e2+88Fpdes7sDNr1lFo4AJXADvwOPDkDtwtQu+Fn7KI=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=b2QDMZT75fspvpIHJtMwx9QUeWemKM9oXLhFLuLu1clAf4QyCX3qnBEKSPNynYSkm
+         Qr1B67ra1/wIb7+VxQpSPCHwkBD36PQ0cohLrYjUKdI/4CMh7W7RHnJh/egaFhJd8Z
+         4RHyIsIzuLStIRJC4yK/26NewusGaRaIO+ZTR9LoU24VEoiKhfW5PMjg6DqklUls49
+         5GK1fDtWjST3rRfTPbI13po7WIPuncvE/I5dy0oNVhqe89gwRITeNtt5aCHJMfUVDJ
+         0qyoXbed7BFafxuZk5FARJ2xN8wZIMiiK5lylPCpdTcorusPpk7Bq8pY/7g+txatVb
+         3TAc3gJrnO9PQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 23 May 2023 22:12:49 +0300
+Message-Id: <CSTW9UX4ERDZ.VBD1QIWLBM75@suppilovahvero>
+Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
+        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
+        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
+        <lukas@wunner.de>, <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>
+X-Mailer: aerc 0.14.0
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
+In-Reply-To: <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue May 23, 2023 at 9:53 PM EEST, Jarkko Sakkinen wrote:
+> On Mon May 22, 2023 at 5:31 PM EEST, Lino Sanfilippo wrote:
+> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> >
+> > Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
+> > interrupts instead of polling on all capable TPMs. Unfortunately, on so=
+me
+> > products the interrupt line is either never asserted or never deasserte=
+d.
+> >
+> > The former causes interrupt timeouts and is detected by
+> > tpm_tis_core_init(). The latter results in interrupt storms.
+> >
+> > Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkP=
+ad
+> > L490 and Inspur NF5180M6:
+> >
+> > https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel=
+@redhat.com/
+> > https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa=
+3a78af5a6.camel@kernel.org/
+> >
+> > The current approach to avoid those storms is to disable interrupts by
+> > adding a DMI quirk for the concerned device.
+> >
+> > However this is a maintenance burden in the long run, so use a generic
+> > approach:
+>
+> I'm trying to comprehend how you evaluate, how big maintenance burden
+> this would be. Adding even a few dozen table entries is not a
+> maintenance burden.
+>
+> On the other hand any new functionality is objectively a maintanance
+> burden of some measure (applies to any functionality). So how do we know
+> that taking this change is less of a maintenance burden than just add
+> new table entries, as they come up?
+>
+> > Detect an interrupt storm by counting the number of unhandled interrupt=
+s
+> > within a 10 ms time interval. In case that more than 1000 were unhandle=
+d
+> > deactivate interrupts, deregister the handler and fall back to polling.
+>
+> I know it can be sometimes hard to evaluate but can you try to explain
+> how you came up to the 10 ms sampling period and 1000 interrupt
+> threshold? I just don't like abritrary numbers.
 
-On Tue, May 23, 2023 at 12:42:46PM +0200, Christian Brauner wrote:
-...
-> Nope, we're not putting namespace_sem in a header. The code it protects
-> is massively sensitive and it interacts with mount_lock and other locks.
-> This stays private to fs/namespace.c as far as I'm concerned.
+Also here I wonder how you came up with this computational model. This
+is not same as saying it is wrong. There's just whole stack of options.
 
-Michal, would it make sense to add a separate locking in cgroup.c? It'll add
-a bit more overhead but not massively so and we should be able to get
-similar gain without entangling with namespace locking.
+Out of top of my head you could e.g. window average the duration between
+IRQs. When the average goes beyond threshold, then you shutdown
+interrupts.
 
-Thanks.
+The pro I would see in this that it is much easier intuitively discuss
+how much there should be time in-between interrupts that the kernel
+handles it, than how many IRQs you can stack into time interval, which
+blows my head tbh.
 
--- 
-tejun
+BR, Jarkko
