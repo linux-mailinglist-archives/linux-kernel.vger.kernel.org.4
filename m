@@ -2,256 +2,420 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C0070DB61
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEAE70DB68
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236643AbjEWLUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S236166AbjEWLW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbjEWLUG (ORCPT
+        with ESMTP id S229889AbjEWLWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:20:06 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC49C4;
-        Tue, 23 May 2023 04:20:05 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230523112003euoutp025abf13a70dec7b770010410165594f3f~hwcjQ4qah1344413444euoutp02f;
-        Tue, 23 May 2023 11:20:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230523112003euoutp025abf13a70dec7b770010410165594f3f~hwcjQ4qah1344413444euoutp02f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1684840803;
-        bh=NhlgtIzHsKmsPU5g/FS0uuD7atxyv9UToKcr8QGWkwU=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=PQ2krdBWkevzyxBu1hBlbzjCpRPu4s152bdMSl0dp5MAsWdRiMMQQR628Nio3GMVo
-         +4RxiGA3iVcZyo5R1hLNnSXlm0WGFTYZ23xie4Afb6iS60whlJ4DlmXllea4GjXXUT
-         tZBksmvY8VAONB4zAfzWOfqD5tNFNZYb8kPx+/FE=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230523112003eucas1p1c2faee0b8e4cd13d86724efb9c0b3d87~hwci5EF3g2286222862eucas1p1o;
-        Tue, 23 May 2023 11:20:03 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id C5.2A.42423.361AC646; Tue, 23
-        May 2023 12:20:03 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230523112002eucas1p29808112c0e3d9c40a34ac3629219d2e9~hwcib9fig1143611436eucas1p2N;
-        Tue, 23 May 2023 11:20:02 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230523112002eusmtrp130a02d92038b4e4925c40c5db9f8f5dc~hwcibIfx_2641026410eusmtrp1m;
-        Tue, 23 May 2023 11:20:02 +0000 (GMT)
-X-AuditID: cbfec7f2-a3bff7000002a5b7-d4-646ca163cfe1
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 66.B5.10549.261AC646; Tue, 23
-        May 2023 12:20:02 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230523112002eusmtip2537422a97c37887457375ead2b9faac4~hwciPnRnU1573615736eusmtip2z;
-        Tue, 23 May 2023 11:20:02 +0000 (GMT)
-Received: from localhost (106.210.248.82) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Tue, 23 May 2023 12:20:02 +0100
-Date:   Tue, 23 May 2023 13:20:01 +0200
-From:   Joel Granados <j.granados@samsung.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Luis Chamberlain <mcgrof@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: bott test warning
-Message-ID: <20230523112001.owwx7sa7qofwuzfd@localhost>
+        Tue, 23 May 2023 07:22:55 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C40BCF;
+        Tue, 23 May 2023 04:22:54 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34NBM4tX078568;
+        Tue, 23 May 2023 06:22:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684840924;
+        bh=xuKQvXHJklOgkcPjezOZZ60CSNAUUih10lDCrfMjZ6k=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=gldnpfReGii3TR627fFtPNi0e3FxdVbeb52FWHMhMw6smcL41pvaxoe8KmzL23kLm
+         Njjx3yFaMruV4oShTzSKWqUFC3LAPynmzvv9b9+ekc42YxvbW3T2dscEmlDlsFfyza
+         C5fVMtuQyXyrtBuFC+KcEcid0YqTLwcOeuIbMgcI=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34NBM4eG064268
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 23 May 2023 06:22:04 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 23
+ May 2023 06:22:04 -0500
+Received: from DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c]) by
+ DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c%18]) with mapi id
+ 15.01.2507.023; Tue, 23 May 2023 06:22:03 -0500
+From:   "Ding, Shenghao" <shenghao-ding@ti.com>
+To:     Takashi Iwai <tiwai@suse.de>, Shenghao Ding <13916275206@139.com>
+CC:     "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "Lu, Kevin" <kevin-lu@ti.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
+        "Navada Kanyana, Mukund" <navada@ti.com>,
+        "gentuser@gmail.com" <gentuser@gmail.com>,
+        "Ryan_Chu@wistron.com" <Ryan_Chu@wistron.com>,
+        "Sam_Wu@wistron.com" <Sam_Wu@wistron.com>
+Subject: RE: [EXTERNAL] Re: [PATCH v3 4/5] ALSA: hda/tas2781: Add tas2781 HDA
+ driver
+Thread-Topic: [EXTERNAL] Re: [PATCH v3 4/5] ALSA: hda/tas2781: Add tas2781 HDA
+ driver
+Thread-Index: AQHZi7qiFX/KEOnLRkSXJDizgQHnya9nuCRg
+Date:   Tue, 23 May 2023 11:22:03 +0000
+Message-ID: <9daf95da47b540329aa9fbbd2df5e504@ti.com>
+References: <20230519080227.20224-1-13916275206@139.com>
+ <871qjayuvv.wl-tiwai@suse.de>
+In-Reply-To: <871qjayuvv.wl-tiwai@suse.de>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.85.15.102]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="gny3tkialmcud3zd"
-Content-Disposition: inline
-In-Reply-To: <20230523135739.73068c68@canb.auug.org.au>
-X-Originating-IP: [106.210.248.82]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsWy7djPc7rJC3NSDGYeFbO4vGsOm8XBhW2M
-        FjcmPGW02Lr3KrsDi0fjjRtsHptWdbJ5fN4kF8AcxWWTkpqTWZZapG+XwJUx4+RkpoI2lYo9
-        E9czNjBOle9i5OSQEDCROL/5MXsXIxeHkMAKRonNW45DOV8YJXa1nINyPjNKPLh1jBGm5WvT
-        cmaIxHJGif8z37HAVS2ZOIURwtnCKDFhxi6gMg4OFgFViaP9+iDdbAI6Euff3AELiwhoSxz4
-        LQBSziwwh1Hi1cUnrCBxYQEtiaZtJiDlvALmElu2rGSHsAUlTs58wgJiMwtUSFy/3AlWziwg
-        LbH8HwdImBOofOLNb0wQdypJrO76wwZh10qc2nILKj6ZU+LpHHWQVgkBF4nO62YQYWGJV8e3
-        sEPYMhKnJ/eAfQVUziix/98HdghnNaPEssavUIOsJVquPIHqcJS4vXgHC8RQPokbbwUhzuST
-        mLRtOjNEmFeio00IolpNYvW9NywTGJVnIXlsFpLHZiE8BmFaSWy6HIsiClKsI7Fg9yc2DGFt
-        iWULXzND2LoSXccOQM2Olzj29RozphpbiXXr3rMsYORZxSieWlqcm55abJiXWq5XnJhbXJqX
-        rpecn7uJEZgIT/87/mkH49xXH/UOMTJxMB5iVAFqfrRh9QVGKZa8/LxUJRHeE+XZKUK8KYmV
-        ValF+fFFpTmpxYcYpTlYlMR5tW1PJgsJpCeWpGanphakFsFkmTg4pRqY9F+tFS1mYJ7xSn7y
-        hedm317tOn/gebzxr5ktVk9Ei9MnKb2afKH1xv66h+qWCS5c2Wv0F6jvmJlUc1zb8uGjsGJ9
-        prmfo5atWHyz9XOIzGrnbCuT689l7b6+930U9Kw8mC/H1ee2ZOyky1MFNmgtZq10OTD3/Q2L
-        pe7PPZ7f/Rv3xVuwzPA2e9hyubifYQ1OagL1sftE33Cav49+nlil6lv/cJrUWsabvt+8LzKH
-        d7PwSTsICR1fsqqmx6rw4cH//4WzT14W+NiVc/94uXLS0uVCIV9fZUa23fKTTGqLPcXbHLfi
-        sQAPn6Thu4vqlZV7jtox/50apD/T1KxmtdK747cvZbUo8mbIWDDd1TmuxFKckWioxVxUnAgA
-        rcuXDv8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkleLIzCtJLcpLzFFi42I5/e/4Pd2khTkpBl9emlhc3jWHzeLgwjZG
-        ixsTnjJabN17ld2BxaPxxg02j02rOtk8Pm+SC2CO0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAz
-        MrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0Ms4ObmfraBFpaJn+nrmBsaJ8l2MnBwSAiYSX5uW
-        M3cxcnEICSxllNjw6hUzREJGYuOXq6wQtrDEn2tdbCC2kMBHRonHlwUgGrYwSqy/+Q6oiIOD
-        RUBV4mi/PkgNm4COxPk3d5hBwiIC2hIHfoOVMwvMYZR4dfEJWLmwgJZE0zYTkHJeAXOJLVtW
-        skOM7GKUWH1zESNEQlDi5MwnLCA2s0CZxPuvIDdwANnSEsv/cYCEOYF6J978xgRxppLE6q4/
-        bBB2rcTnv88YJzAKz0IyaRaSSbMQJkGYVhKbLseiiIIUa0nc+PeSCUNYW2LZwtfMMPbDiVOZ
-        IOx4iWNfrzFjqrGVWLfuPcsCRp5VjCKppcW56bnFhnrFibnFpXnpesn5uZsYgelg27Gfm3cw
-        znv1Ue8QIxMH4yFGFaDORxtWX2CUYsnLz0tVEuE9UZ6dIsSbklhZlVqUH19UmpNafIjRFBj6
-        E5mlRJPzgYkqryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2xJDU7NbUgtQimj4mDU6qBaaZF
-        +uz4Ofq3k19vDA9Laf95kyV6Ybuqq+zi1c9779+3eGsU/d/f5oxfbcdc9eeL09dvFvUKV564
-        78v+qyfizwptLG5maHyx+4jCD6s8UdOYlLb8mptB+5+r+rptd5I+9q1V7+mdoP8it41M+V5K
-        LxU+3K+25aGEbnVyhMXLUzdUyz1Xb9hX+E1zM8P+u1cnmV+xWZ5d0FvcLRCk1u266W1AtdBO
-        Te/05nPpiRMvJ3atPDK7Im2lS/ZRqXMrNOfnWjO1mv9d9vdSzBOLp9sjKq+X2+dKc1w9xceW
-        Fv733puKLvFgti+1j55c5e5In5USE9ma/Nf4+HSJxtSGef+POJwXlpk14WR89TKBTdumKLEU
-        ZyQaajEXFScCABaf6FGcAwAA
-X-CMS-MailID: 20230523112002eucas1p29808112c0e3d9c40a34ac3629219d2e9
-X-Msg-Generator: CA
-X-RootMTR: 20230523035747eucas1p2f10754f5eb6759d6665a35562c523841
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230523035747eucas1p2f10754f5eb6759d6665a35562c523841
-References: <CGME20230523035747eucas1p2f10754f5eb6759d6665a35562c523841@eucas1p2.samsung.com>
-        <20230523135739.73068c68@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---gny3tkialmcud3zd
-Content-Type: multipart/mixed; boundary="muu3ipgqvr4kuhhh"
-Content-Disposition: inline
 
---muu3ipgqvr4kuhhh
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-----Original Message-----
+From: Takashi Iwai <tiwai@suse.de>=20
+Sent: Sunday, May 21, 2023 4:03 PM
+To: Shenghao Ding <13916275206@139.com>
+Cc: broonie@kernel.org; devicetree@vger.kernel.org; krzysztof.kozlowski+dt@=
+linaro.org; robh+dt@kernel.org; lgirdwood@gmail.com; perex@perex.cz; pierre=
+-louis.bossart@linux.intel.com; Lu, Kevin <kevin-lu@ti.com>; Ding, Shenghao=
+ <shenghao-ding@ti.com>; alsa-devel@alsa-project.org; linux-kernel@vger.ker=
+nel.org; Xu, Baojun <x1077012@ti.com>; Gupta, Peeyush <peeyush@ti.com>; Nav=
+ada Kanyana, Mukund <navada@ti.com>; gentuser@gmail.com; Ryan_Chu@wistron.c=
+om; Sam_Wu@wistron.com
+Subject: [EXTERNAL] Re: [PATCH v3 4/5] ALSA: hda/tas2781: Add tas2781 HDA d=
+river
 
-On Tue, May 23, 2023 at 01:57:39PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Fri, 19 May 2023 10:02:27 +0200,
+Shenghao Ding wrote:
 >=20
-> Today's linux-next boot test (powerpc pseries_le_defconfig) produced
-> this warning:
+> Create tas2781 HDA driver.
 >=20
-> sysctl table check failed: kernel/usermodehelper Not a file
-> sysctl table check failed: kernel/usermodehelper No proc_handler
-> sysctl table check failed: kernel/usermodehelper bogus .mode 0555
-> sysctl table check failed: kernel/keys Not a file
-> sysctl table check failed: kernel/keys No proc_handler
-> sysctl table check failed: kernel/keys bogus .mode 0555
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc3-04222-g1999c5d1802e #1
-> Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf00=
-0004 of:SLOF,HEAD pSeries
-> Call Trace:
-> [c0000000028bfd40] [c00000000113ea2c] dump_stack_lvl+0x70/0xa0 (unreliabl=
-e)
-> [c0000000028bfd70] [c0000000006166f0] __register_sysctl_table+0x7f0/0x9e0
-> [c0000000028bfe50] [c00000000204e650] __register_sysctl_init+0x40/0x78
-> [c0000000028bfec0] [c00000000202d660] sysctl_init_bases+0x40/0xb4
-> [c0000000028bfef0] [c00000000204e6dc] proc_sys_init+0x54/0x68
-> [c0000000028bff10] [c00000000204dff4] proc_root_init+0xb8/0xdc
-> [c0000000028bff30] [c0000000020045d8] start_kernel+0x7f8/0x834
-> [c0000000028bffe0] [c00000000000e998] start_here_common+0x1c/0x20
-> failed when register_sysctl kern_table to kernel
->=20
-> I am not sure exactly which commit caused this.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
-Does the attached patch solve the issue?
+> Signed-off-by: Shenghao Ding <13916275206@139.com>
+
+First of all, please give more description.  It's far more changes than wri=
+tten in four words.
+
+Also, don't forget to put me on Cc.  I almost overlooked this one.
+
+> diff --git a/sound/pci/hda/patch_realtek.c=20
+> b/sound/pci/hda/patch_realtek.c index 172ffc2c332b..f5b912f90018=20
+> 100644
+> --- a/sound/pci/hda/patch_realtek.c
+> +++ b/sound/pci/hda/patch_realtek.c
+> +static int comp_match_tas2781_dev_name(struct device *dev, void=20
+> +*data) {
+> +	struct scodec_dev_name *p =3D data;
+> +	const char *d =3D dev_name(dev);
+> +	int n =3D strlen(p->bus);
+> +	char tmp[32];
+> +
+> +	/* check the bus name */
+> +	if (strncmp(d, p->bus, n))
+> +		return 0;
+> +	/* skip the bus number */
+> +	if (isdigit(d[n]))
+> +		n++;
+> +	/* the rest must be exact matching */
+> +	snprintf(tmp, sizeof(tmp), "-%s:00", p->hid);
+> +
+> +	return !strcmp(d + n, tmp);
+> +}
+
+You don't use the index here...
+Accepted
+> +static void tas2781_generic_fixup(struct hda_codec *cdc, int action,
+> +	const char *bus, const char *hid, int count) {
+> +	struct device *dev =3D hda_codec_dev(cdc);
+> +	struct alc_spec *spec =3D cdc->spec;
+> +	struct scodec_dev_name *rec;
+> +	int ret, i;
+> +
+> +	switch (action) {
+> +	case HDA_FIXUP_ACT_PRE_PROBE:
+> +		for (i =3D 0; i < count; i++) {
+> +			rec =3D devm_kmalloc(dev, sizeof(*rec), GFP_KERNEL);
+> +			if (!rec)
+> +				return;
+> +			rec->bus =3D bus;
+> +			rec->hid =3D hid;
+> +			rec->index =3D i;
+
+... and assigning here.  It means that the multiple instances would silentl=
+y break.  It's better to catch here instead.
+Accepted
+> +static void tas2781_fixup_i2c(struct hda_codec *cdc,
+> +	const struct hda_fixup *fix, int action) {
+> +	 tas2781_generic_fixup(cdc, action, "i2c", "TIAS2781", 1); }
+> +
+>  /* for alc295_fixup_hp_top_speakers */  #include "hp_x360_helper.c"
+> =20
+> @@ -7201,6 +7260,8 @@ enum {
+>  	ALC287_FIXUP_YOGA9_14IAP7_BASS_SPK_PIN,
+>  	ALC295_FIXUP_DELL_INSPIRON_TOP_SPEAKERS,
+>  	ALC236_FIXUP_DELL_DUAL_CODECS,
+> +	ALC287_FIXUP_TAS2781_I2C_2,
+> +	ALC287_FIXUP_TAS2781_I2C_4
+>  };
+> =20
+>  /* A special fixup for Lenovo C940 and Yoga Duet 7; @@ -9189,6=20
+> +9250,18 @@ static const struct hda_fixup alc269_fixups[] =3D {
+>  		.chained =3D true,
+>  		.chain_id =3D ALC255_FIXUP_DELL1_MIC_NO_PRESENCE,
+>  	},
+> +	[ALC287_FIXUP_TAS2781_I2C_2] =3D {
+> +		.type =3D HDA_FIXUP_FUNC,
+> +		.v.func =3D tas2781_fixup_i2c,
+> +		.chained =3D true,
+> +		.chain_id =3D ALC269_FIXUP_THINKPAD_ACPI,
+> +	},
+> +	[ALC287_FIXUP_TAS2781_I2C_4] =3D {
+> +		.type =3D HDA_FIXUP_FUNC,
+> +		.v.func =3D tas2781_fixup_i2c,
+> +		.chained =3D true,
+> +		.chain_id =3D ALC269_FIXUP_THINKPAD_ACPI,
+> +	},
+
+What's a difference between *_2 and *_4?
+Combine them into ALC287_FIXUP_TAS2781_I2C
+> --- /dev/null
+> +++ b/sound/pci/hda/tas2781_hda_i2c.c
+> +static int tas2781_acpi_get_i2c_resource(struct acpi_resource
+> +	*ares, void *data)
+> +{
+> +	struct tasdevice_priv *tas_priv =3D (struct tasdevice_priv *)data;
+> +	struct acpi_resource_i2c_serialbus *sb;
+> +
+> +	if (i2c_acpi_get_i2c_resource(ares, &sb)) {
+> +		if (sb->slave_address !=3D TAS2781_GLOBAL_ADDR) {
+> +			tas_priv->tasdevice[tas_priv->ndev].dev_addr =3D
+> +				(unsigned int) sb->slave_address;
+> +			tas_priv->ndev++;
+> +		} else
+> +			tas_priv->glb_addr.dev_addr =3D TAS2781_GLOBAL_ADDR;
+> +
+
+Did you run checkpatch.pl?  I thought it would complain.
+Accept.
+> +static void tas2781_hda_playback_hook(struct device *dev, int action)=20
+> +{
+> +	struct tasdevice_priv *tas_priv =3D dev_get_drvdata(dev);
+> +	int ret =3D 0;
+> +
+> +	dev_info(tas_priv->dev, "%s: action =3D %d\n", __func__, action);
+
+Don't use dev_info().  It'd be dev_dbg() at most.
+Accept.
+> +	switch (action) {
+> +	case HDA_GEN_PCM_ACT_OPEN:
+> +		pm_runtime_get_sync(dev);
+> +		mutex_lock(&tas_priv->codec_lock);
+> +		tas_priv->cur_conf =3D 0;
+> +		tas_priv->rcabin.profile_cfg_id =3D 1;
+> +		tasdevice_tuning_switch(tas_priv, 0);
+> +		mutex_unlock(&tas_priv->codec_lock);
+> +		break;
+> +	case HDA_GEN_PCM_ACT_CLOSE:
+> +		mutex_lock(&tas_priv->codec_lock);
+> +		tasdevice_tuning_switch(tas_priv, 1);
+> +		mutex_unlock(&tas_priv->codec_lock);
+> +
+> +		pm_runtime_mark_last_busy(dev);
+> +		pm_runtime_put_autosuspend(dev);
+> +		break;
+> +	default:
+> +		dev_warn(tas_priv->dev, "Playback action not supported: %d\n",
+> +			action);
+> +		break;
+> +	}
+> +
+> +	if (ret)
+> +		dev_err(tas_priv->dev, "Regmap access fail: %d\n", ret);
+
+The ret is never used.
+Accept.
+> +static int tasdevice_set_profile_id(struct snd_kcontrol *kcontrol,
+> +		struct snd_ctl_elem_value *ucontrol) {
+> +	struct tasdevice_priv *tas_priv =3D snd_kcontrol_chip(kcontrol);
+> +
+> +	tas_priv->rcabin.profile_cfg_id =3D ucontrol->value.integer.value[0];
+> +
+> +	return 1;
+
+It should return 0 if the value is unchanged.
+(Ditto for other *_put functions)
+Accept.
+> +static int tasdevice_create_control(struct tasdevice_priv *tas_priv)=20
+> +{
+> +	char prof_ctrl_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	struct hda_codec *codec =3D tas_priv->codec;
+> +	struct snd_kcontrol_new prof_ctrl =3D {
+> +		.name =3D prof_ctrl_name,
+> +		.iface =3D SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info =3D tasdevice_info_profile,
+> +		.get =3D tasdevice_get_profile_id,
+> +		.put =3D tasdevice_set_profile_id,
+> +	};
+> +	int ret;
+> +
+> +	/* Create a mixer item for selecting the active profile */
+> +	scnprintf(prof_ctrl_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,
+> +		"tasdev-profile-id");
+
+A too bad name as a control element.  Use a more readable one.
+Accept.
+> +static int tasdevice_info_programs(struct snd_kcontrol *kcontrol,
+> +			struct snd_ctl_elem_info *uinfo)
+> +{
+> +	struct tasdevice_priv *tas_priv =3D snd_kcontrol_chip(kcontrol);
+> +	struct tasdevice_fw *tas_fw =3D tas_priv->fmw;
+> +
+> +	uinfo->type =3D SNDRV_CTL_ELEM_TYPE_INTEGER;
+> +	uinfo->count =3D 1;
+> +	uinfo->value.integer.min =3D 0;
+> +	uinfo->value.integer.max =3D (int)tas_fw->nr_programs;
+
+The cast is superfluous.
+Accept.
+> +static int tasdevice_info_configurations(
+> +	struct snd_kcontrol *kcontrol, struct snd_ctl_elem_info *uinfo) {
+> +	struct tasdevice_priv *tas_priv =3D snd_kcontrol_chip(kcontrol);
+> +	struct tasdevice_fw *tas_fw =3D tas_priv->fmw;
+> +
+> +	uinfo->type =3D SNDRV_CTL_ELEM_TYPE_INTEGER;
+> +	uinfo->count =3D 1;
+> +	uinfo->value.integer.min =3D 0;
+> +	uinfo->value.integer.max =3D (int)tas_fw->nr_configurations - 1;
+
+Ditto.
+Accept.
+> +/**
+> + * tas2781_digital_getvol - get the volum control
+> + * @kcontrol: control pointer
+> + * @ucontrol: User data
+> + * Customer Kcontrol for tas2781 is primarily for regmap booking,=20
+> +paging
+> + * depends on internal regmap mechanism.
+> + * tas2781 contains book and page two-level register map, especially
+> + * book switching will set the register BXXP00R7F, after switching to=20
+> +the
+> + * correct book, then leverage the mechanism for paging to access the
+> + * register.
+> + */
+
+You shouldn't use the kerneldoc marker "/**" for local static functions.  I=
+t's not a part of API.
+Accept.
+> +static int tasdevice_dsp_create_ctrls(struct tasdevice_priv
+> +	*tas_priv)
+> +{
+> +	char prog_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	char conf_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	struct hda_codec *codec =3D tas_priv->codec;
+> +	struct snd_kcontrol_new prog_ctl =3D {
+> +		.name =3D prog_name,
+> +		.iface =3D SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info =3D tasdevice_info_programs,
+> +		.get =3D tasdevice_program_get,
+> +		.put =3D tasdevice_program_put,
+> +	};
+> +	struct snd_kcontrol_new conf_ctl =3D {
+> +		.name =3D conf_name,
+> +		.iface =3D SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info =3D tasdevice_info_configurations,
+> +		.get =3D tasdevice_config_get,
+> +		.put =3D tasdevice_config_put,
+> +	};
+> +	int ret;
+> +
+> +	scnprintf(prog_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN, "tasdev-prog-id");
+> +	scnprintf(conf_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,=20
+> +"tasdev-conf-id");
+
+Please use better names.
+Accept.
+> +static void tas2781_apply_calib(struct tasdevice_priv *tas_priv) {
+> +	unsigned char page_array[CALIB_MAX] =3D {0x17, 0x18, 0x18, 0x0d, 0x18};
+> +	unsigned char rgno_array[CALIB_MAX] =3D {0x74, 0x0c, 0x14, 0x3c,=20
+> +0x7c};
+
+Should be static const arrays.
+Accept.
+> +static int tas2781_save_calibration(struct tasdevice_priv *tas_priv)=20
+> +{
+> +	efi_guid_t efi_guid =3D EFI_GUID(0x02f9af02, 0x7734, 0x4233, 0xb4, 0x3d=
+,
+> +		0x93, 0xfe, 0x5a, 0xa3, 0x5d, 0xb3);
+> +	static efi_char16_t efi_name[] =3D L"CALI_DATA";
+> +	struct hda_codec *codec =3D tas_priv->codec;
+> +	unsigned int subid =3D codec->core.subsystem_id & 0xFFFF;
+> +	struct tm *tm =3D &tas_priv->tm;
+> +	unsigned int attr, crc;
+> +	unsigned int *tmp_val;
+> +	efi_status_t status;
+> +	int ret =3D 0;
+> +
+> +	//Lenovo devices
+> +	if ((subid =3D=3D 0x387d) || (subid =3D=3D 0x387e) || (subid =3D=3D 0x3=
+881)
+> +		|| (subid =3D=3D 0x3884) || (subid =3D=3D 0x3886) || (subid =3D=3D 0x3=
+8a7)
+> +		|| (subid =3D=3D 0x38a8) || (subid =3D=3D 0x38ba) || (subid =3D=3D 0x3=
+8bb)
+> +		|| (subid =3D=3D 0x38be) || (subid =3D=3D 0x38bf) || (subid =3D=3D 0x3=
+8c3)
+> +		|| (subid =3D=3D 0x38cb) || (subid =3D=3D 0x38cd))
+> +		efi_guid =3D EFI_GUID(0x1f52d2a1, 0xbb3a, 0x457d, 0xbc, 0x09,
+> +			0x43, 0xa3, 0xf4, 0x31, 0x0a, 0x92);
+
+Here can be a problem: the device ID is embedded here, and it's hard to fin=
+d out.  You'd better to make it some quirk flag that is set in a common pla=
+ce and check the flag here instead of checking ID at each place.
+
+Do you have example of the solution? I found some quirk flag is static in t=
+he patch_realtek.c, can't be accessed outside that file.
+
+> +	crc =3D crc32(~0, tas_priv->cali_data.data, 84) ^ ~0;
+> +	dev_info(tas_priv->dev, "cali crc 0x%08x PK tmp_val 0x%08x\n",
+> +		crc, tmp_val[21]);
+
+If it's a dev_info() output, make it more understandable.
+I'll fix it
+> +	if (crc =3D=3D tmp_val[21]) {
+> +		time64_to_tm(tmp_val[20], 0, tm);
+> +		dev_info(tas_priv->dev, "%4ld-%2d-%2d, %2d:%2d:%2d\n",
+> +			tm->tm_year, tm->tm_mon, tm->tm_mday,
+> +			tm->tm_hour, tm->tm_min, tm->tm_sec);
+
+Ditto.  Or, make them a debug print instead.
+Accepted
+> +static int tas2781_runtime_suspend(struct device *dev) {
+> +	struct tasdevice_priv *tas_priv =3D dev_get_drvdata(dev);
+> +	int i, ret =3D 0;
+> +
+> +	dev_info(tas_priv->dev, "Runtime Suspend\n");
+
+It must be a debug print.  Otherwise it'll be too annoying.
+Accepted
+Also, as a minor nitpicking, there are many functions that set ret =3D 0 at=
+ the beginning but never used.  The unconditional 0 initialization is often=
+ a bad sign indicating that the author doesn't think fully of the code flow=
+.  Please revisit those.
 
 
---=20
+thanks,
 
-Joel Granados
-
---muu3ipgqvr4kuhhh
-Content-Type: text/x-diff; charset="us-ascii"
-Content-Disposition: attachment;
-	filename="0001-sysctl-add-missing-kernel-subdir-nodes.patch"
-Content-Transfer-Encoding: quoted-printable
-
-=46rom c5e439534a8b493679e517616c631af277fcad26 Mon Sep 17 00:00:00 2001
-=46rom: Joel Granados <j.granados@samsung.com>
-Date: Tue, 23 May 2023 13:15:02 +0200
-Subject: [PATCH] sysctl: add missing kernel subdir nodes
-
-The "kernel/usermodehelper" and "kernel/keys" paths are directories with
-sysctl tables of their own; add them to the sysctl_init call.
-
-Signed-off-by: Joel Granados <j.granados@samsung.com>
-Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- kernel/sysctl.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index fa2aa8bd32b6..73fa9cf7ee11 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1782,11 +1782,6 @@ static struct ctl_table kern_table[] =3D {
- 		.mode		=3D 0644,
- 		.proc_handler	=3D sysctl_max_threads,
- 	},
--	{
--		.procname	=3D "usermodehelper",
--		.mode		=3D 0555,
--		.child		=3D usermodehelper_table,
--	},
- 	{
- 		.procname	=3D "overflowuid",
- 		.data		=3D &overflowuid,
-@@ -1962,13 +1957,6 @@ static struct ctl_table kern_table[] =3D {
- 		.proc_handler	=3D proc_dointvec,
- 	},
- #endif
--#ifdef CONFIG_KEYS
--	{
--		.procname	=3D "keys",
--		.mode		=3D 0555,
--		.child		=3D key_sysctls,
--	},
--#endif
- #ifdef CONFIG_PERF_EVENTS
- 	/*
- 	 * User-space scripts rely on the existence of this file
-@@ -2351,6 +2339,11 @@ static struct ctl_table dev_table[] =3D {
- int __init sysctl_init_bases(void)
- {
- 	register_sysctl_init("kernel", kern_table);
-+	register_sysctl_init("kernel/usermodehelper", usermodehelper_table);
-+#ifdef CONFIG_KEYS
-+	register_sysctl_init("kernel/keys", key_sysctls);
-+#endif
-+
- 	register_sysctl_init("vm", vm_table);
- 	register_sysctl_init("debug", debug_table);
- 	register_sysctl_init("dev", dev_table);
---=20
-2.30.2
-
-
---muu3ipgqvr4kuhhh--
-
---gny3tkialmcud3zd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmRsoV8ACgkQupfNUreW
-QU85sAwAiVjesR5QUJPZHJBnuQClElS6Khc7WMJh9O45XekTkdF8HgQLdQ6WzHJ0
-WvPYP8hMHbDwbDr3wtMrLCkUv9unRg8UDZUfFBTlqIDlAGP0OnlixJ+463WmQ6S2
-bP2zG9PP2abcQaNhbBKwOlJjRb2+uM1zcUdHcvfpCT330GfxkWJ5TL5YAr2jM2zN
-pIhQuBMbdr/OpurbbG82DouKuBa7KObb+Cl0PZST84XpkmeJOdilLrxr0+R3L5af
-WlCDQwWf4/gyQ/m0kwcx3dxZy5nYgXs2ixC+O55U8nnKOxJquon2Ntrb5OK7ln6l
-uaiBhEOpKBhLdAufrSCjYtQCk1fUGjHmsLuzn1pzCoX5f3Lqh/rICKtcrhUUZNxO
-NveCVkkxxTBmSxpPgnTs1d0JeRDyKAeGbgFTV+xJ2E5HGKT+5kTm5qaeaxg6sCMW
-VK6KHiiWRUZKppC1RZ9WrGtIckA/ARpq9B/RgRA8iRvc+kKsXiNezE+GcGZm9VSm
-k7W4Dvao
-=PZoi
------END PGP SIGNATURE-----
-
---gny3tkialmcud3zd--
+Takashi
