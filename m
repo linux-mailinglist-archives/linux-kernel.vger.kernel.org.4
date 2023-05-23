@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5734570DB11
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E797A70DB17
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 13:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbjEWLBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 07:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        id S236561AbjEWLCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 07:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjEWLBe (ORCPT
+        with ESMTP id S229525AbjEWLCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 07:01:34 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBC37FF;
-        Tue, 23 May 2023 04:01:31 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxU_AKnWxkUgsAAA--.45S3;
-        Tue, 23 May 2023 19:01:30 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxXrMKnWxkXTJwAA--.57513S3;
-        Tue, 23 May 2023 19:01:30 +0800 (CST)
-Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
- spi
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
- <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
- <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
- <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
- <9f6672a2-4a39-4a34-9c2a-0257b05c9699@sirena.org.uk>
- <5bbc1f55-1e1c-8c74-f9df-2ec950091ba4@loongson.cn>
- <8405acaa-4684-4b81-9839-b24d35d61013@sirena.org.uk>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <e8c9d26e-a1e9-dbd7-a6a7-95414668f714@loongson.cn>
-Date:   Tue, 23 May 2023 19:01:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 23 May 2023 07:02:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722A211A;
+        Tue, 23 May 2023 04:02:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE8A663112;
+        Tue, 23 May 2023 11:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE74C433D2;
+        Tue, 23 May 2023 11:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684839726;
+        bh=admVir0e1iJsJqH69IN82HGXh7gSprJ1rVfCy0tCXmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mIkjqP2ceO1NATfJK4sOVt+Dljp0t48H0f8K6EMal7QFecmRelDQA+epv0CVInmUs
+         NdpEP+TqAaweKmiBz/g0hmPn+q2PgtWd1fmeNYHhX2sCj/mriLbOxejEM/DrAbJpgJ
+         XS3qPOlNX3FUDyFwGS7mPQZVBWcQzRb/ITAxQJFeXZisA8jVCzhoBtXfSuKr2Ecwla
+         f/DnK84dyvaFGOpX8Ry6t8URYzOb9yAmvCX5tU0nw/ikr/ggmkDIEFEQKv+x7y94wi
+         fA3BjbOzUZGS41BPHwS2nr4n78IkTVnY7z0gN4b8JJ32MbIIobrA9SWPew7NX/iems
+         384W5UUK+q9FA==
+Date:   Tue, 23 May 2023 13:01:57 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Neil Brown <neilb@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org
+Subject: Re: [PATCH v4 2/9] fs: add infrastructure for multigrain inode
+ i_m/ctime
+Message-ID: <20230523-undicht-antihelden-b1a98aa769be@brauner>
+References: <20230518114742.128950-1-jlayton@kernel.org>
+ <20230518114742.128950-3-jlayton@kernel.org>
+ <20230523100240.mgeu4y46friv7hau@quack3>
+ <20230523101723.xmy7mylbczhki6aa@quack3>
+ <ef75ac7c96f309b8f080a717f260247f69988d4a.camel@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <8405acaa-4684-4b81-9839-b24d35d61013@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxXrMKnWxkXTJwAA--.57513S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUv01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4
-        v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY
-        67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2js
-        IE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1VW
-        lDUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ef75ac7c96f309b8f080a717f260247f69988d4a.camel@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,19 +79,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/5/23 下午5:57, Mark Brown 写道:
-> On Tue, May 23, 2023 at 10:08:25AM +0800, zhuyinbo wrote:
+On Tue, May 23, 2023 at 06:56:11AM -0400, Jeff Layton wrote:
+> On Tue, 2023-05-23 at 12:17 +0200, Jan Kara wrote:
+> > On Tue 23-05-23 12:02:40, Jan Kara wrote:
+> > > On Thu 18-05-23 07:47:35, Jeff Layton wrote:
+> > > > The VFS always uses coarse-grained timestamp updates for filling out the
+> > > > ctime and mtime after a change. This has the benefit of allowing
+> > > > filesystems to optimize away a lot metadata updates, down to around 1
+> > > > per jiffy, even when a file is under heavy writes.
+> > > > 
+> > > > Unfortunately, this has always been an issue when we're exporting via
+> > > > NFSv3, which relies on timestamps to validate caches. Even with NFSv4, a
+> > > > lot of exported filesystems don't properly support a change attribute
+> > > > and are subject to the same problems with timestamp granularity. Other
+> > > > applications have similar issues (e.g backup applications).
+> > > > 
+> > > > Switching to always using fine-grained timestamps would improve the
+> > > > situation, but that becomes rather expensive, as the underlying
+> > > > filesystem will have to log a lot more metadata updates.
+> > > > 
+> > > > What we need is a way to only use fine-grained timestamps when they are
+> > > > being actively queried.
+> > > > 
+> > > > The kernel always stores normalized ctime values, so only the first 30
+> > > > bits of the tv_nsec field are ever used. Whenever the mtime changes, the
+> > > > ctime must also change.
+> > > > 
+> > > > Use the 31st bit of the ctime tv_nsec field to indicate that something
+> > > > has queried the inode for the i_mtime or i_ctime. When this flag is set,
+> > > > on the next timestamp update, the kernel can fetch a fine-grained
+> > > > timestamp instead of the usual coarse-grained one.
+> > > > 
+> > > > This patch adds the infrastructure this scheme. Filesytems can opt
+> > > > into it by setting the FS_MULTIGRAIN_TS flag in the fstype.
+> > > > 
+> > > > Later patches will convert individual filesystems over to use it.
+> > > > 
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > 
+> > > So there are two things I dislike about this series because I think they
+> > > are fragile:
+> > > 
+> > > 1) If we have a filesystem supporting multigrain ts and someone
+> > > accidentally directly uses the value of inode->i_ctime, he can get bogus
+> > > value (with QUERIED flag). This mistake is very easy to do. So I think we
+> > > should rename i_ctime to something like __i_ctime and always use accessor
+> > > function for it.
+> > > 
+> > > 2) As I already commented in a previous version of the series, the scheme
+> > > with just one flag for both ctime and mtime and flag getting cleared in
+> > > current_time() relies on the fact that filesystems always do an equivalent
+> > > of:
+> > > 
+> > > 	inode->i_mtime = inode->i_ctime = current_time();
+> > > 
+> > > Otherwise we can do coarse grained update where we should have done a fine
+> > > grained one. Filesystems often update timestamps like this but not
+> > > universally. Grepping shows some instances where only inode->i_mtime is set
+> > > from current_time() e.g. in autofs or bfs. Again a mistake that is rather
+> > > easy to make and results in subtle issues. I think this would be also
+> > > nicely solved by renaming i_ctime to __i_ctime and using a function to set
+> > > ctime. Mtime could then be updated with inode->i_mtime = ctime_peek().
+> > > 
+> > > I understand this is quite some churn but a very mechanical one that could
+> > > be just done with Coccinelle and a few manual fixups. So IMHO it is worth
+> > > the more robust result.
+> > 
+> > Also as I'm thinking about it your current scheme is slightly racy. Suppose
+> > the filesystem does:
+> > 
+> > CPU1					CPU2
+> > 
+> > 					statx()
+> > inode->i_ctime = current_time()
+> >   current_mg_time()
+> >     nsec = atomic_long_fetch_andnot(QUERIED, &inode->i_ctime.tv_nsec)
+> > 					  nsec = atomic_long_fetch_or(QUERIED, &inode->i_ctime.tv_nsec)
+> >     if (nsec & QUERIED) - not set
+> >       ktime_get_coarse_real_ts64(&now)
+> >     return timestamp_truncate(now, inode);
+> > - QUERIED flag in the inode->i_ctime gets overwritten by the assignment
+> >   => we need not update ctime due to granularity although it was queried
+> > 
+> > One more reason to use explicit function to update inode->i_ctime ;)
 > 
->> okay, I got it.  thanks!  and I noticed my v11 patch already exists in
->> your ci tree that contain the title change and I whether need send the
->> v12 that for fix the binding patch title ?
+> When we store the new time in the i_ctime field, the flag gets cleared
+> because at that point we're storing a new (unseen) time.
 > 
-> No, it's fine.
+> However, you're correct: if the i_ctime in your above example starts at
+> the same value that is currently being returned by
+> ktime_get_coarse_real_ts64, then we'll lose the flag set in statx.
+> 
+> I think the right fix there would be to not update the ctime at all if
+> it's a coarse grained time, and the value wouldn't have an apparent
+> change to an observer. That would leave the flag intact.
+> 
+> That does mean we'd need to move to a function that does clock fetch and
+> assigns it to i_ctime in one go (like you suggest). Something like:
+> 
+>     inode_update_ctime(inode);
+> 
+> How we do that with atomic operations over two values (the tv_sec and
+> tv_nsec) is a bit tricky. I'll have to think about it.
+> 
+> Christian, given Jan's concerns do you want to drop this series for now
+> and let me respin it?
 
-
-okay, I got it.
-
-Thanks.
-
+I deliberately put it into a vfs.unstable.* branch. I would leave it
+there until you send a new one then drop it. If we get lucky the bots
+that run on -next will have time to report potential perf issues while
+it's not currently causing conflicts.
