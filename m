@@ -2,404 +2,440 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8033D70E848
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0A370E887
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 00:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237497AbjEWV7o convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 17:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
+        id S238553AbjEWWBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 18:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjEWV7m (ORCPT
+        with ESMTP id S229813AbjEWWBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 17:59:42 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20E983;
-        Tue, 23 May 2023 14:59:40 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-ba827c74187so409577276.0;
-        Tue, 23 May 2023 14:59:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684879180; x=1687471180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JGjJxcn57lgCZWic9tKK0sWJnTgZ1s/472pT76ji6ok=;
-        b=KQhIoL0YPlIejfe7jbC+sM2wiQe5cIhcsc8hkpOGH91/b7Y4aaVgQAVv7TmoiRAtw4
-         pto7OAWjqtYl2H6vufb+oiHRgPcyV352Wfwlt/PmxopDVid94uFyITsbuiEPnrMZ8ijQ
-         fpJEjt9p7BRM1cI84Z7Ej8vyikcHPPBNbFNkz/A4Vm9GVdXCjv7QIxbMnsrHXTQh3ra3
-         erBMNzIlCA5jFOo3fFM5Q91AhQqECuN3wdsMh/iRIQW+tQNjvCIQfmcrK6yObJ4XECY5
-         9btJ3I7dgRDD7EejYEsi3F36hRpMf2qR6ZoiOuvzafdma0pKyka1sKm5Wn92ibxjHjpn
-         48Hw==
-X-Gm-Message-State: AC+VfDz4gmnMqcOPuLUt6Hl0dd1eTBCxVY1th/8XLrPg/8A6QoJFByfy
-        I0dBHGThDAxYfvLkMxJwzauIc2W6Q5eBAp4CVlCOc8uW
-X-Google-Smtp-Source: ACHHUZ4TYuQVMRCgQOHUyr7URqBgt2xneISKJzwT1XFm7obrg53FZFtFT+5+gPoLu7NPT/hLtPyjSWmW0sCu8mdtN2o=
-X-Received: by 2002:a25:a1c9:0:b0:ba8:61f8:8eed with SMTP id
- a67-20020a25a1c9000000b00ba861f88eedmr16329846ybi.0.1684879179617; Tue, 23
- May 2023 14:59:39 -0700 (PDT)
+        Tue, 23 May 2023 18:01:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFB283;
+        Tue, 23 May 2023 15:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684879264; x=1716415264;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J6Na125DBGnnjEUgVwbh2WXtdLkhkSeDqrC0HQ/Ip/0=;
+  b=adBVj+JCPadYwgmnIy+BiLpIEXlyAAG6jAMIZlFtNHEUQB76I03bRXJq
+   jatLbcDcHiixKm+ozKtV+V6qp2970r29jIpEfaGlsTNW0mBMlk3IoUEmD
+   DV/VDaHKWzSRaUBZFhvzpu3N2+eQkCTKfb6XvFQI3TeyCg9V0N9QvFU3m
+   jZRUz5G5SyvFdTiC995hZRxD+Jki3KLylHe90JYd9ICXYS4ObT/Y/TMrC
+   /EGkuFIe6mULZ1ewJUdUZNd99UY2B8MGf4i2SHU9zFVLSUEBgcfxNJ2e/
+   gFhM2BmA1UHLK90rEPxKvNr7yRlfNdjmUqNJDgAprkkkZ8NFg3ZKfumZu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="416834102"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="416834102"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 15:01:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="1034225865"
+X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
+   d="scan'208";a="1034225865"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga005.fm.intel.com with ESMTP; 23 May 2023 15:01:03 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: intel: int340x_thermal: New IOCTLs for thermal
+Date:   Tue, 23 May 2023 15:00:59 -0700
+Message-Id: <20230523220102.2377173-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230522064330.189127-1-irogers@google.com> <20230522064330.189127-2-irogers@google.com>
-In-Reply-To: <20230522064330.189127-2-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 23 May 2023 14:59:28 -0700
-Message-ID: <CAM9d7cgQpXJc_5Gf2tH3AUwyQufkDnLNms2mNYpof6kv0jtyLg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/23] perf tools: Warn if no user requested CPUs match
- PMU's CPUs
-To:     Ian Rogers <irogers@google.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ming Wang <wangming01@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Export Passive version 2 table similar to the way _TRT and _ART tables
+via IOCTLs.
 
-On Sun, May 21, 2023 at 11:43 PM Ian Rogers <irogers@google.com> wrote:
->
-> In commit 1d3351e631fc ("perf tools: Enable on a list of CPUs for hybrid")
-> perf on hybrid will warn if a user requested CPU doesn't match the PMU
-> of the given event but only for hybrid PMUs. Make the logic generic
-> for all PMUs and remove the hybrid logic.
->
-> Warn if a CPU is requested that is offline for uncore events. Warn if
-> a CPU is requested for a core PMU, but the CPU isn't within the cpu
-> map of that PMU.
->
-> For example on a 16 (0-15) CPU system:
-> ```
-> $ perf stat -e imc_free_running/data_read/,cycles -C 16 true
-> WARNING: Requested CPU(s) '16' not supported by PMU 'uncore_imc_free_running_1' for event 'imc_free_running/data_read/'
-> WARNING: Requested CPU(s) '16' not supported by PMU 'uncore_imc_free_running_0' for event 'imc_free_running/data_read/'
-> WARNING: Requested CPU(s) '16' not supported by PMU 'cpu' for event 'cycles'
->
->  Performance counter stats for 'CPU(s) 16':
->
->    <not supported> MiB  imc_free_running/data_read/
->    <not supported>      cycles
->
->        0.000570094 seconds time elapsed
-> ```
+This removes need for binary utility to read ACPI Passive 2 table by
+providing open source support. This table already has open source
+implementation in the user space thermald, when the table is part of
+data vault exported by the int3400 sysfs.
 
-I'm ok with the warning changes, but it also removed the fixup logic
-for the hybrid PMUs to change the cpu map in the events.  I'm not sure
-if it's your intention.  If so, I think you'd better splitting it into
-a separate
-commit with some explanation.
+This table is supported in some older platforms before Ice Lake
+generation.
 
-Thanks,
-Namhyung
+Passive 2 tables contain multiple entries. Each entry has following
+fields:
 
+Source: Named Reference (String). This is the source device for
+temperature.
+Target: Named Reference (String). This is the target device to control.
+Priority: Priority of this device compared to others.
+SamplingPeriod: Time Period in 1/10 of seconds unit.
+PassiveTemp: Passive Temperature in 1/10 of Kelvin.
+SourceDomain: Domain for the source (00:Processor, others reserved).
+ControlKnob: Type of control knob (00:Power Limit 1, others: reserved)
+Limit: The target state to set on reaching passive temperature.
+This can be a string "max", "min" or a power limit value.
+LimitStepSize: Step size during activation.
+UnLimitStepSize: Step size during deactivation.
+Reserved1: Reserved
 
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-record.c     |  6 +--
->  tools/perf/builtin-stat.c       |  5 +--
->  tools/perf/util/cpumap.h        |  2 +-
->  tools/perf/util/evlist-hybrid.c | 74 ---------------------------------
->  tools/perf/util/evlist-hybrid.h |  1 -
->  tools/perf/util/evlist.c        | 44 ++++++++++++++++++++
->  tools/perf/util/evlist.h        |  2 +
->  tools/perf/util/pmu.c           | 33 ---------------
->  tools/perf/util/pmu.h           |  4 --
->  9 files changed, 49 insertions(+), 122 deletions(-)
->
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index ec0f2d5f189f..9d212236c75a 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -4198,11 +4198,7 @@ int cmd_record(int argc, const char **argv)
->         /* Enable ignoring missing threads when -u/-p option is defined. */
->         rec->opts.ignore_missing_thread = rec->opts.target.uid != UINT_MAX || rec->opts.target.pid;
->
-> -       if (evlist__fix_hybrid_cpus(rec->evlist, rec->opts.target.cpu_list)) {
-> -               pr_err("failed to use cpu list %s\n",
-> -                      rec->opts.target.cpu_list);
-> -               goto out;
-> -       }
-> +       evlist__warn_user_requested_cpus(rec->evlist, rec->opts.target.cpu_list);
->
->         rec->opts.target.hybrid = perf_pmu__has_hybrid();
->
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index bc45cee3f77c..612467216306 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -2462,10 +2462,7 @@ int cmd_stat(int argc, const char **argv)
->                 }
->         }
->
-> -       if (evlist__fix_hybrid_cpus(evsel_list, target.cpu_list)) {
-> -               pr_err("failed to use cpu list %s\n", target.cpu_list);
-> -               goto out;
-> -       }
-> +       evlist__warn_user_requested_cpus(evsel_list, target.cpu_list);
->
->         target.hybrid = perf_pmu__has_hybrid();
->         if (evlist__create_maps(evsel_list, &target) < 0) {
-> diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-> index e3426541e0aa..c1de993c083f 100644
-> --- a/tools/perf/util/cpumap.h
-> +++ b/tools/perf/util/cpumap.h
-> @@ -59,7 +59,7 @@ struct perf_cpu cpu__max_present_cpu(void);
->  /**
->   * cpu_map__is_dummy - Events associated with a pid, rather than a CPU, use a single dummy map with an entry of -1.
->   */
-> -static inline bool cpu_map__is_dummy(struct perf_cpu_map *cpus)
-> +static inline bool cpu_map__is_dummy(const struct perf_cpu_map *cpus)
->  {
->         return perf_cpu_map__nr(cpus) == 1 && perf_cpu_map__cpu(cpus, 0).cpu == -1;
->  }
-> diff --git a/tools/perf/util/evlist-hybrid.c b/tools/perf/util/evlist-hybrid.c
-> index 57f02beef023..db3f5fbdebe1 100644
-> --- a/tools/perf/util/evlist-hybrid.c
-> +++ b/tools/perf/util/evlist-hybrid.c
-> @@ -86,77 +86,3 @@ bool evlist__has_hybrid(struct evlist *evlist)
->
->         return false;
->  }
-> -
-> -int evlist__fix_hybrid_cpus(struct evlist *evlist, const char *cpu_list)
-> -{
-> -       struct perf_cpu_map *cpus;
-> -       struct evsel *evsel, *tmp;
-> -       struct perf_pmu *pmu;
-> -       int ret, unmatched_count = 0, events_nr = 0;
-> -
-> -       if (!perf_pmu__has_hybrid() || !cpu_list)
-> -               return 0;
-> -
-> -       cpus = perf_cpu_map__new(cpu_list);
-> -       if (!cpus)
-> -               return -1;
-> -
-> -       /*
-> -        * The evsels are created with hybrid pmu's cpus. But now we
-> -        * need to check and adjust the cpus of evsel by cpu_list because
-> -        * cpu_list may cause conflicts with cpus of evsel. For example,
-> -        * cpus of evsel is cpu0-7, but the cpu_list is cpu6-8, we need
-> -        * to adjust the cpus of evsel to cpu6-7. And then propatate maps
-> -        * in evlist__create_maps().
-> -        */
-> -       evlist__for_each_entry_safe(evlist, tmp, evsel) {
-> -               struct perf_cpu_map *matched_cpus, *unmatched_cpus;
-> -               char buf1[128], buf2[128];
-> -
-> -               pmu = perf_pmu__find_hybrid_pmu(evsel->pmu_name);
-> -               if (!pmu)
-> -                       continue;
-> -
-> -               ret = perf_pmu__cpus_match(pmu, cpus, &matched_cpus,
-> -                                          &unmatched_cpus);
-> -               if (ret)
-> -                       goto out;
-> -
-> -               events_nr++;
-> -
-> -               if (perf_cpu_map__nr(matched_cpus) > 0 &&
-> -                   (perf_cpu_map__nr(unmatched_cpus) > 0 ||
-> -                    perf_cpu_map__nr(matched_cpus) < perf_cpu_map__nr(cpus) ||
-> -                    perf_cpu_map__nr(matched_cpus) < perf_cpu_map__nr(pmu->cpus))) {
-> -                       perf_cpu_map__put(evsel->core.cpus);
-> -                       perf_cpu_map__put(evsel->core.own_cpus);
-> -                       evsel->core.cpus = perf_cpu_map__get(matched_cpus);
-> -                       evsel->core.own_cpus = perf_cpu_map__get(matched_cpus);
-> -
-> -                       if (perf_cpu_map__nr(unmatched_cpus) > 0) {
-> -                               cpu_map__snprint(matched_cpus, buf1, sizeof(buf1));
-> -                               pr_warning("WARNING: use %s in '%s' for '%s', skip other cpus in list.\n",
-> -                                          buf1, pmu->name, evsel->name);
-> -                       }
-> -               }
-> -
-> -               if (perf_cpu_map__nr(matched_cpus) == 0) {
-> -                       evlist__remove(evlist, evsel);
-> -                       evsel__delete(evsel);
-> -
-> -                       cpu_map__snprint(cpus, buf1, sizeof(buf1));
-> -                       cpu_map__snprint(pmu->cpus, buf2, sizeof(buf2));
-> -                       pr_warning("WARNING: %s isn't a '%s', please use a CPU list in the '%s' range (%s)\n",
-> -                                  buf1, pmu->name, pmu->name, buf2);
-> -                       unmatched_count++;
-> -               }
-> -
-> -               perf_cpu_map__put(matched_cpus);
-> -               perf_cpu_map__put(unmatched_cpus);
-> -       }
-> -       if (events_nr)
-> -               ret = (unmatched_count == events_nr) ? -1 : 0;
-> -out:
-> -       perf_cpu_map__put(cpus);
-> -       return ret;
-> -}
-> diff --git a/tools/perf/util/evlist-hybrid.h b/tools/perf/util/evlist-hybrid.h
-> index aacdb1b0f948..19f74b4c340a 100644
-> --- a/tools/perf/util/evlist-hybrid.h
-> +++ b/tools/perf/util/evlist-hybrid.h
-> @@ -10,6 +10,5 @@
->  int evlist__add_default_hybrid(struct evlist *evlist, bool precise);
->  void evlist__warn_hybrid_group(struct evlist *evlist);
->  bool evlist__has_hybrid(struct evlist *evlist);
-> -int evlist__fix_hybrid_cpus(struct evlist *evlist, const char *cpu_list);
->
->  #endif /* __PERF_EVLIST_HYBRID_H */
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index a0504316b06f..5d0d99127a90 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -2465,3 +2465,47 @@ void evlist__check_mem_load_aux(struct evlist *evlist)
->                 }
->         }
->  }
-> +
-> +/**
-> + * evlist__warn_user_requested_cpus() - Check each evsel against requested CPUs
-> + *     and warn if the user CPU list is inapplicable for the event's PMUs
-> + *     CPUs. Uncore PMUs list a CPU in sysfs, but this may be overwritten by a
-> + *     user requested CPU and so any online CPU is applicable. Core PMUs handle
-> + *     events on the CPUs in their list and otherwise the event isn't supported.
-> + * @evlist: The list of events being checked.
-> + * @cpu_list: The user provided list of CPUs.
-> + */
-> +void evlist__warn_user_requested_cpus(struct evlist *evlist, const char *cpu_list)
-> +{
-> +       struct perf_cpu_map *user_requested_cpus;
-> +       struct evsel *pos;
-> +
-> +       if (!cpu_list)
-> +               return;
-> +
-> +       user_requested_cpus = perf_cpu_map__new(cpu_list);
-> +       if (!user_requested_cpus)
-> +               return;
-> +
-> +       evlist__for_each_entry(evlist, pos) {
-> +               const struct perf_cpu_map *to_test;
-> +               struct perf_cpu cpu;
-> +               int idx;
-> +               bool warn = true;
-> +               const struct perf_pmu *pmu = evsel__find_pmu(pos);
-> +
-> +               to_test = pmu && pmu->is_uncore ? cpu_map__online() : evsel__cpus(pos);
-> +
-> +               perf_cpu_map__for_each_cpu(cpu, idx, to_test) {
-> +                       if (perf_cpu_map__has(user_requested_cpus, cpu)) {
-> +                               warn = false;
-> +                               break;
-> +                       }
-> +               }
-> +               if (warn) {
-> +                       pr_warning("WARNING: Requested CPU(s) '%s' not supported by PMU '%s' for event '%s'\n",
-> +                               cpu_list, pmu ? pmu->name : "cpu", evsel__name(pos));
-> +               }
-> +       }
-> +       perf_cpu_map__put(user_requested_cpus);
-> +}
-> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-> index e7e5540cc970..5e7ff44f3043 100644
-> --- a/tools/perf/util/evlist.h
-> +++ b/tools/perf/util/evlist.h
-> @@ -447,4 +447,6 @@ struct evsel *evlist__find_evsel(struct evlist *evlist, int idx);
->
->  int evlist__scnprintf_evsels(struct evlist *evlist, size_t size, char *bf);
->  void evlist__check_mem_load_aux(struct evlist *evlist);
-> +void evlist__warn_user_requested_cpus(struct evlist *evlist, const char *cpu_list);
-> +
->  #endif /* __PERF_EVLIST_H */
-> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> index f4f0afbc391c..1e0be23d4dd7 100644
-> --- a/tools/perf/util/pmu.c
-> +++ b/tools/perf/util/pmu.c
-> @@ -2038,39 +2038,6 @@ int perf_pmu__match(char *pattern, char *name, char *tok)
->         return 0;
->  }
->
-> -int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
-> -                        struct perf_cpu_map **mcpus_ptr,
-> -                        struct perf_cpu_map **ucpus_ptr)
-> -{
-> -       struct perf_cpu_map *pmu_cpus = pmu->cpus;
-> -       struct perf_cpu_map *matched_cpus, *unmatched_cpus;
-> -       struct perf_cpu cpu;
-> -       int i, matched_nr = 0, unmatched_nr = 0;
-> -
-> -       matched_cpus = perf_cpu_map__default_new();
-> -       if (!matched_cpus)
-> -               return -1;
-> -
-> -       unmatched_cpus = perf_cpu_map__default_new();
-> -       if (!unmatched_cpus) {
-> -               perf_cpu_map__put(matched_cpus);
-> -               return -1;
-> -       }
-> -
-> -       perf_cpu_map__for_each_cpu(cpu, i, cpus) {
-> -               if (!perf_cpu_map__has(pmu_cpus, cpu))
-> -                       RC_CHK_ACCESS(unmatched_cpus)->map[unmatched_nr++] = cpu;
-> -               else
-> -                       RC_CHK_ACCESS(matched_cpus)->map[matched_nr++] = cpu;
-> -       }
-> -
-> -       perf_cpu_map__set_nr(unmatched_cpus, unmatched_nr);
-> -       perf_cpu_map__set_nr(matched_cpus, matched_nr);
-> -       *mcpus_ptr = matched_cpus;
-> -       *ucpus_ptr = unmatched_cpus;
-> -       return 0;
-> -}
-> -
->  double __weak perf_pmu__cpu_slots_per_cycle(void)
->  {
->         return NAN;
-> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-> index 0e0cb6283594..49033bb134f3 100644
-> --- a/tools/perf/util/pmu.h
-> +++ b/tools/perf/util/pmu.h
-> @@ -257,10 +257,6 @@ void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu);
->  bool perf_pmu__has_hybrid(void);
->  int perf_pmu__match(char *pattern, char *name, char *tok);
->
-> -int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
-> -                        struct perf_cpu_map **mcpus_ptr,
-> -                        struct perf_cpu_map **ucpus_ptr);
-> -
->  char *pmu_find_real_name(const char *name);
->  char *pmu_find_alias_name(const char *name);
->  double perf_pmu__cpu_slots_per_cycle(void);
-> --
-> 2.40.1.698.g37aff9b760-goog
->
+Four IOCTLs are added similar to IOCTLs for reading TRT:
+
+ACPI_THERMAL_GET_PSVT_COUNT: Number of passive 2 entries.
+ACPI_THERMAL_GET_PSVT_LEN: Total return data size (count x each
+passive 2 entry size).
+ACPI_THERMAL_GET_PSVT: Get the data as an array of objects with
+passive 2 entries.
+
+This change is based on original development done by:
+Todd Brandt <todd.e.brandt@linux.intel.com>
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../intel/int340x_thermal/acpi_thermal_rel.c  | 218 ++++++++++++++++++
+ .../intel/int340x_thermal/acpi_thermal_rel.h  |  57 +++++
+ 2 files changed, 275 insertions(+)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+index 01b80331eab6..c6c4c6ef9e32 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+@@ -203,6 +203,151 @@ int acpi_parse_art(acpi_handle handle, int *art_count, struct art **artp,
+ }
+ EXPORT_SYMBOL(acpi_parse_art);
+ 
++/*
++ * acpi_parse_psvt - Passive Table (PSVT) for passive cooling
++ *
++ * @handle: ACPI handle of the device which contains PSVT
++ * @psvt_count: the number of valid entries resulted from parsing PSVT
++ * @psvtp: pointer to array of psvt entries
++ *
++ */
++int acpi_parse_psvt(acpi_handle handle, int *psvt_count, struct psvt **psvtp)
++{
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	int nr_bad_entries = 0, revision;
++	union acpi_object *p;
++	acpi_status status;
++	int i, result = 0;
++	struct psvt *psvts;
++
++	if (!acpi_has_method(handle, "PSVT"))
++		return -ENODEV;
++
++	status = acpi_evaluate_object(handle, "PSVT", NULL, &buffer);
++	if (ACPI_FAILURE(status))
++		return -ENODEV;
++
++	p = buffer.pointer;
++	if (!p || (p->type != ACPI_TYPE_PACKAGE)) {
++		result = -EFAULT;
++		goto end;
++	}
++
++	/* first package is the revision number */
++	if (p->package.count > 0) {
++		union acpi_object *prev = &(p->package.elements[0]);
++
++		if (prev->type == ACPI_TYPE_INTEGER)
++			revision = (int)prev->integer.value;
++	} else {
++		result = -EFAULT;
++		goto end;
++	}
++
++	/* Support only version 2 */
++	if (revision != 2) {
++		result = -EFAULT;
++		goto end;
++	}
++
++	*psvt_count = p->package.count - 1;
++	if (!*psvt_count) {
++		result = -EFAULT;
++		goto end;
++	}
++
++	psvts = kcalloc(*psvt_count, sizeof(*psvts), GFP_KERNEL);
++	if (!psvts) {
++		result = -ENOMEM;
++		goto end;
++	}
++
++	/* Start index is 1 because the first package is the revision number */
++	for (i = 1; i < p->package.count; i++) {
++		struct acpi_buffer psvt_int_format = { sizeof("RRNNNNNNNNNN"), "RRNNNNNNNNNN" };
++		struct acpi_buffer psvt_str_format = { sizeof("RRNNNNNSNNNN"), "RRNNNNNSNNNN" };
++		union acpi_object *package = &(p->package.elements[i]);
++		struct psvt *psvt = &psvts[i - 1 - nr_bad_entries];
++		struct acpi_buffer *psvt_format = &psvt_int_format;
++		struct acpi_buffer element = { 0, NULL };
++		union acpi_object *knob;
++		struct acpi_device *res;
++		struct psvt *psvt_ptr;
++
++		element.length = ACPI_ALLOCATE_BUFFER;
++		element.pointer = NULL;
++
++		if (package->package.count >= ACPI_NR_PSVT_ELEMENTS) {
++			knob = &(package->package.elements[ACPI_PSVT_CONTROL_KNOB]);
++		} else {
++			nr_bad_entries++;
++			pr_info("PSVT package %d is invalid, ignored\n", i);
++			continue;
++		}
++
++		if (knob->type == ACPI_TYPE_STRING) {
++			psvt_format = &psvt_str_format;
++			if (knob->string.length > ACPI_LIMIT_STR_MAX_LEN) {
++				pr_info("PSVT package %d limit string len exceeds max\n", i);
++				knob->string.length = ACPI_LIMIT_STR_MAX_LEN;
++			}
++		}
++
++		status = acpi_extract_package(&(p->package.elements[i]), psvt_format, &element);
++		if (ACPI_FAILURE(status)) {
++			nr_bad_entries++;
++			pr_info("PSVT package %d is invalid, ignored\n", i);
++			continue;
++		}
++
++		psvt_ptr = (struct psvt *)element.pointer;
++
++		memcpy(psvt, psvt_ptr, sizeof(*psvt_ptr));
++
++		/* The limit element can be string or U64 */
++		psvt->control_knob_type = (u64)knob->type;
++
++		if (knob->type == ACPI_TYPE_STRING) {
++			memset(&psvt->limit, 0, sizeof(u64));
++			strncpy(psvt->limit.string, psvt_ptr->limit.str_ptr, knob->string.length);
++		} else {
++			psvt->limit.integer = psvt_ptr->limit.integer;
++		}
++
++		kfree(element.pointer);
++
++		res = acpi_fetch_acpi_dev(psvt->source);
++		if (!res) {
++			nr_bad_entries++;
++			pr_info("Failed to get source ACPI device\n");
++			continue;
++		}
++
++		res = acpi_fetch_acpi_dev(psvt->target);
++		if (!res) {
++			nr_bad_entries++;
++			pr_info("Failed to get target ACPI device\n");
++			continue;
++		}
++	}
++
++	/* don't count bad entries */
++	*psvt_count -= nr_bad_entries;
++
++	if (!*psvt_count) {
++		result = -EFAULT;
++		kfree(psvts);
++		goto end;
++	}
++
++	*psvtp = psvts;
++
++	return 0;
++
++end:
++	kfree(buffer.pointer);
++	return result;
++}
+ 
+ /* get device name from acpi handle */
+ static void get_single_name(acpi_handle handle, char *name)
+@@ -289,6 +434,57 @@ static int fill_trt(char __user *ubuf)
+ 	return ret;
+ }
+ 
++static int fill_psvt(char __user *ubuf)
++{
++	int i, ret, count, psvt_len;
++	union psvt_object *psvt_user;
++	struct psvt *psvts;
++
++	ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
++	if (ret)
++		return ret;
++
++	psvt_len = count * sizeof(*psvt_user);
++
++	psvt_user = kzalloc(psvt_len, GFP_KERNEL);
++	if (!psvt_user) {
++		ret = -ENOMEM;
++		goto free_psvt;
++	}
++
++	/* now fill in user psvt data */
++	for (i = 0; i < count; i++) {
++		/* userspace psvt needs device name instead of acpi reference */
++		get_single_name(psvts[i].source, psvt_user[i].source_device);
++		get_single_name(psvts[i].target, psvt_user[i].target_device);
++
++		psvt_user[i].priority = psvts[i].priority;
++		psvt_user[i].sample_period = psvts[i].sample_period;
++		psvt_user[i].passive_temp = psvts[i].passive_temp;
++		psvt_user[i].source_domain = psvts[i].source_domain;
++		psvt_user[i].control_knob = psvts[i].control_knob;
++		psvt_user[i].step_size = psvts[i].step_size;
++		psvt_user[i].limit_coeff = psvts[i].limit_coeff;
++		psvt_user[i].unlimit_coeff = psvts[i].unlimit_coeff;
++		psvt_user[i].control_knob_type = psvts[i].control_knob_type;
++		if (psvt_user[i].control_knob_type == ACPI_TYPE_STRING)
++			strncpy(psvt_user[i].limit.string, psvts[i].limit.string,
++				ACPI_LIMIT_STR_MAX_LEN);
++		else
++			psvt_user[i].limit.integer = psvts[i].limit.integer;
++
++	}
++
++	if (copy_to_user(ubuf, psvt_user, psvt_len))
++		ret = -EFAULT;
++
++	kfree(psvt_user);
++
++free_psvt:
++	kfree(psvts);
++	return ret;
++}
++
+ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+ 				   unsigned long __arg)
+ {
+@@ -298,6 +494,7 @@ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+ 	char __user *arg = (void __user *)__arg;
+ 	struct trt *trts = NULL;
+ 	struct art *arts = NULL;
++	struct psvt *psvts;
+ 
+ 	switch (cmd) {
+ 	case ACPI_THERMAL_GET_TRT_COUNT:
+@@ -336,6 +533,27 @@ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+ 	case ACPI_THERMAL_GET_ART:
+ 		return fill_art(arg);
+ 
++	case ACPI_THERMAL_GET_PSVT_COUNT:
++		ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
++		if (!ret) {
++			kfree(psvts);
++			return put_user(count, (unsigned long __user *)__arg);
++		}
++		return ret;
++
++	case ACPI_THERMAL_GET_PSVT_LEN:
++		/* total length of the data retrieved (count * PSVT entry size) */
++		ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
++		length = count * sizeof(union psvt_object);
++		if (!ret) {
++			kfree(psvts);
++			return put_user(length, (unsigned long __user *)__arg);
++		}
++		return ret;
++
++	case ACPI_THERMAL_GET_PSVT:
++		return fill_psvt(arg);
++
+ 	default:
+ 		return -ENOTTY;
+ 	}
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+index 78d942477035..ac376d8f9ee4 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+@@ -14,6 +14,16 @@
+ #define ACPI_THERMAL_GET_TRT	_IOR(ACPI_THERMAL_MAGIC, 5, unsigned long)
+ #define ACPI_THERMAL_GET_ART	_IOR(ACPI_THERMAL_MAGIC, 6, unsigned long)
+ 
++/*
++ * ACPI_THERMAL_GET_PSVT_COUNT = Number of PSVT entries
++ * ACPI_THERMAL_GET_PSVT_LEN = Total return data size (PSVT count x each
++ * PSVT entry size)
++ * ACPI_THERMAL_GET_PSVT = Get the data as an array of psvt_objects
++ */
++#define ACPI_THERMAL_GET_PSVT_LEN _IOR(ACPI_THERMAL_MAGIC, 7, unsigned long)
++#define ACPI_THERMAL_GET_PSVT_COUNT _IOR(ACPI_THERMAL_MAGIC, 8, unsigned long)
++#define ACPI_THERMAL_GET_PSVT	_IOR(ACPI_THERMAL_MAGIC, 9, unsigned long)
++
+ struct art {
+ 	acpi_handle source;
+ 	acpi_handle target;
+@@ -43,6 +53,32 @@ struct trt {
+ 	u64 reserved4;
+ } __packed;
+ 
++#define ACPI_NR_PSVT_ELEMENTS	12
++#define ACPI_PSVT_CONTROL_KNOB	7
++#define ACPI_LIMIT_STR_MAX_LEN	8
++
++struct psvt {
++	acpi_handle source;
++	acpi_handle target;
++	u64 priority;
++	u64 sample_period;
++	u64 passive_temp;
++	u64 source_domain;
++	u64 control_knob;
++	union {
++		/* For limit_type = ACPI_TYPE_INTEGER */
++		u64 integer;
++		/* For limit_type = ACPI_TYPE_STRING */
++		char string[ACPI_LIMIT_STR_MAX_LEN];
++		char *str_ptr;
++	} limit;
++	u64 step_size;
++	u64 limit_coeff;
++	u64 unlimit_coeff;
++	/* Spec calls this field reserved, so we borrow it for type info */
++	u64 control_knob_type; /* ACPI_TYPE_STRING or ACPI_TYPE_INTEGER */
++} __packed;
++
+ #define ACPI_NR_ART_ELEMENTS 13
+ /* for usrspace */
+ union art_object {
+@@ -77,6 +113,27 @@ union trt_object {
+ 	u64 __data[8];
+ };
+ 
++union psvt_object {
++	struct {
++		char source_device[8];
++		char target_device[8];
++		u64 priority;
++		u64 sample_period;
++		u64 passive_temp;
++		u64 source_domain;
++		u64 control_knob;
++		union {
++			u64 integer;
++			char string[ACPI_LIMIT_STR_MAX_LEN];
++		} limit;
++		u64 step_size;
++		u64 limit_coeff;
++		u64 unlimit_coeff;
++		u64 control_knob_type;
++	};
++	u64 __data[ACPI_NR_PSVT_ELEMENTS];
++};
++
+ #ifdef __KERNEL__
+ int acpi_thermal_rel_misc_device_add(acpi_handle handle);
+ int acpi_thermal_rel_misc_device_remove(acpi_handle handle);
+-- 
+2.34.1
+
