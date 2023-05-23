@@ -2,140 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA9B70D12D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C101570D12B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 04:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjEWCZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 22:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S232193AbjEWCYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 22:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjEWCZC (ORCPT
+        with ESMTP id S229605AbjEWCYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 22:25:02 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0CACD
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 19:25:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W7pMU9RQC7tTM2th4Es5QUTKFESswpENYmP3aEK3ZAJ+0x4+oXMP0S6BeQM2ZHGxa5waHxJDcZdeqWTc/0LdsMRiSA0vnIn+KuYdZk/yWMrRaGGYn/tsRQLr+5tVx/lIGOyykGLVo7rf+Py8eQX7xBJi1HnW5FmThBrnH+kuIQq1FlmTJkL8d+PeC7dxzKs6pzB0JjwbGVmUSEkCHKsM49HgeRdiDQqnf3NEkZd3OgQ89PrivNX65Ly+vI3FUxYcheKMveUhh9lOl5TCuE5523ejniA2rINyKsf9n4VmgyTZ1qDEG7h+GfjtKieY0ksn2QYJcdF/tAwr4a6wg4+fVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jpr3Bj4jaTo64FjM3CDZju1Z9Ta+E5pOQYxslLEZ78g=;
- b=JywXZqReoX3rde4agZkdC+eD3y4pMW6c+ux8FZXcNp90UX/S96RnMWIw1b9p7hCLzh4S6S/JsHDx3fMdN4kbvs4F3g6k+Wz3iE5nun5m90efRPFS715bvxw6ev5D2PnYkRUOv/gJcKUChsBJivsqC3n7XyQeyiJ8IOTPpxE9lMEW54kVyL6X/wWMuW4eHtlkmWdWSx3+54ZIgEHJLVqFH/Zvv6kHb1rATdvIz6fgdthZv4lHvQVQMgs5U0HF5RTBL0BmhqKJU7C4vsxwNnFRgFNhrdERN+Nd4dOGVcGo8qjNm0++TSOkekVek9XULTivHAARW6lqhusemdGQQk25Cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jpr3Bj4jaTo64FjM3CDZju1Z9Ta+E5pOQYxslLEZ78g=;
- b=AayYBgxh/WVqRXB4Fyg0XJ/qihMo9YLhEzUYL6T0mA3/nsRbDEeN6EkVr30OKy64aeP4rwAUwaSfU+fLNin3i++w+sn7i5hmunNRBaR/OzPsuq9a11f2A+R2ly5rKQRuzATWI6BYtQ0n5APLMUmTqSB6DZPkA2cS5k9ISrrM7bwon6Y0BOGYcHRa9K7fCV6zv6dSuC6oEQBZNh2GVlp/OBmuh7tCvrhNO3PJ2Y19NMag4uVGHN46fwJ1EVYZQuIBCmYDPt7E9NbcwAj7Ms1UZxnjoe8hbKtzZMrp9KIhooqE2yTYMnvwU+w6zZy2QSYNquOeivMaYUDBwUHfcQ/ILQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by PH7PR12MB7426.namprd12.prod.outlook.com (2603:10b6:510:201::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 02:24:59 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::f6e4:71a5:4998:e6b2]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::f6e4:71a5:4998:e6b2%5]) with mapi id 15.20.6411.028; Tue, 23 May 2023
- 02:24:58 +0000
-References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
- <ea51bb69-189c-229b-fc0-9d3e7be5d6b@google.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 24/31] mm/migrate_device: allow pte_offset_map_lock() to
- fail
-Date:   Tue, 23 May 2023 12:23:31 +1000
-In-reply-to: <ea51bb69-189c-229b-fc0-9d3e7be5d6b@google.com>
-Message-ID: <877csz943s.fsf@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0195.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::20) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Mon, 22 May 2023 22:24:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57F1CA;
+        Mon, 22 May 2023 19:24:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684808641; x=1716344641;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VtoVt99kVwI5w/Wx4fG+hHvFzF1Q/pSRnjgaGb5NgZw=;
+  b=CeLT5oDIJ/O85mm4rQgjBsA8SbyHU9wI1TGr7Qr3FOX0GqlsSgruBREv
+   ZV1PuVn1QbCympCeOW6/yTnfh3mdFTBgDVSBPVTIwr5ubSykmSIN08OhR
+   Lo2sEVAcs2cImfPpKeQgeAHzySlSd2Vbf5Xoa5S7JVn+BC2V+6JRddJF0
+   VuI+FNiUmNLF0m8Teil8lbLlEUJrnmx3GN1DUw6ctFloQ7lpVX6AIz+pX
+   q2zglTILXqYUL2eWKeYX2ZHy7hBeilsMX+8OsVvESpZs6BevkwtLZsZE8
+   d4+5AFg1pWqufRrbPwlTDVRL5vFsttu23sKbQXNu/9gUjdHNgFgco2q+K
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="439457670"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="439457670"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 19:24:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="848080658"
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="scan'208";a="848080658"
+Received: from qianwen-mobl1.ccr.corp.intel.com (HELO [10.238.5.200]) ([10.238.5.200])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 19:23:58 -0700
+Message-ID: <676b2b3e-b836-4b55-9772-eb6c6db82542@intel.com>
+Date:   Tue, 23 May 2023 10:23:57 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|PH7PR12MB7426:EE_
-X-MS-Office365-Filtering-Correlation-Id: c735cdb0-0727-427f-9237-08db5b34e7b5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SNMZvFbbJrMpyW4Za3GxDXXZ51YWksnUzu34lmBTLuNVg0BH6erb59sm4t+d04rrMJ8yK/w7MzOXrTlvcyXzNXxe2a8mcjWbR5rz0i+xGVQFCP7LZNbI3X0IRZoSdI3KUjVpR8tgSyoVBqu+tCuds5XZkTnBjvAIvwxaNj+Rv9Q9S9ifpIRbfcXxIRAYUtd4zn/9CrG3Jh+gJt8bL1DCsgePt1wsn0vI4uV1tP2YKeSV3SVUsmRTutfcElm7Yt16tM+/pJg0thkIBxdFdA4NEIt7kbmfYPKN2bkKmCegcIttPxl6jLzq6JPUNRgdpTr57mQU/n0b8yGl/tCDaEeJKU4TN3LBw/6KRK85MnH1/mPY9rYw2O5arwuKtJ+UdWZl1TTf/iVbhkwfo5pgeULpnAMZyearn/eX9GifMtzAm+iSXLhWXSI25dy/D/xz/6IetNiABHI2EmkTisAj40KE1CtjImlN8wPECdws6Kr7AQHwUeVc5sl+UpVdRgYdT78YelrbBepbHCFKyK8OJROCpf2qyHBMQMYKNM6vtkwYeOYUvP6t/pFzgnQnitdN0YMS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(39860400002)(366004)(451199021)(2616005)(83380400001)(186003)(2906002)(36756003)(38100700002)(86362001)(7406005)(5660300002)(8936002)(8676002)(7416002)(54906003)(6916009)(4326008)(66556008)(66476007)(66946007)(6486002)(6666004)(41300700001)(478600001)(316002)(6512007)(6506007)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?awDqFDtmQ/gb3kBZ+ybc/cBzCMtiYjnlvwnR2wpsI6z9wUkLB7/WhhjtSp5b?=
- =?us-ascii?Q?Xaxd93CMqOfgXtv80NKqLoWARuGfnB/Yg+LylDXdPW6CtuU0KXRLEkJMWdLE?=
- =?us-ascii?Q?Ae8Csz7XF+mGn4Y1HNReiEh14PS7TzewiFenoJ0GSbj/1q2+gRIt3zp72NsM?=
- =?us-ascii?Q?HObtnkqxq/llIHIxaehZiv4I3u+/6gtktMPQmKVJ6LXU91xzhu21mdMXN9wX?=
- =?us-ascii?Q?R3uJ7TTR6uSvelSVdkdJT4pNGreasKVnMUhGr1VYx/ohjNPWx6pU3s0rKZpq?=
- =?us-ascii?Q?88b/e7Ofd04Af6Q9FKrYoGI6qeU0AAnW45hQtdXVcHrBG4fYEN7Uc2XZA+9z?=
- =?us-ascii?Q?Z6jzYMnB4tjH4O5+Q4/3aX7/JWtz9HwEVto4RATnnR4SJYdvgz5Mx6sEX4rk?=
- =?us-ascii?Q?MPqw6UAVg/i+qTxNGHiQGio106H0t87J4y4Q04asnadR4GGxXHfswmbGRw3/?=
- =?us-ascii?Q?5rlwJS3h/Gu+ncwRtsy+oVBFahXz8DyT7Z0DxUK5eM6+Z8Qa2+s2k3MbppEZ?=
- =?us-ascii?Q?lrEGewwjW30m2jCO5AsAzEJvDp6rc4CB05bvja7OjL6/4a4DzXVBr5rICzpo?=
- =?us-ascii?Q?9o0ZG2LJGncQEeiOeJHW8tRi570feIPM5bFp/3Q+zmX9gqiK0uhX8r0xEL78?=
- =?us-ascii?Q?6K+x3MOHmcvknPZJgbtl6ASoBHUuFQbl7vI7FrRxURe+xEfYovMl1pH0JEWl?=
- =?us-ascii?Q?ZcZWmZFVSjw6HNUddix9+u/SjDlvh3V+yssrKNXnY/68tmaFaqyNJxRDF0QE?=
- =?us-ascii?Q?2HY/72k6lJLHCD4q4ZpnIIhz3u2/UnwPgTkuJDMUreqT4Au8RIoeClQtKcnN?=
- =?us-ascii?Q?XaSiWRIBA26K7sHGJUWEHu90SB9diFk4x6OGgKNMtupZtWPvgmGguIuloFaZ?=
- =?us-ascii?Q?Km5W4CP0DwMxxqZP1h5IWvzV56rA8QnS4D1IiT/+RTvVJyQJ3KkgfqjTQaXW?=
- =?us-ascii?Q?zFES29xCwPMmyDMqQU/b9YOZxMUkR0HGHPVCu/FsBumLLpjvS6RFJnvoGXdU?=
- =?us-ascii?Q?Bi/+k0rbMq2MlYRuKTOM1kNpGLGDNaRWcxo8rU55kMzSEKwz7GVBf7MJKctr?=
- =?us-ascii?Q?4y66TmSGfHpNRYuNKooaA/aM4PiO5kM5dMXIRhsyKPXbuMEIOKGgqtoKOJ9K?=
- =?us-ascii?Q?ASh3X67/RQ1z3p+7rycTI9xBOrjrjAq+stfYhLfiO6bNJPl/+U+LlyHrxu9J?=
- =?us-ascii?Q?aHtizrLj84lVdBhCHB62NAa+Unrd9yP7P5BzAbfhVmRjE4E9BMTEuw4Ts9g5?=
- =?us-ascii?Q?p4qEKXg/xt6LMoMNY/ZtEj5dJoA3YXkwAfoMBufyn5KkQpTzOqWOY2YZw2xs?=
- =?us-ascii?Q?MI2vOIPiCh5++KkkxYQMY14B/yw3tbERoiVzygrkDnv0WePplF22u94LpiOy?=
- =?us-ascii?Q?MS9fqImzX3XiAYNnPf9J4cxtxzZG27eBOKAjJNPGsQtuw9dPo+guA0QA1MMt?=
- =?us-ascii?Q?L41sog06FU9aCcVcETx5HR3sBXweE1cuABeuzgzEL2fCYFiSxKxCcpUCq720?=
- =?us-ascii?Q?QQbGbU0LRgc8Xjo926+JuMr8X5A9mtlDSu/I9MJPa80fWrg9QqqWc6EOZZjl?=
- =?us-ascii?Q?F612/2Bc7QpqeWpdx0ZIYzQl+5RCVecZY9uHr1J5?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c735cdb0-0727-427f-9237-08db5b34e7b5
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 02:24:58.9096
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fxCGbIqrwykjZXAgEryaopa9Asq+5d/4HXj1ezQpXlix8pS/fIxV1DrF5CtXxftNyjfunUJ4cYNI9wIt5UVIaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7426
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v13 002/113] KVM: x86/vmx: Refactor KVM VMX module
+ init/exit functions
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+ <e4d32af22f0a540c62fffaa17fe478a723e109ea.1678643052.git.isaku.yamahata@intel.com>
+Content-Language: en-US
+From:   "Wen, Qian" <qian.wen@intel.com>
+In-Reply-To: <e4d32af22f0a540c62fffaa17fe478a723e109ea.1678643052.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,114 +72,254 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hugh Dickins <hughd@google.com> writes:
-
-> migrate_vma_collect_pmd(): remove the pmd_trans_unstable() handling after
-> splitting huge zero pmd, and the pmd_none() handling after successfully
-> splitting huge page: those are now managed inside pte_offset_map_lock(),
-> and by "goto again" when it fails.
->
-> But the skip after unsuccessful split_huge_page() must stay: it avoids an
-> endless loop.  The skip when pmd_bad()?  Remove that: it will be treated
-> as a hole rather than a skip once cleared by pte_offset_map_lock(), but
-> with different timing that would be so anyway; and it's arguably best to
-> leave the pmd_bad() handling centralized there.
-
-So for a pmd_bad() the sequence would be:
-
-1. pte_offset_map_lock() would return NULL and clear the PMD.
-2. goto again marks the page as a migrating hole,
-3. In migrate_vma_insert_page() a new PMD is created by pmd_alloc().
-4. This leads to a new zero page getting mapped for the previously
-   pmd_bad() mapping.
-
-I'm not entirely sure what the pmd_bad() case is used for but is that
-ok? I understand that previously it was all a matter of timing, but I
-wouldn't rely on the previous code being correct in this regard either.
-
-> migrate_vma_insert_page(): remove comment on the old pte_offset_map()
-> and old locking limitations; remove the pmd_trans_unstable() check and
-> just proceed to pte_offset_map_lock(), aborting when it fails (page has
-> now been charged to memcg, but that's so in other cases, and presumably
-> uncharged later).
-
-Correct, the non-migrating page will be freed later via put_page() which
-will uncharge the page.
-
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+On 3/13/2023 1:55 AM, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> Currently, KVM VMX module initialization/exit functions are a single
+> function each.  Refactor KVM VMX module initialization functions into KVM
+> common part and VMX part so that TDX specific part can be added cleanly.
+> Opportunistically refactor module exit function as well.
+> 
+> The current module initialization flow is,
+> 0.) Check if VMX is supported,
+> 1.) hyper-v specific initialization,
+> 2.) system-wide x86 specific and vendor specific initialization,
+> 3.) Final VMX specific system-wide initialization,
+> 4.) calculate the sizes of VMX kvm structure and VMX vcpu structure,
+> 5.) report those sizes to the KVM common layer and KVM common
+>     initialization
+> 
+> Refactor the KVM VMX module initialization function into functions with a
+> wrapper function to separate VMX logic in vmx.c from a file, main.c, common
+> among VMX and TDX.  Introduce a wrapper function for vmx_init().
+> 
+> The KVM architecture common layer allocates struct kvm with reported size
+> for architecture-specific code.  The KVM VMX module defines its structure
+> as struct vmx_kvm { struct kvm; VMX specific members;} and uses it as
+> struct vmx kvm.  Similar for vcpu structure. TDX KVM patches will define
+> TDX specific kvm and vcpu structures.
+> 
+> The current module exit function is also a single function, a combination
+> of VMX specific logic and common KVM logic.  Refactor it into VMX specific
+> logic and KVM common logic.  This is just refactoring to keep the VMX
+> specific logic in vmx.c from main.c.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
->  mm/migrate_device.c | 31 ++++---------------------------
->  1 file changed, 4 insertions(+), 27 deletions(-)
->
-> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
-> index d30c9de60b0d..a14af6b12b04 100644
-> --- a/mm/migrate_device.c
-> +++ b/mm/migrate_device.c
-> @@ -83,9 +83,6 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
->  		if (is_huge_zero_page(page)) {
->  			spin_unlock(ptl);
->  			split_huge_pmd(vma, pmdp, addr);
-> -			if (pmd_trans_unstable(pmdp))
-> -				return migrate_vma_collect_skip(start, end,
-> -								walk);
->  		} else {
->  			int ret;
+>  arch/x86/kvm/vmx/main.c    | 51 +++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/vmx/vmx.c     | 54 +++++---------------------------------
+>  arch/x86/kvm/vmx/x86_ops.h | 13 ++++++++-
+>  3 files changed, 69 insertions(+), 49 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index a59559ff140e..3f49e8e38b6b 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -165,3 +165,54 @@ struct kvm_x86_init_ops vt_init_ops __initdata = {
+>  	.runtime_ops = &vt_x86_ops,
+>  	.pmu_ops = &intel_pmu_ops,
+>  };
+> +
+> +static int __init vt_init(void)
+> +{
+> +	unsigned int vcpu_size, vcpu_align;
+> +	int r;
+> +
+> +	if (!kvm_is_vmx_supported())
+> +		return -EOPNOTSUPP;
+> +
+> +	/*
+> +	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
+> +	 * to unwind if a later step fails.
+> +	 */
+> +	hv_init_evmcs();
+> +
+> +	r = kvm_x86_vendor_init(&vt_init_ops);
+> +	if (r)
+> +		return r;
+> +
+> +	r = vmx_init();
+> +	if (r)
+> +		goto err_vmx_init;
+> +
+> +	/*
+> +	 * Common KVM initialization _must_ come last, after this, /dev/kvm is
+> +	 * exposed to userspace!
+> +	 */
+> +	vt_x86_ops.vm_size = sizeof(struct kvm_vmx);
+
+nit: why initialize vm_size again? I noticed that it has already been assigned a value when create vt_x86_ops.
+
++struct kvm_x86_ops vt_x86_ops __initdata = {
+...
++	.vm_size = sizeof(struct kvm_vmx),
++	.vm_init = vmx_vm_init,
+
+
+> +	vcpu_size = sizeof(struct vcpu_vmx);
+> +	vcpu_align = __alignof__(struct vcpu_vmx);
+> +	r = kvm_init(vcpu_size, vcpu_align, THIS_MODULE);
+> +	if (r)
+> +		goto err_kvm_init;
+> +
+> +	return 0;
+> +
+> +err_kvm_init:
+> +	vmx_exit();
+> +err_vmx_init:
+> +	kvm_x86_vendor_exit();
+> +	return r;
+> +}
+> +module_init(vt_init);
+> +
+> +static void vt_exit(void)
+> +{
+> +	kvm_exit();
+> +	kvm_x86_vendor_exit();
+> +	vmx_exit();
+> +}
+> +module_exit(vt_exit);
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 47a9a647ae3a..3bbd07412f00 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -553,7 +553,7 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
+>  	return 0;
+>  }
 >  
-> @@ -100,16 +97,12 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
->  			if (ret)
->  				return migrate_vma_collect_skip(start, end,
->  								walk);
-> -			if (pmd_none(*pmdp))
-> -				return migrate_vma_collect_hole(start, end, -1,
-> -								walk);
->  		}
+> -static __init void hv_init_evmcs(void)
+> +__init void hv_init_evmcs(void)
+>  {
+>  	int cpu;
+>  
+> @@ -589,7 +589,7 @@ static __init void hv_init_evmcs(void)
 >  	}
+>  }
 >  
-> -	if (unlikely(pmd_bad(*pmdp)))
-> -		return migrate_vma_collect_skip(start, end, walk);
-> -
->  	ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
-> +	if (!ptep)
-> +		goto again;
->  	arch_enter_lazy_mmu_mode();
+> -static void hv_reset_evmcs(void)
+> +void hv_reset_evmcs(void)
+>  {
+>  	struct hv_vp_assist_page *vp_ap;
 >  
->  	for (; addr < end; addr += PAGE_SIZE, ptep++) {
-> @@ -595,27 +588,10 @@ static void migrate_vma_insert_page(struct migrate_vma *migrate,
->  	pmdp = pmd_alloc(mm, pudp, addr);
->  	if (!pmdp)
->  		goto abort;
+> @@ -613,10 +613,6 @@ static void hv_reset_evmcs(void)
+>  	vp_ap->current_nested_vmcs = 0;
+>  	vp_ap->enlighten_vmentry = 0;
+>  }
 > -
->  	if (pmd_trans_huge(*pmdp) || pmd_devmap(*pmdp))
->  		goto abort;
+> -#else /* IS_ENABLED(CONFIG_HYPERV) */
+> -static void hv_init_evmcs(void) {}
+> -static void hv_reset_evmcs(void) {}
+>  #endif /* IS_ENABLED(CONFIG_HYPERV) */
+>  
+>  /*
+> @@ -2741,7 +2737,7 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  	return 0;
+>  }
+>  
+> -static bool kvm_is_vmx_supported(void)
+> +bool kvm_is_vmx_supported(void)
+>  {
+>  	int cpu = raw_smp_processor_id();
+>  
+> @@ -8381,7 +8377,7 @@ static void vmx_cleanup_l1d_flush(void)
+>  	l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_AUTO;
+>  }
+>  
+> -static void __vmx_exit(void)
+> +void vmx_exit(void)
+>  {
+>  	allow_smaller_maxphyaddr = false;
+>  
+> @@ -8392,32 +8388,10 @@ static void __vmx_exit(void)
+>  	vmx_cleanup_l1d_flush();
+>  }
+>  
+> -static void vmx_exit(void)
+> -{
+> -	kvm_exit();
+> -	kvm_x86_vendor_exit();
+> -
+> -	__vmx_exit();
+> -}
+> -module_exit(vmx_exit);
+> -
+> -static int __init vmx_init(void)
+> +int __init vmx_init(void)
+>  {
+>  	int r, cpu;
+>  
+> -	if (!kvm_is_vmx_supported())
+> -		return -EOPNOTSUPP;
 > -
 > -	/*
-> -	 * Use pte_alloc() instead of pte_alloc_map().  We can't run
-> -	 * pte_offset_map() on pmds where a huge pmd might be created
-> -	 * from a different thread.
-> -	 *
-> -	 * pte_alloc_map() is safe to use under mmap_write_lock(mm) or when
-> -	 * parallel threads are excluded by other means.
-> -	 *
-> -	 * Here we only have mmap_read_lock(mm).
+> -	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
+> -	 * to unwind if a later step fails.
 > -	 */
->  	if (pte_alloc(mm, pmdp))
->  		goto abort;
+> -	hv_init_evmcs();
 > -
-> -	/* See the comment in pte_alloc_one_map() */
-> -	if (unlikely(pmd_trans_unstable(pmdp)))
-> -		goto abort;
+> -	r = kvm_x86_vendor_init(&vt_init_ops);
+> -	if (r)
+> -		return r;
 > -
->  	if (unlikely(anon_vma_prepare(vma)))
->  		goto abort;
->  	if (mem_cgroup_charge(page_folio(page), vma->vm_mm, GFP_KERNEL))
-> @@ -650,7 +626,8 @@ static void migrate_vma_insert_page(struct migrate_vma *migrate,
->  	}
+>  	/*
+>  	 * Must be called after common x86 init so enable_ept is properly set
+>  	 * up. Hand the parameter mitigation value in which was stored in
+> @@ -8427,7 +8401,7 @@ static int __init vmx_init(void)
+>  	 */
+>  	r = vmx_setup_l1d_flush(vmentry_l1d_flush_param);
+>  	if (r)
+> -		goto err_l1d_flush;
+> +		return r;
 >  
->  	ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
+>  	vmx_setup_fb_clear_ctrl();
+>  
+> @@ -8451,21 +8425,5 @@ static int __init vmx_init(void)
+>  	if (!enable_ept)
+>  		allow_smaller_maxphyaddr = true;
+>  
+> -	/*
+> -	 * Common KVM initialization _must_ come last, after this, /dev/kvm is
+> -	 * exposed to userspace!
+> -	 */
+> -	r = kvm_init(sizeof(struct vcpu_vmx), __alignof__(struct vcpu_vmx),
+> -		     THIS_MODULE);
+> -	if (r)
+> -		goto err_kvm_init;
 > -
-> +	if (!ptep)
-> +		goto abort;
->  	if (check_stable_address_space(mm))
->  		goto unlock_abort;
-
+>  	return 0;
+> -
+> -err_kvm_init:
+> -	__vmx_exit();
+> -err_l1d_flush:
+> -	kvm_x86_vendor_exit();
+> -	return r;
+>  }
+> -module_init(vmx_init);
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index e9ec4d259ff5..051b5c4b5c2f 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -8,11 +8,22 @@
+>  
+>  #include "x86.h"
+>  
+> -__init int vmx_hardware_setup(void);
+> +#if IS_ENABLED(CONFIG_HYPERV)
+> +__init void hv_init_evmcs(void);
+> +void hv_reset_evmcs(void);
+> +#else /* IS_ENABLED(CONFIG_HYPERV) */
+> +static inline void hv_init_evmcs(void) {}
+> +static inline void hv_reset_evmcs(void) {}
+> +#endif /* IS_ENABLED(CONFIG_HYPERV) */
+> +
+> +bool kvm_is_vmx_supported(void);
+> +int __init vmx_init(void);
+> +void vmx_exit(void);
+>  
+>  extern struct kvm_x86_ops vt_x86_ops __initdata;
+>  extern struct kvm_x86_init_ops vt_init_ops __initdata;
+>  
+> +__init int vmx_hardware_setup(void);
+>  void vmx_hardware_unsetup(void);
+>  int vmx_check_processor_compat(void);
+>  int vmx_hardware_enable(void);
