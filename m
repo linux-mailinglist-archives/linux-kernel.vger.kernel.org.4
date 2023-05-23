@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22B770E04E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D200F70E052
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 17:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237228AbjEWPVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 11:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S237508AbjEWPW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 11:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbjEWPVq (ORCPT
+        with ESMTP id S235751AbjEWPW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 11:21:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0DD121
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 08:21:44 -0700 (PDT)
+        Tue, 23 May 2023 11:22:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35242121;
+        Tue, 23 May 2023 08:22:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9050563397
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 15:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952D5C4339B;
-        Tue, 23 May 2023 15:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684855303;
-        bh=z4Tb9HwQR3qu2omMR1+2EyzzwcS65O49EGKOPEOuCM4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XsThTIi8BWp8lNdnvT18YqAX/fGTxOCWVb8v3c86j5cKKoWj5a/wP47vngNKqufLn
-         dFZpTM1bcNipiqo2qyFTGJMCqeFH4ZQX9JQQrUcwYop3FILkDgULwSmX1YZ8Yxn5h/
-         9ttEEadjLSHkwAVbo8T3tiBpqO3RaqU3smuf2uzoSSAhIAMJFm+CN0drF6UiOaMVSb
-         Tor1w7YCo7PVCB6d+Hz1nMK84IRi399puEeKt7EVmG4YVAgk8pG86t6QIOu3AqvsMP
-         qq3/7wQdyetbhtQcByRIee07RvsDTXuoR0XEdl6TkrT5gCUCY65qhQw4Y63aQ2B6uA
-         c1RGeSpMst60A==
-Message-ID: <36eea968-d3e8-fc1e-6d88-0f19fce130d8@kernel.org>
-Date:   Tue, 23 May 2023 09:21:41 -0600
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD63F60EC0;
+        Tue, 23 May 2023 15:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D165DC433D2;
+        Tue, 23 May 2023 15:22:19 +0000 (UTC)
+Message-ID: <5fe993a0-60f8-6756-24dd-068a45e5f23b@xs4all.nl>
+Date:   Tue, 23 May 2023 17:22:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH net] ipv6: Fix out-of-bounds access in ipv6_find_tlv()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] media: mediatek: vcodec: mtk_vcodec_dec_hw: Use
+ devm_pm_runtime_enable()
 Content-Language: en-US
-To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vlad Yasevich <vyasevic@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-References: <20230523082903.117626-1-Ilia.Gavrilov@infotecs.ru>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230523082903.117626-1-Ilia.Gavrilov@infotecs.ru>
+To:     Fei Shao <fshao@chromium.org>
+Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230515141610.v2.1.I0d1657be3fea5870f797e975a7aa490291e17993@changeid>
+ <b5799dfe-f17b-a838-0916-645ba83307d2@xs4all.nl>
+ <2f1bf798-49c3-13d7-96e5-b29e7df73bd1@xs4all.nl>
+ <CAC=S1ngKqJfTh8Dnjv2yYLG0r44Yx6pw5DsRnArsJu2okoKJUA@mail.gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <CAC=S1ngKqJfTh8Dnjv2yYLG0r44Yx6pw5DsRnArsJu2okoKJUA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,37 +60,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 2:29 AM, Gavrilov Ilia wrote:
-> optlen is fetched without checking whether there is more than one byte to parse.
-> It can lead to out-of-bounds access.
+On 23/05/2023 17:18, Fei Shao wrote:
+> On Tue, May 23, 2023 at 8:28 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>>
+>> On 23/05/2023 13:42, Hans Verkuil wrote:
+>>> On 15/05/2023 08:16, Fei Shao wrote:
+>>>> Convert pm_runtime_enable() to the managed version, and clean up error
+>>>> handling and unnecessary .remove() callback accordingly.
+>>>
+>>> This patch no longer applies. Can you make a v3?
+>>
+>> Sorry, you can ignore this. I now realize that this was a v2 of
+>>
+>> https://patchwork.linuxtv.org/project/linux-media/patch/20230510233117.1.I7047714f92ef7569bd21f118ae6aee20b3175a92@changeid/
+>>
+>> I had that v1 applied, so obviously this v2 would fail to apply. After dropping
+>> that v1 patch it now applies cleanly.
 > 
-> Found by InfoTeCS on behalf of Linux Verification Center
-> (linuxtesting.org) with SVACE.
+> Ack, many thanks.
+> BTW, besides the review tags (appreciation to all), would you mind
+> adding this tag also as I missed it in the beginning?
 > 
-> Fixes: 3c73a0368e99 ("ipv6: Update ipv6 static library with newly needed functions")
+> Suggested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-That is not the right Fixes tag; that commit only moved the code.
+Done!
 
-Fixes: c61a40432509 ("[IPV6]: Find option offset by type.")
+Regards,
 
-> Signed-off-by: Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-> ---
->  net/ipv6/exthdrs_core.c | 2 ++
->  1 file changed, 2 insertions(+)
+	Hans
+
 > 
-> diff --git a/net/ipv6/exthdrs_core.c b/net/ipv6/exthdrs_core.c
-> index da46c4284676..49e31e4ae7b7 100644
-> --- a/net/ipv6/exthdrs_core.c
-> +++ b/net/ipv6/exthdrs_core.c
-> @@ -143,6 +143,8 @@ int ipv6_find_tlv(const struct sk_buff *skb, int offset, int type)
->  			optlen = 1;
->  			break;
->  		default:
-> +			if (len < 2)
-> +				goto bad;
->  			optlen = nh[offset + 1] + 2;
->  			if (optlen > len)
->  				goto bad;
-
-Reviewed-by: David Ahern <dsahern@kernel.org>
+> Regards,
+> Fei
+> 
+> 
+> 
+> 
+> 
+>>
+>> Regards,
+>>
+>>         Hans
+>>
+>>>
+>>> Regards,
+>>>
+>>>       Hans
+>>>
+>>>>
+>>>> Signed-off-by: Fei Shao <fshao@chromium.org>
+>>>>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> Use devm_pm_runtime_enable() per suggestion from the previous thread:
+>>>> https://lore.kernel.org/lkml/20230510164330.z2ygkl7vws6fci75@pengutronix.de/T/#m25be91afe3e9554600e859a8a59128ca234fc63d
+>>>>
+>>>>  .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 26 ++++++-------------
+>>>>  1 file changed, 8 insertions(+), 18 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+>>>> index b753bf54ebd9..e1cb2f8dca33 100644
+>>>> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+>>>> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+>>>> @@ -148,20 +148,21 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+>>>>      ret = mtk_vcodec_init_dec_clk(pdev, &subdev_dev->pm);
+>>>>      if (ret)
+>>>>              return ret;
+>>>> -    pm_runtime_enable(&pdev->dev);
+>>>> +
+>>>> +    ret = devm_pm_runtime_enable(&pdev->dev);
+>>>> +    if (ret)
+>>>> +            return ret;
+>>>>
+>>>>      of_id = of_match_device(mtk_vdec_hw_match, dev);
+>>>>      if (!of_id) {
+>>>>              dev_err(dev, "Can't get vdec subdev id.\n");
+>>>> -            ret = -EINVAL;
+>>>> -            goto err;
+>>>> +            return -EINVAL;
+>>>>      }
+>>>>
+>>>>      hw_idx = (enum mtk_vdec_hw_id)(uintptr_t)of_id->data;
+>>>>      if (hw_idx >= MTK_VDEC_HW_MAX) {
+>>>>              dev_err(dev, "Hardware index %d not correct.\n", hw_idx);
+>>>> -            ret = -EINVAL;
+>>>> -            goto err;
+>>>> +            return -EINVAL;
+>>>>      }
+>>>>
+>>>>      main_dev->subdev_dev[hw_idx] = subdev_dev;
+>>>> @@ -173,36 +174,25 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+>>>>      if (IS_SUPPORT_VDEC_HW_IRQ(hw_idx)) {
+>>>>              ret = mtk_vdec_hw_init_irq(subdev_dev);
+>>>>              if (ret)
+>>>> -                    goto err;
+>>>> +                    return ret;
+>>>>      }
+>>>>
+>>>>      subdev_dev->reg_base[VDEC_HW_MISC] =
+>>>>              devm_platform_ioremap_resource(pdev, 0);
+>>>>      if (IS_ERR((__force void *)subdev_dev->reg_base[VDEC_HW_MISC])) {
+>>>>              ret = PTR_ERR((__force void *)subdev_dev->reg_base[VDEC_HW_MISC]);
+>>>> -            goto err;
+>>>> +            return ret;
+>>>>      }
+>>>>
+>>>>      if (!main_dev->subdev_prob_done)
+>>>>              main_dev->subdev_prob_done = mtk_vdec_hw_prob_done;
+>>>>
+>>>>      platform_set_drvdata(pdev, subdev_dev);
+>>>> -    return 0;
+>>>> -err:
+>>>> -    pm_runtime_disable(subdev_dev->pm.dev);
+>>>> -    return ret;
+>>>> -}
+>>>> -
+>>>> -static int mtk_vdec_hw_remove(struct platform_device *pdev)
+>>>> -{
+>>>> -    pm_runtime_disable(&pdev->dev);
+>>>> -
+>>>>      return 0;
+>>>>  }
+>>>>
+>>>>  static struct platform_driver mtk_vdec_driver = {
+>>>>      .probe  = mtk_vdec_hw_probe,
+>>>> -    .remove = mtk_vdec_hw_remove,
+>>>>      .driver = {
+>>>>              .name   = "mtk-vdec-comp",
+>>>>              .of_match_table = mtk_vdec_hw_match,
+>>>
+>>
 
