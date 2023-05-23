@@ -2,234 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875DA70DCAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F231F70DC99
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236894AbjEWMer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S236853AbjEWMbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 08:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjEWMeq (ORCPT
+        with ESMTP id S235903AbjEWMbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:34:46 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F478DD;
-        Tue, 23 May 2023 05:34:42 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D8216C000E;
-        Tue, 23 May 2023 12:34:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684845281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MjjLHA4piWXe9Nt5jWQ61wpym3DoXg/n2DnHKkoOboc=;
-        b=lXAq1/cPGZX+AQhroWjiTrX4TMT4vEs/P2cWLMwEHX96c16hq9L0iIPVvpNN9V8FbZlE+C
-        ELclEIu8h9/Yxx+z06pHxwbZwZpCEe3Li8eGVadS55Zje0/clR3ZeSlbme9BqpqZwVn9HX
-        nqyB2rI/YPDtirz5MReY1HOTnxJoTC+hzp+lFRN5xIZyWqEuK3UWJ6bREkknzwSOvJm+5j
-        pxEo8eAUnCih1zQRYbtKf6u2MrHZ1WF7GJjQIT8lzqVd+uP3kr/4q73Vfvxyvo1QQt4WJl
-        lBennWDv2VUMpbEafrYe5vRPy9WzyDFB8kxsaf8VMxPJrONbqysTOfdKCrFlqA==
-Date:   Tue, 23 May 2023 14:34:33 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Felix Fietkau <nbd@nbd.name>, Jakub Kicinski <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        romain.gantois@bootlin.com
-Subject: Re: [PATCH net-next v8 3/5] net: dsa: add out-of-band tagging
- protocol
-Message-ID: <20230523143433.28947c34@pc-7.home>
-In-Reply-To: <20221115115023.hgc4ynrx3kylf6p3@skbuf>
-References: <20221104174151.439008-1-maxime.chevallier@bootlin.com>
-        <20221104174151.439008-4-maxime.chevallier@bootlin.com>
-        <20221104200530.3bbe18c6@kernel.org>
-        <20221107093950.74de3fa1@pc-8.home>
-        <6b38ec27-65a3-c973-c5e1-a25bbe4f6104@nbd.name>
-        <20221115102924.1329b49f@pc-7.home>
-        <20221115115023.hgc4ynrx3kylf6p3@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Tue, 23 May 2023 08:31:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F410DD;
+        Tue, 23 May 2023 05:31:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 270F363168;
+        Tue, 23 May 2023 12:31:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7E2C433D2;
+        Tue, 23 May 2023 12:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684845072;
+        bh=pgHLqCl3HF7tBS/nxEMgH5e4UztPNDBuOxCwrQ9MXdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tfm4oN7mmhg8p+Sbnj6YhJA1IeKivtYlovJ37BpPAvAPWTH6A6dx25PfvFDlDw5DJ
+         QAsXO6mG7ANsmRDgVXT8ggToHR0xmVfy3doDwRB56d6dcvT/TTMk4Kqr/eY4pIAKjK
+         mOCIzzMidXhAN8Kzs3/j4/Hle9oudE3u8ld2sHbjDIaWFxV2hgllxh/3jc7zqqE0dg
+         cRvlE0h5zoyaalIws1QLOEoJUmCtptTnInZIxtp6jhiixAaon/b4tMqYu3fFKrYmCQ
+         aQjQlcmokeKRtgxu50PS10y/M0uu0rHULVsiJ96Mf0d6SrVYTzMb8P+I6j1UwUS8SR
+         cQlVJioWMI7iQ==
+Date:   Tue, 23 May 2023 05:35:04 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
+        dianders@chromium.org, vkoul@kernel.org, daniel@ffwll.ch,
+        airlied@gmail.com, agross@kernel.org, dmitry.baryshkov@linaro.org,
+        marijn.suijten@somainline.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] drm/msm/dp: enable HDP plugin/unplugged interrupts at
+ hpd_enable/disable
+Message-ID: <20230523123504.3xjssy6ktgrsdewi@ripper>
+References: <1684796565-17138-1-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1684796565-17138-1-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello everyone,
-
-I'm digging this topic up, it has we'd like to move forward with the
-upstreaming of this, and before trying any new approach, I'd like to
-see if we can settle on one of the two choices that were expressed so
-far.
-
-To summarize the issue, this hardware platform (IPQ4019 from Qualcomm)
-uses an internal switch that's a modified QCA8K, for which there
-already is a DSA driver. On that platform, there's a MAC (ipqess)
-connected to the switch, that passes the dst/src port id through the
-DMA descriptor, whereas a typical DSA switch would pass that
-information in the frame itself.
-
-There has been a few approaches to try and reuse DSA as-is with a
-custom tagger, but all of them eventually got rejected, for a good
-reason.
-
-Two solutions are proposed, as discussed in that thread (hence the
-top-posting, sorry about that).
-
-There are two approaches remaining, either implementing DSA tagging
-offload support in RX/TX, or having a DSA frontend for the switch (the
-current QCA8K driver) and a switchdev frontend, using the qca8k logic
-with the ESS driver handling transfers for the CPU port.
-
-As both approaches make sense but are quite opposed, I'd like to make
-sure we go in the right direction. The switchdev approach definitely
-makes a lot of sense, but the DSA tagging offloading has been in
-discussion for quite a while, starting with Florian's series, followed
-by Felix's, and this could also be a good occasion to move forward with
-this, and it would also involve a minimal rework of the current ipqess
-driver.
-
-Any pointer would help,
-
-Thanks everyone,
-
-Maxime
-
-On Tue, 15 Nov 2022 11:50:23 +0000
-Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-
-> On Tue, Nov 15, 2022 at 10:29:24AM +0100, Maxime Chevallier wrote:
-> > Hello everyone,
-> > 
-> > Felix, thanks for the feedback !
-> > 
-> > On Tue, 8 Nov 2022 13:22:17 +0100
-> > Felix Fietkau <nbd@nbd.name> wrote:
-> > 
-> > [...]
-> >   
-> > > FYI, I'm currently working on hardware DSA untagging on the
-> > > mediatek mtk_eth_soc driver. On this hardware, I definitely need
-> > > to keep the custom DSA tag driver, as hardware untagging is not
-> > > always available. For the receive side, I came up with this patch
-> > > (still untested) for using METADATA_HW_PORT_MUX.
-> > > It has the advantage of being able to skip the tag protocol rcv
-> > > ops call for offload-enabled packets.
-> > > 
-> > > Maybe for the transmit side we could have some kind of netdev
-> > > feature or capability that indicates offload support and allows
-> > > skipping the tag xmit function as well.
-> > > In that case, ipqess could simply use a no-op tag driver.  
-> > 
-> > If I'm not mistaken, Florian also proposed a while ago an offload
-> > mechanism for taggin/untagging :
-> > 
-> > https://lore.kernel.org/lkml/1438322920.20182.144.camel@edumazet-glaptop2.roam.corp.google.com/T/
-> > 
-> > It uses some of the points you're mentionning, such as the netdev
-> > feature :)
-> > 
-> > All in all, I'm still a bit confused about the next steps. If I can
-> > summarize a bit, we have a lot of approaches, all with advantages
-> > and inconvenients, I'll try to summarize the state :
-> > 
-> >  - We could simply use the skb extensions as-is, rename the tagger
-> >    something like "DSA_TAG_IPQDMA" and consider this a way to
-> > perform tagging on this specific class of hardware, without trying
-> > too hard to make it generic.  
+On Mon, May 22, 2023 at 04:02:45PM -0700, Kuogee Hsieh wrote:
+> The internal_hpd flag is set to true by dp_bridge_hpd_enable() and set to
+> false by dp_bridge_hpd_disable() to handle GPIO pinmuxed into DP controller
+> case. HDP related interrupts can not be enabled until internal_hpd is set
+> to true. At current implementation dp_display_config_hpd() will initialize
+> DP host controller first followed by enabling HDP related interrupts if
+> internal_hpd was true at that time. Enable HDP related interrupts depends on
+> internal_hpd status may leave system with DP driver host is in running state
+> but without HDP related interrupts being enabled. This will prevent external
+> display from being detected. Eliminated this dependency by moving HDP related
+> interrupts enable/disable be done at dp_bridge_hpd_enable/disable() directly
+> regardless of internal_hpd status.
 > 
-> For Felix, using skb extensions would be inconvenient, since it would
-> involve per packet allocations which are now avoided with the metadata
-> dsts.
+> Changes in V3:
+> -- dp_catalog_ctrl_hpd_enable() and dp_catalog_ctrl_hpd_disable()
+> -- rewording ocmmit text
 > 
-> >  - We could try to move forward with this mechanism of offloading
-> >    tagging and untagging from the MAC driver, this would address
-> >    Florian's first try at this, Felix's use-case and would fit well
-> > the IPQESS case  
-> 
-> Someone would need to take things from where Felix left them:
-> https://patchwork.kernel.org/project/netdevbpf/patch/20221114124214.58199-2-nbd@nbd.name/
-> and add TX tag offloading support as well. Here there would need to be
-> a mechanism through which DSA asks "hey, this is my tagging protocol,
-> can the master offload it in the TX direction or am I just going to
-> push the tag into the packet?". I tried to sketch here something
-> along those lines:
-> https://patchwork.kernel.org/project/netdevbpf/patch/20221109163426.76164-10-nbd@nbd.name/#25084481
-> 
-> >  - There's the option discussed by Vlad and Jakub to add several
-> >    frontends, one being a switchev driver, here I'm a bit lost TBH,
-> > if we go this way I could definitely use a few pointers from Vlad
-> > :)  
-> 
-> The assumption being here that there is more functionality to cover by
-> the metadata dst than a port mux. I'm really not clear what is the
-> hardware design truly, hopefully you could give more details about
-> that.
+> Changes in V4:
+> -- replace dp_display_config_hpd() with dp_display_host_start()
+> -- move enable_irq() at dp_display_host_start();
 
-TBH the documentation I have is pretty limited, I don't actually know
-what else can go in the metadata attached to the descriptor :(
+I think what Dmitry was asking for was that you remove the disable_irq()
+from dp_display_request_irq(), but perhaps I missed some argumentation
+for why that can't/shouldn't be done?
 
-> The mechanism is quite simple, it's not rocket science. Take something
-> like a bridge join operation, the proposal is to do something like
-> this:
 > 
->     dsa_slave_netdevice_event
->         (net/dsa/slave.c)
->                |
->                v
->       dsa_slave_changeupper
->        (net/dsa/slave.c)
->                |
->                v
->        dsa_port_bridge_join
-> ocelot_netdevice_event (net/dsa/port.c)
-> (drivers/net/ethernet/mscc/ocelot_net.c) |
->                | v                                           v
->      dsa_switch_bridge_join
-> ocelot_netdevice_changeupper (net/dsa/switch.c)
-> (drivers/net/ethernet/mscc/ocelot_net.c) |
->                | v                                           v
->        felix_bridge_join
-> ocelot_netdevice_bridge_join (drivers/net/dsa/ocelot/felix.c)
->  (drivers/net/ethernet/mscc/ocelot_net.c) |
->                 | |                                           |
->                +---------------------+---------------------+
->                                      |
->                                      v
->                            ocelot_port_bridge_join
->                       (drivers/net/ethernet/mscc/ocelot.c)
+
+Either way, this looks good and it works for me.
+
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Tested-by: Bjorn Andersson <andersson@kernel.org>
+
+Thanks,
+Bjorn
+
+> Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_catalog.c | 15 +++++++++-
+>  drivers/gpu/drm/msm/dp/dp_catalog.h |  3 +-
+>  drivers/gpu/drm/msm/dp/dp_display.c | 58 +++++++++++++------------------------
+>  3 files changed, 36 insertions(+), 40 deletions(-)
 > 
-> with you maintaining the entire right branch that represents the
-> switchdev frontend, and more or less duplicates part of DSA.
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> index 7a8cf1c..5142aeb 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> @@ -620,7 +620,7 @@ void dp_catalog_hpd_config_intr(struct dp_catalog *dp_catalog,
+>  				config & DP_DP_HPD_INT_MASK);
+>  }
+>  
+> -void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
+> +void dp_catalog_ctrl_hpd_enable(struct dp_catalog *dp_catalog)
+>  {
+>  	struct dp_catalog_private *catalog = container_of(dp_catalog,
+>  				struct dp_catalog_private, dp_catalog);
+> @@ -635,6 +635,19 @@ void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
+>  	dp_write_aux(catalog, REG_DP_DP_HPD_CTRL, DP_DP_HPD_CTRL_HPD_EN);
+>  }
+>  
+> +void dp_catalog_ctrl_hpd_disable(struct dp_catalog *dp_catalog)
+> +{
+> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +				struct dp_catalog_private, dp_catalog);
+> +
+> +	u32 reftimer = dp_read_aux(catalog, REG_DP_DP_HPD_REFTIMER);
+> +
+> +	reftimer &= ~DP_DP_HPD_REFTIMER_ENABLE;
+> +	dp_write_aux(catalog, REG_DP_DP_HPD_REFTIMER, reftimer);
+> +
+> +	dp_write_aux(catalog, REG_DP_DP_HPD_CTRL, 0);
+> +}
+> +
+>  static void dp_catalog_enable_sdp(struct dp_catalog_private *catalog)
+>  {
+>  	/* trigger sdp */
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> index 82376a2..38786e8 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> @@ -104,7 +104,8 @@ bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
+>  void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
+>  void dp_catalog_hpd_config_intr(struct dp_catalog *dp_catalog,
+>  			u32 intr_mask, bool en);
+> -void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog);
+> +void dp_catalog_ctrl_hpd_enable(struct dp_catalog *dp_catalog);
+> +void dp_catalog_ctrl_hpd_disable(struct dp_catalog *dp_catalog);
+>  void dp_catalog_ctrl_config_psr(struct dp_catalog *dp_catalog);
+>  void dp_catalog_ctrl_set_psr(struct dp_catalog *dp_catalog, bool enter);
+>  u32 dp_catalog_link_is_connected(struct dp_catalog *dp_catalog);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 3e13acdf..370632b 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -615,12 +615,6 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
+>  		dp->hpd_state = ST_MAINLINK_READY;
+>  	}
+>  
+> -	/* enable HDP irq_hpd/replug interrupt */
+> -	if (dp->dp_display.internal_hpd)
+> -		dp_catalog_hpd_config_intr(dp->catalog,
+> -					   DP_DP_IRQ_HPD_INT_MASK | DP_DP_HPD_REPLUG_INT_MASK,
+> -					   true);
+> -
+>  	drm_dbg_dp(dp->drm_dev, "After, type=%d hpd_state=%d\n",
+>  			dp->dp_display.connector_type, state);
+>  	mutex_unlock(&dp->event_mutex);
+> @@ -658,12 +652,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+>  	drm_dbg_dp(dp->drm_dev, "Before, type=%d hpd_state=%d\n",
+>  			dp->dp_display.connector_type, state);
+>  
+> -	/* disable irq_hpd/replug interrupts */
+> -	if (dp->dp_display.internal_hpd)
+> -		dp_catalog_hpd_config_intr(dp->catalog,
+> -					   DP_DP_IRQ_HPD_INT_MASK | DP_DP_HPD_REPLUG_INT_MASK,
+> -					   false);
+> -
+>  	/* unplugged, no more irq_hpd handle */
+>  	dp_del_event(dp, EV_IRQ_HPD_INT);
+>  
+> @@ -687,10 +675,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+>  		return 0;
+>  	}
+>  
+> -	/* disable HPD plug interrupts */
+> -	if (dp->dp_display.internal_hpd)
+> -		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
+> -
+>  	/*
+>  	 * We don't need separate work for disconnect as
+>  	 * connect/attention interrupts are disabled
+> @@ -706,10 +690,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+>  	/* signal the disconnect event early to ensure proper teardown */
+>  	dp_display_handle_plugged_change(&dp->dp_display, false);
+>  
+> -	/* enable HDP plug interrupt to prepare for next plugin */
+> -	if (dp->dp_display.internal_hpd)
+> -		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, true);
+> -
+>  	drm_dbg_dp(dp->drm_dev, "After, type=%d hpd_state=%d\n",
+>  			dp->dp_display.connector_type, state);
+>  
+> @@ -1082,18 +1062,10 @@ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp)
+>  	mutex_unlock(&dp_display->event_mutex);
+>  }
+>  
+> -static void dp_display_config_hpd(struct dp_display_private *dp)
+> +static void dp_display_host_start(struct dp_display_private *dp)
+>  {
+>  
+>  	dp_display_host_init(dp);
+> -	dp_catalog_ctrl_hpd_config(dp->catalog);
+> -
+> -	/* Enable plug and unplug interrupts only if requested */
+> -	if (dp->dp_display.internal_hpd)
+> -		dp_catalog_hpd_config_intr(dp->catalog,
+> -				DP_DP_HPD_PLUG_INT_MASK |
+> -				DP_DP_HPD_UNPLUG_INT_MASK,
+> -				true);
+>  
+>  	/* Enable interrupt first time
+>  	 * we are leaving dp clocks on during disconnect
+> @@ -1176,7 +1148,7 @@ static int hpd_event_thread(void *data)
+>  
+>  		switch (todo->event_id) {
+>  		case EV_HPD_INIT_SETUP:
+> -			dp_display_config_hpd(dp_priv);
+> +			dp_display_host_start(dp_priv);
+>  			break;
+>  		case EV_HPD_PLUG_INT:
+>  			dp_hpd_plug_handle(dp_priv, todo->data);
+> @@ -1394,13 +1366,8 @@ static int dp_pm_resume(struct device *dev)
+>  	/* turn on dp ctrl/phy */
+>  	dp_display_host_init(dp);
+>  
+> -	dp_catalog_ctrl_hpd_config(dp->catalog);
+> -
+> -	if (dp->dp_display.internal_hpd)
+> -		dp_catalog_hpd_config_intr(dp->catalog,
+> -				DP_DP_HPD_PLUG_INT_MASK |
+> -				DP_DP_HPD_UNPLUG_INT_MASK,
+> -				true);
+> +	if (dp_display->is_edp)
+> +		dp_catalog_ctrl_hpd_enable(dp->catalog);
+>  
+>  	if (dp_catalog_link_is_connected(dp->catalog)) {
+>  		/*
+> @@ -1568,7 +1535,7 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
+>  
+>  	if (aux_bus && dp->is_edp) {
+>  		dp_display_host_init(dp_priv);
+> -		dp_catalog_ctrl_hpd_config(dp_priv->catalog);
+> +		dp_catalog_ctrl_hpd_enable(dp_priv->catalog);
+>  		dp_display_host_phy_init(dp_priv);
+>  		enable_irq(dp_priv->irq);
+>  
+> @@ -1801,16 +1768,31 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
+>  {
+>  	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
+>  	struct msm_dp *dp_display = dp_bridge->dp_display;
+> +	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
+> +
+> +	mutex_lock(&dp->event_mutex);
+> +	dp_catalog_ctrl_hpd_enable(dp->catalog);
+> +
+> +	/* enable HDP interrupts */
+> +	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, true);
+>  
+>  	dp_display->internal_hpd = true;
+> +	mutex_unlock(&dp->event_mutex);
+>  }
+>  
+>  void dp_bridge_hpd_disable(struct drm_bridge *bridge)
+>  {
+>  	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
+>  	struct msm_dp *dp_display = dp_bridge->dp_display;
+> +	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
+> +
+> +	mutex_lock(&dp->event_mutex);
+> +	/* disable HDP interrupts */
+> +	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
+> +	dp_catalog_ctrl_hpd_disable(dp->catalog);
+>  
+>  	dp_display->internal_hpd = false;
+> +	mutex_unlock(&dp->event_mutex);
+>  }
+>  
+>  void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+> -- 
+> 2.7.4
 > 
-> The advantage of this approach is that you can register your own NAPI
-> handler where you can treat packets in whichever way you like, and
-> have your own ndo_start_xmit. This driver would treat the aggregate
-> of the ess DMA engine and the ipq switch as a single device, and
-> expose it as a switch with DMA, basically.
