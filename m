@@ -2,95 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB0470EA79
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF2770EA7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbjEXAyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 20:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S235773AbjEXA4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 20:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjEXAyq (ORCPT
+        with ESMTP id S229632AbjEXA4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 20:54:46 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EA7C2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:54:45 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ac65ab7432so10515ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684889685; x=1687481685;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=67McTrZYHlUYTkrkjMKzLJM2fylAkOevMd/PAdSKUW8=;
-        b=b+Cf6K+6GzILfBq78GL5a77e4JPfZM8I551nq2kJl/FNwYwktgaPLTOi6cj8OrjXcQ
-         Kc30wdu/X8rkDOEl4Y3dXZS2Ps+JQmXwbUmPQRvWTLko+Nmjh6RhcbrFsGsfNhpRgwNp
-         a7fxqfZHXY9vPP/7kJieitSA4TQmay5eruKaqFbZ9xnfDMG9Q5qnnyNLTKpEhXMJFXr1
-         /txr92SgZ6T7x/JmjAII3CnVQZSF68tCE8WhbczmhLzPcmboOtZggfCFWqFQmCBWazyY
-         jPL9S/S2YCc7rHAJUMWynupHpZPs3FbBA6jp0U8yOtadve4Qli4F8rGISF/BU0T5Wl3C
-         g0QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684889685; x=1687481685;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=67McTrZYHlUYTkrkjMKzLJM2fylAkOevMd/PAdSKUW8=;
-        b=codZOvZ3xb181xtOIihhovCUEaxPbcXECk25VUqKv97DwULS2qG/lSvZnTfGtHDxxp
-         HjZJlUgcdOaGMkSCRJy9HP4GzmqwO+2xvKqAQORJrf6wiiJb1iICBQsbJvKzJi5WGfrM
-         DfoVJB2zdt+NU01LQZLzTkn0kVMZWJp19RJT1i1m6tL9kmIfYzBxery7zZ311nyfIBSU
-         eai8e56eC0/ovpWa6AR+TI/QRJ4Zys6B8+0iWnVVLCGVTGogYANm4NRTdn4laMlDS4V5
-         +29H6T1TEnBqCQ4j4mBTxFqnwg7jT/IzNogmdbTtwJAK42nx6mjbdpDT6dHonfa6hXgg
-         cMWQ==
-X-Gm-Message-State: AC+VfDw2RnIlQyh6PcKQfPCLf6AghzOuvuOgmK0XJYbHjFDIoehhSS7a
-        3T36BLOtj1GVZ1Layg9cJP1a0g==
-X-Google-Smtp-Source: ACHHUZ4mqnM95BjMoKuzKG9ITbJRKiz0luhjMSAWnLF+siwepzzokXQloiUTIAw7DD6xfgnpVrnXzQ==
-X-Received: by 2002:a17:902:d48a:b0:1a9:7cbf:a7c1 with SMTP id c10-20020a170902d48a00b001a97cbfa7c1mr38473plg.13.1684889684574;
-        Tue, 23 May 2023 17:54:44 -0700 (PDT)
-Received: from [2620:0:1008:11:c789:c1fb:6667:1766] ([2620:0:1008:11:c789:c1fb:6667:1766])
-        by smtp.gmail.com with ESMTPSA id m15-20020a17090a3f8f00b0024b79a69361sm142407pjc.32.2023.05.23.17.54.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 17:54:44 -0700 (PDT)
-Date:   Tue, 23 May 2023 17:54:43 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM
- checks
-In-Reply-To: <ZGw2eJxxQl4DrfWi@casper.infradead.org>
-Message-ID: <703a3995-75cf-b575-deff-fe2b78bd1354@google.com>
-References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com> <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com> <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com> <ZGw2eJxxQl4DrfWi@casper.infradead.org>
+        Tue, 23 May 2023 20:56:19 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA52C2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:56:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VjLvOod_1684889773;
+Received: from 192.168.3.7(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjLvOod_1684889773)
+          by smtp.aliyun-inc.com;
+          Wed, 24 May 2023 08:56:14 +0800
+Message-ID: <17c39e1d-2376-c90f-5e87-ed1982a7cff9@linux.alibaba.com>
+Date:   Wed, 24 May 2023 08:56:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [dm-devel] dm overlaybd: targets mapping OverlayBD image
+To:     Mike Snitzer <snitzer@kernel.org>, Du Rui <durui@linux.alibaba.com>
+Cc:     Giuseppe Scrivano <gscrivan@redhat.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>
+References: <9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com>
+ <ZGz32yw7ecKhW+lj@redhat.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <ZGz32yw7ecKhW+lj@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023, Matthew Wilcox wrote:
+Hi Mike,
 
-> On Mon, May 22, 2023 at 11:39:27AM -0700, David Rientjes wrote:
-> > I think VM_BUG_ON*() and friends are used to crash the kernel for 
-> > debugging so that we get a crash dump and because some variants don't 
-> > exist for VM_WARN_ON().  There's no VM_WARN_ON_PAGE(), for example, unless 
-> > implicitly converted with this patch.
+On 2023/5/24 10:28, Mike Snitzer wrote:
+> On Fri, May 19 2023 at  6:27P -0400,
+> Du Rui <durui@linux.alibaba.com> wrote:
 > 
-> It could be added, but there's already a VM_WARN_ON_FOLIO() and
-> VM_WARN_ON_ONCE_PAGE(), so hopefully we just keep converting code
-> to folios until nobody notices that we might need such a thing.
+>> OverlayBD is a novel layering block-level image format, which is design
+>> for container, secure container and applicable to virtual machine,
+>> published in USENIX ATC '20
+>> https://www.usenix.org/system/files/atc20-li-huiba.pdf
+>>
+>> OverlayBD already has a ContainerD non-core sub-project implementation
+>> in userspace, as an accelerated container image service
+>> https://github.com/containerd/accelerated-container-image
+>>
+>> It could be much more efficient when do decompressing and mapping works
+>> in the kernel with the framework of device-mapper, in many circumstances,
+>> such as secure container runtime, mobile-devices, etc.
+>>
+>> This patch contains a module, dm-overlaybd, provides two kinds of targets
+>> dm-zfile and dm-lsmt, to expose a group of block-devices contains
+>> OverlayBD image as a overlaid read-only block-device.
+>>
+>> Signed-off-by: Du Rui <durui@linux.alibaba.com>
 > 
+> <snip, original patch here: [1] >
+> 
+> I appreciate that this work is being done with an eye toward
+> containerd "community" and standardization but based on my limited
+> research it appears that this format of OCI image storage/use is only
+> used by Alibaba? (but I could be wrong...)
 
-Yeah, the lack of VM_WARN variants for VM_BUG_ON_MM or VM_BUG_ON_VMA are 
-probably better examples.  But it looks like we're converging toward 
-eliminating VM_BUG_ON* variants entirely and relying on 
-kernel.panic_on_warn to do the BUG_ON() behavior if we want to opt into 
-that.  So this will be a useful cleanup.
+Not necessarily Alibaba, actually OverlayBD solution is open-source to
+containerd, at least I think it's an opensource project and I saw some
+Microsoft Azure guys are also working on this.
+
+> 
+> But you'd do well to explain why the userspace solution isn't
+> acceptable. Are there security issues that moving the implementation
+> to kernel addresses?
+
+OverlayBD user-space solution was actually the original Alibaba solution
+widely used in Alibaba internally, and Nydus might be the another one
+(used but limited, Ant group and Bytedance use Nydus more widely.) Since
+Alibaba group is a big company, it's pretty normal to have two similiar
+competing solutions together.
+
+After I joined Alibaba, personally, I persuaded OverlayBD guys switching
+from their stacked storage solution to a simple fs solution, because:
+
+  - It allows a simple on-disk format rather than a long storage stack
+    with a random fs, it increases the overall attack vector: which I
+    think this year LSF/MM already discuss about that;
+
+  - Different random fses cannot share page cache across images. IOWs,
+    many in-kernel fses actually doesn't suit for container image use
+    cases;
+
+Also consider this one:
+  - Apart from the detailed on-disk design, this attempt is just a
+    read-only solution without  1) on-demand load;  2) write support;
+
+  - Very similar to the exist approaches:
+    dm-qcow2  https://lore.kernel.org/r/164846619932.251310.3668540533992131988.stgit@pro/
+    dm-vdo   https://lore.kernel.org/r/20230523214539.226387-1-corwin@redhat.com/
+
+I also persuaded Nydus guys from their own format to erofs format, but
+I failed to persuaded Overlaybd guys.
+
+> 
+> I also have doubts that this solution is _actually_ more performant
+> than a proper filesystem based solution that allows page cache sharing
+> of container image data across multiple containers.
+
+Agreed.
+
+> 
+> There is an active discussion about, and active development effort
+> for, using overlayfs + erofs for container images.  I'm reluctant to
+> merge this DM based container image approach without wider consensus
+> from other container stakeholders.
+
+I'm too tired about these different container image solutions.  I will
+go on improve EROFS, and hopefully it will finally useful to everyone.
+
+Thanks,
+Gao Xiang
+
+> 
+> But short of reaching wider consensus on the need for these DM
+> targets: there is nothing preventing you from carrying these changes
+> in your alibaba kernel.
+> 
+> Mike
+> 
+> [1]: https://patchwork.kernel.org/project/dm-devel/patch/9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com/
+> 
+> --
+> dm-devel mailing list
+> dm-devel@redhat.com
+> https://listman.redhat.com/mailman/listinfo/dm-devel
