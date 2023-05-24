@@ -2,115 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E8C70F188
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA5570F18F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240447AbjEXIzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S240477AbjEXI5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbjEXIzj (ORCPT
+        with ESMTP id S239901AbjEXI5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:55:39 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C91F8E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:55:37 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2af290cf9b7so8543701fa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684918535; x=1687510535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xY75exFFc4pLe253DwACRmicg541kJJKSeJfAcbzZL4=;
-        b=cR4OOaDYF9vBD0ac6I93hzlAoNYHVBnRsa0e0anqL18v7B+r/OvCvXTJFHJRkxSFXl
-         4QT1SA7ehERodfK/74U/QrYANGs+MlJoSOB+mXquHN+jVWlSNoJVFgA0M0oH4ghPD55e
-         ZLYsvymofq9MMWRnDgG+zIQf28GQzfTw66EkDOpIjhHixzPLwNNR5f8DrXMDxba2Soc7
-         ru+t0ri/Z0hnvOeHQraBkv9y8m/g33NeWvHGWRZzAG11lIO6xIkyjwYgc5qFbmbyUXY8
-         r2siW9ez3fU6JbxXwtfWOfcP6uXanw0ET4XUW1EDap6H2d7VuEMhDOauM/8ufy1Xxt2t
-         iLMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684918535; x=1687510535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xY75exFFc4pLe253DwACRmicg541kJJKSeJfAcbzZL4=;
-        b=LbpEfEMbyA5QdR8euLZtMFVLl8gNCuggz0RFPV2yAuN+4Ym36949TVCHSgeP2zrc5i
-         s5FThksmxpNp5bWkq0tE0GebcLq+nGnslwWN/lOxN2ZVUt5i05dKzNd1Y69BsG0cHBF/
-         ZbN9yIaNfyNZoxs0q98ELzDhNpysCgnrbi3KeWuiKdjGt85a1v9C78qEkRkwBWD914Jt
-         QfkOPr82iydwkfNN5odIhW0tGrxGJCwkRVPS7CFWAMKVFFT7O//dwK+LSDIy3fr1dqd5
-         t8cCTWiSB7MUl1VLBeCfoGonSMROQ47BrptGO5OF/svEZTlS6dRkaotDx7eSQh5SSZIG
-         ndEw==
-X-Gm-Message-State: AC+VfDwbVEnldeyO4t/n8499oK/LjNt5Lqpv3eh2g59GFKVy6aRDR4E+
-        PzKpHbSZvectOS1aiW4Afu3ptQ==
-X-Google-Smtp-Source: ACHHUZ7w8HrOshJTCZsj04zG70rWFL7ybf7IddSv+nrCIeK32BlN9QJ687mEFidwEq24Oirv2NxajA==
-X-Received: by 2002:ac2:46fc:0:b0:4f3:9a2c:589e with SMTP id q28-20020ac246fc000000b004f39a2c589emr4929567lfo.24.1684918535422;
-        Wed, 24 May 2023 01:55:35 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id p1-20020a19f001000000b004f1477cf8a7sm1622811lfc.115.2023.05.24.01.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 01:55:34 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v6.4-rc4
-Date:   Wed, 24 May 2023 10:55:33 +0200
-Message-Id: <20230524085533.124092-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 24 May 2023 04:57:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F15497;
+        Wed, 24 May 2023 01:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684918634; x=1716454634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RW0IgkneiN2lA7NI9fVLY7vHeqUJ1Zw8kHLQN32dM/c=;
+  b=AaZpR6leentI8i+RiekC2ItOXL7ZmriDjqgz2MYSGhKnRXx1tFrwTYN+
+   czRQNjJ8qmAoh18WupQ9F6RR7PmAkEcwuwX/2jE50obe1QKFLRtBPeiEk
+   cWn04Nz2pdxXiBDIiyYBPmVcKmrKfCWR7loAVo9DviLGZxvFYDnDWcaVg
+   jrZ6ZoZLEeL0jWm2vBR3n9LPLwW7cap4RJ53VxfSCKGdMzLu3mnEyZPfG
+   LW4ckiGmnzp15OKXVN8qFLsjGxdBRwkIp0NThDB5b19z2PcAa0rfJP+6J
+   HcCnHCVZbyvRWn3vvhIMg8Nk+8RF/tIUEW9hQgYuL3PY4QLu9PhtAXTBM
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="asc'?scan'208";a="153670197"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 May 2023 01:57:13 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 24 May 2023 01:57:11 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 24 May 2023 01:57:09 -0700
+Date:   Wed, 24 May 2023 09:56:47 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jianmin Lv <lvjianmin@loongson.cn>,
+        <wanghongliang@loongson.cn>, Liu Peibao <liupeibao@loongson.cn>,
+        <loongson-kernel@lists.loongnix.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
+Message-ID: <20230524-pouncing-variable-c520e85f8db8@wendy>
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-2-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="8QaxS1dvQPxlqCKP"
+Content-Disposition: inline
+In-Reply-To: <20230522071030.5193-2-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+--8QaxS1dvQPxlqCKP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Here's a PR with a couple of MMC fixes intended for v6.4-rc4. Details about the
-highlights are as usual found in the signed tag.
+On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
+> Add the Loongson platform spi binding with DT schema format using
+> json-schema.
+>=20
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-s=
+pi.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml=
+ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+> new file mode 100644
+> index 000000000000..d0be6e5378d7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson SPI controller
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k-spi
 
-Please pull this in!
+I am sorry to jump in here at such a late stage with a (potentially)
+trivial question. "ls2k" is the SoC family rather than a specific model
+as far as I understand.
+The answer is probably yes, but do all SoCs in the family have an
+identical version of the IP?
 
-Kind regards
-Ulf Hansson
+Cheers,
+Conor.
 
+--8QaxS1dvQPxlqCKP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+-----BEGIN PGP SIGNATURE-----
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG3RTwAKCRB4tDGHoIJi
+0vhaAP4qvlPd/Y5xeahrTrNYAScnzWN9KkGBWYj4dIt7W5ayFgD8Co6Y2PAiWZPW
+iIuu6Ay00cydK8AKDf4HG0nafaGKSAc=
+=yeZA
+-----END PGP SIGNATURE-----
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.4-rc1
-
-for you to fetch changes up to 81dce1490e28439c3cd8a8650b862a712f3061ba:
-
-  mmc: sdhci-esdhc-imx: make "no-mmc-hs400" works (2023-05-09 11:55:02 +0200)
-
-----------------------------------------------------------------
-MMC core:
- - Fix error propagation for the non-block-device I/O paths
-
-MMC host:
- - sdhci-cadence: Fix an error path during probe
- - sdhci-esdhc-imx: Fix support for the "no-mmc-hs400" DT property
-
-----------------------------------------------------------------
-Christian Loehle (1):
-      mmc: block: ensure error propagation for non-blk
-
-Christophe JAILLET (1):
-      mmc: sdhci-cadence: Fix an error handling path in sdhci_cdns_probe()
-
-Haibo Chen (1):
-      mmc: sdhci-esdhc-imx: make "no-mmc-hs400" works
-
- drivers/mmc/core/block.c           |  5 +++++
- drivers/mmc/host/sdhci-cadence.c   |  8 +++++---
- drivers/mmc/host/sdhci-esdhc-imx.c | 18 ++++++++++--------
- 3 files changed, 20 insertions(+), 11 deletions(-)
+--8QaxS1dvQPxlqCKP--
