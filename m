@@ -2,141 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F0A70F295
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED05670F22D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240711AbjEXJWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S230076AbjEXJWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240291AbjEXJVH (ORCPT
+        with ESMTP id S229572AbjEXJWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:21:07 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9952E9D;
-        Wed, 24 May 2023 02:21:03 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6af6df7f93aso35501a34.0;
-        Wed, 24 May 2023 02:21:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684920063; x=1687512063;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ooM2WEkot7KuXyG8TFkP/cOGbwCsIoaqyATdhVKfqHo=;
-        b=hYCMKy168dcj7eOuVFj3OkyTUan/mOGuOF/Lh0cuEer68J3eeHMGI0fVcFOL+rNmxJ
-         s+KbgeNu+Vrb6GYpeWzNipse9WrPFTdnrwaHYT006j5LCnGk9xBhYiUxpdJ+2jhumW3v
-         rDv29e6uAUwjg3uXCf91YYLTqqm71xqOr+QgnCf+2l5o3I22bxkhQ6oNKq1N/u5adHpR
-         heTZLTtrtF+H4wogdqMfz+LbjJE+x2bD4ikyJLmDxmi8AUsM95FQp3hnRE5YX789WpVD
-         KU/RwD79WsP8plhBEsRB1fChysv50yG4z4L8heh+00MPoqT96TnTMH0jBlmsXp/W3ZW5
-         mveg==
-X-Gm-Message-State: AC+VfDyVybXLGMWDHUI7Lz9H525B9sYAjz85J6ikBKFil6dDZx+7aT2p
-        /M7nHTY+5N0FplWMswYsbw==
-X-Google-Smtp-Source: ACHHUZ4tFm4ZuNjyciy5rDRzPIQPer8A2tuJgUMFQzjxCy7xPQFdCReLHYiLcV5WSajQCgi+WrZNxA==
-X-Received: by 2002:a05:6830:1b67:b0:6af:8b3f:cda4 with SMTP id d7-20020a0568301b6700b006af8b3fcda4mr3059936ote.13.1684920062785;
-        Wed, 24 May 2023 02:21:02 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a23-20020a9d6e97000000b006af8ac6ed5dsm1992509otr.38.2023.05.24.02.21.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 02:21:02 -0700 (PDT)
-Received: (nullmailer pid 3187102 invoked by uid 1000);
-        Wed, 24 May 2023 09:21:00 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 24 May 2023 05:22:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0094E196
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:21:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7AECC223F2;
+        Wed, 24 May 2023 09:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684920103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QM4gol7aWxHM+cK08fFzQCFpDFcExgXFNwjtTAaTJjY=;
+        b=mGN2Q5yYXM3sOwkoOzVucYbctEeSV5S5CjOkCLnGTEX4OefaG6LdHozlo7VP6XoyR3w+zs
+        aJwyN3Q3+kc0eBbgdcW+P4FmyeclYPk/qqszRMsJp/LXntlCz/P+YfHAy8JVcr78Ojuf9d
+        umqXoEZQEF0uc3ym2HPN+x4PINZXtcQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684920103;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QM4gol7aWxHM+cK08fFzQCFpDFcExgXFNwjtTAaTJjY=;
+        b=9ATs2viGI7oMBF8q/E6X4vUArTOwZzfVhlcbq6P33XT0G6FbJMnW7Si8dFysJ8aGcssps7
+        BFFLOTiMxG6dFSBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D43813425;
+        Wed, 24 May 2023 09:21:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qIIJFifXbWSnewAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 09:21:43 +0000
+Message-ID: <8fd1a56d-5a22-4bde-59a5-169a4696219e@suse.cz>
+Date:   Wed, 24 May 2023 11:21:43 +0200
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Maxim Kiselev <bigunclemax@gmail.com>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        devicetree@vger.kernel.org,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        linux-iio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Haibo Chen <haibo.chen@nxp.com>, Chen-Yu Tsai <wens@csie.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-kernel@vger.kernel.org,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        linux-riscv@lists.infradead.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        William Breathitt Gray <william.gray@linaro.org>
-In-Reply-To: <20230524082744.3215427-3-bigunclemax@gmail.com>
-References: <20230524082744.3215427-1-bigunclemax@gmail.com>
- <20230524082744.3215427-3-bigunclemax@gmail.com>
-Message-Id: <168492006052.3187086.8767275310596142124.robh@kernel.org>
-Subject: Re: [RFC PATCH v1 2/4] dt-bindings: iio: adc: Add Allwinner
- D1/T113s/R329 SoCs GPADC
-Date:   Wed, 24 May 2023 04:21:00 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] mm: compaction: avoid GFP_NOFS ABBA deadlock
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+References: <20230519111359.40475-1-hannes@cmpxchg.org>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230519111359.40475-1-hannes@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 24 May 2023 11:27:31 +0300, Maxim Kiselev wrote:
-> Allwinner's D1, T113s and R329 SoCs have a new general purpose ADC.
-> This ADC is the same for all of this SoCs. The only difference is
-> the number of available channels.
+On 5/19/23 13:13, Johannes Weiner wrote:
+> During stress testing with higher-order allocations, a deadlock
+> scenario was observed in compaction: One GFP_NOFS allocation was
+> sleeping on mm/compaction.c::too_many_isolated(), while all CPUs in
+> the system were busy with compactors spinning on buffer locks held by
+> the sleeping GFP_NOFS allocation.
 > 
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> Reclaim is susceptible to this same deadlock; we fixed it by granting
+> GFP_NOFS allocations additional LRU isolation headroom, to ensure it
+> makes forward progress while holding fs locks that other reclaimers
+> might acquire. Do the same here.
+> 
+> This code has been like this since compaction was initially merged,
+> and I only managed to trigger this with out-of-tree patches that
+> dramatically increase the contexts that do GFP_NOFS compaction. While
+> the issue is real, it seems theoretical in nature given existing
+> allocation sites. Worth fixing now, but no Fixes tag or stable CC.
+
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+
+So IIUC the change is done by not giving GFP_NOFS extra headroom, but
+instead restricting the headroom of __GFP_FS allocations. But the original
+one was probably too generous anyway so it should be fine?
+
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
 > ---
->  .../iio/adc/allwinner,sun20i-d1-gpadc.yaml    | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.yaml
+>  mm/compaction.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-Error: Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.example.dts:27.28-29 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230524082744.3215427-3-bigunclemax@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> v2:
+> - clarify too_many_isolated() comment (Mel)
+> - split isolation deadlock from no-contiguous-anon lockups as that's
+>   a different scenario and deserves its own patch
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index c8bcdea15f5f..c9a4b6dffcf2 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -745,8 +745,9 @@ isolate_freepages_range(struct compact_control *cc,
+>  }
+>  
+>  /* Similar to reclaim, but different enough that they don't share logic */
+> -static bool too_many_isolated(pg_data_t *pgdat)
+> +static bool too_many_isolated(struct compact_control *cc)
+>  {
+> +	pg_data_t *pgdat = cc->zone->zone_pgdat;
+>  	bool too_many;
+>  
+>  	unsigned long active, inactive, isolated;
+> @@ -758,6 +759,17 @@ static bool too_many_isolated(pg_data_t *pgdat)
+>  	isolated = node_page_state(pgdat, NR_ISOLATED_FILE) +
+>  			node_page_state(pgdat, NR_ISOLATED_ANON);
+>  
+> +	/*
+> +	 * Allow GFP_NOFS to isolate past the limit set for regular
+> +	 * compaction runs. This prevents an ABBA deadlock when other
+> +	 * compactors have already isolated to the limit, but are
+> +	 * blocked on filesystem locks held by the GFP_NOFS thread.
+> +	 */
+> +	if (cc->gfp_mask & __GFP_FS) {
+> +		inactive >>= 3;
+> +		active >>= 3;
+> +	}
+> +
+>  	too_many = isolated > (inactive + active) / 2;
+>  	if (!too_many)
+>  		wake_throttle_isolated(pgdat);
+> @@ -806,7 +818,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  	 * list by either parallel reclaimers or compaction. If there are,
+>  	 * delay for some time until fewer pages are isolated
+>  	 */
+> -	while (unlikely(too_many_isolated(pgdat))) {
+> +	while (unlikely(too_many_isolated(cc))) {
+>  		/* stop isolation if there are still pages not migrated */
+>  		if (cc->nr_migratepages)
+>  			return -EAGAIN;
 
