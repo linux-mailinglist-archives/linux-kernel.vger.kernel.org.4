@@ -2,77 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B3670FF6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF6670FF72
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjEXUsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S236600AbjEXUsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjEXUsG (ORCPT
+        with ESMTP id S236057AbjEXUsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:48:06 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1B510B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:48:05 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-33a8f766b64so13335ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684961285; x=1687553285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aHURiBNG6Ag4wh5lMaHsjiW4JgSyhJ4YVI31OjuzIzw=;
-        b=HQXqhO6+GP2Pxk0RilUgixYa2XS/BzMXgWrI0lbbj5IAj4Qz8T2kbmp1m75S9NG6Xi
-         c94SQu6yXfMCyglJIySfV77gnFr5WkY871EHAdMeN36FE9ef79cUkKyBqUJYQCjtQ2Lm
-         pE3HTzOBEA+f7sa6z1awlw/EnvuYUQ9/F2KDtDUYtIoKIv7/3b3ZACraoPkT2/jm5rVd
-         VGJjd7h6ZtimXWCrP76hftOEDz2HvdWJ8spyXm4pn8C4dN2x/pzg8OVCjXpazzH8fxmP
-         p/eHmlmHsYIVPerSMKuOJMvfHInGdDyRnl8Jbh/gzfkaQ13p31Z+9oNCqg+6aO9Vd2CE
-         bdEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684961285; x=1687553285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aHURiBNG6Ag4wh5lMaHsjiW4JgSyhJ4YVI31OjuzIzw=;
-        b=U3r92BVjqI15n4BcFblUhK0g514cqaoOp4nL794v2/pXS9dlZFvdfDWsdapJDRKRdz
-         wkfH++Oo+AkqevxqtJmFAm9ce9D4vFe2PVfzXcqamuflU+eJWtpeGJxb0HQdDJhlETWE
-         NQff2/e1S6zU2K1TR5ennFzLQIilaehPBGs7r9nKHFzJL0+6k4tlkCSbdFS3PSdIlmg4
-         Auwrbg24qkXefQs0ivqYvn9dLsy0tLDmQfzYDEA+M6M9oyETsqGOx2zpaUqPBH/PDN0Q
-         /vC1rjKNF11sbETQoaoa7d43N3gjcBdgD3tK9jRu4wxFc1EWE3oXScg3jGV/inOgoxGT
-         Cx8w==
-X-Gm-Message-State: AC+VfDzNTgDsWVYti49IWftcHQ3zRYMwEs5iPW9c/ENveGESlUpEij2q
-        laF8CxLtgccB04Lt/5g6CRWAZLCaNCRIN5/BNNcCEA==
-X-Google-Smtp-Source: ACHHUZ4JmS7eeOCuh0qfTtfA4JXCPJ0a2rGrHVcWlN0P7pwAJqtjPGnbkh5HRimwHWh0okTNQwWNHiUh7K4UnqXwMyc=
-X-Received: by 2002:a05:6e02:1bcc:b0:335:12d6:2c7d with SMTP id
- x12-20020a056e021bcc00b0033512d62c7dmr87050ilv.0.1684961284829; Wed, 24 May
- 2023 13:48:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-6-likexu@tencent.com>
- <ZC99f+AO1tZguu1I@google.com> <509b697f-4e60-94e5-f785-95f7f0a14006@gmail.com>
- <ZDAvDhV/bpPyt3oX@google.com> <34b5dd08-edac-e32f-1884-c8f2b85f7971@gmail.com>
- <59ef9af0-9528-e220-625a-ff16e6971f23@amd.com> <ZG52cgmjgaqY8jvq@google.com>
-In-Reply-To: <ZG52cgmjgaqY8jvq@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 24 May 2023 13:47:53 -0700
-Message-ID: <CALMp9eR_xYapRm=zJ3OdAzBVFjpzeQWYv9nTs1ZstAsugEwWRQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
- VMRUN instruction
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Sandipan Das <sandipan.das@amd.com>,
-        Like Xu <like.xu.linux@gmail.com>,
+        Wed, 24 May 2023 16:48:37 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01666187;
+        Wed, 24 May 2023 13:48:27 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 564803200B1C;
+        Wed, 24 May 2023 16:48:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 24 May 2023 16:48:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684961303; x=
+        1685047703; bh=GIQrYXVIJfghlyJeZVTwMC4NvSXNZTZ81GeVUDK35vA=; b=t
+        V78D8AQWQriaLyjLryKXcRouM18sDnenIWh1Yu+0MLtrKqbfxYSkYAP7Ah45z0C0
+        wqrRshdZnP8Fzs3Y74J2dEDBmVYWYkp0Dr1xsrl5u5j90fMLI6BY4GxnFIanI2ra
+        ZHoNHyFdoiSeY0hssG0uaEFpYzR9Lz3q64/uyyqR22r9Bp9R7utjmhCAN40FS5yl
+        LMsNTY7sC/uKblPAscJfx1OowRzqDWvUUksw9EcLsmJ5dxmskbo1njKOtT/uAEJb
+        p8CBABZQSKnGrDpi9R3ukiBCGNRVKr8j1xz53Ydve6A5EMl4OC/qVLH06zs0pCt+
+        L7IqaBqFdMvHDowOKkSCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684961303; x=1685047703; bh=GIQrYXVIJfghl
+        yJeZVTwMC4NvSXNZTZ81GeVUDK35vA=; b=YXeLdPNcTaSCsiCsBeJv2f5p9SuP4
+        8PNIAd5OHvvHh0zi0J6sHQ2iDxJi3KUZPgxTwHgsCiBnsG4iFJMa5e9VSO/9SRsp
+        1uf6gxH+qkDhvA2KvyiORL0inPnSLCOCJ7W/hgwUyUdJI1MHVbrXnbq8uhCmMqay
+        QCl1ZWzVXrCzb30GT0XC1Wta3d7Y3WxRKULau+sNOAow3o6ZJP+eHzUVYtEPFdUO
+        SEJPLcn5mgVKhWahWT0mp2x4brRIS3jKZQ5jeti0GnxZf5j3AV7cUWQLho6bY9Hg
+        bJgTAAYblxZs0e6yU12BJKusEGvIJR9TETpkuLHQittJSabdfnNE4zZlw==
+X-ME-Sender: <xms:FnhuZDTH2VncK0GAbUd4QSuubawcVJEemEMmfWagwDdFrmymqbynRw>
+    <xme:FnhuZEylmO4WOFyEi63qXNPS7KmYBZh0Oi4Ko1ah2WyXbPpIb5vWyfJ0rtnlScPMf
+    YwGNKBrFecAJTAStLU>
+X-ME-Received: <xmr:FnhuZI0B8fy9Ol2lnVR91k-mp_zuw1fzrmbcod9KqT-pVjgXEb11Z3-99qaxPUeQ45cz-A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgudehudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
+    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:FnhuZDDD4TIO_TlTLMdLlTBKIBaI4Z9lylnIe3wBeaO4FVJJxTQ0FA>
+    <xmx:FnhuZMj_AEyzunCa7U0nUvY822b_W_v3y-MdIwmWBPCWgqMitbF1og>
+    <xmx:FnhuZHo0gf_JVrLFUK-EgR8w02dXTQBT2P7OqLOR94f80xY3JTy1xg>
+    <xmx:F3huZHB2sQNsFiPjk9M0j2hsG8Xww7Nt8oC4qQnHLKoB8ZE2QQW6hQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 24 May 2023 16:48:21 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 49820109F9F; Wed, 24 May 2023 23:48:18 +0300 (+03)
+Date:   Wed, 24 May 2023 23:48:18 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        "Tom Lendacky (AMD)" <thomas.lendacky@amd.com>,
-        Ananth Narayan <ananth.narayan@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
+Message-ID: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185218.962208640@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508185218.962208640@linutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,78 +119,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 1:41=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Wed, Apr 26, 2023, Sandipan Das wrote:
-> > Hi Sean, Like,
-> >
-> > On 4/19/2023 7:11 PM, Like Xu wrote:
-> > >> Heh, it's very much explicable, it's just not desirable, and you and=
- I would argue
-> > >> that it's also incorrect.
-> > >
-> > > This is completely inaccurate from the end guest pmu user's perspecti=
-ve.
-> > >
-> > > I have a toy that looks like virtio-pmu, through which guest users ca=
-n get hypervisor performance data.
-> > > But the side effect of letting the guest see the VMRUN instruction by=
- default is unacceptable, isn't it ?
-> > >
-> > >>
-> > >> AMD folks, are there plans to document this as an erratum?=C3=AF=C2=
-=BF=C2=BD I agree with Like that
-> > >> counting VMRUN as a taken branch in guest context is a CPU bug, even=
- if the behavior
-> > >> is known/expected.
-> > >
-> >
-> > This behaviour is architectural and an erratum will not be issued. Howe=
-ver, for clarity, a future
-> > release of the APM will include additional details like the following:
-> >
-> >   1) From the perspective of performance monitoring counters, VMRUNs ar=
-e considered as far control
-> >      transfers and VMEXITs as exceptions.
-> >
-> >   2) When the performance monitoring counters are set up to count event=
-s only in certain modes
-> >      through the "OsUserMode" and "HostGuestOnly" bits, instructions an=
-d events that change the
-> >      mode are counted in the target mode. For example, a SYSCALL from C=
-PL 3 to CPL 0 with a
-> >      counter set to count retired instructions with USR=3D1 and OS=3D0 =
-will not cause an increment of
-> >      the counter. However, the SYSRET back from CPL 0 to CPL 3 will cau=
-se an increment of the
-> >      counter and the total count will end up correct. Similarly, when c=
-ounting PMCx0C6 (retired
-> >      far control transfers, including exceptions and interrupts) with G=
-uest=3D1 and Host=3D0, a VMRUN
-> >      instruction will cause an increment of the counter. However, the s=
-ubsequent VMEXIT that occurs,
-> >      since the target is in the host, will not cause an increment of th=
-e counter and so the total
-> >      count will end up correct.
->
-> The count from the guest's perspective does not "end up correct".  Unlike=
- SYSCALL,
-> where _userspace_ deliberately and synchronously executes a branch instru=
-ction,
-> VMEXIT and VMRUN are supposed to be transparent to the guest and can be c=
-ompletely
-> asynchronous with respect to guest code execution, e.g. if the host is sp=
-amming
-> IRQs, the guest will see a potentially large number of bogus (from it's p=
-erspective)
-> branches retired.
+On Mon, May 08, 2023 at 09:44:17PM +0200, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> Make the primary thread tracking CPU mask based in preparation for simpler
+> handling of parallel bootup.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Michael Kelley <mikelley@microsoft.com>
+> 
+> 
+> ---
+>  arch/x86/include/asm/apic.h     |    2 --
+>  arch/x86/include/asm/topology.h |   19 +++++++++++++++----
+>  arch/x86/kernel/apic/apic.c     |   20 +++++++++-----------
+>  arch/x86/kernel/smpboot.c       |   12 +++---------
+>  4 files changed, 27 insertions(+), 26 deletions(-)
+> ---
+> 
 
-The reverse problem occurs when a PMC is configured to count "CPUID
-instructions retired." Since KVM intercepts CPUID and emulates it, the
-PMC will always read 0, even if the guest executes a tight loop of
-CPUID instructions.
+...
 
-The PMU is not virtualizable on AMD CPUs without significant
-hypervisor corrections. I have to wonder if it's really worth the
-effort.
+> @@ -2386,20 +2386,16 @@ bool arch_match_cpu_phys_id(int cpu, u64
+>  }
+>  
+>  #ifdef CONFIG_SMP
+> -/**
+> - * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary thread
+> - * @apicid: APIC ID to check
+> - */
+> -bool apic_id_is_primary_thread(unsigned int apicid)
+> +static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
+>  {
+> -	u32 mask;
+> -
+> -	if (smp_num_siblings == 1)
+> -		return true;
+>  	/* Isolate the SMT bit(s) in the APICID and check for 0 */
+> -	mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
+> -	return !(apicid & mask);
+> +	u32 mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
+> +
+> +	if (smp_num_siblings == 1 || !(apicid & mask))
+> +		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
+>  }
+> +#else
+> +static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
+>  #endif
+>  
+>  /*
+
+This patch causes boot regression on TDX guest. The guest crashes on SMP
+bring up.
+
+The change makes use of smp_num_siblings earlier than before: the mask get
+constructed in acpi_boot_init() codepath. Later on smp_num_siblings gets
+updated in detect_ht().
+
+In my setup with 16 vCPUs, smp_num_siblings is 16 before detect_ht() and
+set to 1 in detect_ht().
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
