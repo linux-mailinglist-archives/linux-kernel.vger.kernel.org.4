@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC4570F47A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B2B70F47B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjEXKpb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 06:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S233703AbjEXKp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjEXKp2 (ORCPT
+        with ESMTP id S229450AbjEXKpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:45:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105DE19C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:45:24 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1q1lzS-0007w7-5i; Wed, 24 May 2023 12:45:10 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1q1lzO-002Sr9-C7; Wed, 24 May 2023 12:45:06 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1q1lzM-0005pO-Dd; Wed, 24 May 2023 12:45:04 +0200
-Message-ID: <b33cf92691afaa158c6282703128dfb8da4fe242.camel@pengutronix.de>
-Subject: Re: [PATCH v2 1/2] crypto: hisilicon - Add HiSilicon ADVCA Subsystem
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     David Yang <mmyangfl@gmail.com>, linux-crypto@vger.kernel.org
-Cc:     Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 24 May 2023 12:45:04 +0200
-In-Reply-To: <20230513074339.266879-2-mmyangfl@gmail.com>
-References: <20230513074339.266879-1-mmyangfl@gmail.com>
-         <20230513074339.266879-2-mmyangfl@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1+deb11u2 
+        Wed, 24 May 2023 06:45:55 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4DB13E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:45:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R521e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VjNqNUm_1684925148;
+Received: from 30.97.48.247(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjNqNUm_1684925148)
+          by smtp.aliyun-inc.com;
+          Wed, 24 May 2023 18:45:49 +0800
+Message-ID: <4056d17c-6cdf-0248-b36f-1fbb7a3685e8@linux.alibaba.com>
+Date:   Wed, 24 May 2023 18:45:48 +0800
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] erofs: remove end parameter from
+ z_erofs_pcluster_readmore()
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
+        jefflexu@linux.alibaba.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+References: <20230524101305.22105-1-zbestahu@gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230524101305.22105-1-zbestahu@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
 
-On Sa, 2023-05-13 at 15:43 +0800, David Yang wrote:
-> HiSilicon ADVCA Subsystem contains various cryptographic devices, including
-> symmetric key ciphers, hash functions, RSA algorithms, as well as key
-> ladder and OTP memory.
+
+On 2023/5/24 03:13, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
 > 
-> This patch adds symmetric key cipher driver.
+> The `end` argument is pointless if it's not backmost.  And we already
+> have `headoffset` in struct `*f`, so let's use this offset to get the
+> `end` for backmost only instead in this function.
 > 
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
->  drivers/crypto/hisilicon/Kconfig              |    8 +
->  drivers/crypto/hisilicon/Makefile             |    1 +
->  drivers/crypto/hisilicon/advca/Makefile       |    1 +
->  .../crypto/hisilicon/advca/hisi-advca-muc.c   | 1527 +++++++++++++++++
->  4 files changed, 1537 insertions(+)
->  create mode 100644 drivers/crypto/hisilicon/advca/Makefile
->  create mode 100644 drivers/crypto/hisilicon/advca/hisi-advca-muc.c
+> Also, remove linux/prefetch.h since it's not used anymore after commit
+> 386292919c25 ("erofs: introduce readmore decompression strategy").
 > 
-[...]
-> diff --git a/drivers/crypto/hisilicon/advca/hisi-advca-muc.c b/drivers/crypto/hisilicon/advca/hisi-advca-muc.c
-> new file mode 100644
-> index 000000000000..362596a91e19
-> --- /dev/null
-> +++ b/drivers/crypto/hisilicon/advca/hisi-advca-muc.c
-> @@ -0,0 +1,1527 @@
-[...]
-> +static int hica_muc_probe(struct platform_device *pdev)
-> +{
-[...]
-> +	priv->rst = devm_reset_control_get_optional(dev, NULL);
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> --->   fs/erofs/zdata.c | 19 ++++++++-----------
+>   1 file changed, 8 insertions(+), 11 deletions(-)
+> 
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index 5cd971bcf95e..b7ebdc8f2135 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -5,7 +5,6 @@
+>    * Copyright (C) 2022 Alibaba Cloud
+>    */
+>   #include "compress.h"
+> -#include <linux/prefetch.h>
+>   #include <linux/psi.h>
+>   #include <linux/cpuhotplug.h>
+>   #include <trace/events/erofs.h>
+> @@ -1825,16 +1824,16 @@ static void z_erofs_runqueue(struct z_erofs_decompress_frontend *f,
+>    */
+>   static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
+>   				      struct readahead_control *rac,
+> -				      erofs_off_t end,
+> -				      struct page **pagepool,
+> -				      bool backmost)
+> +				      struct page **pagepool, bool backmost)
+>   {
+>   	struct inode *inode = f->inode;
+>   	struct erofs_map_blocks *map = &f->map;
+> -	erofs_off_t cur;
+> +	erofs_off_t cur, end;
+>   	int err;
+>   
+>   	if (backmost) {
+> +		end = f->headoffset +
+> +		      rac ? readahead_length(rac) : PAGE_SIZE - 1;
 
-Please use devm_reset_control_get_optional_exclusive() directly.
+		could we avoid "?:" here for readability?
 
-Since priv->rst is only ever used in hica_muc_probe(), it could be
-stored in a local variable instead.
-
-> +	if (IS_ERR(priv->rst))
-> +		return PTR_ERR(priv->rst);
-> +
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +	priv->irqs[0] = ret;
-> +	priv->irqs[1] = platform_get_irq_optional(pdev, 1);
-> +
-> +	priv->algs_num = ARRAY_SIZE(hica_muc_tmpls);
-> +	priv->algs = devm_kmalloc_array(dev, priv->algs_num,
-> +					sizeof(priv->algs[0]), GFP_KERNEL);
-> +	if (!priv->algs)
-> +		return -ENOMEM;
-> +
-> +	init_completion(&priv->cond);
-> +
-> +	priv->dev = dev;
-> +	platform_set_drvdata(pdev, priv);
-> +	dev_set_drvdata(dev, priv);
-> +
-> +	/* bring up device */
-> +	ret = reset_control_assert(priv->rst) ?:
-> +	      clk_bulk_prepare_enable(priv->clks_num, priv->clks) ?:
-> +	      reset_control_deassert(priv->rst);
-
-Using the ternary operator like this is a bit unconventional. Here, the
-clocks are kept enabled if the reset_control_deassert() fails.
-
-It would be good to add an error path that disables the clocks.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!(readl(priv->base + MUC_RST_STATUS) & MUC_STATE_VALID)) {
-> +		msleep(20);
-> +		if (!(readl(priv->base + MUC_RST_STATUS) & MUC_STATE_VALID)) {
-> +			dev_err(dev, "cannot bring up device\n");
-> +			return -ENODEV;
-
-This also leaves the clocks enabled. There are some more return
-statements with the same issue below.
-
-regards
-Philipp
+Thanks,
+Gao Xiang
