@@ -2,108 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08A270EF30
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9A670EF31
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236331AbjEXHQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
+        id S239480AbjEXHQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239505AbjEXHPv (ORCPT
+        with ESMTP id S239768AbjEXHQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:15:51 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F185690;
-        Wed, 24 May 2023 00:15:26 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30a95ec7744so386165f8f.3;
-        Wed, 24 May 2023 00:15:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684912525; x=1687504525;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QTwUX3qEpiLdoo2WOruxY9BVcBrptDaoYsD2JHxAesc=;
-        b=j8e8aqmI8nrYA59qDNX4vMDiOXCYqlzQxVL4aYAfwG42G4CYrBVAzwMIaQ1Erv4hSX
-         kGnV/G7awoKyLM0rQLSvaUFEp3Hpw4ah+4cG8HaHB56syFLX7L0MYR65eGXbihrEsIoD
-         SKFnAIVtSLLkt1jAT0tsSLblry/Honk98G/08iXl1PQRBddaPXBvuSyHUw1Kmn+ylCCT
-         sV7KZtxCVJuQCifkRIaVp8pQX52QrXsytC2TEwVxo/cqI6OlZidu3v4eKWO7B/5iLSJY
-         xGr6RyW9Eu6cY4erU9ajh/uOeMhMdmwf7XUieuntprkeSa6X871PlVGHWwJZJh9y1mF0
-         A1Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684912525; x=1687504525;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QTwUX3qEpiLdoo2WOruxY9BVcBrptDaoYsD2JHxAesc=;
-        b=DViwCu5oYZMQo/t7wXh8255Z5MDB4232QD0aQSCnW3pFmpw5XiCrreI6vDp+yhZ7ex
-         CBcxWMF94GyUQoFGQY/fowzI9JD6hh1Uo5wELYVkDhrwjdufJmGr3/zSS6TTJ2Ga2XgR
-         JKx+WSk2UDA9qMzHQ+vPm2EGrBFBTa20Wb0ZOETHvZ0fE1jKCx0wWO3+NvmQQVaLRC2m
-         ABgskU0S4LJjcENwbGWTBCOpQp281h/K1+EJE6YL7HjSDqc84QCZiGw8Fc1lAdWnDNFu
-         TKYWNPKzJcjyeVf1Huqwr68QWX2QE+HJDEps/LErItU+IcrDndRcV/MMVYl30bHuqbuC
-         s15Q==
-X-Gm-Message-State: AC+VfDxpXIxeEKAeFwUiAm79Xtsnl8UUBW8CGAwe02W9qUYXzntWi8u2
-        aVGXAxIK6v80iwW9nc0y4MY=
-X-Google-Smtp-Source: ACHHUZ7XW0cvABpggLT4CBW+cXjOYhS4kBeHV38swA1xGYzOVfRUCNPM9inU5JsOBBUisX0wNc+F7A==
-X-Received: by 2002:adf:e912:0:b0:307:7e64:4b52 with SMTP id f18-20020adfe912000000b003077e644b52mr14169357wrm.36.1684912525160;
-        Wed, 24 May 2023 00:15:25 -0700 (PDT)
-Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
-        by smtp.gmail.com with ESMTPSA id a2-20020a5d53c2000000b002ffbf2213d4sm13537164wrw.75.2023.05.24.00.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 00:15:23 -0700 (PDT)
-Date:   Wed, 24 May 2023 08:15:23 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slab: remove HAVE_HARDENED_USERCOPY_ALLOCATOR
-Message-ID: <f2ca936a-1441-4cbd-b16c-ff2d54630a75@lucifer.local>
-References: <20230523073136.4900-1-vbabka@suse.cz>
- <310077ed-6f3f-41fe-afcf-36500a9408ec@lucifer.local>
- <623a87c6-c0d2-799a-c39e-0d14dcdfa6df@suse.cz>
- <ae3ff438-5e5a-4a75-b4e9-575324a584f7@lucifer.local>
- <ca7860db-220f-ae77-93e6-2a38f6c1130a@redhat.com>
- <4674f97f-5f97-45b7-a4b9-a19ca46b7ce1@lucifer.local>
- <9191d9b0-3318-4e70-a81b-69acff184fc6@redhat.com>
+        Wed, 24 May 2023 03:16:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90ABBB6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:15:49 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1q1iin-0008Vs-V2; Wed, 24 May 2023 09:15:46 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CF1751CAECB;
+        Wed, 24 May 2023 07:15:44 +0000 (UTC)
+Date:   Wed, 24 May 2023 09:15:44 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] can: esd_usb: More preparation before supporting esd
+ CAN-USB/3 (addendum)
+Message-ID: <20230524-brownnose-spinster-6f4a9d600b21-mkl@pengutronix.de>
+References: <20230523173105.3175086-1-frank.jungclaus@esd.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zezrvyawup3qxqy4"
 Content-Disposition: inline
-In-Reply-To: <9191d9b0-3318-4e70-a81b-69acff184fc6@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230523173105.3175086-1-frank.jungclaus@esd.eu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:28:32AM +0200, David Hildenbrand wrote:
-[snip]
-> > > The file is only compiled with CONFIG_HARDENED_USERCOPY:
-> > >
-> > > mm/Makefile:obj-$(CONFIG_HARDENED_USERCOPY) += usercopy.o
-> > >
-> >
-> > Yeah ugh at this sort of implicit thing. Anyway it'd be preferable to stick
-> > #ifdef CONFIG_HARDENED_USERCOPY around the prototype just so it's
-> > abundantly clear this function doesn't exist unless that is set.
->
-> I recall that it is very common to not use ifdefs unless really required.
-> Because less ifefs are obviously preferable ;)
->
-> Compilation+linking will fail in any case.
->
 
-I don't want to insist so hard on something that doesn't really matter, the
-bike shed can be blue, green or red it's fine :P
+--zezrvyawup3qxqy4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So,
+On 23.05.2023 19:31:03, Frank Jungclaus wrote:
+> While trying to again merge my code changes for CAN-USB/3, I came
+> across some more places where it could make sense to change them
+> analogous to the previous clean-up patch series [1].
+>=20
+> [1] [PATCH v2 0/6] can: esd_usb: More preparation before supporting esd C=
+AN-USB/3
+> Link: https://lore.kernel.org/all/20230519195600.420644-1-frank.jungclaus=
+@esd.eu/
 
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Applied to linux-can-next.
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--zezrvyawup3qxqy4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRtuZ0ACgkQvlAcSiqK
+BOiaDAgAk8zZ0dPy7U85VzvgRKUxB9JKLi/zjcsbhjpgfZTB84AmOPgiOLNU1z2r
+G1C5FoTH4SKl6v1gICkNMp+6X67g3V+hnP6inrpRMs1Z5Ki2p/MWy3g8GTWMkMOZ
+0qU0dc0TwGqQ++/AAl+zKSa9MkBieo7dsGWdqYW4CDPgeaElDNliLE12/D3G3YZR
+sSpRdHgpLmowBPSI7x/FtowfRkGp0CctwrYywVERR+jmfacSH/sKwK+nX525zk+Z
+i6GnvF+yabuXJtpR3ztzmPe1K5CVjH7mXTqLEWam1WOMN7aJm588b8+7AMD8c4Yh
+I1WFL110Kjp1DXEAt/7/i2jX2LzidQ==
+=wh88
+-----END PGP SIGNATURE-----
+
+--zezrvyawup3qxqy4--
