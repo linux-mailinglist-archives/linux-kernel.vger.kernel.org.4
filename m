@@ -2,214 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA4270FEDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1526670FEDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236210AbjEXT5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S236227AbjEXT51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbjEXT5U (ORCPT
+        with ESMTP id S236188AbjEXT5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:57:20 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4AFBB
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:57:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cg2Y5lYMegd7QhVpZ4yBjjXINZWQujiZQctMbatcB4PvJtIuZSkOO9fhEujOViyNjWzPuW6hU6XSxDG6drdQ3dW+mixf+dgJ370kuP6Kjp5JxBQGmgiNCOwQuP3F0V44lJTIGaEuh58qp+dX1i+b75Jy0Fvt4Zwv7gmN32m0sUV4+SGGXTWneROOLCueExU625kDSMTRtxalKqz6G5W1dKRRLOjX9QZSI5wtFM6th8KoOMR5WwWpWUhWgEwTZgN6gnn3cYGbT/LkXDjViYTtNpxLoz+9pdzdcDTqHL1r21og2+QE8Bot/MoF49CLpVtZNKnH6SaItnWgQWm8zCrRYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mWgyyIQHzgoD8orLpkVvl9GE7eHFz+bwp9tEVU9imY8=;
- b=Og0Gal+MDyY0WKQtRORTlZr375+bwibPRGXbLWresapZbzNyh/Es1HruHUMNY1gw3/6lnofiyY9C+CFsjbsWU1iyoCLvkWHow7x95JGj9lfYvebDZpXV0WLPidb9u3DQUrR8tcFTMYkggP96IlDi2gw/N60kImvc8Grorc/8IC8aaFEn5JSQ2dkqcGqTrMmWZ883P0WnovO3EAlh8+msHnRtXkB9E28mGqzSaf4fIPEliKwKWfsalTe8WLPUJith0e0T1jN9hP9bYGNXTVXZ2ZHnKI5lNqSomRtqovwnoz0w8q1xo+jMHCR9IBxOjla5BMqKTBMZ786bHe9PN6IhWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mWgyyIQHzgoD8orLpkVvl9GE7eHFz+bwp9tEVU9imY8=;
- b=4aVS7/z9C1+6WW06/FhcXeB4bzJr7oSECJjm4y37zRBYgH0/VRfDoO01ruEOsIpVYWhiB90qJjNrEtlx66XdUQtGZMahEKj6wwWpz9nA79A4f/a8m16V8xl8/2pwF7cUxI1/+sM6iI8R5lB+HTFK4MhppfNuKFwxp1utAWyDxqg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- SA3PR12MB8764.namprd12.prod.outlook.com (2603:10b6:806:31f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 19:57:17 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%7]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 19:57:16 +0000
-Message-ID: <0774d3f5-6c8a-9737-ee58-4c0bd1ada9cb@amd.com>
-Date:   Wed, 24 May 2023 15:57:12 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] drm/amd/display: enable more strict compile checks
-Content-Language: en-US
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     amd-gfx@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
-        Kenny Ho <kenny.ho@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230524191955.252212-1-hamza.mahfooz@amd.com>
- <CADnq5_Mz6aPFYGnr8J8C8UeTpbo7JDg+uvjqAxo7o4vmTGej2A@mail.gmail.com>
- <cede79cd-4986-ce3c-ab74-a4497e9e1230@amd.com>
- <f8cd7bc5-86c7-f113-f7a1-aec4bbf4aeb3@amd.com>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <f8cd7bc5-86c7-f113-f7a1-aec4bbf4aeb3@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQZPR01CA0123.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:87::28) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Wed, 24 May 2023 15:57:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DB718C;
+        Wed, 24 May 2023 12:57:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EF2E6406C;
+        Wed, 24 May 2023 19:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC29C433EF;
+        Wed, 24 May 2023 19:57:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684958240;
+        bh=1BuMrIt1WuFdXREwNQw5VsWAz4aiv/7I5+G1wxD2xqQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IXHhQcbz6MQkObzeSLJ9jQoSE53U1KKIYHq2Edye1XiGQjvQjqr/g9VwinWvhpqzr
+         xLNZQR6tjrQ9SlGNwzrkwOX0VyHqWJh2eA3Wvys9gXfyA0iBsxj6RQ/5bIXxPAmdnv
+         ot0ZHjpnwwwiuNDxieNKXKZn5sWMClWbQYc/cW6KE56JET2PZ3+/afWKKqy8klzW1i
+         kfDpyflVCsrnafPaQSNnnsIZvzU3VPGylzjW8DSZw3eZ/38aVgLP4QvVsKtu+N/65o
+         XyH3/HbTi54xGIPJ6BDETTcJIiRJKBRZZLGiPNbPRfoNB3Xa70fs4oSujmUTMjh91g
+         0zKcgePfSgEHw==
+Date:   Wed, 24 May 2023 20:57:16 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] dt-bindings: mfd: stpmic1: add fsl,pmic-poweroff
+ property
+Message-ID: <20230524-cider-unarmored-b1141db1030b@spud>
+References: <20230516132225.3012541-1-sean@geanix.com>
+ <20230516132225.3012541-3-sean@geanix.com>
+ <20230516-footprint-handoff-bcd553ff6146@spud>
+ <9B1EE405-77D3-4980-9A13-9D4F87C1A64F@geanix.com>
+ <20230523-flaccid-fossil-c9d09838dc64@spud>
+ <658510B5-702B-464A-BA55-01E2B315BE39@geanix.com>
+ <20230524-ellipse-dagger-72f850253ea0@wendy>
+ <24418459-DE19-4575-835B-8673F279993C@geanix.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SA3PR12MB8764:EE_
-X-MS-Office365-Filtering-Correlation-Id: 633df9f6-4b39-43ad-98a4-08db5c911342
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZbLDKzz9TrmIWHkkqwYE3NJqxGfHl9295k5zmaZLa7IQXUyn5Ns+7xp0/+B7zy/Vg24UeEZx1mCjiNSk7w6dp/ohzwRjxYD9fPIXfGEhOxzAMgMgpN/IsJ9fLZfZy8hE/WRltZpFdpzdFwmS91jAuZZpGMVPk7bPIojxhpBBGMjQpX/ZJRrioLinjRLT1xFQdO3ohE6R0G9bzlEv8sCW1qd6ytF4m3eJ5JZUqlSopZ39Mr9Wcv3e73tIR0P9QQhZnFmg+k7BD3rezM3m1zTWa+QxF1t/GguTXO62z7krlSHsa4TxHZMwJ8uJyf/GeT8ucQRCdMRjViPGjvY0DH++x+LJTYG27ZRCgZd0VR02JduYKxoP3l/gVUz8qUzXQRhX2wJHJqAfasYVD/fVsInU4bYjDAWpZPiWLckV/c6NyWcMb4l/bHyb6gp7gTpN9cTC693PVcA5sksUd6PY/V2m5Th67/bqg+zvbQhKpAL9G4Gxpg5t9cOTwb1RfkwH0NvHc/yp25eNHJrzP5G8uUqWLcaTc55GjC/P00xQow1OKvZchJF+DTO7RC3mWGj55AK8hrWdDUENft3mRb9y4wMLcXieHHgq6U9HgXZJcRpCNnz6Fmu09mBr2xUtPmg7dxN05JPEjY/Wlh1w2oAdxa6H6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199021)(26005)(38100700002)(83380400001)(6486002)(31696002)(6666004)(53546011)(6506007)(6512007)(186003)(86362001)(478600001)(110136005)(54906003)(31686004)(2616005)(4326008)(66556008)(66946007)(66476007)(316002)(44832011)(5660300002)(8936002)(8676002)(2906002)(41300700001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V1BaY3RHLzBOS1Rlakc0Kzk4NE56QS9NdFhiWkZtU3hpN3lDbHBFS2lsSmY1?=
- =?utf-8?B?c2ZQQzdaVVhaUnhSWnovSHNjbkxxdlBPUnNBdlZIN1lvTFN4V2Y0Z1pjTi9O?=
- =?utf-8?B?UWxPazVmdXJmV0xvZnRqd1doajdkVmR5U041VngyeDd5ZmNYYlhXTDV0L3pV?=
- =?utf-8?B?S2lwbWwwWVNvd1FZc0hmUTJhM01vT1dmcFNtUzBVS3BjZzdMdlo0Y1YwOThr?=
- =?utf-8?B?SDJpa1pSME1TZzdxVHlMVUUreVprOG5JK1pxWEVGeGNPVjBvTGxkbHppdjhl?=
- =?utf-8?B?THRJdnAwQjdhUFVqOHpUSFUrSXFIUlk1RVRJTjFHZnVXbzVISFVjTzJaYlo4?=
- =?utf-8?B?WllkbGY3VVlIZEFLL3JGMnFZRlluVlJUVTF6KzBNb0N4YkhUZDdSRjdDZHBD?=
- =?utf-8?B?Rm1LRG9uQnNhZkdhMm14TDc3UVo3NHpKRGlEUUIxcTdNUlY1WCtzSzZvek5l?=
- =?utf-8?B?M2JoWmtsTkFNc29nWmtscGNXOVI0NDUvUURSUlVRVjVTYnVzUWRoNjllajZn?=
- =?utf-8?B?Z0hic2h1SldDVVcyNUswMzcxYytxUGNtRWhzNHdtSERJckNyVjdFQ2ppZ1d2?=
- =?utf-8?B?YS9FeVRuSUNheThPRDEybGxaNE5kSG10ZEVwRENqMWloS2xXQlpIYjVPRTVR?=
- =?utf-8?B?TzcwYXVWdFFFWG9hOU8wdE1iaVp4RzEyQVNYV2F2S1ovV2NiN2JVTjF4dWVI?=
- =?utf-8?B?Zmgwb2pzZEtnWWdJME9iT2xYYTFqUi9NUm1aTzMvMytQdS90NVBNZ2RXaDhw?=
- =?utf-8?B?QnoyOStnVGFkTHEvYlJUTG82Ym50T3BwRXNiNkZ2WVM1UjArc01Hbmpaam1E?=
- =?utf-8?B?dUI1OStuZUUrdlhNQlUvVk5VdTBNcG9qM21yL1I0b2pVZlZsR2h5azhMQk9B?=
- =?utf-8?B?Wkk3T1kvemtTODRBL0JpeTFHdUk2eTVLNG1ZaTdOeEhDWS9BZDJYNWQxWncz?=
- =?utf-8?B?d0ppOHJCTHA0STBqVmNWY1pranNmcmt4cXlEZzJJY3lPWVg3MVVVUmc0akZT?=
- =?utf-8?B?NkVQZVhpRy9idjZBQ2hieTlFK2psV3dEbEg1MkV4MjNGMGFqZUs2NndaaVJP?=
- =?utf-8?B?ZHBkS3QxblJiQXR0NEpVZEpHSngvckVycHA2RS9oU21HdUF3bzh0Sm1lcnYx?=
- =?utf-8?B?ZTV3c2kxTGltVUlUaG83Ymp0VzNDcnJ2RnA0SThkUkdoUFBzeUpOVSs4SURk?=
- =?utf-8?B?WGJNbWYza3ZON3EyTUkxYnhrV1NyeFdMTUFLd09PTXJ2Wkg1WFF4MCt2eXBH?=
- =?utf-8?B?UFhUWmJBMHhLVzgraG1wL0J0anY2YVhBRVFJRWg1OEh5U284Z3FvUTIvYVhC?=
- =?utf-8?B?ZTNmS01MZTVsNGZqb25TcnVJMEMwbjVCdVhzbjhxVTBZalB5S2R5RFpxWklr?=
- =?utf-8?B?SDlycFI3MkZKSkV1TWcxUlljdk9Va01LaEZxVlVuaWhrcDN3RWxrOEt1bEwz?=
- =?utf-8?B?Mm9vM213M2JVejlpZDBsU0tna1J0WEpXbWZBMXZLZzVBbFlNcjZ0bXFFckg5?=
- =?utf-8?B?dW05dHN6ZGcxekUzd0Q1NnptdTFpUERGNjNTNzlhR3pYTkwyOTlRdkliV2Ru?=
- =?utf-8?B?WFJPSnJWeGhqRjFyRThsTDNRSzh3SEJzZlJwd2U5OHc5YWZYT2F1N1I2dGNC?=
- =?utf-8?B?WTNZU0V0QzdpR0ZBcElianRLSkJ4N3MrbHFDSEhNNjgwb05wY3pJVTEwK3VT?=
- =?utf-8?B?QnNHYXRzWVpCUktMemFvTWloaGdWckp2bkZhMmVVREg4cUJ1cERaOUcwcS81?=
- =?utf-8?B?VUJOS1NTZWZWVWpkdUlsc0piYTNjb3dENjN4NDE1T0JwbFdPUDdYdEpYRWdv?=
- =?utf-8?B?RWxmcEJVa0JrZkdPSVA0MzcwVXFkTjU5M1FvYzBESFFjTEtCNGlDYmU2Nmtu?=
- =?utf-8?B?dWFmZ08rRGFzUXBEZXV0NXY2dGJ5NWhqTXRackhSRGVyT3E4Sm1XakpRbTMw?=
- =?utf-8?B?aGkzR1lsdjk5bUFaRnNOMjR0dUJvUE5TUUZ4WFdMYnI1Nk5EeEpXQ21lbnpn?=
- =?utf-8?B?OFZHU1preWcrUUFRUmZZc3IyOGU3dzhrSWE1RUxsUERzS0QrTW54amhSclk5?=
- =?utf-8?B?Zjk5WWhuZGliVmdXdENOYzVTcnZkS0RtU01ORUpuVGRDYkdoalFqZ1c4Zk9F?=
- =?utf-8?Q?brk1Mku3kEZEmvbDF+XX4XWlX?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 633df9f6-4b39-43ad-98a4-08db5c911342
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 19:57:16.7971
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Nhq9bjKI76o6GLYmkuGdYKHuVv+e2c5GiJaZqlfqqaMvHnOyKDIRaMO7y4EGP7Ek9mSYChtLCNDQvKYOemqKRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8764
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tvTbO8tm4UlrjSgl"
+Content-Disposition: inline
+In-Reply-To: <24418459-DE19-4575-835B-8673F279993C@geanix.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 15:54, Harry Wentland wrote:
-> 
-> 
-> On 5/24/23 15:27, Hamza Mahfooz wrote:
->> On 5/24/23 15:22, Alex Deucher wrote:
->>> On Wed, May 24, 2023 at 3:20 PM Hamza Mahfooz <hamza.mahfooz@amd.com> wrote:
->>>>
->>>> Currently, there are quite a number of issues that are quite easy for
->>>> the CI to catch, that slip through the cracks. Among them, there are
->>>> unused variable and indentation issues. Also, we should consider all
->>>> warnings to be compile errors, since the community will eventually end
->>>> up complaining about them. So, enable -Werror, -Wunused and
->>>> -Wmisleading-indentation for all kernel builds.
->>>>
->>>> Cc: Alex Deucher <alexander.deucher@amd.com>
->>>> Cc: Harry Wentland <harry.wentland@amd.com>
->>>> Cc: Kenny Ho <kenny.ho@amd.com>
->>>> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
->>>> ---
->>>> v2: fix grammatical error
->>>> ---
->>>>    drivers/gpu/drm/amd/display/Makefile | 2 ++
->>>>    1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/drivers/gpu/drm/amd/display/Makefile b/drivers/gpu/drm/amd/display/Makefile
->>>> index 0d610cb376bb..3c44162ebe21 100644
->>>> --- a/drivers/gpu/drm/amd/display/Makefile
->>>> +++ b/drivers/gpu/drm/amd/display/Makefile
->>>> @@ -26,6 +26,8 @@
->>>>
->>>>    AMDDALPATH = $(RELATIVE_AMD_DISPLAY_PATH)
->>>>
->>>> +subdir-ccflags-y += -Werror -Wunused -Wmisleading-indentation
->>>> +
->>>
->>> Care to enable this for the rest of amdgpu as well?  Or send out an
->>> additional patch to do that?  Either way:
->>> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
->>
->> As far as I can tell, if `CONFIG_DRM_AMD_DC` is set it will run these
->> checks on at least the base driver code.
->>
-> 
-> It's probable best to put that into amdgpu/Makefile in that case.
 
-I tried the following, but it doesn't seem to work:
+--tvTbO8tm4UlrjSgl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile 
-b/drivers/gpu/drm/amd/amdgpu/Makefile
-index 74a9aa6fe18c..d97bde0796dc 100644
---- a/drivers/gpu/drm/amd/amdgpu/Makefile
-+++ b/drivers/gpu/drm/amd/amdgpu/Makefile
-@@ -39,6 +39,8 @@ ccflags-y := -I$(FULL_AMD_PATH)/include/asic_reg \
-         -I$(FULL_AMD_DISPLAY_PATH)/amdgpu_dm \
-         -I$(FULL_AMD_PATH)/amdkfd
+Hey Sean, Lee,
 
-+ccflags-y += -Werror -Wunused -Wmisleading-indentation
-+
-  amdgpu-y := amdgpu_drv.o
+On Wed, May 24, 2023 at 12:30:59PM +0200, Sean Nyekjaer wrote:
+> > On 24 May 2023, at 12.08, Conor Dooley <conor.dooley@microchip.com> wro=
+te:
+> > On Wed, May 24, 2023 at 10:16:13AM +0200, Sean Nyekj=C3=A6r wrote:
+> >>> On 23 May 2023, at 19.29, Conor Dooley <conor@kernel.org> wrote:
+> >>> On Tue, May 23, 2023 at 11:55:50AM +0200, Sean Nyekj=C3=A6r wrote:
+> >>>>> On 16 May 2023, at 20.06, Conor Dooley <conor@kernel.org> wrote:
+> >>>>> On Tue, May 16, 2023 at 03:22:24PM +0200, Sean Nyekjaer wrote:
 
-  # add KMS driver
+> >>>>>> +  st,pmic-poweroff:
+> >>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+> >>>>>> +    description: |
+> >>>>>> +      if present, configure the PMIC to shutdown all power rails =
+when
+> >>>>>> +      power off sequence have finished.
+> >>>>>> +      Use this option if the SoC should be powered off by externa=
+l power management
+> >>>>>> +      IC (PMIC).
+> >>>>>=20
+> >>>>> Just reading this description, this is sounding quite like a "softw=
+are
+> >>>>> behaviour" type of property, which are not permitted, rather than
+> >>>>> describing some element of the hardware. Clearly you are trying to =
+solve
+> >>>>> an actual problem though, so try re-phrasing the description (and
+> >>>>> property name) to focus on what exact hardware configuration it is =
+that
+> >>>>> you are trying to special-case.
+> >>>>> Krzysztof suggested that the samsung,s2mps11-acokb-ground property =
+in
+> >>>>> samsung,s2mps11.yaml is addressing a similar problem, so that could=
+ be
+> >>>>> good to look at.
 
-> 
-> Harry
-> 
->>>
->>> Alex
->>>
->>>>    subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/
->>>>    subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/hw
->>>>    subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/clk_mgr
->>>> -- 
->>>> 2.40.1
->>>>
-> 
--- 
-Hamza
+> >>> The description for the property that Krzysztof mentioned is
+> >>> samsung,s2mps11-acokb-ground:
+> >>>   description: |
+> >>>     Indicates that ACOKB pin of S2MPS11 PMIC is connected to the grou=
+nd so
+> >>>     the PMIC must manually set PWRHOLD bit in CTRL1 register to turn =
+off the
+> >>>     power. Usually the ACOKB is pulled up to VBATT so when PWRHOLD pi=
+n goes
+> >>>     low, the rising ACOKB will trigger power off.
+> >>>=20
+> >>> In other words, I am asking what (abnormal?) scenario there is that m=
+eans
+> >>> you need the property, rather than what setting the property does.
+> >>> Or am I totally off, and this is the only way this PMIC works?
+> >>=20
+> >> Indicates that the power management IC (PMIC) turn-off condition is met
+> >> by setting the SWOFF bit in the main control register (MAIN_CR) regist=
+er.
+> >> Turn-off condition can still be reached by the PONKEY input.
+> >>=20
+> >> ?
+> >>=20
+> >> I must admit I=E2=80=99m somewhat lost here :)
+> >=20
+> > Sorry about that. I'm trying to understand what is different about your
+> > hardware that it needs the property rather than what adding the property
+> > does. If you look at the samsung one, it describes both the
+> > configuration of the hardware ("ACOKB pin of S2MPS11 PMIC is connected =
+to
+> > the ground") and how that is different from normal ("Usually the ACOKB =
+is
+> > pulled up to VBATT so when PWRHOLD pin goes low, the rising ACOKB will
+> > trigger power off.")
+> >=20
+> > Looking at your datasheet, you don't have such a pin though - just the
+> > sw poweroff bit & the PONKEY stuff. My angle is just that I am trying
+> > to figure out why you need this property when it has not been needed
+> > before. Or why you would not always want to "shutdown all power rails
+> > when power-off sequence have finished". I'm sorry if these are silly
+> > questions.
+> >=20
+>=20
+> No silly questions, maybe they trick me to come up with the correct answe=
+r :D
+>=20
+> Basically without this, you won=E2=80=99t be able to power off the system
+> other than hitting the PONKEY.
+> So it=E2=80=99s a new feature that wasn=E2=80=99t supported before.
+> Maybe this feature should not be optional?
 
+Yeah, I suppose that is the rabbit-hole that the silly questions lead
+down. I don't know the answer to that though. Maybe Lee does?
+
+> If st,pmic-poweroff =3D=3D true:
+> System will power off as the last step in the power off sequence.
+> If st,pmic-powerof =3D=3D false:
+> System will reboot in the last step in the power off sequence.
+>=20
+> I thought of this, as an always on system failsafe.
+>=20
+> /Sean
+
+--tvTbO8tm4UlrjSgl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG5sHAAKCRB4tDGHoIJi
+0rWEAP4lWVE6G3byCCSQgC62atNFVXdqKVjP4XzjoT0ww7VJFAD9Fl9yiOYkQxHu
+nrbVQIPYnPN+/L1UGV8+t49vUBeWUQ8=
+=s+Wx
+-----END PGP SIGNATURE-----
+
+--tvTbO8tm4UlrjSgl--
