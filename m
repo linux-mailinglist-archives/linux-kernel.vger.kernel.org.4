@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BB370EA2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6CF70EA31
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239021AbjEXATu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 20:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S238974AbjEXAWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 20:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239005AbjEXATs (ORCPT
+        with ESMTP id S238477AbjEXAWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 20:19:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A21B5;
-        Tue, 23 May 2023 17:19:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E5DE635F2;
-        Wed, 24 May 2023 00:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF87C433D2;
-        Wed, 24 May 2023 00:19:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684887586;
-        bh=hixGdc1nHEoCc/d3qs1AQBwSDjqbYfvrtLPRskFMBvY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CHuGI6gMsRzy1m4Y8y1Mk4UEu2sIlb5MlVltFq4BGV+PjQyQTUzhuVUzjPUx/YRji
-         wz9b/gjzXwwdjj4eFenbTB06urAgBpj0kU8dArGgPJDQo5K4Pe3ME0Bwz3fa8b+Nnk
-         +YI6DyNveg9VNQjY4wCUkEOr22PwL8SfSMuaUP0Xzz05BOZVR0xse7cScT95RJdVds
-         QjjAuDT1mEMXTeQZlmPkEaBaHOkrE1+Je5/CnIAAwx/1G0Z9AU8qPBRImCX3pua9U9
-         5mHDBwJzbQuVrU40bn27wwzIvR00U6B+1vXsGoQ7Nr9HSLQN9W2Slh/z8gA60K8AL1
-         9Vc8vsTBr8G3A==
-Date:   Tue, 23 May 2023 18:20:38 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Andy Walls <awalls@md.metrocast.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] media: pci: cx18-av-vbi: Replace one-element array
- with flexible-array member
-Message-ID: <ZG1YVji9thTLWeRm@work>
+        Tue, 23 May 2023 20:22:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCB3B5;
+        Tue, 23 May 2023 17:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=2t51EpPSkSfdV7Or5z92c4Otgu+QY2DAdl7GPBfnDHM=; b=UEQPNOXxLqLc/MxXbymjcWHTql
+        R8upb9r74csrDh8xLSIbC7nqBZAwlKxSUVJok4dr7kSSUpGkDGaByL+oN9g91cTuccmxc8GNM/xdi
+        zS5odL7nRZ4/KOuc/HonLwKxiM9t7Fz9D9d8ocU8wqg51pbloZ6fjyzBgI5lJbGxBDMPzw4NuvnUz
+        qHIwp/WgL2r32sCih7Z/rrK7iO+uCPvWw6vKCHrGHj8zEs6rl8ncA2TENvtF7yNw1jaIdqEvq4DmF
+        HjJ3NXrmX4YeDpYk/+aW78oIXQD2fJW9j9BzvJ3wl+E97xc8xyq94rmxCbIq+IESOI6Ni2I6eOoDj
+        4uxEhadg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1cGl-00Btme-1j;
+        Wed, 24 May 2023 00:22:23 +0000
+Message-ID: <e2279988-03b4-9670-6f1c-c360c478b38e@infradead.org>
+Date:   Tue, 23 May 2023 17:22:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
+Content-Language: en-US
+To:     Alexandre Ghiti <alex@ghiti.fr>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor@kernel.org>
+References: <20230515141235.0777c631@canb.auug.org.au>
+ <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
+ <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
+ <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
+ <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
+ <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element arrays with flexible-array
-members in struct vbi_anc_data.
 
-This results in no differences in binary output.
 
-Link: https://github.com/KSPP/linux/issues/79
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/media/pci/cx18/cx18-av-vbi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 5/23/23 06:07, Alexandre Ghiti wrote:
+> 
+> On 23/05/2023 04:28, Randy Dunlap wrote:
+>> Hi,
+>>
+>> On 5/19/23 03:42, Alexandre Ghiti wrote:
+>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
+>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
+>>>>
+>>>> I'll check this one too which seems to be related to kernel/pi introduction.
+>>>
+>>> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
+>> Does this mean exclude XIP_KERNEL or something else from randconfigs?
+> 
+> 
+> I meant excluding XIP_KERNEL from randconfigs: it has very strict constraints regarding what can/can't be enabled then it needs human intervention to make sure the error above does not happen. So I would not bother testing this in randconfigs if possible.
 
-diff --git a/drivers/media/pci/cx18/cx18-av-vbi.c b/drivers/media/pci/cx18/cx18-av-vbi.c
-index a0d465924e75..65281d40c681 100644
---- a/drivers/media/pci/cx18/cx18-av-vbi.c
-+++ b/drivers/media/pci/cx18/cx18-av-vbi.c
-@@ -51,7 +51,7 @@ struct vbi_anc_data {
- 	u8 sdid;
- 	u8 data_count;
- 	u8 idid[2];
--	u8 payload[1]; /* data_count of payload */
-+	u8 payload[]; /* data_count of payload */
- 	/* u8 checksum; */
- 	/* u8 fill[]; Variable number of fill bytes */
- };
+I can exclude it from my randconfig builds, but I don't know of a way to exclude it from randconfig builds in general (i.e., for everyone).
+
 -- 
-2.34.1
-
+~Randy
