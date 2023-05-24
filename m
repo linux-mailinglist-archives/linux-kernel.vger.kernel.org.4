@@ -2,79 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3EC7100FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B688B710102
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237843AbjEXWcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S238221AbjEXWdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbjEXWb6 (ORCPT
+        with ESMTP id S235823AbjEXWdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:31:58 -0400
-Received: from mail-io1-xd46.google.com (mail-io1-xd46.google.com [IPv6:2607:f8b0:4864:20::d46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06F4191
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:31:17 -0700 (PDT)
-Received: by mail-io1-xd46.google.com with SMTP id ca18e2360f4ac-76c6c1b16d2so261073539f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:31:17 -0700 (PDT)
+        Wed, 24 May 2023 18:33:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661F3E41
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684967483;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GSyBtTjyewnVuXUDzPKeU1svAYpm8O8laUSlUsa6VxU=;
+        b=hayEwaNnLDjIK6+i5+xvADQ3GwKqNheywGjPAeP/Ilk8ZMunOIW8NOmtlv3S1AQu73pyht
+        tVECoFJfOwN4dhGu+3JEqoQ4naxYUGucnUsuyXPqkNRJK/lEjydctgdxvZhW08j5h4F0JJ
+        N+okLnvxfAEWhQ9IlSRNiS0D7G8s8nE=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-561-Ylri8fHoMMOKtimWcUb_Bg-1; Wed, 24 May 2023 18:31:21 -0400
+X-MC-Unique: Ylri8fHoMMOKtimWcUb_Bg-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f386bb966cso2510251cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:31:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684967361; x=1687559361;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EEv2m2tkW3LxgGFisYpUk4xaYXyQdf15D8timEsBePw=;
-        b=ICfvqXWyAsNOFZSLqtsQgnU0HyKwmxGihfY8DlmKz7p2Hq8jyczOJyx3JrKHHAEx3x
-         Ngivga0h5j0CQvYaWBwxjMde/Z6wx+j1canXNOPQz5MrJ6zxswVPnkrcehamzSJsb4Rf
-         FT+rQ9JYogYFF7UYI5SeDN7woU3JLJx0aoFrvF2vFsLXJVyfm+0Skr3+Hzbunc+Tsi/T
-         O9dfvDBLU1/30dQ47oaryPC7qMJCwzn/oADiOoWl2uEe3W6g3qTGg3Qd/4J3bXyU7WiG
-         Wq3m/k2ySznR62Mai8xuF5nctZhtPICgb9E5/uM15TASDwvMKR25+IIgfOVIbCxXESIb
-         d5eQ==
-X-Gm-Message-State: AC+VfDw7XhYuTgo4HjkjXskkFRi7TmfJkKokwQhMWJSuiAwktEHngW6G
-        0YX1NaosMwf8P1H3sqL3KWOs61bo+Mq28T/9zA3SvOB7SAfg
-X-Google-Smtp-Source: ACHHUZ72qrCpncxwPE6/T5eypdjBRfnsPFGFFDWfjAutJOp5v9DIOoQX8UKqk1yaqn3vJLjS3kFKoFiv8AWb/wsRgVElDA5SO5rs
+        d=1e100.net; s=20221208; t=1684967481; x=1687559481;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GSyBtTjyewnVuXUDzPKeU1svAYpm8O8laUSlUsa6VxU=;
+        b=fOrpRbO7MoFDzBDesnimHa87Wb4KsTkSps+C1tXdx61nVXWU1f/ly59jbsrS9C4EiU
+         uuZICzp/Gwb63iGI55A3k5Bc0t++c5PH74aMQBJA9KOJGjxMwYI/RlErabBDTq79HkSu
+         X+RWjKe2sM5uo+6eW9HTwUVFjm40iTgXkBUEUWkXSdv9FgZM9ghMwGNn5bEE9i71tRoq
+         IyKr5rF3GFtRSmhyWVq33gkOTS/7alJqzNZs88lqOLGiEKMODxr52h/n/w6iyzjQzs0C
+         81htB3e7vin+VMyZMjmH0RUJZJ3H42wvRKhKAh6nDNyJLCi1gDzqXj+gQLDlq5tKXYlz
+         h7Ww==
+X-Gm-Message-State: AC+VfDykiM/eFYfPXaTQ4XEOTKPkGGbOcCEth9nEIg+55JibuNGFYWJm
+        pA1OQqDt/7cRgkrEoeifkaB0T/Yuq+wr0a0sIRQyVC70yeXdXesnbmdzFXCdNjwIZ4xMLaQQBww
+        n5TRvFppb05Ig44uO3kIVhZy2
+X-Received: by 2002:a05:622a:1a91:b0:3f4:fdaa:8e14 with SMTP id s17-20020a05622a1a9100b003f4fdaa8e14mr5323995qtc.2.1684967481231;
+        Wed, 24 May 2023 15:31:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5lzJovrBCoBI/H1khO1XbOY9927arBDiTQfPlewasaQC7ZJQNBI1Nc0ad1Htf4u2VKsVVQ2g==
+X-Received: by 2002:a05:622a:1a91:b0:3f4:fdaa:8e14 with SMTP id s17-20020a05622a1a9100b003f4fdaa8e14mr5323940qtc.2.1684967480926;
+        Wed, 24 May 2023 15:31:20 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id t7-20020a05622a01c700b003f6ac526568sm3112027qtw.39.2023.05.24.15.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 15:31:20 -0700 (PDT)
+Date:   Wed, 24 May 2023 18:31:18 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 14/31] fs/userfaultfd: retry if pte_offset_map() fails
+Message-ID: <ZG6QNhFhyNxyn5PK@x1n>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <424274a4-7c13-e14-b380-428fc69a45c5@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:8521:0:b0:41a:c808:b49f with SMTP id
- g30-20020a028521000000b0041ac808b49fmr8538740jai.3.1684967361648; Wed, 24 May
- 2023 15:29:21 -0700 (PDT)
-Date:   Wed, 24 May 2023 15:29:21 -0700
-In-Reply-To: <000000000000eb49a905f061ada5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000ca36b05fc780953@google.com>
-Subject: Re: [syzbot] [ntfs3?] WARNING in do_symlinkat
-From:   syzbot <syzbot+e78eab0c1cf4649256ed@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <424274a4-7c13-e14-b380-428fc69a45c5@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Sun, May 21, 2023 at 10:06:32PM -0700, Hugh Dickins wrote:
+> Instead of worrying whether the pmd is stable, userfaultfd_must_wait()
+> call pte_offset_map() as before, but go back to try again if that fails.
+> 
+> Risk of endless loop?  It already broke out if pmd_none(), !pmd_present()
+> or pmd_trans_huge(), and pte_offset_map() would have cleared pmd_bad():
+> which leaves pmd_devmap().  Presumably pmd_devmap() is inappropriate in
+> a vma subject to userfaultfd (it would have been mistreated before),
+> but add a check just to avoid all possibility of endless loop there.
 
-commit 267a36ba30a7425ad59d20e7e7e33bbdcc9cfb0a
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Mon Jan 16 08:52:10 2023 +0000
+Agreed, afaiu that's for either PFNMAP or MIXEDMAP vmas only.  Maybe we can
+use a WARN_ON_ONCE() for that to be clear, but no strong opinions.
 
-    fs/ntfs3: Remove noacsrules
+> 
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15fdf761280000
-start commit:   ec35307e18ba Merge tag 'drm-fixes-2023-02-17' of git://ano..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5f0b8e3df6f76ec
-dashboard link: https://syzkaller.appspot.com/bug?extid=e78eab0c1cf4649256ed
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12570890c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14523acf480000
+Acked-by: Peter Xu <peterx@redhat.com>
 
-If the result looks correct, please mark the issue as fixed by replying with:
+-- 
+Peter Xu
 
-#syz fix: fs/ntfs3: Remove noacsrules
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
