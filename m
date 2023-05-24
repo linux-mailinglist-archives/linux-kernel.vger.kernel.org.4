@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F9B70EF93
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C2070EF95
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbjEXHiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S239969AbjEXHiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239861AbjEXHiL (ORCPT
+        with ESMTP id S234173AbjEXHis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:38:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA3AA;
-        Wed, 24 May 2023 00:38:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D31A63A1D;
-        Wed, 24 May 2023 07:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38090C433D2;
-        Wed, 24 May 2023 07:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684913887;
-        bh=Hbz8LEfGaSM02H3iNlB0mthVRySAG3og3BSuDmEKWfQ=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=RsujwDTA38sOCzbP6mo9BclpTmK6Ngysw2u951NSNd9DsKSy2KQ91nstwobR/85HK
-         EBQklxmOxubaVti2y3WGG+Dyra4GxlLKjNpd5JspoYf7pGt9Da25qdGegQtqUYvaAN
-         tabXzpnW6s56sBxjY9NPD1AjoAQI7LqPpyzwfu3QILxMgdHYD2VjIbbJQnabtyv3Nx
-         eFe6D2UuGMYyzh+wCBAAJtGDH/f880TuJgbLfjPFBx4hGD5slX+uvZP39ScVJ8ZB7e
-         TGZkCb6e9DxzdAr6PN4n2GaLtHsWTBja9NPnqPskYNrW0K1hlbBuu2BL7RMC4/c1ei
-         jWG9gvoUkZ9Jg==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 24 May 2023 03:38:48 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD5391;
+        Wed, 24 May 2023 00:38:47 -0700 (PDT)
+Date:   Wed, 24 May 2023 09:38:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1684913925; bh=l2U6z7PQkaZlK/a39/OVvaeWodpKUCXYinZB8Rh2b7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VBfXD8tL3kRjH8ETHuqwYV1svwW5hXTLe1qu85wjmySlWzRNiHyt88DEJ4RjDjiHu
+         xK/+RCvDWRtyuhQBDgRJ6L5PeOwrOHpOR0lcUIJAY6+MvKRcXzzlkf1QMy0daKQfbz
+         Fag+ImpunF+JwXeX5ApIi+c12IaROL9r8cDrvCpg=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>
+Subject: Re: [PATCH 0/3] tools/nolibc: stack protector compatibility fixes
+Message-ID: <cb3f0f8f-f067-450f-8d5b-9a1ad2a2cd7f@t-8ch.de>
+References: <20230523-nolibc-stackprotector-gcc9-v1-0-3e4804235d50@weissschuh.net>
+ <ZG2+QuD/tVDqyMyb@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v5 43/44] wireless: add HAS_IOPORT dependencies
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230522105049.1467313-44-schnelle@linux.ibm.com>
-References: <20230522105049.1467313-44-schnelle@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jouni Malinen <j@w1.fi>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-wireless@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168491387892.8984.13248048073287184221.kvalo@kernel.org>
-Date:   Wed, 24 May 2023 07:38:04 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZG2+QuD/tVDqyMyb@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
+On 2023-05-24 09:35:30+0200, Willy Tarreau wrote:
+> Hi Thomas,
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Acked-by: Kalle Valo <kvalo@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> On Wed, May 24, 2023 at 08:44:41AM +0200, Thomas Weißschuh wrote:
+> > Two fixes for nolibc to
+> > * allow users to explicitly disable (or theoretically enable) when
+> >   building the tests
+> > * fix stackprotectors on GCC < 10.
+> 
+> Nice, thank you. Just tested with gcc 9.5, works both with and without
+> stkp. Now pushed to branch 20230524-nolibc-rv32+stkp4. I've dropped my
+> exp patch and the associated revert. I think your two patches that clean
+> up the makefile options and the new one here that restores the cflags
+> should be squashed since the latter just partially reverts the former,
+> and that way the series remains bisectable. Just let me know if you're
+> OK, I can just to that and re-push.
 
-Now that the dependencies are in v6.4-rc1 my plan is to take this to
-wireless-next, is that ok for everyone?
+Sounds good to me!
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230522105049.1467313-44-schnelle@linux.ibm.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Thomas
