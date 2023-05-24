@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EE270F343
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D7170F347
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjEXJoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S230112AbjEXJo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjEXJoL (ORCPT
+        with ESMTP id S230143AbjEXJop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:44:11 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A26FA1;
-        Wed, 24 May 2023 02:44:10 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2536e522e47so31006a91.1;
-        Wed, 24 May 2023 02:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684921450; x=1687513450;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CwdYQx8FcXFV0J8oDNY/gZUVBoAXgW87pt+1+NvkXAw=;
-        b=b1/obuKfWcYZskj6Rc4AdZaTyvTCf9MxLyeApNb1hkqVz1FePSBrjH7ZWnp+6ETncM
-         gWthai388O2oeNLLGPc2kK/XDvK078yjSnjFOuS+A8sVsa5doAIWhdJrZoOAW0KfrAo9
-         bD4GxQSWNVUBZRTdoUJgmkkY/pNh2tRWyEJfmK9f4DzkUtf0ZjRJDqqPzAy/xvvCyed7
-         rmRPS9bNZQQZUVrZiz8N2KoxHQAhYXySH4hykWsaNdgFHKnC0TL9sm2wg+d6WCMpMEzE
-         QWTDr7Udwh+QaNMkXeGh9QTo7E5IYh23CMf10Y8fm0ofyf5qWXOeIxI7o6vlMXUpl8cv
-         q+pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684921450; x=1687513450;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CwdYQx8FcXFV0J8oDNY/gZUVBoAXgW87pt+1+NvkXAw=;
-        b=CnKEJ9ibfMV5xvzGuc4XiGNCFnXDdU1Eg77V8KIcqrtJy+uGxUOWa8ctdncbz1MkJX
-         r0Z1h8MfcyufIrgCFGKNfvldq56GzKxAXM1PFZmjAXv7xBAuDeySCflSpEF6OgiRkyED
-         BnrSf2wkpzXVq9TeSqmqtKvOH6gZFf3YjukLFj32aILxqB3G1luC11D0GybtJdY+bQpF
-         HdXwmkA6/JCmmFBBjWpUbq2S4dG27lh2JIGe0uHsMoo3FjLzVqMKHwqzTd9g8HJHiO0N
-         ym+FSW3pymfOYgzV6ttsqh7GvZ6y42XGbbEnjd/nzwwSjijab2UIC0xJiRZmTHteOLzL
-         MACg==
-X-Gm-Message-State: AC+VfDyIBn9v6TK/RhfoARjBwfI7bRbKTYQG2VKAsDwwtRRe0BaSjtkY
-        KH0xxQkZVPV/QInFs2C15Vo=
-X-Google-Smtp-Source: ACHHUZ7KNQCu2AQqm8Xww/7w33hsJlA82n6crTdvm4G3aWoOMjWMdJ5xMADYe7wgXWqZto7PgrfW2g==
-X-Received: by 2002:a17:90a:fa01:b0:255:63ae:f943 with SMTP id cm1-20020a17090afa0100b0025563aef943mr7632498pjb.35.1684921449506;
-        Wed, 24 May 2023 02:44:09 -0700 (PDT)
-Received: from carrot.. (i220-108-176-104.s42.a014.ap.plala.or.jp. [220.108.176.104])
-        by smtp.gmail.com with ESMTPSA id 17-20020a17090a19d100b0024bcad691d4sm1031326pjj.14.2023.05.24.02.44.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 02:44:08 -0700 (PDT)
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-nilfs@vger.kernel.org,
-        syzbot <syzbot+33494cd0df2ec2931851@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] nilfs2: fix possible out-of-bounds segment allocation in resize ioctl
-Date:   Wed, 24 May 2023 18:43:48 +0900
-Message-Id: <20230524094348.3784-1-konishi.ryusuke@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <0000000000005434c405fbbafdc5@google.com>
-References: <0000000000005434c405fbbafdc5@google.com>
+        Wed, 24 May 2023 05:44:45 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6058595;
+        Wed, 24 May 2023 02:44:41 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxyfGJ3G1ky2EAAA--.1143S3;
+        Wed, 24 May 2023 17:44:41 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqraG3G1kobRzAA--.61836S3;
+        Wed, 24 May 2023 17:44:39 +0800 (CST)
+Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-2-zhuyinbo@loongson.cn>
+ <20230524-pouncing-variable-c520e85f8db8@wendy>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
+Date:   Wed, 24 May 2023 17:44:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <20230524-pouncing-variable-c520e85f8db8@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxqraG3G1kobRzAA--.61836S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Kr4DGr4ftw1rGw4rAFy3twb_yoW8Aw47pa
+        47CFnxKFW0qF17ArZaga48CF4fZr93A3WUtr47Kr17Cas0g3WYqayagF98ZwsxCF18GFWU
+        ZFW0gw4UKa18ArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bf8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64
+        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
+        14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+        4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU8gdbUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reports that in its stress test for resize ioctl, the log writing
-function nilfs_segctor_do_construct hits a WARN_ON in
-nilfs_segctor_truncate_segments().
 
-It turned out that there is a problem with the current implementation of
-the resize ioctl, which changes the writable range on the device
-(the range of allocatable segments) at the end of the resize process.
 
-This order is necessary for file system expansion to avoid corrupting
-the superblock at trailing edge.  However, in the case of a file system
-shrink, if log writes occur after truncating out-of-bounds trailing
-segments and before the resize is complete, segments may be allocated
-from the truncated space.
+在 2023/5/24 下午4:56, Conor Dooley 写道:
+> On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+>>   2 files changed, 47 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>> new file mode 100644
+>> index 000000000000..d0be6e5378d7
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>> @@ -0,0 +1,41 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson SPI controller
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k-spi
+> 
+> I am sorry to jump in here at such a late stage with a (potentially)
+> trivial question. "ls2k" is the SoC family rather than a specific model
+> as far as I understand.
+> The answer is probably yes, but do all SoCs in the family have an
+> identical version of the IP?
 
-The userspace resize tool was fine as it limits the range of allocatable
-segments before performing the resize, but it can run into this issue if
-the resize ioctl is called alone.
 
-Fix this issue by changing nilfs_sufile_resize() to update the range of
-allocatable segments immediately after successful truncation of segment
-space in case of file system shrink.
+No, but the spi supported by this loongson spi driver are all the same
+identical version, and other type or verion spi will be supported as
+needed in the future.
 
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: syzbot+33494cd0df2ec2931851@syzkaller.appspotmail.com
-Closes: https://lkml.kernel.org/r/0000000000005434c405fbbafdc5@google.com
-Fixes: 4e33f9eab07e ("nilfs2: implement resize ioctl")
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: stable@vger.kernel.org
----
- fs/nilfs2/sufile.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/fs/nilfs2/sufile.c b/fs/nilfs2/sufile.c
-index dc359b56fdfa..2c6078a6b8ec 100644
---- a/fs/nilfs2/sufile.c
-+++ b/fs/nilfs2/sufile.c
-@@ -779,6 +779,15 @@ int nilfs_sufile_resize(struct inode *sufile, __u64 newnsegs)
- 			goto out_header;
- 
- 		sui->ncleansegs -= nsegs - newnsegs;
-+
-+		/*
-+		 * If the sufile is successfully truncated, immediately adjust
-+		 * the segment allocation space while locking the semaphore
-+		 * "mi_sem" so that nilfs_sufile_alloc() never allocates
-+		 * segments in the truncated space.
-+		 */
-+		sui->allocmax = newnsegs - 1;
-+		sui->allocmin = 0;
- 	}
- 
- 	kaddr = kmap_atomic(header_bh->b_page);
--- 
-2.34.1
+Thanks.
 
