@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEFE70FAB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BED70FAB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236276AbjEXPq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S234657AbjEXPrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbjEXPqz (ORCPT
+        with ESMTP id S236397AbjEXPr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:46:55 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C21BE6A
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:46:30 -0700 (PDT)
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 11BBB41BDF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684943138;
-        bh=92JsxtKc2doKzuIzI6aLPIX3GzuVF3Oem9Ak6r3By98=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Oy3mUJtsR8+daqdkE/eZzHg5GtrArvzXZSD1wf3sRtRff5lVcxrbz2iyIFQtBF4jW
-         vU1qslA5ZpVtSeNcxr6hTScry9QVUJltLo7awpa67Q8mjwRVvfXyINkvURd5aKkedm
-         LxrZN9cGORnnlFpxAHWwh1V7MDMdMcckZwdxNKPsUHe7x16BTCyrKosGZrj43uTYay
-         aH/oK+8BSMppKCIv1aQqEYcCpzgYq8PaiQuT9oX3BveCOvJZl+vtv4bqmsJDX3gChS
-         m3nfAGQsqCI9LYbQTgUEgNBxbDOeCCxfx5dl7kgE4vABU+w5Nai3HjYRpRNomwG6au
-         NjLnpJn/qo36g==
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-5655d99da53so26225357b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:45:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684943137; x=1687535137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=92JsxtKc2doKzuIzI6aLPIX3GzuVF3Oem9Ak6r3By98=;
-        b=VqdsE1ifaaR+VgmmgufmIDpI9BGI+qRTIWGyVdN/Ak53JwnBbRAyercbYLXn5VpKeV
-         tAsVKNz2vb5px57aeBjT9V67NCSCs/BN2leUwo8mJxq54pGmptNwS8P5MoDwK6/juBcz
-         jjoaT03e1VNFFy1oTdBQGIT32sQ5RQJgC6hzFNGCcyh0brI22bPLdOss27A+ZkF8YiCB
-         qy8F33FtchvTHam3Pcq1ir3sjeEEZadyLHYtSQigqlausTUihcygPwvoZmnbrb/RRSHf
-         MkRPGH85xC1X7clzaZu/J2HuPyYU5ORIKGOw3zccMrpKX52iPIV50PqxvYmOxSfRCvmh
-         0pPQ==
-X-Gm-Message-State: AC+VfDyzGBHU1KeiEI4cgkGB5nLHEQmyyCUTHAWhVqEP1lkm0yfVn2K8
-        8JlgzA9UzTthyz7TOy1Knp1J+etGjKIdjQOcAYaOcdDwBkMd7g9dl54PILz5f/sQYWtyTsQxmiN
-        ocJmhC1xWQYT+MWmIDROabX8TtKsy8JrsD1TJbtttgZMzda1ynch7jixlmQ==
-X-Received: by 2002:a81:9a0e:0:b0:565:4c40:fc3 with SMTP id r14-20020a819a0e000000b005654c400fc3mr5833528ywg.23.1684943137037;
-        Wed, 24 May 2023 08:45:37 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4NCqrhc0yq/4yGhKiNRTK/xREKkd6tNR7bvv/mKO+Lk2sONFl/YAqyvoWKLnPhNWxGPsyLx7N9OEP4prvaTeQ=
-X-Received: by 2002:a81:9a0e:0:b0:565:4c40:fc3 with SMTP id
- r14-20020a819a0e000000b005654c400fc3mr5833509ywg.23.1684943136808; Wed, 24
- May 2023 08:45:36 -0700 (PDT)
+        Wed, 24 May 2023 11:47:27 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA995189
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:47:06 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OEwfEm013798;
+        Wed, 24 May 2023 15:45:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=555c+N1KLCBpNsCfoq+DIux9X/yt+A+yKnNeQt4/VpQ=;
+ b=mIw7inVeJZe+rRm8X2FEmfaqjT4WfkO4nBKzvkhxYe0w7QXt9NVELhNPi2MFQYb8AU09
+ yUb9RNSPpdSYY9LR3/5BX959dOqyCMQTpfxb6QOT0utHYV11qMoQujEAmEMRHwqQWtzv
+ 7gb/dsqqfEhMXinPdOlBD3K/57zJO5Us6fmjD/5ULAB0NvMO7JMRKaBIeLo+7yTXfNMP
+ t9SeRT2K6FxaxlWl1OWmyDzWjPUnOZxlQTZ0nrurMHW+vZI8yUpmOJspXMR739Upienw
+ rtMheMGJbg1jBqA4AYMZBB6fUDBTKxImHzh6AFl5nICvqTPH4c4OY+rF8Nsaqh0rZ44W hw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs6981xf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 15:45:54 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34OFjrLR025253
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 15:45:53 GMT
+Received: from [10.216.59.206] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 24 May
+ 2023 08:45:47 -0700
+Message-ID: <83a47f89-ed95-b283-2fe7-e6f12d2d37fa@quicinc.com>
+Date:   Wed, 24 May 2023 21:15:42 +0530
 MIME-Version: 1.0
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
- <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
- <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
- <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
- <20230523140844.5895d645@kernel.org> <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
- <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com> <20230524081933.44dc8bea@kernel.org>
-In-Reply-To: <20230524081933.44dc8bea@kernel.org>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Wed, 24 May 2023 17:45:25 +0200
-Message-ID: <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Luca Boccassi <bluca@debian.org>,
-        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] sched: fix sched_thermal_decay_shift kernel-doc comment
+Content-Language: en-US
+To:     Chia Chuan Yu <yujuan476@gmail.com>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
+References: <20230524143241.146399-1-yujuan476@gmail.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230524143241.146399-1-yujuan476@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: E1sckYMl5-Exat0kLYbUhlRfQdaPgaOI
+X-Proofpoint-GUID: E1sckYMl5-Exat0kLYbUhlRfQdaPgaOI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_10,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
+ impostorscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ bulkscore=0 malwarescore=0 suspectscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305240129
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,31 +82,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 5:19=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Wed, 24 May 2023 11:47:50 +0100 Luca Boccassi wrote:
-> > > I will send SO_PEERPIDFD as an independent patch too, because it
-> > > doesn't require this change with CONFIG_UNIX
-> > > and we can avoid waiting until CONFIG_UNIX change will be merged.
-> > > I've a feeling that the discussion around making CONFIG_UNIX  to be a
-> > > boolean won't be easy and fast ;-)
-> >
-> > Thank you, that sounds great to me, I can start using SO_PEERPIDFD
-> > independently of SCM_PIDFD, there's no hard dependency between the
-> > two.
->
-> How about you put the UNIX -> bool patch at the end of the series,
-> (making it a 4 patch series) and if there's a discussion about it
-> I'll just skip it and apply the first 3 patches?
 
-Sure, I will do that!
 
->
-> In the (IMHO more likely) case that there isn't a discussion it saves
-> me from remembering to chase you to send that patch ;)
+On 5/24/2023 8:02 PM, Chia Chuan Yu wrote:
+> The comment for fix sched_thermal_decay_shift is not in kernel-doc format.
+> This patch will fix it.
+> 
+> Signed-off-by: Chia Chuan Yu <yujuan476@gmail.com>
 
-Thanks a lot, Jakub!
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-Kind regards,
-Alex
+- Mukesh
+> ---
+>   kernel/sched/sched.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 678446251c35..b05861f14543 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1512,7 +1512,7 @@ static inline u64 rq_clock_task(struct rq *rq)
+>   	return rq->clock_task;
+>   }
+>   
+> -/**
+> +/*
+>    * By default the decay is the default pelt decay period.
+>    * The decay shift can change the decay period in
+>    * multiples of 32.
