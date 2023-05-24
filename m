@@ -2,429 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA4E70EBAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826B570EBB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239242AbjEXDJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 23:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S239215AbjEXDKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 23:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbjEXDJe (ORCPT
+        with ESMTP id S232600AbjEXDKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 23:09:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8506B3;
-        Tue, 23 May 2023 20:09:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E63F63826;
-        Wed, 24 May 2023 03:09:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DEFEC4339B;
-        Wed, 24 May 2023 03:09:25 +0000 (UTC)
-Date:   Tue, 23 May 2023 23:09:13 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux trace kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [RESEND][PATCH v2] tracing: Rename stacktrace field to
- common_stacktrace
-Message-ID: <20230523230913.6860e28d@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 23 May 2023 23:10:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0C8AB3;
+        Tue, 23 May 2023 20:10:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F90A1042;
+        Tue, 23 May 2023 20:11:34 -0700 (PDT)
+Received: from [10.163.72.91] (unknown [10.163.72.91])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B3FF3F6C4;
+        Tue, 23 May 2023 20:10:44 -0700 (PDT)
+Message-ID: <d02df808-6d2b-c24b-bc8d-8f4859c0c71b@arm.com>
+Date:   Wed, 24 May 2023 08:40:41 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V9 10/10] arm64/perf: Implement branch records save on PMU
+ IRQ
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+ <20230315051444.1683170-11-anshuman.khandual@arm.com>
+ <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-The histogram and synthetic events can use a pseudo event called
-"stacktrace" that will create a stacktrace at the time of the event and
-use it just like it was a normal field. We have other pseudo events such
-as "common_cpu" and "common_timestamp". To stay consistent with that,
-convert "stacktrace" to "common_stacktrace". As this was used in older
-kernels, to keep backward compatibility, this will act just like
-"common_cpu" did with "cpu". That is, "cpu" will be the same as
-"common_cpu" unless the event has a "cpu" field. In which case, the
-event's field is used. The same is true with "stacktrace".
 
-Also update the documentation to reflect this change.
+On 5/23/23 20:09, James Clark wrote:
+> 
+> 
+> On 15/03/2023 05:14, Anshuman Khandual wrote:
+>> This modifies armv8pmu_branch_read() to concatenate live entries along with
+>> task context stored entries and then process the resultant buffer to create
+>> perf branch entry array for perf_sample_data. It follows the same principle
+>> like task sched out.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+> 
+> [...]
+> 
+>>  void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>  {
+>>  	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>> +	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
+>> +	struct brbe_regset live[BRBE_MAX_ENTRIES];
+>> +	int nr_live, nr_store;
+>>  	u64 brbfcr, brbcr;
+>> -	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
+>>  
+>>  	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>>  	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> @@ -739,36 +743,13 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>  	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>  	isb();
+>>  
+>> -	/* Determine the indices for each loop */
+>> -	loop1_idx1 = BRBE_BANK0_IDX_MIN;
+>> -	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+>> -		loop1_idx2 = brbe_attr->brbe_nr - 1;
+>> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>> -		loop2_idx2 = BRBE_BANK0_IDX_MAX;
+>> -	} else {
+>> -		loop1_idx2 = BRBE_BANK0_IDX_MAX;
+>> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>> -		loop2_idx2 = brbe_attr->brbe_nr - 1;
+>> -	}
+>> -
+>> -	/* Loop through bank 0 */
+>> -	select_brbe_bank(BRBE_BANK_IDX_0);
+>> -	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+>> -		if (!capture_branch_entry(cpuc, event, idx))
+>> -			goto skip_bank_1;
+>> -	}
+>> -
+>> -	/* Loop through bank 1 */
+>> -	select_brbe_bank(BRBE_BANK_IDX_1);
+>> -	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+>> -		if (!capture_branch_entry(cpuc, event, idx))
+>> -			break;
+>> -	}
+>> -
+>> -skip_bank_1:
+>> -	cpuc->branches->branch_stack.nr = idx;
+>> -	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>> +	nr_live = capture_brbe_regset(brbe_attr, live);
+>> +	nr_store = task_ctx->nr_brbe_records;
+>> +	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
+>> +					      nr_live, brbe_attr->brbe_nr);
+>> +	process_branch_entries(cpuc, event, task_ctx->store, nr_store);
+> 
+> Hi Anshuman,
+> 
+> With the following command I get a crash:
+> 
+>   perf record --branch-filter any,save_type -a -- ls
+> 
+> [  101.171822] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000600
+> ...
+> [145380.414654] Call trace:
+> [145380.414739]  armv8pmu_branch_read+0x7c/0x578
+> [145380.414895]  armv8pmu_handle_irq+0x104/0x1c0
+> [145380.415043]  armpmu_dispatch_irq+0x38/0x70
+> [145380.415209]  __handle_irq_event_percpu+0x124/0x3b8
+> [145380.415392]  handle_irq_event+0x54/0xc8
+> [145380.415567]  handle_fasteoi_irq+0x100/0x1e0
+> [145380.415718]  generic_handle_domain_irq+0x38/0x58
+> [145380.415895]  gic_handle_irq+0x5c/0x130
+> [145380.416025]  call_on_irq_stack+0x24/0x58
+> [145380.416173]  el1_interrupt+0x74/0xc0
+> [145380.416321]  el1h_64_irq_handler+0x18/0x28
+> [145380.416475]  el1h_64_irq+0x64/0x68
+> [145380.416604]  smp_call_function_single+0xe8/0x1f0
+> [145380.416745]  event_function_call+0xbc/0x1c8
+> [145380.416919]  _perf_event_enable+0x84/0xa0
+> [145380.417069]  perf_ioctl+0xe8/0xd68
+> [145380.417204]  __arm64_sys_ioctl+0x9c/0xe0
+> [145380.417353]  invoke_syscall+0x4c/0x120
+> [145380.417523]  el0_svc_common+0xd0/0x120
+> [145380.417693]  do_el0_svc+0x3c/0xb8
+> [145380.417859]  el0_svc+0x50/0xc0
+> [145380.418004]  el0t_64_sync_handler+0x84/0xf0
+> [145380.418160]  el0t_64_sync+0x190/0x198
+> 
+> When using --branch-filter any,u without -a it seems to be fine so could
+> be that task_ctx is null in per-cpu mode, or something to do with the
+> userspace only flag?
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Resending to get rid of the junk I left at the top the first time.
+It's task_ctx is null in per-cpu mode, because armv8pmu_branch_read() used
+event->pmu_ctx->task_ctx_data in per-cpu mode where it would not have been
+allocated as well. Following change fixes the problem.
 
-Changes since v1: https://lore.kernel.org/linux-trace-kernel/20230523221108.064a5d82@rorschach.local.home/
- - Update the tracefs README to use common_stacktrace instead of
-   just stacktrace
+diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+index 9e441141a2c3..c8fd581eacf9 100644
+--- a/drivers/perf/arm_brbe.c
++++ b/drivers/perf/arm_brbe.c
+@@ -744,12 +744,17 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+        isb();
+ 
+        nr_live = capture_brbe_regset(brbe_attr, live);
+-       nr_store = task_ctx->nr_brbe_records;
+-       nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
+-                                             nr_live, brbe_attr->brbe_nr);
+-       process_branch_entries(cpuc, event, task_ctx->store, nr_store);
++       if (event->ctx->task) {
++               nr_store = task_ctx->nr_brbe_records;
++               nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
++                                                     nr_live, brbe_attr->brbe_nr);
++               process_branch_entries(cpuc, event, task_ctx->store, nr_store);
++               task_ctx->nr_brbe_records = 0;
++       } else {
++               process_branch_entries(cpuc, event, live, nr_live);
++       }
++
+        process_branch_aborts(cpuc);
+-       task_ctx->nr_brbe_records = 0;
+ 
+        /* Unpause the buffer */
+        write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
 
- Documentation/trace/histogram.rst | 64 +++++++++++++++----------------
- include/linux/trace_events.h      |  1 +
- kernel/trace/trace.c              |  2 +-
- kernel/trace/trace_events.c       |  2 +
- kernel/trace/trace_events_hist.c  | 16 +++++---
- 5 files changed, 46 insertions(+), 39 deletions(-)
 
-diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
-index 479c9eac6335..3c9b263de9c2 100644
---- a/Documentation/trace/histogram.rst
-+++ b/Documentation/trace/histogram.rst
-@@ -35,7 +35,7 @@ Documentation written by Tom Zanussi
-   in place of an explicit value field - this is simply a count of
-   event hits.  If 'values' isn't specified, an implicit 'hitcount'
-   value will be automatically created and used as the only value.
--  Keys can be any field, or the special string 'stacktrace', which
-+  Keys can be any field, or the special string 'common_stacktrace', which
-   will use the event's kernel stacktrace as the key.  The keywords
-   'keys' or 'key' can be used to specify keys, and the keywords
-   'values', 'vals', or 'val' can be used to specify values.  Compound
-@@ -54,7 +54,7 @@ Documentation written by Tom Zanussi
-   'compatible' if the fields named in the trigger share the same
-   number and type of fields and those fields also have the same names.
-   Note that any two events always share the compatible 'hitcount' and
--  'stacktrace' fields and can therefore be combined using those
-+  'common_stacktrace' fields and can therefore be combined using those
-   fields, however pointless that may be.
- 
-   'hist' triggers add a 'hist' file to each event's subdirectory.
-@@ -547,9 +547,9 @@ Extended error information
-   the hist trigger display symbolic call_sites, we can have the hist
-   trigger additionally display the complete set of kernel stack traces
-   that led to each call_site.  To do that, we simply use the special
--  value 'stacktrace' for the key parameter::
-+  value 'common_stacktrace' for the key parameter::
- 
--    # echo 'hist:keys=stacktrace:values=bytes_req,bytes_alloc:sort=bytes_alloc' > \
-+    # echo 'hist:keys=common_stacktrace:values=bytes_req,bytes_alloc:sort=bytes_alloc' > \
-            /sys/kernel/tracing/events/kmem/kmalloc/trigger
- 
-   The above trigger will use the kernel stack trace in effect when an
-@@ -561,9 +561,9 @@ Extended error information
-   every callpath to a kmalloc for a kernel compile)::
- 
-     # cat /sys/kernel/tracing/events/kmem/kmalloc/hist
--    # trigger info: hist:keys=stacktrace:vals=bytes_req,bytes_alloc:sort=bytes_alloc:size=2048 [active]
-+    # trigger info: hist:keys=common_stacktrace:vals=bytes_req,bytes_alloc:sort=bytes_alloc:size=2048 [active]
- 
--    { stacktrace:
-+    { common_stacktrace:
-          __kmalloc_track_caller+0x10b/0x1a0
-          kmemdup+0x20/0x50
-          hidraw_report_event+0x8a/0x120 [hid]
-@@ -581,7 +581,7 @@ Extended error information
-          cpu_startup_entry+0x315/0x3e0
-          rest_init+0x7c/0x80
-     } hitcount:          3  bytes_req:         21  bytes_alloc:         24
--    { stacktrace:
-+    { common_stacktrace:
-          __kmalloc_track_caller+0x10b/0x1a0
-          kmemdup+0x20/0x50
-          hidraw_report_event+0x8a/0x120 [hid]
-@@ -596,7 +596,7 @@ Extended error information
-          do_IRQ+0x5a/0xf0
-          ret_from_intr+0x0/0x30
-     } hitcount:          3  bytes_req:         21  bytes_alloc:         24
--    { stacktrace:
-+    { common_stacktrace:
-          kmem_cache_alloc_trace+0xeb/0x150
-          aa_alloc_task_context+0x27/0x40
-          apparmor_cred_prepare+0x1f/0x50
-@@ -608,7 +608,7 @@ Extended error information
-     .
-     .
-     .
--    { stacktrace:
-+    { common_stacktrace:
-          __kmalloc+0x11b/0x1b0
-          i915_gem_execbuffer2+0x6c/0x2c0 [i915]
-          drm_ioctl+0x349/0x670 [drm]
-@@ -616,7 +616,7 @@ Extended error information
-          SyS_ioctl+0x81/0xa0
-          system_call_fastpath+0x12/0x6a
-     } hitcount:      17726  bytes_req:   13944120  bytes_alloc:   19593808
--    { stacktrace:
-+    { common_stacktrace:
-          __kmalloc+0x11b/0x1b0
-          load_elf_phdrs+0x76/0xa0
-          load_elf_binary+0x102/0x1650
-@@ -625,7 +625,7 @@ Extended error information
-          SyS_execve+0x3a/0x50
-          return_from_execve+0x0/0x23
-     } hitcount:      33348  bytes_req:   17152128  bytes_alloc:   20226048
--    { stacktrace:
-+    { common_stacktrace:
-          kmem_cache_alloc_trace+0xeb/0x150
-          apparmor_file_alloc_security+0x27/0x40
-          security_file_alloc+0x16/0x20
-@@ -636,7 +636,7 @@ Extended error information
-          SyS_open+0x1e/0x20
-          system_call_fastpath+0x12/0x6a
-     } hitcount:    4766422  bytes_req:    9532844  bytes_alloc:   38131376
--    { stacktrace:
-+    { common_stacktrace:
-          __kmalloc+0x11b/0x1b0
-          seq_buf_alloc+0x1b/0x50
-          seq_read+0x2cc/0x370
-@@ -1026,7 +1026,7 @@ Extended error information
-   First we set up an initially paused stacktrace trigger on the
-   netif_receive_skb event::
- 
--    # echo 'hist:key=stacktrace:vals=len:pause' > \
-+    # echo 'hist:key=common_stacktrace:vals=len:pause' > \
-            /sys/kernel/tracing/events/net/netif_receive_skb/trigger
- 
-   Next, we set up an 'enable_hist' trigger on the sched_process_exec
-@@ -1060,9 +1060,9 @@ Extended error information
-     $ wget https://www.kernel.org/pub/linux/kernel/v3.x/patch-3.19.xz
- 
-     # cat /sys/kernel/tracing/events/net/netif_receive_skb/hist
--    # trigger info: hist:keys=stacktrace:vals=len:sort=hitcount:size=2048 [paused]
-+    # trigger info: hist:keys=common_stacktrace:vals=len:sort=hitcount:size=2048 [paused]
- 
--    { stacktrace:
-+    { common_stacktrace:
-          __netif_receive_skb_core+0x46d/0x990
-          __netif_receive_skb+0x18/0x60
-          netif_receive_skb_internal+0x23/0x90
-@@ -1079,7 +1079,7 @@ Extended error information
-          kthread+0xd2/0xf0
-          ret_from_fork+0x42/0x70
-     } hitcount:         85  len:      28884
--    { stacktrace:
-+    { common_stacktrace:
-          __netif_receive_skb_core+0x46d/0x990
-          __netif_receive_skb+0x18/0x60
-          netif_receive_skb_internal+0x23/0x90
-@@ -1097,7 +1097,7 @@ Extended error information
-          irq_thread+0x11f/0x150
-          kthread+0xd2/0xf0
-     } hitcount:         98  len:     664329
--    { stacktrace:
-+    { common_stacktrace:
-          __netif_receive_skb_core+0x46d/0x990
-          __netif_receive_skb+0x18/0x60
-          process_backlog+0xa8/0x150
-@@ -1115,7 +1115,7 @@ Extended error information
-          inet_sendmsg+0x64/0xa0
-          sock_sendmsg+0x3d/0x50
-     } hitcount:        115  len:      13030
--    { stacktrace:
-+    { common_stacktrace:
-          __netif_receive_skb_core+0x46d/0x990
-          __netif_receive_skb+0x18/0x60
-          netif_receive_skb_internal+0x23/0x90
-@@ -1142,14 +1142,14 @@ Extended error information
-   into the histogram.  In order to avoid having to set everything up
-   again, we can just clear the histogram first::
- 
--    # echo 'hist:key=stacktrace:vals=len:clear' >> \
-+    # echo 'hist:key=common_stacktrace:vals=len:clear' >> \
-            /sys/kernel/tracing/events/net/netif_receive_skb/trigger
- 
-   Just to verify that it is in fact cleared, here's what we now see in
-   the hist file::
- 
-     # cat /sys/kernel/tracing/events/net/netif_receive_skb/hist
--    # trigger info: hist:keys=stacktrace:vals=len:sort=hitcount:size=2048 [paused]
-+    # trigger info: hist:keys=common_stacktrace:vals=len:sort=hitcount:size=2048 [paused]
- 
-     Totals:
-         Hits: 0
-@@ -1485,12 +1485,12 @@ Extended error information
- 
-   And here's an example that shows how to combine histogram data from
-   any two events even if they don't share any 'compatible' fields
--  other than 'hitcount' and 'stacktrace'.  These commands create a
-+  other than 'hitcount' and 'common_stacktrace'.  These commands create a
-   couple of triggers named 'bar' using those fields::
- 
--    # echo 'hist:name=bar:key=stacktrace:val=hitcount' > \
-+    # echo 'hist:name=bar:key=common_stacktrace:val=hitcount' > \
-            /sys/kernel/tracing/events/sched/sched_process_fork/trigger
--    # echo 'hist:name=bar:key=stacktrace:val=hitcount' > \
-+    # echo 'hist:name=bar:key=common_stacktrace:val=hitcount' > \
-           /sys/kernel/tracing/events/net/netif_rx/trigger
- 
-   And displaying the output of either shows some interesting if
-@@ -1501,16 +1501,16 @@ Extended error information
- 
-     # event histogram
-     #
--    # trigger info: hist:name=bar:keys=stacktrace:vals=hitcount:sort=hitcount:size=2048 [active]
-+    # trigger info: hist:name=bar:keys=common_stacktrace:vals=hitcount:sort=hitcount:size=2048 [active]
-     #
- 
--    { stacktrace:
-+    { common_stacktrace:
-              kernel_clone+0x18e/0x330
-              kernel_thread+0x29/0x30
-              kthreadd+0x154/0x1b0
-              ret_from_fork+0x3f/0x70
-     } hitcount:          1
--    { stacktrace:
-+    { common_stacktrace:
-              netif_rx_internal+0xb2/0xd0
-              netif_rx_ni+0x20/0x70
-              dev_loopback_xmit+0xaa/0xd0
-@@ -1528,7 +1528,7 @@ Extended error information
-              call_cpuidle+0x3b/0x60
-              cpu_startup_entry+0x22d/0x310
-     } hitcount:          1
--    { stacktrace:
-+    { common_stacktrace:
-              netif_rx_internal+0xb2/0xd0
-              netif_rx_ni+0x20/0x70
-              dev_loopback_xmit+0xaa/0xd0
-@@ -1543,7 +1543,7 @@ Extended error information
-              SyS_sendto+0xe/0x10
-              entry_SYSCALL_64_fastpath+0x12/0x6a
-     } hitcount:          2
--    { stacktrace:
-+    { common_stacktrace:
-              netif_rx_internal+0xb2/0xd0
-              netif_rx+0x1c/0x60
-              loopback_xmit+0x6c/0xb0
-@@ -1561,7 +1561,7 @@ Extended error information
-              sock_sendmsg+0x38/0x50
-              ___sys_sendmsg+0x14e/0x270
-     } hitcount:         76
--    { stacktrace:
-+    { common_stacktrace:
-              netif_rx_internal+0xb2/0xd0
-              netif_rx+0x1c/0x60
-              loopback_xmit+0x6c/0xb0
-@@ -1579,7 +1579,7 @@ Extended error information
-              sock_sendmsg+0x38/0x50
-              ___sys_sendmsg+0x269/0x270
-     } hitcount:         77
--    { stacktrace:
-+    { common_stacktrace:
-              netif_rx_internal+0xb2/0xd0
-              netif_rx+0x1c/0x60
-              loopback_xmit+0x6c/0xb0
-@@ -1597,7 +1597,7 @@ Extended error information
-              sock_sendmsg+0x38/0x50
-              SYSC_sendto+0xef/0x170
-     } hitcount:         88
--    { stacktrace:
-+    { common_stacktrace:
-              kernel_clone+0x18e/0x330
-              SyS_clone+0x19/0x20
-              entry_SYSCALL_64_fastpath+0x12/0x6a
-@@ -1949,7 +1949,7 @@ uninterruptible state::
- 
-   # cd /sys/kernel/tracing
-   # echo 's:block_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
--  # echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 2' >> events/sched/sched_switch/trigger
-+  # echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=common_stacktrace  if prev_state == 2' >> events/sched/sched_switch/trigger
-   # echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(block_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
-   # echo 1 > events/synthetic/block_lat/enable
-   # cat trace
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 0e373222a6df..7c4a0b72334e 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -806,6 +806,7 @@ enum {
- 	FILTER_TRACE_FN,
- 	FILTER_COMM,
- 	FILTER_CPU,
-+	FILTER_STACKTRACE,
- };
- 
- extern int trace_event_raw_init(struct trace_event_call *call);
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index ebc59781456a..81801dc31784 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5752,7 +5752,7 @@ static const char readme_msg[] =
- 	"\t    table using the key(s) and value(s) named, and the value of a\n"
- 	"\t    sum called 'hitcount' is incremented.  Keys and values\n"
- 	"\t    correspond to fields in the event's format description.  Keys\n"
--	"\t    can be any field, or the special string 'stacktrace'.\n"
-+	"\t    can be any field, or the special string 'common_stacktrace'.\n"
- 	"\t    Compound keys consisting of up to two fields can be specified\n"
- 	"\t    by the 'keys' keyword.  Values must correspond to numeric\n"
- 	"\t    fields.  Sort keys consisting of up to two fields can be\n"
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 654ffa40457a..57e539d47989 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -194,6 +194,8 @@ static int trace_define_generic_fields(void)
- 	__generic_field(int, common_cpu, FILTER_CPU);
- 	__generic_field(char *, COMM, FILTER_COMM);
- 	__generic_field(char *, comm, FILTER_COMM);
-+	__generic_field(char *, stacktrace, FILTER_STACKTRACE);
-+	__generic_field(char *, STACKTRACE, FILTER_STACKTRACE);
- 
- 	return ret;
- }
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 543cb7dc84ad..b97d3ad832f1 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -1364,7 +1364,7 @@ static const char *hist_field_name(struct hist_field *field,
- 		if (field->field)
- 			field_name = field->field->name;
- 		else
--			field_name = "stacktrace";
-+			field_name = "common_stacktrace";
- 	} else if (field->flags & HIST_FIELD_FL_HITCOUNT)
- 		field_name = "hitcount";
- 
-@@ -2367,7 +2367,7 @@ parse_field(struct hist_trigger_data *hist_data, struct trace_event_file *file,
- 		hist_data->enable_timestamps = true;
- 		if (*flags & HIST_FIELD_FL_TIMESTAMP_USECS)
- 			hist_data->attrs->ts_in_usecs = true;
--	} else if (strcmp(field_name, "stacktrace") == 0) {
-+	} else if (strcmp(field_name, "common_stacktrace") == 0) {
- 		*flags |= HIST_FIELD_FL_STACKTRACE;
- 	} else if (strcmp(field_name, "common_cpu") == 0)
- 		*flags |= HIST_FIELD_FL_CPU;
-@@ -2378,11 +2378,15 @@ parse_field(struct hist_trigger_data *hist_data, struct trace_event_file *file,
- 		if (!field || !field->size) {
- 			/*
- 			 * For backward compatibility, if field_name
--			 * was "cpu", then we treat this the same as
--			 * common_cpu. This also works for "CPU".
-+			 * was "cpu" or "stacktrace", then we treat this
-+			 * the same as common_cpu and common_stacktrace
-+			 * respectively. This also works for "CPU", and
-+			 * "STACKTRACE".
- 			 */
- 			if (field && field->filter_type == FILTER_CPU) {
- 				*flags |= HIST_FIELD_FL_CPU;
-+			} else if (field && field->filter_type == FILTER_STACKTRACE) {
-+				*flags |= HIST_FIELD_FL_STACKTRACE;
- 			} else {
- 				hist_err(tr, HIST_ERR_FIELD_NOT_FOUND,
- 					 errpos(field_name));
-@@ -5394,7 +5398,7 @@ static void hist_trigger_print_key(struct seq_file *m,
- 			if (key_field->field)
- 				seq_printf(m, "%s.stacktrace", key_field->field->name);
- 			else
--				seq_puts(m, "stacktrace:\n");
-+				seq_puts(m, "common_stacktrace:\n");
- 			hist_trigger_stacktrace_print(m,
- 						      key + key_field->offset,
- 						      HIST_STACKTRACE_DEPTH);
-@@ -5977,7 +5981,7 @@ static int event_hist_trigger_print(struct seq_file *m,
- 			if (field->field)
- 				seq_printf(m, "%s.stacktrace", field->field->name);
- 			else
--				seq_puts(m, "stacktrace");
-+				seq_puts(m, "common_stacktrace");
- 		} else
- 			hist_field_print(m, field);
- 	}
--- 
-2.39.2
+> 
+> I'm also wondering if it's possible to collapse some of the last 5
+> commits? They seem to mostly modify things in brbe.c which is a new file
+> so the history probably isn't important at this point it just makes it a
+> bit harder to review.
 
+[PATCH 6/10] enables base perf branch stack sampling on arm64 platform via
+BRBE and then subsequent patches represent logical progression up until
+save-stitch mechanism is implemented both during normal PMU IRQ and task
+switch callbacks.
+
+> 
+>>  	process_branch_aborts(cpuc);
+>> +	task_ctx->nr_brbe_records = 0;
+>>  
+>>  	/* Unpause the buffer */
+>>  	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
