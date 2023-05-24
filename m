@@ -2,53 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826B570EBB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E300B70EBB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239215AbjEXDKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 23:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S239249AbjEXDMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 23:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbjEXDKv (ORCPT
+        with ESMTP id S235088AbjEXDMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 23:10:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0C8AB3;
-        Tue, 23 May 2023 20:10:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F90A1042;
-        Tue, 23 May 2023 20:11:34 -0700 (PDT)
-Received: from [10.163.72.91] (unknown [10.163.72.91])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B3FF3F6C4;
-        Tue, 23 May 2023 20:10:44 -0700 (PDT)
-Message-ID: <d02df808-6d2b-c24b-bc8d-8f4859c0c71b@arm.com>
-Date:   Wed, 24 May 2023 08:40:41 +0530
+        Tue, 23 May 2023 23:12:10 -0400
+Received: from out-52.mta0.migadu.com (out-52.mta0.migadu.com [IPv6:2001:41d0:1004:224b::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3D718C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:12:08 -0700 (PDT)
+Message-ID: <06996a88-4248-d909-dc06-5af1ba580ef3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684897926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KjGgDwsaWYQjGKLlgM4P0do5d+jCOeVp4sk/adTJ35M=;
+        b=DGy36fVxR3ozLUoXI7o+2j4P+fBJx/CiDo7kPqpMCulWoJWa61A3MI1DcCwWSgIj0pbPos
+        gqTt6zWZjG+fWWLdSMUMm80WiPHZvmVqyFa3yjoez9cyemw4dP6xHiZxiRSEVGbBiqY5zl
+        Pu6DdNjiDQWNUKnwXraTKBEW6kEGSWc=
+Date:   Wed, 24 May 2023 11:11:48 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V9 10/10] arm64/perf: Implement branch records save on PMU
- IRQ
+Subject: Re: [PATCH 04/31] mm/pgtable: allow pte_offset_map[_lock]() to fail
 Content-Language: en-US
-To:     James Clark <james.clark@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
- <20230315051444.1683170-11-anshuman.khandual@arm.com>
- <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <83cac0ae-7e82-d67e-c854-941c65dae79e@arm.com>
-Content-Type: text/plain; charset=UTF-8
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <8218ffdc-8be-54e5-0a8-83f5542af283@google.com>
+ <9dc72654-79db-e988-54a8-488550d235ac@linux.dev>
+ <1efc993b-5b41-4895-a4d-20d38eb95de5@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <1efc993b-5b41-4895-a4d-20d38eb95de5@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,160 +82,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 5/23/23 20:09, James Clark wrote:
-> 
-> 
-> On 15/03/2023 05:14, Anshuman Khandual wrote:
->> This modifies armv8pmu_branch_read() to concatenate live entries along with
->> task context stored entries and then process the resultant buffer to create
->> perf branch entry array for perf_sample_data. It follows the same principle
->> like task sched out.
+On 2023/5/24 10:22, Hugh Dickins wrote:
+> On Mon, 22 May 2023, Qi Zheng wrote:
+>> On 2023/5/22 12:53, Hugh Dickins wrote:
 >>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
+>> [...]
+>>
+>>>    @@ -229,3 +231,57 @@ pmd_t pmdp_collapse_flush(struct vm_area_struct *vma,
+>>> unsigned long address,
+>>>    }
+>>>    #endif
+>>>    #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>>> +
+>>> +pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
+>>> +{
+>>> +	pmd_t pmdval;
+>>> +
+>>> +	/* rcu_read_lock() to be added later */
+>>> +	pmdval = pmdp_get_lockless(pmd);
+>>> +	if (pmdvalp)
+>>> +		*pmdvalp = pmdval;
+>>> +	if (unlikely(pmd_none(pmdval) || is_pmd_migration_entry(pmdval)))
+>>> +		goto nomap;
+>>> +	if (unlikely(pmd_trans_huge(pmdval) || pmd_devmap(pmdval)))
+>>> +		goto nomap;
+>>
+>> Will the follow-up patch deal with the above situation specially?
 > 
-> [...]
+> No, the follow-up patch will only insert the rcu_read_lock() and unlock();
+> and do something (something!) about the PAE mismatched halves case.
 > 
->>  void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->>  {
->>  	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
->> +	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
->> +	struct brbe_regset live[BRBE_MAX_ENTRIES];
->> +	int nr_live, nr_store;
->>  	u64 brbfcr, brbcr;
->> -	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
->>  
->>  	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->>  	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> @@ -739,36 +743,13 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->>  	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->>  	isb();
->>  
->> -	/* Determine the indices for each loop */
->> -	loop1_idx1 = BRBE_BANK0_IDX_MIN;
->> -	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
->> -		loop1_idx2 = brbe_attr->brbe_nr - 1;
->> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->> -		loop2_idx2 = BRBE_BANK0_IDX_MAX;
->> -	} else {
->> -		loop1_idx2 = BRBE_BANK0_IDX_MAX;
->> -		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->> -		loop2_idx2 = brbe_attr->brbe_nr - 1;
->> -	}
->> -
->> -	/* Loop through bank 0 */
->> -	select_brbe_bank(BRBE_BANK_IDX_0);
->> -	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
->> -		if (!capture_branch_entry(cpuc, event, idx))
->> -			goto skip_bank_1;
->> -	}
->> -
->> -	/* Loop through bank 1 */
->> -	select_brbe_bank(BRBE_BANK_IDX_1);
->> -	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
->> -		if (!capture_branch_entry(cpuc, event, idx))
->> -			break;
->> -	}
->> -
->> -skip_bank_1:
->> -	cpuc->branches->branch_stack.nr = idx;
->> -	cpuc->branches->branch_stack.hw_idx = -1ULL;
->> +	nr_live = capture_brbe_regset(brbe_attr, live);
->> +	nr_store = task_ctx->nr_brbe_records;
->> +	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
->> +					      nr_live, brbe_attr->brbe_nr);
->> +	process_branch_entries(cpuc, event, task_ctx->store, nr_store);
+>> Otherwise, maybe it can be changed to the following check method?
+>>
+>> 	if (unlikely(pmd_none(pmdval) || pmd_leaf(pmdval)))
+>> 		goto nomap;
 > 
-> Hi Anshuman,
+> Maybe, but I'm not keen.  Partly just because pmd_leaf() is quite a
+> (good) new invention (I came across a few instances in updating to
+> the current tree), whereas here I'm just following the old examples,
+> from zap_pmd_range() etc.  I'd have to spend a while getting to know
+> pmd_leaf(), and its interaction with strange gotchas like pmd_present().
 > 
-> With the following command I get a crash:
-> 
->   perf record --branch-filter any,save_type -a -- ls
-> 
-> [  101.171822] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000600
-> ...
-> [145380.414654] Call trace:
-> [145380.414739]  armv8pmu_branch_read+0x7c/0x578
-> [145380.414895]  armv8pmu_handle_irq+0x104/0x1c0
-> [145380.415043]  armpmu_dispatch_irq+0x38/0x70
-> [145380.415209]  __handle_irq_event_percpu+0x124/0x3b8
-> [145380.415392]  handle_irq_event+0x54/0xc8
-> [145380.415567]  handle_fasteoi_irq+0x100/0x1e0
-> [145380.415718]  generic_handle_domain_irq+0x38/0x58
-> [145380.415895]  gic_handle_irq+0x5c/0x130
-> [145380.416025]  call_on_irq_stack+0x24/0x58
-> [145380.416173]  el1_interrupt+0x74/0xc0
-> [145380.416321]  el1h_64_irq_handler+0x18/0x28
-> [145380.416475]  el1h_64_irq+0x64/0x68
-> [145380.416604]  smp_call_function_single+0xe8/0x1f0
-> [145380.416745]  event_function_call+0xbc/0x1c8
-> [145380.416919]  _perf_event_enable+0x84/0xa0
-> [145380.417069]  perf_ioctl+0xe8/0xd68
-> [145380.417204]  __arm64_sys_ioctl+0x9c/0xe0
-> [145380.417353]  invoke_syscall+0x4c/0x120
-> [145380.417523]  el0_svc_common+0xd0/0x120
-> [145380.417693]  do_el0_svc+0x3c/0xb8
-> [145380.417859]  el0_svc+0x50/0xc0
-> [145380.418004]  el0t_64_sync_handler+0x84/0xf0
-> [145380.418160]  el0t_64_sync+0x190/0x198
-> 
-> When using --branch-filter any,u without -a it seems to be fine so could
-> be that task_ctx is null in per-cpu mode, or something to do with the
-> userspace only flag?
+> And partly because I do want as many corrupt cases as possible to
+> reach the pmd_bad() check below, so generating a warning (and clear).
+> I might be wrong, I haven't checked through the architectures and how
+> pmd_leaf() is implemented in each, but my guess is that pmd_leaf()
+> will tend to miss the pmd_bad() check.
 
-It's task_ctx is null in per-cpu mode, because armv8pmu_branch_read() used
-event->pmu_ctx->task_ctx_data in per-cpu mode where it would not have been
-allocated as well. Following change fixes the problem.
-
-diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-index 9e441141a2c3..c8fd581eacf9 100644
---- a/drivers/perf/arm_brbe.c
-+++ b/drivers/perf/arm_brbe.c
-@@ -744,12 +744,17 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-        isb();
- 
-        nr_live = capture_brbe_regset(brbe_attr, live);
--       nr_store = task_ctx->nr_brbe_records;
--       nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
--                                             nr_live, brbe_attr->brbe_nr);
--       process_branch_entries(cpuc, event, task_ctx->store, nr_store);
-+       if (event->ctx->task) {
-+               nr_store = task_ctx->nr_brbe_records;
-+               nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
-+                                                     nr_live, brbe_attr->brbe_nr);
-+               process_branch_entries(cpuc, event, task_ctx->store, nr_store);
-+               task_ctx->nr_brbe_records = 0;
-+       } else {
-+               process_branch_entries(cpuc, event, live, nr_live);
-+       }
-+
-        process_branch_aborts(cpuc);
--       task_ctx->nr_brbe_records = 0;
- 
-        /* Unpause the buffer */
-        write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-
+IIUC, pmd_leaf() is just for checking a leaf mapped PMD, and will
+not cover pmd_bad() case. Can see the examples in vmalloc_to_page()
+and apply_to_pmd_range().
 
 > 
-> I'm also wondering if it's possible to collapse some of the last 5
-> commits? They seem to mostly modify things in brbe.c which is a new file
-> so the history probably isn't important at this point it just makes it a
-> bit harder to review.
+> But if you can demonstrate a performance improvement from using
+> pmd_leaf() there, I expect many people would prefer that improvement
+> to badness catching: send a patch later to make that change if it's
+> justified.
 
-[PATCH 6/10] enables base perf branch stack sampling on arm64 platform via
-BRBE and then subsequent patches represent logical progression up until
-save-stitch mechanism is implemented both during normal PMU IRQ and task
-switch callbacks.
+Probably not a lot of performance gain, just makes the check more
+concise.
+
+Thanks,
+Qi
 
 > 
->>  	process_branch_aborts(cpuc);
->> +	task_ctx->nr_brbe_records = 0;
->>  
->>  	/* Unpause the buffer */
->>  	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> Thanks a lot for all your attention to these.
+> 
+> Hugh
+> 
+>>
+>>> +	if (unlikely(pmd_bad(pmdval))) {
+>>> +		pmd_clear_bad(pmd);
+>>> +		goto nomap;
+>>> +	}
+>>> +	return __pte_map(&pmdval, addr);
+>>> +nomap:
+>>> +	/* rcu_read_unlock() to be added later */
+>>> +	return NULL;
+>>> +}
+
+-- 
+Thanks,
+Qi
