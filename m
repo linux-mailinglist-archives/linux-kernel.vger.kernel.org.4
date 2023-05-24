@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A2270F8DA
+	by mail.lfdr.de (Postfix) with ESMTP id BD4AA70F8DB
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbjEXOgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        id S235816AbjEXOg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbjEXOgq (ORCPT
+        with ESMTP id S235126AbjEXOgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:36:46 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7206B135;
-        Wed, 24 May 2023 07:36:44 -0700 (PDT)
+        Wed, 24 May 2023 10:36:48 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6767C11D;
+        Wed, 24 May 2023 07:36:46 -0700 (PDT)
 Received: from francesco-nb.toradex.int (31-10-206-125.static.upc.ch [31.10.206.125])
-        by mail11.truemail.it (Postfix) with ESMTPA id 71836206FC;
+        by mail11.truemail.it (Postfix) with ESMTPA id E3E4F20717;
         Wed, 24 May 2023 16:36:42 +0200 (CEST)
 From:   Francesco Dolcini <francesco@dolcini.it>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
@@ -27,9 +27,9 @@ Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Conor Dooley <conor+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/5] arm64: dts: ti: add verdin am62 dahlia
-Date:   Wed, 24 May 2023 16:36:30 +0200
-Message-Id: <20230524143631.42471-5-francesco@dolcini.it>
+Subject: [PATCH v1 5/5] arm64: dts: ti: add verdin am62 yavia
+Date:   Wed, 24 May 2023 16:36:31 +0200
+Message-Id: <20230524143631.42471-6-francesco@dolcini.it>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230524143631.42471-1-francesco@dolcini.it>
 References: <20230524143631.42471-1-francesco@dolcini.it>
@@ -46,79 +46,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Add Toradex Verdin AM62 Dahlia.
+Add Toradex Verdin AM62 Yavia.
 
-Link: https://www.toradex.com/products/carrier-board/dahlia-carrier-board-kit
+Link: https://www.toradex.com/products/carrier-board/yavia
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
  arch/arm64/boot/dts/ti/Makefile               |   2 +
- .../boot/dts/ti/k3-am62-verdin-dahlia.dtsi    | 214 ++++++++++++++++++
- .../dts/ti/k3-am625-verdin-nonwifi-dahlia.dts |  19 ++
- .../dts/ti/k3-am625-verdin-wifi-dahlia.dts    |  19 ++
- 4 files changed, 254 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62-verdin-dahlia.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dahlia.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-dahlia.dts
+ .../boot/dts/ti/k3-am62-verdin-yavia.dtsi     | 202 ++++++++++++++++++
+ .../dts/ti/k3-am625-verdin-nonwifi-yavia.dts  |  19 ++
+ .../dts/ti/k3-am625-verdin-wifi-yavia.dts     |  19 ++
+ 4 files changed, 242 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62-verdin-yavia.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-yavia.dts
 
 diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 587e581dd27f..f6b38ae10988 100644
+index f6b38ae10988..3af38aaf6463 100644
 --- a/arch/arm64/boot/dts/ti/Makefile
 +++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -11,7 +11,9 @@
- # Boards with AM62x SoC
- dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
+@@ -13,8 +13,10 @@ dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-nonwifi-dahlia.dtb
+ dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-nonwifi-dahlia.dtb
  dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-nonwifi-dev.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-wifi-dahlia.dtb
++dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-nonwifi-yavia.dtb
+ dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-wifi-dahlia.dtb
  dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-wifi-dev.dtb
++dtb-$(CONFIG_ARCH_K3) += k3-am625-verdin-wifi-yavia.dtb
  dtb-$(CONFIG_ARCH_K3) += k3-am62-lp-sk.dtb
  
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-verdin-dahlia.dtsi b/arch/arm64/boot/dts/ti/k3-am62-verdin-dahlia.dtsi
+ # Boards with AM62Ax SoC
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-verdin-yavia.dtsi b/arch/arm64/boot/dts/ti/k3-am62-verdin-yavia.dtsi
 new file mode 100644
-index 000000000000..7205b555f480
+index 000000000000..0f51921e22a5
 --- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am62-verdin-dahlia.dtsi
-@@ -0,0 +1,214 @@
++++ b/arch/arm64/boot/dts/ti/k3-am62-verdin-yavia.dtsi
+@@ -0,0 +1,202 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 +/*
 + * Copyright 2023 Toradex
 + */
 +
++#include <dt-bindings/leds/common.h>
++
 +/ {
-+	reg_1v8_sw: regulator-1v8-sw {
-+		compatible = "regulator-fixed";
-+		regulator-max-microvolt = <1800000>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-name = "On-carrier +V1.8_SW";
-+	};
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_qspi1_clk_gpio
++			     &pinctrl_qspi1_cs_gpio
++			     &pinctrl_qspi1_io0_gpio
++			     &pinctrl_qspi1_io1_gpio
++			     &pinctrl_qspi1_io2_gpio
++			     &pinctrl_qspi1_io3_gpio>;
 +
-+	sound_card: sound-card {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,bitclock-master = <&dailink_master>;
-+		simple-audio-card,format = "i2s";
-+		simple-audio-card,frame-master = <&dailink_master>;
-+		simple-audio-card,name = "verdin-wm8904";
-+
-+		simple-audio-card,routing =
-+			"Headphone Jack", "HPOUTL",
-+			"Headphone Jack", "HPOUTR",
-+			"IN2L", "Line In Jack",
-+			"IN2R", "Line In Jack",
-+			"Headphone Jack", "MICBIAS",
-+			"IN1L", "Headphone Jack";
-+		simple-audio-card,widgets =
-+			"Microphone", "Headphone Jack",
-+			"Headphone", "Headphone Jack",
-+			"Line", "Line In Jack";
-+
-+		dailink_master: simple-audio-card,codec {
-+			clocks = <&k3_clks 157 10>;
-+			sound-dai = <&wm8904_1a>;
++		/* SODIMM 52 - LD1_RED */
++		led-0 {
++			color = <LED_COLOR_ID_RED>;
++			function = LED_FUNCTION_DEBUG;
++			function-enumerator = <1>;
++			gpios = <&main_gpio0 0 GPIO_ACTIVE_HIGH>;
 +		};
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&mcasp0>;
++		/* SODIMM 54 - LD1_GREEN */
++		led-1 {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_DEBUG;
++			function-enumerator = <1>;
++			gpios = <&main_gpio0 11 GPIO_ACTIVE_HIGH>;
++		};
++		/* SODIMM 56 - LD1_BLUE */
++		led-2 {
++			color = <LED_COLOR_ID_BLUE>;
++			function = LED_FUNCTION_DEBUG;
++			function-enumerator = <1>;
++			gpios = <&main_gpio0 3 GPIO_ACTIVE_HIGH>;
++		};
++		/* SODIMM 58 - LD2_RED */
++		led-3 {
++			color = <LED_COLOR_ID_RED>;
++			function = LED_FUNCTION_DEBUG;
++			function-enumerator = <2>;
++			gpios = <&main_gpio0 4 GPIO_ACTIVE_HIGH>;
++		};
++		/* SODIMM 60 - LD2_GREEN */
++		led-4 {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_DEBUG;
++			function-enumerator = <2>;
++			gpios = <&main_gpio0 5 GPIO_ACTIVE_HIGH>;
++		};
++		/* SODIMM 62 - LD2_BLUE */
++		led-5 {
++			color = <LED_COLOR_ID_BLUE>;
++			function = LED_FUNCTION_DEBUG;
++			function-enumerator = <2>;
++			gpios = <&main_gpio0 6 GPIO_ACTIVE_HIGH>;
 +		};
 +	};
 +};
@@ -154,39 +175,18 @@ index 000000000000..7205b555f480
 +		     &pinctrl_gpio_5
 +		     &pinctrl_gpio_6
 +		     &pinctrl_gpio_7
-+		     &pinctrl_gpio_8>;
++		     &pinctrl_gpio_8
++		     &pinctrl_qspi1_cs2_gpio>;
++};
++
++&main_gpio1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_qspi1_dqs_gpio>;
 +};
 +
 +/* Verdin I2C_1 */
 +&main_i2c1 {
 +	status = "okay";
-+
-+	/* Audio Codec */
-+	wm8904_1a: audio-codec@1a {
-+		compatible = "wlf,wm8904";
-+		reg = <0x1a>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_i2s1_mclk>;
-+		/* POSTDIV4_16FF_MAIN_2_HSDIVOUT8_CLK -> AUDIO_EXT_REFCLK1 */
-+		assigned-clocks = <&k3_clks 157 10>;
-+		assigned-clock-parents = <&k3_clks 157 18>;
-+		assigned-clock-rates = <25000000>; /* for 48KHz +/- 1.7% */
-+		clocks = <&k3_clks 157 10>;
-+		clock-names = "mclk";
-+		AVDD-supply = <&reg_1v8_sw>;
-+		CPVDD-supply = <&reg_1v8_sw>;
-+		DBVDD-supply = <&reg_1v8_sw>;
-+		DCVDD-supply = <&reg_1v8_sw>;
-+		MICVDD-supply = <&reg_1v8_sw>;
-+		#sound-dai-cells = <0>;
-+	};
-+
-+	/* Current measurement into module VCC */
-+	hwmon@40 {
-+		compatible = "ti,ina219";
-+		reg = <0x40>;
-+		shunt-resistor = <10000>;
-+	};
 +
 +	/* Temperature sensor */
 +	sensor@4f {
@@ -232,11 +232,6 @@ index 000000000000..7205b555f480
 +	status = "okay";
 +};
 +
-+/* Verdin I2S_1 */
-+&mcasp0 {
-+	status = "okay";
-+};
-+
 +&mcu_gpio0 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&pinctrl_gpio_1
@@ -255,14 +250,8 @@ index 000000000000..7205b555f480
 +	status = "okay";
 +};
 +
-+/* Verdin QSPI_1 */
-+&ospi0 {
-+	status = "okay";
-+};
-+
 +/* Verdin SD_1 */
 +&sdhci1 {
-+	ti,driver-strength-ohm = <33>;
 +	status = "okay";
 +};
 +
@@ -294,11 +283,11 @@ index 000000000000..7205b555f480
 +	/* FIXME: WKUP UART0 is used by DM firmware */
 +	status = "reserved";
 +};
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dahlia.dts b/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dahlia.dts
+diff --git a/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-yavia.dts b/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-yavia.dts
 new file mode 100644
-index 000000000000..0abbc8dfd8a2
+index 000000000000..edbfc7117645
 --- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dahlia.dts
++++ b/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-yavia.dts
 @@ -0,0 +1,19 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 +/*
@@ -310,20 +299,20 @@ index 000000000000..0abbc8dfd8a2
 +#include "k3-am625.dtsi"
 +#include "k3-am62-verdin.dtsi"
 +#include "k3-am62-verdin-nonwifi.dtsi"
-+#include "k3-am62-verdin-dahlia.dtsi"
++#include "k3-am62-verdin-yavia.dtsi"
 +
 +/ {
-+	model = "Toradex Verdin AM62 on Dahlia Board";
-+	compatible = "toradex,verdin-am62-nonwifi-dahlia",
++	model = "Toradex Verdin AM62 on Yavia Board";
++	compatible = "toradex,verdin-am62-nonwifi-yavia",
 +		     "toradex,verdin-am62-nonwifi",
 +		     "toradex,verdin-am62",
 +		     "ti,am625";
 +};
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-dahlia.dts b/arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-dahlia.dts
+diff --git a/arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-yavia.dts b/arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-yavia.dts
 new file mode 100644
-index 000000000000..dae4261bc8c5
+index 000000000000..b5d20a935f76
 --- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-dahlia.dts
++++ b/arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-yavia.dts
 @@ -0,0 +1,19 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 +/*
@@ -335,11 +324,11 @@ index 000000000000..dae4261bc8c5
 +#include "k3-am625.dtsi"
 +#include "k3-am62-verdin.dtsi"
 +#include "k3-am62-verdin-wifi.dtsi"
-+#include "k3-am62-verdin-dahlia.dtsi"
++#include "k3-am62-verdin-yavia.dtsi"
 +
 +/ {
-+	model = "Toradex Verdin AM62 WB on Dahlia Board";
-+	compatible = "toradex,verdin-am62-wifi-dahlia",
++	model = "Toradex Verdin AM62 WB on Yavia Board";
++	compatible = "toradex,verdin-am62-wifi-yavia",
 +		     "toradex,verdin-am62-wifi",
 +		     "toradex,verdin-am62",
 +		     "ti,am625";
