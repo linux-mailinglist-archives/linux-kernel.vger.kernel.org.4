@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD67670F1B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24BF70F1B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240534AbjEXJCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:02:42 -0400
+        id S240539AbjEXJCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:02:45 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240516AbjEXJCi (ORCPT
+        with ESMTP id S240526AbjEXJCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:02:38 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A594C132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:02:36 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-45701a8a1b3so259843e0c.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:02:36 -0700 (PDT)
+        Wed, 24 May 2023 05:02:39 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2249D135
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:02:38 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-437e8282c1fso209350137.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684918955; x=1687510955;
+        d=linaro.org; s=google; t=1684918957; x=1687510957;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=IoXIHN+JHAtPREdCxVNh60cv2ytT0eTrapPfp0USbr4=;
-        b=qcqxbpozRm0YrX1b1eJxarTedM3Dnq8vzbpy9RbNvbtQoCihzSbk7g4ajlUP4ksIT0
-         5wZShQwz1/Xdrny7gLi99EuiEpVTZUneIzU2plEbLvDXfOXzL5X9vZ55Sx+CfFV8IdkH
-         GN+zkxD5pewpDbg+LzosdPgK/014XBxCyFNuOylE2M6nfFnHJ7StqOZF3v0kD+GY6FYG
-         e8uc/y5TFxca5myghprMVJ66VdrHU7JfiJjHTxFEAyvft9BAen+WRfv3UtzUaN6L3BvF
-         a29fikMCxqxbNluJEcAA0ere/Z1SmvrZ/0O7f2N8E7mV/IewbFeO7qMDGak2o5QL1UTN
-         0EVA==
+        bh=RTouH8humuwEe3jhOEhDHis1lZOubi2q4klrpBIze/U=;
+        b=RFA8daYwBWmfkcW7ZdlMoh9q8jXWhk91EKEnZbuLH2ww4Nj2mdLPJiidediuUUJoz/
+         pNaiQASGTU6EMcpwRURbd7snx8zTCaS0TLLmeCmd5VVPI9bMWs5lShlji/B+rDUbKU/N
+         YheUhd+Cet2j0716L3itGxdculE4c6dZ70KsS88oZhSOgi3Y5iWNrcbvJVtFkHG+vF2K
+         vu2zQcys2UaCgEZqxucQvkRU4cDKI7d7vz6QLecjLWNMRA/TE86ulUoLXyHy7fxASDR5
+         OSgmMS70V+EGJ143QzO3SlPl1lInMtw/LYaY70hGZylS9MRzx50mmO004dbpaYT/6DaY
+         evEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684918955; x=1687510955;
+        d=1e100.net; s=20221208; t=1684918957; x=1687510957;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IoXIHN+JHAtPREdCxVNh60cv2ytT0eTrapPfp0USbr4=;
-        b=dyT8ViuqAK+AofLNmm7GVxjSszxHXnQV2hVOxvtqRgEXZdbugpxhKr9yKho0AcYmJJ
-         Pd9WcNLvz0c98blJrIBsDkrbzEnJx2nMySaKSMZ2h0mmzzMQVexEjQNfhL/iMAyD2cQz
-         9JjxquWfEis2yrGyLTT6mtUIhpq42S4XvSB8z/HRHu2NRpNz1tmq2QyFHDVovtCaByYQ
-         CEc44MnT0O7vVHB5GA6Nf3ZbbVzQCPBDyJbhggzBYDMQ7RIrbyM+m+XPTzC+dchgLtMq
-         uLbqqbaw4F9j79shwN/CWu3KFamo28WEguRT+U4mL+4Krl6f3DDIfX9vC9nr7MReuAYf
-         n+Kg==
-X-Gm-Message-State: AC+VfDwF2T8MRePIX2vCGM63JwDp+Id53z5/aijT/8NgURgHWaqf5zTF
-        3tofwWz8Sse8mbb1025myNBeVPjFzGnMcUHj/8H6vkJH7u6Lz3dwOnmtnw==
-X-Google-Smtp-Source: ACHHUZ4YxR4bNRCCAqY1snog2P8OIW025ESXTMcHLjDMXPhMhC8DfhdsNNOn+oX9uoHpz33lpTieLfl0whUtHXIb8fM=
-X-Received: by 2002:a1f:eb42:0:b0:453:8a02:8e7 with SMTP id
- j63-20020a1feb42000000b004538a0208e7mr5231862vkh.6.1684918954432; Wed, 24 May
- 2023 02:02:34 -0700 (PDT)
+        bh=RTouH8humuwEe3jhOEhDHis1lZOubi2q4klrpBIze/U=;
+        b=gyzv3nAKSfqo3bK1LaPi93PBhzdJr/M0JzslXEQRxU8YOnulnNqpsjycywuf57AKUk
+         A0C/42s/+fb/kuxZWg1y7eDkxkm+LTSxGD4ZJZvDpzQgIEcwolPOUyu59GBDGwYFtepB
+         4KQY5p4cdEf93B8DB0quxreLYMpzKgW5ynk3zb2Nnri7OLHaRUyGv3qtfQuka3Sn7Jbc
+         n/oWiJ7vn++vbpFhTQRjoRjJO/dVSLYo7i3uiJzEBMV/WnVofXQQ6KpljTg0QxbSMJkt
+         PrzK64wvzozxN8WC6MgC0LseVOb5bkybkxuBE1m/tnDby6nw9Hsu3X4gmSSsP14OAS1W
+         HWxw==
+X-Gm-Message-State: AC+VfDynwKVJq2htvB0NnrKU/TSM6m8h15haPWtdr9A3JkErxZ2bw2hh
+        BYh5y5U15D0hDlWp06+dEFIyboDS1hrjsfuxno9wjaJjfpxSuL+Wphg44A==
+X-Google-Smtp-Source: ACHHUZ5mYHmvjrTJf9pzrN6SHCUoIJwJqM1u3knIm8Y7zR2jMuag8dfjN1UMmcYTJB/rkkRjgzV2d46lensdPw+3dSc=
+X-Received: by 2002:a67:bc03:0:b0:439:6581:2ed8 with SMTP id
+ t3-20020a67bc03000000b0043965812ed8mr490817vsn.31.1684918956760; Wed, 24 May
+ 2023 02:02:36 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 24 May 2023 14:32:23 +0530
-Message-ID: <CA+G9fYtCCTxT78c0T+5JFw+sN01ZnX_kvBBgDLoVLfPARc9ZuA@mail.gmail.com>
-Subject: Perf: RIP: 0010:__schedule on qemu-x86_64
+Date:   Wed, 24 May 2023 14:32:25 +0530
+Message-ID: <CA+G9fYuGT0esjqBT9=xCTtWKV1DxYspXTtM5gqprbDKiTrb7qQ@mail.gmail.com>
+Subject: LTP: tracing: RIP: 0010:security_inode_permission+0x5/0x70
 To:     open list <linux-kernel@vger.kernel.org>,
         linux-stable <stable@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
+        LTP List <ltp@lists.linux.it>, lkft-triage@lists.linaro.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
+        Anders Roxell <anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -73,172 +71,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel crash noticed while running perf testing on qemu-x86_64
-with stable-rc 6.3.4-rc2 + kselftest merge configs.
+While running LTP tracing tests on qemu-x86_64 following kernel crash noticed
+with stable-rc 6.3.4-rc2.
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-logs:
-=====
-INFO: Performing perf record test...
+FAILED COMMAND File:
+/lava-1/0/tests/0_ltp-tracing/automated/linux/ltp/output/LTP_tracing.failed
+TCONF COMMAND File: /opt/ltp/output/LTP_RUN_ON-LTP_tracing.log.tconf
+Running tests.......
 
-Parse sched tracepoints fields: Ok
- 16: syscalls:sys_enter_openat event fields     :
---- start ---
-test child forked, pid 255
-<4>[  152.221288] int3: 0000 [#1] PREEMPT SMP PTI
-<4>[  152.221564] CPU: 0 PID: 255 Comm: perf Not tainted 6.3.4-rc2 #1
-<4>[  152.221607] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+<4>[   57.932577] int3: 0000 [#1] PREEMPT SMP PTI
+<4>[   57.933090] CPU: 0 PID: 138 Comm: systemd-udevd Not tainted 6.3.4-rc2 #1
+<4>[   57.933243] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
 BIOS 1.14.0-2 04/01/2014
-<4>[  152.221733] RIP: 0010:__schedule+0x29e/0xaa0
-<4>[  152.222066] Code: 00 48 29 c1 49 01 8e 48 04 00 00 48 85 db 74
-0f 48 01 8b 90 0c 00 00 48 83 83 88 0c 00 00 01 0f 1f 44 00 00 0f 1f
-44 00 00 e9 <7a> 01 00 00 49 0f ba ac 24 18 0a 00 00 00 49 83 bc 24 08
-0a 00 00
-<4>[  152.222122] RSP: 0018:ffff94aec0677bc0 EFLAGS: 00000046
-<4>[  152.222170] RAX: ffffffffa2e10900 RBX: ffff8b517bc2b700 RCX:
-0000000000000004
-<4>[  152.222184] RDX: 00000023711138c0 RSI: 0000000000000000 RDI:
-ffff8b517bc2b700
-<4>[  152.222197] RBP: ffff94aec0677c28 R08: ffff8b5102aa6a00 R09:
-000000000000004e
-<4>[  152.222211] R10: 0000000000000001 R11: 0000000000000001 R12:
-ffff8b51009e3c00
-<4>[  152.222223] R13: ffffffffa2cf3f48 R14: ffffffffa2e10900 R15:
-ffff8b51009e4248
-<4>[  152.222275] FS:  00007f6b8ea81800(0000)
-GS:ffff8b517bc00000(0000) knlGS:0000000000000000
-<4>[  152.222294] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[  152.222308] CR2: 00007f6b8dd204e0 CR3: 0000000105a1c000 CR4:
+<4>[   57.933447] RIP: 0010:security_inode_permission+0x5/0x70
+<4>[   57.934163] Code: c0 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00
+00 00 0f 1f 40 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 66
+0f 1f 00 e8 <e7> 8d 64 18 f6 47 0d 02 75 50 55 48 89 e5 41 55 41 89 f5
+41 54 49
+<4>[   57.934257] RSP: 0018:ffffa300c050bca0 EFLAGS: 00000246
+<4>[   57.934363] RAX: 00000000000041ed RBX: ffff9bda012805c0 RCX:
+0000000000000000
+<4>[   57.934390] RDX: ffff9bda01f6df00 RSI: 0000000000000081 RDI:
+ffff9bda012805c0
+<4>[   57.934415] RBP: ffffa300c050bcd0 R08: ffffa300c050bd80 R09:
+00000000ffffff9c
+<4>[   57.934440] R10: 0000000000000fe0 R11: ffc9d09b99d09993 R12:
+0000000000000081
+<4>[   57.934465] R13: 0000000000000000 R14: ffffffffa958f970 R15:
+2f2f2f2f2f2f2f2f
+<4>[   57.934544] FS:  00007fb89665f800(0000)
+GS:ffff9bda7bc00000(0000) knlGS:0000000000000000
+<4>[   57.934578] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+<4>[   57.934604] CR2: 00007f60c9b0e000 CR3: 0000000104402000 CR4:
 00000000000006f0
-<4>[  152.222409] Call Trace:
-<4>[  152.222500]  <TASK>
-<4>[  152.222605]  schedule+0x6a/0xf0
-<4>[  152.222664]  schedule_timeout+0x14f/0x160
-<4>[  152.222680]  wait_for_completion+0x8c/0x140
-<4>[  152.222696]  __wait_rcu_gp+0x13e/0x140
-<4>[  152.222712]  synchronize_rcu+0x12f/0x140
-<4>[  152.222731]  ? __pfx_call_rcu_hurry+0x10/0x10
-<4>[  152.222748]  ? __pfx_wakeme_after_rcu+0x10/0x10
-<4>[  152.222766]  perf_event_alloc+0xd53/0xdc0
-<4>[  152.222783]  ? preempt_count_sub+0x50/0x80
-<4>[  152.222795]  ? _raw_spin_unlock+0x1a/0x40
-<4>[  152.222810]  __do_sys_perf_event_open+0x1df/0xd10
-<4>[  152.222838]  __x64_sys_perf_event_open+0x26/0x30
-<4>[  152.222849]  do_syscall_64+0x3e/0x90
-<4>[  152.222863]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-<4>[  152.222920] RIP: 0033:0x7f6b8dd204f9
-<4>[  152.223150] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00
-00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c
-24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d d7 08 0d 00 f7 d8 64
+<4>[   57.934793] Call Trace:
+<4>[   57.934958]  <TASK>
+<4>[   57.935082]  ? inode_permission+0x70/0x1a0
+<4>[   57.935235]  link_path_walk.part.0.constprop.0+0xdd/0x3b0
+<4>[   57.935360]  path_lookupat+0x3e/0x190
+<4>[   57.935426]  filename_lookup+0xe8/0x1f0
+<4>[   57.935638]  user_path_at_empty+0x42/0x60
+<4>[   57.935692]  do_fchmodat+0x5f/0xc0
+<4>[   57.935809]  __x64_sys_chmod+0x1f/0x30
+<4>[   57.935845]  do_syscall_64+0x3e/0x90
+<4>[   57.935886]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+<4>[   57.935996] RIP: 0033:0x7fb8964fbd6b
+<4>[   57.936393] Code: ff ff ff ff eb e6 66 0f 1f 84 00 00 00 00 00
+f3 0f 1e fa b8 5f 00 00 00 0f 05 c3 0f 1f 40 00 f3 0f 1e fa b8 5a 00
+00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 85 40 0f 00 f7 d8 64
 89 01 48
-<4>[  152.223158] RSP: 002b:00007ffd51880f68 EFLAGS: 00000202
-ORIG_RAX: 000000000000012a
-<4>[  152.223175] RAX: ffffffffffffffda RBX: 00000000ffffffff RCX:
-00007f6b8dd204f9
-<4>[  152.223181] RDX: 0000000000000000 RSI: 00000000000000ff RDI:
-000055e658912b50
-<4>[  152.223187] RBP: 00007ffd51881030 R08: 0000000000000008 R09:
-00007ffd51881090
-<4>[  152.223192] R10: 00000000ffffffff R11: 0000000000000202 R12:
-0000000000000008
-<4>[  152.223198] R13: 0000000000000000 R14: 0000000000000000 R15:
-000055e658912b40
-<4>[  152.223246]  </TASK>
-<4>[  152.223308] Modules linked in:
-<4>[  152.247884] ---[ end trace 0000000000000000 ]---
-<4>[  152.248004] RIP: 0010:__schedule+0x29e/0xaa0
-<4>[  152.248051] Code: 00 48 29 c1 49 01 8e 48 04 00 00 48 85 db 74
-0f 48 01 8b 90 0c 00 00 48 83 83 88 0c 00 00 01 0f 1f 44 00 00 0f 1f
-44 00 00 e9 <7a> 01 00 00 49 0f ba ac 24 18 0a 00 00 00 49 83 bc 24 08
-0a 00 00
-<4>[  152.248066] RSP: 0018:ffff94aec0677bc0 EFLAGS: 00000046
-<4>[  152.248089] RAX: ffffffffa2e10900 RBX: ffff8b517bc2b700 RCX:
-0000000000000004
-<4>[  152.248099] RDX: 00000023711138c0 RSI: 0000000000000000 RDI:
-ffff8b517bc2b700
-<4>[  152.248269] RBP: ffff94aec0677c28 R08: ffff8b5102aa6a00 R09:
-000000000000004e
-<4>[  152.248282] R10: 0000000000000001 R11: 0000000000000001 R12:
-ffff8b51009e3c00
-<4>[  152.248294] R13: ffffffffa2cf3f48 R14: ffffffffa2e10900 R15:
-ffff8b51009e4248
-<4>[  152.248304] FS:  00007f6b8ea81800(0000)
-GS:ffff8b517bc00000(0000) knlGS:0000000000000000
-<4>[  152.248316] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[  152.248479] CR2: 00007f6b8dd204e0 CR3: 0000000105a1c000 CR4:
+<4>[   57.936422] RSP: 002b:00007ffcf4c2aa38 EFLAGS: 00000202
+ORIG_RAX: 000000000000005a
+<4>[   57.936471] RAX: ffffffffffffffda RBX: 0000000000000190 RCX:
+00007fb8964fbd6b
+<4>[   57.936490] RDX: 00007ffcf4c2aa4f RSI: 0000000000000190 RDI:
+00007ffcf4c2aa40
+<4>[   57.936504] RBP: 0000000000000190 R08: 0000000000000000 R09:
+00007ffcf4c2a8e0
+<4>[   57.936528] R10: 0000000000000000 R11: 0000000000000202 R12:
+00007ffcf4c2aa40
+<4>[   57.936542] R13: 0000000000000005 R14: 0000000000000000 R15:
+0000000000000001
+<4>[   57.936754]  </TASK>
+<4>[   57.936853] Modules linked in:
+<4>[   57.962890] ---[ end trace 0000000000000000 ]---
+<4>[   57.963006] RIP: 0010:security_inode_permission+0x5/0x70
+<4>[   57.963080] Code: c0 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00
+00 00 0f 1f 40 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 66
+0f 1f 00 e8 <e7> 8d 64 18 f6 47 0d 02 75 50 55 48 89 e5 41 55 41 89 f5
+41 54 49
+<4>[   57.963105] RSP: 0018:ffffa300c050bca0 EFLAGS: 00000246
+<4>[   57.963145] RAX: 00000000000041ed RBX: ffff9bda012805c0 RCX:
+0000000000000000
+<4>[   57.963163] RDX: ffff9bda01f6df00 RSI: 0000000000000081 RDI:
+ffff9bda012805c0
+<4>[   57.963180] RBP: ffffa300c050bcd0 R08: ffffa300c050bd80 R09:
+00000000ffffff9c
+<4>[   57.963195] R10: 0000000000000fe0 R11: ffc9d09b99d09993 R12:
+0000000000000081
+<4>[   57.963209] R13: 0000000000000000 R14: ffffffffa958f970 R15:
+2f2f2f2f2f2f2f2f
+<4>[   57.963226] FS:  00007fb89665f800(0000)
+GS:ffff9bda7bc00000(0000) knlGS:0000000000000000
+<4>[   57.963246] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+<4>[   57.963261] CR2: 00007f60c9b0e000 CR3: 0000000104402000 CR4:
 00000000000006f0
-<0>[  152.248663] Kernel panic - not syncing: Fatal exception in interrupt
-<4>[  152.248980] int3: 0000 [#2] PREEMPT SMP PTI
-<4>[  152.249101] CPU: 1 PID: 32 Comm: kworker/u4:3 Tainted: G      D
-          6.3.4-rc2 #1
-<4>[  152.249124] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-BIOS 1.14.0-2 04/01/2014
-<4>[  152.249292] Workqueue:  0x0 (events_unbound)
-<4>[  152.249420] RIP: 0010:__schedule+0x29e/0xaa0
-<4>[  152.249471] Code: 00 48 29 c1 49 01 8e 48 04 00 00 48 85 db 74
-0f 48 01 8b 90 0c 00 00 48 83 83 88 0c 00 00 01 0f 1f 44 00 00 0f 1f
-44 00 00 e9 <7a> 01 00 00 49 0f ba ac 24 18 0a 00 00 00 49 83 bc 24 08
-0a 00 00
-<4>[  152.249486] RSP: 0018:ffff94aec0117e38 EFLAGS: 00000046
-<4>[  152.249502] RAX: ffff8b51002d8000 RBX: ffff8b517bd2b700 RCX:
-0000000000000004
-<4>[  152.249512] RDX: 0000002372bd853f RSI: ffffffffffa7caff RDI:
-ffff8b517bd2b700
-<4>[  152.249522] RBP: ffff94aec0117ea0 R08: 0000000000000400 R09:
-0000000000000361
-<4>[  152.249532] R10: 0000000000000001 R11: 0000000000000000 R12:
-ffff8b51008a0f00
-<4>[  152.249542] R13: ffffffffa2cf3f48 R14: ffff8b51002d8000 R15:
-ffff8b51008a1548
-<4>[  152.249552] FS:  0000000000000000(0000)
-GS:ffff8b517bd00000(0000) knlGS:0000000000000000
-<4>[  152.249565] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[  152.249576] CR2: 00007ffd518816b8 CR3: 000000010591e000 CR4:
-00000000000006e0
-<4>[  152.249588] Call Trace:
-<4>[  152.249603]  <TASK>
-<4>[  152.249636]  schedule+0x6a/0xf0
-<4>[  152.249658]  worker_thread+0xc0/0x3e0
-<4>[  152.249684]  ? __pfx_worker_thread+0x10/0x10
-<4>[  152.249704]  kthread+0xfc/0x120
-<4>[  152.249721]  ? __pfx_kthread+0x10/0x10
-<4>[  152.249739]  ret_from_fork+0x2c/0x50
-<4>[  152.249797]  </TASK>
-<4>[  152.249805] Modules linked in:
-<4>[  152.250386] ---[ end trace 0000000000000000 ]---
-<4>[  152.250399] RIP: 0010:__schedule+0x29e/0xaa0
-<4>[  152.250421] Code: 00 48 29 c1 49 01 8e 48 04 00 00 48 85 db 74
-0f 48 01 8b 90 0c 00 00 48 83 83 88 0c 00 00 01 0f 1f 44 00 00 0f 1f
-44 00 00 e9 <7a> 01 00 00 49 0f ba ac 24 18 0a 00 00 00 49 83 bc 24 08
-0a 00 00
-<4>[  152.250434] RSP: 0018:ffff94aec0677bc0 EFLAGS: 00000046
-<4>[  152.250448] RAX: ffffffffa2e10900 RBX: ffff8b517bc2b700 RCX:
-0000000000000004
-<4>[  152.250458] RDX: 00000023711138c0 RSI: 0000000000000000 RDI:
-ffff8b517bc2b700
-<4>[  152.250467] RBP: ffff94aec0677c28 R08: ffff8b5102aa6a00 R09:
-000000000000004e
-<4>[  152.250477] R10: 0000000000000001 R11: 0000000000000001 R12:
-ffff8b51009e3c00
-<4>[  152.250486] R13: ffffffffa2cf3f48 R14: ffffffffa2e10900 R15:
-ffff8b51009e4248
-<4>[  152.250496] FS:  0000000000000000(0000)
-GS:ffff8b517bd00000(0000) knlGS:0000000000000000
-<4>[  152.250508] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[  152.250519] CR2: 00007ffd518816b8 CR3: 000000010591e000 CR4:
-00000000000006e0
-<0>[  154.015533] Shutting down cpus with NMI
-<0>[  154.016784] Kernel Offset: 0x20000000 from 0xffffffff81000000
+<0>[   57.963444] Kernel panic - not syncing: Fatal exception in interrupt
+<0>[   57.964629] Kernel Offset: 0x26600000 from 0xffffffff81000000
 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
 
-log links,
-=====
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3-364-ga37c304c022d/testrun/17169996/suite/log-parser-test/test/check-kernel-panic/log
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3-364-ga37c304c022d/testrun/17169996/suite/log-parser-test/tests/
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2QCeuajqUTZlyC4kEyQGxT6YwYv/
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2QCeuajqUTZlyC4kEyQGxT6YwYv/config
 
+links,
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3-364-ga37c304c022d/testrun/17168198/suite/log-parser-test/tests/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3-364-ga37c304c022d/testrun/17168198/suite/log-parser-test/test/check-kernel-panic/log
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2QCeudZ18KF3RXw3A5qfr5lPC2N/
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2QCeudZ18KF3RXw3A5qfr5lPC2N/config
 
 --
 Linaro LKFT
