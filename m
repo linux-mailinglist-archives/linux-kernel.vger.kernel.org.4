@@ -2,305 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B230670FC6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063B470FC7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbjEXRPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 13:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S231947AbjEXRSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbjEXRPf (ORCPT
+        with ESMTP id S231526AbjEXRSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:15:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4A5E48
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:14:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684948450;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EyHzZjPPIFiS8KYpIWrxQRKT3huMDr2umMnS3bHEjoo=;
-        b=Rw1AUTouDBSbLQ5bW7WOFNxMYFZBzX1RCLupyHQtmaUWUqCa+RtiTrxPICD5blXZpDEm9s
-        0YYHIcG31E6HArI5iE1gbQrfsVqtq987heVeujja1ggi930dGmni3jBe9a6zYrZYGZjMCt
-        zoKyk5bESN47Nz4EC99+827aZDTfnCM=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-230-Cq2uUuW0Nw6PUM2aiagUew-1; Wed, 24 May 2023 13:14:09 -0400
-X-MC-Unique: Cq2uUuW0Nw6PUM2aiagUew-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f6c58d57adso546131cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:14:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684948449; x=1687540449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EyHzZjPPIFiS8KYpIWrxQRKT3huMDr2umMnS3bHEjoo=;
-        b=U2xCCwvxqufQ+wrFEh6d3p4pmiMiHXc2aJzeLvoBfivWpDFQrBHADiRUZoMGmvAOoN
-         /yefcSwq1LqMVocgG3pD2uj6MqkuHLQfpsMsXxTQ2lEM1oXxkHO1ZUnqo3TvBLhI79pe
-         FRNoxsh8dtnJmxfNLWl3WcLu80xwVBCg3fBhTA1jtpAqgkjgQtHJ2/h7QtyyJzf8FNM1
-         cC3/eqHIPMc7vI9OjJUr/dZHHH3RhqjFRBu/WnJ4Qk3P7kB9h0oJ0z941t+RwrMaWkTg
-         da/Zomvb+ZZJxneSTNZJpn5/TfYyS3zGFY8f0cccAdM9wi21nFviIZ+7sQ0LPSJC9uTU
-         Hijg==
-X-Gm-Message-State: AC+VfDwpHPKB/3Ae+yXcm3j4fqUJbpNlcVIPwdplZ+9eetbOvXtdzkyb
-        weOkcUnLGHMWLe9SS4oVXYb7MZ5EcSK27bGtpQ/BacpaYqH1IVLyEA+dXD3zHx1i/4hXXO0UebM
-        eTnfUsBH7IMYWdGjyM0v24m3M
-X-Received: by 2002:a05:622a:1813:b0:3f7:df68:7b09 with SMTP id t19-20020a05622a181300b003f7df687b09mr546674qtc.6.1684948448725;
-        Wed, 24 May 2023 10:14:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6xtGx76nP2e7ci9cMhYQQ8+ofaA2V0fY49xRSBW32J2t3CuEqII3+T4PPYMGd+CYf9BXSPiQ==
-X-Received: by 2002:a05:622a:1813:b0:3f7:df68:7b09 with SMTP id t19-20020a05622a181300b003f7df687b09mr546639qtc.6.1684948448325;
-        Wed, 24 May 2023 10:14:08 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id h10-20020ac85e0a000000b003f38b4167e5sm1587574qtx.2.2023.05.24.10.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 10:14:07 -0700 (PDT)
-Date:   Wed, 24 May 2023 13:14:06 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Stevens <stevensd@chromium.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
-Message-ID: <ZG5F3igFgdIAwrn4@x1n>
-References: <20230330085802.2414466-1-stevensd@google.com>
- <20230330085802.2414466-2-stevensd@google.com>
- <ZGvUsf7lMkrNDHuE@google.com>
- <ZG45q0xJSnA6NKQN@x1n>
- <ZG4/VdHu2LqLTlct@google.com>
+        Wed, 24 May 2023 13:18:45 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C20BB;
+        Wed, 24 May 2023 10:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684948722; x=1716484722;
+  h=message-id:date:subject:from:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=HbCt5jy8CXf6A0tu2BTAKveAKadXHasb93l61S5/VRE=;
+  b=R0g0cnTH7ins8GazmB54fWzZOJ67OuRhnSrduVbCTRMULB8bQTe3u9WF
+   /h/KyjGILq7dy8n5tybeJ/qtdMDs5u6srVJpFIHq08gsHJJzdwKAPyqQD
+   3ZEb8n9VuC0WvrngV8Mi8P/sM2r9fH0aVjdGnShHZjrelg13bpayAAWnl
+   GVd5UxCR6Hevr/Qoe1rPNjBARhl0LGBAgt55M+AVae5dcnc/2mB6VUiTj
+   PFGcXYPC74IRK7uSXVRmYrwhTCIjTjZrSTopLdwAsivyo/zxovQ3Indyd
+   XweH+0dxj8nEcH7Ol5bmWvibInMiCXYPY0/xYTSctCrBYgI8ubh4bTKBu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="351144277"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="351144277"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 10:18:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="769531203"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="769531203"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga008.fm.intel.com with ESMTP; 24 May 2023 10:18:26 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 10:18:26 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 10:18:26 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 24 May 2023 10:18:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nHXNJ54Hs4sldYqZo5sXPabzruL3bsuHlxzobQAkZ0EhQKLRQfbbqmHyFodqju4cims3HHeDsFZ/QwXvgY/h6mBxn2mMjCpv1MMItoUBbmrxX9xd8Kimi8e2+yUgVlZkL3WtLNyp9FKISx3WwRCH4/SYQzvBZrl1rg2bI9lHUZud5lc9WO8c6pPO7pkwrWBJxqQubp/GIuOHzICXzIDrt1ADCPGSM8mUiqXlQ6nd+p/a3Y10kA0oRcrGqqFp2C09aGIC2v4nbaertmNSSmAyM3Ioiwz8eS4nJ65cFdwpZ5s/+1A0mRChb2QKqN9ws2mML/wuyHvaud8K0ONowpvYXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zlH4Iyf/0SLgLNGGfGM7dmSuH75p+bIUmqd//XStDRM=;
+ b=liAoD7e9LFaAPx+dDtPAX7c4maKp3DJA2qxu9BazOYBqejzeaOz5tFQoxBNAtPU41GGxyg0dKYlB5yrKjMnhOtw7gIbunofSOwNu8zjyp1gtUBcg9QOTX98WZ5si8ni4P2Yk8DE92yyh5CN7OOkhRrHHe+gtUmC+wOOdNJvAeoBP/relLQoAASqaqctELfVEmvDECK9n9m8tJ6fouXXfPnuIessnQt3uzdT3duSZKqI3zbJ0Jp1Cc/fXb/5ZxDvQR9T6Zx0SXDaFme2/Js/jd/pGSS1FF4/+DOEvjXCLt0caSEbCwM08AQvP+hAuQIRJ7YuWBrqcck5rCbIptJGqZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by PH0PR11MB5013.namprd11.prod.outlook.com (2603:10b6:510:30::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
+ 2023 17:18:23 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::bad1:92a2:fa0a:1850]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::bad1:92a2:fa0a:1850%7]) with mapi id 15.20.6411.029; Wed, 24 May 2023
+ 17:18:23 +0000
+Message-ID: <fce772b2-29e1-7daf-0a61-7e8e78f7331a@intel.com>
+Date:   Wed, 24 May 2023 10:18:20 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 11/12] crypto: x86/aes-kl - Support AES algorithm using
+ Key Locker instructions
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <dm-devel@redhat.com>, <gmazyland@gmail.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <tglx@linutronix.de>, <bp@suse.de>,
+        <mingo@kernel.org>, <x86@kernel.org>,
+        <herbert@gondor.apana.org.au>, <ardb@kernel.org>,
+        <dan.j.williams@intel.com>, <bernie.keany@intel.com>,
+        <charishma1.gairuboyina@intel.com>,
+        <lalithambika.krishnakumar@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+References: <20220112211258.21115-1-chang.seok.bae@intel.com>
+ <20230410225936.8940-1-chang.seok.bae@intel.com>
+ <20230410225936.8940-12-chang.seok.bae@intel.com>
+ <ZFWY6/VelArVYy1F@gmail.com> <288de217-f0ff-658c-5490-6fbf5f57f5a7@intel.com>
+Content-Language: en-US
+In-Reply-To: <288de217-f0ff-658c-5490-6fbf5f57f5a7@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR13CA0023.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::36) To PH0PR11MB4855.namprd11.prod.outlook.com
+ (2603:10b6:510:41::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZG4/VdHu2LqLTlct@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_|PH0PR11MB5013:EE_
+X-MS-Office365-Filtering-Correlation-Id: 393f1cee-0e98-4997-0f5a-08db5c7ae0ea
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dDbMrULwgrIbAASEWmtW+W9YQ2WqB4Xt21WZ2LqoTiPmNsnnI7q7Wrdwn5/jUruEjBpc6vyjectaeTjbqgW2rCdsk+RK/0SMCUOj6f3jYVU0FK937lDc81SFhVRzsrE0ZGipqLwIOMjHrvz7u0koF0Ac+JMntMVXY3MT4lV0H2ASvIX/0jjJeDr68HKzjrTpmTBDrVcefpCtAh2sGuLsqI7tXc5bWLonQ4gOibxGE3r/Tp9rUqQXFJnbYSywEJmuXeU91IOHkm4TBxLVnJkEiFk49Rtys1Oibdc/+BBD/Bw0HYjr5AmAZwgzgLN2wf5EX1fKtVHVK5NqRfdsbpjJmTH+p9zX7TW9uQwreylVrqZgkydmpvMVs6Ss+8an3Xh/E1IBqCbw4eNPb8x8Nm7j/PE/KZByvdJjG1EuBjhvCBPlMGKATTWOLI9bCKjgVdVLsmvAZToi4AJiWzvvvFE/Wbw/Oh6RMpIYmKzkpLZqSKsMBxw3y2gAclPaPcA/7xqCUzxoqx7zvKq5bBMaEHSQbV6F7Uem0VbmfReHBfcG02j36OJjX5zcRly8J+zjvzz14V/4nbKw/7cLoYraKTQMS4eh1WiL6mPtBvMreKb0xgX9sBlI4Xz2047cRIJBZpGkGPUPJ2ryWfSVm2ssAIC+Ig==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(366004)(39860400002)(396003)(376002)(451199021)(66556008)(8936002)(5660300002)(54906003)(83380400001)(53546011)(31696002)(6512007)(6506007)(86362001)(26005)(186003)(82960400001)(2616005)(38100700002)(8676002)(478600001)(6486002)(66476007)(6916009)(316002)(36756003)(4326008)(41300700001)(7416002)(2906002)(4744005)(66946007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3FkN1p3alBzSHVidVpqQmJ0Z2J2eDBNOWJ6SlJJU2c1c1MrR2dtRDIyd1JL?=
+ =?utf-8?B?d2xYdFI2aXRkR2RvdjZmay9VcVphay9FYU01d2t1UzFBNjk0OXBtS3Y5YkdG?=
+ =?utf-8?B?YkNFakUyclZrT2g5MENLWnVOMHNJY1M0eGJMOVJsYjd2aDVMTHVwM3U5NDN6?=
+ =?utf-8?B?M2Zwd2htb1dSUExoN1o5RFZtQlBQdmQ1RnlEY1pucXFLUGdKRTlTTmlmMk1H?=
+ =?utf-8?B?VFprQ21ISW5uanRieFdJNTdkeFpyV25oWWhHSnVkQXZUYUlrMUdXYVdFU1VP?=
+ =?utf-8?B?WHVYTi9jd1YzSVVzYyt1bk9PMDlBaXMxQ2xMM2k1ZXlqSGxGZ2p1MCtqeXFP?=
+ =?utf-8?B?aWJoRkRVSERBeWVtN0E2cE9ZdTNuU093Z2VwdWhBVmRDNFJUclV5dDVpR2xJ?=
+ =?utf-8?B?NGpjejBFQ2pxRHJpbnhKanQ2Tm4wZFdSdHNzaVZGZDltL1REMnhvZTFNTFp3?=
+ =?utf-8?B?ZzUvN3VKT3htbUE4eTNBUVJpRHdySkd3S1FCalRuZzVYSW1qanNYVE5qMUo3?=
+ =?utf-8?B?Rkk2Z1NOc2RuL1ZoMjZ2dFBRMnozVm9ieHB4QThYTkdOZUorYUtDcmpXSnJu?=
+ =?utf-8?B?citTdUpVUmg4dXRpblJrZlcwMmNqaVpEcysydjE4RGpxRnMrN2dnSDIzVHM0?=
+ =?utf-8?B?RDR2VGRJUlc5Mjh1bXVMQTRualB3Z3FxWC9ZbEwrc1hwR2F0N2lORlVBajhj?=
+ =?utf-8?B?UzZRNUZlalRmMDNFUW9RNHJFSWJ1VE53d3ZvcEp4RWNyWE5qclBXVjBNQ0tI?=
+ =?utf-8?B?aENUeU40MUpIYlBITXhHaEgrbVV3QVhMSDJZRmlJTGNhRk4xaU9oRjlUdDZQ?=
+ =?utf-8?B?dzNpWFZmK3lkQnlJcUdkVlQvRHBTa1R5ZDU0NnZsWkt5Q25YaUhEMURxZjZV?=
+ =?utf-8?B?RzB2U09PT0p1TVhUU2VlQnIvbklYMVNLaFBWS1RHSGhRUXJ6a0UybEtTS3g3?=
+ =?utf-8?B?YTZ2Y3ZZUE5XVTFralJvQ0t4ZnpFREpaSXpkTTd3dk43eEEyZE13K3RSR0pQ?=
+ =?utf-8?B?bG01NzRuWmVJQ1RWR3RQbmdhcHpSeGtSc2dUdDdyb2o1cStONEhHZXdJTkc1?=
+ =?utf-8?B?ejNhck1QaWJSYmhSdUpDSXFtenNsQ2Fsd2laVFNRQm9yMG1nZXFRSEVwR3pr?=
+ =?utf-8?B?Z2FLeXhQanlTZGJQNU9INHZMeElvSnduTVNHblNpMlJyYTg5d0hFQ2FLVDVT?=
+ =?utf-8?B?NVNka2JpMXN3RXVBVzdaaGpOYnlxTE5Ea0tFeDJFZWd4RzNHb2xxUEl0Y3JL?=
+ =?utf-8?B?cDVwUFZ4a3g3bWtYQ2VtWDNMTWg3YXhTYmM3MUxaalhpK2p6S3JqOVhnb2xr?=
+ =?utf-8?B?R1NVZUEra3ZzcUEvWExwU25VcEY3WHEycXJ3N0ZhMzFLeW5IU0NVSnEwTWVG?=
+ =?utf-8?B?MC84R0wvdUVHZUhqQUJSYlZoT2pOelhzZEN2b1FGdnZXQjVaT2xFcEFodXlr?=
+ =?utf-8?B?QTAyKzZ4K3NwbGlGOWFFSW5GWXg1Qm40K25yTmcxeUVnQUtaMHlNY0pRTllG?=
+ =?utf-8?B?bHVzbXRmNmMrS0F5RTk2Ulg4eTI0OUVQTm1sQ1E2RWdEYm5LdURNbTVYZ2Fl?=
+ =?utf-8?B?SkZ6MVJXdllLVnRzdUxjN0IySEpzVTZsQ2dVd1EvOGFNSlRCckhjUnp6a2Vt?=
+ =?utf-8?B?TnpHKzZBVEF2SkhNcEVoOUVTc1dkRmF5VHNMVFE5dTNBZlJoS0JrWEp1SFZP?=
+ =?utf-8?B?K0lXWXNoNWFIV01ydHN5Y3dCVDRLc29HdmR6dTUyWFBVSUJtUXhDbExkcCtD?=
+ =?utf-8?B?N0VqU0xjWTh1WlBHVGlSU3F3d000TnpKWEpjd1hqdEtXeUZQb3hCb05McllO?=
+ =?utf-8?B?OHpTWG9JVVRCSjdmMC9rYmowNitFQU9xall3SVMzQUpOMHJUNFpMSHg5d2RT?=
+ =?utf-8?B?OHpTbXFjcFZFZ012OGQxSmRMTHlpUUQ4Y3pITEtIOW1oblZFQUs2ZXBNd1p5?=
+ =?utf-8?B?MVorUGpmckZrTURnTGduUXM0WUNOemU4bjJKOFFGRURHeXNabTY4d2JjT2x1?=
+ =?utf-8?B?RGgxVnBjZ1pNRXRjaVYwdzBwcVoxWXlYekhjVFVHTXVzZDA3cmhPQnQxMGJH?=
+ =?utf-8?B?MndsSytLZjNZMlVYSXRwcnJXWDl6aDNhbUZoRnp0ZnI1Nno0ZGN6MFZOVWl5?=
+ =?utf-8?B?SXJCU3lrRGlTWmF3QXNib0RqKzlDWXlPUzRLQkRYVEhrTk5Kc2tPQVcrQ1dm?=
+ =?utf-8?B?L3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 393f1cee-0e98-4997-0f5a-08db5c7ae0ea
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 17:18:23.4338
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JZZmXvfs2R4qSq+Q4WK2PEkOrSz+A1/oarfpSDX+9likOBMs9PD/frH7DF13NLtU9SKeTdQbGzPUZXDHeV8b8qEXVJVAyxxSzcBpApEDInI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5013
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 09:46:13AM -0700, Sean Christopherson wrote:
-> On Wed, May 24, 2023, Peter Xu wrote:
-> > On Mon, May 22, 2023 at 01:46:41PM -0700, Sean Christopherson wrote:
-> > > As for the flags vs. bools debate (see link above), I think the best approach is
-> > > a mix of the two.  Specifically, reuse the FOLL_* flags as-is for inputs, and use
-> > > booleans for outputs.  I don't _think_ there are any input bools/flags that don't
-> > > map 1:1 with existing FOLL_* flags.
-> > > 
-> > > As a very, *very* rough sketch, provide APIs that look a bit like this.
-> > 
-> > Unifying ref vs nonref cases does look a bit cleaner to me too.
-> > 
-> > > 
-> > >   kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
-> > >   {
-> > > 	kvm_pfn_t pfn;
-> > > 
-> > > 	if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
-> > 
-> > IMHO we may not want to rely on mmu_seq==0 either for unlucky very initial
-> > mmu_seq being zero, or avoid overflows?
+On 5/8/2023 11:18 AM, Chang S. Bae wrote:
 > 
-> I was thinking we could initialize mmu_seq to '1' and make it a u64 to avoid
-> overflow.
+> I thought this is something benign to stay here. But, yes, I agree that 
+> it is better to simplify the code.
 
-Yeah, that's fine too.
+After staring at this a bit, I realized that at least the feature flag 
+check needs to stay there. This can populate a proper error code when 
+the feature abruptly gets disabled (most likely due to the backup failure).
 
-> 
-> > I'd say we can stick with FOLL_GET in this case to identify ref vs nonref
-> > and always assume mmu_seq a pure random number.
-> 
-> The intent of checking mmu_seq is to flag cases where the caller doesn't specify
-> FOLL_GET and isn't protected by mmu_invalidate_seq, i.e. isn't tapped into the
-> mmu_notifiers.  I.e. this is a sanity check, not functionally necessary.
-> 
-> > 
-> > > 		return KVM_PFN_ERR_FAULT;
-> > > 
-> > > 	pfn = ???;
-> > > 
-> > > 	if (foll->page && !(foll->flags & FOLL_GET))
-> > > 		put_page(foll->page);
-> > > 
-> > > 	return pfn;
-> > >   }
-> > > 
-> > >   kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
-> > >   {
-> > > 	struct kvm_follow_pfn foll = {
-> > > 		.flags = FOLL_GET | FOLL_WRITE,
-> > > 	};
-> > > 
-> > > 	<more stuff here?>
-> > > 
-> > > 	foll.slot = ???;
-> > > 	if (!foll.slot || foll.slot->flags & KVM_MEMSLOT_INVALID)
-> > > 		return KVM_HVA_ERR_BAD;
-> > > 
-> > > 	if (memslot_is_readonly(foll.slot))
-> > > 		return KVM_HVA_ERR_RO_BAD;
-> > > 
-> > > 	return __kvm_follow_pfn(&foll);
-> > >   }
-> > > 
-> > > and a few partially converted users
-> > > 
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 67e2ac799aa7..5eaf0395ed87 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -550,12 +550,14 @@ static bool mmu_spte_update(u64 *sptep, u64 new_spte)
-> > >  
-> > >         if (is_accessed_spte(old_spte) && !is_accessed_spte(new_spte)) {
-> > >                 flush = true;
-> > > -               kvm_set_pfn_accessed(spte_to_pfn(old_spte));
-> > > +               if (is_refcounted_page_pte(old_spte))
-> > 
-> > One question is how to impl is_refcounted_page_pte() here to identify
-> > non-refcountable pages.
-> 
-> KVM would use a software available bit in its PTEs to explicitly track which SPTEs
-> point at refcounted pages.  E.g. I think bit 59 is available for EPT and 64-bit
-> paging.  PAE paging doesn't have high available bits, which is why I called out
-> that this would have to be 64-bit only.
-> 
-> > IIUC those pages are mostly identical to a normal page (so !PG_reserved)
-> > but it has page_ref_count(page)==0 always, am I right?  I got that roughly
-> > from reading f8be156be1 only though, so I could miss a lot of things..
-> > 
-> > When thinking about that, I'm also wondering whether we can trivially allow
-> > kvm to support such mapping (without overhaul of the kvm pfn API) by
-> > something like this:
-> > 
-> > ===8<===
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 51e4882d0873..467acbac1a96 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -192,7 +192,13 @@ struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn)
-> > 
-> >         page = pfn_to_page(pfn);
-> >         if (!PageReserved(page))
-> > -               return page;
-> > +               /*
-> > +                * When page_ref_count(page)==0 it might be speical page
-> > +                * that do not support refcounting.  Treating them the same
-> > +                * as normal reserved (e.g. MMIO) pages by returning NULL,
-> > +                * so they're exempt of refcounting.
-> > +                */
-> > +               return page_ref_count(page) == 0 ? NULL : page;
-> 
-> Heh, because I got burned by this recently, using page_ref_count() is wrong.  This
-> needs to be page_count() so that tail pages of refcounted compound pages are
-> properly identified.
-
-:-D
-
-Actually when I was replying I explicitly didn't use page_count() to make
-sure we're reading the tail page, but I just noticed that's exactly the way
-how we identify the special page with a PageCompound()==true tail page.
-
-Yeah, if we'd like that it needs to be page_count()==0.
-
-> 
-> > 
-> >         /* The ZERO_PAGE(s) is marked PG_reserved, but is refcounted. */
-> >         if (is_zero_pfn(pfn))
-> > ===8<===
-> > 
-> > So that we treat those special pages the same as normal PFNMAP ones by
-> > skipping all refcountings on inc/dec.  This is based on the fact that kvm
-> > should always hold at least 1 ref on a normal page so a normal page should
-> > never hit ref==0 here, but again I could miss something somewhere..
-> 
-> This would "work" from a functionality perspective, and might be acceptable as an
-> out-of-tree patch to unblock the ChromeOS use case, but I don't want to rely on
-> this heuristic on the backend in KVM because it will suppress any and all
-> use-after-free bugs in KVM's MMU (see patch 4 of this series).  I really want to
-> go in the opposite direction and harden KVM against MMU bugs, e.g. I'm planning
-> on posting the below (which is how I learned about page_count() vs. page_ref_count()).
-> 
-> Today, KVM gets partial protection from check_new_page_bad(), which detects *some*
-> cases where KVM marks a page dirty after the page is freed.  But it's racy, and
-> the detection occurs well after the fact since it fires only when the page is
-> re-allocated.
-> 
-> If we hack kvm_pfn_to_refcounted_page(), then all of those protections are lost
-> because KVM would drop its assertions and also skip dirtying pages, i.e. would
-> effectively suppress the latent detection by check_new_page_bad().
-
-So it's probably that I totally have no idea what are the attributes for
-those special pages so I don't understand enough on why we need to handle
-those pages differently from e.g. PFNMAP pages, and also the benefits.
-
-I think what I can tell is that they're pages that doesn't have
-PageCompound bits set on either head or tails, however it's still a
-multi-2-order large page.  Is there an example on how these pages are used
-and allocated?  Why would we need those pages, and whether these pages need
-to be set dirty/accessed after all?
-
-> 
-> Author: Sean Christopherson <seanjc@google.com>
-> Date:   Wed May 17 13:26:54 2023 -0700
-> 
->     KVM: Assert that a page's refcount is elevated when marking accessed/dirty
->     
->     Assert that a page's refcount is elevated, i.e. that _something_ holds a
->     reference to the page, when KVM marks a page as accessed and/or dirty.
->     KVM typically doesn't hold a reference to pages that are mapped into the
->     guest, e.g. to allow page migration, compaction, swap, etc., and instead
->     relies on mmu_notifiers to react to changes in the primary MMU.
->     
->     Incorrect handling of mmu_notifier events (or similar mechanisms) can
->     result in KVM keeping a mapping beyond the lifetime of the backing page,
->     i.e. can (and often does) result in use-after-free.  Yelling if KVM marks
->     a freed page as accessed/dirty doesn't prevent badness as KVM usually
->     only does A/D updates when unmapping memory from the guest, i.e. the
->     assertion fires well after an underlying bug has occured, but yelling
->     does help detect, triage, and debug use-after-free bugs.
->     
->     Note, the assertion must use page_count(), NOT page_ref_count()!  For
->     hugepages, the returned struct page may be a tailpage and thus not have
->     its own refcount.
->     
->     Signed-off-by: Sean Christopherson <seanjc@google.com>
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d1abb331ea68..64f18697096c 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2882,6 +2882,19 @@ EXPORT_SYMBOL_GPL(kvm_vcpu_unmap);
->  
->  static bool kvm_is_ad_tracked_page(struct page *page)
->  {
-> +       /*
-> +        * Assert that KVM isn't attempting to mark a freed page as Accessed or
-> +        * Dirty, i.e. that KVM's MMU doesn't have a use-after-free bug.  KVM
-> +        * (typically) doesn't pin pages that are mapped in KVM's MMU, and
-> +        * instead relies on mmu_notifiers to know when a mapping needs to be
-> +        * zapped/invalidated.  Unmapping from KVM's MMU must happen _before_
-> +        * KVM returns from its mmu_notifier, i.e. the page should have an
-> +        * elevated refcount at this point even though KVM doesn't hold a
-> +        * reference of its own.
-> +        */
-> +       if (WARN_ON_ONCE(!page_count(page)))
-> +               return false;
-> +
->         /*
->          * Per page-flags.h, pages tagged PG_reserved "should in general not be
->          * touched (e.g. set dirty) except by its owner".
-> 
-
-This looks like a good thing to have, indeed.  But again it doesn't seem
-like anything special to the pages we're discussing here, say, !Compound &&
-refcount==0 ones.
-
--- 
-Peter Xu
-
+Thanks,
+Chang
