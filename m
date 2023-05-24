@@ -2,151 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5761C70EBCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222C770EBD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239133AbjEXDU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 23:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S239232AbjEXDVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 23:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239314AbjEXDTr (ORCPT
+        with ESMTP id S239291AbjEXDUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 23:19:47 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F1B91B9;
-        Tue, 23 May 2023 20:19:06 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dx_+spgm1kkkkAAA--.628S3;
-        Wed, 24 May 2023 11:19:05 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axo8Aogm1kbbdyAA--.60316S3;
-        Wed, 24 May 2023 11:19:05 +0800 (CST)
-Subject: Re: [PATCH 1/2] perf arm64: Handle __NR3264_ prefixed syscall number
-To:     Alexander Kapshuk <alexander.kapshuk@gmail.com>
-References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
- <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
- <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Hans-Peter Nilsson <hp@axis.com>, Leo Yan <leo.yan@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <49e98308-ab8d-5811-66a8-9e17f22bb8c4@loongson.cn>
-Date:   Wed, 24 May 2023 11:19:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 23 May 2023 23:20:51 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B381A2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:20:46 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba71cd7ce7fso753155276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684898445; x=1687490445;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S1Ic9lmajt1bc7YqAp1ZDUsVACgZvUXdJaCPzytnSgQ=;
+        b=OydEIfSzuBg9A30R/d+SaZ/46FzOSp7LL0tywF5phYVeld9ovniXgucSvpmx9qp6kv
+         fzEb5o+qX222y7d40RT69HOOmTqtE/mxh+dGZutzpRnxC1ohXmoOHRNT3LwrIrQLXLDd
+         Cl+78DjSEKOQBNYxPXfM3tYeP5xrhc8C5uVkJYKYfF3nnLxd2sIHzA7toqq5yz5HQSF1
+         qZshTFG6b0qR+n/iCO+lOHGEAZmQirGfiA7P7fpVHdYW/k2/6SHC1RT8qguWp/8hd4Ng
+         Qelg8Olb9YUqP2TgKiPWMZdpBBtb7f/YltwBC83heuZghuFH3pWH8qOaitV46WFgAbZm
+         vcEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684898445; x=1687490445;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S1Ic9lmajt1bc7YqAp1ZDUsVACgZvUXdJaCPzytnSgQ=;
+        b=SeBUgFiKisD0Ctx1fJWlXudy1ywFtqC3Ggox6cQ7LfFwpksmy67cpRpzv3xuoHzVtu
+         5+WNjSFSUHo//4R39a9It6Tft274eir4DboMckt5B7Y9O3BzVFgBJMTe6kVvhNvLp5eJ
+         iw2BPf4+qzpFwOJ59KMearW3h6OuWQJ/uc1WIglwqfgFjivjqKQrLoTGLoNR3eDuTiZ5
+         n85JU/NvmwYnUk1rza2YuhwnSRau2hbraJJzpjVAHiBkhSdf0nwyJFFMt6Irck09mvpe
+         ydHAdDHYIxN7wCCtDCfpmQrCYSa9UlY7QZCQuNOqpsmJd3mNNleTxuScLCawwlFxhy6K
+         v38g==
+X-Gm-Message-State: AC+VfDw1bHKTsfYVf1BsQujv1vKA0dBhlEGEQJemFJhRljtm7zzUTpoi
+        J/tlW9Yh43Yfb1/APUs4ouE+0A==
+X-Google-Smtp-Source: ACHHUZ4jp475x6K67Bd7uNS4vA7Hth7pnLr9V4HuAUB51TqTKZ6Hb4uHD1d9YbQMgTAOfsJ3QTeg7g==
+X-Received: by 2002:a81:6ac1:0:b0:556:9f48:cbe7 with SMTP id f184-20020a816ac1000000b005569f48cbe7mr18184556ywc.3.1684898445186;
+        Tue, 23 May 2023 20:20:45 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id e129-20020a0dc287000000b00545a08184f8sm3386553ywd.136.2023.05.23.20.20.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 20:20:44 -0700 (PDT)
+Date:   Tue, 23 May 2023 20:20:41 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Qi Zheng <qi.zheng@linux.dev>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 17/31] mm/various: give up if pte_offset_map[_lock]()
+ fails
+In-Reply-To: <07317766-c901-34a9-360a-e916db4b9045@linux.dev>
+Message-ID: <4df7a2a5-e2b9-6c9e-9bbf-27e1dbdace8@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <c299eba-4e17-c645-1115-ccd1fd9956bd@google.com> <f8468e50-9f54-f22d-59a7-3a48369d2f05@linux.dev> <07317766-c901-34a9-360a-e916db4b9045@linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axo8Aogm1kbbdyAA--.60316S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7WF47CrWDKryktF47tFyxKrg_yoW8KFW8pr
-        n5Aay5tay8WF12kwn7ursIqrySy3ykJr90gryvk39xu3WDt3Z5Kr10v3Z0kFWxXr1xKrWr
-        uF10qFyUX3WrX3DanT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463760895-1197784731-1684898444=:7491"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+---1463760895-1197784731-1684898444=:7491
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On 05/23/2023 08:31 PM, Alexander Kapshuk wrote:
-> On Tue, May 23, 2023 at 1:22 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
->> in the generated syscall table file syscalls.c, there exist some
->> __NR3264_ prefixed syscall numbers such as [__NR3264_ftruncate],
->> it looks like not so good, just do some small filter operations
->> to handle __NR3264_ prefixed syscall number as a digital number.
->>
->> Without this patch:
->>
->>   [__NR3264_ftruncate] = "ftruncate",
->>
->> With this patch:
->>
->>   [46] = "ftruncate",
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 7 ++++---
->>  1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
->> index 22cdf91..59ab7939 100755
->> --- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
->> +++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
->> @@ -39,7 +39,8 @@ create_table()
->>         echo "};"
->>  }
->>
->> -$gcc -E -dM -x c -I $incpath/include/uapi $input \
->> -       |sed -ne 's/^#define __NR_//p' \
->> -       |sort -t' ' -k2 -n             \
->> +$gcc -E -dM -x c -I $incpath/include/uapi $input               \
->> +       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
->> +       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
->> +       |sort -t' ' -k2 -n                                      \
->>         |create_table
->> --
->> 2.1.0
->>
->
-> As an aside, the awk + sed + sort parts of the command line may be
-> reduced to the following awk script, if desired:
-> awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
->         sub("^#define __NR_", "")
->         sub("^#define __NR3264_", "")
->         print | "sort -k2 -n"
-> }'
->
+On Mon, 22 May 2023, Qi Zheng wrote:
+> On 2023/5/22 20:24, Qi Zheng wrote:
+> > On 2023/5/22 13:10, Hugh Dickins wrote:
+> >> Following the examples of nearby code, various functions can just give
+> >> up if pte_offset_map() or pte_offset_map_lock() fails.=C2=A0 And there=
+'s no
+> >> need for a preliminary pmd_trans_unstable() or other such check, since
+> >> such cases are now safely handled inside.
+> >>
+> >> Signed-off-by: Hugh Dickins <hughd@google.com>
+> >> ---
+> >> =C2=A0 mm/gup.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 9 ++++++---
+> >> =C2=A0 mm/ksm.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 7 ++++---
+> >> =C2=A0 mm/memcontrol.c=C2=A0=C2=A0=C2=A0=C2=A0 | 8 ++++----
+> >> =C2=A0 mm/memory-failure.c | 8 +++++---
+> >> =C2=A0 mm/migrate.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 +++
+> >> =C2=A0 mm/swap_state.c=C2=A0=C2=A0=C2=A0=C2=A0 | 3 +++
+> >> =C2=A0 6 files changed, 25 insertions(+), 13 deletions(-)
+> >>
+> >=20
+> > [...]
+> >=20
+> >> diff --git a/mm/migrate.c b/mm/migrate.c
+> >> index 3ecb7a40075f..308a56f0b156 100644
+> >> --- a/mm/migrate.c
+> >> +++ b/mm/migrate.c
+> >> @@ -305,6 +305,9 @@ void migration_entry_wait(struct mm_struct *mm, pm=
+d_t
+> >> *pmd,
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 swp_entry_t entry;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ptep =3D pte_offset_map_lock(mm, pmd, a=
+ddress, &ptl);
+> >> +=C2=A0=C2=A0=C2=A0 if (!ptep)
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
+> >=20
+> > Maybe we should return false and let the caller handle the failure.
 
-Hi Alexander,
+We have not needed to do that before, it's normal for migration_entry_wait(=
+)
+not to wait sometimes: it just goes back out to userspace to try again (by
+which time the situation is usually resolved).  I don't think we want to
+trouble the callers with a new case to handle in some other way.
 
-Thanks, it seems more simple and works well as expected.
-Let us wait for more review comments before respin.
+> >=20
+> >> +
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pte =3D *ptep;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pte_unmap(ptep);
+> >> diff --git a/mm/swap_state.c b/mm/swap_state.c
+> >> index b76a65ac28b3..db2ec85ef332 100644
+> >> --- a/mm/swap_state.c
+> >> +++ b/mm/swap_state.c
+> >> @@ -734,6 +734,9 @@ static void swap_ra_info(struct vm_fault *vmf,
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Copy the PTEs because the page table=
+ may be unmapped */
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 orig_pte =3D pte =3D pte_offset_map(vmf=
+->pmd, faddr);
+> >> +=C2=A0=C2=A0=C2=A0 if (!pte)
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
+> >=20
+> > Ditto?
+>=20
+> Oh, I see that you handle it in the PATCH[22/31].
 
-If no any objections, I will send v2 with the following
-changes based on the current patch in the next week.
+I don't think 22/31 (about swapoff "unuse") relates to this one.
+Here swap_vma_readahead() is doing an interesting calculation for
+how big the readaround window should be, and my thinking was, who cares?
+just read 1, in the rare case that the page table vanishes underneath us.
 
--$gcc -E -dM -x c -I $incpath/include/uapi $input               \
--       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
--       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
--       |sort -t' ' -k2 -n                                      \
-+$gcc -E -dM -x c -I $incpath/include/uapi $input \
-+       |awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
-+               sub("^#define __NR_", "")
-+               sub("^#define __NR3264_", "")
-+               print | "sort -k2 -n"}' \
-         |create_table
+But thank you for making me look again: it looks like I was not careful
+enough before, ra_info->win is definitely *not* 1 on this line, and I
+wonder if something bad might result from not following through on the
+ensuing calculations - see how !CONFIG_64BIT is copying ptes (and that
+implies CONFIG_64BIT is accessing the page table after pte_unmap()).
 
-Thanks,
-Tiezhu
+This swap_ra_info() code looks like it will need a patch all it own:
+I must come back to it.
 
+Thanks!
+Hugh
+---1463760895-1197784731-1684898444=:7491--
