@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E640970FD5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7503570FD63
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjEXSBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S236592AbjEXSBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjEXSBR (ORCPT
+        with ESMTP id S236522AbjEXSBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:01:17 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6610898;
-        Wed, 24 May 2023 11:01:14 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1684951269t67ndppu
-Received: from linux-lab-host.localdomain ( [116.30.125.36])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 May 2023 02:01:08 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000B00A0000000
-X-QQ-FEAT: hoArX50alxHX1mYOrihcB1iZGA+cMKRF18+VTtXY99N55mVqxxcNdy0jsu7Jz
-        AcFGpT9by4v33/v8k6d71SGSNut3w5M1Y55V4QKFnuqDFz4e83jelIWCnwnh7ZZM/sT3E7F
-        z6uTpi+OMP1Z7jyvBEXLGAs4F6CizZ4L8XY7TfsyP2p/AFUjdFPl7T1OArgl97XQgJkh/6Y
-        UFvN8POwUkaWKQhBkorPnFG0okEi1/pIjfr9VCs/vFUjAG/lqDuM5K9BE9462Br2voypj0+
-        KqU2y/d9dGgUBYc8VJyjXbBM9c6PjzUS1OidPVawQduEJIza/o8yXXFRHqHoIzmrt3APMEb
-        gsgqua+2O/NyW4ZeCqKXTDW6FjzPqNY0tBIaYOff9EXpYK8gO+mip2Uh9tHJw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4020491424755662603
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
-Subject: [PATCH 11/13] tools/nolibc: sys_select: riscv: use __NR_pselect6_time64 for rv32
-Date:   Thu, 25 May 2023 01:59:55 +0800
-Message-Id: <9359ab11b52ef7c1799337f475e1e27c0cb00e3b.1684949268.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
-References: <cover.1684949267.git.falcon@tinylab.org>
+        Wed, 24 May 2023 14:01:30 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C24C180;
+        Wed, 24 May 2023 11:01:29 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-783f88ce557so25634241.3;
+        Wed, 24 May 2023 11:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684951288; x=1687543288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rlPBaeyzlXrf/1ID6O8EEwBqTqJMpkMnDn/pRjEQSJc=;
+        b=e3S66VMKx/tiNL1kyczRErSQ+xgBRlykj2JtCBWYSPt3r1L4MT5QNHMVG5sV7GK/q8
+         sHEejcNn1/lp9YZpkogxedGXI04mcqS22B57/2/EOpNryDdY+Lmt5x0FNXPPrrBD/DYA
+         5Bma1m0Y+4Zk/wIdDvJqrW3hz5C/lLx1b9FkLjydcHzh17F8CtBEuipF2RkRn/PYElf5
+         nheW219I/0GqHduhfuU+Jt0xhubNqXWhRK1XU8E2CkgYmsCFkGCkUIPGrJ9nt+D3mXrI
+         4Evhe80dYCAN/zuKuGDk0hbpS294U54DEDn/Dj/1CMBseoLs88Kux+IduqfP5Fp2dRtZ
+         Oo2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684951288; x=1687543288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rlPBaeyzlXrf/1ID6O8EEwBqTqJMpkMnDn/pRjEQSJc=;
+        b=crEEZOqkiE9ACz25trjxhOwedDBfCRf3q5UWwROC6aJDtXts3m86DhyHgrwJHeHXv+
+         ND2IEhVfZxW1WNNCvk3kQ7ST3YpvwKkFr8e4pGJ0vTtPYcR4QgagqoZM8aqewo1MJMR/
+         1BOXwqwDvEnhBpGq5a5x0/AeOElEoV00sWoQylltzCzp4XSPo2pnb+WKuKOWHexCYDXP
+         zQ886760tRcq7IsEjdPcAomHlEoiJGo6dMF5fz8PaTzRL/Qxo2OrffIowPP+BA/EzNTL
+         gyRFGPEI9ODRdzrnrp2I5SZb9+BcmeV8vsoJ4wzzWxRIMls7OfqCIMpr9iyyM1NEHnof
+         xcAg==
+X-Gm-Message-State: AC+VfDzxERy1Ag56yrX0rvKtsoKgSCSJCxmcPUP5klV3Xy4nmKYsKBJh
+        +d2Pnt0vCk7aeJTDz9ZhTaxJbdby5pjlWqE1UU0=
+X-Google-Smtp-Source: ACHHUZ6hH0zXTy1ql2c+FEGKTTerhY9iEh0FL9zJF9iqSxNqhHB315xPjK09tZCO9/r3fGp6aDexLxkWC/p1CvFmO4o=
+X-Received: by 2002:a05:6102:3a44:b0:430:2b7b:a4e9 with SMTP id
+ c4-20020a0561023a4400b004302b7ba4e9mr6014224vsu.20.1684951288614; Wed, 24 May
+ 2023 11:01:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230523223944.691076-1-Kenny.Ho@amd.com> <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
+ <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
+ <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch> <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
+ <5b1355b8-17f7-49c8-b7b5-3d9ecdb146ce@lunn.ch>
+In-Reply-To: <5b1355b8-17f7-49c8-b7b5-3d9ecdb146ce@lunn.ch>
+From:   Kenny Ho <y2kenny@gmail.com>
+Date:   Wed, 24 May 2023 14:01:17 -0400
+Message-ID: <CAOWid-dYtkcKuNxoOyf3yqSJ7OtcNjaqJLVX1QhRUhYSOO6vHA@mail.gmail.com>
+Subject: Re: [PATCH] Remove hardcoded static string length
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        Kenny Ho <Kenny.Ho@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
-__NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
-system call ABI"), use __NR_pselect6_time64 instead.
+On Wed, May 24, 2023 at 1:43=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> The other end of the socket should not blow up, because that would be
+> an obvious DOS or buffer overwrite attack vector. So you need to
+> decide, do you want to expose such issues and see if anything does
+> actually blow up, or do you want to do a bit more work and correctly
+> terminate the string when capped?
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Right... I guess it's not clear to me that existing implementations
+null-terminate correctly when UTS_RELEASE causes the string to exceed
+the 65 byte size of rxrpc_version_string.  We can of course do better,
+but I hesitate to do strncpy because I am not familiar with this code
+base enough to tell if this function is part of some hot path where
+strncpy matters.
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index c0335a84f880..00c7197dcd50 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
- 		struct timeval *t;
- 	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
- 	return my_syscall1(__NR_select, &arg);
--#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
-+#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
-+#ifdef __NR_pselect6
- 	struct timespec t;
-+#else
-+	struct timespec64 t;
-+#define __NR_pselect6 __NR_pselect6_time64
-+#endif
- 
- 	if (timeout) {
- 		t.tv_sec  = timeout->tv_sec;
--- 
-2.25.1
-
+Regards,
+Kenny
