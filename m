@@ -2,249 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484F070FE9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AF970FEA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbjEXTjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S230304AbjEXTm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjEXTjb (ORCPT
+        with ESMTP id S229588AbjEXTm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:39:31 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9DC132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:39:29 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-5ed99ebe076so1251366d6.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:39:29 -0700 (PDT)
+        Wed, 24 May 2023 15:42:26 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2C7130
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:42:25 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-456f7ea8694so471958e0c.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684957167; x=1687549167;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684957344; x=1687549344;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XIB0HReKptcGBTosdBXg1PO+NrPRx+I4udNpoc6AMN0=;
-        b=UbH9k3kVSoK3efzJrB5PftbPDlOMQWm6Ry9OKU11IRkL0XvgWYsT6q0srIwWdi6Stc
-         77RW+1l6kt+XuIxnFQSKe8VkRituefpMsJit/JmxXEmj2Z2BeLqR2vUjMq4T0ZZkIXbi
-         tACPyD99ahwARuyukj+1VPcJ14q6t8qVwha0U=
+        bh=BNTJOwky/qCDAD6V6w3Og06bM/WY9gM+YM9PZwHETOg=;
+        b=PYV/PGOyG75ebKOJpa8EjtuywyYgc9adk1CzQFCWSn77/mQHNSCeNVGGbz52Gv5tZr
+         RHRdi1ICmMT+JBXjh++kUCknmTSd/yAL4fohfT18qNfhwlepwypXf9GHlJdnFfw7T6Jl
+         P4PGrcaHFJ8g/IhTM/a7lz5yU1v/GbLCsSnNLWSZzw3Y/qRBtvOElC+MzWQWECKsWILT
+         p+xX7Zvj1zfLAJyPH01ERyMjtvS7Q4o3V1NkJzJW3vSt8y/oGn/cX0eYZllv7C99lrmS
+         OgUwA8jYewZYLx8Tqe/Ail89fdR9ZsPm3cm2M3S7HnWw/iuig7j688ZLQCftoCV8DkET
+         A9OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684957167; x=1687549167;
+        d=1e100.net; s=20221208; t=1684957344; x=1687549344;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XIB0HReKptcGBTosdBXg1PO+NrPRx+I4udNpoc6AMN0=;
-        b=DUX2X4I+ZCIWJ3AD3uwhKoDwGdVLIpEFrboW3/4Ikzkz/UoSfTuyTp2lKC4UvcuLtr
-         UUJlEBo+de5ZhpVvPsYQRTbfXgvKGoUWryHsiwFaYeZPlDNJMpwnuKxOBMIG7agm9J6Q
-         JLNk5jhnkG9ZW/T1KtLpWszvrLLoJ4hWR2KmmIH7BgXlqcgWhqCalpIryq7McLK1ZsWh
-         df9T/446/FKdoObw0t2aYbjzfbYYJnUcKwb7E62AkvDhwWqBaqcJrAqSYyOG4QCvAcTN
-         ruhCdHCGxy8dlOzUq3roSby/3VZmRLEUKVZqNueynTpMG2ICr5zUN6byXo/NVjj3wKCs
-         vZJA==
-X-Gm-Message-State: AC+VfDwNvW4mqj/C0lzI1JRQP1cgtRpIdQlXd63KSCAdTVppMQnW8mIu
-        6tCgSNVCdsBoMgl50zMvMsAZmD5S56utG8FSd6g=
-X-Google-Smtp-Source: ACHHUZ6BT9K7AD9sY2FrlfaUo1hp6s6lh+6WwEvMRdI32fgFpwC9lBBuJ03gRe1uotgawp1ZUOTcpg==
-X-Received: by 2002:a05:6214:21ed:b0:625:95f1:eb47 with SMTP id p13-20020a05621421ed00b0062595f1eb47mr8185406qvj.20.1684957166979;
-        Wed, 24 May 2023 12:39:26 -0700 (PDT)
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com. [209.85.160.174])
-        by smtp.gmail.com with ESMTPSA id t3-20020a0cea23000000b005dd8b9345f6sm3732121qvp.142.2023.05.24.12.39.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 12:39:26 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-3f38824a025so40791cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:39:25 -0700 (PDT)
-X-Received: by 2002:a05:6e02:194e:b0:331:d42:d06e with SMTP id
- x14-20020a056e02194e00b003310d42d06emr33974ilu.17.1684957143210; Wed, 24 May
- 2023 12:39:03 -0700 (PDT)
+        bh=BNTJOwky/qCDAD6V6w3Og06bM/WY9gM+YM9PZwHETOg=;
+        b=AwNFYeDOCphtH0OBtj1mz+wP7ruSYJJXbeE7BDHUVKGxy0LoPrcVJTEIBTojlKwgtV
+         qNH1X5OOgwA5l4zHYkxbJVXWIG7eRlJJ41IteOoV8RgEdmqdECHVDvA18+XIkn1jU58O
+         RcusvzLh8w+pwdcte3hf6x11R8w65JgTEaOfToU+ijh/2x27FJ0IRXetymFb0mQuaTwC
+         LZVca6Gg5hvrJeXySVyne9NeHRsFvcSCW+xS6DuAuLB2UkaU3RGCc9hmA8Lz+JkoQqbR
+         eUh4uWrc0RDzmS1oDArweTO562x4nENAuwcRmdDMMm81RwaMM1w5WIuHBV4mL6LY4ZVx
+         HOvQ==
+X-Gm-Message-State: AC+VfDwDr81HCZ4Sb9VY//H0j5qaP802uNgqgQKxegTj182MJabt6nhX
+        SQMrLmARYuC9YaKaoih6sMA+XXhtckA5Yjw9oMqqjA==
+X-Google-Smtp-Source: ACHHUZ6QVkA/o5/98l+QmdbWky8XuB/nZPjeOrLT7V61vWawnAq8hhwHPsgmbejo7MIUqHlLhQlEwVBk/uw5IPZISMg=
+X-Received: by 2002:a1f:5c4d:0:b0:456:d210:68e2 with SMTP id
+ q74-20020a1f5c4d000000b00456d21068e2mr5872901vkb.10.1684957344300; Wed, 24
+ May 2023 12:42:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
- <20230519101840.v5.13.I847d9ec852449350997ba00401d2462a9cb4302b@changeid> <ZG4YMyifGLOBJxLo@alley>
-In-Reply-To: <ZG4YMyifGLOBJxLo@alley>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 24 May 2023 12:38:49 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X+LEcSrArV+w35MX4oP1sC9KoRM0puJLT1RFmyS84Hxw@mail.gmail.com>
-Message-ID: <CAD=FV=X+LEcSrArV+w35MX4oP1sC9KoRM0puJLT1RFmyS84Hxw@mail.gmail.com>
-Subject: Re: [PATCH v5 13/18] watchdog/hardlockup: Have the perf hardlockup
- use __weak functions more cleanly
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
-        npiggin@gmail.com, davem@davemloft.net,
-        Marc Zyngier <maz@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
-        christophe.leroy@csgroup.eu,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
-        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>
+References: <20230523155101.196853-1-brgl@bgdev.pl> <ZG1TLBsOy4mZQlW3@sol>
+ <ZG1x5pcyTN2Fio4J@sol> <ZG2USw7TTdFSRZ3E@sol>
+In-Reply-To: <ZG2USw7TTdFSRZ3E@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 24 May 2023 21:42:13 +0200
+Message-ID: <CAMRc=MeRfCoj7bcf-GKrRY3Mp5SEhmb289g=JAHBK-01aERCtw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: cdev: fix a crash on line-request release
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, May 24, 2023 at 6:59=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrot=
-e:
+On Wed, May 24, 2023 at 6:36=E2=80=AFAM Kent Gibson <warthog618@gmail.com> =
+wrote:
 >
-> On Fri 2023-05-19 10:18:37, Douglas Anderson wrote:
-> > The fact that there watchdog_hardlockup_enable(),
-> > watchdog_hardlockup_disable(), and watchdog_hardlockup_probe() are
-> > declared __weak means that the configured hardlockup detector can
-> > define non-weak versions of those functions if it needs to. Instead of
-> > doing this, the perf hardlockup detector hooked itself into the
-> > default __weak implementation, which was a bit awkward. Clean this up.
+> On Wed, May 24, 2023 at 10:09:42AM +0800, Kent Gibson wrote:
+> > On Wed, May 24, 2023 at 07:58:36AM +0800, Kent Gibson wrote:
+> > > On Tue, May 23, 2023 at 05:51:01PM +0200, Bartosz Golaszewski wrote:
+> > > > When a GPIO device is forcefully unregistered, we are left with an
+> > > > inactive object. If user-space kept an open file descriptor to a li=
+ne
+> > > > request associated with such a structure, upon closing it, we'll se=
+e the
+> > > > kernel crash due to freeing unexistent GPIO descriptors.
+> > > >
+> > >
+> > > > @@ -1565,17 +1571,21 @@ static ssize_t linereq_read(struct file *fi=
+le, char __user *buf,
+> > > >
+> > > >  static void linereq_free(struct linereq *lr)
+> > > >  {
+> > > > + struct gpio_device *gdev =3D lr->gdev;
+> > > >   unsigned int i;
+> > > >
+> > > >   for (i =3D 0; i < lr->num_lines; i++) {
+> > > >           if (lr->lines[i].desc) {
+> > > >                   edge_detector_stop(&lr->lines[i]);
+> > > > -                 gpiod_free(lr->lines[i].desc);
+> > > > +                 down_write(&gdev->sem);
+> > > > +                 if (gdev->chip)
+> > > > +                         gpiod_free(lr->lines[i].desc);
+> > > > +                 up_write(&gdev->sem);
 > >
-> > >From comments, it looks as if the original design was done because the
-> > __weak function were expected to implemented by the architecture and
-> > not by the configured hardlockup detector. This got awkward when we
-> > tried to add the buddy lockup detector which was not arch-specific but
-> > wanted to hook into those same functions.
+> > Ummm, taking another look at the oops I sent you, the crash actually
+> > occurs in edge_detector_stop():
 > >
-> > This is not expected to have any functional impact.
+> > May 23 11:47:06 firefly kernel: [ 4216.877056] Call Trace:
+> > May 23 11:47:06 firefly kernel: [ 4216.877512]  <TASK>
+> > May 23 11:47:06 firefly kernel: [ 4216.877924]  irq_domain_deactivate_i=
+rq+0x19/0x30
+> > May 23 11:47:06 firefly kernel: [ 4216.878543]  free_irq+0x257/0x360
+> > May 23 11:47:06 firefly kernel: [ 4216.879056]  linereq_free+0x9b/0xe0
+> > May 23 11:47:06 firefly kernel: [ 4216.879608]  linereq_release+0xc/0x2=
+0
+> > May 23 11:47:06 firefly kernel: [ 4216.880230]  __fput+0x87/0x240
+> > May 23 11:47:06 firefly kernel: [ 4216.880744]  task_work_run+0x54/0x80
 > >
-> > @@ -187,27 +187,33 @@ static inline void watchdog_hardlockup_kick(void)=
- { }
-> >  #endif /* !CONFIG_HARDLOCKUP_DETECTOR_PERF */
+> > That free_irq() call is in edge_detector_stop() (which apparently is in=
+lined),
+> > not in gpiod_free().
 > >
-> >  /*
-> > - * These functions can be overridden if an architecture implements its
-> > - * own hardlockup detector.
-> > + * These functions can be overridden based on the configured hardlockd=
-up detector.
-> >   *
-> >   * watchdog_hardlockup_enable/disable can be implemented to start and =
-stop when
-> > - * softlockup watchdog start and stop. The arch must select the
-> > + * softlockup watchdog start and stop. The detector must select the
-> >   * SOFTLOCKUP_DETECTOR Kconfig.
-> >   */
-> > -void __weak watchdog_hardlockup_enable(unsigned int cpu)
-> > -{
-> > -     hardlockup_detector_perf_enable();
-> > -}
-> > +void __weak watchdog_hardlockup_enable(unsigned int cpu) { }
+> > So pretty sure this patch doesn't even solve my problem, but I will tes=
+t
+> > it to confirm.
 > >
-> > -void __weak watchdog_hardlockup_disable(unsigned int cpu)
-> > -{
-> > -     hardlockup_detector_perf_disable();
-> > -}
-> > +void __weak watchdog_hardlockup_disable(unsigned int cpu) { }
-> >
-> >  /* Return 0, if a hardlockup watchdog is available. Error code otherwi=
-se */
-> >  int __weak __init watchdog_hardlockup_probe(void)
-> >  {
-> > -     return hardlockup_detector_perf_init();
-> > +     /*
-> > +      * If CONFIG_HAVE_NMI_WATCHDOG is defined then an architecture
-> > +      * is assumed to have the hard watchdog available and we return 0=
-.
-> > +      */
-> > +     if (IS_ENABLED(CONFIG_HAVE_NMI_WATCHDOG))
-> > +             return 0;
-> > +
-> > +     /*
-> > +      * Hardlockup detectors other than those using CONFIG_HAVE_NMI_WA=
-TCHDOG
-> > +      * are required to implement a non-weak version of this probe fun=
-ction
-> > +      * to tell whether they are available. If they don't override the=
-n
-> > +      * we'll return -ENODEV.
-> > +      */
-> > +     return -ENODEV;
-> >  }
 >
-> When thinking more about it. It is weird that we need to handle
-> CONFIG_HAVE_NMI_WATCHDOG in this default week function.
+> Yeah, doesn't fix my problem still crashes.
 >
-> It should be handled in watchdog_hardlockup_probe() implemented
-> in kernel/watchdog_perf.c.
+> If the line request doesn't have edge detection enabled (so no
+> irq) then I don't get a crash.
+> i.e. use gpioset to request the line, rather than gpiomon.
 >
-> IMHO, the default __weak function could always return -ENODEV;
+> (To provide background for anyone else trying to follow along, the
+> scenario is:
+> 1. create a gpio-sim
+> 2. request a line
+> 3. destroy the gpio-sim
+> 4. release the line.
 >
-> Would it make sense, please?
+> 3 triggers this error:
+>
+> May 24 11:11:12 firefly kernel: [  200.027280] gpio_stub_drv gpiochip0: R=
+EMOVING GPIOCHIP WITH GPIOS STILL REQUESTED
+>
+> and 4 triggers a crash - if the requested line holds an irq.)
+>
+> I would point out:
+> /**
+>  * gpiochip_remove() - unregister a gpio_chip
+>  * @gc: the chip to unregister
+>  *
+>  * A gpio_chip with any GPIOs still requested may not be removed.
+>  */
+> void gpiochip_remove(struct gpio_chip *gc)
+>
+> which is where that dev_crit() is, so destroying the gpio-sim has already
+> invalidated that contract.
+>
+> Anyway, it seems my problem is the forced removal of the gpiochip invalid=
+ates
+> the irq that the line request is holding.
+> Not sure how best to deal with that.
+>
+> Moving the edge_detector_stop() inside the "if (gdev->chip)" check of
+> your patch does prevent crash.
+> But in that case edge_detector_stop() does other cleanup that is no longe=
+r
+> getting done.
+> Perhaps if the chip is gone then zero line->irq prior to calling
+> edge_detector_stop()?
+> Again, this is starting to feel like a hack for gpiolib not being good
+> at telling the client that it has to pull the rug.
+> Though according the the gpiochip_remove() docs, it WONT pull the rug,
+> so you get that.
+>
+> Cheers,
+> Kent.
 
-I don't quite understand. I'd agree that the special case for
-CONFIG_HAVE_NMI_WATCHDOG is ugly, but it was also ugly before. IMO
-it's actually a little less ugly / easier to understand after my
-patch. ...but let me walk through how I think this special case works
-and maybe you can tell me where I'm confused.
+Interestingly enough, I did test it just like you and the "fix" seemed
+to address the issue. Upon a further look at the code, it's of course
+clear that the patch is wrong.
 
-The first thing to understand is that CONFIG_HARDLOCKUP_DETECTOR_PERF
-and CONFIG_HAVE_NMI_WATCHDOG are mutually exclusive from each other.
-This was true before any of my patches and is still true after them.
-Specifically, if CONFIG_HAVE_NMI_WATCHDOG is defined then an
-architecture implements arch_touch_nmi_watchdog() (as documented in
-the Kconfig docs for HAVE_NMI_WATCHDOG). Looking at the tree before my
-series you can see that the perf hardlockup detector also implemented
-arch_touch_nmi_watchdog(). This would have caused a conflict. The
-mutual exclusion was presumably enforced by an architecture not
-defining both HAVE_NMI_WATCHDOG and HAVE_HARDLOCKUP_DETECTOR_PERF.
+I wanted to debug the code to see what's happening exactly but it
+turned out that enabling the generation of DWARF data hid the issue as
+well even without any fix. It means that it's some kind of a memory
+corruption rather than a regular NULL-pointer dereference.
 
-The second thing to understand is that an architecture that defines
-CONFIG_HAVE_NMI_WATCHDOG is _not_ required to implement
-watchdog_hardlockup_probe() (used to be called watchdog_nmi_probe()).
-Maybe this should change, but at the very least it appears that
-SPARC64 defines HAVE_NMI_WATCHDOG but doesn't define
-watchdog_hardlockup_probe() AKA watchdog_nmi_probe(). Anyone who
-defines CONFIG_HAVE_NMI_WATCHDOG and doesn't implement
-watchdog_hardlockup_probe() is claiming that their watchdog needs no
-probing and is always available.
+I'm not yet sure where the crash happens exactly other that it's in
+the irq domain code.
 
-So with that context:
+Anyway, I'll be back at it tomorrow.
 
-1. We can't handle any special cases for CONFIG_HAVE_NMI_WATCHDOG in
-"kernel/watchdog_perf.c". The special cases that we need to handle are
-all for the cases where CONFIG_HARDLOCKUP_DETECTOR_PERF isn't defined
-and that means "kernel/watchdog_perf.c" isn't included.
-
-2. We can't have the default __weak function return -ENODEV because
-CONFIG_HAVE_NMI_WATCHDOG doesn't require an arch to implement
-watchdog_hardlockup_probe(), but we want watchdog_hardlockup_probe()
-to return "no error" in that case so that
-"watchdog_hardlockup_available" gets set to true.
-
-Does that sound right?
-
-I'd agree that a future improvement saying that
-CONFIG_HAVE_NMI_WATCHDOG means you _must_ implement
-watchdog_hardlockup_probe() would make sense and that would allow us
-to get rid of the special case. IMO, though, that's a separate patch.
-I'd be happy to review that patch if you wanted to post it up. :-)
-
-If we want to add that requirement, I _think_ the only thing you'd
-need to do is to add watchdog_hardlockup_probe() to sparc64 and have
-it return 0 and put that definition in the same file containing
-arch_touch_nmi_watchdog(). powerpc also gets CONFIG_HAVE_NMI_WATCHDOG
-as a side effect of selecting CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH but
-it looks like they implement watchdog_hardlockup_probe() already. Oh,
-but maybe this will fix a preexisting (existed before my patches)
-minor bug... Unless I'm missing something (entirely possible!) on
-powerpc today I guess if you turn off CONFIG_PPC_WATCHDOG then
-CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH and CONFIG_HAVE_NMI_WATCHDOG
-would still be defined and we'd end up returning 0 (no error) from
-watchdog_hardlockup_probe(). That means that on powerpc today if you
-turn off CONFIG_PPC_WATCHDOG that '/proc/sys/kernel/nmi_watchdog' will
-still think the watchdog is enabled?
-
-
--Doug
+Bart
