@@ -2,91 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987C070F5A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD9D70F575
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjEXLtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S229902AbjEXLjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjEXLsp (ORCPT
+        with ESMTP id S229757AbjEXLjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:48:45 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7820D18E;
-        Wed, 24 May 2023 04:48:35 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 81bca2cbad912bad; Wed, 24 May 2023 13:48:33 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 24 May 2023 07:39:19 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D181C5;
+        Wed, 24 May 2023 04:39:18 -0700 (PDT)
+Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
+        by mta-01.yadro.com (Proxmox) with ESMTP id C54313425EE;
+        Wed, 24 May 2023 14:39:16 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :from:from:message-id:mime-version:reply-to:subject:subject:to
+        :to; s=mta-01; bh=BFcrxYKqiW13jQD+5/oTqU0Fja8fey6ujfGMR+aadbA=; b=
+        NcmUeGM6gWZPpoF8GETKzqIrFOHLIoCwgkonTFE57sFOV4brDAD9lRezVYW1l55s
+        hTC1VhGXrPJkaMu4gceABtQw2ll15Pb6Q+wfLTJUGfmyx6ErXr4yNlX9YlSaxYja
+        AqV7XKxlGXwT5aCUWm039M6NF/wPXVvhYD1fi2sYCb0=
+Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 7321A69D7E2;
-        Wed, 24 May 2023 13:48:33 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 0/6] ACPI: scan: MIPI DiSco for Imaging support
-Date:   Wed, 24 May 2023 13:38:32 +0200
-Message-ID: <13276375.uLZWGnKmhe@kreacher>
+        by mta-01.yadro.com (Proxmox) with ESMTPS id BB4523425CB;
+        Wed, 24 May 2023 14:39:16 +0300 (MSK)
+Received: from xpad.Home (10.199.28.63) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 24 May
+ 2023 14:39:16 +0300
+From:   Vladimir Barinov <v.barinov@yadro.com>
+To:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Vladimir Barinov <v.barinov@yadro.com>, <linux@yadro.com>
+Subject: [PATCH 0/2] leds: add Awinic AW2016 driver
+Date:   Wed, 24 May 2023 14:39:10 +0300
+Message-ID: <20230524113910.196321-1-v.barinov@yadro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedggeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffeiuedtieekveekleeiieeghefhveegteeghfffvdduueefudegkeeukeffffdvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpuhgvfhhirdhorhhgpdhmihhpihdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdho
- rhhgpdhrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.28.63]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Folks,
+Hello,
 
-This basically is a re-write of a recent patch series from Sakari:
+This adds the folowing:
+- LED driver for AW2016 chip
+- Document Awinic AW2016 DT bindings
 
-https://lore.kernel.org/linux-acpi/20230329100951.1522322-1-sakari.ailus@linux.intel.com
+Datasheet file can be found here:
+https://www.awinic.com/en/productDetail/AW2026DNR#tech-docs
 
-The general idea is the same - CSI-2 resource descriptors, introduced in
-ACPI 6.4 and defined by
+Vladimir Barinov (2):
+[1/2] leds: Add Awinic AW2016 LED driver
+[2/2] dt-bindings: leds: Document Awinic AW2016 bindings
 
-https://uefi.org/specs/ACPI/6.5/06_Device_Configuration.html#camera-serial-interface-csi-2-connection-resource-descriptor
+---
+This patchset is against the 'kernel/git/lee/leds.git' repo, 'for-leds-next' branch.
 
-are found and used for creating a set of software nodes that represent the CSI-2
-connection graph.
-
-These software nodes need to be available before any scan handlers or ACPI drivers
-are bound to any struct acpi_device objects, so all of that is done at the early
-stage of ACPI device enumeration, but unnecessary ACPI namespace walks are avoided.
-
-The CSI-2 software nodes are populated with data extracted from the CSI-2 resource
-descriptors themselves and from device properties defined by the MIPI DiSco for
-Imaging specification (see https://www.mipi.org/specifications/mipi-disco-imaging).
-
-Patches [4,6/6] come from the original series directly, but the other patches have
-been changes substantially, so I've decided to re-start patch series versioning from
-scratch.
-
-This series is based on the patch at
-
-https://patchwork.kernel.org/project/linux-acpi/patch/12223415.O9o76ZdvQC@kreacher/
-
-applied on top of 6.4-rc3.
-
-Later on, I'll put all of this material into a special git branch for easier
-access.
-
-Thanks!
-
-
+ Documentation/devicetree/bindings/leds/awinic,aw2026.yaml |   92 ++
+ drivers/leds/Kconfig                                      |   10 
+ drivers/leds/Makefile                                     |    1 
+ drivers/leds/leds-aw2026.c                                |  578 ++++++++++++++
+ 4 files changed, 681 insertions(+)
 
