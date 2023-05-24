@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64B170F477
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC4570F47A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjEXKpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        id S232287AbjEXKpb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 06:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjEXKpF (ORCPT
+        with ESMTP id S229735AbjEXKp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:45:05 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4682297
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:45:04 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ae74ab3089so852285ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684925104; x=1687517104;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VtRzF/V811hHQRykzcLAvSFnaLT71WU5kRzUX+bgWt4=;
-        b=gK22slI4F9VxzMYBSv1MOTCo5S+N/Ky2iaqDfM9pZ0jfk4Fc0rVfCQGAT6vXONAEq5
-         A0RyBZYpqWqqP3sx3o4fA6AG1wqodNX7n5+i3YJLDwaY9tAxMy/Fhd4LsYPzllUHRw38
-         i8k4+pn0AymobT5Z4+KOqbsUhaL7xF9pKvWPKbhz1iSMxA4oOSnRpL86Pqc58N6voRW2
-         PT+dfYD3Ra/Nhb8zYGshciIVccgFmJJvMwMPNSSn/wG7K5nOKfaaQZsaM+U/oXDIen0M
-         CJFgjcMQKlFbcS4RJH1AuyV4eR43K4CHpDHfMis5UuilrC4zF4/L+HJz7UGdUndPr8Sm
-         KF6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684925104; x=1687517104;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VtRzF/V811hHQRykzcLAvSFnaLT71WU5kRzUX+bgWt4=;
-        b=OgTfV+r6FWr+xhup/hMrJ5BRwnRt0Ot1Jh9efBscHE+20CvJCLl3XY/ipHPUP9zgYc
-         ShYciNOeDFLqQCoriLDkhJI0uT2JAuVoT6NrCTw94p7MoiQQid5ICCLbrDLXD5R6SvZ8
-         JcBh4osbayRcIyGIgnVFmZ/tTxeCnI3y2eanvY870lKOOrMkmf9fY734R5vwiMbWe2z6
-         //aXVbQ40x3uCyUnhPho6ew0S/utgpP5GMm+77z3Nk3YsFMAp93DrUl9l35DBYczfxSo
-         JmqENJTyvMnMvfdJDIBBGK/AhDNpQHuFE0YD+2CCVHvyOxbCZt7bJBBZKiX+wHoii+WK
-         ismA==
-X-Gm-Message-State: AC+VfDy1dKigQsKmPRA6q9Yu7SHpGIpcm95ep+Sv2iDHz4wYzeANQmsa
-        mMvrK6LN2uu/ywBhqDjg1RMzLA==
-X-Google-Smtp-Source: ACHHUZ7yp/3qCuXXyzRjDvlc5CIdAlNssZWI56gB0O/qKx4HHLXmX4FoNbKuolTI1ecTUxOvnQBNhg==
-X-Received: by 2002:a17:902:ced0:b0:1af:babd:7b57 with SMTP id d16-20020a170902ced000b001afbabd7b57mr9292713plg.25.1684925103784;
-        Wed, 24 May 2023 03:45:03 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id o18-20020a170902d4d200b001ac7ab3e97csm8407519plg.260.2023.05.24.03.45.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 03:45:03 -0700 (PDT)
-Date:   Wed, 24 May 2023 16:15:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Zhipeng Wang <zhipeng.wang_1@nxp.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        Wed, 24 May 2023 06:45:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105DE19C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:45:24 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1q1lzS-0007w7-5i; Wed, 24 May 2023 12:45:10 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1q1lzO-002Sr9-C7; Wed, 24 May 2023 12:45:06 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1q1lzM-0005pO-Dd; Wed, 24 May 2023 12:45:04 +0200
+Message-ID: <b33cf92691afaa158c6282703128dfb8da4fe242.camel@pengutronix.de>
+Subject: Re: [PATCH v2 1/2] crypto: hisilicon - Add HiSilicon ADVCA Subsystem
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     David Yang <mmyangfl@gmail.com>, linux-crypto@vger.kernel.org
+Cc:     Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpufreq: dt-platdev: Add MODULE_LICENSE
-Message-ID: <20230524104501.uhgs6geb5dtk3wnt@vireshk-i7>
-References: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
+Date:   Wed, 24 May 2023 12:45:04 +0200
+In-Reply-To: <20230513074339.266879-2-mmyangfl@gmail.com>
+References: <20230513074339.266879-1-mmyangfl@gmail.com>
+         <20230513074339.266879-2-mmyangfl@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1+deb11u2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +57,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-05-23, 15:34, Zhipeng Wang wrote:
-> Add MODULE_LICENSE to support building as module.
+Hi David,
+
+On Sa, 2023-05-13 at 15:43 +0800, David Yang wrote:
+> HiSilicon ADVCA Subsystem contains various cryptographic devices, including
+> symmetric key ciphers, hash functions, RSA algorithms, as well as key
+> ladder and OTP memory.
 > 
-> Signed-off-by: Zhipeng Wang <zhipeng.wang_1@nxp.com>
+> This patch adds symmetric key cipher driver.
+> 
+> Signed-off-by: David Yang <mmyangfl@gmail.com>
 > ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/crypto/hisilicon/Kconfig              |    8 +
+>  drivers/crypto/hisilicon/Makefile             |    1 +
+>  drivers/crypto/hisilicon/advca/Makefile       |    1 +
+>  .../crypto/hisilicon/advca/hisi-advca-muc.c   | 1527 +++++++++++++++++
+>  4 files changed, 1537 insertions(+)
+>  create mode 100644 drivers/crypto/hisilicon/advca/Makefile
+>  create mode 100644 drivers/crypto/hisilicon/advca/hisi-advca-muc.c
 > 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 338cf6cc6596..54529aa16d53 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -214,3 +214,4 @@ static int __init cpufreq_dt_platdev_init(void)
->  			       sizeof(struct cpufreq_dt_platform_data)));
->  }
->  core_initcall(cpufreq_dt_platdev_init);
-> +MODULE_LICENSE("GPL");
+[...]
+> diff --git a/drivers/crypto/hisilicon/advca/hisi-advca-muc.c b/drivers/crypto/hisilicon/advca/hisi-advca-muc.c
+> new file mode 100644
+> index 000000000000..362596a91e19
+> --- /dev/null
+> +++ b/drivers/crypto/hisilicon/advca/hisi-advca-muc.c
+> @@ -0,0 +1,1527 @@
+[...]
+> +static int hica_muc_probe(struct platform_device *pdev)
+> +{
+[...]
+> +	priv->rst = devm_reset_control_get_optional(dev, NULL);
 
-Any specific reason why you need this as a module ? Just curious.
+Please use devm_reset_control_get_optional_exclusive() directly.
 
--- 
-viresh
+Since priv->rst is only ever used in hica_muc_probe(), it could be
+stored in a local variable instead.
+
+> +	if (IS_ERR(priv->rst))
+> +		return PTR_ERR(priv->rst);
+> +
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +	priv->irqs[0] = ret;
+> +	priv->irqs[1] = platform_get_irq_optional(pdev, 1);
+> +
+> +	priv->algs_num = ARRAY_SIZE(hica_muc_tmpls);
+> +	priv->algs = devm_kmalloc_array(dev, priv->algs_num,
+> +					sizeof(priv->algs[0]), GFP_KERNEL);
+> +	if (!priv->algs)
+> +		return -ENOMEM;
+> +
+> +	init_completion(&priv->cond);
+> +
+> +	priv->dev = dev;
+> +	platform_set_drvdata(pdev, priv);
+> +	dev_set_drvdata(dev, priv);
+> +
+> +	/* bring up device */
+> +	ret = reset_control_assert(priv->rst) ?:
+> +	      clk_bulk_prepare_enable(priv->clks_num, priv->clks) ?:
+> +	      reset_control_deassert(priv->rst);
+
+Using the ternary operator like this is a bit unconventional. Here, the
+clocks are kept enabled if the reset_control_deassert() fails.
+
+It would be good to add an error path that disables the clocks.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!(readl(priv->base + MUC_RST_STATUS) & MUC_STATE_VALID)) {
+> +		msleep(20);
+> +		if (!(readl(priv->base + MUC_RST_STATUS) & MUC_STATE_VALID)) {
+> +			dev_err(dev, "cannot bring up device\n");
+> +			return -ENODEV;
+
+This also leaves the clocks enabled. There are some more return
+statements with the same issue below.
+
+regards
+Philipp
