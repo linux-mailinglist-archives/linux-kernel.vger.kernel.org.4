@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E3C70F8C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B64370F8CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbjEXOcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
+        id S234293AbjEXOcq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 10:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjEXOcG (ORCPT
+        with ESMTP id S231526AbjEXOcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:32:06 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E04912E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:32:04 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-19a347d69c8so276627fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1684938723; x=1687530723;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IDyGaU5vY520HnRjaMujkkWoZrPH9Gy1gshhTzYah3M=;
-        b=FfTgFnJkkoNOzvnk6oEE9OPOuc8tf6bsjZ9BjuQ6mCdPMyGsAzpYo7OE4+isfzgzY1
-         pEfY++1lTgtDnpl5xPZ2qdf9djm0iwGAMzLTIvITVu7pAQpyE0xh2aPkuLSRoowRXeLx
-         L7R165r7QeGBPbhuwFBrr6ThCdviuhTQ9bXCxn6O0ypDoDF2YkQdx2bHveTHpHpv8x1O
-         NeUCVyJEnXyZKEYnTXPjelAbnpeETChz5KzihEjpnpGZONEPf/BGAUS5blax2LQdJc7h
-         7QPjUWVn7wVz+WxqzYt1OOFIkZH1Fh7lvcGnb5UcdwvKI0JAFB9gxH5p5gx2Td8N5fG2
-         fsQg==
+        Wed, 24 May 2023 10:32:43 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1826412E;
+        Wed, 24 May 2023 07:32:41 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-94ea38c90ccso25719166b.1;
+        Wed, 24 May 2023 07:32:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684938723; x=1687530723;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IDyGaU5vY520HnRjaMujkkWoZrPH9Gy1gshhTzYah3M=;
-        b=YVCJ6BWrU9Ri8xAkGtHUzFPzvlqWL53rfNmn0gl2vM/Xs46Mh1iX1CjW1r2/SphS8O
-         SbM3wk3b7xXFjnbUB2Gn4I+BChIGzq08cN0UBTS+yYWVPsk3glj13+g3My9UfWMUKy95
-         RHCY1rgPKd6JdoX5ufBgs+LRHaDrH6iD+aEQmsn9wWZEYHcXJjCfsYMk30CJQ8huskVl
-         A81Y5CNN7SgTfkPfDLqDxlHCaqevyh7lQ2paRWjdycazABhBsvK5FspiPiWqv5vhHDvc
-         UE5NzLzIrlREvubhg8zWQ6r2wCfHLxJyoNsmluwoJFvaEwLwXG0fyYt51yMomBzi9J4M
-         z1lw==
-X-Gm-Message-State: AC+VfDytseQImTZQ/4m6TcWIVvWvEumKsebN0qvziMQhInZmPwuM4xw2
-        j2JOiLVMklj3VCgtDp8TjPyttQX574QRPIdKBBo=
-X-Google-Smtp-Source: ACHHUZ5FsadYXL4czxLL/bHmeVCASD9xFCcwU6J9Jb8HfL+5NU91k63PTMY1pBl3/JZ1F7qDeLMBdg==
-X-Received: by 2002:a05:6870:e493:b0:199:a8cc:13dc with SMTP id v19-20020a056870e49300b00199a8cc13dcmr20766oag.9.1684938723334;
-        Wed, 24 May 2023 07:32:03 -0700 (PDT)
-Received: from ?IPV6:2804:14d:5c5e:44fb:522c:f73f:493b:2b5? ([2804:14d:5c5e:44fb:522c:f73f:493b:2b5])
-        by smtp.gmail.com with ESMTPSA id dt40-20020a0568705aa800b001968dd2e1fesm2814oab.3.2023.05.24.07.32.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 07:32:02 -0700 (PDT)
-Message-ID: <f309f841-3997-93cf-3f30-fa2b06560fc0@mojatatu.com>
-Date:   Wed, 24 May 2023 11:31:58 -0300
+        d=1e100.net; s=20221208; t=1684938759; x=1687530759;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=31tbtpS/xtUTs4cItuML+a0DpTH2qwD/GhPYfwUQ6mU=;
+        b=cEwDCsed1jhPe6e5xB+jEA0N4nkFxbOZIeQgWzJxg+WHlkwwASR9W6WsZ/Yw3/CULd
+         3Pu56sA8CwVebi67inD0pLC1GHFEA3WcplR+KOpWB8AP8P5KU5110ks5nIa7pmZNJILl
+         vbP+qNAyol9GUjrW/hdS6B1LchT1kpSxS5A13QTTQ9i+ILkg34bcxsjiZ4u00p/fBDBk
+         kRSGPgIHpYL8sbGatkWjrkgYt3syO9pdoTdG0dOWTPgCr73jv6e8VtK3/j8Gdfsza04n
+         0785qxKQFHkDcN4zIO/3cjOIFMhksNI0Q3Emm9C32K9UDgR41tFK863c71LWcbppF2MN
+         qpcA==
+X-Gm-Message-State: AC+VfDzDW+I6wGzvYFwQFqj8keKQWf3T9TCQJdNNGcgqHQm+42GK59h2
+        s6vAjFvPNKJ6pB0Wni1XWBfJMjG6MxiH3tPdo/wyaOUU
+X-Google-Smtp-Source: ACHHUZ4AJe2tQs2IpRiAPESgv85dqq908HA8Bz3yMGLrHTLQ7VAUWUG3mXG0j44lgX0oaltY05fmFB3cyMXNbd+C9zo=
+X-Received: by 2002:a17:906:72d4:b0:96f:da08:d451 with SMTP id
+ m20-20020a17090672d400b0096fda08d451mr9168213ejl.6.1684938759307; Wed, 24 May
+ 2023 07:32:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-To:     syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
-        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
-References: <0000000000006cf87705f79acf1a@google.com>
-Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in
- mini_qdisc_pair_swap
-Content-Language: en-US
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <0000000000006cf87705f79acf1a@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+References: <20230523190226.3860727-1-arnd@kernel.org>
+In-Reply-To: <20230523190226.3860727-1-arnd@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 May 2023 16:32:27 +0200
+Message-ID: <CAJZ5v0grS85Vk6MM9kgHaSp4ta5osdOLSSgc2OiFG0Gev=CynQ@mail.gmail.com>
+Subject: Re: [PATCH] [v2] efi: fix missing prototype warnings
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <lenb@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,6 +63,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://gitlab.com/tammela/net.git peilin-patches
+On Tue, May 23, 2023 at 9:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The cper.c file needs to include an extra header, and efi_zboot_entry
+> needs an extern declaration to avoid these 'make W=1' warnings:
+>
+> drivers/firmware/efi/libstub/zboot.c:65:1: error: no previous prototype for 'efi_zboot_entry' [-Werror=missing-prototypes]
+> drivers/firmware/efi/efi.c:176:16: error: no previous prototype for 'efi_attr_is_visible' [-Werror=missing-prototypes]
+> drivers/firmware/efi/cper.c:626:6: error: no previous prototype for 'cper_estatus_print' [-Werror=missing-prototypes]
+> drivers/firmware/efi/cper.c:649:5: error: no previous prototype for 'cper_estatus_check_header' [-Werror=missing-prototypes]
+> drivers/firmware/efi/cper.c:662:5: error: no previous prototype for 'cper_estatus_check' [-Werror=missing-prototypes]
+>
+> To make this easier, move the cper specific declarations to
+> include/linux/cper.h.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Double checking with syzbot
+For the APEI change:
+
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> ---
+> v2: move the prototypes rather than including a file in a different
+> subdir
+> ---
+>  drivers/acpi/apei/apei-internal.h      | 6 ------
+>  drivers/acpi/apei/bert.c               | 1 +
+>  drivers/firmware/efi/libstub/efistub.h | 3 +++
+>  include/linux/cper.h                   | 6 ++++++
+>  include/linux/efi.h                    | 2 ++
+>  5 files changed, 12 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/apei-internal.h b/drivers/acpi/apei/apei-internal.h
+> index 1d6ef9654725..67c2c3b959e1 100644
+> --- a/drivers/acpi/apei/apei-internal.h
+> +++ b/drivers/acpi/apei/apei-internal.h
+> @@ -7,7 +7,6 @@
+>  #ifndef APEI_INTERNAL_H
+>  #define APEI_INTERNAL_H
+>
+> -#include <linux/cper.h>
+>  #include <linux/acpi.h>
+>
+>  struct apei_exec_context;
+> @@ -130,10 +129,5 @@ static inline u32 cper_estatus_len(struct acpi_hest_generic_status *estatus)
+>                 return sizeof(*estatus) + estatus->data_length;
+>  }
+>
+> -void cper_estatus_print(const char *pfx,
+> -                       const struct acpi_hest_generic_status *estatus);
+> -int cper_estatus_check_header(const struct acpi_hest_generic_status *estatus);
+> -int cper_estatus_check(const struct acpi_hest_generic_status *estatus);
+> -
+>  int apei_osc_setup(void);
+>  #endif
+> diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
+> index c23eb75866d0..7514e38d5640 100644
+> --- a/drivers/acpi/apei/bert.c
+> +++ b/drivers/acpi/apei/bert.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/module.h>
+>  #include <linux/init.h>
+>  #include <linux/acpi.h>
+> +#include <linux/cper.h>
+>  #include <linux/io.h>
+>
+>  #include "apei-internal.h"
+> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+> index 67d5a20802e0..54a2822cae77 100644
+> --- a/drivers/firmware/efi/libstub/efistub.h
+> +++ b/drivers/firmware/efi/libstub/efistub.h
+> @@ -1133,4 +1133,7 @@ const u8 *__efi_get_smbios_string(const struct efi_smbios_record *record,
+>  void efi_remap_image(unsigned long image_base, unsigned alloc_size,
+>                      unsigned long code_size);
+>
+> +asmlinkage efi_status_t __efiapi
+> +efi_zboot_entry(efi_handle_t handle, efi_system_table_t *systab);
+> +
+>  #endif
+> diff --git a/include/linux/cper.h b/include/linux/cper.h
+> index eacb7dd7b3af..c1a7dc325121 100644
+> --- a/include/linux/cper.h
+> +++ b/include/linux/cper.h
+> @@ -572,4 +572,10 @@ void cper_print_proc_ia(const char *pfx,
+>  int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg);
+>  int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg);
+>
+> +struct acpi_hest_generic_status;
+> +void cper_estatus_print(const char *pfx,
+> +                       const struct acpi_hest_generic_status *estatus);
+> +int cper_estatus_check_header(const struct acpi_hest_generic_status *estatus);
+> +int cper_estatus_check(const struct acpi_hest_generic_status *estatus);
+> +
+>  #endif
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index bed3c92cbc31..120af31a5136 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -1349,4 +1349,6 @@ bool efi_config_table_is_usable(const efi_guid_t *guid, unsigned long table)
+>         return xen_efi_config_table_is_usable(guid, table);
+>  }
+>
+> +umode_t efi_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n);
+> +
+>  #endif /* _LINUX_EFI_H */
+> --
+> 2.39.2
+>
