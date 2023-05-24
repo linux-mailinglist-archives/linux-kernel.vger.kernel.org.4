@@ -2,140 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FD170F62A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA7570F640
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbjEXMWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
+        id S231789AbjEXMXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjEXMWZ (ORCPT
+        with ESMTP id S229509AbjEXMXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:22:25 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E56199
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:22:22 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:59b9:3473:f0ae:e2b7])
-        by laurent.telenet-ops.be with bizsmtp
-        id 0cNL2A00D5NiV2701cNLTf; Wed, 24 May 2023 14:22:20 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1nVF-002xwB-BN;
-        Wed, 24 May 2023 14:22:20 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q1nVU-00DPCD-Ci;
-        Wed, 24 May 2023 14:22:20 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Osama Muhammad <osmtendev@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 2/2] regulator: core: Streamline debugfs operations
-Date:   Wed, 24 May 2023 14:22:18 +0200
-Message-Id: <adb012e80899ab9f5dfc80cfed7beb8406993e8e.1684930647.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1684930647.git.geert+renesas@glider.be>
-References: <cover.1684930647.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 08:23:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4CD99
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:23:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4BEF9220DF;
+        Wed, 24 May 2023 12:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684931015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H/nWbKe3Z8+xQ9At2iUlyT7hyUtbqXWl1JfLw+THLpc=;
+        b=1kySVWl3pYeX0D5VqMD88/SAUJxePvgmJOgC/QpIHA2klMg7lnofyAbW5rhrNwm0KFg/2E
+        C/vRjZv5iwwWylmSFJcKUn+f/8nH/NL0SuF4+yHQD1EgCwcvNR4DH2+noPt1Id+cS7Yijd
+        L/SYcKUDSi3H0mvYkXrGp7Gdu+Azfrg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684931015;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H/nWbKe3Z8+xQ9At2iUlyT7hyUtbqXWl1JfLw+THLpc=;
+        b=V6WqKmS0GWD7/be54InL00gUEMWUaQx2rSNKozDm+mtBPbfl6Ve6U1NOeLRtw+qstefz6v
+        vleWDMJFKMsjgaBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0EC4713425;
+        Wed, 24 May 2023 12:23:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id skSIAscBbmRrZAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 24 May 2023 12:23:35 +0000
+Date:   Wed, 24 May 2023 14:23:34 +0200
+Message-ID: <871qj5ex4p.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Bin Li <bin.li@canonical.com>
+Cc:     tiwai@suse.com, libin.charles@gmail.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        hui.wang@canonical.com, kailang@realtek.com
+Subject: Re: [PATCH] ALSA: hda/realtek: Enable headset onLenovo M70/M90
+In-Reply-To: <20230524113755.1346928-1-bin.li@canonical.com>
+References: <20230524113755.1346928-1-bin.li@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_DEBUG_FS is not set:
+On Wed, 24 May 2023 13:37:55 +0200,
+Bin Li wrote:
+> 
+> Lenovo M70/M90 Gen4 are equipped with ALC897, and they need
+> ALC897_FIXUP_HEADSET_MIC_PIN quirk to make its headset mic work.
+> The previous quirk for M70/M90 is for Gen3.
+> 
+> Signed-off-by: Bin Li <bin.li@canonical.com>
 
-    regulator: Failed to create debugfs directory
-    ...
-    regulator-dummy: Failed to create debugfs directory
+Thanks, applied now.
 
-As per the comments for debugfs_create_dir(), errors returned by this
-function should be expected, and ignored:
 
- * If debugfs is not enabled in the kernel, the value -%ENODEV will be
- * returned.
- *
- * NOTE: it's expected that most callers should _ignore_ the errors returned
- * by this function. Other debugfs functions handle the fact that the "dentry"
- * passed to them could be an error and they don't crash in that case.
- * Drivers should generally work fine even if debugfs fails to init anyway.
-
-Adhere to the debugfs spirit, and streamline all operations by:
-  1. Demoting the importance of the printed error messages to debug
-     level, like is already done in create_regulator(),
-  2. Further ignoring any returned errors, as by design, all debugfs
-     functions are no-ops when passed an error pointer.
-
-Fixes: 2bf1c45be3b8f3a3 ("regulator: Fix error checking for debugfs_create_dir")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v2:
-  - Spin off error check fix into a separate patch,
-  - Improve rationale.
----
- drivers/regulator/core.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index ad8baf65f63e369b..d8e1caaf207e108f 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -1913,17 +1913,15 @@ static struct regulator *create_regulator(struct regulator_dev *rdev,
- 		regulator->debugfs = debugfs_create_dir(supply_name, rdev->debugfs);
- 	if (IS_ERR(regulator->debugfs))
- 		rdev_dbg(rdev, "Failed to create debugfs directory\n");
--	} else {
--		debugfs_create_u32("uA_load", 0444, regulator->debugfs,
--				   &regulator->uA_load);
--		debugfs_create_u32("min_uV", 0444, regulator->debugfs,
--				   &regulator->voltage[PM_SUSPEND_ON].min_uV);
--		debugfs_create_u32("max_uV", 0444, regulator->debugfs,
--				   &regulator->voltage[PM_SUSPEND_ON].max_uV);
--		debugfs_create_file("constraint_flags", 0444,
--				    regulator->debugfs, regulator,
--				    &constraint_flags_fops);
--	}
-+
-+	debugfs_create_u32("uA_load", 0444, regulator->debugfs,
-+			   &regulator->uA_load);
-+	debugfs_create_u32("min_uV", 0444, regulator->debugfs,
-+			   &regulator->voltage[PM_SUSPEND_ON].min_uV);
-+	debugfs_create_u32("max_uV", 0444, regulator->debugfs,
-+			   &regulator->voltage[PM_SUSPEND_ON].max_uV);
-+	debugfs_create_file("constraint_flags", 0444, regulator->debugfs,
-+			    regulator, &constraint_flags_fops);
- 
- 	/*
- 	 * Check now if the regulator is an always on regulator - if
-@@ -5256,10 +5254,8 @@ static void rdev_init_debugfs(struct regulator_dev *rdev)
- 	}
- 
- 	rdev->debugfs = debugfs_create_dir(rname, debugfs_root);
--	if (IS_ERR(rdev->debugfs)) {
--		rdev_warn(rdev, "Failed to create debugfs directory\n");
--		return;
--	}
-+	if (IS_ERR(rdev->debugfs))
-+		rdev_dbg(rdev, "Failed to create debugfs directory\n");
- 
- 	debugfs_create_u32("use_count", 0444, rdev->debugfs,
- 			   &rdev->use_count);
-@@ -6179,7 +6175,7 @@ static int __init regulator_init(void)
- 
- 	debugfs_root = debugfs_create_dir("regulator", NULL);
- 	if (IS_ERR(debugfs_root))
--		pr_warn("regulator: Failed to create debugfs directory\n");
-+		pr_debug("regulator: Failed to create debugfs directory\n");
- 
- #ifdef CONFIG_DEBUG_FS
- 	debugfs_create_file("supply_map", 0444, debugfs_root, NULL,
--- 
-2.34.1
-
+Takashi
