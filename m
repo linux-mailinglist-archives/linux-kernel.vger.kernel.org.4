@@ -2,176 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C84E70FE44
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5195570FE42
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbjEXTKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S233219AbjEXTKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbjEXTKc (ORCPT
+        with ESMTP id S229504AbjEXTKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:10:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A62712E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:09:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684955383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RLt1jUkMRuYsgAKC2Cdank6FFEsvFTMJq5xzMGDDBh0=;
-        b=JqtQ89PtZSL/UYjISHbiASty/O7umRgIaChcN/5nZU7fPQqM9AVIAWgGzmJpssiKXAZ8zr
-        xkYP7pyamPYoAmF+KOGkUWbDss1ysfbYMS3TwMcLaDaUJaq7tL0rshj8DrE3xJZpZqnQI9
-        1UZquFwRB0tV8kcZawZfhpsvDvajmak=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-317-4FxUtHIeNnyiKgI2f1FlVA-1; Wed, 24 May 2023 15:09:36 -0400
-X-MC-Unique: 4FxUtHIeNnyiKgI2f1FlVA-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f7d72d552fso453081cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:09:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684955375; x=1687547375;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RLt1jUkMRuYsgAKC2Cdank6FFEsvFTMJq5xzMGDDBh0=;
-        b=KhylxJciq3B24LAb/ysZsmh7VpQN4zs+4tcbnvCZYr0EcesV4d/Nxu6mLE/yRWzj1Z
-         WytuW0IY4PLg7eaeVXHDklAEgABJw/HUYpxv8w/Vq6IE1A2Wjq1u5IFbqemlhYVxxsLx
-         YkBS/IrLkHJ369T6eGXJjCEDHDF6/Ew4Jt6cGLQHs/AtaPaZbQaRQ6JJo1UUfl4EoBvB
-         xxb7Um0WfLMmVd8xOQaiMr/Witw86b+OVlThzinUN+QQ4L/XBvxj2Y8Vw6lSAcQm8w3p
-         e6UDfD8YYbWV0Agwx5oUM5+0ZLc/uYg6nlT9/rY3PKCxhyMKlioQMcSRXG2qulQfsKKy
-         i7IQ==
-X-Gm-Message-State: AC+VfDxR5FlxICBwZTIN5mDeXegGEn48nfUOz56gITbElvA9NuKY5034
-        n0O7Bp8Rgpr7KD+WhVOXvWEiDzDnMEcgy1faw71nfX3n6rMg/6scV/2l0s9bfH/tdEAN3cgoJVZ
-        8u6ZmSNTkB9Mi3wSc7FKEk20xl9ZVwl1o
-X-Received: by 2002:a05:622a:1a91:b0:3f4:fdaa:8e14 with SMTP id s17-20020a05622a1a9100b003f4fdaa8e14mr4565646qtc.2.1684955375204;
-        Wed, 24 May 2023 12:09:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7BwuqNh4b6tgKt0w1lmfeAbL8sRjfw3morvt4PO25eB8mOzI2e/Sm85Z9xwtVdn4gN42cjgA==
-X-Received: by 2002:a05:622a:1a91:b0:3f4:fdaa:8e14 with SMTP id s17-20020a05622a1a9100b003f4fdaa8e14mr4565606qtc.2.1684955374809;
-        Wed, 24 May 2023 12:09:34 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id r11-20020ac85e8b000000b003f6be76a5c1sm1315507qtx.6.2023.05.24.12.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 12:09:34 -0700 (PDT)
-Date:   Wed, 24 May 2023 15:09:33 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Stevens <stevensd@chromium.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
-Message-ID: <ZG5g7bhAlsli+Pao@x1n>
-References: <20230330085802.2414466-1-stevensd@google.com>
- <20230330085802.2414466-2-stevensd@google.com>
- <ZGvUsf7lMkrNDHuE@google.com>
- <ZG45q0xJSnA6NKQN@x1n>
- <ZG4/VdHu2LqLTlct@google.com>
- <ZG5F3igFgdIAwrn4@x1n>
- <ZG5XmdYy3VtcyPAL@google.com>
+        Wed, 24 May 2023 15:10:05 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCDF132;
+        Wed, 24 May 2023 12:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684955403; x=1716491403;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xSjd7hZ/B+nz5DlTGVlQO8DdpW3bOXeh33EVNB7yeX0=;
+  b=Pz5XVVd0TtZCwYcOmbXKUkex8/Pdj4IFHVZumIzGpuGYngHdgVdBW19n
+   IFlj53pJpmJI9IRfGkKQUMKpqverrBBUMo3T1HrTLjCbPmxz6AWyCDbag
+   hxLKFz4n6ijHA2bDTPjln2aYeV6lNzc/hSAaukhnRPW2u0161ahpTjgZo
+   YuE4bykixedEdiLCPmVUuN9HHpsnLNCC8hrJutvJeSDJ5EDxG4C/CUtbY
+   VIKw+k06jpdFA8YES8PUUuatVC8vKyP9cda5/aigFxYCB3j1geqQUO14I
+   xrtVnQspkvA6z+X4nUTVwK4Wzb0pRDNrbD2sHruqCe59QQ7h0SFh96DkJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="334021579"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="334021579"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 12:10:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="735292079"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="735292079"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 24 May 2023 12:10:02 -0700
+Received: from [10.212.203.235] (wangyiya-mobl.amr.corp.intel.com [10.212.203.235])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 189DE580C63;
+        Wed, 24 May 2023 12:10:02 -0700 (PDT)
+Message-ID: <fc1e8298-e19d-b16c-3894-1d6e5664151f@linux.intel.com>
+Date:   Wed, 24 May 2023 15:10:00 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZG5XmdYy3VtcyPAL@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] perf/x86/uncore: Correct the number of CHAs on SPR
+To:     Stephane Eranian <eranian@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, ak@linux.intel.com,
+        stable@vger.kernel.org
+References: <20230508140206.283708-1-kan.liang@linux.intel.com>
+ <CABPqkBSczJqEbA8M0HCdeqjddgDqpxapJYVYNuAS+EifJ+v+Dg@mail.gmail.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CABPqkBSczJqEbA8M0HCdeqjddgDqpxapJYVYNuAS+EifJ+v+Dg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:29:45AM -0700, Sean Christopherson wrote:
-> On Wed, May 24, 2023, Peter Xu wrote:
-> > On Wed, May 24, 2023 at 09:46:13AM -0700, Sean Christopherson wrote:
-> > > If we hack kvm_pfn_to_refcounted_page(), then all of those protections are lost
-> > > because KVM would drop its assertions and also skip dirtying pages, i.e. would
-> > > effectively suppress the latent detection by check_new_page_bad().
-> > 
-> > So it's probably that I totally have no idea what are the attributes for
-> > those special pages so I don't understand enough on why we need to handle
-> > those pages differently from e.g. PFNMAP pages, and also the benefits.
-> > 
-> > I think what I can tell is that they're pages that doesn't have
-> > PageCompound bits set on either head or tails, however it's still a
-> > multi-2-order large page.  Is there an example on how these pages are used
-> > and allocated?  Why would we need those pages, and whether these pages need
-> > to be set dirty/accessed after all?
+Hi Peter,
+
+On 2023-05-08 12:16 p.m., Stephane Eranian wrote:
+> On Mon, May 8, 2023 at 7:05 AM <kan.liang@linux.intel.com> wrote:
+>>
+>> From: Kan Liang <kan.liang@linux.intel.com>
+>>
+>> The number of CHAs from the discovery table on some SPR variants is
+>> incorrect, because of a firmware issue. An accurate number can be read
+>> from the MSR UNC_CBO_CONFIG.
+>>
+>> Fixes: 949b11381f81 ("perf/x86/intel/uncore: Add Sapphire Rapids server CHA support")
+>> Reported-by: Stephane Eranian <eranian@google.com>
+>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 > 
-> The use case David is interested in is where an AMD GPU driver kmallocs() a
-> chunk of memory, let's it be mmap()'d by userspace, and userspace then maps it
-> into the guest for a virtual (passthrough?) GPU.  For all intents and purposes,
-> it's normal memory, just not refcounted.
+> Tested-by: Stephane Eranian <eranian@google.com>
+>
 
-I'm not familiar enough with kmalloc, but what I think is kmalloc for large
-chunks will be the same as alloc_pages, and I thought it should also be a
-compound page already.  If that needs to be mmap()ed to userapp then I
-assume it mostly should be kmalloc_large().
+Gentle ping.
 
-kmalloc -> kmalloc_large -> __kmalloc_large_node:
+Do you have any comments for the patch?
 
-	flags |= __GFP_COMP;
+Thanks,
+Kan
 
-Then when the new page allocated and being prepared (prep_new_page):
-
-	if (order && (gfp_flags & __GFP_COMP))
-		prep_compound_page(page, order);
-
-I assume prep_compound_page() will make PageCompound return true for those
-pages returned.  So I know I still miss something, but not sure
-where.. because IIRC we're at least talking about !PageCompound pages.
-
-> 
-> > >  static bool kvm_is_ad_tracked_page(struct page *page)
-> > >  {
-> > > +       /*
-> > > +        * Assert that KVM isn't attempting to mark a freed page as Accessed or
-> > > +        * Dirty, i.e. that KVM's MMU doesn't have a use-after-free bug.  KVM
-> > > +        * (typically) doesn't pin pages that are mapped in KVM's MMU, and
-> > > +        * instead relies on mmu_notifiers to know when a mapping needs to be
-> > > +        * zapped/invalidated.  Unmapping from KVM's MMU must happen _before_
-> > > +        * KVM returns from its mmu_notifier, i.e. the page should have an
-> > > +        * elevated refcount at this point even though KVM doesn't hold a
-> > > +        * reference of its own.
-> > > +        */
-> > > +       if (WARN_ON_ONCE(!page_count(page)))
-> > > +               return false;
-> > > +
-> > >         /*
-> > >          * Per page-flags.h, pages tagged PG_reserved "should in general not be
-> > >          * touched (e.g. set dirty) except by its owner".
-> > > 
-> > 
-> > This looks like a good thing to have, indeed.  But again it doesn't seem
-> > like anything special to the pages we're discussing here, say, !Compound &&
-> > refcount==0 ones.
-> 
-> The problem is that if KVM ignores refcount==0 pages, then KVM can't distinguish
-> between the legitimate[*] refcount==0 AMD GPU case and a buggy refcount==0
-> use-after-free scenario.  I don't want to make that sacrifice as the legimiate
-> !refcounted use case is a very specific use case, whereas consuming refcounted
-> memory is ubiquituous (outside of maybe AWS).
-> 
-> [*] Consuming !refcounted pages is safe only for flows that are tied into the
->     mmu_notifiers.  The current proposal/plan is to add an off-by-default module
->     param that let's userspace opt-in to kmap() use of !refcounted memory, e.g.
->     this case and PFNMAP memory.
-
-I see.
-
-I think you mentioned that we can use one special bit in the shadow pte to
-mark such special pages.  Does it mean that your above patch will still
-cover what you wanted to protect even if we use the trick?  Because then
-kvm_is_ad_tracked_page() should only be called when we're sure the special
-bit is not set.  IOW, we can still rule out these pages already and
-page_count()==0 check here can still be helpful to track kvm bugs?
-
--- 
-Peter Xu
-
+>>
+>> Cc: stable@vger.kernel.org
+>> ---
+>>  arch/x86/events/intel/uncore_snbep.c | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>> diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
+>> index 7d1199554fe3..54abd93828bf 100644
+>> --- a/arch/x86/events/intel/uncore_snbep.c
+>> +++ b/arch/x86/events/intel/uncore_snbep.c
+>> @@ -6138,6 +6138,7 @@ static struct intel_uncore_type spr_uncore_mdf = {
+>>  };
+>>
+>>  #define UNCORE_SPR_NUM_UNCORE_TYPES            12
+>> +#define UNCORE_SPR_CHA                         0
+>>  #define UNCORE_SPR_IIO                         1
+>>  #define UNCORE_SPR_IMC                         6
+>>  #define UNCORE_SPR_UPI                         8
+>> @@ -6448,12 +6449,22 @@ static int uncore_type_max_boxes(struct intel_uncore_type **types,
+>>         return max + 1;
+>>  }
+>>
+>> +#define SPR_MSR_UNC_CBO_CONFIG         0x2FFE
+>> +
+>>  void spr_uncore_cpu_init(void)
+>>  {
+>> +       struct intel_uncore_type *type;
+>> +       u64 num_cbo;
+>> +
+>>         uncore_msr_uncores = uncore_get_uncores(UNCORE_ACCESS_MSR,
+>>                                                 UNCORE_SPR_MSR_EXTRA_UNCORES,
+>>                                                 spr_msr_uncores);
+>>
+>> +       type = uncore_find_type_by_id(uncore_msr_uncores, UNCORE_SPR_CHA);
+>> +       if (type) {
+>> +               rdmsrl(SPR_MSR_UNC_CBO_CONFIG, num_cbo);
+>> +               type->num_boxes = num_cbo;
+>> +       }
+>>         spr_uncore_iio_free_running.num_boxes = uncore_type_max_boxes(uncore_msr_uncores, UNCORE_SPR_IIO);
+>>  }
+>>
+>> --
+>> 2.35.1
+>>
