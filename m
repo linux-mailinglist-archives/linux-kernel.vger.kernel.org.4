@@ -2,231 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C29471010B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24682710109
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238339AbjEXWgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        id S237438AbjEXWgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237763AbjEXWgt (ORCPT
+        with ESMTP id S237763AbjEXWgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:36:49 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459B91B4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684967791; x=1716503791;
-  h=date:from:to:cc:subject:message-id;
-  bh=8Q7P0hpP9ZPzOudqJgzW32QAEujLsjP7P2A5fBXPbEA=;
-  b=OxccnFGT45O3Ww0sTYP7C016T5Icr6kzjUegXv4thKf0DC1Mu52lPmwh
-   8Z/1QUlp+QEqcrMldToPTfURZnzPqZCXul7n0VFxHcekC5CfjE1JTPeBY
-   tejMatdoy2Q1sMqEbMKNEseMmQ342R4+Gx3ndje2ScOKpOUbOSGsgeF27
-   1F9hC1EtOINzmYJLa5AhlZDj3ucsH1qRFVmV9GUAXT3cW2jBok27JUxES
-   Fi4qs1UCoWJikHP3uziy7ozrHINSPXaFmDXXqCBlArQSPyAXrry0Gnktg
-   7B0XRB4UKU9NXYHpsln64IlS2x5xlM++oWlRpmeCjeeuESJoVNxi2xtd0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="381956965"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="381956965"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 15:36:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="794369744"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="794369744"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 May 2023 15:36:23 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q1x5i-000FCz-23;
-        Wed, 24 May 2023 22:36:22 +0000
-Date:   Thu, 25 May 2023 06:35:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:locking/core] BUILD SUCCESS
- 4c8a49244c6abc5fb829d81abaaf2435ad2a44bf
-Message-ID: <20230524223538.2wq4O%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 18:36:40 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760EAE66
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:36:14 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba83fed5097so3191074276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684967773; x=1687559773;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iwTndVYq1t6b9qeOkldCRAlHVQC8rU6fAi10eJnGMhY=;
+        b=S9ACP77jUWIZBGBDJOUQdJpybmEb6sA22nRSGa9bZhQssdnPjuMRgeJI+B1kmVifgW
+         2IRt4po11RHWP4h5g5HFNFjSgWFINJjidtXKmPlKISANbKSTrOGthVG9QFDotD/I/zbd
+         TN7+1cQxG74QrKYoIhj/OYDGJnAfF+g4tNVg43fWjg0R5zWp9Ahw31noVjMVtrFTCpwY
+         fB5IOC7tsIDoyF4MByKeQj0kj1k0isnlI0wc8FJ4V0HIqmzfxvz4UQRuQILYHyjlRG9A
+         Q66UOgGJFKnOhtG+FKztkblHCrLTwy0c/Q+QiEzwQ44dqskMy1gpgrhPwf4pGEn76T2L
+         fr6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684967773; x=1687559773;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iwTndVYq1t6b9qeOkldCRAlHVQC8rU6fAi10eJnGMhY=;
+        b=AjqvXbrlEVNSolxHHORPj0vvOP6vqcpvb9pDRP8EXTXUjOVE/TLy+YqWs0h88Rrlk/
+         lD0AFB3sMurkoVRNvu4SERkvfzS5Av4LJAc41TlJFX0WK0bLdo+7JZv9BEUEBGDFaVS3
+         tJZMWLLfJPlrdF1b1wJvgpzhY+ksjG9IHg7DyumGNtvddl+RXGkfObRJBUvlDz7NsZTU
+         PjMe6cH9eNiwYhbQ1C2Hee6HeZnVsfb5/4kIesdgqXYMfsdkr2gJlBxhPRlM5InEPQDN
+         B81hVu6flQdrrxq5BIeXnQ4BLRwvcY1ezwJ1xEUXISK+oH7l60UAnqMOijCEvsy55PRD
+         JS9Q==
+X-Gm-Message-State: AC+VfDwWtuqaqCWoVNU6K0xcgbpnOF/7jsC1V1+23KoTgdc2zwx3CN9g
+        gQWP8UhFbEj9/Q6cENXd4n1FCVTVMGY=
+X-Google-Smtp-Source: ACHHUZ6rfhhJk7Tf+97ZI8d7MguU8CMY3Qta23pVl/derDf1QpH1rs5Rs8eKZZnMfUc2basJYgKWkjLBSmY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a5b:38e:0:b0:ba8:797c:9bc7 with SMTP id
+ k14-20020a5b038e000000b00ba8797c9bc7mr787216ybp.11.1684967773335; Wed, 24 May
+ 2023 15:36:13 -0700 (PDT)
+Date:   Wed, 24 May 2023 15:36:11 -0700
+In-Reply-To: <20230323072714.82289-3-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230323072714.82289-1-likexu@tencent.com> <20230323072714.82289-3-likexu@tencent.com>
+Message-ID: <ZG6RW4AwayOdPTaZ@google.com>
+Subject: Re: [PATCH 2/7] KVM: selftests: Test Intel PMU architectural events
+ on fixed counters
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230524230549/lkp-src/repo/*/tip
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-branch HEAD: 4c8a49244c6abc5fb829d81abaaf2435ad2a44bf  bcache: Convert to lock_cmp_fn
+On Thu, Mar 23, 2023, Like Xu wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> Update test to cover Intel PMU architectural events on fixed counters.
+> Per Intel SDM, PMU users can also count architecture performance events
+> on fixed counters (specifically, FIXED_CTR0 for the retired instructions
+> and FIXED_CTR1 for cpu core cycles event). Therefore, if guest's CPUID
+> indicates that an architecture event is not available, the corresponding
+> fixed counter will also not count that event.
+> 
+> Co-developed-by: Like Xu <likexu@tencent.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> ---
+>  .../selftests/kvm/x86_64/pmu_cpuid_test.c     | 37 +++++++++++++++++--
+>  1 file changed, 33 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c b/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+> index faab0a91e191..75434aa2a0ec 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+> @@ -25,6 +25,9 @@
+>  #define GP_CTR_NUM_MASK GENMASK_ULL(15, GP_CTR_NUM_OFS_BIT)
+>  #define EVT_LEN_OFS_BIT 24
+>  #define EVT_LEN_MASK GENMASK_ULL(31, EVT_LEN_OFS_BIT)
+> +#define INTEL_PMC_IDX_FIXED 32
+> +#define RDPMC_FIXED_BASE BIT_ULL(30)
+> +#define FIXED_CTR_NUM_MASK GENMASK_ULL(4, 0)
+>  
+>  #define ARCH_EVENT(select, umask) (((select) & 0xff) | ((umask) & 0xff) << 8)
+>  
+> @@ -43,6 +46,14 @@ static const uint64_t arch_events[] = {
+>  	[7] = ARCH_EVENT(0xa4, 0x1), /* Topdown Slots */
+>  };
+>  
+> +/* Association of Fixed Counters with Architectural Performance Events */
+> +static int fixed_events[] = {1, 0, 7};
+> +
+> +static uint64_t evt_code_for_fixed_ctr(uint8_t idx)
+> +{
+> +	return arch_events[fixed_events[idx]];
+> +}
 
-elapsed time: 725m
+This appears to be more fodder for common code.
 
-configs tested: 153
-configs skipped: 4
+>  static struct kvm_vcpu *new_vcpu(void *guest_code)
+>  {
+>  	struct kvm_vm *vm;
+> @@ -88,8 +99,8 @@ static bool first_uc_arg_non_zero(struct ucall *uc, void *data)
+>  }
+>  
+>  static void intel_guest_run_arch_event(uint8_t version, uint8_t max_gp_num,
+> -				       bool supported, uint32_t ctr_base_msr,
+> -				       uint64_t evt_code)
+> +				       uint8_t max_fixed_num, bool supported,
+> +				       uint32_t ctr_base_msr, uint64_t evt_code)
+>  {
+>  	uint32_t global_msr = MSR_CORE_PERF_GLOBAL_CTRL;
+>  	unsigned int i;
+> @@ -108,6 +119,23 @@ static void intel_guest_run_arch_event(uint8_t version, uint8_t max_gp_num,
+>  		GUEST_SYNC(supported == !!_rdpmc(i));
+>  	}
+>  
+> +	/* No need to test independent arch events on fixed counters. */
+> +	if (version > 1 && max_fixed_num > 1 &&
+> +	    (evt_code == evt_code_for_fixed_ctr(0) ||
+> +	     evt_code == evt_code_for_fixed_ctr(1))) {
+> +		i = (evt_code == evt_code_for_fixed_ctr(0)) ? 0 : 1;
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The ternary operator on top of a duplicate comparison isn't super intuitive.
+Maybe use gotos?  Definitely just an idea, not a requirement.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230524   gcc  
-alpha                randconfig-r005-20230524   gcc  
-alpha                randconfig-r016-20230524   gcc  
-alpha                randconfig-r034-20230524   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r012-20230524   gcc  
-arc                  randconfig-r043-20230524   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r031-20230524   clang
-arm                  randconfig-r046-20230524   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230524   gcc  
-arm64                randconfig-r032-20230524   gcc  
-csky         buildonly-randconfig-r003-20230524   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230524   gcc  
-hexagon              randconfig-r024-20230524   clang
-hexagon              randconfig-r041-20230524   clang
-hexagon              randconfig-r045-20230524   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r001-20230524   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i051-20230524   gcc  
-i386                 randconfig-i052-20230524   gcc  
-i386                 randconfig-i053-20230524   gcc  
-i386                 randconfig-i054-20230524   gcc  
-i386                 randconfig-i055-20230524   gcc  
-i386                 randconfig-i056-20230524   gcc  
-i386                 randconfig-i061-20230525   clang
-i386                 randconfig-i062-20230525   clang
-i386                 randconfig-i063-20230525   clang
-i386                 randconfig-i064-20230525   clang
-i386                 randconfig-i065-20230525   clang
-i386                 randconfig-i066-20230525   clang
-i386                 randconfig-i071-20230524   clang
-i386                 randconfig-i072-20230524   clang
-i386                 randconfig-i073-20230524   clang
-i386                 randconfig-i074-20230524   clang
-i386                 randconfig-i075-20230524   clang
-i386                 randconfig-i076-20230524   clang
-i386                 randconfig-i081-20230524   clang
-i386                 randconfig-i082-20230524   clang
-i386                 randconfig-i083-20230524   clang
-i386                 randconfig-i084-20230524   clang
-i386                 randconfig-i085-20230524   clang
-i386                 randconfig-i086-20230524   clang
-i386                 randconfig-i091-20230524   gcc  
-i386                 randconfig-i092-20230524   gcc  
-i386                 randconfig-i093-20230524   gcc  
-i386                 randconfig-i094-20230524   gcc  
-i386                 randconfig-i095-20230524   gcc  
-i386                 randconfig-i096-20230524   gcc  
-i386                 randconfig-r011-20230524   clang
-i386                 randconfig-r015-20230524   clang
-i386                 randconfig-r026-20230524   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r001-20230524   gcc  
-ia64                 randconfig-r002-20230524   gcc  
-ia64                 randconfig-r035-20230524   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r006-20230524   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r005-20230524   gcc  
-loongarch            randconfig-r036-20230524   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r014-20230524   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r025-20230524   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r033-20230524   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230524   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r005-20230524   clang
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230524   clang
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r004-20230524   gcc  
-sparc64              randconfig-r006-20230524   gcc  
-sparc64              randconfig-r013-20230524   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r002-20230524   gcc  
-x86_64       buildonly-randconfig-r004-20230524   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230524   gcc  
-x86_64               randconfig-a002-20230524   gcc  
-x86_64               randconfig-a003-20230524   gcc  
-x86_64               randconfig-a004-20230524   gcc  
-x86_64               randconfig-a005-20230524   gcc  
-x86_64               randconfig-a006-20230524   gcc  
-x86_64               randconfig-a011-20230524   clang
-x86_64               randconfig-a012-20230524   clang
-x86_64               randconfig-a013-20230524   clang
-x86_64               randconfig-a014-20230524   clang
-x86_64               randconfig-a015-20230524   clang
-x86_64               randconfig-a016-20230524   clang
-x86_64               randconfig-x051-20230524   clang
-x86_64               randconfig-x052-20230524   clang
-x86_64               randconfig-x053-20230524   clang
-x86_64               randconfig-x054-20230524   clang
-x86_64               randconfig-x055-20230524   clang
-x86_64               randconfig-x056-20230524   clang
-x86_64               randconfig-x061-20230524   clang
-x86_64               randconfig-x062-20230524   clang
-x86_64               randconfig-x063-20230524   clang
-x86_64               randconfig-x064-20230524   clang
-x86_64               randconfig-x065-20230524   clang
-x86_64               randconfig-x066-20230524   clang
-x86_64               randconfig-x071-20230524   gcc  
-x86_64               randconfig-x072-20230524   gcc  
-x86_64               randconfig-x073-20230524   gcc  
-x86_64               randconfig-x074-20230524   gcc  
-x86_64               randconfig-x075-20230524   gcc  
-x86_64               randconfig-x076-20230524   gcc  
-x86_64               randconfig-x081-20230524   gcc  
-x86_64               randconfig-x082-20230524   gcc  
-x86_64               randconfig-x083-20230524   gcc  
-x86_64               randconfig-x084-20230524   gcc  
-x86_64               randconfig-x085-20230524   gcc  
-x86_64               randconfig-x086-20230524   gcc  
-x86_64               randconfig-x091-20230524   clang
-x86_64               randconfig-x092-20230524   clang
-x86_64               randconfig-x093-20230524   clang
-x86_64               randconfig-x094-20230524   clang
-x86_64               randconfig-x095-20230524   clang
-x86_64               randconfig-x096-20230524   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r021-20230524   gcc  
-xtensa               randconfig-r022-20230524   gcc  
+	if (version <= 1 || max_fixed_num <= 1)
+		goto done;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+	if (evt_code == evt_code_for_fixed_ctr(0))
+		i = 0;
+	else if (evt_code == evt_code_for_fixed_ctr(1))
+		i = 1;
+	else
+		goto done;
+
+> +		wrmsr(MSR_CORE_PERF_FIXED_CTR0 + i, 0);
+> +		wrmsr(MSR_CORE_PERF_FIXED_CTR_CTRL, BIT_ULL(4 * i));
+> +		wrmsr(global_msr, BIT_ULL(INTEL_PMC_IDX_FIXED + i));
+> +
+> +		__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
+> +
+> +		wrmsr(global_msr, 0);
+> +
+> +		GUEST_SYNC(supported == !!_rdpmc(RDPMC_FIXED_BASE | i));
+> +	}
+> +
+>  	GUEST_DONE();
+>  }
