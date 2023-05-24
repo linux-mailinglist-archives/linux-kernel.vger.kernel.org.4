@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763167100BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4772F7100BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbjEXWT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S234337AbjEXWTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236837AbjEXWTB (ORCPT
+        with ESMTP id S237204AbjEXWTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:19:01 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03921E46
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:18:54 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba83fed51b0so1861216276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:18:53 -0700 (PDT)
+        Wed, 24 May 2023 18:19:09 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED9EE53
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:18:56 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56561689700so28562357b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684966733; x=1687558733;
+        d=google.com; s=20221208; t=1684966735; x=1687558735;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SukIuxaoO84Z2N5/tbMdB22CiO94rsJEEkavNjO0alo=;
-        b=xXvaZIob15m9BhOyeJ9ui08mh6OJC4bT99hRIPeTVXfrpP9xnsmelHY2dmsb/wpag7
-         iAP7Mr9NjMYUHMX+QBUES3Zs0sZbYQd7aQtdyvx2FgPosw0ylDPSM1dpP4c9t4eVhKIU
-         r4LC7cq0a/H1w4jinqvYIGdxX2oV6/A1eWQqLpQTNvfCXMjWfC5qMGjSj0tKOGcCqN6j
-         8Y10IA0Tz3UjGDnkT/QDm6jWgiRugZekRKdmFofLPZW4RLGxVF6C/w/x7a6YmYRgrYdm
-         wLZAtQjICcSnF7CMAHqYiwYUb71Yk66ERw/eV92ByLIrwFu8mQzvIILwukoVPnjhhHrQ
-         5T8A==
+        bh=Cy7gJw+E0ntMAmmRtEPYe8LOCyWrq0W20Q546Olgu7k=;
+        b=mczbeLVP6vX9XhKEziiSA4SHBbGgx2XKtK4C8T3nL2qBfrmK8L0ktZhE+3H+9hl3wO
+         vZBzFZdDzO387cRVpPmDkguqDFclulv6SykRF7vHY81JkGOb3sxhp1Jr7cAI2qNBeIco
+         MKYHE6p0rfCgmH5GZ3JTHfaMHatUYVk/wSF4UxFUjqLXJFh3oBytoVa0EENGQJ4fuVF1
+         kM2BtrC35B9cQwKcRzeuKSH00qpZ7cthUKCBntTvCVwwX5aKebznc7SOtjQBl1NnYD7y
+         A7P1KhlD3aEUqrQ2DS2ennyo05n4LJide3clV07VmLmnno5PPoUIi9vPNlmkIouyd6js
+         R77w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684966733; x=1687558733;
+        d=1e100.net; s=20221208; t=1684966735; x=1687558735;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SukIuxaoO84Z2N5/tbMdB22CiO94rsJEEkavNjO0alo=;
-        b=MU3vuPjW1GdA/bL7cYQLSQtf+19gFEIDh0MSQys8IQSG3v09kKgtLWJkGf0FPMUrXa
-         C4UF8mUm8moaHGovaMsQvZdcNgZd3g5LyHUkplNmMBX3BmTOaIh5md6VRy88TWYmflIT
-         EgYeRK3d9l3Y3qeRqyEIl+tTaEAY6gTkbSYnwotRsSQnDIQ5izSpZ0WIUDzEoc3CGWIz
-         SV/LxZCv2yMjGtc8z8haSSSJYZL04jKKxRQeElqFfdpC2cAiyx159L2yYn/4slhpYtBW
-         aPZ53gyysv2VU6CEjPE7lTyIanKfW9aB8tVNz6af06SYXI8KSn8Z+0QwR5a7zSHOsG5N
-         3LOg==
-X-Gm-Message-State: AC+VfDx34luCUAPXOMke8efKaMtGFn750Fubf602BYxsnyyE+IkmJnh+
-        avktNoHESkYCMA/iqm4g2Bzkr3yqxbUD
-X-Google-Smtp-Source: ACHHUZ6kUC+/b7eqs9c4jxHPTriyXHDKWHvZph0q2o9wc+IPQrpvP9irpFnHBysM//pLtj5KTw1TYrleX6Ji
+        bh=Cy7gJw+E0ntMAmmRtEPYe8LOCyWrq0W20Q546Olgu7k=;
+        b=H0cqxx/13NjEKpkmzcM8KiB+ehIG8+bRALe3FfyGwydo5wG8KWwZTIu1jSnX7WEHNr
+         k4QBwJeyp3AXBZihzUVkLOhxxxF3N+DjGWD4LAytCJsxzJZdymU3kWGRFwWtxuQ7Tto5
+         Ef7xNKG5NW5/CNCX3TCvybpud8XkhWYX2xz8h1cGNfNwLaQXFIFuGSFHS1wvqPTOSY6K
+         aKfxaPpWMGJhvEXhTXSrElqt4yPblj2w03mrKd4R1SVqWevE9JZW1XXswk/mk2ZGnP56
+         /aDW8UbjhIA2C4EHwu3PRucXraCjslIGcGklkH5GdmhU/KqoXMAjnvo8LgyyKoPvu1kT
+         5Ixw==
+X-Gm-Message-State: AC+VfDy05nwTxkMSKzpswMpreOmJOUOFxGY1/ajMgmuRXInoJKJYSKHl
+        zmMom4Ncpy3VV5bi9WVQbI/gVN+0r8na
+X-Google-Smtp-Source: ACHHUZ4+pI9OmzMNkQ1yM/rYnP9CZDetV7ZHH1aIpmqtDz+7oLUAKsSkrbsqtJtcIdRYOtffR7G25A/eVQXh
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7aa7:3d2d:76ae:8e96])
- (user=irogers job=sendgmr) by 2002:a25:6b06:0:b0:ba8:97f8:620f with SMTP id
- g6-20020a256b06000000b00ba897f8620fmr756124ybc.8.1684966733649; Wed, 24 May
- 2023 15:18:53 -0700 (PDT)
-Date:   Wed, 24 May 2023 15:18:04 -0700
+ (user=irogers job=sendgmr) by 2002:a81:b717:0:b0:560:d237:43dc with SMTP id
+ v23-20020a81b717000000b00560d23743dcmr11977209ywh.3.1684966735605; Wed, 24
+ May 2023 15:18:55 -0700 (PDT)
+Date:   Wed, 24 May 2023 15:18:05 -0700
 In-Reply-To: <20230524221831.1741381-1-irogers@google.com>
-Message-Id: <20230524221831.1741381-9-irogers@google.com>
+Message-Id: <20230524221831.1741381-10-irogers@google.com>
 Mime-Version: 1.0
 References: <20230524221831.1741381-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Subject: [PATCH v3 08/35] perf pmu: Add CPU map for "cpu" PMUs
+Subject: [PATCH v3 09/35] perf evlist: Propagate user CPU maps intersecting
+ core PMU maps
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -98,71 +99,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A typical "cpu" PMU has no "cpus" or "cpumask" file meaning the CPU
-map is set to NULL, which also encodes an empty CPU map. Update
-pmu_cpumask so that if the "cpu" PMU fails to load a CPU map, use a
-default of all online PMUs.
+The CPU map for a non-core PMU gives a default CPU value for
+perf_event_open. For core PMUs the CPU map lists all CPUs the evsel
+may be opened on. If there are >1 core PMU, the CPU maps will list the
+CPUs for that core PMU, but the user_requested_cpus may contain CPUs
+that are invalid for the PMU and cause perf_event_open to fail. To
+avoid this, when propagating the CPU map for core PMUs intersect it
+with the CPU map of the PMU (the evsel's "own_cpus").
 
-Remove const from cpu_map__online for the sake of reference counting.
+Add comments to __perf_evlist__propagate_maps to explain its somewhat
+complex behavior.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/cpumap.c | 4 ++--
- tools/perf/util/cpumap.h | 4 ++--
- tools/perf/util/pmu.c    | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ tools/lib/perf/evlist.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-index 75d9c73e0184..75c5bed37805 100644
---- a/tools/perf/util/cpumap.c
-+++ b/tools/perf/util/cpumap.c
-@@ -663,9 +663,9 @@ size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size)
- 	return ptr - buf;
- }
- 
--const struct perf_cpu_map *cpu_map__online(void) /* thread unsafe */
-+struct perf_cpu_map *cpu_map__online(void) /* thread unsafe */
+diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+index 81e8b5fcd8ba..b8b066d0dc5e 100644
+--- a/tools/lib/perf/evlist.c
++++ b/tools/lib/perf/evlist.c
+@@ -36,18 +36,33 @@ void perf_evlist__init(struct perf_evlist *evlist)
+ static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
+ 					  struct perf_evsel *evsel)
  {
--	static const struct perf_cpu_map *online = NULL;
-+	static struct perf_cpu_map *online;
- 
- 	if (!online)
- 		online = perf_cpu_map__new(NULL); /* from /sys/devices/system/cpu/online */
-diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-index e3426541e0aa..05201b31810c 100644
---- a/tools/perf/util/cpumap.h
-+++ b/tools/perf/util/cpumap.h
-@@ -48,7 +48,7 @@ struct perf_cpu_map *cpu_map__new_data(const struct perf_record_cpu_map_data *da
- size_t cpu_map__snprint(struct perf_cpu_map *map, char *buf, size_t size);
- size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size);
- size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp);
--const struct perf_cpu_map *cpu_map__online(void); /* thread unsafe */
-+struct perf_cpu_map *cpu_map__online(void); /* thread unsafe */
- 
- int cpu__setup_cpunode_map(void);
- 
-@@ -59,7 +59,7 @@ struct perf_cpu cpu__max_present_cpu(void);
- /**
-  * cpu_map__is_dummy - Events associated with a pid, rather than a CPU, use a single dummy map with an entry of -1.
-  */
--static inline bool cpu_map__is_dummy(struct perf_cpu_map *cpus)
-+static inline bool cpu_map__is_dummy(const struct perf_cpu_map *cpus)
- {
- 	return perf_cpu_map__nr(cpus) == 1 && perf_cpu_map__cpu(cpus, 0).cpu == -1;
- }
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index e8c0762c311a..d992f5242d99 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -610,7 +610,7 @@ static struct perf_cpu_map *pmu_cpumask(int dirfd, const char *name)
- 			return cpus;
+-	/*
+-	 * We already have cpus for evsel (via PMU sysfs) so
+-	 * keep it, if there's no target cpu list defined.
+-	 */
+ 	if (evsel->system_wide) {
++		/* System wide: set the cpu map of the evsel to all online CPUs. */
+ 		perf_cpu_map__put(evsel->cpus);
+ 		evsel->cpus = perf_cpu_map__new(NULL);
++	} else if (evlist->has_user_cpus && evsel->is_pmu_core) {
++		/*
++		 * User requested CPUs on a core PMU, ensure the requested CPUs
++		 * are valid by intersecting with those of the PMU.
++		 */
++		perf_cpu_map__put(evsel->cpus);
++		evsel->cpus = perf_cpu_map__intersect(evlist->user_requested_cpus, evsel->own_cpus);
+ 	} else if (!evsel->own_cpus || evlist->has_user_cpus ||
+-		   (!evsel->requires_cpu && perf_cpu_map__empty(evlist->user_requested_cpus))) {
++		(!evsel->requires_cpu && perf_cpu_map__has_any_cpu(evlist->user_requested_cpus))) {
++		/*
++		 * The PMU didn't specify a default cpu map, this isn't a core
++		 * event and the user requested CPUs or the evlist user
++		 * requested CPUs have the "any CPU" (aka dummy) CPU value. In
++		 * which case use the user requested CPUs rather than the PMU
++		 * ones.
++		 */
+ 		perf_cpu_map__put(evsel->cpus);
+ 		evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+ 	} else if (evsel->cpus != evsel->own_cpus) {
++		/*
++		 * No user requested cpu map but the PMU cpu map doesn't match
++		 * the evsel's. Reset it back to the PMU cpu map.
++		 */
+ 		perf_cpu_map__put(evsel->cpus);
+ 		evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
  	}
- 
--	return NULL;
-+	return !strcmp(name, "cpu") ? perf_cpu_map__get(cpu_map__online()) : NULL;
- }
- 
- static bool pmu_is_uncore(int dirfd, const char *name)
 -- 
 2.40.1.698.g37aff9b760-goog
 
