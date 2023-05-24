@@ -2,174 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E2F70FF92
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB7870FF9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbjEXVCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        id S229921AbjEXVDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjEXVB7 (ORCPT
+        with ESMTP id S229682AbjEXVDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:01:59 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B1EB3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:01:57 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510e5a8704bso783a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:01:57 -0700 (PDT)
+        Wed, 24 May 2023 17:03:48 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4884B3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:03:46 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2533d8f48b5so393059a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:03:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684962116; x=1687554116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ecRHb3a4uZb7D9V7KAm1/nNRXIsZmVIjd+RGF7WArC0=;
-        b=Y5GLMKGFPpIlQIqkAD39okDyWwz+EMI6KjtjQk4TVsTOtaWHy4Lt7mmHTJmGhBmz/S
-         7Xp5+LCH0/jjszqdPtFwYFtRNcaNAmMyWgsMV8z+snOmyhRqZ/RFPxUc/O05u+Wt8z27
-         wkUu4Mkt1sKkoHYscyuLFbyJzwHe3LU0BW2Ks=
+        d=google.com; s=20221208; t=1684962226; x=1687554226;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdskpbDr/vx+kwVgwoZ+l+PjPD1AoALpdTOdIckr/8Q=;
+        b=BxaL6YiFs9lyGj44/uXDyTbkm9+MG2sne0WgHhR7Pu+EhZCcs8IH6vd6OsXjFjCyK8
+         2BGKd7iXWtQI+c6m6RVTqbmTstgL+aw0g0YY3uNb4ZCq3Wu7VuGy2b3wzwW4ZbOE8d8i
+         qDeGYuF+SiMqMt2KVZrD8aPzBvbtG3dV3j4gIiOVmrc9CcseUpE9BvDdFKpR08c2bkWN
+         XaQez5YABiG9AKStAj2frm/V2gPwZFHdRcQjlBO5L9BSMZLoEP7oTs12hYnCq/z+ZIE+
+         V8EJhZBYqhQXf/rUrY608YxfMU5fFowzLITDwZ0EOnmozO/kBGP+xDNEI9D+hRvNxQVO
+         ARjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684962116; x=1687554116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ecRHb3a4uZb7D9V7KAm1/nNRXIsZmVIjd+RGF7WArC0=;
-        b=P3V6CjQLl3Wrp2xrR7yqXrW3+cewOTvGEJ0+H/rXIb5fkm3ez3TS2q4mXy60QZ9zlj
-         rAcdCD/4kTvDPq60MZkg8HrpsCMzIruNuSMufZuQYP43i6QNidFYvXs5of+sl2WUJx0m
-         s/AkUeoIrLi4gj11sMyCc+f0ssKEpQ59Xju3//gqHbfJrd/29WX9yco5s0pFZcWox4tl
-         XP8pAm0b/4RkmqnTKrP7C3l05gtEfXK2hqhtbmU1FUGug75V40wx+OJV85XbM+EMq+wG
-         gURXYuuvo4A1f2EOb2G4h1viATpeMFFDL6O41rikNFcp90qyB/ks+TSxK1/XfL5K9kTY
-         P7Aw==
-X-Gm-Message-State: AC+VfDyfvEYsbtd94K76JPg+TBsNLyKmOLtbya6W/Rnoh+8ifbHsYXE8
-        S1MBRyWJTfJ1Gb02ygvkZ4nNBDnGPS98U36CKztDhg==
-X-Google-Smtp-Source: ACHHUZ6ZLl9FAFgZv7T7gZGWy3LVOp7WfMUJpmQRoNZp2N//Vp6blt2TIamig2Vgxpe5PVROXbu3CI1TU8VYliv/Kzk=
-X-Received: by 2002:a50:cd47:0:b0:4bc:dee8:94ca with SMTP id
- d7-20020a50cd47000000b004bcdee894camr23378edj.7.1684962116191; Wed, 24 May
- 2023 14:01:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230518072657.1.If9539da710217ed92e764cc0ba0f3d2d246a1aee@changeid>
- <CALs4sv2+Uu=Bry=B3FYzWdNrHjGWDvPCDhTFcNERVpWTjpmEyA@mail.gmail.com>
- <CANEJEGuzoBa_yYHRCa0KygUe=AOhUkSg4u6gWx+QNCuGtKod2Q@mail.gmail.com>
- <52cfebaf-79f6-c318-c14b-3716555d0e8f@intel.com> <SJ0PR11MB5866456B9007E3DC55FD8728E5419@SJ0PR11MB5866.namprd11.prod.outlook.com>
-In-Reply-To: <SJ0PR11MB5866456B9007E3DC55FD8728E5419@SJ0PR11MB5866.namprd11.prod.outlook.com>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Wed, 24 May 2023 14:01:44 -0700
-Message-ID: <CANEJEGsOU3KkG5rQ5ph3EQOiBvPXmhUk7aPvM3nj5V5KudP=ZA@mail.gmail.com>
-Subject: Re: [PATCH] igb: Fix igb_down hung on surprise removal
-To:     "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
-Cc:     "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        Grant Grundler <grundler@chromium.org>,
-        Pavan Chebbi <pavan.chebbi@broadcom.com>,
-        "Neftin, Sasha" <sasha.neftin@intel.com>,
-        "Ruinskiy, Dima" <dima.ruinskiy@intel.com>,
-        Ying Hsu <yinghsu@chromium.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684962226; x=1687554226;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdskpbDr/vx+kwVgwoZ+l+PjPD1AoALpdTOdIckr/8Q=;
+        b=TxirdcU+nHFxZayO/+k6xiJmpT2s3Jn1LgQ93h5AvivffD5tEwQGQt3c1ld+c5Dz1q
+         P5H0rR3F/QB0btAxneeL2IoOkbQmM41AT9MdFxWiSZp8yry76m85AWY/yuFO1P2cRjPT
+         W3Q81wIv9DZqwhxeDAKJdeEXXPZAAVKa7lucJl1OP4DOFCgfZ32/VTuvrQhMckv6ops9
+         gBtfwjL0DeeNoQ5WXd+dM7ZUEIzs3I7Ylr2JRXcco8ZiZSP88VtVA3QKeRUbHSLuNKtU
+         dIo7JB6qdcTI5C2MdPGEe3osg5qPTko3fbqVeKv7Jhvv6jV+aNMMj+Nu9qZmj7GU1RiJ
+         ScCQ==
+X-Gm-Message-State: AC+VfDycVTCmYLVU77kMZuVrZT+J9NW7PnlfOOINR8z1TUsAksAnbDKP
+        YVty7MfTrqm//sYlV1RYRAVS7GyGv0Y=
+X-Google-Smtp-Source: ACHHUZ4zaHeDuW0F2TVmtsoRzsaCxJ5RaaPMuhtuz7LQg9D2me9CV3N0a41C9/IXiDzFs2G86pxWKAUz5m0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:840c:b0:250:a6c1:b843 with SMTP id
+ j12-20020a17090a840c00b00250a6c1b843mr4449282pjn.9.1684962226351; Wed, 24 May
+ 2023 14:03:46 -0700 (PDT)
+Date:   Wed, 24 May 2023 14:03:44 -0700
+In-Reply-To: <20230310105346.12302-4-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-4-likexu@tencent.com>
+Message-ID: <ZG57sKYf+8eae6+s@google.com>
+Subject: Re: [PATCH 3/5] KVM: x86/pmu: Move the overflow of a normal counter
+ out of PMI context
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 5:34=E2=80=AFAM Loktionov, Aleksandr
-<aleksandr.loktionov@intel.com> wrote:
->
-> Good day Tony
->
-> We reviewed the patch and have nothing against.
+On Fri, Mar 10, 2023, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> >From the guest's point of view, vPMU's global_status bit update following
+> a counter overflow is completely independent of whether it is emulated
+> in the host PMI context. The guest counter overflow emulation only depends
+> on whether pmc->counter has an overflow or not. Plus the counter overflow
+> generated by the emulation instruction has been delayed and not been
+> handled in the PMI context. This part of the logic can be unified by
+> reusing pmc->prev_counter for a normal counter.
 
-Thank you for reviewing!
+I've asked many times.  Please write changelogs that state what the patch actually
+does, not what "can" be done.  The other patches in this series have similar problems,
+e.g. desribe the state _after_ the patch is applied, not what the patch does.
 
-Can I take this as the equivalent of "Signed-off-by: Loktionov,
-Aleksandr <aleksandr.loktionov@intel.com>"?
+IIUC, this is effectively deferring injection to kvm_pmu_handle_event() and
+kvm_pmu_handle_pmc_overflow().  The changelog says nothing of the sort though.
 
-Or since Tony is listed in MAINTAINERS for drivers/net/ethernet/intel,
-is he supposed to provide that?
+> However for a PEBS counter, its buffer overflow irq still requires hardware to
+> trigger PMI.
 
-cheers,
-grant
-
->
-> With the best regards
-> Alex
-> ND ITP Linux 40G base driver TL
->
->
->
-> > -----Original Message-----
-> > From: Nguyen, Anthony L <anthony.l.nguyen@intel.com>
-> > Sent: Tuesday, May 23, 2023 8:04 PM
-> > To: Grant Grundler <grundler@chromium.org>; Pavan Chebbi
-> > <pavan.chebbi@broadcom.com>; Loktionov, Aleksandr
-> > <aleksandr.loktionov@intel.com>; Neftin, Sasha <sasha.neftin@intel.com>=
-;
-> > Ruinskiy, Dima <dima.ruinskiy@intel.com>
-> > Cc: Ying Hsu <yinghsu@chromium.org>; netdev@vger.kernel.org; David S.
-> > Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
-> > Jakub Kicinski <kuba@kernel.org>; Brandeburg, Jesse
-> > <jesse.brandeburg@intel.com>; Paolo Abeni <pabeni@redhat.com>; intel-
-> > wired-lan@lists.osuosl.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH] igb: Fix igb_down hung on surprise removal
-> >
-> > On 5/22/2023 1:16 PM, Grant Grundler wrote:
-> > > On Thu, May 18, 2023 at 3:36=E2=80=AFAM Pavan Chebbi
-> > <pavan.chebbi@broadcom.com> wrote:
-> > >>
-> > >> On Thu, May 18, 2023 at 12:58=E2=80=AFPM Ying Hsu <yinghsu@chromium.=
-org>
-> > wrote:
-> > >>>
-> > >>> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c
-> > >>> b/drivers/net/ethernet/intel/igb/igb_main.c
-> > >>> index 58872a4c2540..a8b217368ca1 100644
-> > >>> --- a/drivers/net/ethernet/intel/igb/igb_main.c
-> > >>> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
-> > >>> @@ -9581,6 +9581,11 @@ static pci_ers_result_t
-> > igb_io_error_detected(struct pci_dev *pdev,
-> > >>>          struct net_device *netdev =3D pci_get_drvdata(pdev);
-> > >>>          struct igb_adapter *adapter =3D netdev_priv(netdev);
-> > >>>
-> > >>> +       if (state =3D=3D pci_channel_io_normal) {
-> > >>> +               dev_warn(&pdev->dev, "Non-correctable non-fatal err=
-or
-> > reported.\n");
-> > >>> +               return PCI_ERS_RESULT_CAN_RECOVER;
-> > >>> +       }
-> > >>> +
-> > >>
-> > >> This code may be good to have. But not sure if this should be the fi=
-x
-> > >> for igb_down() synchronization.
-> > >
-> > > I have the same opinion. This appears to solve the problem - but I
-> > > don't know if there is a better way to solve this problem.
-> > >
-> > >> Intel guys may comment.
-> > >
-> > > Ping? Can we please get feedback from IGB/IGC maintainers this week?
-> > >
-> > > (I hope igc maintainers can confirm this isn't an issue for igc.)
-> >
-> > Adding some of the igb and igc developers.
-> >
-> > > cheers,
-> > > grant
-> > >
-> > >>
-> > >>>          netif_device_detach(netdev);
-> > >>>
-> > >>>          if (state =3D=3D pci_channel_io_perm_failure)
-> > >>> --
-> > >>> 2.40.1.606.ga4b1b128d6-goog
-> > >>>
-> > >>>
+I didn't follow this.  Hardware isn't triggering the PMI the guest sees, that's
+still coming from KVM.  Are you saying that KVM doesn't have a way to detect
+overflow for PEBS counters, i.e. would drop the PMI as the hardware PMI is the
+only notification KVM gets?
