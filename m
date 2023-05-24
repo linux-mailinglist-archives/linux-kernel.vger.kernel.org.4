@@ -2,238 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA00C70FD96
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95F470FD98
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237026AbjEXSPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S237018AbjEXSPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236895AbjEXSPJ (ORCPT
+        with ESMTP id S236904AbjEXSPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:15:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ADDD3;
-        Wed, 24 May 2023 11:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684952107; x=1716488107;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n4hqN+AXaXZ9XEHrLYNMyhfq1J7mBVLmsRw0RlWIj0A=;
-  b=gaio7bqVYf+ep9D9yYzbhYb/IGSuJPWjsHsvJom+Yb5SWgFJg+EoRRAm
-   E4HEZUYy8ZTJ7O6/z+goOXay0IHtgKopOiBRGbC/coVlvPhKgXyFNBfEP
-   BUcWV53DHGM0ASOO4vSH571K+w1duon1oAlQ6ZA8oLNZKvWr/ZXJlogUk
-   r5JchrJ1rqlzeAS1MoTuJP3l45iaOrcul7PbsUKXt5BL8jbTqzd/C+iEu
-   lpynNJ+7K+cexyIPu9OS0/AevwvdglfzZm+HnQ+p2Th0cbaWrJUbR6AqY
-   9nacwWu9OG7o8nwZBh7/qpiClkLio8pRq01dVZDl/uTA4CRCGZzGBw6rX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="419367177"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="419367177"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 11:15:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="654902139"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="654902139"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga003.jf.intel.com with ESMTP; 24 May 2023 11:15:07 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 11:15:06 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 11:15:06 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 11:15:06 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 24 May 2023 11:15:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BPYlRmH4CQscUQiVgqp8oZe6vDcQhrXCQb7cyEkGvPwixTCVjOHb1Wz+8FzX1aSM9LqJNBfD71mUK4IRegLfKW5nDHsHp6YVD8C60w/3Nfz1ZlwPkorR0fY5tSlLUBP2wIqJFA4nnmo5QGcttkJJgez6gV/it9IaUwaYeZN7Mtzv2ZAVD/dIbwFV2WkX8bT2ZhE36NtIbco/yeaVLDcJwbskH3WYgw22HO7iTuJbico8cZXIXcf8FyJHYRXtbACXcOWRxn7MvkmJ727a7BCWuB+GBQTInZmsL13ECdInKO8CTkzPBcEKfoyFrCmN7k857VZrbfH849EDSPJ/GuDqRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0z/GFDa5Dh1tyjVDOWHA0fWHNkamGRRwhtSDx6XToPU=;
- b=W/LH/fSYNnqgEpYXD8tCmxsyt3HMiFlWrGoW8aYjQjOKmusW1Cgh2BjhnlP8koZcghGJ32zWDGLYB1qLzqtVXROHXLElT+wl5PyxtueDTtCLqOONRcKlmnMy/uFouC63AnzX2Ta02dztxHgNZDUX3CrbRPQeBGRwwlaAobqYVS6CDIOiVcEWA573okqN4OIs0lsxXQYKadgbUMrM7zQM7p2dPMCjK9G0vSHgPCIn4GSdFLIRL1iNMBv3B76opqTkdQ9yGptqx3JmJC5wGLDybB+0ht28aGGPCzab0bO94VdacRbG4I7lxEXcfyRYjDeRdb/3FekBkxu4yRRpL5Ga9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3004.namprd11.prod.outlook.com (2603:10b6:5:67::17) by
- SN7PR11MB7113.namprd11.prod.outlook.com (2603:10b6:806:298::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 18:15:05 +0000
-Received: from DM6PR11MB3004.namprd11.prod.outlook.com
- ([fe80::fa75:e407:ae4e:6f31]) by DM6PR11MB3004.namprd11.prod.outlook.com
- ([fe80::fa75:e407:ae4e:6f31%7]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 18:15:04 +0000
-Date:   Wed, 24 May 2023 11:14:59 -0700
-From:   David Zheng <david.zheng@intel.com>
-To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>
-Subject: [PATCH v3] i2c: designware: fix idx_write_cnt in read loop
-Message-ID: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: BY5PR03CA0018.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::28) To DM6PR11MB3004.namprd11.prod.outlook.com
- (2603:10b6:5:67::17)
+        Wed, 24 May 2023 14:15:19 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B681BB;
+        Wed, 24 May 2023 11:15:17 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f608074b50so14426525e9.0;
+        Wed, 24 May 2023 11:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684952115; x=1687544115;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=87ZCxQxTbVlKyzkUBnd4j43LV2JM7FHJHvdF0cKFlQQ=;
+        b=VbBXmu69uh2gs0RMb+R7/foz1uQKVq/j6oHNX547qBl9t+AzBFUP1CF0w/YXiQHoJJ
+         29rLQkeoO83pZRz0t4dESuYe2Thpebmo7IM4DjpLzyB5HPMz5AIxtPghdpemrkKWB2UL
+         yX2Mm5a0sZUVvSba4Dw103/TcQ3LEAY4bDD948jAt22q/QcJGp6zMhwg4OzqINO2y8t7
+         j8xydeHTuE8QCj8guqMq1hLPS0O0bJctnoyHum4EGVY9l2eakOh4l3j489OdjdklKa27
+         XFWba9CqLUvxG/qwUyK74Vu5ETED/2EQRQXR6hnS8nDctCZ99sX5JXIRfbjrj9xrzfwo
+         4QyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684952115; x=1687544115;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=87ZCxQxTbVlKyzkUBnd4j43LV2JM7FHJHvdF0cKFlQQ=;
+        b=io3bUCvfc+LkuFARn6HrOs3NiSrXdNIurdTC/F6BHkpmQjQ/JWdlzmydT+OAUztSsD
+         vkzoMtByfq2BbI3mQzq9fr3KtCjVwf3X0WEzYKe2nwBw5Lqwhx39tmTfH2yp7zCcSBYh
+         mwBRVzcmvaM3YwtlUzb3aDyIk/vD3N+Gu71rhlvEJjUxUt5RQO6XA8hg6oEhs1hgAhDs
+         fzXAyR3PkbQ6N+DgFY1uxT24fRvo18/WgMN6+F0G1XkjblVvMcWPXUTmnCfTG832osEE
+         UbLfikv7c4gCA2/Sz1eXIDNMaXj7tCHBtyepu3Hnmo16LlCS+7sIcDKotztTtvgV0/nC
+         XLxg==
+X-Gm-Message-State: AC+VfDxyfGC3Y1U/oNM2bC7DszHDUDo4RMsS68c6+NkffUYSvfY5AZoj
+        C33v5nWeMZjgxq6GDy0uNp0=
+X-Google-Smtp-Source: ACHHUZ7FS9+AodX+nKeevqNznXZks1d6+Nsqsfu7Ns9jz1kUkH/m3dvKLOkzaIyMguQB4V8lerzsWA==
+X-Received: by 2002:a7b:cd14:0:b0:3f5:fff8:d4f3 with SMTP id f20-20020a7bcd14000000b003f5fff8d4f3mr541358wmj.7.1684952115423;
+        Wed, 24 May 2023 11:15:15 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05600c228a00b003f42461ac75sm3107977wmf.12.2023.05.24.11.15.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 11:15:15 -0700 (PDT)
+Date:   Wed, 24 May 2023 21:15:12 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 12/30] net: dsa: mt7530: move XTAL check to
+ mt7530_setup()
+Message-ID: <20230524181512.tmll4ijpijmc5fea@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-13-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3004:EE_|SN7PR11MB7113:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a060eea-3cdf-40e2-19e3-08db5c82cc48
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uy76Uqpz1F9++3f+vGwcz9uPZgXx3KWVSJISS7qMHE6WtqHF18D473mNkOGQfGUcf/sGYWoEadlEgOLwUQxQmgzbfZ3ec3gWvdzHJvXysurJuj89HNcSwp+iqslJC0JTLMdozOZQkyEmeBn1pQ71clucJTDJvTCYexxORd8QbWtOgPNfS4faxC94idt7SqKz6iNx7G+gKC8wDTft1OgyhJhQ7dK9rSHF5zG3moMMYdiYhDU4pqcKIDlBLB02WANL/RYNwBCmeXXbug/vHobI0WSdYMj6ktyMXfSrdcrpgAkKA+tAlUwvzLJ+lJtSsfi0LrRVnKQ3LuaKkJTnEM6QTP/81miq1F8Duwlc9XQ37XgxX9gtEMXBlgnW1jeaXirsk7PozNH/MyeCM7eq6/06YufYtAkmtR7rmcIPlHIqqH3KIvkL62T1ZAkpNUJP1lNzmQ1aViD45yPU441aboi0AU+dVQQuscj55JF+DsmBHP9hk+A5f1hRQQ34DeWSCPv4GPvYT1/VzrRRHnbk+kLmqHSVLasoGDLfoPtif+Q1AzV1sbeyltot0VIAHBGCpt4W
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3004.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(39860400002)(376002)(346002)(366004)(136003)(451199021)(5660300002)(8936002)(6666004)(8676002)(26005)(6512007)(9686003)(6506007)(83380400001)(44832011)(186003)(2906002)(86362001)(66476007)(66946007)(66556008)(82960400001)(33716001)(4326008)(316002)(38100700002)(478600001)(41300700001)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JWlKIAehPMxWZ3+KkKwm+bWXRvggvPqfKHTkZSyy6VoZvZ5BZfRHWA2WrNFP?=
- =?us-ascii?Q?ETvZIKwJEOEPRRNBWlfyEO8rY3gXoJgvHpmtFh9uXOFLGFQMLzBMCdSyJH+W?=
- =?us-ascii?Q?gZ/22oag0cDSK6A6JsONRjLxNxHxBwq1GNcKCHRKoNV+7z0fETH6fwTqDaUe?=
- =?us-ascii?Q?kZCnWRQI5Js08eEl6hMIU64HXdUybYuCt3PzEpKtroMyHL9qy035Vw70g/9v?=
- =?us-ascii?Q?QERbCre6lP6rZPgtpZswxdTagewT5hnPpIsOUT7LurF4brPzyxACqLqrXSJq?=
- =?us-ascii?Q?ekJ8Dfocm4s3xZIepOk0+wrZ0PCyZYc9B2qsBTe7qszAPTZTKypwstEiUVec?=
- =?us-ascii?Q?998YSa7/fqiTS6w6axSVnCYKDI4V2JIhok1hey0cV6TFbwf67jeaMsQsXqqJ?=
- =?us-ascii?Q?M0wOuChSuKpIbaL7F2P+p1fppSW+eFBffDe2uzAbqH4Da0DkZYXXsaz1fuCh?=
- =?us-ascii?Q?EauZGxZc5jjVeilB3SADCHidd9WUrrP9CFVLRwqe58Soek3q4QYkwElW2/N2?=
- =?us-ascii?Q?MnNol6CR1QdWBMlTzQUF7MJN2DnGW94+wU2s832kYdJ1WengUnuEjfrYdarq?=
- =?us-ascii?Q?8Iw2e/3Pf1W+gdyD++2m8UfgepOjDyDpEiw1AOKxuzYxcZ39qlUGUICGjoAw?=
- =?us-ascii?Q?JNiTRPJc6k8Ib7YEVx5NoCc4fzhv9ohsRc7LLE0QhsP62w8a2liIkZwYnSJj?=
- =?us-ascii?Q?tpWvpUbCwSBxF9c5meyEdtPweFIq2u20JRdRtGXLe2/MmqpAY/lWdnY2MhwU?=
- =?us-ascii?Q?2HE7sD52+EaoKnx9Orm+jCJ/rOuKm97W/Cg7+FTkhQf9Z/E1JwtGbK6sU4py?=
- =?us-ascii?Q?rok+yp+EmiH3UoPKKuAHW9C0H22OB5G08eWSP/x3wJ0u7KXlMir6wv/9zxYX?=
- =?us-ascii?Q?Obls2BLaQEM5mpldGGGTPkIhN028cf/CMuRYxVi1PBU5gsbBNyunR4YF1fmu?=
- =?us-ascii?Q?CdL0o1tQHZyn15J6EPWbqmX4NFLay81dMt3kYg8kIPtlbm32MZmgQmtjchUs?=
- =?us-ascii?Q?TqAYyGCepkBGtU95u97x4Pnq8j3vS3Xt3ooXrIS60J6OZbc5b1f7DWgDcOe8?=
- =?us-ascii?Q?G3ZeRWvD9o4qBSxJ3++QcuWpIzJmPIvAxerAJJ9rZsWXSbgnqeK2ONkbsZHd?=
- =?us-ascii?Q?oAfxoAH8VmXHot9yOqp2A5Hfl+HSb236Eqr/gsjd2XU4L61BziUzDwPNKQvX?=
- =?us-ascii?Q?NYeYDlLMvzStqsgeO/H1o9CEdNkQWAaeCxYmF50bdSAub209GrXSMOTuQtl+?=
- =?us-ascii?Q?2w87HjeObw6poLZlFqk4/Wpx93iXS+0rawdIHXJr5K1mqDXuM3nExY/iNqmM?=
- =?us-ascii?Q?+pS6pfIFPctrxIThVLCsPZr+V1eDme9EB9+9IG7rrSE6yhj8f3eXx3NRmmeF?=
- =?us-ascii?Q?5/r3+PRdBwb5pEfMWVjFIy+DXF49KQDFS1Q4XZBht73aEd7QQzw5cfD3Q1hd?=
- =?us-ascii?Q?sbATzdihucdK3p0MNBqkGu11S0bLHAwuHL2v4KFH5irnYf2Q3SrulgM3lPmK?=
- =?us-ascii?Q?Fz6UjLFoTjvjmNE54dPiR2HlgYx6FjI07Zu09aCw0Dl+OtLgSbpEgtTeBEVn?=
- =?us-ascii?Q?p7bIsc6+O3aPl249t/CHlGzLOUmkD0v1K1faOwTiJnNPXHCd14F1huxaynQT?=
- =?us-ascii?Q?iw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a060eea-3cdf-40e2-19e3-08db5c82cc48
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3004.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 18:15:04.7553
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oYJyjwU/Q+G59HRLFV6yP+snHs8VWR+D7dyndQJDDy61zhGHLY5PKz3R/t31OMqzxydndl9pNtZF/CEJTRreYw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7113
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230522121532.86610-13-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
-RX FIFO is empty. When testing with the slave-eeprom, each transaction
-has 2 bytes for address/index and 1 byte for value, the address byte
-can be written as data byte due to dropping STOP condition.
+On Mon, May 22, 2023 at 03:15:14PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> The crystal frequency concerns the switch core. The frequency should be
+> checked when the switch is being set up so the driver can reject the
+> unsupported hardware earlier and without requiring port 6 to be used.
+> 
+> Move it to mt7530_setup().
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
 
-In the test below, the master continuously writes to the slave, first 2
-bytes are index, 3rd byte is value and follow by a STOP condition.
+Do you know why a crystal frequency of 20 MHz is not supported?
 
- i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
- i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
- i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
+>  drivers/net/dsa/mt7530.c | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index 049f7be0d790..fa48273269c4 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -408,13 +408,6 @@ mt7530_setup_port6(struct dsa_switch *ds, phy_interface_t interface)
+>  
+>  	xtal = mt7530_read(priv, MT7530_HWTRAP) & HWTRAP_XTAL_MASK;
+>  
+> -	if (xtal == HWTRAP_XTAL_20MHZ) {
+> -		dev_err(priv->dev,
+> -			"%s: MT7530 with a 20MHz XTAL is not supported!\n",
+> -			__func__);
+> -		return -EINVAL;
+> -	}
+> -
+>  	switch (interface) {
+>  	case PHY_INTERFACE_MODE_RGMII:
+>  		trgint = 0;
+> @@ -2133,7 +2126,7 @@ mt7530_setup(struct dsa_switch *ds)
+>  	struct mt7530_dummy_poll p;
+>  	phy_interface_t interface;
+>  	struct dsa_port *cpu_dp;
+> -	u32 id, val;
+> +	u32 id, val, xtal;
+>  	int ret, i;
+>  
+>  	/* The parent node of master netdev which holds the common system
+> @@ -2203,6 +2196,15 @@ mt7530_setup(struct dsa_switch *ds)
+>  		return -ENODEV;
+>  	}
+>  
+> +	xtal = mt7530_read(priv, MT7530_HWTRAP) & HWTRAP_XTAL_MASK;
+> +
+> +	if (xtal == HWTRAP_XTAL_20MHZ) {
+> +		dev_err(priv->dev,
+> +			"%s: MT7530 with a 20MHz XTAL is not supported!\n",
+> +			__func__);
 
-Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
-next 2 bytes can be treated as buffer index for upcoming transaction.
-Supposedly the slave eeprom buffer would be written as
+I don't think __func__ brings much value here, it could be dropped in
+the process of moving the code.
 
- EEPROM[0x00D1] = 0xD1
- EEPROM[0x00D2] = 0xD2
- EEPROM[0x00D3] = 0xD3
+Also, the HWTRAP register is already read once, here (stored in "val"):
 
-When CPU load is high the slave irq handler may not read fast enough,
-the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
-(0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
-the transactions below.
+	INIT_MT7530_DUMMY_POLL(&p, priv, MT7530_HWTRAP);
+	ret = readx_poll_timeout(_mt7530_read, &p, val, val != 0,
+				 20, 1000000);
 
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
- 0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+I wonder if we really need to read it twice.
 
-After `D1` is received, read loop continues to read `00` which is the
-first bype of next index. Since STOP condition is ignored by the loop,
-eeprom buffer index increased to `D2` and `00` is written as value.
-
-So the slave eeprom buffer becomes
-
- EEPROM[0x00D1] = 0xD1
- EEPROM[0x00D2] = 0x00
- EEPROM[0x00D3] = 0xD3
-
-The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
-the transactions. The first index byte in this case would have bit 11
-set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
-which will reset `idx_write_cnt` in slave eeprom.
-
-Signed-off-by: David Zheng <david.zheng@intel.com>
----
-Changes in v2:
- - Send I2C_SLAVE_WRITE_REQUESTED for HW does not have FIRST_DATA_BYTE
-Changes in v3:
- - Move DW_IC_DATA_CMD_FIRST_DATA_BYTE next to DW_IC_DATA_CMD_DAT define
----
- drivers/i2c/busses/i2c-designware-core.h  | 1 +
- drivers/i2c/busses/i2c-designware-slave.c | 4 ++++
- 2 files changed, 5 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index c5d87aae39c6..bf23bfb51aea 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -40,6 +40,7 @@
- #define DW_IC_CON_BUS_CLEAR_CTRL		BIT(11)
- 
- #define DW_IC_DATA_CMD_DAT			GENMASK(7, 0)
-+#define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
- 
- /*
-  * Registers offset
-diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-index cec25054bb24..2e079cf20bb5 100644
---- a/drivers/i2c/busses/i2c-designware-slave.c
-+++ b/drivers/i2c/busses/i2c-designware-slave.c
-@@ -176,6 +176,10 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
- 
- 		do {
- 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
-+			if (tmp & DW_IC_DATA_CMD_FIRST_DATA_BYTE)
-+				i2c_slave_event(dev->slave,
-+						I2C_SLAVE_WRITE_REQUESTED,
-+						&val);
- 			val = tmp;
- 			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
- 					&val);
--- 
-2.40.1
-
+> +		return -EINVAL;
+> +	}
+> +
+>  	/* Reset the switch through internal reset */
+>  	mt7530_write(priv, MT7530_SYS_CTRL,
+>  		     SYS_CTRL_PHY_RST | SYS_CTRL_SW_RST |
+> -- 
+> 2.39.2
+> 
