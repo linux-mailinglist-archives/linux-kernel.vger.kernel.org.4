@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA0070F91D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78ECB70F91F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236014AbjEXOua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S236066AbjEXOuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235363AbjEXOuR (ORCPT
+        with ESMTP id S235481AbjEXOuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:50:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C6A130
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:49:32 -0700 (PDT)
+        Wed, 24 May 2023 10:50:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E70C1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684939772;
+        s=mimecast20190719; t=1684939776;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6x0d7ICEdgzrcRTczgY+40SEU6mXT880gCShmbLBLHI=;
-        b=Nf7DbeMad4/XRcgazI8BfdgZLgrMAD6J1Ov8fhKSZMN8j5L5Yr8/8NCe1/9TfkVMjywWqt
-        vmhg2LW7rN5UQgIJb+/Z5rptSG63PL3oq1O1arVd6/V6X1cuslvDG+xZ8RLjURb1u+zX+v
-        NUfswxgCSQ/VixUTCn440fVkRkqom5o=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=97CTgaKk+HjxMsHB1NZqYRmtg/935y1khOuMG78saNk=;
+        b=INoNHH81Fv5iSneT1VZQguhRtUuRmWuHHxXlu1J1Lcl0EBwm/MePl7vLwd3cl5sYM0llrF
+        e23zgF+iCDAybPfA3y4WeJUjgSKKf8DZFUKuN0IF8eY1bEi9m5/VZr6rd0XuD4qPE9BA2r
+        1aylhzn8mqgSbb8l1A7PAHMwwwunHjY=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-ZiIQyxGuNnic9eYKRn8upQ-1; Wed, 24 May 2023 10:49:28 -0400
-X-MC-Unique: ZiIQyxGuNnic9eYKRn8upQ-1
+ us-mta-651-Tcx3RMC7MxyDhN2LK1DGPQ-1; Wed, 24 May 2023 10:49:31 -0400
+X-MC-Unique: Tcx3RMC7MxyDhN2LK1DGPQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9FFB3C397C6;
-        Wed, 24 May 2023 14:49:27 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 91F1229ABA03;
+        Wed, 24 May 2023 14:49:30 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4FC9B1121314;
-        Wed, 24 May 2023 14:49:26 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A11011121314;
+        Wed, 24 May 2023 14:49:28 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
@@ -48,10 +49,12 @@ Cc:     David Howells <dhowells@redhat.com>,
         David Ahern <dsahern@kernel.org>,
         Matthew Wilcox <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 0/4] splice, net: Replace sendpage with sendmsg(MSG_SPLICE_PAGES), part 2
-Date:   Wed, 24 May 2023 15:49:19 +0100
-Message-Id: <20230524144923.3623536-1-dhowells@redhat.com>
+        linux-kernel@vger.kernel.org, Ayush Sawal <ayush.sawal@chelsio.com>
+Subject: [PATCH net-next 1/4] chelsio: Support MSG_SPLICE_PAGES
+Date:   Wed, 24 May 2023 15:49:20 +0100
+Message-Id: <20230524144923.3623536-2-dhowells@redhat.com>
+In-Reply-To: <20230524144923.3623536-1-dhowells@redhat.com>
+References: <20230524144923.3623536-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
@@ -65,34 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here's the second tranche of patches towards providing a MSG_SPLICE_PAGES
-internal sendmsg flag that is intended to replace the ->sendpage() op with
-calls to sendmsg().  MSG_SPLICE_PAGES is a hint that tells the protocol
-that it should splice the pages supplied if it can and copy them if not.
+Make Chelsio's TLS offload sendmsg() support MSG_SPLICE_PAGES, splicing in
+pages from the source iterator if possible and copying the data in
+otherwise.
 
-This set consists of the following parts:
+This allows ->sendpage() to be replaced by something that can handle
+multiple multipage folios in a single transaction.
 
- (1) Implement MSG_SPLICE_PAGES support in Chelsio TLS and make
-     chtls_sendpage() just a wrapper around sendmsg().
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Ayush Sawal <ayush.sawal@chelsio.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: netdev@vger.kernel.org
+---
+ .../ethernet/chelsio/inline_crypto/chtls/chtls_io.c  | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
- (2) Implement MSG_SPLICE_PAGES support in AF_KCM and make kcm_sendpage()
-     just a wrapper around sendmsg().
-
-I've pushed the patches here also:
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=sendpage-2
-
-David
-
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=51c78a4d532efe9543a4df019ff405f05c6157f6 # part 1
-
-David Howells (4):
-  chelsio: Support MSG_SPLICE_PAGES
-  chelsio: Convert chtls_sendpage() to use MSG_SPLICE_PAGES
-  kcm: Support MSG_SPLICE_PAGES
-  kcm: Convert kcm_sendpage() to use MSG_SPLICE_PAGES
-
- .../chelsio/inline_crypto/chtls/chtls_io.c    | 121 ++--------
- net/kcm/kcmsock.c                             | 216 +++++-------------
- 2 files changed, 74 insertions(+), 263 deletions(-)
+diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
+index ae6b17b96bf1..1d08386ac916 100644
+--- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
++++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
+@@ -1092,7 +1092,17 @@ int chtls_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 		if (copy > size)
+ 			copy = size;
+ 
+-		if (skb_tailroom(skb) > 0) {
++		if (msg->msg_flags & MSG_SPLICE_PAGES) {
++			err = skb_splice_from_iter(skb, &msg->msg_iter, copy,
++						   sk->sk_allocation);
++			if (err < 0) {
++				if (err == -EMSGSIZE)
++					goto new_buf;
++				goto do_fault;
++			}
++			copy = err;
++			sk_wmem_queued_add(sk, copy);
++		} else if (skb_tailroom(skb) > 0) {
+ 			copy = min(copy, skb_tailroom(skb));
+ 			if (is_tls_tx(csk))
+ 				copy = min_t(int, copy, csk->tlshws.txleft);
 
