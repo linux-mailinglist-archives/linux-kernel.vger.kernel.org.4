@@ -2,229 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9E270FEF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FDE70FEF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbjEXUDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S229521AbjEXUFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbjEXUDm (ORCPT
+        with ESMTP id S229542AbjEXUFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:03:42 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F55210B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:02:52 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-75b015c0508so10334185a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:02:52 -0700 (PDT)
+        Wed, 24 May 2023 16:05:31 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73CDA9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:05:29 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-530a1b22514so399020a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684958729; x=1687550729;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Wo8IPofr5IpEW+ax3IvqEWITKhSS7r+DVQFWDx/Q3w=;
+        b=cM5I2g/sGcDLMJ7cDZJKkrmDCu/I/ejP2YujUQ6/H3ebhoV92Cl+FRrOuefqsp1VqC
+         DCwq4EUofvb6CpFAeuqfuD9sXbUhTXBTxQIAVgLvrTGDHXViI8Jn6GCgN0nNM8034rOW
+         BH7C1jT/9b/68gPTEnBL+E2jBfIppwbdr5bieJ8E0CVDdU2kS88aNFIg26rQBXm9we2E
+         JO46b9KinV65dWntKHZLpbNAFr9Cc3psRjAD6alpHeTYkh5mKSmdDHrngtFUei9SEeD+
+         guxxPGSKjZsOCFB4T1RHbYBeWwd/4xuT8x+xIi3TgcNg/nKNKyWuJzSfG6/d8H7XdJX6
+         SMDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684958571; x=1687550571;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wc0lEJ6PvCd/xSxo1AL44vYdysUGzpOXm110SXEKBVE=;
-        b=aUPogNaqfycvLb22HX6hkhNkyfQ8kSCeQbZ26LS8BJk24Dj7FHl0SlZX4T4D21I/yG
-         AJk22xtexGj9Q93InXCDte26eDAb9AkQMxAgVfYFZa5ITiDsom1AL787EWDyQZL8PzqQ
-         Wr+mBxnawgL4BD+9qp9k2PNnDHoZLWru7ajKjyUokE1axZCbPfonIoyhn9tKHeyVbVYc
-         r9WbPNsbtWVDde4/Mpk0Pec2Ab4MaPnBvpFpOh5qZiiMIShd1iOLToskGPDxEjP5nJbn
-         cWJI9HC2qi9jfiewiqxqemRp4WxArW78um2hYB85AiiuMxToKj7rHnTjCygVR6G8YkOY
-         1r9A==
-X-Gm-Message-State: AC+VfDxQGOFRCjBFALXbv3wnOGTgiramcxQeK5x6FUq1Bu97rFnczdKs
-        nl7WucmLEiF02NboiNRjgMic
-X-Google-Smtp-Source: ACHHUZ5Edu25T8oAO0AIn9AjhlUZ+gCHN9Nh8NKCZqGZXLB9J8KM/t5ZexjNCLqFmWACVt0TS1EBUg==
-X-Received: by 2002:ae9:d60e:0:b0:75b:23a1:3671 with SMTP id r14-20020ae9d60e000000b0075b23a13671mr9242472qkk.50.1684958571318;
-        Wed, 24 May 2023 13:02:51 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id v20-20020a05620a123400b0074d60b697a6sm3496740qkj.12.2023.05.24.13.02.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 13:02:50 -0700 (PDT)
-Date:   Wed, 24 May 2023 16:02:49 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Sarthak Kukreti <sarthakkukreti@chromium.org>,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZG5taYoXDRymo/e9@redhat.com>
-References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
- <ZGb2Xi6O3i2pLam8@infradead.org>
- <ZGeKm+jcBxzkMXQs@redhat.com>
- <ZGgBQhsbU9b0RiT1@dread.disaster.area>
- <ZGu0LaQfREvOQO4h@redhat.com>
- <ZGzIJlCE2pcqQRFJ@bfoster>
- <ZGzbGg35SqMrWfpr@redhat.com>
- <ZG1dAtHmbQ53aOhA@dread.disaster.area>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG1dAtHmbQ53aOhA@dread.disaster.area>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684958729; x=1687550729;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Wo8IPofr5IpEW+ax3IvqEWITKhSS7r+DVQFWDx/Q3w=;
+        b=dTvhYAEZ53m9dGelHovpUSnxQwanuhYCSUOv/wX3MbqdBoMAvFG+iShjZzTtMFo30m
+         dw1h9JHSQuz4eVEcjnRhUuFAkekP5kDBjfKWDK863bibXTjHRJxP3ZP4cirG2d6LMR7d
+         nuT8QPIL7f7J//7dm3tZjVg2qEOiy4WZVi3I5YKj6kp4QnGjSkk8yJvXv9Te50O0/2Lp
+         uIEP3RB1wI77hnSrAS3uIsM3wYIBsFsobBtEcOQeUREG/C2Dr6NgEliesxXgILgfU+ZR
+         TZiTqIn6C/se44QiH0Cr3/Isl+KC4HUGbPyigso89A96pClZGHjGP4V3jAKVNh2Tz3rY
+         6nrQ==
+X-Gm-Message-State: AC+VfDz4NIQ2r5NRQ9i1z6UQI6E9Hipf4ovoArDx/2a7ws5KQYm67881
+        uqMK05O7PPxjYSj/slv4b2Rcnq+HfNI=
+X-Google-Smtp-Source: ACHHUZ7aAaZ4DZIh4roCKOcv/0fpbVmvXqI6dKiQGMExO4BifCTRpFrnwqav5XkCzh5HN23hnvYqD6vHIRs=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:943:0:b0:53f:2577:74fb with SMTP id
+ 64-20020a630943000000b0053f257774fbmr13432pgj.8.1684958729265; Wed, 24 May
+ 2023 13:05:29 -0700 (PDT)
+Date:   Wed, 24 May 2023 13:05:27 -0700
+In-Reply-To: <ZG5g7bhAlsli+Pao@x1n>
+Mime-Version: 1.0
+References: <20230330085802.2414466-1-stevensd@google.com> <20230330085802.2414466-2-stevensd@google.com>
+ <ZGvUsf7lMkrNDHuE@google.com> <ZG45q0xJSnA6NKQN@x1n> <ZG4/VdHu2LqLTlct@google.com>
+ <ZG5F3igFgdIAwrn4@x1n> <ZG5XmdYy3VtcyPAL@google.com> <ZG5g7bhAlsli+Pao@x1n>
+Message-ID: <ZG5uB4SiaS92YEWr@google.com>
+Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     David Stevens <stevensd@chromium.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23 2023 at  8:40P -0400,
-Dave Chinner <david@fromorbit.com> wrote:
-
-> On Tue, May 23, 2023 at 11:26:18AM -0400, Mike Snitzer wrote:
-> > On Tue, May 23 2023 at 10:05P -0400, Brian Foster <bfoster@redhat.com> wrote:
-> > > On Mon, May 22, 2023 at 02:27:57PM -0400, Mike Snitzer wrote:
-> > > ... since I also happen to think there is a potentially interesting
-> > > development path to make this sort of reserve pool configurable in terms
-> > > of size and active/inactive state, which would allow the fs to use an
-> > > emergency pool scheme for managing metadata provisioning and not have to
-> > > track and provision individual metadata buffers at all (dealing with
-> > > user data is much easier to provision explicitly). So the space
-> > > inefficiency thing is potentially just a tradeoff for simplicity, and
-> > > filesystems that want more granularity for better behavior could achieve
-> > > that with more work. Filesystems that don't would be free to rely on the
-> > > simple/basic mechanism provided by dm-thin and still have basic -ENOSPC
-> > > protection with very minimal changes.
+On Wed, May 24, 2023, Peter Xu wrote:
+> On Wed, May 24, 2023 at 11:29:45AM -0700, Sean Christopherson wrote:
+> > On Wed, May 24, 2023, Peter Xu wrote:
+> > > On Wed, May 24, 2023 at 09:46:13AM -0700, Sean Christopherson wrote:
+> > > > If we hack kvm_pfn_to_refcounted_page(), then all of those protections are lost
+> > > > because KVM would drop its assertions and also skip dirtying pages, i.e. would
+> > > > effectively suppress the latent detection by check_new_page_bad().
 > > > 
-> > > That's getting too far into the weeds on the future bits, though. This
-> > > is essentially 99% a dm-thin approach, so I'm mainly curious if there's
-> > > sufficient interest in this sort of "reserve mode" approach to try and
-> > > clean it up further and have dm guys look at it, or if you guys see any
-> > > obvious issues in what it does that makes it potentially problematic, or
-> > > if you would just prefer to go down the path described above...
+> > > So it's probably that I totally have no idea what are the attributes for
+> > > those special pages so I don't understand enough on why we need to handle
+> > > those pages differently from e.g. PFNMAP pages, and also the benefits.
+> > > 
+> > > I think what I can tell is that they're pages that doesn't have
+> > > PageCompound bits set on either head or tails, however it's still a
+> > > multi-2-order large page.  Is there an example on how these pages are used
+> > > and allocated?  Why would we need those pages, and whether these pages need
+> > > to be set dirty/accessed after all?
 > > 
-> > The model that Dave detailed, which builds on REQ_PROVISION and is
-> > sticky (by provisioning same blocks for snapshot) seems more useful to
-> > me because it is quite precise.  That said, it doesn't account for
-> > hard requirements that _all_ blocks will always succeed.
+> > The use case David is interested in is where an AMD GPU driver kmallocs() a
+> > chunk of memory, let's it be mmap()'d by userspace, and userspace then maps it
+> > into the guest for a virtual (passthrough?) GPU.  For all intents and purposes,
+> > it's normal memory, just not refcounted.
 > 
-> Hmmm. Maybe I'm misunderstanding the "reserve pool" context here,
-> but I don't think we'd ever need a hard guarantee from the block
-> device that every write bio issued from the filesystem will succeed
-> without ENOSPC.
+> I'm not familiar enough with kmalloc, but what I think is kmalloc for large
+> chunks will be the same as alloc_pages, and I thought it should also be a
+> compound page already.  If that needs to be mmap()ed to userapp then I
+> assume it mostly should be kmalloc_large().
+
+Sorry, by "kmalloc()" I was handwaving at all of the variations of kernel allocated
+memory.  From a separate thread[*], looks like the actual usage is a direct call to
+alloc_pages() that deliberately doesn't set __GFP_COMP.  Note, I'm pretty sure the
+comment about "mapping pages directly into userspace" being illegal really means
+something like "don't allow these pages to be gup()'d or mapped via standard mmap()".
+IIUC, ttm_pool_alloc() fills tt->pages and then ttm_bo_vm_fault_reserved() does
+vmf_insert_pfn_prot() to shove the pfn into userspace.
+
+  static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+					unsigned int order)
+  {
+	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
+	struct ttm_pool_dma *dma;
+	struct page *p;
+	void *vaddr;
+
+	/* Don't set the __GFP_COMP flag for higher order allocations.
+	 * Mapping pages directly into an userspace process and calling
+	 * put_page() on a TTM allocated page is illegal.
+	 */
+	if (order)
+		gfp_flags |= __GFP_NOMEMALLOC | __GFP_NORETRY | __GFP_NOWARN |
+			__GFP_KSWAPD_RECLAIM;
+
+	if (!pool->use_dma_alloc) {
+		p = alloc_pages(gfp_flags, order);
+		if (p)
+			p->private = order;
+		return p;
+
+	}
+
+[*] https://lore.kernel.org/all/20220815095423.11131-1-dmitry.osipenko@collabora.com
+
+> kmalloc -> kmalloc_large -> __kmalloc_large_node:
 > 
-> If the block device can provide a guarantee that a provisioned LBA
-> range is always writable, then everything else is a filesystem level
-> optimisation problem and we don't have to involve the block device
-> in any way. All we need is a flag we can ready out of the bdev at
-> mount time to determine if the filesystem should be operating with
-> LBA provisioning enabled...
+> 	flags |= __GFP_COMP;
 > 
-> e.g. If we need to "pre-provision" a chunk of the LBA space for
-> filesystem metadata, we can do that ahead of time and track the
-> pre-provisioned range(s) in the filesystem itself.
+> Then when the new page allocated and being prepared (prep_new_page):
 > 
-> In XFS, That could be as simple as having small chunks of each AG
-> reserved to metadata (e.g. start with the first 100MB) and limiting
-> all metadata allocation free space searches to that specific block
-> range. When we run low on that space, we pre-provision another 100MB
-> chunk and then allocate all metadata out of that new range. If we
-> start getting ENOSPC to pre-provisioning, then we reduce the size of
-> the regions and log low space warnings to userspace. If we can't
-> pre-provision any space at all and we've completely run out, we
-> simply declare ENOSPC for all incoming operations that require
-> metadata allocation until pre-provisioning succeeds again.
-
-This is basically saying the same thing but:
-
-It could be that the LBA space is fragmented and so falling back to
-the smallest region size (that matches the thinp block size) would be
-the last resort?  Then if/when thinp cannot even service allocating a
-new free thin block, dm-thinp will transition to out-of-data-space
-mode.
-
-> This is built entirely on the premise that once proactive backing
-> device provisioning fails, the backing device is at ENOSPC and we
-> have to wait for that situation to go away before allowing new data
-> to be ingested. Hence the block device really doesn't need to know
-> anything about what the filesystem is doing and vice versa - The
-> block dev just says "yes" or "no" and the filesystem handles
-> everything else.
-
-Yes.
-
-> It's worth noting that XFS already has a coarse-grained
-> implementation of preferred regions for metadata storage. It will
-> currently not use those metadata-preferred regions for user data
-> unless all the remaining user data space is full.  Hence I'm pretty
-> sure that a pre-provisioning enhancment like this can be done
-> entirely in-memory without requiring any new on-disk state to be
-> added.
+> 	if (order && (gfp_flags & __GFP_COMP))
+> 		prep_compound_page(page, order);
 > 
-> Sure, if we crash and remount, then we might chose a different LBA
-> region for pre-provisioning. But that's not really a huge deal as we
-> could also run an internal background post-mount fstrim operation to
-> remove any unused pre-provisioning that was left over from when the
-> system went down.
+> I assume prep_compound_page() will make PageCompound return true for those
+> pages returned.  So I know I still miss something, but not sure
+> where.. because IIRC we're at least talking about !PageCompound pages.
 
-This would be the FITRIM with extension you mention below?  Which is a
-filesystem interface detail? So dm-thinp would _not_ need to have new
-state that tracks "provisioned but unused" block?  Nor would the block
-layer need an extra discard flag for a new class of "provisioned"
-blocks.
+Yeah, they're !PageCompound().
 
-If XFS tracked this "provisioned but unused" state, dm-thinp could
-just discard the block like its told.  Would be nice to avoid dm-thinp
-needing to track "provisioned but unused".
-
-That said, dm-thinp does still need to know if a block was provisioned
-(given our previous designed discussion, to allow proper guarantees
-from this interface at snapshot time) so that XFS and other
-filesystems don't need to re-provision areas they already
-pre-provisioned.
-
-However, it may be that if thinp did track "provisioned but unused"
-it'd be useful to allow snapshots to share provisioned blocks that
-were never used.  Meaning, we could then avoid "breaking sharing" at
-snapshot-time for "provisioned but unused" blocks.  But allowing this
-"optimization" undercuts the gaurantee that XFS needs for thinp
-storage that allows snapshots... SO, I think I answered my own
-question: thinp doesnt need to track "provisioned but unused" blocks
-but we must always ensure snapshots inherit provisoned blocks ;)
-
-> Further, managing shared pool exhaustion doesn't require a
-> reservation pool in the backing device and for the filesystems to
-> request space from it. Filesystems already have their own reserve
-> pools via pre-provisioning. If we want the filesystems to be able to
-> release that space back to the shared pool (e.g. because the shared
-> backing pool is critically short on space) then all we need is an
-> extension to FITRIM to tell the filesystem to also release internal
-> pre-provisioned reserves.
-
-So by default FITRIM will _not_ discard provisioned blocks.  Only if
-a flag is used will it result in discarding provisioned blocks.
-
-My dwelling on this is just double-checking that the 
- 
-> Then the backing pool admin (person or automated daemon!) can simply
-> issue a trim on all the filesystems in the pool and spce will be
-> returned. Then filesystems will ask for new pre-provisioned space
-> when they next need to ingest modifications, and the backing pool
-> can manage the new pre-provisioning space requests directly....
->
-> Hence I think if we get the basic REQ_PROVISION overwrite-in-place
-> guarantees defined and implemented as previously outlined, then we
-> don't need any special coordination between the fs and block devices
-> to avoid fatal ENOSPC issues with sparse and/or snapshot capable
-> block devices...
+> > > >  static bool kvm_is_ad_tracked_page(struct page *page)
+> > > >  {
+> > > > +       /*
+> > > > +        * Assert that KVM isn't attempting to mark a freed page as Accessed or
+> > > > +        * Dirty, i.e. that KVM's MMU doesn't have a use-after-free bug.  KVM
+> > > > +        * (typically) doesn't pin pages that are mapped in KVM's MMU, and
+> > > > +        * instead relies on mmu_notifiers to know when a mapping needs to be
+> > > > +        * zapped/invalidated.  Unmapping from KVM's MMU must happen _before_
+> > > > +        * KVM returns from its mmu_notifier, i.e. the page should have an
+> > > > +        * elevated refcount at this point even though KVM doesn't hold a
+> > > > +        * reference of its own.
+> > > > +        */
+> > > > +       if (WARN_ON_ONCE(!page_count(page)))
+> > > > +               return false;
+> > > > +
+> > > >         /*
+> > > >          * Per page-flags.h, pages tagged PG_reserved "should in general not be
+> > > >          * touched (e.g. set dirty) except by its owner".
+> > > > 
+> > > 
+> > > This looks like a good thing to have, indeed.  But again it doesn't seem
+> > > like anything special to the pages we're discussing here, say, !Compound &&
+> > > refcount==0 ones.
+> > 
+> > The problem is that if KVM ignores refcount==0 pages, then KVM can't distinguish
+> > between the legitimate[*] refcount==0 AMD GPU case and a buggy refcount==0
+> > use-after-free scenario.  I don't want to make that sacrifice as the legimiate
+> > !refcounted use case is a very specific use case, whereas consuming refcounted
+> > memory is ubiquituous (outside of maybe AWS).
+> > 
+> > [*] Consuming !refcounted pages is safe only for flows that are tied into the
+> >     mmu_notifiers.  The current proposal/plan is to add an off-by-default module
+> >     param that let's userspace opt-in to kmap() use of !refcounted memory, e.g.
+> >     this case and PFNMAP memory.
 > 
-> As a bonus, if we can implement the guarantees in dm-thin/-snapshot
-> and have a filesystem make use of it, then we also have a reference
-> implementation to point at device vendors and standards
-> associations....
+> I see.
+> 
+> I think you mentioned that we can use one special bit in the shadow pte to
+> mark such special pages.  Does it mean that your above patch will still
+> cover what you wanted to protect even if we use the trick?  Because then
+> kvm_is_ad_tracked_page() should only be called when we're sure the special
+> bit is not set.  IOW, we can still rule out these pages already and
+> page_count()==0 check here can still be helpful to track kvm bugs?
 
-Yeap.
-
-Thanks,
-Mike
+Yep, exactly.  FWIW, I was thinking that the SPTE bit would flag refcounted pages,
+not these "special" pages, but either way would work.  All that matters is that
+KVM tracks whether or not the page was refcounted when KVM installed the SPTE.
