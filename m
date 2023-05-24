@@ -2,64 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20F170EC96
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7566370ECA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbjEXEjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 00:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S236017AbjEXEo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 00:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234102AbjEXEjW (ORCPT
+        with ESMTP id S233155AbjEXEox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 00:39:22 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CBF119
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:39:20 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-338458a9304so30915ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:39:20 -0700 (PDT)
+        Wed, 24 May 2023 00:44:53 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775E512B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:44:52 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-ba878d5e75fso1078532276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684903160; x=1687495160;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eyHzAlJKyQhOX0WoUypWyXFcK/7in62UHuFMvkfM+WI=;
-        b=7TVKceYPLLcRfoOQPxblGElhRhr6Q4jUuIcKcLkvsLTJGFnRctYIEJCHRCtrsyWqXt
-         B2ZMQHB4EBSMhMkkh+tkeWpU3D17fv3QeIsn8WvPsOmcZ55nsJVs84Cm8lrO9feEvHPe
-         mImjstxR5TrcwFvps/PVcJF9G+hk3skbqCWU/x2gtFBBXbt8myiIUAtNxja8Uuui1Ef0
-         BMRotaPd5vmspexgM2bTn7LTE2bdd/0DZOdkzpP8N47f/Gs0vppXCf0L9BoeicBQn2+D
-         kjSQERJ9rBegEJH/MSWtYl+v5o8D+HCL37dDfGVXi1IWiRd9bkKiX+C67d0PA2qeyRZD
-         m4rQ==
+        d=google.com; s=20221208; t=1684903491; x=1687495491;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f39bjKJNzB9G9TX7qCTMm8x8VJ3ouN/VRnt5yvT027M=;
+        b=JamDd4JmP2zhvbpzAN8ngliSnhtsVTDQSCSV7Hhb56MoCA7ZC/5kjp3iAYY3jTd7EP
+         xZRm4swmN1onU5EY8cggSHzBhSy7GQyAgwZwiXXJR6YA7vJJ08DA9W1T33cDol1onPqA
+         D2Rd5ZOGonVvRlkM/o3I8rfuT9x4XQ5YVxYLcRKOHJ8JBzXyznhKpZ7Kn98JIFVUnGyJ
+         3SE2IMGhoxRZoZu0BNgNaKt1m/z8GHzXkn72+Wg/4Dy+31KCh//EwJ45MOvMh9rvXuVf
+         lBqYdWuzPXQ9IJrpXeedl6J1SaUmF9r5BmI1rYL2p5IAzBxLpcuYx8okDzMNFhvyLq75
+         D31A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684903160; x=1687495160;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eyHzAlJKyQhOX0WoUypWyXFcK/7in62UHuFMvkfM+WI=;
-        b=kyh+cN5NTY7mXDDK7mPE6J7A7ttsJwWtdAVFUWT2+xoJoYA8Mk1y6Qj45t5WClGJLj
-         W4MGNmeMyo4HLvQo6FvFyaGGNxhOLF7K2IsUzRprPBv6vJ9rBjEzhzcvTj0NA0sFZguF
-         OIvYRDhNrm7xj7fnwNOSNgL6sFFj4BCq5jP8CmTYiLPepNcXF+10CUYWZa7PcbhVd16k
-         kosHE3QbJ2uQPVVpYmpuJcE68/Yaz8p3FjkQF7/42tWG8nEfTI3GdwEL6Lfo9bH1YMPP
-         wJJ4ZDiGuqz+jvqT/TK5e4Fi+sTP0G9RWzAO6HfbkqDOa7Y/X1JHzoe+psEF57t/pkW+
-         WMvg==
-X-Gm-Message-State: AC+VfDwFSCjkqzume3PAqql/W+3l8gckydiN2F0MVOXHmOu1E8OoN0i+
-        5/TwmgIf8cCLac/IfWNdhRBca5JEtoQuZcF67jufQOGo8btux0fHrRjk
-X-Google-Smtp-Source: ACHHUZ742Bm4JH+VDCttMaFDF7pY2oaja4SyLmLMa1blZtjFi+bOU92x+D9mrqBYredvUP79GxfGuhZEJRvtp6IFpnU=
-X-Received: by 2002:a05:6e02:1544:b0:335:f8e9:2791 with SMTP id
- j4-20020a056e02154400b00335f8e92791mr135933ilu.18.1684903160018; Tue, 23 May
- 2023 21:39:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684903491; x=1687495491;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f39bjKJNzB9G9TX7qCTMm8x8VJ3ouN/VRnt5yvT027M=;
+        b=h8VV/3sA3sUlD3A4/6KhhtJnkyfmo1JzRgLMUmrYrFRzwuoKTIUlLQoth5GHX2NG+3
+         BpD1BCHuwVX0dh045TfnE8tZZwFCfbKjt/I4fnMTUtJxX2EQ1VTLV6uwbX+IFf0A/ykE
+         whh1V6c1utWLpESdRoQ/+lKBuzA4rQUC5lb0wEKi4KJ6HPXkhBsrbDyWVlhIpmYSiT43
+         IxTl5dBgWrC97938apWi4Jp/8EhLZy0h9PrBvTzXz6LS8DqVLKfXDeNIDdPhy1w6WPJc
+         qIKVY5w7AXbj77krhyxinq8vuwg34SRRc2ajZYxkHl6eaTEhLjciTAyiDQ4A/W2LmRzJ
+         0oaA==
+X-Gm-Message-State: AC+VfDwoqTggpcqH0kti5u0/UTPBCHF5bIP7qTJ6pwTxW+a6IwMHjxJA
+        qtAkiZUmy+SWr71x+Fa3XOkR6w==
+X-Google-Smtp-Source: ACHHUZ6Udji73O98VKhs/8RJOjJyNFJJ9VQVeCUmuu3F+F1oM4lZMvgR8dLHY6gzcqHMiz7EhGVRKA==
+X-Received: by 2002:a25:acd4:0:b0:ba8:7158:f0ac with SMTP id x20-20020a25acd4000000b00ba87158f0acmr18104751ybd.57.1684903491047;
+        Tue, 23 May 2023 21:44:51 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id d143-20020a25e695000000b00ba68a6e547esm2539120ybh.48.2023.05.23.21.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 21:44:50 -0700 (PDT)
+Date:   Tue, 23 May 2023 21:44:47 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Yang Shi <shy828301@gmail.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 27/31] mm/khugepaged: allow pte_offset_map[_lock]() to
+ fail
+In-Reply-To: <CAHbLzkrf-Ft6geL0XKwGCY+Btn3cW=FMRjujQ48VJEnCfVki9g@mail.gmail.com>
+Message-ID: <68dddbbb-bc3c-367d-798a-cbe2a69664@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <aef43be2-f877-b0f8-b41c-37f847d3a7b4@google.com> <CAHbLzkrf-Ft6geL0XKwGCY+Btn3cW=FMRjujQ48VJEnCfVki9g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230524040733.66946-1-feng.tang@intel.com>
-In-Reply-To: <20230524040733.66946-1-feng.tang@intel.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 23 May 2023 21:39:07 -0700
-Message-ID: <CANDhNCpN8YucULaTJs9YGhWSw7KHO22TdFE171XwV3fw-xM_Yw@mail.gmail.com>
-Subject: Re: [PATCH] clocksource: Add a helper fucntion to reduce code duplication
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="-1463760895-655262871-1684903490=:7491"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,170 +100,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 9:08=E2=80=AFPM Feng Tang <feng.tang@intel.com> wro=
-te:
->
-> Several places use the same pattern of 'clocksource_delta() +
-> clocksource_cyc2ns()' for calcualating the time delta in nanoseconds
-> from 2 counters read from a clocksource. Add a helper function to
-> simplify the code.
->
-> signe-off-by: Feng Tang <feng.tang@intel.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Thanks for submitting this!
+---1463760895-655262871-1684903490=:7491
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Can you fix your Signed-off-by: line? I would have thought checkpatch
-would have caught that for you.
+On Mon, 22 May 2023, Yang Shi wrote:
+> On Sun, May 21, 2023 at 10:24=E2=80=AFPM Hugh Dickins <hughd@google.com> =
+wrote:
+> >
+> > __collapse_huge_page_swapin(): don't drop the map after every pte, it
+> > only has to be dropped by do_swap_page(); give up if pte_offset_map()
+> > fails; trace_mm_collapse_huge_page_swapin() at the end, with result;
+> > fix comment on returned result; fix vmf.pgoff, though it's not used.
+> >
+> > collapse_huge_page(): use pte_offset_map_lock() on the _pmd returned
+> > from clearing; allow failure, but it should be impossible there.
+> > hpage_collapse_scan_pmd() and collapse_pte_mapped_thp() allow for
+> > pte_offset_map_lock() failure.
+> >
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+>=20
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-Additional thoughts below.
+Thanks.
 
-> ---
->  kernel/time/clocksource.c | 36 +++++++++++++++++++++---------------
->  1 file changed, 21 insertions(+), 15 deletions(-)
->
-> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-> index 91836b727cef..9f9e25cf5b44 100644
-> --- a/kernel/time/clocksource.c
-> +++ b/kernel/time/clocksource.c
-> @@ -145,6 +145,18 @@ static inline void clocksource_watchdog_unlock(unsig=
-ned long *flags)
->         spin_unlock_irqrestore(&watchdog_lock, *flags);
->  }
->
-> +
-> +/*
-> + * Calculate the delta of 2 counters read from a clocksource, and conver=
-t
-> + * it to nanoseconds. Intended only for short time interval calculation.
-> + */
-> +static inline u64 calc_counters_to_delta_ns(u64 new, u64 old, struct clo=
-cksource *cs)
+>=20
+> A nit below:
+>=20
+> > ---
+> >  mm/khugepaged.c | 72 +++++++++++++++++++++++++++++++++----------------
+> >  1 file changed, 49 insertions(+), 23 deletions(-)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 732f9ac393fc..49cfa7cdfe93 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+=2E..
+> > @@ -1029,24 +1040,29 @@ static int __collapse_huge_page_swapin(struct m=
+m_struct *mm,
+> >                  * resulting in later failure.
+> >                  */
+> >                 if (ret & VM_FAULT_RETRY) {
+> > -                       trace_mm_collapse_huge_page_swapin(mm, swapped_=
+in, referenced, 0);
+> >                         /* Likely, but not guaranteed, that page lock f=
+ailed */
+> > -                       return SCAN_PAGE_LOCK;
+> > +                       result =3D SCAN_PAGE_LOCK;
+>=20
+> With per-VMA lock, this may not be true anymore, at least not true
+> until per-VMA lock supports swap fault. It may be better to have a
+> more general failure code, for example, SCAN_FAIL. But anyway you
+> don't have to change it in your patch, I can send a follow-up patch
+> once this series is landed on mm-unstable.
 
-Bikeshed nit:  I'd probably do  calc_counters_to_delta_ns(struct
-clocksource *cs, u64 new, u64 old) just to match the convention
-elsewhere of passing the clocksource first.
+Interesting point (I've not tried to wrap my head around what differences
+per-VMA locking would make to old likelihoods here), and thank you for
+deferring a change on it - appreciated.
 
-Also, I might suggest naming it clocksource_cycle_interval_to_ns() ?
-That feels clearer to me as to what it's doing.
+Something to beware of, if you do choose to change it: mostly those
+SCAN codes (I'm not a fan of them!) are only for a tracepoint somewhere,
+but madvise_collapse() and madvise_collapse_errno() take some of them
+more seriously than others - I think SCAN_PAGE_LOCK ends up as an
+EAGAIN (rightly), but SCAN_FAIL as an EINVAL (depends).
 
-> +{
-> +       u64 delta =3D clocksource_delta(new, old, cs->mask);
-> +
-> +       return clocksource_cyc2ns(delta, cs->mult, cs->shift);
-> +}
-> +
->  static int clocksource_watchdog_kthread(void *data);
->  static void __clocksource_change_rating(struct clocksource *cs, int rati=
-ng);
->
-> @@ -223,7 +235,7 @@ enum wd_read_status {
->  static enum wd_read_status cs_watchdog_read(struct clocksource *cs, u64 =
-*csnow, u64 *wdnow)
->  {
->         unsigned int nretries;
-> -       u64 wd_end, wd_end2, wd_delta;
-> +       u64 wd_end, wd_end2;
->         int64_t wd_delay, wd_seq_delay;
->
->         for (nretries =3D 0; nretries <=3D max_cswd_read_retries; nretrie=
-s++) {
-> @@ -234,9 +246,7 @@ static enum wd_read_status cs_watchdog_read(struct cl=
-ocksource *cs, u64 *csnow,
->                 wd_end2 =3D watchdog->read(watchdog);
->                 local_irq_enable();
->
-> -               wd_delta =3D clocksource_delta(wd_end, *wdnow, watchdog->=
-mask);
-> -               wd_delay =3D clocksource_cyc2ns(wd_delta, watchdog->mult,
-> -                                             watchdog->shift);
-> +               wd_delay =3D calc_counters_to_delta_ns(wd_end, *wdnow, wa=
-tchdog);
->                 if (wd_delay <=3D WATCHDOG_MAX_SKEW) {
->                         if (nretries > 1 || nretries >=3D max_cswd_read_r=
-etries) {
->                                 pr_warn("timekeeping watchdog on CPU%d: %=
-s retried %d times before success\n",
-> @@ -254,8 +264,8 @@ static enum wd_read_status cs_watchdog_read(struct cl=
-ocksource *cs, u64 *csnow,
->                  * report system busy, reinit the watchdog and skip the c=
-urrent
->                  * watchdog test.
->                  */
-> -               wd_delta =3D clocksource_delta(wd_end2, wd_end, watchdog-=
->mask);
-> -               wd_seq_delay =3D clocksource_cyc2ns(wd_delta, watchdog->m=
-ult, watchdog->shift);
-> +
-> +               wd_seq_delay =3D calc_counters_to_delta_ns(wd_end2, wd_en=
-d, watchdog);
->                 if (wd_seq_delay > WATCHDOG_MAX_SKEW/2)
->                         goto skip_test;
->         }
-> @@ -366,8 +376,8 @@ void clocksource_verify_percpu(struct clocksource *cs=
-)
->                 delta =3D (csnow_end - csnow_mid) & cs->mask;
->                 if (delta < 0)
->                         cpumask_set_cpu(cpu, &cpus_ahead);
-> -               delta =3D clocksource_delta(csnow_end, csnow_begin, cs->m=
-ask);
-> -               cs_nsec =3D clocksource_cyc2ns(delta, cs->mult, cs->shift=
-);
-> +
-> +               cs_nsec =3D calc_counters_to_delta_ns(csnow_end, csnow_be=
-gin, cs);
->                 if (cs_nsec > cs_nsec_max)
->                         cs_nsec_max =3D cs_nsec;
->                 if (cs_nsec < cs_nsec_min)
-> @@ -398,7 +408,7 @@ static inline void clocksource_reset_watchdog(void)
->
->  static void clocksource_watchdog(struct timer_list *unused)
->  {
-> -       u64 csnow, wdnow, cslast, wdlast, delta;
-> +       u64 csnow, wdnow, cslast, wdlast;
->         int next_cpu, reset_pending;
->         int64_t wd_nsec, cs_nsec;
->         struct clocksource *cs;
-> @@ -456,14 +466,10 @@ static void clocksource_watchdog(struct timer_list =
-*unused)
->                         continue;
->                 }
->
-> -               delta =3D clocksource_delta(wdnow, cs->wd_last, watchdog-=
->mask);
-> -               wd_nsec =3D clocksource_cyc2ns(delta, watchdog->mult,
-> -                                            watchdog->shift);
-> -
-> -               delta =3D clocksource_delta(csnow, cs->cs_last, cs->mask)=
-;
-> -               cs_nsec =3D clocksource_cyc2ns(delta, cs->mult, cs->shift=
-);
->                 wdlast =3D cs->wd_last; /* save these in case we print th=
-em */
->                 cslast =3D cs->cs_last;
-> +               wd_nsec =3D calc_counters_to_delta_ns(wdnow, wdlast, watc=
-hdog);
-> +               cs_nsec =3D calc_counters_to_delta_ns(csnow, cslast, cs);
+But maybe there are layers in between which do not propagate the result
+code, I didn't check.  All in all, not something I'd spend time on myself.
 
-So, I get it takes common lines and combines them, but as it's an
-inline function, you're likely not going to change the resulting
-binary code, so this is just about readability, correct?
-
-Personally, I find it easier to read code where the primitives are
-fairly obvious/explicit, even if it's somewhat repetitive.
-
-So combining these simpler operations means the function names are
-less descriptive.  I'm sure future me will likely have to go digging
-to find the consolidated logic to remind myself what it is actually
-doing (and to double check what side effects it might have - luckily
-none!).  For instance, the ordering of the two timestamps isn't always
-obvious, whereas I know clocksource_delta() is subtraction so it
-should be delta =3D new - old so the ordering is easy to remember.
-
-So I'm not sure this is much of a win for readability in my mind?
-But this is all personal taste, so I'll leave it to Thomas and others
-to decide on.
-
-I do appreciate you sending this out for consideration!
-
-thanks
--john
+Hugh
+---1463760895-655262871-1684903490=:7491--
