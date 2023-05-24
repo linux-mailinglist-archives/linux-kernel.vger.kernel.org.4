@@ -2,91 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8E370F82E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480EA70F830
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbjEXOBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S235707AbjEXOB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbjEXOBe (ORCPT
+        with ESMTP id S235696AbjEXOBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:01:34 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAE99E;
-        Wed, 24 May 2023 07:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684936892; x=1716472892;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=JqaNSBpB1Y3By+PIMe1ztMXiAF8ywA/Mfx2FrrbgG6M=;
-  b=GDcbKEEhvrT8qx0grpCTHmzVNKV/UJOfrnDZ8E5mOUgPPy2+VSoIU25K
-   N08II5dCpnBg/S5mJuoevr3cwfpAZ6SLZGr1FaYgdv0uGiZAK/IZ+fs32
-   /KmSnSp1Yv/3grhY6FHMMXuM/XgIlusd04McB4j3ZjnfhpMy8Ylblyrqi
-   qUXJj0QEmxiYa8ttyTq2P/1KS8vflPT5swQ1BPNt2gVUMuFAOg3ozcRxh
-   IG1q2T/B3/cBNh7gW8A1GlFkg3gFfLGzfR9R8DxL1G/UdZTkrGJSo5yDk
-   UCkjB5Q77E0IfqUnvhG0B+onK62mvToYLs0Lpq/b3wW3c4Ah+O23mBnRh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="381816503"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="381816503"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 07:01:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="774262059"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="774262059"
-Received: from nwhelanx-mobl.ger.corp.intel.com ([10.252.55.15])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 07:01:17 -0700
-Date:   Wed, 24 May 2023 17:01:15 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Subject: Re: [PATCH] serial: 8250_pci: remove unreachable code for ASIX
- devices
-In-Reply-To: <aee8ff85-5716-424e-3773-33700fd90dc2@linux.intel.com>
-Message-ID: <62142324-dc90-788a-f040-72ef11192e6@linux.intel.com>
-References: <20230510142855.256658-1-jiaqing.zhao@linux.intel.com> <2023051343-cringing-junction-54f7@gregkh> <188db6e4-d1de-6643-f6e1-5cb3807b28ee@linux.intel.com> <2023051533-harmonize-ozone-bc72@gregkh>
- <aee8ff85-5716-424e-3773-33700fd90dc2@linux.intel.com>
+        Wed, 24 May 2023 10:01:55 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0395B18B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:01:53 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso179289566b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1684936911; x=1687528911;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GcnYDNNJKRDTvBz4U4x4piA3wZfgWR11rBlHqZISUZw=;
+        b=cBRG8OIciHgkJG5NeGpDKgXBLwB/ZRieicor/6NiIG3NMQ1B/bIFDyoHjCsFWSj6Dh
+         NYPSkHxVPzMFS6zrRvk8Vu4wSKDXgHIdsXNG7HnJKoV5jngMjC6m4+4Ejb8cwJUNzh+K
+         h0sFoTKIuc9638A6aDq/12b39F8dap8vN6cb6grcVRU2GiUnjeB0guaTZmwOq50n7yOh
+         J0q9yFNPRJi9f0Wa6yREWvws/Fx+13BXqhhFWliMovEX8xKUGyVmNEXP1E2hfNKuamPq
+         7gEAJqSSubtg7vrG8Pbj6UFiCAAl6bxS9menFiATiRgE+bcmLH7U+40V3RlZcSfKzzU7
+         QJ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684936911; x=1687528911;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GcnYDNNJKRDTvBz4U4x4piA3wZfgWR11rBlHqZISUZw=;
+        b=CpSy4o9JmzN/lb4JoudAofcVkqk5RCzHeIoPM6SixcWNhnnW9cTnNBMTU6mABFyeCZ
+         7BHyjdtyDhpciH4U9i8mOX6Y0jJH0s63dl3SGswKE/dWkh3vBv6MFUNGAI23MV7pfE/V
+         8HdXOVka9ksBz2h2UjBlRImP/x0eZ8NUWzST2YYyfsmuyd7NTDIFMnW2M+Ytn8iSKm/t
+         EmU6geLls1GPrrAmqjgGC7vcsQVYFPmKU64oMqEDGw7od/nqzLGuuB/yWXVGZQ93QLPi
+         NdFtNyeztPAO1yFufQmdueIJk+PzrdTOr8RYGJMNFCwyBFP+HkGqwOuR45TgslyHuElt
+         wHRA==
+X-Gm-Message-State: AC+VfDz8p6hq1LzEeoPdB2M4bidte/d7KHCzvGFgYbICmbyFoIJBZIvz
+        Qrt9cV4HOOqUCuZ7FTeE/g6ngkpfq+skFfKoQLU=
+X-Google-Smtp-Source: ACHHUZ5LJ1RLFW3yyptH2uNq3JrXu9MBzFBIvQQGDf110Gc3zDntoLPKWCyt9dTiL0jQ3+akZGR55w==
+X-Received: by 2002:a17:907:1686:b0:973:91a5:bfdf with SMTP id hc6-20020a170907168600b0097391a5bfdfmr1347603ejc.4.1684936911458;
+        Wed, 24 May 2023 07:01:51 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id p25-20020a1709060dd900b0096f67b55b0csm5860748eji.115.2023.05.24.07.01.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 07:01:51 -0700 (PDT)
+Date:   Wed, 24 May 2023 16:01:50 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-kernel@vger.kernel.org,
+        christoph.muellner@vrull.eu, David.Laight@aculab.com,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH v3 1/2] riscv: don't include kernel.h into alternative.h
+Message-ID: <20230524-1ae0ba16b93b71a150320a6d@orel>
+References: <20230521114715.955823-1-heiko.stuebner@vrull.eu>
+ <20230521114715.955823-2-heiko.stuebner@vrull.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230521114715.955823-2-heiko.stuebner@vrull.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023, Jiaqing Zhao wrote:
-> On 2023-05-15 11:49, Greg Kroah-Hartman wrote:
-> > On Mon, May 15, 2023 at 10:36:30AM +0800, Jiaqing Zhao wrote:
-> >> On 2023-05-13 18:28, Greg Kroah-Hartman wrote:
-> >>> Please follow the documented Intel kernel developer requirements before
-> >>> you submit this again, based on the changes that process will require.
-> >>>
-> >>> thanks,
-> >>>
-> >>> greg k-h
-> >> Sorry I am unable to find this "Intel kernel developer requirements". Is
-> >> there any link or contact where I can find this information? Thank you.
-> > 
-> > Contact the Intel Linux developer team and they will point you at them.
-> > This is a company-wide requirement, it is odd that your normal "Here is
-> > how you can contribute to Linux!" training at Intel did not cover it?
+On Sun, May 21, 2023 at 01:47:14PM +0200, Heiko Stuebner wrote:
+> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
 > 
-> I contacted them and there is no reply so far. Could you please tell me if
-> there is any general available docs about this or point out what I'm doing
-> wrong in this patch? Thank you very much.
+> This include is not currently needed for alternatives and creates
+> possible issues when we want to add alternatives to deeper kernel
+> infrastructure.
+> 
+> The issue in question came from trying to introduce Zawrs alternatives,
+> which resulted in a somewhat circular dependency like:
+> 
+> In file included from ../include/linux/bitops.h:34,
+>                  from ../include/linux/kernel.h:22,
+>                  from ../arch/riscv/include/asm/alternative.h:16,
+>                  from ../arch/riscv/include/asm/errata_list.h:8,
+>                  from ../arch/riscv/include/asm/barrier.h:15,
+>                  from ../include/linux/list.h:11,
+>                  from ../include/linux/preempt.h:11,
+>                  from ../include/linux/spinlock.h:56,
+>                  from ../include/linux/mmzone.h:8,
+>                  from ../include/linux/gfp.h:7,
+>                  from ../include/linux/mm.h:7,
+>                  from ../arch/riscv/kernel/asm-offsets.c:10:
+> ../include/asm-generic/bitops/generic-non-atomic.h: In function ‘generic_test_bit_acquire’:
+> ../include/asm-generic/bitops/generic-non-atomic.h:140:23: error: implicit declaration of function ‘smp_load_acquire’ [-Werror=implicit-function-declaration]
+>   140 |         return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
+>       |                       ^~~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> ---
+>  arch/riscv/include/asm/alternative.h | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
+> index 6a41537826a7..05885de6048c 100644
+> --- a/arch/riscv/include/asm/alternative.h
+> +++ b/arch/riscv/include/asm/alternative.h
+> @@ -13,7 +13,6 @@
+>  #ifdef CONFIG_RISCV_ALTERNATIVE
+>  
+>  #include <linux/init.h>
+> -#include <linux/kernel.h>
+>  #include <linux/types.h>
+>  #include <linux/stddef.h>
+>  #include <asm/hwcap.h>
+> -- 
+> 2.39.0
+>
 
-I've pointed him to the right direction (now that I noticed this has 
-just gone on here).
+Removing this include doesn't break compilation because the only callers
+of PATCH_ID_CPUFEATURE_ID() and PATCH_ID_CPUFEATURE_VALUE(), which are
+defined with lower/upper_16_bits(), are in arch/riscv/kernel/cpufeature.c,
+which includes at least one thing which eventually includes linux/kernel.h
+(the first path I found was linux/module.h -> linux/moduleparam.h ->
+linux/kernel.h). Ideally we wouldn't rely on that luck. We can open
+code the PATCH_ID_* macros to drop the lower/upper_16_bits() dependencies
+or move the macros elsewhere, maybe, for now, just to
+arch/riscv/kernel/cpufeature.c
 
--- 
- i.
-
+Thanks,
+drew
