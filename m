@@ -2,139 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F319670FF4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0157C70FF4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbjEXUdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S229742AbjEXUea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjEXUdt (ORCPT
+        with ESMTP id S234345AbjEXUe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:33:49 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B5710B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:33:48 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-530a1b22514so409631a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684960428; x=1687552428;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ccOI4mZo9XfuiFQ9V2PeqZJhByctKZGbBlZxcPOJ16o=;
-        b=J5mE/dXhDYvUVrKyzwcgeygz3QEleyiIzQplgmVTnGrfT1kd64BHSjrsjRuDHCLFgQ
-         oxIhXd0uodkyon9bwjunJ5d4kwWoGNChHzSHAAr9PtIM2o9awxNYDzYF9UTJy9mSUIWP
-         4ywbkgPPLXd0lyLDnitUw2BqHg8L3x/S2lUwD4O7i+SwSqdP+SyIdJDKiR1iTS95SDQr
-         l1gQKTtXC2syTVeUzkdmajeSwic8xEoRZRkCPaVo33gw+2VXZACbWbaPkvAG8MwmwW0l
-         SE7l1Ko3DyFNWEDuBW8VPD7W0wgnJlHPYmw/rBMTEbwCwJAYGxQOJtgJqwnJp6fb7QIQ
-         vv+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684960428; x=1687552428;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ccOI4mZo9XfuiFQ9V2PeqZJhByctKZGbBlZxcPOJ16o=;
-        b=Y6kUmWFQJEMqEVu/ki0NCZrjt4PfVSL9C0FiMOHIWg7sv0/AtO66prR1OhIvacII3/
-         0HsmlCdjZksUjtjN1sg2d5RKqK/fW4klW+hGtYk7S0J8oMOAykeIm12INSvzUSJu10+5
-         k6pDu8iU9dPdewhmiCMWBP+FhyF+zfMcwrKUNjWU8JND7d4eW2mOBDdDLBqy2ZqdgiHL
-         ppOE2B123KRZLmNCWfORMvVmyIhNmEpnVks29NbLhirJgPTta+8dHbOWBcUnF+6XEAMF
-         /Ka5GioF71h5XbtINt7kySRerdTw6QjcO0TQMQalXjClRpLwWLwNDlCXfXdYAdhy478r
-         ugYw==
-X-Gm-Message-State: AC+VfDye5YF6A5NR/LvRAcjjbHkFQ+8vnBft+7+v1DB5XOgAIFy5dEPi
-        QZ6C8FfKwgfvmi0/4GKSthqxREbQR8o=
-X-Google-Smtp-Source: ACHHUZ7ogoj9VRxjE2Dsg67VcrHv1bhJs8NbvDJMng3eAz0jKeU0eiETQcE+mZmZat3UDRuw+SZbSDJmSzw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:5fce:0:b0:521:62ef:9b38 with SMTP id
- t197-20020a635fce000000b0052162ef9b38mr4451847pgb.3.1684960427855; Wed, 24
- May 2023 13:33:47 -0700 (PDT)
-Date:   Wed, 24 May 2023 13:33:46 -0700
-In-Reply-To: <7e84bfb4-b052-4c31-a319-1ea2dd52ae54@gmail.com>
-Mime-Version: 1.0
-References: <20230322093117.48335-1-likexu@tencent.com> <CABgObfYfiUDf4zY=izcg_32yGCbUxxVc+JAkHGHwiQ0VmGdOgA@mail.gmail.com>
- <871434fe-ae80-bec6-9920-a6411f5842c0@gmail.com> <fce5c1ad-24a3-febf-127e-e97238492143@redhat.com>
- <7e84bfb4-b052-4c31-a319-1ea2dd52ae54@gmail.com>
-Message-ID: <ZG50qnYquf77OOoT@google.com>
-Subject: Re: [PATCH v2] KVM: x86/pmu: Fix emulation on Intel counters' bit width
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 16:34:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D262AE42;
+        Wed, 24 May 2023 13:34:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D76C61221;
+        Wed, 24 May 2023 20:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14B4C4339B;
+        Wed, 24 May 2023 20:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684960451;
+        bh=kiVdWQSTTav/tshrrGYq/uWbw/+JKIr66Tdi+u9F4eg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ePUf6CTM3RQFyjPtTOOcu4EjixxuaPcm824GPFrSFSO3dSTs9ZvGUFN1eJbX6pIvb
+         KgmuEDbTPt2s0sNkLZxCWrACnF3VAlzGVOfz7PpfLIWR5b/sFjC+ppfpNW8slpuu+4
+         NaZH1U9E6s2wEggXCV61Dxb46Im9taS7IHPEFit+SeCFGxVb1WefmvOYc4SvqHLdJY
+         kgWvOkiCiwABLmlVPwgCffeiQKtg/aDlTN4J5LY5xKpJPFvzhrTUn2rUorruoZUXxD
+         +iyHCquWKqrEPXzbxHhXPp30rLBDcM88iCPmgZLvppSllPXlG7GsByBq+MgXRs2LMH
+         F354+8R5flg8Q==
+Date:   Wed, 24 May 2023 21:34:06 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] dt-bindings: sram: qcom,ocmem: Add msm8226 support
+Message-ID: <20230524-conjure-gag-731ab10fd7ff@spud>
+References: <20230506-msm8226-ocmem-v2-0-177d697e43a9@z3ntu.xyz>
+ <20230506-msm8226-ocmem-v2-4-177d697e43a9@z3ntu.xyz>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nS212F5uUQ8wUpOz"
+Content-Disposition: inline
+In-Reply-To: <20230506-msm8226-ocmem-v2-4-177d697e43a9@z3ntu.xyz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023, Like Xu wrote:
-> On 28/3/2023 5:20 pm, Paolo Bonzini wrote:
-> > On 3/28/23 11:16, Like Xu wrote:
-> > >=20
-> > >=20
-> > > If IA32_PERF_CAPABILITIES.FW_WRITE[bit 13] =3D1, each IA32_PMCi is ac=
-companied by a
-> > > corresponding alias address starting at 4C1H for IA32_A_PMC0.
-> > >=20
-> > > The bit width of the performance monitoring counters is specified in
-> > > CPUID.0AH:EAX[23:16].
-> > > If IA32_A_PMCi is present, the 64-bit input value (EDX:EAX) of WRMSR
-> > > to IA32_A_PMCi will cause
-> > > IA32_PMCi to be updated by:
-> > >=20
-> > > =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDCOUNTERWIDTH =3D
-> > > =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
-=BD CPUID.0AH:EAX[23:16] bit width of the performance monitoring counter
-> > > =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDIA32_PMCi[COUNTERWIDTH-1=
-:32] :=3D EDX[COUNTERWIDTH-33:0]);
-> > > =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDIA32_PMCi[31:0] :=3D EAX=
-[31:0];
-> > > =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDEDX[63:COUNTERWIDTH] are=
- reserved
-> > >=20
-> > > ---
-> > >=20
-> > > Some might argue that this is all talking about GP counters, not
-> > > fixed counters. In fact, the full-width write hw behaviour is
-> > > presumed to do the same thing for all counters.
-> > But the above behavior, and the #GP, is only true for IA32_A_PMCi (the
-> > full-witdh MSR).=EF=BF=BD Did I understand correctly that the behavior =
-for fixed
-> > counters is changed without introducing an alias MSR?
-> >=20
-> > Paolo
-> >=20
+
+--nS212F5uUQ8wUpOz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 23, 2023 at 10:55:11PM +0200, Luca Weiss wrote:
+> Add the compatible for the OCMEM found on msm8226 which compared to
+> msm8974 only has a core clock and no iface clock.
 >=20
-> If true, why introducing those alias MSRs ?
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-My guess is there is/was software in the field that wrote -1 to the GP coun=
-ters,
-i.e. would have been broken by the new #GP behavior.
+Could you please either send me the cover-letter or include the
+changelog in the patch under the ---?
 
-> My archaeological findings are:
->=20
-> a platform w/o full-witdh like Westmere (has 3-fixed counters already) is
-> declared to have a counter width (R:48, W:32) and its successor Sandy Bri=
-dge
-> has (R:48 , W: 32/48).
->=20
-> Thus I think the behaviour of the fixed counter has changed from there, a=
-nd
-> the alias GP MSRs were introduced to keep the support on 32-bit writes on=
- #GP
-> counters (via original address).
+Otherwise,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-FWIW, I see the #GP behavior for fixed counters on Haswell, so this does se=
-em to
-be the case.  That said, I would like to get confirmation from Intel that t=
-his is
-architectural and/or working as intended.
+Thanks,
+Conor.
 
-Like, can you follow up with Intel to get clarification/confirmation?  And =
-ideally
-an SDM update...
+--nS212F5uUQ8wUpOz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG50vgAKCRB4tDGHoIJi
+0oV5AP4muNXeDIDKZSnwI44nTQX8Oq7xiJgcllvvUusHL5Dq7wEAroPwkJCcfwiA
+zWyvNeuCPs9ELGc0lBPSmZUvWOSuvgc=
+=WxuP
+-----END PGP SIGNATURE-----
+
+--nS212F5uUQ8wUpOz--
