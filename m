@@ -2,138 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432A570F9D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DA070F9D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235753AbjEXPLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
+        id S235885AbjEXPLY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 11:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbjEXPK6 (ORCPT
+        with ESMTP id S231633AbjEXPLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:10:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B02FE9;
-        Wed, 24 May 2023 08:10:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA398632AF;
-        Wed, 24 May 2023 15:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD444C433D2;
-        Wed, 24 May 2023 15:10:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684941056;
-        bh=1HziZk0Ofryk7MpDRZfUaSYzXybvtVckG6+PfRVCo1c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VtjnI42vjLtKXXQrmlFpD4S0MDxUXc3TpPumveYqzmCrv1phZPzw7aRVWX9r8I8yP
-         YcjvDpK6GkfOBA/6OeuZwCDBgZ2WckqL/A+/9iwEtBPG9/SIwno60R6pfkl913ttyW
-         nL25h06PJrbFVcD7bmLFRfSdcJJU5y29FLYXidHBuQRR+cf4ZNvdjD1T7PWAaVwSFC
-         Rj0W0eGEa4LsxRsjwtWcKvGP92NeX3DdYfDctqQnAGbBjegMhH5WDiuy3f+XbD978d
-         cu7RGX43IKJ6B0X2NNZRbNNbflLK2CP+uPHAUTIf75BZNgbEoakwdIXqFS2oTrmxBt
-         7JaVh7h5oEUrw==
-Date:   Wed, 24 May 2023 10:10:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Kazior <michal.kazior@tieto.com>,
-        Janusz Dziedzic <janusz.dziedzic@tieto.com>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dean Luick <dean.luick@cornelisnetworks.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 9/9] wifi: ath10k: Use RMW accessors for changing
- LNKCTL
-Message-ID: <ZG4o/pYseBklnrTc@bhelgaas>
+        Wed, 24 May 2023 11:11:22 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71951E9;
+        Wed, 24 May 2023 08:11:20 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96f72e6925cso24433166b.1;
+        Wed, 24 May 2023 08:11:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684941079; x=1687533079;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7nss0ucgr/ESmy+PjCm3qpugQV6w2aHePkSgyOIXHvM=;
+        b=KgMx/g88W0NvPJ8qpLn3QiZhmXVyC+ZUqAr4C0z4GRvwVGKAFmtaT9XH0dR3gP/UCi
+         /GNSq1qDV3dtRltoMdWU3HjoUdPCO6fi97cnLFzqwTgmr5tL+gg54y+/ebbkBTHIq+EL
+         iASfWQ5z5h0h93BLzjwIJgMaQoDWb9MYHdWkBrAZBMw6JiIhuymUzMcxZYl+XkwuwEPq
+         4X6o7XRIY6DePMWiUeytNbOPCIC5o1kMlWV5ME527tgEdbMAXjNpofgFOVzLz9w8DCQ1
+         Il91kHf8xFnopVfk5lMachMglS+d+21gO7vk7iCVzLswl9tcTS1sauZJmbY6KDrOe3A+
+         uxWQ==
+X-Gm-Message-State: AC+VfDzAu7INL2m6rsmeLNyRRWd9oevzUXmcuQ/ijTAJT15Z7xXZvWwz
+        u9bZsk/dFsaAXFRSLIF/3ZV3S+LoMA4h8TUQW6g=
+X-Google-Smtp-Source: ACHHUZ641vcCCJosn7JXJ2lfLp7dhRWsBrg3n4CiXJeo2ypbFDpFROYj8sMPWI3wOIZFsVcQsGEKXSE/sDtoTunVh74=
+X-Received: by 2002:a17:906:72ce:b0:96f:56ab:c69b with SMTP id
+ m14-20020a17090672ce00b0096f56abc69bmr2531918ejl.3.1684941078712; Wed, 24 May
+ 2023 08:11:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517105235.29176-10-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230309140724.2152712-1-cristian.marussi@arm.com> <20230309140724.2152712-4-cristian.marussi@arm.com>
+In-Reply-To: <20230309140724.2152712-4-cristian.marussi@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 May 2023 17:11:07 +0200
+Message-ID: <CAJZ5v0gUf3Vh=baW7PgPMnFcgV6CjMc2kNayhzP-MC=UvQogKA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] powercap: arm_scmi: Add support for disabling
+ powercaps on a zone
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
+        f.fainelli@gmail.com, vincent.guittot@linaro.org,
+        tarek.el-sherbiny@arm.com, nicola.mazzucato@arm.com,
+        souvik.chakravarty@arm.com, wleavitt@marvell.com,
+        wbartczak@marvell.com, "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 01:52:35PM +0300, Ilpo Järvinen wrote:
-> Don't assume that only the driver would be accessing LNKCTL. ASPM
-> policy changes can trigger write to LNKCTL outside of driver's control.
-> 
-> Use RMW capability accessors which does proper locking to avoid losing
-> concurrent updates to the register value. On restore, clear the ASPMC
-> field properly.
-> 
-> Fixes: 76d870ed09ab ("ath10k: enable ASPM")
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Cc: stable@vger.kernel.org
+On Thu, Mar 9, 2023 at 3:07â€¯PM Cristian Marussi
+<cristian.marussi@arm.com> wrote:
+>
+> Add support to disable/enable powercapping on a zone.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
 > ---
->  drivers/net/wireless/ath/ath10k/pci.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
-> index a7f44f6335fb..9275a672f90c 100644
-> --- a/drivers/net/wireless/ath/ath10k/pci.c
-> +++ b/drivers/net/wireless/ath/ath10k/pci.c
-> @@ -1963,8 +1963,9 @@ static int ath10k_pci_hif_start(struct ath10k *ar)
->  	ath10k_pci_irq_enable(ar);
->  	ath10k_pci_rx_post(ar);
->  
-> -	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> -				   ar_pci->link_ctl);
-> +	pcie_capability_clear_and_set_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> +					   PCI_EXP_LNKCTL_ASPMC,
-> +					   ar_pci->link_ctl & PCI_EXP_LNKCTL_ASPMC);
->  
->  	return 0;
+>  drivers/powercap/arm_scmi_powercap.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
+> index 05d0e516176a..5231f6d52ae3 100644
+> --- a/drivers/powercap/arm_scmi_powercap.c
+> +++ b/drivers/powercap/arm_scmi_powercap.c
+> @@ -70,10 +70,26 @@ static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
+>         return 0;
 >  }
-> @@ -2821,8 +2822,8 @@ static int ath10k_pci_hif_power_up(struct ath10k *ar,
->  
->  	pcie_capability_read_word(ar_pci->pdev, PCI_EXP_LNKCTL,
->  				  &ar_pci->link_ctl);
-> -	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> -				   ar_pci->link_ctl & ~PCI_EXP_LNKCTL_ASPMC);
-> +	pcie_capability_clear_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> +				   PCI_EXP_LNKCTL_ASPMC);
-
-These ath drivers all have the form:
-
-  1) read LNKCTL
-  2) save LNKCTL value in ->link_ctl
-  3) write LNKCTL with "->link_ctl & ~PCI_EXP_LNKCTL_ASPMC"
-     to disable ASPM
-  4) write LNKCTL with ->link_ctl, presumably to re-enable ASPM
-
-These patches close the hole between 1) and 3) where other LNKCTL
-updates could interfere, which is definitely a good thing.
-
-But the hole between 1) and 4) is much bigger and still there.  Any
-update by the PCI core in that interval would be lost.
-
-Straw-man proposal:
-
-  - Change pci_disable_link_state() so it ignores aspm_disabled and
-    always disables ASPM even if platform firmware hasn't granted
-    ownership.  Maybe this should warn and taint the kernel.
-
-  - Change drivers to use pci_disable_link_state() instead of writing
-    LNKCTL directly.
-
-Bjorn
+>
+> +static int scmi_powercap_zone_enable_set(struct powercap_zone *pz, bool mode)
+> +{
+> +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> +
+> +       return powercap_ops->cap_enable_set(spz->ph, spz->info->id, mode);
+> +}
+> +
+> +static int scmi_powercap_zone_enable_get(struct powercap_zone *pz, bool *mode)
+> +{
+> +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> +
+> +       return powercap_ops->cap_enable_get(spz->ph, spz->info->id, mode);
+> +}
+> +
+>  static const struct powercap_zone_ops zone_ops = {
+>         .get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
+>         .get_power_uw = scmi_powercap_get_power_uw,
+>         .release = scmi_powercap_zone_release,
+> +       .set_enable = scmi_powercap_zone_enable_set,
+> +       .get_enable = scmi_powercap_zone_enable_get,
+>  };
+>
+>  static void scmi_powercap_normalize_cap(const struct scmi_powercap_zone *spz,
+> --
+> 2.34.1
+>
