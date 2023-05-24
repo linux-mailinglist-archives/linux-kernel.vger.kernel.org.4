@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EDF70EE92
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636C670EE95
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239310AbjEXGxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S239564AbjEXGxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239819AbjEXGwZ (ORCPT
+        with ESMTP id S239727AbjEXGw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:52:25 -0400
+        Wed, 24 May 2023 02:52:56 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4484818C;
-        Tue, 23 May 2023 23:52:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F02F1B4;
+        Tue, 23 May 2023 23:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GuzHvAUZfPGn+qg3FBQx9CA7o9FB1B0ZlZ+LFZFZkEI=; b=3SsvELNVjt+WJEb5AwPnwm+hni
-        n5AakEZ2NmMD4FaTgPYQozEBcH5rhZaA+evYq3I4s5NZOgo3ApgWK5JJJT3zz6ymesofysrQqwCjv
-        iTgiHwdQlPsy+Q8mGwNmOpFavnfWi9MCV+KbB4Mw57tcPHH+wkXc1FMjZ/Nz3FXNa6oZCKZc9khCf
-        xpVdEVUoQ5qCrqkbhaCdITCFQKKdP3Fr4k/jpgHxjMbBSAKHB2LAvRJkzuCBysFYHLZLTW5FUiT4P
-        OAMfZ4JDMnRFvRr48S8ojjk2dg6ooby9F1PnU/CagsBUNOjHXNeWlWWU/I3ktlAOX1r7qRroByPPQ
-        xlktuibQ==;
+        bh=YRw9OpJPOYvTEj//3KZeiED/BNHcvsHuScYwpGfneP8=; b=qltV6rhjDIMg/g2XyqByozJe6x
+        5HRs/uboAJULBbyDCoqw+AGZ+IA2sitjTioscw+unolLNXvDijODh2rHe6Ivd1nDBFx0/Pf1Kn5Bk
+        skR0IwWiZ8ytqfMXj7XNmqelqPWQPuV46CBwf03v8GetMkz7sQrPae1fCUMxLCxE4F+zzUUbSL9kx
+        wIF2FxZN57H1Bz9PPJwjorWWgc+DB66ONlw/kRohx2vC5a1m33XAUn/29R0g2E+cAU2AIveIJkc93
+        9i3pr4Rz9mvRGeCOEYN/daFNi6Hunxo54+DZ0vRT6sOkBwBfLQsv/J0vST/BYGhlEYJOemjKNnDht
+        E1Vgilbg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1iLp-00CXLD-1r;
-        Wed, 24 May 2023 06:52:01 +0000
-Date:   Tue, 23 May 2023 23:52:01 -0700
+        id 1q1iMD-00CXNZ-2i;
+        Wed, 24 May 2023 06:52:25 +0000
+Date:   Tue, 23 May 2023 23:52:25 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Allen Webb <allenwebb@google.com>
 Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
@@ -37,7 +37,7 @@ Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
         nick.alcock@oracle.com, kernel test robot <lkp@intel.com>
 Subject: Re: [PATCH v10 03/11] stmpe-spi: Fix MODULE_DEVICE_TABLE entries
-Message-ID: <ZG20ESArR8H0LcHj@bombadil.infradead.org>
+Message-ID: <ZG20KZ6Quk87zm8l@bombadil.infradead.org>
 References: <20221219204619.2205248-1-allenwebb@google.com>
  <20230406190030.968972-1-allenwebb@google.com>
  <20230406190030.968972-4-allenwebb@google.com>
@@ -71,9 +71,7 @@ On Thu, Apr 06, 2023 at 02:00:22PM -0500, Allen Webb wrote:
 > Signed-off-by: Allen Webb <allenwebb@google.com>
 > ---
 
-I'm happy to take patches 1-3 thorugh modules-next, but please try to
-Cc the driver maintainers on the next iteration of this patch series
-and let them know these are related to this work and see if you can
-get their ACKs to go through another tree for this purpose.
+Oh feel free to add Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+on patches 1-3.
 
   Luis
