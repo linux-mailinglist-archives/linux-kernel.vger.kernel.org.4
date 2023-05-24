@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B1970FA65
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17F870FA69
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237131AbjEXPgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S237118AbjEXPgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236698AbjEXPfM (ORCPT
+        with ESMTP id S236323AbjEXPfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 May 2023 11:35:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EC5E7A
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F5E123
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684942428;
+        s=mimecast20190719; t=1684942430;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hgbi0fncQFlNqYJvJIncCzqzDTHwL/0fY7UO/lvli4s=;
-        b=hTPgvlWoInLvn++tgGEbbo5CQe2zyOKlXGZJnFqICvHNGvvqFT0wLnTwNb+rhRHkGgTUFY
-        6XG3CLTf74Ae1W1e8TJFHzj2e4rSRboLSPjU5M2W5O/WgDHbRAMg3Eq+Mc0RMLFQPDDIxx
-        INSLprQJTn1RfnGkk4xLRKKwy8kuS8w=
+        bh=PZf0byHPp2E2QKGUTDTD+TlMjPhCnr7dpojTO1v28qY=;
+        b=jWzDHD7qRb45gP5eAEdveVXJvNr8sK15Oep6MRqqVvJ2Sovbdc5Sd7u6eODXgpIfZzpYO+
+        SlxXksB1FMqy7MtnvE8BFdOQN8hwzWz5zmTP/DyJITyMqPBNZzRK3je9LvwakkG2VZAwIg
+        qS8l8D5yMR71WoeA6oF+EpBDVcXcgog=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-170-IhsFsMjsP6yLutFsBhfOSA-1; Wed, 24 May 2023 11:33:44 -0400
-X-MC-Unique: IhsFsMjsP6yLutFsBhfOSA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-26-wF7-Cb2KPtKxfSJZIAw0Dg-1; Wed, 24 May 2023 11:33:46 -0400
+X-MC-Unique: wF7-Cb2KPtKxfSJZIAw0Dg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6EDD280027F;
-        Wed, 24 May 2023 15:33:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E46EB811E85;
+        Wed, 24 May 2023 15:33:45 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C2DC4C1ED99;
-        Wed, 24 May 2023 15:33:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4289240C6EC4;
+        Wed, 24 May 2023 15:33:44 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
@@ -50,108 +50,106 @@ Cc:     David Howells <dhowells@redhat.com>,
         Matthew Wilcox <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 07/12] net: Clean up users of netdev_alloc_cache and napi_frag_cache
-Date:   Wed, 24 May 2023 16:33:06 +0100
-Message-Id: <20230524153311.3625329-8-dhowells@redhat.com>
+Subject: [PATCH net-next 08/12] net: Copy slab data for sendmsg(MSG_SPLICE_PAGES)
+Date:   Wed, 24 May 2023 16:33:07 +0100
+Message-Id: <20230524153311.3625329-9-dhowells@redhat.com>
 In-Reply-To: <20230524153311.3625329-1-dhowells@redhat.com>
 References: <20230524153311.3625329-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The users of netdev_alloc_cache and napi_frag_cache don't need to take the
-bh lock around access to these fragment caches any more as the percpu
-handling is now done in page_frag_alloc_align().
+If sendmsg() is passed MSG_SPLICE_PAGES and is given a buffer that contains
+some data that's resident in the slab, copy/coalesce it rather than
+returning EIO.
 
 Signed-off-by: David Howells <dhowells@redhat.com>
-cc: "David S. Miller" <davem@davemloft.net>
 cc: Eric Dumazet <edumazet@google.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: David Ahern <dsahern@kernel.org>
 cc: Jakub Kicinski <kuba@kernel.org>
 cc: Paolo Abeni <pabeni@redhat.com>
-cc: linux-mm@kvack.org
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: netdev@vger.kernel.org
 ---
- include/linux/skbuff.h |  3 ++-
- net/core/skbuff.c      | 29 +++++++++--------------------
- 2 files changed, 11 insertions(+), 21 deletions(-)
+ include/linux/skbuff.h |  3 +++
+ net/core/skbuff.c      | 33 ++++++++++++++++++++++++++++++---
+ 2 files changed, 33 insertions(+), 3 deletions(-)
 
 diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 41b63e72c6c3..e11a765fe7fa 100644
+index e11a765fe7fa..11d98990f5f1 100644
 --- a/include/linux/skbuff.h
 +++ b/include/linux/skbuff.h
-@@ -252,7 +252,8 @@
- /* Maximum value in skb->csum_level */
- #define SKB_MAX_CSUM_LEVEL	3
+@@ -5084,6 +5084,9 @@ static inline void skb_mark_for_recycle(struct sk_buff *skb)
+ #endif
+ }
  
--#define SKB_DATA_ALIGN(X)	ALIGN(X, SMP_CACHE_BYTES)
-+#define SKB_DATA_ALIGNMENT	SMP_CACHE_BYTES
-+#define SKB_DATA_ALIGN(X)	ALIGN(X, SKB_DATA_ALIGNMENT)
- #define SKB_WITH_OVERHEAD(X)	\
- 	((X) - SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
++ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
++			     ssize_t maxsize, gfp_t gfp);
++
+ ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
+ 			     ssize_t maxsize, gfp_t gfp);
  
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 225a16f3713f..c2840b0dcad9 100644
+index c2840b0dcad9..a16499b9942b 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
-@@ -291,27 +291,20 @@ void napi_get_frags_check(struct napi_struct *napi)
+@@ -6927,17 +6927,44 @@ ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
+ 			break;
+ 		}
  
- void *napi_alloc_frag_align(unsigned int fragsz, unsigned int align)
- {
--	fragsz = SKB_DATA_ALIGN(fragsz);
++		if (space == 0 &&
++		    !skb_can_coalesce(skb, skb_shinfo(skb)->nr_frags,
++				      pages[0], off)) {
++			iov_iter_revert(iter, len);
++			break;
++		}
++
+ 		i = 0;
+ 		do {
+ 			struct page *page = pages[i++];
+ 			size_t part = min_t(size_t, PAGE_SIZE - off, len);
 -
-+	align = min_t(unsigned int, align, SKB_DATA_ALIGNMENT);
- 	return page_frag_alloc_align(&napi_frag_cache, fragsz, GFP_ATOMIC, align);
- }
- EXPORT_SYMBOL(napi_alloc_frag_align);
+-			ret = -EIO;
+-			if (WARN_ON_ONCE(!sendpage_ok(page)))
++			bool put = false;
++
++			if (PageSlab(page)) {
++				const void *p;
++				void *q;
++
++				p = kmap_local_page(page);
++				q = page_frag_memdup(NULL, p + off, part, gfp,
++						     ULONG_MAX);
++				kunmap_local(p);
++				if (!q) {
++					iov_iter_revert(iter, len);
++					ret = -ENOMEM;
++					goto out;
++				}
++				page = virt_to_page(q);
++				off = offset_in_page(q);
++				put = true;
++			} else if (WARN_ON_ONCE(!sendpage_ok(page))) {
++				ret = -EIO;
+ 				goto out;
++			}
  
- void *netdev_alloc_frag_align(unsigned int fragsz, unsigned int align)
- {
--	void *data;
--
--	fragsz = SKB_DATA_ALIGN(fragsz);
--	if (in_hardirq() || irqs_disabled()) {
--		data = page_frag_alloc_align(&netdev_alloc_cache,
-+	align = min_t(unsigned int, align, SKB_DATA_ALIGNMENT);
-+	if (in_hardirq() || irqs_disabled())
-+		return page_frag_alloc_align(&netdev_alloc_cache,
- 					     fragsz, GFP_ATOMIC, align);
--	} else {
--		local_bh_disable();
--		data = page_frag_alloc_align(&napi_frag_cache,
-+	else
-+		return page_frag_alloc_align(&napi_frag_cache,
- 					     fragsz, GFP_ATOMIC, align);
--		local_bh_enable();
--	}
--	return data;
- }
- EXPORT_SYMBOL(netdev_alloc_frag_align);
- 
-@@ -709,15 +702,11 @@ struct sk_buff *__netdev_alloc_skb(struct net_device *dev, unsigned int len,
- 	if (sk_memalloc_socks())
- 		gfp_mask |= __GFP_MEMALLOC;
- 
--	if (in_hardirq() || irqs_disabled()) {
-+	if (in_hardirq() || irqs_disabled())
- 		data = page_frag_alloc(&netdev_alloc_cache, len, gfp_mask);
--		pfmemalloc = folio_is_pfmemalloc(virt_to_folio(data));
--	} else {
--		local_bh_disable();
-+	else
- 		data = page_frag_alloc(&napi_frag_cache, len, gfp_mask);
--		pfmemalloc = folio_is_pfmemalloc(virt_to_folio(data));
--		local_bh_enable();
--	}
-+	pfmemalloc = folio_is_pfmemalloc(virt_to_folio(data));
- 
- 	if (unlikely(!data))
- 		return NULL;
+ 			ret = skb_append_pagefrags(skb, page, off, part,
+ 						   frag_limit);
++			if (put)
++				put_page(page);
+ 			if (ret < 0) {
+ 				iov_iter_revert(iter, len);
+ 				goto out;
 
