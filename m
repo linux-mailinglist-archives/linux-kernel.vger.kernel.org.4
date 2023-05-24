@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45253710036
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304BF710095
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236143AbjEXVya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S236221AbjEXWD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjEXVy2 (ORCPT
+        with ESMTP id S229547AbjEXWD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:54:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF9095;
-        Wed, 24 May 2023 14:54:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6116260B20;
-        Wed, 24 May 2023 21:54:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5168EC433D2;
-        Wed, 24 May 2023 21:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684965266;
-        bh=F88GJ6vAwpF7GaNRxrTGbI4XIS1F/cwKB4bP/M/sqPg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nm34SmeRRRuboq2DXC8KAsXOk5fBetJUa8L40dIfrTBG6JNZVc177pxEFd3g/4lHt
-         W3H3KUpBSHEbX7a7lS/4gqi+NcoHgYZUgSexLbljemKvn6YyHGyKgCCzfsidsd90ma
-         uVVsHKKP/+MC9lwtJVvLr+jUjrmZu9yUhcaa5IlchON1wWrJJJUNk9g7D3k9W8mHKa
-         crn0j3rSqC4t4CzXdoI24ItziojE5XpUaIE1M4Ezi4U8NjNMIGwnuGo8N2LlgmRGOh
-         k1b2ImKC7HtZkH2nxEgu4S6nHyh8pKmuXqeDqna33zX325Hj0FDqQbPNTk7cfqQno5
-         9W7o6/PPQhDAQ==
-Date:   Wed, 24 May 2023 22:54:19 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Justin Chen <justin.chen@broadcom.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com, justinpopo6@gmail.com,
-        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        richardcochran@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, simon.horman@corigine.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: Re: [PATCH net-next v4 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
- controller
-Message-ID: <20230524-fountain-icing-eceec8fe6c96@spud>
-References: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
- <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
- <20230523-unfailing-twisting-9cb092b14f6f@spud>
- <CALSSxFYMm5NYw41ERr1Ah-bejDgf9EdJd1dGNL9_sKVVmrpg3g@mail.gmail.com>
- <20230524-scientist-enviable-7bfff99431cc@wendy>
- <20230524-resample-dingbat-8a9f09ba76a5@wendy>
- <CALSSxFabgO-YTQ-nzki6h+Y=n3SfzgC4giJk8BySgCErK6zrmw@mail.gmail.com>
+        Wed, 24 May 2023 18:03:27 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B111C10B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:03:26 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2af2e908163so17943031fa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684965804; x=1687557804;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGJNYAB8T/lr+YL5tSEXLDHHn2s+eih/Ya1hsZucDVU=;
+        b=YGnq6z+6UdWriHJovvH32ejeIEdFSsUsF0YwCxsLX4Eaj2Mn7bQfdQ240fsbxanWfx
+         eSodL/Nfer1LbYRRoDsr7hr8HNFON59XtBDlNUiJBYgB1wf5lz58i466bC8N1WBde64j
+         wnL1YisuMgB17ECW/zH39qJdHs/r7jZIaHHfc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684965804; x=1687557804;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BGJNYAB8T/lr+YL5tSEXLDHHn2s+eih/Ya1hsZucDVU=;
+        b=Sw9dAdfD7QFgP7CW0Fe6fwW/PniTAPizqWz4+ORpo6g8u3FGuYF3w3epAIYAEyGZRD
+         nAieE7PVL56xdoSKDr8k9y2LGvis5jzNbrCT6D01HcXDEQ6H9oHlZtxEF0G1b1QCExF9
+         Zw0dEtEqbVEjaxw5TpUxAhdR8sEVN98sHLO+yU2HCjOG7hjqSAPbGWeG9dcAUSoLULEf
+         gUmbma8dcNn3b7kQ5VJsCMuk3vZ6tmTT02/cz/eSV/39WpcNGP7Mb4/AnKfJOOytjQ94
+         l2FeIchnizJrac6hrbV8YwbDsfcWugSqeg6rFNP6AAzUR0U+RjKE5rMc7lfYZAAd7AiS
+         1PrQ==
+X-Gm-Message-State: AC+VfDxDBsb8b0mKLiMa5SWqBZv6J3+ywvCakK+cxEh+2WTrQIeV/hDf
+        PK8P4pdltvFTVwqCzuVeM/T0Ekzzlt/FQcUdJOdaymqC
+X-Google-Smtp-Source: ACHHUZ5u/Gpa6gWeoJQI/LEUyhnGpSIRjPk82ZKYg2KA5r0NgDfftGEGnUvoe20Hv8oH9O7bVYoU5Q==
+X-Received: by 2002:a2e:9001:0:b0:2b0:3046:9c6 with SMTP id h1-20020a2e9001000000b002b0304609c6mr332038ljg.9.1684965804376;
+        Wed, 24 May 2023 15:03:24 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id y14-20020a2eb00e000000b002af0464353bsm2177846ljk.106.2023.05.24.15.03.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 15:03:24 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso1509101e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:03:23 -0700 (PDT)
+X-Received: by 2002:a17:907:268c:b0:96f:65db:d6d2 with SMTP id
+ bn12-20020a170907268c00b0096f65dbd6d2mr16749757ejc.14.1684965423649; Wed, 24
+ May 2023 14:57:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-2-mcgrof@kernel.org>
+ <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 24 May 2023 14:56:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi9oPrxcMK469X0zAueKQ4tqX80SdFqCx9StcL82vuEkw@mail.gmail.com>
+Message-ID: <CAHk-=wi9oPrxcMK469X0zAueKQ4tqX80SdFqCx9StcL82vuEkw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate detection
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, tglx@linutronix.de, hch@lst.de,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
+        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
+        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CALSSxFabgO-YTQ-nzki6h+Y=n3SfzgC4giJk8BySgCErK6zrmw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 02:47:59PM -0700, Justin Chen wrote:
-> On Tue, May 23, 2023 at 11:56=E2=80=AFPM Conor Dooley <conor.dooley@micro=
-chip.com> wrote:
+On Wed, May 24, 2023 at 2:52=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Stop adding horrific code for some made-up load that isn't real.
 
-> Gotcha. I got something like this now.
->=20
->   compatible:
->     oneOf:
->       - items:
->           - enum:
->               - brcm,bcm74165-asp
->           - const: brcm,asp-v2.1
->       - items:
->           - enum:
->               - brcm,bcm72165-asp
->           - const: brcm,asp-v2.0
+Even if you trigger some "worst case 3x memory use", that is
+_temporary_, and will be free'd in the end.
 
-Yes, this is what I had in mind.
+The patches to "fix" this are worse than the disease.
 
-> Apologies, still getting used to this yaml stuff. Starting to make a
-> bit more sense to me now.
-
-No worries.
-
-> > > valid fallback for "brcm,asp-v2.1"?
-> > > The oneOf: also becomes redundant since you only have one items:.
-> > >
-> > > > Will submit a v5 tomorrow.
-> > >
-> > > BTW, when you do, could you use the address listed in MAINTAINERS rat=
-her
-> > > than the one you used for this version?
-> > >
-> I changed the address listed in MAINTAINERS from the previous versions
-> of this patchset. The current version should match the address that
-> this patch set was sent from. Looks like I forgot to add a changelog
-> for that in v4.
-
-Hmm, I must not have been clear. You sent it to <conor@kernel.org> and I
-was hoping that you would use <conor+dt@kernel.org> instead so that you
-end up hitting the right mail filters :) It's not a problem, I was just
-added to it in -rc1 so get_maintainer.pl probably didn't spit my name
-out for your original revision.
-
-Thanks,
-Conor.
+                  Linus
