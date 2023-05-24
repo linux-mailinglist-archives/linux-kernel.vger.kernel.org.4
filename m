@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3455D70F922
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5512970F926
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236105AbjEXOum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
+        id S235929AbjEXOuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235996AbjEXOu2 (ORCPT
+        with ESMTP id S236028AbjEXOub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:50:28 -0400
+        Wed, 24 May 2023 10:50:31 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDE313E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:49:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B03C119
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684939780;
+        s=mimecast20190719; t=1684939785;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BBjfMnLRdPLaOtZKQ3MfDk6Q85OlEId07NY6t+N1kv8=;
-        b=D1FAUJ23agMWFj1o1DMGAspYoU/794A9XWndytP4RUUCt1LB0jbcGszmy33RwjzzkO43rN
-        kxTmqjuTR+C3++Ma9bgbvy3D7UzAkIhu3NykCzu7JZpFNEzBocPeHwUs+6cOzBh+pzZmD5
-        VWuBimwg7iPOe+dpvvvaiGEvD9eOx3Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=3J8PHmDPb0Wk4jmNU2VIBExWXmpJgDgYePfc2qOgcg8=;
+        b=gZP2Fs/WpLyfehohyQ+1SyntagfGBA++/t09kTBUiRQpH8ze+U7v3hxLBaFfrL06rOsPw1
+        I7Em1v8geTXPq0zhvV+dOsvOXzTT7JCGlBmgd8nA18WSOMYUpPwPvQ0t7ZftcsBXV4DdY0
+        Y6e6NsbkwzuLB2Unt/Lcdgq4gDnFeMA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-WIiQwQthN-adX17FR81rFw-1; Wed, 24 May 2023 10:49:36 -0400
-X-MC-Unique: WIiQwQthN-adX17FR81rFw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-576-zslUpdpYNp6S1clsL_W_IQ-1; Wed, 24 May 2023 10:49:39 -0400
+X-MC-Unique: zslUpdpYNp6S1clsL_W_IQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2C9785A5B5;
-        Wed, 24 May 2023 14:49:35 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C44043800E80;
+        Wed, 24 May 2023 14:49:38 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D2BDC407DEC6;
-        Wed, 24 May 2023 14:49:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A8A32C1ED99;
+        Wed, 24 May 2023 14:49:36 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
@@ -51,14 +51,14 @@ Cc:     David Howells <dhowells@redhat.com>,
         Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, Tom Herbert <tom@herbertland.com>,
         Tom Herbert <tom@quantonium.net>
-Subject: [PATCH net-next 3/4] kcm: Support MSG_SPLICE_PAGES
-Date:   Wed, 24 May 2023 15:49:22 +0100
-Message-Id: <20230524144923.3623536-4-dhowells@redhat.com>
+Subject: [PATCH net-next 4/4] kcm: Convert kcm_sendpage() to use MSG_SPLICE_PAGES
+Date:   Wed, 24 May 2023 15:49:23 +0100
+Message-Id: <20230524144923.3623536-5-dhowells@redhat.com>
 In-Reply-To: <20230524144923.3623536-1-dhowells@redhat.com>
 References: <20230524144923.3623536-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -69,8 +69,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make AF_KCM sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
-spliced from the source iterator if possible.
+Convert kcm_sendpage() to use sendmsg() with MSG_SPLICE_PAGES rather than
+directly splicing in the pages itself.
 
 This allows ->sendpage() to be replaced by something that can handle
 multiple multipage folios in a single transaction.
@@ -86,79 +86,186 @@ cc: Jens Axboe <axboe@kernel.dk>
 cc: Matthew Wilcox <willy@infradead.org>
 cc: netdev@vger.kernel.org
 ---
- net/kcm/kcmsock.c | 55 ++++++++++++++++++++++++++++++++---------------
- 1 file changed, 38 insertions(+), 17 deletions(-)
+ net/kcm/kcmsock.c | 161 ++++++----------------------------------------
+ 1 file changed, 18 insertions(+), 143 deletions(-)
 
 diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index cfe828bd7fc6..411726d830c0 100644
+index 411726d830c0..f6e0e017e3cc 100644
 --- a/net/kcm/kcmsock.c
 +++ b/net/kcm/kcmsock.c
-@@ -989,29 +989,50 @@ static int kcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
- 			merge = false;
- 		}
+@@ -761,149 +761,6 @@ static void kcm_push(struct kcm_sock *kcm)
+ 		kcm_write_msgs(kcm);
+ }
  
--		copy = min_t(int, msg_data_left(msg),
--			     pfrag->size - pfrag->offset);
-+		if (msg->msg_flags & MSG_SPLICE_PAGES) {
-+			copy = msg_data_left(msg);
-+			if (!sk_wmem_schedule(sk, copy))
-+				goto wait_for_memory;
+-static ssize_t kcm_sendpage(struct socket *sock, struct page *page,
+-			    int offset, size_t size, int flags)
+-
+-{
+-	struct sock *sk = sock->sk;
+-	struct kcm_sock *kcm = kcm_sk(sk);
+-	struct sk_buff *skb = NULL, *head = NULL;
+-	long timeo = sock_sndtimeo(sk, flags & MSG_DONTWAIT);
+-	bool eor;
+-	int err = 0;
+-	int i;
+-
+-	if (flags & MSG_SENDPAGE_NOTLAST)
+-		flags |= MSG_MORE;
+-
+-	/* No MSG_EOR from splice, only look at MSG_MORE */
+-	eor = !(flags & MSG_MORE);
+-
+-	lock_sock(sk);
+-
+-	sk_clear_bit(SOCKWQ_ASYNC_NOSPACE, sk);
+-
+-	err = -EPIPE;
+-	if (sk->sk_err)
+-		goto out_error;
+-
+-	if (kcm->seq_skb) {
+-		/* Previously opened message */
+-		head = kcm->seq_skb;
+-		skb = kcm_tx_msg(head)->last_skb;
+-		i = skb_shinfo(skb)->nr_frags;
+-
+-		if (skb_can_coalesce(skb, i, page, offset)) {
+-			skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], size);
+-			skb_shinfo(skb)->flags |= SKBFL_SHARED_FRAG;
+-			goto coalesced;
+-		}
+-
+-		if (i >= MAX_SKB_FRAGS) {
+-			struct sk_buff *tskb;
+-
+-			tskb = alloc_skb(0, sk->sk_allocation);
+-			while (!tskb) {
+-				kcm_push(kcm);
+-				err = sk_stream_wait_memory(sk, &timeo);
+-				if (err)
+-					goto out_error;
+-			}
+-
+-			if (head == skb)
+-				skb_shinfo(head)->frag_list = tskb;
+-			else
+-				skb->next = tskb;
+-
+-			skb = tskb;
+-			skb->ip_summed = CHECKSUM_UNNECESSARY;
+-			i = 0;
+-		}
+-	} else {
+-		/* Call the sk_stream functions to manage the sndbuf mem. */
+-		if (!sk_stream_memory_free(sk)) {
+-			kcm_push(kcm);
+-			set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
+-			err = sk_stream_wait_memory(sk, &timeo);
+-			if (err)
+-				goto out_error;
+-		}
+-
+-		head = alloc_skb(0, sk->sk_allocation);
+-		while (!head) {
+-			kcm_push(kcm);
+-			err = sk_stream_wait_memory(sk, &timeo);
+-			if (err)
+-				goto out_error;
+-		}
+-
+-		skb = head;
+-		i = 0;
+-	}
+-
+-	get_page(page);
+-	skb_fill_page_desc_noacc(skb, i, page, offset, size);
+-	skb_shinfo(skb)->flags |= SKBFL_SHARED_FRAG;
+-
+-coalesced:
+-	skb->len += size;
+-	skb->data_len += size;
+-	skb->truesize += size;
+-	sk->sk_wmem_queued += size;
+-	sk_mem_charge(sk, size);
+-
+-	if (head != skb) {
+-		head->len += size;
+-		head->data_len += size;
+-		head->truesize += size;
+-	}
+-
+-	if (eor) {
+-		bool not_busy = skb_queue_empty(&sk->sk_write_queue);
+-
+-		/* Message complete, queue it on send buffer */
+-		__skb_queue_tail(&sk->sk_write_queue, head);
+-		kcm->seq_skb = NULL;
+-		KCM_STATS_INCR(kcm->stats.tx_msgs);
+-
+-		if (flags & MSG_BATCH) {
+-			kcm->tx_wait_more = true;
+-		} else if (kcm->tx_wait_more || not_busy) {
+-			err = kcm_write_msgs(kcm);
+-			if (err < 0) {
+-				/* We got a hard error in write_msgs but have
+-				 * already queued this message. Report an error
+-				 * in the socket, but don't affect return value
+-				 * from sendmsg
+-				 */
+-				pr_warn("KCM: Hard failure on kcm_write_msgs\n");
+-				report_csk_error(&kcm->sk, -err);
+-			}
+-		}
+-	} else {
+-		/* Message not complete, save state */
+-		kcm->seq_skb = head;
+-		kcm_tx_msg(head)->last_skb = skb;
+-	}
+-
+-	KCM_STATS_ADD(kcm->stats.tx_bytes, size);
+-
+-	release_sock(sk);
+-	return size;
+-
+-out_error:
+-	kcm_push(kcm);
+-
+-	err = sk_stream_error(sk, flags, err);
+-
+-	/* make sure we wake any epoll edge trigger waiter */
+-	if (unlikely(skb_queue_len(&sk->sk_write_queue) == 0 && err == -EAGAIN))
+-		sk->sk_write_space(sk);
+-
+-	release_sock(sk);
+-	return err;
+-}
+-
+ static int kcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
+ {
+ 	struct sock *sk = sock->sk;
+@@ -1109,6 +966,24 @@ static int kcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
+ 	return err;
+ }
  
--		if (!sk_wmem_schedule(sk, copy))
--			goto wait_for_memory;
-+			err = skb_splice_from_iter(skb, &msg->msg_iter, copy,
-+						   sk->sk_allocation);
-+			if (err < 0) {
-+				if (err == -EMSGSIZE)
-+					goto wait_for_memory;
-+				goto out_error;
-+			}
- 
--		err = skb_copy_to_page_nocache(sk, &msg->msg_iter, skb,
--					       pfrag->page,
--					       pfrag->offset,
--					       copy);
--		if (err)
--			goto out_error;
-+			skb_shinfo(skb)->flags |= SKBFL_SHARED_FRAG;
-+			sk_wmem_queued_add(sk, copy);
-+			sk_mem_charge(sk, copy);
- 
--		/* Update the skb. */
--		if (merge) {
--			skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
-+			if (head != skb)
-+				head->truesize += copy;
- 		} else {
--			skb_fill_page_desc(skb, i, pfrag->page,
--					   pfrag->offset, copy);
--			get_page(pfrag->page);
-+			copy = min_t(int, msg_data_left(msg),
-+				     pfrag->size - pfrag->offset);
-+			if (!sk_wmem_schedule(sk, copy))
-+				goto wait_for_memory;
++static ssize_t kcm_sendpage(struct socket *sock, struct page *page,
++			    int offset, size_t size, int flags)
 +
-+			err = skb_copy_to_page_nocache(sk, &msg->msg_iter, skb,
-+						       pfrag->page,
-+						       pfrag->offset,
-+						       copy);
-+			if (err)
-+				goto out_error;
++{
++	struct bio_vec bvec;
++	struct msghdr msg = { .msg_flags = flags | MSG_SPLICE_PAGES, };
 +
-+			/* Update the skb. */
-+			if (merge) {
-+				skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
-+			} else {
-+				skb_fill_page_desc(skb, i, pfrag->page,
-+						   pfrag->offset, copy);
-+				get_page(pfrag->page);
-+			}
++	if (flags & MSG_SENDPAGE_NOTLAST)
++		msg.msg_flags |= MSG_MORE;
 +
-+			pfrag->offset += copy;
- 		}
- 
--		pfrag->offset += copy;
- 		copied += copy;
- 		if (head != skb) {
- 			head->len += copy;
++	if (flags & MSG_OOB)
++		return -EOPNOTSUPP;
++
++	bvec_set_page(&bvec, page, size, offset);
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, size);
++	return kcm_sendmsg(sock, &msg, size);
++}
++
+ static int kcm_recvmsg(struct socket *sock, struct msghdr *msg,
+ 		       size_t len, int flags)
+ {
 
