@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C737570F2C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E48E70F2C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240518AbjEXJ2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S240257AbjEXJ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240717AbjEXJ2J (ORCPT
+        with ESMTP id S230356AbjEXJ3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:28:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61873130;
-        Wed, 24 May 2023 02:28:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB94763B4B;
-        Wed, 24 May 2023 09:28:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD8B2C433D2;
-        Wed, 24 May 2023 09:28:00 +0000 (UTC)
-Message-ID: <b5c45ac7-64ad-ddc1-a7a2-99d9d1c27ca7@xs4all.nl>
-Date:   Wed, 24 May 2023 11:27:59 +0200
+        Wed, 24 May 2023 05:29:12 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B6090;
+        Wed, 24 May 2023 02:29:11 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O5Jpuf031611;
+        Wed, 24 May 2023 09:29:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=8wt6AN6pl6ghSok1hDDHJ3uMHeMEuXrVVpwKZb4ImaA=;
+ b=UU9aHMhhqUWGQCCBxaNAJWeh5sY9aguwPdJseMPAVArbkX2nPuXqKqEig9Rb4p4PZ6Gb
+ nz+iEjOglOnawlCEEa0fj11NC0c/4avjz/OXJqB8lWBcyO2HrdnR0Zqn5O4Ka9NOYXgt
+ 3Ox0EuTwQTj8LVXcLlNPJvQzVGUmZIGmyo1V0gRwVs3tGCtQajtSOzcfiekGOxEPOv+M
+ ArnKXDkb7iZihguL12hVooZM0WXLqPu58SQYPdYWqBJnYI1RzSae973N5QmdlDq9VDsd
+ QLuMAcnCHHkEHqB6kHaDP+1C00pA2oj2BEeic/3DyDUtgLhokH/zFOp8WrzoqEqV56u9 uw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qscaurj71-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 09:29:02 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O9T1NI017392
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 09:29:01 GMT
+Received: from [10.201.3.104] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 24 May
+ 2023 02:28:58 -0700
+Message-ID: <69bde397-9d6a-d6b2-846c-310fbbbaba98@quicinc.com>
+Date:   Wed, 24 May 2023 14:58:55 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7,0/2] media: mediatek: vcodec: add hevc stateless
- decoder driver in MT8195
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 3/5] mtd: rawnand: qcom: Add support for param_page
+ read exec_ops
 Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230524080739.17264-1-yunfei.dong@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230524080739.17264-1-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     <mani@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_srichara@quicinc.com>
+References: <20230511133017.6307-1-quic_mdalam@quicinc.com>
+ <20230511133017.6307-4-quic_mdalam@quicinc.com>
+ <20230522154916.3bb7be4e@xps-13>
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <20230522154916.3bb7be4e@xps-13>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iltTnx8JJHJ3PpptWLFUC1OqnB6XTwH_
+X-Proofpoint-GUID: iltTnx8JJHJ3PpptWLFUC1OqnB6XTwH_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_05,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 clxscore=1015 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305240079
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,63 +83,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yunfei,
 
-On 24/05/2023 10:07, Yunfei Dong wrote:
-> Add hevc stateless decoder driver to support hardware decode in MT8195, and the driver
-> need num_delta_pocs_of_ref_rps_idx value to parse slice header short_term_ref_pic_set().
-> 
-> patch 1 add num_delta_pocs_of_ref_rps_idx field.
-> patch 2 add hevc stateless decoder driver.
 
-This series clashes with this older series from you:
+On 5/22/2023 7:19 PM, Miquel Raynal wrote:
+> Hi Md,
+> 
+> quic_mdalam@quicinc.com wrote on Thu, 11 May 2023 19:00:15 +0530:
+> 
+>> This change will add exec_ops for PARAM_PAGE_READ command.
+>>
+>> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>> ---
+>> Change in [v2]
+>>
+>> * Missed to post Cover-letter, so posting v2 patch with cover-letter
+>>
+>>   drivers/mtd/nand/raw/qcom_nandc.c | 91 ++++++++++++++++++++++++++++++-
+>>   1 file changed, 90 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+>> index d2f2a8971907..8717d5086f80 100644
+>> --- a/drivers/mtd/nand/raw/qcom_nandc.c
+>> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+>> @@ -3086,7 +3086,96 @@ static int qcom_erase_cmd_type_exec(struct nand_chip *chip, const struct nand_su
+>>   
+>>   static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_subop *subop)
+>>   {
+>> -	return 0;
+>> +	struct qcom_nand_host *host = to_qcom_nand_host(chip);
+>> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> +	struct qcom_op q_op;
+>> +	const struct nand_op_instr *instr = NULL;
+>> +	unsigned int op_id = 0;
+>> +	unsigned int len = 0;
+>> +	int ret = 0;
+>> +
+>> +	qcom_parse_instructions(chip, subop, &q_op);
+>> +
+>> +	q_op.cmd_reg |= PAGE_ACC | LAST_PAGE;
+>> +
+>> +	pre_command(host, NAND_CMD_PARAM);
+>> +	/*
+>> +	 * NAND_CMD_PARAM is called before we know much about the FLASH chip
+>> +	 * in use. we configure the controller to perform a raw read of 512
+>> +	 * bytes to read onfi params
+> 
+> There is no guess to do, just follow what the core asks.
 
-https://patchwork.linuxtv.org/project/linux-media/cover/20230424060130.18395-1-yunfei.dong@mediatek.com/
+   Sure, will fix this in next patch V3.
+> 
+>> +	 */
+>> +	if (nandc->props->qpic_v2)
+>> +		nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
+>> +	else
+>> +		nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
+> 
+> There is something wrong here.
+> 
+   Will fix this in next patch V3.
 
-Can you post a v8 that sits on top of that older series?
+>> +
+>> +	nandc_set_reg(chip, NAND_ADDR0, 0);
+>> +	nandc_set_reg(chip, NAND_ADDR1, 0);
+>> +	nandc_set_reg(chip, NAND_DEV0_CFG0, 0 << CW_PER_PAGE
+>> +					| 512 << UD_SIZE_BYTES
+>> +					| 5 << NUM_ADDR_CYCLES
+>> +					| 0 << SPARE_SIZE_BYTES);
+>> +	nandc_set_reg(chip, NAND_DEV0_CFG1, 7 << NAND_RECOVERY_CYCLES
+>> +					| 0 << CS_ACTIVE_BSY
+>> +					| 17 << BAD_BLOCK_BYTE_NUM
+>> +					| 1 << BAD_BLOCK_IN_SPARE_AREA
+>> +					| 2 << WR_RD_BSY_GAP
+>> +					| 0 << WIDE_FLASH
+>> +					| 1 << DEV0_CFG1_ECC_DISABLE);
+>> +	if (!nandc->props->qpic_v2)
+>> +		nandc_set_reg(chip, NAND_EBI2_ECC_BUF_CFG, 1 << ECC_CFG_ECC_DISABLE);
+>> +
+>> +	/* configure CMD1 and VLD for ONFI param probing in QPIC v1 */
+>> +	if (!nandc->props->qpic_v2) {
+>> +		nandc_set_reg(chip, NAND_DEV_CMD_VLD,
+>> +			      (nandc->vld & ~READ_START_VLD));
+>> +		nandc_set_reg(chip, NAND_DEV_CMD1,
+>> +			      (nandc->cmd1 & ~(0xFF << READ_ADDR))
+>> +			      | NAND_CMD_PARAM << READ_ADDR);
+>> +	}
+>> +
+>> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
+>> +
+>> +	if (!nandc->props->qpic_v2) {
+>> +		nandc_set_reg(chip, NAND_DEV_CMD1_RESTORE, nandc->cmd1);
+>> +		nandc_set_reg(chip, NAND_DEV_CMD_VLD_RESTORE, nandc->vld);
+>> +	}
+>> +
+>> +	nandc_set_read_loc(chip, 0, 0, 0, 512, 1);
+>> +
+>> +	if (!nandc->props->qpic_v2) {
+>> +		write_reg_dma(nandc, NAND_DEV_CMD_VLD, 1, 0);
+>> +		write_reg_dma(nandc, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
+>> +	}
+>> +
+>> +	nandc->buf_count = 512;
+> 
+> The length is provided by the instruction.
 
-Regards,
-
-	Hans
-
-> ---
-> Changed from v6:
-> - fix AngeloGioacchino's suggestion.
+    Will fix this in next patch V3.
 > 
-> Changed from v5:
-> - checkpatch/kernel-doc pass/build pass.
-> - fix warning: struct vdec_av1_slice_fb -> struct vdec_hevc_slice_fb.
-> - fix warning: remove unused comment for param "trans_start" and "trans_end"
+>> +	memset(nandc->data_buffer, 0xff, nandc->buf_count);
+>> +
+>> +	config_nand_single_cw_page_read(chip, false, 0);
+>> +
+>> +	read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer,
+>> +		      nandc->buf_count, 0);
+>> +
+>> +	/* restore CMD1 and VLD regs */
+>> +	if (!nandc->props->qpic_v2) {
+>> +		write_reg_dma(nandc, NAND_DEV_CMD1_RESTORE, 1, 0);
+>> +		write_reg_dma(nandc, NAND_DEV_CMD_VLD_RESTORE, 1, NAND_BAM_NEXT_SGL);
+>> +	}
+>> +
+>> +	ret = submit_descs(nandc);
+>> +	if (ret)
+>> +		dev_err(nandc->dev, "failure in sbumitting param page descriptor\n");
+>> +
+>> +	free_descs(nandc);
+>> +
+>> +	ret = qcom_wait_rdy_poll(chip, q_op.rdy_timeout_ms);
+>> +
+>> +	instr = q_op.data_instr;
+>> +	op_id = q_op.data_instr_idx;
+>> +	len = nand_subop_get_data_len(subop, op_id);
+>> +	memcpy(instr->ctx.data.buf.in, nandc->data_buffer, len);
+>> +
+>> +	return ret;
+>>   }
+>>   
+>>   static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
 > 
-> Changed from v4:
-> - fix some comments according to Nathan's suggestion.
 > 
-> Changed from v3:
-> - add the dependency patch to this patch series for patch 1.
-> 
-> Changed from v2:
-> - fix one build warning.
-> - add the dependency patch link.
-> 
-> Changed from v1:
-> - fix build error when build 32bit system.
-> - hevc fluster test result: 132/147 (not support: 10bit => 11 and resolution => 4).
-> ---
-> Benjamin Gaignard (1):
->   media: uapi: HEVC: Add num_delta_pocs_of_ref_rps_idx field
-> 
-> Yunfei Dong (1):
->   media: mediatek: vcodec: support stateless hevc decoder
-> 
->  .../media/v4l/ext-ctrls-codec-stateless.rst   |    7 +
->  .../media/platform/mediatek/vcodec/Makefile   |    1 +
->  .../vcodec/mtk_vcodec_dec_stateless.c         |   59 +-
->  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |    1 +
->  .../vcodec/vdec/vdec_hevc_req_multi_if.c      | 1097 +++++++++++++++++
->  .../platform/mediatek/vcodec/vdec_drv_if.c    |    4 +
->  .../platform/mediatek/vcodec/vdec_drv_if.h    |    1 +
->  include/uapi/linux/v4l2-controls.h            |    6 +-
->  8 files changed, 1174 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-> 
-
+> Thanks,
+> Miquèl
