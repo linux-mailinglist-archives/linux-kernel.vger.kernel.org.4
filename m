@@ -2,164 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0927270FA3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BBF70FA39
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235992AbjEXPeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S233176AbjEXPeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbjEXPea (ORCPT
+        with ESMTP id S231633AbjEXPeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:34:30 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159D91BC
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FKgJYwYthLQNkQsOe0vU9sYWmxGfaPmT7UH2cwH0m27W2b1v6X7ismG9Upvgtg2gzn4IlUK2Ur9JjYmoWcQ0YAc1RKV6WxvnTrVykzjyE+98dVCLX/WdldNdYjL/s/LgOcGxytNQ7V25lzAyVUu7h9b/vCx/ZoXdnpA1t321qCd+Fs8+DhAWR0jTeLhnPtBJtyjjJlVkEyvkDZmCm33PtYY1u30TxTfA7zwG7vo7HxD3J2jMgXwrF8nYbyqlHLRz8uleKLU7zZtnr8VOm0KQkhVQCxLor3vaGrXC0MkB+cFBXpLxUGM21VzoJphVEH5Tc+cqJRuqFdpHK5gCCO7lcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y6hfyoKesjMvZdDskLJrk+Polnugi9Urd4XRsrP2XpY=;
- b=D7v+U4Yg/dD+9Ipk3xQxMy7Lh0kfNHGPmp+KkN3dsO9gyiRRAbDjxhTzI07wqKiKD+eohT7wAUCFu2jNoYPl8H3iQMv5RG4Dz3vcGjtHf7pDTJJGC0MuRjaJFybCghL9mjfSOpBcHieeQlmJlbJcGDFmI+zX2TAuZfubjAVpfziAPXxzSB5aJBSRHF7k+Dz5U8OOgGvpNrp0Er/5oFHNDJm5hJJNbtnJbpw0cd9PBcGaa803+kVF+vHZrhQe2xNNuJNIQcjgJ+PneGKB9q+4+SNPpmI/xXgBQeajdHZSozwtCcpb6uXscIDcvPErt4EYOUrbMPNR/nKyBY52rRivjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y6hfyoKesjMvZdDskLJrk+Polnugi9Urd4XRsrP2XpY=;
- b=yN4/HrCJ2+xJ3zfDA2GObk6yjaAv+e/anoWHDffMVOGSA5oTOqHpGAm3ezA2PTwE/QPLWT4Wyf1X/DR6kSEehomn/3FeP87IHKIWZfVAmlEOqeQcHmuXRFTgB6xXvOyCOdm08JCdfQTGslBdKzyePCu6AvuvYBYW79pj/A9lJT0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- PH8PR12MB6795.namprd12.prod.outlook.com (2603:10b6:510:1c6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 15:33:43 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%7]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 15:33:43 +0000
-Message-ID: <5d48a7cb-29eb-9177-f95a-ad686d15fbd8@amd.com>
-Date:   Wed, 24 May 2023 11:33:39 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH -next 01/13] drm/amd/display: remove unused definition
-To:     Yang Li <yang.lee@linux.alibaba.com>, alexander.deucher@amd.com
-Cc:     sunpeng.li@amd.com, harry.wentland@amd.com, Xinhui.Pan@amd.com,
-        Rodrigo.Siqueira@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch, airlied@gmail.com
-References: <20230524035952.123590-1-yang.lee@linux.alibaba.com>
-Content-Language: en-US
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230524035952.123590-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0173.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:f::16) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Wed, 24 May 2023 11:34:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CFC195
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:33:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD4DA6376E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:33:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7922C4339C;
+        Wed, 24 May 2023 15:33:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684942423;
+        bh=88v5bOvUrHpnigzjD7xR3ehZTKQzCviyqHGY6Krfgxk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nZ0/YZCGN+y4Pnj8RFVrtv/aa7OoIMusnYX2i0bHSk0upcrNedee0iJe+T7ZA+UMc
+         VKXxpJt/8x+rpyZqd4SdrXnxWeBIZfkNHcAbEZXHIh6zgOnAuAg4fdqMP5Oz1by3lp
+         8lHeciDHiVh1V6exuh2DDo/VWDhgqT7EjlVeXzNqsrDqbjah/6gOp1uX9QP5QJx4C5
+         Mo6ZNRL5VvsS/BlsYqZJe8dhZYj2eOgU6xXy3SyhTQknJRBDJiV9l6xVyh53/77YpJ
+         pU8u/t9DATb3dXTxPTT4TBvi4R8GdYgLb4Zmr/+13FLPWdLXALLpQXnCa4COmk39u/
+         psDsfH8PfTAIw==
+Date:   Wed, 24 May 2023 08:33:41 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        syzbot <syzbot+c2775460db0e1c70018e@syzkaller.appspotmail.com>,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        pabeni@redhat.com, wireguard@lists.zx2c4.com, jann@thejh.net
+Subject: Re: [syzbot] [wireguard?] KASAN: slab-use-after-free Write in
+ enqueue_timer
+Message-ID: <20230524083341.0cd435f7@kernel.org>
+In-Reply-To: <CACT4Y+YcNt8rvJRK+XhCZa1Ocw9epHg1oSGc28mntjY3HWZp1g@mail.gmail.com>
+References: <000000000000c0b11d05fa917fe3@google.com>
+        <ZGzfzEs-vJcZAySI@zx2c4.com>
+        <20230523090512.19ca60b6@kernel.org>
+        <CANn89iLVSiO1o1C-P30_3i19Ci8W1jQk9mr-_OMsQ4tS8Nq2dg@mail.gmail.com>
+        <20230523094108.0c624d47@kernel.org>
+        <CAHmME9obRJPrjiJE95JZug0r6NUwrwwWib+=LO4jiQf-y2m+Vg@mail.gmail.com>
+        <20230523094736.3a9f6f8c@kernel.org>
+        <ZGzxa18w-v8Dsy5D@zx2c4.com>
+        <CANn89iLrP7-NbE1yU_okruVKqbuUc3gxPABq4-vQ4SKrUhEdtA@mail.gmail.com>
+        <CANn89iKEjb-g1ed2M+VS5avSs=M0gNgH9QWXtOQRM_uDTMCwPw@mail.gmail.com>
+        <CACT4Y+YcNt8rvJRK+XhCZa1Ocw9epHg1oSGc28mntjY3HWZp1g@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|PH8PR12MB6795:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65a9725f-afd8-43da-f523-08db5c6c417f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sLXsD9anm7D1WHJhrV+DC+bAAGlx9gCaZvP7IA0C3OUBz6dlLfYucWLz0O8UYo9YhvjOYDWCvrOt8E1MLRik8pkxIb/ukBWAu6Osmm0kWRx//HTVuVCPn8uCY4eNTL4nVe9G/KlVCJYtzQTCWApCJAT8j/F6dEJ81FgrDjp1wqNZQNWbPuqIpl60BdbeMt1n/4iQpmXoS5hxXEas/ZuQV3Ldzxb6cb+MOByuhr0odB3HSYz7ROhdXaJ44bhCoGo8HrAKq+rBxnGmwRMmiH7m+zooKSOm0ZaCsyrmVOg1iRUX2nIsNWWVCrhOzbpPxEXpl98ekv58WfKyqiPbl56tN0WFuhBd1I3NKIUr68//53NiEF9cFLM4vPhSXz7RiI7c0KhBVFia3HX34yQ6k/GP+TgwzbShtYG93plPUjnKVo9NLH1j+s3tJzdVqhONbypkrKsAqt7yqebDk1OVPLAHQ1HWEkNsuqYcRZTxzfRlsyBj4OYHzKkdtRD1I6qHzrkCck1WFn7dklywHRWQNj2B76vzn5Io7vMGRaBQLjDvtLsTn3Dx7TBm+YbyOsNRjUbvMiagmUoF6c10uU7g5O9OAkLEhvBt5ATFdToF9/2k52n8G2Ab5ZpGxTihN6aBLKQlfBpaHHht6TXGg2kfC2ccAQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(346002)(39860400002)(136003)(451199021)(41300700001)(6486002)(478600001)(31696002)(31686004)(316002)(966005)(4326008)(6636002)(6666004)(66476007)(66946007)(66556008)(86362001)(5660300002)(8676002)(8936002)(38100700002)(2906002)(44832011)(26005)(6506007)(6512007)(186003)(53546011)(83380400001)(2616005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHFlbkdpUmVIRmhFUmZNRG1CMDd5cFZ3QkkrM3k3V1pZaURKK0dtbUJOWnpv?=
- =?utf-8?B?aGVQaGdUeHNUemowQjFZRGtNQ1k5V2FqSjZiaGVreWZDaFhldG5YMzU3ZDY2?=
- =?utf-8?B?czhZOTRrMEVpM1NxRUMvTHdsRS96Rkp0NGRBNGlCK01SMGlULytxdm9mMnhY?=
- =?utf-8?B?U1FDVnhLQ0w0bWI3NUp5eWNrNEo2WlJzR0dOTkxnclpITHdpMU00NGdESjB0?=
- =?utf-8?B?VXpqQWQ4T216V0JiY3NHRjFhdlo5Nk9aOGNkOUVpZkl3L0ZoRGhqay9FZXpE?=
- =?utf-8?B?bkYycG9KRXhiRURZdzlHcDI3aGJYQktUMll0VzQ0Ri9rM05yWEtQY0Ruc3pM?=
- =?utf-8?B?QXN6SVpsck5aNzVpOUJNV3NhMVEvUU1vdk9oSDR3YWVGaEMrbHJDb3JpRXBS?=
- =?utf-8?B?clFOK3MwM0Fkc01VeG5yRkUrRHphK0MxVDJkZmNYZ2NYdVlhL1AwTFNNWG9T?=
- =?utf-8?B?Z2ZDT1drRnMrNzBDM0dOUU05UFllNGNtR0I5OFlodU00TFVrbndvd1RQVU1a?=
- =?utf-8?B?QWI2dHFjNEJEMURQRElKWGZFTVJTYzhodWJMTnBrNk1BRmxxa1V2bVBodCtB?=
- =?utf-8?B?Qk9HN2I2WExHWHFBMVBlSjhqZm12WngzRWpuL0x3azlMVUQ5eVRYQVIyUGlU?=
- =?utf-8?B?b2oydmw1c3dLcnVvOUcxS3RsUzIwN043TFoyclZsY0tvZEw3TVdZWEthT2Zm?=
- =?utf-8?B?amJvbXFaMXZxSGVDT2h1dks0VVhSU0JPNkZwRE5LS2Y5NnlEcWd2SmVxcXZF?=
- =?utf-8?B?SnpVL3loSmJLK2ZUTjNOUE83K0VMT2Z0Um1BYUN4eUhSSnpvVlVlbFUwblJ4?=
- =?utf-8?B?bkZ5TStrVHF0blpLYTJ6NXdBNmczcEwxQW9za3BmUG5YRWdhWnlmMnJDTXpI?=
- =?utf-8?B?cXFITzNLeEtxS2Q1dzNtNndzUVBHNWFxbEpSUjlkN3lPSDFQQ3NMQytPTU9u?=
- =?utf-8?B?YnEwY1JSR0ZsSng3UlcwK0FmUUc2a0tEOFdvWVRvUzFNSGcyTW5mTnpnWGZ1?=
- =?utf-8?B?eFhSRnprdmx5Vy9pajhQYmFmRUdrT2ZpWFY1TkJTQVhJckt4MFh0ckFyZEY2?=
- =?utf-8?B?QnoxSFhxL04vSFk5SExJSktmZUxGL0lNbHRMano3M20vRzFkOGVBNVhOTlBX?=
- =?utf-8?B?N0JsL1N6WjhQL2pwTFRMc0J2am5KOVpZZkViWUFiU0ZDbEJLaGZmQ1M1Vm9p?=
- =?utf-8?B?azBJTlhrSW9PekFUOFNiTDJ2VDdpTnpKcnV4TU9UOW1JREFma3VPb284d1l6?=
- =?utf-8?B?eHZFYkZFR0ROcUpLR0JaQUUvWHpFbFNVUVY5TXVmZVcrQ29PMVBlK3dhM0R0?=
- =?utf-8?B?V1Y0dERvdDdtWE05QjRhbzIzN3Nvb2s1cW1sdWplZmtjRG5GaFZ4U0FVb0Jj?=
- =?utf-8?B?ZG1NbklVT0lGczhxckpiL2pPbzVxVHBETldpWnhma3ZkMlhrZVBuVndQR1Fr?=
- =?utf-8?B?N3ZpRFNZYjZSdmN0L1hwYWh5c0lValhsUlNONGVqZ3JCaUwvMlBVRlBVekta?=
- =?utf-8?B?NWxaVyt6dmd0SW1nM3A5RFpOUVNwUE1iSFlsNTIxc3oraUJRNlFGVDhtazR0?=
- =?utf-8?B?blpkMzUySnBPRzlySFhIRWt4dmRyMEE1em9PWi9wbTNLRTVGdzMxa3Ezb2Zy?=
- =?utf-8?B?YjZ0WEsrazFKNG1XQkd3alNNS0VzRjhFd2d4MjdlSmdzNWJPaVMxZlJRVG9r?=
- =?utf-8?B?V0taK2Q0T0V4MGJLdnhxME5xSUNtbXRZWjhQck9jckFFd1pGTVIwaTJsbmdR?=
- =?utf-8?B?RDhCd3hrRmxpTzhpUWlVcGM0bU1Lc2Zidnp1TFc0RGxTU1lSTjROVUhhNUdE?=
- =?utf-8?B?b29MV2xQR3RseG9qcnpqbmhOL3dLYnJnU3BBcGZPUnVhWFNSSDVPK3ZoLzV6?=
- =?utf-8?B?ZTFrM0d2S3k5QjdCbVlrNUJaRmhLcmp2cm1iMDBTbURaQVlKd091R2ZsVjZ3?=
- =?utf-8?B?cFZEemhtNFpCbWUrMDNsb0tiUWxHaVFCTkRMaVppWDEyN3ZyN1EyQldteU5D?=
- =?utf-8?B?TUowRGxpM1ZWQkJSbE92S1VhQVgzcDhQR1NySGFEMFN1eDJNMm5XeXRsVTJu?=
- =?utf-8?B?K3d4c3U5WGhtbFlIVHB6a3FCUUI0Y092eGM0T1BPckhkMkZGSmFmMWdNMVFW?=
- =?utf-8?Q?B+KDtaqK4l+DVLPHV4QuUim70?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65a9725f-afd8-43da-f523-08db5c6c417f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 15:33:43.3930
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vr/K1pBO8HdBZ4PXUFXg3l2z/QptYUyrREYpjX1RyqA2RTVfC9uC1YVP1ZLUSmW2a0+oqTVG54OHGo9qHtIo8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6795
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 23:59, Yang Li wrote:
-> Eliminate the following warning:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_resource.c:889:43: warning: unused variable 'res_create_maximus_funcs'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5296
-> Fixes: 00df97e1df57 ("drm/amd/display: Clean FPGA code in dc")
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+On Wed, 24 May 2023 10:24:31 +0200 Dmitry Vyukov wrote:
+> FWIW There are more report examples on the dashboard.
+> There are some that don't mention wireguard nor usbnet, e.g.:
+> https://syzkaller.appspot.com/text?tag=CrashReport&x=17dd2446280000
+> So that's probably red herring. But they all seem to mention alloc_netdev_mqs.
 
-I have applied the series, thanks!
-
-> ---
->   drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c | 7 -------
->   1 file changed, 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
-> index a0625209c86d..26ddf73fd5b1 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
-> @@ -886,13 +886,6 @@ static const struct resource_create_funcs res_create_funcs = {
->   	.create_hwseq = dcn10_hwseq_create,
->   };
->   
-> -static const struct resource_create_funcs res_create_maximus_funcs = {
-> -	.read_dce_straps = NULL,
-> -	.create_audio = NULL,
-> -	.create_stream_encoder = NULL,
-> -	.create_hwseq = dcn10_hwseq_create,
-> -};
-> -
->   static void dcn10_clock_source_destroy(struct clock_source **clk_src)
->   {
->   	kfree(TO_DCE110_CLK_SRC(*clk_src));
--- 
-Hamza
-
+While we have you, let me ask about the possibility of having vmcore
+access - I think it'd be very useful to solve this mystery. 
+With a bit of luck the timer still has the function set.
