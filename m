@@ -2,101 +2,507 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F383D70F931
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839D370F933
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbjEXOwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S230295AbjEXOxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjEXOv6 (ORCPT
+        with ESMTP id S233497AbjEXOxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:51:58 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDE0E76
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:51:36 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f68fc6b479so2302445e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684939869; x=1687531869;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d2DZMvMkI+V5RMAcXCANfBiGO0oQRS/4+8XHUn3qgoQ=;
-        b=YT+4PyG2PpzfKSBHI8via/8/85UUkYBO2UQIpGyWv6Za+qBrjWJtqy48/7FF0kjuXS
-         RMowXnKeB9ZUFdWVc02eXhlevD7TG5KMShelI1AdHdYOdM2/focKmgSgHkJTQVl1hH1E
-         583D9fVRRW7QNbiEQsBi1u+lVIRB+0IiP8nSx5Q3NGOOjOE1p4Fv3Gdxj9zcGgldrsN0
-         v+Owz0hzn7fVsVQl/QfZp38PHyTcyN9qsiWdkr2Z04AyMtXOSKDIvDODXJyyQKKt5bJ7
-         Q8rffHMfEiZe4LyTr8tGRM0t/YtOcfIAT3wI0MsdXaO+QrL6w6KCtyeSFa3/ARp0/w+i
-         fPMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684939869; x=1687531869;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d2DZMvMkI+V5RMAcXCANfBiGO0oQRS/4+8XHUn3qgoQ=;
-        b=JjOEPzrVcYY40qbbybG61fg9xnRENyb4eiTqYQ3V+ZpFITm/W2EOPks+yxkrg6bzSe
-         bny9jCWeDPcyPm6XP72vUlaciNZ3ih67wZFoQJBhopmNk6FQWJa8/uoVlC+Ulyrq1zD+
-         62HhzYAik634JDFH3vHdFOQF1zKfLlybdET0kDMvUos92idWlRRvup74WJYReeAPd3Cy
-         QUO248YsgvYWFCqhKF2hG6WyimMkP0Yjpk8l7MsFYPVN6TF5uUQV7OCgJrLqM4hAkVjF
-         mJoqpqSIf5rZCg7hIkWe8meDK/d7u76ZcDxuN6cxES9FFtych8KRo9zXPcuGEhkgtA3B
-         heQg==
-X-Gm-Message-State: AC+VfDz2qb5nM2D/pgAPPD9jM/veew+NcJy5n7Zp4AUqmgi8IEPi3KeL
-        7ICBIl08PATbhmD9heiKKTYNJjhZj18rmoyGMuE=
-X-Google-Smtp-Source: ACHHUZ5wWAGNXmRoeycTsyYGzAOS1ytBUa6At8n0AYB/K3UfJLVFRhbZwiqycV6JUKARY/EvMGybsA==
-X-Received: by 2002:a7b:c40a:0:b0:3f1:72fb:461a with SMTP id k10-20020a7bc40a000000b003f172fb461amr86103wmi.2.1684939869319;
-        Wed, 24 May 2023 07:51:09 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id x26-20020a05600c21da00b003f423f5b659sm2675744wmj.10.2023.05.24.07.51.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 07:51:08 -0700 (PDT)
-Message-ID: <e13c2670-4877-7e75-aaa2-623f4ed927c0@baylibre.com>
-Date:   Wed, 24 May 2023 16:51:07 +0200
+        Wed, 24 May 2023 10:53:06 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4101A8
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:52:36 -0700 (PDT)
+Date:   Wed, 24 May 2023 14:51:48 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=qkvvwriddbeojgix67vuuke7hy.protonmail; t=1684939919; x=1685199119;
+        bh=CL9s3PHQprbA9Ukgl2ZS7fO2vcssugR3QiwDaOjylcQ=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=dffR/9pFMHkotKTsQh3Nq252whjndeWU2fztjO9IZkIIVrjHR+IkxTEsN22sJd8Lz
+         9X8LfzEqVhpZiaIvzS1xu5+YlFHuBMcugBWoSr9wXmGxbAjANYwoNp20vHCBPsMOY0
+         uWwuxXGM2w5MeNpTc4UCvrM54Ic8s0TC4tA3vNPXROZYW3kwE7lr2m34AJvtbX0uiQ
+         1/qV5QsQP1jNjUYJPYePfu6LFY4juCJQ10bkXygKNDOR/vBfB7wwlF2ymQ+RQSKj09
+         wjkiw1fuIBdEfBB4ugXZkmynBIPlHTp755xaAESCDYdGBRnB+fqafYq4p6r39F1pMv
+         pV560yVRUWlRw==
+To:     Alice Ryhl <aliceryhl@google.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v1 6/7] rust: workqueue: add safe API to workqueue
+Message-ID: <ZWC2OS5uiRNgHMBBzQqt4FZXnOBeHw5IK5D7CAqfNC-z6nfYVLS9jXgvP2cMFvIMtVG22OGlmRGR9RkUJ53lip-SPiEkTHEiBoxMoL-K_38=@proton.me>
+In-Reply-To: <20230517203119.3160435-7-aliceryhl@google.com>
+References: <20230517203119.3160435-1-aliceryhl@google.com> <20230517203119.3160435-7-aliceryhl@google.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 5/7] ASoC: soc-dapm.c: clean up debugfs for freed
- widget
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230523021933.3422-1-trevor.wu@mediatek.com>
- <20230523021933.3422-6-trevor.wu@mediatek.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230523021933.3422-6-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 04:19, Trevor Wu wrote:
-> When a widget is added to dapm via snd_soc_dapm_new_widgets,
-> dapm_debugfs_add_widget is also called to create a corresponding debugfs
-> file. However, when a widget is freed by snd_soc_dapm_free_widget, the
-> corresponding debugfs is not cleared. As a result, the freed widget is
-> still seen in the dapm directory.
-> 
-> This patch adds dapm_debugfs_free_widget to free the debugfs of a
-> specified widget, and it's called at snd_soc_dapm_free_widget to clean
-> up the debugfs for freed widget.
-> 
-> Signed-off-by: Trevor Wu<trevor.wu@mediatek.com>
+On Wednesday, May 17th, 2023 at 22:31, Alice Ryhl <aliceryhl@google.com> wr=
+ote:
+> This commit introduces `ArcWorkItem`, `BoxWorkItem`, and
+> `define_work_adapter_newtype!` that make it possible to use the
+> workqueue without any unsafe code whatsoever.
+>=20
+> The `ArcWorkItem` and `BoxWorkItem` traits are used when a struct has a
+> single `work_struct` field.
+>=20
+> The `define_work_adapter_newtype!` macro is used when a struct has
+> multiple `work_struct` fields. For each `work_struct` field, a newtype
+> struct is defined that wraps `Arc<TheStruct>`, and pushing an instance
+> of the newtype to a workqueue will enqueue it using the associated
+> `work_struct` field. The newtypes are matched with `work_struct` fields
+> by having the T in `Work<T>` be the newtype.
+>=20
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+>  rust/kernel/workqueue.rs | 332 ++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 331 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
+> index 7509618af252..007005ddcaf0 100644
+> --- a/rust/kernel/workqueue.rs
+> +++ b/rust/kernel/workqueue.rs
+> @@ -4,8 +4,9 @@
+>  //!
+>  //! C header: [`include/linux/workqueue.h`](../../../../include/linux/wo=
+rkqueue.h)
+>=20
+> -use crate::{bindings, prelude::*, types::Opaque};
+> +use crate::{bindings, prelude::*, sync::Arc, types::Opaque};
+>  use core::marker::{PhantomData, PhantomPinned};
+> +use core::result::Result;
+>=20
+>  /// A kernel work queue.
+>  ///
+> @@ -279,6 +280,335 @@ macro_rules! impl_has_work {
+>      )*};
+>  }
+>=20
+> +/// Declares that [`Arc<Self>`] should implement [`WorkItem`].
+> +///
+> +/// # Examples
+> +///
+> +/// The example below will make [`Arc<MyStruct>`] implement the [`WorkIt=
+em`] trait so that you can
+> +/// enqueue it in a workqueue.
+> +///
+> +/// ```
+> +/// use kernel::sync::Arc;
+> +///
+> +/// struct MyStruct {
+> +///     work_field: Work<Arc<MyStruct>>,
+> +/// }
+> +///
+> +/// kernel::impl_has_work! {
+> +///     impl HasWork<Arc<MyStruct>> for MyStruct { self.work_field }
+> +/// }
+> +///
+> +/// impl ArcWorkItem for MyStruct {
+> +///     fn run(self: Arc<Self>) {
+> +///         pr_info!("Executing MyStruct on a workqueue.");
+> +///     }
+> +/// }
+> +/// ```
+> +///
+> +/// [`Arc<Self>`]: crate::sync::Arc
+> +/// [`Arc<MyStruct>`]: crate::sync::Arc
+> +pub trait ArcWorkItem {
+> +    /// Called when this work item is executed.
+> +    fn run(self: Arc<Self>);
+> +}
+> +
+> +unsafe impl<T> WorkItem for Arc<T>
+> +where
+> +    T: ArcWorkItem + HasWork<Self> + ?Sized,
+> +{
+> +    type EnqueueOutput =3D Result<(), Self>;
+> +
+> +    unsafe fn __enqueue<F>(self, queue_work_on: F) -> Self::EnqueueOutpu=
+t
+> +    where
+> +        F: FnOnce(*mut bindings::work_struct) -> bool,
+> +    {
+> +        let ptr =3D Arc::into_raw(self);
+> +
+> +        // Using `get_work_offset` here for object-safety.
+> +        //
+> +        // SAFETY: The pointer is valid since we just got it from `into_=
+raw`.
+> +        let off =3D unsafe { (&*ptr).get_work_offset() };
+> +
+> +        // SAFETY: The `HasWork` impl promises that this offset gives us=
+ a field of type
+> +        // `Work<Self>` in the same allocation.
+> +        let work_ptr =3D unsafe { (ptr as *const u8).add(off) as *const =
+Work<Self> };
+> +        // SAFETY: The pointer is not dangling.
+> +        let work_ptr =3D unsafe { Work::raw_get(work_ptr) };
+> +
+> +        match (queue_work_on)(work_ptr) {
+> +            true =3D> Ok(()),
+> +            // SAFETY: The work queue has not taken ownership of the poi=
+nter.
+> +            false =3D> Err(unsafe { Arc::from_raw(ptr) }),
+> +        }
+> +    }
+> +}
+> +
+> +// Let `Work<Arc<T>>` be usable with types that are `ArcWorkItem`.
+> +//
+> +// We do not allow unsized types here. The `Work<Arc<T>>` field should a=
+lways specify the actual
+> +// concrete type stored in the `Arc`.
+> +//
+> +// SAFETY: The `Work<Arc<T>>` field must be initialized with this `run` =
+method because the `Work`
+> +// struct prevents you from initializing it in any other way. The `__enq=
+ueue` trait uses the
+> +// same `Work<Arc<T>>` field because `HasWork` promises to always return=
+ the same field.
+> +unsafe impl<T> WorkItemAdapter for Arc<T>
+> +where
+> +    T: ArcWorkItem + HasWork<Self> + Sized,
+> +{
+> +    unsafe extern "C" fn run(ptr: *mut bindings::work_struct) {
+> +        // SAFETY: The `__enqueue` method always uses a `work_struct` st=
+ored in a `Work<Self>`.
+> +        let ptr =3D ptr as *mut Work<Self>;
+> +        // SAFETY: This computes the pointer that `__enqueue` got from `=
+Arc::into_raw`.
+> +        let ptr =3D unsafe { T::work_container_of(ptr) };
+> +        // SAFETY: This pointer comes from `Arc::into_raw` and we've bee=
+n given back ownership.
+> +        let arc =3D unsafe { Arc::from_raw(ptr) };
+> +
+> +        arc.run();
+> +    }
+> +}
+> +
+> +/// Declares that [`Pin`]`<`[`Box`]`<Self>>` should implement [`WorkItem=
+`].
+> +///
+> +/// # Examples
+> +///
+> +/// The example below will make [`Pin`]`<`[`Box`]`<MyStruct>>` implement=
+ the [`WorkItem`] trait so
+> +/// that you can enqueue it in a workqueue.
+> +///
+> +/// ```
+> +/// struct MyStruct {
+> +///     work_field: Work<Pin<Box<MyStruct>>>,
+> +/// }
+> +///
+> +/// kernel::impl_has_work! {
+> +///     impl HasWork<Pin<Box<MyStruct>>> for MyStruct { self.work_field =
+}
+> +/// }
+> +///
+> +/// impl BoxWorkItem for MyStruct {
+> +///     fn run(self: Pin<Box<MyStruct>>) {
+> +///         pr_info!("Executing MyStruct on a workqueue.");
+> +///     }
+> +/// }
+> +/// ```
+> +///
+> +/// [`Box`]: alloc::boxed::Box
+> +/// [`Pin`]: core::pin::Pin
+> +pub trait BoxWorkItem {
+> +    /// Called when this work item is executed.
+> +    fn run(self: Pin<Box<Self>>);
+> +}
+> +
+> +unsafe impl<T> WorkItem for Pin<Box<T>>
+> +where
+> +    T: BoxWorkItem + HasWork<Self> + ?Sized,
+> +{
+> +    // When a box is in a workqueue, the workqueue has exclusive ownersh=
+ip of the box. Therefore,
+> +    // it's not possible to enqueue a box while it is in a workqueue.
+> +    type EnqueueOutput =3D ();
+> +
+> +    unsafe fn __enqueue<F>(self, queue_work_on: F)
+> +    where
+> +        F: FnOnce(*mut bindings::work_struct) -> bool,
+> +    {
+> +        // SAFETY: We will not used the contents in an unpinned manner.
+> +        let ptr =3D unsafe { Box::into_raw(Pin::into_inner_unchecked(sel=
+f)) };
+> +
+> +        // Using `get_work_offset` here for object-safety.
+> +        //
+> +        // SAFETY: The pointer is valid since we just got it from `into_=
+raw`.
+> +        let off =3D unsafe { (&*ptr).get_work_offset() };
+> +
+> +        // SAFETY: The `HasWork` impl promises that this offset gives us=
+ a field of type
+> +        // `Work<Self>` in the same allocation.
+> +        let work_ptr =3D unsafe { (ptr as *mut u8).add(off) as *mut Work=
+<Self> };
+> +        // SAFETY: The pointer is not dangling.
+> +        let work_ptr =3D unsafe { Work::raw_get(work_ptr) };
+> +
+> +        match (queue_work_on)(work_ptr) {
+> +            true =3D> {}
+> +            // SAFETY: This method requires exclusive ownership of the b=
+ox, so it cannot be in a
+> +            // workqueue.
+> +            false =3D> unsafe { core::hint::unreachable_unchecked() },
+> +        }
+> +    }
+> +}
+> +
+> +// Let `Work<Pin<Box<T>>>` be usable with types that are `BoxWorkItem`.
+> +//
+> +// We do not allow unsized types here. The `Work<Pin<Box<T>>>` field sho=
+uld always specify the actual
+> +// concrete type stored in the `Box`.
+> +//
+> +// SAFETY: The `Work<Pin<Box<T>>>` field must be initialized with this r=
+un method because the `Work`
+> +// struct prevents you from initializing it in any other way. The `__enq=
+ueue` trait uses the
+> +// same `Work<Pin<Box<T>>>` field because `HasWork` promises to always r=
+eturn the same field.
+> +unsafe impl<T> WorkItemAdapter for Pin<Box<T>>
+> +where
+> +    T: BoxWorkItem + HasWork<Self> + Sized,
+> +{
+> +    unsafe extern "C" fn run(ptr: *mut bindings::work_struct) {
+> +        // SAFETY: The `__enqueue` method always uses a `work_struct` st=
+ored in a `Work<Self>`.
+> +        let ptr =3D ptr as *mut Work<Self>;
+> +        // SAFETY: This computes the pointer that `__enqueue` got from `=
+Arc::into_raw`.
+> +        let ptr =3D unsafe { T::work_container_of(ptr) };
+> +        // SAFETY: This pointer comes from `Box::into_raw` and we've bee=
+n given back ownership.
+> +        // The box was originally pinned, so pinning it again is ok.
+> +        let boxed =3D unsafe { Pin::new_unchecked(Box::from_raw(ptr)) };
+> +
+> +        boxed.run();
+> +    }
+> +}
+> +
+> +/// Helper macro for structs with several `Work` fields that can be in s=
+everal queues at once.
+> +///
+> +/// For each `Work` field in your type `T`, a newtype struct that wraps =
+an `Arc<T>` or
+> +/// `Pin<Box<T>>` should be defined.
+> +///
+> +/// # Examples
+> +///
+> +/// ```
+> +/// struct MyStruct {
+> +///     work1: Work<MyStructWork1>,
+> +///     work2: Work<MyStructWork2>,
+> +/// }
+> +///
+> +/// impl_has_work! {
+> +///     impl HasWork<MyStructWork1> for MyStruct { self.work1 }
+> +///     impl HasWork<MyStructWork2> for MyStruct { self.work2 }
+> +/// }
+> +///
+> +/// define_work_adapter_newtype! {
+> +///     struct MyStructWork1(Arc<MyStruct>);
+> +///     struct MyStructWork2(Arc<MyStruct>);
+> +/// }
+> +///
+> +/// impl MyStructWork1 {
+> +///     fn run(self) {
+> +///         // ...
+> +///     }
+> +/// }
+> +///
+> +/// impl MyStructWork2 {
+> +///     fn run(self) {
+> +///         // ...
+> +///     }
+> +/// }
+> +/// ```
+> +///
+> +/// This will let you push a `MyStructWork1(arc)` or `MyStructWork2(arc)=
+` to a work queue. The [`Arc`]
+> +/// can be in two work queues at the same time, and the `run` method on =
+the wrapper type is called
+> +/// when the work item is called.
+> +///
+> +/// [`Arc`]: crate::sync::Arc
+> +#[macro_export]
+> +macro_rules! define_work_adapter_newtype {
+> +    (
+> +        $(#[$outer:meta])*
+> +        $pub:vis struct $name:ident(
+> +            $(#[$innermeta:meta])*
+> +            $fpub:vis Arc<$inner:ty> $(,)?
+> +        );
+> +        $($rest:tt)*
+> +    ) =3D> {
+> +        $(#[$outer])*
+> +        $pub struct $name($(#[$innermeta])* $fpub $crate::sync::Arc<$inn=
+er>);
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+I am a bit confused as to why these types *contain* a pointer. Shouldn't
+these be exactly the same `Work<$inner>`, except they allow multiple `run`
+functions? So IMO they should embed a `Work<$inner>` and the
+manually defined `run` function would take a `$inner`.
 
--- 
-Regards,
-Alexandre
+> +
+> +        unsafe impl $crate::workqueue::WorkItem for $name {
+> +            type EnqueueOutput =3D ::core::result::Result<(), $name>;
+> +
+> +            unsafe fn __enqueue<F>(self, queue_work_on: F) -> Self::Enqu=
+eueOutput
+> +            where
+> +                F: ::core::ops::FnOnce(*mut $crate::bindings::work_struc=
+t) -> bool,
+> +            {
+> +                let ptr =3D $crate::sync::Arc::into_raw(self.0);
+> +
+> +                // SAFETY: The pointer is not dangling since we just got=
+ it from Arc::into_raw.
+> +                let work_ptr =3D unsafe { <$inner as $crate::workqueue::=
+HasWork::<$name>>::raw_get_work(ptr.cast_mut()) };
+> +
+> +                // SAFETY: The pointer is not dangling.
+> +                let work_ptr =3D unsafe { $crate::workqueue::Work::raw_g=
+et(work_ptr) };
+> +
+> +                match (queue_work_on)(work_ptr) {
+> +                    true =3D> Ok(()),
+> +                    // SAFETY: The work queue has not taken ownership of=
+ the pointer.
+> +                    false =3D> Err($name(unsafe { $crate::sync::Arc::fro=
+m_raw(ptr) })),
+> +                }
+> +            }
+> +        }
+> +
+> +        unsafe impl $crate::workqueue::WorkItemAdapter for $name {
+> +            unsafe extern "C" fn run(ptr: *mut $crate::bindings::work_st=
+ruct) {
+> +                // SAFETY: The `__enqueue` method always uses a `work_st=
+ruct` stored in a `Work<Self>`.
+> +                let ptr =3D ptr as *mut $crate::workqueue::Work<Self>;
+> +                // SAFETY: This computes the pointer that `__enqueue` go=
+t from `Arc::into_raw`.
+> +                let ptr =3D unsafe { <$inner as $crate::workqueue::HasWo=
+rk::<$name>>::work_container_of(ptr) };
+> +                // SAFETY: This pointer comes from `Arc::into_raw` and w=
+e've been given back ownership.
+> +                let arc =3D unsafe { $crate::sync::Arc::from_raw(ptr) };
+> +
+> +                $name::run($name(arc));
+> +            }
+> +        }
+> +
+> +        define_work_adapter_newtype! { $($rest)* }
+> +    };
+> +
+> +    (
+> +        $(#[$outer:meta])*
+> +        $pub:vis struct $name:ident(
+> +            $(#[$innermeta:meta])*
+> +            $fpub:vis Pin<Box<$inner:ty>> $(,)?
+> +        );
+> +        $($rest:tt)*
+> +    ) =3D> {
+> +        $(#[$outer])*
+> +        $pub struct $name($(#[$innermeta])* $fpub ::core::pin::Pin<::all=
+oc::boxed::Box<$inner>>);
+> +
+> +        unsafe impl $crate::workqueue::WorkItem for $name {
+> +            type EnqueueOutput =3D ();
+> +
+> +            unsafe fn __enqueue<F>(self, queue_work_on: F)
+> +            where
+> +                F: ::core::ops::FnOnce(*mut $crate::bindings::work_struc=
+t) -> bool,
+> +            {
+> +                // SAFETY: We will not used the contents in an unpinned =
+manner.
+> +                let boxed =3D unsafe { ::core::pin::Pin::into_inner_unch=
+ecked(self.0) };
+> +                let ptr =3D ::alloc::boxed::Box::into_raw(boxed);
+> +
+> +                // SAFETY: The pointer is not dangling since we just got=
+ it from Box::into_raw.
+> +                let work_ptr =3D unsafe { <$inner as $crate::workqueue::=
+HasWork::<$name>>::raw_get_work(ptr) };
+> +
+> +                // SAFETY: The pointer is not dangling.
+> +                let work_ptr =3D unsafe { $crate::workqueue::Work::raw_g=
+et(work_ptr) };
+> +
+> +                match (queue_work_on)(work_ptr) {
+> +                    true =3D> {},
+> +                    // SAFETY: This method requires exclusive ownership =
+of the box, so it cannot be in a
+> +                    // workqueue.
+> +                    false =3D> unsafe { ::core::hint::unreachable_unchec=
+ked() },
+> +                }
+> +            }
+> +        }
+> +
+> +        unsafe impl $crate::workqueue::WorkItemAdapter for $name {
+> +            unsafe extern "C" fn run(ptr: *mut $crate::bindings::work_st=
+ruct) {
+> +                // SAFETY: The `__enqueue` method always uses a `work_st=
+ruct` stored in a `Work<Self>`.
+> +                let ptr =3D ptr as *mut $crate::workqueue::Work<Self>;
+> +                // SAFETY: This computes the pointer that `__enqueue` go=
+t from `Arc::into_raw`.
+> +                let ptr =3D unsafe { <$inner as $crate::workqueue::HasWo=
+rk::<$name>>::work_container_of(ptr) };
+> +                // SAFETY: This pointer comes from `Box::into_raw` and w=
+e've been given back ownership.
+> +                let boxed =3D unsafe { ::alloc::boxed::Box::from_raw(ptr=
+) };
+> +                // SAFETY: The box was originally pinned, so pinning it =
+again is ok.
+> +                let boxed =3D unsafe { ::core::pin::Pin::new_unchecked(b=
+oxed) };
+> +
+> +                $name::run($name(boxed));
+> +            }
+> +        }
+> +
+> +        define_work_adapter_newtype! { $($rest)* }
+> +    };
+> +
+> +    // After processing the last definition, we call ourselves with no i=
+nput.
+> +    () =3D> {};
+> +}
+> +
+>  /// Returns the system work queue (`system_wq`).
+>  ///
+>  /// It is the one used by `schedule[_delayed]_work[_on]()`. Multi-CPU mu=
+lti-threaded. There are
+> --
+> 2.40.1.606.ga4b1b128d6-goog
+>=20
 
+--
+Cheers,
+Benno
