@@ -2,131 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358C270FC08
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020EB70FC0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjEXQ43 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 12:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S229751AbjEXQ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbjEXQ4C (ORCPT
+        with ESMTP id S231352AbjEXQ5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 12:56:02 -0400
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3737F13E;
-        Wed, 24 May 2023 09:56:01 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-50d897af77bso298196a12.1;
-        Wed, 24 May 2023 09:56:00 -0700 (PDT)
+        Wed, 24 May 2023 12:57:09 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD3810B;
+        Wed, 24 May 2023 09:57:06 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96fa4a6a79bso178994866b.3;
+        Wed, 24 May 2023 09:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684947425; x=1687539425;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XeYz+UHp1BdAADtFCMDrvi6V+EkmkXCK/AxBNs57v08=;
+        b=bqFNnLIiRYxhCll0RGSuw2nKMMAguyc/BFGPqqToS/oPPNn8vZrajcbq4p4LjetWfk
+         YZCILREk+GagD3q+lKBzKl5XI/X4XqMoYH5Zgcp0JLZ1dcf/ahrk7cVADdhEKrlKFakq
+         ANz2m0v5IwLz8BkvyC/yggQ0ETDsN+uchbV+0xymp7q58eh5te2o+CRK4w/hNd+VlKA9
+         lJjMvFO4MJVSyA2pEPXDXitBzVKYTYqAtl/WvhM+S0qgUlWqs4LJOLqFVN2E6EnJP9HE
+         Uo2nh8Jv81TrUebZ6dWCd3QRua94SVvdTqr0FiAhMy6cnrnC03BoDbvywgMalXYNKsTl
+         H1hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684947359; x=1687539359;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k71AaKPH+PKMyjKj9rRd3a33/dwSoj0nZEwywN8KLBk=;
-        b=eiwk9lWovS4bVkyYfCGwd1C7ITCS/HzX1u8y2V6ve8WEUSjon88H6Sw2v0fBDN/prb
-         h5KmSmLzgFxNXZgLBTZKOcWoA0MP82Ly/0lC3OPrX4jcV+hAGF4iJG8Qex5msJ2f9TFQ
-         TLRlpX2/09jBShECusOyF9gQbeoXbo85iT87ZaXoHC8k1HhJrfXABRoeSAbYF9yyk7AH
-         bCw9U3rsn9ZTRLIzzMrLlF9jjaLThy725DfV0eJE3oRyvtyzAduUH+n0o8Rpla6KfNos
-         hQZ1oqW2/T091SCVUEy5Y4lTYIlv76NRYgpmfSa8i36h+Z/apsgXENoRoZvpg2nIadyu
-         Y5RQ==
-X-Gm-Message-State: AC+VfDwe3OZflFgYbv0oaORxgsa1Ryibupr+6MzGNLoqWrqGMq7pF8g7
-        +xrgWnlhBOACJzmaFca7LJlhRJvOlXvlxyt/qvg=
-X-Google-Smtp-Source: ACHHUZ4tFT+T7dpzQdI8IrNhlNCDrWw+hRlNVd/dZe5o2/a0BdoFWWMjqgLP+2sQyJx+x9LbHGcVWlwpWoMFR6zouuo=
-X-Received: by 2002:a17:906:7a52:b0:965:b73d:592c with SMTP id
- i18-20020a1709067a5200b00965b73d592cmr16017501ejo.4.1684947359345; Wed, 24
- May 2023 09:55:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684947425; x=1687539425;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XeYz+UHp1BdAADtFCMDrvi6V+EkmkXCK/AxBNs57v08=;
+        b=fS1wVVTZekf0ilVukSXqHgA274TYzJiNVbMIa+5jjBAKO5hF8dECQD/N2AeTDSAKUF
+         sQLosqEvstYizosHkQr3yNeH1YxHCX+dlqblnjKXMaL4ojsWPM8/3wKHusPllB0ouWOi
+         ZXQ9l+1XJhsUibGy+vPDJsmZFhicTkEhkahj5IwrlM+hzLx2GS+87xOlfip4vyUiYqHZ
+         Ad/CQCuITqEPizIzjGcd9WRvO428o5u9yhRRts6ocIwGKg7hy8Ud48N7EUuG+vtIpVAT
+         m0FVRBrmxM7WCQ8ByY+VIogPPw1kZxuiyf1G17AZ5U5BIHUWzikMhtaDx4iKGudDGd9E
+         eOJg==
+X-Gm-Message-State: AC+VfDzAvpAkVhdSTYWSdx5ljEHMaILCYUj51eUxdF/QCkTVUg2AYM/p
+        sTjq1YL5jwVdpjDL61veDsw=
+X-Google-Smtp-Source: ACHHUZ5CJz5jxB6qbPwCbTc+prI9Nva9PTqbNys2iAAru4n0/lWzK/8PgjqMrqwU3jaEm/ggBXnjGg==
+X-Received: by 2002:a17:907:930d:b0:94a:959f:6d58 with SMTP id bu13-20020a170907930d00b0094a959f6d58mr19818491ejc.18.1684947424548;
+        Wed, 24 May 2023 09:57:04 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id t19-20020a170906a11300b0097382ed45cbsm1067674ejy.108.2023.05.24.09.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 09:57:04 -0700 (PDT)
+Date:   Wed, 24 May 2023 19:57:01 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 05/30] net: dsa: mt7530: read XTAL value from
+ correct register
+Message-ID: <20230524165701.pbrcs4e74juzb4r3@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-6-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-References: <20230502150435.423770-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20230502150435.423770-1-kai.heng.feng@canonical.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 18:55:48 +0200
-Message-ID: <CAJZ5v0gYMLopZuTr1nE9GDMJ_r8O-+YWz+SLAKm9-muBVrk8+A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] PM: suspend: Define pm_suspend_target_state
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        bblock@linux.ibm.com, acelan.kao@canonical.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230522121532.86610-6-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 5:05 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> Define pm_suspend_target_state so it can still be used when
-> CONFIG_SUSPEND is not set.
->
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+On Mon, May 22, 2023 at 03:15:07PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> On commit 7ef6f6f8d237 ("net: dsa: mt7530: Add MT7621 TRGMII mode support")
+> macros for reading the crystal frequency were added under the MT7530_HWTRAP
+> register. However, the value given to the xtal variable on
+> mt7530_pad_clk_setup() is read from the MT7530_MHWTRAP register instead.
+> 
+> Although the document MT7621 Giga Switch Programming Guide v0.3 states that
+> the value can be read from both registers, use the register where the
+> macros were defined under.
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
-> v4:
->  - Move pm_suspend_target_state to CONFIG_SUSPEND block.
->
-> v3:
->  - New patch to resolve undefined pm_suspend_target_state.
->
->  drivers/base/power/wakeup.c | 5 -----
->  include/linux/suspend.h     | 4 +++-
->  2 files changed, 3 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 7cc0c0cf8eaa..a917219feea6 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -19,11 +19,6 @@
->
->  #include "power.h"
->
-> -#ifndef CONFIG_SUSPEND
-> -suspend_state_t pm_suspend_target_state;
-> -#define pm_suspend_target_state        (PM_SUSPEND_ON)
-> -#endif
-> -
->  #define list_for_each_entry_rcu_locked(pos, head, member) \
->         list_for_each_entry_rcu(pos, head, member, \
->                 srcu_read_lock_held(&wakeup_srcu))
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index d0d4598a7b3f..474ecfbbaa62 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -202,6 +202,7 @@ struct platform_s2idle_ops {
->  };
->
->  #ifdef CONFIG_SUSPEND
-> +extern suspend_state_t pm_suspend_target_state;
->  extern suspend_state_t mem_sleep_current;
->  extern suspend_state_t mem_sleep_default;
->
-> @@ -337,6 +338,8 @@ extern bool sync_on_suspend_enabled;
->  #else /* !CONFIG_SUSPEND */
->  #define suspend_valid_only_mem NULL
->
-> +#define pm_suspend_target_state        (PM_SUSPEND_ON)
-> +
->  static inline void pm_suspend_clear_flags(void) {}
->  static inline void pm_set_suspend_via_firmware(void) {}
->  static inline void pm_set_resume_via_firmware(void) {}
-> @@ -503,7 +506,6 @@ extern void pm_report_max_hw_sleep(u64 t);
->
->  /* drivers/base/power/wakeup.c */
->  extern bool events_check_enabled;
-> -extern suspend_state_t pm_suspend_target_state;
->
->  extern bool pm_wakeup_pending(void);
->  extern void pm_system_wakeup(void);
-> --
 
-Applied as 6.5 material under an edited subject and with some edits in
-the changelog.
+I'm sorry, but I refuse this patch, mainly as a matter of principle -
+because that's just not how we do things, and you need to understand why.
 
-Thanks!
+The commit title ("read XTAL value from correct register") claims that
+the process of reading a field which cannot be changed by software is
+any more correct when it is read from HWTRAP rather than MHWTRAP
+(modified HWTRAP).
+
+Your justification is that it's confusing to you if two registers have
+the same layout, and the driver has a single set of macros to decode the
+fields from both. You seem to think it's somehow not correct to decode
+fields from the MHWTRAP register using macros which have just HWTRAP in
+the name.
+
+While in this very particular case there should be no negative effect
+caused by the change (*because* XTAL_FSEL is read-only), your approach
+absolutely does not scale to the other situations that you will be faced
+with.
+
+If it was any other r/w field from HWTRAP vs MHWTRAP, you would have
+needed to get used to that coding pattern (or do something about the
+coding pattern itself), and not just decide to change the register to
+what you think is correct - which is a *behavior* change and not just
+a *coding style* change. You don't change the *behavior* when you don't
+like the *coding style* !!! because that's not a punctual fix to your
+problem.
+
+I'm sorry that it is like this, but you can't expect the Linux kernel to
+be written for the level of understanding of a beginner C programmer.
+It's simply too hard for everyone to change, and much easier, and more
+beneficial overall, for you to change.
+
+I understand that you're poking sticks at everything in order to become
+more familiar with the driver. That's perfectly normal and fine. But not
+everything that comes as a result of that is of value for sharing back
+to the mainline kernel's mailing lists.
+
+Seriously, please first share these small rewrites with someone more
+senior than you, and ask for a preliminary second opinion.
+
+As they say, "on the Internet, nobody knows you're a dog". If reviewers
+don't take into account that you're a newbie with C (which is a badge
+that you don't carry everywhere - because you don't have to), it's easy
+for patches like this (and most of this series) to come across as:
+"I have no consideration for the fact that the existing code works, and
+the way in which it works, I'm just gonna rewrite all of it according to
+my own sensibilities and subjective justifications, and throw baseless
+words at it such as: fix this, correct that, when in fact all I'm doing
+is make silly changes with no effect to the observable behavior".
+
+Because I know that the above isn't the case, I try to be as polite as
+possible expressing my frustration that I am looking at a large volume
+of worthless and misguided refactoring.
