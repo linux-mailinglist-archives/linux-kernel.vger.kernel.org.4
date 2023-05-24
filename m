@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D5E70EF07
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5457F70EF08
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239816AbjEXHIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S231232AbjEXHIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbjEXHHj (ORCPT
+        with ESMTP id S239912AbjEXHHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:07:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C431B4
+        Wed, 24 May 2023 03:07:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011A4E6
         for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:07:06 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684912024;
+        s=2020; t=1684912025;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5Rgz0XMpFHBcgryFLb9u8XHoyQkZQCERFRJm4RJQ5aM=;
-        b=ZA/565hYULTzhp4Plywb8Bb+rNQozqthRlQ6lyBZEoVflXtTSl3KMZujNEkfx0dSNcU5/7
-        trLT0/nXE2rKYK6Cizc0bIhdbBXM44Qg9RlA3fFF0fgq6Vg2HKXAKhkbjZqkf0kruE5vZO
-        nieSIsftVRLVWSu9ja7vlz+8Lbz13x96ybGfJQ4LhtyKs8McVBIfgEj34JufyUpUZ3n3/Q
-        8Gq8jjCogehMm6wwEdK3YSpTVigv7G4MRAwOBI97dFp9GDoRQvYuylShzLYDRBvp1Lanrf
-        3NFUmpc85EyY6G9KcUr2YW+U4rnL4i9lHp9GGV0Uqf6oTE9SLjYjbhw44w04iQ==
+        bh=qCLAKadcYOZy8B4KFbVXg+LyGdFwzMy0r154VhivR5o=;
+        b=tHFqHdu20MXPAtpTRsfPwWNCbJztGEDXzxOplx9XGBrL3C7BfZWGQtFFfGYTlB//V2DEhR
+        9MsIKWOSexeT5+cBj4L+WmPYG0q13mwHDfbqMks0hIKqapcuzyyBLpblAXrgfIVPaa2LGL
+        DRBetaRFUiLbawOwdu4+yG+2n/X918H+VEFe691uHIlC5AYM3EiAaP2pr7/cZ5qXMsobgf
+        Bx3QoAsWsQQzqKuHTFKg16c3t1W4Jo2PtjrmXPLz64QR9Lyw8wBdaPaXS11/tQe1jBEcBh
+        lUwlZgGBX+YsDBL5u1LNiyGnNQrKAYceYMCX4OaNU8jRCmpTJlWHvarvOzE73w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684912024;
+        s=2020e; t=1684912025;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5Rgz0XMpFHBcgryFLb9u8XHoyQkZQCERFRJm4RJQ5aM=;
-        b=B10AAADYkHpwVbWkLSNQvdrPRmrH7RAgbM7qllpRuQNJyuypUowUeOG9RoOUqqsfBCeaUt
-        k5vfawz1UXqFJcCA==
+        bh=qCLAKadcYOZy8B4KFbVXg+LyGdFwzMy0r154VhivR5o=;
+        b=kgRbb+1b+la7MSqatrlHvx+mu/1T9qsoiBvm94x+G6Yg8dKw7GjUSDxT5O+joLO9aWiuCW
+        VIb6eGjqyNj2zSDw==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -52,11 +52,10 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>,
         Lukasz Luba <lukasz.luba@arm.com>,
         "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        "Richard Cochran (linutronix GmbH)" <richardcochran@gmail.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v7 16/21] timer: Restructure internal locking
-Date:   Wed, 24 May 2023 09:06:24 +0200
-Message-Id: <20230524070629.6377-17-anna-maria@linutronix.de>
+Subject: [PATCH v7 17/21] timer: Check if timers base is handled already
+Date:   Wed, 24 May 2023 09:06:25 +0200
+Message-Id: <20230524070629.6377-18-anna-maria@linutronix.de>
 In-Reply-To: <20230524070629.6377-1-anna-maria@linutronix.de>
 References: <20230524070629.6377-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -71,79 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Richard Cochran (linutronix GmbH)" <richardcochran@gmail.com>
+Due to the conversion of the NOHZ timer placement to a pull at expiry
+time model, the per CPU timer bases with non pinned timers are no
+longer handled only by the local CPU. In case a remote CPU already
+expires the non pinned timers base of the local cpu, nothing more
+needs to be done by the local CPU. A check at the begin of the expire
+timers routine is required, because timer base lock is dropped before
+executing the timer callback function.
 
-Move the locking out from __run_timers() to the call sites, so the
-protected section can be extended at the call site. Preparatory patch for
-changing the NOHZ timer placement to a pull at expiry time model.
+This is a preparatory work, but has no functional impact right now.
 
-No functional change.
-
-Signed-off-by: Richard Cochran (linutronix GmbH) <richardcochran@gmail.com>
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 ---
- kernel/time/timer.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+v6: Drop double negation
+---
+ kernel/time/timer.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 564001b98098..20106dad531a 100644
+index 20106dad531a..c2d66fd4638f 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -2202,11 +2202,7 @@ static inline void __run_timers(struct timer_base *base)
- 	struct hlist_head heads[LVL_DEPTH];
- 	int levels;
+@@ -2204,6 +2204,9 @@ static inline void __run_timers(struct timer_base *base)
  
--	if (time_before(jiffies, base->next_expiry))
--		return;
--
--	timer_base_lock_expiry(base);
--	raw_spin_lock_irq(&base->lock);
-+	lockdep_assert_held(&base->lock);
+ 	lockdep_assert_held(&base->lock);
  
- 	while (time_after_eq(jiffies, base->clk) &&
- 	       time_after_eq(jiffies, base->next_expiry)) {
-@@ -2226,21 +2222,36 @@ static inline void __run_timers(struct timer_base *base)
- 		while (levels--)
- 			expire_timers(base, heads + levels);
- 	}
-+}
-+
-+static void __run_timer_base(struct timer_base *base)
-+{
-+	if (time_before(jiffies, base->next_expiry))
++	if (base->running_timer)
 +		return;
 +
-+	timer_base_lock_expiry(base);
-+	raw_spin_lock_irq(&base->lock);
-+	__run_timers(base);
- 	raw_spin_unlock_irq(&base->lock);
- 	timer_base_unlock_expiry(base);
- }
- 
-+static void run_timer_base(int index)
-+{
-+	struct timer_base *base = this_cpu_ptr(&timer_bases[index]);
-+
-+	__run_timer_base(base);
-+}
-+
- /*
-  * This function runs timers and the timer-tq in bottom half context.
-  */
- static __latent_entropy void run_timer_softirq(struct softirq_action *h)
- {
--	struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_LOCAL]);
--
--	__run_timers(base);
-+	run_timer_base(BASE_LOCAL);
- 	if (IS_ENABLED(CONFIG_NO_HZ_COMMON)) {
--		__run_timers(this_cpu_ptr(&timer_bases[BASE_GLOBAL]));
--		__run_timers(this_cpu_ptr(&timer_bases[BASE_DEF]));
-+		run_timer_base(BASE_GLOBAL);
-+		run_timer_base(BASE_DEF);
- 	}
- }
- 
+ 	while (time_after_eq(jiffies, base->clk) &&
+ 	       time_after_eq(jiffies, base->next_expiry)) {
+ 		levels = collect_expired_timers(base, heads);
 -- 
 2.30.2
 
