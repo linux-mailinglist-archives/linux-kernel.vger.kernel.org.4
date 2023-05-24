@@ -2,66 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C0970F1D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1248870F1DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240561AbjEXJKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S240380AbjEXJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240548AbjEXJKT (ORCPT
+        with ESMTP id S239858AbjEXJLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:10:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C0512B;
-        Wed, 24 May 2023 02:10:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EC3C62E1B;
-        Wed, 24 May 2023 09:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01F2C433EF;
-        Wed, 24 May 2023 09:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684919417;
-        bh=W8HWtStbDZqhZruPggcwStOJ7mNKd3pQ/1x8r+G6DMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u1OQit3TXyjPAcUn81+mCtS0rcNk7LEMrmcBUptvnsIU/dQThktPqPtq82zuxm0k8
-         KkHLOMvERfHj2DDY2wceGvqSH9RHHQPaNdFHTjoIKJW8GYcrYvHeSiTfIH75tSHKHy
-         m8UpdwvmGESD8MotjkvZsPTgIX7dwL5/b4EQ083sw4NTF32F8APl/tXVyxTvLUrNb1
-         jZrtlvDsJDUk6pJD4NfDFg5e8I50NUMr+H/0XgYCMJjVZ5Ao4hE0GkImS1qI4dXc4t
-         QzMbOtGrkPHuemAht2nChWhE7ohcH3cuVt5ixzw48IseoZeyex7w3eCS6lmWj5dus6
-         oOfN8OB5dm/vg==
-Date:   Wed, 24 May 2023 11:10:08 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the vfs-brauner
- tree
-Message-ID: <20230524-ersuchen-artischocken-ca05dcf0daf2@brauner>
-References: <20230524081805.4c969d7f@canb.auug.org.au>
+        Wed, 24 May 2023 05:11:41 -0400
+Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64130FC
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:11:40 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id E6A06802BFCF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:11:39 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 776EA10041C7A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:11:39 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 1kWxq4hPpNX2a1kWxqcYei; Wed, 24 May 2023 09:11:39 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=646dd4cb
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=P0xRbXHiH_UA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=4PzeazIDGJN80CO3zooA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=osxXOXLBbA0T3As3FGP+kctZJL7l5/hEZuPqD8FHtoo=; b=I62uzNFAmPRIusl2RbUuYTSS95
+        h1vQ0wIseGummGt9Tki6YFJixeHaSki/zC/5q6pUAhYbdNIQ0lEJwnzo7owmB3NDNzScJioQk2IaK
+        BDQTYTm77Al8cTkxe1ercT37AxkoHdkD51ZWgc1fjDiAPwDGQ21SDOVShW8trkOB8RPX8gt1Ju1e8
+        0sZSq92b6uVmdp98MdDXeVp5vQjMrMr6niwUc7Vg9//OyixwkeY59Svw92ICtfsARFwZS55MfwrS+
+        YjEpBR30tKd+tOCVOdZHg98G2QOEXFbJMbaxietkT81t4r/m5tkG1bAXh0ezwB6PZre9WEMUpJcUl
+        mZF47dAA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:41144 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1q1kWw-003qDl-7B;
+        Wed, 24 May 2023 03:11:38 -0600
+Subject: Re: [PATCH 6.3 000/363] 6.3.4-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230523164950.435226211@linuxfoundation.org>
+In-Reply-To: <20230523164950.435226211@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <1814f1d4-d768-9e08-ad20-436a30b30b3d@w6rz.net>
+Date:   Wed, 24 May 2023 02:11:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230524081805.4c969d7f@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1q1kWw-003qDl-7B
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:41144
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 20
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:18:05AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   ee3b4556cee8 ("ntfs: do not dereference a null ctx on error")
-> 
-> is missing a Signed-off-by from its committer.
+On 5/23/23 10:01 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.4 release.
+> There are 363 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 25 May 2023 16:48:37 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.4-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Fixed. Thanks!
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
+
