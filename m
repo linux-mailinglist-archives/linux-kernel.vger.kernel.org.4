@@ -2,133 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F74A70FBFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9252A70FC04
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjEXQyw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 12:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S233455AbjEXQzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjEXQyp (ORCPT
+        with ESMTP id S229921AbjEXQzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 12:54:45 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEB5E9;
-        Wed, 24 May 2023 09:54:44 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96fc07d7e6bso28694866b.1;
-        Wed, 24 May 2023 09:54:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684947282; x=1687539282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N7mhVD4XTMnqROD616kljeDBlLud+Bhb73ooieBcdEc=;
-        b=Pl0NF9wPkItXq1l96mkCcAvKNn+KX0rgBHBmiQQHAm4IDsmso7q0WhhBd1eWHd7eXL
-         G2yZYq4Cp9r2Sa8De6YVGMK3ebzZ0Hp4SYQ/fQ+Hbw27PZr4S6QvzhZPik1eZtcsXQqS
-         usGHxPkNHNAjQbysc5w6K0PzVUfbxTf/EiGJR6V4JGSwCTpepdae/XHNZxnTiwIHZgod
-         zf0AsqdfKSXMzeNdtgn5RWBapIlptnJIFhW2NFsjymwzr9BTN7towac0qKTwoKOCsEbG
-         OTtYf7dXoQmf5Woumftn3hNOdqjLSgiya1KFlV6ujJ50lQ2OKitLxmN6B+12wb7/9LQM
-         fQ4g==
-X-Gm-Message-State: AC+VfDxmc2gE6iO9NKhERafrmkLTlQev3pWPNY2qD1LTYrJkkdI3VXda
-        zTpsP3C+jFTOo+RBXFA5PV2AQYK4vf3kIb78wQYyAor8
-X-Google-Smtp-Source: ACHHUZ6liAGoZTnKFZUz9S6DWgLnyzIVMVT1sbU56fUZMYgmFj8pOE+AqVS6mk+bAhcH3bd6Akn31Bx4XWCzB6UharQ=
-X-Received: by 2002:a17:906:5189:b0:96f:469d:19ba with SMTP id
- y9-20020a170906518900b0096f469d19bamr17150526ejk.2.1684947282487; Wed, 24 May
- 2023 09:54:42 -0700 (PDT)
+        Wed, 24 May 2023 12:55:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1D6E9;
+        Wed, 24 May 2023 09:55:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7523563F5B;
+        Wed, 24 May 2023 16:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95706C433D2;
+        Wed, 24 May 2023 16:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684947319;
+        bh=i/ViLVESTquMbf7XVtp4F0icq/QV6S+BFeqm22e+61U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=EZn4dBLJYKJzDw7GesfFrqT4utUECzX6nO7T3TpfZcHs1CQvoJf5MeVErPxNNaqak
+         XsZijdRDLtayXV9sdJVnqXjT1ZV9MZZtjnt2JqHfZae4vxCshvlZ5umB8dP0xC7XZh
+         beUap4J8hQlOB4ctvDUXAQeo7ZW0HRT0aymipgZYe+KN2G+hA1VVtE90rgIvu3kxSD
+         aQ8ox4tcKRTtVtwTdLalwbp5c4D561p5yeYETflhbfaF5WKEdqwuMaW6rWq0DRIrhS
+         PZQGYjl/waU/OBP9UwZkNd7JuGxti7O1YDcJqDGqvhlDB9QH9kmZ9BQbw9G2u6/HZ9
+         KhPh3uCe2p1Kg==
+Date:   Wed, 24 May 2023 11:55:18 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     alison.schofield@intel.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
+        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+        linux-cxl@vger.kernel.org, rrichter@amd.com,
+        linux-kernel@vger.kernel.org, bhelgaas@google.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v4 18/23] PCI/AER: Refactor cper_print_aer() for use by
+ CXL driver module
+Message-ID: <ZG5BdvAP1OuQVTWz@bhelgaas>
 MIME-Version: 1.0
-References: <20230419024419.324436-1-rui.zhang@intel.com>
-In-Reply-To: <20230419024419.324436-1-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 18:54:31 +0200
-Message-ID: <CAJZ5v0g5+wsBjCFhO--hfJYfRxheNA1V1XuB6zp-7wV-nwSf+w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/15] powercap/intel_rapl: Introduce RAPL TPMI support
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
-        srinivas.pandruvada@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523232214.55282-19-terry.bowman@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 4:44 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> The TPMI (Topology Aware Register and PM Capsule Interface) provides a
-> flexible, extendable and PCIe enumerable MMIO interface for PM features.
->
-> The TPMI documentation can be downloaded from:
-> https://github.com/intel/tpmi_power_management
->
-> Intel RAPL (Running Average Power Limit) is one of the features that
-> benefit from this. Using TPMI Interface has advantage over traditional MSR
-> (Model Specific Register) interface, where a thread needs to be scheduled
-> on the target CPU to read or write. Also the RAPL features vary between
-> CPU models, and hence lot of model specific code. Here TPMI provides an
-> architectural interface by providing hierarchical tables and fields,
-> which will not need any model specific implementation.
->
-> Given that there are some differences between RAPL TPMI Interface and the
-> existing RAPL MSR/MMIO Interface, this patch series improves the RAPL
-> common code to satisfy the new requirements from TPMI interface, and then
-> introduces the RAPL TPMI Interface driver.
->
-> Patch 1-4       cleanups and preparation work.
-> Patch 5         adds support for per Domain Unit register.
-> Patch 6-10      improves Power Limits handling, and provides support
->                 for per Power Limit register, and per Power Limit Lock.
-> Patch 11-12     support rapl_package without online CPUs. So that TPMI
->                 rapl_package still works with whole package offlined.
-> Patch 13-15     introduces RAPL Core support for TPMI Interface and the
->                 RAPL TPMI Interface driver.
->
-> This series depends on the TPMI base driver which has been merged in 6.3-rc1.
->
-> thanks,
-> rui
-> ---
-> Changes since v1:
->    - use set_defaults() and variable name 'defaults' for rapl_defaults
->      structure.
->    - use 'rpi_default' instead of 'rpis' for the default rapl primitive
->      information of MSR/MMIO Interface.
->    - rephase the changelog of patch 7/15.
->    - change the subject of patch 10/15 and use a helper for getting the
->      primitive for power limit LOCK bit control.
->
-> ----------------------------------------------------------------
-> Zhang Rui (15):
->       powercap/intel_rapl: Remove unused field in struct rapl_if_priv
->       powercap/intel_rapl: Allow probing without CPUID match
->       powercap/intel_rapl: Support per Interface rapl_defaults
->       powercap/intel_rapl: Support per Interface primitive information
->       powercap/intel_rapl: Support per domain energy/power/time unit
->       powercap/intel_rapl: Use index to initialize primitive information
->       powercap/intel_rapl: Change primitive order
->       powercap/intel_rapl: Use bitmap for Power Limits
->       powercap/intel_rapl: Cleanup Power Limits support
->       powercap/intel_rapl: Introduce per Power Limit lock
->       powercap/intel_rapl: Remove redundant cpu parameter
->       powercap/intel_rapl: Make cpu optional for rapl_package
->       powercap/intel_rapl: Introduce RAPL I/F type
->       powercap/intel_rapl: Introduce core support for TPMI interface
->       powercap/intel_rapl_tpmi: Introduce RAPL TPMI interface driver
->
->  drivers/powercap/Kconfig                           |  14 +
->  drivers/powercap/Makefile                          |   1 +
->  drivers/powercap/intel_rapl_common.c               | 868 ++++++++++++---------
->  drivers/powercap/intel_rapl_msr.c                  |  14 +-
->  drivers/powercap/intel_rapl_tpmi.c                 | 325 ++++++++
->  .../intel/int340x_thermal/processor_thermal_rapl.c |  11 +-
->  include/linux/intel_rapl.h                         |  40 +-
->  7 files changed, 875 insertions(+), 398 deletions(-)
->  create mode 100644 drivers/powercap/intel_rapl_tpmi.c
+On Tue, May 23, 2023 at 06:22:09PM -0500, Terry Bowman wrote:
+> The CXL driver plans to use cper_print_aer() for logging restricted CXL
+> host (RCH) AER errors. cper_print_aer() is not currently exported and
+> therefore not usable by the CXL driver built as a loadable module. Export
+> the cper_print_aer() function making it available.
+> 
+> The CONFIG_ACPI_APEI_PCIEAER kernel config is currently used to enable
+> cper_print_aer(). cper_print_aer() logs the AER registers and is
+> useful in PCIE AER logging outside of APEI. Remove the
+> CONFIG_ACPI_APEI_PCIEAER dependency to enable cper_print_aer().
+> 
+> The cper_print_aer() function name implies CPER specific use but is useful
+> in non-CPER cases as well. Rename cper_print_aer() to pci_print_aer().
+> 
+> Co-developed-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Cc: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
+> Cc: "Oliver O'Halloran" <oohall@gmail.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: linux-pci@vger.kernel.org
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-The whole series has been applied as 6.5 material, thanks!
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+> ---
+>  drivers/pci/pcie/aer.c | 9 +++++----
+>  include/linux/aer.h    | 2 +-
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index f6c24ded134c..d3344fcf1f79 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -771,9 +771,10 @@ int cper_severity_to_aer(int cper_severity)
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(cper_severity_to_aer);
+> +#endif
+>  
+> -void cper_print_aer(struct pci_dev *dev, int aer_severity,
+> -		    struct aer_capability_regs *aer)
+> +void pci_print_aer(struct pci_dev *dev, int aer_severity,
+> +		   struct aer_capability_regs *aer)
+>  {
+>  	int layer, agent, tlp_header_valid = 0;
+>  	u32 status, mask;
+> @@ -812,7 +813,7 @@ void cper_print_aer(struct pci_dev *dev, int aer_severity,
+>  	trace_aer_event(dev_name(&dev->dev), (status & ~mask),
+>  			aer_severity, tlp_header_valid, &aer->header_log);
+>  }
+> -#endif
+> +EXPORT_SYMBOL_NS_GPL(pci_print_aer, CXL);
+>  
+>  /**
+>   * add_error_device - list device to be handled
+> @@ -1009,7 +1010,7 @@ static void aer_recover_work_func(struct work_struct *work)
+>  			       PCI_SLOT(entry.devfn), PCI_FUNC(entry.devfn));
+>  			continue;
+>  		}
+> -		cper_print_aer(pdev, entry.severity, entry.regs);
+> +		pci_print_aer(pdev, entry.severity, entry.regs);
+>  		if (entry.severity == AER_NONFATAL)
+>  			pcie_do_recovery(pdev, pci_channel_io_normal,
+>  					 aer_root_reset);
+> diff --git a/include/linux/aer.h b/include/linux/aer.h
+> index 97f64ba1b34a..8f124b904314 100644
+> --- a/include/linux/aer.h
+> +++ b/include/linux/aer.h
+> @@ -64,7 +64,7 @@ static inline void pci_save_aer_state(struct pci_dev *dev) {}
+>  static inline void pci_restore_aer_state(struct pci_dev *dev) {}
+>  #endif
+>  
+> -void cper_print_aer(struct pci_dev *dev, int aer_severity,
+> +void pci_print_aer(struct pci_dev *dev, int aer_severity,
+>  		    struct aer_capability_regs *aer);
+>  int cper_severity_to_aer(int cper_severity);
+>  void aer_recover_queue(int domain, unsigned int bus, unsigned int devfn,
+> -- 
+> 2.34.1
+> 
