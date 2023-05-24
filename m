@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BBF70FA39
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449D370FA4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbjEXPeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S236771AbjEXPfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbjEXPeT (ORCPT
+        with ESMTP id S236227AbjEXPem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:34:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CFC195
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:33:52 -0700 (PDT)
+        Wed, 24 May 2023 11:34:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1119C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD4DA6376E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:33:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7922C4339C;
-        Wed, 24 May 2023 15:33:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1964D63B86
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01583C43443;
+        Wed, 24 May 2023 15:34:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684942423;
-        bh=88v5bOvUrHpnigzjD7xR3ehZTKQzCviyqHGY6Krfgxk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nZ0/YZCGN+y4Pnj8RFVrtv/aa7OoIMusnYX2i0bHSk0upcrNedee0iJe+T7ZA+UMc
-         VKXxpJt/8x+rpyZqd4SdrXnxWeBIZfkNHcAbEZXHIh6zgOnAuAg4fdqMP5Oz1by3lp
-         8lHeciDHiVh1V6exuh2DDo/VWDhgqT7EjlVeXzNqsrDqbjah/6gOp1uX9QP5QJx4C5
-         Mo6ZNRL5VvsS/BlsYqZJe8dhZYj2eOgU6xXy3SyhTQknJRBDJiV9l6xVyh53/77YpJ
-         pU8u/t9DATb3dXTxPTT4TBvi4R8GdYgLb4Zmr/+13FLPWdLXALLpQXnCa4COmk39u/
-         psDsfH8PfTAIw==
-Date:   Wed, 24 May 2023 08:33:41 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        syzbot <syzbot+c2775460db0e1c70018e@syzkaller.appspotmail.com>,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        pabeni@redhat.com, wireguard@lists.zx2c4.com, jann@thejh.net
-Subject: Re: [syzbot] [wireguard?] KASAN: slab-use-after-free Write in
- enqueue_timer
-Message-ID: <20230524083341.0cd435f7@kernel.org>
-In-Reply-To: <CACT4Y+YcNt8rvJRK+XhCZa1Ocw9epHg1oSGc28mntjY3HWZp1g@mail.gmail.com>
-References: <000000000000c0b11d05fa917fe3@google.com>
-        <ZGzfzEs-vJcZAySI@zx2c4.com>
-        <20230523090512.19ca60b6@kernel.org>
-        <CANn89iLVSiO1o1C-P30_3i19Ci8W1jQk9mr-_OMsQ4tS8Nq2dg@mail.gmail.com>
-        <20230523094108.0c624d47@kernel.org>
-        <CAHmME9obRJPrjiJE95JZug0r6NUwrwwWib+=LO4jiQf-y2m+Vg@mail.gmail.com>
-        <20230523094736.3a9f6f8c@kernel.org>
-        <ZGzxa18w-v8Dsy5D@zx2c4.com>
-        <CANn89iLrP7-NbE1yU_okruVKqbuUc3gxPABq4-vQ4SKrUhEdtA@mail.gmail.com>
-        <CANn89iKEjb-g1ed2M+VS5avSs=M0gNgH9QWXtOQRM_uDTMCwPw@mail.gmail.com>
-        <CACT4Y+YcNt8rvJRK+XhCZa1Ocw9epHg1oSGc28mntjY3HWZp1g@mail.gmail.com>
+        s=k20201202; t=1684942444;
+        bh=4QHC/7RI05eUKQuxt6iIEos2VGTGOenDuE0rDWP+VkA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QpERaxuDyehcZp34bqas11QKRDScHrvuDKvxWWCqCmr17nIpk/cueE23t4irG3Gj9
+         jbIb1YF2N4dUHPzSmDMvOw6tSVq7pCV9BmRY1ZLR88jRqsyt3MfTwgkkfyQTCE+gEN
+         U7Le1buCQ8SegwzW++ObXTO2fcbMBfmWZbvfd2tky5unxwkXACCI+v//RuC0EPM++d
+         zn/Mb5jYq2dv2zN1fWx+zsNBzsE1IYIJTei1cedtlWGZ6fF7Yh7Vj6Jkk77/IfiuK8
+         W0phk87kHtb0GORlPVc7xwL+6eXpkOxKvnE32oJ/jXiMsdGXLx10Be9judm2WRLs6/
+         /yfb90kE2jTVA==
+Date:   Wed, 24 May 2023 18:33:44 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        20230519105321.333-1-ssawgyw@gmail.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, tsahu@linux.ibm.com,
+        ssawgyw@gmail.com
+Subject: Re: [PATCH] memblock: update numa node of memblk reserved type
+Message-ID: <20230524153344.GM4967@kernel.org>
+References: <20230523115708.195597-1-wangkefeng.wang@huawei.com>
+ <03cdccc3-8b8a-d972-bbad-d60966e59ca9@arm.com>
+ <4eb83d16-58ed-9f09-4308-f0f786580257@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4eb83d16-58ed-9f09-4308-f0f786580257@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,12 +59,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 10:24:31 +0200 Dmitry Vyukov wrote:
-> FWIW There are more report examples on the dashboard.
-> There are some that don't mention wireguard nor usbnet, e.g.:
-> https://syzkaller.appspot.com/text?tag=CrashReport&x=17dd2446280000
-> So that's probably red herring. But they all seem to mention alloc_netdev_mqs.
+On Wed, May 24, 2023 at 02:47:26PM +0800, Kefeng Wang wrote:
+> 
+> On 2023/5/24 12:59, Anshuman Khandual wrote:
+> > 
+> > On 5/23/23 17:27, Kefeng Wang wrote:
+> > > The numa node of memblk reserved type is wrong, it could update
+> > > according to the numa node information from memblk memory type,
+> > > let's fix it.
+> > 
+> > Indeed it's wrong at present and can be verified from sysfs file
+> > (/sys/kernel/debug/memblock/reserved) accessed in user space.
+> 
+> Yes, both memblock_dump() and sysfs show wrong value.
+> > 
+> > > 
+> > > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> > > ---
+> > >   mm/memblock.c | 25 +++++++++++++++++++++++++
+> > >   1 file changed, 25 insertions(+)
+> > > 
+> > > diff --git a/mm/memblock.c b/mm/memblock.c
+> > > index a50447d970ef..45a0781cda31 100644
+> > > --- a/mm/memblock.c
+> > > +++ b/mm/memblock.c
+> > > @@ -1922,6 +1922,28 @@ phys_addr_t __init_memblock memblock_get_current_limit(void)
+> > >   	return memblock.current_limit;
+> > >   }
+> > > +static void __init_memblock memblock_reserved_update_node(void)
+> > > +{
+> > > +	struct memblock_region *rgn;
+> > > +	phys_addr_t base, end, size;
+> > > +	int ret;
+> > > +
+> > > +	if (!IS_ENABLED(CONFIG_NUMA))
+> > > +		return;
+> > > +
+> > > +	for_each_mem_region(rgn) {
+> > > +		base = rgn->base;
+> > > +		size = rgn->size;
+> > > +		end = base + size - 1;
+> > > +
+> > > +		ret = memblock_set_node(base, size, &memblock.reserved,
+> > > +					memblock_get_region_node(rgn));
+> > > +		if (ret)
+> > > +			pr_err("memblock: Failed to update reserved [%pa-%pa] node",
+> > > +			       &base, &end);
+> > > +	}
+> > > +}
+> > > +
+> > >   static void __init_memblock memblock_dump(struct memblock_type *type)
+> > >   {
+> > >   	phys_addr_t base, end, size;
+> > > @@ -1955,6 +1977,7 @@ static void __init_memblock __memblock_dump_all(void)
+> > >   		&memblock.memory.total_size,
+> > >   		&memblock.reserved.total_size);
+> > > +	memblock_reserved_update_node();
+> > 
+> > __memblock_dump_all() gets called only when memblock_debug is enabled.
+> > This helper should be called directly inside memblock_dump_all() right
+> > at the beginning, regardless of memblock_debug.
+> 
+> This is my first though, but I found there are still many memblock_alloc and
+> memblock_reserve after memblock_dump_all(), so I update it twice,
+> 
+> 1) __memblock_dump_all()
+> 2) memblock_debug_show()
+> 
+> and without the above two interface, no one care about the reserved node
+> info, so I put memblock_reserved_update_node into __memblock_dump_all().
+ 
+We don't care about the reserved node info and __memblock_dump_all()
+actually does not print node info for reserved regions unless somebody
+explicitly sets the node id on a reserved memory.
 
-While we have you, let me ask about the possibility of having vmcore
-access - I think it'd be very useful to solve this mystery. 
-With a bit of luck the timer still has the function set.
+So instead of updating reserved memory node info I'd rather avoid printing
+it in debugfs.
+ 
+> > >   #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+> > > @@ -2196,6 +2219,8 @@ static int memblock_debug_show(struct seq_file *m, void *private)
+> > >   	unsigned int count = ARRAY_SIZE(flagname);
+> > >   	phys_addr_t end;
+> > > +	memblock_reserved_update_node();
+> > > +
+> > 
+> 
+> > This is redundant, should be dropped. Reserved memblock ranges need not
+> > be scanned, each time the sysfs file is accessed from user space.
+> 
+> Yes, it's better to move it into memblock_init_debugfs(),
+> which only called once.
+> 
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.
