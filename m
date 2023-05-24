@@ -2,109 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F70370F6E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A073370F6E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233535AbjEXMtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        id S234195AbjEXMv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232878AbjEXMta (ORCPT
+        with ESMTP id S229525AbjEXMv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:49:30 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B23F12F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:49:25 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-52cbd7d0c37so190897a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:49:25 -0700 (PDT)
+        Wed, 24 May 2023 08:51:27 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E8799;
+        Wed, 24 May 2023 05:51:25 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ae6dce19f7so1692655ad.3;
+        Wed, 24 May 2023 05:51:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684932564; x=1687524564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B5bYhjesjBsxjaSysPkMJO99V3Ea7SCjBnlff9eYvbY=;
-        b=onTMlDek1lsDHY/2PJKI0VAWe+DU8HN6eSloXlvlqwTOous0g0QLPwn3hDQQI13yAD
-         HIM1jV0JJBftM+cgQnxKAQzOEODn3sFJAKAISIqWccqw2aglhzDolTqJ6pTo6j5vgl19
-         FpcndoobY7T6vaOan8xI23GbfLlgv0yr/3Dt4B9w0vPH1ARv8fgpSDNjoMj43KFrj3u/
-         sqodjWtr8pmA3VPhx9aXCCeh5+0B9yQ2PLUmsBCaE1pYym3g+G4YpAbeLlTJicHKQDIm
-         XZX8e2AEQeEvsZFGb+7nabvZ0s0YF/krrDZQ0KzhrIZkBgd8dZit16/ib9GnHKn03IrR
-         pn+Q==
+        d=gmail.com; s=20221208; t=1684932685; x=1687524685;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zk9EWfEb3kBrQUJGitkwkI89dkxpciH5LXEkEz68Cj8=;
+        b=T/XLAZorwFOJbaa+132APjPt+LQnEsFtRTYN3LtrM53eQaswePBHFctCjxCgSDDhjL
+         shp/g03d1hxkDFqQCoOTNcYnUvwnGun9DeIBp1zRws3X5wyPTHzSzRqGHDiNDdIoCLWP
+         zg/SyF8x0SQvQvYNp8VfjT3Z17jY2pXHGOmhD1JUN6Ev4i9Bn/wdQN7KYt/6eiTilcVK
+         rFiEtr/pLq/s139Kb+SEtb/929kZJgiwDjZKwz/wwPmdPAAXmN+RDPaPA/0Hjfw7Qq2w
+         gHdixhDSMM6kKKXG9H2m/w+gLQqfRI3YJ2MwGuFUhfidcHqz0HirkRli3v6jxKNxOovm
+         rEsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684932564; x=1687524564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B5bYhjesjBsxjaSysPkMJO99V3Ea7SCjBnlff9eYvbY=;
-        b=XhDZMgr40FdTD5loYS9Axw7iS88hCDITUhsvJejOqzQCboKCOXxqWqn8wT4G4YQhxd
-         z1/IuuKD5jZUah8WXA5qiDNtWlK2af1UrOeXddJBTI4Giq3cmGiHevZdjLVVy0uOvIU/
-         OI3xXDLkFkN1tD88kS6ctwxgviuu0qzvcSA9kXTwIpqC8LLJ0zu2RjTJUj30gFJhqzb5
-         5QT5bjMcm2iMzNs57PubCaoEaao1y4hGJVi98TUN6TuXAZDQEmTviV7Pb0gUuva0ToS1
-         FoSovS9iIEfsJVp6OiHZEX7wYEcQ2p3nRexXEYHD3e1WPCsAxMEVCZ91jvp0zUgaW/7Q
-         kK5w==
-X-Gm-Message-State: AC+VfDzG69Y3ZQbYmU8XJg2itIPZ+M6Att1Lt0NQnVzPPiOmlFBbANHK
-        K7qOL2VrE0yE9ZTXSPBGnfxk1dcNYPyL9D7A4d4=
-X-Google-Smtp-Source: ACHHUZ5ItBNeHc1mocu63gt5yO5aEXFbBG2651LJcmnhZbL0sPpUsAqGOTVsQB5ww5tjO15bfmfDwMX/ev2ULfHLdSM=
-X-Received: by 2002:a17:902:7008:b0:1ad:edbd:8547 with SMTP id
- y8-20020a170902700800b001adedbd8547mr15325761plk.15.1684932564214; Wed, 24
- May 2023 05:49:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230518230626.404068-1-aford173@gmail.com> <CAOMZO5DBefFuLWi39txu2RiU5vdHVx-0T48Fua6M5Y6Fr9PGNg@mail.gmail.com>
- <CAHCN7xLqmMPtnHTVbApyYxY2tx97oRjsk_51abdDcZkOJmA=Tw@mail.gmail.com>
- <CAHCN7xJTWqf_qfaZge4GpKuuzPE_OC-Kx7hBd_hFLOchH=Ef0g@mail.gmail.com> <CAOMZO5Csjx17kfkxN1xMLuCg+-J0v6rjiuvaK-ZktXO50ZTuSw@mail.gmail.com>
-In-Reply-To: <CAOMZO5Csjx17kfkxN1xMLuCg+-J0v6rjiuvaK-ZktXO50ZTuSw@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 24 May 2023 07:49:12 -0500
-Message-ID: <CAHCN7xL2GWLTwMttCha=b9_W0nE5aimCQ08YJFrCF5vNZUOL7Q@mail.gmail.com>
-Subject: Re: [PATCH V7 0/6] drm: bridge: samsung-dsim: Support variable clocking
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        d=1e100.net; s=20221208; t=1684932685; x=1687524685;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zk9EWfEb3kBrQUJGitkwkI89dkxpciH5LXEkEz68Cj8=;
+        b=cB+pARy5A5cLK6NrVTtMcV/73peEjXw+z54EEncSAgQUu87N2Gw6ewoZq6HI5d6fv5
+         d3l1LpJVH97nt+tZjyp3azV35Fuw83IBZfdHZRqaDDBK6YuL9Kj3U8ECiGTvqGXQhEzL
+         Nnh8K6TYgUJ18ahOsP8At/LQt7mv444oNZb39Dk3pRgrRVPn6Jrt2BywNYusBFSM1kYA
+         Cl0CDdXX9wG4Km1fi+/5fnb6nW2VsR8RrorI9gMYVIoqiqgI7DIQUiwFJJ3jSWNDRWDY
+         RTRzhRDehsVIcIm3Grkf5GXbFrlpYqJbF0KCpiN9BWlNGHX+IwrrOXszGajGnNcjrFgs
+         sB0w==
+X-Gm-Message-State: AC+VfDzmBo4mwWxTk75r3ibnqQ87XYJVyEsYS8I1b+m17ZfrJBJnyzvt
+        5B+ur3F9sPkDG9xeXPF439I=
+X-Google-Smtp-Source: ACHHUZ5C3R3Zpckqk00E2SQecJySjUWpaFT2Zzoiw6GylxDNkN3UlZL/FW9NAvl/SZqFfuEWDECbkQ==
+X-Received: by 2002:a17:902:e751:b0:19e:6e00:4676 with SMTP id p17-20020a170902e75100b0019e6e004676mr20675820plf.61.1684932685101;
+        Wed, 24 May 2023 05:51:25 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-11.three.co.id. [180.214.232.11])
+        by smtp.gmail.com with ESMTPSA id l10-20020a170903244a00b001a221d14179sm8607679pls.302.2023.05.24.05.51.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 05:51:24 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 2D0C210622B; Wed, 24 May 2023 19:51:20 +0700 (WIB)
+Date:   Wed, 24 May 2023 19:51:20 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Praneeth Bajjuri <praneeth@ti.com>,
+        Geet Modi <geet.modi@ti.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Inki Dae <inki.dae@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Dan Murphy <dmurphy@ti.com>
+Subject: Re: DP83867 ethernet PHY regression
+Message-ID: <ZG4ISE3WXlTM3H54@debian.me>
+References: <ZGuDJos8D7N0J6Z2@francesco-nb.int.toradex.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G6zBKAl4QuB1XUdm"
+Content-Disposition: inline
+In-Reply-To: <ZGuDJos8D7N0J6Z2@francesco-nb.int.toradex.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 7:45=E2=80=AFAM Fabio Estevam <festevam@gmail.com> =
-wrote:
->
-> Hi Adam,
->
-> On Tue, May 23, 2023 at 8:49=E2=80=AFPM Adam Ford <aford173@gmail.com> wr=
-ote:
->
-> > Inki,
-> >
-> > I haven't heard back from you on whether or not you want the bindings
-> > patch to be included with me resending the series as V7 or if you're
-> > OK with a single, stand-alone patch.
-> > Will you let me know?  I have the patch standing by waiting for
-> > instructions.  If you're not the right person to ask, please let me
-> > know who the right person is.
->
-> Neil has also been collecting samsung-dsim patches. Maybe he can clarify.
 
-If it matters, my preference all along was to do the bindings as a
-separate thing once the driver updates were merged into the tree.
-Since the bindings can be done in different ways, I was hoping to have
-a separate discussion on the right way to do the bindings. If they
-need to be part of the series, I can do that.
+--G6zBKAl4QuB1XUdm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-adam
+On Mon, May 22, 2023 at 04:58:46PM +0200, Francesco Dolcini wrote:
+> Hello all,
+> commit da9ef50f545f ("net: phy: dp83867: perform soft reset and retain
+> established link") introduces a regression on my TI AM62 based board.
+>=20
+> I have a working DTS with Linux TI 5.10 downstream kernel branch, while
+> testing the DTS with v6.4-rc in preparation of sending it to the mailing
+> list I noticed that ethernet is working only on a cold poweron.
+>=20
+> With da9ef50f545f reverted it always works.
+>=20
+> Here the DTS snippet for reference:
+>=20
+> &cpsw_port1 {
+> 	phy-handle =3D <&cpsw3g_phy0>;
+> 	phy-mode =3D "rgmii-rxid";
+> };
+>=20
+> &cpsw3g_mdio {
+> 	assigned-clocks =3D <&k3_clks 157 20>;
+> 	assigned-clock-parents =3D <&k3_clks 157 22>;
+> 	assigned-clock-rates =3D <25000000>;
+>=20
+> 	cpsw3g_phy0: ethernet-phy@0 {
+> 		compatible =3D "ethernet-phy-id2000.a231";
+> 		reg =3D <0>;
+> 		interrupt-parent =3D <&main_gpio0>;
+> 		interrupts =3D <25 IRQ_TYPE_EDGE_FALLING>;
+> 		reset-gpios =3D <&main_gpio0 17 GPIO_ACTIVE_LOW>;
+> 		reset-assert-us =3D <10>;
+> 		reset-deassert-us =3D <1000>;
+> 		ti,fifo-depth =3D <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
+> 		ti,rx-internal-delay =3D <DP83867_RGMIIDCTL_2_00_NS>;
+> 	};
+> };
+>=20
+
+Thanks for the regression report. I'm adding it to regzbot:
+
+#regzbot ^introduced: da9ef50f545f86
+#regzbot title: TI AM62 DTS regression due to dp83867 soft reset
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--G6zBKAl4QuB1XUdm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZG4IRAAKCRD2uYlJVVFO
+o5qfAQDwUI5i8vhNfuMRPTkr53hzcc3BMXEOS2dbl0R+Acl0NAD/Us8OljgaYCr2
+IRxQ5ohMdzwq4B8pLzs3Fl4LanHLHQY=
+=T8Bf
+-----END PGP SIGNATURE-----
+
+--G6zBKAl4QuB1XUdm--
