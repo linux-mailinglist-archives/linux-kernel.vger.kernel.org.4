@@ -2,203 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA5170F33F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D609270F340
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjEXJmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S231510AbjEXJnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbjEXJmC (ORCPT
+        with ESMTP id S231349AbjEXJme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:42:02 -0400
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7730FE76
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:41:44 -0700 (PDT)
-Received: from local
-        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1q1kzr-00083c-1y;
-        Wed, 24 May 2023 09:41:31 +0000
-Date:   Wed, 24 May 2023 10:41:24 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH 1/4] mtd: ubi: block: don't return on error when removing
-Message-ID: <ZG3bxMFxYM-dfN4r@makrotopia.org>
-References: <cover.1683043928.git.daniel@makrotopia.org>
- <4bca8ffa66fa094da37625e66f3a2681058531d6.1683043928.git.daniel@makrotopia.org>
- <89f2a4a9-6054-80a8-285f-2be6c57c299d@huawei.com>
+        Wed, 24 May 2023 05:42:34 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFE91AC
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:42:25 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30a8dc89c33so370908f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684921343; x=1687513343;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uquqzdaQrX19mRcDaISNYnvybT61v+KWR57K049I3LE=;
+        b=tbd5wy+zY49KmvFoEOTGhwI2WTzhH/ZG4gdY0YXn0J7AOdR19LraPxtn2dqPjSxQeB
+         cttppn4t0lhjRfAkzCCrcq0WUr5A/h6TuY9/Zh4DFLCKKACzshfQRClpz8NaeOPl8+0m
+         ahH0OhDr5Fzkxh2oofpYDe4BL2e0abA1TVJPgsijUA2OP03c1TFmfkb9R74XpvAmXMfa
+         BiDEi7lKfX9y5Urud29LjwHRJ4vfEoLqjiztM0SERfh8mOarXjC2G37GzI5TTft5bg7X
+         x/4PYVGtOzk5SQ2tlFGpusKI4RuyaWt9D3LUllKMSKW2ygm0Pm4A4LdpnZH0C0IwXS1+
+         4jqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684921343; x=1687513343;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uquqzdaQrX19mRcDaISNYnvybT61v+KWR57K049I3LE=;
+        b=E8/GT989P4lZD2p0bPP8He6STLb+TbbV9N5VuM0xGjLdoev6ygSeIu9b3sld+TiWHs
+         0YiFzjw3nHMuNQgPN5HQmKjFCzCrDco7Zk0tf5braE7jkJH3Stj0+UJ//NmUA6yoGoQH
+         EcbPCx20Y+TzNVVbMMQxNdQa2iMBS9QoyP29ynLFnH0le74Bv9SmDIZmJOUntu3rBjRb
+         Oj+oBCfAbmlwndKU+JkLZEBDvrtkZhrmKpZg05MVBMczkvsEKcZkK3RA0AjbG09cXBFX
+         QxQ3g69wqdnQmhDbwMjBZ1rkYYOZtKUiwwWy/CJbO5rMClIb4+6okS+BzDg8x8vh1Tsr
+         qVSg==
+X-Gm-Message-State: AC+VfDzlsfxmtUMOICkj3BpZGml+k3QPc8OfnTPKaQfwdNBrs3XSaSLP
+        zcT7r2giIEudFW5eIOQuaElSVA==
+X-Google-Smtp-Source: ACHHUZ43MZZ5VeJjBY2a3hiOrD3vVjpcAeqRjxRgjQJAYQB8sz7zPSthTGL6T8eT1JMOWEOGzu5Xdg==
+X-Received: by 2002:a5d:4650:0:b0:307:8e1b:6cc7 with SMTP id j16-20020a5d4650000000b003078e1b6cc7mr13307619wrs.67.1684921343466;
+        Wed, 24 May 2023 02:42:23 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id f5-20020a5d4dc5000000b0030644bdefd8sm13900529wru.52.2023.05.24.02.42.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 02:42:22 -0700 (PDT)
+Message-ID: <af7b7d4f-d7ab-b5ef-e639-9a8b13de54ee@linaro.org>
+Date:   Wed, 24 May 2023 10:42:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <89f2a4a9-6054-80a8-285f-2be6c57c299d@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] ASoC: codecs: wsa883x: do not set can_multi_write
+ flag
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org
+References: <20230523154605.4284-1-srinivas.kandagatla@linaro.org>
+ <00283665-e44f-457b-b2c9-1acf59d1cbd8@sirena.org.uk>
+ <c37b88ae-7f54-3c07-666f-010a5fd84bd1@linaro.org>
+ <d94e734c-e816-4b3f-9fb3-a6589063c05a@sirena.org.uk>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <d94e734c-e816-4b3f-9fb3-a6589063c05a@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 09:09:49PM +0800, Zhihao Cheng wrote:
-> 在 2023/5/3 0:48, Daniel Golle 写道:
-> > There is no point on returning the error from ubiblock_remove in case
-> > it is being called due to a volume removal event -- the volume is gone,
-> > we should destroy and remove the ubiblock device no matter what.
-> > 
-> > Introduce a new boolean parameter 'force' to tell ubiblock_remove to go
-> > on even in case the ubiblock device is still busy. Use that new option
-> > when calling ubiblock_remove due to a UBI_VOLUME_REMOVED event.
-> > 
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> >   drivers/mtd/ubi/block.c | 6 +++---
-> >   drivers/mtd/ubi/cdev.c  | 2 +-
-> >   drivers/mtd/ubi/ubi.h   | 4 ++--
-> >   3 files changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
-> > index 3711d7f746003..6f5804f4b8f55 100644
-> > --- a/drivers/mtd/ubi/block.c
-> > +++ b/drivers/mtd/ubi/block.c
-> > @@ -457,7 +457,7 @@ static void ubiblock_cleanup(struct ubiblock *dev)
-> >   	idr_remove(&ubiblock_minor_idr, dev->gd->first_minor);
-> >   }
-> > -int ubiblock_remove(struct ubi_volume_info *vi)
-> > +int ubiblock_remove(struct ubi_volume_info *vi, bool force)
-> >   {
-> >   	struct ubiblock *dev;
-> >   	int ret;
-> > @@ -471,7 +471,7 @@ int ubiblock_remove(struct ubi_volume_info *vi)
-> >   	/* Found a device, let's lock it so we can check if it's busy */
-> >   	mutex_lock(&dev->dev_mutex);
-> > -	if (dev->refcnt > 0) {
-> > +	if (dev->refcnt > 0 && !force) {
-> >   		ret = -EBUSY;
-> >   		goto out_unlock_dev;
-> >   	}
+
+
+On 24/05/2023 09:57, Mark Brown wrote:
+> On Wed, May 24, 2023 at 09:51:00AM +0100, Srinivas Kandagatla wrote:
+>> On 23/05/2023 17:55, Mark Brown wrote:
 > 
-> After looking through this series, I think we should pay attention to one
-> problem: The lifetime of mtd device and ubi things(ubi device/volume/block
-> device). It's difficult to decide whether or not to destroy ubi things when
-> mtd driver is removed.
-> If we destroy ubi things, one application may have opened an ubi volume
-> early, then ubi device and all its volumes are destroyed by
-> ubi_notify_remove(), later volume accessing by the application will trigger
-> an UAF problem in kernel.
->       App              driver_remove
-> fd = ubi_open_volume
->                    ubi_notify_remove
->                     ubi_detach_mtd_dev
->                      vfree(ubi->vtbl)
-> ioctl(fd, UBI_IOCVOLUP)
->  ubi_start_update
->   set_update_marker
->    vtbl_rec = ubi->vtbl[vol->vol_id]  // UAF!
+>>> Does the CODEC support mulitple writes?  If so it seems better to leave
 > 
-> If we reserve ubi things even mtd driver is removed. There exists mtd
-> drivers releasing mtd device (eg. phram_remove), then upper application
-> could accessing released mtd device by the ubi device, which also triggers
-> UAF in kernel.
-
-I agree this is a problem, and I also agree it is not a new problem
-introduced by this series, but rather already exists in the kernel for
-many years.
-
-An idea to get closer to a good state would be to try dropping the
-'anyway' parameter from ubi_detach_mtd_dev which is currently only
-used in the module_exit. To avoid this, we should make sure the
-module's refcnt is increased/decreased together with ubi->ref_count.
-
-When it comes to the to-be-introduced ubi_notify_remove we still
-face another problem, see below...
-
+>> No, the codec itself does not support multi-write. All the codec register
+>> level interface is via SoundWire Bus. which also does not support with the
+>> existing code.
 > 
-> After looking at nvme_free_ctrl, I found that nvme_dev is released when
-> device refcnt becomes zero, so block device and nvme_dev won't be freed
-> immediately when pci driver removed if upper filesystem being mounted on
-> nvme device. And the mtd device's refcnt is held by ubi too, we may follow
-> this method, but investigating all mtd drivers looks like unrealistic.
+> I'm unclear, is this a limitation of the hardware or of the current
+> Soundwire code?
 
-A good start would be deciding on and defining the way it should be.
-I agree with your suggestion above, however, also note that in case of
-MTD (in contrast to block devices) we have only a 'remove' notification
-call returning void, see include/linux/mtd/mtd.h
+Its both.
 
-struct mtd_notifier {
-        void (*add)(struct mtd_info *mtd);
-        void (*remove)(struct mtd_info *mtd);
-        struct list_head list;
-};
-
-Also see del_mtd_device in drivers/mtd/mtdcore.c:
-[...]
-        /* No need to get a refcount on the module containing
-                the notifier, since we hold the mtd_table_mutex */
-        list_for_each_entry(not, &mtd_notifiers, list)
-                not->remove(mtd);
-
-        if (mtd->usecount) {
-                printk(KERN_NOTICE "Removing MTD device #%d (%s) with use count %d\n",
-                       mtd->index, mtd->name, mtd->usecount);
-                ret = -EBUSY;
-        } else {
-[...]
-
-So remove is called despite usecount could still be > 0.
-
-Looks a bit like I've opened a can of worms...
+Codec itself does not have any private write callback to support this 
+and AFAIU Qualcomm Soundwire controller does not have any such hw 
+facility to program multi-registers for device at one shot.
 
 
-> 
-> > @@ -546,7 +546,7 @@ static int ubiblock_notify(struct notifier_block *nb,
-> >   		 */
-> >   		break;
-> >   	case UBI_VOLUME_REMOVED:
-> > -		ubiblock_remove(&nt->vi);
-> > +		ubiblock_remove(&nt->vi, true);
-> >   		break;
-> >   	case UBI_VOLUME_RESIZED:
-> >   		ubiblock_resize(&nt->vi);
-> > diff --git a/drivers/mtd/ubi/cdev.c b/drivers/mtd/ubi/cdev.c
-> > index f43430b9c1e65..bb55e863dd296 100644
-> > --- a/drivers/mtd/ubi/cdev.c
-> > +++ b/drivers/mtd/ubi/cdev.c
-> > @@ -572,7 +572,7 @@ static long vol_cdev_ioctl(struct file *file, unsigned int cmd,
-> >   		struct ubi_volume_info vi;
-> >   		ubi_get_volume_info(desc, &vi);
-> > -		err = ubiblock_remove(&vi);
-> > +		err = ubiblock_remove(&vi, false);
-> >   		break;
-> >   	}
-> > diff --git a/drivers/mtd/ubi/ubi.h b/drivers/mtd/ubi/ubi.h
-> > index c8f1bd4fa1008..44c0eeaf1e1b0 100644
-> > --- a/drivers/mtd/ubi/ubi.h
-> > +++ b/drivers/mtd/ubi/ubi.h
-> > @@ -979,7 +979,7 @@ static inline void ubi_fastmap_destroy_checkmap(struct ubi_volume *vol) {}
-> >   int ubiblock_init(void);
-> >   void ubiblock_exit(void);
-> >   int ubiblock_create(struct ubi_volume_info *vi);
-> > -int ubiblock_remove(struct ubi_volume_info *vi);
-> > +int ubiblock_remove(struct ubi_volume_info *vi, bool force);
-> >   #else
-> >   static inline int ubiblock_init(void) { return 0; }
-> >   static inline void ubiblock_exit(void) {}
-> > @@ -987,7 +987,7 @@ static inline int ubiblock_create(struct ubi_volume_info *vi)
-> >   {
-> >   	return -ENOSYS;
-> >   }
-> > -static inline int ubiblock_remove(struct ubi_volume_info *vi)
-> > +static inline int ubiblock_remove(struct ubi_volume_info *vi, bool force)
-> >   {
-> >   	return -ENOSYS;
-> >   }
-> > 
-> 
+Also to note, the current state of code soundwire regmap write callback 
+assumes that the request to write will always have base address at the 
+start followed by register values. This is not true for multi-register 
+writes which comes in address-value-padding pairs.
+
+
+Am confused on the multi_write feature and looking at regmap bus level 
+write callback.
+
+Is write callback used for both Bulk writes and multi-writes?
+
+Is multi-write feature of regmap bus or device?
+
+
+
+--srini
