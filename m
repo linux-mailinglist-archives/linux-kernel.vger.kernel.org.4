@@ -2,88 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1BB70F4A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFD570F4A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbjEXK75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
+        id S231761AbjEXK7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbjEXK7w (ORCPT
+        with ESMTP id S229848AbjEXK7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:59:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68873A3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684925945;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RyOOthwCwKmK2k/rvH+STfuwWCIZAOvW3IUp8VzMxe8=;
-        b=ZCKo7KzXnxM2Afq/SRCN6pk3FXzlmBjNDbptyJvbBj/YkLAf6HG7DVATFVCYUVZ0t/IA1e
-        IP3MF7GOqlciYbslExhBdA5MSYQWvb8KmMjBsfjlKl5FsOg31i5jK/kxHL2rlAe8hzs7H8
-        XOMN2wKiswwc2XQmRHFFjsboqE6HXF8=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-522-JeqWbzBDMV6n-FsfwaWokw-1; Wed, 24 May 2023 06:59:04 -0400
-X-MC-Unique: JeqWbzBDMV6n-FsfwaWokw-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30932d15a30so438864f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:59:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684925943; x=1687517943;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RyOOthwCwKmK2k/rvH+STfuwWCIZAOvW3IUp8VzMxe8=;
-        b=kj4G7xcl1EViRuP/mbmVj0g94HqXsZ5rGpJjLoSs177EwJiaj2UuDGiwsV+qjCabri
-         AzEwgEc5V3VkIkrmZjYNKD6VFRfnyoallJMMlmfbhDhLqJxniKw530or4TDQYj6OO8HD
-         iI5UuYK6DVPPuk8xDWFRf/JTu9s7LjKIPyzcYYVwwCxIn7abhsMi0UYWaEHq+geqin7N
-         TassFpbkqyaM50zz5Q7mz1eoaysLP/G0cBwrj7cUmvSnQ+foqTmLFQglGHyUrsINzV+z
-         eaNU+b5xEw0vgVSP8Mve3LwYUBVXtYEJCoiFTW/QZ9lYHk5Pd5eGTNJDZZr/F39ezcgJ
-         LC+Q==
-X-Gm-Message-State: AC+VfDwN8pOdxzxKe04zSh2W+o6HI3aJiuugKL7X/dOFWLpT/E2S2kVH
-        eCVM7oVnujhvzZOl5zC1Nvhf+TxRkwVFON5lu90ZA4xEWJY6eEHTJW/1puqb93JCMRX9tpiP+GS
-        Ch9rvlaG1MyJ5IqTJ7jfJrN1x
-X-Received: by 2002:adf:fa8f:0:b0:309:3698:8011 with SMTP id h15-20020adffa8f000000b0030936988011mr12471434wrr.57.1684925942847;
-        Wed, 24 May 2023 03:59:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5UaFWIVzBtnybp/B6RPa+rXR+XvsRSCgDzFFSi7zOXyojX3oHmwbpJBkn+4vaJyJI2ouLlKA==
-X-Received: by 2002:adf:fa8f:0:b0:309:3698:8011 with SMTP id h15-20020adffa8f000000b0030936988011mr12471419wrr.57.1684925942608;
-        Wed, 24 May 2023 03:59:02 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d484b000000b00307c0afc030sm14324322wrs.4.2023.05.24.03.59.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 03:59:02 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linmiaohe@huawei.com
-Subject: Re: [PATCH] sched/deadline: simplify dl_bw_cpus() using
- cpumask_weight_and()
-In-Reply-To: <20230522115605.1238227-1-linmiaohe@huawei.com>
-References: <20230522115605.1238227-1-linmiaohe@huawei.com>
-Date:   Wed, 24 May 2023 11:59:00 +0100
-Message-ID: <xhsmhv8giov0r.mognet@vschneid.remote.csb>
+        Wed, 24 May 2023 06:59:41 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C784AB7;
+        Wed, 24 May 2023 03:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684925979; x=1716461979;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eB9kvRkYr5mGdUVQC9djBQdjGQY2g4NNBVXwNgQMGuk=;
+  b=hUWZNbm8KaiT0mZ/ruFuZuZD1s4FGLTPGRf96Agt6ictZcmxo2X1NCnX
+   3bnSBBT4SOY1/1JkgxajPi9ZPjeQfSVdBInhMBfr8yvd8bSszDQYI8NJ2
+   zKv1zXFKVBf7+BNektQeZMGufj9Nkzr3roEjpfloamHb7S0pS9DLOoPtN
+   LZ6T7P1jNBKsI+0Z9MgDtzjx0rqJQKY4Aa2mY7TYtGZKbsFvw4h89pz5c
+   YKbCza7CWjkNC30kV6+NftlYhyIKTmXGNzViFbW7EUQKpjPQe/RSBbAJp
+   wICl5IdRp2g5QA5hfnnW4o+jmAGT25gFxwg9vQ+XZpNVdCeyYKF4xr2FJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="356752886"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="356752886"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 03:59:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="1034490764"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="1034490764"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 24 May 2023 03:59:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q1mDQ-000GDz-0W;
+        Wed, 24 May 2023 13:59:36 +0300
+Date:   Wed, 24 May 2023 13:59:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Zheng <david.zheng@intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com
+Subject: Re: [PATCH v1] i2c: designware: fix idx_write_cnt in read loop
+Message-ID: <ZG3uF1WOv1MhTV3f@smile.fi.intel.com>
+References: <ZGzt3dGW0dxa5fqc@davidzhe-DESK>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGzt3dGW0dxa5fqc@davidzhe-DESK>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/23 19:56, Miaohe Lin wrote:
-> cpumask_weight_and() can be used to count of bits both in rd->span and
-> cpu_active_mask. No functional change intended.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On Tue, May 23, 2023 at 09:46:21AM -0700, David Zheng wrote:
+> With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
+> RX FIFO is empty. When testing with the slave-eeprom, each transaction
+> has 2 bytes for address/index and 1 byte for value, the address byte
+> can be written as data byte due to dropping STOP condition.
+> 
+> In the test below, the master continuously writes to the slave, first 2
+> bytes are index, 3rd byte is value and follow by a STOP condition.
+> 
+>  i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
+>  i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
+>  i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
+> 
+> Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
+> next 2 bytes can be treated as buffer index for upcoming transaction.
+> Supposedly the slave eeprom buffer would be written as
+> 
+>  EEPROM[0x00D1] = 0xD1
+>  EEPROM[0x00D2] = 0xD2
+>  EEPROM[0x00D3] = 0xD3
+> 
+> When CPU load is high the slave irq handler may not read fast enough,
+> the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
+> (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
+> the transactions below.
+> 
+>  0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>  0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>  0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>  0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
+>  0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
+>  0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>  0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>  0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> 
+> After `D1` is received, read loop continues to read `00` which is the
+> first bype of next index. Since STOP condition is ignored by the loop,
+> eeprom buffer index increased to `D2` and `00` is written as value.
+> 
+> So the slave eeprom buffer becomes
+> 
+>  EEPROM[0x00D1] = 0xD1
+>  EEPROM[0x00D2] = 0x00
+>  EEPROM[0x00D3] = 0xD3
+> 
+> The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
+> the transactions. The first index byte in this case would have bit 11
+> set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
+> which will reset `idx_write_cnt` in slave eeprom.
+> 
+> Signed-off-by: David Zheng <david.zheng@intel.com>
+> ---
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+Is it still v1? Otherwise you have wrong Subject (missing version) and missing
+changelog here.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
