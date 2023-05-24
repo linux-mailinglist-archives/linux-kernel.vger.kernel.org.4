@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC22570FA60
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDD270FA6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236906AbjEXPf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S237224AbjEXPgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236556AbjEXPfH (ORCPT
+        with ESMTP id S236398AbjEXPfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:35:07 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A203E7B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:45 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 24 May 2023 11:35:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A2413E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684942436;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hDpyQQ1JedFG6lTxY3chHyZphdbNgdYt0GxXfK9/WHk=;
+        b=MsotCOIcMt265KW/WcHD8SryM+iPuTMZYn5frv12XWfn7YbGysExOJQtOMlSN8/geXaFrL
+        4qqJXcmmepvd4TavLJS/xNEDPwpTA9Y18+C0CRaUFOnkPssoYgdVLaD4eTTobLcoatSiFs
+        wIhmQZUp9fpRh18CwQlwmPhuUHTfMSI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-164-4pleeuJrPNyai-iLRApvog-1; Wed, 24 May 2023 11:33:49 -0400
+X-MC-Unique: 4pleeuJrPNyai-iLRApvog-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E29F53F196
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:34:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684942444;
-        bh=VOsvDeo72Li4A+MGz8y/FXCiDvmbWTjb5uUMq09Z+GE=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=gWZurhxT3fpyDMIpY77JZvx4PwqkyY55Hc00DdcdOYztydiLIGYoifVtCs4mY8MIa
-         ZcsHOyJkkF4TImSP8JTVQ3o6LuOPpT0l/y/hlaf2s6QXPAF8bYWqmKwHHGkR9hBBrL
-         JR6JDvFZ0j4k16Kq91Cdd1QRvMd8AkU+++VHZYxiz7PphVXcvGAeUk6s5gz7ZKO95E
-         MZjGao1DtzPoAPe/70t/3FmgTniZj6iDRtIIa5gkSpOrdewvRvZFvhEcR0sGwe6GXC
-         OvbqVUp0s9LIjXIjkFb1hlcl+6PnYJ3DK/lKKIpsqy8ze78clGszML8MEKIdxJeMn3
-         TG10RXmVv5ceQ==
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-50bf847b267so1341538a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684942444; x=1687534444;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VOsvDeo72Li4A+MGz8y/FXCiDvmbWTjb5uUMq09Z+GE=;
-        b=YPvSggpxBidgzZplnj7Edj9esrO7Qg4pctSpQ4aU5FfzcMEaKQAnDGXrP/Bq6LlfeQ
-         BkYkBAXM2bV2jRymuVlXV0xOPzdaEv/knGGPPiv4TFHkkvnjTr0epcvvmekml/20Eyoe
-         eQSkBIgIFPqjlRQW2XY0vEGU8iQQ+JYZSnJ3aCFd0GBQDp8oq9gcAZHRBoIJ1te3sgTh
-         MAOLpWZjxicRS11dM7ShSDmMnk+Sz9gjL66aoMucDl/yNXRy4ITRSwlwfIQKHRniAfbA
-         nwGfbVZqLZpIdCGRz0vNACSoMFdy7V2elGIPwt4Pg4jhBbQ2tu4ngNWLQLGToFCBSMy/
-         nDbw==
-X-Gm-Message-State: AC+VfDwaEvWMgMNOZ+bWkP6b/UY3J79QqBbPZSBuxUuPbPWlVhmxzvTb
-        lqBIuCykcDsCyVNX7jtiHR95wDxoqxE9zQnzYisB0Ss/0/Fdb1GSiiHkmNXjX+hSNEVU64rqaXu
-        xeiB/ZXtfiVcfLqCVF2DCx9MOT1drJVTlk9wGqgZTXw==
-X-Received: by 2002:a17:906:5044:b0:96a:63d4:24c5 with SMTP id e4-20020a170906504400b0096a63d424c5mr16834948ejk.77.1684942444420;
-        Wed, 24 May 2023 08:34:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7gBpqHitu+lLhIckipr6Iw+ZMNPeoZej+/zA1KHtSCkxGa9OwcqI2J/tv0ifrYtmEPsQMuyg==
-X-Received: by 2002:a17:906:5044:b0:96a:63d4:24c5 with SMTP id e4-20020a170906504400b0096a63d424c5mr16834933ejk.77.1684942444258;
-        Wed, 24 May 2023 08:34:04 -0700 (PDT)
-Received: from amikhalitsyn.local (dslb-088-074-206-207.088.074.pools.vodafone-ip.de. [88.74.206.207])
-        by smtp.gmail.com with ESMTPSA id p26-20020a17090664da00b0096f7105b3a6sm5986979ejn.189.2023.05.24.08.34.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 08:34:03 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     xiubli@redhat.com
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 05/13] ceph: allow idmapped symlink inode op
-Date:   Wed, 24 May 2023 17:33:07 +0200
-Message-Id: <20230524153316.476973-6-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A7B73849528;
+        Wed, 24 May 2023 15:33:48 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B045C164ED;
+        Wed, 24 May 2023 15:33:46 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH net-next 09/12] tls/sw: Support MSG_SPLICE_PAGES
+Date:   Wed, 24 May 2023 16:33:08 +0100
+Message-Id: <20230524153311.3625329-10-dhowells@redhat.com>
+In-Reply-To: <20230524153311.3625329-1-dhowells@redhat.com>
+References: <20230524153311.3625329-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,32 +70,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Brauner <christian.brauner@ubuntu.com>
+Make TLS's sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
+spliced from the source iterator if possible and copied the data if not.
 
-Enable ceph_symlink() to handle idmapped mounts. This is just a matter
-of passing down the mount's idmapping.
+This allows ->sendpage() to be replaced by something that can handle
+multiple multipage folios in a single transaction.
 
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: Ilya Dryomov <idryomov@gmail.com>
-Cc: ceph-devel@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Chuck Lever <chuck.lever@oracle.com>
+cc: Boris Pismenny <borisp@nvidia.com>
+cc: John Fastabend <john.fastabend@gmail.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Eric Dumazet <edumazet@google.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: netdev@vger.kernel.org
 ---
- fs/ceph/dir.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/tls/tls_sw.c | 57 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 56 insertions(+), 1 deletion(-)
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index 8d3fedb3629b..3996572060da 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -956,6 +956,7 @@ static int ceph_symlink(struct mnt_idmap *idmap, struct inode *dir,
- 	req->r_num_caps = 2;
- 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED | CEPH_CAP_AUTH_EXCL;
- 	req->r_dentry_unless = CEPH_CAP_FILE_EXCL;
-+	req->r_mnt_idmap = idmap;
- 	if (as_ctx.pagelist) {
- 		req->r_pagelist = as_ctx.pagelist;
- 		as_ctx.pagelist = NULL;
--- 
-2.34.1
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 635b8bf6b937..0ccef8aa9951 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -929,6 +929,49 @@ static int tls_sw_push_pending_record(struct sock *sk, int flags)
+ 				   &copied, flags);
+ }
+ 
++static int rls_sw_sendmsg_splice(struct sock *sk, struct msghdr *msg,
++				 struct sk_msg *msg_pl, size_t try_to_copy,
++				 ssize_t *copied)
++{
++	struct page *page = NULL, **pages = &page;
++
++	do {
++		ssize_t part;
++		size_t off;
++		bool put = false;
++
++		part = iov_iter_extract_pages(&msg->msg_iter, &pages,
++					      try_to_copy, 1, 0, &off);
++		if (part <= 0)
++			return part ?: -EIO;
++
++		if (!sendpage_ok(page)) {
++			const void *p = kmap_local_page(page);
++			void *q;
++
++			q = page_frag_memdup(NULL, p + off, part,
++					     sk->sk_allocation, ULONG_MAX);
++			kunmap_local(p);
++			if (!q) {
++				iov_iter_revert(&msg->msg_iter, part);
++				return -ENOMEM;
++			}
++			page = virt_to_page(q);
++			off = offset_in_page(q);
++			put = true;
++		}
++
++		sk_msg_page_add(msg_pl, page, part, off);
++		sk_mem_charge(sk, part);
++		if (put)
++			put_page(page);
++		*copied += part;
++		try_to_copy -= part;
++	} while (try_to_copy && !sk_msg_full(msg_pl));
++
++	return 0;
++}
++
+ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ {
+ 	long timeo = sock_sndtimeo(sk, msg->msg_flags & MSG_DONTWAIT);
+@@ -1018,6 +1061,17 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 			full_record = true;
+ 		}
+ 
++		if (try_to_copy && (msg->msg_flags & MSG_SPLICE_PAGES)) {
++			ret = rls_sw_sendmsg_splice(sk, msg, msg_pl,
++						    try_to_copy, &copied);
++			if (ret < 0)
++				goto send_end;
++			tls_ctx->pending_open_record_frags = true;
++			if (full_record || eor || sk_msg_full(msg_pl))
++				goto copied;
++			continue;
++		}
++
+ 		if (!is_kvec && (full_record || eor) && !async_capable) {
+ 			u32 first = msg_pl->sg.end;
+ 
+@@ -1080,8 +1134,9 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 		/* Open records defined only if successfully copied, otherwise
+ 		 * we would trim the sg but not reset the open record frags.
+ 		 */
+-		tls_ctx->pending_open_record_frags = true;
+ 		copied += try_to_copy;
++copied:
++		tls_ctx->pending_open_record_frags = true;
+ 		if (full_record || eor) {
+ 			ret = bpf_exec_tx_verdict(msg_pl, sk, full_record,
+ 						  record_type, &copied,
 
