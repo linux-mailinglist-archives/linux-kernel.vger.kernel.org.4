@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD20570EA69
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B99A70EA75
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238631AbjEXAng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 20:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S238701AbjEXAuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 20:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233155AbjEXAne (ORCPT
+        with ESMTP id S234277AbjEXAuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 20:43:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C030EB5;
-        Tue, 23 May 2023 17:43:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 548C861B8C;
-        Wed, 24 May 2023 00:43:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A78C433D2;
-        Wed, 24 May 2023 00:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684889010;
-        bh=XqBRM7wMx7bhj22GlxezAhF4kwnXTfLHZNjhx8i29XE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=f93Pabb7KcuqabWadPFXOC3R2rz9S0T3KbI+qvoqRkbAunayJIvMEs8EsZZFS++ys
-         qAl0KX2/JhMe+2GGL32tEDHx8TL6795oLn4S5lAsxJ8takKfd/LqscgyCYuTPHYzdO
-         XgFyn4OFB44MqzfOFj+s5GH/j/jY33s2Cq39S4+79w6Pc9/GS3BKsEfuVTBEFQa39M
-         FKLJ+Hz7tQ47ebQefuIvv6AumkfczhVQhoEOiO3esr+CULGVvyftidR1/a+3DAnNib
-         8QuEXqLFMxFnMOLF6dbuYWiL2KIOUaGoYnzxL55FOgxR4iV8O6ZbQdlCD0dfsYn6J3
-         nQSZtWGLvIgZQ==
-Date:   Tue, 23 May 2023 18:44:23 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] nfsd: Replace one-element array with flexible-array
- member
-Message-ID: <ZG1d51tGG4c97qqb@work>
+        Tue, 23 May 2023 20:50:00 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33C4126;
+        Tue, 23 May 2023 17:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=O4zO94iFTrLjEiMrq1dnb+x3JXQnGuk03+XEMWVY2So=; b=wYbhQOg5kZ7jk5zD083qFdm86E
+        mhGO4DMm6pld8ANOD5zePR/6jmBHk9Wx+H89xqedEjfv2R88n8qQ06mvbH0lzhKzAWAEwzh7jzYEl
+        bWMpoqMuScq2+pwbJw0xw2Y11uCSqKaJWVykww06h7OezfE2nHJ2AoRLzCKLM8L35s6s=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q1cgw-00DjwO-8o; Wed, 24 May 2023 02:49:26 +0200
+Date:   Wed, 24 May 2023 02:49:26 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kenny Ho <Kenny.Ho@amd.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        y2kenny@gmail.com
+Subject: Re: [PATCH] Remove hardcoded static string length
+Message-ID: <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
+References: <20230523223944.691076-1-Kenny.Ho@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230523223944.691076-1-Kenny.Ho@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with
-flexible array members instead. So, replace a one-element array
-with a flexible-arrayº member in struct vbi_anc_data and refactor
-the rest of the code, accordingly.
+On Tue, May 23, 2023 at 06:39:44PM -0400, Kenny Ho wrote:
+> UTS_RELEASE length can exceed the hardcoded length.  This is causing
+> compile error when WERROR is turned on.
+> 
+> Signed-off-by: Kenny Ho <Kenny.Ho@amd.com>
+> ---
+>  net/rxrpc/local_event.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
+> index 19e929c7c38b..61d53ee10784 100644
+> --- a/net/rxrpc/local_event.c
+> +++ b/net/rxrpc/local_event.c
+> @@ -16,7 +16,7 @@
+>  #include <generated/utsrelease.h>
+>  #include "ar-internal.h"
+>  
+> -static const char rxrpc_version_string[65] = "linux-" UTS_RELEASE " AF_RXRPC";
+> +static const char rxrpc_version_string[] = "linux-" UTS_RELEASE " AF_RXRPC";
 
-This results in no differences in binary output.
+This is not an area of the network stack i know about, so please
+excuse what might be a dumb question.
 
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/298
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- fs/nfsd/nfs4callback.c | 2 +-
- fs/nfsd/xdr4.h         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+How is the protocol defined here? Is there an RFC or some other sort
+of standard?
 
-diff --git a/fs/nfsd/nfs4callback.c b/fs/nfsd/nfs4callback.c
-index 4039ffcf90ba..2c688d51135d 100644
---- a/fs/nfsd/nfs4callback.c
-+++ b/fs/nfsd/nfs4callback.c
-@@ -353,7 +353,7 @@ encode_cb_recallany4args(struct xdr_stream *xdr,
- {
- 	encode_nfs_cb_opnum4(xdr, OP_CB_RECALL_ANY);
- 	encode_uint32(xdr, ra->ra_keep);
--	encode_bitmap4(xdr, ra->ra_bmval, ARRAY_SIZE(ra->ra_bmval));
-+	encode_bitmap4(xdr, ra->ra_bmval, 1);
- 	hdr->nops++;
- }
- 
-diff --git a/fs/nfsd/xdr4.h b/fs/nfsd/xdr4.h
-index 510978e602da..68072170eac8 100644
---- a/fs/nfsd/xdr4.h
-+++ b/fs/nfsd/xdr4.h
-@@ -899,7 +899,7 @@ struct nfsd4_operation {
- struct nfsd4_cb_recall_any {
- 	struct nfsd4_callback	ra_cb;
- 	u32			ra_keep;
--	u32			ra_bmval[1];
-+	u32			ra_bmval[];
- };
- 
- #endif
--- 
-2.34.1
+A message is being built and sent over a socket. The size of that
+message was fixed, at 65 + sizeof(whdr). Now the message is variable
+length. Does the protocol specification actually allow this?
 
+	Andrew
