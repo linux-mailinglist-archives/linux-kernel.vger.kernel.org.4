@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A0D70F173
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E1470F170
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240461AbjEXIvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240373AbjEXIvM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240390AbjEXIvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 24 May 2023 04:51:12 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B91118B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:51:08 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-564dc3dc075so6470417b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:51:08 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240373AbjEXIvJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 24 May 2023 04:51:09 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577A097
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:51:04 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f42ba32e24so5856115e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684918267; x=1687510267;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yTHHxaJoMypDJpE/fsiTCCRA1MQ4EfaJk8LPuAmRUjY=;
-        b=WWt1aFUgSK1Ne1Cxs/lfu8qKDGY9W9Y13wFo68wgZy1PwC6Mm36fuTV91X/m7vDu5s
-         MSi9VVvYCz+uvJyy7ZTFObF4p0+QQcUKH44pvNXiUQSOvFQbnt/BtoxpUlXY2Qu41VZ3
-         UiBXWHSSitiqsp4KMFNg9TM7rkywutQ8fNZJKQLrxHrgnZj5yhPDMpm0H3aR5YwsotJm
-         38PMUgD1RCVfKyRIMN6geYUvqNAZMjoyDs4xt/qeiLoUwsfzLMHgcVA0FHSyQof1lYDX
-         mIWu1FDUgm/wGXN72nPPmKFD7dlWxPYND8mezH46xxmUfW+NozrnpNUJoLWzTYNOO4Cc
-         YbzQ==
+        d=linaro.org; s=google; t=1684918263; x=1687510263;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qpwZKl15N1ARAVTzHTzpdCx10bm72H5sA4Jzbb3JTYA=;
+        b=HvFRB1UTElygxUYfN+8OUAQV8DHc74GM/qd3uJNTM/5AUFFeH870fRxbP6cS6hs87s
+         snYxkYZtpIgTx3j4tj+byXvhspX7IO7OThCVtps6DSplS5IzGMV853X/sqgk1yoYzv7i
+         nHohAn9kJ9ofONnx71cWdBxU04VSJ0XMeBywsh83eVkPhu0SASoI3MLWX+zWAE0v3tBd
+         uhnYiZ8g3udr18R9Fn2aVsB+RKVR83W7ocAZ1wyT0AIzlSnuaXoFZHmkTVAiKLAhVPgf
+         lSR1L9yUrW9rVKKeWIlLIPqqYN7SbWnpObC8njObLhEF/AyST1zCxxRqnswhIRj15c36
+         ruAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684918267; x=1687510267;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yTHHxaJoMypDJpE/fsiTCCRA1MQ4EfaJk8LPuAmRUjY=;
-        b=J4p7DMMrDlJ1gL2o1UJ8OXuX4qAYWhrYKfN9OOli/q0Ci7M30b0x+hxvQtaIGCIpqJ
-         aSrxDtWiYW+/Obe3zbeE5kwqDBcQyDVs/dS2lxAGBGk7ANPAYWI16kbdLg34jTL3FvAk
-         naZdOOoK1LEZK+YLq81B6RIxq98sEdzzbAH/C0FDT05fAksHxxRHxKQ5EWBfdLj1Uxme
-         abEkdvxSsdeU7Ocu4Mm2CucFAnZ3v36nGhD0FxrR6vdOAikY02iy6HyH4grhbF8adHKb
-         GZe4j6LMoXQaoCFmF5RPt3vr87BtU3m1RsVdPO050E22+vr9N8T3TSljAUAVrNZbmCEu
-         /g9A==
-X-Gm-Message-State: AC+VfDzQ6B6ekfmrhTOUFpdro1ETsPs8Mn3jAVQVUQ+XC4u+Na4GbHr7
-        ZSVuBeOj6YYzj75p/Tji7h7mibwGLTJmbnv4frvd9Q==
-X-Google-Smtp-Source: ACHHUZ5vVK9vagH7aFbtx2YppYrWx9tZs7lNqLziCsJ17rVWYpua6FaBjs1X2V+4pwEhVnpLameEWFYTQofY27fqee8=
-X-Received: by 2002:a0d:d4c7:0:b0:55a:52e3:da37 with SMTP id
- w190-20020a0dd4c7000000b0055a52e3da37mr16454222ywd.10.1684918267794; Wed, 24
- May 2023 01:51:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684918263; x=1687510263;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qpwZKl15N1ARAVTzHTzpdCx10bm72H5sA4Jzbb3JTYA=;
+        b=eDBVDNcOxbwK+peRS4aWsNjP7Y3qhaTVICCKei9xBAcfXHvhJ8fWYM5t2UZppOLf5w
+         Y+K9WQtfV3r/wH5g4FwvAfc2MPlrb/GKft/rvoG7EEe59c0sVWtLaU/oIQ1X49itxgaY
+         nFsNPpBsEj09WJDhXXqUzbmesqxaiknEIEGBYEU5FCbYk/eTh5wG/f8nTavWdKao/B6Q
+         Xn4dNelWR8aOsa3cErQgSD+b2xr62gjFg18e8o8JXZkznjzBVTcgZMvYBh6rvXFMAbMB
+         0CRNNSa621UVn+Br4WEQdpHUgsCoM6jtw2RudsSKcBouA9Mn4QIK4JsShgxmGqIvi/IR
+         afeg==
+X-Gm-Message-State: AC+VfDyXfkLZEKTeTs7SYMaoB12AgpS78087QRwBYx2Ty9EZb0F9iZUr
+        ZcAuMkWHG8bGxNRsKdvq3ycL+w==
+X-Google-Smtp-Source: ACHHUZ5pq80iTCiDU+xKmX+H47kSR1xBIKDG6rPFbX5sZR6vWq/q/bTRaLpBwsF09Dabfc+MOBUfBQ==
+X-Received: by 2002:a7b:c8cf:0:b0:3f6:26a1:1d58 with SMTP id f15-20020a7bc8cf000000b003f626a11d58mr594423wml.37.1684918262841;
+        Wed, 24 May 2023 01:51:02 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id m11-20020a7bce0b000000b003f6042d6da0sm1613875wmc.16.2023.05.24.01.51.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 01:51:02 -0700 (PDT)
+Message-ID: <c37b88ae-7f54-3c07-666f-010a5fd84bd1@linaro.org>
+Date:   Wed, 24 May 2023 09:51:00 +0100
 MIME-Version: 1.0
-References: <cover.1684313910.git.Ryan.Wanner@microchip.com> <048a41d1dcb3da0e845986a73eaac61a54c69269.1684313910.git.Ryan.Wanner@microchip.com>
-In-Reply-To: <048a41d1dcb3da0e845986a73eaac61a54c69269.1684313910.git.Ryan.Wanner@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 24 May 2023 10:50:57 +0200
-Message-ID: <CACRpkdaN=9X_bvYrVF4xoZ1k4hbd+sMx6KtpPPLweKxtrSZ2Dg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: pinctrl: at91-pio4: Add push-pull support
-To:     Ryan.Wanner@microchip.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        ludovic.desroches@microchip.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] ASoC: codecs: wsa883x: do not set can_multi_write
+ flag
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org
+References: <20230523154605.4284-1-srinivas.kandagatla@linaro.org>
+ <00283665-e44f-457b-b2c9-1acf59d1cbd8@sirena.org.uk>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <00283665-e44f-457b-b2c9-1acf59d1cbd8@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,15 +79,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 1:54=E2=80=AFPM <Ryan.Wanner@microchip.com> wrote:
 
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
->
-> Add generic push-pull support for pio4 driver.
->
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Patch applied.
+On 23/05/2023 17:55, Mark Brown wrote:
+> On Tue, May 23, 2023 at 04:46:04PM +0100, Srinivas Kandagatla wrote:
+>> regmap-sdw does not support multi register writes, so there is
+>> no point in setting this flag. This also leads to incorrect
+>> programming of WSA codecs with regmap_multi_reg_write() call.
+> 
+>> This invalid configuration should have been rejected by regmap-sdw.
+> 
+> Does the CODEC support mulitple writes?  If so it seems better to leave
+No, the codec itself does not support multi-write. All the codec 
+register level interface is via SoundWire Bus. which also does not 
+support with the existing code.
 
-Yours,
-Linus Walleij
+
+--srini
+
+> the flag set and just do the appropriate fix in the regmap code until
+> such time as it's updated to be able to exercise it.
