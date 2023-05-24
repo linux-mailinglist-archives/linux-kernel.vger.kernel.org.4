@@ -2,87 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E2570F5C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64FF70F5C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbjEXL6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S232600AbjEXL6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjEXL63 (ORCPT
+        with ESMTP id S232576AbjEXL6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:58:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEB3135;
-        Wed, 24 May 2023 04:58:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 24 May 2023 07:58:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD1818B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:58:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 802D622168;
-        Wed, 24 May 2023 11:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684929505; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rH18iBwWnn9zYEQ2bRQgcgXCwVXM3ls6ER1KLLT/r60=;
-        b=WMTRqdgWgo5Xv1JGWXGXa/4leJ+kA3Fr2EvuxoJ+Aqe6NU5zbCpx8cdBkJRqivz3zlmCI8
-        fYweNr+iUlPQUznzgqAE9D1FG4L+KMokWqHKNGTedF59FJDkPiQa49qcPJoEz7QSNuY/TE
-        11uKzpPFgkG44/ySFC88vJeQKALxzNA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684929505;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rH18iBwWnn9zYEQ2bRQgcgXCwVXM3ls6ER1KLLT/r60=;
-        b=5OLIE73rOKr/k1ojPtkzX/HPu5nXWbAb/WgNuvY9KLod1eci7r+KTUnNLWeyZDjI8HJPtV
-        go+jXuaQCYw1m7Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F3D0D13425;
-        Wed, 24 May 2023 11:58:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cu/HOuD7bWSZVgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 11:58:24 +0000
-Message-ID: <18c33bf0-0c7e-7584-5149-33cf77b50b8a@suse.cz>
-Date:   Wed, 24 May 2023 13:58:24 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD2B963163
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4478FC433EF;
+        Wed, 24 May 2023 11:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684929520;
+        bh=/B0vdMufjSzg+kWpfRvse4iAzkRz1UKFhqFiVIC2l3g=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=MqhflI3Gwts1TEZhQ9dRco3qCqLLYolvjSx+5bt9qY3IxV9KmhdfIkiMcyR3atk4U
+         +8EbZbat46iKnI2t9WIpFyBhnaj5oC6FFdbzaSlq8jj1oZFX2vMwYXBIB+eLy4XLBO
+         ScZzjaIjqJBOZkHeMpxlRQI3ypqu4Le1NBUiZaxC4CHanI+xwMUk/6Q7quV4kcbWFD
+         5bCypJgj7hTWQd9lXQtmFNXlhvYuucDfhb3u8MNMQlZPuTcxuupJEY9Pue8S94uQS5
+         WHK7FyQwDF+ldm7tBAJAVg6gKR682aDqjhDYTnFoJNmafur9YKu2EexS2599PW95eV
+         +Qv61NgH2FADA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20230523-regcache-maple-sync-lock-v1-1-530e4d68dfab@kernel.org>
+References: <20230523-regcache-maple-sync-lock-v1-1-530e4d68dfab@kernel.org>
+Subject: Re: [PATCH] regmap: maple: Drop the RCU read lock while syncing
+ registers
+Message-Id: <168492951899.55912.11663734518532161454.b4-ty@kernel.org>
+Date:   Wed, 24 May 2023 12:58:38 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 09/11] mm/slub: Fold slab_update_freelist()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.520976397@infradead.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230515080554.520976397@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,171 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 09:57, Peter Zijlstra wrote:
-> The two functions slab_update_freelist() and __slab_update_freelist()
-> are nearly identical, fold and add a boolean argument and rely on
-> constant propagation.
+On Tue, 23 May 2023 23:18:19 +0100, Mark Brown wrote:
+> Unfortunately the maple tree requires us to explicitly lock it so we need
+> to take the RCU read lock while iterating. When syncing this means that we
+> end up trying to write out register values while holding the RCU read lock
+> which triggers lockdep issues since that is an atomic context but most
+> buses can't be used in atomic context. Pause the iteration and drop the
+> lock for each register we check to avoid this.
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> [...]
 
-Something like that has been tried before and the result:
-https://lore.kernel.org/all/CAHk-=wiJLqL2cUhJbvpyPQpkbVOu1rVSzgO2=S2jC55hneLtfQ@mail.gmail.com/
+Applied to
 
-Your parameter is not called 'locked' but 'irq_save' which is better, but
-that's just one detail.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
-After your refactoring in 08/11 which puts most of the code into
-__update_freelist_fast() and _slow() I'd say the result is not so bad already.
+Thanks!
 
-BTW I have some suspicion that some SLUB code is based on assumptions that
-are no longer true these days. IIRC I've seen some microbenchmark results a
-while ago that showed that disabling/enabling irqs is surprisingly (to me)
-very cheap today, so maybe it's not so useful to keep doing the
-this_cpu_cmpxchg128 for the struct kmem_cache_cpu operations (less so for
-struct slab cmpxchg128 where actually different cpus may be involved). But
-it needs a closer look.
+[1/1] regmap: maple: Drop the RCU read lock while syncing registers
+      commit: 0cc6578048e0980d254aee345130cced4912f723
 
-> ---
->  mm/slub.c |   80 +++++++++++++++++++++-----------------------------------------
->  1 file changed, 28 insertions(+), 52 deletions(-)
-> 
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -559,53 +559,29 @@ __update_freelist_slow(struct slab *slab
->   * allocation/ free operation in hardirq context. Therefore nothing can
->   * interrupt the operation.
->   */
-> -static inline bool __slab_update_freelist(struct kmem_cache *s, struct slab *slab,
-> -		void *freelist_old, unsigned long counters_old,
-> -		void *freelist_new, unsigned long counters_new,
-> -		const char *n)
-> +static __always_inline
-> +bool slab_update_freelist(struct kmem_cache *s, struct slab *slab,
-> +			  void *freelist_old, unsigned long counters_old,
-> +			  void *freelist_new, unsigned long counters_new,
-> +			  bool irq_save, const char *n)
->  {
->  	bool ret;
->  
-> -	if (USE_LOCKLESS_FAST_PATH())
-> +	if (!irq_save && USE_LOCKLESS_FAST_PATH())
->  		lockdep_assert_irqs_disabled();
->  
->  	if (s->flags & __CMPXCHG_DOUBLE) {
->  		ret = __update_freelist_fast(slab, freelist_old, counters_old,
->  				            freelist_new, counters_new);
->  	} else {
-> -		ret = __update_freelist_slow(slab, freelist_old, counters_old,
-> -				            freelist_new, counters_new);
-> -	}
-> -	if (likely(ret))
-> -		return true;
-> -
-> -	cpu_relax();
-> -	stat(s, CMPXCHG_DOUBLE_FAIL);
-> -
-> -#ifdef SLUB_DEBUG_CMPXCHG
-> -	pr_info("%s %s: cmpxchg double redo ", n, s->name);
-> -#endif
-> -
-> -	return false;
-> -}
-> -
-> -static inline bool slab_update_freelist(struct kmem_cache *s, struct slab *slab,
-> -		void *freelist_old, unsigned long counters_old,
-> -		void *freelist_new, unsigned long counters_new,
-> -		const char *n)
-> -{
-> -	bool ret;
-> -
-> -	if (s->flags & __CMPXCHG_DOUBLE) {
-> -		ret = __update_freelist_fast(slab, freelist_old, counters_old,
-> -				            freelist_new, counters_new);
-> -	} else {
->  		unsigned long flags;
->  
-> -		local_irq_save(flags);
-> +		if (irq_save)
-> +			local_irq_save(flags);
->  		ret = __update_freelist_slow(slab, freelist_old, counters_old,
->  				            freelist_new, counters_new);
-> -		local_irq_restore(flags);
-> +		if (irq_save)
-> +			local_irq_restore(flags);
->  	}
->  	if (likely(ret))
->  		return true;
-> @@ -2250,10 +2226,10 @@ static inline void *acquire_slab(struct
->  	VM_BUG_ON(new.frozen);
->  	new.frozen = 1;
->  
-> -	if (!__slab_update_freelist(s, slab,
-> -			freelist, counters,
-> -			new.freelist, new.counters,
-> -			"acquire_slab"))
-> +	if (!slab_update_freelist(s, slab,
-> +				  freelist, counters,
-> +				  new.freelist, new.counters,
-> +				  false, "acquire_slab"))
->  		return NULL;
->  
->  	remove_partial(n, slab);
-> @@ -2577,9 +2553,9 @@ static void deactivate_slab(struct kmem_
->  
->  
->  	if (!slab_update_freelist(s, slab,
-> -				old.freelist, old.counters,
-> -				new.freelist, new.counters,
-> -				"unfreezing slab")) {
-> +				  old.freelist, old.counters,
-> +				  new.freelist, new.counters,
-> +				  true, "unfreezing slab")) {
->  		if (mode == M_PARTIAL)
->  			spin_unlock_irqrestore(&n->list_lock, flags);
->  		goto redo;
-> @@ -2633,10 +2609,10 @@ static void __unfreeze_partials(struct k
->  
->  			new.frozen = 0;
->  
-> -		} while (!__slab_update_freelist(s, slab,
-> -				old.freelist, old.counters,
-> -				new.freelist, new.counters,
-> -				"unfreezing slab"));
-> +		} while (!slab_update_freelist(s, slab,
-> +					       old.freelist, old.counters,
-> +					       new.freelist, new.counters,
-> +					       false, "unfreezing slab"));
->  
->  		if (unlikely(!new.inuse && n->nr_partial >= s->min_partial)) {
->  			slab->next = slab_to_discard;
-> @@ -3072,10 +3048,10 @@ static inline void *get_freelist(struct
->  		new.inuse = slab->objects;
->  		new.frozen = freelist != NULL;
->  
-> -	} while (!__slab_update_freelist(s, slab,
-> -		freelist, counters,
-> -		NULL, new.counters,
-> -		"get_freelist"));
-> +	} while (!slab_update_freelist(s, slab,
-> +				       freelist, counters,
-> +				       NULL, new.counters,
-> +				       false, "get_freelist"));
->  
->  	return freelist;
->  }
-> @@ -3666,9 +3642,9 @@ static void __slab_free(struct kmem_cach
->  		}
->  
->  	} while (!slab_update_freelist(s, slab,
-> -		prior, counters,
-> -		head, new.counters,
-> -		"__slab_free"));
-> +				       prior, counters,
-> +				       head, new.counters,
-> +				       true, "__slab_free"));
->  
->  	if (likely(!n)) {
->  
-> 
-> 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
