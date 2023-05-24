@@ -2,142 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60ED270F143
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769A370F13E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240327AbjEXInL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S234471AbjEXIm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240303AbjEXImw (ORCPT
+        with ESMTP id S240344AbjEXImf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:42:52 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201E8E51
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:41:21 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-2553f2706bfso725984a91.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684917680; x=1687509680;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dTHbB0gony/TYMogUW6Qo/V1GtsaSfduo/QCXMjaxUM=;
-        b=ZnX7arnhJ7Q+Ipi910Jn2NK7QtDaPy4TlGLSCmXMrFgaUyqr1HH/K1c8b6/vd5Uy7O
-         jNoxiqXlVyu7dS8JQ6XZcHcyTIWBo5LiGPQ2ieUIGyL0YZetHQ2aHFnCghlX8XgkIv+F
-         f5EuBJnyV4VDQSb9NGCcJtePUs1XekOOsQ7ZeebwLbsoZ8oXPbGQ8lEuVgI+YY4ZT/0S
-         A5DUGll7sRLEHXSOQqu1Q8FZI26Y3oe3l2415CbQ8TxjnBND2kMPXNEJYohRbUKP5kVZ
-         woD/ctZI3vJHoAqhsIdLRO+9uYd6q4ASQGv3xtle4N7GIVzykLdRozpCCKQxXXlzaFno
-         K06w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684917680; x=1687509680;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dTHbB0gony/TYMogUW6Qo/V1GtsaSfduo/QCXMjaxUM=;
-        b=GRsKjSZyoxVViz5lCV6Ket7cWn+jAx8P0PNstDn/s0ImDqdi/dKAkFMhlzE+E6FMuA
-         hWZXwsj59D5UJQKmKEdxHAVFYMUHfZ0NvnTD0Sq96/qBIEB4fbd/r6s5AMoXBCDcZK6S
-         8uuWsExE5+zcjUSakHAww0HmAj5E9TOWG9fCzYJmK2rqgtoGLb/rieKkuvcmnwxZkCBm
-         Va7OjfUVvxiPnjlndCTM5mnnlAKeRJM6YYb0aIMJCqpGeD4Qi7QE3jFQb0uVvN8v0dcW
-         hFhSA4W0xvkQt6WAvpwDg32/SNTbaLiL5q4nyho12L1SAf9l0g9EzkjcbtZuhT/3r1Fs
-         JBHQ==
-X-Gm-Message-State: AC+VfDw2jjhC0O8dZFf9IOyi+wBLIhemtQIirE1RFC+e2QsNNOrb/E1y
-        rv1MrkR8qM+WAQr6hS1a5hPTmA==
-X-Google-Smtp-Source: ACHHUZ5hZGClD8Wm6BRjHwUzH4LIwlL/jyB4wklJZWIBhBzz+AkGHz5cDJ1YVqdT0xuc+4+ZgMFqtA==
-X-Received: by 2002:a17:90b:378c:b0:23f:962e:825d with SMTP id mz12-20020a17090b378c00b0023f962e825dmr17772299pjb.1.1684917680462;
-        Wed, 24 May 2023 01:41:20 -0700 (PDT)
-Received: from [10.85.115.102] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id n3-20020a17090ab80300b00253298287ccsm857956pjr.14.2023.05.24.01.41.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 01:41:20 -0700 (PDT)
-Message-ID: <8e65aa62-c92c-857d-3e27-8ccddf51b07f@bytedance.com>
-Date:   Wed, 24 May 2023 16:41:08 +0800
+        Wed, 24 May 2023 04:42:35 -0400
+Received: from out-3.mta1.migadu.com (out-3.mta1.migadu.com [95.215.58.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3D1B0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:42:03 -0700 (PDT)
+Date:   Wed, 24 May 2023 04:41:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684917722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NfeE66MsVipD0d/K4/FqZuOlVvQxWiCOF8XwvhL/c+o=;
+        b=Bkd7MJoVVH/6uAc1V9EL/nWfsvHGFZoQhShKvhukMALDO/54FWL8DAFlKiR8n+zTvKJ/YS
+        uNPxnyEY+KuxgXEYsYezoZofXtkxcUc4cUk0luygoeHvznElXOlSLzbsyiCEp709ySM/uU
+        xGaC4P3320A8hFHJvvom4MCHtC42q3I=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: (subset) [PATCH 20/32] vfs: factor out inode hash head
+ calculation
+Message-ID: <ZG3N10ytvE1D91XU@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-21-kent.overstreet@linux.dev>
+ <20230523-plakat-kleeblatt-007077ebabb6@brauner>
+ <ZG1D4gvpkFjZVMcL@dread.disaster.area>
+ <ZG2yM1vzHZkW0yIA@infradead.org>
+ <ZG2+Jl8X1i5zGdMK@dread.disaster.area>
+ <20230524-zumeist-fotomodell-8b772735323d@brauner>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [External] Re: [PATCH] cgroup: rstat: Simplified
- cgroup_base_stat_flush() update last_bstat logic
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230518124142.57644-1-jiahao.os@bytedance.com>
- <f39b9229-e59c-2b1c-7f3f-1aeedfad44dc@bytedance.com>
- <5g73i4yvi4ub4dqrf4dnq5qghkyckoygmgd2st6be3gg7twww2@w6zim6nxpt3b>
- <4d49f7e7-2488-9690-258e-34e617cfef6f@bytedance.com>
- <remnwctqmxleig7ywt6puhxnpmzjo7xm6hlfhpnul46ulfnw7j@36sbuxhuatto>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <remnwctqmxleig7ywt6puhxnpmzjo7xm6hlfhpnul46ulfnw7j@36sbuxhuatto>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524-zumeist-fotomodell-8b772735323d@brauner>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/5/24 Michal Koutný wrote:
-> On Wed, May 24, 2023 at 02:54:10PM +0800, Hao Jia <jiahao.os@bytedance.com> wrote:
->> Yes, so we need @curr to record the bstat value after the sequence fetch is
->> completed.
+On Wed, May 24, 2023 at 10:31:14AM +0200, Christian Brauner wrote:
+> I'm here to help get more review done and pick stuff up. I won't be able
+> to do it without additional reviewers such as Christoph helping of
+> course as this isn't a one-man show.
 > 
-> No, I still don't see a problem that it solves. If you find incorrect
-> data being reported, please explain it more/with an example.
+> Let's see if we can get this reviewed. If you have the bandwith to send
+> it to fsdevel that'd be great. If it takes you a while to get back to it
+> then that's fine too.
 
-Sorry to confuse you.
+These patches really should have my reviewed-by on them already, I
+stared at them quite a bit (and fs/inode.c in general) awhile back.
 
-My earliest patch is like this:
-
-diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index 9c4c55228567..3e5c4c1c92c6 100644
---- a/kernel/cgroup/rstat.c
-+++ b/kernel/cgroup/rstat.c
-@@ -376,14 +376,14 @@ static void cgroup_base_stat_flush(struct cgroup 
-*cgrp, int cpu)
-     /* propagate percpu delta to global */
-     cgroup_base_stat_sub(&delta, &rstatc->last_bstat);  (1) <---
-     cgroup_base_stat_add(&cgrp->bstat, &delta);
-- cgroup_base_stat_add(&rstatc->last_bstat, &delta);
-+ rstatc->last_bstat = rstatc->bstat; 			(2) <--
-
-     /* propagate global delta to parent (unless that's root) */
-     if (cgroup_parent(parent)) {
-        delta = cgrp->bstat;
-        cgroup_base_stat_sub(&delta, &cgrp->last_bstat);
-        cgroup_base_stat_add(&parent->bstat, &delta);
-- cgroup_base_stat_add(&cgrp->last_bstat, &delta);
-+ cgrp->last_bstat = cgrp->bstat;
-     }
-   }
-
-If I understand correctly, the rstatc->bstat at (1) and (2) may be 
-different. At (2) rstatc->bstat may have been updated on other CPUs.
-Or we should not read rstatc->bstat directly, we should pass the 
-following way
-
-     do {
-        seq = __u64_stats_fetch_begin(&rstatc->bsync);
-        cur = rstatc->bstat;
-     } while (__u64_stats_fetch_retry(&rstatc->bsync, seq));
-
-
-> 
->> Yes, but it may not be obvious.
->> Another reason is that when we complete an update, we snapshot last_bstat as
->> the current bstat, which is better for readers to understand. Arithmetics is
->> somewhat obscure.
-> 
-> The readability here is subjective. It'd be interesting to have some
-> data comparing arithmetics vs copying though.
-
-Thanks for your suggestion, I plan to use RDTSC to compare the time 
-consumption of arithmetics vs copying. Do you have better suggestions or 
-tools?
-
-Thanks,
-Hao
+(I was attempting to convert fs/inode.c to an rhashtable up until I
+realized the inode lifetime rules are completely insane, so when I saw
+Dave's much simpler approach I was _more_ than happy to not have to
+contemplate that mess anymore...)
