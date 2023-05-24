@@ -2,322 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F5670ECBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917F370ECBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239037AbjEXExy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 00:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S230323AbjEXEy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 00:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjEXExw (ORCPT
+        with ESMTP id S229540AbjEXEyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 00:53:52 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63F213E;
-        Tue, 23 May 2023 21:53:50 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O4UKeh005024;
-        Wed, 24 May 2023 04:53:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vaaPbw1ARTGRfOskyv4NiuJF0uHBDUVCzB7VY4qNrqg=;
- b=amXzxzQvBkRRpLSzLoSoL023sqjbACekChdxJLyWtz2yHlYIP+jP5+VW8ryyxHJeeEa6
- rY4JKy3AjJ1veLws/g5w6rxNevfOG8GNOXDf8zrSPA8BIJNXabxYYUkcmCtQYi6iFL5L
- tGo/tqBDEv1O+hPS6zqJg95lN/5XJE4TZQFRyrHxVLcPqAwu9SYyzJ/8BpI1yfc+7PAs
- s/pny1qtTeg6vThaU5P3akumGm8/WktE34UcYjo2ZaSU+zx7gwKZO3Qf65QrAlLI3qHu
- vssRY6u2JpfA3i+a2MXMuHjh/JFMqc3KagynuVb9iWV3/dRswF0e4InVAT6LYfNyRFZ+ EA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs42urt2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 04:53:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O4riID026837
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 04:53:44 GMT
-Received: from [10.50.55.115] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
- 2023 21:53:41 -0700
-Message-ID: <03a9eb97-0961-5031-debe-acea03ee68fd@quicinc.com>
-Date:   Wed, 24 May 2023 10:23:32 +0530
+        Wed, 24 May 2023 00:54:23 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C81184
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:54:18 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba8cd61ee2dso8241624276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684904058; x=1687496058;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KqPOl9ypUlM9FOcJpAG9+3J18Ww9uHXlwCXL2XFf4aM=;
+        b=cr+AzMNHLzBZehXjVbZ+6LzhsqAMJoB7wynFTygjsNCLn3hXwhPtGPFhdD4PqnAc9M
+         jj35Sd9X1YYFQKHuxPfyuFw61GgVTeurqC72t0hz+TiRBgb1Mfm9tuWtWTX6DURJdCga
+         gRSaqwx7qYKU3rUSR1AaWRazZRCDCqfL+20T8wlRqqLnHKlKFbQf0qEzcjAhX0Ym1Uo8
+         D1l4etRSW7oEjEmszglGL6xjlMxjbmwhAes45bCna8eaa33Hi/AEKvt6F3TmlWfHnESv
+         Y9RW4cUzgHMSGhz1/ANzV1xkfNI4iStIaXJjNyeYLQplolsqmQoBrRElRezNE3QEAQXV
+         47NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684904058; x=1687496058;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KqPOl9ypUlM9FOcJpAG9+3J18Ww9uHXlwCXL2XFf4aM=;
+        b=erBnKoOLfn5AE4pAJH4VhxLCjjnXxcNJP1juwNXb7WBic48GYrgqjizxV1kdIHzkEd
+         OjVpYBOqJZHlCmrgNfAxDjyOOgiEMvAkLTpcZyDUDElpuM2f2sv0zrM4JHZlaN7OiW01
+         TTDurYe/1P5zIx/PbYBhfKBl6acKJTO6ZeIIUw8/X+qIvZAjYAS7HpdRy5Emq57vJGgm
+         WAZEbr8Oum5DblJoerk70OUlRIvwFgh9jqwCMWf+c7HLJoUGhfqpp2z9fcZL6+4p68ef
+         u5m9puAnEMld60cL0lhWQMfPUwKSaWStcV+8hb8SCFRssPcWMrOqPgnfUYKq66A0/hYo
+         cBaw==
+X-Gm-Message-State: AC+VfDxvSu5ql3B1porrOPfiIkQtrenGoZfYFxohDyactq1yQ+7hJHVp
+        M1d3fVzJMCZeSu6nLOl6i3rdYQ==
+X-Google-Smtp-Source: ACHHUZ6atGZH5fRFxmsfK54bzyEVqL7dJkCeyQRAeAXzu+E26Fai81nyT2Er1bQtHD5E8RbQ/8Oa6Q==
+X-Received: by 2002:a81:ab4a:0:b0:55a:c779:d8c0 with SMTP id d10-20020a81ab4a000000b0055ac779d8c0mr16230329ywk.22.1684904057666;
+        Tue, 23 May 2023 21:54:17 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id g134-20020a0ddd8c000000b0055a382ae26fsm3432251ywe.49.2023.05.23.21.54.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 21:54:17 -0700 (PDT)
+Date:   Tue, 23 May 2023 21:54:14 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Qi Zheng <qi.zheng@linux.dev>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 29/31] mm/memory: handle_pte_fault() use
+ pte_offset_map_nolock()
+In-Reply-To: <a56c92c9-44a0-97f4-1a3d-e1679471f19c@linux.dev>
+Message-ID: <9cccc47c-d9c7-3071-098-4edb54b178a@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <5f10e87-c413-eb92-fc6-541e52c1f6be@google.com> <a56c92c9-44a0-97f4-1a3d-e1679471f19c@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] venus: replace arrary index with enum for supported
- formats
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-media@vger.kernel.org>, <stanimir.k.varbanov@gmail.com>,
-        <quic_vgarodia@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <mchehab@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <1684736229-30567-1-git-send-email-quic_dikshita@quicinc.com>
- <0f7a33c1-f894-adfe-94d7-89296893128f@linaro.org>
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <0f7a33c1-f894-adfe-94d7-89296893128f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AyHwFdofocAfPoz6xvonnD5EJWk1iU0Q
-X-Proofpoint-GUID: AyHwFdofocAfPoz6xvonnD5EJWk1iU0Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_02,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- priorityscore=1501 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- phishscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305240040
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 22 May 2023, Qi Zheng wrote:
+> On 2023/5/22 13:26, Hugh Dickins wrote:
+> > handle_pte_fault() use pte_offset_map_nolock() to get the vmf.ptl which
+> > corresponds to vmf.pte, instead of pte_lockptr() being used later, when
+> > there's a chance that the pmd entry might have changed, perhaps to none,
+> > or to a huge pmd, with no split ptlock in its struct page.
+> > 
+> > Remove its pmd_devmap_trans_unstable() call: pte_offset_map_nolock()
+> > will handle that case by failing.  Update the "morph" comment above,
+> > looking forward to when shmem or file collapse to THP may not take
+> > mmap_lock for write (or not at all).
+> > 
+> > do_numa_page() use the vmf->ptl from handle_pte_fault() at first, but
+> > refresh it when refreshing vmf->pte.
+> > 
+> > do_swap_page()'s pte_unmap_same() (the thing that takes ptl to verify a
+> > two-part PAE orig_pte) use the vmf->ptl from handle_pte_fault() too; but
+> > do_swap_page() is also used by anon THP's __collapse_huge_page_swapin(),
+> > so adjust that to set vmf->ptl by pte_offset_map_nolock().
+> > 
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >   mm/khugepaged.c |  6 ++++--
+> >   mm/memory.c     | 38 +++++++++++++-------------------------
+> >   2 files changed, 17 insertions(+), 27 deletions(-)
+> > 
+...
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index c7b920291a72..4ec46eecefd3 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+...
+> > @@ -4897,27 +4897,16 @@ static vm_fault_t handle_pte_fault(struct vm_fault
+> > *vmf)
+> >     vmf->pte = NULL;
+> >     vmf->flags &= ~FAULT_FLAG_ORIG_PTE_VALID;
+> >   	} else {
+> > -		/*
+> > -		 * If a huge pmd materialized under us just retry later.  Use
+> > -		 * pmd_trans_unstable() via pmd_devmap_trans_unstable()
+> > instead
+> > -		 * of pmd_trans_huge() to ensure the pmd didn't become
+> > -		 * pmd_trans_huge under us and then back to pmd_none, as a
+> > -		 * result of MADV_DONTNEED running immediately after a huge
+> > pmd
+> > -		 * fault in a different thread of this mm, in turn leading to
+> > a
+> > -		 * misleading pmd_trans_huge() retval. All we have to ensure
+> > is
+> > -		 * that it is a regular pmd that we can walk with
+> > -		 * pte_offset_map() and we can do that through an atomic read
+> > -		 * in C, which is what pmd_trans_unstable() provides.
+> > -		 */
+> > -		if (pmd_devmap_trans_unstable(vmf->pmd))
+> > -			return 0;
+> >     /*
+> >   		 * A regular pmd is established and it can't morph into a huge
+> > -		 * pmd from under us anymore at this point because we hold the
+> > -		 * mmap_lock read mode and khugepaged takes it in write mode.
+> > -		 * So now it's safe to run pte_offset_map().
+> > +		 * pmd by anon khugepaged, since that takes mmap_lock in write
+> > +		 * mode; but shmem or file collapse to THP could still morph
+> > +		 * it into a huge pmd: just retry later if so.
+> >   		 */
+> > -		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
+> > +		vmf->pte = pte_offset_map_nolock(vmf->vma->vm_mm, vmf->pmd,
+> > +						 vmf->address, &vmf->ptl);
+> > +		if (unlikely(!vmf->pte))
+> > +			return 0;
+> 
+> Just jump to the retry label below?
 
+Shrug.  Could do.  But again I saw no reason to optimize this path,
+the pmd_devmap_trans_unstable() treatment sets a good enough example.
 
-On 5/23/2023 1:32 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 22.05.2023 08:17, Dikshita Agarwal wrote:
->> Use enums to list supported formats for encoder and decoder
->> instead of array index which was a error prone design.
->>
->> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
->> ---
-> Thanks a lot.
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
->>  drivers/media/platform/qcom/venus/core.h | 16 ++++++++
->>  drivers/media/platform/qcom/venus/vdec.c | 63 +++++++++++++++++++-------------
->>  drivers/media/platform/qcom/venus/venc.c | 31 +++++++++-------
->>  3 files changed, 72 insertions(+), 38 deletions(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
->> index 12a42fb..e988ed4 100644
->> --- a/drivers/media/platform/qcom/venus/core.h
->> +++ b/drivers/media/platform/qcom/venus/core.h
->> @@ -83,6 +83,22 @@ struct venus_resources {
->>  	const char *fwname;
->>  };
->>  
->> +enum venus_fmt {
->> +	VENUS_FMT_NV12			= 0,
->> +	VENUS_FMT_QC08C			= 1,
->> +	VENUS_FMT_QC10C			= 2,
->> +	VENUS_FMT_H264			= 3,
->> +	VENUS_FMT_VP8			= 4,
->> +	VENUS_FMT_VP9			= 5,
->> +	VENUS_FMT_HEVC			= 6,
->> +	VENUS_FMT_VC1_ANNEX_G		= 7,
->> +	VENUS_FMT_VC1_ANNEX_L		= 8,
->> +	VENUS_FMT_MPEG4			= 9,
->> +	VENUS_FMT_MPEG2			= 10,
->> +	VENUS_FMT_H263			= 11,
->> +	VENUS_FMT_XVID			= 12,
-> Nit: I don't think the '= n' is necessary here, as it doesn't
-> map to anything in hw/fw (or does it?)
-> 
-> Konrad
-> 
-Yes, It doesn't. Will remove in next patch.
-
-Thanks,
-Dikshita
-
->> +};
->> +
->>  struct venus_format {
->>  	u32 pixfmt;
->>  	unsigned int num_planes;
->> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
->> index c6f0fd08..bab985b 100644
->> --- a/drivers/media/platform/qcom/venus/vdec.c
->> +++ b/drivers/media/platform/qcom/venus/vdec.c
->> @@ -30,69 +30,82 @@
->>   * - future firmware versions could add support for >1 planes
->>   */
->>  static const struct venus_format vdec_formats[] = {
->> -	{
->> +	[VENUS_FMT_NV12] = {
->>  		.pixfmt = V4L2_PIX_FMT_NV12,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> -	}, {
->> +	},
->> +	[VENUS_FMT_QC08C] = {
->>  		.pixfmt = V4L2_PIX_FMT_QC08C,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> -	}, {
->> +	},
->> +	[VENUS_FMT_QC10C] = {
->>  		.pixfmt = V4L2_PIX_FMT_QC10C,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_MPEG4,
->> +	},
->> +	[VENUS_FMT_H264] = {
->> +		.pixfmt = V4L2_PIX_FMT_H264,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_MPEG2,
->> +	},
->> +	[VENUS_FMT_VP8] = {
->> +		.pixfmt = V4L2_PIX_FMT_VP8,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_H263,
->> +	},
->> +	[VENUS_FMT_VP9] = {
->> +		.pixfmt = V4L2_PIX_FMT_VP9,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
->> +	},
->> +	[VENUS_FMT_HEVC] = {
->> +		.pixfmt = V4L2_PIX_FMT_HEVC,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
->> +	},
->> +	[VENUS_FMT_VC1_ANNEX_G] = {
->> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_H264,
->> +	},
->> +	[VENUS_FMT_VC1_ANNEX_L] = {
->> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_VP8,
->> +	},
->> +	[VENUS_FMT_MPEG4] = {
->> +		.pixfmt = V4L2_PIX_FMT_MPEG4,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_VP9,
->> +	},
->> +	[VENUS_FMT_MPEG2] = {
->> +		.pixfmt = V4L2_PIX_FMT_MPEG2,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_XVID,
->> +	},
->> +	[VENUS_FMT_H263] = {
->> +		.pixfmt = V4L2_PIX_FMT_H263,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_HEVC,
->> +	},
->> +	[VENUS_FMT_XVID] = {
->> +		.pixfmt = V4L2_PIX_FMT_XVID,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
->>  	},
->> +
->>  };
->>  
->>  static const struct venus_format *
->> @@ -1575,8 +1588,8 @@ static const struct hfi_inst_ops vdec_hfi_ops = {
->>  static void vdec_inst_init(struct venus_inst *inst)
->>  {
->>  	inst->hfi_codec = HFI_VIDEO_CODEC_H264;
->> -	inst->fmt_out = &vdec_formats[8];
->> -	inst->fmt_cap = &vdec_formats[0];
->> +	inst->fmt_out = &vdec_formats[VENUS_FMT_H264];
->> +	inst->fmt_cap = &vdec_formats[VENUS_FMT_NV12];
->>  	inst->width = frame_width_min(inst);
->>  	inst->height = ALIGN(frame_height_min(inst), 32);
->>  	inst->crop.left = 0;
->> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
->> index 4666f42..b60772c 100644
->> --- a/drivers/media/platform/qcom/venus/venc.c
->> +++ b/drivers/media/platform/qcom/venus/venc.c
->> @@ -32,28 +32,33 @@
->>   * - future firmware versions could add support for >1 planes
->>   */
->>  static const struct venus_format venc_formats[] = {
->> -	{
->> +	[VENUS_FMT_NV12] = {
->>  		.pixfmt = V4L2_PIX_FMT_NV12,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_MPEG4,
->> +	},
->> +	[VENUS_FMT_H264] = {
->> +		.pixfmt = V4L2_PIX_FMT_H264,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_H263,
->> +	},
->> +	[VENUS_FMT_VP8] = {
->> +		.pixfmt = V4L2_PIX_FMT_VP8,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_H264,
->> +	},
->> +	[VENUS_FMT_HEVC] = {
->> +		.pixfmt = V4L2_PIX_FMT_HEVC,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_VP8,
->> +	},
->> +	[VENUS_FMT_MPEG4] = {
->> +		.pixfmt = V4L2_PIX_FMT_MPEG4,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> -	}, {
->> -		.pixfmt = V4L2_PIX_FMT_HEVC,
->> +	},
->> +	[VENUS_FMT_H263] = {
->> +		.pixfmt = V4L2_PIX_FMT_H263,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->>  	},
->> @@ -1416,8 +1421,8 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
->>  
->>  static void venc_inst_init(struct venus_inst *inst)
->>  {
->> -	inst->fmt_cap = &venc_formats[3];
->> -	inst->fmt_out = &venc_formats[0];
->> +	inst->fmt_cap = &venc_formats[VENUS_FMT_H264];
->> +	inst->fmt_out = &venc_formats[VENUS_FMT_NV12];
->>  	inst->width = 1280;
->>  	inst->height = ALIGN(720, 32);
->>  	inst->out_width = 1280;
+Hugh
