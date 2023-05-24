@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632067101CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A727101D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbjEXXuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 19:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S231689AbjEXXvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 19:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjEXXuE (ORCPT
+        with ESMTP id S229612AbjEXXu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 19:50:04 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF3132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:50:01 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3581C2C02E0;
-        Thu, 25 May 2023 11:49:47 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1684972187;
-        bh=4a27tZpGUeVAxwbKAxTrxpyuPQrRyNv6hwKJVC39hRU=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=fnWb9dxs2Y/WJyV8dK/t5Ogo1L0uvd9MOaeY/oyMOG8rKpqL2222aPCU3dqccjWhm
-         WmStHOAINnNHWI1K1v6ArXpYiyAJn6FIbka14mYkwLQm5piQKaJWVxsPIzonOIaief
-         zGTyBhIuaNSQ5HKDqFoLdUdIYDUSU4L8qW0TnZYz5hoplBVSZg6G84+TaHW2ooKcc9
-         rFEEQB/JVZRidJgAKZvnqvJ86YiIkCjUNUGfOrDSOeoUY6nFqcRPAs8VfUba2fDivF
-         1vB4GRG+uwISfLS72w+P+8pobpMxYalYXnRKmFx0LEn7HpzVUKL98GzDIgs/ExVteR
-         ncka8Fej8qCRw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B646ea29b0001>; Thu, 25 May 2023 11:49:47 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 25 May 2023 11:49:46 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Thu, 25 May 2023 11:49:46 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "bbrezillon@kernel.org" <bbrezillon@kernel.org>
-CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] mtd: rawnand: marvell: ensure timing values are
- written
-Thread-Topic: [PATCH v2] mtd: rawnand: marvell: ensure timing values are
- written
-Thread-Index: AQHZjdODNtokZcXnnEuLkFH94ISxpa9pUAUA
-Date:   Wed, 24 May 2023 23:49:46 +0000
-Message-ID: <9372c8df-5604-0284-ba3a-74af4ca435e3@alliedtelesis.co.nz>
-References: <20230524000551.581491-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20230524000551.581491-1-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0E716FB8D48E644196FB08B558227153@atlnz.lc>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=P-IC7800AAAA:8 a=CjQ7iZMe9_sfGYb6nLMA:9 a=QEXdDO2ut3YA:10 a=d3PnA9EDa4IxuAV0gXij:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 19:50:58 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E9C99
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:50:57 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64d2d0f5132so907155b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684972256; x=1687564256;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSR7SiejqAADkjtE2sfBUw7kBDCwXi6R0Pqg2+hbZ5M=;
+        b=sBgm/c/eypRScnM/5VK84NQJotHmdUBdtdu7k+AA2ntAYB6j5QG/rkORL1OXol+KHR
+         V8olrWLcq19w9iPuiX8It70T0bWgLUavXKJVcMFrc9Lcc5uNtTL3TSMcBs6peyxVYbHz
+         8TJwNaRveyodUpGx9k1rKBmJBq6fJYXXo3pftEa2308DCGiNODq5j7xEaVXVbBilzMZR
+         nUvrsvFQxCd4Jh1hWPgKLPYY84wfc/rszy2CSOGTQIirnhWYC64OIaDAYkPGm4obhw+Q
+         KvfboAFt7XMNOhnDUGg7wdUu6I1fkWo6S+YncB0LvSAtW8ZcIyBYPPGeODVGBwdqcnBI
+         4/vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684972256; x=1687564256;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSR7SiejqAADkjtE2sfBUw7kBDCwXi6R0Pqg2+hbZ5M=;
+        b=cx7sJcaG4pk19odC8Zojl16xGhmJ0BGrrePdkkLFcpl+twfh4OGPqeg8NfDj2hAWyY
+         2hLKQ3kfzjeCk783HWqoCXsRpkms7kTcaDpXKtfaerZKq6KDSkxGJiXPaPmGEtc9Kd9U
+         cX2UzxLbTh6aDqo0UUi/epEh+Wcycjp6/IsBS5vUBAlGy9JYNjU21F4hHaMsSe/5d38y
+         qgtN7qQeMUbBxQVcCOKSYsIYg4pBF0jvM3sS+XrIbRee/jjqW44iXoo1zLuuyjslsIUH
+         AoF2xSswDT7t1FIJNWQE1ky8ha+jLqUls7wEewU5GEUwT2nlCSPJkuyc97zAl5JwKuYb
+         JI5Q==
+X-Gm-Message-State: AC+VfDxO4G0Vs+t4MqaJpzvWaiXbqVsV08V7DRLCtbZqUMRFS0Cxo+2w
+        IHFqI5f9KZrZERHdor8D8RyIpcxRzMU=
+X-Google-Smtp-Source: ACHHUZ5++i/grgISdAgXADrF+3dpyM58oC7OV69ywkCye0aodewP+oJLe6AqjUhs2UrhIZ1ob43Es59MFt0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:189c:b0:63a:ff2a:bf9f with SMTP id
+ x28-20020a056a00189c00b0063aff2abf9fmr1730016pfh.2.1684972256482; Wed, 24 May
+ 2023 16:50:56 -0700 (PDT)
+Date:   Wed, 24 May 2023 16:50:54 -0700
+In-Reply-To: <20230420104622.12504-8-ljrcore@126.com>
+Mime-Version: 1.0
+References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-8-ljrcore@126.com>
+Message-ID: <ZG6i3sqOcZDg/UCG@google.com>
+Subject: Re: [PATCH v2 7/7] KVM: selftests: Test pmu event filter with
+ incompatible kvm_pmu_event_filter
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAyNC8wNS8yMyAxMjowNSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gV2hlbiBuZXcgdGlt
-aW5nIHZhbHVlcyBhcmUgY2FsY3VsYXRlZCBpbiBtYXJ2ZWxsX25mY19zZXR1cF9pbnRlcmZhY2Uo
-KQ0KPiBlbnN1cmUgdGhhdCB0aGV5IHdpbGwgYmUgYXBwbGllZCBpbiBtYXJ2ZWxsX25mY19zZWxl
-Y3RfdGFyZ2V0KCkgYnkNCj4gY2xlYXJpbmcgdGhlIHNlbGVjdGVkX2NoaXAgcG9pbnRlci4NCj4N
-Cj4gRml4ZXM6IGIyNTI1MTQxNGY2ZSAoIm10ZDogcmF3bmFuZDogbWFydmVsbDogU3RvcCBpbXBs
-ZW1lbnRpbmcgLT5zZWxlY3RfY2hpcCgpIikNCj4gU3VnZ2VzdGVkLWJ5OiBNaXF1ZWwgUmF5bmFs
-IDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNr
-aGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQo+IC0tLQ0KPg0KPiBOb3Rl
-czoNCj4gICAgICBUaGlzIGF0IGxlYXN0IGdldHMgbWUgdG8gYSBwb2ludCB3aGVyZSBJIGNhbiBp
-bGx1c3RyYXRlZCB0aGUgcHJvYmxlbQ0KPiAgICAgIHJlcG9ydGVkIHRvIG1lLiBJdCBhcHBlYXJz
-IHRoYXQgZGVzcGl0ZSB0aGUgY2hpcCBjb3JyZWN0bHkgcmVwb3J0aW5nDQo+ICAgICAgc3VwcG9y
-dCBmb3IgU0RSIHRpbWluZyBtb2RlcyB1cCB0byA0IHRoZSBvYnNlcnZlZCB0V0MgaXMgMjBucy4g
-SSd2ZSBub3QNCj4gICAgICBzZWVuIGFueSBhY3R1YWwgcHJvYmxlbSBydW5uaW5nIGluIHRoaXMg
-c3RhdGUgdGhlIG9ubHkgY29tcGxhaW50IGlzIHRoYXQNCj4gICAgICB0aGUgZGF0YXNoZWV0IHNh
-eXMgdGhlIG1pbmltdW0gdFdDIGlzIDI1bnMuDQo+ICAgICAgDQo+ICAgICAgSWYgSSBtYWtlIGEg
-Y2hhbmdlIHRvIG15IGJvb3Rsb2FkZXIgc3VjaCB0aGF0IHRoZSBOQU5EIENsb2NrIEZyZXF1ZW5j
-eQ0KPiAgICAgIFNlbGVjdCBiaXQgKDB4RjI0NDA3MDA6MCkgdG8gMSBiZWZvcmUgYm9vdGluZyB0
-aGUga2VybmVsIF9hbmRfIEkgcmVtb3ZlDQo+ICAgICAgdGhlIGV4dHJhIGZhY3RvciBvZiAyIGZy
-b20gdGhlIHBlcmlvZF9ucyBjYWxjdWxhdGlvbiBJIG9ic2VydmUgdFdDIG9mDQo+ICAgICAgYWJv
-dXQgNjBucy4gSWYgSSBkb24ndCByZW1vdmUgdGhlIGZhY3RvciBvZiAyIHRoZSBOQU5EIGludGVy
-ZmFjZSBkb2Vzbid0DQo+ICAgICAgd29yayAoY2FuJ3Qgd3JpdGUgQkJUKS4NCj4gICAgICANCj4g
-ICAgICBDaGFuZ2VzIGluIHYyOg0KPiAgICAgIC0gcmV3b3JkIGNvbW1lbnQgcGVyIHN1Z2dlc3Rp
-b24gZnJvbSBNaXF1ZWwsIGFkZCBmaXhlcyB0YWcNCg0KQWN0dWFsbHkgdGhpbmtpbmcgYWJvdXQg
-dGhpcyBJIHNob3VsZCBwcm9iYWJseSBhbHNvIGluY2x1ZGUgYSBjaGFuZ2UgdG8gDQpkcm9wIHRo
-ZSB1bmNvbmRpdGlvbmFsIE5BTkQgQ2xvY2sgRnJlcXVlbmN5IHNlbGVjdC4gU29tZSBtYXJ2ZWxs
-X25hbmQgDQp1c2VycyBwcm9iYWJseSBhcmVuJ3QgZ2V0dGluZyB0aGUgYmVzdCB0aW1pbmdzIHdp
-dGhvdXQgdGhpcyBjaGFuZ2UgYnV0IA0KdGhvc2Ugd2l0aCBhIHN5c3RlbSBjb250cm9sbGVyIHdp
-bGwgcHJvYmFibHkgZW5kIHVwIHdpdGggdGltaW5ncyBmYXN0ZXIgDQp0aGFuIGludGVuZGVkICh3
-aGljaCBtYXkgd29yayBkZXBlbmRpbmcgb24gZGVzaWduIHRvbGVyYW5jZXMpLg0KDQo+DQo+ICAg
-ZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMgfCA2ICsrKysrKw0KPiAgIDEgZmls
-ZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKykNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbXRk
-L25hbmQvcmF3L21hcnZlbGxfbmFuZC5jIGIvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9u
-YW5kLmMNCj4gaW5kZXggYWZiNDI0NTc5ZjBiLi5mMWZjZjEzNmFkMDMgMTAwNjQ0DQo+IC0tLSBh
-L2RyaXZlcnMvbXRkL25hbmQvcmF3L21hcnZlbGxfbmFuZC5jDQo+ICsrKyBiL2RyaXZlcnMvbXRk
-L25hbmQvcmF3L21hcnZlbGxfbmFuZC5jDQo+IEBAIC0yNDU3LDYgKzI0NTcsMTIgQEAgc3RhdGlj
-IGludCBtYXJ2ZWxsX25mY19zZXR1cF9pbnRlcmZhY2Uoc3RydWN0IG5hbmRfY2hpcCAqY2hpcCwg
-aW50IGNoaXBuciwNCj4gICAJCQlORFRSMV9XQUlUX01PREU7DQo+ICAgCX0NCj4gICANCj4gKwkv
-Kg0KPiArCSAqIFJlc2V0IG5mYy0+c2VsZWN0ZWRfY2hpcCBzbyB0aGUgbmV4dCBjb21tYW5kIHdp
-bGwgY2F1c2UgdGhlIHRpbWluZw0KPiArCSAqIHJlZ2lzdGVycyB0byBiZSB1cGRhdGVkIGluIG1h
-cnZlbGxfbmZjX3NlbGVjdF90YXJnZXQoKS4NCj4gKwkgKi8NCj4gKwluZmMtPnNlbGVjdGVkX2No
-aXAgPSBOVUxMOw0KPiArDQo+ICAgCXJldHVybiAwOw0KPiAgIH0NCj4gICA=
+On Thu, Apr 20, 2023, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> Add test to verify the behavior of the pmu event filter when an
+> incomplete kvm_pmu_event_filter structure is used. By running the
+> test, we can ensure that the pmu event filter correctly handles
+> incomplete structures and does not allow events to be counted when
+> they should not be.
+> 
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> ---
+>  .../kvm/x86_64/pmu_event_filter_test.c        | 23 +++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> index 9be4c6f8fb7e..a6b6e0d086ae 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> @@ -881,6 +881,24 @@ static bool fixed_ctr_is_allowed(uint8_t idx, uint32_t action, uint32_t bitmap)
+>  		(action == KVM_PMU_EVENT_DENY && !(bitmap & BIT_ULL(idx)));
+>  }
+>  
+> +struct incompatible_pmu_event_filter {
+> +	__u32 action;
+> +	__u32 nevents;
+> +	__u32 fixed_counter_bitmap;
+> +};
+> +
+> +static uint64_t test_incompatible_filter(struct kvm_vcpu *vcpu, uint32_t action,
+> +					 uint32_t bitmap)
+> +{
+> +	struct incompatible_pmu_event_filter err_f;
+> +
+> +	err_f.action = action;
+> +	err_f.fixed_counter_bitmap = bitmap;
+> +	ioctl((vcpu->vm)->fd, KVM_SET_PMU_EVENT_FILTER, &err_f.action);
+
+This is completely busted.  It "passes" by luck, not because it's a valid test.
+The size of the argument is embedded in the IOCTL number itself, which means that
+unless glibc is being very nice and using a macro + typeof + sizeof to sanity check
+things, which I highly doubt is the case, this ioctl() is passing random stack data,
+a.k.a. garbage, to KVM.
+
+In short, drop this patch.
