@@ -2,345 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B2F70FB92
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010F370FB96
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjEXQVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 12:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S232903AbjEXQWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjEXQVn (ORCPT
+        with ESMTP id S230029AbjEXQWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 12:21:43 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020015.outbound.protection.outlook.com [52.101.61.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1320097;
-        Wed, 24 May 2023 09:21:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MpEeFnUDgp3xUA+KrlSYkTvzUGUXCzvhepfTWxZ5PkVuWFZN5rZseQ76FeAIkwifxr/UivHWupDY3ZQLlr3Itz0hFluNYQ5UgwxjSUVT5+fDT4ZdtGNuVUmv3/Ik6kmZ6iP1dlHt9ccspU3cQLDtd23kZe3jG3daajVSSopxU+2d9jBbEB4xVn1sGzMCxpEhKGbOCDo2fgMpQc/wSaZ7uqIrve7d4GA48Ofu+YUFg35zweWXbbk3/Si7L+/w5CJPzL4OZnJnU5rJHDAXu+4iBxgDdWY2z1NXySAkvx1QfwxxWGb85kDTdHx8rBM9lp0UV8UOioqtivXBUf8JISJCTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3u9zbkto3riJuIIb2/rm0jmK0uqkf71tI7awqUGZXEc=;
- b=DIHzKEReH47xO77mRs8A3UjNbzD3t05OmzJR+Bn14W8YPg1lXPWc6VJy9uv8ancSjyXj/r3uGVUZu8anKJU814J3oaObPob+8ceGG9qtHpYt915Rne6pEAB0mv3jxZqXCFcd54ju3bV4d6V+UPY0LKMWemv9TsqT9WMq+BqL3utFiqmzgA2gP8yBeVKrO1bf/lxK2UF3mcUPUI/sJzKaIAjkFQ9L/jcTc4+M3WVLL2b3M/z8DV1jEd2xfxaoSlTDw7HxAu2lHDjvPXgvTORXxYJWhSe174KHsv15DCpJH6zfCQ4R4y0l6TZeffcD44omi0s80oWqoQc21urONajDtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3u9zbkto3riJuIIb2/rm0jmK0uqkf71tI7awqUGZXEc=;
- b=M1sB2ZDJ6Bso7iv/BKboUXMNOO2i7fG9yIcUOpeq2pkZE6e0Kfr7sMJ+lS5cbP2czf1Yby4N/6treqPvW8wkEehAUnNnAOGCMdlMLc/INsbuN0G9AwGb8AadDUduyQCmGI5J1KEXVNqF9eHO7m+XI0J3d+FpYl3T9RZhGVQJSDQ=
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
- by SA0PR21MB2010.namprd21.prod.outlook.com (2603:10b6:806:132::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.13; Wed, 24 May
- 2023 16:21:37 +0000
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::5600:ea5a:6768:1900]) by PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::5600:ea5a:6768:1900%5]) with mapi id 15.20.6433.013; Wed, 24 May 2023
- 16:21:37 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: RE: [PATCH v2] hv_netvsc: Allocate rx indirection table size
- dynamically
-Thread-Topic: [PATCH v2] hv_netvsc: Allocate rx indirection table size
- dynamically
-Thread-Index: AQHZjiYfytjH4W3iikuEzMDvTxCQnK9pkECQ
-Date:   Wed, 24 May 2023 16:21:37 +0000
-Message-ID: <PH7PR21MB31160E7158B9EA4FF9DF1D53CA41A@PH7PR21MB3116.namprd21.prod.outlook.com>
-References: <1684922230-24073-1-git-send-email-shradhagupta@linux.microsoft.com>
-In-Reply-To: <1684922230-24073-1-git-send-email-shradhagupta@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=839751ef-aa99-4b8b-b533-1e9e48e45e1b;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-24T15:41:58Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|SA0PR21MB2010:EE_
-x-ms-office365-filtering-correlation-id: b8d067d4-009f-4de1-5dd6-08db5c72f30d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QVL1CCfjX/o78BRnm/sfZjolNG9uyaThfIpfQFnNh2HZgVYf6E//eWIvyxri38WA2uJqky7DfKhEQXpRg6VUh3KGjmizGCKw/Y+SvjUOlO+cQ4wEPkB/EgCsmgiOoY2U8o/ToTe2twLxFfjhj1qMyvb5s7bCVs5sH6PzZZCkWekv3mspgY+5x8Vxnv6q4vG3CPaol1zEah8SfSKC0ReCET0ui3gQe4vkWz5OWsVIGyJmeZTJVxDP+tD9PJgY2v7kYgG8lFLEm82CR4AbCvza18IrED5+iPStffDju8V7VP7ZqJYgU1tid250ZRJrbCPo0i58XL13nwXzAdtIrTPa3zbMFoMfX8ClsIJMQQ8X2WoY5UCrI7wK3n4oO/Ua+0kxvHDrTB35tUdmFxbIcDAH0TrfVAeWS1fbTmxYqC8hMQG2WGEAgwYSSHkU8H9j5E7sd+xpN37rR9UDYchOy/FR0REBesQRddagodCh+Zpo/GT7rCv+cpAZHwMv5NoQq13GObf+4s2+e8lDDduKTCN2qMLDtXEONawXbIDqMy7NBtusMg4TalTVD+lmXVo8qqECKEa5WaPM1hXDRmuuqpB+Eai1oBQqdxIVQmeIX+dLyNQQ9GCf5jnW3cCWmHxg3jEu18PnmMYX4AVH7nntJP+XnECI6HozvGLNCyNuLS9B/ng=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(366004)(376002)(136003)(451199021)(110136005)(54906003)(66446008)(4326008)(10290500003)(66476007)(64756008)(66556008)(66946007)(76116006)(8676002)(8936002)(7416002)(5660300002)(52536014)(26005)(53546011)(9686003)(6506007)(478600001)(316002)(71200400001)(786003)(41300700001)(7696005)(2906002)(186003)(8990500004)(83380400001)(82950400001)(122000001)(82960400001)(55016003)(33656002)(38070700005)(86362001)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dqTebIw0IOf/eOP9kaGo3JLYfDBIcDOZay3S4Bi4sfQt7Y7znQd3VUdgsUSZ?=
- =?us-ascii?Q?iDxGmHK9HoOkLM9v8fqMMgK3k5fdDP+DEqTZ7FYmJCQeczbqSxFj8OF2pPX4?=
- =?us-ascii?Q?z63FJCVNbLmVV6gRIP/NwUR1QZdrGCLdUDoiTxmMaBN8dJ3XIHWqINtYPG9j?=
- =?us-ascii?Q?gwiF2JAWPrUIGa0NFnrlUso8EDwICvTfAqMC3D/GBTYwvMnfjvDQrHl86dau?=
- =?us-ascii?Q?CEwAy2rAjCTEi8PwgOcSn5M1Q38LF7kYv6hNLc0YsWNKeNkF4UT5eAvtcOp3?=
- =?us-ascii?Q?NBaxlkvuGpEvvUIueXjdFS3A3zqUH3Dc+RDPI0P6xqr6FcAK2oe7inKOb5Dn?=
- =?us-ascii?Q?sgTUlAC3N/tvPNvnKiXqFV4sXohK9PznHUqOYBaJgYcmtOwFVQ2BmtbXimi/?=
- =?us-ascii?Q?a/ZfqLyOO7F/QBvacz+588iqTswCBXihl2ze9XxiKGyx++AHofRe5Pd1EDv9?=
- =?us-ascii?Q?vTWGYhFlpc3KRWv536NcIO299YXK0nctxUPL4DThwBgShfN5lwmM62MqSMNQ?=
- =?us-ascii?Q?X5vq9J/Q72LaI6WvK4r+DqemTzRkCRObXricCUaY7QIhpbOAIj0g9nSp0XWG?=
- =?us-ascii?Q?Kp3ZUvQp6racTAHlPX3wtgo6ACSxCpqbEdk7jJ0SyUH3qbfHP0iZNDFvPA3j?=
- =?us-ascii?Q?eLST80vu5jUeqTFdcxNqj3qIleX9f+Iy6lOpGVELJjRMsKDfcLIVzoMt5yEW?=
- =?us-ascii?Q?Eaawlq4gvM353ojqcq27YDxnITsTnjLrqkQt/IlppnuJTM7ky8rbOdBAZBd/?=
- =?us-ascii?Q?XqHhGBbdnyphbVcQnvT6BcbIOobiZOfKS9oOA8gQ7NpKFAg/KEVfEhW+8FRi?=
- =?us-ascii?Q?/b82SfbDBl3kWYUN4Mxlotn4Zk+V826R2IK0/huvNF5DytbxZLnhpC0tAckB?=
- =?us-ascii?Q?vJ/NWvVQR5Pl9zWy/dlMwoBALNQSV518Xla9EIlxWHgFj2iZMKiZuhlY1Fum?=
- =?us-ascii?Q?VYhRscJMPBnnYfII0WaaZQWX4vqUJEjClqeswjRVCeLfh9EDc8k3NE75Au2u?=
- =?us-ascii?Q?YdQSjPnBAhcR0duDp3hxETl7qqht7ZQg44SQNLBxema5LMIfLHwSEwA9bkBC?=
- =?us-ascii?Q?J8Bzo1F2FedtLM+TPSTlxxj7NBAW/g45CVQuNzKbx+LH/+Z0q8WYU0OqbKeX?=
- =?us-ascii?Q?zpElW+tLPu43v+x9hpP8/Hd1p8VmVwww6ifY6KO4EYcSIZgtbs4sjIZT4x/I?=
- =?us-ascii?Q?aL6Cajy7WwjlZFOtXDAwnCpd1AhFFE9t2qD9tGEyqZ1EICcsBYjf5hNsfFrZ?=
- =?us-ascii?Q?JqEY1djrj0iQssfvbwcWQU67iayNzveq/7+Ct3GWn5xaQgu2yw9wIXvTR4VT?=
- =?us-ascii?Q?xhf5335/69qGcOcbaTlBa46xdzhASl+woiPKV3H94i+9/qX4PNg4xDS2wjuq?=
- =?us-ascii?Q?9o9UYnpA9rikOHW+tj87WiNm4JZ56byxnceh+wljvGYjtCiSsD4h/dqT/J72?=
- =?us-ascii?Q?YclTWwHTxMDAAYHjnh3fqliCQgFn5qfVilmRJqzLljkkZFNJYMnib2BUv6s4?=
- =?us-ascii?Q?+cmqrPafXhO0iaZ4O1BldbkYgPxnAUkF3wm7nUKNwzgc4ItwUP2kXRk+WJCU?=
- =?us-ascii?Q?qcLytuBzHQH+Rb7HocwZKNZ/IomDYL7T4Q5i2qM5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 24 May 2023 12:22:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D30E9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684945327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yPwyuS1OongKitLVaU9z5x5rdysTI14nc2mLRrtatWw=;
+        b=M7brJvW4XeufFfq0alht3QbiDMsny8/180yGOAWWsv9VqXnfJfuiQHsvom5AXKN2ELo4Vf
+        rL9/yLE5bR0NKtHocc04aLEbu/beTw2o+DQkeaPh+X2pCByRfP8AcIZ7Jta6lDoDp3UVDc
+        OcuMIf6vUYaDeix1nPE5K1nErolmz3M=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-117--niw7dG6MSOmNg_ABK_lOQ-1; Wed, 24 May 2023 12:22:06 -0400
+X-MC-Unique: -niw7dG6MSOmNg_ABK_lOQ-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-623a2273194so1956386d6.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:22:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684945326; x=1687537326;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yPwyuS1OongKitLVaU9z5x5rdysTI14nc2mLRrtatWw=;
+        b=GKKWmTlaROZCLAmYRWb+Cwa8NT7f/0Zt6Zz3wdKIdsr/yVNIhjXlz8Td2VEgtcu3Nf
+         lEBxHEBJRNEUCQmb8q8rsK0Vp1rqHpvK2iIAcMGA6kaxT64hsePMy07j3zCaxVwvonXo
+         DitgcmnAWe2g06lFrjfgHjAOet3OHcwyGXetBUovA/buORuNBzH8d+D/wpqvSuujJzRm
+         3RdTLVptdcJdqMEyixCscw9gEXvLJLnTnXudIrsDpp4VfF6Cl+sY5mhVbs2KegP6l5BU
+         Cv02joeouu1zO2YvicVDp5LP7d6mdGBj4r+tvDtvwYTKNP9Z/LlSjqdPMBEGVbf199Cw
+         lKRw==
+X-Gm-Message-State: AC+VfDzZFvQ/TTbqCCYfmS7bG+TqlYPaKRPOAeluad71gBN2aDtGahJV
+        GRLByS8q++7HpnscdMT5+txiHAZIE5k/dthIWFAffKL/L8gXGPSvk8bFAwCL4bCcmbEhS771R7y
+        2tJEtqYNLl0dJ9R2SRc+6DORE
+X-Received: by 2002:a05:6214:4118:b0:622:265e:3473 with SMTP id kc24-20020a056214411800b00622265e3473mr26910200qvb.1.1684945326064;
+        Wed, 24 May 2023 09:22:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ44gSuxNK5fKTIYGrmxrxLmxwCMv6vwRSeYWoCsOBEZjRDG+1NMNWBC7tmoLEdae6sAzBVCjg==
+X-Received: by 2002:a05:6214:4118:b0:622:265e:3473 with SMTP id kc24-20020a056214411800b00622265e3473mr26910168qvb.1.1684945325673;
+        Wed, 24 May 2023 09:22:05 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id bz16-20020ad44c10000000b00621253d19f9sm3649443qvb.98.2023.05.24.09.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 09:22:04 -0700 (PDT)
+Date:   Wed, 24 May 2023 12:22:03 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Stevens <stevensd@chromium.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
+Message-ID: <ZG45q0xJSnA6NKQN@x1n>
+References: <20230330085802.2414466-1-stevensd@google.com>
+ <20230330085802.2414466-2-stevensd@google.com>
+ <ZGvUsf7lMkrNDHuE@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8d067d4-009f-4de1-5dd6-08db5c72f30d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2023 16:21:37.6576
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: veK3doc/1agqy/9kx++n/2mRQ1Ro/MBXLsby8/GzfWLDscOjbYhtwfC/rsWng/iIvaZbVKqXXc1/7eSAx6hivw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR21MB2010
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZGvUsf7lMkrNDHuE@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 22, 2023 at 01:46:41PM -0700, Sean Christopherson wrote:
+> +Peter
+> 
+> On Thu, Mar 30, 2023, David Stevens wrote:
+> > From: David Stevens <stevensd@chromium.org>
+> > 
+> > Introduce new gfn_to_pfn_noref functions that parallel existing
+> > gfn_to_pfn functions. These functions can be used when the caller does
+> > not need to maintain a reference to the returned pfn (i.e. when usage is
+> > guarded by a mmu_notifier). The noref functions take an out parameter
+> > that is used to return the struct page if the hva was resolved via gup.
+> > The caller needs to drop its reference such a returned page.
+> 
+> I dislike the "noref" name and the approach itself (of providing an entirely
+> separate set of APIs).  Using "noref" is confusing because the callers do actually
+> get a reference to the page (if a refcounted page is found).
+> 
+> As for the approach, I really, really don't want to end up with yet more APIs
+> for getting PFNs from GFNs.  We already have far too many.  In the short term,
+> I think we'll need to carry multiple sets of APIs, as converting all architectures
+> to any new API will be too much for a single series.  But I want to have line of
+> sight to convering on a single, as-small-as-possible set of APIs, and I think/hope
+> it should be possible to make the old APIs, e.g. gfn_to_pfn(), to be shims around
+> the new APIs.
+> 
+> And since this series is essentially overhauling the gfn_to_pfn APIs, I think it's
+> the right series to take on refactoring the APIs to clean up the growing flag
+> problem.  There was a bit of discussion back when "interruptible" support was
+> added (https://lore.kernel.org/all/YrTbKaRe497n8M0o@xz-m1.loca), but it got punted
+> because it wasn't necessary, and because there wasn't immediate agreement on what
+> exactly the APIs should look like.
+> 
+> Overhauling the APIs would also let us clean up things like async #PF, specifically
+> replacing the unintuitive "*async = true" logic with something like this:
+> 
+> 		if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
+> 			pfn = KVM_PFN_ERR_FAULT_MINOR;
+> 		else
+> 			pfn = KVM_PFN_ERR_FAULT;
+> 
+> Lastly, I think there's also an opportunity here to harden KVM's interaction with
+> mmu_notifiers, and to dedup arch code in KVM .  Specifically, even when the proposed
+> "allow_unsafe_kmap" is true, KVM should either (a) be "in" an mmu_notifier sequence
+> or (b) _want_ to grab a reference.  And when KVM does NOT want a reference, the core
+> API can/should immediately drop the reference even before returning.
+> 
+> My thought is it provide an "entirely" new API, named something like kvm_follow_pfn()
+> to somewhat mirror follow_{pfn,pte,phys}().  Ideally something to pair with gup()
+> would be nice, but having a dedicated KVM helper to get _only_ struct page memory
+> doesn't work well because KVM almost never wants only struct page memory.
+> 
+> As for the flags vs. bools debate (see link above), I think the best approach is
+> a mix of the two.  Specifically, reuse the FOLL_* flags as-is for inputs, and use
+> booleans for outputs.  I don't _think_ there are any input bools/flags that don't
+> map 1:1 with existing FOLL_* flags.
+> 
+> As a very, *very* rough sketch, provide APIs that look a bit like this.
 
+Unifying ref vs nonref cases does look a bit cleaner to me too.
 
-> -----Original Message-----
-> From: Shradha Gupta <shradhagupta@linux.microsoft.com>
-> Sent: Wednesday, May 24, 2023 5:57 AM
-> To: linux-kernel@vger.kernel.org; linux-hyperv@vger.kernel.org;
-> netdev@vger.kernel.org
-> Cc: Shradha Gupta <shradhagupta@linux.microsoft.com>; Eric Dumazet
-> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
-> <pabeni@redhat.com>; KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> <haiyangz@microsoft.com>; Wei Liu <wei.liu@kernel.org>; Dexuan Cui
-> <decui@microsoft.com>; Long Li <longli@microsoft.com>; Michael Kelley
-> (LINUX) <mikelley@microsoft.com>; David S. Miller <davem@davemloft.net>;
-> Steen Hegelund <steen.hegelund@microchip.com>; Simon Horman
-> <simon.horman@corigine.com>
-> Subject: [PATCH v2] hv_netvsc: Allocate rx indirection table size dynamic=
-ally
->=20
-> Allocate the size of rx indirection table dynamically in netvsc
-> from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
-> query instead of using a constant value of ITAB_NUM.
->=20
-> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
-> ---
-> Changes in v2:
->  * Added a missing free for rx_table to fix a leak
->  * Corrected alignment around rx table size query
->  * Fixed incorrect error handling for rx_table pointer.
-> ---
->  drivers/net/hyperv/hyperv_net.h   |  5 ++++-
->  drivers/net/hyperv/netvsc_drv.c   | 18 ++++++++++++++----
->  drivers/net/hyperv/rndis_filter.c | 22 ++++++++++++++++++----
->  3 files changed, 36 insertions(+), 9 deletions(-)
->=20
-> diff --git a/drivers/net/hyperv/hyperv_net.h
-> b/drivers/net/hyperv/hyperv_net.h
-> index dd5919ec408b..1dbdb65ca8f0 100644
-> --- a/drivers/net/hyperv/hyperv_net.h
-> +++ b/drivers/net/hyperv/hyperv_net.h
-> @@ -74,6 +74,7 @@ struct ndis_recv_scale_cap { /*
-> NDIS_RECEIVE_SCALE_CAPABILITIES */
->  #define NDIS_RSS_HASH_SECRET_KEY_MAX_SIZE_REVISION_2   40
->=20
->  #define ITAB_NUM 128
-> +#define ITAB_NUM_MAX 256
->=20
->  struct ndis_recv_scale_param { /* NDIS_RECEIVE_SCALE_PARAMETERS */
->  	struct ndis_obj_header hdr;
-> @@ -1034,7 +1035,9 @@ struct net_device_context {
->=20
->  	u32 tx_table[VRSS_SEND_TAB_SIZE];
->=20
-> -	u16 rx_table[ITAB_NUM];
-> +	u16 *rx_table;
-> +
-> +	int rx_table_sz;
->=20
->  	/* Ethtool settings */
->  	u8 duplex;
-> diff --git a/drivers/net/hyperv/netvsc_drv.c
-> b/drivers/net/hyperv/netvsc_drv.c
-> index 0103ff914024..ab791e4ca63c 100644
-> --- a/drivers/net/hyperv/netvsc_drv.c
-> +++ b/drivers/net/hyperv/netvsc_drv.c
-> @@ -1040,6 +1040,13 @@ static int netvsc_detach(struct net_device *ndev,
->=20
->  	rndis_filter_device_remove(hdev, nvdev);
->=20
-> +	/*
-> +	 * Free the rx indirection table and reset the table size to 0.
-> +	 * With the netvsc_attach call it will get allocated again.
-> +	 */
-> +	ndev_ctx->rx_table_sz =3D 0;
-> +	kfree(ndev_ctx->rx_table);
-> +
+> 
+>   kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
+>   {
+> 	kvm_pfn_t pfn;
+> 
+> 	if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
 
-Please move the table free to rndis_filter_device_remove() which is the cou=
-nter=20
-part of rndis_filter_device_add(). So it's automatically called by netvsc_d=
-etach/remove()=20
-and other error cases.
+IMHO we may not want to rely on mmu_seq==0 either for unlucky very initial
+mmu_seq being zero, or avoid overflows?
 
-Also, set ndev_ctx->rx_table =3D NULL after free to prevent potential doubl=
-e free, or=20
-accessing freed memory, etc.
+I'd say we can stick with FOLL_GET in this case to identify ref vs nonref
+and always assume mmu_seq a pure random number.
 
->  	return 0;
->  }
->=20
-> @@ -1747,7 +1754,9 @@ static u32 netvsc_get_rxfh_key_size(struct
-> net_device *dev)
->=20
->  static u32 netvsc_rss_indir_size(struct net_device *dev)
+> 		return KVM_PFN_ERR_FAULT;
+> 
+> 	pfn = ???;
+> 
+> 	if (foll->page && !(foll->flags & FOLL_GET))
+> 		put_page(foll->page);
+> 
+> 	return pfn;
+>   }
+> 
+>   kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
+>   {
+> 	struct kvm_follow_pfn foll = {
+> 		.flags = FOLL_GET | FOLL_WRITE,
+> 	};
+> 
+> 	<more stuff here?>
+> 
+> 	foll.slot = ???;
+> 	if (!foll.slot || foll.slot->flags & KVM_MEMSLOT_INVALID)
+> 		return KVM_HVA_ERR_BAD;
+> 
+> 	if (memslot_is_readonly(foll.slot))
+> 		return KVM_HVA_ERR_RO_BAD;
+> 
+> 	return __kvm_follow_pfn(&foll);
+>   }
+> 
+> and a few partially converted users
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 67e2ac799aa7..5eaf0395ed87 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -550,12 +550,14 @@ static bool mmu_spte_update(u64 *sptep, u64 new_spte)
+>  
+>         if (is_accessed_spte(old_spte) && !is_accessed_spte(new_spte)) {
+>                 flush = true;
+> -               kvm_set_pfn_accessed(spte_to_pfn(old_spte));
+> +               if (is_refcounted_page_pte(old_spte))
+
+One question is how to impl is_refcounted_page_pte() here to identify
+non-refcountable pages.
+
+IIUC those pages are mostly identical to a normal page (so !PG_reserved)
+but it has page_ref_count(page)==0 always, am I right?  I got that roughly
+from reading f8be156be1 only though, so I could miss a lot of things..
+
+When thinking about that, I'm also wondering whether we can trivially allow
+kvm to support such mapping (without overhaul of the kvm pfn API) by
+something like this:
+
+===8<===
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 51e4882d0873..467acbac1a96 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -192,7 +192,13 @@ struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn)
+
+        page = pfn_to_page(pfn);
+        if (!PageReserved(page))
+-               return page;
++               /*
++                * When page_ref_count(page)==0 it might be speical page
++                * that do not support refcounting.  Treating them the same
++                * as normal reserved (e.g. MMIO) pages by returning NULL,
++                * so they're exempt of refcounting.
++                */
++               return page_ref_count(page) == 0 ? NULL : page;
+
+        /* The ZERO_PAGE(s) is marked PG_reserved, but is refcounted. */
+        if (is_zero_pfn(pfn))
+===8<===
+
+So that we treat those special pages the same as normal PFNMAP ones by
+skipping all refcountings on inc/dec.  This is based on the fact that kvm
+should always hold at least 1 ref on a normal page so a normal page should
+never hit ref==0 here, but again I could miss something somewhere..
+
+> +                       kvm_set_page_accessed(pfn_to_page(spte_to_pfn));
+>         }
+>  
+>         if (is_dirty_spte(old_spte) && !is_dirty_spte(new_spte)) {
+>                 flush = true;
+> -               kvm_set_pfn_dirty(spte_to_pfn(old_spte));
+> +               if (is_refcounted_page_pte(old_spte))
+> +                       kvm_set_page_dirty(pfn_to_page(spte_to_pfn));
+>         }
+>  
+>         return flush;
+> @@ -4278,6 +4280,10 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
+>  
+>  static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
 >  {
-> -	return ITAB_NUM;
-> +	struct net_device_context *ndc =3D netdev_priv(dev);
+> +       struct kvm_follow_pfn foll = {
+> +               .mmu_seq = fault->mmu_seq,
+> +               .gfn = fault->gfn,
+> +       };
+>         struct kvm_memory_slot *slot = fault->slot;
+>         bool async;
+>  
+> @@ -4309,12 +4315,16 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>                         return RET_PF_EMULATE;
+>         }
+>  
+> -       async = false;
+> -       fault->pfn = __gfn_to_pfn_noref_memslot(slot, fault->gfn, false, false, &async,
+> -                                               fault->write, &fault->map_writable,
+> -                                               &fault->hva, &fault->page);
+> -       if (!async)
+> -               return RET_PF_CONTINUE; /* *pfn has correct page already */
+> +       foll.flags = FOLL_NOWAIT;
+> +       if (fault->write)
+> +               foll.flags |= FOLL_WRITE;
 > +
-> +	return ndc->rx_table_sz;
->  }
->=20
->  static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
-> @@ -1766,7 +1775,7 @@ static int netvsc_get_rxfh(struct net_device *dev,
-> u32 *indir, u8 *key,
->=20
->  	rndis_dev =3D ndev->extension;
->  	if (indir) {
-> -		for (i =3D 0; i < ITAB_NUM; i++)
-> +		for (i =3D 0; i < ndc->rx_table_sz; i++)
->  			indir[i] =3D ndc->rx_table[i];
->  	}
->=20
-> @@ -1792,11 +1801,11 @@ static int netvsc_set_rxfh(struct net_device
-> *dev, const u32 *indir,
->=20
->  	rndis_dev =3D ndev->extension;
->  	if (indir) {
-> -		for (i =3D 0; i < ITAB_NUM; i++)
-> +		for (i =3D 0; i < ndc->rx_table_sz; i++)
->  			if (indir[i] >=3D ndev->num_chn)
->  				return -EINVAL;
->=20
-> -		for (i =3D 0; i < ITAB_NUM; i++)
-> +		for (i =3D 0; i < ndc->rx_table_sz; i++)
->  			ndc->rx_table[i] =3D indir[i];
->  	}
-
-Please use the ethtool to change & show the table contents. So these functi=
-ons=20
-are tested:
-ethtool -x eth0
-ethtool -X eth0 ...
-
-Also, run perf test to ensure no perf regression.
-
->=20
-> @@ -2638,6 +2647,7 @@ static void netvsc_remove(struct hv_device *dev)
->=20
->  	hv_set_drvdata(dev, NULL);
->=20
-> +	kfree(ndev_ctx->rx_table);
-
-Move the table free to rndis_filter_device_remove() as said earlier.
-
->  	free_percpu(ndev_ctx->vf_stats);
->  	free_netdev(net);
->  }
-> diff --git a/drivers/net/hyperv/rndis_filter.c
-> b/drivers/net/hyperv/rndis_filter.c
-> index eea777ec2541..3695c7d3da3a 100644
-> --- a/drivers/net/hyperv/rndis_filter.c
-> +++ b/drivers/net/hyperv/rndis_filter.c
-> @@ -927,7 +927,7 @@ static int rndis_set_rss_param_msg(struct
-> rndis_device *rdev,
->  	struct rndis_set_request *set;
->  	struct rndis_set_complete *set_complete;
->  	u32 extlen =3D sizeof(struct ndis_recv_scale_param) +
-> -		     4 * ITAB_NUM + NETVSC_HASH_KEYLEN;
-> +		     4 * ndc->rx_table_sz + NETVSC_HASH_KEYLEN;
->  	struct ndis_recv_scale_param *rssp;
->  	u32 *itab;
->  	u8 *keyp;
-> @@ -953,7 +953,7 @@ static int rndis_set_rss_param_msg(struct
-> rndis_device *rdev,
->  	rssp->hashinfo =3D NDIS_HASH_FUNC_TOEPLITZ | NDIS_HASH_IPV4 |
->  			 NDIS_HASH_TCP_IPV4 | NDIS_HASH_IPV6 |
->  			 NDIS_HASH_TCP_IPV6;
-> -	rssp->indirect_tabsize =3D 4*ITAB_NUM;
-> +	rssp->indirect_tabsize =3D 4 * ndc->rx_table_sz;
->  	rssp->indirect_taboffset =3D sizeof(struct ndis_recv_scale_param);
->  	rssp->hashkey_size =3D NETVSC_HASH_KEYLEN;
->  	rssp->hashkey_offset =3D rssp->indirect_taboffset +
-> @@ -961,7 +961,7 @@ static int rndis_set_rss_param_msg(struct
-> rndis_device *rdev,
->=20
->  	/* Set indirection table entries */
->  	itab =3D (u32 *)(rssp + 1);
-> -	for (i =3D 0; i < ITAB_NUM; i++)
-> +	for (i =3D 0; i < ndc->rx_table_sz; i++)
->  		itab[i] =3D ndc->rx_table[i];
->=20
->  	/* Set hask key values */
-> @@ -1548,6 +1548,20 @@ struct netvsc_device
-> *rndis_filter_device_add(struct hv_device *dev,
->  	if (ret || rsscap.num_recv_que < 2)
->  		goto out;
->=20
-> +	if (rsscap.num_indirect_tabent &&
-> +	    rsscap.num_indirect_tabent <=3D ITAB_NUM_MAX)
-> +		ndc->rx_table_sz =3D rsscap.num_indirect_tabent;
-> +	else
-> +		ndc->rx_table_sz =3D ITAB_NUM;
+> +       fault->pfn = __kvm_follow_pfn(&foll);
+> +       if (!is_error_noslot_pfn(fault->pfn))
+> +               goto success;
 > +
-> +	ndc->rx_table =3D kzalloc(sizeof(u16) * ndc->rx_table_sz,
-> +				GFP_KERNEL);
-> +	if (!ndc->rx_table) {
-> +		netdev_err(net, "Error in allocating rx indirection table of
-> size %d\n",
-> +				ndc->rx_table_sz);
-> +		goto out;
-> +	}
+> +       if (!is_fault_minor_pfn(fault->pfn))
+> +               return RET_PF_CONTINUE;
+>  
+>         if (!fault->prefetch && kvm_can_do_async_pf(vcpu)) {
+>                 trace_kvm_try_async_get_page(fault->addr, fault->gfn);
+> @@ -4332,9 +4342,18 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>          * to wait for IO.  Note, gup always bails if it is unable to quickly
+>          * get a page and a fatal signal, i.e. SIGKILL, is pending.
+>          */
+> -       fault->pfn = __gfn_to_pfn_noref_memslot(slot, fault->gfn, false, true, NULL,
+> -                                               fault->write, &fault->map_writable,
+> -                                               &fault->hva, &fault->page);
+> +       foll.flags |= FOLL_INTERRUPTIBLE;
+> +       foll.flags &= ~FOLL_NOWAIT;
+> +
+> +       fault->pfn = kvm_follow_pfn(&foll);
+> +       if (!is_error_noslot_pfn(fault->pfn))
+> +               goto success;
+> +
+> +       return RET_PF_CONTINUE;
+> +success:
+> +       fault->hva = foll.hva;
+> +       fault->page = foll.page;
+> +       fault->map_writable = foll.writable;
+>         return RET_PF_CONTINUE;
+>  }
+>  
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 360eaa24456f..0bae253c88dd 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2663,9 +2663,10 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
+>                 if (r < 0)
+>                         pfn = KVM_PFN_ERR_FAULT;
+>         } else {
+> -               if (async && vma_is_valid(vma, write_fault))
+> -                       *async = true;
+> -               pfn = KVM_PFN_ERR_FAULT;
+> +               if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
+> +                       pfn = KVM_PFN_ERR_FAULT_MINOR;
+> +               else
+> ...skipping...
+> +       fault->pfn = kvm_follow_pfn(&foll);
+> +       if (!is_error_noslot_pfn(fault->pfn))
+> +               goto success;
+> +
+> +       return RET_PF_CONTINUE;
+> +success:
+> +       fault->hva = foll.hva;
+> +       fault->page = foll.page;
+> +       fault->map_writable = foll.writable;
+>         return RET_PF_CONTINUE;
+>  }
+>  
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 360eaa24456f..0bae253c88dd 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2663,9 +2663,10 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
+>                 if (r < 0)
+>                         pfn = KVM_PFN_ERR_FAULT;
+>         } else {
+> -               if (async && vma_is_valid(vma, write_fault))
+> -                       *async = true;
+> -               pfn = KVM_PFN_ERR_FAULT;
+> +               if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
+> +                       pfn = KVM_PFN_ERR_FAULT_MINOR;
+> +               else
+> +                       pfn = KVM_PFN_ERR_FAULT;
+>         }
+>  exit:
+>         mmap_read_unlock(current->mm);
+> @@ -2732,6 +2733,30 @@ kvm_pfn_t __gfn_to_pfn_noref_memslot(const struct kvm_memory_slot *slot, gfn_t g
+>  }
+>  EXPORT_SYMBOL_GPL(__gfn_to_pfn_noref_memslot);
+>  
+> +kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
+> +{
+> +       kvm_pfn_t pfn;
+> +
+> +       if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
+> +               return KVM_PFN_ERR_FAULT;
+> +
+> +       pfn = __gfn_to_pfn_noref_memslot(...);
+> +
+> +       if (foll->page && !(foll->flags & FOLL_GET))
+> +               put_page(foll->page);
+> +
+> +       return pfn;
+> +}
+> +
+> +kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
+> +{
+> +       struct kvm_follow_pfn foll = {
+> +               .flags = FOLL_GET | FOLL_WRITE,
+> +       };
+> +
+> +       return __kvm_follow_pfn(&foll);
+> +}
+> +
+>  kvm_pfn_t gfn_to_pfn_noref_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+>                                 bool *writable, struct page **page)
+>  {
+> @@ -2910,25 +2935,23 @@ void kvm_release_pfn(kvm_pfn_t pfn, bool dirty)
+>  
+>  int kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map)
+>  {
+> +       struct page *page;
+>         kvm_pfn_t pfn;
+>         void *hva = NULL;
+> -       struct page *page = KVM_UNMAPPED_PAGE;
+>  
+>         if (!map)
+>                 return -EINVAL;
+>  
+> -       pfn = gfn_to_pfn(vcpu->kvm, gfn);
+> +       pfn = kvm_follow_pfn(vcpu->kvm, gfn, &page)
+>         if (is_error_noslot_pfn(pfn))
+>                 return -EINVAL;
+>  
+> -       if (pfn_valid(pfn)) {
+> -               page = pfn_to_page(pfn);
+> +       if (page)
+>                 hva = kmap(page);
+>  #ifdef CONFIG_HAS_IOMEM
+> -       } else {
+> +       else if (allow_unsafe_kmap)
+>                 hva = memremap(pfn_to_hpa(pfn), PAGE_SIZE, MEMREMAP_WB);
+>  #endif
+> -       }
+>  
+>         if (!hva)
+>                 return -EFAULT;
+> 
 
-When no enough memory for the table, it should:
-	goto err_dev_remv;
-So the device_add fails with an error.
-
-Otherwise, it may continue to run with just one channel. The perf will be l=
-ow, but=20
-the error is not easily visible. That's probably why you didn't find the "i=
-f (ndc->rx_table) "=20
-condition error in the patch v1.
-
-Thanks,
-- Haiyang
+-- 
+Peter Xu
 
