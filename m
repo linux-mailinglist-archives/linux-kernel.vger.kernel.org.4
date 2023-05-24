@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F1170FB20
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D6670FB30
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238012AbjEXQAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 12:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S237873AbjEXQBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238613AbjEXP75 (ORCPT
+        with ESMTP id S237811AbjEXQAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:59:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2661BF;
-        Wed, 24 May 2023 08:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684943950; x=1716479950;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=cPGYkaqYYFhks3L/ld61pl5BucXJLtMRX9m+oGps24g=;
-  b=bJpGP8kMa8OsqWF4aTrsKrZUQTXUlRVxiQFzahQPEgZd6eiPuoBak/3V
-   u0ibW1GnpyGEPnIgbDw1CQlYj2x8Xi6rd9Pf+bMVfDq4IH/ty3GNtTXCa
-   qUHereCMFPazfFpUqpE68j9BED2JscMFH/UYwabVkJcSBbAJpvB3ixZ4v
-   GxHbccr54VvZfAvdVkmDR+q6ZVZ0vYFEO/ud/EHZnAPEVOvQkoGZh4Yyc
-   oIrOB+NfZQ7t1s+xaaqj3MO1b4gAFvRxiIYN/1Gozno8FnlcMcGRrYAMh
-   Lr2meMkzudaQwb9j28YStWwCsUYcwQmpNvJKWbUb4VPj9kWboell4Qled
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="356838057"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="356838057"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 08:58:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="707587010"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="707587010"
-Received: from kesims-mobl1.amr.corp.intel.com ([10.209.176.111])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 08:58:57 -0700
-Message-ID: <fa90e73483b866a0622ad077f4af16978d1c1c8d.camel@linux.intel.com>
-Subject: Re: [PATCH v5 13/15] crypto: iaa - Add support for default IAA
- 'canned' compression mode
-From:   Tom Zanussi <tom.zanussi@linux.intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     davem@davemloft.net, fenghua.yu@intel.com, vkoul@kernel.org,
-        dave.jiang@intel.com, tony.luck@intel.com,
-        wajdi.k.feghali@intel.com, james.guilford@intel.com,
-        kanchana.p.sridhar@intel.com, giovanni.cabiddu@intel.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Date:   Wed, 24 May 2023 10:58:54 -0500
-In-Reply-To: <ZG3dpbPlRXbF2ZxN@gondor.apana.org.au>
-References: <20230516215009.51794-1-tom.zanussi@linux.intel.com>
-         <20230516215009.51794-14-tom.zanussi@linux.intel.com>
-         <ZG3dpbPlRXbF2ZxN@gondor.apana.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Wed, 24 May 2023 12:00:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B4B1708
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:00:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F712617B0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:59:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C36C433D2;
+        Wed, 24 May 2023 15:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684943974;
+        bh=5372x0NwtP9OuIkf3bXPiuvz3HjwcgvBpj2LWuqXpl8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NImesrJ+ptmRyEad7hwasI002O4sWYW+CbD1X9oK5s7FyN8O3MOIQrJ7I+9kHtfnj
+         jAVdE0C3chkYsPmnll030YFAn+P6q/8tyTlBuMvFLhTT1I/l47MxPq4ZCeI1kcLJ8z
+         Icl+LQTkpvXylwgIK82PYpyKo/WehzjcyTL62wmJcLvQQqv7xBz1rjdKvsCJ0gJiMp
+         Lu8SdOtM+8ZjIPK9mavF1ywA5bJ7lwTvMAfJcf3s52kX+Gsc/pKTiAVWaD3E3i+njL
+         lvgxFqQQ4ooSJGktcKuv6nMPn5/xnB/FfdY2SAbHvla4oK1Yq4bWXh/KDWBFMhNHvh
+         cdAjToE+LRcCA==
+Date:   Wed, 24 May 2023 16:59:28 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup@brainfault.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Song Shuai <suagrfillet@gmail.com>, robh@kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>, palmer@rivosinc.com,
+        jeeheng.sia@starfivetech.com, leyfoon.tan@starfivetech.com,
+        mason.huo@starfivetech.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Sunil V L <sunilvl@ventanamicro.com>
+Subject: Re: Bug report: kernel paniced when system hibernates
+Message-ID: <20230524-rocker-uphill-0cfdab27a3f4@spud>
+References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
+ <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
+ <CAHVXubj92O_dwGShOJgrYezqk2pA2NtFyhNFbAPyhn7=PztK6Q@mail.gmail.com>
+ <20230517-preacher-primer-f41020b3376a@wendy>
+ <CAHVXubhMLgb54_7zV2yFuGPoMKCkUXwozHbDvghc7kQqNLK-JA@mail.gmail.com>
+ <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
+ <fe8d716c-fb4f-1f3f-6c69-de1d8b9fb6af@ghiti.fr>
+ <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
+ <20230524-wasp-charm-fe5c5478957a@spud>
+ <CAHVXubjhti9reD8oCh3Jm97tvFdUGi9ShYnm0NhQU4ZYVgU6HA@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fpr9FumDr9m9Nw35"
+Content-Disposition: inline
+In-Reply-To: <CAHVXubjhti9reD8oCh3Jm97tvFdUGi9ShYnm0NhQU4ZYVgU6HA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
 
-On Wed, 2023-05-24 at 17:49 +0800, Herbert Xu wrote:
-> On Tue, May 16, 2023 at 04:50:07PM -0500, Tom Zanussi wrote:
-> .
-> > To choose 'fixed' mode:
-> >=20
-> > =C2=A0 echo "fixed" >=C2=A0 /sys/bus/dsa/drivers/crypto/compression_mod=
-e
-> >=20
-> > To choose 'canned' mode:
-> >=20
-> > =C2=A0 echo "canned" >=C2=A0 /sys/bus/dsa/drivers/crypto/compression_mo=
-de
+--fpr9FumDr9m9Nw35
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, May 24, 2023 at 03:57:20PM +0200, Alexandre Ghiti wrote:
+> The reserved memory regions are *currently* not specified to be no-map
+> and that since v0.8: the culprit is commit 6966ad0abe70
+> ("platform/lib: Allow the OS to map the regions that are protected by
+> PMP").
 >=20
-> This seems to be a strange way to switch modes.=C2=A0 How about just
-> registering both algorithms and then let the user decide which
-> one to use throught the algorithm name?
+> So to make sure we are on the same page:
 >=20
+> - from 0.1 to 0.7 =3D> reserved memory regions were marked as no-map
+> - starting from 0.8 =3D> reserved memory regions are *not* marked as
+> no-map anymore
+>=20
+> Hope that's clear!
 
-Yes, I think you're right.  The reason we did it this way was that
-we're expecting to add more modes, such as 'dynamic' and/or 'canned-
-dynamic' etc.
+Yes it was helpful - thanks.
 
-But I don't see a reason we couldn't just register them all and have
-the user choose using the algorithm names, especially if that's the way
-crypto users expect things to work.
+--fpr9FumDr9m9Nw35
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-Tom=20
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG40YAAKCRB4tDGHoIJi
+0h12AQDRekzfK51Hw9OBc1W5MAlPSn5sT0eZA/blzdGjhlJVvQD/TyuBHKkjWtVC
+NayJSPKdj8ioC9UTvr0eodxsCuo40Qs=
+=pEnp
+-----END PGP SIGNATURE-----
 
-
+--fpr9FumDr9m9Nw35--
