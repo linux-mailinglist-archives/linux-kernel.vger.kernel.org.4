@@ -2,73 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D69070ED78
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE7570ED6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239578AbjEXF6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S239533AbjEXF5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239564AbjEXF6U (ORCPT
+        with ESMTP id S233759AbjEXF5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:58:20 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB71C198
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 22:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=x+N6WV/CyF+wzcgIuD5OCrwWYrJjwwC1z6uAEEubo1c=; b=Z6UOwVj6yiJqAeVLNAZ5XhFLod
-        2EeVpQrzvSFp1FuDVe5FS9XKyvLxPCovJLnu8rRx4dRQJcQT3/vRc+NZbl6b//WJVDbFpktB4KteQ
-        +pDPdy9X+pjQqYQfLAA5BjRsMwUDKyNs+2c9bz7Wn5LvjOlQrGdi6yrqgkaJjELWFStL0HOkcels2
-        B7kuxD/oOE3yHM9u284tmeBGKOVrnGpcEQbSwYXtGgzYMRbORVw6dCvO1j17V2GUnVJiTRqYeTFyQ
-        v8tyhtAWI+yggCuYTzbKsUqal3i16OWiJ25sHZ6w03k6Hbb6ovbNjFUsXceTprqjU3doItbgE/JRX
-        4A/pAHoQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1hVh-00CRpm-1c;
-        Wed, 24 May 2023 05:58:09 +0000
-Date:   Tue, 23 May 2023 22:58:09 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH 1/2] ubi: block: Fix use-after-free of gendisk
-Message-ID: <ZG2ncaTjxCnRWcUZ@infradead.org>
-References: <20230523-ubiblock-remove-v1-0-240bed75849b@axis.com>
- <20230523-ubiblock-remove-v1-1-240bed75849b@axis.com>
+        Wed, 24 May 2023 01:57:19 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE831132;
+        Tue, 23 May 2023 22:57:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684907838; x=1716443838;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=O2khWCZpYpaAuiJUEy1FdFjA3ykBxyXgTWC0NJSEmZA=;
+  b=C4+lc4zy4Kb8ZH1xra/2GXw3sfN36YRL2mz/QgheTdgxiXocRPgzbJ2P
+   eyrMAmVgUZ9IoAfGybOycAehTVMN3DwA7EbfptGEM5hWmORF+oViQlexS
+   paVDzKCdjw87cf7p5cXe4blCVudyIpu/LzcTDXGFhnC8JQPkcnDj6IXP9
+   BTG5LtaVhbQQ7TtJlTiOilFA3zlhaemSlMgrYnHkt4OGndr+3Etji579S
+   Mw8ga9vUaebarAH6iHTwZX4BqsqubNy/T9QkMJpI7jvBPH9P47VBTt1gA
+   Ut2N3HS0BTiobjJPkRNbtu3OzafaCXACaXqIr7Mg50UA/3N6jRN3oq64e
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="381711522"
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="scan'208";a="381711522"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 22:57:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="769310141"
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="scan'208";a="769310141"
+Received: from mhakkine-mobl4.ger.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.252.53.214])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 22:57:15 -0700
+From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+To:     peterhuewe@gmx.de, jarkko@kernel.org
+Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        peter.ujfalusi@linux.intel.com, jsnitsel@redhat.com
+Subject: [PATCH] tpm: tpm_tis: Narrow the AAEON DMI quirk to UPX-i11 only
+Date:   Wed, 24 May 2023 08:58:15 +0300
+Message-Id: <20230524055815.10165-1-peter.ujfalusi@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523-ubiblock-remove-v1-1-240bed75849b@axis.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 03:12:16PM +0200, Vincent Whitchurch wrote:
->  static void ubiblock_cleanup(struct ubiblock *dev)
->  {
-> +	int first_minor = dev->gd->first_minor;
-> +
->  	/* Stop new requests to arrive */
->  	del_gendisk(dev->gd);
->  	/* Finally destroy the blk queue */
->  	dev_info(disk_to_dev(dev->gd), "released");
->  	put_disk(dev->gd);
->  	blk_mq_free_tag_set(&dev->tag_set);
-> -	idr_remove(&ubiblock_minor_idr, dev->gd->first_minor);
-> +	idr_remove(&ubiblock_minor_idr, first_minor);
+The original patch which added the quirk would apply to all AAEON machines,
+which might or might not be valid.
 
-I think the real fix here is to implement the free_disk method
-and free the idr there.  That ensures the ID can't be reused until
-the disk is entirely freed as well.
+The issue was discovered on UPX-i11 (TigerLake), it is not known if the
+i12 (AlderLake) version is affected.
+UP2 (ApolloLake) does not even have TMP module (no TPM drivers probing
+and confirmed by dmidecode).
+
+Let's make the quirk to be applicable for UPX-i11 (UPX-TGL01) only.
+
+Fixes: 95a9359ee22f ("tpm: tpm_tis: Disable interrupts for AEON UPX-i11")
+Suggested-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+---
+Hi Jarkko,
+
+the patch is generated on top of your
+git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git : irq-storm
+
+Regards,
+Peter
+
+ drivers/char/tpm/tpm_tis.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index 7db3593941ea..4357d4ba8f9e 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -143,6 +143,7 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+ 		.ident = "UPX-TGL",
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01"),
+ 		},
+ 	},
+ 	{}
+-- 
+2.40.1
+
