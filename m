@@ -2,193 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E776C70EFE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5672370EFEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240092AbjEXHvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S240091AbjEXHw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbjEXHvO (ORCPT
+        with ESMTP id S232910AbjEXHwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:51:14 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB5F93
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:51:11 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230524075107euoutp0145bc2a764100c0c9cf4883df65df6f66~iBPaBPlR60893708937euoutp01D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:51:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230524075107euoutp0145bc2a764100c0c9cf4883df65df6f66~iBPaBPlR60893708937euoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1684914667;
-        bh=YEkrocO0Lhlb57mohHGNmeTDKwplmsj2mt7QK1SNvHM=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=G9S4pcMqE6t09Qir0XS4yvAJ/f72EPm6+qstq18k5G4ztrs9ehjS/UDxwPyiNcBOP
-         5bxkCi8ILMDMHsaiIZeEcZtNnEXh9k94dA353j86EIk1MLJR+N/gqD7o0GBh27+CTe
-         XwgjmsCMU4MqDujouByXr8s3cfBHo4OC1LnwTccI=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230524075107eucas1p2ba76fdf6fdf3d88c9abb90fcc8cc494f~iBPZxdIia2699126991eucas1p2E;
-        Wed, 24 May 2023 07:51:07 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 04.1E.42423.AE1CD646; Wed, 24
-        May 2023 08:51:07 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230524075106eucas1p26a6f2fc48035a96cd86912d6f9a71a69~iBPZYj3Qu2697926979eucas1p2R;
-        Wed, 24 May 2023 07:51:06 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230524075106eusmtrp1900217962e97d095ced3bf5a75072223~iBPZXkj2v2522525225eusmtrp17;
-        Wed, 24 May 2023 07:51:06 +0000 (GMT)
-X-AuditID: cbfec7f2-a3bff7000002a5b7-03-646dc1eab95a
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 5E.17.14344.AE1CD646; Wed, 24
-        May 2023 08:51:06 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230524075105eusmtip233dd8d7684832bd1687f22a6140474c0~iBPYey1fZ1216812168eusmtip2R;
-        Wed, 24 May 2023 07:51:05 +0000 (GMT)
-Message-ID: <7659de84-2b90-7f6b-edf3-2e1e42f6e4c6@samsung.com>
-Date:   Wed, 24 May 2023 09:51:05 +0200
+        Wed, 24 May 2023 03:52:24 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4A6E91;
+        Wed, 24 May 2023 00:52:21 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxqvI0wm1kx1gAAA--.1050S3;
+        Wed, 24 May 2023 15:52:20 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxQbQywm1ku2pzAA--.61392S3;
+        Wed, 24 May 2023 15:52:19 +0800 (CST)
+Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+To:     andy.shevchenko@gmail.com
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-3-zhuyinbo@loongson.cn> <ZGy3b7ZfNwWoGDTu@surfacebook>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
+Date:   Wed, 24 May 2023 15:52:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH] media: verisilicon: Additional fix for the crash when
- opening the driver
+In-Reply-To: <ZGy3b7ZfNwWoGDTu@surfacebook>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, nicolas.dufresne@collabora.com,
-        p.zabel@pengutronix.de, mchehab@kernel.org,
-        m.tretter@pengutronix.de, didi.debian@cknow.org
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
-        regressions@lists.linux.dev
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230523162515.993862-1-benjamin.gaignard@collabora.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMKsWRmVeSWpSXmKPExsWy7djP87qvD+amGHx0sthyZTazReur5+wW
-        G198ZrG4OPMui8Xmcz2sFqum7mSxuLxrDptFz4atrBafHvxntti24hyrxbJNf5gsdn25x2Zx
-        994JFouNbzvYHfg8Tvw/wuKx4+4SRo9NqzrZPDYvqfd4sXkmo0f/XwOPriPX2Tw+b5LzOPX1
-        M3sAZxSXTUpqTmZZapG+XQJXxvqFE9kL7ohX3Ju4n7GB8ZVwFyMnh4SAicSvBxvZuxi5OIQE
-        VjBK9K2bxAjhfGGUONf1lA2kSkjgM6PE2m3ZMB3NB64xQRQtZ5T4uHcRM4TzkVFi1YaNTCBV
-        vAJ2ElsuzmABsVkEVCW6vy1hhYgLSpyc+QQsLiqQKrFq80VmEFtYIF7iwKSrYDazgLjErSfz
-        wTaICNxklOg4PB/sQGaBk4wSl7d/AetmEzCU6HrbBXYfp4CbROOeH2wQ3fIS29/OATtJQmA1
-        p8TyL11AoziAHBeJt9ukIX4Qlnh1fAs7hC0jcXpyDwtEfTujxILf95kgnAmMEg3PbzFCVFlL
-        3Dn3iw1kELOApsT6XfoQYUeJs5dAmkHm80nceCsIcQOfxKRt05khwrwSHW1CENVqErOOr4Nb
-        e/DCJeYJjEqzkMJlFpL/ZyH5ZhbC3gWMLKsYxVNLi3PTU4sN81LL9YoTc4tL89L1kvNzNzEC
-        093pf8c/7WCc++qj3iFGJg7GQ4wSHMxKIrwnyrNThHhTEiurUovy44tKc1KLDzFKc7AoifNq
-        255MFhJITyxJzU5NLUgtgskycXBKNTBJhr1RS3pxy+Okg4SXadVjcVmZvXVxZ5+6NDdfqPgy
-        O1x26hv2j9be7dMsX5yY3tEef7O1be0prR3Wwgp7Gpb8Xdus8XrRnf85blIfZ76+FD1javtM
-        xbvcTP5iyW/qVqydbH/OcKZX9E7XxSEqm1rrayvebUr3qDh49dy5FfP5TfN7GuYktj18Umdx
-        6dDswuAbK9ep34kOnrj0gVTVxO8MPUYf3Asdmz3z780rdstZwvTWfXpu4iPWg2Vz14l12blc
-        CF8772Sf+dL6vjTFvVlMB7caf15yWGf2nMtPHghYbXf7ribAsvXqUwE10SUtF/9e4qkxd0wQ
-        0G0+JCDe5+AafcGy+VkiS62FvHTZNQklluKMREMt5qLiRACH257w5gMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGIsWRmVeSWpSXmKPExsVy+t/xe7qvDuamGOw8qGCx5cpsZovWV8/Z
-        LTa++MxicXHmXRaLzed6WC1WTd3JYnF51xw2i54NW1ktPj34z2yxbcU5Votlm/4wWez6co/N
-        4u69EywWG992sDvweZz4f4TFY8fdJYwem1Z1snlsXlLv8WLzTEaP/r8GHl1HrrN5fN4k53Hq
-        62f2AM4oPZui/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsE
-        vYz1CyeyF9wRr7g3cT9jA+Mr4S5GTg4JAROJ5gPXmLoYuTiEBJYyShy6t58RIiEjcXJaAyuE
-        LSzx51oXG4gtJPCeUaLhbxyIzStgJ7Hl4gwWEJtFQFWi+9sSVoi4oMTJmU/A4qICqRInl94A
-        s4UF4iUOTLrKDGIzC4hL3HoynwnEFhG4ySix4o8zyBHMAicZJc70zWWDuGgmo0TXvQVgHWwC
-        hhJdbyGu4BRwk2jc84MNYpKZRNfWLkYIW15i+9s5zBMYhWYhOWQWkoWzkLTMQtKygJFlFaNI
-        amlxbnpusZFecWJucWleul5yfu4mRmCEbzv2c8sOxpWvPuodYmTiYDzEKMHBrCTCe6I8O0WI
-        NyWxsiq1KD++qDQntfgQoykwNCYyS4km5wNTTF5JvKGZgamhiZmlgamlmbGSOK9nQUeikEB6
-        YklqdmpqQWoRTB8TB6dUA5OZ3Peqk6/nZwbacTJPi0t3KN7isKLqcMzlPW1V6Wpr2VmeiqkH
-        S5yTNZ568y7P3Cl+N/KKrv15lfL+W4V5xHbn7685XOqs3shM2/KAd69bmsCe4DvNDvHeRblT
-        S1MnhavecHvmnPRP7UC//LMaJaZchpUHzaz9Vggc3TZNVC7wrqxIvgQLT2py412vA3NkH8q4
-        97VOZvjsG9DuJndqx/E/JmaJvIdMZEyL1jIntwrrx1bzFdmq3P3vsDzMN6XQ7Nf/deovGyfd
-        +eF7zXvZbauE2YmcfeZS7/SNAw9O4Kj0dXz1M+vd60lqGn+Ctp2X72jfpRO0zHJzgipftHDa
-        K2vHOcoH53HVS2cwrfVTYinOSDTUYi4qTgQAuyXLn3kDAAA=
-X-CMS-MailID: 20230524075106eucas1p26a6f2fc48035a96cd86912d6f9a71a69
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230523162528eucas1p297a28b644c81704d7fc9a0810649e3e9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230523162528eucas1p297a28b644c81704d7fc9a0810649e3e9
-References: <CGME20230523162528eucas1p297a28b644c81704d7fc9a0810649e3e9@eucas1p2.samsung.com>
-        <20230523162515.993862-1-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxQbQywm1ku2pzAA--.61392S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3AFyfGFy3ArW8CryrtF15CFg_yoW3JFW5pF
+        48Aa15KFWSyr4Iyw18XFs5GF4Yqry3J3W7JFWav3y8Kr98Zw1xXa45KF1fCr4SvFZ5ZF1x
+        ZFWUur4kCFs8C3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
+        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.05.2023 18:25, Benjamin Gaignard wrote:
-> This fixes the following issue observed on Odroid-M1 board:
->
->   Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
->   Mem abort info:
->   ...
->   Modules linked in: crct10dif_ce hantro_vpu snd_soc_simple_card snd_soc_simple_card_utils v4l2_vp9 v4l2_h264 rockchip_saradc v4l2_mem2mem videobuf2_dma_contig videobuf2_memops rtc_rk808 videobuf2_v4l2 industrialio_triggered_buffer rockchip_thermal dwmac_rk stmmac_platform stmmac videodev kfifo_buf display_connector videobuf2_common pcs_xpcs mc rockchipdrm analogix_dp dw_mipi_dsi dw_hdmi drm_display_helper panfrost drm_shmem_helper gpu_sched ip_tables x_tables ipv6
->   CPU: 3 PID: 176 Comm: v4l_id Not tainted 6.3.0-rc7-next-20230420 #13481
->   Hardware name: Hardkernel ODROID-M1 (DT)
->   pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->   pc : hantro_try_fmt+0xa0/0x278 [hantro_vpu]
->   lr : hantro_try_fmt+0x94/0x278 [hantro_vpu]
->   ...
->   Call trace:
->    hantro_try_fmt+0xa0/0x278 [hantro_vpu]
->    hantro_set_fmt_out+0x3c/0x298 [hantro_vpu]
->    hantro_reset_raw_fmt+0x98/0x128 [hantro_vpu]
->    hantro_set_fmt_cap+0x240/0x254 [hantro_vpu]
->    hantro_reset_encoded_fmt+0x94/0xcc [hantro_vpu]
->    hantro_reset_fmts+0x18/0x38 [hantro_vpu]
->    hantro_open+0xd4/0x20c [hantro_vpu]
->    v4l2_open+0x80/0x120 [videodev]
->    chrdev_open+0xc0/0x22c
->    do_dentry_open+0x13c/0x48c
->    vfs_open+0x2c/0x38
->    path_openat+0x550/0x934
->    do_filp_open+0x80/0x12c
->    do_sys_openat2+0xb4/0x168
->    __arm64_sys_openat+0x64/0xac
->    invoke_syscall+0x48/0x114
->    el0_svc_common+0x100/0x120
->    do_el0_svc+0x3c/0xa8
->    el0_svc+0x40/0xa8
->    el0t_64_sync_handler+0xb8/0xbc
->    el0t_64_sync+0x190/0x194
->   Code: 97fc8a7f f940aa80 52864a61 72a686c1 (b9400800)
->   ---[ end trace 0000000000000000 ]---
->
-> Fixes: db6f68b51e5c ("media: verisilicon: Do not set context src/dst formats in reset functions")
->
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->   drivers/media/platform/verisilicon/hantro_v4l2.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> index 835518534e3b..61cfaaf4e927 100644
-> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> @@ -397,10 +397,12 @@ hantro_reset_raw_fmt(struct hantro_ctx *ctx, int bit_depth)
->   	if (!raw_vpu_fmt)
->   		return -EINVAL;
->   
-> -	if (ctx->is_encoder)
-> +	if (ctx->is_encoder) {
->   		encoded_fmt = &ctx->dst_fmt;
-> -	else
-> +		ctx->vpu_src_fmt = raw_vpu_fmt;
-> +	} else {
->   		encoded_fmt = &ctx->src_fmt;
-> +	}
->   
->   	hantro_reset_fmt(&raw_fmt, raw_vpu_fmt);
->   	raw_fmt.width = encoded_fmt->width;
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+
+ÔÚ 2023/5/23 ÏÂÎç8:54, andy.shevchenko@gmail.com Ð´µÀ:
+> Mon, May 22, 2023 at 03:10:30PM +0800, Yinbo Zhu kirjoitti:
+>> This bus driver supports the Loongson SPI hardware controller in the
+>> Loongson platforms and supports to use DTS and PCI framework to
+>> register SPI device resources.
+> 
+> It's polite to add reviewers of the previous versions to the Cc list.
+
+okay, I got it.
+> 
+> ...
+> 
+>> +static void loongson_spi_set_clk(struct loongson_spi *loongson_spi, unsigned int hz)
+>> +{
+>> +	unsigned char val;
+>> +	unsigned int div, div_tmp;
+> 
+>> +	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
+> 
+> static?
+
+okay, I will define "static const char rdiv".
+
+> 
+>> +
+>> +	div = clamp_val(DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz), 2, 4096);
+>> +	div_tmp = rdiv[fls(div - 1)];
+>> +	loongson_spi->spcr = (div_tmp & GENMASK(1, 0)) >> 0;
+>> +	loongson_spi->sper = (div_tmp & GENMASK(3, 2)) >> 2;
+>> +	val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+>> +	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, (val & ~3) |
+>> +			       loongson_spi->spcr);
+>> +	val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
+>> +	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG, (val & ~3) |
+>> +			       loongson_spi->sper);
+>> +	loongson_spi->hz = hz;
+>> +}
+> 
+> ...
+> 
+>> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
+>> +				struct spi_device *spi, struct spi_transfer *t)
+>> +{
+>> +	unsigned int hz;
+>> +
+>> +	if (t)
+>> +		hz = t->speed_hz;
+> 
+> And if t is NULL? hz will be uninitialized. Don't you get a compiler warning?
+> (Always test your code with `make W=1 ...`)
+
+I alwasy use `make W=1` and I don't find any warnig, but that what you
+said was right and I will initial hz.
+
+> 
+>> +	if (hz && loongson_spi->hz != hz)
+>> +		loongson_spi_set_clk(loongson_spi, hz);
+>> +
+>> +	if ((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK)
+>> +		loongson_spi_set_mode(loongson_spi, spi);
+>> +
+>> +	return 0;
+>> +}
+> 
+> ...
+> 
+>> +	readb_poll_timeout(loongson_spi->base + LOONGSON_SPI_SPSR_REG, loongson_spi->spsr,
+>> +			   (loongson_spi->spsr & 0x1) != 1, 1, MSEC_PER_SEC);
+> 
+> Wouldn't be better to use ' == 0' in the conditional? Or if you think your
+> approach is better (to show the exact expectation) the definition of the bit 0
+> might help
+> 
+> #define LOONGSON_... BIT(0)
+
+okay, I got it.
+> 
+> 
+> 	readb_poll_timeout(loongson_spi->base + LOONGSON_SPI_SPSR_REG, loongson_spi->spsr,
+> 			   (loongson_spi->spsr & LOONGSON_...) != LOONGSON_...,
+> 			   1, MSEC_PER_SEC);
+> 
+> ...
+> 
+>> +	do {
+>> +		if (loongson_spi_write_read_8bit(spi, &tx, &rx, count) < 0)
+> 
+>> +			goto out;
+> 
+> 		break;
+> 
+>> +		count--;
+>> +	} while (count);
+> 
+> 	} while (--count);
+> 
+> ?
+
+okay, I got it.
+
+> 
+>> +out:
+>> +	return xfer->len - count;
+> 
+> Shouldn't you return an error code if the write failed?
+
+okay, I got it. I will add a error code for return when write failed.
+
+> 
+> ...
+> 
+>> +	master = devm_spi_alloc_master(dev, sizeof(struct loongson_spi));
+> 
+>> +	if (master == NULL)
+> 
+> 	if (!master)
+> 
+>> +		return -ENOMEM;
+> 
+> Why do you use deprecated naming? Can you use spi_controller* instead of
+> spi_master* in all cases?
+
+
+It seems was a personal code style issue and I don't find the
+differences between spi_controller and spi_master, Using spi_controller*
+is also acceptable to me and I will use spi_controller* instead of
+spi_master* in all cases.
+
+
+> 
+> ...
+> 
+>> +	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
+> 
+> 	= SPI_MODE_X_MASK | SPI_CS_HIGH;
+> 
+> ...
+> 
+>> +	clk = devm_clk_get_optional(dev, NULL);
+>> +	if (!IS_ERR(clk))
+>> +		spi->clk_rate = clk_get_rate(clk);
+> 
+>> +	else
+> 
+> Redundant. Just check for the error first as it's very usual pattern in the
+> Linux kernel.
+
+Like below ?
+
+         clk = devm_clk_get_optional(dev, NULL);
+-       if (!IS_ERR(clk))
+-               spi->clk_rate = clk_get_rate(clk);
+-       else
++       if (IS_ERR(clk))
+                 return dev_err_probe(dev, PTR_ERR(clk), "unable to get 
+clock\n");
+
++       spi->clk_rate = clk_get_rate(clk);
+         loongson_spi_reginit(spi);
+
+
+> 
+>> +		return dev_err_probe(dev, PTR_ERR(clk), "unable to get clock\n");
+> 
+> ...
+> 
+>> +static void loongson_spi_pci_unregister(struct pci_dev *pdev)
+>> +{
+> 
+>> +	pcim_iounmap_regions(pdev, BIT(0));
+> 
+> Not needed due to 'm' in the API name, which means "managed".
+
+> 
+>> +	pci_disable_device(pdev);
+> 
+> This is simply wrong. We don't do explicit clean up for managed resources.
+> 
+>> +}
+> 
+> That said, drop the ->remove() completely.
+
+okay,  I will drop the ->remove() completely.
+> 
+> ...
+> 
+>> +static struct pci_device_id loongson_spi_devices[] = {
+>> +	{ PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 0x7a0b) },
+>> +	{ PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 0x7a1b) },
+>> +	{ },
+> 
+> No comma for the terminator entry. It's by definition "terminating" something.
+
+okay, I got it.
+> 
+>> +};
+> 
+> ...
+> 
+>> +#include <linux/of.h>
+> 
+> There is no user of this header. Please, replace with what actually is being
+> used (presumably mod_devicetable.h and maybe others).
+> 
+
+okay, I got it.
+
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include "spi-loongson.h"
+>> +
+>> +static int loongson_spi_platform_probe(struct platform_device *pdev)
+>> +{
+>> +	int ret;
+>> +	void __iomem *reg_base;
+>> +	struct device *dev = &pdev->dev;
+>> +
+>> +	reg_base = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(reg_base))
+>> +		return PTR_ERR(reg_base);
+>> +
+>> +	ret = loongson_spi_init_master(dev, reg_base);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "failed to initialize master\n");
+>> +
+>> +	return ret;
+> 
+> 	return 0;
+
+It seems was more appropriate that initialize ret then return ret.
+Do you think so ?
+
+> 
+>> +}
+> 
+> ...
+> 
+>> +#ifndef __LINUX_SPI_LOONGSON_H
+>> +#define __LINUX_SPI_LOONGSON_H
+>> +
+>> +#include <linux/bits.h>
+> 
+>> +#include <linux/device.h>
+> 
+> This header is not used.
+
+okay, I got it.
+> 
+>> +#include <linux/pm.h>
+> 
+>> +#include <linux/spi/spi.h>
+> 
+> This neither.
+
+That other .c file seems to need it and I will move it to other .c
+code file.
+> 
+>> +#include <linux/types.h>
+> 
+> 
+> For them use forward declarations
+> 
+> struct device;
+> struct spi_controller;
+> 
+> The rest of the inclusions is correct.
+
+okay, I got it.
+> 
+> ...
+> 
+>> +#define	LOONGSON_SPI_SPCR_REG	0x00
+>> +#define	LOONGSON_SPI_SPSR_REG	0x01
+>> +#define	LOONGSON_SPI_FIFO_REG	0x02
+>> +#define	LOONGSON_SPI_SPER_REG	0x03
+>> +#define	LOONGSON_SPI_PARA_REG	0x04
+>> +#define	LOONGSON_SPI_SFCS_REG	0x05
+>> +#define	LOONGSON_SPI_TIMI_REG	0x06
+> 
+> Where is this used outside of the main driver?
+
+These definitions are only used in core.c
+
+> 
+>> +/* Bits definition for Loongson SPI register */
+>> +#define	LOONGSON_SPI_PARA_MEM_EN	BIT(0)
+>> +#define	LOONGSON_SPI_SPCR_CPHA	BIT(2)
+>> +#define	LOONGSON_SPI_SPCR_CPOL	BIT(3)
+>> +#define	LOONGSON_SPI_SPCR_SPE	BIT(6)
+>> +#define	LOONGSON_SPI_SPSR_WCOL	BIT(6)
+>> +#define	LOONGSON_SPI_SPSR_SPIF	BIT(7)
+>> +
+>> +struct loongson_spi {
+>> +	struct	spi_master	*master;
+>> +	void __iomem		*base;
+>> +	int			cs_active;
+>> +	unsigned int		hz;
+>> +	unsigned char		spcr;
+>> +	unsigned char		sper;
+>> +	unsigned char		spsr;
+>> +	unsigned char		para;
+>> +	unsigned char		sfcs;
+>> +	unsigned char		timi;
+>> +	unsigned int		mode;
+>> +	u64			clk_rate;
+>> +};
+>> +
+>> +int loongson_spi_init_master(struct device *dev, void __iomem *reg);
+>> +extern const struct dev_pm_ops loongson_spi_dev_pm_ops;
+>> +#endif /* __LINUX_SPI_LOONGSON_H */
+> 
 
