@@ -2,170 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0CA70EE4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3474270EE4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239071AbjEXGmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
+        id S239723AbjEXGnD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 02:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239561AbjEXGlw (ORCPT
+        with ESMTP id S239477AbjEXGm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:41:52 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35E41BFD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:40:08 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-2532d6c7ef2so4271613a91.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684910402; x=1687502402;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zn7OMSsYSCX/rc9bjAKI2reLL+5RLLeTJ6anC4INbJ0=;
-        b=Blwwm5MxBGo/l24/gdA8zXS9W/9IYhXx34COU9v3rz8YFOVDy2GHAXNVZcNMzpSnIK
-         Mv272aeEWdy1CQnzZq5279bTNcxPbDD7p4vzgxuS8yectKxfFvkGhGTT3kSTG8IrLjrK
-         4fsl2Nzo070iVYcV/5Mjga7zFtuVO9F+nI9bHPFoCKststHCwHycrcjphZm2Tw4zXSaT
-         vYHPlJ1Ab77O6sRhciRy7X6TBmixbxj5TKEpdil8L4LfgdslllMPXhM/iU4v/iBOqjeg
-         28Jz3qeU354e8vdzhp4k8zq80LVv8t1O8XqMTMV1XfVGlx5wquzllD824PHLsBKYYxa8
-         2YOg==
+        Wed, 24 May 2023 02:42:27 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7561FEF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:40:24 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-561da492bcbso7925067b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:40:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684910402; x=1687502402;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684910420; x=1687502420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zn7OMSsYSCX/rc9bjAKI2reLL+5RLLeTJ6anC4INbJ0=;
-        b=Cyd9ANN/Pu6AgNKEwt2VII15b9GOnv54TxljPky/pazUr0pYJgUkuipRy1IgjgmJx1
-         dV9D52XOqE0I92Om1Wnkaadg5+hm2aYdZIxGmTCYBR21WRx2bpHgIIZktx1H27xXD33P
-         95AVvgJSrMNh3Lx7gMsv15l/s0ACvgYHy76NXMX5P/kNzcCGnEagE6gP0yr1xzlcfClh
-         hHz2+vdSVxOwiHYSUe/JB8J+FdqSEguX7JDR/mXfbQ8McsSj0Pwz7fMUHVM/J7uTZiGD
-         +583FikSXBSMWgHxMBsuDT1Dg4tdAu7OeEODOczGsY1/Phyj++2WO0dLY7LyW7GQsN4q
-         wuMQ==
-X-Gm-Message-State: AC+VfDzW2wxnhjrITd3kLEXkLoArsGXAWGVhZR2ovIwJpOHxuIbnszSL
-        b+x+t/ppa6TiDKAt3Nb906K3WCHBnes=
-X-Google-Smtp-Source: ACHHUZ54QbswgzWqbpMWpc5kcmKJu0sCpoDIcGaCEWvL6mfDinJ4GzW4yBfgfVCjieyPrS/gupcpTA==
-X-Received: by 2002:a17:90a:1b2b:b0:24e:2759:8dbe with SMTP id q40-20020a17090a1b2b00b0024e27598dbemr18040657pjq.7.1684910402282;
-        Tue, 23 May 2023 23:40:02 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id 4-20020a630904000000b00534514bc08bsm6947515pgj.64.2023.05.23.23.40.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 23:40:01 -0700 (PDT)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     xiang@kernel.org, chao@kernel.org, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
-        zhangwen@coolpad.com
-Subject: [PATCH v2] erofs: remove the member readahead from struct z_erofs_decompress_frontend
-Date:   Wed, 24 May 2023 14:39:44 +0800
-Message-Id: <20230524063944.1655-1-zbestahu@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=Vr2MntkgqtW/rKvOcW5bbJn6xN2wNk/NNHYHNMo3fRo=;
+        b=bn9prfgqNhoKBosibtR/6n+b1MmFVFMRBD3GIjrS5hMAf8EUX1FUOpG/ZoeyvohQhx
+         iOboiJDNHKs1qlbhPhhyZ2QTNUtnv+ipQGkw7lTgBNRCny3ll0hnWKdtk12atJwvWBmw
+         z5u2P2tAQa3fVbW4ozUxc+xt4bJikeF8OjKIv9JNadXMD36NqOkcFZMuIQ9fj/ZRfZWQ
+         gzIWsuEn9wWh8SSpwNFWVqaMAkkg4JIHK/jBLQ5/RCTukHOroGRI+8ynYfukLo5jZ+JZ
+         qql9mffAN9CsWlN5+6N9xeEXKFvaNGNepNUgATI38WCpp6GOckIPGd5PEe9rbodkpQfj
+         p6PA==
+X-Gm-Message-State: AC+VfDzqbLh8Wrpm3LHhEjzrsgNPqDIXwe7uEDci7laiwa69GO1NHqSI
+        vqqJLYkL62m1iOzOaKpUnUykp5ToDy4AcQ==
+X-Google-Smtp-Source: ACHHUZ4mOk3LAC0PwaMpAEGvMN10rZLq0M/hP7+j+Yl9PZxPTZjup5PwCMgYdPm45oSV0GGWrbei6w==
+X-Received: by 2002:a0d:fdc6:0:b0:565:5478:713c with SMTP id n189-20020a0dfdc6000000b005655478713cmr4179195ywf.0.1684910420139;
+        Tue, 23 May 2023 23:40:20 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id d18-20020a81ab52000000b00564d7328c59sm3054905ywk.76.2023.05.23.23.40.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 23:40:19 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-ba71cd7ce7fso954986276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:40:19 -0700 (PDT)
+X-Received: by 2002:a25:342:0:b0:ba8:5009:db33 with SMTP id
+ 63-20020a250342000000b00ba85009db33mr16875830ybd.59.1684910418943; Tue, 23
+ May 2023 23:40:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <587f259fb8634daa268595f60fa52c3c4d9bbec2.1684854090.git.geert+renesas@glider.be>
+ <2c26f143-47ae-4c2f-bd55-2e3b7a6300f0@sirena.org.uk>
+In-Reply-To: <2c26f143-47ae-4c2f-bd55-2e3b7a6300f0@sirena.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 24 May 2023 08:40:07 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXb+w6dSnFHvx6zTrXq1bKogrRjsodp+s_9jJcs=X5yFg@mail.gmail.com>
+Message-ID: <CAMuHMdXb+w6dSnFHvx6zTrXq1bKogrRjsodp+s_9jJcs=X5yFg@mail.gmail.com>
+Subject: Re: [PATCH] regulator: core: Streamline debugfs operations
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Osama Muhammad <osmtendev@gmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yue Hu <huyue2@coolpad.com>
+Hi Mark,
 
-The struct member is only used to add REQ_RAHEAD during I/O submission.
-So it is cleaner to pass it as a parameter than keep it in the struct.
+On Tue, May 23, 2023 at 5:16 PM Mark Brown <broonie@kernel.org> wrote:
+> On Tue, May 23, 2023 at 05:03:58PM +0200, Geert Uytterhoeven wrote:
+>
+> > -     if (!regulator->debugfs) {
+> > +     if (IS_ERR(regulator->debugfs))
+> >               rdev_dbg(rdev, "Failed to create debugfs directory\n");
+> > -     } else {
+> > -             debugfs_create_u32("uA_load", 0444, regulator->debugfs,
+> > -                                &regulator->uA_load);
+> > -     }
+> > +
+> > +     debugfs_create_u32("uA_load", 0444, regulator->debugfs,
+> > +                        &regulator->uA_load);
+>
+> No, it's actually useful to not just dump these files in the root
+> directory if we fail to create the per regulator directory.
 
-Also, rename function z_erofs_get_sync_decompress_policy() to
-z_erofs_is_sync_decompress() for better clarity and conciseness.
+If regulator->debugfs is an error, no files are dumped in the root
+directory.
 
-Signed-off-by: Yue Hu <huyue2@coolpad.com>
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
-v2: readahead -> ra in z_erofs_runqueue()
+By design, all debugfs functions are no-ops when passed an error,
+cfr. the comment quoted above:
 
- fs/erofs/zdata.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+    Other debugfs functions handle the fact that the "dentry"
+    passed to them could be an error and they don't crash in that case.
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 45f21db2303a..5cd971bcf95e 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -550,7 +550,6 @@ struct z_erofs_decompress_frontend {
- 	z_erofs_next_pcluster_t owned_head;
- 	enum z_erofs_pclustermode mode;
- 
--	bool readahead;
- 	/* used for applying cache strategy on the fly */
- 	bool backmost;
- 	erofs_off_t headoffset;
-@@ -1106,7 +1105,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 	return err;
- }
- 
--static bool z_erofs_get_sync_decompress_policy(struct erofs_sb_info *sbi,
-+static bool z_erofs_is_sync_decompress(struct erofs_sb_info *sbi,
- 				       unsigned int readahead_pages)
- {
- 	/* auto: enable for read_folio, disable for readahead */
-@@ -1672,7 +1671,7 @@ static void z_erofs_decompressqueue_endio(struct bio *bio)
- static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
- 				 struct page **pagepool,
- 				 struct z_erofs_decompressqueue *fgq,
--				 bool *force_fg)
-+				 bool *force_fg, bool readahead)
- {
- 	struct super_block *sb = f->inode->i_sb;
- 	struct address_space *mc = MNGD_MAPPING(EROFS_SB(sb));
-@@ -1763,7 +1762,7 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
- 				bio->bi_iter.bi_sector = (sector_t)cur <<
- 					(sb->s_blocksize_bits - 9);
- 				bio->bi_private = q[JQ_SUBMIT];
--				if (f->readahead)
-+				if (readahead)
- 					bio->bi_opf |= REQ_RAHEAD;
- 				++nr_bios;
- 			}
-@@ -1799,13 +1798,13 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
- }
- 
- static void z_erofs_runqueue(struct z_erofs_decompress_frontend *f,
--			     struct page **pagepool, bool force_fg)
-+			     struct page **pagepool, bool force_fg, bool ra)
- {
- 	struct z_erofs_decompressqueue io[NR_JOBQUEUES];
- 
- 	if (f->owned_head == Z_EROFS_PCLUSTER_TAIL)
- 		return;
--	z_erofs_submit_queue(f, pagepool, io, &force_fg);
-+	z_erofs_submit_queue(f, pagepool, io, &force_fg, ra);
- 
- 	/* handle bypass queue (no i/o pclusters) immediately */
- 	z_erofs_decompress_queue(&io[JQ_BYPASS], pagepool);
-@@ -1903,8 +1902,8 @@ static int z_erofs_read_folio(struct file *file, struct folio *folio)
- 	(void)z_erofs_collector_end(&f);
- 
- 	/* if some compressed cluster ready, need submit them anyway */
--	z_erofs_runqueue(&f, &pagepool,
--			 z_erofs_get_sync_decompress_policy(sbi, 0));
-+	z_erofs_runqueue(&f, &pagepool, z_erofs_is_sync_decompress(sbi, 0),
-+			 false);
- 
- 	if (err)
- 		erofs_err(inode->i_sb, "failed to read, err [%d]", err);
-@@ -1922,7 +1921,6 @@ static void z_erofs_readahead(struct readahead_control *rac)
- 	struct page *pagepool = NULL, *head = NULL, *page;
- 	unsigned int nr_pages;
- 
--	f.readahead = true;
- 	f.headoffset = readahead_pos(rac);
- 
- 	z_erofs_pcluster_readmore(&f, rac, f.headoffset +
-@@ -1953,7 +1951,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
- 	(void)z_erofs_collector_end(&f);
- 
- 	z_erofs_runqueue(&f, &pagepool,
--			 z_erofs_get_sync_decompress_policy(sbi, nr_pages));
-+			 z_erofs_is_sync_decompress(sbi, nr_pages), true);
- 	erofs_put_metabuf(&f.map.buf);
- 	erofs_release_pages(&pagepool);
- }
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.17.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
