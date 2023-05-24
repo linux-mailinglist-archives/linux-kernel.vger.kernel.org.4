@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D8A70FBA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FBF70FBA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjEXQXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 12:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S234865AbjEXQXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbjEXQXi (ORCPT
+        with ESMTP id S229461AbjEXQXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 12:23:38 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC3912F;
-        Wed, 24 May 2023 09:23:34 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-510bcd2d6b8so31010a12.0;
-        Wed, 24 May 2023 09:23:34 -0700 (PDT)
+        Wed, 24 May 2023 12:23:39 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3831AC;
+        Wed, 24 May 2023 09:23:36 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96fffe11714so191986366b.0;
+        Wed, 24 May 2023 09:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684945413; x=1687537413;
+        d=gmail.com; s=20221208; t=1684945414; x=1687537414;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3/ycEJUTtAvi7GqgpK2zlFsLIGEJyRG8499TbrV7bF8=;
-        b=AtJCedqw7nCCBMw/v9uxTNYD5Zg9FPuoDc4lUvqOiF4tI/xA5h/bg9eoiNEZF3zZZS
-         NaNjRKQ5iiaCXB24tQ+xgnGgSvXsGDdGOzQgUoqqsN3WYanzIt7bpXbMofpXF+jZXWmn
-         aLvCrfz3NYQ4k3jAZ8FizXMLfds2/V9DyFWTXP26a00qY2g9xa+vN43uzepu34uGml6C
-         6odowDAVKse38OmYmGXKaJy9djuJDZ0ftIUYg4jA69dVghto746pYwCIETg8rspSMqPU
-         pGrNg6ycDX2SQGorD4NmWozexz7uAFKYVnqcBEV2lkqm7iriWF4/SeGGXj11rdTnUtAp
-         RI9w==
+        bh=OpOWhP8DxFONC41kTCdHjaq2c0kscoG17qr+mKyv86Y=;
+        b=UItT9vYrEv/kfnpRB7ymoq0pbO0X+WFATR5duxybpApV0VslX3wEkhOt49PvRhdhyH
+         u2wxN4RUq3UCMP+DOzHnZKVbrzBvh5CxrBoaAGHuE2X1s5Zjk/bXJXHQL1b+oEmzwbjf
+         IbqXXFCzyy9KqgOeiDV2WwpPmZImQmC69uZoIZJWAzdyxvC+d6bQsMYVVbgMIOUp+Q9C
+         tFtcaIJM7ucEQHYRswFkiIlHepIYbL49QO+qVBRXOU3mjkJzdaZ+R8xA35cwTCC58T8G
+         llrimVok27IyOFYUYic1L0tnKYI1lTbNHi0K4FHrB8mh1jGoA8z5Vk3x90WV4gGNzDZo
+         Jr4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684945413; x=1687537413;
+        d=1e100.net; s=20221208; t=1684945414; x=1687537414;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3/ycEJUTtAvi7GqgpK2zlFsLIGEJyRG8499TbrV7bF8=;
-        b=hn5i42675+4gL5QVx4vciS6yCqY1tkVOJ/HgLG2vn3Y8pBFQVkwnAXSseI0OkBdPLO
-         LHS/rqJRK8PXgJWrZHyiUzrObPO1b/f9VVFHbyndXm5LTt4/WrT9IPEuxVwBCLNyfEf7
-         MHlYYcW+cY8kB5EMGE5Djnz2uJ6RYKW59SHui+1jgbKJAHWawj/BJTs42bakGQxqztyb
-         g99/1AgkWOFd+mHetkWuePwFpOV8cscuK21tRYa1SmystNDTbmrOmP6+4NVaAuca9wyv
-         GBsBpcrdVQYYYUc07uqvWGMuDFiFiIw+rxsCzh3A8AU5pvxO2RgC4nIuVDnWDMMXw/tu
-         Rr3A==
-X-Gm-Message-State: AC+VfDzmfcBIwAhOjZM3RSX0Q5NXMPdZ0uhdlbCtDWwLrkCvSZOrYAJx
-        kaGlHLSrNaO85+eLo7wzlvo=
-X-Google-Smtp-Source: ACHHUZ56ZChcvKAYIQXUlS6gupUgJPC8PLWKayRJD2ZiW+tGr59q4nQy/ARzZvkGOWkpBgfuvtotvQ==
-X-Received: by 2002:a17:907:d9f:b0:973:84b0:b077 with SMTP id go31-20020a1709070d9f00b0097384b0b077mr2792885ejc.33.1684945413244;
-        Wed, 24 May 2023 09:23:33 -0700 (PDT)
+        bh=OpOWhP8DxFONC41kTCdHjaq2c0kscoG17qr+mKyv86Y=;
+        b=gO9/VbgN5SVnXWS/dFqCFusIQUWRhCWW/ZzpuWZN9IWYBvU/LCUoWGY3klbKmaiC89
+         HVYF4ygQ1r35NUPNG8oqe/22HhNtFXtoPkqNyduzp0YxJtLXqIBQ4NaODG2vsagnafZZ
+         hSSAckvWK8TgkraSV5iWoljIkLxqXWZvLnXdSsFfwe+0UsW16Q5ZGE9MqeXt9p9ZYb53
+         E4yHaxpHxQO8fJNbaUNrnLs7tFhImkdBxOnVl6eC6kY856rnt/wB22v1WRQ5qzXq1tPT
+         WnYQDK+SqulmC9eG8FtBRYkHVrDGncunmfEYrR7eQOk/i6RrvQQFabd3qR5blULAen2M
+         FFFQ==
+X-Gm-Message-State: AC+VfDxkxpQa/buPmoWOmGmoLviQqCybQNlAklhJrFuQjncah7FVXxRj
+        AG0JR3DpOTjnPl4eVs3E0NU=
+X-Google-Smtp-Source: ACHHUZ7MDPXXXXYo4DbsGUwSu0EzM1l4sfqZg9xWYeIw0Hj8LtCnDU0xtGqR9WUvxkNsDNqEQGjYxg==
+X-Received: by 2002:a17:907:9494:b0:96a:30b5:cfb0 with SMTP id dm20-20020a170907949400b0096a30b5cfb0mr16826339ejc.22.1684945414459;
+        Wed, 24 May 2023 09:23:34 -0700 (PDT)
 Received: from fedora.. ([213.149.38.146])
-        by smtp.googlemail.com with ESMTPSA id p19-20020a170906229300b0096f5b48fe43sm5913793eja.47.2023.05.24.09.23.32
+        by smtp.googlemail.com with ESMTPSA id p19-20020a170906229300b0096f5b48fe43sm5913793eja.47.2023.05.24.09.23.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 09:23:32 -0700 (PDT)
+        Wed, 24 May 2023 09:23:34 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org
-Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v2 2/4] soc: qcom: smem: introduce qcom_smem_get_msm_id()
-Date:   Wed, 24 May 2023 18:23:27 +0200
-Message-Id: <20230524162329.819770-2-robimarko@gmail.com>
+Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v2 3/4] cpufreq: qcom-nvmem: use SoC ID-s from bindings
+Date:   Wed, 24 May 2023 18:23:28 +0200
+Message-Id: <20230524162329.819770-3-robimarko@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230524162329.819770-1-robimarko@gmail.com>
 References: <20230524162329.819770-1-robimarko@gmail.com>
@@ -74,68 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a helper to return the SoC SMEM ID, which is used to identify the
-exact SoC model as there may be differences in the same SoC family.
-
-Currently, cpufreq-nvmem does this completely in the driver and there has
-been more interest expresed for other drivers to use this information so
-lets expose a common helper to prevent redoing it in individual drivers
-since this field is present on every SMEM table version.
+SMEM SoC ID-s are now stored in DT bindings so lets use those instead of
+defining them in the driver again.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/soc/qcom/smem.c       | 19 +++++++++++++++++++
- include/linux/soc/qcom/smem.h |  2 ++
- 2 files changed, 21 insertions(+)
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-index 6be7ea93c78c..0d6ba9bce8cb 100644
---- a/drivers/soc/qcom/smem.c
-+++ b/drivers/soc/qcom/smem.c
-@@ -14,6 +14,7 @@
- #include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/soc/qcom/smem.h>
-+#include <linux/soc/qcom/socinfo.h>
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index a577586b23be..60e99be2d3db 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -31,12 +31,7 @@
  
- /*
-  * The Qualcomm shared memory system is a allocate only heap structure that
-@@ -772,6 +773,24 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
- }
- EXPORT_SYMBOL(qcom_smem_virt_to_phys);
+ #define MSM_ID_SMEM	137
  
-+/**
-+ * qcom_smem_get_msm_id() - return the SoC ID
-+ *
-+ * Look up SoC ID from HW/SW build ID and return it.
-+ */
-+int qcom_smem_get_msm_id(void)
-+{
-+	size_t len;
-+	struct socinfo *info;
-+
-+	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
-+	if (IS_ERR(info))
-+		return PTR_ERR(info);
-+
-+	return __le32_to_cpu(info->id);
-+}
-+EXPORT_SYMBOL(qcom_smem_get_msm_id);
-+
- static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
- {
- 	struct smem_header *header;
-diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
-index 86e1b358688a..6448607239e6 100644
---- a/include/linux/soc/qcom/smem.h
-+++ b/include/linux/soc/qcom/smem.h
-@@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
+-enum _msm_id {
+-	MSM8996V3 = 0xF6ul,
+-	APQ8096V3 = 0x123ul,
+-	MSM8996SG = 0x131ul,
+-	APQ8096SG = 0x138ul,
+-};
++#include <dt-bindings/arm/qcom,ids.h>
  
- phys_addr_t qcom_smem_virt_to_phys(void *p);
+ enum _msm8996_version {
+ 	MSM8996_V3,
+@@ -154,12 +149,12 @@ static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+ 	msm_id++;
  
-+int qcom_smem_get_msm_id(void);
-+
- #endif
+ 	switch ((enum _msm_id)*msm_id) {
+-	case MSM8996V3:
+-	case APQ8096V3:
++	case QCOM_ID_MSM8996:
++	case QCOM_ID_APQ8096:
+ 		version = MSM8996_V3;
+ 		break;
+-	case MSM8996SG:
+-	case APQ8096SG:
++	case QCOM_ID_MSM8996SG:
++	case QCOM_ID_APQ8096SG:
+ 		version = MSM8996_SG;
+ 		break;
+ 	default:
 -- 
 2.40.1
 
