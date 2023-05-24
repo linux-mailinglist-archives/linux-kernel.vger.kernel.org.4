@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6674470FA1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FE370FA1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235495AbjEXP3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S235705AbjEXPag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235199AbjEXP3A (ORCPT
+        with ESMTP id S229876AbjEXPae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:29:00 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2389DF5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:28:57 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-396140d25e0so271143b6e.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684942136; x=1687534136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j5MQz4tRtkG+kSAOx+7cDjXH3GlxLpEVvkOR0cGeMbw=;
-        b=CKW2NTF6Voh4yCMud+Z9KU6wa2a3nyRCotPLtem283S8sHvDjQcHT8DaACbLBM34AB
-         u3Do1boA3IpAoWMFpuzvdgS406jmI7Gej8+CnrWPYcBCurgHrRJzkx7sqncgq9bHmKB9
-         o6vbxenD89yepUE3ZFj4jVSPRzcQ183xWtQoK5l2JX/0MmGB1JprLbMteiV8n5yVmooc
-         rZsLu83MzpBxB77Y541sBwI/27VJtN3TROQZU4bnllY/D4n61J8+2IgSI3VbL2hwizf/
-         +ddvxDb9hMA9t8K8n+rs5514YlPd+9kHqjfrraBu8Gjs+R824mt/1Zy5b9btLL5Q/3jN
-         k9Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684942136; x=1687534136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j5MQz4tRtkG+kSAOx+7cDjXH3GlxLpEVvkOR0cGeMbw=;
-        b=N9SROZa1opAgDLhPmq7t+HQqAwVyXXuroYl2NHb4rtACE0wtuZC8WaI+woxIocQrIz
-         1WaIh5VlvdlEDXseWykK+r6bHSiaNRdXQEfz+IukKMhTgjajHeJCJO69pbUIxvPs03Pw
-         O+ZU2MZMF+DhMj3S9f0Lui8UiVgam/uu6MVNZlM0v//WDGiemAbZP0kywul2t6eKrF+Q
-         sNnzchJZvjtcKxtkoGNyYzcHdrzFcjvVq6JwGpX6BOzi1t2ipWx/AfYNL/6TslL4fcVk
-         DHRn7y6GtgotNgnESVcN4zpcOKdqS5DjDNTDo1rXK4sE0wSQi5YBbuupMZyIKTDJmR65
-         sGEg==
-X-Gm-Message-State: AC+VfDzB4nS2z5cow5fpf+m4e5XGU56vXWjkOVX/Mp37Ure7g57r0dKP
-        15oZFQdx/jDQjihOS6i8J2++MCjUii5jRibye8Ef8bki
-X-Google-Smtp-Source: ACHHUZ7uw0PRxGdf3aDPz7JxHgbvzaWS6kWcooJnGWj444daIvvFiBZAFV48kI0dDl2rfNgYCiGCMryqK5Uhs2taraU=
-X-Received: by 2002:aca:3cd6:0:b0:392:31fe:cd19 with SMTP id
- j205-20020aca3cd6000000b0039231fecd19mr10464992oia.0.1684942136452; Wed, 24
- May 2023 08:28:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <646e2c58.170a0220.4f979.2ba7@mx.google.com>
-In-Reply-To: <646e2c58.170a0220.4f979.2ba7@mx.google.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 24 May 2023 11:28:45 -0400
-Message-ID: <CADnq5_N7W8_c6tcFDkEEM_shXr0GJV+YJfJ8y4YC=2ufRHRX5g@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Enable GCVM_CONTEXT1_CNTL after page table
- addr is set.
-To:     ghostfly233 <ghostfly23333@gmail.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, daniel@ffwll.ch, airlied@gmail.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 24 May 2023 11:30:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0870F5;
+        Wed, 24 May 2023 08:30:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D6B763385;
+        Wed, 24 May 2023 15:30:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A74C433D2;
+        Wed, 24 May 2023 15:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684942232;
+        bh=apv7fp2JStfK/1O9ZPoYlUJJmLzvR6yZ/dFs2Sq5Cl8=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=bKSS11QXhFSdLKI+N5lXBXvtHnz5/ib84JrDNKJoClE//sLm1NMoXl9VeucC2+OAX
+         2kVfV8zfWHHSlkz4qvziDZfUkYJqEVrA7Gr5AXz61O56wvgepoA+ban1Du68+koiae
+         wF4C0/UTAuxlnKVwSZ5l77Y7T8lu6uQir1aMtRy592pW8k9NsbFljp7/52ZXedO+F2
+         IV0aBm4u1muOXGf+D27FD1n2USc7u4pkr6whlm4SgmlG4SpshaiwSf5dIBxNaRBNhy
+         fvj7vB9OpEuybJ9J+FnkoKBDITr0CavIEXUVDYEMFa+O96GB7LaXiI2dVNxfOJr+Ai
+         9STys3pU031dw==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 24 May 2023 18:30:27 +0300
+Message-Id: <CSUM65JDEX5D.8GL20PUI2XDV@suppilovahvero>
+Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
+        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
+        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
+        <lukas@wunner.de>, <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>
+X-Mailer: aerc 0.14.0
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <CSU7G2UZSZ8K.22EGXU5CJTZBB@suppilovahvero>
+In-Reply-To: <CSU7G2UZSZ8K.22EGXU5CJTZBB@suppilovahvero>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:25=E2=80=AFAM ghostfly233 <ghostfly23333@gmail.c=
-om> wrote:
->
-> In gfxhub_v2_1_setup_vmid_config(), the GCVM_CONTEXT1_CNTL reg is
-> enabled before related GCVM_CONTEXT1_PAGE_TABLE_START_ADDR and
-> GCVM_CONTEXT1_PAGE_TABLE_END_ADDR regs are written, which may
-> cause undefined behavior.
->
-> This patch enable GCVM_CONNTEXT1_CNTL after page table addresses are set,
-> so that it can ensure no undefined behavior will happen.
+On Wed May 24, 2023 at 6:58 AM EEST, Jarkko Sakkinen wrote:
+> >  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrup=
+t);
+> >  	if (rc < 0)
+> > -		return IRQ_NONE;
+> > +		goto unhandled;
+> > =20
+> >  	if (interrupt =3D=3D 0)
+> > -		return IRQ_NONE;
+> > +		goto unhandled;
+> > =20
+> >  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+> >  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
+> > @@ -780,10 +829,14 @@ static irqreturn_t tis_int_handler(int dummy, voi=
+d *dev_id)
+> >  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrup=
+t);
+> >  	tpm_tis_relinquish_locality(chip, 0);
+> >  	if (rc < 0)
+> > -		return IRQ_NONE;
+> > +		goto unhandled;
+> > =20
+> >  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+> >  	return IRQ_HANDLED;
+> > +
+> > +unhandled:
+> > +	tpm_tis_process_unhandled_interrupt(chip);
+> > +	return IRQ_HANDLED;
+> >  }
 
-Please update all of the gfxhub and mmhub files with this change.
+Some minor glitches I noticed.
 
-Alex
+You could simplify the flow by making the helper to return IRQ_NONE.
 
->
-> Signed-off-by: Zibin Liu <ghostfly23333@gmail.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c b/drivers/gpu/drm/a=
-md/amdgpu/gfxhub_v2_1.c
-> index 4aacbbec31e2..791afc8e9e85 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c
-> @@ -297,7 +297,7 @@ static void gfxhub_v2_1_setup_vmid_config(struct amdg=
-pu_device *adev)
->
->         for (i =3D 0; i <=3D 14; i++) {
->                 tmp =3D RREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_CNTL, =
-i);
-> -               tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, ENABLE_CON=
-TEXT, 1);
-> +               tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, ENABLE_CON=
-TEXT, 0);
->                 tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, PAGE_TABLE=
-_DEPTH,
->                                     adev->vm_manager.num_level);
->                 tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL,
-> @@ -333,6 +333,9 @@ static void gfxhub_v2_1_setup_vmid_config(struct amdg=
-pu_device *adev)
->                 WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_PAGE_TABLE_END=
-_ADDR_HI32,
->                                     i * hub->ctx_addr_distance,
->                                     upper_32_bits(adev->vm_manager.max_pf=
-n - 1));
-> +               tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, ENABLE_CON=
-TEXT, 1);
-> +               WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_CNTL,
-> +                                   i * hub->ctx_distance, tmp);
->         }
->
->         hub->vm_cntx_cntl =3D tmp;
-> --
-> 2.34.1
->
+E.g.=20
+
+	tpm_tis_relinquish_locality(chip, 0);
+	if (rc < 0)
+		return tpm_tis_process_unhandled_interrupt(chip);
+
+I'd recommend changing the function name simply tpm_tis_rollback_interrupt(=
+).
+
+Also tpm_tis_handle_irq_storm() is a pretty bad function name=20
+because handle also can mean anything. You are resetting to the
+polling mode, right?
+
+So perhaps that could be e.g. tpm_tis_reenable_polling? I'm open
+for any other name but it really needs to give a hint what the
+function does.
+
+BR, Jarkko
