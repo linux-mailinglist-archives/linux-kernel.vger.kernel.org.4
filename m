@@ -2,127 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1684470ECB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F5670ECBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239014AbjEXExQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 00:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S239037AbjEXExy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 00:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjEXExO (ORCPT
+        with ESMTP id S229540AbjEXExw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 00:53:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF2184;
-        Tue, 23 May 2023 21:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=x3TATxZ2qX9UI1aV8ki5wVDf4nzUOgqNz0TYOz12DOU=; b=zT5WGgGRyuiauI1Gqh/aDM7kw9
-        en7NVJcwdW+iclF0oXdu6aIQcvoPd3XQpBTqQX5h/Hzc0c9keUnI/kY+EaXgSvRpCPwDPNJgsZI2h
-        FXm2xcQpQKY6+GxUxgiPyq60w4khmqBT+0IJiR9BPx5sS6fdM9Bhgje57XsYI9NcQenvuRqX7vq2B
-        dWxYM241L/EVfLa60E0DyPkyUOUCYJrLZcyLRSWO3oNdUycFL/dFOHJviLvGSDrCoXqI9oR8iKobP
-        /jn3jJ+w2Cg7wFNNujLQI7V/UgJwFIWSb2cui8d5zAqXMVKGMmG2V3SSoFaylPmxffnsGGT2dO6bW
-        7CAkfC7A==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1gUp-00CLwp-0V;
-        Wed, 24 May 2023 04:53:12 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jaswinder Singh <jassisinghbrar@gmail.com>,
-        Boojin Kim <boojin.kim@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v2] dmaengine: pl330: rename _start to prevent build error
-Date:   Tue, 23 May 2023 21:53:10 -0700
-Message-Id: <20230524045310.27923-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.1
+        Wed, 24 May 2023 00:53:52 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63F213E;
+        Tue, 23 May 2023 21:53:50 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O4UKeh005024;
+        Wed, 24 May 2023 04:53:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vaaPbw1ARTGRfOskyv4NiuJF0uHBDUVCzB7VY4qNrqg=;
+ b=amXzxzQvBkRRpLSzLoSoL023sqjbACekChdxJLyWtz2yHlYIP+jP5+VW8ryyxHJeeEa6
+ rY4JKy3AjJ1veLws/g5w6rxNevfOG8GNOXDf8zrSPA8BIJNXabxYYUkcmCtQYi6iFL5L
+ tGo/tqBDEv1O+hPS6zqJg95lN/5XJE4TZQFRyrHxVLcPqAwu9SYyzJ/8BpI1yfc+7PAs
+ s/pny1qtTeg6vThaU5P3akumGm8/WktE34UcYjo2ZaSU+zx7gwKZO3Qf65QrAlLI3qHu
+ vssRY6u2JpfA3i+a2MXMuHjh/JFMqc3KagynuVb9iWV3/dRswF0e4InVAT6LYfNyRFZ+ EA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs42urt2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 04:53:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O4riID026837
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 04:53:44 GMT
+Received: from [10.50.55.115] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
+ 2023 21:53:41 -0700
+Message-ID: <03a9eb97-0961-5031-debe-acea03ee68fd@quicinc.com>
+Date:   Wed, 24 May 2023 10:23:32 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] venus: replace arrary index with enum for supported
+ formats
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-media@vger.kernel.org>, <stanimir.k.varbanov@gmail.com>,
+        <quic_vgarodia@quicinc.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <mchehab@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <1684736229-30567-1-git-send-email-quic_dikshita@quicinc.com>
+ <0f7a33c1-f894-adfe-94d7-89296893128f@linaro.org>
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <0f7a33c1-f894-adfe-94d7-89296893128f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AyHwFdofocAfPoz6xvonnD5EJWk1iU0Q
+X-Proofpoint-GUID: AyHwFdofocAfPoz6xvonnD5EJWk1iU0Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_02,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305240040
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"_start" is used in several arches and proably should be reserved
-for ARCH usage. Using it in a driver for a private symbol can cause
-a build error when it conflicts with ARCH usage of the same symbol.
 
-Therefore rename pl330's "_start" to "pl330_start_thread" so that there
-is no conflict and no build error.
 
-drivers/dma/pl330.c:1053:13: error: '_start' redeclared as different kind of symbol
- 1053 | static bool _start(struct pl330_thread *thrd)
-      |             ^~~~~~
-In file included from ../include/linux/interrupt.h:21,
-                 from ../drivers/dma/pl330.c:18:
-arch/riscv/include/asm/sections.h:11:13: note: previous declaration of '_start' with type 'char[]'
-   11 | extern char _start[];
-      |             ^~~~~~
+On 5/23/2023 1:32 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 22.05.2023 08:17, Dikshita Agarwal wrote:
+>> Use enums to list supported formats for encoder and decoder
+>> instead of array index which was a error prone design.
+>>
+>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+>> ---
+> Thanks a lot.
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+>>  drivers/media/platform/qcom/venus/core.h | 16 ++++++++
+>>  drivers/media/platform/qcom/venus/vdec.c | 63 +++++++++++++++++++-------------
+>>  drivers/media/platform/qcom/venus/venc.c | 31 +++++++++-------
+>>  3 files changed, 72 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+>> index 12a42fb..e988ed4 100644
+>> --- a/drivers/media/platform/qcom/venus/core.h
+>> +++ b/drivers/media/platform/qcom/venus/core.h
+>> @@ -83,6 +83,22 @@ struct venus_resources {
+>>  	const char *fwname;
+>>  };
+>>  
+>> +enum venus_fmt {
+>> +	VENUS_FMT_NV12			= 0,
+>> +	VENUS_FMT_QC08C			= 1,
+>> +	VENUS_FMT_QC10C			= 2,
+>> +	VENUS_FMT_H264			= 3,
+>> +	VENUS_FMT_VP8			= 4,
+>> +	VENUS_FMT_VP9			= 5,
+>> +	VENUS_FMT_HEVC			= 6,
+>> +	VENUS_FMT_VC1_ANNEX_G		= 7,
+>> +	VENUS_FMT_VC1_ANNEX_L		= 8,
+>> +	VENUS_FMT_MPEG4			= 9,
+>> +	VENUS_FMT_MPEG2			= 10,
+>> +	VENUS_FMT_H263			= 11,
+>> +	VENUS_FMT_XVID			= 12,
+> Nit: I don't think the '= n' is necessary here, as it doesn't
+> map to anything in hw/fw (or does it?)
+> 
+> Konrad
+> 
+Yes, It doesn't. Will remove in next patch.
 
-Fixes: b7d861d93945 ("DMA: PL330: Merge PL330 driver into drivers/dma/")
-Fixes: ae43b3289186 ("ARM: 8202/1: dmaengine: pl330: Add runtime Power Management support v12")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jaswinder Singh <jassisinghbrar@gmail.com>
-Cc: Boojin Kim <boojin.kim@samsung.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Russell King <rmk+kernel@arm.linux.org.uk>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: dmaengine@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org
----
-v2: make new function name pl330-specific (Vinod)
-    drop Jaswinder Singh @samsung.com from Cc: list
+Thanks,
+Dikshita
 
- drivers/dma/pl330.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff -- a/drivers/dma/pl330.c b/drivers/dma/pl330.c
---- a/drivers/dma/pl330.c
-+++ b/drivers/dma/pl330.c
-@@ -1050,7 +1050,7 @@ static bool _trigger(struct pl330_thread
- 	return true;
- }
- 
--static bool _start(struct pl330_thread *thrd)
-+static bool pl330_start_thread(struct pl330_thread *thrd)
- {
- 	switch (_state(thrd)) {
- 	case PL330_STATE_FAULT_COMPLETING:
-@@ -1702,7 +1702,7 @@ static int pl330_update(struct pl330_dma
- 			thrd->req_running = -1;
- 
- 			/* Get going again ASAP */
--			_start(thrd);
-+			pl330_start_thread(thrd);
- 
- 			/* For now, just make a list of callbacks to be done */
- 			list_add_tail(&descdone->rqd, &pl330->req_done);
-@@ -2089,7 +2089,7 @@ static void pl330_tasklet(struct tasklet
- 	} else {
- 		/* Make sure the PL330 Channel thread is active */
- 		spin_lock(&pch->thread->dmac->lock);
--		_start(pch->thread);
-+		pl330_start_thread(pch->thread);
- 		spin_unlock(&pch->thread->dmac->lock);
- 	}
- 
-@@ -2107,7 +2107,7 @@ static void pl330_tasklet(struct tasklet
- 			if (power_down) {
- 				pch->active = true;
- 				spin_lock(&pch->thread->dmac->lock);
--				_start(pch->thread);
-+				pl330_start_thread(pch->thread);
- 				spin_unlock(&pch->thread->dmac->lock);
- 				power_down = false;
- 			}
+>> +};
+>> +
+>>  struct venus_format {
+>>  	u32 pixfmt;
+>>  	unsigned int num_planes;
+>> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+>> index c6f0fd08..bab985b 100644
+>> --- a/drivers/media/platform/qcom/venus/vdec.c
+>> +++ b/drivers/media/platform/qcom/venus/vdec.c
+>> @@ -30,69 +30,82 @@
+>>   * - future firmware versions could add support for >1 planes
+>>   */
+>>  static const struct venus_format vdec_formats[] = {
+>> -	{
+>> +	[VENUS_FMT_NV12] = {
+>>  		.pixfmt = V4L2_PIX_FMT_NV12,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> -	}, {
+>> +	},
+>> +	[VENUS_FMT_QC08C] = {
+>>  		.pixfmt = V4L2_PIX_FMT_QC08C,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> -	}, {
+>> +	},
+>> +	[VENUS_FMT_QC10C] = {
+>>  		.pixfmt = V4L2_PIX_FMT_QC10C,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_MPEG4,
+>> +	},
+>> +	[VENUS_FMT_H264] = {
+>> +		.pixfmt = V4L2_PIX_FMT_H264,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_MPEG2,
+>> +	},
+>> +	[VENUS_FMT_VP8] = {
+>> +		.pixfmt = V4L2_PIX_FMT_VP8,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_H263,
+>> +	},
+>> +	[VENUS_FMT_VP9] = {
+>> +		.pixfmt = V4L2_PIX_FMT_VP9,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
+>> +	},
+>> +	[VENUS_FMT_HEVC] = {
+>> +		.pixfmt = V4L2_PIX_FMT_HEVC,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+>> +	},
+>> +	[VENUS_FMT_VC1_ANNEX_G] = {
+>> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_H264,
+>> +	},
+>> +	[VENUS_FMT_VC1_ANNEX_L] = {
+>> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_VP8,
+>> +	},
+>> +	[VENUS_FMT_MPEG4] = {
+>> +		.pixfmt = V4L2_PIX_FMT_MPEG4,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_VP9,
+>> +	},
+>> +	[VENUS_FMT_MPEG2] = {
+>> +		.pixfmt = V4L2_PIX_FMT_MPEG2,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_XVID,
+>> +	},
+>> +	[VENUS_FMT_H263] = {
+>> +		.pixfmt = V4L2_PIX_FMT_H263,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_HEVC,
+>> +	},
+>> +	[VENUS_FMT_XVID] = {
+>> +		.pixfmt = V4L2_PIX_FMT_XVID,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>>  		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+>>  	},
+>> +
+>>  };
+>>  
+>>  static const struct venus_format *
+>> @@ -1575,8 +1588,8 @@ static const struct hfi_inst_ops vdec_hfi_ops = {
+>>  static void vdec_inst_init(struct venus_inst *inst)
+>>  {
+>>  	inst->hfi_codec = HFI_VIDEO_CODEC_H264;
+>> -	inst->fmt_out = &vdec_formats[8];
+>> -	inst->fmt_cap = &vdec_formats[0];
+>> +	inst->fmt_out = &vdec_formats[VENUS_FMT_H264];
+>> +	inst->fmt_cap = &vdec_formats[VENUS_FMT_NV12];
+>>  	inst->width = frame_width_min(inst);
+>>  	inst->height = ALIGN(frame_height_min(inst), 32);
+>>  	inst->crop.left = 0;
+>> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+>> index 4666f42..b60772c 100644
+>> --- a/drivers/media/platform/qcom/venus/venc.c
+>> +++ b/drivers/media/platform/qcom/venus/venc.c
+>> @@ -32,28 +32,33 @@
+>>   * - future firmware versions could add support for >1 planes
+>>   */
+>>  static const struct venus_format venc_formats[] = {
+>> -	{
+>> +	[VENUS_FMT_NV12] = {
+>>  		.pixfmt = V4L2_PIX_FMT_NV12,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_MPEG4,
+>> +	},
+>> +	[VENUS_FMT_H264] = {
+>> +		.pixfmt = V4L2_PIX_FMT_H264,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_H263,
+>> +	},
+>> +	[VENUS_FMT_VP8] = {
+>> +		.pixfmt = V4L2_PIX_FMT_VP8,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_H264,
+>> +	},
+>> +	[VENUS_FMT_HEVC] = {
+>> +		.pixfmt = V4L2_PIX_FMT_HEVC,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_VP8,
+>> +	},
+>> +	[VENUS_FMT_MPEG4] = {
+>> +		.pixfmt = V4L2_PIX_FMT_MPEG4,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> -	}, {
+>> -		.pixfmt = V4L2_PIX_FMT_HEVC,
+>> +	},
+>> +	[VENUS_FMT_H263] = {
+>> +		.pixfmt = V4L2_PIX_FMT_H263,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>>  	},
+>> @@ -1416,8 +1421,8 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
+>>  
+>>  static void venc_inst_init(struct venus_inst *inst)
+>>  {
+>> -	inst->fmt_cap = &venc_formats[3];
+>> -	inst->fmt_out = &venc_formats[0];
+>> +	inst->fmt_cap = &venc_formats[VENUS_FMT_H264];
+>> +	inst->fmt_out = &venc_formats[VENUS_FMT_NV12];
+>>  	inst->width = 1280;
+>>  	inst->height = ALIGN(720, 32);
+>>  	inst->out_width = 1280;
