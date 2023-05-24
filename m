@@ -2,72 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFD070F3C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB6870F3C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbjEXKIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
+        id S231591AbjEXKJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjEXKIn (ORCPT
+        with ESMTP id S229459AbjEXKJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:08:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0A912F;
-        Wed, 24 May 2023 03:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684922921; x=1716458921;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hbLik93CbdP8dn5iLZyClx7c7cBiepErVjvKm8IDhB0=;
-  b=gLW76oPQzUkPVPiksA2RmD8wz3Cs7SqcI3TZygM7D+Q3DesOHPCrbTPZ
-   SuNSLuwZ6bE4nxsNcS83K0opzBTqF5wslfwg72UiYXlC4uw8O5rAYouCJ
-   AaFm/jCMg+ySks2r1tsWe7dFzSJYI89Aw4GjqxrHhobnkJTO3GllTIXRe
-   AOzQXWsKRLhWUO3ytPZ6aAWcdMgqqp1anMtTsLL/w73NC0ffANyOJHhaR
-   PTWZ75OJYyB4mCH3S2FNsnONH4EjUlYxbZ1r/yCs/W4g0GXCX2uIq9E+h
-   /gLP3EEgLQOXpKJOcUlXbsDp5PwbnHG07HxsDGA/j9mkXo9bxpCBTqH+R
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="asc'?scan'208";a="153680048"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 May 2023 03:08:39 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 24 May 2023 03:08:37 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 24 May 2023 03:08:35 -0700
-Date:   Wed, 24 May 2023 11:08:14 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Sean =?iso-8859-1?Q?Nyekj=E6r?= <sean@geanix.com>
-CC:     Conor Dooley <conor@kernel.org>, <robh+dt@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        pascal Paillet <p.paillet@foss.st.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] dt-bindings: mfd: stpmic1: add fsl,pmic-poweroff
- property
-Message-ID: <20230524-ellipse-dagger-72f850253ea0@wendy>
-References: <20230516132225.3012541-1-sean@geanix.com>
- <20230516132225.3012541-3-sean@geanix.com>
- <20230516-footprint-handoff-bcd553ff6146@spud>
- <9B1EE405-77D3-4980-9A13-9D4F87C1A64F@geanix.com>
- <20230523-flaccid-fossil-c9d09838dc64@spud>
- <658510B5-702B-464A-BA55-01E2B315BE39@geanix.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DsxYJaeHtrcJiRcO"
+        Wed, 24 May 2023 06:09:32 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2056.outbound.protection.outlook.com [40.107.241.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF0FC0;
+        Wed, 24 May 2023 03:09:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SLaZ2xJDVsnswKM7N65CY1cNPjaKWaz5R7FhVf77l7bg4PhG3rbf+EOXdczd1RgJysvC2Ip3mbYdRhAJSpaD7lnQ5gOhtmdqFBONkWiYqLvqd1WFrlgbaiLyNhyw1Qo996OC064rXllfQ6DoefIk+uDunbfcsa/alOj75X5sO4nNAn4g70JWnok209waAknpirCK7U46mRJgFZevuuwBTe+ywCiZq5/uDQWc40Mxah8BQ6ReIHvmWWUgrXakIsktfRut84hucRnI3y4Mq800D2TE72OwMG+3yu3Q3IVxBHWezc9IAjEBjFjerHBgXl2y1WqdzTjOKkfXpAQNXgMSSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UchupbWIPHgRZt7OTRW978kpskveo/4f1kcmLAQUKR0=;
+ b=GnJsAZa/cvUryi/usmxBAVJN6CnD+nmrHUUmSGnoeywhmzSF5ZkWL//hV6ZbBmntWUdmHH/oFPiWFCSPXV1nt2Pb3kvpWRNKG+0NhdGx/rC42GNBVxlZQ1ypRK73fzVUU8vxCDxwMMyf2Q0z5ZSqZPebYRgKvNRy5542kCq5AvpLMf+urkO6QJxlgUsbnsdol39Yqpk0j/rYVQl/t+hDm1Q9r3TszJxAESnSGrcZq9AFI3/5na1w/67POSuB21NqoAp5wGUitxwacgMKTB1zqkWkaMnpWrheUooEF2VnbXsVbIlviJiByREcH7eRWEQ22wg2lOtZFfNZW42MsI+0KQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UchupbWIPHgRZt7OTRW978kpskveo/4f1kcmLAQUKR0=;
+ b=YhyO6IQ0bgqqsLyKWRm8qpNrbKA3VHA9Ld1OCJ+o/32MJ3S2ESRA0f/U3r/SMWY6Dt7FPsxCTNTj9SovIq1DLYVkfeZZgzJfBcLYY/12ZllQvIFbCnqDf6INw9xiVDvISm4HD0L2I3xFHl06uqM3z21xQnFuJUpZSYL24tcloWI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by AM8PR04MB7732.eurprd04.prod.outlook.com (2603:10a6:20b:237::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Wed, 24 May
+ 2023 10:09:28 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::b027:17aa:e5f5:4fea]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::b027:17aa:e5f5:4fea%6]) with mapi id 15.20.6411.029; Wed, 24 May 2023
+ 10:09:28 +0000
+Date:   Wed, 24 May 2023 13:09:24 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Harini Katakam <harini.katakam@amd.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, wsa+renesas@sang-engineering.com,
+        simon.horman@corigine.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, harinikatakamlinux@gmail.com,
+        michal.simek@amd.com, radhey.shyam.pandey@amd.com
+Subject: Re: [PATCH net-next v4 2/2] phy: mscc: Add support for RGMII delay
+ configuration
+Message-ID: <20230524100924.ty37zfndvh2nlgj3@skbuf>
+References: <20230522122829.24945-1-harini.katakam@amd.com>
+ <20230522122829.24945-1-harini.katakam@amd.com>
+ <20230522122829.24945-3-harini.katakam@amd.com>
+ <20230522122829.24945-3-harini.katakam@amd.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <658510B5-702B-464A-BA55-01E2B315BE39@geanix.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230522122829.24945-3-harini.katakam@amd.com>
+ <20230522122829.24945-3-harini.katakam@amd.com>
+X-ClientProxiedBy: FR3P281CA0001.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1d::10) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM8PR04MB7732:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2443c480-9664-4596-fc8d-08db5c3ef584
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9qKfE6vq5FBhw/DeNfAzo48OIPsH7H/7YWVLJA3Q5ESJkdJVsoU28M+HQNUJlb/oxjlZ3XotNgMVQ5O0yCOGFFuAQJYc1jUEOBQdALArYmStOhlciT16uWimjZV+jhHgKixRinc6rbECOj9GDjSk2gafTE2LpnYufTnlUcIGtPUeYjOvPfacXMnMF4++z7naeajBKztvGw85QAVjXOzsqzf5l/L+3Bt9r+l3fWt5TaxC2O2GfmA/NpKbL2qf5NCRAgbX89NT3rUciAlFK5Q3By75yTkseCpJzbJmf1EUsEpdTMgPE94VhYaXIJgLVUTuehirRQIIB7lnJsURMDsR5MpESVXRHiWd9djun5kKEMr6IioOQ3gZcvidirehGagjnVAjsUN1w4Gj8Z9sfs9D2GVMCwhuxIzLlqykqN752j5ljYzTFudQyHMaYxidG42kjuYP3rj4+DnRB8xvQqI27OtIsm4s1afTkoBqjsthpJQKsuXHdrx7eZLjMGpIDIKNmKqgPkyJJsMQ7DYieZaPjoP5vGDqxnd2qOlz7ruFYhKn8pu3rTQs4dalUrUbcUh/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(366004)(136003)(39860400002)(396003)(346002)(376002)(451199021)(33716001)(6512007)(1076003)(26005)(6506007)(9686003)(186003)(41300700001)(8936002)(40140700001)(8676002)(83380400001)(66556008)(6666004)(6486002)(66476007)(44832011)(7416002)(478600001)(38100700002)(4326008)(6916009)(86362001)(66946007)(316002)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jxqF2tDVLG3pqqFAuhDvqoPywBI932Wuysd6M/loliqh+1ETDaN4P/SdNmxr?=
+ =?us-ascii?Q?/qWB7Mk8i45uOt3PKqG7xDZvfYQIijiPtAyG4D+6MGOP6Uzi6DToLFgmzTVH?=
+ =?us-ascii?Q?oyYsfcKMtMsOg8Mng5VKsxkIM6H05E1IxdUXjPUpECHT9wIvOvhxBY5MrqPY?=
+ =?us-ascii?Q?S16rHHJj7ab3K3bKs9HdP6/ApgbNrqMKM6kocWRei7s/EaEvW4B+0RBLHYpf?=
+ =?us-ascii?Q?71WZtLvadDFbaeaSizORXfrRenlhZSpgxw1lzcurc6I0yzkPj4xNMDmIIiko?=
+ =?us-ascii?Q?QyRQ+xbWkzhNNbiaCeJD1x+Y9kka0++OyZSuPN/r3Jl49kFZtafu/+FI4okV?=
+ =?us-ascii?Q?iXMx2gBCf3x8F6QnkHOJ47cXGtjRh2ZIIJv+LSzZW+5pjyhAvI8HjgmbpgME?=
+ =?us-ascii?Q?sEvPS9s4tFu8H+b5Y9SybTVCCi9HKxVmYWtoVuV73OlLnBo4goftaQeb5vf5?=
+ =?us-ascii?Q?WPfk9qUvS26Y3A84BG+DSg1dbGbuPUaEf+yZ2XaIx9C1+JIg33D4BrX43oov?=
+ =?us-ascii?Q?ELnh9V/0/zd5KMhXsCBFwZlFUa808Ifb+kuevYVWAg/AFlswzaB7xRbU+xeF?=
+ =?us-ascii?Q?+fmWGR6RDT+At1PipPzi2lWfzHj2mdZHWzhSeE9JhvAvnb4U3sgOIMQJ6zWB?=
+ =?us-ascii?Q?MqaQ/xaMizaQ+PVkComkEjWLsHCOZ/U9K/lbV9AWVmDj3vwjaEJT811CtB4L?=
+ =?us-ascii?Q?lDNF9C8OTqAkFa1LvkNVw5r7TQLH0tl9h6rCV2qOLQv3FGR8mBZRwI/5IX2C?=
+ =?us-ascii?Q?M+JuyXT0CF1drL7CWbT1FdkUzUuPEevokGcJKKIDCiTe8CpacO5kKcpkpCuu?=
+ =?us-ascii?Q?+FS6KI/RpV1onbQ8qsH6AjmdTeAn6iuASgcPdZof0qWzLBriERh4EXMyxlLI?=
+ =?us-ascii?Q?mLdYnZiWPWVEMST0Q5NiQ+4bMJxn8FofPwgig8GIQZEQgdmcbCTUXxFPTw7M?=
+ =?us-ascii?Q?fjcz5qlfwrWslxIQqLY/5Bg3gQDmTdscXoMveisLPigHLkNEtqzvKJPPtqsO?=
+ =?us-ascii?Q?5zAt9al8Jn44ne7sp9eDEqdJgHXCHkCZAca5VzJ5pzpDodMZCE0JBGoLqy6e?=
+ =?us-ascii?Q?1ocDGIp4xW42ajYlYcos+Sb8oKI7yXCXj7YzWMEiSMOlpG/bBG4EGpEYp3UT?=
+ =?us-ascii?Q?8q9naEFdUgtY4MVIkG9KiWslCeRq5Tq7YqN3yoePkvxdgzKOQ3p3p7KQoStK?=
+ =?us-ascii?Q?cRDT6gsWtqJme9v2p0fXHZUbT647rpAEmz3RcKqvuSvaOnU0hvVKT/3Ftvxi?=
+ =?us-ascii?Q?dLeZa1pE1m9LWiNZsnat8yixRw9ayRC2Rz/U1HHoG1JQoERRDZV0lKrgRWAN?=
+ =?us-ascii?Q?4RIVa/li9WhJVDyOWTRyBlYVJP7sxy9NUadlpQsW0ySvj1yDqqqSlIhbqAus?=
+ =?us-ascii?Q?ZX1MNITkVS8wqkJmDbKenHjmKBnBSbuHkF3yGeCvBciQapWpJiqRAclWYH9T?=
+ =?us-ascii?Q?vADtTEBewo3KT6p8nUH/FBVjYGPTruOwPRGju5HMGW0OqD9am49ksSfmXNkP?=
+ =?us-ascii?Q?PZhjUaQUQjI4CdmrhAd/YOsIzmew3qFYhm4Ii6A15DhJX/PPy6UVrf7doHuh?=
+ =?us-ascii?Q?63ARCzK9aHhZxlIvkTTR0DD7ogSU6DeaTzPyJuNzG27JvQHk8Q5eCDazS/o2?=
+ =?us-ascii?Q?OA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2443c480-9664-4596-fc8d-08db5c3ef584
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 10:09:28.2289
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M61gB/6Yx6jsll8033zwigXsMUjl0lgWi/iwKINFoANA5qWxgnsTVX9VYkItoxHrszMg84WE9WBHftDJdJTxQQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7732
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,114 +122,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---DsxYJaeHtrcJiRcO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 22, 2023 at 05:58:29PM +0530, Harini Katakam wrote:
+> diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
+> index 91010524e03d..9e856231e464 100644
+> --- a/drivers/net/phy/mscc/mscc_main.c
+> +++ b/drivers/net/phy/mscc/mscc_main.c
+> @@ -525,17 +525,14 @@ static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
+>  {
+>  	u16 rgmii_rx_delay_pos = ffs(rgmii_rx_delay_mask) - 1;
+>  	u16 rgmii_tx_delay_pos = ffs(rgmii_tx_delay_mask) - 1;
+> +	struct vsc8531_private *vsc8531 = phydev->priv;
+>  	u16 reg_val = 0;
+>  	int rc;
+>  
+>  	mutex_lock(&phydev->lock);
+>  
+> -	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
+> -	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+> -		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_rx_delay_pos;
+> -	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
+> -	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+> -		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_tx_delay_pos;
+> +	reg_val |= vsc8531->rx_delay << rgmii_rx_delay_pos;
+> +	reg_val |= vsc8531->tx_delay << rgmii_tx_delay_pos;
 
-On Wed, May 24, 2023 at 10:16:13AM +0200, Sean Nyekj=C3=A6r wrote:
-> Hi Conor,
->=20
-> > On 23 May 2023, at 19.29, Conor Dooley <conor@kernel.org> wrote:
-> >=20
-> > On Tue, May 23, 2023 at 11:55:50AM +0200, Sean Nyekj=C3=A6r wrote:
-> >>> On 16 May 2023, at 20.06, Conor Dooley <conor@kernel.org> wrote:
-> >>> On Tue, May 16, 2023 at 03:22:24PM +0200, Sean Nyekjaer wrote:
-> >>>> Document the new optional "fsl,pmic-poweroff" property.
-> >>>>=20
-> >>>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> >>>> ---
-> >>>> Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 8 ++++++++
-> >>>> 1 file changed, 8 insertions(+)
-> >>>>=20
-> >>>> diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b=
-/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> >>>> index 9573e4af949e..5183a7c660d2 100644
-> >>>> --- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> >>>> +++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> >>>> @@ -26,6 +26,14 @@ properties:
-> >>>>=20
-> >>>>  interrupt-controller: true
-> >>>>=20
-> >>>> +  st,pmic-poweroff:
-> >>>> +    $ref: /schemas/types.yaml#/definitions/flag
-> >>>> +    description: |
-> >>>> +      if present, configure the PMIC to shutdown all power rails wh=
-en
-> >>>> +      power off sequence have finished.
-> >>>> +      Use this option if the SoC should be powered off by external =
-power management
-> >>>> +      IC (PMIC).
-> >>>=20
-> >>> Just reading this description, this is sounding quite like a "software
-> >>> behaviour" type of property, which are not permitted, rather than
-> >>> describing some element of the hardware. Clearly you are trying to so=
-lve
-> >>> an actual problem though, so try re-phrasing the description (and
-> >>> property name) to focus on what exact hardware configuration it is th=
-at
-> >>> you are trying to special-case.
-> >>> Krzysztof suggested that the samsung,s2mps11-acokb-ground property in
-> >>> samsung,s2mps11.yaml is addressing a similar problem, so that could be
-> >>> good to look at.
-> >>=20
-> >> Better wording?
-> >>      Indicates that the power management IC (PMIC) is used to power of=
-f the board.
-> >>      So as the last step in the power off sequence set the SWOFF bit i=
-n the
-> >>      main control register (MAIN_CR) register, to shutdown all power r=
-ails.
-> >=20
-> > The description for the property that Krzysztof mentioned is
-> >  samsung,s2mps11-acokb-ground:
-> >    description: |
-> >      Indicates that ACOKB pin of S2MPS11 PMIC is connected to the groun=
-d so
-> >      the PMIC must manually set PWRHOLD bit in CTRL1 register to turn o=
-ff the
-> >      power. Usually the ACOKB is pulled up to VBATT so when PWRHOLD pin=
- goes
-> >      low, the rising ACOKB will trigger power off.
-> >=20
-> > In other words, I am asking what (abnormal?) scenario there is that mea=
-ns
-> > you need the property, rather than what setting the property does.
-> > Or am I totally off, and this is the only way this PMIC works?
->=20
-> Indicates that the power management IC (PMIC) turn-off condition is met
-> by setting the SWOFF bit in the main control register (MAIN_CR) register.
-> Turn-off condition can still be reached by the PONKEY input.
->=20
-> ?
->=20
-> I must admit I=E2=80=99m somewhat lost here :)
+What about vsc8584_config_init() -> vsc85xx_rgmii_set_skews()? Who will
+have configured rx_delay and tx_delay for that call path?
 
-Sorry about that. I'm trying to understand what is different about your
-hardware that it needs the property rather than what adding the property
-does. If you look at the samsung one, it describes both the
-configuration of the hardware ("ACOKB pin of S2MPS11 PMIC is connected to
-the ground") and how that is different from normal ("Usually the ACOKB is
-pulled up to VBATT so when PWRHOLD pin goes low, the rising ACOKB will
-trigger power off.")
+Isn't it better to absorb the device tree parsing logic into
+vsc85xx_rgmii_set_skews(), I wonder?
 
-Looking at your datasheet, you don't have such a pin though - just the
-sw poweroff bit & the PONKEY stuff. My angle is just that I am trying
-to figure out why you need this property when it has not been needed
-before. Or why you would not always want to "shutdown all power rails
-when power-off sequence have finished". I'm sorry if these are silly
-questions.
+And if we do that, is it still necessary to use struct vsc8531_private
+as temporary storage space from vsc85xx_config_init() to vsc85xx_rgmii_set_skews(),
+or will two local variables (rx_delay, tx_delay) serve that purpose just fine?
 
+>  
+>  	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
+>  			      rgmii_cntl,
+> @@ -1808,10 +1805,34 @@ static irqreturn_t vsc8584_handle_interrupt(struct phy_device *phydev)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static const int vsc8531_internal_delay[] = {200, 800, 1100, 1700, 2000, 2300,
+> +					     2600, 3400};
 
---DsxYJaeHtrcJiRcO
-Content-Type: application/pgp-signature; name="signature.asc"
+Could you please avoid intermingling this with the function code, and
+move it at the top of mscc_main.c?
 
------BEGIN PGP SIGNATURE-----
+Also, vsc8531_internal_delay[] or vsc85xx_internal_delay[]? The values
+are also good for VSC8572, the other caller of vsc85xx_rgmii_set_skews().
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG3iDQAKCRB4tDGHoIJi
-0sNhAQDrqJBu7vfQqhRTxEBUolB1pjQeSEoNGI9Axz5tG/cVZAD/aezxAmTr5Nh6
-Wlk6somgMyEr4in58VhQECKZPJThVAY=
-=gj9X
------END PGP SIGNATURE-----
+>  static int vsc85xx_config_init(struct phy_device *phydev)
+>  {
+> -	int rc, i, phy_id;
+> +	int delay_size = ARRAY_SIZE(vsc8531_internal_delay);
+>  	struct vsc8531_private *vsc8531 = phydev->priv;
+> +	struct device *dev = &phydev->mdio.dev;
+> +	int rc, i, phy_id;
+> +
+> +	vsc8531->rx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
 
---DsxYJaeHtrcJiRcO--
+You can just write "x" rather than "&x[0]".
+
+> +						   delay_size, true);
+> +	if (vsc8531->rx_delay < 0) {
+> +		if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
+> +		    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+> +			vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
+> +		else
+> +			vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
+> +	}
+> +
+> +	vsc8531->tx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
+> +						   delay_size, false);
+> +	if (vsc8531->tx_delay < 0) {
+> +		if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
+> +		    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+> +			vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
+> +		else
+> +			vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
+> +	}
+>  
+>  	rc = vsc85xx_default_config(phydev);
+>  	if (rc)
+> -- 
+> 2.17.1
+>
