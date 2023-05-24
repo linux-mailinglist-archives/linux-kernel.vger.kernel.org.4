@@ -2,187 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EFD70F482
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8750F70F487
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjEXKro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S233807AbjEXKsS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 06:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233733AbjEXKrl (ORCPT
+        with ESMTP id S233738AbjEXKsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:47:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D5113E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:47:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 88CE01F896;
-        Wed, 24 May 2023 10:47:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684925256; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B6eofjmVUUNyLVYqaAyecwdLrDjG/xIisa/ISnr9R3w=;
-        b=i5DzOO5IUGWY11coV46xM2v1dZTVvivjtQjtvHKF2RZvDVoAq8wgXYwR9DJNy0cwZjeHUC
-        n021bMPaOazVIjMQEFVu5CBp01ZCVzA+b0u+2CuYTxE1vEPFaIJVNMomKkvAh8hJF5ht8t
-        bPC8uydePERM7+5xz0YhlLNC0KBjFqo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684925256;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B6eofjmVUUNyLVYqaAyecwdLrDjG/xIisa/ISnr9R3w=;
-        b=ocknsgsHyitBwRsrSK0dOT2s//PoN/27t60ftL4Kgx82BjE9d25ZnbFFVLOEDRHhB+d8wa
-        zyslt7AF6XLgsyBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B2FC133E6;
-        Wed, 24 May 2023 10:47:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id J3BJGUjrbWTbLQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 24 May 2023 10:47:36 +0000
-Message-ID: <2f516118-2183-400f-7efd-04c2766fa9d6@suse.de>
-Date:   Wed, 24 May 2023 12:47:35 +0200
+        Wed, 24 May 2023 06:48:16 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBFE1A8;
+        Wed, 24 May 2023 03:48:03 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-561f10b6139so7345777b3.2;
+        Wed, 24 May 2023 03:48:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684925283; x=1687517283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QnWIVHFoNbsQTI/EkqM6iBpWOcV5CSw3JS4i0UJMOqA=;
+        b=gCIXS72YrHlzIeOO6bfhahYysz0R+nKKEVwaB7pVFp1Y4OBEw5KXwXXH+X1HnUUhP/
+         JxgdLKsWHzt+MUzT7wSVFk1x/bdH2Xn81aJVPlW+0HickVg98davDmwyJPnos/2AKuUz
+         8tkhHBtoGQl0kaJCAEDcoy5NbwlThbJnfT2HbAwUaA6nlj111GF5Zk+MUvtIn0xeyq9O
+         r3KoGLoDb22GpWBPc6XSat5v3o02KeQCA8zkrug83WJY/SZeoohNTqQBEJNGMQ52i+gh
+         vhSIq4GQrDa4II22N0AP3C9Akp427mCylGXKhhYWg2UvglG9r7Lus4be4FQUvzomqAYT
+         TlJw==
+X-Gm-Message-State: AC+VfDzq6hoF2oqU9/JetA4mVauUbIqI2r2jQTyv598GbnmdC9dSlqlc
+        piNTKRsFkZeVqWAW09qtbThyT5UnVPI16A==
+X-Google-Smtp-Source: ACHHUZ7XM7Y5p15ds3axmbh3RNuqUrz/Md0p+ksEKg0Wt7Cli5FfL3qJtQqaju5PnUgDLitlhj7OUQ==
+X-Received: by 2002:a81:6c43:0:b0:561:a7fd:4fe4 with SMTP id h64-20020a816c43000000b00561a7fd4fe4mr18794588ywc.28.1684925282680;
+        Wed, 24 May 2023 03:48:02 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id x11-20020a817c0b000000b0055a4fe11ce0sm1485796ywc.130.2023.05.24.03.48.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 03:48:01 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-563b1e5f701so7313997b3.3;
+        Wed, 24 May 2023 03:48:01 -0700 (PDT)
+X-Received: by 2002:a81:9245:0:b0:561:beec:89d3 with SMTP id
+ j66-20020a819245000000b00561beec89d3mr20362339ywg.6.1684925281318; Wed, 24
+ May 2023 03:48:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/ast: Fix modeset failed on DisplayPort
-Content-Language: en-US
-To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230425070330.8520-1-jammy_huang@aspeedtech.com>
- <d43c0c09-ff6b-e2d1-01ae-68fe93188896@suse.de>
- <d285566b-ed7c-8e2a-a078-7bdd5bac13e3@aspeedtech.com>
- <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------h3sRk7wcYjp8AoDlXc0WzKbw"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+ <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+ <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+ <20230523140844.5895d645@kernel.org> <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+In-Reply-To: <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+From:   Luca Boccassi <bluca@debian.org>
+Date:   Wed, 24 May 2023 11:47:50 +0100
+X-Gmail-Original-Message-ID: <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
+Message-ID: <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------h3sRk7wcYjp8AoDlXc0WzKbw
-Content-Type: multipart/mixed; boundary="------------3FTifAi8yA0mKGX0gRMnKnrK";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-ID: <2f516118-2183-400f-7efd-04c2766fa9d6@suse.de>
-Subject: Re: [PATCH] drm/ast: Fix modeset failed on DisplayPort
-References: <20230425070330.8520-1-jammy_huang@aspeedtech.com>
- <d43c0c09-ff6b-e2d1-01ae-68fe93188896@suse.de>
- <d285566b-ed7c-8e2a-a078-7bdd5bac13e3@aspeedtech.com>
- <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
-In-Reply-To: <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
+On Wed, 24 May 2023 at 11:43, Aleksandr Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+>
+> On Tue, May 23, 2023 at 11:08 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > On Tue, 23 May 2023 11:44:01 +0100 Luca Boccassi wrote:
+> > > > I really would like to avoid that because it will just mean that someone
+> > > > else will abuse that function and then make an argument why we should
+> > > > export the other function.
+> > > >
+> > > > I think it would be ok if we required that unix support is built in
+> > > > because it's not unprecedented either and we're not breaking anything.
+> > > > Bpf has the same requirement:
+> > > >
+> > > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
+> > > >   struct bpf_unix_iter_state {
+> > > >           struct seq_net_private p;
+> > > >           unsigned int cur_sk;
+> > > >           unsigned int end_sk;
+> > > >           unsigned int max_sk;
+> > > >           struct sock **batch;
+> > > >           bool st_bucket_done;
+> > > >   };
+> > > >
+> > > > and
+> > > >
+> > > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+> > > >   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
+> > > >                        struct unix_sock *unix_sk, uid_t uid)
+> >
+> > Don't think we should bring BPF into arguments about uAPI consistency :S
+> >
+> > > Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
+> > > ship with CONFIG_UNIX=y, so a missing SCM_PIDFD in unlikely to have a
+> > > widespread impact, and if it does, it might encourage someone to
+> > > review their kconfig.
+> >
+> > IDK how you can argue that everyone sets UNIX to =y so hiding SCM_PIDFD
+> > is fine and at the same time not be okay with making UNIX a bool :S
+> >
+> > > As mentioned on the v5 thread, we are waiting for this API to get the
+> > > userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
+> > > really grateful if we could start with the simplest and most
+> > > conservative approach (which seems to be the current one in v6 to me),
+> > > and then eventually later decide whether to export more functions, or
+> > > to deprecate CONFIG_UNIX=m, or something else entirely, as that
+> > > doesn't really affect the shape of the UAPI, just the details of its
+> > > availability. Thank you.
+> >
+> > Just throw in a patch to make UNIX a bool and stop arguing then.
+>
+> Dear Jakub,
+>
+> Thanks for your attention to these patch series!
+>
+> I'm ready to prepare/send a patch to make CONFIG_UNIX bool.
+>
+> I will send SO_PEERPIDFD as an independent patch too, because it
+> doesn't require this change with CONFIG_UNIX
+> and we can avoid waiting until CONFIG_UNIX change will be merged.
+> I've a feeling that the discussion around making CONFIG_UNIX  to be a
+> boolean won't be easy and fast ;-)
 
---------------3FTifAi8yA0mKGX0gRMnKnrK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thank you, that sounds great to me, I can start using SO_PEERPIDFD
+independently of SCM_PIDFD, there's no hard dependency between the
+two.
 
-SGksDQoNCnRoaXMgcGF0Y2ggYWxzbyBmZWxsIHRocm91Z2ggdGhlIGNyYWNrcy4gQXBvbG9n
-aWVzLg0KDQpBbSAyNC4wNS4yMyB1bSAwNDoyOSBzY2hyaWViIEphbW15IEh1YW5nOg0KPiBI
-aSBUaG9tYXMsDQo+IA0KPiBEbyB5b3UgaGF2ZSBvdGhlciBzdWdnZXN0aW9uIGZvciB0aGlz
-IHBhdGNoPz8NCg0KVGhlIG1haW4gaXNzdWUgd2FzIHRoYXQgc3RydWN0IGFzdF9wcml2YXRl
-IGlzIG5vdyBjYWxsZWQgc3RydWN0IA0KYXN0X2RldmljZS4gIFNvIHRoZSBjdXJyZW50IHBh
-dGNoIGNhbm5vdCBiZSBhcHBsaWVkLg0KDQo+IA0KPiBQbGVhc2Uga2luZGx5IGFkdmlzZS4N
-Cj4gDQo+IE9uIDIwMjMvNC8yNSDkuIvljYggMDM6MzksIEphbW15IEh1YW5nIHdyb3RlOg0K
-Pj4gSGkgVGhvbWFzLA0KPj4NCj4+IEkgdGhpbmsgRFA1MDEgaXMgT0suIEl0IGRvZXNuJ3Qg
-dXNlIGlvcmVncyBpbiBhc3RfZHA1MDFfcmVhZF9lZGlkKCkuDQo+Pg0KPj4gT24gMjAyMy80
-LzI1IOS4i+WNiCAwMzoyNywgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+Pj4gSGkNCj4+
-Pg0KPj4+IEFtIDI1LjA0LjIzIHVtIDA5OjAzIHNjaHJpZWIgSmFtbXkgSHVhbmc6DQo+Pj4+
-IElmIHdlIHN3aXRjaCBkaXNwbGF5IGFuZCB1cGRhdGUgY3Vyc29yIHRvZ2V0aGVyLCBpdCBj
-b3VsZCBsZWFkIHRvDQo+Pj4+IG1vZGVzZXQgZmFpbGVkIGJlY2F1c2Ugb2YgY29uY3VycmVu
-dCBhY2Nlc3MgdG8gSU8gcmVnaXN0ZXJzLg0KPj4+Pg0KPj4+PiBBZGQgbG9jayBwcm90ZWN0
-aW9uIGluIERQJ3MgZWRpZCBhY2Nlc3MgdG8gYXZvaWQgdGhpcyBwcm9ibGVtLg0KPj4+DQo+
-Pj4gVGhhbmtzIGZvciB0aGUgcGF0Y2guIEkgdGhvdWdodCBJIGZpeGVkIHRoaXMgaXNzdWUg
-YWxyZWFkeSwgYnV0IHRoYXQgDQo+Pj4gYXBwYXJlbnRseSBvbmx5IGhhcHBlbmVkIGZvciBT
-SUwxNjQgYW5kIFZHQS4NCj4+Pg0KPj4+IFdoYXQgYWJvdXQgYXN0X2RwNTAxX2Nvbm5lY3Rv
-cl9oZWxwZXJfZ2V0X21vZGVzKCk/IERvZXMgaXQgcmVxdWlyZSANCj4+PiB0aGUgbG9ja2lu
-ZyBhcyB3ZWxsPw0KPj4+DQo+Pj4+DQo+Pj4+IFNpZ25lZC1vZmYtYnk6IEphbW15IEh1YW5n
-IDxqYW1teV9odWFuZ0Bhc3BlZWR0ZWNoLmNvbT4NCj4+Pj4gLS0tDQo+Pj4+IMKgIGRyaXZl
-cnMvZ3B1L2RybS9hc3QvYXN0X21vZGUuYyB8IDExICsrKysrKysrKysrDQo+Pj4+IMKgIDEg
-ZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMgDQo+Pj4+IGIvZHJpdmVycy9ncHUv
-ZHJtL2FzdC9hc3RfbW9kZS5jDQo+Pj4+IGluZGV4IDk4NGVjNTkwYTdlNy4uZmU1ZjFmZDYx
-MzYxIDEwMDY0NA0KPj4+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMN
-Cj4+Pj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+Pj4+IEBAIC0x
-NjM1LDYgKzE2MzUsOCBAQCBzdGF0aWMgaW50IGFzdF9kcDUwMV9vdXRwdXRfaW5pdChzdHJ1
-Y3QgDQo+Pj4+IGFzdF9wcml2YXRlICphc3QpDQo+Pj4+IMKgIHN0YXRpYyBpbnQgYXN0X2Fz
-dGRwX2Nvbm5lY3Rvcl9oZWxwZXJfZ2V0X21vZGVzKHN0cnVjdCANCj4+Pj4gZHJtX2Nvbm5l
-Y3RvciAqY29ubmVjdG9yKQ0KPj4+PiDCoCB7DQo+Pj4+IMKgwqDCoMKgwqAgdm9pZCAqZWRp
-ZDsNCj4+Pj4gK8KgwqDCoCBzdHJ1Y3QgZHJtX2RldmljZSAqZGV2ID0gY29ubmVjdG9yLT5k
-ZXY7DQo+Pj4+ICvCoMKgwqAgc3RydWN0IGFzdF9wcml2YXRlICphc3QgPSB0b19hc3RfcHJp
-dmF0ZShkZXYpOw0KPj4+DQo+Pj4gV2UndmUgbWVhbndoaWxlIHJlbmFtZWQgYXN0X3ByaXZh
-dGUgdG8gYXN0X2RldmljZS4gQ291bGQgeW91IHBsZWFzZSANCj4+PiBwcm92aWRlIGFuIHVw
-ZGF0ZWQgcGF0Y2ggZm9yIHRoZSBkcm0tbWlzYy1uZXh0IHRyZWU/DQo+Pj4NCj4+PiBCZXN0
-IHJlZ2FyZHMNCj4+PiBUaG9tYXMNCj4+Pg0KPj4+PiDCoCDCoMKgwqDCoMKgIGludCBzdWNj
-Ow0KPj4+PiDCoMKgwqDCoMKgIGludCBjb3VudDsNCj4+Pj4gQEAgLTE2NDMsMTAgKzE2NDUs
-MTggQEAgc3RhdGljIGludCANCj4+Pj4gYXN0X2FzdGRwX2Nvbm5lY3Rvcl9oZWxwZXJfZ2V0
-X21vZGVzKHN0cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+Pj4+IMKgwqDCoMKg
-wqAgaWYgKCFlZGlkKQ0KPj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBlcnJfZHJtX2Nv
-bm5lY3Rvcl91cGRhdGVfZWRpZF9wcm9wZXJ0eTsNCj4+Pj4gwqAgK8KgwqDCoCAvKg0KPj4+
-PiArwqDCoMKgwqAgKiBQcm90ZWN0IGFjY2VzcyB0byBJL08gcmVnaXN0ZXJzIGZyb20gY29u
-Y3VycmVudCBtb2Rlc2V0dGluZw0KPj4+PiArwqDCoMKgwqAgKiBieSBhY3F1aXJpbmcgdGhl
-IEkvTy1yZWdpc3RlciBsb2NrLg0KPj4+PiArwqDCoMKgwqAgKi8NCj4+Pj4gK8KgwqDCoCBt
-dXRleF9sb2NrKCZhc3QtPmlvcmVnc19sb2NrKTsNCj4+Pj4gKw0KPj4+PiDCoMKgwqDCoMKg
-IHN1Y2MgPSBhc3RfYXN0ZHBfcmVhZF9lZGlkKGNvbm5lY3Rvci0+ZGV2LCBlZGlkKTsNCj4+
-Pj4gwqDCoMKgwqDCoCBpZiAoc3VjYyA8IDApDQo+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBn
-b3RvIGVycl9rZnJlZTsNCj4+Pj4gwqAgK8KgwqDCoCBtdXRleF91bmxvY2soJmFzdC0+aW9y
-ZWdzX2xvY2spOw0KPj4+PiArDQo+Pj4+IMKgwqDCoMKgwqAgZHJtX2Nvbm5lY3Rvcl91cGRh
-dGVfZWRpZF9wcm9wZXJ0eShjb25uZWN0b3IsIGVkaWQpOw0KPj4+PiDCoMKgwqDCoMKgIGNv
-dW50ID0gZHJtX2FkZF9lZGlkX21vZGVzKGNvbm5lY3RvciwgZWRpZCk7DQo+Pj4+IMKgwqDC
-oMKgwqAga2ZyZWUoZWRpZCk7DQo+Pj4+IEBAIC0xNjU0LDYgKzE2NjQsNyBAQCBzdGF0aWMg
-aW50IA0KPj4+PiBhc3RfYXN0ZHBfY29ubmVjdG9yX2hlbHBlcl9nZXRfbW9kZXMoc3RydWN0
-IGRybV9jb25uZWN0b3IgKmNvbm5lY3RvcikNCj4+Pj4gwqDCoMKgwqDCoCByZXR1cm4gY291
-bnQ7DQo+Pj4+IMKgIMKgIGVycl9rZnJlZToNCg0KSGVyZSdzIGEgbWlub3IgaXNzdWUgdGhh
-dCB0aGUgZ290byBsYWJlbCBzaG91bGQgbm93IGJlIGNhbGxlZCANCmVycl9tdXRleF91bmxv
-Y2suDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4+Pj4gK8KgwqDCoCBtdXRleF91bmxv
-Y2soJmFzdC0+aW9yZWdzX2xvY2spOw0KPj4+PiDCoMKgwqDCoMKgIGtmcmVlKGVkaWQpOw0K
-Pj4+PiDCoCBlcnJfZHJtX2Nvbm5lY3Rvcl91cGRhdGVfZWRpZF9wcm9wZXJ0eToNCj4+Pj4g
-wqDCoMKgwqDCoCBkcm1fY29ubmVjdG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5KGNvbm5lY3Rv
-ciwgTlVMTCk7DQo+Pj4+DQo+Pj4+IGJhc2UtY29tbWl0OiA2MWQzMjVkY2JjMDVkOGZlZjg4
-MTEwZDM1ZWY3Nzc2ZjNhYzNmNjhiDQo+Pj4NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0K
-R3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2Vy
-bWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFu
-eQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRp
-ZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
-
---------------3FTifAi8yA0mKGX0gRMnKnrK--
-
---------------h3sRk7wcYjp8AoDlXc0WzKbw
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRt60cFAwAAAAAACgkQlh/E3EQov+AW
-xxAAy/ziqgA6zei6EXLe1AECLwK4wKA4yQhL87KBle1Se+eAuUQFWnQSCjao/Zv7nGuxGXnlJgFJ
-mnfHewlgoUzQnEJS8QgqTU3z9BEOsgr7MnBWHqrEUE3omDPsnx0Fo2QP4ukjvbBMwgPTdm4QzzzB
-XnXweFlgLKhM1957qRCbFTNetS6P9mQZZ1dPh4WTrXjTFBdY1geM8LqpE87f2ZcZsNc3oLwqvJv0
-s2D4oO5jXB39tLmqz+TZ9msKuytulukuGydBOq47SjHq2SUUU6u1a60ffBkjRkVgYMXceP6I636Y
-s66BKL+d2lya/J2MIleqsR5twBUJ41Dw9+N16HbAlt+1kwwOG5C7FMljn5eBdYUCfQ++Vw1aIgYm
-EzX03xXD4vRwvVPrAtSlyVhY3wYuNb6rBqXKEE6t9RjCfuu7yaxP4uxjniBJV3LpXTHpw/q6y7jl
-ZT8VNRbwMtW/UMxxNwsQNG+gzo65DdRVBMrC2AkRgg4XrQYKvYGWh0NbOzheIA0+++c0W8PlV+7v
-Lm9ap2PZuHncRNUaFvqVSR6V3qW1djgrlBIhyFFkm8Oi8M3KuxF/4ZFbtFoY8LUNxyA2YO/eWsXL
-E0OR/sT4nEKUMIoV/DfOm4oKa5lS6JlwePXdOv33usxtsq7yQdxIvhXa1npjB9/chmQ38KOQ3GvX
-loc=
-=lOPq
------END PGP SIGNATURE-----
-
---------------h3sRk7wcYjp8AoDlXc0WzKbw--
+Kind regards,
+Luca Boccassi
