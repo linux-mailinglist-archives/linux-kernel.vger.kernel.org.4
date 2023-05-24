@@ -2,172 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0005070F3FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987B370F404
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbjEXKTl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 06:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S229572AbjEXKUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbjEXKSf (ORCPT
+        with ESMTP id S233871AbjEXKUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:18:35 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98973E6C;
-        Wed, 24 May 2023 03:18:08 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96f72e6925cso15689566b.1;
-        Wed, 24 May 2023 03:18:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684923487; x=1687515487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kIbASmk4FtEgWrqVYhKPUtwtIiST0CQZcy/ybdN1tZk=;
-        b=Y6910eTfj9aEfs0Ls+yYeG2938rtzbqHLvbCJwGed9VjTHpm0pNPNWN3kAm0mwMc+b
-         IBmm0W5sFUnavvcfTQ8yPsQ4Qpf39GpI++djl80kejHmV74Md+NFd1oBrDzKq4GISALx
-         ntwsnDfVDzYKech88Yx9Q1g5o1hdvL7IMIrpLVeoBLTzCtOAhklRy7/s6HaTiItc8P+r
-         qeIdFtRmhqjeAvASDvIf5XHa49ISrZXFxn97rjXEX0taMnjixEKNgxpiURZO9pSMPwVp
-         VrjasSiQaHF05109BgO4J7nC8Q61tM1z67A29KjwvElQqCAJc2xRiU4oFKbK1NIxGPc6
-         PXgg==
-X-Gm-Message-State: AC+VfDzLP7xNa/wS7iPWOdP6QLIOFf5EKqnl8kuxAqadzsVJmbjbDThr
-        l4rDkQ/TmwnuoRz+RUuGzF5J4Xn4EzpMDpEtMnQ=
-X-Google-Smtp-Source: ACHHUZ6MfeW4Iz0iuqbb/1bCIMVmiJssD4zE344ftV+J1YfKEI/cSISP7O/SQjiOiT3Mf9B/3DqQuKn/DFk7ERvm5zc=
-X-Received: by 2002:a17:906:77c5:b0:966:1f60:fd32 with SMTP id
- m5-20020a17090677c500b009661f60fd32mr1471924ejn.6.1684923486802; Wed, 24 May
- 2023 03:18:06 -0700 (PDT)
+        Wed, 24 May 2023 06:20:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751D3E63;
+        Wed, 24 May 2023 03:19:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09B2E63244;
+        Wed, 24 May 2023 10:19:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164C8C433EF;
+        Wed, 24 May 2023 10:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684923555;
+        bh=MtWBtQ6aAoXyFoAVZRww941etajSf0Pwbm9hhrT6pfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uw7G/dz0llS7lUVaJS3D/WIC2fhIKJtExPpIgjQ39YeXVmiLGXkU5Ri0nDd/oRAjX
+         MbO1fPei28wWMNb9S2cN6YRwWJozrzW0pUWKG6EXbQRR2uY6O+5VNA1t/EiVPn++UV
+         5EmwX1oe+gLkciKaBdnNVa/u9LcGxIyyYqIea6XpMNNVKmQrneaI2dSx/kPnnx4Ijm
+         LUq1nUZ+8BGqp9oTCjq7GJ6LDCVC5pYolCKy5f9f2Vx03Ih5qSsQmkQeyA/C6UdNTu
+         w9xjsQ2IquFlRofxLlUSpf2XJ9F9nk6lxXhugYHyLVHbqHDGawytYtkrbtYvg9SMMX
+         h5YfmNsf8cfYA==
+Date:   Wed, 24 May 2023 11:19:09 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <39e99d0b-9a5a-446d-aed7-efee21216ec1@sirena.org.uk>
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-3-zhuyinbo@loongson.cn>
+ <ZGy3b7ZfNwWoGDTu@surfacebook>
+ <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
+ <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
 MIME-Version: 1.0
-References: <ZG0jhvzAZnfscSeC@bhelgaas> <654d2a59-9836-cc6d-c521-6835d725284d@amd.com>
-In-Reply-To: <654d2a59-9836-cc6d-c521-6835d725284d@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 12:17:53 +0200
-Message-ID: <CAJZ5v0gTWJWR=cO+DXD15UW-CcCMaGRxxX11L8UWLm61w6gvbw@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: Don't assume root ports from > 2015 are power manageable
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        Iain Lane <iain@orangesquash.org.uk>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Xqg6i+1FCvZAy4Oy"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
+X-Cookie: You will be divorced within a year.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 11:30 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
->
-> On 5/23/2023 3:35 PM, Bjorn Helgaas wrote:
-> > [+cc Rafael, Lukas, linux-pm]
-> >
-> > On Wed, May 17, 2023 at 10:08:27AM -0500, Mario Limonciello wrote:
-> >> Using an XHCI device to wakeup the system from s2idle fails when
-> >> that XHCI device is connected to a USB-C port for an AMD USB4
-> >> router.
-> > Are XHCI, USB-C, and the AMD USB4 router just examples?
->
-> They're very specific to this case.  If XHCI
-> keyboard/mouse is connected to a type-C port that is
-> not connected to AMD USB4 router this issue doesn't occur.
->
-> > I assume the
-> > same issue could happen with non-XHCI and non-AMD devices, too?
-> Based on what's wrong with Linux and fixed by this patch,
-> yes this *can* happen to any vendor that the root port doesn't
-> support waking from for D3 but Linux uses it anyway.
-> >
-> > I assume the problem has something to do with PME_Support and some
-> > device being put in a power state where it cannot generate or forward
-> > PME messages?  I think the PCIe protocol details would be helpful
-> > here.
->
-> No; it's specific to an internal sequence in the SoC.
->
-> If the problematic root port is in D3 during s0i3 this
-> problematic sequence happens.  If the root port is in D0
-> then it doesn't.
->
->  From discussion with others in AMD that's at least one
-> reason why the firmware doesn't advertise any power management
-> on this root port and why Linux shouldn't be using it.
->
-> >> Comparing registers between Linux and Windows 11 this behavior to put root
-> >> ports into D3 at suspend is unique to Linux.  On an affected system
-> >> Windows does not put the root ports into D3 over Modern Standby.
-> >>
-> >> Windows doesn't put the root ports into D3 because root ports are not
-> >> power manageable; they're missing _PRW and _S0W.
-> > platform_pci_power_manageable() tests adev->flags.power_manageable,
-> > which is set by acpi_bus_get_power_flags() when a device has _PS0 or
-> > _PR0.
-> >
-> > So I don't know what's relevant out of _PRW, _S0W, _PS0, _PR0, but
-> > this sentence doesn't seem to match the code.
->
-> The firmware doesn't have _PS0 or _PR0 either for this root
-> port.
->
-> >> Linux shouldn't be assuming they support D3 just because they're newer
-> >> than 2015, the ports should also be deemed power manageable.
-> >> Add an extra check for this to ensure D3 isn't selected for such machines.
-> > Is this talking about D3hot or D3cold or both?  If we can make this
-> > explicit, it will help me out.  It's probably obvious to power
-> > experts, but I'm not one.
-> Both.
-> >> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> >> Reported-by: Iain Lane <iain@orangesquash.org.uk>
-> >> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >>   drivers/pci/pci.c | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> >> index 5ede93222bc1..3fe27aef09e6 100644
-> >> --- a/drivers/pci/pci.c
-> >> +++ b/drivers/pci/pci.c
-> >> @@ -3010,6 +3010,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
-> >>              if (dmi_check_system(bridge_d3_blacklist))
-> >>                      return false;
-> >>
-> >> +            if (!platform_pci_power_manageable(bridge))
-> >> +                    return false;
-> >> +
 
-This goes too far, because it causes all ports, not just root ports.
+--Xqg6i+1FCvZAy4Oy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If the intention is to address a problem with a root port, then the
-change in behavior should be limited to root ports.
+On Wed, May 24, 2023 at 11:42:34AM +0300, Andy Shevchenko wrote:
+> On Wed, May 24, 2023 at 10:52=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> =
+wrote:
 
-And yes, you can argue that for root ports, specifically, power
-management without firmware support is rather pointless if not
-harmful.
+> > >> +#define     LOONGSON_SPI_SPCR_REG   0x00
+> > >> +#define     LOONGSON_SPI_SPSR_REG   0x01
+> > >> +#define     LOONGSON_SPI_FIFO_REG   0x02
+> > >> +#define     LOONGSON_SPI_SPER_REG   0x03
+> > >> +#define     LOONGSON_SPI_PARA_REG   0x04
+> > >> +#define     LOONGSON_SPI_SFCS_REG   0x05
+> > >> +#define     LOONGSON_SPI_TIMI_REG   0x06
 
-> >>              /*
-> >>               * It should be safe to put PCIe ports from 2015 or newer
-> >>               * to D3.
-> >> --
-> >> 2.34.1
-> Something that this patch makes me wonder is if the original
-> heuristic was actually correct.
+> > > Where is this used outside of the main driver?
 
-Do you mean the cutoff date?
+> > These definitions are only used in core.c
 
-> Did the PCIe ports from "older" machine have everything needed
-> to let them go to D3?
->
-> Or would this change also let the heuristic be dropped?
+> Then the obvious question, why are they located in *.h?
 
-For root ports - probably.  In general - not at all.
+It's absolutely fine to put them in a header file, that's a perfectly
+normal way of writing code - it helps keep the driver a bit smaller by
+putting big piles of defines in a separate file, that can help make
+things a bit more manageable.
+
+--Xqg6i+1FCvZAy4Oy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRt5JwACgkQJNaLcl1U
+h9Ci5Af+NaHg1gQJOq8Q4R3aAaMCss64c2eb1tgoVaaTl1dAsuDyMvXBh/gZiY7Q
+a8XqU5QVk9o7HD7UpvdY3f6ZlpakU9WdUfqsSX/XCaBheAa7MISY1NGyNkAjcDOl
+hR17A+BK5REb3dlYcWsONd5fouuKl+KsOipPSOFVTeU3VJuIIlGQUFGaw74hxMsa
+LWgZHOpAiCsgCMyyeJrzNgSl62j+iOeg4SIRbumZzvFdoFQbb5wnIzEzlWLDWgBd
+vvYaqdcTlNTz5wQLjzyUDUsocO4LxXPLwJz5ljlnbji0CUzbc6h9XtUV6OoRohIE
+H+u7g0Ma8nEu/VhuZiUszak7EoXxCA==
+=SXKy
+-----END PGP SIGNATURE-----
+
+--Xqg6i+1FCvZAy4Oy--
