@@ -2,157 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420DF70EA24
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB1270EA04
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238990AbjEXASA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 20:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S238945AbjEXAHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 20:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236423AbjEXAR6 (ORCPT
+        with ESMTP id S229539AbjEXAHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 20:17:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29837B5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:17:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B718D6376C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:17:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6650C433EF;
-        Wed, 24 May 2023 00:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684887476;
-        bh=9dxLjHPo+SZEGy7KQS3cCv9yVec/7vFxtb4zBAqLmXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wr7T+5i/6DQrZylu3WCREvJ2bcO9dFx9j+flmANgbbKwhs3FVnYFrJV967oKEfeyD
-         YaSfFfAdfwU/d4c/BDPMmayNOvc/FfiKVKHsE1Ay4B/b98MeOAAZv3MX7LVnwS1CfX
-         Q88UbGhhrbK1+okbRb5/KhncQQ67FMZMShmeZgmhl3BrDuN0sWCn/FeDXxn5KnII0m
-         wR8vT6zgg42KZZhLyDFnkwNsago373inq3hwEKApu1gWsnsEZlktQlfe8E3PuJm2Bd
-         P3O3ZJLPpzsUU7TRBYQTyH8AJ9Py1nm/Hg426LOqE7Pb5CaeQ1hcY0ORJzf8MtqdLa
-         1YWM74O5ER+yA==
-Date:   Wed, 24 May 2023 08:06:44 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH] riscv: mm: try VMA lock-based page fault handling first
-Message-ID: <ZG1VFHgV2z74RlMn@xhacker>
-References: <20230523165942.2630-1-jszhang@kernel.org>
- <ZGzz11GhPyzcQ/nz@xhacker>
+        Tue, 23 May 2023 20:07:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E578B5;
+        Tue, 23 May 2023 17:07:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CFA11042;
+        Tue, 23 May 2023 17:08:03 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 168633F67D;
+        Tue, 23 May 2023 17:07:15 -0700 (PDT)
+Date:   Wed, 24 May 2023 01:06:45 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Shengyu Qu <wiagn233@outlook.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com,
+        Martin Botka <martin.botka@somainline.org>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v3 2/3] mfd: axp20x: Add support for AXP15060 PMIC
+Message-ID: <20230524010645.0f3cf2a2@slackpad.lan>
+In-Reply-To: <TY3P286MB2611E4814895D1F6CBD127E198789@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+References: <20230421150816.10513-1-wiagn233@outlook.com>
+        <TY3P286MB261162D57695AC8164ED50E298609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+        <20230426142740.GN50521@google.com>
+        <20230503120759.6fd6a7a9@donnerap.cambridge.arm.com>
+        <19bccb62-b7e0-855d-fb5f-4fd3dde4f6f0@linaro.org>
+        <20230515105229.GI8963@google.com>
+        <20230515161940.3bcbe932@donnerap.cambridge.arm.com>
+        <20230515152829.GW10825@google.com>
+        <TY3P286MB2611E4814895D1F6CBD127E198789@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZGzz11GhPyzcQ/nz@xhacker>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 01:11:55AM +0800, Jisheng Zhang wrote:
-> On Wed, May 24, 2023 at 12:59:42AM +0800, Jisheng Zhang wrote:
-> > Attempt VMA lock-based page fault handling first, and fall back to the
-> > existing mmap_lock-based handling if that fails.
-> > 
-> > A simple running the ebizzy benchmark on Lichee Pi 4A shows that
-> > PER_VMA_LOCK can improve the ebizzy benchmark by about 32.68%. In
-> > theory, the more CPUs, the bigger improvement, but I don't have any
-> > HW platform which has more than 4 CPUs.
-> > 
-> > This is the riscv variant of "x86/mm: try VMA lock-based page fault
-> > handling first".
-> > 
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > ---
-> > Any performance numbers are welcome! Especially the numbers on HW
-> > platforms with 8 or more CPUs.
-> 
-> PS: run ebizzy as below:
-> ./ebizzy -mTt your_nr_cpus
+On Mon, 15 May 2023 23:44:03 +0800
+Shengyu Qu <wiagn233@outlook.com> wrote:
 
-Sorry, should be ./ebizzy -mTt 2*your_nr_cpus
+Hi Shengyu,
 
-> > 
-> >  arch/riscv/Kconfig    |  1 +
-> >  arch/riscv/mm/fault.c | 33 +++++++++++++++++++++++++++++++++
-> >  2 files changed, 34 insertions(+)
-> > 
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 62e84fee2cfd..b958f67f9a12 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -42,6 +42,7 @@ config RISCV
-> >  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
-> >  	select ARCH_SUPPORTS_HUGETLBFS if MMU
-> >  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
-> > +	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
-> >  	select ARCH_USE_MEMTEST
-> >  	select ARCH_USE_QUEUED_RWLOCKS
-> >  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> > index 8685f85a7474..eccdddf26f4b 100644
-> > --- a/arch/riscv/mm/fault.c
-> > +++ b/arch/riscv/mm/fault.c
-> > @@ -286,6 +286,36 @@ void handle_page_fault(struct pt_regs *regs)
-> >  		flags |= FAULT_FLAG_WRITE;
-> >  	else if (cause == EXC_INST_PAGE_FAULT)
-> >  		flags |= FAULT_FLAG_INSTRUCTION;
-> > +#ifdef CONFIG_PER_VMA_LOCK
-> > +	if (!(flags & FAULT_FLAG_USER))
-> > +		goto lock_mmap;
-> > +
-> > +	vma = lock_vma_under_rcu(mm, addr);
-> > +	if (!vma)
-> > +		goto lock_mmap;
-> > +
-> > +	if (unlikely(access_error(cause, vma))) {
-> > +		vma_end_read(vma);
-> > +		goto lock_mmap;
-> > +	}
-> > +
-> > +	fault = handle_mm_fault(vma, addr, flags | FAULT_FLAG_VMA_LOCK, regs);
-> > +	vma_end_read(vma);
-> > +
-> > +	if (!(fault & VM_FAULT_RETRY)) {
-> > +		count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
-> > +		goto done;
-> > +	}
-> > +	count_vm_vma_lock_event(VMA_LOCK_RETRY);
-> > +
-> > +	if (fault_signal_pending(fault, regs)) {
-> > +		if (!user_mode(regs))
-> > +			no_context(regs, addr);
-> > +		return;
-> > +	}
-> > +lock_mmap:
-> > +#endif /* CONFIG_PER_VMA_LOCK */
-> > +
-> >  retry:
-> >  	mmap_read_lock(mm);
-> >  	vma = find_vma(mm, addr);
-> > @@ -355,6 +385,9 @@ void handle_page_fault(struct pt_regs *regs)
+> Please ping me if your new version of axp313a series is sent, I would update
+> mine as soon as possible.
+
+as you have probably seen, I have just sent out a new version, and
+included the one remaining patch from your series. So there is no
+need from your side for any further post. I'd just be grateful if you
+could test the final result.
+
+Cheers,
+Andre
+
+> > On Mon, 15 May 2023, Andre Przywara wrote:
 > >  
-> >  	mmap_read_unlock(mm);
+> >> On Mon, 15 May 2023 11:52:29 +0100
+> >> Lee Jones <lee@kernel.org> wrote:
+> >>  
+> >>> On Thu, 04 May 2023, Krzysztof Kozlowski wrote:
+> >>>  
+> >>>> On 03/05/2023 13:07, Andre Przywara wrote:  
+> >>>>> On Wed, 26 Apr 2023 15:27:40 +0100
+> >>>>> Lee Jones <lee@kernel.org> wrote:
+> >>>>>
+> >>>>> Hi Lee,
+> >>>>>
+> >>>>> I see this patch in Linus' tree, but something must have gone wrong here,
+> >>>>> can you please check? See below ...
+> >>>>>      
+> >>>>>> On Fri, 21 Apr 2023, Shengyu Qu wrote:
+> >>>>>>     
+> >>>>>>> The AXP15060 is a PMIC chip produced by X-Powers, and could be connected
+> >>>>>>> via an I2C bus.
+> >>>>>>>
+> >>>>>>> Describe the regmap and the MFD bits, along with the registers exposed
+> >>>>>>> via I2C. Eventually advertise the device using a new compatible string
+> >>>>>>> and add support for power off the system.
+> >>>>>>>
+> >>>>>>> The driver would disable PEK function if IRQ is not configured in device
+> >>>>>>> tree, since some boards (For example, Starfive Visionfive 2) didn't
+> >>>>>>> connect IRQ line of PMIC to SOC.
+> >>>>>>>
+> >>>>>>> GPIO function isn't enabled in this commit, since its configuration
+> >>>>>>> operation is different from any existing AXP PMICs and needs
+> >>>>>>> logic modification on existing driver. GPIO support might come in later
+> >>>>>>> patches.
+> >>>>>>>
+> >>>>>>> ---  
+> >>>>>> You must not use these above the tags or Git will drop them.
+> >>>>>>     
+> >>>>>>> Changes since v2:
+> >>>>>>>   - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch  
+> >>>>> So this patch was based on the AXP313a series, but I don't see that in
+> >>>>> Linus' tree (or in any of your trees, if I have checked correctly).
+> >>>>> There must have been a conflict, as this [PATCH v3 2/3] diff actually lists
+> >>>>> the axp313a entry in the context lines.
+> >>>>>      
+> >>>>>>>   - Add axp_regulator_only_cells rather than directly using axp806_cells
+> >>>>>>>     for cases that IRQ line isn't connected.
+> >>>>>>>
+> >>>>>>> Changes since v1:
+> >>>>>>>   - Nothing
+> >>>>>>>
+> >>>>>>> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
+> >>>>>>>
+> >>>>>>> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+> >>>>>>> ---  
+> >>>>>> Put change-logs here instead.
+> >>>>>>     
+> >>>>>>>   drivers/mfd/axp20x-i2c.c   |   2 +
+> >>>>>>>   drivers/mfd/axp20x.c       | 107 +++++++++++++++++++++++++++++++++++++
+> >>>>>>>   include/linux/mfd/axp20x.h |  85 +++++++++++++++++++++++++++++
+> >>>>>>>   3 files changed, 194 insertions(+)  
+> >>>>>> I manually added the missing tags for this and the DT patch and applied.  
+> >>>>> So this patch doesn't list any tags aside from Shengyu's
+> >>>>> Signed-off-by. The patch in Linus' tree list a Reviewed-by: from
+> >>>>> Krzysztof, which I don't see anywhere in the thread, he just reviewed the
+> >>>>> binding patch, AFAICT.  
+> >>>> Yep, I never reviewed this.
+> >>>>      
+> >>>>> I see your tentative R-b: on v2, but with the
+> >>>>> request to rebase and resend, which he did with v3. The applied patch
+> >>>>> looks like v3, but not on the base commit this was send against.
+> >>>>>
+> >>>>> So I am slightly confused, and am also wondering what happened to the
+> >>>>> AXP313a patches? I see the binding patch merged, but not the MFD part,
+> >>>>> even though you replied saying so.  
+> >>>> Because the patch #1 was broken, see:
+> >>>> https://lore.kernel.org/all/TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+> >>>>
+> >>>> The SoB and Reviewed-by were after --- and apparently b4 understood it
+> >>>> as cover letter and applied everywhere.
+> >>>>
+> >>>> Lee,
+> >>>> Do you have the latest b4? If yes, this should be reported as b4 bug,
+> >>>> assuming you used it.  
+> >>> I am using b4, although the version I'm using is quite old (0.9.0).
+> >>>
+> >>> Also, this was quite some time ago - I have slept since applying this
+> >>> and do not distinctly remember doing so.  Thus, the application of your
+> >>> R-b may well have been a mistake on my part.  I'll keep an eye for such
+> >>> things in the future and if I see (and remember) an issue, I'll report
+> >>> it.  
+> >> So what are we going to do about the two series now? I guess it's not
+> >> worthwhile to revert Shengyu's patch, just for the wrong R-b: tag?  
+> > No, I won't be reverting any patches.
 > >  
-> > +#ifdef CONFIG_PER_VMA_LOCK
-> > +done:
-> > +#endif
-> >  	if (unlikely(fault & VM_FAULT_ERROR)) {
-> >  		tsk->thread.bad_cause = cause;
-> >  		mm_fault_error(regs, addr, fault);
-> > -- 
-> > 2.40.1
-> > 
-> > 
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> >> So does this mean both series should be rebased on top of that and re-sent?  
+> > Yes please.
+> >  
+
