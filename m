@@ -2,276 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E18E70EBFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E4770EC0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbjEXDnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 23:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S233965AbjEXDqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 23:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235017AbjEXDnn (ORCPT
+        with ESMTP id S239396AbjEXDqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 23:43:43 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2081.outbound.protection.outlook.com [40.107.220.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CA1C1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:43:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d1BsMDFZjCsB5KoBMTEyZbexGO6zJqnPWz+roF+NPsF1JSqQLElwG6MJtmnRoS67ZZ4rzmS0MN3MDs+eWY8MEvGkI8sQcc07z990JvXsGbvaREkQG6jw26c0gDKV+j+LpZsHNvg7RiEv7lrpgz6zx4fqgrjgUZgpOFtzZd2jn9PDYkNO1dnVEM1MjpRqPq6sLEF0r+jfSp7dn+UHIQXhPwIfTLGnD6CPiBw0YMmyIqP/1N38aPwAx/wS7g0+kWghV1AERe6rJE821TFywjZILFwEJrlbXbuwaFwKPAaeVdfOPPq9AEcUsYayExBlWNTSB7GGMSChyvzo3rOuVE5BXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=go8rm9nsLOfTaj75EdlYmB4QPwnbKS52X8x6VsPHmCI=;
- b=k0jt6ZqTLFVOvlCVwc1LoH3ezjtAdMd0PHWsT3K//zhoB1JjK0i9KYL12JaEEEmtoXG1l62AM7poEYdT1tePTJ9WMPGLzmL2ZXeer8sanHqpGWBgzWUg37+yVJqw33CNnRJAw4hQjtVh7QirON25LFnmzNCOse9aMrPz3stGhGIfTmFOqbYAoEtNl1yqzpCxzywzSrln+o3g2UoQj7Wb9H6KWl7pdAstJG5NJwq6KqHE6bB7pZrscQpmRO9ixMyZDbS9+dDQRr9A9kNTnPqDmhK23ob0P4ytGFiDbKVT9g7GgWHmj8JQQVvZt2pkM1zn6e4i+03k/WWRlIykbf/Cnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=go8rm9nsLOfTaj75EdlYmB4QPwnbKS52X8x6VsPHmCI=;
- b=dmo7eytZbG0tASMBuHIWWvHKHm9jWn9bU1sgiyQQxNYp+oHTAypoP9eq0B79n4eMx2D5vONM/+jWEHQg6Il1Id6mEa9Rv7dXcRSxJmGG//wRdJeIoVB4Yhx4K3/N6m5/9UUNQt2S6FdJ3oUc3eSoi1VdkyiCmxyZx/ABRsi+TYU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24)
- by PH7PR12MB8123.namprd12.prod.outlook.com (2603:10b6:510:2bb::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 03:43:39 +0000
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::b197:512:a4ca:6e9c]) by MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::b197:512:a4ca:6e9c%4]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 03:43:38 +0000
-Message-ID: <31f30fb6-5988-ab19-b155-1b598025c049@amd.com>
-Date:   Wed, 24 May 2023 09:13:26 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 2/2] drivers: base: cacheinfo: Update cpu_map_populated
- during CPU Hotplug
-Content-Language: en-US
-To:     Yicong Yang <yangyicong@huawei.com>, linux-kernel@vger.kernel.org,
-        sudeep.holla@arm.com
-Cc:     yangyicong@hisilicon.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, yongxuan.wang@sifive.com,
-        pierre.gondois@arm.com, vincent.chen@sifive.com,
-        greentime.hu@sifive.com, prime.zeng@hisilicon.com,
-        palmer@rivosinc.com, puwen@hygon.cn
-References: <20230508084115.1157-1-kprateek.nayak@amd.com>
- <20230508084115.1157-3-kprateek.nayak@amd.com>
- <32bd2ca8-30f1-204e-898f-fc93bbdd2e14@huawei.com>
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <32bd2ca8-30f1-204e-898f-fc93bbdd2e14@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0065.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:23::10) To MW2PR12MB2379.namprd12.prod.outlook.com
- (2603:10b6:907:9::24)
+        Tue, 23 May 2023 23:46:03 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD561BD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:45:47 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d577071a6so397105b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 20:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684899947; x=1687491947;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eERsr2KIMKuXdu39RaY5MYbtRVFOF/NWR6LanLsqRiE=;
+        b=oX1i/2BM+POPpgU0H7rR2FA3xezK1PV62m0gmR8X7cDypxDgrcNm6y1hN2L7xe0Iyt
+         1mqpUUfU5wVY2ct7zwN0337V84n335jWKfp/fLGAae/GVQX9d8VHopDXSbyc+VR1Aw1J
+         9Ln+3f/S210eHii1JUTImMdQcMguXXxjCOJMG/os9DxbKxZoC3hCKTQnLCF93Q1iaQ2d
+         av0h8BHHGKbrBu5ciEaKli2LNHRY7yFVTfPWjAoQjfyG42IfpEaak2hpBJvurKUqdl4x
+         ITXpwstImNpqzIKZSk8wc9OYgBtYSk1nlvLmy+qLuTu2DYOqJGPDLsbxqqKtB6I35i6L
+         mLtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684899947; x=1687491947;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eERsr2KIMKuXdu39RaY5MYbtRVFOF/NWR6LanLsqRiE=;
+        b=O5V51ZQ+6QtbUZr2vN1wHaAcrW8U7x9jY4tYMoJl0R90vzUTxx+vPOBn6YhxDfcw3n
+         Jz2eiDJSKCY17Majjea/b8fQGBL8lqpmO0fTH/H9tPYmJ+4h1rri3vg3u9gj39Qsd2dt
+         RfGh+2LAX4B6AEdWpZ+yErn/hG4rF2lKAniUBhQMNGZyBWOmNfr/6Gy2CKjSCEptJpwl
+         Ma1rtExSORHHw50UwPlu/7xK218XvACfVPhR9YP/wweBSUVSw2D34v844ZVOu2XOoxer
+         fSCcvYf46BXFx1+QAgeuv7g3Bhg2agJ3f+v16UzfmV44krS6QQ/6v/FwrPqtQRvb9Y65
+         RqGw==
+X-Gm-Message-State: AC+VfDzwRPiXzDaWcW42MiYsA7gPArTD6DpBzVBC53BWVWUh061qjcX3
+        7YuIzCRvmiPn+NO+iL2kjPci86fo2nC61koBlNc9Cw==
+X-Google-Smtp-Source: ACHHUZ4PLipjlYjH8YoIgKf655AyBFU9nvjtB318MzB07fqsGQ8SGcMEHi2RWTo6VU1u85f4vPEQAt10WMMOk/wTCek=
+X-Received: by 2002:a05:6a21:788f:b0:10b:58f1:7a6f with SMTP id
+ bf15-20020a056a21788f00b0010b58f17a6fmr11464439pzc.41.1684899947297; Tue, 23
+ May 2023 20:45:47 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2379:EE_|PH7PR12MB8123:EE_
-X-MS-Office365-Filtering-Correlation-Id: 715cc723-b29b-461f-7c92-08db5c090f07
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kgB93rWUFsCWn1nvqEACkLmwNoOQLdUHL/pIoQ1FE8fdmniluQfaEalem+3HQj1Sifqj7YOMeqmuM4aA5rWPhZHOMd6JYIOwdFS+XGhZlsuMAQA2hibZTVI0/OTZ5pMMP7/Bv5U5RlzchIDrS7RJZ9DlRgXOIYI2B6mgsgBkFxkHuowqO+RFNCgygst8YcKR+kurm6t3wrFxHZHa/GiJoUzylDWf3QlRagZ9P0dS7uKWGKmpSRqp+D5MfbosuXLR26kZRNZx5+dH9w3SPWNXu32aFzvc/TrTPmwWim9zQmnBJr4+2VZxlKafd6+euqbnRsN10Ja1FrZzwrEWs2XgsRVOQ0tm9m969ejYlQdy5JV+VH1IqFL7fHLocYS4XuJCpaCiN3yrh5s+Fm6raEOweGHjIK71Ptk6TEkrY2ahxxW0FMLe1cAzqB0q+OVRT9A8kCfn6SG9V3IQM5vInJpcfhkMNzfyygQgXhE91Dnvw1F12CxwV2+pKwl2oXjNwfVkkT7f3Nn0Qv4T4nXk8dwa+z9o4FWp8lWO8msg79hWFB6iCqM6jSGdTkSiXvOmKm9C462lh8ZjDyiMRNUoze2r5SiGXfQJHQOhsTIRPamQCKYg/YaxiGa7meEIT3NEMBgP2sRwUYABWkYxRyrkoC0T9A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(136003)(376002)(366004)(451199021)(15650500001)(53546011)(107886003)(6512007)(8936002)(8676002)(7416002)(83380400001)(38100700002)(86362001)(31696002)(36756003)(6506007)(2616005)(2906002)(41300700001)(66946007)(66556008)(66476007)(31686004)(4326008)(6666004)(6486002)(316002)(5660300002)(186003)(26005)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTV2b000S1F2RTdwVG83TVJ5YjNWK2lCcytwbUVFZERCbVZKbis3aWZQblph?=
- =?utf-8?B?M25pS3FoRXNJa2E2VGFQNkxpQUg2eEgzQ3RhZ2FpNDFhU0w3cEloKzROSDNr?=
- =?utf-8?B?bmNGbTY4ZmhwaGU3cHZXRG9Cb2x5U3V0R2I3SzdtOCtyRGg3UXhoaGNKQ044?=
- =?utf-8?B?N013SjVZWUE5bG1uczFMT2kyVDFDWnI1S2IxRGdHUk5QNnJNbHZqdkg2cW9V?=
- =?utf-8?B?bEl2NWg1NW9hOUpnWUpvU2QyU2FBWUplUk5SN1ZXQjJvSEVNTWN0ZFJUdzB6?=
- =?utf-8?B?MFN0STJReDR6WDdyU285cnIrY2ZSMGUranFWV24rZHJuSWpqNTR4Nkgydmdr?=
- =?utf-8?B?b1dRQ3pJdmVVSnlOWldzSENJSWxZUjVKT0FvL0l0alFmaVRlenNpR2o5NHRK?=
- =?utf-8?B?Q0YrRlhNR0dCVXVMd0Q1MjZhTDhZdERpYVJnd1NFSGVkcjVDbjdGQUlqOVFs?=
- =?utf-8?B?ZDdDOFB2T05yNEdZNlM3a1hEVGVub2l5SmRwTlZSUGl4QSswQlllbHpiN3lP?=
- =?utf-8?B?Y3VFMVIrYU8zWjNwQXJMdWNhMG43R0JJczFFUEJ1amloeUhCK1FEcStVNERB?=
- =?utf-8?B?b0hUV3RQT1ZaczB3UTFNNVArOXNPZDh0K1AxUFRoZFcrL01UVXVrSTlsTUpE?=
- =?utf-8?B?OFQ2ZnY3NlhXSHJOMUhBMFJlczh5d1BybzNHVVRvZlZsY1Rvd1RZamo1Y3ox?=
- =?utf-8?B?WVUxamZ0QXBoVEZZM3lITFpRcGMzUFBCRUxwNHp2ejQzamFkWnNmNFBrazRs?=
- =?utf-8?B?WHE1dGgyNlFUeGxWWWhnYVdsWFJPbXlTeDI1QTJDOElCUGxWeG1jclRGT2tk?=
- =?utf-8?B?Ni9aclFVakVseHZQdEVqWkFneVZMc3RVME9kcHc5YjFtMjZMem1kN05LUSsw?=
- =?utf-8?B?WjA3c3l2bnpibFZONzRsbnkxeEpoL3ZvT1ZFNlIwcWtLbnRkK0ZmMVRwL2xY?=
- =?utf-8?B?VlhGZ01FWHVyYVF3ejFOZ29UYnRzM1dlRXJqYU5VWXJDbXdreEtrM3BDMGRS?=
- =?utf-8?B?c1piVk1rRlJhVm5Qcng4eWhuakRnYnl5bm0yM1hENFRXTnNGQXRXSi9lVmRi?=
- =?utf-8?B?WUVMUFdaeFFmazlyY0QyeDhaNGI1WGxIZmg5R0gxbEZEQlZEY2UrUStuaTdC?=
- =?utf-8?B?VWwwbFRkZjlWYmxuVjZaUEZSckJ4WWZKQXc5VHFGc1R5TTlXNGlZb0Nmc21I?=
- =?utf-8?B?d0VDMWVGMGN4anFTQkpOUlF4NWFVYmhIYW0vYXdOK1oxZ2R0UkFINkJITGJU?=
- =?utf-8?B?SVc3WlVDZjFHbG5jZGxzR3cwZEFRWWdOZnhmRVVDcVVHWWN6cjZBYWtQYUFv?=
- =?utf-8?B?WkorcGlRcTBJMFI0c05IQzVjT3ZEZlhiVzFaTkI0VDdNUlkrOEx6a0VFcVQ3?=
- =?utf-8?B?TFF6blZYblhkaWQ0RHByd1VwSzE1QmljM1NjdTlJbUdzaFRBMzQrYlMxSHBG?=
- =?utf-8?B?WDlvbzdsanowaFlVcDlzbWQwajB5UkRwNU1VMWFIUFhOQnNNWFhsNDhDdmRl?=
- =?utf-8?B?RU5YdlUweW5VaGVUdTNmYnpjbXF1bVc2eEQxM25tNk9hMVNpU1dqSjNkWW8r?=
- =?utf-8?B?aGExckEvTGdNZmFjR2dHS205MEg1TG9vM1Y1RWVKVXduWVlERVdDQTYza0dZ?=
- =?utf-8?B?SmYvVUltaitob3FXZ09BcFh1VnJGTVc5WTdwdHpBWVZRS3ViNEYrM3hYSVho?=
- =?utf-8?B?N0JPM2RvaG5vQUpnZ2g1VHZsRGYrc2ZrWDY5YzBHU0F5WUcyd0ExZjdoTlAv?=
- =?utf-8?B?OCtRKzZZekpiUXJvaHAyWnRkOVhUMW8zWTMxTURHMG9xV0tHemdMNVVFb2ZY?=
- =?utf-8?B?ZlRtWU5RdGM3Q0Y1WlMxSVNIVzdiMzNZL1Ywb2ZrTEx0UmN2WTdmT1ZXWTcw?=
- =?utf-8?B?alpxNzFyNW5MY1NMRTZYZVBjcm5vd29VUVM4RXQxcldoTW1wc2diakpiZ1dN?=
- =?utf-8?B?ZUZYR0hPNGhxdUQwZXlUMkhZYUNUUmI2azloR3NjZG1zU3Y4UjVBNDFpbVk4?=
- =?utf-8?B?VE1oRTVKLzlnQzdZdlROendBdWdEN2VtMXJpL0ErdUNuUGl0S1dCVFdheFU4?=
- =?utf-8?B?dmRKemJtdkIrZm05cXJwblQ2alBjUWRyMU85aGM1SlRFOVFmMHE5QXBVNU4z?=
- =?utf-8?Q?c4vzf14RH3AJZrQdyfKjSXas+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 715cc723-b29b-461f-7c92-08db5c090f07
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 03:43:38.4524
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UpHK13Ns3C4Mko7iTZexomyjVqMNbLD/DTPsKhlGQBQTLOJ3XC2ZZd6ZAgoQ0mckRKN3kTTnd95t5+6SRsU64A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8123
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <CAEUSe78ip=wkHUSz3mBFMcd-LjQAnByuJm1Oids5GSRm-J-dzA@mail.gmail.com>
+ <CAKwvOdn3ngS101Y8DiBQgmw4K8kEX+ibGeXYBwTRVLT59q6wsw@mail.gmail.com>
+In-Reply-To: <CAKwvOdn3ngS101Y8DiBQgmw4K8kEX+ibGeXYBwTRVLT59q6wsw@mail.gmail.com>
+From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date:   Tue, 23 May 2023 21:45:36 -0600
+Message-ID: <CAEUSe7_S_u=4rfJib9p=yaniAWcO6YZCkXtT26_o--+bhW8ODg@mail.gmail.com>
+Subject: Re: Stable backport request: skbuff: Proactively round up to kmalloc
+ bucket size
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux- stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        rientjes@google.com, vbabka@suse.cz,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yicong,
+Hello!
 
-On 5/20/2023 12:26 PM, Yicong Yang wrote:
-> Hi Prateek,
-> 
-> On 2023/5/8 16:41, K Prateek Nayak wrote:
->> Until commit 5c2712387d48 ("cacheinfo: Fix LLC is not exported through
->> sysfs"), cacheinfo called populate_cache_leaves() for CPU coming online
->> which let the arch specific functions handle (at least on x86)
->> populating the shared_cpu_map. However, with the changes in the
->> aforementioned commit, populate_cache_leaves() is not called when a CPU
->> comes online as a result of hotplug since last_level_cache_is_valid()
->> returns true as the cacheinfo data is not discarded. The CPU coming
-> 
-> Yes in free_cache_attributes() we only update the shared_cpu_map but make
-> other attributes remained. From my feelings we should do all the work
-> opposite to detect_cache_attributes(), including free the memory allocated.
+On Mon, 22 May 2023 at 12:37, Nick Desaulniers <ndesaulniers@google.com> wr=
+ote:
+>
+> On Mon, May 22, 2023 at 11:24=E2=80=AFAM Daniel D=C3=ADaz <daniel.diaz@li=
+naro.org> wrote:
+> >
+> > Hello!
+> >
+> > Would the stable maintainers please consider backporting the following
+> > commit to the 6.1? We are trying to build gki_defconfig (plus a few
+>
+> Does android's gki_defconfig fail to boot on the `android14-6.1`
+> branch of https://android.googlesource.com/kernel/common?
+>
+> (i.e. downstream branch from linux stable's linux-6.1.y)?
+>
+> We just ran CI successfully on that branch 10 hours ago.
+> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/5=
+042504560/jobs/9045030265
+>
+> Do you have more information on the observed boot failure? (panic splat?)
 
-In fact, when free_cache_attributes() was first added in
-commit 246246cbde5e ("drivers: base: support cpu cache information
-interface to userspace via sysfs"), it did exactly that. It was later
-changed in commit 5944ce092b97 ("arch_topology: Build cacheinfo from
-primary CPU")
+Apologies if it sounded like we were trying to boot an Android kernel.
+Let me clarify: We're booting v6.1.29 from linux-stable/linux-6.1.y.
 
-> 
->> online is not present in shared_cpu_map, however, it will not be added
->> since the cpu_cacheinfo->cpu_map_populated flag is set (it is set in
->> populate_cache_leaves() when cacheinfo is first populated for x86)
->>
->> This can lead to inconsistencies in the shared_cpu_map when an offlined
->> CPU comes online again. Example below depicts the inconsistency in the
->> shared_cpu_list in cacheinfo when CPU8 is offlined and onlined again on
->> a 3rd Generation EPYC processor:
->>
->>   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->>     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
->>
->>   # echo 0 > /sys/devices/system/cpu/cpu8/online
->>   # echo 1 > /sys/devices/system/cpu/cpu8/online
->>
->>   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->>     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8
->>     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8
->>     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8
->>     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8
->>
->>   # cat /sys/devices/system/cpu/cpu136/cache/index0/shared_cpu_list
->>     136
->>
->>   # cat /sys/devices/system/cpu/cpu136/cache/index3/shared_cpu_list
->>     9-15,136-143
->>
->> Clear the flag when the CPU is removed from shared_cpu_map when
->> cache_shared_cpu_map_remove() is called during CPU hotplug. This will
->> allow cache_shared_cpu_map_setup() to add the CPU coming back online in
->> the shared_cpu_map. Set the flag again when the shared_cpu_map is setup.
->> Following are results of performing the same test as described above with
->> the changes:
->>
->>   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->>     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
->>
->>   # echo 0 > /sys/devices/system/cpu/cpu8/online
->>   # echo 1 > /sys/devices/system/cpu/cpu8/online
->>
->>   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->>     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->>     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
->>
->>   # cat /sys/devices/system/cpu/cpu136/cache/index0/shared_cpu_list
->>     8,136
->>
->>   # cat /sys/devices/system/cpu/cpu136/cache/index3/shared_cpu_list
->>     8-15,136-143
->>
->> Fixes: 5c2712387d48 ("cacheinfo: Fix LLC is not exported through sysfs")
-> 
-> It's ok for me to have this tag but I don't think this is the root cause,
-> the commit happens to expose the problem. Other arthitectures like arm64
-> never updates the this_cpu_ci->cpu_map_populated even after the cpumap is
-> populated.
+This is what we get under Qemu-arm64 for v6.1.29 with Clang 16:
+-----8<-----
+  Unexpected kernel BRK exception at EL1
+  Internal error: BRK handler: 00000000f2000001 [#1] PREEMPT SMP
+  Modules linked in:
+  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.29 #1
+  Hardware name: linux,dummy-virt (DT)
+  pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+  pc : pskb_expand_head+0x448/0x480
+  lr : pskb_expand_head+0x13c/0x480
+  sp : ffff80000802b850
+  x29: ffff80000802b860 x28: 00000000000002c0 x27: 0000000000000ec0
+  x26: ffff0000c02c8ec0 x25: ffff0000c02c8000 x24: 00000000000128c0
+  x23: ffff0000c030e800 x22: ffff0000c030e800 x21: 0000000000000240
+  x20: 0000000000000000 x19: ffff0000c085e900 x18: ffff800008021068
+  x17: 00000000ad6b63b6 x16: 00000000ad6b63b6 x15: 0001001c00070038
+  x14: 0000000c00020008 x13: 00882cc00000ffff x12: 0000000000000000
+  x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000001
+  x8 : ffff0000c030eac0 x7 : 0000000000000000 x6 : 0000000000000000
+  x5 : ffff0000c030eaf0 x4 : ffff0000ff7abd10 x3 : 0000000000001740
+  x2 : ffff0000c02c8000 x1 : 0000000000000000 x0 : 0000000000000000
+  Call trace:
+   pskb_expand_head+0x448/0x480
+   netlink_trim+0xa0/0xc8
+   netlink_broadcast+0x54/0x764
+   genl_ctrl_event+0x21c/0x37c
+   genl_register_family+0x628/0x708
+   thermal_netlink_init+0x28/0x3c
+   thermal_init+0x28/0xec
+   do_one_initcall+0xfc/0x358
+   do_initcall_level+0xd8/0x1b4
+   do_initcalls+0x64/0xa8
+   do_basic_setup+0x2c/0x3c
+   kernel_init_freeable+0x118/0x198
+   kernel_init+0x30/0x1c0
+   ret_from_fork+0x10/0x20
+  Code: f9406679 38776b28 3707eba8 17ffff67 (d4200020)
+  ---[ end trace 0000000000000000 ]---
+  Kernel panic - not syncing: BRK handler: Fatal exception
+  SMP: stopping secondary CPUs
+----->8-----
 
-I agree. I added the tag to indicate where the behavior changed for x86.
-Fun fact, "cpu_map_populated" was added specifically for x86 in commit
-fac51482577d5 ("drivers: base: cacheinfo: fix x86 with CONFIG_OF
-enabled") back in 2016. There seems to be a long history between the
-cacheinfo driver and the arch specific methods :)
+Here's a link to that test, with all artifacts:
+https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/daniel/tests/2QA2CVTT=
+vG6KZETMUyZCNgS8koR
 
-> 
->> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
-> 
-> Thanks for fixing this!
-> 
-> Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+This can be reproduced locally via Tuxrun:
+-----8<-----
+#pip3 install -U tuxrun
+tuxrun --runtime podman \
+  --device qemu-arm64 \
+  --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f \
+  --boot-args rw \
+  --kernel https://storage.tuxsuite.com/public/linaro/daniel/builds/2QA2CHQ=
+UpqKe27FyMZrBNILVwXi/Image.gz
+\
+  --modules https://storage.tuxsuite.com/public/linaro/daniel/builds/2QA2CH=
+QUpqKe27FyMZrBNILVwXi/modules.tar.xz
+\
+  --rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.xz
+----->8-----
 
-Thank you for reviewing the changes.
+This is vanilla v6.1.29 with no extra patches, just this kernel configurati=
+on:
+  https://storage.tuxsuite.com/public/linaro/daniel/builds/2QA2CHQUpqKe27Fy=
+MZrBNILVwXi/config
 
-> 
->> ---
->>  drivers/base/cacheinfo.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
->> index d1ae443fd7a0..cbae8be1fe52 100644
->> --- a/drivers/base/cacheinfo.c
->> +++ b/drivers/base/cacheinfo.c
->> @@ -410,11 +410,14 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
->>  			coherency_max_size = this_leaf->coherency_line_size;
->>  	}
->>  
->> +	/* shared_cpu_map is now populated for the cpu */
->> +	this_cpu_ci->cpu_map_populated = true;
->>  	return 0;
->>  }
->>  
->>  static void cache_shared_cpu_map_remove(unsigned int cpu)
->>  {
->> +	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
->>  	struct cacheinfo *this_leaf, *sib_leaf;
->>  	unsigned int sibling, index, sib_index;
->>  
->> @@ -447,6 +450,9 @@ static void cache_shared_cpu_map_remove(unsigned int cpu)
->>  			}
->>  		}
->>  	}
->> +
->> +	/* cpu is no longer populated in the shared map */
->> +	this_cpu_ci->cpu_map_populated = false;
->>  }
->>  
->>  static void free_cache_attributes(unsigned int cpu)
->>
- 
---
-Thanks and Regards,
-Prateek
+Greetings!
+
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
+
+
+
+> > extras) on Arm64 and test it under Qemu-arm64, but it fails to boot.
+> > Bisection has pointed here.
+> >
+> > We have verified that cherry-picking this patch on top of v6.1.29
+> > applies cleanly and allows the kernel to boot.
+> >
+> > commit 12d6c1d3a2ad0c199ec57c201cdc71e8e157a232
+> > Author: Kees Cook <keescook@chromium.org>
+> > Date:   Tue Oct 25 15:39:35 2022 -0700
+> >
+> >     skbuff: Proactively round up to kmalloc bucket size
+> >
+> >     Instead of discovering the kmalloc bucket size _after_ allocation, =
+round
+> >     up proactively so the allocation is explicitly made for the full si=
+ze,
+> >     allowing the compiler to correctly reason about the resulting size =
+of
+> >     the buffer through the existing __alloc_size() hint.
+> >
+> >     This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
+> >     coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
+> >     back the __alloc_size() hints that were temporarily reverted in com=
+mit
+> >     93dd04ab0b2b ("slab: remove __alloc_size attribute from
+> > __kmalloc_track_caller")
+> >
+> >     Cc: "David S. Miller" <davem@davemloft.net>
+> >     Cc: Eric Dumazet <edumazet@google.com>
+> >     Cc: Jakub Kicinski <kuba@kernel.org>
+> >     Cc: Paolo Abeni <pabeni@redhat.com>
+> >     Cc: netdev@vger.kernel.org
+> >     Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >     Cc: Nick Desaulniers <ndesaulniers@google.com>
+> >     Cc: David Rientjes <rientjes@google.com>
+> >     Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> >     Link: https://patchwork.kernel.org/project/netdevbpf/patch/20221021=
+234713.you.031-kees@kernel.org/
+> >     Signed-off-by: Kees Cook <keescook@chromium.org>
+> >     Link: https://lore.kernel.org/r/20221025223811.up.360-kees@kernel.o=
+rg
+> >     Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> >
+> >
+> > Thanks and greetings!
+> >
+> > Daniel D=C3=ADaz
+> > daniel.diaz@linaro.org
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
