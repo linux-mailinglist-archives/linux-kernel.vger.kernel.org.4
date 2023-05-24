@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4302870FE4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375BA70FE59
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbjEXTLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S233361AbjEXTOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbjEXTLq (ORCPT
+        with ESMTP id S234705AbjEXTOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:11:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFCCF132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:11:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60FBF1042;
-        Wed, 24 May 2023 12:12:27 -0700 (PDT)
-Received: from [10.57.74.16] (unknown [10.57.74.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 517853F762;
-        Wed, 24 May 2023 12:11:40 -0700 (PDT)
-Message-ID: <b818b1f6-f822-477c-6674-6860c84ffdc7@arm.com>
-Date:   Wed, 24 May 2023 20:11:38 +0100
+        Wed, 24 May 2023 15:14:50 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2086.outbound.protection.outlook.com [40.107.102.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0493DA4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:14:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=juIsngSoVoziQN8itJJCReqSin6D28h6WfVf49WqNIOAx/nwVYGV331/rGmJoKxzSfbN0YsiwBP1mlZeoEQ5v35TdikVe9GavZwEYb95vzGBSx1wvMoSHR3ioQ6Owon7l1TLckMsaGPBNQUztORJgRwRkmlKT9MnzvE1Fd8dfVJp7+I9RbVLiaM95lmALPwZDNAFN3GemxvYkvKoEFhuZrLDjfjDvW0+4R/NIB1OxJX/DM7+Xt7cpNZWaMDdvCIUjf3SkvlyXBiCeE2xEAAEUe6+OS9dp2Y2Fy/bNAbg4SgAGUDB5vz2DV6X0IHaNJzR1+jNNsvm46/kFhBYBwsMXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mQBAyPGXFsVGQUphORVfyEPjDfdDcNUK5WVsgDFJNfg=;
+ b=F3L0abHI4ZNYzM3adAWUTD0OfEvn6k+OaTUs0QjFH8VQVDTx9NuxS/yAJHRdOuVM252db4FRMjobnqnfJXXT4zmV3eHFHH7B8uPusNTvPkN/yxjLL3vRgJAg+bM09panTF7hCcnUz4zEEJwPYLUBdwjvDBowkoJ4hC9Voge+HQC4nqeynQWpuBt1xI2QO+Ldww7bVxNdvX26kyJvv4rQR7o3J2bSO1uh/fzRN4hdx7Vv0gWLMldGnB1nnxII9jqaPNa4jCiSvtjBapXg8+Mw+Cl0qUVolmPhSHAro8yTqwcY9DuCJ/MJMlavX7X/9F0eeK8dntBsQHPyvh0AC7RCig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mQBAyPGXFsVGQUphORVfyEPjDfdDcNUK5WVsgDFJNfg=;
+ b=fYJQotjiwIw7xv+5uMuxTL34nE8qVS2JhQpZCe8e3yyIuCT7AwKiC2LWMAbRiy5dpogFc7gWuvHWY9ynCgcL9xiKT8bIChe5r7SmtvFTIdcRCMzT7l9ilDs6gf/AWPEa+gWiuHt0i3v4aWr5TnyT2BgjCSGnnAkgm+oft8VVKoQ=
+Received: from SJ0PR05CA0081.namprd05.prod.outlook.com (2603:10b6:a03:332::26)
+ by CH3PR12MB9022.namprd12.prod.outlook.com (2603:10b6:610:171::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 24 May
+ 2023 19:14:46 +0000
+Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a03:332:cafe::8e) by SJ0PR05CA0081.outlook.office365.com
+ (2603:10b6:a03:332::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15 via Frontend
+ Transport; Wed, 24 May 2023 19:14:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6433.16 via Frontend Transport; Wed, 24 May 2023 19:14:45 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 24 May
+ 2023 14:14:43 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        "Kenny Ho" <kenny.ho@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: enable more strict compile checks
+Date:   Wed, 24 May 2023 15:14:21 -0400
+Message-ID: <20230524191421.251221-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 4/5] mm: Add new ptep_deref() helper to fully
- encapsulate pte_t
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        SeongJae Park <sj@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        damon@lists.linux.dev
-References: <20230518110727.2106156-1-ryan.roberts@arm.com>
- <20230518110727.2106156-5-ryan.roberts@arm.com>
- <20230524190618.GR4967@kernel.org>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230524190618.GR4967@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT014:EE_|CH3PR12MB9022:EE_
+X-MS-Office365-Filtering-Correlation-Id: edf958ff-f2a9-4a3a-59e8-08db5c8b228c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aLCdj336PKaK+fueoqgRfKdSQmF3p3HPvPmrqqz2LLp4S7cGw2acbIgIQDGwx3G8xdC7Pb6Hp5m3GUO2jajIk6c1KcerAa/iFOW1FGNCvKDbWoRDT+IZo5I0od1vPIb7pios8uHOom2HiDM47lNLw9GVf/Xz2+vj0xZyzr4amMgUAHlzOaq007ElTbN+rDr6vJEkMzWluO8xJ1eJJy7WEEXWUm0vroqht4Nptex2EZxHKgRV7UVHbAgveRCQtwn3ugmaue/l5Xn9t0H7Gz6jagies2DP0tpDnkioEiluCMQL+n3gwJTtDtxzYuknNBNkDLx3B28Y50ifli4KlyHqFlxKAzI7Q9e5abSDDHDlBeIjBSvsdd4SVWzP3LlBVjVy1bf0gFm0IXob/P/B254p42OzKqOBNFADgRwmL4fOyQiG1DpqeSXYHGRH4s0CARKxn0zqbw0EWzgXw+ZM/a8wWG/vTJaP0VHL9SOhQXuwT8juUDqWoaf09J6PkD7YgujLwhBsSssLgktnaJBfzYDP65BPOXFHxRnlHATxmWLUQYRnYIHIee+mrmLRh2+c0hMV92mutEas5GnUCoCODdiL5pe+Cl3wLLBfyRG8On9CgTxzQCgezbVTDy8Jx6tMWvZjEQXNopS0G+hBpv7RHQLc8GcHS3+M9629MBD43pblB3yV1MN/c0SyH4c99cRXZk/QTMys4v2MUa5xiSiLEMYuwIJrPTT1i0JNeLiXmBI6kck15hj94GtCdVqjNul1xzxWplcMMDnBD8xbam8O3ghmfYj6tUDo+eiFHoXzEkqhrUseqV4p0UyLCsENST81mWVd
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(46966006)(40470700004)(36840700001)(54906003)(2906002)(36860700001)(47076005)(82310400005)(5660300002)(8936002)(8676002)(44832011)(6666004)(40460700003)(41300700001)(4326008)(316002)(70206006)(478600001)(36756003)(70586007)(6916009)(40480700001)(81166007)(86362001)(2616005)(26005)(1076003)(83380400001)(186003)(16526019)(336012)(426003)(356005)(82740400003)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 19:14:45.2108
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: edf958ff-f2a9-4a3a-59e8-08db5c8b228c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9022
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2023 20:06, Mike Rapoport wrote:
-> On Thu, May 18, 2023 at 12:07:26PM +0100, Ryan Roberts wrote:
->> There are many call sites that directly dereference a pte_t pointer.
->> This makes it very difficult to properly encapsulate a page table in the
->> arch code without having to allocate shadow page tables. ptep_deref()
->> aims to solve this by replacing all direct dereferences with a call to
->> this function.
->>
->> The default implementation continues to just dereference the pointer
->> (*ptep), so generated code should be exactly the same. However, it is
->> possible for the architecture to override the default with their own
->> implementation, that can (e.g.) hide certain bits from the core code, or
->> determine young/dirty status by mixing in state from another source.
->>
->> While ptep_get() and ptep_get_lockless() already exist, these are
->> implemented as atomic accesses (e.g. READ_ONCE() in the default case).
->> So rather than using ptep_get() and risking performance regressions,
->> introduce an new variant.
->>
->> Call sites will be converted to use the accessor in future commits.
->>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> ---
->>  include/linux/pgtable.h | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
->> index c5a51481bbb9..1161beab2492 100644
->> --- a/include/linux/pgtable.h
->> +++ b/include/linux/pgtable.h
->> @@ -204,6 +204,13 @@ static inline int pudp_set_access_flags(struct vm_area_struct *vma,
->>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->>  #endif
->>  
->> +#ifndef ptep_deref
->> +static inline pte_t ptep_deref(pte_t *ptep)
->> +{
->> +	return *(pte_t *)ptep;
-> 
-> Why do you need the casting here?
+Currently, there are quite a number of issues that are quite easy for
+the CI to catch, that slip through the cracks. Among them, there unused
+variable and indentation issues. Also, we should consider all warnings
+to be compile errors, since the community will eventually end up
+complaining about them. So, enable -Werror, -Wunused and
+-Wmisleading-indentation for all kernel builds.
 
-I don't - good spot. Will fix for v3.
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: Harry Wentland <harry.wentland@amd.com>
+Cc: Kenny Ho <kenny.ho@amd.com>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ drivers/gpu/drm/amd/display/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This is some residue from one of the approaches I took to finding all the call
-sites, where I globally did s/pte_t */pte_handle_t/ and typedef'ed pte_handle_t
-as a void*. Then the compiler would error on any attempted dereferences, but I
-had to explicitly cast in the places that could legitimately dereference.
-
-Thanks for the reviews.
-
-> 
->> +}
->> +#endif
->> +
->>  #ifndef __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
->>  static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
->>  					    unsigned long address,
->> -- 
->> 2.25.1
->>
->>
-> 
+diff --git a/drivers/gpu/drm/amd/display/Makefile b/drivers/gpu/drm/amd/display/Makefile
+index 0d610cb376bb..3c44162ebe21 100644
+--- a/drivers/gpu/drm/amd/display/Makefile
++++ b/drivers/gpu/drm/amd/display/Makefile
+@@ -26,6 +26,8 @@
+ 
+ AMDDALPATH = $(RELATIVE_AMD_DISPLAY_PATH)
+ 
++subdir-ccflags-y += -Werror -Wunused -Wmisleading-indentation
++
+ subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/
+ subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/hw
+ subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/clk_mgr
+-- 
+2.40.1
 
