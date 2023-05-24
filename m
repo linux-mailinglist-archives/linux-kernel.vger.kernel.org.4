@@ -2,157 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F9170FD20
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADCC70FD2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbjEXRru convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 13:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
+        id S236282AbjEXRuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbjEXRrs (ORCPT
+        with ESMTP id S232199AbjEXRt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:47:48 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017691B0;
-        Wed, 24 May 2023 10:47:23 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-96fc07d7e6bso29977966b.1;
-        Wed, 24 May 2023 10:47:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950442; x=1687542442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MtHsKfwHpJ/MA8hmcGf3XA0dHKGtuHV+9hRCpO7LUUQ=;
-        b=YbRSDzMKa4jU5aZFXUWeYeO9W8pvI2ZNPxhznCKYmIcKOgXtPAzg/bgdNOGwMjuq0w
-         xjT2OkYWUxHulq+QISGoK+VFfwJtgVJnrWrw0SEiTZRLS4BJY1E2F8NsUZ//5/bXLulB
-         ucxyN3+Lo5FOOWKBH+XTHOA79+mlsKwha8NHIeYgFBbuZeDsCrOIFxzsse6Xaa0NehBh
-         u0zDuV9VfKlovPGo8WPjPj2qhY3npQ7Itu83Fqd7rTM9ilkz/i+6BRrjxtKVVIKeobTI
-         2RmZN+uTxNGumuvZUm6XsscgyTllQlqVji966qm9+WY6eXPghKn5DbDm4ViT18WDpT11
-         uKvw==
-X-Gm-Message-State: AC+VfDy1W1Tjml2M8LpTlwOyGj14eAMYqT0Hfg0e67z9jIpuz+MsmnuR
-        djFz5r9PaI+DhtPqyaGa3dM9BgTPCSqp9FxUx/aTef59
-X-Google-Smtp-Source: ACHHUZ7wV5rpKfHlT4Qvg5kxQ7ILIFzV9E6zc6/Zo7WWoX8XyhFI0scNMfjaJOLlZP/M2c0c5gL6LM9eBkeEvdEzDtQ=
-X-Received: by 2002:a17:906:7a52:b0:965:9db5:3823 with SMTP id
- i18-20020a1709067a5200b009659db53823mr15874562ejo.3.1684950442317; Wed, 24
- May 2023 10:47:22 -0700 (PDT)
+        Wed, 24 May 2023 13:49:58 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A085F122;
+        Wed, 24 May 2023 10:49:54 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1684950589taqcvbsf
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 May 2023 01:49:48 +0800 (CST)
+X-QQ-SSF: 00200000000000D0V000000A0000000
+X-QQ-FEAT: uGhnJwy6xZIUNwFWUkTcVZC7g8QNyKiY+XzJriACbUL4oqMszlNtgYpAkhLex
+        cwihvRwjjgmsdDZeCDPBF1DQ938pSja9bqh13OBnuTww50GACW6NmZRGD621FTL2iQ3QVmZ
+        3HkI3ZEvZW3yLng05TVWCIwUhYuPiSBwb0uYCZ2D0qnkqyOSDmeRKNiGa4kRHpIhHm7YHPU
+        M+DcW0gUtbzTW69JkDGyC5dTxiYptZzlvCJn1XJGMlllb0F9TAExPLOZnvDJwVcyv4oUI5Y
+        ue15DAsGTU3Ke9lTyUtaRF1ixOTRnyGTK0aokkIreZiU8hdYxCiI4zKZzp6KpnUehGaYkIe
+        EmHYz1QP6NJqwxJyJLXzjh4+56x/vuIlsuhL/BW/dMwVCVkSckCr2+nK3wZ+NdVB6t/VW7q
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17354439834397082086
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
+Subject: [PATCH 04/13] selftests/nolibc: syscall_args: use __NR_statx for rv32
+Date:   Thu, 25 May 2023 01:48:11 +0800
+Message-Id: <b306ae7b53d67acad6d1e2f63d43505d79f81241.1684949267.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
+References: <cover.1684949267.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230517162817.8538-1-wyes.karny@amd.com> <20230517162817.8538-2-wyes.karny@amd.com>
-In-Reply-To: <20230517162817.8538-2-wyes.karny@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:47:11 +0200
-Message-ID: <CAJZ5v0h+frxNpTz4GsjQ=OdbXXnTgLB=ufA5P2pNjbDF_FhNUQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] amd_pstate: Add ->fast_switch() callback
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gautham.shenoy@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 6:29 PM Wyes Karny <wyes.karny@amd.com> wrote:
->
-> From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
->
-> Schedutil normally calls the adjust_perf callback for drivers with
-> adjust_perf callback available and fast_switch_possible flag set.
-> However, when frequency invariance is disabled and schedutil tries to
-> invoke fast_switch. So, there is a chance of kernel crash if this
-> function pointer is not set. To protect against this scenario add
-> fast_switch callback to amd_pstate driver.
->
-> Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
->
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 36 ++++++++++++++++++++++++++++++------
->  1 file changed, 30 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 5a3d4aa0f45a..45711fc0a856 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -444,9 +444,8 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
->         return 0;
->  }
->
-> -static int amd_pstate_target(struct cpufreq_policy *policy,
-> -                            unsigned int target_freq,
-> -                            unsigned int relation)
-> +static int amd_pstate_update_freq(struct cpufreq_policy *policy,
-> +                                 unsigned int target_freq, bool fast_switch)
->  {
->         struct cpufreq_freqs freqs;
->         struct amd_cpudata *cpudata = policy->driver_data;
-> @@ -465,14 +464,37 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
->         des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
->                                      cpudata->max_freq);
->
-> -       cpufreq_freq_transition_begin(policy, &freqs);
-> +       WARN_ON(fast_switch && !policy->fast_switch_enabled);
-> +       /*
-> +        * If fast_switch is desired, then there aren't any registered
-> +        * transition notifiers. See comment for
-> +        * cpufreq_enable_fast_switch().
-> +        */
-> +       if (!fast_switch)
-> +               cpufreq_freq_transition_begin(policy, &freqs);
-> +
->         amd_pstate_update(cpudata, min_perf, des_perf,
-> -                         max_perf, false, policy->governor->flags);
-> -       cpufreq_freq_transition_end(policy, &freqs, false);
-> +                       max_perf, fast_switch, policy->governor->flags);
-> +
-> +       if (!fast_switch)
-> +               cpufreq_freq_transition_end(policy, &freqs, false);
->
->         return 0;
->  }
->
-> +static int amd_pstate_target(struct cpufreq_policy *policy,
-> +                            unsigned int target_freq,
-> +                            unsigned int relation)
-> +{
-> +       return amd_pstate_update_freq(policy, target_freq, false);
-> +}
-> +
-> +static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
-> +                                 unsigned int target_freq)
-> +{
-> +       return amd_pstate_update_freq(policy, target_freq, true);
-> +}
-> +
->  static void amd_pstate_adjust_perf(unsigned int cpu,
->                                    unsigned long _min_perf,
->                                    unsigned long target_perf,
-> @@ -715,6 +737,7 @@ static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
->
->         freq_qos_remove_request(&cpudata->req[1]);
->         freq_qos_remove_request(&cpudata->req[0]);
-> +       policy->fast_switch_possible = false;
->         kfree(cpudata);
->
->         return 0;
-> @@ -1309,6 +1332,7 @@ static struct cpufreq_driver amd_pstate_driver = {
->         .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
->         .verify         = amd_pstate_verify,
->         .target         = amd_pstate_target,
-> +       .fast_switch    = amd_pstate_fast_switch,
->         .init           = amd_pstate_cpu_init,
->         .exit           = amd_pstate_cpu_exit,
->         .suspend        = amd_pstate_cpu_suspend,
-> --
+When compile nolibc-test.c for rv32, we got such error:
 
-Applied along with the [2/3], thanks!
+    tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: ‘__NR_fstat’ undeclared (first use in this function)
+      599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
 
-Do you need them in 6.4 or would 6.5 be sufficient?  Also do you need
-them to go into "stable"?
+The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
+support __NR_fstat, use __NR_statx instead:
+
+    Running test 'syscall'
+    69 syscall_noargs = 1                                            [OK]
+    70 syscall_args = -1 EFAULT                                      [OK]
+
+As tools/include/nolibc/sys.h shows, __NR_statx is either not supported
+by all platforms, so, both __NR_fstat and __NR_statx are required.
+
+Btw, the latest riscv libc6-dev package is required, otherwise, we would
+also get such error:
+
+    In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
+                     from /usr/riscv64-linux-gnu/include/features.h:461,
+                     from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
+                     from /usr/riscv64-linux-gnu/include/limits.h:26,
+                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
+                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
+                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
+                     from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
+    /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
+       28 | # error "rv32i-based targets are not supported"
+
+The glibc commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
+implementation") fixed up above error, so, glibc >= 2.33 (who includes
+this commit) is required.
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 227ef2a3ebba..c86ff6018c7f 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -501,6 +501,17 @@ static int test_fork(void)
+ 	}
+ }
+ 
++static int test_syscall_args(void)
++{
++#ifdef __NR_fstat
++	return syscall(__NR_fstat, 0, NULL);
++#elif defined(__NR_statx)
++	return syscall(__NR_statx, 0, NULL, 0, 0, NULL);
++#else
++#error Neither __NR_fstat nor __NR_statx defined, cannot implement syscall_args test
++#endif
++}
++
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -597,7 +608,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+ 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+-		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
++		CASE_TEST(syscall_args);      EXPECT_SYSER(1, test_syscall_args(), -1, EFAULT); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
+-- 
+2.25.1
+
