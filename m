@@ -2,304 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082F170E9EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB33970E9F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238834AbjEXACm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 20:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S238915AbjEXADe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 20:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjEXACk (ORCPT
+        with ESMTP id S229539AbjEXADb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 20:02:40 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D7EE5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:02:38 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NM4S8V001400;
-        Wed, 24 May 2023 00:02:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=UyF135nxlzJoix2bpUUN6JSR5fK6QirtGJo526PbuLA=;
- b=QvB6ec9TucACJwfXvOrLs4KCBVwalqYEAhNEQu8GgdIIf7V2EfJfAuSCf6h7DtOrLwqq
- lxZjS8T/9U3aMa5M+oru0czjEcfAi9omKxFmgLzI9veEoOLOMvcpJlfaJCp+Kz8K7Anf
- 8L6nVN+XVCeeKnXHYXmcDK2OW3Dpz9IJTkXxk3E3OqDhrRpW9Wjm3cUAWRNbSpTl6EDJ
- pZwMp7VtOzpBQAZGxm9440vDLdcS6pv7+tCcoVZ9HVWLw749+OJHDCMjCUmjGGL9QWzH
- 1ATA78dO39Pdg+rC12MEOgrKrb2jibQCW5QxxFE1DYGSuEHLcJtKewmeSxiaB5ujCBvX 3A== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp426f3x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 May 2023 00:02:23 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34NNvcTI028937;
-        Wed, 24 May 2023 00:02:22 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk2bhavj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 May 2023 00:02:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YwqjlGkEFnFFqhzzAPy862nxWEtY18/x9A8XoxxNTKyRHCeyjHlZ4nHJPifbyxhEqJ/cnJtmL4uqxG3LefI/7bN7zSdNhg0jJpqoS+ftB0VrBkttfCVKBjy4188Xr8uIcB3JJpmo1O2rSXS2VdhiBvl/yrdSEJM4rku/oDkm9fxy0VY/0y6vxyhvZCQP0crlHCh5+jHiz8GL/ElQHPYhTACqAjJ2SNi2vE25LFlodfG7fSvPWtzbrI/A1dHVPctL4cqIHnAHtijw58JpGQ3tmBleTTPlMt/Tx06DapGTy6F3FXxIdzBl5Kq58iLky+SMwpYI9Z/2bDwi9ydTHV2xxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UyF135nxlzJoix2bpUUN6JSR5fK6QirtGJo526PbuLA=;
- b=DxebIKy5woBk5UYkRonqzxB74hV/6kM9bOGZKwqvTfmHNdNdri3ZAEw98e1HgPcSxchfx0En0NIzkItkZDTByxDk0RF5e5i92SONkDPoR5jPthKaQ0XY6Ev1UsJK1Am6ccpQOiD1bqDAU3TMBuSXvu92wdFz+fKnHg/pG9Bj7IhiWNFg/4l2SFhYuWWGkjWEhhTvSua/Kxfu/WLSpeIqO5xlKE41yMB+LDx81Y+cqN2Cmby9YmYrqOHW3s1g0+R9xGB+2Blba/4rHLt45TS7u6tf0WQkPUiHk943S/TGbeL0Y0oFUh6QkI4XZVH+3DhmWYJBo1jBZkt0TdmXqiEVCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UyF135nxlzJoix2bpUUN6JSR5fK6QirtGJo526PbuLA=;
- b=Ef0KDos3oMKKOYG2gU1V0P9+9X5McZdzd6Ei5q+vrHyWZjOscjE6xLWivWSiGeplaD+67eDZWRhn8mkynHYRZloJ0lVmG2R0DE3520uGUdzOBrnTccgxht7iegMvpMDtRrseh8BTTBqAaYCpY+CbLqpX+x7VlkIOsjpzs92++Ns=
-Received: from CY8PR10MB7243.namprd10.prod.outlook.com (2603:10b6:930:7c::10)
- by BLAPR10MB5106.namprd10.prod.outlook.com (2603:10b6:208:30c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.14; Wed, 24 May
- 2023 00:02:19 +0000
-Received: from CY8PR10MB7243.namprd10.prod.outlook.com
- ([fe80::13d6:c3f3:2447:6559]) by CY8PR10MB7243.namprd10.prod.outlook.com
- ([fe80::13d6:c3f3:2447:6559%5]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 00:02:19 +0000
-Message-ID: <00c2a7c7-43f1-d55a-da51-273d069bd240@oracle.com>
-Date:   Tue, 23 May 2023 19:02:17 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        ebiederm@xmission.com, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-References: <20230522025124.5863-1-michael.christie@oracle.com>
- <20230522025124.5863-4-michael.christie@oracle.com>
- <20230522123029.GA22159@redhat.com>
- <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
- <20230522174757.GC22159@redhat.com> <20230523121506.GA6562@redhat.com>
-Content-Language: en-US
-From:   Mike Christie <michael.christie@oracle.com>
-In-Reply-To: <20230523121506.GA6562@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DS7PR03CA0177.namprd03.prod.outlook.com
- (2603:10b6:5:3b2::32) To CY8PR10MB7243.namprd10.prod.outlook.com
- (2603:10b6:930:7c::10)
+        Tue, 23 May 2023 20:03:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5EB83;
+        Tue, 23 May 2023 17:03:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE6E462AD7;
+        Wed, 24 May 2023 00:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2F8C433D2;
+        Wed, 24 May 2023 00:03:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684886609;
+        bh=CTgebIKJKAGtPHZmVGrZglejR1IhKcMyAClOVru44yU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=elN475I2iEUckg3souLG2WzLYYtvKV+4UHxrWak8MCxl0K/MUPLP5kNDH8EOV9Rdz
+         KdLhtJfw1eav+rngkk0bP3fAMZs89htGE3jlzNa0GCH/MD09uWNCickD0HtKmkIRHF
+         LyjVC6uZ+8WsLI/4RU6NeuI/njhwqPbGdn8g/pBqVb3qIe8fdRHOrRiglc3kaT9CIJ
+         dgpXcILjlX7jaBOCj5WnU25sDuqDi+dWp+OvGy+7GNg1DJ4JccIyuQ77pU8M0ZVHDq
+         c3TtllQFLNwqAT4OcoRFnpeBNl/TByLg37Loqv8XU8qkq+YubnBxktfMUdkz6GhgB/
+         K0aGpjM3hdDOA==
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3980f932206so286351b6e.1;
+        Tue, 23 May 2023 17:03:29 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyjuhD2gaHXrfIwVBppEJYjnqA7h1QfiY/OYvKB5b7AhFtD128v
+        t+5KlZVQ914urAfNl4Wu1WNqQEUAl7Jcs5AlC5w=
+X-Google-Smtp-Source: ACHHUZ4v/o9p3Ug2zWzJzKlre95zk287ufsJpq0sYomf0TLDU5ULK6aFdZ91taKqGo1ZuxItoeO2FAkmPo4nKQueIv0=
+X-Received: by 2002:a54:4697:0:b0:398:fa2:4bb8 with SMTP id
+ k23-20020a544697000000b003980fa24bb8mr3923070oic.43.1684886608523; Tue, 23
+ May 2023 17:03:28 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY8PR10MB7243:EE_|BLAPR10MB5106:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96492388-014c-49c1-76fb-08db5bea2458
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IdFiufUifZvUznhSIwbwKvTwaXok8X+SULJpdjVwRqcBNsPxEf8ei2CggUrtE5QMFKt8VH09Oo4yv7GVIezngyCuxOErAH9DOKpwaGSDeK8Qcom/OBVUQWSnkiE9oJbVrgVLyytas/DspM3A+9QVNCsGeCmHqst6C5FCFCD0I8dR098a9fossobEl7a4TA/Ymd5y6cSrkmwVl28ttDcDNJM1iJdZaQQZsAPScQAAtjlXMDmArZ7bPHaSXaetHxJI7ZJsDv7ZOXxlBlB6ZWecA9lQ8no1w2od4SUfAkjQNIp9mLUXvxJwPh/dy5aNV1yfaM/5Sst0iPvhSbQwxGjpsgV0CO2m6rJdGalDo/QYMvhiJzR9s3sr7AwiTucCnSgsQM210CdBH7YCJOeidlC5rQIPQp2dO1x++RNPH6fq3jdwd8i1xOSk5wa1O74IjqX+pcKzdrEe80t7u8340XboE1LTgqlIY3r7Uirbchih4pZD6cAvzPeKzkY18ZhA65A26b5iN2nJW2DQCSfHBw8YGtTCUD7+H7Ly9tr6JdC5oR+fcMeEWpBnIYPPU8zFeuSs6S8gNoPXaOO/jLxaLrW1x/3Vn74fFMBFZ/0y5hfH+ftJoYJIJFnrQNDS8pLVp8LreaEQELrAa7nEu1wBBB8HEg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR10MB7243.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(136003)(346002)(39860400002)(396003)(451199021)(38100700002)(26005)(186003)(6512007)(6506007)(83380400001)(6486002)(53546011)(478600001)(2616005)(31686004)(8676002)(8936002)(7416002)(4326008)(6916009)(66946007)(66556008)(66476007)(5660300002)(2906002)(316002)(41300700001)(86362001)(31696002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MzNiMW5yQW9GUnVudGpTOWtHazROa2F0UWJuSGIyVDgyTlQ4cDlMaFp1eElU?=
- =?utf-8?B?QndkZ0NhTElSMHpiOWhFak1udmkrYVlTNG9yZXRZeXNxTXcrOS9iMUpRakRK?=
- =?utf-8?B?TDQ2b2d0aUFTTFIyOXpVOVIvZnZOZjBESEtVaFc4a1EwaThNR1ZaYUFOdTZu?=
- =?utf-8?B?T3FxbXFHM0ZZOUpzSTFKaG9XNC9sNzMvelRJWndHbm1ZdjlXQUUyOWpOWGVL?=
- =?utf-8?B?R1VNaVNWN3RpcVE2VjJiQmQvUjhMNkgrRXV4L2ljZTlmNmpZKzE4Q2xuMEFF?=
- =?utf-8?B?WmtaSitJZEl0MFRuSENLSkVFRmdWWEt4OWNmaWp1b0NJbUl4b0h1WlZPeVlM?=
- =?utf-8?B?ejVrd2tqVG1hd1RFSE9PRXZFb2IxaFFRb3R3OXdISHZkQTBvYldVblZDNmdQ?=
- =?utf-8?B?LzlGZFllc1luanh1VGtXZHo5bW93T0ZGaTg1Y3ZtUmxkSjdJYjcwSHU5aVJF?=
- =?utf-8?B?TGNOQ3haMVBWaG0wNldadW5CQ29wa21tSWJMVFdLVks3aHRKVFFaMWdMMGdo?=
- =?utf-8?B?RS9FSHpTTk4xWTd2c1VwanJqQkw1RDdIQ0hKT25BTVNsTU9PNEVTSmIyRGUx?=
- =?utf-8?B?Z1o2ZEVqaCtBMXRoVjZXRURGWUljQ2VQMmZzRTVaQ21pb1RxcUl2U0YrZk02?=
- =?utf-8?B?SmRHb2w5eEQrWmZXODJQN2M5Zm9CMjhqV0N0RFk2K3pjQURhTkt3K3pJUU5z?=
- =?utf-8?B?Z0d5b0JBdHZGTFFJTVY3aHMyR0ZRaW9pWEVKZ1ZZSVJUWWNGUWQreDBZTG9J?=
- =?utf-8?B?THUwYnJzRkFjQ0tkMFFnWG9xK2UvcEo4c0NEMThVQ05IRXV3Ym8vd0lhaDJG?=
- =?utf-8?B?UXo3MCs3cTZnSHpFTVhNazQ1eTJhMHVXOTVxbkNwWDBCdndWeTZtWkVQRXpx?=
- =?utf-8?B?UzZOYVNyTU9tZDI4VDZoZXJ6MWk5RDFic1VtL2hhclVEZVZzMTltdmVOUzFQ?=
- =?utf-8?B?aCtMZVJMWjloMkk1Sk42L0lmdGpLL0JEMzV2bklJVnc0Mml2VDFVNzFHWUc1?=
- =?utf-8?B?QWVvViszcTRJdU02Q1JEQjZueEFoNzFES3IxTU9nQlliR0FTckdsaEtjOVhv?=
- =?utf-8?B?b0EyVDlOdm1uR1hBOFlJcHBxSDdMa1B2MzFmSUV1c0NnT3BMZlg5RThlUUdQ?=
- =?utf-8?B?OWFxenZYN0N2bGRON09wczB0aER5cmpKdkM1MWQwblVKaktBVmlFWG9DUkNw?=
- =?utf-8?B?NmowZktxTmR4S1h0UTdZODdJcjBCS0VNZ3pESGttWFI5cXpFalpIc0pZSEZP?=
- =?utf-8?B?SDdzN3JMbHZxY2FhS0tIMFcwcnJlUG9KRU1JQ2FoOXRsYVNmNVhjdjVQU1NF?=
- =?utf-8?B?amgzREk4elN4NERXRG8zVWJpcDBnWGlOb1BiVGVFNURlUlhKTk5UMEhOanlj?=
- =?utf-8?B?NExYL09ZYXg3bkVKVDB1UHFHb0ZwWXJDMkRHeUwvMSt0elNmT2N4TDhLanQ0?=
- =?utf-8?B?aUpNTzMrc09MMWllQ1J2ZGZTTEJTTFlTYmR1ckk3YSt5azFPc2RVL3luSlFp?=
- =?utf-8?B?TUZBakFhODkwWlkwUzVrTjlxb3FObmV5NDA2VUlkV2JKQ051cDMxQy9Ubldn?=
- =?utf-8?B?REtxcno3SFVvSXBQZjNoeGgyM1U2aThGVytYWDFnY29wSnFPRUorRE5KN2Z2?=
- =?utf-8?B?RlU4dkVPRjU0a0JFbFVJbG5VWTBHVmkzVCtVbjFMY0YybkwvMkhtaXRpeHVG?=
- =?utf-8?B?WXhrTlh0TmJhZHhnMDVHTFlDTmRvLzdsanNBVnQrZ1RraFE4RmVMOGJhV2Vi?=
- =?utf-8?B?NlNlQkNFYzhCM2Ftc2o0OXhyclIyVis3TnRBTm0xNG94eU9JOUdsYXkxOGhE?=
- =?utf-8?B?aGZMSUNVVkhtUUExR2pjbWJKN2FTMmNZczNHaTcrbVJ1TWNzUVpYMG96THlk?=
- =?utf-8?B?cnpEazkwdXNxY3pYVEFNME9uZDhTTFlkRmNzWFQzbGFYUzdRR1prcTZnWlNx?=
- =?utf-8?B?anJxOFhGcXdaN1BMd1luYVBDRWpZM0UwVmVYa0Q3YkxHSUoySHJJaHdhYkdM?=
- =?utf-8?B?Q1F5cDNzREJvNyttdndvVW9VTXlScW5uL1RiS3VYZHBsakQwTHM1YmtMSXVC?=
- =?utf-8?B?VGdncmw3dDVDVnJhZWlKM2JlUFZpMTFydWZOUVRydWFsNWMyWWtqay83K3Rp?=
- =?utf-8?B?QXJuQUx2QlJ2dmxOWHBVc2VsZERUWE5PRndtY0RJb2QzUDI3cVFpWWx2TCtT?=
- =?utf-8?B?eUE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?endhSS9vZkk5K2VLK3cveEt4dlhRSHpnaVEzd25NL2JKUmhzNzhYRDYyejJ1?=
- =?utf-8?B?dzE5SzNUaEU3QXBuOFF6TUloOE5LQ2hoU3Y5c2tJTUZWZVhsMDRSa1o1Sm11?=
- =?utf-8?B?eDlSUFpsamFJYm1hSzZndkk1VUVlMHNXUWFNMDhOZUtxYjNVU1NFMkRXZ0V1?=
- =?utf-8?B?QjU1dG4yZVp2VFhRcTBGM1BZRDRxTkpienZaYlhrWVZSTmhRVGpBODd1VW51?=
- =?utf-8?B?b24zanVTcUZ2MW00THpVUk9ZTWJGdDd5LzdkWWNBVHB4eEZ6WDJ0MFlFRmNU?=
- =?utf-8?B?ODJscVFMZXJvZUNkTUJyZUZpZVFneCtlVUxJSVhVa0VvUGlTNEYvbXpiVXhE?=
- =?utf-8?B?dFYxTmQ0UGpKNlJOQUNBNnVPc3pFU0twb2YrRjJrclJScEdmMVZldTV0Y1I1?=
- =?utf-8?B?c2pRZkhZV3pyeWJ6N2R3aGtNQnBubUtxa2JmMFRSL0xBMjE3MFluL3Fwdkx1?=
- =?utf-8?B?Ti9nSjNUbnM4Q2wwZTNpbW16MFZjNlowOUNmajEwQXBBcVovcDNGRWtFaWp6?=
- =?utf-8?B?cFpCdnNQNWwwNURzN21FZzJVSnJEclhta20yaGV2aVpSU2h0czFOU3dZd2JU?=
- =?utf-8?B?akdOM0h2bFNKRzFJNXd1cnlpelduKzVVVDVZZzByL2xHK2NDOE1WTXE1NndF?=
- =?utf-8?B?cGZ4Sll4TW4zd0ZIbmpDdW4zSllqWW8vd1ppZWpad2hjQmxPMTNCZFI3Zkpk?=
- =?utf-8?B?SXd2Q21uSkovU25DcXplSERhSGhzeVpZVVZnV2ZwODBjVVd2QUZJRUcwVDFl?=
- =?utf-8?B?SlVnN3lkdXQxaVJwWDd5NnNpNmcxOWtIMnFMY1ZiQXJ0b0tmK20zQmp2dTFF?=
- =?utf-8?B?OE1ZYkh4NXB0QlU2dW5iVGFVMHNBNWxoa294QjE2QzJEL3pudmxDeU5yOUdB?=
- =?utf-8?B?K0ZEam5iRUIxR3RzUkhyTzVHRXJJd1VrRjlzLzZIeGRuY0lyRGl1c3E2N2N1?=
- =?utf-8?B?dFFFQWVvLzg4Qlc4Z1BRV0JXc1NnemxsRFc2eWt1MElOcDdkK2NsK0Z3QVdX?=
- =?utf-8?B?VFQzdjd5SDhsTmlqUm44NUJjUWtsemlXS2hNUm9BRUI5clYvTjEyd05QWGNi?=
- =?utf-8?B?VEY3Q2oxVGVyTG03cW5Vb0NBUkVuSEo0YW04bjA2bGxiOE50eHE1amJEeWds?=
- =?utf-8?B?d1R4ZDlyamJlSkJOcFh3cFdvQWpGZU5Od3ZWeWFYTTNFRmI1bWNFM1JmUkZK?=
- =?utf-8?B?MFU4dG9uNGFibllodGpCbnBnbDRHSUtoWEU0bGdlZVNuZ2Y5elJrcjdvd25G?=
- =?utf-8?B?Q0lxOFNHdnV6bERBdDV0Mi83TlFHZHJ4ejJUeThjbXMrZWs3eDlEK0VPazRK?=
- =?utf-8?B?bExQR0lBc1NkWUpNVTZ4eHZ2bkZJbjJ1TURxS1ZVUUhtMmlKa2pyVGtDRjFY?=
- =?utf-8?B?QXZCMWhlVkg4dDdnZlRac0ltbWNoWkk1RjNIZ1JMMVBtOGl6Yk5KUlZUQTAz?=
- =?utf-8?Q?mC5/0fbj?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96492388-014c-49c1-76fb-08db5bea2458
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR10MB7243.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 00:02:19.6030
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iNglmmmfmH6SEvM5qZuqSuQh9mIn6NcoY331+hK+rAEr1tchKVFkdZSxqCdsi9wd+KDBoF1CSg1JbZxgDyIBvr/ocLCJ4yfsKMd4SEsAZfI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5106
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_16,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- mlxlogscore=927 phishscore=0 bulkscore=0 suspectscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305230193
-X-Proofpoint-ORIG-GUID: 0By9DC05hbTbXrnBogo8nbPb8UusLu6W
-X-Proofpoint-GUID: 0By9DC05hbTbXrnBogo8nbPb8UusLu6W
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230521160426.1881124-1-masahiroy@kernel.org>
+ <20230521160426.1881124-4-masahiroy@kernel.org> <CAKwvOdmxLrE8VksbsSGirfTqnuhEFT__FuCG53ri3V42UbH5aw@mail.gmail.com>
+ <CAMj1kXGZLn37bchQ8NZy6zPgsMNT=CE7pZ0voTsnu=ytSf2i7g@mail.gmail.com>
+ <CAK7LNASEj618kZn8ANnZwfFC54MuFx3UxgnqG=ByeubD7vUymA@mail.gmail.com> <CAMj1kXGDBkL4ZyPD-8LzEL=2uA6pSEwhtpG3nwc6esoLuMgRDQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXGDBkL4ZyPD-8LzEL=2uA6pSEwhtpG3nwc6esoLuMgRDQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 24 May 2023 09:02:52 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQgWuoYbHjz4uFvnPVJ_kvsSp4tdyJ4AT+2vGYNaLmXMg@mail.gmail.com>
+Message-ID: <CAK7LNAQgWuoYbHjz4uFvnPVJ_kvsSp4tdyJ4AT+2vGYNaLmXMg@mail.gmail.com>
+Subject: Re: [PATCH v6 03/20] modpost: detect section mismatch for
+ R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Oleg,
+On Tue, May 23, 2023 at 9:21=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
+ote:
+>
+> On Tue, 23 May 2023 at 13:59, Masahiro Yamada <masahiroy@kernel.org> wrot=
+e:
+> >
+> > On Tue, May 23, 2023 at 6:50=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org=
+> wrote:
+> > >
+> > > On Mon, 22 May 2023 at 20:03, Nick Desaulniers <ndesaulniers@google.c=
+om> wrote:
+> > > >
+> > > > + linux-arm-kernel
+> > > >
+> > > > On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@=
+kernel.org> wrote:
+> > > > >
+> > > > > ARM defconfig misses to detect some section mismatches.
+> > > > >
+> > > > >   [test code]
+> > > > >
+> > > > >     #include <linux/init.h>
+> > > > >
+> > > > >     int __initdata foo;
+> > > > >     int get_foo(int x) { return foo; }
+> > > > >
+> > > > > It is apparently a bad reference, but modpost does not report any=
+thing
+> > > > > for ARM defconfig (i.e. multi_v7_defconfig).
+> > > > >
+> > > > > The test code above produces the following relocations.
+> > > > >
+> > > > >   Relocation section '.rel.text' at offset 0x200 contains 2 entri=
+es:
+> > > > >    Offset     Info    Type            Sym.Value  Sym. Name
+> > > > >   00000000  0000062b R_ARM_MOVW_ABS_NC 00000000   .LANCHOR0
+> > > > >   00000004  0000062c R_ARM_MOVT_ABS    00000000   .LANCHOR0
+> > > > >
+> > > > >   Relocation section '.rel.ARM.exidx' at offset 0x210 contains 2 =
+entries:
+> > > > >    Offset     Info    Type            Sym.Value  Sym. Name
+> > > > >   00000000  0000022a R_ARM_PREL31      00000000   .text
+> > > > >   00000000  00001000 R_ARM_NONE        00000000   __aeabi_unwind_=
+cpp_pr0
+> > > > >
+> > > > > Currently, R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS are just skipped.
+> > > > >
+> > > > > Add code to handle them. I checked arch/arm/kernel/module.c to le=
+arn
+> > > > > how the offset is encoded in the instruction.
+> > > > >
+> > > > > The referenced symbol in relocation might be a local anchor.
+> > > > > If is_valid_name() returns false, let's search for a better symbo=
+l name.
+> > > > >
+> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > > ---
+> > > > >
+> > > > >  scripts/mod/modpost.c | 12 ++++++++++--
+> > > > >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > > > > index 34fbbd85bfde..ed2301e951a9 100644
+> > > > > --- a/scripts/mod/modpost.c
+> > > > > +++ b/scripts/mod/modpost.c
+> > > > > @@ -1108,7 +1108,7 @@ static inline int is_valid_name(struct elf_=
+info *elf, Elf_Sym *sym)
+> > > > >  /**
+> > > > >   * Find symbol based on relocation record info.
+> > > > >   * In some cases the symbol supplied is a valid symbol so
+> > > > > - * return refsym. If st_name !=3D 0 we assume this is a valid sy=
+mbol.
+> > > > > + * return refsym. If is_valid_name() =3D=3D true, we assume this=
+ is a valid symbol.
+> > > > >   * In other cases the symbol needs to be looked up in the symbol=
+ table
+> > > > >   * based on section and address.
+> > > > >   *  **/
+> > > > > @@ -1121,7 +1121,7 @@ static Elf_Sym *find_tosym(struct elf_info =
+*elf, Elf64_Sword addr,
+> > > > >         Elf64_Sword d;
+> > > > >         unsigned int relsym_secindex;
+> > > > >
+> > > > > -       if (relsym->st_name !=3D 0)
+> > > > > +       if (is_valid_name(elf, relsym))
+> > > > >                 return relsym;
+> > > > >
+> > > > >         /*
+> > > > > @@ -1312,11 +1312,19 @@ static int addend_arm_rel(struct elf_info=
+ *elf, Elf_Shdr *sechdr, Elf_Rela *r)
+> > > > >         unsigned int r_typ =3D ELF_R_TYPE(r->r_info);
+> > > > >         Elf_Sym *sym =3D elf->symtab_start + ELF_R_SYM(r->r_info)=
+;
+> > > > >         unsigned int inst =3D TO_NATIVE(*reloc_location(elf, sech=
+dr, r));
+> > > > > +       int offset;
+> > > > >
+> > > > >         switch (r_typ) {
+> > > > >         case R_ARM_ABS32:
+> > > > >                 r->r_addend =3D inst + sym->st_value;
+> > > > >                 break;
+> > > > > +       case R_ARM_MOVW_ABS_NC:
+> > > > > +       case R_ARM_MOVT_ABS:
+> > > > > +               offset =3D ((inst & 0xf0000) >> 4) | (inst & 0xff=
+f);
+> > > > > +               offset =3D (offset ^ 0x8000) - 0x8000;
+> > > >
+> > > > The code in arch/arm/kernel/module.c then right shifts the offset b=
+y
+> > > > 16 for R_ARM_MOVT_ABS. Is that necessary?
+> > > >
+> > >
+> > > MOVW/MOVT pairs are limited to an addend of -/+ 32 KiB, and the same
+> > > value must be encoded in both instructions.
+> >
+> >
+> > In my understanding, 'movt' loads the immediate value to
+> > the upper 16-bit of the register.
+> >
+>
+> Correct. It sets the upper 16 bits of a register without corrupting
+> the lower 16 bits.
+>
+> > I am just curious about the code in arch/arm/kernel/module.c.
+> >
+> > Please see 'case R_ARM_MOVT_ABS:' part.
+> >
+> >   [1] 'offset' is the immediate value encoded in instruction
+> >   [2] Add sym->st_value
+> >   [3] Right-shift 'offset' by 16
+> >   [4] Write it back to the instruction
+> >
+> > So, the immediate value encoded in the instruction
+> > is divided by 65536.
+> >
+> > I guess we need something like the following?
+> > (left-shift by 16).
+> >
+> >   if (ELF32_R_TYPE(rel->r_info) =3D=3D R_ARM_MOVT_ABS ||
+> >       ELF32_R_TYPE(rel->r_info) =3D=3D R_ARM_MOVT_PREL)
+> >           offset <<=3D 16;
+> >
+>
+> No. The addend is not encoded in the same way as the effective immediate =
+value.
+>
+> The addend is limited to -/+ 32 KiB (range of s16), and the MOVT
+> instruction must use the same addend value as the MOVW instruction it
+> is paired with, without shifting.
+>
+> This is necessary because otherwise, there is no way to handle an
+> addend/symbol combination that results in a carry between the lower
+> and upper 16 bit words. This is a consequence of the use of REL format
+> rather than RELA, where the addend is part of the relocation and not
+> encoded in the instructions.
 
-For all these questions below let me get back to you by tomorrow.
-I need to confirm if something would be considered a regression by
-the core vhost developers.
 
-On 5/23/23 7:15 AM, Oleg Nesterov wrote:
-> On 05/22, Oleg Nesterov wrote:
->>
->> Right now I think that "int dead" should die,
-> 
-> No, probably we shouldn't call get_signal() if we have already dequeued SIGKILL.
-> 
->> but let me think tomorrow.
-> 
-> May be something like this... I don't like it but I can't suggest anything better
-> right now.
-> 
-> 	bool killed = false;
-> 
-> 	for (;;) {
-> 		...
-> 	
-> 		node = llist_del_all(&worker->work_list);
-> 		if (!node) {
-> 			schedule();
-> 			/*
-> 			 * When we get a SIGKILL our release function will
-> 			 * be called. That will stop new IOs from being queued
-> 			 * and check for outstanding cmd responses. It will then
-> 			 * call vhost_task_stop to tell us to return and exit.
-> 			 */
-> 			if (signal_pending(current)) {
-> 				struct ksignal ksig;
-> 
-> 				if (!killed)
-> 					killed = get_signal(&ksig);
-> 
-> 				clear_thread_flag(TIF_SIGPENDING);
-> 			}
-> 
-> 			continue;
-> 		}
-> 
-> -------------------------------------------------------------------------------
-> But let me ask a couple of questions. Let's forget this patch, let's look at the
-> current code:
-> 
-> 		node = llist_del_all(&worker->work_list);
-> 		if (!node)
-> 			schedule();
-> 
-> 		node = llist_reverse_order(node);
-> 		... process works ...
-> 
-> To me this looks a bit confusing. Shouldn't we do
-> 
-> 		if (!node) {
-> 			schedule();
-> 			continue;
-> 		}
-> 
-> just to make the code a bit more clear? If node == NULL then
-> llist_reverse_order() and llist_for_each_entry_safe() will do nothing.
-> But this is minor.
-> 
-> 
-> 
-> 		/* make sure flag is seen after deletion */
-> 		smp_wmb();
-> 		llist_for_each_entry_safe(work, work_next, node, node) {
-> 			clear_bit(VHOST_WORK_QUEUED, &work->flags);
-> 
-> I am not sure about smp_wmb + clear_bit. Once we clear VHOST_WORK_QUEUED,
-> vhost_work_queue() can add this work again and change work->node->next.
-> 
-> That is why we use _safe, but we need to ensure that llist_for_each_safe()
-> completes LOAD(work->node->next) before VHOST_WORK_QUEUED is cleared.
-> 
-> So it seems that smp_wmb() can't help and should be removed, instead we need
-> 
-> 		llist_for_each_entry_safe(...) {
-> 			smp_mb__before_atomic();
-> 			clear_bit(VHOST_WORK_QUEUED, &work->flags);
-> 
-> Also, if the work->fn pointer is not stable, we should read it before
-> smp_mb__before_atomic() as well.
-> 
-> No?
-> 
-> 
-> 			__set_current_state(TASK_RUNNING);
-> 
-> Why do we set TASK_RUNNING inside the loop? Does this mean that work->fn()
-> can return with current->state != RUNNING ?
-> 
-> 
-> 			work->fn(work);
-> 
-> Now the main question. Whatever we do, SIGKILL/SIGSTOP/etc can come right
-> before we call work->fn(). Is it "safe" to run this callback with
-> signal_pending() or fatal_signal_pending() ?
-> 
-> 
-> Finally. I never looked into drivers/vhost/ before so I don't understand
-> this code at all, but let me ask anyway... Can we change vhost_dev_flush()
-> to run the pending callbacks rather than wait for vhost_worker() ?
-> I guess we can't, ->mm won't be correct, but can you confirm?
-> 
-> Oleg.
-> 
+Ah, OK.
+Now I understand.
 
+
+
+
+> >
+> >
+> >
+> > >
+> > > When constructing the actual immediate value from the symbol value an=
+d
+> > > the addend, only the top 16 bits are used in MOVT and the bottom 16
+> > > bits in MOVW.
+> > >
+> > > However, this code seems to borrow the Elf_Rela::addend field (which
+> > > ARM does not use natively) to record the intermediate value, which
+> > > would need to be split if it is used to fix up instruction opcodes.
+> >
+> > At first, modpost supported only RELA for section mismatch checks.
+> >
+> > Later, 2c1a51f39d95 ("[PATCH] kbuild: check SHT_REL sections")
+> > added REL support.
+> >
+> > But, the common code still used Elf_Rela.
+> >
+> >
+> > modpost does not need to write back the fixed instruction.
+> > modpost is only interested in the offset address.
+> >
+> > Currently, modpost saves the offset address in
+> > r->r_offset even for Rel. I do not like this code.
+> >
+> > So, I am trying to reduce the use of Elf_Rela.
+> > For example, this patch.
+> > https://patchwork.kernel.org/project/linux-kbuild/patch/20230521160426.=
+1881124-8-masahiroy@kernel.org/
+> >
+>
+> Yeah, that looks better to me.
+>
+> >
+> > > Btw the Thumb2 encodings of MOVT and MOVW seem to be missing here.
+> >
+> > Right, if CONFIG_THUMB2_KERNEL=3Dy, section mismatch check.
+> >
+> > Several relocation types are just skipped.
+> >
+>
+> Skipped entirely? Or only for the diagnostic print that outputs the symbo=
+l name?
+
+
+Skipped entirely.
+
+modpost cannot detect section mismatches
+if you enable CONFIG_THUMB2_KERNEL.
+
+
+
+--
+Best Regards
+Masahiro Yamada
