@@ -2,157 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5127470F1A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3881F70F1AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240514AbjEXJCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S240521AbjEXJCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236330AbjEXJCH (ORCPT
+        with ESMTP id S240516AbjEXJCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:02:07 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E218E;
-        Wed, 24 May 2023 02:02:01 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1012524E26B;
-        Wed, 24 May 2023 17:01:53 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 24 May
- 2023 17:01:52 +0800
-Received: from [192.168.125.131] (183.27.98.143) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 24 May
- 2023 17:01:51 +0800
-Message-ID: <38a9cb77-18b3-4daa-724b-9f2282f7d948@starfivetech.com>
-Date:   Wed, 24 May 2023 17:00:02 +0800
+        Wed, 24 May 2023 05:02:35 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AE7132
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:02:33 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-783e4666739so556141241.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684918952; x=1687510952;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ua6FkUKy2yQqOMjKldJnUgyegjdZw3FbhuPjicIwteg=;
+        b=fKFDl8ZGGN7XNtarh49Y8oGnN/EsvWER4MjTjYlfHqkuS/8KB7f0rUvIts68PTIU6Z
+         I4z2Lo+xQrwcYCKpMdns6bE9/+rEFqzuiQhyLWKTGbW6+wwVeQPx7+/6OYZNe4UpkXuM
+         dtg2fMvdW/QXlMtQhHaQfvfzuAZhed0YhczXn+UOb9H30TWONqiYQb80g6n9fumbvBf8
+         a0iaH34Zwawv3LhEoiojd8mEjW+BTJf02unRksZSXrD0HHKu5T7Tzp8lmrfqACx+zhhj
+         DoByis3GvrH5tVeMjYqH4YgtWatyGIYbMiqLnssySAxDugcXA9C34EOXGwooZud4/kWI
+         MEFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684918952; x=1687510952;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ua6FkUKy2yQqOMjKldJnUgyegjdZw3FbhuPjicIwteg=;
+        b=Ze15caU6Jo+Ft8gWotPULofhgOnXmHDEjlI9cEakNDSeT3/ItBS5VDmRd0aZF/lt8Q
+         A9SjCuJ1n0pO5rlklb5Mo4SCoPK2JgqN8jvN+xRe6kB0i3/Xn5CgiC061ShSAJ8SsURR
+         wXS9pcIYuow7qAyJnSMawH9dAKGYAtbE6x3U1t4zGUUId18W6T8tHAwz/9l92uiu5lYZ
+         GliGHF4CVEaNPd2P9q49Wx/zgWQBdIolmr6jkL9c9N/Yw3f2tEFm2QDOSIuvcTSIA6PE
+         o6PBBgLyPF4LYRZsc17VvaBSa9pwzOcEZ5YT4TCXngryAYWVgQmRXezneP9TMjkwMhqO
+         HrjQ==
+X-Gm-Message-State: AC+VfDyrymOzrJeIXuuKn/V3e3d8iP+osBBWIUncpjdWQzwv3/PpWQhG
+        CTu12TfuO3tk2pUNQX4/gfuICZiDsDy6xZcgKRpzKtdOvKF/C0A3+yYzng==
+X-Google-Smtp-Source: ACHHUZ5+N5FBtl4UeP/lGj5cD/G4H09HIygf4+rwHs0U98XLci7zKstCxKdKZWSbYm/VEQwbUn1WTfmxdJCrhOmqXKc=
+X-Received: by 2002:a67:f483:0:b0:439:3c9f:d040 with SMTP id
+ o3-20020a67f483000000b004393c9fd040mr4503215vsn.34.1684918951760; Wed, 24 May
+ 2023 02:02:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Add StarFive JH7110 PLL clock
- generator
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Torsten Duwe <duwe@lst.de>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <yanhong.wang@starfivetech.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Hal Feng" <hal.feng@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <u-boot@lists.denx.de>
-References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
- <20230512022036.97987-2-xingyu.wu@starfivetech.com>
- <20230519135733.GA10188@lst.de>
- <20230519-smokeless-guileless-2a71cae06509@wendy>
- <df43411e-8982-74f5-6148-e7281c37dada@starfivetech.com>
- <20230523-fondue-monotype-0c751a8f0c13@wendy>
- <20230523131006.46997d84@blackhole.lan>
- <20230523-saturate-axis-f46b78b7b82b@wendy>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <20230523-saturate-axis-f46b78b7b82b@wendy>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 24 May 2023 14:32:20 +0530
+Message-ID: <CA+G9fYvVZ9WF-2zfrYeo3xnWNra0QGxLzei+b4yANZwEvr5CYw@mail.gmail.com>
+Subject: qemu-x86_64 compat: LTP: controllers: RIP: 0010:__alloc_pages
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, LTP List <ltp@lists.linux.it>,
+        lkft-triage@lists.linaro.org, X86 ML <x86@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.143]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/23 19:28, Conor Dooley wrote:
-> On Tue, May 23, 2023 at 01:10:06PM +0200, Torsten Duwe wrote:
->> On Tue, 23 May 2023 09:28:39 +0100
->> Conor Dooley <conor.dooley@microchip.com> wrote:
->> 
->> > On Tue, May 23, 2023 at 10:56:43AM +0800, Xingyu Wu wrote:
->> > > On 2023/5/19 22:16, Conor Dooley wrote:
->> > > > On Fri, May 19, 2023 at 03:57:33PM +0200, Torsten Duwe wrote:
->> > > >> On Fri, May 12, 2023 at 10:20:30AM +0800, Xingyu Wu wrote:
->> > > >> [...]
->> 
->> > > >> > +/* PLL clocks */
->> > > >> > +#define JH7110_CLK_PLL0_OUT			0
->> > > >> > +#define JH7110_CLK_PLL1_OUT			1
->> > > >> > +#define JH7110_CLK_PLL2_OUT			2
->> > > >> 
->> > > >> In U-Boot commit 58c9c60b Yanhong Wang added:
->> > > >> 
->> > > >> +
->> > > >> +#define JH7110_SYSCLK_PLL0_OUT                       190
->> > > >> +#define JH7110_SYSCLK_PLL1_OUT                       191
->> > > >> +#define JH7110_SYSCLK_PLL2_OUT                       192
->> > > >> +
->> > > >> +#define JH7110_SYSCLK_END                    193
->> [...]
->> > > > Ohh, that's not good.. If you pass the U-Boot dtb to Linux it
->> > > > won't understand the numbering. The headers are part of the
->> > > > dt-binding :/
->> 
->> In fact, the clock index >= 190 makes linux hang on boot, waiting with
->> EPROBE_DEFER for every device's clock, because the sysclk driver errors
->> out with EINVAL (jh7110_sysclk_get()).
-> 
-> Yup, that's about what I expected to happen.
-> 
->> > > Because PLL driver is separated from SYSCRG drivers in Linux, the
->> > > numbering starts from 0. But in Uboot, the PLL driver is included
->> > > in the SYSCRG driver, and the number follows the SYSCRG.
->> > 
->> > Unfortunately, how you choose to construct your drivers has nothing to
->> > do with this.
->> > These defines/numbers appear in the dts and are part of the DT ABI.
->> > The same dts is supposed to work for Linux & U-Boot.
->> 
->> The JH7110 has 6 blocks of 64k iomem in that functional area:
->> {SYS,STG,AON} x {CRG,SYSCON}. None of these has 190 clocks.
->> The good news: the current DTS, as proposed here and in U-Boot master,
->> provides nodes for all 6 entities. The bad news is that the clock
->> assignments to those nodes and their numbering is messed up.
->> 
->> AFAICT PLL{0,1,2} _are_ generated in SYS_SYSCON and thus U-Boot gets it
->> wrong, in addition to the erroneous DTS.
-> 
-> The numbers are kinda hocus-pocus anyway, they are just made up since the
-> clock numbering usually isn't something with a nice TRM to go and
-> reference (unlike interrupts which usually are documented in that way).
-> It is very helpful to make them aligned some register/bit positions or,
-> but that is not required.
-> IOW U-Boot is not wrong per se to use 190 instead of 0, but it is wrong
-> to have different numbers in both places.
-> 
-> It sounds like you're saying that (and I have not looked) the U-Boot dts
-> actually has structural difference w.r.t. what provides which clock?
-> If so, that'll need to be fixed independently of the numbering problem.
-> 
-> Otherwise Xingyu & Yanhong should coordinate on which is the "correct"
-> way of doing things & do it in both places.
-> 
+While running LTP controllers following kernel crash noticed on qemu-x86_64
+compat mode with stable-rc 6.3.4-rc2.
 
-Oh, unfortunately, the 7110 can not support to mix the uboot dtb and linux dtb up.
-If boot the Linux and should use the linux dtb instead of the uboot dtb.
-Because all clock ids and reset ids in Linux and Uboot are different include
-PLL, and some modules can work in Linux but not in uboot.
-I suggest to boot Linux with its own linux dtb.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Best regards,
-Xingyu Wu
+ Linux version 6.3.4-rc2 (tuxmake@tuxmake) (x86_64-linux-gnu-gcc
+(Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1
+SMP PREEMPT_DYNAMIC @1684862676
+..
+./runltp -f controllers
+...
+cpuset_inherit 11 TPASS: cpus: Inherited information is right!
+cpuset_inherit 13 TPASS: mems: Inherited information is right!
+<4>[ 1130.117922] int3: 0000 [#1] PREEMPT SMP PTI
+<4>[ 1130.118132] CPU: 0 PID: 32748 Comm: cpuset_inherit_ Not tainted
+6.3.4-rc2 #1
+<4>[ 1130.118216] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+BIOS 1.14.0-2 04/01/2014
+<4>[ 1130.118320] RIP: 0010:__alloc_pages+0xeb/0x340
+<4>[ 1130.118605] Code: 48 c1 e0 04 48 8d 84 01 00 13 00 00 48 89 45
+a8 8b 05 d9 31 cf 01 85 c0 0f 85 05 02 00 00 89 d8 c1 e8 03 83 e0 03
+89 45 c0 66 <90> 41 89 df 41 be 01 00 00 00 f6 c7 04 75 66 44 89 e6 89
+df e8 ec
+<4>[ 1130.118653] RSP: 0018:ffffa3d085d07b08 EFLAGS: 00000246
+<4>[ 1130.118694] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX:
+ffffa2b9ffffa000
+<4>[ 1130.118706] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+0000000000400dc0
+<4>[ 1130.118717] RBP: ffffa3d085d07b60 R08: 00007fffffffe000 R09:
+00007fffffffefff
+<4>[ 1130.118728] R10: ffffa2b981faaa0c R11: 0000000000000000 R12:
+0000000000000000
+<4>[ 1130.118739] R13: 0000000000000000 R14: 0000000000000000 R15:
+00007fffffffefec
+<4>[ 1130.118783] FS:  0000000000000000(0003)
+GS:ffffa2b9fbc00000(0063) knlGS:00000000f7f05880
+<4>[ 1130.118798] CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+<4>[ 1130.118810] CR2: 00000000f7c10bec CR3: 00000001085ba000 CR4:
+00000000000006f0
+<4>[ 1130.118899] Call Trace:
+<4>[ 1130.118974]  <TASK>
+<4>[ 1130.119069]  alloc_pages+0x94/0x140
+<4>[ 1130.119128]  get_zeroed_page+0x1d/0x50
+<4>[ 1130.119142]  __pud_alloc+0x33/0xe0
+<4>[ 1130.119156]  __handle_mm_fault+0x50c/0x1310
+<4>[ 1130.119175]  handle_mm_fault+0xf8/0x320
+<4>[ 1130.119187]  ? check_vma_flags+0x53/0x130
+<4>[ 1130.119199]  __get_user_pages+0x1ed/0x600
+<4>[ 1130.119214]  get_user_pages_remote+0x137/0x3c0
+<4>[ 1130.119229]  get_arg_page+0x65/0x150
+<4>[ 1130.119245]  copy_string_kernel+0xd7/0x1e0
+<4>[ 1130.119258]  do_execveat_common.isra.0+0x11e/0x240
+<4>[ 1130.119272]  __ia32_compat_sys_execve+0x3f/0x50
+<4>[ 1130.119285]  __do_fast_syscall_32+0x6b/0xf0
+<4>[ 1130.119300]  do_fast_syscall_32+0x38/0x80
+<4>[ 1130.119312]  do_SYSENTER_32+0x23/0x30
+<4>[ 1130.119324]  entry_SYSENTER_compat_after_hwframe+0x7f/0x91
+<4>[ 1130.119374] RIP: 0023:0xf7f0a579
+<4>[ 1130.119570] Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10
+08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5
+0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00
+00 00 00
+<4>[ 1130.119578] RSP: 002b:00000000ffcc16e8 EFLAGS: 00000206
+ORIG_RAX: 000000000000000b
+<4>[ 1130.119594] RAX: ffffffffffffffda RBX: 00000000086cc480 RCX:
+00000000086d8810
+<4>[ 1130.119600] RDX: 00000000086dc490 RSI: 00000000086cc480 RDI:
+0000000000000020
+<4>[ 1130.119605] RBP: 00000000086d6270 R08: 0000000000000000 R09:
+0000000000000000
+<4>[ 1130.119610] R10: 0000000000000000 R11: 0000000000000206 R12:
+0000000000000000
+<4>[ 1130.119614] R13: 0000000000000000 R14: 0000000000000000 R15:
+0000000000000000
+<4>[ 1130.119652]  </TASK>
+<4>[ 1130.119698] Modules linked in:
+<4>[ 1130.148538] ---[ end trace 0000000000000000 ]---
+<4>[ 1130.148708] RIP: 0010:__alloc_pages+0xeb/0x340
+<4>[ 1130.148907] Code: 48 c1 e0 04 48 8d 84 01 00 13 00 00 48 89 45
+a8 8b 05 d9 31 cf 01 85 c0 0f 85 05 02 00 00 89 d8 c1 e8 03 83 e0 03
+89 45 c0 66 <90> 41 89 df 41 be 01 00 00 00 f6 c7 04 75 66 44 89 e6 89
+df e8 ec
+<4>[ 1130.148923] RSP: 0018:ffffa3d085d07b08 EFLAGS: 00000246
+<4>[ 1130.148947] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX:
+ffffa2b9ffffa000
+<4>[ 1130.148952] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+0000000000400dc0
+<4>[ 1130.148958] RBP: ffffa3d085d07b60 R08: 00007fffffffe000 R09:
+00007fffffffefff
+<4>[ 1130.148963] R10: ffffa2b981faaa0c R11: 0000000000000000 R12:
+0000000000000000
+<4>[ 1130.148968] R13: 0000000000000000 R14: 0000000000000000 R15:
+00007fffffffefec
+<4>[ 1130.148974] FS:  0000000000000000(0003)
+GS:ffffa2b9fbc00000(0063) knlGS:00000000f7f05880
+<4>[ 1130.148981] CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+<4>[ 1130.148987] CR2: 00000000f7c10bec CR3: 00000001085ba000 CR4:
+00000000000006f0
+<0>[ 1130.149129] Kernel panic - not syncing: Fatal exception in interrupt
+<0>[ 1130.152835] Kernel Offset: 0x8400000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
 
+links,
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3-364-ga37c304c022d/testrun/17170153/suite/log-parser-test/tests/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3-364-ga37c304c022d/testrun/17170153/suite/log-parser-test/test/check-kernel-panic/log
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3-364-ga37c304c022d/testrun/17170153/suite/log-parser-test/test/check-kernel-panic/details/
 
+--
+Linaro LKFT
+https://lkft.linaro.org
