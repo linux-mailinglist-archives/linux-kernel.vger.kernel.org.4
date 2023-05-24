@@ -2,182 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF6670FF72
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7C070FF74
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236600AbjEXUsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S231376AbjEXUty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236057AbjEXUsh (ORCPT
+        with ESMTP id S229542AbjEXUtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:48:37 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01666187;
-        Wed, 24 May 2023 13:48:27 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 564803200B1C;
-        Wed, 24 May 2023 16:48:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 24 May 2023 16:48:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684961303; x=
-        1685047703; bh=GIQrYXVIJfghlyJeZVTwMC4NvSXNZTZ81GeVUDK35vA=; b=t
-        V78D8AQWQriaLyjLryKXcRouM18sDnenIWh1Yu+0MLtrKqbfxYSkYAP7Ah45z0C0
-        wqrRshdZnP8Fzs3Y74J2dEDBmVYWYkp0Dr1xsrl5u5j90fMLI6BY4GxnFIanI2ra
-        ZHoNHyFdoiSeY0hssG0uaEFpYzR9Lz3q64/uyyqR22r9Bp9R7utjmhCAN40FS5yl
-        LMsNTY7sC/uKblPAscJfx1OowRzqDWvUUksw9EcLsmJ5dxmskbo1njKOtT/uAEJb
-        p8CBABZQSKnGrDpi9R3ukiBCGNRVKr8j1xz53Ydve6A5EMl4OC/qVLH06zs0pCt+
-        L7IqaBqFdMvHDowOKkSCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684961303; x=1685047703; bh=GIQrYXVIJfghl
-        yJeZVTwMC4NvSXNZTZ81GeVUDK35vA=; b=YXeLdPNcTaSCsiCsBeJv2f5p9SuP4
-        8PNIAd5OHvvHh0zi0J6sHQ2iDxJi3KUZPgxTwHgsCiBnsG4iFJMa5e9VSO/9SRsp
-        1uf6gxH+qkDhvA2KvyiORL0inPnSLCOCJ7W/hgwUyUdJI1MHVbrXnbq8uhCmMqay
-        QCl1ZWzVXrCzb30GT0XC1Wta3d7Y3WxRKULau+sNOAow3o6ZJP+eHzUVYtEPFdUO
-        SEJPLcn5mgVKhWahWT0mp2x4brRIS3jKZQ5jeti0GnxZf5j3AV7cUWQLho6bY9Hg
-        bJgTAAYblxZs0e6yU12BJKusEGvIJR9TETpkuLHQittJSabdfnNE4zZlw==
-X-ME-Sender: <xms:FnhuZDTH2VncK0GAbUd4QSuubawcVJEemEMmfWagwDdFrmymqbynRw>
-    <xme:FnhuZEylmO4WOFyEi63qXNPS7KmYBZh0Oi4Ko1ah2WyXbPpIb5vWyfJ0rtnlScPMf
-    YwGNKBrFecAJTAStLU>
-X-ME-Received: <xmr:FnhuZI0B8fy9Ol2lnVR91k-mp_zuw1fzrmbcod9KqT-pVjgXEb11Z3-99qaxPUeQ45cz-A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgudehudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
-    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
-    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:FnhuZDDD4TIO_TlTLMdLlTBKIBaI4Z9lylnIe3wBeaO4FVJJxTQ0FA>
-    <xmx:FnhuZMj_AEyzunCa7U0nUvY822b_W_v3y-MdIwmWBPCWgqMitbF1og>
-    <xmx:FnhuZHo0gf_JVrLFUK-EgR8w02dXTQBT2P7OqLOR94f80xY3JTy1xg>
-    <xmx:F3huZHB2sQNsFiPjk9M0j2hsG8Xww7Nt8oC4qQnHLKoB8ZE2QQW6hQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 24 May 2023 16:48:21 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 49820109F9F; Wed, 24 May 2023 23:48:18 +0300 (+03)
-Date:   Wed, 24 May 2023 23:48:18 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-Message-ID: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
+        Wed, 24 May 2023 16:49:53 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D8110B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:49:52 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso1444379e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684961390; x=1687553390;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MhCcbiMDeimZgRsX8GeS67PO3y/8MJ5nVThqdM2u2S8=;
+        b=a6183VQoSnm61M8xRWx9/75KYWUsFX46HC+7vufK9YfLfomSLuEY2LDasUTwVv6wBI
+         mYNg6RruGwEPtNteV/tYs28bn+oySMN9zUeLT5hFZDj0YqYxfX+SLj6Tig3o41tS3vse
+         7Lsv1EED+ki0LYidxA+7QAiVpjJzK32Y8oPf1IHw80WuTVwRiqu7xfgqu/mU/f/aBcSk
+         1J0XuRPqP2wSZ6ylTcSWkvRjEYRi4XiC5yevJieVN/fUz06IaqNSAxy+Ay6jTBGMkJOU
+         YYTJakJo+TQJBPbjWRHNCVOkCCp36U7RKckRZFXj1GIX7k1OaiIYXLioPZ9v7CZIWYjh
+         9jew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684961390; x=1687553390;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MhCcbiMDeimZgRsX8GeS67PO3y/8MJ5nVThqdM2u2S8=;
+        b=Eb9o6kRWDZaQTZxaz304Ka+I3FC5kAGdu5PUt70RXRALMelsjTNAJZ9fW6tQlLH3pJ
+         Nu8clGIZnIeocCskssP6o2K2J0VAzkxJhhD99A7NNXFKAKBz1dwtqjFKuEgM3V9crEWi
+         lrV9O1pzURXXSrzFOWiVCpoiX+vjDXDKT2LS1hLG1bbqfkCGuIz2tUkHi8lfUGSfKUQ6
+         1P9ofF+ZqBADg9CGg2kKhXz6AKjLD7hKoKU5bWkqUmrM2gXIpprFVcauYUKoVDvJtOpq
+         RrVzf+8ShAOpAM9hS8GgjKYRcN/CLoHAzA9SlrS7VJBXxgZDQMyaxozfvG6BQbm+ZqY/
+         y8vw==
+X-Gm-Message-State: AC+VfDxXXzK3C4k6g2i7kRlWjPk63NbdMk7jPqVeUYFAqIbn5BD/3/bt
+        tSK8LAjKvBCPG4j3Cn7H5bn32qeT+80kGA9bk6M=
+X-Google-Smtp-Source: ACHHUZ7DU/8bhXhtrcw7t5vMw2s4J8znp+eYxzusiHyLIP7/3/tMmWgVtCv0tT64e96JtJNp9LjKMLUHclLR0JvLPX8=
+X-Received: by 2002:ac2:47fc:0:b0:4f4:b47d:5c07 with SMTP id
+ b28-20020ac247fc000000b004f4b47d5c07mr2629800lfp.46.1684961390122; Wed, 24
+ May 2023 13:49:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508185218.962208640@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6520:4254:b0:258:f5f3:a127 with HTTP; Wed, 24 May 2023
+ 13:49:49 -0700 (PDT)
+Reply-To: samuelkelliner@gmail.com
+From:   Sam <gerrypricebigbustours@gmail.com>
+Date:   Wed, 24 May 2023 21:49:49 +0100
+Message-ID: <CALN4VLGcCcwoOhqTNH8=Jmkp-+PjN91-nMEH7HOgqrCAxGP0-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,BODY_SINGLE_WORD,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:44:17PM +0200, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Make the primary thread tracking CPU mask based in preparation for simpler
-> handling of parallel bootup.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Tested-by: Michael Kelley <mikelley@microsoft.com>
-> 
-> 
-> ---
->  arch/x86/include/asm/apic.h     |    2 --
->  arch/x86/include/asm/topology.h |   19 +++++++++++++++----
->  arch/x86/kernel/apic/apic.c     |   20 +++++++++-----------
->  arch/x86/kernel/smpboot.c       |   12 +++---------
->  4 files changed, 27 insertions(+), 26 deletions(-)
-> ---
-> 
+Hello, I am aware that the Internet has become very unsafe, but
+considering the situation I have no option than to seek for foreign
+partnership through this medium.I will not disclose my Identity until
+I am fully convinced you are the right person for this business deal.
+I have access to very vital information that can be used to move a
+huge amount of money to a secured account outside United Kingdom. Full
+details/modalities will be disclosed on your expression of Interest to
+partner with me. I am open for negotiation importantly the funds to be
+transferred have nothing to do with drugs, terrorism or Money
+laundering.
 
-...
-
-> @@ -2386,20 +2386,16 @@ bool arch_match_cpu_phys_id(int cpu, u64
->  }
->  
->  #ifdef CONFIG_SMP
-> -/**
-> - * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary thread
-> - * @apicid: APIC ID to check
-> - */
-> -bool apic_id_is_primary_thread(unsigned int apicid)
-> +static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
->  {
-> -	u32 mask;
-> -
-> -	if (smp_num_siblings == 1)
-> -		return true;
->  	/* Isolate the SMT bit(s) in the APICID and check for 0 */
-> -	mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
-> -	return !(apicid & mask);
-> +	u32 mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
-> +
-> +	if (smp_num_siblings == 1 || !(apicid & mask))
-> +		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
->  }
-> +#else
-> +static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
->  #endif
->  
->  /*
-
-This patch causes boot regression on TDX guest. The guest crashes on SMP
-bring up.
-
-The change makes use of smp_num_siblings earlier than before: the mask get
-constructed in acpi_boot_init() codepath. Later on smp_num_siblings gets
-updated in detect_ht().
-
-In my setup with 16 vCPUs, smp_num_siblings is 16 before detect_ht() and
-set to 1 in detect_ht().
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards,
