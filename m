@@ -2,64 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0FD70EAC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403D970EAC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238940AbjEXB1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 21:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S238979AbjEXB1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 21:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjEXB1i (ORCPT
+        with ESMTP id S238962AbjEXB1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 21:27:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA74FE5;
-        Tue, 23 May 2023 18:27:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 561336335A;
-        Wed, 24 May 2023 01:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E5AC433D2;
-        Wed, 24 May 2023 01:27:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684891655;
-        bh=+WcFC3ZuBzCMetAlFyxcdTIwCfk0qpdjVDSSvtNKS3M=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=nmPqrTziLWzeDSATIBbVYaSRpqJm5R5V5zJ5gdXOH/10p7Zk4GHv+v6YYM8eNQYAl
-         HpS4IdhrCQoNjOxp9ccPy13BPzPC7a82Btszq0X0ugEmPc96q9kJx2HpWN1C85icID
-         0EAzBih2mD0AhZQ542Ix0b4Poxtv325UFDx9KhDgoeQO3ir/JLH9AxVSmtop97eOr3
-         BhW6C4zJLuo/QaxSAgdtZU9Ki8fywfKDeC9A0PMIRSvrCc8gMU6tVH/U7ZyCVXGWmF
-         W0IobLGj2N9PznD1qozRNTngHXBCNHKp5x8FBjhAGsruZOB5Cf7I/DcAaexQemYP9X
-         s550Im4AvkCSA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 24 May 2023 04:27:30 +0300
-Message-Id: <CSU48QNPCXL4.1WBHVCECJ2PZU@suppilovahvero>
-Cc:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <dmitry.kasatkin@gmail.com>, <paul@paul-moore.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>, <jlee@suse.com>,
-        <kanth.ghatraju@oracle.com>, <konrad.wilk@oracle.com>,
-        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] integrity: Enforce digitalSignature usage in the
- ima and evm keyrings
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Eric Snowberg" <eric.snowberg@oracle.com>, <dhowells@redhat.com>,
-        <dwmw2@infradead.org>
-X-Mailer: aerc 0.14.0
-References: <20230522230944.180389-1-eric.snowberg@oracle.com>
- <20230522230944.180389-3-eric.snowberg@oracle.com>
- <ce525793452831d5823bf0548faa0eae2a302f5a.camel@linux.ibm.com>
- <CSU44RXD19SU.26AGW4IZDW9CK@suppilovahvero>
-In-Reply-To: <CSU44RXD19SU.26AGW4IZDW9CK@suppilovahvero>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 23 May 2023 21:27:52 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 54346126;
+        Tue, 23 May 2023 18:27:49 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 932E018002B642;
+        Wed, 24 May 2023 09:27:35 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Su Hui <suhui@nfschina.com>
+Subject: [PATCH] media: dvb_ringbuffer: Return -EFAULT if copy fails
+Date:   Wed, 24 May 2023 09:27:33 +0800
+Message-Id: <20230524012733.414441-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,24 +40,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed May 24, 2023 at 4:22 AM EEST, Jarkko Sakkinen wrote:
-> On Wed May 24, 2023 at 1:01 AM EEST, Mimi Zohar wrote:
-> > On Mon, 2023-05-22 at 19:09 -0400, Eric Snowberg wrote:
-> > > After being vouched for by a system keyring, only allow keys into the=
- .ima
-> > > and .evm keyrings that have the digitalSignature usage field set.
-> > >=20
-> > > Link: https://lore.kernel.org/all/41dffdaeb7eb7840f7e38bc691fbda83663=
-5c9f9.camel@linux.ibm.com
-> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> > > Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-> >
-> > Jarrko, similarly please update the above tag to Acked-and-test-by.
->
-> OK, cool, I'll pick this series, thanks.
+The copy_to/from_user() functions return the number of bytes remaining
+to be copied, but we want to return -EFAULT to the user.
 
-Please check https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-t=
-pmdd.git
+Fixes: 04da2daee383 ("[media] ngene: properly handle __user ptr")
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/media/dvb-core/dvb_ringbuffer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-BR, Jarkko
+diff --git a/drivers/media/dvb-core/dvb_ringbuffer.c b/drivers/media/dvb-core/dvb_ringbuffer.c
+index 7d4558de8e83..f132578840ad 100644
+--- a/drivers/media/dvb-core/dvb_ringbuffer.c
++++ b/drivers/media/dvb-core/dvb_ringbuffer.c
+@@ -216,7 +216,7 @@ ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
+ 	if (split > 0) {
+ 		status = copy_from_user(rbuf->data+rbuf->pwrite, buf, split);
+ 		if (status)
+-			return len - todo;
++			return -EFAULT;
+ 		buf += split;
+ 		todo -= split;
+ 		/* smp_store_release() for write pointer update to ensure that
+@@ -228,7 +228,7 @@ ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
+ 	}
+ 	status = copy_from_user(rbuf->data+rbuf->pwrite, buf, todo);
+ 	if (status)
+-		return len - todo;
++		return -EFAULT;
+ 	/* smp_store_release() for write pointer update, see above */
+ 	smp_store_release(&rbuf->pwrite, (rbuf->pwrite + todo) % rbuf->size);
+ 
+-- 
+2.30.2
+
