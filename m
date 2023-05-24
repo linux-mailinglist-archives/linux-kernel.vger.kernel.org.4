@@ -2,171 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F4E70EFC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5716470EFC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239835AbjEXHpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
+        id S240040AbjEXHpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240082AbjEXHpA (ORCPT
+        with ESMTP id S240090AbjEXHpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:45:00 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C1391;
-        Wed, 24 May 2023 00:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684914298; x=1716450298;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=krFLkK1i5DTqs2wxDrK9/zUXO021C+SH6hgSBp172mk=;
-  b=cG+i/lMFo9ttpL/Hm8M5t19RrpuleF+0N9XuM77FSeBZ1c16OCHUuxxl
-   4WICf6sWcpc4COjoPYSm9122mI13A5hEZMGdqpP3RPM04XjxU3j1YnBO3
-   3fVyaY9ZVqij9vM+crBi5y5tVyw0E3geKceahgWcQCYlN3tG/nOM3NFgo
-   ucFj6Fz3mfc+zztEyncxsJ9FUMxyhZWb5j6cXFSPvQan0qH92yVq34NQP
-   to+JQBBAGlQhtI2Lt87pdIx+QwLI5pNfFORWK2NU8+uYNLokhlXsJiybs
-   QNjiysVEydJmji40RRoQO+sM3kwWnLuASn/eHRnsqJO05Bws37Kx3XS4y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="355845042"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="355845042"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 00:44:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="707396678"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="707396678"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga007.fm.intel.com with ESMTP; 24 May 2023 00:44:57 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 00:44:57 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 00:44:57 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 00:44:57 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 24 May 2023 00:44:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N4CVhiqtfFsH4uNssHWVbE4hautddTdAESfVQU0MCtviKHGKQADKTv2GLWWQ7ysBe4lXytAw38TkGwVmZr8Ew1lX6sjBmib2lzFzcVaioyGJvFSyM2whHn/VjoFeMwDMhuFhcmQ3u5+Qeiest2t60NDmWXPHwDnjzVPil7nyl0bcJnypivj7sqe8R9vokru1JocQitmRT5UiBsg6o0KH7t8sK56YPmbsd5YnUp3++1RGiIGQD1xVTgY7utRzOc1aVVgVJEpwKKw9ALW1nEBBZMhHYutVtA5oCEa/6ALBREhiU0rlznnu5l4vJAq7k3alu/HHlhemJeTRu8NskZXEdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Su3zlrTMX2tabpiZmrEaQOmPZRumi81l1MSiaMquDP8=;
- b=dv/XuWqO2sTeC74e2wUjkCnxDfgTIhO13gk89dgYqh3jt+z90IYeFfuHcwEowWhr1zVc1UIt6MLQYe180obxHAFWBdN+YhLGz2myUUBYiKOdxTEqJI2Kx86R0H0pg6w9UsmZQncE0G/ErmU7GLfHW/kfmWkDi3gHNm/UnlaZrshisShUp2CLvHW2gExxK8nkmtKoD1kId082gcjqY3tqnwubxcndF4RSWVpZ+5++/quX+BZwqnLj8SBA68C1ky5gRlGdEQnv1JiQUMovzDexA8IPBnY8EDca4J8JVjKG7ibT1304v+0NMS1ZqRhO8EiCHTMzmnAhth8L0qhh7yKXAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DM4PR11MB5406.namprd11.prod.outlook.com (2603:10b6:5:395::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 07:44:54 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::dd3:4277:e348:9e00]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::dd3:4277:e348:9e00%3]) with mapi id 15.20.6433.015; Wed, 24 May 2023
- 07:44:54 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: RE: [PATCH v3 10/10] iommu/vt-d: Disallow nesting on domains with
- read-only mappings
-Thread-Topic: [PATCH v3 10/10] iommu/vt-d: Disallow nesting on domains with
- read-only mappings
-Thread-Index: AQHZhBgSYJ72BBeg/EuD31moJcjTo69pHH+Q
-Date:   Wed, 24 May 2023 07:44:54 +0000
-Message-ID: <BN9PR11MB527673E35A8C123648997A238C419@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230511145110.27707-1-yi.l.liu@intel.com>
- <20230511145110.27707-11-yi.l.liu@intel.com>
-In-Reply-To: <20230511145110.27707-11-yi.l.liu@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM4PR11MB5406:EE_
-x-ms-office365-filtering-correlation-id: 4aa04d42-6b93-4d3b-85ef-08db5c2ac3e0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2OQL37vjIPY/twyqNWszWl7lXHr0WCdL6Aqyl+QbW2DE5TyLjUz64NhDxBGT8nnROWtZ9Ms8nXHzuP30ybnuMLBGqETv/kkN0hjjcYwoEqFGF+9BVgpmzv92gapS70+VybYzhK9gbpuUkOlz69Nn/d3eXwzllEhyoXhMNxUB1qALq9wur2f4jEjROopzqLzvFP9Qxga7mOpUTm48pE6AedXvZEy7GBHcUIEwSY3bhTkTdfU4zRwvDv0FmlMRGL324e5QBMhheFJakFrq3YCwHHkiV7HvlRI5hr6p5Bt0oEssWlITHqnj3aO3jbbg2rXm1P4JRywvfLrQyH+VG+NJBIMATqnhLsnlDzbOsjC4gRt0ZKh99vCamNshk9NtCytXyz+Jorsf7pqQRl4gpRbz0A8tK7ZTNBCHt6O+W9211hqEbKUlorquBCnf726I4FfmndcU0n8jpzzgMH7FGspAxRmRnS1pUV2iytdbbuRc94/jgIWz1F/5QCc9G2aockg2uXiPM7svnNL7DGLAKGPYymD/5o+Qvsn+g6uN0sHluQMWVl+dyP0P5H7Ck7yuUNO/Ik9vl974JWwOS4QAVvVeMFvXql1bkCjIkZGphEUyGuRqSRgeFmQ4mjgXE1VZqilJ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(376002)(366004)(346002)(451199021)(71200400001)(7416002)(8676002)(8936002)(5660300002)(55016003)(52536014)(26005)(186003)(9686003)(6506007)(41300700001)(33656002)(83380400001)(38100700002)(38070700005)(82960400001)(110136005)(54906003)(122000001)(66946007)(86362001)(478600001)(66556008)(66476007)(66446008)(64756008)(76116006)(316002)(4326008)(7696005)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eyaCp6xmotwMZ3+x1WdFQ/4XFelhgTsKd8U/y/hRVmvC8AOIJWyknnUHPVzJ?=
- =?us-ascii?Q?wQdffA7WI309uM5b+ixEUXxcL9pmgKab4e/iEBcN4/LetrXXkz5h4DGQ6c1W?=
- =?us-ascii?Q?G9Bo8DHvDxepp0VBPuOZsSYBuS65xYDZ5RjQ9jfUP9fS4/5caacyhKZaimmL?=
- =?us-ascii?Q?nDkbKpcjepuETpI3ngWQc6x00rl+jwzNXj7uCXAKjIcNKYvhkAvRToWIwawY?=
- =?us-ascii?Q?sjOVwQKpKENPMgTVHizKFKW4KSsF2j7U0GdtTv0a19UDRJB+U+VXZflpVD+v?=
- =?us-ascii?Q?nzn0g1HQ9zB65ryJX6tc2rLo0YvvqcBo6OH0vGyNZd/6bop6z+QHMsRmWt83?=
- =?us-ascii?Q?MmyU2yXM2L7LX5ouJjGsIwJqx1wpJI8ReH2ElQJhyxroj2bSAnZ+vL21oiQZ?=
- =?us-ascii?Q?tLXcYMnBZhUot2lSj5asOraVv39Pt5K7hhD5tBh89j8e3u9/YH91Sbp2Ymgo?=
- =?us-ascii?Q?1GDGJr8tqCQyVcEoRU/L/T3Tep5bnmDp0TASJy5YPwn3CGwCwre7I4k26TfV?=
- =?us-ascii?Q?D9BcWjhMMr1hzFtLFFXAGNoP6cUx0h4yfmbUfK8IkyJYY7trTvu1JOv7+mg4?=
- =?us-ascii?Q?Fswp6NDqOjAB5Lcubr7hMv2aEGslo4HiAmxt9pGZePqHMuUSPVDAjyQE7OY9?=
- =?us-ascii?Q?WfxjfFhglFXdI/WQRahC8TuKk/CMUKRDroa9v0H0N3u1ZgvNwnZlVfGG+xqq?=
- =?us-ascii?Q?9T7cPLF+p15WIOGtknzpe+xKGzXYARilC8sR/msIrFANIuf4S4SiE0DrE7NF?=
- =?us-ascii?Q?36sUOj6sI67l/lrWOqiGRqg1dFETzn3PkrkGgm+tmUNVUmCu+5BafV8SQUbf?=
- =?us-ascii?Q?U9ORjTwMgaVN5qYyCXVtjmRwmC3+Q9xjyFyTA7dM4JlyReqdMXon0jlzlKKE?=
- =?us-ascii?Q?EEZ1UuHzX3z68aG/D5zN0tNZIMvNrFjDVKkt7lN3P7gL9FwyY3jIvnp4vjAS?=
- =?us-ascii?Q?KHgRPN3lF55wXQBPvagKv/31UoYHUuAui/ZW5dauByK+kiD06wCjtAcIdHuw?=
- =?us-ascii?Q?O5PgeVgYf15BF1y5JqEBD/qo9WQmXEbfdkc53BiiNYQ4R9KLgjioyXztKAal?=
- =?us-ascii?Q?RA7cmYjNFTliOJKl7xVSVf9sxf21t5MAY++XpHA3Rx99fO9kNk+Sx5+Ql7e4?=
- =?us-ascii?Q?QdPp9MRWWsC9FO67MvpcvVeosfNXYb9F+ch+1iab3cp230QoWP0J4xI4xaoQ?=
- =?us-ascii?Q?+i7jtqGIvd1Hm9hJ9hk9w7W32rV+6/UX900dz/lvpTYYZ1uMM3jMUGgia6cy?=
- =?us-ascii?Q?uS0fP36NKq6GGeliVkdbIQzUVSqglJ2vwozRHuj8Yx4BlZ/FAloKKltKUYxw?=
- =?us-ascii?Q?Ysy7MDIm9mcQcRsKUuJ608q1n/jFP+AlVY8mRJ5e2FGtWhotv6a5451XYNS/?=
- =?us-ascii?Q?j+zC3I15GzGW4j78rgYuo+mwiHhm9tfpXaFsCP1Ybk/ry9YensndSnqLCHTL?=
- =?us-ascii?Q?DtIPDQD3DyPWWR4P4WbbTFX3iKpuFnBZfiY1tQYqPhouSGhETpcIGPso2H0J?=
- =?us-ascii?Q?eTNZQ0UGYEzlnZBDmdxYrgvST8vlFUlMzCSjLgOjIdqc8PAtmzKFr93r9jqK?=
- =?us-ascii?Q?teGZs6OSmowchAqjpTIRKhAt4xd83cZla2npYMD7?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 24 May 2023 03:45:31 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34ED411D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:45:25 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d24136685so392200b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1684914324; x=1687506324;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ys/SLmJf9ZfMR5xC5B+aVb11E3cqyPInCe2lYcTys6w=;
+        b=O9W4mEYJy3RzxDLdJdWLxzqiwP1Ylxa3TIWst/JvA9UPmhtF7kz4LB8Uj+MbWwkmae
+         SXSaB7rj/iia708kLLPAIWPyhXKZYTeu+ETv86jb4viym/2+qNYdshXTG0Gl0DsRoneE
+         4tIJUo1N2TdRgU/v7KgGHcYjwHrM5/V0NICA0Ak8okFSV8kPffJKvEB41gK15Vtp1asv
+         t4teYeNXNQDDYyME4svL88fw2rJ7i3TslXTFF40WKh4wuZ2B8DBcOOe/Jq4kBFZClvz/
+         Vgw7k7G51sRrEeaeEglVfpe/5JFAxcWfgIxDiolV75BV1y0CmOrBXhpcalLmMxn5duub
+         oG1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684914324; x=1687506324;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ys/SLmJf9ZfMR5xC5B+aVb11E3cqyPInCe2lYcTys6w=;
+        b=ksjF2XEIJZ1tt5H7BgULI3xdFcaJGcKlfJK7Qr3q41AygUYAnZW4TzaKM+DZwGIVwd
+         JMuOgMYbUE9xbkbuD2XEUm286oOn+JBhpx9I6hLd+k9F66aMSVZ8uso9BrdP+ru1m1yY
+         mXEaUH1kLkvLMehcYOE/q/TcYvpv48oHOKUUmJLcRn/rYvg0L16lgaZyZick2WD1unIX
+         /bytI0UYIhDfkkQC1mku7P7Ju56u5cKB/IvP6l7e0QMC6LhuKN0UfhIBZPMLa+XNfecy
+         Fn18JuIx1DsSl1yZRMyFiRUS0+wVvqicKO2o8YXYhCGr4c1GKAyEyJhwMXeU3pAyAAtD
+         QsKA==
+X-Gm-Message-State: AC+VfDxXLdn1L56bvHBzTtOjmCSyFJZoqDxs+L6HtQXXb6TPl2ymVY+j
+        q/MQVwd7dQecsPNaSam4OSvphQ==
+X-Google-Smtp-Source: ACHHUZ772BXLvv9iSKgRv0OHi1NApJDkZ266P3N+Twh6YGcaDgZs91atcx6DS8NTIqtu4xWPgBZR/w==
+X-Received: by 2002:a05:6a00:4294:b0:64d:2a87:2596 with SMTP id bx20-20020a056a00429400b0064d2a872596mr1534767pfb.10.1684914324665;
+        Wed, 24 May 2023 00:45:24 -0700 (PDT)
+Received: from yc.huaqin.com ([101.78.151.214])
+        by smtp.gmail.com with ESMTPSA id j6-20020a62e906000000b0063d29df1589sm6801336pfh.136.2023.05.24.00.45.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 00:45:24 -0700 (PDT)
+From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+To:     dianders@google.com, daniel@ffwll.ch, neil.armstrong@linaro.org,
+        sam@ravnborg.org, airlied@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
+        conor+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Subject: [v2 4/4] dt-bindings: display: panel: Add compatible for Starry ili9882t
+Date:   Wed, 24 May 2023 15:44:55 +0800
+Message-Id: <20230524074455.1172064-3-yangcong5@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230524074455.1172064-1-yangcong5@huaqin.corp-partner.google.com>
+References: <CAD=FV=WRecTWsFM96k81YAx1=jJT0vpS4EPP0ZfWFUGHNFx9Tw@mail.gmail.com>
+ <20230524074455.1172064-1-yangcong5@huaqin.corp-partner.google.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4aa04d42-6b93-4d3b-85ef-08db5c2ac3e0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2023 07:44:54.7671
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0i/hEd8deqmvMj/vwbqFjPTreNkCuM2sNpTYWVimiyHCrXChEnfP7ZiJHltVtCNvOhoU86wQfB3rVSszB4uJ0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5406
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -174,51 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Liu, Yi L <yi.l.liu@intel.com>
-> Sent: Thursday, May 11, 2023 10:51 PM
->=20
-> From: Lu Baolu <baolu.lu@linux.intel.com>
->=20
-> When remapping hardware is configured by system software in scalable
-> mode
-> as Nested (PGTT=3D011b) and with PWSNP field Set in the PASID-table-entry=
-,
-> it may Set Accessed bit and Dirty bit (and Extended Access bit if enabled=
-)
-> in first-stage page-table entries even when second-stage mappings indicat=
-e
-> that corresponding first-stage page-table is Read-Only.
->=20
-> As the result, contents of pages designated by VMM as Read-Only can be
-> modified by IOMMU via PML5E (PML4E for 4-level tables) access as part of
-> address translation process due to DMAs issued by Guest.
->=20
-> Disallow the nested translation when there are read-only pages in the
-> corresponding second-stage mappings. And, no read-only pages are allowed
-> to be configured in the second-stage table of a nested translation.
-> For the latter, an alternative is to disallow read-only mappings in
-> any stage-2 domain as long as it's ever been used as a parent. In this
-> way, we can simply replace the user counter with a flag.
->=20
-> In concept if the user understands this errata and does expect to
-> enable nested translation it should never install any RO mapping
-> in stage-2 in the entire VM life cycle."
+The STARRY ili9882t is a 10.51" WUXGA TFT LCD panel,
+which fits in nicely with the existing panel-boe-tv101wum-nl6
+driver. Hence, we add a new compatible with panel specific config.
 
-IMHO the alternative is reasonable and simpler. If the user decides to
-enable nesting it should keep the nesting-friendly configuration static
-since whether nesting is enabled on a device is according to viommu
-configuration (i.e. whether the guest attaches the device to identity
-domain or non-identity domain) and it's not good to break the nesting
-setup just because the host inadvertently adds a RO mapping to s2 in
-the middle between guest is detached/put back to identity domain
-and then re-attach to an unmanaged domain.
->=20
-> +	if (!(prot & DMA_PTE_WRITE) && !domain->read_only_mapped) {
-> +		spin_lock_irqsave(&domain->lock, flags);
-> +		if (domain->nested_users > 0) {
-> +			spin_unlock_irqrestore(&domain->lock, flags);
-> +			return -EINVAL;
-> +		}
-> +
+Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+---
+ .../devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml     | 2 ++
+ 1 file changed, 2 insertions(+)
 
-this is worth a one-off warning. Same in the other path.
+diff --git a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
+index 28a7beeb8f92..906ef62709b8 100644
+--- a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
++++ b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
+@@ -34,6 +34,8 @@ properties:
+       - starry,2081101qfh032011-53g
+         # STARRY himax83102-j02 10.51" WUXGA TFT LCD panel
+       - starry,himax83102-j02
++        # STARRY ili9882t 10.51" WUXGA TFT LCD panel
++      - starry,ili9882t
+ 
+   reg:
+     description: the virtual channel number of a DSI peripheral
+-- 
+2.25.1
+
