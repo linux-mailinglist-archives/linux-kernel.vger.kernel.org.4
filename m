@@ -2,61 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986B770EF7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6EF70EF7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239949AbjEXHfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
+        id S239943AbjEXHfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239948AbjEXHfT (ORCPT
+        with ESMTP id S239996AbjEXHfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:35:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1C79E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qkbTHa74RqVx5scyvuURKZ3IXXkvsRG06ONrBK7Q0vM=; b=SEeenSyO+zoxIqiysPU5pxE140
-        yqb6r8HRIiROJ5lXrscO8mPffvWto3MvioiJsWQNKw8clYMCI6df/HodWIi+pgAA/9A3MWG/u/Kg0
-        s0zBJq8aCcQzV8yiNqudF8vv5v4CL4t5beE7+oisxi29rxJ8kB018XL1l7Xne7RDdP8jNxNXjutZt
-        agebM0jy+xlvBc7+bB87it1Y2/nGdhd2Cc3UuOeOygQto62TiHaga56su+y8Ww4YPnbNted1aIBaT
-        lGKFWS7x7Fc1PsUlgDnefjAUxmWljRsULUBn+47ZY9ugj/gLC1ixkb/H0+a7so3/DFtNj4b25QqhX
-        fScvd7aw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q1j1O-00AyiB-Jv; Wed, 24 May 2023 07:34:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D48C300322;
-        Wed, 24 May 2023 09:34:56 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 41EEE212FC822; Wed, 24 May 2023 09:34:56 +0200 (CEST)
-Date:   Wed, 24 May 2023 09:34:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Tejun Heo <tj@kernel.org>, jiangshanlai@gmail.com,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, joshdon@google.com, brho@google.com,
-        briannorris@chromium.org, nhuck@google.com, agk@redhat.com,
-        snitzer@kernel.org, void@manifault.com, gautham.shenoy@amd.com
-Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
- execution locality
-Message-ID: <20230524073456.GO83892@hirez.programming.kicks-ass.net>
-References: <20230519001709.2563-1-tj@kernel.org>
- <20230523111818.GH4253@hirez.programming.kicks-ass.net>
- <CAKfTPtB11Zwt9bgOJrNVDfs5yY7Dws_vnQBuXZHErSsbn9Edhw@mail.gmail.com>
+        Wed, 24 May 2023 03:35:07 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F021293
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:35:05 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae85b71141so5923945ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684913705; x=1687505705;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O0M90dYEtoB+tX95FKz0Jj4hKmcCt+vtzXw6fRk3trk=;
+        b=WCK/moH3TMm6NtivNgmKsUsBm8l+Kxtmp01ZtIL/pbTxvgi6Exn7jWFQY0TR+67vQ8
+         HmK5bZ8rQmm9BdvoKo6XBR8Idrsnq4ykCG/sKaXvVjQVFiU2sxMBcxnhKMBX/lXCWbpd
+         fHxz/1EubAeHIGNQrS9P28TswPGD3DvJdFIJd4ZmY/FSXiZX6vxV4uJjTt4c69lVfXCB
+         fggs7ICMEOPjrWYK9R+N2gKGYMxx1CRHH89iIaSeq5M3L4eHnX0Xq2P8wBaT7MCyXxFK
+         AFnP5HPLO0ad5B62yxOiTOkUPZsbUTLddDV8yIrsHn/syehTZ/vQ68X2T5iz+zvn8JjW
+         7mxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684913705; x=1687505705;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O0M90dYEtoB+tX95FKz0Jj4hKmcCt+vtzXw6fRk3trk=;
+        b=buJgggznzxxLV3QfzlIcKZ/BJo2koEJkGbD04Jbv4yO0/AOikh26bidSuvf1JmPElz
+         iuO4SYGm7ZdgFmK54pp+ZE4bBOT1g48eGQ8qRK4vOhIK3ITipvnOL5EONfoKbSpze5B4
+         7wt/40iHz+A7k9/yllyhzq7NLMYB7/Zy2nJXEwqEccIKNqm6ZXQax+mipETwOwW83Eie
+         SlBNwVtBg2L+kqyG9vwGnOQFmjLAwkBykNCChM6OhGYoIEkRYUi5QwMTiTvquQsouky2
+         cET8jnpI08JW1MYGV/sW4Le9HAXpYSrWxprfYsvLtZHrqosgMEb+73WCqykb57yy5hY7
+         7oXw==
+X-Gm-Message-State: AC+VfDwybaWrBDUhpST1JHtA7+aMNA95ANfz9g5KWPIGoHyypO1XKCNC
+        pxjpmxagcSM9khz6Ih3G1rXeHmpvAEC8+AX2O8w=
+X-Google-Smtp-Source: ACHHUZ6UeStupei4VgkExMH9NL+gLbB8bBfErJC2pwxidR1k45P0Di9t+zSp2el1Ydxxv+Ev+VA3Rw==
+X-Received: by 2002:a17:902:e5c8:b0:1aa:e425:2527 with SMTP id u8-20020a170902e5c800b001aae4252527mr17443473plf.21.1684913705482;
+        Wed, 24 May 2023 00:35:05 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id v5-20020a170902b7c500b001a505f04a06sm7976312plz.190.2023.05.24.00.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 00:35:05 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q1j1S-003FTy-2N;
+        Wed, 24 May 2023 17:35:02 +1000
+Date:   Wed, 24 May 2023 17:35:02 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: (subset) [PATCH 20/32] vfs: factor out inode hash head
+ calculation
+Message-ID: <ZG2+Jl8X1i5zGdMK@dread.disaster.area>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-21-kent.overstreet@linux.dev>
+ <20230523-plakat-kleeblatt-007077ebabb6@brauner>
+ <ZG1D4gvpkFjZVMcL@dread.disaster.area>
+ <ZG2yM1vzHZkW0yIA@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtB11Zwt9bgOJrNVDfs5yY7Dws_vnQBuXZHErSsbn9Edhw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <ZG2yM1vzHZkW0yIA@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,18 +84,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 06:12:45PM +0200, Vincent Guittot wrote:
+On Tue, May 23, 2023 at 11:44:03PM -0700, Christoph Hellwig wrote:
+> On Wed, May 24, 2023 at 08:53:22AM +1000, Dave Chinner wrote:
+> > Hi Christian - I suspect you should pull the latest version of these
+> > patches from:
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/dgc/linux-xfs.git vfs-scale
+> > 
+> > The commit messages are more recent and complete, and I've been
+> > testing the branch in all my test kernels since 6.4-rc1 without
+> > issues.
+> 
+> Can you please send the series to linux-fsdevel for review?
 
-> Another possibility to investigate would be that each wakeup of a
-> worker is mostly unrelated to the previous one and it cares only
-> waker. so we should use -1 for the prev_cpu
+When it gets back to the top of my priority pile. Last time I sent
+it there was zero interest in reviewing it from fs/vfs developers
+but it attracted lots of obnoxious shouting from some RTPREEMPT
+people about using bit locks. If there's interest in getting it
+merged, then I can add it to my backlog of stuff to do...
 
-Tejun is actually overriding p->wake_cpu in this series to target a
-specific LLC -- with the explicit purpose to keep the workers near
-enough.
+As it is, I'm buried layers deep right now, so I really have no
+bandwidth to deal with this in the foreseeable future. The code is
+there, it works just fine, if you want to push it through the
+process of getting it merged, you're more than welcome to do so.
 
-But the problem is that with lots of short tasks we then overload the
-LLC and are not running long enough for the idle load-balancer to spread
-things, leading to idle time.
-
-And that is specific to this lots of little LLC topologies.
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
