@@ -2,220 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F8C70F5B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E2570F5C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbjEXL4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        id S232405AbjEXL6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjEXL4q (ORCPT
+        with ESMTP id S229630AbjEXL63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:56:46 -0400
-Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [IPv6:2001:41d0:203:375::3b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D7C189
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:56:41 -0700 (PDT)
-Message-ID: <bfb36563-fac9-4c84-96db-87dd28892088@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684929400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 24 May 2023 07:58:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEB3135;
+        Wed, 24 May 2023 04:58:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 802D622168;
+        Wed, 24 May 2023 11:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684929505; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uMsexn7FypO2MxTw7kOkZKMP6/q4BmJjDQCpRviZwTk=;
-        b=WiHpg5RNA4GTwK2SDkHLvlaHzfo3/HpO34N4XoPdsW0f4IrTrk2Utap9fkZOHfoZnzWEUM
-        0CNPosbjasx5hfvCkRzmQcfaYfYXeLk2MywMuAOKAjaRsOv+4Vn4L3rjgUgWuewCVawufe
-        gIoLMAnY89tKHEm9SxQWeeC/G6kpSrM=
-Date:   Wed, 24 May 2023 19:56:30 +0800
+        bh=rH18iBwWnn9zYEQ2bRQgcgXCwVXM3ls6ER1KLLT/r60=;
+        b=WMTRqdgWgo5Xv1JGWXGXa/4leJ+kA3Fr2EvuxoJ+Aqe6NU5zbCpx8cdBkJRqivz3zlmCI8
+        fYweNr+iUlPQUznzgqAE9D1FG4L+KMokWqHKNGTedF59FJDkPiQa49qcPJoEz7QSNuY/TE
+        11uKzpPFgkG44/ySFC88vJeQKALxzNA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684929505;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rH18iBwWnn9zYEQ2bRQgcgXCwVXM3ls6ER1KLLT/r60=;
+        b=5OLIE73rOKr/k1ojPtkzX/HPu5nXWbAb/WgNuvY9KLod1eci7r+KTUnNLWeyZDjI8HJPtV
+        go+jXuaQCYw1m7Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F3D0D13425;
+        Wed, 24 May 2023 11:58:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cu/HOuD7bWSZVgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 11:58:24 +0000
+Message-ID: <18c33bf0-0c7e-7584-5149-33cf77b50b8a@suse.cz>
+Date:   Wed, 24 May 2023 13:58:24 +0200
 MIME-Version: 1.0
-Subject: Re: [linus:master] [mm] f95bdb700b: stress-ng.ramfs.ops_per_sec
- -88.8% regression
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 09/11] mm/slub: Fold slab_update_freelist()
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Qi Zheng <qi.zheng@linux.dev>
-To:     RCU <rcu@vger.kernel.org>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
+To:     Peter Zijlstra <peterz@infradead.org>,
+        torvalds@linux-foundation.org
+Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
+        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
         Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Kirill Tkhai <tkhai@ya.ru>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
-        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com,
-        Yujie Liu <yujie.liu@intel.com>
-References: <202305230837.db2c233f-yujie.liu@intel.com>
- <eba38fce-2454-d7a4-10ef-240b4686f23d@linux.dev>
- <ZG29ULGNJdErnatI@yujie-X299>
- <896bbb09-d400-ec73-ba3a-b64c6e9bbe46@linux.dev>
- <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
-In-Reply-To: <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+References: <20230515075659.118447996@infradead.org>
+ <20230515080554.520976397@infradead.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230515080554.520976397@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/15/23 09:57, Peter Zijlstra wrote:
+> The two functions slab_update_freelist() and __slab_update_freelist()
+> are nearly identical, fold and add a boolean argument and rely on
+> constant propagation.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
+Something like that has been tried before and the result:
+https://lore.kernel.org/all/CAHk-=wiJLqL2cUhJbvpyPQpkbVOu1rVSzgO2=S2jC55hneLtfQ@mail.gmail.com/
 
-On 2023/5/24 19:08, Qi Zheng wrote:
+Your parameter is not called 'locked' but 'irq_save' which is better, but
+that's just one detail.
 
-[...]
+After your refactoring in 08/11 which puts most of the code into
+__update_freelist_fast() and _slow() I'd say the result is not so bad already.
 
+BTW I have some suspicion that some SLUB code is based on assumptions that
+are no longer true these days. IIRC I've seen some microbenchmark results a
+while ago that showed that disabling/enabling irqs is surprisingly (to me)
+very cheap today, so maybe it's not so useful to keep doing the
+this_cpu_cmpxchg128 for the struct kmem_cache_cpu operations (less so for
+struct slab cmpxchg128 where actually different cpus may be involved). But
+it needs a closer look.
+
+> ---
+>  mm/slub.c |   80 +++++++++++++++++++++-----------------------------------------
+>  1 file changed, 28 insertions(+), 52 deletions(-)
 > 
-> Well, I just ran the following command and reproduced the result:
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -559,53 +559,29 @@ __update_freelist_slow(struct slab *slab
+>   * allocation/ free operation in hardirq context. Therefore nothing can
+>   * interrupt the operation.
+>   */
+> -static inline bool __slab_update_freelist(struct kmem_cache *s, struct slab *slab,
+> -		void *freelist_old, unsigned long counters_old,
+> -		void *freelist_new, unsigned long counters_new,
+> -		const char *n)
+> +static __always_inline
+> +bool slab_update_freelist(struct kmem_cache *s, struct slab *slab,
+> +			  void *freelist_old, unsigned long counters_old,
+> +			  void *freelist_new, unsigned long counters_new,
+> +			  bool irq_save, const char *n)
+>  {
+>  	bool ret;
+>  
+> -	if (USE_LOCKLESS_FAST_PATH())
+> +	if (!irq_save && USE_LOCKLESS_FAST_PATH())
+>  		lockdep_assert_irqs_disabled();
+>  
+>  	if (s->flags & __CMPXCHG_DOUBLE) {
+>  		ret = __update_freelist_fast(slab, freelist_old, counters_old,
+>  				            freelist_new, counters_new);
+>  	} else {
+> -		ret = __update_freelist_slow(slab, freelist_old, counters_old,
+> -				            freelist_new, counters_new);
+> -	}
+> -	if (likely(ret))
+> -		return true;
+> -
+> -	cpu_relax();
+> -	stat(s, CMPXCHG_DOUBLE_FAIL);
+> -
+> -#ifdef SLUB_DEBUG_CMPXCHG
+> -	pr_info("%s %s: cmpxchg double redo ", n, s->name);
+> -#endif
+> -
+> -	return false;
+> -}
+> -
+> -static inline bool slab_update_freelist(struct kmem_cache *s, struct slab *slab,
+> -		void *freelist_old, unsigned long counters_old,
+> -		void *freelist_new, unsigned long counters_new,
+> -		const char *n)
+> -{
+> -	bool ret;
+> -
+> -	if (s->flags & __CMPXCHG_DOUBLE) {
+> -		ret = __update_freelist_fast(slab, freelist_old, counters_old,
+> -				            freelist_new, counters_new);
+> -	} else {
+>  		unsigned long flags;
+>  
+> -		local_irq_save(flags);
+> +		if (irq_save)
+> +			local_irq_save(flags);
+>  		ret = __update_freelist_slow(slab, freelist_old, counters_old,
+>  				            freelist_new, counters_new);
+> -		local_irq_restore(flags);
+> +		if (irq_save)
+> +			local_irq_restore(flags);
+>  	}
+>  	if (likely(ret))
+>  		return true;
+> @@ -2250,10 +2226,10 @@ static inline void *acquire_slab(struct
+>  	VM_BUG_ON(new.frozen);
+>  	new.frozen = 1;
+>  
+> -	if (!__slab_update_freelist(s, slab,
+> -			freelist, counters,
+> -			new.freelist, new.counters,
+> -			"acquire_slab"))
+> +	if (!slab_update_freelist(s, slab,
+> +				  freelist, counters,
+> +				  new.freelist, new.counters,
+> +				  false, "acquire_slab"))
+>  		return NULL;
+>  
+>  	remove_partial(n, slab);
+> @@ -2577,9 +2553,9 @@ static void deactivate_slab(struct kmem_
+>  
+>  
+>  	if (!slab_update_freelist(s, slab,
+> -				old.freelist, old.counters,
+> -				new.freelist, new.counters,
+> -				"unfreezing slab")) {
+> +				  old.freelist, old.counters,
+> +				  new.freelist, new.counters,
+> +				  true, "unfreezing slab")) {
+>  		if (mode == M_PARTIAL)
+>  			spin_unlock_irqrestore(&n->list_lock, flags);
+>  		goto redo;
+> @@ -2633,10 +2609,10 @@ static void __unfreeze_partials(struct k
+>  
+>  			new.frozen = 0;
+>  
+> -		} while (!__slab_update_freelist(s, slab,
+> -				old.freelist, old.counters,
+> -				new.freelist, new.counters,
+> -				"unfreezing slab"));
+> +		} while (!slab_update_freelist(s, slab,
+> +					       old.freelist, old.counters,
+> +					       new.freelist, new.counters,
+> +					       false, "unfreezing slab"));
+>  
+>  		if (unlikely(!new.inuse && n->nr_partial >= s->min_partial)) {
+>  			slab->next = slab_to_discard;
+> @@ -3072,10 +3048,10 @@ static inline void *get_freelist(struct
+>  		new.inuse = slab->objects;
+>  		new.frozen = freelist != NULL;
+>  
+> -	} while (!__slab_update_freelist(s, slab,
+> -		freelist, counters,
+> -		NULL, new.counters,
+> -		"get_freelist"));
+> +	} while (!slab_update_freelist(s, slab,
+> +				       freelist, counters,
+> +				       NULL, new.counters,
+> +				       false, "get_freelist"));
+>  
+>  	return freelist;
+>  }
+> @@ -3666,9 +3642,9 @@ static void __slab_free(struct kmem_cach
+>  		}
+>  
+>  	} while (!slab_update_freelist(s, slab,
+> -		prior, counters,
+> -		head, new.counters,
+> -		"__slab_free"));
+> +				       prior, counters,
+> +				       head, new.counters,
+> +				       true, "__slab_free"));
+>  
+>  	if (likely(!n)) {
+>  
 > 
-> stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
-> 
-> 1) with commit 42c9db3970483:
-> 
-> stress-ng: info:  [11023] setting to a 60 second run per stressor
-> stress-ng: info:  [11023] dispatching hogs: 9 ramfs
-> stress-ng: info:  [11023] stressor       bogo ops real time  usr time 
-> sys time   bogo ops/s     bogo ops/s
-> stress-ng: info:  [11023]                           (secs)    (secs) 
-> (secs)   (real time) (usr+sys time)
-> stress-ng: info:  [11023] ramfs            774966     60.00     10.18 
-> 169.45     12915.89        4314.26
-> stress-ng: info:  [11023] for a 60.00s run time:
-> stress-ng: info:  [11023]    1920.11s available CPU time
-> stress-ng: info:  [11023]      10.18s user time   (  0.53%)
-> stress-ng: info:  [11023]     169.44s system time (  8.82%)
-> stress-ng: info:  [11023]     179.62s total time  (  9.35%)
-> stress-ng: info:  [11023] load average: 8.99 2.69 0.93
-> stress-ng: info:  [11023] successful run completed in 60.00s (1 min, 
-> 0.00 secs)
-> 
-> 2) with commit f95bdb700bc6b:
-> 
-> stress-ng: info:  [37676] dispatching hogs: 9 ramfs
-> stress-ng: info:  [37676] stressor       bogo ops real time  usr time 
-> sys time   bogo ops/s     bogo ops/s
-> stress-ng: info:  [37676]                           (secs)    (secs) 
-> (secs)   (real time) (usr+sys time)
-> stress-ng: info:  [37676] ramfs            168673     60.00      1.61 
->   39.66      2811.08        4087.47
-> stress-ng: info:  [37676] for a 60.10s run time:
-> stress-ng: info:  [37676]    1923.36s available CPU time
-> stress-ng: info:  [37676]       1.60s user time   (  0.08%)
-> stress-ng: info:  [37676]      39.66s system time (  2.06%)
-> stress-ng: info:  [37676]      41.26s total time  (  2.15%)
-> stress-ng: info:  [37676] load average: 7.69 3.63 2.36
-> stress-ng: info:  [37676] successful run completed in 60.10s (1 min, 
-> 0.10 secs)
-> 
-> The bogo ops/s (real time) did drop significantly.
-> 
-> And the memory reclaimation was not triggered in the whole process. so
-> theoretically no one is in the read critical section of shrinker_srcu.
-> 
-> Then I found that some stress-ng-ramfs processes were in
-> TASK_UNINTERRUPTIBLE state for a long time:
-> 
-> root       42313  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42314  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42315  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42316  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42317  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42318  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42319  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42320  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42321  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42322  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42323  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42324  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42325  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42326  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42327  7.9  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42328  7.9  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42329  7.9  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42330  7.9  0.0  69592  1556 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> 
-> Their call stack is as follows:
-> 
-> cat /proc/42330/stack
-> 
-> [<0>] __synchronize_srcu.part.21+0x83/0xb0
-> [<0>] unregister_shrinker+0x85/0xb0
-> [<0>] deactivate_locked_super+0x27/0x70
-> [<0>] cleanup_mnt+0xb8/0x140
-> [<0>] task_work_run+0x65/0x90
-> [<0>] exit_to_user_mode_prepare+0x1ba/0x1c0
-> [<0>] syscall_exit_to_user_mode+0x1b/0x40
-> [<0>] do_syscall_64+0x44/0x80
-> [<0>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> + RCU folks, Is this result as expected? I would have thought that
-> synchronize_srcu() should return quickly if no one is in the read
-> critical section. :(
 > 
 
-With the following changes, ops/s can return to previous levels:
-
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index db2ed6e08f67..90f541b07cd1 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -763,7 +763,7 @@ void unregister_shrinker(struct shrinker *shrinker)
-         debugfs_entry = shrinker_debugfs_remove(shrinker);
-         up_write(&shrinker_rwsem);
-
--       synchronize_srcu(&shrinker_srcu);
-+       synchronize_srcu_expedited(&shrinker_srcu);
-
-         debugfs_remove_recursive(debugfs_entry);
-
-stress-ng: info:  [13159] dispatching hogs: 9 ramfs
-stress-ng: info:  [13159] stressor       bogo ops real time  usr time 
-sys time   bogo ops/s     bogo ops/s
-stress-ng: info:  [13159]                           (secs)    (secs) 
-(secs)   (real time) (usr+sys time)
-stress-ng: info:  [13159] ramfs            710062     60.00      9.63 
-157.26     11834.18        4254.75
-stress-ng: info:  [13159] for a 60.00s run time:
-stress-ng: info:  [13159]    1920.14s available CPU time
-stress-ng: info:  [13159]       9.62s user time   (  0.50%)
-stress-ng: info:  [13159]     157.26s system time (  8.19%)
-stress-ng: info:  [13159]     166.88s total time  (  8.69%)
-stress-ng: info:  [13159] load average: 9.49 4.02 1.65
-stress-ng: info:  [13159] successful run completed in 60.00s (1 min, 
-0.00 secs)
-
-Can we make synchronize_srcu() call synchronize_srcu_expedited() when no
-one is in the read critical section?
-
-> 
-
--- 
-Thanks,
-Qi
