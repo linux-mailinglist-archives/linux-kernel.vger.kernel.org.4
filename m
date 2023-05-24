@@ -2,244 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D6F70F87A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBB570F884
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbjEXOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S235886AbjEXOUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234198AbjEXOSR (ORCPT
+        with ESMTP id S233176AbjEXOU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:18:17 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B488119;
-        Wed, 24 May 2023 07:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684937892; x=1716473892;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1iQCpw/J8b4ow6an4aBxEQoU1oA43ahwT/M6UCw7OWE=;
-  b=Ew7FXCXxoqv/5j14NfkBBEXit2o5PiEfyyODbJTMQiLpC7Fyk9hMKLhE
-   hc7Ech4d4RLgDjNJTpR0dCrdguX7XOD9za8KjCvvDg53u8xJrhZFpgO00
-   JZfmD/jZhWDSETOFMDP1Bu1l4dKnNrqFilVSbsv4YHvXheFjT3rXNH+mv
-   HzMazH/tMMjxnuSpHpDBLUK8nJ0e/Jbipjj3cGiI4OBJ9qrAD1ma6+1vx
-   9EVWaTWoWQuXv/b3kyqUAyy98Z8tH1gKhqGccc4aqCK2OZa/C+Sh5qoI/
-   bM+ONrsWu3WpwRgDRGA/qGTNeG/JBhzTITI/la93Sx7OeG8J2e1tFUrxh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="352420982"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="352420982"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 07:18:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="698559507"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="698559507"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga007.jf.intel.com with ESMTP; 24 May 2023 07:18:09 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 07:18:09 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 07:18:09 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 24 May 2023 07:18:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PWw+ZDfzY1vCfbIHcubKXGJU/7vJ+dPdK3G60/gg4hVK8Cy0OROKLaP8EWQ8RRsWZFhCVv6ScTW+3K3q35icAcz0pUWtFKJ9W4H9vMu1VKBiCBe2i6zlgDV7fhxoKOPzBKQZgBQyqgqToqia5RjgJmpB3TC22cevUholMN9d5IsnxCaHiXwYdRnvfKq9JGiLakwjC76Nu/zqpVkIeLyDG6yMk5epeUnxNsHrHN+tGgn7OjoJiWaKhqQLYkJRbckJhiKgcu2JnD+t+nIU+xis5OaJvvkcEz8rZTqHwTlv+yy/eKLEfE/ZXz4meTAMdAZybzb+WzeC3bUoZwkkyyT2Ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nrse2M0wULZCNNRDOF5wLry+2/KouMeyxl4dOth/qRQ=;
- b=fSCvH2GEG14Mb+DOPLyNBHCpfhGYqXKiXBYMIpTOOFNmXzwNl/nB57ABu+WKamcT1D64SGAZbLRLguqKck4I+OXi6UGjVtHuNrKae45WxmPV/Xe9Ilc8gYpihb5CVkDIZK5r74ZQcdxInGsa6RCN8x2sNpW5AvSyE9Thn9WgSZdxUgn/tyG0RGX5zzRW+6i8j/tshiJ5OxvvNNRlMHwP+ohrmjjbJUIFIm/YWOzs+U8TSMKusHWTbWZoafT0ygFz/5da8rdbk0NfPjjTSTXH/MAuOOpJxUmbx90KdCUrsrKw/qSSTRR3foIm6FrFo3HLAZgFbLf+cSMTAw50Uz+B4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by SA2PR11MB5130.namprd11.prod.outlook.com (2603:10b6:806:11d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 14:18:07 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 14:18:07 +0000
-Message-ID: <1d909989-5418-17ca-f161-67b4c05c6fb2@intel.com>
-Date:   Wed, 24 May 2023 16:17:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Intel-wired-lan] [PATCH] overflow: Add struct_size_t() helper
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, Kees Cook <keescook@chromium.org>
-CC:     "Darrick J. Wong" <djwong@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        <storagedev@microchip.com>, <linux-nvme@lists.infradead.org>,
-        James Smart <james.smart@broadcom.com>,
-        "Guo Xuenan" <guoxuenan@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "Tony Nguyen" <anthony.l.nguyen@intel.com>,
-        <linux-hardening@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>, <linux-scsi@vger.kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        <intel-wired-lan@lists.osuosl.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Gwan-gyeong Mun" <gwan-gyeong.mun@intel.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Keith Busch" <kbusch@kernel.org>,
-        HighPoint Linux Team <linux@highpoint-tech.com>,
-        <megaraidlinux.pdl@broadcom.com>, Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        <netdev@vger.kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        "Tales Aparecida" <tales.aparecida@gmail.com>,
-        Don Brace <don.brace@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20230522211810.never.421-kees@kernel.org>
- <20230523205354.06b147c6@kernel.org>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <20230523205354.06b147c6@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0176.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9f::14) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+        Wed, 24 May 2023 10:20:29 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF293119;
+        Wed, 24 May 2023 07:20:27 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OCelIk018004;
+        Wed, 24 May 2023 14:20:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FfIUZHOHpcLbU5HBca+VgpgQEMlYe+fHPzpTBYhzp6k=;
+ b=SimTO1WC6iBpNg4s2T32q5nrQ1TLybO4tpAQYsQ/sPTGenKDeflZ5V+hpGV+FBfC7rFT
+ 79qZL62RudAt4a5H8IaKNLFSy6QmsVETbdMZCfHwtN51wd/STkIIF+HAhyaknlWL3SU2
+ 3+vgItoFrZN75TB+k2UZq/sL767YFf6PnpIqZPuXXCe0xEx5pvZBLYMRziTfaaCORGAt
+ h4xhw73T+nCuhKlot36xgO5B8ebg5uHEB0MiI3YWEjP3cp4zJE6E03Z0w9GVdFZheqJU
+ Jmhaudmh0m149VsK/1z/er0d/9EJ5ujTJOVJGTWNmG3O2irYLts/0b5Y2BUmJEiZb2o0 wg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qscpms2eg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 14:20:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34OEKKxp001881
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 14:20:20 GMT
+Received: from [10.217.216.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 24 May
+ 2023 07:20:16 -0700
+Message-ID: <a101f5f2-4458-8284-cc7f-1ce22389c26f@quicinc.com>
+Date:   Wed, 24 May 2023 19:50:14 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|SA2PR11MB5130:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1aa4a62a-49b5-4d7d-a5bd-08db5c61b1a7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oibmwHQLyesMT4J0kfOdL+xf6ve6FBoCQY5O8bMauI6ODC3cwO4fseuBLTzgnMuOKrTrxRHC0w/Q6V85iRQ1DwEOEAKxJ3MOf2WoxBDjXnEisTLaKkV6DbNDXJZoVfgS/7CnrHs2aYbnOkAFwAhP57koLQza8ciJfKGNw2k2Lso0pGULCZ6w61VKbFCOzCZlWrZLBdH+yxjz4B6SWT1KTbH40Ewbs1kW36YskAsHX9p3yvjsDFfwituMNe38o5YMsqTzuHQzfiL2EELFfsS9iPdPRW0VaX+ZCbJU1G0SRy2CTnS6aKbp/eiYeiA15VzbKe97mBeOWcj1R8iqn5l5DzVWGBeXYamvxCYhX3Ayau0rhMGQfRU3Nq4qnbbvt8gltbLJxvvpz4DVyWUE/CERgsAb61qYr9gkQ3M8pdtHl/QGsXH66ZIjPBnsMHltNN2/C0sjqcp4V/aRZmQc1lno8DpRD1YYnP1lg/vWB+2zT79lUOXqAfSds/mW1lHgucHck2JQNynpc8yRIREpV+SWTTsSG8J4FBXjC1B4tgmFAuxUZM4YRVoU6ISCOzmMbwHufX4romIgAoIjTbCKiGIeRd7vCuJL6dQnOUtASCSm4dW6Rfwu+S3jWHm5IgXylKqU0bLbGAPXHzhYq7CkVAaAqw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(346002)(366004)(39860400002)(396003)(451199021)(82960400001)(186003)(6512007)(6506007)(26005)(38100700002)(7406005)(7416002)(2616005)(36756003)(2906002)(316002)(6666004)(4326008)(66476007)(66946007)(66556008)(41300700001)(6486002)(54906003)(110136005)(31696002)(86362001)(478600001)(31686004)(8676002)(8936002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWRTVnliVkJET2RBQ2ZvOVlWcGdaUWl3dTF2clQzL0N5OU5LeGJISG4vU1lS?=
- =?utf-8?B?dkt1ZDhyZWdYSmJ3VTV3WUlBWmY0czR5RUxXMkRKNDNVMXRPNTkxRzk5Y05F?=
- =?utf-8?B?TG5qd1NsS0NReS81L28rell1QWUwSTRnQUVCcVpsYm5mcWdlZUZQeW9LMU80?=
- =?utf-8?B?YVkyUWJDVTI4S3FUdythMmZHZHVMTzFwYjFBSFM4UEdxTUMrWU4vaEo4dUNi?=
- =?utf-8?B?Y3NqdXU4WVFMRkMzUms2ZGNFckNRN3QyZEhoM2Zyd1d1SEF3b0Q0WThrK3hj?=
- =?utf-8?B?Nm81dnhraWRoZEgvemI4eG9va0wzay9aSm43NUxJN09SR1pRaFpmWE1NYzhS?=
- =?utf-8?B?cTVrakdad0VJNDV6Y1FIK25jSnNNUlNBY1I3OVNwTTJXaEh0U2pSeXlWeDJs?=
- =?utf-8?B?a3hKUUZYcjlqUDZHZ0E1K3N1YzdweWtEZVM5VVk5STVRRGZIUkZUVWgvdmhM?=
- =?utf-8?B?K1dMSHljVHRQcWRqN2kyYldKWWZ3RHpDeUY0RzFTTmpCWUJGcTNVU0xxVE5s?=
- =?utf-8?B?MUhHNDFNUXBtS2RGQzBCaXRROVZ0NnlydEVwbzdxL3R2MWNReWdyalhKTVpN?=
- =?utf-8?B?NS9vMXBpNFZOZ3QzOGc3enpzNEF4NVBGRTRqaklmUjB0TzFQaThCSmtJZ1gw?=
- =?utf-8?B?WXBMOFB1UVd5L0ZRQ1p6WTg5cXVRSFJNTklIRXQ3aWpKRVZNRnQxQWZsVnBX?=
- =?utf-8?B?NklOdHBrV2JEL01ncXMzS0x0a2M2Vm8rcEFNbmhxU0V1Ukl6cUlldXBFSnJa?=
- =?utf-8?B?Zi9GZi9nMERGQ1N1SHJ2dTZjNnRxcVdQODFiZVYvb1NMUW5NOWZ5emkxbGg1?=
- =?utf-8?B?QjdTV2hPNGh3NHp6dnN4SEJ6S0hEUFF6azVVV0gyS1drVGprVlNTL09wY0lL?=
- =?utf-8?B?ZEE3NmlrVERSZ0h4ZjVXZ1JNaUlZRnR6SGJzRkQ4Ylk5R2o3empjYUs5VDVv?=
- =?utf-8?B?YVBwQ29ZS3FHK0R3SUMrWUIzVUJzdGtNWkI3UU1qcDRwRHNZYjA5eDdydnJn?=
- =?utf-8?B?RDFBejRjN21wUWttM0liaUdLNEYvanlqRDZyNDVKTTROQXpNaFN2bkcyMU9t?=
- =?utf-8?B?Y1lBaEU3aVR6TmVxT09iMDJ4WE4zcndtSEIzYUJWb2tEbDZZbDN4YWZJU2NP?=
- =?utf-8?B?RDlEc1VubDdLMEk4a3JqWlFlWVZiU3g0NFJPK2xhYVBsTkdrWTFDYU13Y3Ez?=
- =?utf-8?B?aXcrZkdGTVFIYXpPVEphNHZrZnltOUwwQkpjQVNzOTU4c0QzOGpvUXo3WmNP?=
- =?utf-8?B?Q1RJczBVbVlGYWhPbTdGRVI4SE15L1JiV2Fac3dZNFV1SVhneXRXTUxPYkox?=
- =?utf-8?B?UjBlUVpyOUtGNGpweVpwdWFzSXk1NlowN0pjZTdLQ0RDMlM5Uk1FZU1wKys3?=
- =?utf-8?B?TzRWeVp2eVFoTXpPNzJJK01KUWYwZ1NDN2pCUUYzU3ZzdTRVSVVoOTE5QnB4?=
- =?utf-8?B?SmJpSUNMK3AyUHkrVjM5bUQwQlZVZWhCVGdiVHNKUVhWc1lSdE5hamZjcHUw?=
- =?utf-8?B?UDdIMzVxK0d5T0c4L3FhcndHTkVxY3RKek9sOXdwa1QrUWxPYVhqRExtU1Mr?=
- =?utf-8?B?VjFnUVJRQ2txelhQdXJxeXNWQ2xKeE8rMnk1NzFpK3dQYUk5L2VZWE54M25Y?=
- =?utf-8?B?WnRkVUpsVHF2blRHOUhSN1RLdmRHN1ZDUUhjUUNhd3VzTUV5V2FPc3pRZXZm?=
- =?utf-8?B?RGU3VUtqU05CRGJQM2RXZnNVcEhUUVdrYWxpY2ZFVWw4RTNST2JlRFM3Mkow?=
- =?utf-8?B?YTNKWEZRVTRKS0orWkZYbXZNak1iOVdSMTlFbEQ1TUl5RmVMZCtRV2htS2N1?=
- =?utf-8?B?UDR0dm1waTFLS1luaUZlWWdadVZDZlQ0d3JTTGlLZm9wMVRoem9aYlBvdUhz?=
- =?utf-8?B?TVYrdStFanNja2hoWXBYR3djRnF3NzJFdUVacklycFU4RkNBa2ZvVm1DUlNh?=
- =?utf-8?B?ZUlNNkpkZHU4QlBWamYyQWx0Q3BRV0tFdzBHSFYwNS9pZlpUMVE1aXhEck5p?=
- =?utf-8?B?SHZGNVpUTUJwaUljUzRoNWsvT2RRd1E4VVAwL0pTUlVMTWxXWVNrakREMG4y?=
- =?utf-8?B?VHpleFBUczNzOENmZmlTVm5oUTlkeVFSN2RSbFJkTkhZaGhBQzdiR3dER0s2?=
- =?utf-8?B?Vlc4Tnczc0d3dUUxdm9jOGI2bU56bjFtVUVSb1Zac1IyRmZCQlhXdGdXQ2JP?=
- =?utf-8?B?Mnc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1aa4a62a-49b5-4d7d-a5bd-08db5c61b1a7
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 14:18:06.9803
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GZa5YNCGdC90BUrBWM/DzmXUbTnNDU+ZXAdAeZoy0SROq5ZD9krLJCDsKxsXraoFDiyS1Piq1hjK7ODBEHE18NPqjU2YXDIosBY9exOEkOE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5130
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 3/4] clk: qcom: videocc-sm8550: Add video clock controller
+ driver for SM8550
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230509161218.11979-1-quic_jkona@quicinc.com>
+ <20230509161218.11979-4-quic_jkona@quicinc.com>
+ <CAA8EJppn9=gPFk1RRB9y50aU_G3J6QrsOVQ9GH5gT86D_hOAgQ@mail.gmail.com>
+From:   Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <CAA8EJppn9=gPFk1RRB9y50aU_G3J6QrsOVQ9GH5gT86D_hOAgQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 0PIp1uK_OZaGeK9qMccerJPMP9Sfd1zP
+X-Proofpoint-GUID: 0PIp1uK_OZaGeK9qMccerJPMP9Sfd1zP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_09,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 clxscore=1015 priorityscore=1501 adultscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305240117
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
-Date: Tue, 23 May 2023 20:53:54 -0700
+Hi Dmitry,
 
-> On Mon, 22 May 2023 14:18:13 -0700 Kees Cook wrote:
->> diff --git a/drivers/net/ethernet/intel/ice/ice_ddp.h b/drivers/net/ethernet/intel/ice/ice_ddp.h
->> index 37eadb3d27a8..41acfe26df1c 100644
->> --- a/drivers/net/ethernet/intel/ice/ice_ddp.h
->> +++ b/drivers/net/ethernet/intel/ice/ice_ddp.h
->> @@ -185,7 +185,7 @@ struct ice_buf_hdr {
->>  
->>  #define ICE_MAX_ENTRIES_IN_BUF(hd_sz, ent_sz)                                 \
->>  	((ICE_PKG_BUF_SIZE -                                                  \
->> -	  struct_size((struct ice_buf_hdr *)0, section_entry, 1) - (hd_sz)) / \
->> +	  struct_size_t(struct ice_buf_hdr,  section_entry, 1) - (hd_sz)) / \
->>  	 (ent_sz))
->>  
->>  /* ice package section IDs */
->> @@ -297,7 +297,7 @@ struct ice_label_section {
->>  };
->>  
->>  #define ICE_MAX_LABELS_IN_BUF                                             \
->> -	ICE_MAX_ENTRIES_IN_BUF(struct_size((struct ice_label_section *)0, \
->> +	ICE_MAX_ENTRIES_IN_BUF(struct_size_t(struct ice_label_section,  \
->>  					   label, 1) -                    \
->>  				       sizeof(struct ice_label),          \
->>  			       sizeof(struct ice_label))
->> @@ -352,7 +352,7 @@ struct ice_boost_tcam_section {
->>  };
->>  
->>  #define ICE_MAX_BST_TCAMS_IN_BUF                                               \
->> -	ICE_MAX_ENTRIES_IN_BUF(struct_size((struct ice_boost_tcam_section *)0, \
->> +	ICE_MAX_ENTRIES_IN_BUF(struct_size_t(struct ice_boost_tcam_section,  \
->>  					   tcam, 1) -                          \
->>  				       sizeof(struct ice_boost_tcam_entry),    \
->>  			       sizeof(struct ice_boost_tcam_entry))
->> @@ -372,8 +372,7 @@ struct ice_marker_ptype_tcam_section {
->>  };
->>  
->>  #define ICE_MAX_MARKER_PTYPE_TCAMS_IN_BUF                                    \
->> -	ICE_MAX_ENTRIES_IN_BUF(                                              \
->> -		struct_size((struct ice_marker_ptype_tcam_section *)0, tcam, \
->> +	ICE_MAX_ENTRIES_IN_BUF(struct_size_t(struct ice_marker_ptype_tcam_section,  tcam, \
->>  			    1) -                                             \
->>  			sizeof(struct ice_marker_ptype_tcam_entry),          \
->>  		sizeof(struct ice_marker_ptype_tcam_entry))
+Thanks for your review!
+
+On 5/9/2023 10:45 PM, Dmitry Baryshkov wrote:
+> On Tue, 9 May 2023 at 19:14, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
+>>
+>> Add support for the video clock controller for video clients to be able
+>> to request for videocc clocks on SM8550 platform.
+>>
+>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>> ---
+>>   drivers/clk/qcom/Kconfig          |  10 +
+>>   drivers/clk/qcom/Makefile         |   1 +
+>>   drivers/clk/qcom/videocc-sm8550.c | 468 ++++++++++++++++++++++++++++++
+>>   3 files changed, 479 insertions(+)
+>>   create mode 100644 drivers/clk/qcom/videocc-sm8550.c
+>>
+>> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+>> index 12be3e2371b3..6bb9b4aff047 100644
+>> --- a/drivers/clk/qcom/Kconfig
+>> +++ b/drivers/clk/qcom/Kconfig
+>> @@ -925,6 +925,16 @@ config SM_VIDEOCC_8250
+>>            Say Y if you want to support video devices and functionality such as
+>>            video encode and decode.
+>>
+>> +config SM_VIDEOCC_8550
+>> +       tristate "SM8550 Video Clock Controller"
+>> +       select SM_GCC_8550
+>> +       select QCOM_GDSC
+>> +       help
+>> +         Support for the video clock controller on Qualcomm Technologies, Inc.
+>> +         SM8550 devices.
+>> +         Say Y if you want to support video devices and functionality such as
+>> +         video encode/decode.
+>> +
+>>   config SPMI_PMIC_CLKDIV
+>>          tristate "SPMI PMIC clkdiv Support"
+>>          depends on SPMI || COMPILE_TEST
+>> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+>> index 9ff4c373ad95..f0b95fc217aa 100644
+>> --- a/drivers/clk/qcom/Makefile
+>> +++ b/drivers/clk/qcom/Makefile
+>> @@ -127,6 +127,7 @@ obj-$(CONFIG_SM_GPUCC_8350) += gpucc-sm8350.o
+>>   obj-$(CONFIG_SM_TCSRCC_8550) += tcsrcc-sm8550.o
+>>   obj-$(CONFIG_SM_VIDEOCC_8150) += videocc-sm8150.o
+>>   obj-$(CONFIG_SM_VIDEOCC_8250) += videocc-sm8250.o
+>> +obj-$(CONFIG_SM_VIDEOCC_8550) += videocc-sm8550.o
+>>   obj-$(CONFIG_SPMI_PMIC_CLKDIV) += clk-spmi-pmic-div.o
+>>   obj-$(CONFIG_KPSS_XCC) += kpss-xcc.o
+>>   obj-$(CONFIG_QCOM_HFPLL) += hfpll.o
+>> diff --git a/drivers/clk/qcom/videocc-sm8550.c b/drivers/clk/qcom/videocc-sm8550.c
+>> new file mode 100644
+>> index 000000000000..10e4b2725ddf
+>> --- /dev/null
+>> +++ b/drivers/clk/qcom/videocc-sm8550.c
+>> @@ -0,0 +1,468 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/pm_runtime.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +#include <dt-bindings/clock/qcom,sm8550-videocc.h>
+>> +
+>> +#include "clk-alpha-pll.h"
+>> +#include "clk-branch.h"
+>> +#include "clk-rcg.h"
+>> +#include "clk-regmap.h"
+>> +#include "clk-regmap-divider.h"
+>> +#include "common.h"
+>> +#include "gdsc.h"
+>> +#include "reset.h"
+>> +
+>> +enum {
+>> +       DT_BI_TCXO,
 > 
-> Acked-by: Jakub Kicinski <kuba@kernel.org>
+> Any additional handling for gcc_video_ahb clk? It doesn't seem to be
+> used as a parent. Probably you intended to use it as a pm_clk?
+> Yes it is a pm_clk, but no additional handling is required from driver side.
+
+>> +};
+>> +
+>> +enum {
+>> +       P_BI_TCXO,
+>> +       P_VIDEO_CC_PLL0_OUT_MAIN,
+>> +       P_VIDEO_CC_PLL1_OUT_MAIN,
+>> +};
+[skipped]
+
+>> +static struct clk_regmap *video_cc_sm8550_clocks[] = {
+>> +       [VIDEO_CC_MVS0_CLK] = &video_cc_mvs0_clk.clkr,
+>> +       [VIDEO_CC_MVS0_CLK_SRC] = &video_cc_mvs0_clk_src.clkr,
+>> +       [VIDEO_CC_MVS0_DIV_CLK_SRC] = &video_cc_mvs0_div_clk_src.clkr,
+>> +       [VIDEO_CC_MVS0C_CLK] = &video_cc_mvs0c_clk.clkr,
+>> +       [VIDEO_CC_MVS0C_DIV2_DIV_CLK_SRC] = &video_cc_mvs0c_div2_div_clk_src.clkr,
+>> +       [VIDEO_CC_MVS1_CLK] = &video_cc_mvs1_clk.clkr,
+>> +       [VIDEO_CC_MVS1_CLK_SRC] = &video_cc_mvs1_clk_src.clkr,
+>> +       [VIDEO_CC_MVS1_DIV_CLK_SRC] = &video_cc_mvs1_div_clk_src.clkr,
+>> +       [VIDEO_CC_MVS1C_CLK] = &video_cc_mvs1c_clk.clkr,
+>> +       [VIDEO_CC_MVS1C_DIV2_DIV_CLK_SRC] = &video_cc_mvs1c_div2_div_clk_src.clkr,
+>> +       [VIDEO_CC_PLL0] = &video_cc_pll0.clkr,
+>> +       [VIDEO_CC_PLL1] = &video_cc_pll1.clkr,
+>> +};
+>> +
+>> +static struct gdsc *video_cc_sm8550_gdscs[] = {
+>> +       [VIDEO_CC_MVS0C_GDSC] = &video_cc_mvs0c_gdsc,
+>> +       [VIDEO_CC_MVS0_GDSC] = &video_cc_mvs0_gdsc,
+>> +       [VIDEO_CC_MVS1C_GDSC] = &video_cc_mvs1c_gdsc,
+>> +       [VIDEO_CC_MVS1_GDSC] = &video_cc_mvs1_gdsc,
+>> +};
+>> +
+>> +static const struct qcom_reset_map video_cc_sm8550_resets[] = {
+>> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0x80f0 },
+>> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0x80a0 },
+>> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0x8048 },
+>> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0x80c8 },
+>> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0x8074 },
 > 
-> but Intel ICE folks please speak up if this has a high chance of
-> conflicts, I think I've seen some ICE DDP patches flying around :(
+> Please rename them to start with the VIDEO_CC prefix.
+> 
+These names are coming from hardware plan and clients will
+refer to hardware plan for these names. So we would like to
+keep the names intact same as from hardware plan.
 
-I haven't found anything that would conflict with this, esp. since it
-implies no functional changes.
-I agree it's been much needed, great, thanks!
+>> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0x8064, 2 },
+>> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0x8090, 2 },
+>> +};
+>> +
+>> +static const struct regmap_config video_cc_sm8550_regmap_config = {
+>> +       .reg_bits = 32,
+>> +       .reg_stride = 4,
+>> +       .val_bits = 32,
+>> +       .max_register = 0x9f4c,
+>> +       .fast_io = true,
+>> +};
+>> +
+>> +static struct qcom_cc_desc video_cc_sm8550_desc = {
+>> +       .config = &video_cc_sm8550_regmap_config,
+>> +       .clks = video_cc_sm8550_clocks,
+>> +       .num_clks = ARRAY_SIZE(video_cc_sm8550_clocks),
+>> +       .resets = video_cc_sm8550_resets,
+>> +       .num_resets = ARRAY_SIZE(video_cc_sm8550_resets),
+>> +       .gdscs = video_cc_sm8550_gdscs,
+>> +       .num_gdscs = ARRAY_SIZE(video_cc_sm8550_gdscs),
+>> +};
+>> +
+>> +static const struct of_device_id video_cc_sm8550_match_table[] = {
+>> +       { .compatible = "qcom,sm8550-videocc" },
+>> +       { }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, video_cc_sm8550_match_table);
+>> +
+>> +static int video_cc_sm8550_probe(struct platform_device *pdev)
+>> +{
+>> +       struct regmap *regmap;
+>> +       int ret;
+>> +
+>> +       ret = devm_pm_runtime_enable(&pdev->dev);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       regmap = qcom_cc_map(pdev, &video_cc_sm8550_desc);
+>> +       if (IS_ERR(regmap)) {
+>> +               pm_runtime_put(&pdev->dev);
+>> +               return PTR_ERR(regmap);
+>> +       }
+>> +
+>> +       clk_lucid_ole_pll_configure(&video_cc_pll0, regmap, &video_cc_pll0_config);
+>> +       clk_lucid_ole_pll_configure(&video_cc_pll1, regmap, &video_cc_pll1_config);
+>> +
+>> +       /*
+>> +        * Keep clocks always enabled:
+>> +        *      video_cc_ahb_clk
+>> +        *      video_cc_sleep_clk
+>> +        *      video_cc_xo_clk
+>> +        */
+>> +       regmap_update_bits(regmap, 0x80f4, BIT(0), BIT(0));
+>> +       regmap_update_bits(regmap, 0x8140, BIT(0), BIT(0));
+>> +       regmap_update_bits(regmap, 0x8124, BIT(0), BIT(0));
+>> +
+>> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8550_desc, regmap);
+>> +
+>> +       pm_runtime_put(&pdev->dev);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static struct platform_driver video_cc_sm8550_driver = {
+>> +       .probe = video_cc_sm8550_probe,
+>> +       .driver = {
+>> +               .name = "video_cc-sm8550",
+>> +               .of_match_table = video_cc_sm8550_match_table,
+>> +       },
+>> +};
+>> +
+>> +static int __init video_cc_sm8550_init(void)
+>> +{
+>> +       return platform_driver_register(&video_cc_sm8550_driver);
+>> +}
+>> +subsys_initcall(video_cc_sm8550_init);
+> 
+> module_platform_driver() instead? There is no need to register videocc
+> at the subsys level.
+> 
+We need to evaluate and validate if module_platform_driver works for us 
+in all scenarios. We will post a cleanup patch once we conclude 
+module_platform_driver works for us in all cases.
 
-Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-
-Olek
+Thanks & Regards,
+Jagadeesh
