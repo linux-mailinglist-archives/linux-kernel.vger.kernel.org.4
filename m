@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C993A70F5B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5275370F5B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjEXLyV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 07:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
+        id S231349AbjEXL43 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 07:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjEXLyT (ORCPT
+        with ESMTP id S229450AbjEXL41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:54:19 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7E9130;
-        Wed, 24 May 2023 04:54:18 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-ba829e17aacso1332617276.0;
-        Wed, 24 May 2023 04:54:18 -0700 (PDT)
+        Wed, 24 May 2023 07:56:27 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F37B184;
+        Wed, 24 May 2023 04:56:23 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-510f866ce78so250345a12.1;
+        Wed, 24 May 2023 04:56:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684929257; x=1687521257;
+        d=1e100.net; s=20221208; t=1684929381; x=1687521381;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mB+yJW9GxDPC7vWCyTgkNtqkSRQGKRDyuctXyoPIN+0=;
-        b=Y2+fmgJTPEZXQE0T1YaGGIniNCWNMYLAPCZbQt11SrboYMsAH7nY9ffJuBghP33BU2
-         gYtXPANKugy5Qu3B2N3JauJzBzDDDnxO2fJsKchUqYHp+//rJS28tavK7cleJfZj4ZJG
-         PM6qs5twP+4RtSi1BAGWqNcgGZvEPdwZT6qQ2GfKkUTpLISOrwQFMVhaxKeMGSN+cTP8
-         CEGvx9pg1dcj5L3LCx8g3m+HeQpymiU6IxJrbWAx8AhQzBim6tp2IbeGlk1M1lPrcisF
-         Ibak8MvbmpYRTSiZI9yYL7DhJn8MkiPJbwjFEkqUVnnpxK6LFMLQ7DLaqjm2aOa618Pp
-         Tk5g==
-X-Gm-Message-State: AC+VfDxuGGTC/+jzD+e+yQnOTE408GiEbNd8W2XUdbz4AupQQs2SJFTE
-        XsWwesBhinG2UGztYIcWxOvWxcix/EI6Pg==
-X-Google-Smtp-Source: ACHHUZ4URujJT/VuMXlr7/M/3PHGt78GqQjWgeHLmoXaViuBJm26DxxDcg/XokClTYsXEKitekVXdw==
-X-Received: by 2002:a25:f80b:0:b0:ba8:707a:7ff4 with SMTP id u11-20020a25f80b000000b00ba8707a7ff4mr1623342ybd.62.1684929256901;
-        Wed, 24 May 2023 04:54:16 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id e7-20020a259247000000b00b9def138173sm2633333ybo.1.2023.05.24.04.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 04:54:16 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-561e919d355so12116427b3.0;
-        Wed, 24 May 2023 04:54:15 -0700 (PDT)
-X-Received: by 2002:a25:342:0:b0:ba8:5009:db33 with SMTP id
- 63-20020a250342000000b00ba85009db33mr17581461ybd.59.1684929255682; Wed, 24
- May 2023 04:54:15 -0700 (PDT)
+        bh=ts8juLbk9tH3TciBEO7YqwijEpAwtpNwIl+U8f3UTMQ=;
+        b=kpBoJh4DkxP+iwsgPqfDjse7EMYHRBOuefhjwRClfwJFuoHkFg6fWME7fU1Ir2HyKc
+         OLxvWXZ9QIplw77e6XduYrEZx6i0wQ65ixmeV/cSMP7K9knh/M3e9k6FpgWIFG/H0POk
+         caIS6TvonWmo1wq3kgCjos+DUFbRIyZO3+5lXERnG58twLwvGxhKTVkv85ALHUUq/Tp/
+         QTq6ZZBoZPIInlZnhCCM6G5NyWhzyUxBRba5qtHdkxVkNC721u2Zk9J9nAPrrWYRZry1
+         bAkSlcxw73dWqXQZt2yfvYYXnMnPI2faaFDD4bUdTHqgmXUWs5IqDyRqK0RKC4Kx4q2L
+         QpfQ==
+X-Gm-Message-State: AC+VfDy2/6owOawSENdBtQROq+4t39IvklLvzZGC90YOOoiWqAL4xacS
+        71YasAWWc8JZEY6AtOUBfTuZ5/AHWA0/NdX1fEf/PS7PDlM=
+X-Google-Smtp-Source: ACHHUZ7MT06b3lSwEViVMQBGKwn1Lr58MTA/6lavX4RbfWS9M+/gFm0HhFbW7cCnvW8F4QI1XvBsJe8rw+24fvc/UMk=
+X-Received: by 2002:a17:906:2097:b0:965:86ed:ca6d with SMTP id
+ 23-20020a170906209700b0096586edca6dmr15549853ejq.0.1684929381339; Wed, 24 May
+ 2023 04:56:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1684854992.git.geert+renesas@glider.be> <d800a238-83e0-0ec2-cf3a-67d07d749b5b@suse.de>
-In-Reply-To: <d800a238-83e0-0ec2-cf3a-67d07d749b5b@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 24 May 2023 13:54:04 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXPJ02UWuH1v_ZaoWmbHALu0Qe2K27nhuvwKBmjno+YMw@mail.gmail.com>
-Message-ID: <CAMuHMdXPJ02UWuH1v_ZaoWmbHALu0Qe2K27nhuvwKBmjno+YMw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] drm: shmobile: Fixes and enhancements
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <13276375.uLZWGnKmhe@kreacher>
+In-Reply-To: <13276375.uLZWGnKmhe@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 May 2023 13:56:09 +0200
+Message-ID: <CAJZ5v0g+jD3WUQgvaLrFZ3etEcF486UpCemhrfUQKuOV1hjt_Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] ACPI: scan: MIPI DiSco for Imaging support
+To:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -72,46 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-On Wed, May 24, 2023 at 1:42 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 23.05.23 um 17:31 schrieb Geert Uytterhoeven:
-> > Currently, there are two drivers for the LCD controller on Renesas
-> > SuperH-based and ARM-based SH-Mobile and R-Mobile SoCs:
-> >    1. sh_mobile_lcdcfb, using the fbdev framework,
-> >    2. shmob_drm, using the DRM framework.
-> > However, only the former driver can be used, as all platform support
-> > integrates the former.  None of these drivers support DT-based systems.
-> >
-> > This patch series is a first step to enable the SH-Mobile DRM driver for
-> > Renesas ARM-based SH-Mobile and R-Mobile SoCs.  The next steps planned are
-> > to (1) add DT support (works, but needs a hack due to lack of (2)), and (2)
-> > convert the driver to atomic modesetting.
-> >
-> > Changes compared to v2[1]:
-> >    - Add Reviewed-by.
-> >
-> > Changes compared to v1[2]:
-> >    - Add Reviewed-by,
-> >    - Drop dependency on ARM.
-> >
-> > This has been tested on the R-Mobile A1-based Atmark Techno
-> > Armadillo-800-EVA development board, using a temporary
-> > platform-enablement patch[3].
-> >
-> > Thanks for applying to drm-misc!
+On Wed, May 24, 2023 at 1:48 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> It's all been reviewed. Do you want me to merge the patchset?
+> Hi Folks,
+>
+> This basically is a re-write of a recent patch series from Sakari:
+>
+> https://lore.kernel.org/linux-acpi/20230329100951.1522322-1-sakari.ailus@linux.intel.com
+>
+> The general idea is the same - CSI-2 resource descriptors, introduced in
+> ACPI 6.4 and defined by
+>
+> https://uefi.org/specs/ACPI/6.5/06_Device_Configuration.html#camera-serial-interface-csi-2-connection-resource-descriptor
+>
+> are found and used for creating a set of software nodes that represent the CSI-2
+> connection graph.
+>
+> These software nodes need to be available before any scan handlers or ACPI drivers
+> are bound to any struct acpi_device objects, so all of that is done at the early
+> stage of ACPI device enumeration, but unnecessary ACPI namespace walks are avoided.
+>
+> The CSI-2 software nodes are populated with data extracted from the CSI-2 resource
+> descriptors themselves and from device properties defined by the MIPI DiSco for
+> Imaging specification (see https://www.mipi.org/specifications/mipi-disco-imaging).
+>
+> Patches [4,6/6] come from the original series directly, but the other patches have
+> been changes substantially, so I've decided to re-start patch series versioning from
+> scratch.
 
-That would be great! Thanks!
+I should have mentioned that the following two patches are not included:
 
-Gr{oetje,eeting}s,
+https://patchwork.kernel.org/project/linux-acpi/patch/20230329100951.1522322-9-sakari.ailus@linux.intel.com/
+https://patchwork.kernel.org/project/linux-acpi/patch/20230329100951.1522322-10-sakari.ailus@linux.intel.com/
 
-                        Geert
+because I don't agree with the idea of renaming device properties in place.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Also not included is the documentation patch, because comments are
+added by the individual patches making changes in the code.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks!
