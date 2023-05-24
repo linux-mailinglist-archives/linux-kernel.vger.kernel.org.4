@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5190E70F10E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D82A70F0F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240423AbjEXIeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S240310AbjEXIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240282AbjEXIdK (ORCPT
+        with ESMTP id S240196AbjEXIci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:33:10 -0400
+        Wed, 24 May 2023 04:32:38 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91576E54
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:32:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC09135
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:32:35 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1q1jua-0002nD-Jx; Wed, 24 May 2023 10:32:00 +0200
+        id 1q1juc-0002tQ-A9; Wed, 24 May 2023 10:32:02 +0200
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1q1juZ-002RaE-JW; Wed, 24 May 2023 10:31:59 +0200
+        id 1q1jub-002Rar-D6; Wed, 24 May 2023 10:32:01 +0200
 Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1q1juX-009jJ8-CX; Wed, 24 May 2023 10:31:57 +0200
+        id 1q1juX-009jKG-FH; Wed, 24 May 2023 10:31:57 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-rockchip@lists.infradead.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v5 18/25] PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
-Date:   Wed, 24 May 2023 10:31:46 +0200
-Message-Id: <20230524083153.2046084-19-s.hauer@pengutronix.de>
+Subject: [PATCH v5 19/25] PM / devfreq: rockchip-dfi: add support for RK3588
+Date:   Wed, 24 May 2023 10:31:47 +0200
+Message-Id: <20230524083153.2046084-20-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230524083153.2046084-1-s.hauer@pengutronix.de>
 References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
@@ -64,139 +64,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The currently supported RK3399 has a set of registers per channel, but
-it has only a single DDRMON_CTRL register. With upcoming RK3588 this
-will be different, the RK3588 has a DDRMON_CTRL register per channel.
-
-Instead of expecting a single DDRMON_CTRL register, loop over the
-channels and write the channel specific DDRMON_CTRL register. Break
-out early out of the loop when there is only a single DDRMON_CTRL
-register like on the RK3399.
+Add support for the RK3588 to the driver. The RK3588 has four DDR
+channels with a register stride of 0x4000 between the channel
+registers, also it has a DDRMON_CTRL register per channel.
 
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/devfreq/event/rockchip-dfi.c | 72 ++++++++++++++++++----------
- 1 file changed, 48 insertions(+), 24 deletions(-)
+ drivers/devfreq/event/rockchip-dfi.c | 30 +++++++++++++++++++++++++++-
+ include/soc/rockchip/rk3588_grf.h    | 18 +++++++++++++++++
+ 2 files changed, 47 insertions(+), 1 deletion(-)
+ create mode 100644 include/soc/rockchip/rk3588_grf.h
 
 diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index a872550a7caf5..23d66fe737975 100644
+index 23d66fe737975..1410d20f3df80 100644
 --- a/drivers/devfreq/event/rockchip-dfi.c
 +++ b/drivers/devfreq/event/rockchip-dfi.c
-@@ -113,12 +113,13 @@ struct rockchip_dfi {
- 	int burst_len;
- 	int buswidth[DMC_MAX_CHANNELS];
- 	int ddrmon_stride;
-+	bool ddrmon_ctrl_single;
- };
+@@ -26,8 +26,9 @@
+ #include <soc/rockchip/rockchip_grf.h>
+ #include <soc/rockchip/rk3399_grf.h>
+ #include <soc/rockchip/rk3568_grf.h>
++#include <soc/rockchip/rk3588_grf.h>
  
- static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
- {
- 	void __iomem *dfi_regs = dfi->regs;
--	int ret = 0;
-+	int i, ret = 0;
+-#define DMC_MAX_CHANNELS	2
++#define DMC_MAX_CHANNELS	4
  
- 	mutex_lock(&dfi->mutex);
+ #define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
  
-@@ -132,29 +133,41 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
- 		goto out;
- 	}
- 
--	/* clear DDRMON_CTRL setting */
--	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_SOFTWARE_EN |
--		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
-+	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
-+		u32 ctrl = 0;
- 
--	/* set ddr type to dfi */
--	switch (dfi->ddr_type) {
--	case ROCKCHIP_DDRTYPE_LPDDR2:
--	case ROCKCHIP_DDRTYPE_LPDDR3:
--		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE_MASK),
--			       dfi_regs + DDRMON_CTRL);
--		break;
--	case ROCKCHIP_DDRTYPE_LPDDR4:
--	case ROCKCHIP_DDRTYPE_LPDDR4X:
--		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_MASK),
--			       dfi_regs + DDRMON_CTRL);
--		break;
--	default:
--		break;
--	}
-+		if (!(dfi->channel_mask & BIT(i)))
-+			continue;
- 
--	/* enable count, use software mode */
--	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
--		       dfi_regs + DDRMON_CTRL);
-+		/* clear DDRMON_CTRL setting */
-+		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN |
-+			       DDRMON_CTRL_SOFTWARE_EN | DDRMON_CTRL_HARDWARE_EN),
-+			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-+
-+		/* set ddr type to dfi */
-+		switch (dfi->ddr_type) {
-+		case ROCKCHIP_DDRTYPE_LPDDR2:
-+		case ROCKCHIP_DDRTYPE_LPDDR3:
-+			ctrl = DDRMON_CTRL_LPDDR23;
-+			break;
-+		case ROCKCHIP_DDRTYPE_LPDDR4:
-+		case ROCKCHIP_DDRTYPE_LPDDR4X:
-+			ctrl = DDRMON_CTRL_LPDDR4;
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		writel_relaxed(HIWORD_UPDATE(ctrl, DDRMON_CTRL_DDR_TYPE_MASK),
-+			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-+
-+		/* enable count, use software mode */
-+		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
-+			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-+
-+		if (dfi->ddrmon_ctrl_single)
-+			break;
-+	}
- out:
- 	mutex_unlock(&dfi->mutex);
- 
-@@ -164,6 +177,7 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
- static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
- {
- 	void __iomem *dfi_regs = dfi->regs;
-+	int i;
- 
- 	mutex_lock(&dfi->mutex);
- 
-@@ -174,8 +188,17 @@ static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
- 	if (dfi->usecount > 0)
- 		goto out;
- 
--	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
--		       dfi_regs + DDRMON_CTRL);
-+	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
-+		if (!(dfi->channel_mask & BIT(i)))
-+			continue;
-+
-+		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
-+			      dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-+
-+		if (dfi->ddrmon_ctrl_single)
-+			break;
-+	}
-+
- 	clk_disable_unprepare(dfi->clk);
- out:
- 	mutex_unlock(&dfi->mutex);
-@@ -663,6 +686,7 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
- 	dfi->buswidth[1] = FIELD_GET(RK3399_PMUGRF_OS_REG2_BW_CH1, val) == 0 ? 4 : 2;
- 
- 	dfi->ddrmon_stride = 0x14;
-+	dfi->ddrmon_ctrl_single = true;
- 
+@@ -711,9 +712,36 @@ static int rk3568_dfi_init(struct rockchip_dfi *dfi)
  	return 0;
  };
+ 
++static int rk3588_dfi_init(struct rockchip_dfi *dfi)
++{
++	struct regmap *regmap_pmu = dfi->regmap_pmu;
++	u32 reg2, reg3, reg4;
++
++	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG2, &reg2);
++	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG3, &reg3);
++	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG4, &reg4);
++
++	dfi->ddr_type = FIELD_GET(RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO, reg2);
++
++	if (FIELD_GET(RK3588_PMUGRF_OS_REG3_SYSREG_VERSION, reg3) >= 0x3)
++		dfi->ddr_type |= FIELD_GET(RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3, reg3) << 3;
++
++	dfi->buswidth[0] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH0, reg2) == 0 ? 4 : 2;
++	dfi->buswidth[1] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg2) == 0 ? 4 : 2;
++	dfi->buswidth[2] = FIELD_GET(RK3568_PMUGRF_OS_REG2_BW_CH0, reg4) == 0 ? 4 : 2;
++	dfi->buswidth[3] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg4) == 0 ? 4 : 2;
++	dfi->channel_mask = FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg2) |
++			    FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg4) << 2;
++
++	dfi->ddrmon_stride = 0x4000;
++
++	return 0;
++};
++
+ static const struct of_device_id rockchip_dfi_id_match[] = {
+ 	{ .compatible = "rockchip,rk3399-dfi", .data = rk3399_dfi_init },
+ 	{ .compatible = "rockchip,rk3568-dfi", .data = rk3568_dfi_init },
++	{ .compatible = "rockchip,rk3588-dfi", .data = rk3588_dfi_init },
+ 	{ },
+ };
+ 
+diff --git a/include/soc/rockchip/rk3588_grf.h b/include/soc/rockchip/rk3588_grf.h
+new file mode 100644
+index 0000000000000..630b35a550640
+--- /dev/null
++++ b/include/soc/rockchip/rk3588_grf.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++#ifndef __SOC_RK3588_GRF_H
++#define __SOC_RK3588_GRF_H
++
++#define RK3588_PMUGRF_OS_REG2		0x208
++#define RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO		GENMASK(15, 13)
++#define RK3588_PMUGRF_OS_REG2_BW_CH0			GENMASK(3, 2)
++#define RK3588_PMUGRF_OS_REG2_BW_CH1                    GENMASK(19, 18)
++#define RK3588_PMUGRF_OS_REG2_CH_INFO                   GENMASK(29, 28)
++
++#define RK3588_PMUGRF_OS_REG3		0x20c
++#define RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3		GENMASK(13, 12)
++#define RK3588_PMUGRF_OS_REG3_SYSREG_VERSION		GENMASK(31, 28)
++
++#define RK3588_PMUGRF_OS_REG4           0x210
++#define RK3588_PMUGRF_OS_REG5           0x214
++
++#endif /* __SOC_RK3588_GRF_H */
 -- 
 2.39.2
 
