@@ -2,166 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419CB70FDE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8C870FDE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbjEXS3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S229996AbjEXS36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbjEXS3C (ORCPT
+        with ESMTP id S237415AbjEXS3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:29:02 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0841C98
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:29:01 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96fd3a658eeso184561866b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:29:00 -0700 (PDT)
+        Wed, 24 May 2023 14:29:49 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC01CB6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:29:47 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb7aaa605so2573573276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684952939; x=1687544939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c5lgPY1OhSwXtRY0LRAeuO9w0cAYukxFSoQE2BhbX5Y=;
-        b=doTct/umbGJ2NGSZfavFJNaiYz8FxhaAljg6NSt6hs8auwjLpc/TxrPJioDpEdbWBx
-         aXgmHEME3QkebZ0nmTGnXfR+gHhJlk9NoLlSkefmoipWILRsvUxicr4lfEQv9ry1RMgu
-         JpAaVHi6V2YtulRO+hGtCPpcl1AaITS8SCXsU=
+        d=google.com; s=20221208; t=1684952987; x=1687544987;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zhCLzNiRBNlROtfKp+ujTOcVOVXlrI8zrVzKw44qRAY=;
+        b=gk9VY1Fi8rAEgoEQhDDDcAlyZtuvVYH+tDqstE9RgYMCMx44Q39XjyhilHUndn79Jf
+         DsYr1NeHSyJUP6Xnpups0LK8LE/e6MaJSo5KgXEbph/nbdV6f20iBAAvJDcDAb8yWxqa
+         PwXxf/osa258qdIt5lOohF/nQXbGcInom6MWSqv5xu2G/FDMvyF17aGJfKTyj0ZxdkU+
+         1YwX6JquS35m12/IprqBATiSQnRhymKxch+P3H7efEhJZWSGzCXGn81+zzZVAaeP//kP
+         +akCm4mHwxaHiE3+Y6UMz/ktFwEkssQ3cCRXbiLWobVua0yuYn9XCHMU6TN87sPyU0Lr
+         hBbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684952939; x=1687544939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c5lgPY1OhSwXtRY0LRAeuO9w0cAYukxFSoQE2BhbX5Y=;
-        b=VhjPjuh/vcMIN9FUJ1niNGnMVxmhBWwxesdUGpZxvkSeFr7YIaOFZqvWyRUb0NWgVp
-         IHH5n378h3y331lBrII4uznQ3pQqfVtyzK8Y+uV3R8QNCkw392F3s8zlNxQ2/DK2vyTu
-         PD64ICClLBvn6p9l4yFL5/5Fn5/IJBB1Zrup+SUis/G+AtaTj56nxg4QjrTq0tmy8HXo
-         z8A5YzsuP8SAfHc3yLr+u+JwoIn1Iqqq3ZNSN8iHCZpQsN87XDAh6g7qsbluw+X/SAzN
-         uHi9jxbtv5DWCFd+5tJfL9n+DOyeWhM1RIehWyCghL2vz4tSFsEjRm2ZAYgMK0mP0/Rb
-         TJNA==
-X-Gm-Message-State: AC+VfDwB6l47CNmPkR/uQk9cK1jTJ/7oqdGmDkENJEVqHPrZHXTdA/oq
-        qssZmgQzgmtcwF6Fpu4H/b745ybRIHAw/1lZbtNzMVuv
-X-Google-Smtp-Source: ACHHUZ5fKSiygDLIueGMjF/bl7hIjsYvMgr6eJTNilIwyIhzbucev5ZWe4IJTqtTBi5aP+RjdkTaAg==
-X-Received: by 2002:a17:907:86a2:b0:96f:a39c:86d6 with SMTP id qa34-20020a17090786a200b0096fa39c86d6mr15106884ejc.8.1684952939342;
-        Wed, 24 May 2023 11:28:59 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id qx15-20020a170906fccf00b00965f98eefc1sm6126279ejb.116.2023.05.24.11.28.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 11:28:58 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-969f90d71d4so183524366b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:28:58 -0700 (PDT)
-X-Received: by 2002:a17:907:7b8d:b0:92b:3c78:91fa with SMTP id
- ne13-20020a1709077b8d00b0092b3c7891famr20565714ejc.28.1684952938255; Wed, 24
- May 2023 11:28:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230524131200.0f6fb318@rorschach.local.home>
-In-Reply-To: <20230524131200.0f6fb318@rorschach.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 24 May 2023 11:28:41 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiNagW7exChQ4YuiRpCDN=kxmUdY5u7ebFux1jgEoL2tg@mail.gmail.com>
-Message-ID: <CAHk-=wiNagW7exChQ4YuiRpCDN=kxmUdY5u7ebFux1jgEoL2tg@mail.gmail.com>
-Subject: Re: [BUG 6.4-rc3] BUG: kernel NULL pointer dereference in __dev_fwnode
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684952987; x=1687544987;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zhCLzNiRBNlROtfKp+ujTOcVOVXlrI8zrVzKw44qRAY=;
+        b=cpUqTnbpXva8M8zQ3EHVTLAslFoGuW7Hmy5xFymBxGTcK/ieCF63CDAsLF0TmSdTwq
+         jeNIev9fJYjM5bsArcXcCss2QCT3+7QlYbB02vJE9yqA0nK9ICikJLuGRoKmjXOwHY7t
+         JK6NeGItqI93OrcrxChz3gbTbdwz/EldZGwJ1Ei2HFLBColh9YmwgBradRFJyUB7vfEH
+         I8JYQuzjG9FQLfq1GFLGsdG0N0IUp51j51nKhc4wHwfbluauQjnoCF2sYEtXbFMErDKq
+         AF6AlMqmjBLFo1lYNbudmWnEPSHEgrnteGXjOx00uC4rvxOZwLpTzioPdfrYRcgNE/7L
+         DzJg==
+X-Gm-Message-State: AC+VfDwbHEE8/REMflbLsv9toFME8C6UT46QF+rj61ivsxLMXidv1WC6
+        aMNWhjICp5xW/NjyVSqjw68EV5R7RME=
+X-Google-Smtp-Source: ACHHUZ6aIrpFTNF+ZZtuCtnMHlGQa2V7WRfUVWrDI43ohWGbs/qTvtv8jZTbxA9m9umssjztL0lGmACZlFw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1024:b0:ba8:6422:7fc with SMTP id
+ x4-20020a056902102400b00ba8642207fcmr398046ybt.7.1684952987216; Wed, 24 May
+ 2023 11:29:47 -0700 (PDT)
+Date:   Wed, 24 May 2023 11:29:45 -0700
+In-Reply-To: <ZG5F3igFgdIAwrn4@x1n>
+Mime-Version: 1.0
+References: <20230330085802.2414466-1-stevensd@google.com> <20230330085802.2414466-2-stevensd@google.com>
+ <ZGvUsf7lMkrNDHuE@google.com> <ZG45q0xJSnA6NKQN@x1n> <ZG4/VdHu2LqLTlct@google.com>
+ <ZG5F3igFgdIAwrn4@x1n>
+Message-ID: <ZG5XmdYy3VtcyPAL@google.com>
+Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     David Stevens <stevensd@chromium.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 10:12=E2=80=AFAM Steven Rostedt <rostedt@goodmis.or=
-g> wrote:
->
-> I started adding fixes to my urgent branch rebased on top of v6.4-rc3
-> and ran my tests. Unfortunately they crashed on unrelated code.
->
-> Here's the dump:
->
->  BUG: kernel NULL pointer dereference, address: 00000000000003e8
->  RIP: 0010:__dev_fwnode+0x9/0x2a
->  Code: ff 85 c0 78 16 48 8b 3c 24 89 c6 59 e9 e0 f7 ff ff b8 ea ff ff ff =
-c3 cc cc cc cc 5a c3 cc cc cc cc f3 0f 1e fa 0f 1f 44 00 00 <48> 8b 87 e8 0=
-3 00 00 48
->  83 c0 18 c3 cc cc cc cc 48
+On Wed, May 24, 2023, Peter Xu wrote:
+> On Wed, May 24, 2023 at 09:46:13AM -0700, Sean Christopherson wrote:
+> > If we hack kvm_pfn_to_refcounted_page(), then all of those protections are lost
+> > because KVM would drop its assertions and also skip dirtying pages, i.e. would
+> > effectively suppress the latent detection by check_new_page_bad().
+> 
+> So it's probably that I totally have no idea what are the attributes for
+> those special pages so I don't understand enough on why we need to handle
+> those pages differently from e.g. PFNMAP pages, and also the benefits.
+> 
+> I think what I can tell is that they're pages that doesn't have
+> PageCompound bits set on either head or tails, however it's still a
+> multi-2-order large page.  Is there an example on how these pages are used
+> and allocated?  Why would we need those pages, and whether these pages need
+> to be set dirty/accessed after all?
 
-That disassembles to
+The use case David is interested in is where an AMD GPU driver kmallocs() a
+chunk of memory, let's it be mmap()'d by userspace, and userspace then maps it
+into the guest for a virtual (passthrough?) GPU.  For all intents and purposes,
+it's normal memory, just not refcounted.
 
-    endbr64
-    nopl   0x0(%rax,%rax,1)
-    mov    0x3e8(%rdi),%rax
-    add    $0x18,%rax
-    ret
+> >  static bool kvm_is_ad_tracked_page(struct page *page)
+> >  {
+> > +       /*
+> > +        * Assert that KVM isn't attempting to mark a freed page as Accessed or
+> > +        * Dirty, i.e. that KVM's MMU doesn't have a use-after-free bug.  KVM
+> > +        * (typically) doesn't pin pages that are mapped in KVM's MMU, and
+> > +        * instead relies on mmu_notifiers to know when a mapping needs to be
+> > +        * zapped/invalidated.  Unmapping from KVM's MMU must happen _before_
+> > +        * KVM returns from its mmu_notifier, i.e. the page should have an
+> > +        * elevated refcount at this point even though KVM doesn't hold a
+> > +        * reference of its own.
+> > +        */
+> > +       if (WARN_ON_ONCE(!page_count(page)))
+> > +               return false;
+> > +
+> >         /*
+> >          * Per page-flags.h, pages tagged PG_reserved "should in general not be
+> >          * touched (e.g. set dirty) except by its owner".
+> > 
+> 
+> This looks like a good thing to have, indeed.  But again it doesn't seem
+> like anything special to the pages we're discussing here, say, !Compound &&
+> refcount==0 ones.
 
-which looks like it must be the
+The problem is that if KVM ignores refcount==0 pages, then KVM can't distinguish
+between the legitimate[*] refcount==0 AMD GPU case and a buggy refcount==0
+use-after-free scenario.  I don't want to make that sacrifice as the legimiate
+!refcounted use case is a very specific use case, whereas consuming refcounted
+memory is ubiquituous (outside of maybe AWS).
 
-    return dev->fwnode;
-
-with a NULL 'dev'. Which makes sense for __dev_fwnode with CONFIG_OF
-not enabled.
-
-Except I have no idea what that odd 'add $0x18" is all about. Strange.
-
-Anyway, the caller seems to be this code in power_supply_get_battery_info()=
-:
-
-        if (psy->of_node) {
-            .. presumably not this ..
-        } else {
-                err =3D fwnode_property_get_reference_args(
-                                        dev_fwnode(psy->dev.parent),
-                                        "monitored-battery", NULL, 0, 0, &a=
-rgs);
-                ...
-
-so I suspect we have psy->dev.parent being NULL.
-
->  I ran a bisect and it found it to be this commit:
->
-> 27a2195efa8d2 ("power: supply: core: auto-exposure of simple-battery data=
-")
->
-> I checked out that commit and tested it, and it crashed. I then
-> reverted that commit, and the crash goes away.
-
-At a guess, it's
-
- (a) the new code to expose battery info at registration time:
-
-+       /*
-+        * Expose constant battery info, if it is available. While there ar=
-e
-+        * some chargers accessing constant battery data, we only want to
-+        * expose battery data to userspace for battery devices.
-+        */
-+       if (desc->type =3D=3D POWER_SUPPLY_TYPE_BATTERY) {
-+               rc =3D power_supply_get_battery_info(psy, &psy->battery_inf=
-o);
-+               if (rc && rc !=3D -ENODEV && rc !=3D -ENOENT)
-+                       goto check_supplies_failed;
-+       }
-
-interacting with
-
- (b) the test_power_init() that does that
-
-                test_power_supplies[i] =3D power_supply_register(NULL,
-                                                &test_power_desc[i],
-                                                &test_power_configs[i]);
-
-which passes in NULL for the "parent" pointer.
-
-So it looks like a dodgy test that was a bit lazy. But maybe a NULL
-parent is supposed to work.
-
-                Linus
+[*] Consuming !refcounted pages is safe only for flows that are tied into the
+    mmu_notifiers.  The current proposal/plan is to add an off-by-default module
+    param that let's userspace opt-in to kmap() use of !refcounted memory, e.g.
+    this case and PFNMAP memory.
