@@ -2,286 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09E2710006
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73388710007
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjEXVah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S229565AbjEXVaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjEXVag (ORCPT
+        with ESMTP id S229482AbjEXVan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:30:36 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5375FC
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:30:34 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a950b982d4so51835ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684963834; x=1687555834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G2+uYBM7vhcZmnf3eRsoO9c1MdM84v2xsik1061w3BU=;
-        b=303m9Llrp6cfxOdtK60TR0oaqqRB2ACyQFV7cV3rxGv8aVqoho39Sqj7AGcKq5A/DD
-         6Sw2vu+7TxqxiqG5KVsxm3YbmUwaONCcn2RFl2G1EmqB0M6oXwj0uBwjshI7oEN5rp9a
-         dkOI+cQBI85rSr27inftspFiR3yffYEV17N/ypfmSOCpDjDilGar7hHGn2x2Xh4fyZjV
-         p/J/sodZI7aw3e8vLoA6EtKP7r4eRuMGH2PXzEkfk1KktA29Iy94lwGf/bGSvSb6M03t
-         kInAp2jRO1+y8NE26awFbtyfzAfolKWsi6yGwR2E5orPdlaJaR49Tfl4IhwCCGxo7gIf
-         5pRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684963834; x=1687555834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G2+uYBM7vhcZmnf3eRsoO9c1MdM84v2xsik1061w3BU=;
-        b=Xfq92zGDp9d/OOgOD4MvxChtxcFhjOsPEzHLyiWwFNHXPFqxi32xPfutLXlSbI2wEA
-         GvMsGE59HPZdQ8dKZJCQFftmRUZ2Ab2veY3Q7FmSMEFHKm6FGhGtyLiNQsjPIvTd2sZw
-         Pry1bU2L5oyK+NCy27nlRLIonGrJ9H6a1ASp9Lem6zqs4utEWGLF8rscAzFgheRd6STr
-         AVlkO1mKTdAiUW16aKcB+qIpnTtHbQ8cBDR4kG4fJeCeCykUiSDuIan9p8sanR04IxR7
-         XFqPUE28o6vyCNjqj/emjLvJUZiROuLxn9WWW6cBQEiIiYW3CAqU/Q5ZxGuWWvuDv5BF
-         bhkg==
-X-Gm-Message-State: AC+VfDyScuiVVST+6jQNaaYON5s42sb8Q9gdFCAkVB8z8QqdkVH8EC/H
-        6AuPwQN9JKRCZ+hribchwpncXWHTQU2m0AIvWXJPSQ==
-X-Google-Smtp-Source: ACHHUZ6+1ieC3oV2pkDDB18X32nt/PqbrPCNaRs6RWDzSSJW2g1XT8mV6g1SQYhASRcjSt3XuUxfC9xfD1XBnF2oJoI=
-X-Received: by 2002:a17:902:e746:b0:1a8:df:f3c6 with SMTP id
- p6-20020a170902e74600b001a800dff3c6mr73961plf.2.1684963833783; Wed, 24 May
- 2023 14:30:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-6-likexu@tencent.com>
- <ZG6AUjci2J9WpT2z@google.com>
-In-Reply-To: <ZG6AUjci2J9WpT2z@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 24 May 2023 14:30:22 -0700
-Message-ID: <CALMp9eSe+kx8s5rkypvHWjFr45L_foXiDi1Vdp3R=AmRwA3RAQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
- VMRUN instruction
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 24 May 2023 17:30:43 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5139C135
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:30:42 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 699F45C0082;
+        Wed, 24 May 2023 17:30:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 24 May 2023 17:30:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1684963841; x=1685050241; bh=ZhxPI6yBtBdhZEiyO9wGhdKxon/G0xigzrP
+        JMnA88c0=; b=DWK5uy3p54JIMLb4pxi5mpr2xZiEar2Cpd5CYlWYViJlq+uF+6D
+        qg3aXRrXeRWU4JpJjMKc0L7LMtMbmOkd9qav5dqEfCpBQx8dNls71bK9ZlXDk5cp
+        H2a1Ty/IpxStBE8hh4stAp+6rv6JBymlU1Ikh+B89ghrEPA3TStCLxHIXlpaJCSi
+        H+wsi/KwYG4GSb3tHGLP9CPii6gI719zKPd7EiQCtO1jK9HkftpMS9V0il6aMct2
+        PHopXRnpDSWQn8HozPuhjBcEWOsxa+ZcNwhGM52mVXn/dvrxPfjchg2Ak2f4LVMT
+        n5jrmKpd0VM+zxT6wYTDSlDvTjFDnCUwRGA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684963841; x=1685050241; bh=ZhxPI6yBtBdhZEiyO9wGhdKxon/G0xigzrP
+        JMnA88c0=; b=bLAo2kdoO59YKVcSgOgM4af1cfzuoO7OXUG9yySmffhMrkcL7oC
+        Izctj0E5u73uRYA4y/SnwskzPtcgNx4kzZUyFf78Kb0VH9zLKhnqYnZTutlP3A9u
+        eB4JWpK/ndbiwOaJ3lzgGZwnXiWlxlY/IpehTLngfLbATL9VdQV7l1CQofvSrZL+
+        lnDY3yV1FLXZaZV5CY6UdhPnk72pAT0XoVa+/RWzx2hDTi2JuEBezDP6eT0JXjUy
+        EWLt//YcETuO3dBY3n9gSHsxOh7Nas0NLzvaELFHQTRKe04MVjjHaN09GyXz/55K
+        VMDqRSeyRJDYr3WGRWDPUZ7qg9bxkFDYYlQ==
+X-ME-Sender: <xms:AIJuZBxejtj57Iwne4G_CIrr32n0RAZklgidMPL6GbujRH_kBsoAkg>
+    <xme:AIJuZBRW8W617XA_v7sKsUCO1jVwpgFjDnC51E18-5JpWOX3dHSP42hPDNRRaOLW1
+    Rmj9DhE9cYaHB4ROMs>
+X-ME-Received: <xmr:AIJuZLX257nVK25sdqSqyl-kEw6rN_GBIzwHytptB-Kw-DH5xkTTR0Wwye_IgnMi0Uofbw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgudeitdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkuffhvfevffgjfhgtgfgfggesthhqredttderjeenucfhrhhomhepnfhu
+    khgvucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvg
+    hrnhepkeefffeujeevueejueegleelhedtgedvledukedttdffhfeifeelvdduheefjeei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukh
+    gvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:AIJuZDgVKjnhh2jOeeUTPNItVzYy5S81lWGsnPh-jMdh5yHb4C-UFQ>
+    <xmx:AIJuZDAd34FAY0EkC9RPRy-fb2O6aWt6uEAmwjtljrcyIdEqryf4Ig>
+    <xmx:AIJuZMIpX8ldk79re0AM4ZSk9ltkXUIsqdj8Pr6ckJi2FkJJF9QHSQ>
+    <xmx:AYJuZFzTE28zX4JjF_IRMg7S6JFIE0fQPWQKxnQWNrh3WrkuJsquSw>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 24 May 2023 17:30:32 -0400 (EDT)
+Message-ID: <19d69a5da8f1d4017ac14ed87f927ab82278073d.camel@ljones.dev>
+Subject: Re: CSC3551 and devices missing related _DSD bits
+From:   Luke Jones <luke@ljones.dev>
+To:     Stuart Henderson <stuarth@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.de>
+Cc:     linux-kernel@vger.kernel.org, tiwai@suse.com,
+        sbinding@opensource.cirrus.com, perex@perex.cz,
+        tangmeng@uniontech.com, andy.chi@canonical.com, p.jungkamp@gmx.net,
+        kasper93@gmail.com, yangyuchi66@gmail.com, armas@codux.tech,
+        ealex95@gmail.com, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org
+Date:   Thu, 25 May 2023 09:30:24 +1200
+In-Reply-To: <b4c202b2-ab29-e2aa-b141-0c967b2c1645@opensource.cirrus.com>
+References: <1991650.PYKUYFuaPT@fedora> <87jzx3zaf8.wl-tiwai@suse.de>
+         <b4c202b2-ab29-e2aa-b141-0c967b2c1645@opensource.cirrus.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.48.1 (by Flathub.org) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 2:23=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Fri, Mar 10, 2023, Like Xu wrote:
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index adb92fc4d7c9..d6fcbf233cb3 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -561,6 +561,10 @@ struct kvm_pmu {
-> >        */
-> >       u64 host_cross_mapped_mask;
-> >
-> > +     /* Flags to track any HW quirks that need to be fixed by vPMU. */
-> > +     u64 quirk_flags;
-> > +     DECLARE_BITMAP(hide_vmrun_pmc_idx, X86_PMC_IDX_MAX);
->
-> Since it sounds like AMD isn't changing the behavior, let's forego the qu=
-irk and
-> just hardcode the fixup.
->
-> > diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> > index 2a0504732966..315dca021d57 100644
-> > --- a/arch/x86/kvm/pmu.c
-> > +++ b/arch/x86/kvm/pmu.c
-> > @@ -254,6 +254,7 @@ static void pmc_pause_counter(struct kvm_pmc *pmc)
-> >       counter +=3D perf_event_pause(pmc->perf_event, true);
-> >       pmc->counter =3D counter & pmc_bitmask(pmc);
-> >       pmc->is_paused =3D true;
-> > +     kvm_mark_pmc_is_quirky(pmc);
-> >  }
-> >
-> >  static bool pmc_resume_counter(struct kvm_pmc *pmc)
-> > @@ -822,6 +823,19 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *=
-kvm, void __user *argp)
-> >       return r;
-> >  }
-> >
-> > +static inline bool event_is_branch_instruction(struct kvm_pmc *pmc)
->
-> How about pmc_is_counting_branches()?  The "event" itself isn't a branch
-> instruction.
+On Wed, 2023-05-24 at 17:36 +0100, Stuart Henderson wrote:
+>=20
+> > The problem is that this can really easily blow up your machine if
+> > some incorrect bit is applied.=C2=A0 And more easily applicable, more
+> > chance to break by novice users, simply by believing what a chat
+> > bot
+> > speaks :)
+> > That's the very reason why this kind of change should be via ACPI
+> > table officially set up by the vendor.=C2=A0 That said, the question is
+> > only who and how can be responsible for this kind of change.=C2=A0 It's
+> > no technical issue, per se.
+> >=20
+> > If BIOS can't be updated, at least, the configuration change has to
+> > be
+> > confirmed by ASUS people.=C2=A0 If ASUS still ignores the inquires and
+> > requests, we may put the quirk but with a bit fat warning (and
+> > maybe
+> > complaints to ASUS) to be shown in the log as a very last resort.
+> >=20
+> > Let's see what happens.
+>=20
+> Thanks Takashi.
+>=20
+> Just a note to say we're not ignoring this and are investigating the=20
+> best way to support released laptops with ACPI incompatible with
+> Linux.=C2=A0=20
+> We're hoping this is going to be less of an issue going forward.=C2=A0
+> Please=20
+> bear with us while we look into this.
+>=20
 
-Note that there's a bug in the original code for this that has
-probably never been fixed: it ignores CMASK and INV in the PerfEvtSel.
-
-> > +{
-> > +     return eventsel_match_perf_hw_id(pmc, PERF_COUNT_HW_INSTRUCTIONS)=
- ||
-> > +             eventsel_match_perf_hw_id(pmc,
-> > +                                       PERF_COUNT_HW_BRANCH_INSTRUCTIO=
-NS);
->
-> Let this poke out.
->
-> > +}
-> > +
-> > +static inline bool quirky_pmc_will_count_vmrun(struct kvm_pmc *pmc)
-> > +{
-> > +     return event_is_branch_instruction(pmc) && event_is_allowed(pmc) =
-&&
-> > +             !static_call(kvm_x86_get_cpl)(pmc->vcpu);
-> > +}
-> > +
-> >  void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
-> >  {
-> >       struct kvm_pmu *pmu =3D vcpu_to_pmu(vcpu);
-> > @@ -837,6 +851,10 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
-> >
-> >               reprogram_counter(pmc);
-> >               kvm_pmu_handle_pmc_overflow(pmc);
-> > +
-> > +             if (vcpu_has_pmu_quirks(vcpu) &&
-> > +                 quirky_pmc_will_count_vmrun(pmc))
-> > +                     set_bit(pmc->idx, pmu->hide_vmrun_pmc_idx);
->
-> Doesn't this need to adjust the count _before_ handling overflow?  I.e. i=
-sn't it
-> possible for the bogus counts to cause bogus overflow?
->
-> > diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> > index a47b579667c6..30f6f58f4c38 100644
-> > --- a/arch/x86/kvm/pmu.h
-> > +++ b/arch/x86/kvm/pmu.h
-> > @@ -18,6 +18,9 @@
-> >  #define VMWARE_BACKDOOR_PMC_REAL_TIME                0x10001
-> >  #define VMWARE_BACKDOOR_PMC_APPARENT_TIME    0x10002
-> >
-> > +#define X86_PMU_COUNT_VMRUN  BIT_ULL(0)
-> > +#define X86_PMU_QUIRKS_MASK  X86_PMU_COUNT_VMRUN
-> > +
-> >  struct kvm_pmu_ops {
-> >       bool (*hw_event_available)(struct kvm_pmc *pmc);
-> >       bool (*pmc_is_enabled)(struct kvm_pmc *pmc);
-> > @@ -54,14 +57,33 @@ static inline void kvm_pmu_request_counter_reprogra=
-m(struct kvm_pmc *pmc)
-> >       kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
-> >  }
-> >
-> > +static inline bool vcpu_has_pmu_quirks(struct kvm_vcpu *vcpu)
-> > +{
-> > +     return vcpu_to_pmu(vcpu)->quirk_flags & X86_PMU_QUIRKS_MASK;
-> > +}
-> > +
-> > +/*
-> > + * The time to mark pmc is when the accumulation value returned
-> > + * by perf API based on a HW counter has just taken effect.
-> > + */
-> > +static inline void kvm_mark_pmc_is_quirky(struct kvm_pmc *pmc)
-> > +{
-> > +     if (!vcpu_has_pmu_quirks(pmc->vcpu))
-> > +             return;
-> > +
-> > +     kvm_pmu_request_counter_reprogram(pmc);
-> > +}
-> > +
-> >  static inline u64 pmc_read_counter(struct kvm_pmc *pmc)
-> >  {
-> >       u64 counter, enabled, running;
-> >
-> >       counter =3D pmc->counter;
-> > -     if (pmc->perf_event && !pmc->is_paused)
-> > +     if (pmc->perf_event && !pmc->is_paused) {
-> >               counter +=3D perf_event_read_value(pmc->perf_event,
-> >                                                &enabled, &running);
-> > +             kvm_mark_pmc_is_quirky(pmc);
-> > +     }
-> >       /* FIXME: Scaling needed? */
-> >       return counter & pmc_bitmask(pmc);
-> >  }
-> > diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> > index 5fa939e411d8..130991a97f22 100644
-> > --- a/arch/x86/kvm/svm/pmu.c
-> > +++ b/arch/x86/kvm/svm/pmu.c
-> > @@ -187,6 +187,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
-> >       pmu->nr_arch_fixed_counters =3D 0;
-> >       pmu->global_status =3D 0;
-> >       bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counters);
-> > +     pmu->quirk_flags |=3D X86_PMU_COUNT_VMRUN;
-> >  }
-> >
-> >  static void amd_pmu_init(struct kvm_vcpu *vcpu)
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index f41d96e638ef..f6b33d172481 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -3919,6 +3919,31 @@ static fastpath_t svm_exit_handlers_fastpath(str=
-uct kvm_vcpu *vcpu)
-> >       return EXIT_FASTPATH_NONE;
-> >  }
-> >
-> > +static void pmu_hide_vmrun(struct kvm_vcpu *vcpu)
->
-> This needs to be noinstr.
->
-> > +{
-> > +     struct kvm_pmu *pmu =3D vcpu_to_pmu(vcpu);
-> > +     struct kvm_pmc *pmc;
-> > +     unsigned int i;
-> > +
-> > +     for_each_set_bit(i, pmu->hide_vmrun_pmc_idx, X86_PMC_IDX_MAX) {
-> > +             clear_bit(i, pmu->hide_vmrun_pmc_idx);
->
-> Clearing the bit will hide only the first VMRUN after the guest attempts =
-to read
-> the counter, no?  The fixup needs to apply to every VMRUN that is execute=
-d after
-> the PMC is programmed.  Or am I misreading the patch?
->
-> > +
-> > +             /* AMD doesn't have fixed counters at now. */
-> > +             if (i >=3D pmu->nr_arch_gp_counters)
-> > +                     continue;
-> > +
-> > +             /*
-> > +              * The prerequisite for fixing HW quirks is that there is=
- indeed
-> > +              * HW working and perf has no chance to retrieve the coun=
-ter.
->
-> I don't follow the "perf has no chance to retrieve the counter" part.
->
-> > +              */
-> > +             pmc =3D &pmu->gp_counters[i];
-> > +             if (!pmc->perf_event || pmc->perf_event->hw.idx < 0)
-> > +                     continue;
-> > +
-> > +             pmc->counter--;
-> > +     }
-> > +}
-> > +
-> >  static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu, bool sp=
-ec_ctrl_intercepted)
-> >  {
-> >       struct vcpu_svm *svm =3D to_svm(vcpu);
-> > @@ -3986,6 +4011,9 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct =
-kvm_vcpu *vcpu)
-> >
-> >       kvm_wait_lapic_expire(vcpu);
-> >
-> > +     if (vcpu->kvm->arch.enable_pmu && vcpu_has_pmu_quirks(vcpu))
-> > +             pmu_hide_vmrun(vcpu);
-> > +
-> >       /*
-> >        * If this vCPU has touched SPEC_CTRL, restore the guest's value =
-if
-> >        * it's non-zero. Since vmentry is serialising on affected CPUs, =
-there
-> > --
-> > 2.39.2
-> >
+This is great news, thank you Stuart. If you need testing done at all
+on a wide range please reach out to me and I will enlist the help of
+those with the affected laptops I mentioned.
