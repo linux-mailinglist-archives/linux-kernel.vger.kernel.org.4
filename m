@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB26070F862
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDC470F86A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjEXOMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S234894AbjEXOPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbjEXOMo (ORCPT
+        with ESMTP id S229919AbjEXOPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:12:44 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0D218B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:12:41 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so43233875e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684937560; x=1687529560;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zm+/ZRBOZldlqL53b66Kc1VMqiVBWlw5REXJ3gKRg4Y=;
-        b=LHhbslmTHVtT9aRVJDuMWr6LDB2MF3ACI6tD/x5vOsxgQkBYgqvwDD2fM+JU9yS1rR
-         XzvkbnASGuJZNpMiKuI2/qFlqr16uMdAr8lTmipfrNJb6s/OVD8XXt9gOBHYaPg/xnR6
-         B6iJpZtoz1xSwOhBJMS1ND9SZv6/Ekphr0o7uDD2vsM7YYmyvFT+Fe4QprO+akeUiG81
-         5TpJskzGdjOImOoOwC/fPDAGUD5jOnCl7oGrQ95IAJMqiik4rjNWC8EVUculVpwDP3Dp
-         /2dVOwmVQ6isKH5XKbxJzxmAJGeP4NF0aaOh5tW8/GzYrRbooI3r6d8C9kyvJyTeU1I0
-         RUMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684937560; x=1687529560;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zm+/ZRBOZldlqL53b66Kc1VMqiVBWlw5REXJ3gKRg4Y=;
-        b=fMOS6erSE1yBNA+nv5sRD/AW7bIP1WbBKevn04fO43hf1MzfZA5O145PEo+vCTZo2t
-         dxrtO2Sp3g/+DOIH4l7oQEiikjDblP47lNz6QPstHqp+6EjyLOrys+gS7sZvEXCsjTRw
-         yXQVU7oEhNtps4low8L0oTBbH87D1ue/qJnekr23jptAvQGwiL9q8Bg9RArn3GjmGlDj
-         wt97pQC48A9wwJjNaFmcVh70KAciwuyouy+Jfc33DCar/0JHOWHDG7V9l3m/QFdyjnYy
-         2e0MhykAYyCPnC3Zg+UCzpxK5jIAd0siZlTs3MBKejAxAGEXS70RrO3X5B4jImMVkClz
-         V+dA==
-X-Gm-Message-State: AC+VfDwkrun+ewSiseBw+uuQPWLowGpU5/xzD0rwUIOMIu7pXOlEq62y
-        hyCDiWUjQh+cgznAizptbGfIEw==
-X-Google-Smtp-Source: ACHHUZ7ZiBQArVsrxbnbOPfcgyP4nY6sB/SNzM2bGxT5NtG/F1Eh5MP/d2t7lgX/aqnh4urNKvrplQ==
-X-Received: by 2002:a7b:cbc9:0:b0:3f6:84:3df6 with SMTP id n9-20020a7bcbc9000000b003f600843df6mr9846304wmi.10.1684937560071;
-        Wed, 24 May 2023 07:12:40 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c24cd00b003f4dde07956sm2444460wmu.42.2023.05.24.07.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 07:12:39 -0700 (PDT)
-Message-ID: <cb2e035d-2630-2eca-3f15-b04e4d81c699@baylibre.com>
-Date:   Wed, 24 May 2023 16:12:37 +0200
+        Wed, 24 May 2023 10:15:38 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A0F11D;
+        Wed, 24 May 2023 07:15:34 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 3AB9F60171;
+        Wed, 24 May 2023 16:15:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684937732; bh=jX+U2qFkL9kOsl3dg0r8zNgfUzZNcOzw0PDQGkAamNs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WUBXTR/QeyhHwgnNm5r9PJ08PA2rzdgAlfNohV9mnHMW66F+rg0dv1yrVcv68Wj3F
+         QLKiwDGgaElv61Ic0NPqI28uEQPIbW3fZjkW2QpAT76fRbB/y26oMUJFNdj8VFpq9+
+         G37RE/Hp314P9PiX4RsqKB4R2eq5DKjJoFAA//wgIYH6WEMhBDFVaQZ2G1Esln2afZ
+         LMPHp2Buc3KImvskb8zu/XQWGGdgsnBJE4v3JrFThSRosVoRWZu0zfGtzY7or8OGYb
+         zberJTyZXT/bnn0756FfXt5xCrxMuIzX/pQ6+8d+sJFdajCqZJ+dH4uYIEkhgbDkCu
+         1QaOmR6ot9eTg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9N6Spi061kV4; Wed, 24 May 2023 16:15:29 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id A02346016E;
+        Wed, 24 May 2023 16:15:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684937729; bh=jX+U2qFkL9kOsl3dg0r8zNgfUzZNcOzw0PDQGkAamNs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aa3ToDy02ohu1xgY1IJSmLT7oZGksuVgdPch5gQYpB2oMOrHuwOxAXyqsTGxReO9R
+         0yCvpf4aImJqhxZfQN/u/V7bN/stV7Sigf1Hbnf2PpvO2pK9XNLIt3bdRW6oNkqzZn
+         9e2+oCGCkhSn5VetrIgRHcq0sk3SHPclLVk0lpvowgd4xJASFgFRZKl4vNiALPSTe9
+         h1PMX5MMhxVpWyoAX0gmeqvm6n4rq2xU7zVG0fH/KQ6Ut6Ls09L40NnYa/B3dRXQkp
+         G1CsBzLlZBFHABcN0dLjirMPwZQEv5ok4iyrIeD4aQFe2BL37ROF2I6v+z4/Fgykiz
+         iFFns9Yzs2HVQ==
+Message-ID: <29ae885c-cb7f-412a-43c7-22df8052831b@alu.unizg.hr>
+Date:   Wed, 24 May 2023 16:15:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 4/7] ASoC: mediatek: common: soundcard driver add
- dai_fmt support
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230523021933.3422-1-trevor.wu@mediatek.com>
- <20230523021933.3422-5-trevor.wu@mediatek.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230523021933.3422-5-trevor.wu@mediatek.com>
+Subject: Re: [BUG] selftests: af_unix: unix:diag.c does not compile on
+ AlmaLinux 8.7
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
+References: <c993180f-22a8-130a-8487-74fbe4c81335@alu.unizg.hr>
+ <20230522182623.67385-1-kuniyu@amazon.com>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230522182623.67385-1-kuniyu@amazon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,41 +70,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 04:19, Trevor Wu wrote:
-> There are two changes included in the patch.
-> 
-> First, add set_dailink_daifmt() function, so dai_fmt can be updated by
-> the configuration in dai-link sub node.
-> 
-> Second, remove codec phandle from required property in dai-link sub node.
-> For example, user possibly needs to update dai-format for all etdm
-> co-clock dai-links, but codec doesn't need to be specified in capture
-> dai-link for a speaker amp.
-> 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->   .../mediatek/common/mtk-soundcard-driver.c    | 49 ++++++++++++++++++-
->   1 file changed, 48 insertions(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/mediatek/common/mtk-soundcard-driver.c b/sound/soc/mediatek/common/mtk-soundcard-driver.c
-> index 738093451ccb..5e291092046b 100644
-> --- a/sound/soc/mediatek/common/mtk-soundcard-driver.c
-> +++ b/sound/soc/mediatek/common/mtk-soundcard-driver.c
-> @@ -22,7 +22,7 @@ static int set_card_codec_info(struct snd_soc_card *card,
->   
->   	codec_node = of_get_child_by_name(sub_node, "codec");
->   	if (!codec_node)
-> -		return -EINVAL;
+Hi,
 
-IMO, the debug or info print should be welcome here because the behavior
-change: dai link info parse will not stop if the codec node is NULL.
-That could help to understand what is happening during init.
+On 5/22/23 20:26, Kuniyuki Iwashima wrote:
+>>>
+>>> I launched AlmaLinux/RockyLinux 8.7 and 9.2 with images listed in the pages
+>>> below.
+>>>
+>>>     https://wiki.almalinux.org/cloud/AWS.html#community-amis
+>>>     https://rockylinux.org/cloud-images/
+>>>
+>>> The kernel versions in each image were :
+>>>
+>>>     8.7:
+>>>     Alma  : 4.18.0-425.3.1.el8.x86_64
+>>>     Rocky : 4.18.0-425.10.1.el8_7.x86_64
+>>>
+>>>     9.2:
+>>>     Alma  : 5.14.0-284.11.1.el9_2.x86_64
+>>>     Rocky : 5.14.0-284.11.1.el9_2.x86_64
+>>>
+>>> So, this is not a bug.  It's just because v4.18 does not support
+>>> UNIX_DIAG_UID, which was introduced in v5.3.
+>>>
+>>> You should install 5.3+ kernel if you want to build the test.
+>>>
+>>> Thanks,
+>>> Kuniyuki
+>>
+>> Hi, Kuniyuki,
+>>
+>> Good point. However, newer kernel won't save me from old /usr/include
+>> headers, will it?
+> 
+> Sorry, I meant kernel and kernel-headers package that should be
+> updated along with kernel.
+> 
+> You should use proper header files that match to the actual kernel
+> version running on the machine.
+> 
+> 
+>> I was actually testing the 6.4-rc3 on AlmaLinux 8.7, as it is my only
+>> RHEL-based box ...
+>>
+>> What would then be the right action?
+> 
+> make headers_install ?
 
+I would rather not to. For the installation to remain manageable,
+preferably I'd have a kernel-devel RPM built.
 
+>> If it was a #define instead of enum, I'd probably work around and
+>> exclude the test that doesn't fit the kernel, or the system call
+>> would return -EINVAL?
+>>
+>> Including from the includes that came with the kernel might be
+>> a solution:
+>>
+>> ../../../../../include/uapi/linux/unix_diag.h:44:	UNIX_DIAG_UID,
+>>
+>> Alas, when I try to include, I get these ugly errors:
+>>
+>> [marvin@pc-mtodorov af_unix]$ gcc -I ../../../../../include/ diag_uid.c
+>> In file included from ../../../../../include/linux/build_bug.h:5,
+>>                    from ../../../../../include/linux/bits.h:21,
+>>                    from ../../../../../include/linux/capability.h:18,
+>>                    from ../../../../../include/linux/netlink.h:6,
+>>                    from diag_uid.c:8:
+>> ../../../../../include/linux/compiler.h:246:10: fatal error:
+>> asm/rwonce.h: No such file or directory
+>>    #include <asm/rwonce.h>
+>>             ^~~~~~~~~~~~~~
+> 
+> FWIW, this is provided by kernel-devel package.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Actually, what is provided is essentially the same as before:
+
+[root@pc-mtodorov kernel]# rpm -q --fileprovide kernel-devel-6.3.3 | grep rwonce.h
+/usr/src/kernels/6.3.3-100.fc37.x86_64/arch/x86/include/generated/asm/rwonce.h	
+/usr/src/kernels/6.3.3-100.fc37.x86_64/include/asm-generic/rwonce.h	
+[root@pc-mtodorov kernel]#
+
+>> compilation terminated.
+>> [marvin@pc-mtodorov af_unix]$ vi +246
+>> ../../../../../include/linux/compiler.h
+>> [marvin@pc-mtodorov af_unix]$ find ../../../../../include -name rwonce.h
+>> ../../../../../include/asm-generic/rwonce.h
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> Minimum reproducer is:
+>>
+>> [marvin@pc-mtodorov af_unix]$ gcc -I ../../../../../include/ reproducer.c
+>> In file included from ../../../../../include/linux/build_bug.h:5,
+>>                    from ../../../../../include/linux/bits.h:21,
+>>                    from ../../../../../include/linux/capability.h:18,
+>>                    from ../../../../../include/linux/netlink.h:6,
+>>                    from reproducer.c:5:
+>> ../../../../../include/linux/compiler.h:246:10: fatal error:
+>> asm/rwonce.h: No such file or directory
+>>    #include <asm/rwonce.h>
+>>             ^~~~~~~~~~~~~~
+>> compilation terminated.
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> [marvin@pc-mtodorov af_unix]$ nl reproducer.c
+>>
+>>        1	#define _GNU_SOURCE
+>>        2	#include <linux/netlink.h>
+>>
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> Am I doing something very stupid right now, for actually I see
+>>
+>> #include <asm/rwonce.h>
+>>
+>> in "include/linux/compiler.h" 248L, 7843C
+>>
+>> while actual rwonce.h is in <asm-generic/rwonce.h>
+>>
+>> [marvin@pc-mtodorov af_unix]$ find ../../../../../include -name rwonce.h
+>> ../../../../../include/asm-generic/rwonce.h
+>> [marvin@pc-mtodorov af_unix]$
+>>
+>> I must be doing something wrong, for I see that the kernel compiled
+>> despite not having include/asm ?
+>>
+>> When looking at the invocations of rwonce.h in the kernel, they seem to
+>> be equally spread between <asm-generic/rwonce.h> and <asm/rwonce.h> :
+>>
+>> [marvin@pc-mtodorov af_unix]$ grep --include="*.[ch]" -n -w rwonce.h -r ../../../../.. 2> /dev/null | less
+>> ../../../../../arch/alpha/include/asm/rwonce.h:33:#include <asm-generic/rwonce.h>
+>> ../../../../../arch/arm64/include/asm/rwonce.h:71:#include <asm-generic/rwonce.h>
+>> ../../../../../arch/arm64/kvm/hyp/include/nvhe/spinlock.h:18:#include <asm/rwonce.h>
+>> ../../../../../arch/s390/include/asm/rwonce.h:29:#include <asm-generic/rwonce.h>
+>> ../../../../../arch/x86/include/generated/asm/rwonce.h:1:#include <asm-generic/rwonce.h>
+>> ../../../../../include/asm-generic/barrier.h:18:#include <asm/rwonce.h>
+>> ../../../../../include/kunit/test.h:29:#include <asm/rwonce.h>
+>> ../../../../../include/linux/compiler.h:246:#include <asm/rwonce.h>
+>>
+>> I figured out I must be doing something wrong or the kernel otherwise
+>> would not build for me.
+>>
+>> Eventually, the UNIX_DIAG_UID enum is used in only one place:
+>>
+>>           ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
+>>
+>> That particular test should fail in case of kernel older than 5.3.
+> 
+> We don't expect it to be run on older kernels in the first place.
+
+Certainly.
+
+>> However, I fell into a terrible mess where one thing breaks the other.
+>>
+>> I can't seem to make this work.
+>>
+>> Thanks,
+>> Mirsad
 
 -- 
-Regards,
-Alexandre
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
