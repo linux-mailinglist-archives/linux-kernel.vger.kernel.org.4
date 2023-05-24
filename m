@@ -2,187 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4449570F49C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7F270F49F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjEXKyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S230409AbjEXK6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjEXKyM (ORCPT
+        with ESMTP id S229588AbjEXK6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:54:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E804C5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:54:10 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96fdc081cb3so109541566b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:54:09 -0700 (PDT)
+        Wed, 24 May 2023 06:58:15 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538C3A3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:58:14 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25376483f66so78619a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684925648; x=1687517648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684925893; x=1687517893;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0/qi+dHgB0OUou2fTatsWKxVpRKt0hH2Bcu1Do/nAuA=;
-        b=GftWbWECWQFLbvcv03JoAPeER0zJrtOqVthatc1RpHrmOLrBOX8yVtEf+Dhl2PqNUu
-         YdodgmdA/Ge5MR5vz3mUJQsQ9NhIdN3ivxeb87HNRa4MX7baDVrvPaZSmC+smSRKbFx/
-         n6BlgiMG2y8MBuWi3oF78vr00bVu6KKuhjYcE=
+        bh=EtNtYGFCrVyZey4VNLOickd29YxbAE5d03gdnH81J+U=;
+        b=l3Y8DRIQWeZSAkdFMfWSj0ifqiRCoUl+MxNzyGPTw4ZMaQ6QWphZ802TjCA9rSm9so
+         WMG3R44sc0gr+xXBTBY7TCuICT3d45vwv+Fhc2Kif7HhDdftbNF0EkAGL8oVUJSe2Eay
+         ZUaEtkJpPuwE8y8NK/iA7PUeSMknfa4tcoav5tGrXwUQFy8oRiNb9MqyPcTeGkb27rHp
+         hMzPGBz5WgbeekaXTC+5mYde3P4XFoDPx30/BpGiJJRyymxVzStX6k13W/tbQ/2bM4zm
+         Va38TCsEtvSD8nOdlVZbYfj30hYNmcztUhE7KWlVnuBOtz6HCt6W+ZPxpyac7saVfI9j
+         9sDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684925648; x=1687517648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0/qi+dHgB0OUou2fTatsWKxVpRKt0hH2Bcu1Do/nAuA=;
-        b=A1TTzyS1nE7HUjtlvKDbkvbqs9T0pk7x/o491AOwHcpmETmBrgPUPsp7PChG0ooOIN
-         awBQmefm9wy1w0gcrK8sdW23ka5OW2jq/j6fgmnUq+HTDKX0og2alKlVsP+FJsNcfDAg
-         erytZJvOve8la477GzakrdkbcAPZwWeCx+h1l2HkXs/qLpTTSZoDogYCkJoQeDZyTAnq
-         pjPX35iQ5c7mhRqfv1dzI5BzBjWENRpv59ydbO9SZ42f+domPa0GLWgNJXe7QoE+TFf5
-         lIpIHdOsuIrK9e57ll4hQ/qk8fcnAT6h/xbR1b3CXIKCQKa8GRgAWnx6FUABlaj+JKyz
-         dgyQ==
-X-Gm-Message-State: AC+VfDxB4bqlehOTurpHQRY0SKJPTR81CxBkjMQ7Iise1gWQcMpg6z4H
-        lEi5YU4lhZPexfdeOfluJ+rLmlvXuZZsoeUkh20=
-X-Google-Smtp-Source: ACHHUZ7BkN0nAA3yy67CPct7vbs07CKSWI2zVFzyDjxqccld7LwbOysrZE2o/SmY0VwOSAjWcF11/A==
-X-Received: by 2002:a17:906:9743:b0:94f:4102:25c8 with SMTP id o3-20020a170906974300b0094f410225c8mr19874853ejy.61.1684925648124;
-        Wed, 24 May 2023 03:54:08 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id q19-20020a170906941300b00966293c06e9sm5567113ejx.126.2023.05.24.03.54.06
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1684925893; x=1687517893;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EtNtYGFCrVyZey4VNLOickd29YxbAE5d03gdnH81J+U=;
+        b=hgUnv3G5L7rzuO/hNyqaKTkLYQ3nBKDE+b91JMUsziHMv/oGHcHJ0uMKzkQQ9pGU2t
+         mn45BGU2dqt7bSIqqS0n7mjS3T4Lnb3dOKqlyxp0eNEGPokG1TdoE/e7ZOU2VZKGVXnb
+         D+BM2Rs8JenQBX3g3McFIliteP9//cz0YnMQ3hwpJmR4hQy67R5zXPb7gDVV3Z7wRflH
+         sK9AhIneWuTfEOZG4t1Bv6ZZlJ/B7YLxe/y1pe/a+giCTw5I7IG5GWWcXX52/cGKQj8r
+         6C7PYgmsszhSDKFzvRYNJRYI+6BFgLcF3NDxPHmuD6IKINizslpwZ/+i3m4H56kij2Fa
+         h8iw==
+X-Gm-Message-State: AC+VfDzo7sRnRZpZ4T7YBLx38tVraIojsNZhstzUdgmEdIAQ6VAthdlF
+        DnVQDanlAzzETbs+edtIj3rW1UnZMHc=
+X-Google-Smtp-Source: ACHHUZ4x3mbRZza/OnPc7Hf62AB/tvNESZBkKaby/M3eKCGQRKizRlGE/zRB69YbxrIb8Twc5v/liA==
+X-Received: by 2002:a17:90a:bf8b:b0:253:727e:4b41 with SMTP id d11-20020a17090abf8b00b00253727e4b41mr15726441pjs.34.1684925893529;
+        Wed, 24 May 2023 03:58:13 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-28.three.co.id. [180.214.232.28])
+        by smtp.gmail.com with ESMTPSA id i2-20020a17090ac40200b0024de39e8746sm1110323pjt.11.2023.05.24.03.58.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 03:54:07 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-30a95ec7744so627073f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:54:06 -0700 (PDT)
-X-Received: by 2002:a5d:5348:0:b0:306:2ef0:d223 with SMTP id
- t8-20020a5d5348000000b003062ef0d223mr11847562wrv.62.1684925646235; Wed, 24
- May 2023 03:54:06 -0700 (PDT)
+        Wed, 24 May 2023 03:58:13 -0700 (PDT)
+Message-ID: <2a1cd5e6-01f7-66f9-1f9d-c655cc3f919b@gmail.com>
+Date:   Wed, 24 May 2023 17:58:07 +0700
 MIME-Version: 1.0
-References: <20230522234154.2924052-1-yinghsu@chromium.org>
- <ZGyPt1GYGV2C2RQZ@corigine.com> <CABBYNZ+by-OQH2aPEMHpQ5cOLoKNpR7k111rJj6iOd2PGLx3gg@mail.gmail.com>
-In-Reply-To: <CABBYNZ+by-OQH2aPEMHpQ5cOLoKNpR7k111rJj6iOd2PGLx3gg@mail.gmail.com>
-From:   Ying Hsu <yinghsu@chromium.org>
-Date:   Wed, 24 May 2023 18:53:29 +0800
-X-Gmail-Original-Message-ID: <CAAa9mD3A+3uJzFK0EbTrn5hX42EOgeixehmxgkwdhp1KetxjVQ@mail.gmail.com>
-Message-ID: <CAAa9mD3A+3uJzFK0EbTrn5hX42EOgeixehmxgkwdhp1KetxjVQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Fix l2cap_disconnect_req deadlock
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, Zi Yan <ziy@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        doru iorgulescu <doru.iorgulescu1@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Disha Goel <disgoel@linux.vnet.ibm.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: ./include/linux/mmzone.h:1735:2: error: #error Allocator
+ MAX_ORDER exceeds SECTION_SIZE (v6.4-rc3 build regression)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon,
+Hi,
 
-I understand your concern about the repeated code.
-However, simply hiding the locking logic in another function
-introduces hidden assumptions.
-For this patch, I would like to fix the deadlock in a simple and easy
-to understand way.
-We can always refactor the l2cap_chan utility functions later.
+I notice a powerpc[64?] build regression on Bugzilla [1]. Quoting from it:
 
-Hi Luis,
+>  CC      arch/powerpc/kernel/asm-offsets.s
+> In file included from ./include/linux/gfp.h:7,
+>                 from ./include/linux/xarray.h:15,
+>                 from ./include/linux/list_lru.h:14,
+>                 from ./include/linux/fs.h:13,
+>                 from ./include/linux/compat.h:17,
+>                 from arch/powerpc/kernel/asm-offsets.c:12:
+> ./include/linux/mmzone.h:1735:2: error: #error Allocator MAX_ORDER exceeds SECTION_SIZE
+> 1735 | #error Allocator MAX_ORDER exceeds SECTION_SIZE
+>      |  ^~~~~
+> make[5]: *** [scripts/Makefile.build:114: arch/powerpc/kernel/asm-offsets.s] Error 1
 
-I'll add a fixes tag in the next version.
+Apparently removing the errored line solves the problem for the reporter
+(the attached dmesg on [2] looks fine at a glance).
 
-Best regards,
-Ying
+Anyway, I'm adding it to regzbot:
 
+#regzbot introduced: 23baf831a32c04f https://bugzilla.kernel.org/show_bug.cgi?id=217477
+#regzbot title: Allocator MAX_ORDER exceeds SECTION_SIZE caused by MAX_ORDER redefinition
 
-On Wed, May 24, 2023 at 3:06=E2=80=AFAM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Simon, Ying,
->
-> On Tue, May 23, 2023 at 3:04=E2=80=AFAM Simon Horman <simon.horman@corigi=
-ne.com> wrote:
-> >
-> > On Mon, May 22, 2023 at 11:41:51PM +0000, Ying Hsu wrote:
-> > > L2CAP assumes that the locks conn->chan_lock and chan->lock are
-> > > acquired in the order conn->chan_lock, chan->lock to avoid
-> > > potential deadlock.
-> > > For example, l2sock_shutdown acquires these locks in the order:
-> > >   mutex_lock(&conn->chan_lock)
-> > >   l2cap_chan_lock(chan)
-> > >
-> > > However, l2cap_disconnect_req acquires chan->lock in
-> > > l2cap_get_chan_by_scid first and then acquires conn->chan_lock
-> > > before calling l2cap_chan_del. This means that these locks are
-> > > acquired in unexpected order, which leads to potential deadlock:
-> > >   l2cap_chan_lock(c)
-> > >   mutex_lock(&conn->chan_lock)
-> > >
-> > > This patch uses __l2cap_get_chan_by_scid to replace
-> > > l2cap_get_chan_by_scid and adjusts the locking order to avoid the
-> > > potential deadlock.
->
-> This needs the fixes tag so we can backport it properly.
->
-> > > Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-> > > ---
-> > > This commit has been tested on a Chromebook device.
-> > >
-> > > Changes in v2:
-> > > - Adding the prefix "Bluetooth:" to subject line.
-> > >
-> > >  net/bluetooth/l2cap_core.c | 26 ++++++++++++++++++++------
-> > >  1 file changed, 20 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-> > > index 376b523c7b26..8f08192b8fb1 100644
-> > > --- a/net/bluetooth/l2cap_core.c
-> > > +++ b/net/bluetooth/l2cap_core.c
-> > > @@ -4651,8 +4651,16 @@ static inline int l2cap_disconnect_req(struct =
-l2cap_conn *conn,
-> > >
-> > >       BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
-> > >
-> > > -     chan =3D l2cap_get_chan_by_scid(conn, dcid);
-> > > +     mutex_lock(&conn->chan_lock);
-> > > +     chan =3D __l2cap_get_chan_by_scid(conn, dcid);
-> > > +     if (chan) {
-> > > +             chan =3D l2cap_chan_hold_unless_zero(chan);
-> > > +             if (chan)
-> > > +                     l2cap_chan_lock(chan);
-> > > +     }
-> > > +
-> > >       if (!chan) {
-> > > +             mutex_unlock(&conn->chan_lock);
-> > >               cmd_reject_invalid_cid(conn, cmd->ident, dcid, scid);
-> > >               return 0;
-> > >       }
-> >
-> > Hi Ying,
-> >
-> > The conditional setting of chan and calling l2cap_chan_lock()
-> > is both non-trivial and repeated. It seems that it ought to be
-> > in a helper.
-> >
-> > Something like this (I'm sure a better function name can be chosen):
-> >
-> >         chan =3D __l2cap_get_and_lock_chan_by_scid(conn, dcid);
-> >         if (!chan) {
-> >                 ...
-> >         }
-> >
-> >         ...
->
-> Or perhaps we could do something like l2cap_del_chan_by_scid:
->
-> https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
->
-> --
-> Luiz Augusto von Dentz
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217477
+[2]: https://bugzilla.kernel.org/show_bug.cgi?id=217477#c1
+
+-- 
+An old man doll... just what I always wanted! - Clara
