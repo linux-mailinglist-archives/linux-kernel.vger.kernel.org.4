@@ -2,218 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D384470F398
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC92070F3A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjEXJ5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S231983AbjEXKAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjEXJ5O (ORCPT
+        with ESMTP id S231848AbjEXKAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:57:14 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D954E93;
-        Wed, 24 May 2023 02:57:12 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id 46D4020FB9FB; Wed, 24 May 2023 02:57:12 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 46D4020FB9FB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1684922232;
-        bh=VHd2+HBr/ZdV/++44Xu4iEewGcOk/dRPyk8bgSx8juI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VzoWUx2YB7ZlOJMsU1/h7rUaRCgihwp+j2cnk/px5bHj5WIHjkjLKkJDXjqjLwvoQ
-         h1J0eGr75Nb7mV4sScZzUOPiIwVTI4td3KgqbP9QhL/AqSIuyncbAr6NTYKZBG74Bk
-         TC2tyGlvnAIUd1XQ1SVcKaiVK9r695jL6y+3l970=
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH v2] hv_netvsc: Allocate rx indirection table size dynamically
-Date:   Wed, 24 May 2023 02:57:10 -0700
-Message-Id: <1684922230-24073-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 06:00:22 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AC312F;
+        Wed, 24 May 2023 03:00:19 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2533b600d35so44636a91.1;
+        Wed, 24 May 2023 03:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684922419; x=1687514419;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UNSvuvrQGvwdxH/qdhsUYjzWunRTiKdWvSzt8OcjbNQ=;
+        b=Ov0+DpbPgrrIqbyKmxJ+eJ4OawMMguWIsxAEKBxkEwH9mGRlImk+DEcubbX31amMYS
+         /gER4DSD7hEX9AuQYr0rQy4ZSHTJDKwdxeWkKQ+S0sD/JE/rInkDwSiOBt/oDV5wRxfb
+         vWE9PDql6Nyda03C2wIETWhGABocjrwVTWq6tg9TO5tSmQoKuvCZ2l2KEct442PhJQyB
+         o2e70YCyKVuFVmCLmUG57s07QejSurdW3IVS1RmgyC5hPFvj12rXf3rQvXF7ATRl9ZKA
+         grZRyK7KBe055EMpJPiS/4SsD6H7G9fki7IX7pmsS7nD2zMm1KWQ9e88edddj97YtOUw
+         k0rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684922419; x=1687514419;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UNSvuvrQGvwdxH/qdhsUYjzWunRTiKdWvSzt8OcjbNQ=;
+        b=BkNGOVLuJpeITnR77pXIYYvOXDgU4PDSY1iICLh2rbzgwHOS3a6gZpLnBYlIv204cH
+         ZNFRqu0G+cs6t2uiBOdTpJRxAdEUAE7Q+kGFYnO7Gqy7/czKC+PhICh8cr8ibDcvqo2e
+         Uldh4by3hArcz8noNtCShgm0Oi23NgjATK4sNvTz9vqll4NR2ooe9mtYhBc+c1XyGQ0V
+         LpcuWvZwZLQcvYPfsLz8r7OkJmaKlE6n7O79b/6dqsi6FDIQSHJ60L2+onXEHJ7S50Iq
+         TS2Gb9uCG1sy1joF7qAT83I2XEr3eQ2K3Mr1F+0BixiyIFywmCzWpRI5moNzG9TbS3CM
+         obsg==
+X-Gm-Message-State: AC+VfDzGJlRFVEm6yt7FdVNLdRB6VDBCaUSuR7U/ULe+VY7CCusQyenU
+        itBFx4BaiKZTe/+pGAW3sG8Zd5RIHAU=
+X-Google-Smtp-Source: ACHHUZ4HzUkejSTlixUkOvAE8dm9+V31YmC0hmTMMOxd/VAwP5P9I9OQi2IKm7VCjKB7xthZmInJaw==
+X-Received: by 2002:a17:90a:ab08:b0:234:889f:c35d with SMTP id m8-20020a17090aab0800b00234889fc35dmr15271241pjq.3.1684922418865;
+        Wed, 24 May 2023 03:00:18 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-28.three.co.id. [180.214.232.28])
+        by smtp.gmail.com with ESMTPSA id 137-20020a63028f000000b0053423447a12sm7515016pgc.73.2023.05.24.03.00.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 03:00:18 -0700 (PDT)
+Message-ID: <a8461137-0c87-fd7d-8354-5b8675d8e45d@gmail.com>
+Date:   Wed, 24 May 2023 16:59:41 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        "Linux Bluetooth (Bluez)" <linux-bluetooth@vger.kernel.org>,
+        Linux MediaTek <linux-mediatek@lists.infradead.org>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Alberto Garcia <berto@igalia.com>,
+        Aaron Ma <aaron.ma@canonical.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Foxconn / Hon Hai Bluetooth adapter 0489:e0cd stops working on
+ ThinkPad T14s AMD Gen1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate the size of rx indirection table dynamically in netvsc
-from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
-query instead of using a constant value of ITAB_NUM.
+Hi,
 
-Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
----
-Changes in v2:
- * Added a missing free for rx_table to fix a leak
- * Corrected alignment around rx table size query
- * Fixed incorrect error handling for rx_table pointer.
----
- drivers/net/hyperv/hyperv_net.h   |  5 ++++-
- drivers/net/hyperv/netvsc_drv.c   | 18 ++++++++++++++----
- drivers/net/hyperv/rndis_filter.c | 22 ++++++++++++++++++----
- 3 files changed, 36 insertions(+), 9 deletions(-)
+I notice a bug report on Bugzilla [1]. Quoting from it:
 
-diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_net.h
-index dd5919ec408b..1dbdb65ca8f0 100644
---- a/drivers/net/hyperv/hyperv_net.h
-+++ b/drivers/net/hyperv/hyperv_net.h
-@@ -74,6 +74,7 @@ struct ndis_recv_scale_cap { /* NDIS_RECEIVE_SCALE_CAPABILITIES */
- #define NDIS_RSS_HASH_SECRET_KEY_MAX_SIZE_REVISION_2   40
- 
- #define ITAB_NUM 128
-+#define ITAB_NUM_MAX 256
- 
- struct ndis_recv_scale_param { /* NDIS_RECEIVE_SCALE_PARAMETERS */
- 	struct ndis_obj_header hdr;
-@@ -1034,7 +1035,9 @@ struct net_device_context {
- 
- 	u32 tx_table[VRSS_SEND_TAB_SIZE];
- 
--	u16 rx_table[ITAB_NUM];
-+	u16 *rx_table;
-+
-+	int rx_table_sz;
- 
- 	/* Ethtool settings */
- 	u8 duplex;
-diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-index 0103ff914024..ab791e4ca63c 100644
---- a/drivers/net/hyperv/netvsc_drv.c
-+++ b/drivers/net/hyperv/netvsc_drv.c
-@@ -1040,6 +1040,13 @@ static int netvsc_detach(struct net_device *ndev,
- 
- 	rndis_filter_device_remove(hdev, nvdev);
- 
-+	/* 
-+	 * Free the rx indirection table and reset the table size to 0.
-+	 * With the netvsc_attach call it will get allocated again.
-+	 */
-+	ndev_ctx->rx_table_sz = 0;
-+	kfree(ndev_ctx->rx_table);
-+
- 	return 0;
- }
- 
-@@ -1747,7 +1754,9 @@ static u32 netvsc_get_rxfh_key_size(struct net_device *dev)
- 
- static u32 netvsc_rss_indir_size(struct net_device *dev)
- {
--	return ITAB_NUM;
-+	struct net_device_context *ndc = netdev_priv(dev);
-+
-+	return ndc->rx_table_sz;
- }
- 
- static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
-@@ -1766,7 +1775,7 @@ static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
- 
- 	rndis_dev = ndev->extension;
- 	if (indir) {
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			indir[i] = ndc->rx_table[i];
- 	}
- 
-@@ -1792,11 +1801,11 @@ static int netvsc_set_rxfh(struct net_device *dev, const u32 *indir,
- 
- 	rndis_dev = ndev->extension;
- 	if (indir) {
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			if (indir[i] >= ndev->num_chn)
- 				return -EINVAL;
- 
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			ndc->rx_table[i] = indir[i];
- 	}
- 
-@@ -2638,6 +2647,7 @@ static void netvsc_remove(struct hv_device *dev)
- 
- 	hv_set_drvdata(dev, NULL);
- 
-+	kfree(ndev_ctx->rx_table);
- 	free_percpu(ndev_ctx->vf_stats);
- 	free_netdev(net);
- }
-diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis_filter.c
-index eea777ec2541..3695c7d3da3a 100644
---- a/drivers/net/hyperv/rndis_filter.c
-+++ b/drivers/net/hyperv/rndis_filter.c
-@@ -927,7 +927,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
- 	struct rndis_set_request *set;
- 	struct rndis_set_complete *set_complete;
- 	u32 extlen = sizeof(struct ndis_recv_scale_param) +
--		     4 * ITAB_NUM + NETVSC_HASH_KEYLEN;
-+		     4 * ndc->rx_table_sz + NETVSC_HASH_KEYLEN;
- 	struct ndis_recv_scale_param *rssp;
- 	u32 *itab;
- 	u8 *keyp;
-@@ -953,7 +953,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
- 	rssp->hashinfo = NDIS_HASH_FUNC_TOEPLITZ | NDIS_HASH_IPV4 |
- 			 NDIS_HASH_TCP_IPV4 | NDIS_HASH_IPV6 |
- 			 NDIS_HASH_TCP_IPV6;
--	rssp->indirect_tabsize = 4*ITAB_NUM;
-+	rssp->indirect_tabsize = 4 * ndc->rx_table_sz;
- 	rssp->indirect_taboffset = sizeof(struct ndis_recv_scale_param);
- 	rssp->hashkey_size = NETVSC_HASH_KEYLEN;
- 	rssp->hashkey_offset = rssp->indirect_taboffset +
-@@ -961,7 +961,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
- 
- 	/* Set indirection table entries */
- 	itab = (u32 *)(rssp + 1);
--	for (i = 0; i < ITAB_NUM; i++)
-+	for (i = 0; i < ndc->rx_table_sz; i++)
- 		itab[i] = ndc->rx_table[i];
- 
- 	/* Set hask key values */
-@@ -1548,6 +1548,20 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
- 	if (ret || rsscap.num_recv_que < 2)
- 		goto out;
- 
-+	if (rsscap.num_indirect_tabent &&
-+	    rsscap.num_indirect_tabent <= ITAB_NUM_MAX)
-+		ndc->rx_table_sz = rsscap.num_indirect_tabent;
-+	else
-+		ndc->rx_table_sz = ITAB_NUM;
-+
-+	ndc->rx_table = kzalloc(sizeof(u16) * ndc->rx_table_sz,
-+				GFP_KERNEL);
-+	if (!ndc->rx_table) {
-+		netdev_err(net, "Error in allocating rx indirection table of size %d\n",
-+				ndc->rx_table_sz);
-+		goto out;
-+	}
-+
- 	/* This guarantees that num_possible_rss_qs <= num_online_cpus */
- 	num_possible_rss_qs = min_t(u32, num_online_cpus(),
- 				    rsscap.num_recv_que);
-@@ -1558,7 +1572,7 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
- 	net_device->num_chn = min(net_device->max_chn, device_info->num_chn);
- 
- 	if (!netif_is_rxfh_configured(net)) {
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			ndc->rx_table[i] = ethtool_rxfh_indir_default(
- 						i, net_device->num_chn);
- 	}
+> Hi,
+> 
+> I'm running Linux on a ThinkPad T14s AMD Gen 1 and I'm having problems
+> with its Bluetooth adapter.
+> 
+> The adapter is a Foxconn / Hon Hai, USB ID 0489:e0cd, and it uses the
+> Mediatek MT7921 driver. Sometimes it just works but often if I suspend
+> the laptop and come back it stops working. This also happens when I
+> use the RF kill switch. The kernel errors vary a bit depending on the
+> moment but it's usually a combination of these:
+> 
+> kernel: Bluetooth: hci0: Failed to get device id (-108)
+> kernel: Bluetooth: hci0: Failed to get fw version (-108)
+> kernel: bluetooth hci0: firmware: direct-loading firmware mediatek/BT_RAM_CODE_MT7961_1_2_hdr.bin
+> kernel: Bluetooth: hci0: Execution of wmt command timed out
+> kernel: Bluetooth: hci0: Failed to send wmt patch dwnld (-110)
+> kernel: Bluetooth: hci0: Failed to set up firmware (-110)
+> kernel: Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection command is advertised, but not supported.
+> 
+> Interestingly I noticed that if I try to use it on a Linux VM (using
+> USB passthrough) it generally works better, even when it's not working
+> on the host and the guest and the host are running the same OS and
+> kernel version. Still it fails sometimes, although the error messages
+> tend to be a bit different:
+> 
+> kernel: usbcore: registered new interface driver btusb
+> kernel: Bluetooth: hci0: Device setup in 153593 usecs
+> kernel: Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection command is advertised, but not supported.
+> kernel: Bluetooth: hci0: Opcode 0x c03 failed: -110
+> kernel: Bluetooth: hci0: Failed to read MSFT supported features (-110)
+> kernel: Bluetooth: hci0: AOSP get vendor capabilities (-110)
+> 
+> (I also tried the adapter with a Windows VM, again using USB
+> passthrough, but here it works perfectly fine)
+> 
+> Back to the host I found out that resetting the adapter using
+> "usb_modeswitch -R -v 0489 -p e0cd" sometimes is enough to bring the
+> adapter back to life and make it work. But this doesn't always
+> succeed, and at some point I end up in a situation like this:
+> 
+> kernel: xhci_hcd 0000:06:00.4: xHCI host not responding to stop endpoint command
+> kernel: xhci_hcd 0000:06:00.4: xHCI host controller not responding, assume dead
+> kernel: xhci_hcd 0000:06:00.4: HC died; cleaning up
+> 
+> Sometimes I can get out of it with this:
+> 
+> $ echo 0000:06:00.4 > /sys/bus/pci/drivers/xhci_hcd/unbind
+> $ echo 0000:06:00.4 > /sys/bus/pci/drivers/xhci_hcd/bind
+> 
+> All this has been happening since I got the laptop, but I'm testing it
+> now with Linux 6.3.3 and the problem is still there.
+> 
+> The end result is that I basically cannot rely on the USB adapter so I
+> have it almost always disabled.
+> 
+> A bit more information about the system:
+> 
+> $ lspci -nn | grep USB
+> 02:00.4 USB controller [0c03]: Realtek Semiconductor Co., Ltd. RTL811x EHCI host controller [10ec:816d] (rev 0e)
+> 05:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720202 USB 3.0 Host Controller [1912:0015] (rev 02)
+> 06:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne USB 3.1 [1022:1639]
+> 06:00.4 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne USB 3.1 [1022:1639]
+> 
+> $ lsusb
+> Bus 007 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 006 Device 003: ID 0489:e0cd Foxconn / Hon Hai Wireless_Device
+> Bus 006 Device 002: ID 06cb:00bd Synaptics, Inc. Prometheus MIS Touch Fingerprint Reader
+> Bus 006 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 005 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 002 Device 002: ID 04f2:b6cb Chicony Electronics Co., Ltd Integrated Camera
+> Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> 
+
+See bugzilla for the full thread.
+
+The reporter said that the bluetooth adapter works well on Windows VM via
+device passthrough, but not on Linux host.
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217475
+
 -- 
-2.34.1
-
+An old man doll... just what I always wanted! - Clara
