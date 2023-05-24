@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8947100BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EE17100B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237813AbjEXWUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S237365AbjEXWUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237227AbjEXWTh (ORCPT
+        with ESMTP id S229758AbjEXWTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 May 2023 18:19:37 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007AB1B8
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:19:18 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8a5cbb012so2835613276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:19:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D0E1BC
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:19:19 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb53e6952so3139465276.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684966747; x=1687558747;
+        d=google.com; s=20221208; t=1684966750; x=1687558750;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KvYI76SN3LSsDGBG627TEqFEqoZE169lDakPXaks7wo=;
-        b=LtNd1sQ1nR/tVT5PcLtarn5jp9Pff92GyzyO3QGdW+jYyOgNiferLf2Z/5TEQDatqe
-         LMBmKujbWP9OUnMx9F8cFQtFsn5JNJAknbkWSl5MCGT4mQhbj/T0bL7h3ojv0g8HscnA
-         ny267xSWe+TaTr9y2L/aj1vRXrzGL7L/PiTKoex9s3fSuSICP5lqc1ly6v2Lax1VB7r2
-         NIG0ltCupgrkU4ZErGXA5dNgPrJNoR2idq1/NNMtKumd/SJsE7AB1mhAPWSkZIP0yU1+
-         Vtp63Lcwmh2tSYUygKQJZxpU85Zk7Xxpp7ROAFkgU5qX5bTujEIvdBL8a0H4Iem+UhNy
-         zj0A==
+        bh=2Ev/Umag+1kF8B15W9g1QM1ZWvuEFBejQXrwI+WR21A=;
+        b=JMsQYU8+yomo5jSbLSRJBjA6TPdzXTPm3ryzbqOjQ7HfpZVXJADxYoGFbCtFk2p9Ac
+         gy8yeurv+ybzg2s44BB3EsfcuBqOuGvKxjI8UJZPLDGzJrSIS4j/BEF4MDpDrDAPg+6X
+         WAwALlGobCGXKvC7SSI6X0v6yzULWHrch28mGvGXl3LdL3lrRMLTeHJ+Sj1TC2z+ZEji
+         zOr13lKE/zy/d0IxU6HRONlAsH28ebWFz+xOHSaANWq1uiZQWhWvhS36+N2LGaSTk/kG
+         k4WpRB3sTmDGcH0Vvk9niZDX3o9VTdPtrhZD2kBb6iuaFfoMpJBP4Q9yZvOfdRPq8n5x
+         LG2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684966747; x=1687558747;
+        d=1e100.net; s=20221208; t=1684966750; x=1687558750;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KvYI76SN3LSsDGBG627TEqFEqoZE169lDakPXaks7wo=;
-        b=W+p7B7fWa5f9NgQfVuAexKI2whC4tcH95XTQ+UM3UdM6iL7xcbS39lgnp5P4er6ehh
-         avC7H4e9pmvu2JOUyVoQQi9zaHt79ArSjMYug1DJMWo29IgfiWva3aWYu+mQkH0FaKmP
-         uhUL4/5ctp9GEGu4sg30UgBD7heyq6t7oRBP777UJQZy41I6DxLilyyJgJ/8zp5lP0l0
-         HLekCwiguIFbQoqR1xtoUjwKVXvE2MyrAYeovrJPY+le9xOcCruOmQS3nwgg77tk3FlC
-         EGc1fTiV9A1V5hmfgW95Hhm6bjMhXSbV9xvUPC5MxKbhpQGSdzaA9g84US/PqeDNeSa5
-         moxg==
-X-Gm-Message-State: AC+VfDwpmDklbeIl+faeBM4c9oatY5ZaNUTEnCiAr081rYzjPRGMihaE
-        3kRf6eIUmM4soZD0NMAFVhGTZBCnIAXr
-X-Google-Smtp-Source: ACHHUZ5D/yUipWEDiqSUQ3rcMif94S1VlO1gGnqpCF1RxrNods675HwSbtRDhVW0rXw1HwI9CBryYTOySrBc
+        bh=2Ev/Umag+1kF8B15W9g1QM1ZWvuEFBejQXrwI+WR21A=;
+        b=Vb3pSvLg/U8b9cMRW3QRY6ctH7dkL+/Wpu5fsaQOeglqoGazfzXGloHBhmWbiCPNwS
+         aYLdDaXMtIqaiLz30askNs0Ocj5qgh6BVkLHqeiJ836RZbCJ2svF88xVLyfknWjyJKRt
+         bB25NEvpi2z4OqslASe11aAWalwb7rBaqj+ZJjVxzzk6abOnRdg2jximoGzG7AuAnoCR
+         AI7dHBEH6UZfpgIFyNU8YZnPnvRRLqoaUwGNmNKd71bsS2czpVQvxHRW+kliLT+GcaCz
+         jKNPCcEeScL6IaSAFQJQUoQA/dWRnzxmbsPx4+wIHiu9b7YJRuigm2HB6At4TogdBINJ
+         wNxg==
+X-Gm-Message-State: AC+VfDwxcq2jHNp2FZprwgzmj49dxTUtsuBYc+l6f9KryCIsQl2DNgbi
+        l0ERe9zP5ILDcMKHTgzI9auDwewSDyyT
+X-Google-Smtp-Source: ACHHUZ6nk7KPim+zmUUj154fvDJHp2Oy0J25GAXFhwzJha51YxFfXSRvFi9Uiblj4LbpUvvE76tjnkiiTBt1
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7aa7:3d2d:76ae:8e96])
- (user=irogers job=sendgmr) by 2002:a25:db47:0:b0:ba8:6148:4300 with SMTP id
- g68-20020a25db47000000b00ba861484300mr577117ybf.6.1684966747454; Wed, 24 May
- 2023 15:19:07 -0700 (PDT)
-Date:   Wed, 24 May 2023 15:18:10 -0700
+ (user=irogers job=sendgmr) by 2002:a25:aacc:0:b0:ba8:757c:2523 with SMTP id
+ t70-20020a25aacc000000b00ba8757c2523mr797390ybi.9.1684966749986; Wed, 24 May
+ 2023 15:19:09 -0700 (PDT)
+Date:   Wed, 24 May 2023 15:18:11 -0700
 In-Reply-To: <20230524221831.1741381-1-irogers@google.com>
-Message-Id: <20230524221831.1741381-15-irogers@google.com>
+Message-Id: <20230524221831.1741381-16-irogers@google.com>
 Mime-Version: 1.0
 References: <20230524221831.1741381-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Subject: [PATCH v3 14/35] perf evlist: Remove __evlist__add_default
+Subject: [PATCH v3 15/35] perf evlist: Reduce scope of evlist__has_hybrid
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -98,295 +98,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__evlist__add_default adds a cycles event to a typically empty evlist
-and was extended for hybrid with evlist__add_default_hybrid, as more
-than 1 PMU was necessary. Rather than have dedicated logic for the
-cycles event, this change switches to parsing 'cycles:P' which will
-handle wildcarding the PMUs appropriately for hybrid.
+Function is only used in printout, reduce scope to
+stat-display.c. Remove the now empty evlist-hybrid.c and
+evlist-hybrid.h.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/arch/x86/util/evsel.c | 20 --------------
- tools/perf/builtin-record.c      | 13 +++------
- tools/perf/builtin-top.c         | 10 ++++---
- tools/perf/util/evlist-hybrid.c  | 25 -----------------
- tools/perf/util/evlist-hybrid.h  |  1 -
- tools/perf/util/evlist.c         | 22 ++++++---------
- tools/perf/util/evlist.h         |  7 -----
- tools/perf/util/evsel.c          | 46 --------------------------------
- tools/perf/util/evsel.h          |  3 ---
- 9 files changed, 17 insertions(+), 130 deletions(-)
+ tools/perf/builtin-record.c     |  1 -
+ tools/perf/builtin-stat.c       |  1 -
+ tools/perf/util/Build           |  1 -
+ tools/perf/util/evlist-hybrid.c | 31 -------------------------------
+ tools/perf/util/evlist-hybrid.h | 12 ------------
+ tools/perf/util/evlist.c        |  1 -
+ tools/perf/util/stat-display.c  | 15 ++++++++++++++-
+ 7 files changed, 14 insertions(+), 48 deletions(-)
+ delete mode 100644 tools/perf/util/evlist-hybrid.c
+ delete mode 100644 tools/perf/util/evlist-hybrid.h
 
-diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/util/evsel.c
-index ea3972d785d1..153cdca94cd4 100644
---- a/tools/perf/arch/x86/util/evsel.c
-+++ b/tools/perf/arch/x86/util/evsel.c
-@@ -16,26 +16,6 @@ void arch_evsel__set_sample_weight(struct evsel *evsel)
- 	evsel__set_sample_bit(evsel, WEIGHT_STRUCT);
- }
- 
--void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr)
--{
--	struct perf_env env = { .total_mem = 0, } ;
--
--	if (!perf_env__cpuid(&env))
--		return;
--
--	/*
--	 * On AMD, precise cycles event sampling internally uses IBS pmu.
--	 * But IBS does not have filtering capabilities and perf by default
--	 * sets exclude_guest = 1. This makes IBS pmu event init fail and
--	 * thus perf ends up doing non-precise sampling. Avoid it by clearing
--	 * exclude_guest.
--	 */
--	if (env.cpuid && strstarts(env.cpuid, "AuthenticAMD"))
--		attr->exclude_guest = 0;
--
--	free(env.cpuid);
--}
--
- /* Check whether the evsel's PMU supports the perf metrics */
- bool evsel__sys_has_perf_metrics(const struct evsel *evsel)
- {
 diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 88f7b4241153..d80b54a6f450 100644
+index d80b54a6f450..e30e8d6a6575 100644
 --- a/tools/perf/builtin-record.c
 +++ b/tools/perf/builtin-record.c
-@@ -4161,18 +4161,11 @@ int cmd_record(int argc, const char **argv)
- 		record.opts.tail_synthesize = true;
- 
- 	if (rec->evlist->core.nr_entries == 0) {
--		if (perf_pmu__has_hybrid()) {
--			err = evlist__add_default_hybrid(rec->evlist,
--							 !record.opts.no_samples);
--		} else {
--			err = __evlist__add_default(rec->evlist,
--						    !record.opts.no_samples);
--		}
-+		bool can_profile_kernel = perf_event_paranoid_check(1);
- 
--		if (err < 0) {
--			pr_err("Not enough memory for event selector list\n");
-+		err = parse_event(rec->evlist, can_profile_kernel ? "cycles:P" : "cycles:Pu");
-+		if (err)
- 			goto out;
--		}
- 	}
- 
- 	if (rec->opts.target.tid && !rec->opts.no_inherit_set)
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 48ee49e95c5e..27a7f068207d 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1653,10 +1653,12 @@ int cmd_top(int argc, const char **argv)
- 	if (annotate_check_args(&top.annotation_opts) < 0)
- 		goto out_delete_evlist;
- 
--	if (!top.evlist->core.nr_entries &&
--	    evlist__add_default(top.evlist) < 0) {
--		pr_err("Not enough memory for event selector list\n");
--		goto out_delete_evlist;
-+	if (!top.evlist->core.nr_entries) {
-+		bool can_profile_kernel = perf_event_paranoid_check(1);
-+		int err = parse_event(top.evlist, can_profile_kernel ? "cycles:P" : "cycles:Pu");
-+
-+		if (err)
-+			goto out_delete_evlist;
- 	}
- 
- 	status = evswitch__init(&top.evswitch, top.evlist, stderr);
+@@ -50,7 +50,6 @@
+ #include "util/pfm.h"
+ #include "util/clockid.h"
+ #include "util/pmu-hybrid.h"
+-#include "util/evlist-hybrid.h"
+ #include "util/off_cpu.h"
+ #include "util/bpf-filter.h"
+ #include "asm/bug.h"
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index cc4d96de1851..3b90d742b023 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -48,7 +48,6 @@
+ #include "util/pmu.h"
+ #include "util/event.h"
+ #include "util/evlist.h"
+-#include "util/evlist-hybrid.h"
+ #include "util/evsel.h"
+ #include "util/debug.h"
+ #include "util/color.h"
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index c146736ead19..21e4cdcba504 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -11,7 +11,6 @@ perf-y += db-export.o
+ perf-y += env.o
+ perf-y += event.o
+ perf-y += evlist.o
+-perf-y += evlist-hybrid.o
+ perf-y += sideband_evlist.o
+ perf-y += evsel.o
+ perf-y += evsel_fprintf.o
 diff --git a/tools/perf/util/evlist-hybrid.c b/tools/perf/util/evlist-hybrid.c
-index 0f59c80f27b2..64f78d06fe19 100644
+deleted file mode 100644
+index 64f78d06fe19..000000000000
 --- a/tools/perf/util/evlist-hybrid.c
-+++ b/tools/perf/util/evlist-hybrid.c
-@@ -16,31 +16,6 @@
- #include <perf/evsel.h>
- #include <perf/cpumap.h>
- 
--int evlist__add_default_hybrid(struct evlist *evlist, bool precise)
++++ /dev/null
+@@ -1,31 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-#include <errno.h>
+-#include <inttypes.h>
+-#include "cpumap.h"
+-#include "evlist.h"
+-#include "evsel.h"
+-#include "../perf.h"
+-#include "util/pmu-hybrid.h"
+-#include "util/evlist-hybrid.h"
+-#include "debug.h"
+-#include <unistd.h>
+-#include <stdlib.h>
+-#include <linux/err.h>
+-#include <linux/string.h>
+-#include <perf/evlist.h>
+-#include <perf/evsel.h>
+-#include <perf/cpumap.h>
+-
+-bool evlist__has_hybrid(struct evlist *evlist)
 -{
 -	struct evsel *evsel;
--	struct perf_pmu *pmu;
--	__u64 config;
--	struct perf_cpu_map *cpus;
 -
--	perf_pmu__for_each_hybrid_pmu(pmu) {
--		config = PERF_COUNT_HW_CPU_CYCLES |
--			 ((__u64)pmu->type << PERF_PMU_TYPE_SHIFT);
--		evsel = evsel__new_cycles(precise, PERF_TYPE_HARDWARE,
--					  config);
--		if (!evsel)
--			return -ENOMEM;
--
--		cpus = perf_cpu_map__get(pmu->cpus);
--		evsel->core.cpus = cpus;
--		evsel->core.own_cpus = perf_cpu_map__get(cpus);
--		evsel->pmu_name = strdup(pmu->name);
--		evlist__add(evlist, evsel);
+-	evlist__for_each_entry(evlist, evsel) {
+-		if (evsel->pmu_name &&
+-		    perf_pmu__is_hybrid(evsel->pmu_name)) {
+-			return true;
+-		}
 -	}
 -
--	return 0;
+-	return false;
 -}
--
- bool evlist__has_hybrid(struct evlist *evlist)
- {
- 	struct evsel *evsel;
 diff --git a/tools/perf/util/evlist-hybrid.h b/tools/perf/util/evlist-hybrid.h
-index 4b000eda6626..0cded76eb344 100644
+deleted file mode 100644
+index 0cded76eb344..000000000000
 --- a/tools/perf/util/evlist-hybrid.h
-+++ b/tools/perf/util/evlist-hybrid.h
-@@ -7,7 +7,6 @@
- #include "evlist.h"
- #include <unistd.h>
- 
--int evlist__add_default_hybrid(struct evlist *evlist, bool precise);
- bool evlist__has_hybrid(struct evlist *evlist);
- 
- #endif /* __PERF_EVLIST_HYBRID_H */
++++ /dev/null
+@@ -1,12 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __PERF_EVLIST_HYBRID_H
+-#define __PERF_EVLIST_HYBRID_H
+-
+-#include <linux/compiler.h>
+-#include <linux/kernel.h>
+-#include "evlist.h"
+-#include <unistd.h>
+-
+-bool evlist__has_hybrid(struct evlist *evlist);
+-
+-#endif /* __PERF_EVLIST_HYBRID_H */
 diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 9dfa977193b3..63f8821a5395 100644
+index 63f8821a5395..82c0b3d0c822 100644
 --- a/tools/perf/util/evlist.c
 +++ b/tools/perf/util/evlist.c
-@@ -93,8 +93,15 @@ struct evlist *evlist__new(void)
- struct evlist *evlist__new_default(void)
- {
- 	struct evlist *evlist = evlist__new();
-+	bool can_profile_kernel;
-+	int err;
+@@ -28,7 +28,6 @@
+ #include "util/string2.h"
+ #include "util/perf_api_probe.h"
+ #include "util/evsel_fprintf.h"
+-#include "util/evlist-hybrid.h"
+ #include "util/pmu.h"
+ #include "util/sample.h"
+ #include "util/bpf-filter.h"
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index bf5a6c14dfcd..ede0477d958a 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -20,7 +20,6 @@
+ #include "util.h"
+ #include "iostat.h"
+ #include "pmu-hybrid.h"
+-#include "evlist-hybrid.h"
+ 
+ #define CNTR_NOT_SUPPORTED	"<not supported>"
+ #define CNTR_NOT_COUNTED	"<not counted>"
+@@ -677,6 +676,20 @@ static bool is_mixed_hw_group(struct evsel *counter)
+ 	return false;
+ }
+ 
++static bool evlist__has_hybrid(struct evlist *evlist)
++{
++	struct evsel *evsel;
 +
-+	if (!evlist)
-+		return NULL;
- 
--	if (evlist && evlist__add_default(evlist)) {
-+	can_profile_kernel = perf_event_paranoid_check(1);
-+	err = parse_event(evlist, can_profile_kernel ? "cycles:P" : "cycles:Pu");
-+	if (err) {
- 		evlist__delete(evlist);
- 		evlist = NULL;
- 	}
-@@ -237,19 +244,6 @@ static void evlist__set_leader(struct evlist *evlist)
- 	perf_evlist__set_leader(&evlist->core);
- }
- 
--int __evlist__add_default(struct evlist *evlist, bool precise)
--{
--	struct evsel *evsel;
--
--	evsel = evsel__new_cycles(precise, PERF_TYPE_HARDWARE,
--				  PERF_COUNT_HW_CPU_CYCLES);
--	if (evsel == NULL)
--		return -ENOMEM;
--
--	evlist__add(evlist, evsel);
--	return 0;
--}
--
- static struct evsel *evlist__dummy_event(struct evlist *evlist)
++	evlist__for_each_entry(evlist, evsel) {
++		if (evsel->pmu_name &&
++		    perf_pmu__is_hybrid(evsel->pmu_name)) {
++			return true;
++		}
++	}
++
++	return false;
++}
++
+ static void printout(struct perf_stat_config *config, struct outstate *os,
+ 		     double uval, u64 run, u64 ena, double noise, int aggr_idx)
  {
- 	struct perf_event_attr attr = {
-diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-index 5e7ff44f3043..664c6bf7b3e0 100644
---- a/tools/perf/util/evlist.h
-+++ b/tools/perf/util/evlist.h
-@@ -100,13 +100,6 @@ void evlist__delete(struct evlist *evlist);
- void evlist__add(struct evlist *evlist, struct evsel *entry);
- void evlist__remove(struct evlist *evlist, struct evsel *evsel);
- 
--int __evlist__add_default(struct evlist *evlist, bool precise);
--
--static inline int evlist__add_default(struct evlist *evlist)
--{
--	return __evlist__add_default(evlist, true);
--}
--
- int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs);
- 
- int __evlist__add_default_attrs(struct evlist *evlist,
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 8c8f371ea2b5..1df8f967d2eb 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -316,48 +316,6 @@ struct evsel *evsel__new_idx(struct perf_event_attr *attr, int idx)
- 	return evsel;
- }
- 
--static bool perf_event_can_profile_kernel(void)
--{
--	return perf_event_paranoid_check(1);
--}
--
--struct evsel *evsel__new_cycles(bool precise __maybe_unused, __u32 type, __u64 config)
--{
--	struct perf_event_attr attr = {
--		.type	= type,
--		.config	= config,
--		.exclude_kernel	= !perf_event_can_profile_kernel(),
--	};
--	struct evsel *evsel;
--
--	event_attr_init(&attr);
--
--	/*
--	 * Now let the usual logic to set up the perf_event_attr defaults
--	 * to kick in when we return and before perf_evsel__open() is called.
--	 */
--	evsel = evsel__new(&attr);
--	if (evsel == NULL)
--		goto out;
--
--	arch_evsel__fixup_new_cycles(&evsel->core.attr);
--
--	evsel->precise_max = true;
--
--	/* use asprintf() because free(evsel) assumes name is allocated */
--	if (asprintf(&evsel->name, "cycles%s%s%.*s",
--		     (attr.precise_ip || attr.exclude_kernel) ? ":" : "",
--		     attr.exclude_kernel ? "u" : "",
--		     attr.precise_ip ? attr.precise_ip + 1 : 0, "ppp") < 0)
--		goto error_free;
--out:
--	return evsel;
--error_free:
--	evsel__delete(evsel);
--	evsel = NULL;
--	goto out;
--}
--
- int copy_config_terms(struct list_head *dst, struct list_head *src)
- {
- 	struct evsel_config_term *pos, *tmp;
-@@ -1131,10 +1089,6 @@ void __weak arch_evsel__set_sample_weight(struct evsel *evsel)
- 	evsel__set_sample_bit(evsel, WEIGHT);
- }
- 
--void __weak arch_evsel__fixup_new_cycles(struct perf_event_attr *attr __maybe_unused)
--{
--}
--
- void __weak arch__post_evsel_config(struct evsel *evsel __maybe_unused,
- 				    struct perf_event_attr *attr __maybe_unused)
- {
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index df8928745fc6..429b172cc94d 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -243,8 +243,6 @@ static inline struct evsel *evsel__newtp(const char *sys, const char *name)
- }
- #endif
- 
--struct evsel *evsel__new_cycles(bool precise, __u32 type, __u64 config);
--
- #ifdef HAVE_LIBTRACEEVENT
- struct tep_event *event_format__new(const char *sys, const char *name);
- #endif
-@@ -312,7 +310,6 @@ void __evsel__reset_sample_bit(struct evsel *evsel, enum perf_event_sample_forma
- void evsel__set_sample_id(struct evsel *evsel, bool use_sample_identifier);
- 
- void arch_evsel__set_sample_weight(struct evsel *evsel);
--void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr);
- void arch__post_evsel_config(struct evsel *evsel, struct perf_event_attr *attr);
- 
- int evsel__set_filter(struct evsel *evsel, const char *filter);
 -- 
 2.40.1.698.g37aff9b760-goog
 
