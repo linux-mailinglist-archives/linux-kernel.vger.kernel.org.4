@@ -2,317 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F77470FE68
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0E370FE70
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjEXTTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S235274AbjEXTUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEXTTP (ORCPT
+        with ESMTP id S234897AbjEXTUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:19:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF9DA4;
-        Wed, 24 May 2023 12:19:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BF486402C;
-        Wed, 24 May 2023 19:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE12C433EF;
-        Wed, 24 May 2023 19:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684955952;
-        bh=UrGuYtn1xPI8m/h89y7lPAigXIpFhTgc56VT/0n00Yw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gSvvRmFT8sf4ysJEpWdOTFQzO5zkbZgEGg9DwPrl2WUntNM/dg5xnM2VEzqb02P+j
-         c6iVycvwtfLZRdyYTPsD+Z6OScIfCb5kFn8JlDs1D03THeABrXy9ipWXmbc6AR5/Ts
-         hLwBr907o8jGHEP50RfI8bGIyYEnMzDDYcFS7ZG+zT9F7ZowfYwqI6+bs7kMA7MaPS
-         C0NaD+A36TyXhujq1L+/YIM8Jn2c70+Uu2bKbUekgzz59miuoBkBIfMw4dIZPKZVAl
-         a2AxEL38VG1ALqm+vTY1kUpGFDrN88QxJ4AQV920UTva2reAsoyD02UJPM27wACrii
-         qt0DuaNHwoZ9A==
-Date:   Wed, 24 May 2023 20:19:08 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, sre@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
- convert to yaml
-Message-ID: <20230524-blizzard-hunting-4da815e634e2@spud>
-References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
- <20230524123528.439082-4-claudiu.beznea@microchip.com>
+        Wed, 24 May 2023 15:20:30 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AED7199
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:20:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L6hl9HkoCSsdJGQHncFeBSZctBjWNEM7bliR2oPxuzCTzFarwEBz1eWshUiyuZ9yq81yfsx0QLii+muS+X0nM0MQXD6rkgMXhSKrOL75/CDiiBuefTohHZXsH/WJ2awqGAh06w2deoh5LlNMefyvqBCmt/la8SMxkeD4vNBHWc47W82sCEZkrShWanFhBIvawCfS+XNeHJKx2TIgeDtfCTwBQf/CL7eXnI0tULtSwLRBnsuw7425cNJNFf4Sz4rgiK6JfTCI/aNxGV9dfhXYJChVNH2XlrYkpDFGfkyscIYo5JENByu7aLMimeu26W9UOiGEYXnuHEwkoLM8NUJUBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZswGC+wvdudFGf0pzc33Yee4KSj208EDmKA9pMngpTw=;
+ b=kqN/CUvocJhURwRWT+bUKmU+xN6F429Q209YMspgrhurk6yHD94LEpYU2dBbY0YMSNxpu1/NyJWYWiicRWsbGzOCkNLd+HaVksJLboFl3qDl3UO8V1y3gQGHNckBFsb+bsbQZxUO/YVq8JHBPFZy8A+PKynI+OFPi0Q/7YWvI6LGSn1KDP+he2M3sJ3bVDe7NLxuhbVSvm4//4lA6KoDJK5N4D4Zq0CxM9UBCwHdf8C/xHcpLAc/iVicpqEq/paLhvTCNqGn4q3F/GQloIQpi/69vSav7fT9cSn4K/jdSMpb2KQbrZcyOMfHpmbBRItoBYSlUADWRsrxLSlW1D8mgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZswGC+wvdudFGf0pzc33Yee4KSj208EDmKA9pMngpTw=;
+ b=d2YmpN+XR2uYvJePrJFgT5YxPApzPa3bk97eaB+oE8t1oFJid8Sh2ZnoRW2epOlxGRTrU7JymdJD/RaVuMP5bVuQXNHetFdUA82Std0DSE0+Dxn3WA8I6RnpqSs5U8kllG1WU/4aWraErdH2Z1ijZAnuRozAKLBiZ7Bjrxw/0FU=
+Received: from BN9PR03CA0892.namprd03.prod.outlook.com (2603:10b6:408:13c::27)
+ by IA0PR12MB8896.namprd12.prod.outlook.com (2603:10b6:208:493::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 24 May
+ 2023 19:20:22 +0000
+Received: from BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13c:cafe::cd) by BN9PR03CA0892.outlook.office365.com
+ (2603:10b6:408:13c::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15 via Frontend
+ Transport; Wed, 24 May 2023 19:20:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT070.mail.protection.outlook.com (10.13.177.50) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.30 via Frontend Transport; Wed, 24 May 2023 19:20:21 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 24 May
+ 2023 14:20:19 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        "Kenny Ho" <kenny.ho@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/amd/display: enable more strict compile checks
+Date:   Wed, 24 May 2023 15:19:55 -0400
+Message-ID: <20230524191955.252212-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wk90yo5YHkHmxCdc"
-Content-Disposition: inline
-In-Reply-To: <20230524123528.439082-4-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT070:EE_|IA0PR12MB8896:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1fafae1b-0ffb-4b47-7c61-08db5c8beb3b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RhlbLYYZOr6VDKctTL0Demh9i8rKVzJozIhBGO3yhpkfJm4TcvBL6Olnrx3A5pkZjjWRNJwi+tlYKlNiOtRRn+mY493DlDjdwrOy4ycallu/tf6K2BB87o4xlCMR5twoQweAmh7VnKR0D+vk3u74XIko4nvMGYHAZ1YwDXVXomDnd60qBQj7tmacd2C+9iokbgaf5JAHk59csNSk0rb3E7qSxTJuYrNlJtgk0dcEBIZNwq/gv/NXUC0IWfoPrbP+88R2UMhZaR0BFEaS1OPV+m4IFH+vnWm8lnX8sVcpVsjdrnrf0xXlxYSCHe3QVDxBpvi4EBGuB0wE7HOeNqf2yXJaLuI3N/ehLmktFNrDCU8eoZ5XYP3+mmK1K+I+69BA+JD22ili9m3ZsSvvY7i0s8O1qSKzjqpl8nMdPCzCwromV4zvhHX8RdL3SPHU8U7qaqVDbMGqHInUf7Y0pZCYB1mkMn0vrqrpoESFdvOkgRewBBKMgOslssPlaVbj5HHHT0AyRsE/zgsp1WCu/mWScf+TTP6L2eQKBV9tAHusyzteBFJj5bpEi1eAIY6HrC+KmdRp7gFxyuT/nZ0ONaB1oXJRbX2NAcO729PT/T+z2lMGwsyfbYvDfni+xPDVLYqxt/Ne4oiCtE7ctWkSmmQtHxtBCWYUGmZcNwFmb0FaJfjOwMVHWaPukV139z2l7hzn5GHKSecTxr7Ksgbdq9WXNRJ1Md1jp3Rw38qYJIEn7Led/c3ddTW62xHV1m2PXa+DsMWhXirIm6GgvKvgCT3xSVO8bEX/vM+FClQu8w+TglAGap+aWmR9jG0/FtUfsVWK
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(6666004)(41300700001)(86362001)(2616005)(336012)(82310400005)(426003)(26005)(44832011)(16526019)(1076003)(186003)(36756003)(2906002)(82740400003)(81166007)(83380400001)(47076005)(356005)(36860700001)(40480700001)(8936002)(8676002)(5660300002)(6916009)(4326008)(70206006)(70586007)(478600001)(316002)(54906003)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 19:20:21.9498
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fafae1b-0ffb-4b47-7c61-08db5c8beb3b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8896
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, there are quite a number of issues that are quite easy for
+the CI to catch, that slip through the cracks. Among them, there are
+unused variable and indentation issues. Also, we should consider all
+warnings to be compile errors, since the community will eventually end
+up complaining about them. So, enable -Werror, -Wunused and
+-Wmisleading-indentation for all kernel builds.
 
---wk90yo5YHkHmxCdc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: Harry Wentland <harry.wentland@amd.com>
+Cc: Kenny Ho <kenny.ho@amd.com>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+v2: fix grammatical error
+---
+ drivers/gpu/drm/amd/display/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Wed, May 24, 2023 at 03:35:27PM +0300, Claudiu Beznea wrote:
-> Convert Atmel SAMA5D2 shutdown controller to YAML. SAMA7G5 SHDWC DT node
-> (available in arch/arm/boot/dts/sama7g5.dtsi) has syscon along with its
-> compatible. There is no usage of this syscon in the current code but it
-> may be necessary in future as some registers of SHDWC are accessed in
-> different drivers (at91-sama5d2_shdwc.c and arch/arm/mach-at91/pm.c).
-> Thus update the YAML with it to make DT checkers happy.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+diff --git a/drivers/gpu/drm/amd/display/Makefile b/drivers/gpu/drm/amd/display/Makefile
+index 0d610cb376bb..3c44162ebe21 100644
+--- a/drivers/gpu/drm/amd/display/Makefile
++++ b/drivers/gpu/drm/amd/display/Makefile
+@@ -26,6 +26,8 @@
+ 
+ AMDDALPATH = $(RELATIVE_AMD_DISPLAY_PATH)
+ 
++subdir-ccflags-y += -Werror -Wunused -Wmisleading-indentation
++
+ subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/
+ subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/hw
+ subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/clk_mgr
+-- 
+2.40.1
 
-Modulo the license thing that I mentioned on v1,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-> ---
->  .../devicetree/bindings/arm/atmel-sysregs.txt |  63 ----------
->  .../power/reset/atmel,sama5d2-shdwc.yaml      | 115 ++++++++++++++++++
->  2 files changed, 115 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,s=
-ama5d2-shdwc.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
-cumentation/devicetree/bindings/arm/atmel-sysregs.txt
-> index e6b2fb291b45..67a66bf74895 100644
-> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> @@ -52,69 +52,6 @@ Example:
->  		reg =3D <0xe3804000 0x1000>;
->  };
-> =20
-> -SHDWC SAMA5D2-Compatible Shutdown Controller
-> -
-> -1) shdwc node
-> -
-> -required properties:
-> -- compatible: should be "atmel,sama5d2-shdwc", "microchip,sam9x60-shdwc"=
- or
-> -  "microchip,sama7g5-shdwc"
-> -- reg: should contain registers location and length
-> -- clocks: phandle to input clock.
-> -- #address-cells: should be one. The cell is the wake-up input index.
-> -- #size-cells: should be zero.
-> -
-> -optional properties:
-> -
-> -- debounce-delay-us: minimum wake-up inputs debouncer period in
-> -  microseconds. It's usually a board-related property.
-> -- atmel,wakeup-rtc-timer: boolean to enable Real-Time Clock wake-up.
-> -
-> -optional microchip,sam9x60-shdwc or microchip,sama7g5-shdwc properties:
-> -- atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
-> -
-> -The node contains child nodes for each wake-up input that the platform u=
-ses.
-> -
-> -2) input nodes
-> -
-> -Wake-up input nodes are usually described in the "board" part of the Dev=
-ice
-> -Tree. Note also that input 0 is linked to the wake-up pin and is frequen=
-tly
-> -used.
-> -
-> -Required properties:
-> -- reg: should contain the wake-up input index [0 - 15].
-> -
-> -Optional properties:
-> -- atmel,wakeup-active-high: boolean, the corresponding wake-up input des=
-cribed
-> -  by the child, forces the wake-up of the core power supply on a high le=
-vel.
-> -  The default is to be active low.
-> -
-> -Example:
-> -
-> -On the SoC side:
-> -	shdwc@f8048010 {
-> -		compatible =3D "atmel,sama5d2-shdwc";
-> -		reg =3D <0xf8048010 0x10>;
-> -		clocks =3D <&clk32k>;
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
-> -		atmel,wakeup-rtc-timer;
-> -	};
-> -
-> -On the board side:
-> -	shdwc@f8048010 {
-> -		debounce-delay-us =3D <976>;
-> -
-> -		input@0 {
-> -			reg =3D <0>;
-> -		};
-> -
-> -		input@1 {
-> -			reg =3D <1>;
-> -			atmel,wakeup-active-high;
-> -		};
-> -	};
-> -
->  Special Function Registers (SFR)
-> =20
->  Special Function Registers (SFR) manage specific aspects of the integrat=
-ed
-> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-=
-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-sh=
-dwc.yaml
-> new file mode 100644
-> index 000000000000..31a16a354a3a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
-aml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel SAMA5D2 SHDWC Shutdown Controller
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description:
-> +  Atmel SHDWC shutdown controller controls the power supplies VDDIO and =
-VDDCORE
-> +  and the wake-up detection on debounced input lines.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: microchip,sama7g5-shdwc
-> +          - const: syscon
-> +      - items:
-> +          enum:
-> +            - atmel,sama5d2-shdwc
-> +            - microchip,sam9x60-shdwc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  debounce-delay-us:
-> +    description:
-> +      Minimum wake-up inputs debouncer period in microseconds. It is usu=
-ally a
-> +      board-related property.
-> +
-> +  atmel,wakeup-rtc-timer:
-> +    description: enable real-time clock wake-up
-> +    type: boolean
-> +
-> +patternProperties:
-> +  "^input@[0-15]$":
-> +    description:
-> +      Wake-up input nodes. These are usually described in the "board" pa=
-rt of
-> +      the Device Tree. Note also that input 0 is linked to the wake-up p=
-in and
-> +      is frequently used.
-> +    type: object
-> +    properties:
-> +      reg:
-> +        description: contains the wake-up input index
-> +        minimum: 0
-> +        maximum: 15
-> +
-> +      atmel,wakeup-active-high:
-> +        description:
-> +          The corresponding wake-up input described by the child forces =
-the
-> +          wake-up of the core power supply on a high level. The default =
-is to
-> +          be active low.
-> +        type: boolean
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - microchip,sam9x60-shdwc
-> +              - microchip,sama7g5-shdwc
-> +    then:
-> +      properties:
-> +        atmel,wakeup-rtt-timer:
-> +          description: enable real-time timer wake-up
-> +          type: boolean
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    shdwc: poweroff@f8048010 {
-> +        compatible =3D "atmel,sama5d2-shdwc";
-> +        reg =3D <0xf8048010 0x10>;
-> +        clocks =3D <&clk32k>;
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +        atmel,wakeup-rtc-timer;
-> +        debounce-delay-us =3D <976>;
-> +
-> +        input@0 {
-> +            reg =3D <0>;
-> +        };
-> +
-> +        input@1 {
-> +            reg =3D <1>;
-> +            atmel,wakeup-active-high;
-> +        };
-> +    };
-> +
-> +...
-> --=20
-> 2.34.1
->=20
-
---wk90yo5YHkHmxCdc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG5jKwAKCRB4tDGHoIJi
-0p9OAQDaa+pUPo20aynlsVZ+ZkT1qKrlrMyJEBUl4ZP+2YwgCgEArC5r7v2+ddus
-dDpEvz6OUd7qIXJhVBt7zYHGf3oeuAc=
-=WmUB
------END PGP SIGNATURE-----
-
---wk90yo5YHkHmxCdc--
