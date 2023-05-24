@@ -2,62 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2B870ECC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7807170ECC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjEXE7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 00:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
+        id S239084AbjEXE7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 00:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjEXE7P (ORCPT
+        with ESMTP id S239071AbjEXE7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 00:59:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9A13E;
-        Tue, 23 May 2023 21:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=3cqLQxSD9pGuqgjwI40zZQxFCK7ZM0myf/djuDV5MFg=; b=fwDNoeFbu59alevHNXxjQ4UtcX
-        z4Nmn91xZTx2tfK9c/84TCrR7U0lEPaXIyi0YCtlrOsdU0yI3kfG6hgm3vxKv0txBywb0QQn8xo7b
-        WA/TJqaIhOTkyK/+PsT8Wo5aXRNWSiLAft36+EU9A76hU1hw/EdjynpSBKuiPw2jZpjHJPtvSOWpX
-        aHnd8xa+vN0kWv4BYUWLZc4Q3mrRO2zubNbtWLOWzmm7wNxU5XO87vRbWAskvdWzCz0wQbyAmk6AJ
-        +BBFUKXtbaVsYD9KLE2Zg8ZsGWIruTEeftNL95FFSumG+Z52rQocISza4Jh3Eva6F/Cxi/8xGYTqE
-        vVXHccEQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1gaM-00CMV4-1i;
-        Wed, 24 May 2023 04:58:54 +0000
-Message-ID: <b384f464-92c6-6a14-4072-1faa9fa6a6a8@infradead.org>
-Date:   Tue, 23 May 2023 21:58:53 -0700
+        Wed, 24 May 2023 00:59:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05A9718D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:59:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC4DD1042;
+        Tue, 23 May 2023 22:00:26 -0700 (PDT)
+Received: from [10.163.72.91] (unknown [10.163.72.91])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E456B3F840;
+        Tue, 23 May 2023 21:59:38 -0700 (PDT)
+Message-ID: <03cdccc3-8b8a-d972-bbad-d60966e59ca9@arm.com>
+Date:   Wed, 24 May 2023 10:29:36 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 15/24] block: move the code to do early boot lookup of
- block devices to block/
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] memblock: update numa node of memblk reserved type
 Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230523074535.249802-1-hch@lst.de>
- <20230523074535.249802-16-hch@lst.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230523074535.249802-16-hch@lst.de>
+To:     20230519105321.333-1-ssawgyw@gmail.com,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, tsahu@linux.ibm.com,
+        ssawgyw@gmail.com, Kefeng Wang <wangkefeng.wang@huawei.com>
+References: <20230523115708.195597-1-wangkefeng.wang@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230523115708.195597-1-wangkefeng.wang@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,25 +49,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 5/23/23 00:45, Christoph Hellwig wrote:
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f08b83e62c6222..3f8cf6dc7de887 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5452,7 +5452,7 @@
->  			port and the regular usb controller gets disabled.
+On 5/23/23 17:27, Kefeng Wang wrote:
+> The numa node of memblk reserved type is wrong, it could update
+> according to the numa node information from memblk memory type,
+> let's fix it.
+
+Indeed it's wrong at present and can be verified from sysfs file
+(/sys/kernel/debug/memblock/reserved) accessed in user space.
+
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  mm/memblock.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index a50447d970ef..45a0781cda31 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -1922,6 +1922,28 @@ phys_addr_t __init_memblock memblock_get_current_limit(void)
+>  	return memblock.current_limit;
+>  }
 >  
->  	root=		[KNL] Root filesystem
-> -			See early_lookup_bdev comment in init/do_mounts.c.
-> +			See early_lookup_bdev comment in block/early-lookup.c
+> +static void __init_memblock memblock_reserved_update_node(void)
+> +{
+> +	struct memblock_region *rgn;
+> +	phys_addr_t base, end, size;
+> +	int ret;
+> +
+> +	if (!IS_ENABLED(CONFIG_NUMA))
+> +		return;
+> +
+> +	for_each_mem_region(rgn) {
+> +		base = rgn->base;
+> +		size = rgn->size;
+> +		end = base + size - 1;
+> +
+> +		ret = memblock_set_node(base, size, &memblock.reserved,
+> +					memblock_get_region_node(rgn));
+> +		if (ret)
+> +			pr_err("memblock: Failed to update reserved [%pa-%pa] node",
+> +			       &base, &end);
+> +	}
+> +}
+> +
+>  static void __init_memblock memblock_dump(struct memblock_type *type)
+>  {
+>  	phys_addr_t base, end, size;
+> @@ -1955,6 +1977,7 @@ static void __init_memblock __memblock_dump_all(void)
+>  		&memblock.memory.total_size,
+>  		&memblock.reserved.total_size);
+>  
+> +	memblock_reserved_update_node();
 
-Patch 13 does this:
+__memblock_dump_all() gets called only when memblock_debug is enabled.
+This helper should be called directly inside memblock_dump_all() right
+at the beginning, regardless of memblock_debug.
 
- 	root=		[KNL] Root filesystem
--			See name_to_dev_t comment in init/do_mounts.c.
-+			See early_lookup_bdev comment in init/do_mounts.c.
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 804fae92d56f..008c4e86d7f3 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -1954,7 +1954,6 @@ static void __init_memblock __memblock_dump_all(void)
+                &memblock.memory.total_size,
+                &memblock.reserved.total_size);
+ 
+-       memblock_reserved_update_node();
+        memblock_dump(&memblock.memory);
+        memblock_dump(&memblock.reserved);
+ #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+@@ -1964,6 +1963,8 @@ static void __init_memblock __memblock_dump_all(void)
+ 
+ void __init_memblock memblock_dump_all(void)
+ {
++       memblock_reserved_update_node();
++
+        if (memblock_debug)
+                __memblock_dump_all();
+ }
 
-Should this latter chunk be dropped?
+>  	memblock_dump(&memblock.memory);
+>  	memblock_dump(&memblock.reserved);
+>  #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+> @@ -2196,6 +2219,8 @@ static int memblock_debug_show(struct seq_file *m, void *private)
+>  	unsigned int count = ARRAY_SIZE(flagname);
+>  	phys_addr_t end;
+>  
+> +	memblock_reserved_update_node();
+> +
 
--- 
-~Randy
+This is redundant, should be dropped. Reserved memblock ranges need not
+be scanned, each time the sysfs file is accessed from user space.
+
+>  	for (i = 0; i < type->cnt; i++) {
+>  		reg = &type->regions[i];
+>  		end = reg->base + reg->size - 1;
