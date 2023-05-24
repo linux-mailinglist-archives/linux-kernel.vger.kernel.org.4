@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBA070F30E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C2570F32B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbjEXJhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S229653AbjEXJkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEXJhD (ORCPT
+        with ESMTP id S230006AbjEXJjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:37:03 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DF2A1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:37:01 -0700 (PDT)
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QR5Z61K5gz18LhL;
-        Wed, 24 May 2023 17:32:30 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 17:36:58 +0800
-Message-ID: <b0a08101-2f20-825a-5120-6662e1436821@huawei.com>
-Date:   Wed, 24 May 2023 17:36:58 +0800
+        Wed, 24 May 2023 05:39:23 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA631B6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:38:42 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id 98e67ed59e1d1-25533eb3e5dso27465a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684921121; x=1687513121;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=znQ+oQUgIqQozQ/bIunmQ5Brszqw1hXk3gYEb70x7Ec=;
+        b=kvRjfI8u1/VLUfkqd5Ct5F3vo6B5Fw1haAIedIcCdIgza/VJRX5AWh4Tyi2Olz+NxT
+         9xumV48hwvRiUyeHlx6c5N3s048PejEPGWuOBQz7BbrJNpJUPlfA3D4afx6/5d1dqsNw
+         ydRjE6svWzjEbkuFDsCXlCntICW2mJENeLTC7TFnb0Hwi4XZwf1AhOmgKXNOQ3NiR9ZC
+         hWhBSoze6SX1RTvi8Bgb49IBilKo8ZECaSfR7VkBCNyMxc85fxgt89oMjmwZNIGbcvAF
+         bzPv3hFenPFesnnhAB4TT6t5duvE4fbtMObulDh5m6ijh5o6dFUHpJCrLQ7rcyaGx4mQ
+         0rbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684921121; x=1687513121;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=znQ+oQUgIqQozQ/bIunmQ5Brszqw1hXk3gYEb70x7Ec=;
+        b=ZhOWs6aokcYeJ8gj1Lv74WvYcbugyhMkLLBovfVOfNPqR2g+nCEJVn8B9L9Cj41U18
+         +ffAedgOAoRzJeDvy5GLnY5IdgvvVBZfM6iFw/LVSGzYlQOEgANaVL1tQFAhim+5v8I2
+         yaPPzw3wVnVw8OWDsbs38ct9YNBppsxNBS8nP7KIIRLR1JhiZvv63jMCbYrS5R6sDpJc
+         OpmWzSmkGzCQHQ6Jq0NDMNfjICXhFbiLlq6Mzdra6WICBx6f3AZOp9/EE4SRzqaMH6bx
+         rsFlaZrI1EF8SfNbHGdORKH918qYWuM388gvliLfrBr8WNjiKNry+nsd4voE8Btj5SJP
+         Q0gw==
+X-Gm-Message-State: AC+VfDyUkiWFMZ13N9pakYV5YX+TOnPmmRT+HbKYgvo4sTNoaxECQsPF
+        ZyQWP4CUVDgUVe5GtkEVPWMOYaHHgD84OQ==
+X-Google-Smtp-Source: ACHHUZ7cV+w13loNLlYYuEwTQ6PJaf/iRpYXJmpxUxnXHgID38lfYIfERsHTMD6/+I0XfoETDCxABw==
+X-Received: by 2002:a17:90b:4c41:b0:255:b1d9:a206 with SMTP id np1-20020a17090b4c4100b00255b1d9a206mr3828466pjb.22.1684921121123;
+        Wed, 24 May 2023 02:38:41 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y10-20020a63e24a000000b0051b0e564963sm7441840pgj.49.2023.05.24.02.38.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 02:38:40 -0700 (PDT)
+From:   xu xin <xu.xin.sc@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     david@redhat.com
+Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn
+Subject: Re: [PATCH v9 5/5] selftest: add a testcase of ksm zero pages
+Date:   Wed, 24 May 2023 17:38:36 +0800
+Message-Id: <20230524093836.21038-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <84c00f9d-0b83-e4a2-de6f-617cf23b6444@redhat.com>
+References: <84c00f9d-0b83-e4a2-de6f-617cf23b6444@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     <andersson@kernel.org>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
-        <arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <soc@kernel.org>, <wanghuiqiang@huawei.com>,
-        <tanxiaofei@huawei.com>, <liuyonglong@huawei.com>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230522072211.8894-1-lihuisong@huawei.com>
- <20230522072211.8894-2-lihuisong@huawei.com>
- <20230523093922.f2y4wrz3vkzi7kmw@bogus>
- <928a893b-6596-8d40-ce0e-80059a363d11@huawei.com>
- <20230523134135.jkkhcwfihflp775m@bogus>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230523134135.jkkhcwfihflp775m@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>> +	if (write(ksm_use_zero_pages_fd, "1", 1) != 1) {
+>> +		ksft_test_result_skip("write \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
+>> +		return;
+>> +	}
+>
+>I realize that this test will fail if there is any other process in the system that has KSM
+>Enabled with a suitable page filled with zeroes ... maybe instead of checking the global
+>KSM zeropages, check the per-mm ones instead? That should be better
 
-在 2023/5/23 21:41, Sudeep Holla 写道:
-> On Tue, May 23, 2023 at 07:57:42PM +0800, lihuisong (C) wrote:
->> 在 2023/5/23 17:39, Sudeep Holla 写道:
->>> On Mon, May 22, 2023 at 03:22:10PM +0800, Huisong Li wrote:
->>>> The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
->>>> for ensuring cache coherent on HiSilicon SoC. The performance of
->>>> the application may be affected if some hccs ports are in non-full
->>>> lane status, have a large number of CRC errors and so on.
->>>>
->>>> This driver provides the query interface of the health status and
->>>> port information of HCCS on Kunpeng SoC.
->>>>
->>>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
->>>> ---
->>>>    MAINTAINERS                          |    6 +
->>>>    drivers/soc/Kconfig                  |    1 +
->>>>    drivers/soc/Makefile                 |    1 +
->>>>    drivers/soc/hisilicon/Kconfig        |   19 +
->>>>    drivers/soc/hisilicon/Makefile       |    2 +
->>>>    drivers/soc/hisilicon/kunpeng_hccs.c | 1287 ++++++++++++++++++++++++++
->>>>    drivers/soc/hisilicon/kunpeng_hccs.h |  196 ++++
->>>>    7 files changed, 1512 insertions(+)
->>>>    create mode 100644 drivers/soc/hisilicon/Kconfig
->>>>    create mode 100644 drivers/soc/hisilicon/Makefile
->>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
->>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index eddbc48c61e9..fe0e796e8445 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -9399,6 +9399,12 @@ S:	Maintained
->>>>    W:	http://www.hisilicon.com
->>>>    F:	drivers/spi/spi-hisi-sfc-v3xx.c
->>>> +HISILICON KUNPENG SOC HCCS DRIVER
->>> s/HCCS/HCCS INFO or QUERY/ ?
->>  From the current features, what you suggest is suitable.
->> But this driver will support to the setting feature.
-> Ah OK, I wasn't aware of that, in that case it is fine to keep it as is
-> and add comment about future feature expansions so that the name makes
-It's not suitable to add it in advance.
-> more sense them. I assumed it is more a query interface.
-Yes, most of them are query interfaces.
+Emmm, yes. It makes sense. I'll do it per-mm in next-version.
+
+>You could do something like the following on top (I recall you had some kind of COW
+>tests previously, this should be a simplified version of it):
 >
-> I also assume the settings with just control performance and is fully
-> safe and stability of the system is taken care.
-Yes, it will has an impact on performance and power consumption, but not 
-functionality.
->
-> [...]
->
->>>> +
->>>> +/* PCC defines */
->>>> +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
->>>> +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
->>> I am not really sure if we keep duplicating this. I will try to cook up
->>> a patch consolidating these.
->> Yes, these info is better placed in a global header.
->> Do I need to do this in this series?
->> Or do not modify it, and then process all related code in your patch.
-> Fair enough, we can do that later. I don't want to block this for that reason.
-ok, thanks. will send v3 ASAP.
->
+
+Ok. Thank you.
+
+>diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+>index ea060c683c80..160675a4e3d2 100644
+>--- a/tools/testing/selftests/mm/ksm_functional_tests.c
+>+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+>@@ -182,6 +182,7 @@ static void test_unmerge(void)
+>  static void test_unmerge_zero_pages(void)
+>  {
+>  	const unsigned int size = 2 * MiB;
+>+	unsigned int offs;
+>  	char *map;
+>  	unsigned long pages_expected;
+>  
+>@@ -225,8 +226,18 @@ static void test_unmerge_zero_pages(void)
+>  		goto unmap;
+>  	}
+>  
+>+	/* Trigger unmerging of the other half by writing to the pages. */
+>+	for (offs = size / 2; offs < size; offs += pagesize)
+>+		*((unsigned int *)&map[offs]) = offs;
+>+
+>+	/* We should have no zeropages remaining. */
+>+	if (get_ksm_zero_pages()) {
+>+		ksft_test_result_fail("'ksm_zero_pages' updated after write fault\n");
+>+		goto unmap;
+>+	}
+>+
+>  	/* Check if ksm zero pages are really unmerged */
+>-	ksft_test_result(!range_maps_duplicates(map, size / 2),
+>+	ksft_test_result(!range_maps_duplicates(map, size),
+>  				"KSM zero pages were unmerged\n");
+>  unmap:
+>  	munmap(map, size);
