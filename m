@@ -2,138 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E73710020
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A17710024
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjEXVj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
+        id S230192AbjEXVlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjEXVjy (ORCPT
+        with ESMTP id S230124AbjEXVli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:39:54 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25277119
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:39:53 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-564f529a663so16597367b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684964392; x=1687556392;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+lTI9LGfJCIeH9eUZOS37jnh9XivOrfiNHxwExkkPU=;
-        b=1OM2n6A6XJR4jj8vE2JD/qVka6KhOa37sATKkJGdtzfw5ejGSX46cgRyM3KxfTglOD
-         0RNiltYW0aqpSJK1ylM7pyVuNywmw3i8GLhqy6D8KbpUnlsiq///5XlVQOyARTMakL95
-         sruDKzgA0kJWIRgwdNf60tHMZ2lnfSldT/PHutYtTTub50wqJp62S52UJsWvKQ7jpGPj
-         JBND0HA8P6pXYHkEPXwT4zPgdYSplBBE7ttHpAHPL1RPyn6nSmxfEos2auwOVntQ9sEN
-         x6n9gU3Z0Y/wI8zE55ONSW8DBiSo/6ReRvhBCmqYQEuA2BiS/6yDjqxNIpbAGpQ1wAiT
-         KtGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684964392; x=1687556392;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+lTI9LGfJCIeH9eUZOS37jnh9XivOrfiNHxwExkkPU=;
-        b=Jzx7bHS9wLUdDUeKJfiamEzLPe5oSY97Zo26QAxGfLtepOQuwrurVFtt9hcTszr2Sd
-         bY8vfn1N4S292p2JC/1mTcQg5S0dIhHLG0yffg9Qau6jJJmNeB9dnPZptyFB3KxIH01Z
-         XXZgZieA/icC8WTr6o3EmVSMjvsV7uTXgjvUmhyVvwAik112BWhM+FwhDB+4nsfSjWN8
-         ulgY59PJQiAFOQ7I3FIobAi0OBAnRHJEjhFeCqN88uA3rkgeel+qZwv2ScDdE9m08Kdd
-         jbd0pEOsPE1Do6vX7o3ojA97xxpDBHQk9Bsx69bbpKUFCHfUJTeRcpLC7qq/jtLAVnOH
-         +h6w==
-X-Gm-Message-State: AC+VfDxT4VQNR9gIZAie/EpkNjH6DS68dSIBsxyrTJ1ga2O2j+MK1PK2
-        r3f0dj4NY9V51MZqbZHbcPJpQlTSMKs=
-X-Google-Smtp-Source: ACHHUZ4gGkG32f/WDPDY+8DnC86QiU6Z2uyq9N2VVLscH3WfhLiakxSPFeyk8pWCaiTnq1AgYyU2vpbztC4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ae14:0:b0:561:8bfb:feb1 with SMTP id
- m20-20020a81ae14000000b005618bfbfeb1mr12005442ywh.10.1684964392193; Wed, 24
- May 2023 14:39:52 -0700 (PDT)
-Date:   Wed, 24 May 2023 14:39:50 -0700
-In-Reply-To: <20230524203336.GC3447678@hirez.programming.kicks-ass.net>
-Mime-Version: 1.0
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-9-chao.p.peng@linux.intel.com> <ZGxo9ylqYI8JXjGn@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZGzLf4zgxpBjghaF@google.com> <ZG2qv9sWl2RUnGqd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <ZG5wg3VbG4rCYrfk@google.com> <20230524203336.GC3447678@hirez.programming.kicks-ass.net>
-Message-ID: <ZG6EJoXbduApRsgV@google.com>
-Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 17:41:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83546FC;
+        Wed, 24 May 2023 14:41:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1928161221;
+        Wed, 24 May 2023 21:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58302C433EF;
+        Wed, 24 May 2023 21:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684964496;
+        bh=cZrnJxeMhUwXMVYsdoRzT3yaEt4/nNkyLF7HSNLFDZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iihtjHlFxfST4cYvt3gkZ/Mkzems7Hy57Pf8LyKaPzb7eEGcK0mkSMAV/4GgXlEhq
+         cbJaHiSqNnSVbrnAq8IG5voAwb13B6OJdir8itKCRRFGF3O7CfNEifkQ2+Hj48MdzZ
+         fHMVHO2i2zMf27HKaz456y5C4E5XKidXmmqQRq7XWqVOpTcLuKBXZl3uO1Y0XJL00q
+         Nn7pS6Ho/uA/fthp8Wx1Tsy7IJAd9nkwaGtQJnRgUwGoTKfFnDN0hIg3xyka91U6vH
+         b5SbK+IEJrSotZ1QRaJAwHIbPKstxF+ky3ajwITMPrRYpFUNUpaAMfnND8ZuBOaAOI
+         VhyToQ/N27iAg==
+Date:   Wed, 24 May 2023 14:41:33 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     peterz@infradead.org, namhyung@kernel.org, eranian@google.com,
+        acme@kernel.org, mark.rutland@arm.com, jolsa@kernel.org,
+        irogers@google.com, bp@alien8.de, kan.liang@linux.intel.com,
+        adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, maz@kernel.org, oliver.upton@linux.dev,
+        kvmarm@lists.linux.dev
+Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
+Message-ID: <20230524214133.GA2359762@dev-arch.thelio-3990X>
+References: <20230504110003.2548-1-ravi.bangoria@amd.com>
+ <20230504110003.2548-4-ravi.bangoria@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504110003.2548-4-ravi.bangoria@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023, Peter Zijlstra wrote:
-> On Wed, May 24, 2023 at 01:16:03PM -0700, Sean Christopherson wrote:
-> > Of course, the only accesses outside of mmu_lock are reads, so on x86 that
-> > "atomic" access is just a READ_ONCE() load, but that's not the case for all
-> > architectures.
+Hi Ravi,
+
++ arm64 KVM folks
+
+On Thu, May 04, 2023 at 04:30:02PM +0530, Ravi Bangoria wrote:
+> Searching for the right pmu by iterating over all pmus is no longer
+> required since all pmus now *must* be present in the 'pmu_idr' list.
+> So, remove linear searching code.
 > 
-> This is true on *all* archs. atomic_set() and atomic_read() are no more
-> and no less than WRITE_ONCE() / READ_ONCE().
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> ---
+>  kernel/events/core.c | 37 +++++++++++++------------------------
+>  1 file changed, 13 insertions(+), 24 deletions(-)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 0695bb9fbbb6..eba2b8595115 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -11630,38 +11630,27 @@ static struct pmu *perf_init_event(struct perf_event *event)
+>  	}
+>  
+>  again:
+> +	ret = -ENOENT;
+>  	rcu_read_lock();
+>  	pmu = idr_find(&pmu_idr, type);
+>  	rcu_read_unlock();
+> -	if (pmu) {
+> -		if (event->attr.type != type && type != PERF_TYPE_RAW &&
+> -		    !(pmu->capabilities & PERF_PMU_CAP_EXTENDED_HW_TYPE))
+> -			goto fail;
+> -
+> -		ret = perf_try_init_event(pmu, event);
+> -		if (ret == -ENOENT && event->attr.type != type && !extended_type) {
+> -			type = event->attr.type;
+> -			goto again;
+> -		}
+> +	if (!pmu)
+> +		goto fail;
+>  
+> -		if (ret)
+> -			pmu = ERR_PTR(ret);
+> +	if (event->attr.type != type && type != PERF_TYPE_RAW &&
+> +	    !(pmu->capabilities & PERF_PMU_CAP_EXTENDED_HW_TYPE))
+> +		goto fail;
+>  
+> -		goto unlock;
+> +	ret = perf_try_init_event(pmu, event);
+> +	if (ret == -ENOENT && event->attr.type != type && !extended_type) {
+> +		type = event->attr.type;
+> +		goto again;
+>  	}
+>  
+> -	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
+> -		ret = perf_try_init_event(pmu, event);
+> -		if (!ret)
+> -			goto unlock;
+> -
+> -		if (ret != -ENOENT) {
+> -			pmu = ERR_PTR(ret);
+> -			goto unlock;
+> -		}
+> -	}
+>  fail:
+> -	pmu = ERR_PTR(-ENOENT);
+> +	if (ret)
+> +		pmu = ERR_PTR(ret);
+> +
+>  unlock:
+>  	srcu_read_unlock(&pmus_srcu, idx);
+>  
+> -- 
+> 2.40.0
+> 
 
-Ah, I take it s390's handcoded assembly routines are just a paranoid equivalents
-and not truly special?  "l" and "st" do sound quite generic...
+My apologies if this has already been reported or fixed already, I did a
+search of lore.kernel.org and did not find anything. This patch as
+commit 9551fbb64d09 ("perf/core: Remove pmu linear searching code") in
+-next breaks starting QEMU with KVM enabled on two of my arm64 machines:
 
-  commit 7657e41a0bd16c9d8b3cefe8fd5d6ac3c25ae4bf
-  Author: Heiko Carstens <hca@linux.ibm.com>
-  Date:   Thu Feb 17 13:13:58 2011 +0100
+$ qemu-system-aarch64 \
+    -display none \
+    -nodefaults \
+    -machine virt,gic-version=max \
+    -append 'console=ttyAMA0 earlycon' \
+    -kernel arch/arm64/boot/Image.gz \
+    -initrd rootfs.cpio \
+    -cpu host \
+    -enable-kvm \
+    -m 512m \
+    -smp 8 \
+    -serial mon:stdio
+qemu-system-aarch64: PMU: KVM_SET_DEVICE_ATTR: No such device
+qemu-system-aarch64: failed to set irq for PMU
 
-    [S390] atomic: use inline asm
-    
-    Use inline assemblies for atomic_read/set(). This way there shouldn't
-    be any questions or subtle volatile semantics left.
+In the kernel log, I see
 
-static inline int __atomic_read(const atomic_t *v)
-{
-	int c;
+[   42.944952] kvm: pmu event creation failed -2
 
-	asm volatile(
-		"	l	%0,%1\n"
-		: "=d" (c) : "R" (v->counter));
-	return c;
-}
+I am not sure if this issue is unexpected as a result of this change or
+if there is something that needs to change on the arm64 KVM side (it
+appears the kernel message comes from arch/arm64/kvm/pmu-emul.c).
 
-static inline void __atomic_set(atomic_t *v, int i)
-{
-	asm volatile(
-		"	st	%1,%0\n"
-		: "=R" (v->counter) : "d" (i));
-}
+If there is any further information I can provide or patches I can test,
+I am more than happy to do so.
+
+Cheers,
+Nathan
+
+# bad: [cf09e328589a2ed7f6c8d90f2edb697fb4f8a96b] Add linux-next specific files for 20230524
+# good: [27e462c8fad4bf04ec4f81f8539ce6fa947ead3a] Merge tag 'xtensa-20230523' of https://github.com/jcmvbkbc/linux-xtensa
+git bisect start 'cf09e328589a2ed7f6c8d90f2edb697fb4f8a96b' '27e462c8fad4bf04ec4f81f8539ce6fa947ead3a'
+# good: [a20d8ab9e26daaeeaf971139b736981cf164ab0a] Merge branch 'for-linux-next' of git://anongit.freedesktop.org/drm/drm-misc
+git bisect good a20d8ab9e26daaeeaf971139b736981cf164ab0a
+# good: [2714032dfd641b22695e14efd5f9dff08a5e3245] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git
+git bisect good 2714032dfd641b22695e14efd5f9dff08a5e3245
+# bad: [b2bc2854ec87557033538aa9290f70b9141a6653] Merge branch 'for-leds-next' of git://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git
+git bisect bad b2bc2854ec87557033538aa9290f70b9141a6653
+# good: [20d4044f23c7724020b6c7d34ccee9bb929d1078] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+git bisect good 20d4044f23c7724020b6c7d34ccee9bb929d1078
+# bad: [c3cab2fce7b318ee2edf148b1436f3a3864ae773] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+git bisect bad c3cab2fce7b318ee2edf148b1436f3a3864ae773
+# bad: [af75e6871092fc1f9fa039132d5667f1e0a47a0a] Merge branch into tip/master: 'sched/core'
+git bisect bad af75e6871092fc1f9fa039132d5667f1e0a47a0a
+# good: [c50a7b40a2f50403c3f58f1c27a85e4c5d2e0865] Merge branch into tip/master: 'objtool/core'
+git bisect good c50a7b40a2f50403c3f58f1c27a85e4c5d2e0865
+# good: [519fabc7aaba3f0847cf37d5f9a5740c370eb777] psi: remove 500ms min window size limitation for triggers
+git bisect good 519fabc7aaba3f0847cf37d5f9a5740c370eb777
+# bad: [b85c6694924e9f09a40a2e0a3798f3945eaa6fda] Merge branch into tip/master: 'perf/core'
+git bisect bad b85c6694924e9f09a40a2e0a3798f3945eaa6fda
+# bad: [9551fbb64d094cc105964716224adeb7765df8fd] perf/core: Remove pmu linear searching code
+git bisect bad 9551fbb64d094cc105964716224adeb7765df8fd
+# good: [2fad201fe38ff9a692acedb1990ece2c52a29f95] perf/ibs: Fix interface via core pmu events
+git bisect good 2fad201fe38ff9a692acedb1990ece2c52a29f95
+# first bad commit: [9551fbb64d094cc105964716224adeb7765df8fd] perf/core: Remove pmu linear searching code
