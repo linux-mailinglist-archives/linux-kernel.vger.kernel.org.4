@@ -2,203 +2,423 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888BD70FB5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DC170FB60
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjEXQGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 12:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
+        id S230207AbjEXQJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjEXQGg (ORCPT
+        with ESMTP id S229611AbjEXQJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 12:06:36 -0400
-Received: from esa5.hc3370-68.iphmx.com (esa5.hc3370-68.iphmx.com [216.71.155.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC6019C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1684944378;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tm65vq3RdyIRKBQDq/1y/ORB5HYwi09XnCHiE+t3B2o=;
-  b=JbPF3tOrDbRd4hSGDsjSzW+WlmK6fqZ3ldBZLmCmirBUeyGwCvT2oyOX
-   kRqWuTRvySyJDFrajdBzKFweIfrD1SJAzW2uWDhhp8aHK98cSOGpSFguC
-   LQKUpgTsVvZeG3KNv5UsBptfv7yAUhF9BBcLolojuTQJy0Eg8GpG1vquz
-   4=;
-Authentication-Results: esa5.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-X-SBRS: 4.0
-X-MesageID: 109010816
-X-Ironport-Server: esa5.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.123
-X-Policy: $RELAYED
-IronPort-Data: A9a23:ZJU7g65duXdmHzo6yR3dbwxRtHzAchMFZxGqfqrLsTDasY5as4F+v
- jccWGqBOfbbZmukKIgja4+0pElTusKEydY3SlZu/ngyHi5G8cbLO4+Ufxz6V8+wwm8vb2o8t
- plDNYOQRCwQZiWBzvt4GuG59RGQ7YnRGvynTraCYnsrLeNdYH9JoQp5nOIkiZJfj9G8Agec0
- fv/uMSaM1K+s9JOGjt8B5mr9lU35JwehBtC5gZlPa0R4AeF/5UoJMl3yZ+ZfiOQrrZ8RoZWd
- 86bpJml82XQ+QsaC9/Nut4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5iXBYoUm9Fii3hojxE4
- I4lWapc6+seFvakdOw1C3G0GszlVEFM0OevzXOX6aR/w6BaGpdFLjoH4EweZOUlFuhL7W5m3
- NEVGSwWSw242s2OzJWmS+Mvuv0aM5y+VG8fkikIITDxCP8nRdbIQrnQ5M8e1zA17ixMNa+AP
- YxDM2MpNUmeJUQVYT/7C7pn9AusrmP4aCYerFuaqLAo6mzX5AdwzKLsIJzefdniqcB9xx7J/
- juerz2nav0cHPuixD/ZtVu2uuqM3jHWU94CU7uk2fE/1TV/wURMUUZLBDNXu8KRjk+4RsIaK
- EEO/CcqhbY9+VbtTdTnWRC85nmesXY0S9dWVuE39gyJ4q7V+BqCQHgJSCZbb94rv9NwQiYlv
- neVkNf5LThutqCJU3Wb96fSoT7aESINBWYGZCICHU0J7rHLrIgtg1TPR9B4HaiditzzBCG2w
- jaWoSx4jLIW5eYJ2L+85kvvmC+3q97CSQtdzg/QRGO+qARieJSieZer+HDc9/9LKIvfRV6E1
- FABms6R68gUAJ2NnTDLS+IIdJmx5fGDPSb0m1NjH5A9sT+q/haLbdAOyDJzPkFkNoADYzCBS
- EzUvxlY6LdQMWGsYKsxZJi+Y/nG1oC5S46jDKqNKIMTPN4oLlTvEDxSiVC49k3goVQ3tLwEZ
- LijfeGxDHxZNZ1e02/jLwsC6oMDyic7zGLVYJn0yRW7zLaTDEKopac53EimNb5gsv7dyOnB2
- 5MGbpbRlU0DOAHrSnOPmbP/O2zmOpTS6Xrej8VMPtCOLQN9cI3KI6+AmOhxE2CJckk8qwspw
- p1fchUAoLYcrSedQelvVpyEQO2HYHqHhShnVRHAxH7xs5TZXa6h7b0Ea7w8dqQ9+epowJZcF
- qdVJ5XeXKQTEWqWoVzxiKURS6Q7LnyWaf+mZXL5MFDTgbY7L+A2xjMUVlS2r3RfZsZGncA/v
- 6ehxmvmfHb3fCw7VJy+QKv2nzuMUY01xLoas73gfoMCJy0BMeFCd0TMsxPAC51Qd0iYnWvGi
- m57w34w/IHwnmP8y/GR7YjskmtjO7AidqaGNwE3NYqLCBQ=
-IronPort-HdrOrdr: A9a23:o7Kw36o2R/qRvJjUU7PAEJUaV5oJeYIsimQD101hICG9E/bo8v
- xG+c5wuCMc5wx8ZJhNo7+90dC7MBThHP1OkOss1NWZPDUO0VHARL2Ki7GN/9SKIVycygcy78
- Zdmp9FebnN5AhB5voSODPIaerIGuP3iJxAWN2uqUuFkTsaEJ2IMT0JdzpyfSVNNXB7OaY=
-X-Talos-CUID: =?us-ascii?q?9a23=3AqSPEPWn0YOBFKzhT5B2DEIZaQmvXOVTwwUbMOGq?=
- =?us-ascii?q?lMjtGcLGyVF6au59dqtU7zg=3D=3D?=
-X-Talos-MUID: 9a23:E7Tvtggk1lYhpJwDOK5m0MMpE/pl5vjpIVoxlNZFqeSPaTw3PSuyg2Hi
-X-IronPort-AV: E=Sophos;i="6.00,189,1681185600"; 
-   d="scan'208";a="109010816"
-From:   Ross Lagerwall <ross.lagerwall@citrix.com>
-To:     <linux-kernel@vger.kernel.org>, <xen-devel@lists.xenproject.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Peter Jones <pjones@redhat.com>,
-        "Konrad Rzeszutek Wilk" <konrad@kernel.org>,
-        Ross Lagerwall <ross.lagerwall@citrix.com>
-Subject: [PATCH] iscsi_ibft: Fix finding the iBFT under Xen Dom 0
-Date:   Wed, 24 May 2023 17:05:58 +0100
-Message-ID: <20230524160558.3686226-1-ross.lagerwall@citrix.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 24 May 2023 12:09:19 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2218F97
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:09:18 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba81031424dso1688484276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1684944557; x=1687536557;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Iq84UqCHKytfCCilcnjKzulPfnpCvwNQqRoNIkPLBVI=;
+        b=wCUD3KgjP1xy+fLvk10X14N9tfjfA2+uHQCCja9c3ycn2VmHLtmJ0l8Nue3kQpJLjb
+         dOUzC3VUAkuIF3E9mq2nH0bHKalCk6SrHfyp1wobiHttvWi+FNXVy/jEYOA09SnWpFnY
+         g1L5235JeN9g3gvQ4Gw9k1Ibc+eOokOoyInK4hZAbTjljnrtcY38tZYWOvmE5VONLuHN
+         9gAP8a9NXn6L4g8dHuP7N/z0qknJ4l4vGwm293jmCKA2UZfjXQEI066o++XiKgwJO6eO
+         RF7MgGEq0s1vrvK0bqYVZkE77/QVnkglHLuE016Q+bUWedSInSb2jOsnBzisRlqHeh5q
+         hwvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684944557; x=1687536557;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Iq84UqCHKytfCCilcnjKzulPfnpCvwNQqRoNIkPLBVI=;
+        b=DgIFeypkld0gS3f2CoVI0/DoS9tRSizNsGGDdz6vooDNeWB7114E0RlwD6k/8GJY1n
+         9bu1al1R5ySS8GX3KMN52K01GFpIvkHZLFkIEquU6g2KAD1ZRrxtcs9NdLrRlYW9vEZo
+         JZdBoE8KP6MGFozBROiuzAVkanRT/DsV/KimQ7io+FZR73bgdJ/i0AzmlvVY8qlmOxd/
+         TUWfP7xTU6XdoDAlMCZQUfgrN04unJV/s9FEILN1nMsxYZYJL6rEpc3cMfcKJEn6KEw8
+         c5PU8ttB73DDjDvI75ZArD1fUPoxFFcw1NpSCvZZqL84d1RPxzauXXS3dw1K69JrZDtt
+         eR0w==
+X-Gm-Message-State: AC+VfDwFAX6XHH5HXPe8OpAV88lCrvw+eJi/FIDKoz4c8buPEy/7v/uD
+        340TZ7IrIFYo05viR6IcC8Q33WIhMsrKNI5QyaLlDg==
+X-Google-Smtp-Source: ACHHUZ6l1iSRzNTqyhDaKfDeXGLHIIIe/OL7Clk6mPXymR/nhxMU4FxF5x8TIwpgotm19v3r047lZepfTJoIcoZeu78=
+X-Received: by 2002:a25:43:0:b0:ba8:5009:db33 with SMTP id 64-20020a250043000000b00ba85009db33mr258900yba.59.1684944557221;
+ Wed, 24 May 2023 09:09:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1684887977.git.peilin.ye@bytedance.com> <429357af094297abbc45f47b8e606f11206df049.1684887977.git.peilin.ye@bytedance.com>
+ <faaeb0b0-8538-9dfa-4c1e-8a225e3534f4@mojatatu.com>
+In-Reply-To: <faaeb0b0-8538-9dfa-4c1e-8a225e3534f4@mojatatu.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Wed, 24 May 2023 12:09:06 -0400
+Message-ID: <CAM0EoM=T_p_-zRiPDPj2r9aX0BZ5Vtb5ugkNQ08Q+NrTWB+Kpg@mail.gmail.com>
+Subject: Re: [PATCH v5 net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+To:     Pedro Tammela <pctammela@mojatatu.com>
+Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since firmware doesn't indicate the iBFT in the E820, add a reserved
-region so that it gets identity mapped when running as Dom 0 so that it
-is possible to search for it. Move the call to reserve_ibft_region()
-later so that it is called after the Xen identity mapping adjustments
-are applied.
+Pedro,
+When you have a moment - could you run tc monitor in parallel to the
+reproducer and double check it generates the correct events...
 
-Finally, instead of using isa_bus_to_virt() which doesn't do the right
-thing under Xen, use early_memremap() like the dmi_scan code does.
+cheers,
+jamal
 
-Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
----
-
-It tested this to work under Xen and native Linux.
-
- arch/x86/kernel/setup.c            |  2 +-
- arch/x86/xen/setup.c               |  8 +++++++-
- drivers/firmware/iscsi_ibft_find.c | 24 +++++++++++++++++-------
- 3 files changed, 25 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 16babff771bd..616b80507abd 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -796,7 +796,6 @@ static void __init early_reserve_memory(void)
- 
- 	memblock_x86_reserve_range_setup_data();
- 
--	reserve_ibft_region();
- 	reserve_bios_regions();
- 	trim_snb_memory();
- }
-@@ -1032,6 +1031,7 @@ void __init setup_arch(char **cmdline_p)
- 	if (efi_enabled(EFI_BOOT))
- 		efi_init();
- 
-+	reserve_ibft_region();
- 	dmi_setup();
- 
- 	/*
-diff --git a/arch/x86/xen/setup.c b/arch/x86/xen/setup.c
-index c2be3efb2ba0..daab59df3b99 100644
---- a/arch/x86/xen/setup.c
-+++ b/arch/x86/xen/setup.c
-@@ -772,8 +772,14 @@ char * __init xen_memory_setup(void)
- 	 * UNUSABLE regions in domUs are not handled and will need
- 	 * a patch in the future.
- 	 */
--	if (xen_initial_domain())
-+	if (xen_initial_domain()) {
- 		xen_ignore_unusable();
-+		/* Reserve 0.5 MiB to 1 MiB region so iBFT can be found */
-+		xen_e820_table.entries[xen_e820_table.nr_entries].addr = 0x80000;
-+		xen_e820_table.entries[xen_e820_table.nr_entries].size = 0x80000;
-+		xen_e820_table.entries[xen_e820_table.nr_entries].type = E820_TYPE_RESERVED;
-+		xen_e820_table.nr_entries++;
-+	}
- 
- 	/* Make sure the Xen-supplied memory map is well-ordered. */
- 	e820__update_table(&xen_e820_table);
-diff --git a/drivers/firmware/iscsi_ibft_find.c b/drivers/firmware/iscsi_ibft_find.c
-index 94b49ccd23ac..e3c1449987dd 100644
---- a/drivers/firmware/iscsi_ibft_find.c
-+++ b/drivers/firmware/iscsi_ibft_find.c
-@@ -52,9 +52,9 @@ static const struct {
-  */
- void __init reserve_ibft_region(void)
- {
--	unsigned long pos;
-+	unsigned long pos, virt_pos = 0;
- 	unsigned int len = 0;
--	void *virt;
-+	void *virt = NULL;
- 	int i;
- 
- 	ibft_phys_addr = 0;
-@@ -70,13 +70,20 @@ void __init reserve_ibft_region(void)
- 		 * so skip that area */
- 		if (pos == VGA_MEM)
- 			pos += VGA_SIZE;
--		virt = isa_bus_to_virt(pos);
-+
-+		/* Map page by page */
-+		if (offset_in_page(pos) == 0) {
-+			if (virt)
-+				early_memunmap(virt, PAGE_SIZE);
-+			virt = early_memremap_ro(pos, PAGE_SIZE);
-+			virt_pos = pos;
-+		}
- 
- 		for (i = 0; i < ARRAY_SIZE(ibft_signs); i++) {
--			if (memcmp(virt, ibft_signs[i].sign, IBFT_SIGN_LEN) ==
--			    0) {
-+			if (memcmp(virt + (pos - virt_pos), ibft_signs[i].sign,
-+				   IBFT_SIGN_LEN) == 0) {
- 				unsigned long *addr =
--				    (unsigned long *)isa_bus_to_virt(pos + 4);
-+				    (unsigned long *)(virt + pos - virt_pos + 4);
- 				len = *addr;
- 				/* if the length of the table extends past 1M,
- 				 * the table cannot be valid. */
-@@ -84,9 +91,12 @@ void __init reserve_ibft_region(void)
- 					ibft_phys_addr = pos;
- 					memblock_reserve(ibft_phys_addr, PAGE_ALIGN(len));
- 					pr_info("iBFT found at %pa.\n", &ibft_phys_addr);
--					return;
-+					goto out;
- 				}
- 			}
- 		}
- 	}
-+
-+out:
-+	early_memunmap(virt, PAGE_SIZE);
- }
--- 
-2.31.1
-
+On Wed, May 24, 2023 at 11:39=E2=80=AFAM Pedro Tammela <pctammela@mojatatu.=
+com> wrote:
+>
+> On 23/05/2023 22:20, Peilin Ye wrote:
+> > From: Peilin Ye <peilin.ye@bytedance.com>
+> >
+> > mini_Qdisc_pair::p_miniq is a double pointer to mini_Qdisc, initialized=
+ in
+> > ingress_init() to point to net_device::miniq_ingress.  ingress Qdiscs
+> > access this per-net_device pointer in mini_qdisc_pair_swap().  Similar =
+for
+> > clsact Qdiscs and miniq_egress.
+> >
+> > Unfortunately, after introducing RTNL-unlocked RTM_{NEW,DEL,GET}TFILTER
+> > requests (thanks Hillf Danton for the hint), when replacing ingress or
+> > clsact Qdiscs, for example, the old Qdisc ("@old") could access the sam=
+e
+> > miniq_{in,e}gress pointer(s) concurrently with the new Qdisc ("@new"),
+> > causing race conditions [1] including a use-after-free bug in
+> > mini_qdisc_pair_swap() reported by syzbot:
+> >
+> >   BUG: KASAN: slab-use-after-free in mini_qdisc_pair_swap+0x1c2/0x1f0 n=
+et/sched/sch_generic.c:1573
+> >   Write of size 8 at addr ffff888045b31308 by task syz-executor690/1490=
+1
+> > ...
+> >   Call Trace:
+> >    <TASK>
+> >    __dump_stack lib/dump_stack.c:88 [inline]
+> >    dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+> >    print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:3=
+19
+> >    print_report mm/kasan/report.c:430 [inline]
+> >    kasan_report+0x11c/0x130 mm/kasan/report.c:536
+> >    mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
+> >    tcf_chain_head_change_item net/sched/cls_api.c:495 [inline]
+> >    tcf_chain0_head_change.isra.0+0xb9/0x120 net/sched/cls_api.c:509
+> >    tcf_chain_tp_insert net/sched/cls_api.c:1826 [inline]
+> >    tcf_chain_tp_insert_unique net/sched/cls_api.c:1875 [inline]
+> >    tc_new_tfilter+0x1de6/0x2290 net/sched/cls_api.c:2266
+> > ...
+> >
+> > @old and @new should not affect each other.  In other words, @old shoul=
+d
+> > never modify miniq_{in,e}gress after @new, and @new should not update
+> > @old's RCU state.  Fixing without changing sch_api.c turned out to be
+> > difficult (please refer to Closes: for discussions).  Instead, make sur=
+e
+> > @new's first call always happen after @old's last call, in
+> > qdisc_destroy(), has finished:
+> >
+> > In qdisc_graft(), return -EAGAIN and tell the caller to replay
+> > (suggested by Vlad Buslov) if @old has any ongoing RTNL-unlocked filter
+> > requests, and call qdisc_destroy() for @old before grafting @new.
+> >
+> > Introduce qdisc_refcount_dec_if_one() as the counterpart of
+> > qdisc_refcount_inc_nz() used for RTNL-unlocked filter requests.  Introd=
+uce
+> > a non-static version of qdisc_destroy() that does a TCQ_F_BUILTIN check=
+,
+> > just like qdisc_put() etc.
+> >
+> > Depends on patch "net/sched: Refactor qdisc_graft() for ingress and cls=
+act
+> > Qdiscs".
+> >
+> > [1] To illustrate, the syzkaller reproducer adds ingress Qdiscs under
+> > TC_H_ROOT (no longer possible after patch "net/sched: sch_ingress: Only
+> > create under TC_H_INGRESS") on eth0 that has 8 transmission queues:
+> >
+> >    Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2), =
+then
+> >    adds a flower filter X to A.
+> >
+> >    Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 a=
+nd
+> >    b2) to replace A, then adds a flower filter Y to B.
+> >
+> >   Thread 1               A's refcnt   Thread 2
+> >    RTM_NEWQDISC (A, RTNL-locked)
+> >     qdisc_create(A)               1
+> >     qdisc_graft(A)                9
+> >
+> >    RTM_NEWTFILTER (X, RTNL-unlocked)
+> >     __tcf_qdisc_find(A)          10
+> >     tcf_chain0_head_change(A)
+> >     mini_qdisc_pair_swap(A) (1st)
+> >              |
+> >              |                         RTM_NEWQDISC (B, RTNL-locked)
+> >           RCU sync                2     qdisc_graft(B)
+> >              |                    1     notify_and_destroy(A)
+> >              |
+> >     tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-unlocked=
+)
+> >     qdisc_destroy(A)                    tcf_chain0_head_change(B)
+> >     tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
+> >     mini_qdisc_pair_swap(A) (3rd)                |
+> >             ...                                 ...
+> >
+> > Here, B calls mini_qdisc_pair_swap(), pointing eth0->miniq_ingress to i=
+ts
+> > mini Qdisc, b1.  Then, A calls mini_qdisc_pair_swap() again during
+> > ingress_destroy(), setting eth0->miniq_ingress to NULL, so ingress pack=
+ets
+> > on eth0 will not find filter Y in sch_handle_ingress().
+> >
+> > This is only one of the possible consequences of concurrently accessing
+> > miniq_{in,e}gress pointers.  The point is clear though: again, A should
+> > never modify those per-net_device pointers after B, and B should not
+> > update A's RCU state.
+> >
+> > Fixes: 7a096d579e8e ("net: sched: ingress: set 'unlocked' flag for Qdis=
+c ops")
+> > Fixes: 87f373921c4e ("net: sched: ingress: set 'unlocked' flag for clsa=
+ct Qdisc ops")
+> > Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
+> > Closes: https://lore.kernel.org/r/0000000000006cf87705f79acf1a@google.c=
+om/
+> > Cc: Hillf Danton <hdanton@sina.com>
+> > Cc: Vlad Buslov <vladbu@mellanox.com>
+> > Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+>
+> Tested-by: Pedro Tammela <pctammela@mojatatu.com>
+>
+> > ---
+> > change in v5:
+> >    - reinitialize @q, @p (suggested by Vlad) and @tcm before replaying,
+> >      just like @flags in tc_new_tfilter()
+> >
+> > change in v3, v4:
+> >    - add in-body From: tag
+> >
+> > changes in v2:
+> >    - replay the request if the current Qdisc has any ongoing RTNL-unloc=
+ked
+> >      filter requests (Vlad)
+> >    - minor changes in code comments and commit log
+> >
+> >   include/net/sch_generic.h |  8 ++++++++
+> >   net/sched/sch_api.c       | 40 ++++++++++++++++++++++++++++++--------=
+-
+> >   net/sched/sch_generic.c   | 14 +++++++++++---
+> >   3 files changed, 50 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+> > index fab5ba3e61b7..3e9cc43cbc90 100644
+> > --- a/include/net/sch_generic.h
+> > +++ b/include/net/sch_generic.h
+> > @@ -137,6 +137,13 @@ static inline void qdisc_refcount_inc(struct Qdisc=
+ *qdisc)
+> >       refcount_inc(&qdisc->refcnt);
+> >   }
+> >
+> > +static inline bool qdisc_refcount_dec_if_one(struct Qdisc *qdisc)
+> > +{
+> > +     if (qdisc->flags & TCQ_F_BUILTIN)
+> > +             return true;
+> > +     return refcount_dec_if_one(&qdisc->refcnt);
+> > +}
+> > +
+> >   /* Intended to be used by unlocked users, when concurrent qdisc relea=
+se is
+> >    * possible.
+> >    */
+> > @@ -652,6 +659,7 @@ void dev_deactivate_many(struct list_head *head);
+> >   struct Qdisc *dev_graft_qdisc(struct netdev_queue *dev_queue,
+> >                             struct Qdisc *qdisc);
+> >   void qdisc_reset(struct Qdisc *qdisc);
+> > +void qdisc_destroy(struct Qdisc *qdisc);
+> >   void qdisc_put(struct Qdisc *qdisc);
+> >   void qdisc_put_unlocked(struct Qdisc *qdisc);
+> >   void qdisc_tree_reduce_backlog(struct Qdisc *qdisc, int n, int len);
+> > diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
+> > index f72a581666a2..286b7c58f5b9 100644
+> > --- a/net/sched/sch_api.c
+> > +++ b/net/sched/sch_api.c
+> > @@ -1080,10 +1080,18 @@ static int qdisc_graft(struct net_device *dev, =
+struct Qdisc *parent,
+> >               if ((q && q->flags & TCQ_F_INGRESS) ||
+> >                   (new && new->flags & TCQ_F_INGRESS)) {
+> >                       ingress =3D 1;
+> > -                     if (!dev_ingress_queue(dev)) {
+> > +                     dev_queue =3D dev_ingress_queue(dev);
+> > +                     if (!dev_queue) {
+> >                               NL_SET_ERR_MSG(extack, "Device does not h=
+ave an ingress queue");
+> >                               return -ENOENT;
+> >                       }
+> > +
+> > +                     /* Replay if the current ingress (or clsact) Qdis=
+c has ongoing
+> > +                      * RTNL-unlocked filter request(s).  This is the =
+counterpart of that
+> > +                      * qdisc_refcount_inc_nz() call in __tcf_qdisc_fi=
+nd().
+> > +                      */
+> > +                     if (!qdisc_refcount_dec_if_one(dev_queue->qdisc_s=
+leeping))
+> > +                             return -EAGAIN;
+> >               }
+> >
+> >               if (dev->flags & IFF_UP)
+> > @@ -1104,8 +1112,16 @@ static int qdisc_graft(struct net_device *dev, s=
+truct Qdisc *parent,
+> >                               qdisc_put(old);
+> >                       }
+> >               } else {
+> > -                     dev_queue =3D dev_ingress_queue(dev);
+> > -                     old =3D dev_graft_qdisc(dev_queue, new);
+> > +                     old =3D dev_graft_qdisc(dev_queue, NULL);
+> > +
+> > +                     /* {ingress,clsact}_destroy() @old before graftin=
+g @new to avoid
+> > +                      * unprotected concurrent accesses to net_device:=
+:miniq_{in,e}gress
+> > +                      * pointer(s) in mini_qdisc_pair_swap().
+> > +                      */
+> > +                     qdisc_notify(net, skb, n, classid, old, new, exta=
+ck);
+> > +                     qdisc_destroy(old);
+> > +
+> > +                     dev_graft_qdisc(dev_queue, new);
+> >               }
+> >
+> >   skip:
+> > @@ -1119,8 +1135,6 @@ static int qdisc_graft(struct net_device *dev, st=
+ruct Qdisc *parent,
+> >
+> >                       if (new && new->ops->attach)
+> >                               new->ops->attach(new);
+> > -             } else {
+> > -                     notify_and_destroy(net, skb, n, classid, old, new=
+, extack);
+> >               }
+> >
+> >               if (dev->flags & IFF_UP)
+> > @@ -1450,19 +1464,22 @@ static int tc_get_qdisc(struct sk_buff *skb, st=
+ruct nlmsghdr *n,
+> >                       struct netlink_ext_ack *extack)
+> >   {
+> >       struct net *net =3D sock_net(skb->sk);
+> > -     struct tcmsg *tcm =3D nlmsg_data(n);
+> >       struct nlattr *tca[TCA_MAX + 1];
+> >       struct net_device *dev;
+> > +     struct Qdisc *q, *p;
+> > +     struct tcmsg *tcm;
+> >       u32 clid;
+> > -     struct Qdisc *q =3D NULL;
+> > -     struct Qdisc *p =3D NULL;
+> >       int err;
+> >
+> > +replay:
+> >       err =3D nlmsg_parse_deprecated(n, sizeof(*tcm), tca, TCA_MAX,
+> >                                    rtm_tca_policy, extack);
+> >       if (err < 0)
+> >               return err;
+> >
+> > +     tcm =3D nlmsg_data(n);
+> > +     q =3D p =3D NULL;
+> > +
+> >       dev =3D __dev_get_by_index(net, tcm->tcm_ifindex);
+> >       if (!dev)
+> >               return -ENODEV;
+> > @@ -1515,8 +1532,11 @@ static int tc_get_qdisc(struct sk_buff *skb, str=
+uct nlmsghdr *n,
+> >                       return -ENOENT;
+> >               }
+> >               err =3D qdisc_graft(dev, p, skb, n, clid, NULL, q, extack=
+);
+> > -             if (err !=3D 0)
+> > +             if (err !=3D 0) {
+> > +                     if (err =3D=3D -EAGAIN)
+> > +                             goto replay;
+> >                       return err;
+> > +             }
+> >       } else {
+> >               qdisc_notify(net, skb, n, clid, NULL, q, NULL);
+> >       }
+> > @@ -1704,6 +1724,8 @@ static int tc_modify_qdisc(struct sk_buff *skb, s=
+truct nlmsghdr *n,
+> >       if (err) {
+> >               if (q)
+> >                       qdisc_put(q);
+> > +             if (err =3D=3D -EAGAIN)
+> > +                     goto replay;
+> >               return err;
+> >       }
+> >
+> > diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+> > index 37e41f972f69..e14ed47f961c 100644
+> > --- a/net/sched/sch_generic.c
+> > +++ b/net/sched/sch_generic.c
+> > @@ -1046,7 +1046,7 @@ static void qdisc_free_cb(struct rcu_head *head)
+> >       qdisc_free(q);
+> >   }
+> >
+> > -static void qdisc_destroy(struct Qdisc *qdisc)
+> > +static void __qdisc_destroy(struct Qdisc *qdisc)
+> >   {
+> >       const struct Qdisc_ops  *ops =3D qdisc->ops;
+> >
+> > @@ -1070,6 +1070,14 @@ static void qdisc_destroy(struct Qdisc *qdisc)
+> >       call_rcu(&qdisc->rcu, qdisc_free_cb);
+> >   }
+> >
+> > +void qdisc_destroy(struct Qdisc *qdisc)
+> > +{
+> > +     if (qdisc->flags & TCQ_F_BUILTIN)
+> > +             return;
+> > +
+> > +     __qdisc_destroy(qdisc);
+> > +}
+> > +
+> >   void qdisc_put(struct Qdisc *qdisc)
+> >   {
+> >       if (!qdisc)
+> > @@ -1079,7 +1087,7 @@ void qdisc_put(struct Qdisc *qdisc)
+> >           !refcount_dec_and_test(&qdisc->refcnt))
+> >               return;
+> >
+> > -     qdisc_destroy(qdisc);
+> > +     __qdisc_destroy(qdisc);
+> >   }
+> >   EXPORT_SYMBOL(qdisc_put);
+> >
+> > @@ -1094,7 +1102,7 @@ void qdisc_put_unlocked(struct Qdisc *qdisc)
+> >           !refcount_dec_and_rtnl_lock(&qdisc->refcnt))
+> >               return;
+> >
+> > -     qdisc_destroy(qdisc);
+> > +     __qdisc_destroy(qdisc);
+> >       rtnl_unlock();
+> >   }
+> >   EXPORT_SYMBOL(qdisc_put_unlocked);
+>
