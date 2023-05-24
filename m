@@ -2,198 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC79E70ED71
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AF270ED76
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbjEXF53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S239551AbjEXF6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239539AbjEXF52 (ORCPT
+        with ESMTP id S233941AbjEXF6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:57:28 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2622518E;
-        Tue, 23 May 2023 22:57:27 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id 2D51020FB9F2; Tue, 23 May 2023 22:57:26 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2D51020FB9F2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1684907846;
-        bh=t5dzhOilp7QpFsI2q/pIEVeDMxfw0/HEc1rMQtlFgqk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MYTppQc3MP2tIIarrRFPMqgstCxp/wch2FlbAWuwnIfTNrG+L7HqZZS48JWKV7pVr
-         5IUxNkGn94JIQevJFCrjxfUGEO00YhFIlnPBWpNWtxiRr1JklsbNpkZKdX7TilMspQ
-         JwMPO9ChXPz/GKkjwaiYIh73SsnHCKFOzXFvKjrE=
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH] hv_netvsc: Allocate rx indirection table size dynamically
-Date:   Tue, 23 May 2023 22:57:24 -0700
-Message-Id: <1684907844-23224-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 01:58:13 -0400
+Received: from ubuntu20 (unknown [193.203.214.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4EC1B1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 22:58:00 -0700 (PDT)
+Received: by ubuntu20 (Postfix, from userid 1003)
+        id 81B28E1EE2; Wed, 24 May 2023 13:57:54 +0800 (CST)
+From:   Yang Yang <yang.yang29@zte.com.cn>
+To:     akpm@linux-foundation.org, david@redhat.com
+Cc:     yang.yang29@zte.com.cn, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn
+Subject: [PATCH v9 2/5] ksm: count all zero pages placed by KSM
+Date:   Wed, 24 May 2023 13:57:52 +0800
+Message-Id: <20230524055752.20449-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202305241351365661923@zte.com.cn>
+References: <202305241351365661923@zte.com.cn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_NON_FQDN_1,
+        HEADER_FROM_DIFFERENT_DOMAINS,HELO_NO_DOMAIN,NO_DNS_FOR_FROM,
+        RCVD_IN_PBL,RDNS_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL_NO_RDNS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate the size of rx indirection table dynamically in netvsc
-from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
-query instead of using a constant value of ITAB_NUM.
+From: xu xin <xu.xin16@zte.com.cn>
 
-Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+As pages_sharing and pages_shared don't include the number of zero pages
+merged by KSM, we cannot know how many pages are zero pages placed by KSM
+when enabling use_zero_pages, which leads to KSM not being transparent with
+all actual merged pages by KSM. In the early days of use_zero_pages,
+zero-pages was unable to get unshared by the ways like MADV_UNMERGEABLE so
+it's hard to count how many times one of those zeropages was then unmerged.
+
+But now, unsharing KSM-placed zero page accurately has been achieved, so we
+can easily count both how many times a page full of zeroes was merged with
+zero-page and how many times one of those pages was then unmerged. and so,
+it helps to estimate memory demands when each and every shared page could
+get unshared.
+
+So we add ksm_zero_pages under /sys/kernel/mm/ksm/ to show the number
+of all zero pages placed by KSM. Meanwhile, we update the Documentation.
+
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Suggested-by: David Hildenbrand <david@redhat.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
 ---
- drivers/net/hyperv/hyperv_net.h   |  5 ++++-
- drivers/net/hyperv/netvsc_drv.c   | 11 +++++++----
- drivers/net/hyperv/rndis_filter.c | 23 +++++++++++++++++++----
- 3 files changed, 30 insertions(+), 9 deletions(-)
+ Documentation/admin-guide/mm/ksm.rst |  7 +++++++
+ include/linux/ksm.h                  | 12 ++++++++++++
+ mm/khugepaged.c                      |  2 ++
+ mm/ksm.c                             | 12 ++++++++++++
+ mm/memory.c                          |  5 ++++-
+ 5 files changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_net.h
-index dd5919ec408b..1dbdb65ca8f0 100644
---- a/drivers/net/hyperv/hyperv_net.h
-+++ b/drivers/net/hyperv/hyperv_net.h
-@@ -74,6 +74,7 @@ struct ndis_recv_scale_cap { /* NDIS_RECEIVE_SCALE_CAPABILITIES */
- #define NDIS_RSS_HASH_SECRET_KEY_MAX_SIZE_REVISION_2   40
- 
- #define ITAB_NUM 128
-+#define ITAB_NUM_MAX 256
- 
- struct ndis_recv_scale_param { /* NDIS_RECEIVE_SCALE_PARAMETERS */
- 	struct ndis_obj_header hdr;
-@@ -1034,7 +1035,9 @@ struct net_device_context {
- 
- 	u32 tx_table[VRSS_SEND_TAB_SIZE];
- 
--	u16 rx_table[ITAB_NUM];
-+	u16 *rx_table;
+diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
+index 7626392fe82c..6cc919dbfd55 100644
+--- a/Documentation/admin-guide/mm/ksm.rst
++++ b/Documentation/admin-guide/mm/ksm.rst
+@@ -173,6 +173,13 @@ stable_node_chains
+         the number of KSM pages that hit the ``max_page_sharing`` limit
+ stable_node_dups
+         number of duplicated KSM pages
++ksm_zero_pages
++        how many zero pages that are still mapped into processes were mapped by
++        KSM when deduplicating.
 +
-+	int rx_table_sz;
++When ``use_zero_pages`` is/was enabled, the sum of ``pages_sharing`` +
++``ksm_zero_pages`` represents the actual number of pages saved by KSM.
++if ``use_zero_pages`` has never been enabled, ``ksm_zero_pages`` is 0.
  
- 	/* Ethtool settings */
- 	u8 duplex;
-diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-index 0103ff914024..5b8a7d5f9a15 100644
---- a/drivers/net/hyperv/netvsc_drv.c
-+++ b/drivers/net/hyperv/netvsc_drv.c
-@@ -1747,7 +1747,9 @@ static u32 netvsc_get_rxfh_key_size(struct net_device *dev)
+ A high ratio of ``pages_sharing`` to ``pages_shared`` indicates good
+ sharing, but a high ratio of ``pages_unshared`` to ``pages_sharing``
+diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+index 4fd5f4a50bac..f2d98c53cfec 100644
+--- a/include/linux/ksm.h
++++ b/include/linux/ksm.h
+@@ -33,6 +33,14 @@ void __ksm_exit(struct mm_struct *mm);
+  */
+ #define is_ksm_zero_pte(pte)	(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte))
  
- static u32 netvsc_rss_indir_size(struct net_device *dev)
++extern unsigned long ksm_zero_pages;
++
++static inline void ksm_notify_unmap_zero_page(pte_t pte)
++{
++	if (is_ksm_zero_pte(pte))
++		ksm_zero_pages--;
++}
++
+ static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
  {
--	return ITAB_NUM;
-+	struct net_device_context *ndc = netdev_priv(dev);
+ 	int ret;
+@@ -103,6 +111,10 @@ static inline void ksm_exit(struct mm_struct *mm)
+ 
+ #define is_ksm_zero_pte(pte)	0
+ 
++static inline void ksm_notify_unmap_zero_page(pte_t pte)
++{
++}
 +
-+	return ndc->rx_table_sz;
+ #ifdef CONFIG_MEMORY_FAILURE
+ static inline void collect_procs_ksm(struct page *page,
+ 				     struct list_head *to_kill, int force_early)
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 6b9d39d65b73..e417a928ef8d 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -19,6 +19,7 @@
+ #include <linux/page_table_check.h>
+ #include <linux/swapops.h>
+ #include <linux/shmem_fs.h>
++#include <linux/ksm.h>
+ 
+ #include <asm/tlb.h>
+ #include <asm/pgalloc.h>
+@@ -711,6 +712,7 @@ static void __collapse_huge_page_copy_succeeded(pte_t *pte,
+ 				spin_lock(ptl);
+ 				ptep_clear(vma->vm_mm, address, _pte);
+ 				spin_unlock(ptl);
++				ksm_notify_unmap_zero_page(pteval);
+ 			}
+ 		} else {
+ 			src_page = pte_page(pteval);
+diff --git a/mm/ksm.c b/mm/ksm.c
+index f31c789406b1..d3ed90159322 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -278,6 +278,9 @@ static unsigned int zero_checksum __read_mostly;
+ /* Whether to merge empty (zeroed) pages with actual zero pages */
+ static bool ksm_use_zero_pages __read_mostly;
+ 
++/* The number of zero pages which is placed by KSM */
++unsigned long ksm_zero_pages;
++
+ #ifdef CONFIG_NUMA
+ /* Zeroed when merging across nodes is not allowed */
+ static unsigned int ksm_merge_across_nodes = 1;
+@@ -1227,6 +1230,7 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+ 		 * the dirty bit in zero page's PTE is set.
+ 		 */
+ 		newpte = pte_mkdirty(pte_mkspecial(pfn_pte(page_to_pfn(kpage), vma->vm_page_prot)));
++		ksm_zero_pages++;
+ 		/*
+ 		 * We're replacing an anonymous page with a zero page, which is
+ 		 * not anonymous. We need to do proper accounting otherwise we
+@@ -3354,6 +3358,13 @@ static ssize_t pages_volatile_show(struct kobject *kobj,
  }
+ KSM_ATTR_RO(pages_volatile);
  
- static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
-@@ -1766,7 +1768,7 @@ static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
- 
- 	rndis_dev = ndev->extension;
- 	if (indir) {
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			indir[i] = ndc->rx_table[i];
- 	}
- 
-@@ -1792,11 +1794,11 @@ static int netvsc_set_rxfh(struct net_device *dev, const u32 *indir,
- 
- 	rndis_dev = ndev->extension;
- 	if (indir) {
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			if (indir[i] >= ndev->num_chn)
- 				return -EINVAL;
- 
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			ndc->rx_table[i] = indir[i];
- 	}
- 
-@@ -2638,6 +2640,7 @@ static void netvsc_remove(struct hv_device *dev)
- 
- 	hv_set_drvdata(dev, NULL);
- 
-+	kfree(ndev_ctx->rx_table);
- 	free_percpu(ndev_ctx->vf_stats);
- 	free_netdev(net);
- }
-diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis_filter.c
-index eea777ec2541..af031e711cb2 100644
---- a/drivers/net/hyperv/rndis_filter.c
-+++ b/drivers/net/hyperv/rndis_filter.c
-@@ -927,7 +927,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
- 	struct rndis_set_request *set;
- 	struct rndis_set_complete *set_complete;
- 	u32 extlen = sizeof(struct ndis_recv_scale_param) +
--		     4 * ITAB_NUM + NETVSC_HASH_KEYLEN;
-+		     4 * ndc->rx_table_sz + NETVSC_HASH_KEYLEN;
- 	struct ndis_recv_scale_param *rssp;
- 	u32 *itab;
- 	u8 *keyp;
-@@ -953,7 +953,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
- 	rssp->hashinfo = NDIS_HASH_FUNC_TOEPLITZ | NDIS_HASH_IPV4 |
- 			 NDIS_HASH_TCP_IPV4 | NDIS_HASH_IPV6 |
- 			 NDIS_HASH_TCP_IPV6;
--	rssp->indirect_tabsize = 4*ITAB_NUM;
-+	rssp->indirect_tabsize = 4 * ndc->rx_table_sz;
- 	rssp->indirect_taboffset = sizeof(struct ndis_recv_scale_param);
- 	rssp->hashkey_size = NETVSC_HASH_KEYLEN;
- 	rssp->hashkey_offset = rssp->indirect_taboffset +
-@@ -961,7 +961,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
- 
- 	/* Set indirection table entries */
- 	itab = (u32 *)(rssp + 1);
--	for (i = 0; i < ITAB_NUM; i++)
-+	for (i = 0; i < ndc->rx_table_sz; i++)
- 		itab[i] = ndc->rx_table[i];
- 
- 	/* Set hask key values */
-@@ -1548,6 +1548,21 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
- 	if (ret || rsscap.num_recv_que < 2)
- 		goto out;
- 
-+	if (rsscap.num_indirect_tabent &&
-+		rsscap.num_indirect_tabent <= ITAB_NUM_MAX) {
-+		ndc->rx_table_sz = rsscap.num_indirect_tabent;
-+	} else {
-+		ndc->rx_table_sz = ITAB_NUM;
-+	}
++static ssize_t ksm_zero_pages_show(struct kobject *kobj,
++				struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%ld\n", ksm_zero_pages);
++}
++KSM_ATTR_RO(ksm_zero_pages);
 +
-+	ndc->rx_table = kzalloc(sizeof(u16) * ndc->rx_table_sz,
-+				GFP_KERNEL);
-+	if (ndc->rx_table) {
-+		netdev_err(net, "Error in allocating rx indirection table of size %d\n",
-+				ndc->rx_table_sz);
-+		goto out;
-+	}
-+
- 	/* This guarantees that num_possible_rss_qs <= num_online_cpus */
- 	num_possible_rss_qs = min_t(u32, num_online_cpus(),
- 				    rsscap.num_recv_que);
-@@ -1558,7 +1573,7 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
- 	net_device->num_chn = min(net_device->max_chn, device_info->num_chn);
+ static ssize_t general_profit_show(struct kobject *kobj,
+ 				   struct kobj_attribute *attr, char *buf)
+ {
+@@ -3421,6 +3432,7 @@ static struct attribute *ksm_attrs[] = {
+ 	&pages_sharing_attr.attr,
+ 	&pages_unshared_attr.attr,
+ 	&pages_volatile_attr.attr,
++	&ksm_zero_pages_attr.attr,
+ 	&full_scans_attr.attr,
+ #ifdef CONFIG_NUMA
+ 	&merge_across_nodes_attr.attr,
+diff --git a/mm/memory.c b/mm/memory.c
+index 8358f3b853f2..09c31160af4e 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1415,8 +1415,10 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 			tlb_remove_tlb_entry(tlb, pte, addr);
+ 			zap_install_uffd_wp_if_needed(vma, addr, pte, details,
+ 						      ptent);
+-			if (unlikely(!page))
++			if (unlikely(!page)) {
++				ksm_notify_unmap_zero_page(ptent);
+ 				continue;
++			}
  
- 	if (!netif_is_rxfh_configured(net)) {
--		for (i = 0; i < ITAB_NUM; i++)
-+		for (i = 0; i < ndc->rx_table_sz; i++)
- 			ndc->rx_table[i] = ethtool_rxfh_indir_default(
- 						i, net_device->num_chn);
- 	}
+ 			delay_rmap = 0;
+ 			if (!PageAnon(page)) {
+@@ -3120,6 +3122,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 				inc_mm_counter(mm, MM_ANONPAGES);
+ 			}
+ 		} else {
++			ksm_notify_unmap_zero_page(vmf->orig_pte);
+ 			inc_mm_counter(mm, MM_ANONPAGES);
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
 -- 
-2.34.1
-
+2.15.2
