@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AD570EABB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07A670EABD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238920AbjEXBW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 21:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
+        id S238938AbjEXBZJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 May 2023 21:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjEXBW1 (ORCPT
+        with ESMTP id S230359AbjEXBZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 21:22:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DE3E5;
-        Tue, 23 May 2023 18:22:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7B586363E;
-        Wed, 24 May 2023 01:22:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20E0C433D2;
-        Wed, 24 May 2023 01:22:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684891345;
-        bh=gRN8H4LqvWROxsMb6K8cSUguA4fkgGMJBUi4a1FHt6Q=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=udbtyjuurr1yZ3Q3LSIH32HFyYXa3WYOQ8w91o+g9lXjXeW5iWcKhsph8xqfqIkhf
-         oz9iisFBC/Phd7qrkHGQr44Q2GNWTkOar6IS5n4Aer2JWuwAim3V+qTKKyx+0BFIxh
-         nyDX2DJp2PpB+sUGiD2wiibOYnVnhRf6Mu99MxAY6vtliYc8iOHoyRg7FNGyedSRk3
-         7VjrsGIvSfqV32hGb0MzOYM4Bf8eCTK/97PIh+decegZXjNpu4gqiEkVeyP58JK1DS
-         iBq4M7yUjrT4mun7EfPzp3exRUYXF4Ttf/itobTu8BEPbhouYGpiNNM/8FyhryyChQ
-         t5Poo0luWoT+w==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 24 May 2023 04:22:19 +0300
-Message-Id: <CSU44RXD19SU.26AGW4IZDW9CK@suppilovahvero>
-Cc:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <dmitry.kasatkin@gmail.com>, <paul@paul-moore.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>, <jlee@suse.com>,
-        <kanth.ghatraju@oracle.com>, <konrad.wilk@oracle.com>,
-        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] integrity: Enforce digitalSignature usage in the
- ima and evm keyrings
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Eric Snowberg" <eric.snowberg@oracle.com>, <dhowells@redhat.com>,
-        <dwmw2@infradead.org>
-X-Mailer: aerc 0.14.0
-References: <20230522230944.180389-1-eric.snowberg@oracle.com>
- <20230522230944.180389-3-eric.snowberg@oracle.com>
- <ce525793452831d5823bf0548faa0eae2a302f5a.camel@linux.ibm.com>
-In-Reply-To: <ce525793452831d5823bf0548faa0eae2a302f5a.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Tue, 23 May 2023 21:25:07 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5B3E5;
+        Tue, 23 May 2023 18:25:06 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34O1OemeE028494, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34O1OemeE028494
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 24 May 2023 09:24:40 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 24 May 2023 09:24:51 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 24 May 2023 09:24:50 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Wed, 24 May 2023 09:24:50 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Arnd Bergmann <arnd@kernel.org>, Kalle Valo <kvalo@kernel.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, DeanKu <ku920601@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] rtw89: use flexible array member in rtw89_btc_btf_tlv
+Thread-Topic: [PATCH] rtw89: use flexible array member in rtw89_btc_btf_tlv
+Thread-Index: AQHZjWpPQ0KzeDFfo0qATwMmb1dUKK9ooiyw
+Date:   Wed, 24 May 2023 01:24:50 +0000
+Message-ID: <27a7010de8be4006a3e4b95e851781c6@realtek.com>
+References: <20230523113241.2772811-1-arnd@kernel.org>
+In-Reply-To: <20230523113241.2772811-1-arnd@kernel.org>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,20 +65,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed May 24, 2023 at 1:01 AM EEST, Mimi Zohar wrote:
-> On Mon, 2023-05-22 at 19:09 -0400, Eric Snowberg wrote:
-> > After being vouched for by a system keyring, only allow keys into the .=
-ima
-> > and .evm keyrings that have the digitalSignature usage field set.
-> >=20
-> > Link: https://lore.kernel.org/all/41dffdaeb7eb7840f7e38bc691fbda836635c=
-9f9.camel@linux.ibm.com
-> > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> > Acked-by: Mimi Zohar <zohar@linux.ibm.com>
->
-> Jarrko, similarly please update the above tag to Acked-and-test-by.
 
-OK, cool, I'll pick this series, thanks.
 
-BR, Jarkko
+> -----Original Message-----
+> From: Arnd Bergmann <arnd@kernel.org>
+> Sent: Tuesday, May 23, 2023 7:33 PM
+> To: Ping-Ke Shih <pkshih@realtek.com>; Kalle Valo <kvalo@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>; DeanKu <ku920601@realtek.com>; linux-wireless@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: [PATCH] rtw89: use flexible array member in rtw89_btc_btf_tlv
+> 
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> struct rtw89_btc_btf_tlv contains a one-byte member that is intended as a
+> flexible array:
+> 
+> In function 'fortify_memcpy_chk',
+>     inlined from '_append_tdma' at drivers/net/wireless/realtek/rtw89/coex.c:1579:3:
+> include/linux/fortify-string.h:583:25: error: call to '__write_overflow_field' declared with attribute
+> warning: detected write beyond size of field (1st parameter); maybe use struct_group()?
+> [-Werror=attribute-warning]
+>   583 |                         __write_overflow_field(p_size_field, size);
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Make this actually use a flexible array to let the compiler understand.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+
+> ---
+>  drivers/net/wireless/realtek/rtw89/coex.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
+> index 3a586a971e8f..bda0e1e99a8c 100644
+> --- a/drivers/net/wireless/realtek/rtw89/coex.c
+> +++ b/drivers/net/wireless/realtek/rtw89/coex.c
+> @@ -206,7 +206,7 @@ static const struct rtw89_btc_ver rtw89_btc_ver_defs[] = {
+>  struct rtw89_btc_btf_tlv {
+>         u8 type;
+>         u8 len;
+> -       u8 val[1];
+> +       u8 val[];
+>  } __packed;
+> 
+>  enum btc_btf_set_report_en {
+> --
+> 2.39.2
+
