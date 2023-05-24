@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF42670F0C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D952670F10A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240115AbjEXIbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S240248AbjEXIdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239935AbjEXIbn (ORCPT
+        with ESMTP id S240240AbjEXIc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:31:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B139184;
-        Wed, 24 May 2023 01:31:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC4DB63A92;
-        Wed, 24 May 2023 08:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC7CC433D2;
-        Wed, 24 May 2023 08:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684917079;
-        bh=ZlVoxwIsaYAgxSC4RI1ZotSzStbW0T0NJv0jKHHFdw4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eDiadXvYffS1uYZMc9oGkxjm7GOukTwe6358e0XUGe9Eu4euNu/2NH57X5Wg+ss06
-         pK565keJNG0Kyp19fEuAG9gx/kftjWcID4u2eawJRyPxFvx2Bx8LxDIMLh+J4mxFKy
-         zYLPJQTyGe0CKwc2kydC8gUDk7Tr4lf58P+onM0/KRVXNcxIaTCE6F+7OE+VD4Jwb0
-         0KlBOoo0LnVT5gIQRk/upbeRKYK5niRa2XXSdcwBr/1jR0HdGPGoJFRe2PeuwHbf5I
-         hrzyGzrSHFcFohE4YvjTL6GaRpYwM2rNnwi04+dmxE3qbMo4ooYfalv2AziSNdXimM
-         Bp3P8yDudj9rw==
-Date:   Wed, 24 May 2023 10:31:14 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: (subset) [PATCH 20/32] vfs: factor out inode hash head
- calculation
-Message-ID: <20230524-zumeist-fotomodell-8b772735323d@brauner>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-21-kent.overstreet@linux.dev>
- <20230523-plakat-kleeblatt-007077ebabb6@brauner>
- <ZG1D4gvpkFjZVMcL@dread.disaster.area>
- <ZG2yM1vzHZkW0yIA@infradead.org>
- <ZG2+Jl8X1i5zGdMK@dread.disaster.area>
+        Wed, 24 May 2023 04:32:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962C51B4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:32:38 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1q1juY-0002l6-Rb; Wed, 24 May 2023 10:31:58 +0200
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1q1juW-002RZ7-Io; Wed, 24 May 2023 10:31:56 +0200
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1q1juV-009izp-MD; Wed, 24 May 2023 10:31:55 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
+Date:   Wed, 24 May 2023 10:31:28 +0200
+Message-Id: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZG2+Jl8X1i5zGdMK@dread.disaster.area>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,38 +61,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 05:35:02PM +1000, Dave Chinner wrote:
-> On Tue, May 23, 2023 at 11:44:03PM -0700, Christoph Hellwig wrote:
-> > On Wed, May 24, 2023 at 08:53:22AM +1000, Dave Chinner wrote:
-> > > Hi Christian - I suspect you should pull the latest version of these
-> > > patches from:
-> > > 
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/dgc/linux-xfs.git vfs-scale
-> > > 
-> > > The commit messages are more recent and complete, and I've been
-> > > testing the branch in all my test kernels since 6.4-rc1 without
-> > > issues.
-> > 
-> > Can you please send the series to linux-fsdevel for review?
-> 
-> When it gets back to the top of my priority pile. Last time I sent
-> it there was zero interest in reviewing it from fs/vfs developers
-> but it attracted lots of obnoxious shouting from some RTPREEMPT
-> people about using bit locks. If there's interest in getting it
+This is v5 of the series adding perf support to the rockchip DFI driver.
 
-I think there is given that it seems to have nice perf gains.
+A lot has changed in the perf driver since v4. First of all the review
+feedback from Robin and Jonathan has been integrated. The perf driver
+now not only supports monitoring the total DDR utilization, but also the
+individual channels. I also reworked the way the raw 32bit counter
+values are summed up to 64bit perf values, so hopefully the code is
+easier to follow now.
 
-> merged, then I can add it to my backlog of stuff to do...
-> 
-> As it is, I'm buried layers deep right now, so I really have no
-> bandwidth to deal with this in the foreseeable future. The code is
-> there, it works just fine, if you want to push it through the
-> process of getting it merged, you're more than welcome to do so.
+lockdep found out that that locking in the perf driver was broken, so I
+reworked that as well. None of the perf hooks allows locking with
+mutexes or spinlocks, so in perf it's not possible to enable the DFI
+controller when needed. Instead I now unconditionally enable the DFI
+controller during probe when perf is enabled.
 
-I'm here to help get more review done and pick stuff up. I won't be able
-to do it without additional reviewers such as Christoph helping of
-course as this isn't a one-man show.
+Furthermore the hrtimer I use for reading out the hardware counter
+values before they overflow race with perf. Now a seqlock is used to
+prevent that.
 
-Let's see if we can get this reviewed. If you have the bandwith to send
-it to fsdevel that'd be great. If it takes you a while to get back to it
-then that's fine too.
+The RK3588 device tree changes for the DFI were not part of v4. As
+Vincent Legoll showed interest in testing this series the necessary
+device tree changes are now part of this series.
+
+Changes since v4:
+- Add device tree changes for RK3588
+- Use seqlock to protect perf counter values from hrtimer
+- Unconditionally enable DFI when perf is enabled
+- Bring back changes to dts/binding patches that were lost in v4
+
+Changes since v3:
+- Add RK3588 support
+
+Changes since v2:
+- Fix broken reference to binding
+- Add Reviewed-by from Rob
+
+Changes since v1:
+- Fix example to actually match the binding and fix the warnings resulted thereof
+- Make addition of rockchip,rk3568-dfi an extra patch
+
+Sascha Hauer (25):
+  PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+  PM / devfreq: rockchip-dfi: Embed desc into private data struct
+  PM / devfreq: rockchip-dfi: use consistent name for private data
+    struct
+  PM / devfreq: rockchip-dfi: Add SoC specific init function
+  PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+  PM / devfreq: rockchip-dfi: Use free running counter
+  PM / devfreq: rockchip-dfi: introduce channel mask
+  PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+  PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+  PM / devfreq: rockchip-dfi: Add RK3568 support
+  PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+  PM / devfreq: rockchip-dfi: Handle LPDDR4X
+  PM / devfreq: rockchip-dfi: Pass private data struct to internal
+    functions
+  PM / devfreq: rockchip-dfi: Prepare for multiple users
+  PM / devfreq: rockchip-dfi: give variable a better name
+  PM / devfreq: rockchip-dfi: Add perf support
+  PM / devfreq: rockchip-dfi: make register stride SoC specific
+  PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
+  PM / devfreq: rockchip-dfi: add support for RK3588
+  dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
+  arm64: dts: rockchip: rk3399: Enable DFI
+  arm64: dts: rockchip: rk356x: Add DFI
+  arm64: dts: rockchip: rk3588s: Add DFI
+
+ .../bindings/devfreq/event/rockchip,dfi.yaml  |  84 ++
+ .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
+ .../rockchip,rk3399-dmc.yaml                  |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  16 +
+ drivers/devfreq/event/rockchip-dfi.c          | 796 +++++++++++++++---
+ drivers/devfreq/rk3399_dmc.c                  |  10 +-
+ include/soc/rockchip/rk3399_grf.h             |   9 +-
+ include/soc/rockchip/rk3568_grf.h             |  13 +
+ include/soc/rockchip/rk3588_grf.h             |  18 +
+ include/soc/rockchip/rockchip_grf.h           |  18 +
+ 12 files changed, 854 insertions(+), 138 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+ create mode 100644 include/soc/rockchip/rk3568_grf.h
+ create mode 100644 include/soc/rockchip/rk3588_grf.h
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
+
+-- 
+2.39.2
+
