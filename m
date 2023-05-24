@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1447100A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5131D7100A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbjEXWKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S234265AbjEXWRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjEXWKP (ORCPT
+        with ESMTP id S229680AbjEXWRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:10:15 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2713512E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:10:13 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1afa6afcf4fso6991745ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:10:13 -0700 (PDT)
+        Wed, 24 May 2023 18:17:39 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F2D183;
+        Wed, 24 May 2023 15:17:38 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2538aa25873so562452a91.2;
+        Wed, 24 May 2023 15:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684966212; x=1687558212;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hlk6FbizkRfE0g6Mbi2ayuft7RVVPKxaFs9z7XZvbt8=;
-        b=DJxxEPCQifdkFvHohQ0CTNLVn/W7Ax0VZgxx8Brng0Glm9JxGJyqaphATv6OM5v2xN
-         gHul35XcsjmYZ1Wbv+SE94VwvGesjMZyq7EHaE7rBrA50XH8pcPqOR2Su0W08yCeUdRx
-         CYjWAGQRofYP+GsLsqQ5XdW9M8i16VtW4wRHs748qO9jmHdsDwmYnYo+qrUZ4AebVCOw
-         umcZlxwaJwr9pO4NhpQM82kZeFp3sJMkjUPdZwxkxWCtEKUm7uEaIxk735t3cptzI2JG
-         hAn0lAljcrDNOIiDDFWqonMmdNIIaLp+6kd4iNGqUX/RB9lZvvQEW2fAgOFH1QC9DlQh
-         s1ug==
+        d=gmail.com; s=20221208; t=1684966657; x=1687558657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=05lEIN21oQi8iWsH3j0kw4MIe4JZuPAlQrx21xPv+7U=;
+        b=jmtOfuFiV5A1KlO2y4sbzzNHcbNeHMvzL0OJX4/Uvwpa3mPzC9mFbUozEa9g9VwYVc
+         kV2rpeiehvlFBvXdxfW6JDgT3cek0y7OanNGnYnpaNujrCriUI+cMiFB27e7LzWFI/42
+         2pK1nIpo3KhHo420WxCMvUuG7iJghbxbZnidionG52BSvEvaSQ+6kL6RSQq2QNoUwFxf
+         NN6weimIFgleNJNEWUkHpP3avPJfAIJ7+352+F9CZm+L1gP8rmF44BJgdej4R4W+InXa
+         Aygw+s1LxeQIk/w1yG0yGSbS6GnhYc3pihb5Zvgff3oFeL1D5viXfwmRgjaf9G+Kpbhh
+         699g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684966212; x=1687558212;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hlk6FbizkRfE0g6Mbi2ayuft7RVVPKxaFs9z7XZvbt8=;
-        b=iMUyPLEzPzpiILKIVSNQQbyW7WPz4o8MBRxJNa829T9ANVAYNw9eITWXf1ZOeIgeoY
-         y7GZOE08mkXOCeuyDeWmKDXEYWISifh9g0YWg6t31+aOLgPM8QITSeqiZFXMp6emi98+
-         S1brXzBM4kKSs58DooC3KgH4RFZ9y7VpaFFOHrWX4CVTJkzGmDmznkXSQ2ve8nMsdGKj
-         KvocQCPMIK4wJCuqHB9xEabIhCg0xaakbHM/NG1MSVy+cltBh6JcuLh2rrmJyugZt+YE
-         JXI8DwZvZfcQ/BGeHjM3wO7X/Ld2UmH0n1gNoyQn14k/THGJmkyLwd+5fhorv39ZRCgk
-         6GfQ==
-X-Gm-Message-State: AC+VfDypm2oZrrnYbAKn3bfj2sht3QELFKHkgkuJSl1zCo01lMv1ijWr
-        ErNu1k2etwOLWhNODc9uHHE=
-X-Google-Smtp-Source: ACHHUZ4nFmasMmvR8X/Un7B81nriJLJva7YPXvDucMX14mDcDxcK1JBamHyg8e+FcA8axMGhr0V7yw==
-X-Received: by 2002:a17:903:48a:b0:1ae:52ea:5fa6 with SMTP id jj10-20020a170903048a00b001ae52ea5fa6mr17192839plb.8.1684966212407;
-        Wed, 24 May 2023 15:10:12 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:be57])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902788500b001a96269e12csm9237256pll.51.2023.05.24.15.10.11
+        d=1e100.net; s=20221208; t=1684966658; x=1687558658;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=05lEIN21oQi8iWsH3j0kw4MIe4JZuPAlQrx21xPv+7U=;
+        b=dgPGR3broH7qaK/ohVfWZvZLSfKcRDeO7ADJHpbcuiI5FdFa9lzatKvpXDGry/b8r3
+         bnGviWTRx3HOgOsxO5uQXlQ6YjVeFbS7AqpKTCpNLezO7jgGuug68oC62wghGoSQhNbC
+         kW5t2Aug94tnR4PU9CG1/1J9fI0oBLJenxY7OoOj396fdcS9Oh3YooqJgNLu2VtMANPV
+         WhAj4ecYo43x6s7Gg6A5PSkfA/3kl3ItGGfxBfQJ3uQ3FrtXd+el2TmC2RCo5tKCQ8oM
+         QRauTBZOIqZB9imikLwxfpVwooXNVeH+oziJj7Ko1I9azLeu8EGFxbwJ8PCMfLvdBfxG
+         EeqQ==
+X-Gm-Message-State: AC+VfDzVkeOjU/RWpHjLahAHECdtnunzO0mf+EZyMNEMrz24sbG4FHzj
+        Q5plrFBqJg8W4LUseQChbhHJT5j0FGQ=
+X-Google-Smtp-Source: ACHHUZ4PXLIoL1QjaMUh6zIjqtQvdlc0tTz20tdsRqDzhxHxpZm8amcoFKw2h7saTgMRW6/vNPfWzA==
+X-Received: by 2002:a17:90a:d486:b0:253:87e5:384a with SMTP id s6-20020a17090ad48600b0025387e5384amr15972867pju.42.1684966657647;
+        Wed, 24 May 2023 15:17:37 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 21-20020a17090a01d500b0024e2980574asm1967335pjd.4.2023.05.24.15.17.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 15:10:11 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 24 May 2023 12:10:10 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Josef =?iso-8859-1?Q?Sch=F6nberger?= <josef.schoenberger@tum.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 24 May 2023 15:17:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 24 May 2023 15:17:36 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Osama Muhammad <osmtendev@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: KernFS: Missing IN_DELETE_SELF or IN_IGNORED inotify events
-Message-ID: <ZG6LQo1LUPn4A72f@slm.duckdns.org>
-References: <51354ca5-acd2-f542-95e0-85ed8418f483@tum.de>
+Subject: Re: [PATCH] adm1266.c: Fix error checking for debugfs_create_dir
+Message-ID: <e227fe50-1d46-4d84-b869-f0fa74154d02@roeck-us.net>
+References: <20230524165423.21024-1-osmtendev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <51354ca5-acd2-f542-95e0-85ed8418f483@tum.de>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230524165423.21024-1-osmtendev@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 09:53:01PM +0200, Josef Schönberger wrote:
-> Hi everybody,
+On Wed, May 24, 2023 at 09:54:23PM +0500, Osama Muhammad wrote:
+> This patch fixes the error checking in adm1266.c in
+> debugfs_create_dir. The correct way to check if an error occurred
+> is using 'IS_ERR' inline function.
 > 
-> I'm currently working on event listeners for cgroups for a long running
-> daemon. I found that the removal of cgroups that I'm currently listening
-> for produces neither an IN_DELETE_SELF nor an IN_IGNORED event; which is
-> unfortunate, since I need to maintain a map from watch descriptors to
-> paths, from which I would like to remove all obsolete entries.
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> ---
+>  drivers/hwmon/pmbus/adm1266.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Since this is not the documented behaviour and since I could not find
-> any material that would specify an intention behind this, I'm assuming
-> that this is a bug?
-> 
-> I've found that the same applies to the sysfs. Taking a look at the
-> kernel code, I'd guess that the issue might be in KernFS.
+> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> index 1ac2b2f4c570..d88b6115b42e 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
+> +++ b/drivers/hwmon/pmbus/adm1266.c
+> @@ -340,7 +340,7 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
+>  		return;
+>  
+>  	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
+> -	if (!data->debugfs_dir)
+> +	if (IS_ERR(data->debugfs_dir))
+>  		return;
 
-Yeah, that'd be all kernfs. kernfs does have some explicit fsnotify hookups
-so that kernfs users can generate custom modified events (e.g. for
-cgroup.events file) but doesn't do anything else. If the generic layer
-generates events, they'd go out. If not, they won't. I can't think of a
-reason why hooking up the missing events would be difficult tho. I'm pretty
-bandwidth constrained these days and don't know when I'll be able to get to
-it but if you wanna take a stab at it, I'd be happy to review.
+Just drop the error check entirely instead. It is not needed.
 
-Thanks.
+Thanks,
+Guenter
 
--- 
-tejun
+>  
+>  	debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
