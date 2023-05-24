@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5DD70F7BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF24470F7BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbjEXNfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S233936AbjEXNgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbjEXNfZ (ORCPT
+        with ESMTP id S231609AbjEXNgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:35:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD791B5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:35:16 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30948709b3cso568854f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684935315; x=1687527315;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9uljV3lePHX2dT1PWNMh/ljjLSAl+kOPIh8cm/LkNac=;
-        b=SO63kmKtSJT+rMuOzFfavtHtUqylLnOJdFFicK5cp/eceA89/zf3PQyUFaH5Rs63cz
-         Pzm3JQnfxT3+MD7uHfDR/yLU+U7Gus5FSM9tHP9+ZSaIBDkq7XNwTso4yaPGZ2wllepE
-         8f2xSrMVugmNS8uSy9Xxzu1Y+Soi4C+n56BPnZmw2VBq1j0GfYnWQtoNo+vDlNMMcodH
-         JAG66GqoBj/9ugfDnaBciDx9Sy8+uZF4SM79v+Wyf5ADftBvUlHrLVB+2zv4q2hOVLSs
-         xeSHkWEaN0XiPEOEbWMW344h9yvsp89mo7ke0mBbrLS8FhyqVQTXksnBIplcSe6w+D7u
-         UwxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684935315; x=1687527315;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9uljV3lePHX2dT1PWNMh/ljjLSAl+kOPIh8cm/LkNac=;
-        b=gBBSLzJvVztzLR/vjls5CJiwWbY7yvQpxGQdHju/3k9tV1AKIIKG8I/X9WG+ZfHKid
-         5DZWzac3NyP1DX9+uJDwz/cJR4ylJK4K1bKkyrrbN7yeinL0T/NuKjso16fyp3CVS4hr
-         7mXFwRD6MR4ZEWP8xM5Uo1NKeVzFs9a06NC8PWbHE73doXAyAEZ8VUKRfRfaPv1wjDJs
-         QjStG/5h2G/czAZjKdevq+X79trqwJFFYwx6pn+jf5nNadkAAlMYEKYqVi2luHvXh/Qc
-         PUqNhVBZHobYK3fI9eHqimAIFoSkm8yQRKzexGFReFwKpei8Gq23WiflSRpbXNUNxWbu
-         HCwA==
-X-Gm-Message-State: AC+VfDwpSX7Z8BK8SKc91KogOS/fDXE2VIAfnjjjuEztE3ag24mpd3Qc
-        ePPyuPn5EZbBiwZ/WEm0JxGFOw==
-X-Google-Smtp-Source: ACHHUZ5RZ7Bo5fpNypNWTBFfgonGWh7gKVvBN1SdijZkeoUQ8x/A+0ydKs+34LVC2FAgeWHBgFnIfw==
-X-Received: by 2002:a5d:45c4:0:b0:306:39a8:6fa2 with SMTP id b4-20020a5d45c4000000b0030639a86fa2mr13135682wrs.61.1684935315016;
-        Wed, 24 May 2023 06:35:15 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id a2-20020a056000100200b0030903d44dbcsm14555695wrx.33.2023.05.24.06.35.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 06:35:14 -0700 (PDT)
-Message-ID: <1ee72aae-46ec-dfad-f68e-f9189c84d148@baylibre.com>
-Date:   Wed, 24 May 2023 15:35:13 +0200
+        Wed, 24 May 2023 09:36:47 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A6A132;
+        Wed, 24 May 2023 06:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ECySvPIgegu4Sj8aDCP+tqf0nmw3GutStZtWX6wbB84=; b=UYd7xh000gsUuibwqVs1szml7Z
+        vGZFhPeHkV+3BtYtd4HsKZNqPTLJ37fCK2L1aq4uw4d5dbhT0Zc4uUBgtPjy7MWj8bAndzB0qr7Iw
+        89JcoBSaVz8XvdaG+5zqM/UedcJk9nex+rUfRNXXlY8xbi6rkLCmvqEfIv/niX4UEQMikLwAM0RP6
+        gUL1zB+55T5WDv+m/ZGvWth27dn+qxWhknT/czUqPYPZ6P/PI1Iddc91G9CPX7pTIOCBS/TEJA471
+        v2uX1oAHT4RjDUrT0X2M/vEi1Z4wne2vOj+5yCNwu/iGEACRL3VWYcMeiJa3WKGlrycYgZ3hwqAHL
+        E+DSVxnQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45404)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q1ofH-0002R4-W4; Wed, 24 May 2023 14:36:32 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q1ofG-0001fJ-0V; Wed, 24 May 2023 14:36:30 +0100
+Date:   Wed, 24 May 2023 14:36:29 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        paul.arola@telus.com, scott.roberts@telus.com,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH net-next v3 7/7] net: dsa: mv88e6xxx: enable support for
+ 88E6361 switch
+Message-ID: <ZG4S3QuT6ava3U72@shell.armlinux.org.uk>
+References: <20230524130127.268201-1-alexis.lothore@bootlin.com>
+ <20230524130127.268201-8-alexis.lothore@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/7] ASoC: mediatek: mt8188-mt6359: register hdmi/dp
- jack pins
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230523021933.3422-1-trevor.wu@mediatek.com>
- <20230523021933.3422-4-trevor.wu@mediatek.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230523021933.3422-4-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230524130127.268201-8-alexis.lothore@bootlin.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,15 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 04:19, Trevor Wu wrote:
-> Some userspace applications need jack control events, so register hdmi
-> and dp jack pins to activate jack control events.
-> 
-> Signed-off-by: Trevor Wu<trevor.wu@mediatek.com>
+On Wed, May 24, 2023 at 03:01:27PM +0200, Alexis Lothoré wrote:
+> diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
+> index 3c9fc17abdd2..56dfa9d3d4e0 100644
+> --- a/drivers/net/dsa/mv88e6xxx/port.h
+> +++ b/drivers/net/dsa/mv88e6xxx/port.h
+> @@ -138,6 +138,7 @@
+>  #define MV88E6XXX_PORT_SWITCH_ID_PROD_6141	0x3400
+>  #define MV88E6XXX_PORT_SWITCH_ID_PROD_6341	0x3410
+>  #define MV88E6XXX_PORT_SWITCH_ID_PROD_6352	0x3520
+> +#define MV88E6XXX_PORT_SWITCH_ID_PROD_6361	0x2610
+>  #define MV88E6XXX_PORT_SWITCH_ID_PROD_6350	0x3710
+>  #define MV88E6XXX_PORT_SWITCH_ID_PROD_6351	0x3750
+>  #define MV88E6XXX_PORT_SWITCH_ID_PROD_6390	0x3900
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+This list is ordered by the value in the register. The value you are
+adding is 0x2610, which is not ordered between 0x3520 and 0x3710.
+Please move this to be after the definition for
+MV88E6XXX_PORT_SWITCH_ID_PROD_6250. Thanks.
 
 -- 
-Regards,
-Alexandre
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
