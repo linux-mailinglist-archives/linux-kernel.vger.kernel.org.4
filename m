@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECEB70FC5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8A370FC5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjEXRKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 13:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S235744AbjEXRKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235479AbjEXRKX (ORCPT
+        with ESMTP id S235414AbjEXRKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:10:23 -0400
+        Wed, 24 May 2023 13:10:24 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B312212E;
-        Wed, 24 May 2023 10:10:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F59ABB;
+        Wed, 24 May 2023 10:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684948222; x=1716484222;
+  t=1684948223; x=1716484223;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=WDTSl+X1XPquNKqotXNY0s7uU9PS6vgLhf4WACna8JI=;
-  b=WrlKRdicL43PumcC2o26eSslUaBSm0AYEGCDlCXP8q400wzmattc3dCt
-   jHpMqFq6FJl0Tkte5iAnCNy98bpa6Qa+zpdEk+2JQNCSXrdUJNg+A8sMO
-   1NGo+1kdK4Q29RlELyPUucFdayd3LoGEOYXwVKtHG6rsgviV8ehaXpHLg
-   5AoE+DhgpCREP7dEpFCQoLxRtC3I+bh06Qoo9tmuA+wnku2UavW+9VnI/
-   02CfwsnL08jkZ8D9/7BRIw48JhokZOtld5p0dnEXkkieeFzGWLylvqR2h
-   k9V9HoqiZkhGCpamENpafujbQjPBigNcBkBCq7iZ13Rl5oAl5snfBfdWz
+  bh=+YuUSbnWKYlNrEuY9wZwu6rqIXV81jiJurK8saoa8ho=;
+  b=PMF2gEbvIbagokWkViQWbp84stDhh3SsejV4F9LLuzMaPn+mDgsOdKzt
+   KJOncQvORfliKZkoKh88CzQDGtSsx1X/RsF4uvzp/GFq14o0jxUwDy1+0
+   09xjR88IQROTk1Iyume+rUoGf85PNoxHe15VQqBp3QZQcx0R3SPQzirhs
+   sCTrEjHfpmalO3HQYI/mnIE5Y+s2WLs0yo+z+GYNksSi7Mw9pngHr0pEJ
+   9Fv1nt0UlvKmLXdFGd29IQBvPqkAIErFEPymys68jHe+aHlkV2K6IgGpi
+   oVgWK5BtUn40ahBxacgtB6ZNgsTKqY7wMcku/a4WBdJzdCj9eWQNa52cT
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338206713"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338206726"
 X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="338206713"
+   d="scan'208";a="338206726"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 10:09:53 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 10:09:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="704427349"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="704427352"
 X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="704427349"
+   d="scan'208";a="704427352"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga002.jf.intel.com with ESMTP; 24 May 2023 10:09:52 -0700
+  by orsmga002.jf.intel.com with ESMTP; 24 May 2023 10:09:53 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         dm-devel@redhat.com
@@ -50,11 +50,10 @@ Cc:     ebiggers@kernel.org, elliott@hpe.com, gmazyland@gmail.com,
         charishma1.gairuboyina@intel.com,
         lalithambika.krishnakumar@intel.com, nhuck@google.com,
         chang.seok.bae@intel.com, Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v7 05/12] x86/msr-index: Add MSRs for Key Locker wrapping key
-Date:   Wed, 24 May 2023 09:57:10 -0700
-Message-Id: <20230524165717.14062-6-chang.seok.bae@intel.com>
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v7 06/12] x86/keylocker: Define Key Locker CPUID leaf
+Date:   Wed, 24 May 2023 09:57:11 -0700
+Message-Id: <20230524165717.14062-7-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230524165717.14062-1-chang.seok.bae@intel.com>
 References: <20230410225936.8940-1-chang.seok.bae@intel.com>
@@ -69,25 +68,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CPU state that contains the wrapping key is in the same power
-domain as the cache. So any sleep state that would invalidate the
-cache (like S3) also invalidates the state of the wrapping key.
-
-But, since the state is inaccessible to software, it needs a special
-mechanism to save and restore the key during deep sleep.
-
-A set of new MSRs are provided as an abstract interface to save and
-restore the wrapping key, and to check the key status. The wrapping
-key is saved in a platform-scoped state of non-volatile media. The
-backup itself and its path from the CPU are encrypted and integrity
-protected.
-
-Define those MSRs to be used to save and restore the key for S3/4
-sleep states.
-
-But the backup storage's non-volatility is not architecturally
-guaranteed across off-states, such as S5 and G3. Then, the kernel may
-generate a new key on the next boot.
+Both Key Locker enabling code in the x86 core and AES Key Locker code
+in the crypto library will need to reference some CPUID bits. Define
+these feature-specific CPUID leaf and bits.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
@@ -96,36 +79,43 @@ Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
 Changes from v6:
-* Tweak the changelog -- put the last for those about other sleep
-  states
+* Tweak the changelog -- comment the reason first and then brief the
+  change.
 
 Changes from RFC v2:
-* Update the changelog. (Dan Williams)
-* Rename the MSRs. (Dan Williams)
+* Separate out the code as a new patch.
 ---
- arch/x86/include/asm/msr-index.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/x86/include/asm/keylocker.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 3aedae61af4f..cd8555c0f3c2 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -1117,4 +1117,10 @@
- 						* a #GP
- 						*/
+diff --git a/arch/x86/include/asm/keylocker.h b/arch/x86/include/asm/keylocker.h
+index 9b3bec452b31..1717e0866254 100644
+--- a/arch/x86/include/asm/keylocker.h
++++ b/arch/x86/include/asm/keylocker.h
+@@ -5,6 +5,7 @@
  
-+/* MSRs for managing a CPU-internal wrapping key for Key Locker. */
-+#define MSR_IA32_IWKEY_COPY_STATUS		0x00000990
-+#define MSR_IA32_IWKEY_BACKUP_STATUS		0x00000991
-+#define MSR_IA32_BACKUP_IWKEY_TO_PLATFORM	0x00000d91
-+#define MSR_IA32_COPY_IWKEY_TO_LOCAL		0x00000d92
+ #ifndef __ASSEMBLY__
+ 
++#include <linux/bits.h>
+ #include <asm/fpu/types.h>
+ 
+ /**
+@@ -21,5 +22,11 @@ struct iwkey {
+ 	struct reg_128_bit encryption_key[2];
+ };
+ 
++#define KEYLOCKER_CPUID			0x019
++#define KEYLOCKER_CPUID_EAX_SUPERVISOR	BIT(0)
++#define KEYLOCKER_CPUID_EBX_AESKLE	BIT(0)
++#define KEYLOCKER_CPUID_EBX_WIDE	BIT(2)
++#define KEYLOCKER_CPUID_EBX_BACKUP	BIT(4)
 +
- #endif /* _ASM_X86_MSR_INDEX_H */
+ #endif /*__ASSEMBLY__ */
+ #endif /* _ASM_KEYLOCKER_H */
 -- 
 2.17.1
 
