@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F7870F7D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C414A70F7D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbjEXNkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S235314AbjEXNkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235190AbjEXNkP (ORCPT
+        with ESMTP id S232530AbjEXNkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:40:15 -0400
+        Wed, 24 May 2023 09:40:14 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F205AA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47962A9;
         Wed, 24 May 2023 06:40:13 -0700 (PDT)
 Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O9qTZQ009638;
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O9ioXp010792;
         Wed, 24 May 2023 15:39:53 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=ODAJpjjCT+TsOCgb7AAjwV5Sj2DIOhFUhg814BVV3ow=;
- b=yOfyE+E7dIXTUCzjDvhYvToT/ySwWBq1DowSRQGdZLWUw6Jh+hBfXIqOLUOsGJJmYGIo
- TiFQwhNngoXe/gxLn0/EMQvpeMx/6o0kqKU9HbcowuGibvFM4DQBxMWaoEeOPh0QoZU6
- nDmysUF2cA9rlXc/TVnIeJRtGMYv0YaZS4BLZALTUTq6vaZI0N2DNwtGOjrB8E6GOJjH
- 4sV1KFjddHmQY0Rd3uatyR2E2PFziIq4U1YH9Oh7MvlOxrl9ULDPssAmjZslQ8GI6ONz
- v3dsQlnyGEoWf+kfg0IFtoex8PlUPC7S3rwpadvfxmNiWVH1XC3IaBYhTZ/QMeuZeqc3 +w== 
+ bh=+PfABAqjFKoktucajSEVGKR9Q6DkjuUsIsIWvzTTESo=;
+ b=LXAqIRKhba6Iygd9ElsBF7bz+NV/25TNK5y+K2cY4cpZwepo5o69Hus6GwuUYeT6cLuL
+ SVao+jv/wWm41rsGnJfxlWiChB3KLMcDj/puTFSJ17ZPQBu9rLx8YqJmJngAw4WQVyW8
+ nS3gGBAr1yjlOGE5+TyzyDHkf8YIGOvAHiGDDp21eHEKI3MZh9byDFToBe3ig0ZBIK71
+ BZzRN0GzqW8BzbwecQAaE30FmLVCD2FVNnQEh/g521HYZfssr2t8LSIg963H+icBdFSY
+ AMJ8kB2M5TCt3J/ac1JBlpbSZkDn77qrO4/ilR8xq2vG1vLyI7X2BJ4XDGaNRpQsrhiN 7g== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qru86gkfk-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qru86gkfp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 24 May 2023 15:39:53 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A2333100038;
-        Wed, 24 May 2023 15:39:50 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7ACD7100039;
+        Wed, 24 May 2023 15:39:51 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9B727229A98;
-        Wed, 24 May 2023 15:39:50 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 73840229A88;
+        Wed, 24 May 2023 15:39:51 +0200 (CEST)
 Received: from localhost (10.252.20.36) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 24 May
- 2023 15:39:50 +0200
+ 2023 15:39:51 +0200
 From:   Olivier Moysan <olivier.moysan@foss.st.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -52,9 +52,9 @@ CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/8] ARM: dts: stm32: add vrefint calibration on stm32mp15
-Date:   Wed, 24 May 2023 15:39:11 +0200
-Message-ID: <20230524133918.1439516-3-olivier.moysan@foss.st.com>
+Subject: [PATCH 3/8] ARM: dts: stm32: add vrefint support to adc2 on stm32mp15
+Date:   Wed, 24 May 2023 15:39:12 +0200
+Message-ID: <20230524133918.1439516-4-olivier.moysan@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
 References: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
@@ -77,27 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe vrefint calibration cell to be retrieved through bsec.
+Set STM32 ADC2 as a consumer of BSEC on STM32MP15, to retrieve
+vrefint calibration data saved in OTP.
+
+During the calibration process vrefp is set to 3.3V and the data
+acquired is saved to the OTP. This data is used by the ADC driver
+to calculated the actual value of vrefp according to the formula:
+vrefp = 3.3 x vrefint_cal / vrefint_data
+
+The vrefint channel provides the actual value of vrefp,
+which can be used to correct ADC acquisition data.
 
 Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 ---
- arch/arm/boot/dts/stm32mp151.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/boot/dts/stm32mp151.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 9c40b5e679f8..40d3959964cf 100644
+index 40d3959964cf..5bb5dfabb747 100644
 --- a/arch/arm/boot/dts/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1635,6 +1635,9 @@ bsec: efuse@5c005000 {
- 			part_number_otp: part-number-otp@4 {
- 				reg = <0x4 0x1>;
- 			};
-+			vrefint: vrefin_cal@52 {
-+				reg = <0x52 0x2>;
-+			};
- 			ts_cal1: calib@5c {
- 				reg = <0x5c 0x2>;
- 			};
+@@ -1113,6 +1113,8 @@ adc2: adc@100 {
+ 				interrupts = <1>;
+ 				dmas = <&dmamux1 10 0x400 0x01>;
+ 				dma-names = "rx";
++				nvmem-cells = <&vrefint>;
++				nvmem-cell-names = "vrefint";
+ 				status = "disabled";
+ 				channel@13 {
+ 					reg = <13>;
 -- 
 2.25.1
 
