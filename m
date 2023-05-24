@@ -2,190 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C91770F4FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4E470F500
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbjEXLXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S234505AbjEXLXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjEXLXJ (ORCPT
+        with ESMTP id S233260AbjEXLX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:23:09 -0400
-Received: from out-39.mta0.migadu.com (out-39.mta0.migadu.com [91.218.175.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA59C5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:23:07 -0700 (PDT)
-Message-ID: <2c5df9e0-9b1f-89eb-4d64-c5091ead9cf0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684927386;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r7uIYMMBsG2+gFwRyUinbXHkYOIikxEdGr36MvRUJ8c=;
-        b=UDiOa/81mudJk0eXr2RQY2l6PUDl6gutYQUUOBdWfw4+15hm55V38MmdVeo8ZBbuswPAFY
-        1iSSHBTD3py36UxZcDvDq/qD2DEAJoyPeXpgy5NsEneGuN2zjBbbI9o1IVf8kR2YwibCRo
-        20qMn8Ci3rj0h3HJsM6Kqt1Dhq1pZaM=
-Date:   Wed, 24 May 2023 19:22:55 +0800
+        Wed, 24 May 2023 07:23:29 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EF91B6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:23:23 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f6094cb2ebso6929435e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:23:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684927402; x=1687519402;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XnHfsKcNH/cNGJ6XNCOWz/0q5ZKOE9Q1MtdFrXQQHlg=;
+        b=HP1A3H0LJ3yGNLAb/iW11BhivBLLgjUIeGYq0rXzNJnrb8iiey3QkvYn1SYsziMNLw
+         s+gOaE3U7WNFm0ChMlLJ/d4XzPHRSrKhEc3nI90nt8TaFhOtbohRVKRUwJyi+3ZMrwa7
+         OyzjT7n42Um1ezPKnOWUEqzfPEoqtP9Jy1B9knhtDQRG4eoOFAssdIMHPGz4Ty9ynHPi
+         2ODWAy4wTo5Z9scvqLUjg29hHX9AHT920fVBiQt6acbMXpxh4HnnMz6suc+MBYPXGpWa
+         sDTOhlLEkcxVjd2C0CUsNDQ2rH6AWgk5uy3YgFtOSPhC0T6yoUfgRL6j81ikJ3+UARD/
+         +/MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684927402; x=1687519402;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XnHfsKcNH/cNGJ6XNCOWz/0q5ZKOE9Q1MtdFrXQQHlg=;
+        b=PXuZ3Ru/EK3MgKJE0x7AKWC2QCDSqpwzua7yFZ5zophFRj1tQTIRF8VXxmbDeQyp9V
+         fn44yDFzbYcNMNtJJtbNdujyeodzyNpErT+N7t2pnFNpVxIsEsUuXluZJsad9+Ecnjta
+         gA7Izh7UXHOUVOgCgBFqxq7ZlhfXnRbeqaC+se1sxG97TJxPWlenwtdOaiTgpKv80Ygd
+         oxs2ljuuM2oQCfbPQz44IgT8fdROf518j8wRfjz875JBj0Ev/oQvCj6Q2HIOnBDh2QvO
+         C8b0+jNhbNY1X09BVRPmCXnSIIDCFw1HwMPI0IVw+tNVdxhTuxZTUxRcdUbIqfKTTmwY
+         wB/g==
+X-Gm-Message-State: AC+VfDxMUrsmyt3/lzTrgxCu68Z9I08aQbFcCtrXD1W5AVNBpEmlEVSI
+        Co89LgCsmrazfQ2VGMaLUhuPlw==
+X-Google-Smtp-Source: ACHHUZ4MJroqG+izF3TpvDWSMNs8ThwUAbnXvlX+TBLtv5iVz+aYg4Q/LNEqQCuFBIUxNT0Gc2Fh5Q==
+X-Received: by 2002:a1c:cc1a:0:b0:3f5:fc21:5426 with SMTP id h26-20020a1ccc1a000000b003f5fc215426mr8660954wmb.41.1684927401874;
+        Wed, 24 May 2023 04:23:21 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id 2-20020a05600c020200b003f50e29bce3sm1968526wmi.48.2023.05.24.04.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 04:23:20 -0700 (PDT)
+Date:   Wed, 24 May 2023 14:23:16 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Joel Granados <j.granados@samsung.com>
+Cc:     LTP List <ltp@lists.linux.it>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org,
+        chrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: LTP: syscalls: statx06.c:138: TFAIL: Modified time > after_time
+Message-ID: <784b9a90-9d56-4e53-8f92-676e76e49665@kili.mountain>
+References: <CA+G9fYvGM6a3wct+_o0z-B=k1ZBg1FuBBpfLH71ULihnTo5RrQ@mail.gmail.com>
 MIME-Version: 1.0
-Subject: Re: [linus:master] [mm] f95bdb700b: stress-ng.ramfs.ops_per_sec
- -88.8% regression
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Qi Zheng <qi.zheng@linux.dev>
-To:     RCU <rcu@vger.kernel.org>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Kirill Tkhai <tkhai@ya.ru>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
-        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com,
-        Yujie Liu <yujie.liu@intel.com>
-References: <202305230837.db2c233f-yujie.liu@intel.com>
- <eba38fce-2454-d7a4-10ef-240b4686f23d@linux.dev>
- <ZG29ULGNJdErnatI@yujie-X299>
- <896bbb09-d400-ec73-ba3a-b64c6e9bbe46@linux.dev>
- <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
-In-Reply-To: <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvGM6a3wct+_o0z-B=k1ZBg1FuBBpfLH71ULihnTo5RrQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I am pretty sure this is caused by commit 7eec88986dce ("sysctl:
+Refactor base paths registrations").  Add Joel to the CC list.
 
+Before we used to use register_sysctl_table() to register that table.
 
-On 2023/5/24 19:08, Qi Zheng wrote:
-> 
+regards,
+dan carpenter
 
-[...]
-
+On Wed, May 24, 2023 at 04:18:42PM +0530, Naresh Kamboju wrote:
+> LTP syscalls statx06 fails on NFS mounted devices using external hard drives
+> for testing and running on Linux next 6.4.0-rc3-next-20230524.
 > 
-> Well, I just ran the following command and reproduced the result:
+> Test case fails on x86_64, i386 and arm64 Juno-r2.
 > 
-> stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> 1) with commit 42c9db3970483:
 > 
-> stress-ng: info:  [11023] setting to a 60 second run per stressor
-> stress-ng: info:  [11023] dispatching hogs: 9 ramfs
-> stress-ng: info:  [11023] stressor       bogo ops real time  usr time 
-> sys time   bogo ops/s     bogo ops/s
-> stress-ng: info:  [11023]                           (secs)    (secs) 
-> (secs)   (real time) (usr+sys time)
-> stress-ng: info:  [11023] ramfs            774966     60.00     10.18 
-> 169.45     12915.89        4314.26
-> stress-ng: info:  [11023] for a 60.00s run time:
-> stress-ng: info:  [11023]    1920.11s available CPU time
-> stress-ng: info:  [11023]      10.18s user time   (  0.53%)
-> stress-ng: info:  [11023]     169.44s system time (  8.82%)
-> stress-ng: info:  [11023]     179.62s total time  (  9.35%)
-> stress-ng: info:  [11023] load average: 8.99 2.69 0.93
-> stress-ng: info:  [11023] successful run completed in 60.00s (1 min, 
-> 0.00 secs)
+> Linux version 6.4.0-rc3-next-20230524 (tuxmake@tuxmake)
+> (x86_64-linux-gnu-gcc (Debian 11.3.0-12) 11.3.0, GNU ld (GNU Binutils
+> for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1684908723
+> ...
 > 
-> 2) with commit f95bdb700bc6b:
+> [    1.396191] Mountpoint-cache hash table entries: 32768 (order: 6,
+> 262144 bytes, linear)
+> [    1.397234] sysctl table check failed: kernel/usermodehelper Not a file
+> [    1.398166] sysctl table check failed: kernel/usermodehelper No proc_handler
+> [    1.399165] sysctl table check failed: kernel/usermodehelper bogus .mode 0555
+> [    1.400166] sysctl table check failed: kernel/keys Not a file
+> [    1.401165] sysctl table check failed: kernel/keys No proc_handler
+> [    1.402165] sysctl table check failed: kernel/keys bogus .mode 0555
+> [    1.403166] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+> 6.4.0-rc3-next-20230524 #1
+> [    1.404165] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.5 11/26/2020
+> [    1.404165] Call Trace:
+> [    1.404165]  <TASK>
+> [    1.404165]  dump_stack_lvl+0x72/0x90
+> [    1.404165]  dump_stack+0x14/0x20
+> [    1.404165]  __register_sysctl_table+0x570/0x840
+> [    1.404165]  __register_sysctl_init+0x29/0x60
+> [    1.404165]  sysctl_init_bases+0x27/0x80
+> [    1.404165]  proc_sys_init+0x37/0x40
+> [    1.404165]  proc_root_init+0x7b/0x90
+> [    1.404165]  start_kernel+0x403/0x6a0
+> [    1.404165]  x86_64_start_reservations+0x1c/0x30
+> [    1.404165]  x86_64_start_kernel+0xcb/0xe0
+> [    1.404165]  secondary_startup_64_no_verify+0x179/0x17b
+> [    1.404165]  </TASK>
+> [    1.404165] failed when register_sysctl kern_table to kernel
 > 
-> stress-ng: info:  [37676] dispatching hogs: 9 ramfs
-> stress-ng: info:  [37676] stressor       bogo ops real time  usr time 
-> sys time   bogo ops/s     bogo ops/s
-> stress-ng: info:  [37676]                           (secs)    (secs) 
-> (secs)   (real time) (usr+sys time)
-> stress-ng: info:  [37676] ramfs            168673     60.00      1.61 
->   39.66      2811.08        4087.47
-> stress-ng: info:  [37676] for a 60.10s run time:
-> stress-ng: info:  [37676]    1923.36s available CPU time
-> stress-ng: info:  [37676]       1.60s user time   (  0.08%)
-> stress-ng: info:  [37676]      39.66s system time (  2.06%)
-> stress-ng: info:  [37676]      41.26s total time  (  2.15%)
-> stress-ng: info:  [37676] load average: 7.69 3.63 2.36
-> stress-ng: info:  [37676] successful run completed in 60.10s (1 min, 
-> 0.10 secs)
+> ....
+> ./runltp -f syscalls -d /scratch
 > 
-> The bogo ops/s (real time) did drop significantly.
+> ...
 > 
-> And the memory reclaimation was not triggered in the whole process. so
-> theoretically no one is in the read critical section of shrinker_srcu.
+> [ 1192.088987] loop0: detected capacity change from 0 to 614400
+> tst_device.c:93: TINFO: Found free device 0 '/dev/loop0'
+> tst_test.c:1093: TINFO: Formatting /dev/loop0 with ext4 opts='-I 256'
+> extra opts=''
+> mke2fs 1.46.5 (30-Dec-2021)
+> [ 1192.337350] EXT4-fs (loop0): mounted filesystem
+> dfe9283c-5d2f-43f8-840e-a2bbbff5b202 r/w with ordered data mode. Quota
+> mode: none.
+> tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
 > 
-> Then I found that some stress-ng-ramfs processes were in
-> TASK_UNINTERRUPTIBLE state for a long time:
+> statx06.c:140: TPASS: Birth time Passed
+> statx06.c:138: TFAIL: Modified time > after_time
+> statx06.c:140: TPASS: Access time Passed
+> statx06.c:140: TPASS: Change time Passed
 > 
-> root       42313  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42314  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42315  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42316  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42317  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42318  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42319  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42320  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42321  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42322  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42323  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42324  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42325  7.8  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42326  0.0  0.0  69592  2068 pts/0    S    19:00   0:00 
-> stress-ng-ramfs [run]
-> root       42327  7.9  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42328  7.9  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42329  7.9  0.0  69592  1812 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
-> root       42330  7.9  0.0  69592  1556 pts/0    D    19:00   0:02 
-> stress-ng-ramfs [run]
 > 
-> Their call stack is as follows:
+> links,
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230524/testrun/17171892/suite/ltp-syscalls/test/statx06/log
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230524/testrun/17171892/suite/ltp-syscalls/test/statx06/history/
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230524/testrun/17171892/suite/ltp-syscalls/test/statx06/details/
 > 
-> cat /proc/42330/stack
 > 
-> [<0>] __synchronize_srcu.part.21+0x83/0xb0
-> [<0>] unregister_shrinker+0x85/0xb0
-> [<0>] deactivate_locked_super+0x27/0x70
-> [<0>] cleanup_mnt+0xb8/0x140
-> [<0>] task_work_run+0x65/0x90
-> [<0>] exit_to_user_mode_prepare+0x1ba/0x1c0
-> [<0>] syscall_exit_to_user_mode+0x1b/0x40
-> [<0>] do_syscall_64+0x44/0x80
-> [<0>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> + RCU folks, Is this result as expected? I would have thought that
-> synchronize_srcu() should return quickly if no one is in the read
-> critical section. :(
-> 
-
-I received the message:
-	BOUNCE rcu@vger.kernel.org: Message too long (>100000 chars)
-
-So add RCU folks again.
-
--- 
-Thanks,
-Qi
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
