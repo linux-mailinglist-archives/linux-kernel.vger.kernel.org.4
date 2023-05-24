@@ -2,66 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B3A710101
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D0D710103
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238194AbjEXWdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
+        id S238122AbjEXWe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232967AbjEXWdP (ORCPT
+        with ESMTP id S233142AbjEXWe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:33:15 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC27E4D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:32:37 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d1c53cad8so1475507b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:32:37 -0700 (PDT)
+        Wed, 24 May 2023 18:34:27 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE28E45
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:33:55 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f51ea3a062so40161cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684967536; x=1687559536;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=McTAZz5TDM/wNA+pFvseGWR8u1z//QTBMfmw5hfPpfs=;
-        b=g/ZKhO12ISoI6HFD5/SS5tOhIqWpz2FWh4HPlVxaTZGw7NmkIFwsi5FxFUd/K4uls1
-         8Vh29qUaC2GO9JKUQAwGb0nroHcRbcZ5poXwf4VmVf2MYaF1lY8K9cz9x/QsfRZr+DaF
-         1RDf8Av4ZO2V363lBGXzfhby/bxWw1SKD+fHrOQyqLqSq2cd5/TsiHEM1uwfRj9Pbzvw
-         xsfn6jobUSUO3Uvtna6zmnkGas+IO4c7JTWAJPTqFun18rP3d6aoFmyBo5UGQ8f8n3nG
-         pXhDHy6OPPuiDWb80jffsRF4npsc03SjuGvD/IbDxxDSH76Es0C9zj+ISHxvMbSdW/GN
-         zBpQ==
+        d=google.com; s=20221208; t=1684967626; x=1687559626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyEU5OsCRY/yGoB6PyW2OQuIJez0sdTCx6qaItf1S5g=;
+        b=Pgl6cxxgci78kLAVU3hg5HMNg/JWkpyFvcdoo7xA5rg8xgZhMVlxlT+Yp1KJiQPDV9
+         KVlEHeEQ/2U1Fmpz4m12yJKxKHU2Piu4kVGo0I617XtgVJBekNUvjalakgghIqx/7yue
+         ukMnjDcqPDTo2jQ04zIY4+RGPCDXx8qi6jmU73IB1yRGJbUHZxtjXvW8fii3Km5nutln
+         v+2YN7qaWbRuWMk0kcekLo0+UpBzF8FbsvakNqaAvwGdpuDC4MXI54CAO3fBm0UYYGqG
+         JfxxuVDafqJhHbL61c+6ibKAa8Ea6lfaaF5UFdi8SNEJJ+Tay6PBQDD5rT5dgKChC5ro
+         6Aug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684967536; x=1687559536;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=McTAZz5TDM/wNA+pFvseGWR8u1z//QTBMfmw5hfPpfs=;
-        b=DxkIAMyNiDStvaL0FvWrdg27pzvcha/bmXAvL0z+rab8+0F07ZO/PcPxCCsUlzmiic
-         Yy+pK/pOaJT37krBq0uv+qARW8BdzfxcY2godITgIf5CabhpThVu3abpWWkFF6mEmgDk
-         iF+OO/UxQNIGmDFGN2yYn+VKYpJkIjTViN6Cix+ReTBIWHrZEq9kCZZfJW27qww7iFY+
-         kYEsj3hEkrg/tjIutPvumtrNS65yNEEchsgMVIhIEb2ezNz/DgQsZg2LG8AtxXKyPsjs
-         tsBHaNO6Fi2kne7KKeXso47z6uP57awJKvs6WwkTeEsZPNVJ1RIMdloEUUHI3LLnqxUr
-         0GxQ==
-X-Gm-Message-State: AC+VfDwR9fR3owyvMPU4rAueo+JpKJsnGTmV0qLMyVzaJ9nFLX7g60sk
-        mG904YBOMihwpxWclqchdpVuoHvQOsU=
-X-Google-Smtp-Source: ACHHUZ7f8imVN4mHfpyTxq0yrWtQT+BrfgXSNEpa5yYX/4HxEQ9Ydq9/mTx70cR7zkzNpBjB4y1oTHe5FrM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:390c:b0:647:5400:a7cb with SMTP id
- fh12-20020a056a00390c00b006475400a7cbmr1699653pfb.3.1684967536684; Wed, 24
- May 2023 15:32:16 -0700 (PDT)
-Date:   Wed, 24 May 2023 15:32:14 -0700
-In-Reply-To: <20230323072714.82289-2-likexu@tencent.com>
-Mime-Version: 1.0
-References: <20230323072714.82289-1-likexu@tencent.com> <20230323072714.82289-2-likexu@tencent.com>
-Message-ID: <ZG6QbjRk7F8QyTr+@google.com>
-Subject: Re: [PATCH 1/7] KVM: selftests: Test Intel PMU architectural events
- on gp counters
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1684967626; x=1687559626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xyEU5OsCRY/yGoB6PyW2OQuIJez0sdTCx6qaItf1S5g=;
+        b=PSFXzlqgdwsXZZlyir5NA/ADk8v4GqvLqJjioLrQtcaxWUo8HZ1INnMRvLufs0LDSv
+         YQhfjy0Vvv/68njcPmLVPOUTF3ug7D49nRyyl56tnF3pQ26p25geaenw+TyGCpNG8s12
+         R647g6KZVadhUuPqx/aoYOu69VZpysmbel4gPOr8KKaLGZRrinisl7hV5x6jMHxYZqNo
+         fImCxcn9T+Dbps7reh4lHdh6cNxVgmQMAp+fgiEavtcqb3RktZZLHr6AONNPJrJnzKXI
+         jbIIFq1dhmFj/2k3pidYVBbAaGcrUCdLgENNzWj3sSQkdbFAxbrVzGjrpn1A291GkAlM
+         D6OA==
+X-Gm-Message-State: AC+VfDwWY39rPWYXj6zP90fBi1S90RmuMMGnL/0Rv7LaYgIuxuxS78Qc
+        3QA6UytHKYtw5nQYQ+HU5XDfbk2pvlLSUG5Uw87tug==
+X-Google-Smtp-Source: ACHHUZ6ypVkdPL/mT9z01cqJVuftf3vL0nnB4J8vZMW9cZ9/h7eku9mZP2smMJE7b1PMYn4eLC7Pccl9wHHj1DZ2iY4=
+X-Received: by 2002:a05:622a:1a0c:b0:3f5:3110:21bf with SMTP id
+ f12-20020a05622a1a0c00b003f5311021bfmr102238qtb.10.1684967625676; Wed, 24 May
+ 2023 15:33:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230524221831.1741381-1-irogers@google.com> <CA+JHD93cMBrcw0O6bwazzACsPr+HhVVGMKf8ZYLnCV0dEm1gmw@mail.gmail.com>
+In-Reply-To: <CA+JHD93cMBrcw0O6bwazzACsPr+HhVVGMKf8ZYLnCV0dEm1gmw@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 24 May 2023 15:33:30 -0700
+Message-ID: <CAP-5=fXY-EanZze4_YsmrcsFiAyPxU2FudTT_2qcAshRUJ5yvQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/35] PMU refactoring and improvements
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ming Wang <wangming01@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Coresight ML <coresight@lists.linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,205 +101,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Add test cases to check if different Architectural events are available
-> after it's marked as unavailable via CPUID. It covers vPMU event filtering
-> logic based on Intel CPUID, which is a complement to pmu_event_filter.
-> 
-> According to Intel SDM, the number of architectural events is reported
-> through CPUID.0AH:EAX[31:24] and the architectural event x is
-> supported if EBX[x]=0 && EAX[31:24]>x.
-> 
-> Co-developed-by: Jinrong Liang <cloudliang@tencent.com>
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/x86_64/pmu_cpuid_test.c     | 202 ++++++++++++++++++
+On Wed, May 24, 2023 at 3:21=E2=80=AFPM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+>
+>
+> On Wed, May 24, 2023, 7:18 PM Ian Rogers <irogers@google.com> wrote:
+>>
+>> Separate the code in pmu.[ch] into the set/list of PMUs and the code
+>> for a particular PMU. Move the set/list of PMUs code into
+>> pmus.[ch]. Clean up hybrid code and remove hybrid PMU list, it is
+>> sufficient to scan PMUs looking for core ones. Add core PMU list and
+>> perf_pmus__scan_core that just reads core PMUs. Switch code that skips
+>> non-core PMUs during a perf_pmus__scan, to use the
+>> perf_pmus__scan_core variant. Don't scan sysfs for PMUs if all such
+>> PMUs have been previously scanned/loaded. Scanning just core PMUs, for
+>> the cases it is applicable, can improve the sysfs reading time by more
+>> than 4 fold on my laptop, as servers generally have many more uncore
+>> PMUs the improvement there should be larger:
+>>
+>> ```
+>> $ perf bench internals pmu-scan -i 1000
+>> Computing performance of sysfs PMU event scan for 1000 times
+>>   Average core PMU scanning took: 989.231 usec (+- 1.535 usec)
+>>   Average PMU scanning took: 4309.425 usec (+- 74.322 usec)
+>> ```
+>>
+>> The patch "perf pmu: Separate pmu and pmus" moves and renames a lot of
+>> functions, and is consequently large. The changes are trivial, but
+>> kept together to keep the overall number of patches more reasonable.
+>>
+>> v3. Address fixing hybrid user specified CPU maps by doing it in
+>>     propagate maps. Remove nearly all references to cpu_core/cpu_atom
+>>     in particular by removing is_pmu_hybrid - hybrid is now >1 core
+>>     PMU. Addresses comments by Kan and Namhyung.
+>> v2. Address Kan's review comments wrt "cycles" -> "cycles:P" and
+>>     "uncore_pmus" -> "other_pmus".
+>
+>
+> Is this series bisectable wrt 'perf test'?
 
-"cpuid" is a rather confusing name, e.g. I was half expecting tests where the guest
-is executing CPUID.  IIUC, this is really just a basic functionality test, for a
-somewhat loose definition of "basic".
+Yep, I wrote it running 'perf test' at each commit. It is somewhat
+laborious for me to test on hybrid, so I didn't test smaller things on
+that, but I'm guessing that's not a concern anyway. I hope to follow
+up with adding an ability to have a non-sysfs directory containing
+fake PMUs for testing.
 
-Maybe something like pmu_basic_functionality_test?  Or pmu_functional_test?
+Thanks,
+Ian
 
->  2 files changed, 203 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
-
-...
-
-> +#define EVENTSEL_OS BIT_ULL(17)
-> +#define EVENTSEL_EN BIT_ULL(22)
-> +#define PMU_CAP_FW_WRITES BIT_ULL(13)
-> +#define EVENTS_MASK GENMASK_ULL(7, 0)
-> +#define PMU_VERSION_MASK GENMASK_ULL(7, 0)
-> +#define GP_CTR_NUM_OFS_BIT 8
-> +#define GP_CTR_NUM_MASK GENMASK_ULL(15, GP_CTR_NUM_OFS_BIT)
-> +#define EVT_LEN_OFS_BIT 24
-> +#define EVT_LEN_MASK GENMASK_ULL(31, EVT_LEN_OFS_BIT)
-> +
-> +#define ARCH_EVENT(select, umask) (((select) & 0xff) | ((umask) & 0xff) << 8)
-> +
-> +/*
-> + * Intel Pre-defined Architectural Performance Events. Note some events
-> + * are skipped for testing due to difficulties in stable reproduction.
-> + */
-> +static const uint64_t arch_events[] = {
-> +	[0] = ARCH_EVENT(0x3c, 0x0),
-> +	[1] = ARCH_EVENT(0xc0, 0x0),
-> +	[2] = ARCH_EVENT(0x3c, 0x1),
-> +	[3] = ARCH_EVENT(0x2e, 0x4f), /* LLC Reference */
-> +	[4] = ARCH_EVENT(0x2e, 0x41), /* LLC Misses */
-> +	[5] = ARCH_EVENT(0xc4, 0x0),
-> +	[6] = ARCH_EVENT(0xc5, 0x0),  /* Branch Misses Retired */
-> +	[7] = ARCH_EVENT(0xa4, 0x1), /* Topdown Slots */
-> +};
-
-All of these definitions belong in library code.  Probably something like
-tools/testing/selftests/kvm/include/x86_64/pmu.h, or maybe intel_pmu.h?
-
-> +static struct kvm_vcpu *new_vcpu(void *guest_code)
-
-Assuming the next version is sent before the aforementioned cleanup, how about
-defining this as
-
-static struct kvm_vm *pmu_vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
-						  void *guest_code)
-
-so that the cleanup can be a more straightforward replacement.  That should also
-make the free_vcpu() wrapper completely unnecessary.
-
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> +	vm_init_descriptor_tables(vm);
-> +	vcpu_init_descriptor_tables(vcpu);
-
-Ugh, I really need to put together that series to clean up the descriptor table
-mess.
-
-https://lore.kernel.org/all/Y8hCBOndYMD9zsDL@google.com
-
-> +
-> +	return vcpu;
-> +}
-> +
-> +static void free_vcpu(struct kvm_vcpu *vcpu)
-> +{
-> +	kvm_vm_free(vcpu->vm);
-
-Just call kvm_vm_free().  Adding layers of unnecessary helpers just to provide
-symmetry is not a good tradeoff.  As above, tweak the name/prototyp of new_vcpu()
-if you really want something approaching symmetry.
-
-> +static void run_vcpu(struct kvm_vcpu *vcpu, const char *msg,
-> +		     bool (*check_ucall)(struct ucall *uc, void *data),
-> +		     void *expect_args)
-> +{
-> +	struct ucall uc;
-> +
-> +	for (;;) {
-> +		vcpu_run(vcpu);
-> +		switch (get_ucall(vcpu, &uc)) {
-> +		case UCALL_SYNC:
-> +			TEST_ASSERT(check_ucall(&uc, expect_args), "%s", msg);
-
-A callback is both overkill and debug hostile.  If the assert fails, it will report
-this common code and not the caller.  Since all uses grab the first ucall param,
-just "return" that from the run_vcpu() wrapper as out param.  Callers will need
-to define their own loop, but that's one line of code, and it has the advantage
-of making the code much more self-documenting
-
-E.g.
-
-static uint64_t run_vcpu(struct kvm_vcpu *vcpu, uint64_t *ucall_arg)
-{
-	struct ucall uc;
-
-	vcpu_run(vcpu);
-	switch (get_ucall(vcpu, &uc)) {
-	case UCALL_SYNC:
-		ucall_arg = uc->args[1];
-		break;
-	case UCALL_DONE:
-		break;
-	default:
-		TEST_ASSERT(false, "Unexpected exit: %s",
-				exit_reason_str(vcpu->run->exit_reason));
-	}
-	return uc.cmd;
-}
-
-and in intel_test_fixed_counters() as an example:
-
-			while (run_vcpu(vcpu, &val) != UCALL_DONE)
-				TEST_ASSERT(val, "One or more fixed counters not counting");
-
-> +static void test_arch_events_setup(struct kvm_vcpu *vcpu, uint8_t evt_vector,
-> +				   uint8_t unavl_mask, uint8_t idx)
-> +{
-> +	struct kvm_cpuid_entry2 *entry;
-> +	uint32_t ctr_msr = MSR_IA32_PERFCTR0;
-> +	bool is_supported;
-> +
-> +	entry = vcpu_get_cpuid_entry(vcpu, 0xa);
-> +	entry->eax = (entry->eax & ~EVT_LEN_MASK) |
-> +		(evt_vector << EVT_LEN_OFS_BIT);
-> +	entry->ebx = (entry->ebx & ~EVENTS_MASK) | unavl_mask;
-> +	vcpu_set_cpuid(vcpu);
-> +
-> +	if (vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES) & PMU_CAP_FW_WRITES)
-> +		ctr_msr = MSR_IA32_PMC0;
-> +
-> +	/* Arch event x is supported if EBX[x]=0 && EAX[31:24]>x */
-> +	is_supported = !(entry->ebx & BIT_ULL(idx)) &&
-> +		(((entry->eax & EVT_LEN_MASK) >> EVT_LEN_OFS_BIT) > idx);
-> +
-> +	vcpu_args_set(vcpu, 5, entry->eax & PMU_VERSION_MASK,
-> +		      (entry->eax & GP_CTR_NUM_MASK) >> GP_CTR_NUM_OFS_BIT,
-> +		      is_supported, ctr_msr, arch_events[idx]);
-
-Why pass all this stuff in as params?  Wouldn't it be easier to query CPUID from
-the guest side?  And define KVM_X86_CPU_PROPERTY macros where possible to avoid
-having to open code things in multiple places.
-
-> +static void intel_check_arch_event_is_unavl(uint8_t idx)
-> +{
-> +	const char *msg = "Unavailable arch event is counting.";
-> +	uint8_t eax_evt_vec, ebx_unavl_mask, i, j;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	/*
-> +	 * A brute force iteration of all combinations of values is likely to
-> +	 * exhaust the limit of the single-threaded thread fd nums, so it's
-> +	 * tested here by iterating through all valid values on a single bit.
-> +	 */
-> +	for (i = 0; i < ARRAY_SIZE(arch_events); i++) {
-> +		eax_evt_vec = BIT_ULL(i);
-> +		for (j = 0; j < ARRAY_SIZE(arch_events); j++) {
-> +			ebx_unavl_mask = BIT_ULL(j);
-> +
-> +			vcpu = new_vcpu(intel_guest_run_arch_event);
-> +			test_arch_events_setup(vcpu, eax_evt_vec,
-> +					       ebx_unavl_mask, idx);
-> +			run_vcpu(vcpu, msg, first_uc_arg_non_zero, NULL);
-
-Oof, this is super confusing.  At first, second, and third glances, it looks like
-this is asserting that the counter _is_ counting.  It took me a while to find this
-code in the guest:
-
-		GUEST_SYNC(supported == !!_rdpmc(RDPMC_FIXED_BASE | i));
-
-Either have the guest do GUEST_ASSERT() directly and process the output in the
-common run_vcpu(), or just have the guest return the counter value and do the
-assert here.  My vote would be the latter, e.g.
-
-			while (run_vcpu(vcpu, &counter_val) != UCALL_DONE)
-				TEST_ASSERT(is_supported == !!counter_val,
-					    "blah blah blah");
-
-That'd also likely avoid having to plumb the "supported" info into the guest.
+> - Arnaldo
+>>
+>>
+>> Ian Rogers (35):
+>>   perf cpumap: Add intersect function
+>>   perf tests: Organize cpu_map tests into a single suite
+>>   perf cpumap: Add equal function
+>>   libperf cpumap: Add "any CPU"/dummy test function
+>>   perf pmu: Detect ARM and hybrid PMUs with sysfs
+>>   perf pmu: Add is_core to pmu
+>>   perf evsel: Add is_pmu_core inorder to interpret own_cpus
+>>   perf pmu: Add CPU map for "cpu" PMUs
+>>   perf evlist: Propagate user CPU maps intersecting core PMU maps
+>>   perf evlist: Allow has_user_cpus to be set on hybrid
+>>   perf target: Remove unused hybrid value
+>>   perf tools: Warn if no user requested CPUs match PMU's CPUs
+>>   perf evlist: Remove evlist__warn_hybrid_group
+>>   perf evlist: Remove __evlist__add_default
+>>   perf evlist: Reduce scope of evlist__has_hybrid
+>>   perf pmu: Remove perf_pmu__hybrid_mounted
+>>   perf pmu: Rewrite perf_pmu__has_hybrid to avoid list
+>>   perf x86: Iterate hybrid PMUs as core PMUs
+>>   perf topology: Avoid hybrid list for hybrid topology
+>>   perf evsel: Compute is_hybrid from PMU being core
+>>   perf header: Avoid hybrid PMU list in write_pmu_caps
+>>   perf metrics: Remove perf_pmu__is_hybrid use
+>>   perf stat: Avoid hybrid PMU list
+>>   perf mem: Avoid hybrid PMU list
+>>   perf pmu: Remove perf_pmu__hybrid_pmus list
+>>   perf pmus: Prefer perf_pmu__scan over perf_pmus__for_each_pmu
+>>   perf x86 mem: minor refactor to is_mem_loads_aux_event
+>>   perf pmu: Separate pmu and pmus
+>>   perf pmus: Split pmus list into core and other
+>>   perf pmus: Allow just core PMU scanning
+>>   perf pmus: Avoid repeated sysfs scanning
+>>   perf pmus: Ensure all PMUs are read for find_by_type
+>>   perf pmus: Add function to return count of core PMUs
+>>   perf pmus: Remove perf_pmus__has_hybrid
+>>   perf pmu: Remove is_pmu_hybrid
+>>
+>>  tools/lib/perf/cpumap.c                 |  61 +++
+>>  tools/lib/perf/evlist.c                 |  25 +-
+>>  tools/lib/perf/include/internal/evsel.h |   9 +
+>>  tools/lib/perf/include/perf/cpumap.h    |  14 +
+>>  tools/perf/arch/arm/util/auxtrace.c     |   7 +-
+>>  tools/perf/arch/arm/util/cs-etm.c       |   4 +-
+>>  tools/perf/arch/arm64/util/pmu.c        |   6 +-
+>>  tools/perf/arch/x86/tests/hybrid.c      |   7 +-
+>>  tools/perf/arch/x86/util/auxtrace.c     |   5 +-
+>>  tools/perf/arch/x86/util/evlist.c       |  25 +-
+>>  tools/perf/arch/x86/util/evsel.c        |  27 +-
+>>  tools/perf/arch/x86/util/intel-bts.c    |   4 +-
+>>  tools/perf/arch/x86/util/intel-pt.c     |   4 +-
+>>  tools/perf/arch/x86/util/mem-events.c   |  17 +-
+>>  tools/perf/arch/x86/util/perf_regs.c    |  15 +-
+>>  tools/perf/arch/x86/util/topdown.c      |   5 +-
+>>  tools/perf/bench/pmu-scan.c             |  60 +--
+>>  tools/perf/builtin-c2c.c                |   9 +-
+>>  tools/perf/builtin-list.c               |   4 +-
+>>  tools/perf/builtin-mem.c                |   9 +-
+>>  tools/perf/builtin-record.c             |  29 +-
+>>  tools/perf/builtin-stat.c               |  14 +-
+>>  tools/perf/builtin-top.c                |  10 +-
+>>  tools/perf/tests/attr.c                 |  11 +-
+>>  tools/perf/tests/builtin-test.c         |   4 +-
+>>  tools/perf/tests/cpumap.c               |  92 ++++-
+>>  tools/perf/tests/event_groups.c         |   7 +-
+>>  tools/perf/tests/parse-events.c         |  15 +-
+>>  tools/perf/tests/parse-metric.c         |   9 +-
+>>  tools/perf/tests/pmu-events.c           |   6 +-
+>>  tools/perf/tests/switch-tracking.c      |  14 +-
+>>  tools/perf/tests/tests.h                |   4 +-
+>>  tools/perf/tests/topology.c             |  16 +-
+>>  tools/perf/util/Build                   |   2 -
+>>  tools/perf/util/cpumap.c                |   4 +-
+>>  tools/perf/util/cpumap.h                |   4 +-
+>>  tools/perf/util/cputopo.c               |  12 +-
+>>  tools/perf/util/env.c                   |   5 +-
+>>  tools/perf/util/evlist-hybrid.c         | 162 --------
+>>  tools/perf/util/evlist-hybrid.h         |  15 -
+>>  tools/perf/util/evlist.c                |  64 +++-
+>>  tools/perf/util/evlist.h                |   9 +-
+>>  tools/perf/util/evsel.c                 |  60 +--
+>>  tools/perf/util/evsel.h                 |   3 -
+>>  tools/perf/util/header.c                |  27 +-
+>>  tools/perf/util/mem-events.c            |  25 +-
+>>  tools/perf/util/metricgroup.c           |   9 +-
+>>  tools/perf/util/parse-events.c          |  25 +-
+>>  tools/perf/util/parse-events.y          |   3 +-
+>>  tools/perf/util/pfm.c                   |   6 +-
+>>  tools/perf/util/pmu-hybrid.c            |  52 ---
+>>  tools/perf/util/pmu-hybrid.h            |  32 --
+>>  tools/perf/util/pmu.c                   | 483 ++----------------------
+>>  tools/perf/util/pmu.h                   |  25 +-
+>>  tools/perf/util/pmus.c                  | 465 ++++++++++++++++++++++-
+>>  tools/perf/util/pmus.h                  |  15 +-
+>>  tools/perf/util/print-events.c          |  15 +-
+>>  tools/perf/util/python-ext-sources      |   1 -
+>>  tools/perf/util/stat-display.c          |  19 +-
+>>  tools/perf/util/target.h                |   1 -
+>>  60 files changed, 1002 insertions(+), 1089 deletions(-)
+>>  delete mode 100644 tools/perf/util/evlist-hybrid.c
+>>  delete mode 100644 tools/perf/util/evlist-hybrid.h
+>>  delete mode 100644 tools/perf/util/pmu-hybrid.c
+>>  delete mode 100644 tools/perf/util/pmu-hybrid.h
+>>
+>> --
+>> 2.40.1.698.g37aff9b760-goog
+>>
