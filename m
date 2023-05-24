@@ -2,132 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA3C70F4C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53AB70F548
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbjEXLFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
+        id S231588AbjEXLaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234465AbjEXLEu (ORCPT
+        with ESMTP id S233808AbjEXL34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:04:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718A31B4;
-        Wed, 24 May 2023 04:04:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD49262C37;
-        Wed, 24 May 2023 11:04:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8685CC4331D;
-        Wed, 24 May 2023 11:04:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684926282;
-        bh=gSfPnPjxQ+g5yc36jkezG18RMtNAGuoMZoOVm/qXtTk=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=hJXyXP5mJz8gnTLp5D5Ov89xtBbXvOV38zbwsu3TQLvFbwHzZVTdHm7/WhqYKnr2C
-         5//c4/C/ZcPI4HyNLZC3afU4VDVwsB8q31BfWCv3h6ELyZpX/8h/FTZNhfzZLaqrua
-         PGh5fei8RPfjdCAeUO1m4gzdZ60mbJ4Qu3YD3JTthQBQ/TAvw9dihxG5ItWjajLD08
-         Ckqheu+mhzZMQs7NZi6TA1yZO4iOqVC9MCOojHKZlXwjPaA90DJKo+9XLPstDHDlNh
-         Jp5JSWdQ1d9iTJPJsJthVicAvEqNiruU6LaGI9shj4H0RVh6q6TZFmtItwrZ2Z/RAD
-         V/QGnLfyU0pJg==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        Daniel Golle <daniel@makrotopia.org>
-In-Reply-To: <ZFAF6pJxMu1z6k4w@makrotopia.org>
-References: <ZFAF6pJxMu1z6k4w@makrotopia.org>
-Subject: Re: [PATCH] spi: mt65xx: make sure operations completed before
- unloading
-Message-Id: <168492628027.37394.11329859234589803044.b4-ty@kernel.org>
-Date:   Wed, 24 May 2023 12:04:40 +0100
+        Wed, 24 May 2023 07:29:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742C3184;
+        Wed, 24 May 2023 04:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684927795; x=1716463795;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=h3P42I9Tuovk9u4OXGJJMm0/tV46mroIT63GWYcR/Ng=;
+  b=BJuTHB6VKstVLRsnEa7FK+QiFlJOWO7KgjlBZM8wS9Vhmfi1OaMwOgve
+   /A4OZ90z91dQWVuiUnI9lCmj/w47eqm3JnV9qmwjHYRLRuHtAbCbE2B2K
+   YB3zfF1LJBp8oC+Ajs4I1lqAE9v/LfkFkG8lqRK65zMHJWw8PJbhHvcpj
+   GMxOCs7+lrLOuT3HQc5pFxU3GksmZb9/heIoVt5vJNFNz9dPo3EBx9dmE
+   YVHgjZR+c7dF1lIJVw12nOE84m5FXuYdmb6Sg52A6Cjv7OEzQmqybTiiX
+   uXFMIIPlqd5hvgfqcH1kZkLHySedX8XtzF7qGBEzrFCyhENjUNscQlM5D
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="338114816"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="338114816"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 04:29:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="950972289"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="950972289"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga006.fm.intel.com with ESMTP; 24 May 2023 04:29:52 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 04:29:52 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 04:29:52 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.170)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 24 May 2023 04:29:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QOL2lr5jskUDGSD3vvIIhsaAKbI80YQmsZNcRjPTXFcwbOgBnlMiFYZDlV7SU3ZXBPkxVWUSDhpUoEuAdkFSVwKyS251guwuB1D2GDUZYjQtEEoTG/czP9vQ/n19LELOZQTMYoX8bInrJDTyAT+cBnMNrdj72c75JdkpupDEUmNf+osxip+zrl+LLwkM+3qAyNK+BwUz6NR0LWpmdRzMMQlMoIQQJBS2J8Clev37lTjndBGhQggFxZz4UvUO5kdv65syPKvXazZdOQaRMVjvjYznpI4PrHfktWFtCZdxjXxslnGu9jK5XpixBbt3Co8GgrjPGMlG+HiD/HL/d4dFQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LLeVlezI75exjV1AA5vORgHXTr0zAvjaI4gArUlYNLE=;
+ b=ZpCo7VwDNNNZ/geRbkBaWVvRrZN247s16o0IajmuZocyJHXjP5SxP1aUd/7c8HnVNl15u9fLQLSJ9u5u7wRKD79p8ohy3b0gEieVlkYrqhB1BpR5L58tMlJmv7xzlPM0fT46XhoOvQkbojw3rrNfcRTO8ikFv9+jb6WDCd0qWjnEv/2kX8q6/mbSxISy/ZXYvFcfqOqJqyp8iMQSro4jshnwZexmiGyGCZu+q+Tl/yNk1VLTJmSjRMj71MMYqcuN3JTx9ViSPEpJXZGUqhc4TJQYMobFzCwO0Muu7j/03nBAsjXTIC8nx3jN1/oUwSYOpOTGCADRFKSwVVET8uX6WQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ CH3PR11MB7299.namprd11.prod.outlook.com (2603:10b6:610:14b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 24 May
+ 2023 11:29:49 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::a670:49f5:d602:e2e4]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::a670:49f5:d602:e2e4%6]) with mapi id 15.20.6411.029; Wed, 24 May 2023
+ 11:29:49 +0000
+Date:   Wed, 24 May 2023 19:04:42 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <pbonzini@redhat.com>
+Subject: Re: [PATCH v2 0/6] KVM: x86/mmu: refine memtype related mmu zap
+Message-ID: <ZG3vSnLyzolwblD9@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230509134825.1523-1-yan.y.zhao@intel.com>
+ <ZG1XOHBKZbxNEjQK@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZG1XOHBKZbxNEjQK@google.com>
+X-ClientProxiedBy: SG2PR06CA0218.apcprd06.prod.outlook.com
+ (2603:1096:4:68::26) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|CH3PR11MB7299:EE_
+X-MS-Office365-Filtering-Correlation-Id: d073affe-1b3b-43b8-a500-08db5c4a2f28
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O8uYouZG34YVBTsMTqL4zksFCJF0tQfEBYEYBTuaH4H50imgHuyaY1lWPRMDkw1dOH/uSdUXw+s65WcAD7GSYMWiGfJYnTr97V4quKwDiH9YcIaLZsrjZGzDGn3XNkzRl4V0WvNhAA+13FAL4c/TBhwGa1Pa8olqdqAPBAPQdztUS3hcSCF8++oaGjxIhTZPn6oEbzgQ5PVqF0bkAju6T2NzB+ShGRG1Uh/630k85sk4PwEhAeYDf3xaEDoherpZp74CKz5NNcgBGUYjslB94fhJZCBtYy6BDVT2vUzxX7fBDsANAMhs4h6wdf//jCdLmJ51NdIigv769JfFTAJ4svD7OFprmsfF9Pu4NCre+x3sHnBqqr3btN5//Urul7lyqMY8X/fYX601a7syHkGyANw3ap/fgQcvSPqzGYGhZLkr3IlyXQ2hK7RUPbZltd+coKX8yhkWtnksZiRRsGBgrXUE76VyZOsrndB60pgbZ7AjJTpKYLmDNY+1VoVnAVaubahSLzg742rNsV5fDA/BUv7cUD1cRLVr2Tt5TZ/saAo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199021)(5660300002)(8676002)(8936002)(186003)(3450700001)(86362001)(82960400001)(2906002)(83380400001)(38100700002)(6512007)(6506007)(26005)(316002)(66946007)(66556008)(66476007)(6916009)(4326008)(6666004)(478600001)(6486002)(41300700001)(966005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jAbKm4nIgWhjqsAf/+9v3ID3zuavOVPaAQ1PvyCqA+MTUU2BrJAHblBEhu9t?=
+ =?us-ascii?Q?bQGPrA6t9uujkOBQwQtUi7JprkEEg7EvPgvR57ZmUloJVX7yYTuvh/xGyye9?=
+ =?us-ascii?Q?9u38aIq/kuBPGE1Dp/70N8PS5+OJuIuS6i4Z4RRg6tFDaw4NPhiDCGb5LHp6?=
+ =?us-ascii?Q?5RHyU1H092pJoST3aoEtAKAQNvr64BkBSTVCSfTwH9E6SyLqEJsMmI+gzbtG?=
+ =?us-ascii?Q?trDmN4UCPukIr87lISdGVteQL+IDpeHVck+nc8F9znKe4ZcKhWyyuESbTejy?=
+ =?us-ascii?Q?Jw0F7GhNEmD1gmp5vZvs/XvXy38zLP6cbt2+FFwavI/n3LTQs1MaDVfanuKA?=
+ =?us-ascii?Q?s5ekgT2wB8d5YrKb85xWIU/wLupoIWVkDFl3ldmeWQl3qYBqBAJftFkecb0I?=
+ =?us-ascii?Q?lSQpFUS8VRl0dyBNEpWLv4x9OA0kM9w2DMWFHTKCLKZ8AjsFBcP3rn2tetjl?=
+ =?us-ascii?Q?qeIRLKMjVFSTwzytq2XJN1Idr3XGMosrDqy2eu9ef3szDSAXl8DufhXSPYMo?=
+ =?us-ascii?Q?+0sJePj7DMMF1s7cokeWbIyIwWCvqKKckBI2CE8Qzak+MvrCrVH9VVNL7A/Y?=
+ =?us-ascii?Q?ciuO43VDIKyzr3esYOmjcDUd0HBCyA2hN6UfbXa0KdGwAROSkkhKGPA3+Kyp?=
+ =?us-ascii?Q?UEMPJA9BlsvxakaEPcqtvdKV+fMTx4nvYauch6Kk6xCsKJ3WPMlSyfqcTwsH?=
+ =?us-ascii?Q?MrsRpgIyv8QXLC6ZA5Kest+32LAtGIXPMbxtHwzFgNLYXLwCiWtnBlagyy3W?=
+ =?us-ascii?Q?RTIzGaHAS4BPACum9lAaCHIM2LPS6OyGuKjesHC229Brir+qa/atpF1CLUEu?=
+ =?us-ascii?Q?Szwb8YDpdkk7DmgJOvgXyMMe4uuvwjflVOO/ReD6cZ5aiasOcsbdLTCLPZf1?=
+ =?us-ascii?Q?Y+lgGJye6zNMk72U63j7b2H1eyxPkTRo5FjbxM4zSprZHag42RtwKC1ffoT1?=
+ =?us-ascii?Q?d/6z4w7Sh9BqyCPUCOk0XpXFUVj8GCRdSKQgzXu4lNh7TtCg/S9lMYTc+PPB?=
+ =?us-ascii?Q?0KaWqjK42bGYRso2sVxtl6KLmXQatxhIesA9Huh7VmV0dLI2HBlW8idnk6lv?=
+ =?us-ascii?Q?9f5H9kRIl4211yJ3GLJtP8JSoaV2GEum3Weq6ZTD5ptq8jp9jAJjaP8eDxZO?=
+ =?us-ascii?Q?+WZqiwqLUX3fJtNsbtyHGgv8EkJ/+UPLQVTavK3gBmObnm1l2jRecmmgrVur?=
+ =?us-ascii?Q?TTHAO5X12+CcFykKBt7rZDnpeiXXGPbrf8wwR4pfQ5YfFV3yGzLs1JAIv7pu?=
+ =?us-ascii?Q?ZltD7VA3UhaE46AW44drr4hXXOt6ibYXwDbZGugsqN3PJA9tb0CYj+85nGLj?=
+ =?us-ascii?Q?lsGZif9ybbkJ1847iEAqqE96K8Ft+8S0F15Vc+qdbJzOBYiwXiziNd+9cnw+?=
+ =?us-ascii?Q?Dp2GTLQef4oDi7u3zmzdSg+fHs79rmJHP/BiPF/beqlZscBn7iWC6lbvBZCF?=
+ =?us-ascii?Q?H+3lHcTf0b0I7E5bNpvfzZIY62sVQ9Qju8BlBClPupxZpsXlZzB92J53GpOY?=
+ =?us-ascii?Q?nOaQzNQ1uUPonYwSmlLbp8lDhCmBEudZzbRrsSkox3rVQWeomQjhpb4GzG0U?=
+ =?us-ascii?Q?78iE9hn+YVtiyFlNBLMTZ/o22+8Ak2VIGnMUOBby?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d073affe-1b3b-43b8-a500-08db5c4a2f28
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 11:29:49.5870
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: au7tl0L8s0EAQXcz/jjxCc+XE2rx6Nw3JPNn6jrGCBN6hBPz+K/ks4O/ULJP6yUp3ltp2mDJxtqq8uQ8ShEbKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7299
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 May 2023 19:33:14 +0100, Daniel Golle wrote:
-> When unloading the spi-mt65xx kernel module during an ongoing spi-mem
-> operation the kernel will Oops shortly after unloading the module.
-> This is because wait_for_completion_timeout was still running and
-> returning into the no longer loaded module:
+On Tue, May 23, 2023 at 05:15:52PM -0700, Sean Christopherson wrote:
+> On Tue, May 09, 2023, Yan Zhao wrote:
+> > This series refines mmu zap caused by EPT memory type update.
+> > Yan Zhao (6):
+> >   KVM: x86/mmu: add a new mmu zap helper to indicate memtype changes
+> >   KVM: x86/mmu: only zap EPT when guest CR0_CD changes
+> >   KVM: x86/mmu: only zap EPT when guest MTRR changes
+> >   KVM: x86/mmu: Zap all EPT leaf entries according noncoherent DMA count
+> >   KVM: x86: Keep a per-VM MTRR state
+> >   KVM: x86/mmu: use per-VM based MTRR for EPT
+> > 
+> >  arch/x86/include/asm/kvm_host.h |   3 +
+> >  arch/x86/kvm/mmu.h              |   1 +
+> >  arch/x86/kvm/mmu/mmu.c          |  18 ++++-
+> >  arch/x86/kvm/mtrr.c             | 112 +++++++++++++++++++++++++-------
+> >  arch/x86/kvm/vmx/vmx.c          |   2 +-
+> >  arch/x86/kvm/x86.c              |  10 ++-
+> >  arch/x86/kvm/x86.h              |   6 +-
+> >  7 files changed, 122 insertions(+), 30 deletions(-)
+> > 
+> > 
+> > base-commit: 5c291b93e5d665380dbecc6944973583f9565ee5
+> > -- 
 > 
-> Internal error: Oops: 0000000096000005 [#1] SMP
-> Modules linked in: [many, but spi-mt65xx is no longer there]
-> CPU: 0 PID: 2578 Comm: block Tainted: G        W  O       6.3.0-next-20230428+ #0
-> Hardware name: Bananapi BPI-R3 (DT)
-> pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : __lock_acquire+0x18c/0x20e8
-> lr : __lock_acquire+0x9b8/0x20e8
-> sp : ffffffc009ec3400
-> x29: ffffffc009ec3400 x28: 0000000000000001 x27: 0000000000000004
-> x26: ffffff80082888c8 x25: 0000000000000000 x24: 0000000000000000
-> x23: ffffffc009609da8 x22: ffffff8008288000 x21: ffffff8008288968
-> x20: 00000000000003c2 x19: ffffff8008be7990 x18: 00000000000002af
-> x17: 0000000000000000 x16: 0000000000000000 x15: ffffffc008d78970
-> x14: 000000000000080d x13: 00000000000002af x12: 00000000ffffffea
-> x11: 00000000ffffefff x10: ffffffc008dd0970 x9 : ffffffc008d78918
-> x8 : 0000000000017fe8 x7 : 0000000000000001 x6 : 0000000000000000
-> x5 : ffffff807fb53910 x4 : 0000000000000000 x3 : 0000000000000027
-> x2 : 0000000000000027 x1 : 0000000000000000 x0 : 00000000000c03c2
-> Call trace:
->  __lock_acquire+0x18c/0x20e8
->  lock_acquire+0x100/0x2a4
->  _raw_spin_lock_irq+0x58/0x74
->  __wait_for_common+0xe0/0x1b4
->  wait_for_completion_timeout+0x1c/0x24
->  0xffffffc000acc8a4 <--- used to be mtk_spi_transfer_wait
->  spi_mem_exec_op+0x390/0x3ec
->  spi_mem_no_dirmap_read+0x6c/0x88
->  spi_mem_dirmap_read+0xcc/0x12c
->  spinand_read_page+0xf8/0x1dc
->  spinand_mtd_read+0x1b4/0x2fc
->  mtd_read_oob_std+0x58/0x7c
->  mtd_read_oob+0x8c/0x148
->  mtd_read+0x50/0x6c
->  ...
+> To save us both a bit of pain, can you base the next version on top of my PAT
+> cleanup[*]?  I am planning on applying that series "soon".  Thanks!
 > 
-> [...]
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: mt65xx: make sure operations completed before unloading
-      commit: 4be47a5d59cbc9396a6ffd327913eb4c8d67a32f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+> [*] https://lore.kernel.org/all/20230511233351.635053-1-seanjc@google.com 
+Sure, will do it!
