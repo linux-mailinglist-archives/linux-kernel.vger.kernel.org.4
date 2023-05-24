@@ -2,154 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E3F70FD6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D7870FD6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236623AbjEXSDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S234241AbjEXSEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjEXSDo (ORCPT
+        with ESMTP id S229604AbjEXSEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:03:44 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C082B6;
-        Wed, 24 May 2023 11:03:41 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1684951416tb3pz334
-Received: from linux-lab-host.localdomain ( [116.30.125.36])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 May 2023 02:03:35 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: znfcQSa1hKahN1m9MXihhsfaKEggHvIyA5/pTK2SaWBMBZDnB/qZVYB9hhaeW
-        CtThDB38b2eIGVPxEtHTZ/aQx/m+LDrbyyqaUCEQjb3UrqG8e6vmoo+YN9ez5R3jAa+ctud
-        hvf6+/GoNail8IsTWRntTm/VesMGwdeFQrjRCv9wgfeqGxpgfAXNzkEbm39kA+CQ13SCWiE
-        iowUfkUtPUrUPEHv1pYfm9xxUrsV9UR/X3MRXjJ4GFhpHfjlERqt1laG9cY/MuPEBPIPVse
-        G6RO3Z7tTbo4v1LfUw+MGPlMNWQaDMO/oUPriwjPaOHCEtWdRGHW+OdwyxBTwFSMSP/o1qi
-        MlHUfX46tdBlGm7LLQfYMG6eXe10fkgOsXkruJqOw4zHZuAjYDpIHkDjpGh47G+lEvpB/RZ
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13367086140274863961
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
-Subject: [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64 for rv32
-Date:   Thu, 25 May 2023 02:03:32 +0800
-Message-Id: <e35cf1de35fdb0a236064ff645ae4734d32bacd4.1684949845.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
-References: <cover.1684949267.git.falcon@tinylab.org>
+        Wed, 24 May 2023 14:04:40 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B519194;
+        Wed, 24 May 2023 11:04:33 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f60ec45314so9986425e9.3;
+        Wed, 24 May 2023 11:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684951471; x=1687543471;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PbGGH2S3w7HcoJCp7d0j90HcXaq6j3Fgosa8UJEEVfY=;
+        b=UwL5D7dqjeyyVogHuw+vr4kTyy8m3QwcpUwkIf50pcw11+nKU8hibHk9iQG3PduHz3
+         l+MnVdjeb1HWtGpz5cosOld1neklNsNQJqIIzjtCrey1rQHzTYfc/RHtoVpOg73HgXlL
+         0qNFcHTgyNGa8ajdOaCjick2Bo5LalpYUy2I2XDcwGWCVJxmq2uTVBSXjUagVxZ5Z7px
+         cokK63ETdLfT4Wozb+QLhD7APgo3Yt+BA4FSCQCSqQHM0ogLU5qEEWksemPSQ6hKc/jx
+         2wVsyrvkc7afl5km4Rtigfr1zTvWO2za8QiPtjCiMTeITDmmle6UJVNFIA08ku3696kr
+         OjHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684951471; x=1687543471;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbGGH2S3w7HcoJCp7d0j90HcXaq6j3Fgosa8UJEEVfY=;
+        b=LYfMyjqXvufEDeVtjdw1ixaos6rvgkT/oKPa3dYbnxLwpAK84NRyz0HVi6hs95wjsf
+         CkTXh/4G9Ww/czCeU1O/hW7xha7kIn85zztFFdUeXn9FQ0yDzNg7DUf2KchEKFvCDFAq
+         2eAhggWy58patjJrIfLQrRSfcekb5k+XoGKXyNeyqfHk/TKm+ZzOXH6aGWDWHPgXjOK2
+         R5V+O83gIo5dwstvEsSAslQWXqV8ocTSWM3lAtBRtHbcupxfYu6bTKk5AKIz2eCX7f4u
+         2N1f3oW7PC3hGIXsD15HtWlphW5Ku0vzkt2Mjb9przUgP8iHubDiVuo5mmvJDQxx2mI+
+         SkUA==
+X-Gm-Message-State: AC+VfDwze+RbLrr2+xzsj+ddlFeELnl0/0hkNoHQRw+B3V8HqZj12vPR
+        1IDqdJsuXY3v1FHRac3/1FA=
+X-Google-Smtp-Source: ACHHUZ4TjJmVnHvv5pYI09ns9MQOl/UVt7YfJISuZVNO22gwZiqXDmnrVLOyMThPojnNCNy/e53ukQ==
+X-Received: by 2002:a05:600c:ac5:b0:3f6:536:a4b2 with SMTP id c5-20020a05600c0ac500b003f60536a4b2mr461872wmr.27.1684951470896;
+        Wed, 24 May 2023 11:04:30 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id o9-20020adfeac9000000b0030647d1f34bsm15367534wrn.1.2023.05.24.11.04.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 11:04:30 -0700 (PDT)
+Date:   Wed, 24 May 2023 21:04:27 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 09/30] net: dsa: mt7530: empty default case on
+ mt7530_setup_port5()
+Message-ID: <20230524180427.t77iohojxelpa4yk@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-10-arinc.unal@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230522121532.86610-10-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
-__NR_gettimeofday and __NR_clock_gettime after kernel commit d4c08b9776b3
-("riscv: Use latest system call ABI"), use __NR_clock_gettime64 instead.
+On Mon, May 22, 2023 at 03:15:11PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> There're two code paths for setting up port 5:
+> 
+> mt7530_setup()
+> -> mt7530_setup_port5()
+> 
+> mt753x_phylink_mac_config()
+> -> mt753x_mac_config()
+>    -> mt7530_mac_config()
+>       -> mt7530_setup_port5()
+> 
+> On the first code path, priv->p5_intf_sel is either set to
+> P5_INTF_SEL_PHY_P0 or P5_INTF_SEL_PHY_P4 when mt7530_setup_port5() is run.
+> 
+> On the second code path, priv->p5_intf_sel is set to P5_INTF_SEL_GMAC5 when
+> mt7530_setup_port5() is run.
+> 
+> Empty the default case which will never run but is needed nonetheless to
+> handle all the remaining enumeration values.
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
 
-This code is based on src/time/gettimeofday.c of musl and
-sysdeps/unix/sysv/linux/clock_gettime.c of glibc.
-
-Both __NR_clock_gettime and __NR_clock_gettime64 are added for
-sys_gettimeofday() for they share most of the code.
-
-Notes:
-
-* Both tv and tz are not directly passed to kernel clock_gettime*
-  syscalls, so, it isn't able to check the pointer automatically with the
-  get_user/put_user helpers just like kernel gettimeofday syscall does.
-  instead, we emulate (but not completely) such checks in our new
-  __NR_clock_gettime* branch of nolibc.
-
-* kernel clock_gettime* syscalls can not get tz info, just like musl and
-  glibc do, we set tz to zero to avoid a random number.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 46 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 2642b380c6aa..ad38cc3856be 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -26,6 +26,7 @@
- 
- #include "arch.h"
- #include "errno.h"
-+#include "string.h"
- #include "types.h"
- 
- 
-@@ -51,6 +52,11 @@
-  * should not be placed here.
-  */
- 
-+/*
-+ * This is the first address past the end of the text segment (the program code).
-+ */
-+
-+extern char etext;
- 
- /*
-  * int brk(void *addr);
-@@ -554,7 +560,47 @@ long getpagesize(void)
- static __attribute__((unused))
- int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
- {
-+#ifdef __NR_gettimeofday
- 	return my_syscall2(__NR_gettimeofday, tv, tz);
-+#elif defined(__NR_clock_gettime) || defined(__NR_clock_gettime64)
-+#ifdef __NR_clock_gettime
-+	struct timespec ts;
-+#else
-+	struct timespec64 ts;
-+#define __NR_clock_gettime __NR_clock_gettime64
-+#endif
-+	int ret;
-+
-+	/* make sure tv pointer is at least after code segment */
-+	if (tv != NULL && (char *)tv <= &etext)
-+		return -EFAULT;
-+
-+	/* set tz to zero to avoid random number */
-+	if (tz != NULL) {
-+		if ((char *)tz > &etext)
-+			memset(tz, 0, sizeof(struct timezone));
-+		else
-+			return -EFAULT;
-+	}
-+
-+	if (tv == NULL)
-+		return 0;
-+
-+	ret = my_syscall2(__NR_clock_gettime, CLOCK_REALTIME, &ts);
-+	if (ret)
-+		return ret;
-+
-+	tv->tv_sec = (time_t) ts.tv_sec;
-+#ifdef __NR_clock_gettime64
-+	if (tv->tv_sec != ts.tv_sec)
-+		return -EOVERFLOW;
-+#endif
-+
-+	tv->tv_usec = ts.tv_nsec / 1000;
-+	return 0;
-+#else
-+#error None of __NR_gettimeofday, __NR_clock_gettime and __NR_clock_gettime64 defined, cannot implement sys_gettimeofday()
-+#endif
- }
- 
- static __attribute__((unused))
--- 
-2.25.1
-
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
