@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C13070F7D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F7870F7D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbjEXNkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        id S235325AbjEXNkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbjEXNkO (ORCPT
+        with ESMTP id S235190AbjEXNkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:40:14 -0400
+        Wed, 24 May 2023 09:40:15 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BAEA7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F205AA;
         Wed, 24 May 2023 06:40:13 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OCgVK1015625;
-        Wed, 24 May 2023 15:39:51 +0200
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O9qTZQ009638;
+        Wed, 24 May 2023 15:39:53 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=G9vvnWSLJsuNooiWQS7kP00jY9mJ1HLWlugGthqt8l8=;
- b=kw38mBeXe5RHnnD2GdW+CYW/6+IGkURLioYttckPR+MDBW3baW8s3rkZXsoFR8UxVMKe
- bVhZVgDacecLIR1WAHvz22378NEpOLJKkSRIz46JHkhpgVCMnYpYW4cpfxVdgOtIdb4l
- fZy+Qh/MRx7705ZBhsAzXHsg13WAcJNUaNIbPMh7yjxFtHXh0PnuE92PoJ2ljyBXnJRM
- J8kz2T9/XI6OL5aPlrvRFU1SW+4FQFxdXlSiArbdQhtzXdyiMqZ1DeWPkDMWyeAVmhC/
- fmdnjVjuIXFnlkI97++n7159L5+eHXV/II6JjECwjvOqwS77RzWpYJjtDNM141rLXJ8N sw== 
+ bh=ODAJpjjCT+TsOCgb7AAjwV5Sj2DIOhFUhg814BVV3ow=;
+ b=yOfyE+E7dIXTUCzjDvhYvToT/ySwWBq1DowSRQGdZLWUw6Jh+hBfXIqOLUOsGJJmYGIo
+ TiFQwhNngoXe/gxLn0/EMQvpeMx/6o0kqKU9HbcowuGibvFM4DQBxMWaoEeOPh0QoZU6
+ nDmysUF2cA9rlXc/TVnIeJRtGMYv0YaZS4BLZALTUTq6vaZI0N2DNwtGOjrB8E6GOJjH
+ 4sV1KFjddHmQY0Rd3uatyR2E2PFziIq4U1YH9Oh7MvlOxrl9ULDPssAmjZslQ8GI6ONz
+ v3dsQlnyGEoWf+kfg0IFtoex8PlUPC7S3rwpadvfxmNiWVH1XC3IaBYhTZ/QMeuZeqc3 +w== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qrthk930g-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qru86gkfk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 15:39:51 +0200
+        Wed, 24 May 2023 15:39:53 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7B539100034;
-        Wed, 24 May 2023 15:39:49 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A2333100038;
+        Wed, 24 May 2023 15:39:50 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 759CE229A97;
-        Wed, 24 May 2023 15:39:49 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9B727229A98;
+        Wed, 24 May 2023 15:39:50 +0200 (CEST)
 Received: from localhost (10.252.20.36) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 24 May
- 2023 15:39:49 +0200
+ 2023 15:39:50 +0200
 From:   Olivier Moysan <olivier.moysan@foss.st.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -52,9 +52,9 @@ CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/8] ARM: dts: stm32: add adc internal channels to stm32mp15
-Date:   Wed, 24 May 2023 15:39:10 +0200
-Message-ID: <20230524133918.1439516-2-olivier.moysan@foss.st.com>
+Subject: [PATCH 2/8] ARM: dts: stm32: add vrefint calibration on stm32mp15
+Date:   Wed, 24 May 2023 15:39:11 +0200
+Message-ID: <20230524133918.1439516-3-olivier.moysan@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
 References: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
@@ -77,59 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add STM32 ADC2 internal channels VREFINT and VDDCORE to STM32MP15x SoCs.
-VBAT internal channel is not defined by default in SoC DT, and
-has be defined in board DT when needed, instead. This avoids unwanted
-current consumption on battery, when ADC conversions are performed
-on any other channels.
-
-The internal channels are defined in STM32MP15 SoC DT according to the
-generic IIO channel bindings. The STM32 driver does not support a mixed
-use of legacy and generic channels. When generic channels are defined,
-legacy channels are ignored. This involves that the board device trees
-using legacy bindings for ADC2, have to be reworked.
+Describe vrefint calibration cell to be retrieved through bsec.
 
 Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 ---
- arch/arm/boot/dts/stm32mp151.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm/boot/dts/stm32mp151.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index a98ae58e2c1c..9c40b5e679f8 100644
+index 9c40b5e679f8..40d3959964cf 100644
 --- a/arch/arm/boot/dts/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1093,6 +1093,8 @@ adc: adc@48003000 {
- 			adc1: adc@0 {
- 				compatible = "st,stm32mp1-adc";
- 				#io-channel-cells = <1>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
- 				reg = <0x0>;
- 				interrupt-parent = <&adc>;
- 				interrupts = <0>;
-@@ -1104,12 +1106,22 @@ adc1: adc@0 {
- 			adc2: adc@100 {
- 				compatible = "st,stm32mp1-adc";
- 				#io-channel-cells = <1>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
- 				reg = <0x100>;
- 				interrupt-parent = <&adc>;
- 				interrupts = <1>;
- 				dmas = <&dmamux1 10 0x400 0x01>;
- 				dma-names = "rx";
- 				status = "disabled";
-+				channel@13 {
-+					reg = <13>;
-+					label = "vrefint";
-+				};
-+				channel@14 {
-+					reg = <14>;
-+					label = "vddcore";
-+				};
+@@ -1635,6 +1635,9 @@ bsec: efuse@5c005000 {
+ 			part_number_otp: part-number-otp@4 {
+ 				reg = <0x4 0x1>;
  			};
- 		};
- 
++			vrefint: vrefin_cal@52 {
++				reg = <0x52 0x2>;
++			};
+ 			ts_cal1: calib@5c {
+ 				reg = <0x5c 0x2>;
+ 			};
 -- 
 2.25.1
 
