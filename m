@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B28270FBC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AC370FB4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjEXQh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 12:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S235751AbjEXQEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjEXQhZ (ORCPT
+        with ESMTP id S229547AbjEXQER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 12:37:25 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39980E9;
-        Wed, 24 May 2023 09:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=DAOLtkgl++ZaUIbUqvEG8vYlbrCs6LpYkEDUBJQWXys=; b=F11jg424/ylaN67WRXdL2jIGoM
-        0eBJyChaR9MjAvDP97H2duDxmjYzk9CIwdnWHXXMMSxQFjhkJXMN9egYpH4Vb4c/6yuam9TSVE1vM
-        9lqFsb7zX4IZE08nbKHvY7gZ96nNx352U3nCe3FYqM6kfmZx0qCYcOFoliyHlWgm3Ieo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q1qvm-00DoMd-Gz; Wed, 24 May 2023 18:01:42 +0200
-Date:   Wed, 24 May 2023 18:01:42 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marc Dionne <marc.dionne@auristor.com>
-Cc:     Kenny Ho <Kenny.Ho@amd.com>, David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        y2kenny@gmail.com
-Subject: Re: [PATCH] Remove hardcoded static string length
-Message-ID: <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch>
-References: <20230523223944.691076-1-Kenny.Ho@amd.com>
- <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
- <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
+        Wed, 24 May 2023 12:04:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFF510E9;
+        Wed, 24 May 2023 09:03:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5D0E63EF0;
+        Wed, 24 May 2023 16:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0E2C4339B;
+        Wed, 24 May 2023 16:03:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684944226;
+        bh=Ef+8gDMEGEy6+nkJmKJ1sPJxegkve0GGQfyCdTFWf0A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=PIZ8P4OdbWN9k9z/bsioFchL87vtM8hE6ho3ChU0MWvLfzA/KHf/5h59mR4H2U4aC
+         jDwJ44mkUX79YlZi3zzorhVVnEpdUEb4gBFi+hdDVOzCGPortAXWYYAS9CWdNg3taq
+         Itcpp8XZlmp7HePmQbK+gSXIuWiBPO29k9fiSbXfdayk0zq62EryxRvj08NH4AC5n4
+         D+FtdsINmC+UInlBdwC0x/MQS/70E1ssi3Ry7XJoExzcofKIrZ+AJ6uSNx95mUoNZ1
+         /LlCAp7YDTpECVobZN/CVMbqKUCpl+hts7a3uBg9OlOqTaD3gfqZpRrzLAwQQj4L3u
+         SkBgAVzRWbpmQ==
+Message-ID: <d0b56100e7a8cdea42972637d2c32fce367a8286.camel@kernel.org>
+Subject: Re: [PATCH 1/2] tpm: tis_i2c: Limit read bursts to
+ I2C_SMBUS_BLOCK_MAX (32) bytes
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-kernel@vger.kernel.org,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Michael Haener <michael.haener@siemens.com>
+Date:   Wed, 24 May 2023 19:03:43 +0300
+In-Reply-To: <20230524154040.1204030-1-alexander.sverdlin@siemens.com>
+References: <20230524154040.1204030-1-alexander.sverdlin@siemens.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I don't think there is an RFC describing RX, but the closest thing to
-> a spec (https://web.mit.edu/kolya/afs/rx/rx-spec) states:
-> 
-> "If a server receives a packet with a type value of 13, and the
-> client-initiated flag set, it should respond with a 65-byte payload
-> containing a string that identifies the version of AFS software it is
-> running."
-> 
-> So while it may not actually cause any issues (the few things that
-> look at the data just truncate past 65), it's probably best to keep
-> the response at a fixed 65 bytes.
+On Wed, 2023-05-24 at 17:40 +0200, A. Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+>=20
+> Underlying I2C bus drivers not always support longer transfers and
+> imx-lpi2c for instance doesn't. SLB 9673 offers 427-bytes packets.
+>=20
+> Visible symptoms are:
+>=20
+> tpm tpm0: Error left over data
+> tpm tpm0: tpm_transmit: tpm_recv: error -5
+> tpm_tis_i2c: probe of 1-002e failed with error -5
+>=20
+> Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
+> Tested-by: Michael Haener <michael.haener@siemens.com>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-Thanks for the link and the quote.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-So the compiler warning/error needs to be fixed a different want.
-
-    Andrew
-
----
-pw-bot: cr
+BR, Jarkko
