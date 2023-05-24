@@ -2,132 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D0C70F46F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7685170F474
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjEXKmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S229468AbjEXKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjEXKmW (ORCPT
+        with ESMTP id S232616AbjEXKny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:42:22 -0400
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8820697
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:42:21 -0700 (PDT)
-Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
-        by cmsmtp with ESMTP
-        id 1lvTqnH5pEoVs1lwjq0Ix0; Wed, 24 May 2023 10:42:21 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTPS
-        id 1lwiqcsMQipLm1lwiqmEvL; Wed, 24 May 2023 10:42:20 +0000
-X-Authority-Analysis: v=2.4 cv=R5gQpPdX c=1 sm=1 tr=0 ts=646dea0c
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10
- a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8 a=533kGXqUlK_MWtiuI0gA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jyuIbAssiy/Sf7j9Qj1G/b2n1LG+av2mAC3uxplu1Lw=; b=Ek8Ow101SykqzlMQ57/EQMUBcx
-        Nufs7SkTH2dJogpkDBWx/QEztnaOruUgR1Sr82mr9pxAZoaTOkN6YN0uE2y5f0tvfHS9EMKKRbilz
-        mN0ZLEA1BTk2QWiHWqRBdVPecZrWf/eJLREJR/K89ur5F6B89kiBDSzxxKYcUK/K2B9JJ49PhabfA
-        zxyrcSARIMnpqu18J/Ig3o7cV5BRCgD+Wke+JKn6T3QfnBt/+CaJsWZdtP8TvH6AfSEmvDbn4iQfQ
-        NhjbOmSaQmFM5+/Zu84muZcSZk1FpYv5G5gnYKh0nw21fWkBEAZJQJ0JyG401zzcTjGkMEct/Oxf/
-        zpH+/V/Q==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:46694 helo=[192.168.15.7])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1q1lwh-003bxf-Pa;
-        Wed, 24 May 2023 05:42:19 -0500
-Message-ID: <d247d8ec-0ab6-c552-fef5-8d48b245a7dd@embeddedor.com>
-Date:   Wed, 24 May 2023 04:43:08 -0600
+        Wed, 24 May 2023 06:43:54 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBBA98
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:43:53 -0700 (PDT)
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4C5D844298
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684925028;
+        bh=VcR2dM9dZkrtIAYuc+uEYt6q6RFFCfHdSpmFwxj+wQM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ICYhzP3alsOukQOEQWvvrws87UFBIOwILO305wzr8xWUwsG1L4ZC9c0oKite3wrPL
+         EseAWN1gLDwCqoX3G1/6Z8nMAfkDgMAPmA4HdaANqOUc7IlhRJsf+ZlnL3qXx8dKOT
+         9IuEpcRvvkymZJigK9A5WSkegXUrLgYF0YGQhSvn+RVQEMhmipANGe1WOoLhiOo6qK
+         HFnthkYPVbRSjYMocf5lqIbMy1ST66igp5lJXNyT2z7xUfmFcdb1jQOOI2VqKbahpi
+         rKzNsvbY31qL/+0z+2KTWUfYO+UFEU45GTtC6mykSut3tXiSaJ/0Rqcwj/bh/+nW0d
+         4mYdjt8HJCEYA==
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-5655d99d636so18132577b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:43:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684925027; x=1687517027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VcR2dM9dZkrtIAYuc+uEYt6q6RFFCfHdSpmFwxj+wQM=;
+        b=SjFZXe9+00f8NKaMpYEyIFrYDXIEL7esuIimaMYW+NI6hcIYddwNEzDBkuV1v3FgQi
+         LfCQeKzHUZ0mqX6K4jcqFVRLfCHmTRpbPPzb34OjVVvqe+oGSNTkAcbV50D99PPtg9Vo
+         aulztg48h6h1lwG9/HAKh2LcPsG5axMQGm7uB4AlfoUHE/+iokW/Jkc39D1DPmvQHmPz
+         ujt0PF65MGnXcqY8AJYZohAQ8vb2e9WxyzbcBAzCUQjIZbOSTwNpJ/qEp8LrNe24JTPz
+         /b+U++FU6kupPFedZqAf/Iq1UgA4mba2IMrenekimbVUnHaPw0eRmmRUMxpwAqtZngLG
+         vD/w==
+X-Gm-Message-State: AC+VfDzeG6sXfG2T3JiBD3qtXZfAHMsaDQeREAq+tVyyBTY25SFGeFgM
+        j29D0N+mK3V8lsdg2Zug4e4RYCTxMjYQjTD0q6/MAogbjdxgjloJj06XLN1yiyngZ/ctqQVB5Wk
+        mdVTUyRhFWqU2srbq7kwzFMmQeDbp1Cemi1Jj67HczJF7BVyqnWvE877J9w==
+X-Received: by 2002:a81:ab50:0:b0:561:179b:1276 with SMTP id d16-20020a81ab50000000b00561179b1276mr16277647ywk.26.1684925027357;
+        Wed, 24 May 2023 03:43:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4iOk/L3sMlt+J6yeXjbzBVkYzcNAS9i5TiiFe4XzBVBtPC3NhYAtD5clOw6pJbtiOOIbVSK/C8SNjWhkpcZOY=
+X-Received: by 2002:a81:ab50:0:b0:561:179b:1276 with SMTP id
+ d16-20020a81ab50000000b00561179b1276mr16277633ywk.26.1684925027137; Wed, 24
+ May 2023 03:43:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] rtw89: use flexible array member in rtw89_btc_btf_tlv
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Ching-Te Ku <ku920601@realtek.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230523113241.2772811-1-arnd@kernel.org>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230523113241.2772811-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1q1lwh-003bxf-Pa
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.7]) [187.162.21.192]:46694
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 1
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfOz/vlCKAM9uf5e32r2OZ73hMU3bJjrSA8qGqGC/qJrUx6swwgzqc8WAn9aqswcZ+EWK/gDdTctM9oTntEhYY5Ik6gnYoWpYl+t0o3ZcfdBZpSsGXCUV
- wEYbJ+NjTzPvTH8h4QhvEayquENjOhUo+bD/zcCni1Ehw9errjd2ZFcFPB0w5dRD0ZK1nJJkVDpKaUk20yv5rf+nhgEDQ028DQ27SJ3vicuGfHYWqQJIRJ+e
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+ <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+ <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com> <20230523140844.5895d645@kernel.org>
+In-Reply-To: <20230523140844.5895d645@kernel.org>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Wed, 24 May 2023 12:43:36 +0200
+Message-ID: <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Luca Boccassi <bluca@debian.org>,
+        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 23, 2023 at 11:08=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+>
+> On Tue, 23 May 2023 11:44:01 +0100 Luca Boccassi wrote:
+> > > I really would like to avoid that because it will just mean that some=
+one
+> > > else will abuse that function and then make an argument why we should
+> > > export the other function.
+> > >
+> > > I think it would be ok if we required that unix support is built in
+> > > because it's not unprecedented either and we're not breaking anything=
+.
+> > > Bpf has the same requirement:
+> > >
+> > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
+> > >   struct bpf_unix_iter_state {
+> > >           struct seq_net_private p;
+> > >           unsigned int cur_sk;
+> > >           unsigned int end_sk;
+> > >           unsigned int max_sk;
+> > >           struct sock **batch;
+> > >           bool st_bucket_done;
+> > >   };
+> > >
+> > > and
+> > >
+> > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defin=
+ed(CONFIG_PROC_FS)
+> > >   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
+> > >                        struct unix_sock *unix_sk, uid_t uid)
+>
+> Don't think we should bring BPF into arguments about uAPI consistency :S
+>
+> > Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
+> > ship with CONFIG_UNIX=3Dy, so a missing SCM_PIDFD in unlikely to have a
+> > widespread impact, and if it does, it might encourage someone to
+> > review their kconfig.
+>
+> IDK how you can argue that everyone sets UNIX to =3Dy so hiding SCM_PIDFD
+> is fine and at the same time not be okay with making UNIX a bool :S
+>
+> > As mentioned on the v5 thread, we are waiting for this API to get the
+> > userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
+> > really grateful if we could start with the simplest and most
+> > conservative approach (which seems to be the current one in v6 to me),
+> > and then eventually later decide whether to export more functions, or
+> > to deprecate CONFIG_UNIX=3Dm, or something else entirely, as that
+> > doesn't really affect the shape of the UAPI, just the details of its
+> > availability. Thank you.
+>
+> Just throw in a patch to make UNIX a bool and stop arguing then.
 
+Dear Jakub,
 
-On 5/23/23 05:32, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> struct rtw89_btc_btf_tlv contains a one-byte member that is intended as a
-> flexible array:
-> 
-> In function 'fortify_memcpy_chk',
->      inlined from '_append_tdma' at drivers/net/wireless/realtek/rtw89/coex.c:1579:3:
-> include/linux/fortify-string.h:583:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->    583 |                         __write_overflow_field(p_size_field, size);
->        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Make this actually use a flexible array to let the compiler understand.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Thanks for your attention to these patch series!
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+I'm ready to prepare/send a patch to make CONFIG_UNIX bool.
 
-Thanks!
---
-Gustavo
+I will send SO_PEERPIDFD as an independent patch too, because it
+doesn't require this change with CONFIG_UNIX
+and we can avoid waiting until CONFIG_UNIX change will be merged.
+I've a feeling that the discussion around making CONFIG_UNIX  to be a
+boolean won't be easy and fast ;-)
 
-> ---
->   drivers/net/wireless/realtek/rtw89/coex.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
-> index 3a586a971e8f..bda0e1e99a8c 100644
-> --- a/drivers/net/wireless/realtek/rtw89/coex.c
-> +++ b/drivers/net/wireless/realtek/rtw89/coex.c
-> @@ -206,7 +206,7 @@ static const struct rtw89_btc_ver rtw89_btc_ver_defs[] = {
->   struct rtw89_btc_btf_tlv {
->   	u8 type;
->   	u8 len;
-> -	u8 val[1];
-> +	u8 val[];
->   } __packed;
->   
->   enum btc_btf_set_report_en {
+Kind regards,
+Alex
