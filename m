@@ -2,271 +2,416 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D36570F6C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F80F70F6C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbjEXMm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S233660AbjEXMnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234242AbjEXMmz (ORCPT
+        with ESMTP id S229729AbjEXMnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:42:55 -0400
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA77F18B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:42:51 -0700 (PDT)
-Received: from local
-        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1q1npD-0000Ql-0u;
-        Wed, 24 May 2023 12:42:43 +0000
-Date:   Wed, 24 May 2023 13:42:30 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Jia-wei Chang =?utf-8?B?KOW8teS9s+WBiSk=?= 
-        <Jia-wei.Chang@mediatek.com>
-Cc:     "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vincent@systemli.org" <vincent@systemli.org>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        Rex-BC Chen =?utf-8?B?KOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>, "error27@gmail.com" <error27@gmail.com>
-Subject: Re: [PATCH v2 4/4] cpufreq: mediatek: Raise proc and sram max
- voltage for MT7622/7623
-Message-ID: <ZG4GNpxdbZ4TNq3K@makrotopia.org>
-References: <20230324101130.14053-1-jia-wei.chang@mediatek.com>
- <20230324101130.14053-5-jia-wei.chang@mediatek.com>
- <ZGuuVPCqgpUO6p0Q@makrotopia.org>
- <a1793745-eae3-cae5-49fc-2e75fe0847f0@collabora.com>
- <ZGz55oEEAhlWZajK@makrotopia.org>
- <3054e2d9-7f77-a22a-293d-382f19494079@collabora.com>
- <4e5a8202f7446481def19e5926d1bfd6e6568dd7.camel@mediatek.com>
+        Wed, 24 May 2023 08:43:23 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A39C1BB;
+        Wed, 24 May 2023 05:43:12 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2602848aso11927811fa.2;
+        Wed, 24 May 2023 05:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684932190; x=1687524190;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oLizIo0XumOD4h7KO8R6amgCpgqck5gKIRXruHe9I94=;
+        b=W/pWzSGv/Gh0KUOzyMlJ+jaArBBr50KpWqOX97ksbqImzhi/gf/Rn91ZuCFP0eZRsx
+         PAREbvVI8fbNLLNBg9RPGZX1+754zxqWw2FykK8OxyeBpNyjh8ZmUk60TIx/xmxzEbyV
+         OSZWCueG83xxVMUL9E5jn9NwBdsHLI0VsCyGOE4b2IHw32I9Wu/aARPGPaSmLW4wAKXs
+         m1wjMvtCJA3Zefem5sZzDkEwlXw3THqt58JhoBeRWGFJibn70d9ysGlS6jtKZl6ehAXH
+         rIj6r8LtJ6C7hU73IRe0FBy06HSsmwCv7nH2Wu2ZRr4Nh8mOb5MwOVvSiz+lygfGatN8
+         LZ4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684932190; x=1687524190;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oLizIo0XumOD4h7KO8R6amgCpgqck5gKIRXruHe9I94=;
+        b=ft1iItveMM+is0GMuUCoWyyNE/6GyMXZMcc+/C554zyMeLuxHn6NKPnmUOmSLk2bi8
+         z2SbZ8eP2SButVeSg5zARZiNEVcdYIfe0NQBVvT62ZiCDBAHhkWxZM+qY/rBuKIAn7pw
+         01RhOvqMdUYoZICVsyKlVX7a2ICMWAx52d6NVFRb7qmIDWWhAwBjtBN7DP0qpsUsbFaF
+         Iopgj4BO7mONwCwSXrDb2xt43T+QrVxsAd5ZrKP9FuTdBXYZnH+tAbyUVpxDmD8r1pSw
+         PZMiQ/MGrq+Xm7eFRe/kWXC6jdZyTo6hQqnppi+5K5/cCkpyNAAwlUHH0LpQl2lURKPX
+         wd2Q==
+X-Gm-Message-State: AC+VfDzj0wx/Ota8D3f7RYIJ/BHqu1or9p1nN467M0P9rxrCv18XFapy
+        D1/6EWek/f0BhwcQ4QQAk+id6xRpgHadd/QkM48=
+X-Google-Smtp-Source: ACHHUZ5jNJvb22e6FwIgcsi6Oiog/+7QsR8+tbWnnHc5TYBy+UeVaBLWwf2w25Ox//uloH8E6Y5q6EsDEaX65r+mraI=
+X-Received: by 2002:a2e:81ce:0:b0:2a8:b7e9:82ee with SMTP id
+ s14-20020a2e81ce000000b002a8b7e982eemr6660837ljg.1.1684932190187; Wed, 24 May
+ 2023 05:43:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4e5a8202f7446481def19e5926d1bfd6e6568dd7.camel@mediatek.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230516111823.2103536-1-starmiku1207184332@gmail.com>
+ <e37c0a65-a3f6-e2e6-c2ad-367db20253a0@meta.com> <CALyQVax8X63qekZVhvRTmZFFs+ucPKRkBB7UnRZk6Hu3ggi7Og@mail.gmail.com>
+ <57dc6a0e-6ba9-e77c-80ac-6bb0a6e2650a@meta.com> <CALyQVazb=D1ejapiFdTnan6JbjFJA2q9ifhSsmF4OC9MDz3oAw@mail.gmail.com>
+ <d027cb6b-e32c-36ad-3aba-9a7b1177f89f@meta.com>
+In-Reply-To: <d027cb6b-e32c-36ad-3aba-9a7b1177f89f@meta.com>
+From:   Teng Qi <starmiku1207184332@gmail.com>
+Date:   Wed, 24 May 2023 20:42:57 +0800
+Message-ID: <CALyQVayW7e4FPbaMNNuOmYGYt5pcd47zsx2xVkrekEDaVm7H2g@mail.gmail.com>
+Subject: Re: [bug] kernel: bpf: syscall: a possible sleep-in-atomic bug in __bpf_prog_put()
+To:     Yonghong Song <yhs@meta.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:43:31AM +0000, Jia-wei Chang (張佳偉) wrote:
-> On Wed, 2023-05-24 at 09:28 +0200, AngeloGioacchino Del Regno wrote:
-> > External email : Please do not click links or open attachments until
-> > you have verified the sender or the content.
-> > 
-> > 
-> > Il 23/05/23 19:37, Daniel Golle ha scritto:
-> > > On Tue, May 23, 2023 at 04:56:47PM +0200, AngeloGioacchino Del
-> > > Regno wrote:
-> > > > Il 22/05/23 20:03, Daniel Golle ha scritto:
-> > > > > Hi Jia-Wei,
-> > > > > Hi AngeloGioacchino,
-> > > > > 
-> > > > > On Fri, Mar 24, 2023 at 06:11:30PM +0800, jia-wei.chang wrote:
-> > > > > > From: AngeloGioacchino Del Regno <
-> > > > > > angelogioacchino.delregno@collabora.com>
-> > > > > > 
-> > > > > > During the addition of SRAM voltage tracking for CCI scaling,
-> > > > > > this
-> > > > > > driver got some voltage limits set for the vtrack algorithm:
-> > > > > > these
-> > > > > > were moved to platform data first, then enforced in a later
-> > > > > > commit
-> > > > > > 6a17b3876bc8 ("cpufreq: mediatek: Refine
-> > > > > > mtk_cpufreq_voltage_tracking()")
-> > > > > > using these as max values for the regulator_set_voltage()
-> > > > > > calls.
-> > > > > > 
-> > > > > > In this case, the vsram/vproc constraints for MT7622 and
-> > > > > > MT7623
-> > > > > > were supposed to be the same as MT2701 (and a number of other
-> > > > > > SoCs),
-> > > > > > but that turned out to be a mistake because the
-> > > > > > aforementioned two
-> > > > > > SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
-> > > > > > 
-> > > > > > Fix that by adding new platform data for MT7622/7623
-> > > > > > declaring the
-> > > > > > right {proc,sram}_max_volt parameter.
-> > > > > > 
-> > > > > > Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits
-> > > > > > to platform data")
-> > > > > > Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine
-> > > > > > mtk_cpufreq_voltage_tracking()")
-> > > > > > Signed-off-by: AngeloGioacchino Del Regno <
-> > > > > > angelogioacchino.delregno@collabora.com>
-> > > > > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > > > > ---
-> > > > > >    drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
-> > > > > >    1 file changed, 11 insertions(+), 2 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > b/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > index 764e4fbdd536..9a39a7ccfae9 100644
-> > > > > > --- a/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > @@ -693,6 +693,15 @@ static const struct
-> > > > > > mtk_cpufreq_platform_data mt2701_platform_data = {
-> > > > > >            .ccifreq_supported = false,
-> > > > > >    };
-> > > > > > +static const struct mtk_cpufreq_platform_data
-> > > > > > mt7622_platform_data = {
-> > > > > > +  .min_volt_shift = 100000,
-> > > > > > +  .max_volt_shift = 200000,
-> > > > > > +  .proc_max_volt = 1360000,
-> > > > > > +  .sram_min_volt = 0,
-> > > > > > +  .sram_max_volt = 1360000,
-> > > > > 
-> > > > > This change breaks cpufreq (with ondemand scheduler) on my BPi
-> > > > > R64
-> > > > > board (having MT7622AV SoC with MT6380N PMIC).
-> > > > > ...
-> > > > > [    2.540091] cpufreq: __target_index: Failed to change cpu
-> > > > > frequency: -22
-> > > > > [    2.556985] cpu cpu0: cpu0: failed to scale up voltage!
-> > > > > ...
-> > > > > (repeating a lot, every time the highest operating point is
-> > > > > selected
-> > > > > by the cpufreq governor)
-> > > > > 
-> > > > > The reason is that the MT6380N doesn't support 1360000uV on the
-> > > > > supply
-> > > > > outputs used for SRAM and processor.
-> > > > > 
-> > > > > As for some reason cpufreq-mediatek tries to rise the SRAM
-> > > > > supply
-> > > > > voltage to the maximum for a short moment (probably a side-
-> > > > > effect of
-> > > > > the voltage tracking algorithm), this fails because the PMIC
-> > > > > only
-> > > > > supports up to 1350000uV. As the highest operating point is
-> > > > > anyway
-> > > > > using only 1310000uV the simple fix is setting 1350000uV as the
-> > > > > maximum
-> > > > > instead for both proc_max_volt and sram_max_volt.
-> > > > > 
-> > > > > A similar situation applies also for BPi R2 (MT7623NI with
-> > > > > MT6323L
-> > > > > PMIC), here the maximum supported voltage of the PMIC which
-> > > > > also only
-> > > > > supports up to 1350000uV, and the SoC having its highest
-> > > > > operating
-> > > > > voltage defined at 1300000uV.
-> > > > > 
-> > > > > If all agree with the simple fix I will post a patch for that.
-> > > > > 
-> > > > > However, to me it feels fishy to begin with that the tracking
-> > > > > algorithm
-> > > > > tries to rise the voltage above the highest operating point
-> > > > > defined in
-> > > > > device tree, see here:
-> > > > > 
-> > > > > 6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei
-> > > > > Chang              2022-05-05 19:52:20 +0800 100)    new_vsram
-> > > > > = clamp(new_vproc + soc_data->min_volt_shift,
-> > > > > 6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei
-> > > > > Chang              2022-05-05 19:52:20 +0800
-> > > > > 101)                      soc_data->sram_min_volt, soc_data-
-> > > > > >sram_max_volt);
-> > > > > 
-> > > > > However, I did not investigate in depth the purpose of this
-> > > > > initial rise and can impossibly test my modifications to the
-> > > > > tracking algorithm on all supported SoCs.
-> > > > > 
-> > > > 
-> > > > Thanks for actually reporting that, I don't think that there's
-> > > > any
-> > > > valid reason why the algorithm should set a voltage higher than
-> > > > the
-> > > > maximum votage specified in the fastest OPP.
-> > > > 
-> > > > Anyway - the logic for the platform data of this driver is to
-> > > > declare
-> > > > the maximum voltage that SoC model X supports, regardless of the
-> > > > actual
-> > > > board-specific OPPs, so that part is right; to solve this issue,
-> > > > I guess
-> > > > that the only way is for this driver to parse the OPPs during
-> > > > .probe()
-> > > > and then always use in the algorithm
-> > > > 
-> > > >      vproc_max = max(proc_max_volt, opp_vproc_max);
-> > > >      vsram_max = max(sram_max_volt, vsram_vreg_max);
-> 
-> Hi Daniel, Angelo Sir,
-> 
-> Thanks for the issue report and suggestions.
-> 
-> Is it possible to modify the value of proc_max_volt and sram_max_volt
-> to 1310000 in mt7622_platform_data as the highest voltage declared in
-> mt7622.dtsi and then give it a try?
-> 
-> Sorry, I need someone help to check this on mt7622 since I don't have
-> mt7622 platform..
+Thank you.
 
-Unfortunately also setting proc_max_volt and sram_max_volt to 1310000
-doesn't work:
-[    1.983325] cpu cpu0: cpu0: failed to scale up voltage!
-[    1.988621] cpufreq: __target_index: Failed to change cpu frequency: -22
-::repeating infinitely::
+> We cannot use rcu_read_lock_held() in the 'if' statement. The return
+> value rcu_read_lock_held() could be 1 for some configurations regardless
+> whether rcu_read_lock() is really held or not. In most cases,
+> rcu_read_lock_held() is used in issuing potential warnings.
+> Maybe there are other ways to record whether rcu_read_lock() is held or n=
+ot?
 
-This is because in mt6380-regulator.c you can see
-static const unsigned int ldo_volt_table1[] = {
-        1400000, 1350000, 1300000, 1250000, 1200000, 1150000, 1100000, 1050000,
-};
+Sorry. I was not aware of the dependency of configurations of
+rcu_read_lock_held().
 
-So 1310000 is not among the supported voltages but mediatek-cpufreq.c
-will repeatedly call
-regulator_set_voltage(sram_reg, 1310000, 1310000);
-which will fail for obvious reasons.
+> If we cannot resolve rcu_read_lock() presence issue, maybe the condition
+> can be !in_interrupt(), so any process-context will go to a workqueue.
 
-Using 1350000 for proc_max_volt and sram_max_volt like I have suggested
-as a simple work-around does work because 1350000 is among the supported
-voltages of the MT6380 regulator.
+I agree that using !in_interrupt() as a condition is an acceptable solution=
+.
 
-On MT7623 the whole problem is anyway non-existent because there is no
-separate sram-supply, hence the tracking algorithm isn't used at all.
+> Alternatively, we could have another solution. We could add another
+> function e.g., bpf_prog_put_rcu(), which indicates that bpf_prog_put()
+> will be done in rcu context.
 
-> 
-> Thanks.
-> 
-> > > 
-> > > You probably meant to write
-> > > vproc_max = min(proc_max_volt, opp_vproc_max);
-> > > vsram_max = min(sram_max_volt, vsram_vreg_max);
-> > > 
-> > > right?
-> > > 
-> > 
-> > Apparently, some of my braincells was apparently taking a break. :-)
-> > 
-> > Yes, I was meaning min(), not max() :-)
-> > 
-> > Cheers!
-> > 
-> > > > 
-> > > > Jia-Wei, can you please handle this?
-> > > > 
-> > > > Thanks,
-> > > > Angelo
-> > > > 
-> > 
-> > 
-> > 
+Implementing a new function like bpf_prog_put_rcu() is a solution that invo=
+lves
+more significant changes.
+
+> So if in_interrupt(), do kvfree, otherwise,
+> put into a workqueue.
+
+Shall we proceed with submitting a patch following this approach?
+
+I would like to mention something unrelated to the possible bug. At this
+moment, things seem to be more puzzling. vfree() is safe under in_interrupt=
+()
+but not safe under other atomic contexts.
+This disorder challenges our conventional belief, a monotonic incrementatio=
+n
+of limitations of the hierarchical atomic contexts, that programer needs
+to be more and more careful to write code under rcu read lock, spin lock,
+bh disable, interrupt...
+This disorder can lead to unexpected consequences, such as code being safe
+under interrupts but not safe under spin locks.
+The disorder makes kernel programming more complex and may result in more b=
+ugs.
+Even though we find a way to resolve the possible bug about the bpf_prog_pu=
+t(),
+I feel sad for undermining of kernel`s maintainability and disorder of
+hierarchy of atomic contexts.
+
+-- Teng Qi
+
+On Tue, May 23, 2023 at 12:33=E2=80=AFPM Yonghong Song <yhs@meta.com> wrote=
+:
+>
+>
+>
+> On 5/21/23 6:39 AM, Teng Qi wrote:
+> > Thank you.
+> >
+> >  > Your above analysis makes sense if indeed that kvfree cannot appear
+> >  > inside a spin lock region or RCU read lock region. But is it true?
+> >  > I checked a few code paths in kvfree/kfree. It is either guarded
+> >  > with local_irq_save/restore or by
+> >  > spin_lock_irqsave/spin_unlock_
+> >  > irqrestore, etc. Did I miss
+> >  > anything? Are you talking about RT kernel here?
+> >
+> > To see the sleepable possibility of kvfree, it is important to analyze =
+the
+> > following calling stack:
+> > mm/util.c: 645 kvfree()
+> > mm/vmalloc.c: 2763 vfree()
+> >
+> > In kvfree(), to call vfree, if the pointer addr points to memory
+> > allocated by
+> > vmalloc(), it calls vfree().
+> > void kvfree(const void *addr)
+> > {
+> >          if (is_vmalloc_addr(addr))
+> >                  vfree(addr);
+> >          else
+> >                  kfree(addr);
+> > }
+> >
+> > In vfree(), in_interrupt() and might_sleep() need to be considered.
+> > void vfree(const void *addr)
+> > {
+> >          // ...
+> >          if (unlikely(in_interrupt()))
+> >          {
+> >                  vfree_atomic(addr);
+> >                  return;
+> >          }
+> >          // ...
+> >          might_sleep();
+> >          // ...
+> > }
+>
+> Sorry. I didn't check vfree path. So it does look like that
+> we need to pay special attention to non interrupt part.
+>
+> >
+> > The vfree() may sleep if in_interrupt() =3D=3D false. The RCU read lock=
+ region
+> > could have in_interrupt() =3D=3D false and spin lock region which only =
+disables
+> > preemption also has in_interrupt() =3D=3D false. So the kvfree() cannot=
+ appear
+> > inside a spin lock region or RCU read lock region if the pointer addr p=
+oints
+> > to memory allocated by vmalloc().
+> >
+> >  > > Therefore, we propose modifying the condition to include
+> >  > > in_atomic(). Could we
+> >  > > update the condition as follows: "in_irq() || irqs_disabled() ||
+> >  > > in_atomic()"?
+> >  > Thank you! We look forward to your feedback.
+> >
+> > We now think that =E2=80=98irqs_disabled() || in_atomic() ||
+> > rcu_read_lock_held()=E2=80=99 is
+> > more proper. irqs_disabled() is for irq flag reg, in_atomic() is for
+> > preempt count and rcu_read_lock_held() is for RCU read lock region.
+>
+> We cannot use rcu_read_lock_held() in the 'if' statement. The return
+> value rcu_read_lock_held() could be 1 for some configuraitons regardless
+> whether rcu_read_lock() is really held or not. In most cases,
+> rcu_read_lock_held() is used in issuing potential warnings.
+> Maybe there are other ways to record whether rcu_read_lock() is held or n=
+ot?
+>
+> I agree with your that 'irqs_disabled() || in_atomic()' makes sense
+> since it covers process context local_irq_save() and spin_lock() cases.
+>
+> If we cannot resolve rcu_read_lock() presence issue, maybe the condition
+> can be !in_interrupt(), so any process-context will go to a workqueue.
+>
+> Alternatively, we could have another solution. We could add another
+> function e.g., bpf_prog_put_rcu(), which indicates that bpf_prog_put()
+> will be done in rcu context. So if in_interrupt(), do kvfree, otherwise,
+> put into a workqueue.
+>
+>
+> >
+> > -- Teng Qi
+> >
+> > On Sun, May 21, 2023 at 11:45=E2=80=AFAM Yonghong Song <yhs@meta.com
+> > <mailto:yhs@meta.com>> wrote:
+> >
+> >
+> >
+> >     On 5/19/23 7:18 AM, Teng Qi wrote:
+> >      > Thank you for your response.
+> >      >  > Looks like you only have suspicion here. Could you find a rea=
+l
+> >     violation
+> >      >  > here where __bpf_prog_put() is called with !in_irq() &&
+> >      >  > !irqs_disabled(), but inside spin_lock or rcu read lock? I
+> >     have not seen
+> >      >  > things like that.
+> >      >
+> >      > For the complex conditions to call bpf_prog_put() with 1 refcnt,
+> >     we have
+> >      > been
+> >      > unable to really trigger this atomic violation after trying to
+> >     construct
+> >      > test cases manually. But we found that it is possible to show
+> >     cases with
+> >      > !in_irq() && !irqs_disabled(), but inside spin_lock or rcu read =
+lock.
+> >      > For example, even a failed case, one of selftest cases of bpf,
+> >     netns_cookie,
+> >      > calls bpf_sock_map_update() and may indirectly call bpf_prog_put=
+()
+> >      > only inside rcu read lock: The possible call stack is:
+> >      > net/core/sock_map.c: 615 bpf_sock_map_update()
+> >      > net/core/sock_map.c: 468 sock_map_update_common()
+> >      > net/core/sock_map.c:  217 sock_map_link()
+> >      > kernel/bpf/syscall.c: 2111 bpf_prog_put()
+> >      >
+> >      > The files about netns_cookie include
+> >      > tools/testing/selftests/bpf/progs/netns_cookie_prog.c and
+> >      > tools/testing/selftests/bpf/prog_tests/netns_cookie.c. We
+> >     inserted the
+> >      > following code in
+> >      > =E2=80=98net/core/sock_map.c: 468 sock_map_update_common()=E2=80=
+=99:
+> >      > static int sock_map_update_common(..)
+> >      > {
+> >      >          int inIrq =3D in_irq();
+> >      >          int irqsDisabled =3D irqs_disabled();
+> >      >          int preemptBits =3D preempt_count();
+> >      >          int inAtomic =3D in_atomic();
+> >      >          int rcuHeld =3D rcu_read_lock_held();
+> >      >          printk("in_irq() %d, irqs_disabled() %d, preempt_count(=
+) %d,
+> >      >            in_atomic() %d, rcu_read_lock_held() %d", inIrq,
+> >     irqsDisabled,
+> >      >            preemptBits, inAtomic, rcuHeld);
+> >      > }
+> >      >
+> >      > The output message is as follows:
+> >      > root@(none):/root/bpf# ./test_progs -t netns_cookie
+> >      > [  137.639188] in_irq() 0, irqs_disabled() 0, preempt_count() 0,
+> >      > in_atomic() 0,
+> >      >          rcu_read_lock_held() 1
+> >      > #113     netns_cookie:OK
+> >      > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >      >
+> >      > We notice that there are numerous callers in kernel/, net/ and
+> >     drivers/,
+> >      > so we
+> >      > highly suggest modifying __bpf_prog_put() to address this gap.
+> >     The gap
+> >      > exists
+> >      > because __bpf_prog_put() is only safe under in_irq() ||
+> >     irqs_disabled()
+> >      > but not in_atomic() || rcu_read_lock_held(). The following code
+> >     snippet may
+> >      > mislead developers into thinking that bpf_prog_put() is safe in =
+all
+> >      > contexts.
+> >      > if (in_irq() || irqs_disabled()) {
+> >      >          INIT_WORK(&aux->work, bpf_prog_put_deferred);
+> >      >          schedule_work(&aux->work);
+> >      > } else {
+> >      >          bpf_prog_put_deferred(&aux->work);
+> >      > }
+> >      >
+> >      > Implicit dependency may lead to issues.
+> >      >
+> >      >  > Any problem here?
+> >      > We mentioned it to demonstrate the possibility of kvfree() being
+> >      > called by __bpf_prog_put_noref().
+> >      >
+> >      > Thanks.
+> >      > -- Teng Qi
+> >      >
+> >      > On Wed, May 17, 2023 at 1:08=E2=80=AFAM Yonghong Song <yhs@meta.=
+com
+> >     <mailto:yhs@meta.com>
+> >      > <mailto:yhs@meta.com <mailto:yhs@meta.com>>> wrote:
+> >      >
+> >      >
+> >      >
+> >      >     On 5/16/23 4:18 AM, starmiku1207184332@gmail.com
+> >     <mailto:starmiku1207184332@gmail.com>
+> >      >     <mailto:starmiku1207184332@gmail.com
+> >     <mailto:starmiku1207184332@gmail.com>> wrote:
+> >      >      > From: Teng Qi <starmiku1207184332@gmail.com
+> >     <mailto:starmiku1207184332@gmail.com>
+> >      >     <mailto:starmiku1207184332@gmail.com
+> >     <mailto:starmiku1207184332@gmail.com>>>
+> >      >      >
+> >      >      > Hi, bpf developers,
+> >      >      >
+> >      >      > We are developing a static tool to check the matching bet=
+ween
+> >      >     helpers and the
+> >      >      > context of hooks. During our analysis, we have discovered=
+ some
+> >      >     important
+> >      >      > findings that we would like to report.
+> >      >      >
+> >      >      > =E2=80=98kernel/bpf/syscall.c: 2097 __bpf_prog_put()=E2=
+=80=99 shows that
+> >     function
+> >      >      > bpf_prog_put_deferred() won`t be called in the condition =
+of
+> >      >      > =E2=80=98in_irq() || irqs_disabled()=E2=80=99.
+> >      >      > if (in_irq() || irqs_disabled()) {
+> >      >      >      INIT_WORK(&aux->work, bpf_prog_put_deferred);
+> >      >      >      schedule_work(&aux->work);
+> >      >      > } else {
+> >      >      >
+> >      >      >      bpf_prog_put_deferred(&aux->work);
+> >      >      > }
+> >      >      >
+> >      >      > We suspect this condition exists because there might be
+> >     sleepable
+> >      >     operations
+> >      >      > in the callees of the bpf_prog_put_deferred() function:
+> >      >      > kernel/bpf/syscall.c: 2097 __bpf_prog_put()
+> >      >      > kernel/bpf/syscall.c: 2084 bpf_prog_put_deferred()
+> >      >      > kernel/bpf/syscall.c: 2063 __bpf_prog_put_noref()
+> >      >      > kvfree(prog->aux->jited_linfo);
+> >      >      > kvfree(prog->aux->linfo);
+> >      >
+> >      >     Looks like you only have suspicion here. Could you find a re=
+al
+> >      >     violation
+> >      >     here where __bpf_prog_put() is called with !in_irq() &&
+> >      >     !irqs_disabled(), but inside spin_lock or rcu read lock? I
+> >     have not seen
+> >      >     things like that.
+> >      >
+> >      >      >
+> >      >      > Additionally, we found that array prog->aux->jited_linfo =
+is
+> >      >     initialized in
+> >      >      > =E2=80=98kernel/bpf/core.c: 157 bpf_prog_alloc_jited_linf=
+o()=E2=80=99:
+> >      >      > prog->aux->jited_linfo =3D kvcalloc(prog->aux->nr_linfo,
+> >      >      >    sizeof(*prog->aux->jited_linfo),
+> >     bpf_memcg_flags(GFP_KERNEL |
+> >      >     __GFP_NOWARN));
+> >      >
+> >      >     Any problem here?
+> >      >
+> >      >      >
+> >      >      > Our question is whether the condition 'in_irq() ||
+> >      >     irqs_disabled() =3D=3D false' is
+> >      >      > sufficient for calling 'kvfree'. We are aware that callin=
+g
+> >      >     'kvfree' within the
+> >      >      > context of a spin lock or an RCU lock is unsafe.
+> >
+> >     Your above analysis makes sense if indeed that kvfree cannot appear
+> >     inside a spin lock region or RCU read lock region. But is it true?
+> >     I checked a few code paths in kvfree/kfree. It is either guarded
+> >     with local_irq_save/restore or by
+> >     spin_lock_irqsave/spin_unlock_irqrestore, etc. Did I miss
+> >     anything? Are you talking about RT kernel here?
+> >
+> >
+> >      >      >
+> >      >      > Therefore, we propose modifying the condition to include
+> >      >     in_atomic(). Could we
+> >      >      > update the condition as follows: "in_irq() ||
+> >     irqs_disabled() ||
+> >      >     in_atomic()"?
+> >      >      >
+> >      >      > Thank you! We look forward to your feedback.
+> >      >      >
+> >      >      > Signed-off-by: Teng Qi <starmiku1207184332@gmail.com
+> >     <mailto:starmiku1207184332@gmail.com>
+> >      >     <mailto:starmiku1207184332@gmail.com
+> >     <mailto:starmiku1207184332@gmail.com>>>
+> >      >
+> >
