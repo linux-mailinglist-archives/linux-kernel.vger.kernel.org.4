@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2D071017D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07193710175
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238114AbjEXXF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 19:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S238607AbjEXXFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 19:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236356AbjEXXFT (ORCPT
+        with ESMTP id S230136AbjEXXFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 19:05:19 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7561CA4;
-        Wed, 24 May 2023 16:05:18 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75b14216386so21392985a.0;
-        Wed, 24 May 2023 16:05:18 -0700 (PDT)
+        Wed, 24 May 2023 19:05:21 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6E9A9;
+        Wed, 24 May 2023 16:05:20 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-623a6c15aacso2977216d6.0;
+        Wed, 24 May 2023 16:05:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684969517; x=1687561517;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUSAAG9pfUB1ZTX71jFjFbloAT5u0vNKnYB6yXCHfu0=;
-        b=bHV702UhCY4TRJGzeAncS7APMg1HomAan8iZ3h6+IvELJEmEmls9hYz/WISv4CknSM
-         sFP2DUoyaNuIjbU1rB6fZkA8eufsKGbxunYltb/DCAiG/AabABhAZamRZ8AqS5597MRa
-         Bh5ECtgPg4zpeelycObq6Qve50gBYNxmfH4GKLvzjzDQJzBWABmyMrChpoR/WMxVarMz
-         u8YHS94y0mvvtO4t7hNUes/Px5R3/3pQXu7URsYMV8vI0JWiwD7t7qnDth9ZE8klpz6A
-         Q8Gb2uWkC6cqbSP/h4lywg8zSmb+htd1qe6vjgOgQ3sCK4jUuKPal1VurqYKSczCANT2
-         oTxg==
+        d=gmail.com; s=20221208; t=1684969519; x=1687561519;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BrFzx7G4H9QRCmQYSXPg0uma6wQ2uEflaOZc0x6PNfw=;
+        b=dEEtuRpLsq6AiyU1eNLmXqJH3Xzh+W5LQnEJwuTgTTciXV39QhsSuVKuqFqFtzWYkw
+         CSHx4pMRHYd7XGicfO3YGBf2Sxf/aaaB5IaOpCHwJWVHxkmIwdjO31v6a7nr8Hj09bvS
+         aJ+4Mun+vMiHAf5mM/AZSCUZpuXTTWU02yYaKm+fA8jQGgAZd2AU+b2QqK30Ya2IDCc9
+         zQH3jTRTwealbaDLOEWDboM1j7jd3JYjJ8AXFLjONw0Q96v2AQ0XzM2hCWoWM7zyggNd
+         rTx51tvbmXn86Y65t7pbSMul1v3Sl2HxzYUxutQ7xeRNOjVqDMM1YWcy2IMPGiTfubj2
+         VLKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684969517; x=1687561517;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nUSAAG9pfUB1ZTX71jFjFbloAT5u0vNKnYB6yXCHfu0=;
-        b=YkMKqRFSpg13sCcBp+NiQAoSaOInxxp13OKQwNpkdCn951NqStKnUx+fVngklTiitT
-         DzZfVLFKIJKUoGyA8y2hiJdeR1tWV+RtYa/mIq7N7YV+nnT1FyEPcL7ao7vItd2ZZ8/c
-         hAVepFVjpzufxRgPDBxWvgtkvBgNdhQTxR0iUqVxPeZCEHEDCuiQ1uNLYmFAeGIEWtW7
-         mJSRAxKEHcbez6c5Zic2TKSNETqU3H7j52eqi8NF8AQjAwpRr4647iVTKZBZj4jmisx1
-         QhfrbfG6YpevQ0dbirOc9x9en9SF9ZI68DcMqGoaQVbQVa3ZowAkseAGFFewwttv5mHp
-         /Ykw==
-X-Gm-Message-State: AC+VfDyTdXpkKQbwvdTWbMv6TOlI5K06904FBzyQmFs1azTCcTXzBqVh
-        dbYT4XAJBOfXrXtvZnzGOJI=
-X-Google-Smtp-Source: ACHHUZ5Bs24l8Epn2wrNFBabv2Tzpalpn6WpE7byhruVeuHJkWcn1oO5NZhD/W5m/RzgutJcG1iS2g==
-X-Received: by 2002:a05:6214:dad:b0:625:aa1a:b6dd with SMTP id h13-20020a0562140dad00b00625aa1ab6ddmr3625488qvh.63.1684969517456;
-        Wed, 24 May 2023 16:05:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684969519; x=1687561519;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BrFzx7G4H9QRCmQYSXPg0uma6wQ2uEflaOZc0x6PNfw=;
+        b=GtqeEonaUmsMP8ERlOfsx19D5Fjnk7Lc7henZkJLjk6bRic1QmbZZ6GzH7BVPOblNM
+         FtcGsb1YNkQNsTS4p9FAsLB1QmWSmIpBxdZPE5aCZr0s0/62zNfK6tZeRGZdjEiP0jHz
+         1hDXY19mxqDtaBqr+O/jd0TkZGbZI/XrJAzq3BqPUqLA8Zb3PssJzr9HfrSs5J5zfLEw
+         z2TRykgqCqMdpP3jAuThbpTWPZVifl6oDAuRSz8i4+l8Vj/CDcV/YPY0F/hzXXiDDzN5
+         qJ3PEipumnQVqLLoizZYHXP69ceTcnmO2ZvQtVshioiH3/morkAPt/o4kawHC5RE6GT/
+         KJMQ==
+X-Gm-Message-State: AC+VfDyEHzWRjn3veg9hdFbG6QeYAnowVwlusUMZTq4tJ4EWKNA1YQMK
+        Dqo38gpmcw6MY2istmCSjLE=
+X-Google-Smtp-Source: ACHHUZ58zHEAHPo/4ezQC9Q0V6L7v82UcEclg5MNDLSIFpxNJ6yiaIVMZ5xYMV4A84FmD1U1EOlB1Q==
+X-Received: by 2002:ad4:5ecc:0:b0:623:7707:5650 with SMTP id jm12-20020ad45ecc000000b0062377075650mr28892564qvb.15.1684969519151;
+        Wed, 24 May 2023 16:05:19 -0700 (PDT)
 Received: from Latitude-E6420.mynetworksettings.com ([2600:4040:2007:9800:650f:ad8b:38f6:d091])
-        by smtp.gmail.com with ESMTPSA id ea15-20020ad458af000000b0062075f40f61sm3914019qvb.73.2023.05.24.16.05.16
+        by smtp.gmail.com with ESMTPSA id ea15-20020ad458af000000b0062075f40f61sm3914019qvb.73.2023.05.24.16.05.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 16:05:17 -0700 (PDT)
+        Wed, 24 May 2023 16:05:18 -0700 (PDT)
 From:   Rudraksha Gupta <guptarud@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,10 +60,12 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     david@ixit.cz, Rudraksha Gupta <guptarud@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] ARM: Add label to sleep_clk in qcom-msm8960.dtsi
-Date:   Wed, 24 May 2023 19:04:54 -0400
-Message-Id: <20230524230459.120681-1-guptarud@gmail.com>
+Subject: [PATCH 2/5] ARM: Add samsung,expressatt to qcom.yaml
+Date:   Wed, 24 May 2023 19:04:55 -0400
+Message-Id: <20230524230459.120681-2-guptarud@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230524230459.120681-1-guptarud@gmail.com>
+References: <20230524230459.120681-1-guptarud@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,26 +78,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allows msm8960 DTS files to reference the sleep_clk node.
-
 Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
 ---
- arch/arm/boot/dts/qcom-msm8960.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-index 2a668cd535cc..a4d8dd2d24a6 100644
---- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-@@ -71,7 +71,7 @@ pxo_board: pxo_board {
- 			clock-output-names = "pxo_board";
- 		};
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 3ffa682cd079..18ed09f359ee 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -192,6 +192,7 @@ properties:
+       - items:
+           - enum:
+               - qcom,msm8960-cdp
++              - samsung,expressatt
+           - const: qcom,msm8960
  
--		sleep_clk {
-+		sleep_clk: sleep_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <32768>;
+       - items:
 -- 
 2.34.1
 
