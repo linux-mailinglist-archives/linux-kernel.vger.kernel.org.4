@@ -2,97 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC57370F53D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D7C70F544
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjEXL2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S231193AbjEXL3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjEXL2Q (ORCPT
+        with ESMTP id S229780AbjEXL3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:28:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936A5B6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:28:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3051B61A90
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCEB3C433D2;
-        Wed, 24 May 2023 11:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684927694;
-        bh=7Q2toi92kbc3u6MrXrJck4rE1II3ijn0ylZFuZ8InwA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=iUKGc7rr6VMrE0d3hPc03v/qzZocxq2fzPdwFK+cQZZlL6vsLPB6vvS4XJ1rAsdCc
-         eIFYUXwuH4OPNnhX4/GbLa1y7WMm2r1+WkOX7PjoL7g9ejW8AfVSWfbesHF9cjlbfq
-         P/mXAhxwTiIQQ8O8IbIfgI7IZM5Qc+wkXkq3k64nRXqsrONojUxnfRHLfaMpTSnDkE
-         KruzlueoqeUh2ApIbLR6tWGZnfB06z2JsuyF3UHMuSRH0bA1Akl+N4ar/mKtjVcHPs
-         pKhNLiFy+aRjwEZdRo0bj3r2JwIOJcys2CWVT3myYx6rixCJAQshHYLOR+HT9neG8g
-         ppJFxrzaf4BNA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
-        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org
-In-Reply-To: <20230523165414.14560-1-srinivas.kandagatla@linaro.org>
-References: <20230523165414.14560-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] ASoC: codecs: wcd938x-sdw: do not set can_multi_write
- flag
-Message-Id: <168492769255.49784.5898976665110689198.b4-ty@kernel.org>
-Date:   Wed, 24 May 2023 12:28:12 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 07:29:07 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF241B6;
+        Wed, 24 May 2023 04:29:06 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 466F05C014E;
+        Wed, 24 May 2023 07:29:06 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 24 May 2023 07:29:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684927746; x=1685014146; bh=Dk
+        ZDQE6py1T70Nun2afUAHBUj+DwKgk6UL7vXpX8QhQ=; b=OuajjyOEvj2z0UCkI7
+        8yNJDmgeFVs1eUVzmQ5GKJRwZqwMPElMNUE273nEdCDnUINRM3t7yJJhhoepWyyK
+        ZNuzVOznd/3/kzU7bo7e9/CMTcIQCV8yOTyjuVL01iN1JepJg4BYZdSRLIh+NDhU
+        g7XzTMI4cmf32JyyTYBQ+bio/yi4mrDh7Lzm8hT9n0WC9D7GUtd96mWeGMFTl0i8
+        3fFHMJY9cDQEIZmgCZx/KX1qRGGvjXPHL4DUsHr3oDKV9D5PqMfXlzWee2BnjwLa
+        CjUMmPHhydmWWjBC9ZClY5PvoUit0s0rTV1PaGF20AvCk3Vo7aFcqIVGru+i6FqL
+        mQtw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684927746; x=1685014146; bh=DkZDQE6py1T70
+        Nun2afUAHBUj+DwKgk6UL7vXpX8QhQ=; b=lap2AWzgSkO2/ftKQvEQc+TE2KWFr
+        vYBw6aE/5tK9iGQTlFTT4ukU+WrSyq2QGdbrOnahz0DvuzzfLnNFmshvCKTsWF4O
+        5oDoq+AkiaiBO+GCP1dt9MBpb5CFO6pMpwW2VhCNVnwXd2Y++/KHjWByWT1tU99n
+        541mExHgts3zT2nzGQQ2aHHkd9m6do9IVPHHlUbYb3FoeCQLcYPPWxeCPh7AfHRe
+        68sGTQ8VfV6h6CIeu0Os0A7ZpQ9gvppDyUgIYO3nmYahiz09b9qMBe5UXJMKRDky
+        7dZ9N244N353p/qBaOTFO/G3IKA0CfOK/XuHLcpGQK2mPa/fiBDwH2RkA==
+X-ME-Sender: <xms:AfVtZG3gsNWYMMiA6FxF_mm37tpjTSU1iLWP12Ipl_8HYeOPSLCjog>
+    <xme:AfVtZJGYY5jLeejDyC9ymqGBvpF_7DzCDoDpwDb7sexJYVn5nEnjmYHWgawOVpQ_c
+    k1diJvq5m53fBIswco>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvdefjeevfefhvdevjeeuheefieetvdduheeludevtdefhfekleduhfdvjedt
+    ieeinecuffhomhgrihhnpehlfihnrdhnvghtnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:AfVtZO6Thrhqy1bi8COkH1ttpx9Wv6hEGizb6gfpceRrO3bIWqX4aQ>
+    <xmx:AfVtZH08gIKPotE-OJ0TC6eyCBRYqM0xkdLfMxJMF1JFjbEuCLwnaQ>
+    <xmx:AfVtZJHTcSwXtAolEWFq8t-pSj9nw1RR7dnlwvLXPpcgYOT4LaPFzA>
+    <xmx:AvVtZIB2wYixFc3Fyw7Jh-UW_3NDtXrNPix_kcGBHItHZek46ErRZw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A7548B60086; Wed, 24 May 2023 07:29:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <dca09245-5b59-438b-b7d6-c65db7a84a85@app.fastmail.com>
+In-Reply-To: <CA+G9fYvGM6a3wct+_o0z-B=k1ZBg1FuBBpfLH71ULihnTo5RrQ@mail.gmail.com>
+References: <CA+G9fYvGM6a3wct+_o0z-B=k1ZBg1FuBBpfLH71ULihnTo5RrQ@mail.gmail.com>
+Date:   Wed, 24 May 2023 13:28:45 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        "LTP List" <ltp@lists.linux.it>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org,
+        "Jeff Layton" <jlayton@kernel.org>
+Cc:     chrubis <chrubis@suse.cz>, "Petr Vorel" <pvorel@suse.cz>,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Dan Carpenter" <dan.carpenter@linaro.org>,
+        "Anders Roxell" <anders.roxell@linaro.org>
+Subject: Re: LTP: syscalls: statx06.c:138: TFAIL: Modified time > after_time
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 17:54:14 +0100, Srinivas Kandagatla wrote:
-> regmap-sdw does not support multi register writes, so there is
-> no point in setting this flag. This also leads to incorrect
-> programming of WSA codecs with regmap_multi_reg_write() call.
-> 
-> This invalid configuration should have been rejected by regmap-sdw.
-> 
-> 
-> [...]
+On Wed, May 24, 2023, at 12:48, Naresh Kamboju wrote:
 
-Applied to
+>
+> ...
+>
+> [ 1192.088987] loop0: detected capacity change from 0 to 614400
+> tst_device.c:93: TINFO: Found free device 0 '/dev/loop0'
+> tst_test.c:1093: TINFO: Formatting /dev/loop0 with ext4 opts='-I 256'
+> extra opts=''
+> mke2fs 1.46.5 (30-Dec-2021)
+> [ 1192.337350] EXT4-fs (loop0): mounted filesystem
+> dfe9283c-5d2f-43f8-840e-a2bbbff5b202 r/w with ordered data mode. Quota
+> mode: none.
+> tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
+>
+> statx06.c:140: TPASS: Birth time Passed
+> statx06.c:138: TFAIL: Modified time > after_time
+> statx06.c:140: TPASS: Access time Passed
+> statx06.c:140: TPASS: Change time Passed
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+I found a description in
 
-Thanks!
+https://lwn.net/ml/linux-kernel/20230503142037.153531-1-jlayton@kernel.org/
 
-[1/1] ASoC: codecs: wcd938x-sdw: do not set can_multi_write flag
-      commit: 2d7c2f9272de6347a9cec0fc07708913692c0ae3
+which indicates that this is expected. Added Jeff to Cc in case
+I'm misreading his explanation.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+     Arnd
