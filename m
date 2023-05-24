@@ -2,169 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C6270F837
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90D270F83A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235745AbjEXOFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
+        id S235766AbjEXOFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjEXOFN (ORCPT
+        with ESMTP id S231573AbjEXOFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:05:13 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3B2119
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:05:10 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-309438004a6so602505f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684937109; x=1687529109;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gYK7qPs3K1mFYFt83RxjkD5ObwozLtF5ga5amIDsihk=;
-        b=4ZafKxfGLJdkPWBsxlTVtT+cEWZgHCeBAVxIB1Yj/ajbUZXdejKUVx11UN31nSk161
-         pCLnKBPkgeIZryb+Q6Fi1k6sqDcPorkF5vUQsAjAHaI8GD7DXGa0hPWHrEgEUPnKzRUA
-         CNzODjz6k+O76u81KJS7gBPhfaFPGXNwsd0gqtIEmvkelhzBSVy40S+5aGozdCCPbY3W
-         T+ebSUBLH6iDUmZlgQ/Bqkb/Tuo9drKd8oBgi1JjlYIzXfz1vcdgrfv1oWMdIsV3FRkX
-         FPGwAXkqnrlGOy1anD8KfMUrZOO8hxQy/qJEggfYxOK6IqPLxrppkpwbBGU9GvM/lHrW
-         kTsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684937109; x=1687529109;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gYK7qPs3K1mFYFt83RxjkD5ObwozLtF5ga5amIDsihk=;
-        b=A7b4zOk1upRLyb3UlknMMR+gC+TTuN0FKbtkpxkieQSUTI9GUCMU6ueD8L/2er5TZa
-         F5NmkItOHSEGBmbmA1eirg+rSqkbEXVgNv9ATrgBytmO4veRwNGJZFXSnfCloAfwBWRq
-         kTvBRIhrjf3WPdZyL9MOxWPZroTQD29pmoy9cFTIEFTGbGv4Iz0vf0I2bTbob7mpGO4w
-         yecumTBO3DBGsnvRyHjD68zUkKo4GLgpcUSrucdcfcWNprUxrYAv1YTVvAyZT65XdqfU
-         PRaWouzS4jmpp6KOL2d3/9wj7A/XVYLSraUr+xjduLIqGjaRuhoINtejglbAk0Y6KjdD
-         DBRQ==
-X-Gm-Message-State: AC+VfDxtmoZGHWWjTKGQuMiBZRqv7S7gHievLRBOHU+h7iBhL+Sjb7ap
-        aCy+qy/f+nrF4JZHtHSTic8sZQ==
-X-Google-Smtp-Source: ACHHUZ7DY/QLV/yoCNKc+5pHRfJJcvT+0JwdYcgh8jA6/pQw2WsZyH/SczX7hjf76cberK5A66uMnQ==
-X-Received: by 2002:adf:e8ce:0:b0:306:34d6:6dfc with SMTP id k14-20020adfe8ce000000b0030634d66dfcmr12451544wrn.37.1684937109015;
-        Wed, 24 May 2023 07:05:09 -0700 (PDT)
-Received: from localhost ([2a01:e0a:55f:21e0:9e19:4376:dea6:dbfa])
-        by smtp.gmail.com with ESMTPSA id t1-20020a5d6a41000000b003063176ef09sm14849411wrw.6.2023.05.24.07.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 07:05:08 -0700 (PDT)
-Date:   Wed, 24 May 2023 16:05:03 +0200
-From:   Julien Stephan <jstephan@baylibre.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mkorpershoek@baylibre.com, khilman@baylibre.com,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: phy: add mediatek MIPI CD-PHY module
- v0.5
-Message-ID: <2jfgupyvtuenvm7x52l6bo5xzzpva7u6njeg3ecd52wwj4spv6@y3nsq7j2hl2u>
-References: <20230524083033.486490-1-jstephan@baylibre.com>
- <20230524083033.486490-3-jstephan@baylibre.com>
- <f92c39c8-177a-e18d-c3b0-79e7349ea4db@collabora.com>
+        Wed, 24 May 2023 10:05:52 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE63AE7;
+        Wed, 24 May 2023 07:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684937150; x=1716473150;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=O3ky+HRl+9kQSjMWZ81b6b+99pfCEki8XfJm2dVk39Q=;
+  b=KddEqw3jsh3sZRRg7pkEGGar8EBvrLlLWQisgdVO2V1tHim9WJEHQvOh
+   VuD0KyNuou7WpLZm0PvwppmRlrwGewbAowo99OQvpebch3/lacWkaZsbq
+   vGE9cGy8e5DkC5PJdjTRFFn7mS5RGMgUBBaCi9tv2OMVVr0N9dg+6JQWk
+   p38KAW34jyjdaXn7opVThW7unAIbFsdhev5QLcVDQM9raGX662c9tMnXR
+   ZJwQfTw7Zox21go+akSYblxepKW9p4+Mzj1Ujn61r2z2uKnvXGg3bLTVC
+   NvwF4qVvJFjk3VOw8MDenc2aGqhTgoF87teoYgn1bsRyC9Vy35qSMq1th
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="351084598"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="351084598"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 07:05:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="951031302"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="951031302"
+Received: from mylly.fi.intel.com (HELO [10.237.72.160]) ([10.237.72.160])
+  by fmsmga006.fm.intel.com with ESMTP; 24 May 2023 07:05:17 -0700
+Message-ID: <49bce4e6-5757-7afe-2173-681305f1be36@linux.intel.com>
+Date:   Wed, 24 May 2023 17:05:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f92c39c8-177a-e18d-c3b0-79e7349ea4db@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v1] i2c: designware: fix idx_write_cnt in read loop
+Content-Language: en-US
+To:     David Zheng <david.zheng@intel.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com
+References: <ZGzt3dGW0dxa5fqc@davidzhe-DESK>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <ZGzt3dGW0dxa5fqc@davidzhe-DESK>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:45:30AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 24/05/23 10:30, Julien Stephan ha scritto:
-> > From: Florian Sylvestre <fsylvestre@baylibre.com>
-> >
-> > This adds the bindings, for the MIPI CD-PHY module v0.5 embedded in
-> > some Mediatek soc, such as the mt8365
-> >
-> > Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
-> > Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> > ---
-> >   .../bindings/phy/mediatek,mt8365-csi-rx.yaml  | 67 +++++++++++++++++++
-> >   MAINTAINERS                                   |  6 ++
-> >   2 files changed, 73 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml b/Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml
-> > new file mode 100644
-> > index 000000000000..a1bd96a98051
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml
-> > @@ -0,0 +1,67 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (c) 2023 MediaTek, BayLibre
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/phy/mediatek,mt8365-csi-rx.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mediatek Sensor Interface MIPI CSI CD-PHY
-> > +
-> > +maintainers:
-> > +  - Julien Stephan <jstephan@baylibre.com>
-> > +  - Andy Hsieh <andy.hsieh@mediatek.com>
-> > +
-> > +description:
-> > +  The SENINF CD-PHY is a set of CD-PHY connected to the SENINF CSI-2
-> > +  receivers. The number of PHYs depends on the SoC model.
-> > +  Depending on the SoC model, each PHYs can be either CD-PHY or D-PHY only
-> > +  capable.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt8365-csi-rx
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  '#phy-cells':
-> > +    const: 0
-> > +
-> > +  mediatek,phy-type:
->
-> Instead of declaring a phy-type here like this, can't we instead declare that in
-> the phy cells, like we're doing with MTK TPHY and like other non-MediaTek PHYs are
-> already doing?
->
-> device {
-> 	...
-> 	phys = <&csi0_rx PHY_TYPE_CDPHY>;
-> 	...
-> }
->
-> Regards,
-> Angelo
->
->
+On 5/23/23 19:46, David Zheng wrote:
+> With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
+> RX FIFO is empty. When testing with the slave-eeprom, each transaction
+> has 2 bytes for address/index and 1 byte for value, the address byte
+> can be written as data byte due to dropping STOP condition.
+> 
+> In the test below, the master continuously writes to the slave, first 2
+> bytes are index, 3rd byte is value and follow by a STOP condition.
+> 
+>   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
+>   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
+>   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
+> 
+> Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
+> next 2 bytes can be treated as buffer index for upcoming transaction.
+> Supposedly the slave eeprom buffer would be written as
+> 
+>   EEPROM[0x00D1] = 0xD1
+>   EEPROM[0x00D2] = 0xD2
+>   EEPROM[0x00D3] = 0xD3
+> 
+> When CPU load is high the slave irq handler may not read fast enough,
+> the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
+> (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
+> the transactions below.
+> 
+>   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
+>   0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
+>   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+> 
+> After `D1` is received, read loop continues to read `00` which is the
+> first bype of next index. Since STOP condition is ignored by the loop,
+> eeprom buffer index increased to `D2` and `00` is written as value.
+> 
+> So the slave eeprom buffer becomes
+> 
+>   EEPROM[0x00D1] = 0xD1
+>   EEPROM[0x00D2] = 0x00
+>   EEPROM[0x00D3] = 0xD3
+> 
+> The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
+> the transactions. The first index byte in this case would have bit 11
+> set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
+> which will reset `idx_write_cnt` in slave eeprom.
+> 
+> Signed-off-by: David Zheng <david.zheng@intel.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-core.h  | 2 ++
+>   drivers/i2c/busses/i2c-designware-slave.c | 4 ++++
+>   2 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+> index c5d87aae39c6..8b85147bd518 100644
+> --- a/drivers/i2c/busses/i2c-designware-core.h
+> +++ b/drivers/i2c/busses/i2c-designware-core.h
+> @@ -123,6 +123,8 @@
+>   #define DW_IC_COMP_PARAM_1_SPEED_MODE_HIGH	(BIT(2) | BIT(3))
+>   #define DW_IC_COMP_PARAM_1_SPEED_MODE_MASK	GENMASK(3, 2)
+>   
+> +#define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
+> +
 
-Hi Angelo,
-
-This is a hardware property that is not dynamic, so IMHO it doesn't make sense
-to use phy argument for that. Some driver already use a 'phy-type'
-property (such as phy-cadence-torrent.yaml).
-
-I was thinking of using phy argument on future upgrade when driver will
-support D-PHY and C-PHY modes so the phy user will be able to choose the
-mode.
-
-Does it makes sense?
-
-Best
-Julien
+Sorry, didn't notice earlier. Could you put this near to 
+DW_IC_DATA_CMD_DAT define.
