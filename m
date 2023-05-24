@@ -2,149 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFC070ED0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CCA70ED11
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239344AbjEXF15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S239384AbjEXF2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjEXF1z (ORCPT
+        with ESMTP id S239363AbjEXF2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:27:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BDF13E;
-        Tue, 23 May 2023 22:27:53 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O5QJMQ011402;
-        Wed, 24 May 2023 05:27:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vDRlbCPueHl+m8WtGe+G1vGaIcLuvwNJ0UbZoqCVEc0=;
- b=QXoCVMQch7LvvVFKg6nD4rTAUdUKkfjc4PsppUClxRYNfNrqQU8GtXGU4g7rQ+GbXDtx
- eSx4M328aAR7wtWLYr9LDSWQ9vVxpPyHXVDBs3/gnIYmX5iPBt2Kl0s/a8jYHyhMVKcM
- WVn//4FE0D28FKDyIM7HvWPZEDilcx1NjIhVAaBFsOb5vJD4qTdZeAKO7Xq5rIY3ZkT0
- iNWFq8N3QkU+5f8DNMEHm39wgNN8OAjgr10lRSSjclPyrAYzVoNmZElbMXAgyyQUAupy
- ikHOpBo/W/6waIbnoH32r1MvTazBtpz4vjx60AN5fStDlILlXDA77KmtREK25os4t2f+ ZA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qscaur0fj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 05:27:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O5RdS0010827
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 05:27:39 GMT
-Received: from [10.216.39.178] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
- 2023 22:27:32 -0700
-Message-ID: <28a4d1e6-224d-9ecb-6b94-cffc3ecb408d@quicinc.com>
-Date:   Wed, 24 May 2023 10:57:28 +0530
+        Wed, 24 May 2023 01:28:42 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856D613E
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 22:28:41 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5621a279cbbso10713097b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 22:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684906120; x=1687498120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aS3Nhb3VAWEGlLu+XBwgpmCXcyJvTR79ms1GmCOYiuc=;
+        b=yHK9rzEq2VzEMfw2DClczT1cZ0xt1Sc1yfEDGlQ/piJkXnt8SYE6F8347x9r4Bnc4X
+         5iu3V89eWxuFne6sR9CxkQ6TxK6EN/6k7xBX1U24kVBLCxj0/5whUbyYRpkJBxC9+85Q
+         qqvV1OC49D6WylWj5VRJukBH6nVXLiiZnWrGw7MJOfNnudiIuo1Wu8eRwGaol4pdIkqT
+         mJXhFmDRVi/PyVkDerk/ALdFKhRrvkAuKqS0sctgyaFABXSacfned5FhxHdfNtu1TwO+
+         i4pfgPYu6LKg+XSwBDJi7TyvTqRGiO2lfSZsYPaVWA+nZ4XwxxojQ5ChtP3PdIDKRzqK
+         7OCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684906120; x=1687498120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aS3Nhb3VAWEGlLu+XBwgpmCXcyJvTR79ms1GmCOYiuc=;
+        b=HFHHJpA3fDXKmnOYmWzpJ1G6maK/3vEyiz1K5DMy9s5AkHlzy9Lztf+JNIIiv0r8Y4
+         3j8bMl40H3HeFsDilLfYwtpkeZyi+eGg5G+C98k/ftXMrxC2QKYO4QuEDKMFJ7X/THjb
+         JHGqGCLAh20hIGLc4wtYvyPGFPXFmhxY0ssUSXu/vLE3o8Ko9Z02sh1YRyV48JetzweU
+         Jn5KwZHUnV89q/pBzINOr2sPeZ5X72SSDeuKtopZ93XdR25nNsdtm44Rq4ViIAjd4iVq
+         852pBuIYe4vY2QQXLRE7hn9ctH60vDRApJ5Sykr8yDxZ7hVYF/lJyA28/vJOjQDuf710
+         kZEQ==
+X-Gm-Message-State: AC+VfDzM7oORahZ48Y5zFG8IttTMG/GuEpKkKK6awsyEKbQtAG+756FY
+        mw27tdqkNFhvc4QXQ9Oa245WLSBCfWGQZjq+4p6m2TxGqAym2zbX3IAqpw==
+X-Google-Smtp-Source: ACHHUZ4Try6TclbYIBRhUv6Q1d1POhNmJXlpCYm6I1CpyXdd8PNyciLfqJujJFDOKp0b7AKP6kzrS4aavRcC3gJgu4g=
+X-Received: by 2002:a05:690c:810:b0:565:62e7:223a with SMTP id
+ bx16-20020a05690c081000b0056562e7223amr925533ywb.3.1684906120498; Tue, 23 May
+ 2023 22:28:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V3 4/4] arm64: dts: qcom: ipq9574: Enable crypto nodes
-To:     <bhupesh.sharma@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <thara.gopinath@gmail.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <linux-arm-msm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230518141105.24741-1-quic_anusha@quicinc.com>
- <20230518141105.24741-5-quic_anusha@quicinc.com>
- <93db4ee5-4fb8-f159-0cf4-ec1669c36dd1@linaro.org>
-From:   Anusha Canchi <quic_anusha@quicinc.com>
-In-Reply-To: <93db4ee5-4fb8-f159-0cf4-ec1669c36dd1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4xb4uA5YvSKQvmVFDQ08UJ5O6mIQuv41
-X-Proofpoint-GUID: 4xb4uA5YvSKQvmVFDQ08UJ5O6mIQuv41
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_02,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- impostorscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 suspectscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305240045
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230523165942.2630-1-jszhang@kernel.org> <20230524050259.104358-1-guoren@kernel.org>
+In-Reply-To: <20230524050259.104358-1-guoren@kernel.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 23 May 2023 22:28:29 -0700
+Message-ID: <CAJuCfpGAV1dhxS3FDyxJNtg25ZznYOv4tHzSezhoWZdG_WRizQ@mail.gmail.com>
+Subject: Re: [PATCH] riscv: mm: try VMA lock-based page fault handling first
+To:     guoren@kernel.org
+Cc:     jszhang@kernel.org, aou@eecs.berkeley.edu,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, chenhuacai@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/22/2023 2:23 PM, bhupesh.sharma@linaro.org wrote:
-> On 5/18/23 7:41 PM, Anusha Rao <quic_anusha@quicinc.com> wrote:
->> Enable crypto support for ipq9574.
->>
->> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->> ---
->>   Changes in V3:
->>     - No change.
->>
->>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 20 ++++++++++++++++++++
->>   1 file changed, 20 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
->> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> index fea15f3cf910..6e52d35a6a15 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> @@ -123,6 +123,26 @@
->>               clock-names = "core";
->>           };
->>   +        cryptobam: dma-controller@704000 {
->> +            compatible = "qcom,bam-v1.7.0";
+On Tue, May 23, 2023 at 10:03=E2=80=AFPM <guoren@kernel.org> wrote:
 >
-> Please confirm if this is "qcom,bam-v1.7.4" or "qcom,bam-v1.7.0". If 
-> "qcom,bam-v1.7.4" please use the newer compatible format.
-Sure, will update.
-
-Thanks,
-Anusha
+> > Attempt VMA lock-based page fault handling first, and fall back to the
+> > existing mmap_lock-based handling if that fails.
+> >
+> > A simple running the ebizzy benchmark on Lichee Pi 4A shows that
+> > PER_VMA_LOCK can improve the ebizzy benchmark by about 32.68%. In
+> Good improvement, I think VMA lock is worth to support in riscv.
 >
-> Thanks,
-> Bhupesh
+> Please give more details about ebizzy, Is it
+> https://github.com/linux-test-project/ltp/blob/master/utils/benchmark/ebi=
+zzy-0.3/ebizzy.c
+> ?
 >
->> +            reg = <0x00704000 0x20000>;
->> +            interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
->> +            #dma-cells = <1>;
->> +            qcom,ee = <1>;
->> +            qcom,controlled-remotely;
->> +        };
->> +
->> +        crypto: crypto@73a000 {
->> +            compatible = "qcom,ipq9574-qce", "qcom,ipq4019-qce", 
->> "qcom,qce";
->> +            reg = <0x0073a000 0x6000>;
->> +            clocks = <&gcc GCC_CRYPTO_AHB_CLK>,
->> +                 <&gcc GCC_CRYPTO_AXI_CLK>,
->> +                 <&gcc GCC_CRYPTO_CLK>;
->> +            clock-names = "iface", "bus", "core";
->> +            dmas = <&cryptobam 2>, <&cryptobam 3>;
->> +            dma-names = "rx", "tx";
->> +        };
->> +
->>           tlmm: pinctrl@1000000 {
->>               compatible = "qcom,ipq9574-tlmm";
->>               reg = <0x01000000 0x300000>;
->>
+> > theory, the more CPUs, the bigger improvement, but I don't have any
+> > HW platform which has more than 4 CPUs.
+> >
+> > This is the riscv variant of "x86/mm: try VMA lock-based page fault
+> > handling first".
+> >
+>
+> How about add Link tag here:
+> Link: https://lwn.net/Articles/906852/
+>
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> > Any performance numbers are welcome! Especially the numbers on HW
+> > platforms with 8 or more CPUs.
+> >
+> >  arch/riscv/Kconfig    |  1 +
+> >  arch/riscv/mm/fault.c | 33 +++++++++++++++++++++++++++++++++
+> >  2 files changed, 34 insertions(+)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 62e84fee2cfd..b958f67f9a12 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -42,6 +42,7 @@ config RISCV
+> >       select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+> >       select ARCH_SUPPORTS_HUGETLBFS if MMU
+> >       select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+> > +     select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
+> >       select ARCH_USE_MEMTEST
+> >       select ARCH_USE_QUEUED_RWLOCKS
+> >       select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+> > index 8685f85a7474..eccdddf26f4b 100644
+> > --- a/arch/riscv/mm/fault.c
+> > +++ b/arch/riscv/mm/fault.c
+> > @@ -286,6 +286,36 @@ void handle_page_fault(struct pt_regs *regs)
+> >               flags |=3D FAULT_FLAG_WRITE;
+> >       else if (cause =3D=3D EXC_INST_PAGE_FAULT)
+> >               flags |=3D FAULT_FLAG_INSTRUCTION;
+> > +#ifdef CONFIG_PER_VMA_LOCK
+> > +     if (!(flags & FAULT_FLAG_USER))
+> > +             goto lock_mmap;
+> > +
+> > +     vma =3D lock_vma_under_rcu(mm, addr);
+> > +     if (!vma)
+> > +             goto lock_mmap;
+> > +
+> > +     if (unlikely(access_error(cause, vma))) {
+> > +             vma_end_read(vma);
+> > +             goto lock_mmap;
+> > +     }
+> > +
+> > +     fault =3D handle_mm_fault(vma, addr, flags | FAULT_FLAG_VMA_LOCK,=
+ regs);
+> > +     vma_end_read(vma);
+> > +
+> > +     if (!(fault & VM_FAULT_RETRY)) {
+> > +             count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
+> > +             goto done;
+> > +     }
+> > +     count_vm_vma_lock_event(VMA_LOCK_RETRY);
+> > +
+> > +     if (fault_signal_pending(fault, regs)) {
+> > +             if (!user_mode(regs))
+> > +                     no_context(regs, addr);
+> > +             return;
+> > +     }
+> > +lock_mmap:
+> > +#endif /* CONFIG_PER_VMA_LOCK */
+> > +
+> >  retry:
+> >       mmap_read_lock(mm);
+> >       vma =3D find_vma(mm, addr);
+> > @@ -355,6 +385,9 @@ void handle_page_fault(struct pt_regs *regs)
+> >
+> >       mmap_read_unlock(mm);
+> >
+> > +#ifdef CONFIG_PER_VMA_LOCK
+> > +done:
+> > +#endif
+> It's very close to cd7f176aea5f ("arm64/mm: try VMA lock-based page fault
+> handling first"), and I didn't find any problem. So:
+>
+> Reviewed-by: Guo Ren <guoren@kernel.org>
 
+Looks correct to me.
+
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+
+>
+> F.Y.I Huacai Chen, maybe he also would be interesting this new feature.
+>
+>
+> >       if (unlikely(fault & VM_FAULT_ERROR)) {
+> >               tsk->thread.bad_cause =3D cause;
+> >               mm_fault_error(regs, addr, fault);
+> > --
+> > 2.40.1
