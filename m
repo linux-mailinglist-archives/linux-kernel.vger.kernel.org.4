@@ -2,243 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7131170EDEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3DE70EDED
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjEXGh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        id S239718AbjEXGhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239708AbjEXGhW (ORCPT
+        with ESMTP id S239708AbjEXGhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:37:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F98518D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:37:18 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q1i7Y-0003AK-JT; Wed, 24 May 2023 08:37:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q1i7X-002QOl-Gl; Wed, 24 May 2023 08:37:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q1i7W-007T24-Rd; Wed, 24 May 2023 08:37:14 +0200
-Date:   Wed, 24 May 2023 08:37:14 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, LKML <linux-kernel@vger.kernel.org>,
-        linux-pwm@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: PWM regression causing failures with the pwm-atmel driver
-Message-ID: <20230524063714.dkuwyyikpkfco42x@pengutronix.de>
-References: <7e2cfb55-e39f-2e5c-7f43-e1d275428bb5@axentia.se>
- <20230522172358.bw677efyovbrfwjg@pengutronix.de>
- <abe0b7f7-19de-605b-e1b1-c62930052894@axentia.se>
- <20230522204346.krb37yyzylxokslx@pengutronix.de>
- <ZG0itIIg48IGuC8R@orome>
+        Wed, 24 May 2023 02:37:41 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FE518C;
+        Tue, 23 May 2023 23:37:36 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d722dac08so157870b3a.1;
+        Tue, 23 May 2023 23:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684910256; x=1687502256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AKMIdvdUFfqOqbdUAufCFsw61dClBFnE+Z15IrMaD9E=;
+        b=EkgB+c4ANGqbmlkGwYHW50rvLdKZLi1OzD3AqPjws7Ozl3gmlSZdBMWVYTBuucuBtY
+         TKnfn6B4Yr0HE1XIG4VFuZAwaxv7piqlfJdbahOKr3F1F7R4tnSI1eBaT74bnCTbdUe9
+         sQueeEMQX112CAx+D2oeugtpAWQI1eSmtKcJai6JVZ50UTryNxwyE5RB36n/Hp3sZyIN
+         ImbJ+SqTl/7gTXOLh5GgI223l1mO4Ti+DiAqi+N6hGjWi9K4lr8z+h7qGFkQ+Egg6NGx
+         kaXDocGHN0iNRjL+Z7xQin10vA7GiXeoheg7N5dBfRS1F5LeoWlrnlmxSjfE+16e5+lK
+         dLzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684910256; x=1687502256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AKMIdvdUFfqOqbdUAufCFsw61dClBFnE+Z15IrMaD9E=;
+        b=E7Ou8ELdvLP3yFHis83qS3VI2lR29+vNG1jp0bmPiRvU7/Q1iJZaFDrk0cRpgeeO/2
+         3bZw0G72IVH2s17Mo7Ect00/l+eEaCwOzKoSCm1j8bUofYySpvkjZP7MDwvXS4awRPVR
+         Slf+MIHkKdsjjbq1EuEoHKf7swgW7d3rs/rOSkRIvPLeTbsEz9WE89653zjKwLXfrz1q
+         A1/soKsMvqWSeVCoc2AvALyrUr/HBdW52kPrTmlpXpPoplEvCOx+kG4/gQMmMbM+DOSI
+         B/vjAoN5CxUYtWU21F+t4Wz0z/tSGkLKg6m36cOiR79lRd80xA9rdGYaN2Vt1NnbMQ1F
+         LZJg==
+X-Gm-Message-State: AC+VfDy36icbw8LcFegz2AjzzskpncQD0aQahrLAaQeNiuBnFCW14mQc
+        Mirgb/7mewNF2Yfu25W09iQ=
+X-Google-Smtp-Source: ACHHUZ7J6dSVr4eZ5LvpgpyuTFaRiOV95nIjeYCF0JJEp7ewhofMBHHrfBw4Ca/uZXZuL3fOxKHuWQ==
+X-Received: by 2002:a05:6a00:1d06:b0:646:e11c:f5f9 with SMTP id a6-20020a056a001d0600b00646e11cf5f9mr15979656pfx.0.1684910255836;
+        Tue, 23 May 2023 23:37:35 -0700 (PDT)
+Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
+        by smtp.gmail.com with ESMTPSA id x48-20020a056a000bf000b0064378c52398sm2104876pfu.25.2023.05.23.23.37.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 23:37:35 -0700 (PDT)
+Date:   Wed, 24 May 2023 06:37:34 +0000
+From:   Alok Tiagi <aloktiagi@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        David.Laight@aculab.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hch@infradead.org, tycho@tycho.pizza
+Subject: Re: [RFC v6 1/2] epoll: Implement eventpoll_replace_file()
+Message-ID: <ZG2wrrZBLl1ApFDL@ip-172-31-38-16.us-west-2.compute.internal>
+References: <20230523065802.2253926-1-aloktiagi@gmail.com>
+ <ZGzATlGu7mh6EFUi@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4zmiibewdkp7eyng"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZG0itIIg48IGuC8R@orome>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZGzATlGu7mh6EFUi@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 23, 2023 at 02:31:58PM +0100, Matthew Wilcox wrote:
+> On Tue, May 23, 2023 at 06:58:01AM +0000, aloktiagi wrote:
+> > +/*
+> > + * This is called from eventpoll_replace() to replace a linked file in the epoll
+> > + * interface with a new file received from another process. This is useful in
+> > + * cases where a process is trying to install a new file for an existing one
+> > + * that is linked in the epoll interface
+> > + */
+> > +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd)
+> 
+> Functions do not control where they are called from.  Just take that
+> clause out:
+> 
+> /*
+>  * Replace a linked file in the epoll interface with a new file received
+>  * from another process. This allows a process to
+>  * install a new file for an existing one that is linked in the epoll
+>  * interface
+>  */
+> 
+> But, erm, aren't those two sentences basically saying the same thing?
+> So simplify again:
+> 
+> /*
+>  * Replace a linked file in the epoll interface with a new file
+>  */
+>
 
---4zmiibewdkp7eyng
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+thank you for pointing this out. I'll address this in the next version.
+ 
+> > diff --git a/include/linux/eventpoll.h b/include/linux/eventpoll.h
+> > index 3337745d81bd..2a6c8f52f272 100644
+> > --- a/include/linux/eventpoll.h
+> > +++ b/include/linux/eventpoll.h
+> > @@ -25,6 +25,14 @@ struct file *get_epoll_tfile_raw_ptr(struct file *file, int tfd, unsigned long t
+> >  /* Used to release the epoll bits inside the "struct file" */
+> >  void eventpoll_release_file(struct file *file);
+> >  
+> > +/*
+> > + * This is called from fs/file.c:do_replace() to replace a linked file in the
+> > + * epoll interface with a new file received from another process. This is useful
+> > + * in cases where a process is trying to install a new file for an existing one
+> > + * that is linked in the epoll interface
+> > + */
+> > +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd);
+> 
+> No need to repeat the comment again.  Just delete it here.
 
-Hello Thierry,
-
-On Tue, May 23, 2023 at 10:31:48PM +0200, Thierry Reding wrote:
-> On Mon, May 22, 2023 at 10:43:46PM +0200, Uwe Kleine-K=F6nig wrote:
-> > On Mon, May 22, 2023 at 09:28:39PM +0200, Peter Rosin wrote:
-> > > 2023-05-22 at 19:23, Uwe Kleine-K=F6nig wrote:
-> > > > On Mon, May 22, 2023 at 05:19:43PM +0200, Peter Rosin wrote:
-> > > >> I have a device with a "sound card" that has an amplifier that nee=
-ds
-> > > >> an extra boost when high amplification is requested. This extra
-> > > >> boost is controlled with a pwm-regulator.
-> > > >>
-> > > >> As of commit c73a3107624d ("pwm: Handle .get_state() failures") th=
-is
-> > > >> device no longer works. I have tracked the problem to an unfortuna=
-te
-> > > >> interaction between the underlying PWM driver and the PWM core.
-> > > >>
-> > > >> The driver is drivers/pwm/pwm-atmel.c which has difficulties getti=
-ng
-> > > >> the period and/or duty_cycle from the HW when the PWM is not enabl=
-ed.
-> > > >> Because of this, I think, the driver does not fill in .period and
-> > > >> .duty_cycle at all in atmel_pwm_get_state() unless the PWM is enab=
-led.
-> > > >>
-> > > >> However, the PWM core is not expecting these fields to be left as-=
-is,
-> > > >> at least not in pwm_adjust_config(), and its local state variable =
-on
-> > > >> the stack ends up with whatever crap was on the stack on entry for
-> > > >> these fields. That fails spectacularly when the function continues=
- to
-> > > >> do math on these uninitialized values.
-> >=20
-> > After looking again, I don't understand that part. Note that
-> > pwm_get_state() doesn't call .get_state() at all. Also pwmchip_add()
-> > zero initializes .state, then pwm_get() calls .get_state() (via
-> > pwm_device_request() which is called in .xlate()) which (if the HW is
-> > disabled) doesn't touch .period, so it should continue to be zero?!
-> >=20
-> > So I wonder why your approach 2 works at all. Do you see what I'm
-> > missing?
-> >=20
-> > > >> In particular, I find this in the kernel log when a bad kernel run=
-s:
-> > > >> pwm-regulator: probe of reg-ana failed with error -22
-> > > >>
-> > > >> Before commit c73a3107624d this was a silent failure, and the situ=
-ation
-> > > >> "repaired itself" when the PWM was later reprogrammed, at least fo=
-r my
-> > > >> case. After that commit, the failure is fatal and the "sound card"
-> > > >> fails to come up at all.
-> > > >>
-> > > >>
-> > > >> I see a couple of adjustments that could be made.
-> > > >>
-> > > >> 1. Zero out some fields in the driver:
-> > > >>
-> > > >> @@ -390,4 +390,6 @@ static int atmel_pwm_get_state(struct pwm_chip=
- *chip, struct pwm_device *pwm,
-> > > >>  		state->enabled =3D true;
-> > > >>  	} else {
-> > > >> +		state->period =3D 0;
-> > > >> +		state->duty_cycle =3D 0;
-> > > >>  		state->enabled =3D false;
-> > > >>  	}
-> > > >=20
-> > > > I don't particularily like that. While state->period is an invalid
-> > > > value, IMHO enabled =3D false is enough information from the driver=
-'s POV.
-> > >=20
-> > > This was the preferred approach of Thierry, and given the number of
-> > > call sites for pwm_get_state with a local variable, I can sympathize
-> > > with that view.
-> >=20
-> > I looked a bit more into the issue and think that pwm_get_state() isn't
-> > problematic. pwm_get_state() fully assigns *state.
-> >=20
-> > > At the same time, fixing drivers one by one is not
-> > > a fun game, so I can certainly see that approach 3 also has an appeal.
-> >=20
-> > What I don't like about it is that the output of a disabled PWM doesn't
-> > have a period. There might be one configured in hardware(, and the
-> > .get_state() callback might or might not return that), but the emitted
-> > signal has no well-defined period.
->=20
-> Well, this is a bit of a gray area, admittedly. .get_state() was not
-> designed with regards to drivers that are unable to read the hardware
-> state. Essentially if you can't read the full hardware state, the
-> assumption was that you just shouldn't provide a .get_state() callback
-> at all.
->=20
-> In retrospect that's perhaps not ideal, and as you pointed out this is
-> all a bit moot as of v6.3 because the initial state is now effectively
-> zeroed out already.
->=20
-> But just to address your point about enabled =3D false being enough: it's
-> not. The reason is that consumers should be able to do something along
-> these lines:
->=20
-> 	pwm_get_state(pwm, &state);
-> 	state.enabled =3D true;
-> 	pwm_apply_state(pwm, &state);
->=20
-> And expect the device to do something reasonable. If the PWM isn't
-> properly configured, that pwm_apply_state() should return an error. If
-> ->get_state() returned random values, that may not be guaranteed. With
-> v6.3, the above should return -EINVAL for pwm-atmel because period ends
-> up being 0 and we check for that explicitly. And that's really the only
-> sane behavior for drivers that can't read back the full hardware state.
-
-This is something that we don't agree about. IMHO it's better if
-consumers specify the state they want to apply completely themselves
-without using pwm_get_state(). I'm convinced that many people don't
-understand pwm_get_state() and the resulting corner cases.
-
-One such corner case is the one we hit here, that pwm_get_state() can
-return a state that cannot be reapplied. Another common misunderstanding
-is that (apart from directly after driver init (or was it after each
-request?)) pwm_get_state() isn't about the actual HW state, but about
-the state that was last applied successfully.
-
-Do you think that I should be able to do:
-
-	pwm_apply(mypwm, &(struct pwm_state){ .period =3D 0, .duty_cycle =3D 0, .e=
-nabled =3D false, .polarity =3D PWM_POLARITY_NORMAL });
-
-? This should be enough for a driver to know what to do. After that,
-what is the "reasonable" thing that should happen if I follow up with
-
- 	pwm_get_state(pwm, &state);
- 	state.enabled =3D true;
- 	pwm_apply_state(pwm, &state);
-
-?
-
-The current state is that the first pwm_apply() fails. I didn't check,
-but I can imagine that there are other combinations of (state, lowlevel
-driver) where pwm_apply() succeeds with .enabled =3D false but not with
-=2Eenabled =3D true. (For example consider a driver that can only do
-inversed polarity, or polarity > 100000. What should happen when I call
-
-	pwm_apply(mypwm, &(struct pwm_state){ .period =3D 100, .duty_cycle =3D 20,=
- .enabled =3D false, .polarity =3D PWM_POLARITY_NORMAL });
-
-?)
-
-If I was to design a PWM API today, I'd consider to not put .enabled
-into pwm_state. With that enabled =3D true would be implied for
-pwm_apply_state(), and there would be a separate pwm_disable().
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---4zmiibewdkp7eyng
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRtsJkACgkQj4D7WH0S
-/k7rDggArf5zaA2qcXfUd+ZJgysORb7RYwPUMGU7Hh9sSyT3OEnd9vaW/sDXlKZu
-O+3UE8x4oni9BwS9NFRhdIJ0l4gw9If8YCJIGNuwyI1WCnHSo5uUr1TZNYIlUl3a
-lolISPQ8OI5Zenilhsci0LkxS1dhk0TX7B75ICyPPxgmC6YbLzoZ+kXmlSx0FcwO
-Mhpctrbe0we3qkqdQ2wAUNfx/XqqOrHOvTPvz6JxTFPQcfrvKYng1zvnZ2029oXW
-KHKXQ4t8QoNisMBvxexWUsbCf7cQm/2H4SBMd//H9KIKzRrEYa78lcKbU60ZGV/R
-TznTIVgRmX81xqNvRn2iM5AcEI3/rQ==
-=ykOq
------END PGP SIGNATURE-----
-
---4zmiibewdkp7eyng--
+thank you. I'll update this in the next version.
