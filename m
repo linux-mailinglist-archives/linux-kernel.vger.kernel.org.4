@@ -2,165 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E2470ED35
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAA670ED38
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239446AbjEXFlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S239033AbjEXFlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjEXFlD (ORCPT
+        with ESMTP id S239085AbjEXFlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:41:03 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2066.outbound.protection.outlook.com [40.107.100.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C81B3;
-        Tue, 23 May 2023 22:41:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yd+Sb0dL5PVvw0Oj9R1Y9ZMDDLc+yOHW6RF0fBW2OF1Gbt3RrEkHVB8WIiAIKU24ckwCFbcbjY386ZWMA8NYYPDIlnirDUxkM60fc0DWm+T8kfTDq895oMwnkCKQ1vbZs0GqQJ2DNhZLm0KLhc8Gqg2SLc9BlOihh+qIIG8F56gWVz98Q9fOS2CzOnirrpPmm2QHmxUiqTni6NJiPTnwudrFBER1ClK+iZQxkll/jMUKkshBUo2HLvb+wjy5LKw1c9HbXQOuqCJj9DlE/x05mAkNTYfjGvYXqnvP2ej9yLXm1yuHULrPxNg+WWt2MRcjr0JHBgnAxBjkTBvXSklRcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qPi1dEVFcU8HVIyIvWq83TAsjFOhg2qPq6Q0R0xw2qE=;
- b=QevItaZOtxZUZRcIRP2XixsdvDU81a186MS6QiMmBx/vBgEs/pTd7RlfNNXIAry4qIIr6OmJgofNGwllNaECOXD1iSGo4VvVuvdCgbFfKeKfMMjgu+zg1lcjBBUBZvXfOQdn2SeK+/ZEj+rvy14W+WNURQ7O53dlKl/K5oAtDHYHPPlbKK3P8xm3gS7wtYHoMKrRh2tZhihMTnojsD+TZrgleLRD0EewDW6p078VEhuZMFg/JnTV3KSUzy9PBNc4+xFSSQosg+ZuztrO6uysejG7LHmap5cvbJgx1guQjRhPk+6RAOO4JqEOyrxiUEMHtqb6nhVi1+P3tpwkG95ZMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qPi1dEVFcU8HVIyIvWq83TAsjFOhg2qPq6Q0R0xw2qE=;
- b=UceqGKph/w9FIqtV+IZacm88WIZ4OVjTxxHcytP/dvpaGzjBIwxr/AXUVKdFxm3NjAUxItT8SxMWm6FitKSeMsRmM8z/raOWOnT2gZtH7FLo9LX/V8hxhlf8v8tg8KX9H5EKAuy3pv7h2XUIuW4t9M6VQpdMjzK6CfnKaT9sql9eCsjTK/2BRG2AERsris3hzZHrTSvywb7rO/PsYOxE6nkgFucmltTwQGK9TELfnLmFMygXiGX5fxbHFPaNmxjdDWzOoJwHFRJo3fLeaRRHQ6hUMvP1Hgq1zhr0W22zq0xr1bnzse1bEX3hPQEMwL5tIPyrRJBGcN7OrE5o2hs7mA==
-Received: from BN8PR03CA0002.namprd03.prod.outlook.com (2603:10b6:408:94::15)
- by SA1PR12MB8699.namprd12.prod.outlook.com (2603:10b6:806:389::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Wed, 24 May
- 2023 05:41:00 +0000
-Received: from BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:94:cafe::15) by BN8PR03CA0002.outlook.office365.com
- (2603:10b6:408:94::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15 via Frontend
- Transport; Wed, 24 May 2023 05:41:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT029.mail.protection.outlook.com (10.13.177.68) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.30 via Frontend Transport; Wed, 24 May 2023 05:40:59 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 23 May 2023
- 22:40:44 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 23 May
- 2023 22:40:44 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 23 May 2023 22:40:42 -0700
-Date:   Tue, 23 May 2023 22:40:41 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v2 06/11] iommufd: IOMMU_HWPT_ALLOC allocation with user
- data
-Message-ID: <ZG2jWQvl9tdpZ1Vv@Asurada-Nvidia>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <20230511143844.22693-7-yi.l.liu@intel.com>
- <BN9PR11MB52767257B1AC401121F3B24F8C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZGfSjYMA06PmaI+Y@Asurada-Nvidia>
- <BN9PR11MB5276FCE1CAA5556E0CBE0B628C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Wed, 24 May 2023 01:41:44 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22EC189;
+        Tue, 23 May 2023 22:41:30 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ae74ab3089so4269215ad.0;
+        Tue, 23 May 2023 22:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684906890; x=1687498890;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DB+FrLXm23sZ6gr4EDrh7Ica+cTPF1YFJFo6DmMxVSo=;
+        b=Mxj5EL2uhyedVvbrLxTkPsh+/bb4kU9FMVyGhIMjuj63YfrxJpTxn8UQgpsZdEFHQy
+         spuh4pgh4pk5vIxXYUe+tjYRlvYud88Lq8BFyjiT4w+glFlwH+313DrlUFlOUk83SmRo
+         X6hZKOqGBBP+El9cz50wbdRvZVjNnXeLSofCKEusJcHvyhVTk3qBkYL1aVhe0McQeFqz
+         GUSpYiN85e8WX2nPTwZ0gh+3oix5gBnkcTnfUja7SDM9z9B6QMOGW8QxWLjBJIpDxYeA
+         VAGIi9moNCtAbXh1p0TjwM43tyOZG76KyI7xEZg8HFgBChjsDlmWPM6m5Fk4Kn9oU7M5
+         yPwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684906890; x=1687498890;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DB+FrLXm23sZ6gr4EDrh7Ica+cTPF1YFJFo6DmMxVSo=;
+        b=edtcbIH3r1VAEQ6eM3SBguCc2YZvVdrosLgNL+S7c0mF6QTDSjkOngPkS1oFLwh+eb
+         F5k9llw9AQaYEfr3Kx+eB/US87a1V4bKiFtSqKNleBv2WIxZA5QJ4sYDXQabf4kDRocY
+         +aE6mxrBLNMqs058aLMolnEsRjRHlwuc+TC795aaOqqOXatbgGe7vgEtUAu9b80jVYAl
+         v6IwPoXK91qWYFU5xbn/Kjec/IqG4expswpthAsciza+Cc5VhzHQhmBQCNKBGUiBzrqs
+         vZlI46WXqqVmi14VGWSIIRbA1WtZY0Y5IZrIrc6fSLhbuvJ0fZVCAcHxj4KX925Q6IPo
+         PUDg==
+X-Gm-Message-State: AC+VfDyXFBF11U6aGXxBqv15PxIk27ja+60sybVg9PxehVZ/m7/wMYR8
+        hKOYFJTOxRjcovsvUWooM+w=
+X-Google-Smtp-Source: ACHHUZ7dNPiJ3xPKUMCOV5C9Stlxo2YIt4aDPcffxXvvoZuZxGkXWOiq0H6bYqoP/vfvTbSlhN5SQQ==
+X-Received: by 2002:a17:902:ac86:b0:1af:a704:a65 with SMTP id h6-20020a170902ac8600b001afa7040a65mr9557991plr.10.1684906890162;
+        Tue, 23 May 2023 22:41:30 -0700 (PDT)
+Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
+        by smtp.gmail.com with ESMTPSA id u3-20020a170902e80300b0019f3cc463absm7762636plg.0.2023.05.23.22.41.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 22:41:29 -0700 (PDT)
+Date:   Wed, 24 May 2023 13:41:23 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "johan@kernel.org" <johan@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
+Message-ID: <ZG2jgwjK+CBmOk3G@sol>
+References: <ZGzsD_HMbMGhGwcr@surfacebook>
+ <72990baf-6964-01ad-d891-7090831d0310@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276FCE1CAA5556E0CBE0B628C419@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT029:EE_|SA1PR12MB8699:EE_
-X-MS-Office365-Filtering-Correlation-Id: 011f6aed-50a3-42d0-43db-08db5c19744d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HMgEOvXJMb16pvfbbeTm+hczhBREXZ4XvoVp01UNtmU2txps+FiSERNLFQGksbrclOomyIF41nuGsNusvBzz3v5V5e0kIPrPTAp/kfRfellzPwk8bgfgRxR8HmDmfzjz9oOdE3N1nXuiiZORJMDKLoQvTdwH/Wh2F0hHzu31UieADjxDohuOMr1canz4RzopZemvL899hs5Df3/GMVgUbp5QcSvyqNmZR7BH3GTT3haI3diIwXVv6WDJvCcsXBm4cvNqE5vobzZLbCJ7KpFrEniFvEGEINIPZsfblIQD0y7BfG1AT4Afhl17E+H909dJ1Xv3F2TIBm8GKTOWj0flRzphh/srKPbguVhJq9IF6pdlwXq82ibO9OWw/yYZXt2WSVFQ0tg1tBUUjFptOanftFUtWejc9Fzv9NAIJglLGFYUfzYzW76OU6QPd2S2VjM8JqCRKyeQK1MzcI+CpKCiF5UALTdawc05T3a3sZ3Xf+hncREIl2MfSUcapQGET/toqMgIgqR9CZQ4XoomekvUYXtgIJ1JzH3OuxDSkCMYDBQRxTesOP4niFsHzdq7Uf1XLXbTdo1Vcvpq3iZ24uCJjKt14biusS6de1W+z2jP5c7/z9fZq5kkoSK0lVCAFJYC/YFCz0SyAX5ANtenE6mn4Cgx0MCkdJnUjYyyd0UwuXde2TowRNeQ12/BNpV5i9p+pV85cYkTyRTurGevTG/FjO1Fih+ceWA4jDszeWY8j0s=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199021)(36840700001)(46966006)(40470700004)(54906003)(82310400005)(41300700001)(478600001)(316002)(4326008)(70586007)(6916009)(86362001)(70206006)(5660300002)(33716001)(8936002)(8676002)(2906002)(7636003)(26005)(356005)(40460700003)(82740400003)(186003)(9686003)(7416002)(426003)(336012)(55016003)(40480700001)(36860700001)(47076005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 05:40:59.6028
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 011f6aed-50a3-42d0-43db-08db5c19744d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8699
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <72990baf-6964-01ad-d891-7090831d0310@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 05:16:35AM +0000, Tian, Kevin wrote:
- 
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Saturday, May 20, 2023 3:48 AM
-> >
-> >
-> > > >
-> > > > +     switch (pt_obj->type) {
-> > > > +     case IOMMUFD_OBJ_IOAS:
-> > > > +             ioas = container_of(pt_obj, struct iommufd_ioas, obj);
-> > > > +             break;
-> > >
-> > > this should fail if parent is specified.
-> >
-> > I don't think that's necessaray: the parent is NULL by default
-> > and only specified (if IOMMUFD_OBJ_HW_PAGETABLE) by the exact
-> > pt_id/pt_obj here.
+On Tue, May 23, 2023 at 09:17:26PM +0000, Chris Packham wrote:
 > 
-> I didn't get. The uAPI describes that only hwpt not ioas can be specified
-> in the pt_id field as the parent.
->
-> If we don't check here it means the user can specify an ioas id as the
-> parent?
+> On 24/05/23 04:38, andy.shevchenko@gmail.com wrote:
+> > Wed, May 17, 2023 at 09:30:51PM +0000, Chris Packham kirjoitti:
+> >> On 17/05/23 20:54, Andy Shevchenko wrote:
+> >>> On Wed, May 17, 2023 at 2:50 AM Chris Packham
+> >>> <Chris.Packham@alliedtelesis.co.nz> wrote:
+> >>>> On 17/05/23 10:47, Kent Gibson wrote:
+> > ...
+> >
+> >> Again the problem boils down to the fact that we have a userspace switch
+> >> driver (which uses a vendor supplied non-free SDK). So despite the
+> >> kernel having quite good support for SFPs I can't use it without a
+> >> netdev to attach it to.
+> > That user space driver is using what from the kernel? GPIO sysfs?
+> 
+> Yes GPIO sysfs and exported links with known names, which allows things 
+> to be done per-port but also wildcarded from shell scripts if necessary. 
+> I think the key point here is that it doesn't care about the GPIO chips 
+> just the individual GPIO lines. Anything involving libgpiod currently 
+> has to start caring about GPIO chips (or I'm misreading the docs).
+> 
 
-I meant that the parent pointer isn't specified at this line:
-the declaration of the parent is simply NULL, and not touched
-in this IOMMUFD_OBJ_IOAS case, as the parent pointer would be
-only specified in the IOMMUFD_OBJ_HW_PAGETABLE case that is
-behind this line.
+As previously mentioned, the libgpiod tools now support identification of
+lines by name.
+As long as your line names are unique at system scope you should be
+good.  Otherwise you have no option but to identify by (chip,offset).
 
-We could add a sanity of the parent pointer, but that would
-be just a NOP, right?
+Wrt the library itself, I was thinking about relocating the line name
+resolution logic from the tools into the library itself, so it would be
+more generally accessible, but haven't gotten there yet.
 
-Thanks
-Nic
+I'm also of the opinion that libgpiod is too low level for common
+tasks.  That is necessary to access all the features of the uAPI, but
+for basic tasks it would be nice to have a higher level abstraction to
+reduce the barrier to entry.
+
+e.g. in Rust I can do this:
+
+    let led0 = gpiocdev::find_named_line("LED0").unwrap();
+    let req = Request::builder()
+        .with_found_line(&led0)
+        .as_output(Value::Active)
+        .request()?;
+
+    // change value later
+    req.set_value(led0.offset, Value::Inactive)
+
+which is the equivalent of the sysfs
+
+echo 1 > /some/sysfs/line
+...
+echo 0 > /some/sysfs/line
+
+That is bad enough. It pains me to see how complex the equivalent is using
+the libgpiod v2 API (or v1), and that is not putting any shade on Bart or
+anyone else who worked on it - there are a lot of constraints on how it
+is designed.  It just doesn't feel complete yet, particularly from a
+casual user's perspective.
+
+One of the things I would like to see added to libgpiod is a set of working
+examples of simple use cases.  Formerly the tools took double duty to
+fill that role, but they've now grown too complex.
+Those examples would highlight where we could provide simplified
+higher level APIs.
+Then rinse and repeat until the simple use cases are simple.
+
+> >>>> I'm sure both of these applications could be re-written around libgpiod
+> >>>> but that would incur a significant amount of regression testing on
+> >>>> existing platforms. And I still consider dealing with GPIO chips an
+> >>>> extra headache that the applications don't need (particularly with the
+> >>>> sheer number of them the SFP case).
+> >>> It seems to me that having no in-kernel driver for your stuff is the
+> >>> main point of all headache here. But I might be mistaken.
+> >> It certainly doesn't help, but I do think that is all orthogonal to the
+> >> fact that gpio_is_visible() changes things rather than just determining
+> >> if an attribute should be exported or not.
+> > Sorry for being unhelpful here. But without understanding the issue we can't
+> > propose better solutions.
+> No problem, this is probably the most engagement I've had out of a Linux 
+> patch submission. Hopefully it's not too annoying for those on the Cc list.
+
+Well, now you mention it....
+
+Along the same lines as Andy, it is always useful to get feedback about
+problems people are facing, and how the available solutions aren't
+working for them.
+If we don't know the problem exists then we can't fix it - except by
+accident.
+
+Cheers,
+Kent.
