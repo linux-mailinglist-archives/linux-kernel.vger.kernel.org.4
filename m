@@ -2,90 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE2D70F3D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA93D70F3DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjEXKNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S232531AbjEXKOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbjEXKNO (ORCPT
+        with ESMTP id S232397AbjEXKOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:13:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D478F;
-        Wed, 24 May 2023 03:13:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 24 May 2023 06:14:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150A2E65;
+        Wed, 24 May 2023 03:13:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 06883223C1;
-        Wed, 24 May 2023 10:13:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684923191; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/ve4/TtYTb+xjne8MK5462M47xa5SsY8B2FkwW34+Ec=;
-        b=J854jhGb1iler25PD7IsLRhDY4qoNhjLVAy1/X25dxY5NIvulnv6l5hExoBxGabJwFyDN2
-        NtV6g1YcuEl6ruTvP88ymkpxRTHoCn0BVUvAOTmkCoZ9AwY1e9k1t94YkXMYx9xiS9PUiw
-        Yuh7KrysetiKHjdZq0ICvFqn8qChoMs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684923191;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/ve4/TtYTb+xjne8MK5462M47xa5SsY8B2FkwW34+Ec=;
-        b=8PPtdtNJ/oSkIBJ1FkAulBoYKRBsmhFmFPjHKM7RavKLfxQz/S+ayzKm2bWdeCdLTnCg1b
-        YjnkN1s0fBFUg5Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45D9B13425;
-        Wed, 24 May 2023 10:13:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OFd2EDbjbWTwGgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 10:13:10 +0000
-Message-ID: <d2e02a4e-2a73-7b07-1bfb-ddf3f2a53ff1@suse.cz>
-Date:   Wed, 24 May 2023 12:13:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
-        mpe@ellerman.id.au
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.453785148@infradead.org>
- <20230524093246.GP83892@hirez.programming.kicks-ass.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230524093246.GP83892@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1BD629C8;
+        Wed, 24 May 2023 10:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD94C4339B;
+        Wed, 24 May 2023 10:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684923210;
+        bh=YBiQZnn3UE4CseHaGnob9PKsAhVchxOdPP8AumSzB48=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kK6Io4A318tO+M6jmuKFkonmmbgrosqEmC3p82hxD7GbkMs4d0x+j/5oZ9VbZfAmY
+         gogGbYl1IgncgeZ/uG1tcDSX/6An+eKCYyj3pl5As/uh7wRjwOxZ5v6GrioHuWInWl
+         xVLfw/1n65LCiXkavZ6aND+GVMmaN6rdQ9q9+pobaE2DZ9l7zs4hK+u+bYrCyx72q1
+         5DNo5p8XFiTUTQ5F1Uzz9BCmfjd6ms5XBmr84QWH4o+3L91Q1Zei72gjXdAyDdAXlv
+         ZNz2/C9+WJLxNKNNQjYTLRVSF6GDLkm+C69gIEZGXRS91OQG4yDsVxzMEUhZ8Ue73H
+         7oISuu+2ptM2g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.4-rc3
+Date:   Wed, 24 May 2023 11:13:17 +0100
+Message-Id: <20230524101329.ACD94C4339B@smtp.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,74 +49,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 11:32, Peter Zijlstra wrote:
-> On Mon, May 15, 2023 at 09:57:07AM +0200, Peter Zijlstra wrote:
-> 
->> @@ -3008,6 +3029,22 @@ static inline bool pfmemalloc_match(stru
->>  }
->>  
->>  #ifndef CONFIG_SLUB_TINY
->> +static inline bool
->> +__update_cpu_freelist_fast(struct kmem_cache *s,
->> +			   void *freelist_old, void *freelist_new,
->> +			   unsigned long tid)
->> +{
->> +#ifdef system_has_freelist_aba
->> +	freelist_aba_t old = { .freelist = freelist_old, .counter = tid };
->> +	freelist_aba_t new = { .freelist = freelist_new, .counter = next_tid(tid) };
->> +
->> +	return this_cpu_cmpxchg_freelist(s->cpu_slab->freelist_tid.full,
->> +					 old.full, new.full) == old.full;
->> +#else
->> +	return false;
->> +#endif
->> +}
->> +
->>  /*
->>   * Check the slab->freelist and either transfer the freelist to the
->>   * per cpu freelist or deactivate the slab.
->> @@ -3359,11 +3396,7 @@ static __always_inline void *__slab_allo
->>  		 * against code executing on this cpu *not* from access by
->>  		 * other cpus.
->>  		 */
->> -		if (unlikely(!this_cpu_cmpxchg_double(
->> -				s->cpu_slab->freelist, s->cpu_slab->tid,
->> -				object, tid,
->> -				next_object, next_tid(tid)))) {
->> -
->> +		if (unlikely(!__update_cpu_freelist_fast(s, object, next_object, tid))) {
->>  			note_cmpxchg_failure("slab_alloc", s, tid);
->>  			goto redo;
->>  		}
->> @@ -3736,11 +3769,7 @@ static __always_inline void do_slab_free
->>  
->>  		set_freepointer(s, tail_obj, freelist);
->>  
->> -		if (unlikely(!this_cpu_cmpxchg_double(
->> -				s->cpu_slab->freelist, s->cpu_slab->tid,
->> -				freelist, tid,
->> -				head, next_tid(tid)))) {
->> -
->> +		if (unlikely(!__update_cpu_freelist_fast(s, freelist, head, tid))) {
->>  			note_cmpxchg_failure("slab_free", s, tid);
->>  			goto redo;
->>  		}
-> 
-> This isn't right; the this_cpu_cmpxchg_double() was unconditional and
-> relied on the local_irq_save() fallback when no native cmpxchg128 is
-> present.
-> 
-> The below delta makes things boot again when system_has_cmpxchg128 is
-> not defined.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-Right, that should do.
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-> I'm going to zap these patches from tip/locking/core for a few days and
-> fold the below back into the series and let it run through the robots
-> again.
+are available in the Git repository at:
 
-I noticed some comments in mm/slub.c still mention "cmpxchg_double", dunno
-how much you want to clean it right now or can be postponed. Also some sysfs
-stats files for CONFIG_SLUB_STATS (not widely used) which we probably might
-try renaming without breaking anyone, but it's not guaranteed.
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc3
 
+for you to fetch changes up to 6afe2ae8dc48e643cb9f52e86494b96942440bc6:
+
+  spi: spi-cadence: Interleave write of TX and read of RX FIFO (2023-05-22 11:41:05 +0100)
+
+----------------------------------------------------------------
+spi: Fixes for v6.4
+
+A collection of fixes that came in since the merge window, plus an
+update to MAINTAINERS.  The Cadence fixes are coming from the addition
+of device mode support, they required a couple of incremental updates in
+order to get something that works robustly for both device and
+controller modes.
+
+----------------------------------------------------------------
+Amit Kumar Mahapatra (1):
+      spi: dw: Replace spi->chip_select references with function calls
+
+Charles Keepax (3):
+      spi: spi-cadence: Avoid read of RX FIFO before its ready
+      spi: spi-cadence: Only overlap FIFO transactions in slave mode
+      spi: spi-cadence: Interleave write of TX and read of RX FIFO
+
+Krzysztof Kozlowski (1):
+      spi: MAINTAINERS: drop Krzysztof Kozlowski from Samsung SPI
+
+Vijaya Krishna Nivarthi (1):
+      spi: spi-geni-qcom: Select FIFO mode for chip select
+
+ MAINTAINERS                 |   1 -
+ drivers/spi/spi-cadence.c   | 105 +++++++++++++++++++-------------------------
+ drivers/spi/spi-dw-mmio.c   |   8 ++--
+ drivers/spi/spi-geni-qcom.c |   2 +
+ 4 files changed, 51 insertions(+), 65 deletions(-)
