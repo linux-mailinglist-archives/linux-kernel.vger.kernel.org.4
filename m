@@ -2,138 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2224E710040
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C352710045
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236201AbjEXV5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S236332AbjEXV52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjEXV5B (ORCPT
+        with ESMTP id S231411AbjEXV50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:57:01 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F70119
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:57:00 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-25566708233so709920a91.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:57:00 -0700 (PDT)
+        Wed, 24 May 2023 17:57:26 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077CF187
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:57:25 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba86ec8047bso2177209276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:57:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684965420; x=1687557420;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PAhC/flunH4mhtUx9WkifybqdgbT+jLIDs5rKRqBH18=;
-        b=VcANevIbUge33+JiwrVldMPsDVseKzleSpEoGVXvCtvf59KvdrxkNaG3LuTkHdW4Jk
-         bifOJhE2t54HMCgFf22CN2SG1cVz5SG5Lko5jtDAvmJP1YtUNTibOJe5TrnwIpvIOFYR
-         dOrd/xuRTa+VnYbxbX7Rn0MbebnB6yrfeiMEBHHLsoKYVoaHG7M7CsH56LaK0Gh7rdBq
-         C2unCUg13w37PapsE/+jP/rfI9e9ejFvHv85XK6ohMG1yFOAxI5zmjatNWwb/cCXOFso
-         h/YeuYHyIZlpMyxTKJUzb+DpHWDl8D7Slzl1NiYD68IRDEkqt8JInDTOFbEVdcrm4ai5
-         6/ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684965420; x=1687557420;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1684965444; x=1687557444;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PAhC/flunH4mhtUx9WkifybqdgbT+jLIDs5rKRqBH18=;
-        b=RcVcBpGfVsiGiscUP9SW8qHIo9CcIpKEp10MQ3Eh7S7TnfjV5CQIy5OJIZGoxkm3cV
-         YRp+Ggr9Ont/79R12cUzCgY5477yndh4p1i9YXe1Q4FF0/EBoyybqyPdA0fWBjNE89i8
-         QTVemrTL5UEgtZ21VLsl6HKMBnq0fNxPyisetF7cKz6DE0MynMx7kxgY+dXvnzR5aOm0
-         rMWT4rgg3a2VG6na3PnBliJBfSCt3b9bf6hf7umqZPkFRbIVyOkUawdzyYI8COvBuxzm
-         IfuL3gv1bMHtilvF8Vs/Cf1bOno7FXwmPWJWq40SVxG9MVnMihg7e0KF7+oLlONgQJqZ
-         JZEA==
-X-Gm-Message-State: AC+VfDwEpUxq34AKoLfeqfmv73EzsNht1UjyDV/T8HIQq1zMxxbE4PNe
-        +6nXmHC3leSmZ9Bns5r0BYyV0Q==
-X-Google-Smtp-Source: ACHHUZ5QRESsHt/p5Vp49+LOpaxi0xAHAvojh3fT62UGmVDu+zceNYswQcWGKavnizqXEm1VGKl/5w==
-X-Received: by 2002:a17:90b:46d1:b0:247:529f:92d7 with SMTP id jx17-20020a17090b46d100b00247529f92d7mr19482622pjb.8.1684965420233;
-        Wed, 24 May 2023 14:57:00 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id 8-20020a17090a018800b0024e41f23a2dsm1954764pjc.3.2023.05.24.14.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 14:56:59 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q1wTY-003UIE-1M;
-        Thu, 25 May 2023 07:56:56 +1000
-Date:   Thu, 25 May 2023 07:56:56 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        linux-xfs@vger.kernel.org
-Subject: Re: [PATCH 0/9] Mitigate a vmap lock contention
-Message-ID: <ZG6IKE7yNEkJhge+@dread.disaster.area>
-References: <20230522110849.2921-1-urezki@gmail.com>
- <ZGyqiaRnMJPFhxR6@debian-BULLSEYE-live-builder-AMD64>
- <ZGzX3vRMlGHIcYCe@pc636>
- <ZG0AE9mjHkRZIGmr@debian-BULLSEYE-live-builder-AMD64>
- <ZG3d1FUXiCk3QL3D@pc636>
+        bh=HnrQePs+guIncAtpR4LpewLTG9uJD1WVMzDg7x5+JnQ=;
+        b=MOJGgNeeZ2NTaZLOw5dLeQKOsSMdZuOUDLi4BpOvTiIWRhxlewpCkLWFm90AvCFDM0
+         dBbOiUgnwSF3tx2OCsfzW5pehrThLZTOsfw+byMilrUxH/Cj5v2axZNDxs+vrOsJ2N4v
+         IxXP53ZTgLR3muduWGVYPh1B5tWmAMwq4uWqW4WLkhKPpMI27Eee0C+v/cW+dzVTGCUZ
+         4A+99EiMuntUsoYNf+LzQB7aUOpYtEqfYo2C/g9I4lkOyTxkb7Zoy5dm+ieqK7BfUV0z
+         H7dMG4Is8HvC4rO8ie0Gg/xc9BXLT61Su2UirLdP/AoEm8mYapaDU29mprZAm7Yp+MSi
+         ymhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684965444; x=1687557444;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HnrQePs+guIncAtpR4LpewLTG9uJD1WVMzDg7x5+JnQ=;
+        b=LgTGHw3heURsVdwkO3o5OVNpDQdS2v3e2/3rON7eqad0PLCAq66yTmuJojhxdJV+qf
+         7bwHaJiLmBbtj51QILt8F1AQTUp8osBPkDSZgiwBYnpBjtl6rfPgeHmZYmJ5zziTtBPa
+         4mWWSodPf6IER40sX0bp4XcCAd7vKlamqtCx5ddId89062gf42pab+Fr8/+tSi1N14AL
+         fRyHV9yJ7PPesX7zxUxyBxDmX/Fxv5g53NDop6wvTndAOqH1r9EzHwPp0eJDSwH1HJOP
+         ARGF3FQZnE2lzBOHW8g10kpe4KvKa8BJC5AWf6PJefLYuvsXDI/VqJM8GiFSYX9RMefs
+         NnAg==
+X-Gm-Message-State: AC+VfDwyC/gB7kWX2IraoBRlU4BJFqCb/h54v73TuQoAsMtYYfQVvwS8
+        lq14/8TeK+lUiEDWMF05KCv3fHFVFi/xw8XxRfSPoCOE+LjfNPY=
+X-Google-Smtp-Source: ACHHUZ6wwnRp26WVRb5bMlIwp5UO3NdT+DkO9QgYycHZoQNR88qp6I/wrFTyf14xwXWr/rrvRF6bugZWse9TXC6cuUE=
+X-Received: by 2002:a0d:e807:0:b0:55a:4ff4:f97d with SMTP id
+ r7-20020a0de807000000b0055a4ff4f97dmr19964058ywe.48.1684965444190; Wed, 24
+ May 2023 14:57:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG3d1FUXiCk3QL3D@pc636>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000be039005fc540ed7@google.com> <00000000000018faf905fc6d9056@google.com>
+ <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com> <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
+In-Reply-To: <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 24 May 2023 17:57:13 -0400
+Message-ID: <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
+Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:50:12AM +0200, Uladzislau Rezki wrote:
-> On Wed, May 24, 2023 at 03:04:28AM +0900, Hyeonggon Yoo wrote:
-> > On Tue, May 23, 2023 at 05:12:30PM +0200, Uladzislau Rezki wrote:
-> > And I would like to ask some side questions:
-> > 
-> > 1. Is vm_[un]map_ram() API still worth with this patchset?
-> > 
-> It is up to community to decide. As i see XFS needs it also. Maybe in
-> the future it can be removed(who knows). If the vmalloc code itself can
-> deliver such performance as vm_map* APIs.
+On Wed, May 24, 2023 at 11:50=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Wed, 2023-05-24 at 11:11 -0400, Paul Moore wrote:
+> > On Wed, May 24, 2023 at 5:59=E2=80=AFAM syzbot
+> > <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
+> > > syzbot has bisected this issue to:
+> > >
+> > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+> > > Author: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Date:   Fri Mar 31 12:32:18 2023 +0000
+> > >
+> > >     reiserfs: Add security prefix to xattr name in reiserfs_security_=
+write()
+> > >
+> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D11c396=
+39280000
+> > > start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.l=
+inux-..
+> > > git tree:       upstream
+> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D13c396=
+39280000
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D15c396392=
+80000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7d8067683=
+055e3f5
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D0a684c06158=
+9dcc30e51
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1431279=
+1280000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12da86052=
+80000
+> > >
+> > > Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
+> > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in =
+reiserfs_security_write()")
+> > >
+> > > For information about bisection process see: https://goo.gl/tpsmEJ#bi=
+section
+> >
+> > Roberto, I think we need to resolve this somehow.  As I mentioned
+> > earlier, I don't believe this to be a fault in your patch, rather that
+> > patch simply triggered a situation that had not been present before,
+> > likely because the reiserfs code always failed when writing LSM
+> > xattrs.  Regardless, we still need to fix the deadlocks that sysbot
+> > has been reporting.
+>
+> Hi Paul
+>
+> ok, I will try.
 
-vm_map* APIs cannot be replaced with vmalloc, they cover a very
-different use case.  i.e.  vmalloc allocates mapped memory,
-vm_map_ram() maps allocated memory....
+Thanks Roberto.  If it gets to be too challenging, let us know and we
+can look into safely disabling the LSM xattrs for reiserfs, I'll be
+shocked if anyone is successfully using LSM xattrs on reiserfs.
 
-> vm_map_ram() and friends interface was added because of vmalloc drawbacks.
+> > Has anyone dug into the reiserfs code to try and resolve the deadlock?
+> >  Considering the state of reiserfs, I'm guessing no one has, and I
+> > can't blame them; I personally would have a hard time justifying
+> > significant time spent on reiserfs at this point.  Unless someone has
+> > any better ideas, I'm wondering if we shouldn't just admit defeat with
+> > reiserfs and LSM xattrs and disable/remove the reiserfs LSM xattr
+> > support?  Given the bug that Roberto was fixing with the patch in
+> > question, it's unlikely this was working anyway.
 
-No. vm_map*() were scalability improvements added in 2009 to replace
-on vmap() and vunmap() to avoid global lock contention in the vmap
-allocator that XFS had been working around for years with it's own
-internal vmap cache....
-
-commit 95f8e302c04c0b0c6de35ab399a5551605eeb006
-Author: Nicholas Piggin <npiggin@gmail.com>
-Date:   Tue Jan 6 14:43:09 2009 +1100
-
-    [XFS] use scalable vmap API
-    
-    Implement XFS's large buffer support with the new vmap APIs. See the vmap
-    rewrite (db64fe02) for some numbers. The biggest improvement that comes from
-    using the new APIs is avoiding the global KVA allocation lock on every call.
-    
-    Signed-off-by: Nick Piggin <npiggin@suse.de>
-    Reviewed-by: Christoph Hellwig <hch@infradead.org>
-    Signed-off-by: Lachlan McIlroy <lachlan@sgi.com>
-
-vmap/vunmap() themselves were introduce in 2.5.32 (2002) and before
-that XFS was using remap_page_array() and vfree() in exactly the
-same way it uses vm_map_ram() and vm_unmap_ram() today....
-
-XFS has a long, long history of causing virtual memory allocator
-scalability and contention problems. As you can see, this isn't our
-first rodeo...
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+--=20
+paul-moore.com
