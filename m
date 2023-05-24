@@ -2,211 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6AC70EF9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0F270EFCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239761AbjEXHkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S239939AbjEXHp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbjEXHkU (ORCPT
+        with ESMTP id S239380AbjEXHpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:40:20 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2049.outbound.protection.outlook.com [40.107.244.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D039B8F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:40:18 -0700 (PDT)
+        Wed, 24 May 2023 03:45:53 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2095.outbound.protection.outlook.com [40.107.105.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425421A8;
+        Wed, 24 May 2023 00:45:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SvPbv3ksoK7gT+BNFvhWCedNT9yHEPK+GACt8nUNYoe5dhcjAo2424vLwt/AXU9hgKNJz3R6Ej2G776qTvK4ycw4WppC5quqK7LpREhXKgbw4eB+gM7cz2KI9ErKoUAh/ENASZWgdRtP8KbhrW3Rh0hYSn6lBdSlxfg4IBv5R2+o/6it7+kpdPzG9a3gy4Y8kJwTnhm95zHmiBQbzSV616sQNzDmKZCIFzpGVXAYwy3jDeyHkfzzpcee7UmerMwuPWxVR2MCR0XHaAmYJMf4x+rFlmKhUYNFzwSCVFN3yByB2raNcPVQwxmGhE443wer9mf5evD5F+diToY38KAGxg==
+ b=X7UrFqZGpzHPKTVtmaORZ5k7xcTu1JfiShQBF9I7NsHxHYngG1WOf7mukv8LVMuuwF+poOFx3YkLRrWgqqsKge+d1f/2bw0BLJOwh38z+MbuDBLTZNjOYpGTmRxJlLTWVEbLw4DE9B6qrGZCVu+z+2G8fII13GIxv8FBNfxm0fXINUb/mcdRHR/qYenS1b4mwbs3Azl3cP/kYGjZ3ZWAgl1SXPLZTX+j+Fy1/BTUhaUH1iY1Cho/m4xeptRGd00hNmBSsfFO4MZ847CvlXomysWkclHtUv3XEEpKvWx1q8gkkwc62LwSYSclq4fBcWIeTLCGaFIVBPU0cPidyocZbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=78N8cT4/Uxc5Bx/bPB0fc5glJgTP0FkI8uNrKrmvX1Q=;
- b=DblI5sw+hh/ZGtmu5jMHPNS2ykkjzQc+Xqw9WXXdYyreWeQVkK8+iGank1VCJMVe9VI1zE2+FnB6vyj0lepej5+oEM6nWAt/nW3UgZZiiZRX6JwbaNMTf7E+6DevKY+LcUXjoBzaOY14Qab0bVJBzVRuPpKj8r7srRpoMCT2qql9Y67Te9p8oEsj59RBda2Jm1ukJazLqKyNMMrIIL48O52oUrP7HXB6q5BNCSfXMGhFGMEZ/ez1iRsf2Yil4D1IU2bcmZdaMMGEg8sACxrTHiHbfeMia8Lluz68xz1KsJzOYcbM1IKjkUdQ0ZZLtZ+Mqvq6JjFx2JmnvTd6Ue4EbQ==
+ bh=uhdrjWthq7IOXZ9EZdnDGAu/l7lGobaT9W+qzkKF6PM=;
+ b=HS9zviYUrH+usFPN7xutd4L6RDlhwRRD+eAPoX0GCXZLszlxMR4Y0OYfteZKF45INYFvWTKGAE+IS+BTWfB7VbSHpma4uiljwY70/B3oTgyTYe626NkbJagIguFPZ0WUaVb+DhbUXRODqKntiMv9SK2RRrPhTW/cWoTqP+rvRKJFL9HZIP3REimCX/MUd3DyFb5xwJMDlaaTyCTjvsgWDNy1LKXHiyiQ03iiqC50by5BbwOGo9M+WfRzEZfcyTzVpvSJduEY3iQ8SM1nd2CYXn0D4UdjIjbBZrO6lP27pE0bcz6pVbo73b12YRBI0+GRObp4rFzvfgpZIKJFuGTOFA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=78N8cT4/Uxc5Bx/bPB0fc5glJgTP0FkI8uNrKrmvX1Q=;
- b=k+QH32ps+JoruUbC7cjAhT0+TuCM6/9ZIolKNQ1OTyJqhynFK3VWK6Z0m07hPQHKCKoRShF2fBHYb3ZT2fqrynH9/yRqU4RYNs0La78zlBCFr9vUYGc9LwRR3vQJvfc5x3J3KdAHItM+N8HaVJDjFWh5ODAFft5uux8Bcl/p2ww=
+ bh=uhdrjWthq7IOXZ9EZdnDGAu/l7lGobaT9W+qzkKF6PM=;
+ b=AMKErKMi9wdxTMmazjgOPwrmgqjrlAdfBlG1kiGzJsoRw40NkvIkc5Mz7SIeqjyTxYzc+4xp5FKsseTeZqV7VEX3/PhL1E4/UvDTzW+cEHRG5kCpK+u4BqYghdw603eeGBhOSrsXrqd+H1ZQwi0cS9tU9PbE4OLbSTRm86U+goA=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by MW6PR12MB8915.namprd12.prod.outlook.com (2603:10b6:303:23e::16) with
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
+ by VI1PR02MB10265.eurprd02.prod.outlook.com (2603:10a6:800:1c4::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 07:40:16 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::8700:a051:2ddf:d350]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::8700:a051:2ddf:d350%4]) with mapi id 15.20.6433.015; Wed, 24 May 2023
- 07:40:15 +0000
-Message-ID: <017abf89-a1aa-0c85-e244-a56c05b7c6e2@amd.com>
-Date:   Wed, 24 May 2023 13:15:09 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V2 5/9] ASoC: amd: ps: add support for SoundWire DMA
- interrupts
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
- <20230522133122.166841-6-Vijendar.Mukunda@amd.com>
- <fea3c862-1470-7911-ff77-5d945b1d77cf@linux.intel.com>
- <2dfeee7c-32bd-c054-22ff-3a2266e62c90@amd.com>
- <f11f3370-0b72-cb1f-21cf-c574ef03fd72@linux.intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <f11f3370-0b72-cb1f-21cf-c574ef03fd72@linux.intel.com>
+ 2023 07:45:29 +0000
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::681f:7dcc:3f6c:3b36]) by AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::681f:7dcc:3f6c:3b36%5]) with mapi id 15.20.6433.015; Wed, 24 May 2023
+ 07:45:29 +0000
+Message-ID: <3d51a79e-faa3-5a7e-6ce6-372684e0f14a@axentia.se>
+Date:   Wed, 24 May 2023 09:45:27 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: PWM regression causing failures with the pwm-atmel driver
+Content-Language: sv-SE, en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-pwm@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+From:   Peter Rosin <peda@axentia.se>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0147.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:6::32) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MM0P280CA0071.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:8::25) To AM0PR02MB4436.eurprd02.prod.outlook.com
+ (2603:10a6:208:ed::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|MW6PR12MB8915:EE_
-X-MS-Office365-Filtering-Correlation-Id: 89bbc12b-6f28-40de-1ebf-08db5c2a1d31
+X-MS-TrafficTypeDiagnostic: AM0PR02MB4436:EE_|VI1PR02MB10265:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82c05466-d7a4-448e-4cac-08db5c2ad85d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: P+1pqUWHt1VrqXeQ/LEpch3jpEv/9eFR616B4TL1Ck1IXeAzHMDc+7AmIA7gMzcZOF+KgGKrbV62gjt86Oj7YADkAchxewx25zVlszlj7iTVoFKRmUsf0/l8t5jI9ihwf6Zk56D7L2wIRTfrDcziUStGefntUlNNVxi2JVQhMCCPQ7DIct3kOBVZwRwDXcWtXcREyRs7IwDNqw6dg9STIDsmtb3vkKRXer5ktH7YeTUZVGUWdLi1zSsj7WLRXAf7hn4doRbWRBOgesw9wkaIo7fBQH2BXgw9XTlLBnQkHdVIQP9ewJ1Lgnek9nxXJWqkhE4pcrCspflN2Mw+R1Cd9tIBArjG6VlONltO2gyzQknLGQIHCtiQMsQqUnIQ271vcWnMav4DYTNeytxj4iZ+DsStRb+Rmp4TFdWo92TV2CneDaBAAXWOxbbw+fl47aWZk0L51WqdNhs9oPG4793apfp+IrV6jj3QGrv+CsNDeXQB+yXgM0uZzF3SMCcOOp7HSmv6YizxZhk6P+I4CD42ge3rF6nuUKRqHknY2hWjY2uJz2OYgGMPf83dS5s+onz41xAQyoB01ScvvcpTJ4/B6rzWZNo6TqyO8E56aUVbiRyyQfuMbrN7Y9tJ/LspmUOO+d0X8ephalRwM6zHggPiQw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(136003)(376002)(366004)(451199021)(53546011)(6512007)(8676002)(8936002)(83380400001)(38100700002)(86362001)(31696002)(36756003)(6506007)(2616005)(2906002)(41300700001)(66946007)(66556008)(66476007)(31686004)(4326008)(6666004)(6486002)(316002)(26005)(5660300002)(54906003)(186003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: PRfikwLaYpd+VDp5dCGkn0HXWIM4GZLWTuod9ihyD4S2TXbi+JV/K57uVt7MrMwBCXVpiQOD2BkUXUKXhsVRumFp9ujFf+0w1hwoPhqCG73KP8QyVk2cHYW7MfwzXF0krrMLvMBZBKSkKu52kalH7q031RcvKJI320k5EJNVd63RfsEUQLJOE63pVZ9HwYdsw1omEZHG1BM8Dsppb9rdvY1sd+nAJxO4BaTaR0zF4spVTUmWr55kaFG/aCke9NHCJYoAOrjunqgoivMlMS20LxCE6A3nppMbLakmlEzD4cpEE54+EdG89bdvG/U66kVqOGqKsfJbapLs0GO+tFM66lBfTKeicwfr3PgpBJJ1mNA4Q/E69nq8K3RPg1zn0xbj4AxfJnsYocDKuY7VrrP2H9Q7Q3SXKmXFzYZMLsto4D406d8c4tDvO/HShbZF48ZntVLX1XgwiSzTf7u65gS7gfLgK1Fw9hNoW7pP34x6Wa4bHsoEYGspUW2oErQmhUsjBlG7fgUKlON+Fx4RPrCe3UNkZhgDp2MVhBt/m1m04bcXh35KkHRRMEJZpIS/BN7hQnD4/TslWW16CDpbkL7JxX8PIFrPACXUlyvvb4JWuG8Y3vpkg8QMZnJDEUE1fYbTWp4Kc7XZn4h0Y1e/iSPsug==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39830400003)(366004)(376002)(396003)(136003)(346002)(451199021)(83380400001)(8936002)(8676002)(5660300002)(66574015)(6506007)(26005)(6512007)(86362001)(186003)(2616005)(31696002)(38100700002)(6916009)(478600001)(6486002)(966005)(66946007)(66556008)(41300700001)(4326008)(316002)(36756003)(66476007)(54906003)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anVkZk5ORGk5ajc5VVlnVU9WVjZ6MTUzbjJuR01SWVFjOU5XYmJyM0MrWEw4?=
- =?utf-8?B?ZSswRm1tbjFDampFdFlNNnd5eWtJRW1SR1RCYXB5ZGpzWTBLemZMdnRNdjZV?=
- =?utf-8?B?bTR3R3BnTHJNdXE4RnNBVEpyT1RpMWd0UTYyZ3pTcEltSzQzcmZ1SEwyZm9C?=
- =?utf-8?B?WGZJWDErU2tDc3V2WnVwSUx6V0piOTBqMUtTTFJFd0N3S01jaUt5eDl4RDJz?=
- =?utf-8?B?YUdHZ3lrOERsY1Q4NkQrdGdrZlBhNEZCb1VGSC9YcFFLdVNUZldrNDRVNUhD?=
- =?utf-8?B?Y09EMXlqQ25IZjErWWQyOFowaTA1VTdIMHM5UEo3TXRTbHh3MVdkM1V3QUNF?=
- =?utf-8?B?dDNEb3ppNU9XeWVLLzJEVWl4Nk5pY1pBNzhXb0p4cHk2VHp1YkkrMzlVek00?=
- =?utf-8?B?S09VWXEvYUF0ZlZTcU96T25RZjZJMDRtNnhtWWJWazZVYk5TZFR6V0xXZzlI?=
- =?utf-8?B?bWZsdjh0dmVEUGVZT1ZLTDZWMFkzUWJ5RXFJQklSU2FQL01GemVCa21OR01a?=
- =?utf-8?B?QUNiRmhFNytlbDhnclp4VW02Zjk2NmNEZzZkbDk5ZzZhM0hpVFh1V1VzQUw1?=
- =?utf-8?B?TVFGTlFWMnIzeUhVRjFnYW1FR3pYY29XV0duNVllbVpIM2NBVGpwbnlnZm1C?=
- =?utf-8?B?K2lBZmlSaGc3UDdEUFdWOG1jYUVGLzlFUHlCRWhuK2hVK1FXV24rYWFzcEJa?=
- =?utf-8?B?QlZmRHg0N0kwdTBZcm9YcEJCdHIwekFoa3RrZm9MbGxCMWdDS3hGUFFKTGRP?=
- =?utf-8?B?TWlTblRKaWhjdHNzaWUxbUQyNStzaWg5QzF4MmwwMnZLbEtvdVNOYTQ4VVJq?=
- =?utf-8?B?cW85emo1cTNKNFBJSDdOeGJEQ3JUcG82VjltVVN1RFlESHhVaXI4U1lqellC?=
- =?utf-8?B?eHRtMkhTbWhBMUhKQlpxQzd4ZjFUUHBXTmNtM2hCVUFiSXNDRm9CSDlnUFFS?=
- =?utf-8?B?UTg2NDNTNW9OYndCdE1QWGt6SjZiOVlPUmdwSDYwdXVVd2hoQUwxS2lDTWpP?=
- =?utf-8?B?WmxueUg0dDR3WUZhSkZPOFBZSkxkOE9hd2JQRUE1QStCRlNCSXFQQXZTOXFT?=
- =?utf-8?B?aUZ6cGFZYVFZK01wNG5DUXcxZHNaWFJZNlhqQWlqWUFQMktLWmJUUDZmUVpn?=
- =?utf-8?B?RnI2dlVVZ2xTd09peWtvTzdieGoxV2VKMUtZdDROU1JyLzA0UzBGK1ZXMXhj?=
- =?utf-8?B?V3I1SGFmK08zM3YwdVdiWFd4RlhUT2RyWWlXOC9YSEJ3enlqa2o3NGo4ZHg3?=
- =?utf-8?B?dit6Z1MvWmtmYTJidkF2eVZkeWg2c1NrdXM2eDE5UUNReEFyU0ZmaUx0aFNp?=
- =?utf-8?B?Rnh0cHNucmFrcWx2U0kxOUp3bDl0UDVDRVlsb1RRSFhpWjJNVXExUnNpR1d0?=
- =?utf-8?B?T1RxcFQ3dDdZVWJCMGtaVjhucUJ1QTdwMEgyVjVLWHQ0VVFmNzRmTW42Ykk5?=
- =?utf-8?B?dDQ2VmluYjJ4aWdIaUFVSENkYldVd1QzOGhxM1pvajZnTHF2WjFORmJQUGNY?=
- =?utf-8?B?b2tuc3ppNU1mb3FVeldha0p0TEEyeHFlVnlyVUJmaG1WZlVmRk5MQ3NtREpN?=
- =?utf-8?B?V2pYWWIwTkN3ZEsxZ0owWnN0RVM3WHY1dFJKSkJDVWF2S1dxNjdJeVlZa2lH?=
- =?utf-8?B?MTRtcThRNno3bmd4NkVMamwyU0ZFOXY5d2ZlQmlMMElTY2hGSzdmUG9oZkM4?=
- =?utf-8?B?THd5TkhKZ0ZrWW9ZaERnRUxZRUJWeGhyQ0NaclNZVE9Sd25odUR4b2UzT2Nu?=
- =?utf-8?B?bllOV2FWZTkySVVZdGVDSnRpcFMvdzhTNkxDZ1hHQmw1ZHJrWGVYMXdkejVZ?=
- =?utf-8?B?SFZveXZPZkdBYTZIVFFqTFdsZnhpRG9nVUFBUzVnejhrakNyVFlJY0V1Zy9B?=
- =?utf-8?B?RDNjT3JhbVBRUnhlL0tyTmluZWxVUFBzdXB5dHo5N0IyaDA0aTA0T1BGM00v?=
- =?utf-8?B?dERCNW9Gd0wxWHVDb2ZIVnBOVFkzQzVnaGk1enF6aHBSM0pOOVNqYm5ZV05R?=
- =?utf-8?B?NFNtNkZ4Q2lrVkJIZllWZTJaZ2NTQTI3VC91VDNTMGFQTXI5K2toZXpjcnhE?=
- =?utf-8?B?MnkyRkhaRjl0OGFvNjd1NTVQSE9USUZBRVdmcWZUSTBBL2xoQ1dIRy9BcG9L?=
- =?utf-8?Q?OxIN2hPvGCQ7x+L9ddPsSL07l?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89bbc12b-6f28-40de-1ebf-08db5c2a1d31
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TVdYUVZGNmdESmVERngzaDBHZTk5bE9KWitYcU50L2M5UU5hRThTWTNBZEI1?=
+ =?utf-8?B?ZlY1YUF0WkJMUC8wZk44NDRsdFpDQjg5NitNMmNNM1RJV0NXVzVwY0NOU2xu?=
+ =?utf-8?B?bnRDcU51eFJzYUl1UmZZVkQ5R2ZadkNybEFXamJZWFJMcUU0V1Y2V2hBb3R3?=
+ =?utf-8?B?YXp5bUNFSHk4VnlzeHFOamY5VGhQOHllRHRHVDBMdkpUbFllTWYxQVAxZkEy?=
+ =?utf-8?B?akd4T01jcVpxZjJlOHg2T2ZVQXJwN1EvTTdRcXIwWTd4d1NEaFYwRFh5U2l3?=
+ =?utf-8?B?Vy9rQmhuTDJBQnFxZzVLaWhFRmh0V0drcXhSTEY5VlYvaDAxMmNuS29BL0lr?=
+ =?utf-8?B?MTVuNys0UWV4ZnlsdTJDQkZZQ01RYm43MW5CMEh6Q1N1TnhrUjRtY3VhY0ky?=
+ =?utf-8?B?ODY1Q3M5VER4T1BST0N5VklJNmdYTGc4ZVVIQTZRNXRCWFhpNzY0eDNtR1ZF?=
+ =?utf-8?B?bml6bDFDRkdWMkw2WGNDNHFETCtIcHJ6Y2VKS0RhOUF0Yitmd1B3SndOTHRv?=
+ =?utf-8?B?SDJVUHlQblhlN3puRlp2V0xxckJkV3UyTkVJZXh2V2JKTmRRcDF4MVIrZWd5?=
+ =?utf-8?B?ZUlJSEg5WG93TU9GWGtqa1ZOV2RwUXdJT3N2bXlGU3BZT3o2dm50dFBCNEFJ?=
+ =?utf-8?B?Ym9QY1hQYnd1Y0hFSjRYQWdydmY1OTU5Z29DTVpLZWoyKzhqbHhJQWRTU1Bz?=
+ =?utf-8?B?Njd4eFBxdWZtVzNCR3BwT1ZYdnhrYzRTQ3crYXhaclAvZkFLK0VCUnZDY0ZE?=
+ =?utf-8?B?UzlubElOSG9HYmFWbThqN0hjalVjc1c4WTFIbys5dFVyYktpS1hrbjhVTk9l?=
+ =?utf-8?B?TjU2VnBNRmthTnE3NENsRStzQWVLRTR1MUZjaUJUZ0dmTldBa1VickZsN1RX?=
+ =?utf-8?B?SEJTbWJsSjUwTTJ2YUpzQSt4RWkzcmlzZEhBTlAxTDZ6RmY3NldmMk9IUXc5?=
+ =?utf-8?B?Z3FHT2pCaHJ6SWd5UkRUcW5VaGlmUmdhY3ZWRE4weU9aZmtZaWFsWnBTZlM1?=
+ =?utf-8?B?MU1lU1FJOFNvMnpXZ0pTWkpyZEVUOFdmcVJDaUcwK2NLV3E0VmVBcFU0d2J3?=
+ =?utf-8?B?M0ZtYk5BMzdUcHNqQ20zTUFxbllJREQweGZ0OXlpcEZiUitYVnNlSHpiRXpo?=
+ =?utf-8?B?N0IvdDRLUVoxUlZCU29kMEVCU2NTSVZWOUJQSDJ5Q3VWK0QzZzA1N3FrR1o4?=
+ =?utf-8?B?NHJLamFZUUNVdy9RNWJDRjZMdUxGaS9pNkFTWlFBWEVZZWY2K1NKT2dxMHU1?=
+ =?utf-8?B?VTdQamtzWURnUVRYTk8xL1Y1Y1ovRXpHMTFzcnBaN1NaN3RBY0REelg0U0dy?=
+ =?utf-8?B?N01leVVOM241RnEySUlzRkZxZkU2MFFSWXVKTklnckNBdWlIQ0hwMnBFSGd2?=
+ =?utf-8?B?Skc0OExGbVFVNGNVb3Fia2YvN2pGeFNCa2JrdElDN0dxaUhEWTRCS3c0RmZR?=
+ =?utf-8?B?ZkozLzVITGdvWVFhTTA3Zkd1ZFlSdk9MNk5kcXhxMXhLdUE1a21OcUpjOWF1?=
+ =?utf-8?B?MWdCM0FmZG1HM3RTWjRTZ0c2M2l6KzNXQ0dQWlNJd0hzUEZwTUJBZjBMQ002?=
+ =?utf-8?B?dTc3QVhlNHdYejBxbVQ0NVNTYitZYzBvVDJnWkpPVjE5MHcwUGRWMkU1Umh4?=
+ =?utf-8?B?U3Bvdy92dVJhb1dEWE5rZnA5TFUwcEpON1VlTkRTUHVjU1luWHROQ3NHSkxv?=
+ =?utf-8?B?MU90cEtrV0NOTlkydzNHTStwaWdjcXZiVFFBMFVXWlJOUjlvQk80T1pEajYw?=
+ =?utf-8?B?cXBlejc5ZmJaVXp1MmVZVE5hM3NCcDBXYlJBVlBnQW9FWlNaQUdWeUNCSVlv?=
+ =?utf-8?B?RFRYeUhxak80U0Q5Tk14eU1Mb0tXZUhQci93UVBpNDUvdzZOakFwTnJnWHkz?=
+ =?utf-8?B?WnZaODk5RjRyaFEyVE96ZEJjSWNYSzdNWitQSkJzbGkvdmpnQzhjckFweUNI?=
+ =?utf-8?B?MUh3TlZWUmhmMGlQdnBoOVBRN3M3ZnZrVmxVR0J6azh0OTUzVHFjZWE0bW5C?=
+ =?utf-8?B?U05WdVZUTG9hWS91RFlTZ3BzTTc3Uzl6RnB0V09FYXNseHMrcVJSMlB3K05n?=
+ =?utf-8?B?aXpYbnN3RG10bjkvSktpMTVMR2dCdWQ2NDU5UGgvVGZET3BHelM2NzQ5OTha?=
+ =?utf-8?Q?BO5TpggigqqJp5Hn2iUlR66ov?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82c05466-d7a4-448e-4cac-08db5c2ad85d
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 07:40:15.6088
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 07:45:29.3707
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H7MJcZDYq4J14ARf71c6IAlzS6vkUGTMI76buHa6tsE6h9E0/ByUeMiws/CO8uqHsX1JIKfpoOWp9DEb9VVQXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8915
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: qRctRt/pE6Z9rj++i3KYi7NPbW7kD7EaPg7+KvT1nR0Cd8kQptNjIct2bcQv0T9K
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR02MB10265
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/23 20:30, Pierre-Louis Bossart wrote:
->
-> On 5/23/23 02:36, Mukunda,Vijendar wrote:
->> On 22/05/23 23:42, Pierre-Louis Bossart wrote:
->>> On 5/22/23 08:31, Vijendar Mukunda wrote:
->>>> Initialize workqueue for SoundWire DMA interrupts handling.
->>>> Whenever audio data equal to the SoundWire FIFO watermark level
->>>> are produced/consumed, interrupt is generated.
->>>> Acknowledge the interrupt and schedule the workqueue.
->>> It would help to explain why a work queue is needed is the first place,
->>> as opposed to handling periods in the interrupt thread.
->> For SoundWire DAI link, we are setting nonatomic flag to true.
->> If we return period elapsed from hard irq handler instead of workqueue,
->> soft lock up is observed during stream closure.
->>
->> We can use interrupt thread as well. To have a symmetry with
->> SoundWire manager work queues, we have used workqueue for
->> DMA interrupts.
-> Oh, I completely missed the model here.
->
-> If you are using the bottom half/hard irq handler to read status
-> information, the natural thing to do would be to have an irq thread, no?
->
-> Not sure I see the benefit of aligning with the manager work queues -
-> unless it makes your life simpler to avoid race conditions with
-> cancel_work_sync()?
-We can implement request_threaded_irq() and move the handling of
-DMA interrupts to thread function whereas we need to handle SoundWire
-manager interrupts in top half only. Reason as follows.
+Hi!
 
-As per our design, we are not masking the interrupts in top half and
-restoring mask after thread execution like Intel and
-our IP supports line based interrupts. If we move SoundWire manager
-interrupt handling to thread function, we have observed interrupts are
-reported but not handled properly due to thread execution is in progress
-sometimes.
-we will add comments for this design constraint in the code if we have to
-go with threaded_irq implementation.
->
->>>> +static void acp63_sdw_dma_workthread(struct work_struct *work)
->>>> +{
->>>> +	struct acp63_dev_data *adata = container_of(work, struct acp63_dev_data,
->>>> +						    acp_sdw_dma_work);
->>>> +	struct sdw_dma_dev_data *sdw_dma_data;
->>>> +	u32 stream_index;
->>>> +	u16 pdev_index;
->>>> +
->>>> +	pdev_index = adata->sdw_dma_dev_index;
->>>> +	sdw_dma_data = dev_get_drvdata(&adata->pdev[pdev_index]->dev);
->>>> +
->>>> +	for (stream_index = 0; stream_index < ACP63_SDW0_DMA_MAX_STREAMS; stream_index++) {
->>>> +		if (adata->sdw0_dma_intr_stat[stream_index]) {
->>>> +			if (sdw_dma_data->sdw0_dma_stream[stream_index])
->>>> +				snd_pcm_period_elapsed(sdw_dma_data->sdw0_dma_stream[stream_index]);
->>>> +			adata->sdw0_dma_intr_stat[stream_index] = 0;
->>>> +		}
->>>> +	}
->>>> +	for (stream_index = 0; stream_index < ACP63_SDW1_DMA_MAX_STREAMS; stream_index++) {
->>>> +		if (adata->sdw1_dma_intr_stat[stream_index]) {
->>>> +			if (sdw_dma_data->sdw1_dma_stream[stream_index])
->>>> +				snd_pcm_period_elapsed(sdw_dma_data->sdw1_dma_stream[stream_index]);
->>>> +			adata->sdw1_dma_intr_stat[stream_index] = 0;
->>>> +		}
->>>> +	}
->>> I am not clear on the benefits of the workqueue which only tests a flag
->>> that's set ...
->> In top half, we are checking all stream irq mask and setting
->> corresponding stream id index in interrupt status array when dma
->> irq is raised.
+2023-05-24 at 08:07, Uwe Kleine-König wrote:
+> On Tue, May 23, 2023 at 10:42:34PM +0200, Peter Rosin wrote:
+>> 2023-05-23 at 01:34, Peter Rosin wrote:
+>>> So, I took a step back and can only conclude that there must be some
+>>> another regression to find, and I was confused by that other regression.
+>>> In short, I was on 6.1.<foo> and everything was fine, and then I bumped
+>>> to 6.3 and a process crashed. I went to 6.2 and that same process also
+>>> crashed. I then totally focused on v6.1..v6.2 to figure out the problem.
+>>> I simply assumed v6.3 had the same problem because the symptom from
+>>> 30.000ft was the same (that process died). I failed to go back to v6.3
+>>> to confirm that it was indeed the same problem as I had found in the
+>>> v6.1..v6.2 range.
+>>>
+>>> My bad, it seems I have another day of bisections lined up.
 >>
->> Our intention is to handle snd_pcm_period_elapsed in process context.
->> if the flag is set, call the period elapsed for the substream based on stream
->> id in work queue.
+>> For closure, I ended up with this:
+>> https://lore.kernel.org/lkml/221d19e2-6b92-7f38-7d8a-a730f54c33ea@axentia.se/
+>>
+>> I.e. another v6.1..v6.2 regression that caused sound failures.
+>> The two problems looked very similar to the suffering application.
+>>
+>> Anyway, sorry again for the noise.
+> 
+> OK. After your first mail I had the impression there is another PWM
+> releated problem to be reported, but it seems this isn't the case.
+> 
+> Just to have that explicit: Did I understand you right?
 
+The PWM regression was already solved by 1271a7b98e79 ("pwm: Zero-
+initialize the pwm_state passed to driver's .get_state()") and I failed
+to notice that. I was simply confused by that other totally unrelated
+DMA problem that made me think the PWM problem persisted into the
+present when in fact it didn't.
+
+All is well.
+
+Cheers,
+Peter
+
+#regzbot fixed-by: 1271a7b98e79
