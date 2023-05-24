@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97DC70F3F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4746770F415
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjEXKSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S232459AbjEXKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjEXKSM (ORCPT
+        with ESMTP id S231506AbjEXKYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:18:12 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5C010DB;
-        Wed, 24 May 2023 03:17:26 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1q1lXr-00Cl6E-Rk; Wed, 24 May 2023 18:16:40 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 24 May 2023 18:16:39 +0800
-Date:   Wed, 24 May 2023 18:16:39 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Breno =?iso-8859-1?Q?Leit=E3o?= <leitao@debian.org>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] powerpc/crypto: fix build warnings when DEBUG_FS is not
- enabled
-Message-ID: <ZG3kB4Mlmlc4I0Ck@gondor.apana.org.au>
-References: <20230519223334.11992-1-rdunlap@infradead.org>
+        Wed, 24 May 2023 06:24:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3065011D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:23:59 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C39E2223D9;
+        Wed, 24 May 2023 10:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684923837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=hliaaV35ugS9mBcv4FyggOLg0wQ/iiY9Q3rhXXLm7AY=;
+        b=OnzsDya3ECMF2LW6Tu/DQER+kYAv7897Jlj7xXn2quQ6zFhHc52EY2t73zWroFdhxnRlS8
+        T0FQQgynmCyjp6WmPTUgows5xs+X177KlarU2SuH+TM+byVtXWtgxvH8lpKr9tMnUs4Efg
+        /phot2QbYeGI56UFHOBRcLzZLJxv7Zs=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 1B9BA2C141;
+        Wed, 24 May 2023 10:23:57 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id DE97ADA7D7; Wed, 24 May 2023 12:17:50 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH] mm/slab: add new flag SLAB_NO_MERGE to avoid merging per slab
+Date:   Wed, 24 May 2023 12:17:48 +0200
+Message-Id: <20230524101748.30714-1-dsterba@suse.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230519223334.11992-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 03:33:34PM -0700, Randy Dunlap wrote:
-> Fix build warnings when DEBUG_FS is not enabled by using an empty
-> do-while loop instead of a value:
-> 
-> In file included from ../drivers/crypto/nx/nx.c:27:
-> ../drivers/crypto/nx/nx.c: In function 'nx_register_algs':
-> ../drivers/crypto/nx/nx.h:173:33: warning: statement with no effect [-Wunused-value]
->   173 | #define NX_DEBUGFS_INIT(drv)    (0)
-> ../drivers/crypto/nx/nx.c:573:9: note: in expansion of macro 'NX_DEBUGFS_INIT'
->   573 |         NX_DEBUGFS_INIT(&nx_driver);
-> ../drivers/crypto/nx/nx.c: In function 'nx_remove':
-> ../drivers/crypto/nx/nx.h:174:33: warning: statement with no effect [-Wunused-value]
->   174 | #define NX_DEBUGFS_FINI(drv)    (0)
-> ../drivers/crypto/nx/nx.c:793:17: note: in expansion of macro 'NX_DEBUGFS_FINI'
->   793 |                 NX_DEBUGFS_FINI(&nx_driver);
-> 
-> Also, there is no need to build nx_debugfs.o when DEBUG_FS is not
-> enabled, so change the Makefile to accommodate that.
-> 
-> Fixes: ae0222b7289d ("powerpc/crypto: nx driver code supporting nx encryption")
-> Fixes: aef7b31c8833 ("powerpc/crypto: Build files for the nx device driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Breno Leitão <leitao@debian.org>
-> Cc: Nayna Jain <nayna@linux.ibm.com>
-> Cc: Paulo Flabiano Smorigo <pfsmorigo@gmail.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> ---
->  drivers/crypto/nx/Makefile |    2 +-
->  drivers/crypto/nx/nx.h     |    4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Add a flag that allows to disable merging per slab. This can be used for
+more fine grained control over the caches or for debugging builds where
+separate slabs can verify that no objects leak.
 
-Patch applied.  Thanks.
+The slab_nomerge boot option is too coarse and would need to be enabled
+on all testing hosts. There are some other ways how to disable merging,
+e.g. a slab constructor but this disables poisoning besides that it adds
+additional overhead. Other flags are internal and may have other
+semantics.
+
+A concrete example what motivates the flag. During 'btrfs balance' slab
+top reported huge increase in caches like
+
+  1330095 1330095 100%    0.10K  34105       39    136420K Acpi-ParseExt
+  1734684 1734684 100%    0.14K  61953       28    247812K pid_namespace
+  8244036 6873075  83%    0.11K 229001       36    916004K khugepaged_mm_slot
+
+which was confusing and that it's because of slab merging was not the
+first idea.  After rebooting with slab_nomerge all the caches were from
+btrfs_ namespace as expected.
+
+Signed-off-by: David Sterba <dsterba@suse.com>
+---
+ include/linux/slab.h | 3 +++
+ mm/slab_common.c     | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 6b3e155b70bf..06b94dfbce65 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -106,6 +106,9 @@
+ /* Avoid kmemleak tracing */
+ #define SLAB_NOLEAKTRACE	((slab_flags_t __force)0x00800000U)
+ 
++/* Don't merge slab */
++#define SLAB_NO_MERGE		((slab_flags_t __force)0x01000000U)
++
+ /* Fault injection mark */
+ #ifdef CONFIG_FAILSLAB
+ # define SLAB_FAILSLAB		((slab_flags_t __force)0x02000000U)
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 607249785c07..0e0a617eae7d 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -47,7 +47,7 @@ static DECLARE_WORK(slab_caches_to_rcu_destroy_work,
+  */
+ #define SLAB_NEVER_MERGE (SLAB_RED_ZONE | SLAB_POISON | SLAB_STORE_USER | \
+ 		SLAB_TRACE | SLAB_TYPESAFE_BY_RCU | SLAB_NOLEAKTRACE | \
+-		SLAB_FAILSLAB | kasan_never_merge())
++		SLAB_FAILSLAB | SLAB_NO_MERGE | kasan_never_merge())
+ 
+ #define SLAB_MERGE_SAME (SLAB_RECLAIM_ACCOUNT | SLAB_CACHE_DMA | \
+ 			 SLAB_CACHE_DMA32 | SLAB_ACCOUNT)
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.40.0
+
