@@ -2,96 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AF170F097
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AB170F099
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240038AbjEXIZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S239946AbjEXI0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239946AbjEXIZr (ORCPT
+        with ESMTP id S239772AbjEXI0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:25:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ED8132;
-        Wed, 24 May 2023 01:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684916746; x=1716452746;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wf5w+pVCOmmTWohRf52XJbrasB2Q03aVKNpVbuoznkI=;
-  b=bVCsxu2Heclr9kf6RXwT5sTHYK5kHxVFCQDPeq7WRJps51l7BbRewp4S
-   ffd5M3cbvNFgVGu4teAUzhlwouqGGZWuAAcPG0LJCzt8cI3NVfnATZu4V
-   PZbNGHrjalCQ0zlreAEIhSNLkn1yoztT4YBUzBrMGqudyFTknEkPmx3cz
-   1pXi0ivMBSE0bYF9Jw/mb5SHsT/VISe6l66HLi/4c7obdp/XxYifVk6zM
-   Imypf/LKtXGVOtqnVeyPTBogW84boXhX5hBl0gH1yGYIwcLKqKT/64Mb8
-   7DxXienyIpVarTlxr1rv8qbcEygl0ldgFhi7OuISJ1k4S+pPTb3HuZ1Sy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="333855297"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="333855297"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 01:25:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="878559362"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="878559362"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.31.124]) ([10.255.31.124])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 01:25:43 -0700
-Message-ID: <ec820c56-ad56-f7bf-db0e-1ba6f7cedfd0@intel.com>
-Date:   Wed, 24 May 2023 16:25:41 +0800
+        Wed, 24 May 2023 04:26:31 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2055184
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:26:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VjNOvI8_1684916785;
+Received: from 30.97.48.247(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjNOvI8_1684916785)
+          by smtp.aliyun-inc.com;
+          Wed, 24 May 2023 16:26:27 +0800
+Message-ID: <02524ece-956f-f5d8-fb21-adc4e5617dc6@linux.alibaba.com>
+Date:   Wed, 24 May 2023 16:26:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/3] KVM: x86: Correct the name for skipping VMENTER
- l1d flush
-Content-Language: en-US
-To:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org, x86@kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20230524061634.54141-1-chao.gao@intel.com>
- <20230524061634.54141-3-chao.gao@intel.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230524061634.54141-3-chao.gao@intel.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: dm overlaybd: targets mapping OverlayBD image
+To:     Giuseppe Scrivano <gscrivan@redhat.com>
+Cc:     Alexander Larsson <alexl@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Du Rui <durui@linux.alibaba.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>
+References: <9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com>
+ <ZGz32yw7ecKhW+lj@redhat.com>
+ <CAL7ro1FPEqXyOuX_WPMYdsT6rW-bD5EU=v=oWKsd6XscykLF6Q@mail.gmail.com>
+ <fd4d0429-4da3-8217-6c13-14fd8a198920@linux.alibaba.com>
+ <87r0r6ywri.fsf@redhat.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <87r0r6ywri.fsf@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/2023 2:16 PM, Chao Gao wrote:
-> There is no VMENTER_L1D_FLUSH_NESTED_VM. It should be
-> ARCH_CAP_SKIP_VMENTRY_L1DFLUSH.
+Hi Giuseppe,
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> ---
->   arch/x86/kvm/x86.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+On 2023/5/24 01:11, Giuseppe Scrivano wrote:
+> Gao Xiang <hsiangkao@linux.alibaba.com> writes:
 > 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 2408b5f554b7..f7838260c183 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1631,7 +1631,7 @@ static u64 kvm_get_arch_capabilities(void)
->   	 * If we're doing cache flushes (either "always" or "cond")
->   	 * we will do one whenever the guest does a vmlaunch/vmresume.
->   	 * If an outer hypervisor is doing the cache flush for us
-> -	 * (VMENTER_L1D_FLUSH_NESTED_VM), we can safely pass that
-> +	 * (ARCH_CAP_SKIP_VMENTRY_L1DFLUSH), we can safely pass that
->   	 * capability to the guest too, and if EPT is disabled we're not
->   	 * vulnerable.  Overall, only VMENTER_L1D_FLUSH_NEVER will
->   	 * require a nested hypervisor to do a flush of its own.
 
+...
+
+>> Agreed, I hope you guys could actually sit down and evaluate a proper
+>> solution on the next OCI v2, currently I know there are:
+>>
+>>   - Composefs
+>>   - (e)stargz   https://github.com/containerd/stargz-snapshotter
+>>   - Nydus       https://github.com/containerd/nydus-snapshotter
+>>   - OverlayBD   https://github.com/containerd/accelerated-container-image
+>>   - SOCI        https://github.com/awslabs/soci-snapshotter
+>>   - Tarfs
+>>   - (maybe even more..)
+>>
+>> Honestly, I do think OSTree/Composefs is the best approach for now for
+>> deduplication and page cache sharing (due to kernel limitation of page
+>> cache sharing and overlayfs copyup limitation).  I'm too tired of
+>> container image stuffs honestly.  Too much unnecessary manpower waste.
+> 
+> for a file-based storage model, I am not sure a new format would really
+> buy us much or it can be significantly different.
+> 
+> Without a proper support from the kernel, a new format would still need
+> to create the layout overlay expects, so it won't be much different than
+> what we have now.
+
+I've seen lot efforts on this, for example,
+https://docs.google.com/presentation/d/1lBKVrYzm9JEYuw-gIEsrcePSK0jL1Boe/edit#slide=id.p22
+
+Merging the writable layer and read-only layers with overlayfs is
+feasible. I mean, at least for composefs model on backing XFS/btrfs, we
+could merge these layers with overlayfs so that I guess reflink could
+be done to avoid full copyup as well?  I do think that's a net win.
+
+> 
+> The current OCI format, with some tweaks like (e)stargz or zstd:chunked,
+> already make its content addressable and a client can retrieve only the
+> subset of the files that are needed.  At the same time we maintain the
+> simplicity of a tarball and it won't break existing clients.
+
+(e)stargz or zstd:chunked still needs to be converted by the publisher
+and not all exist OCI images are stored in this way.  But apart from
+detailed comparsion, disk mapping image approaches seems really a
+drawback at least on my side.
+
+Anyway, I think it's what OCIv2 would like to eventually address
+anyway.
+
+> 
+> IMO, the most interesting problem is how to store these images locally
+> and how the kernel can help with that.
+
+I think composefs model can do both sides. But I'm not sure the final
+conclusion, I tend to leave it to the OCI guys.
+
+> 
+> The idea behind composefs is to replace the existing storage model used
+> for overlay, where each layer has its own directory, with a single
+> directory where all the files are stored by their checksum.  The
+> expected layout then is recreated at runtime.
+
+Yes, what I'd like to say, without finer page cache sharing mechanism,
+the composefs way sounds better to me honestly to the whole system.
+
+Thanks,
+Gao Xiang
