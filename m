@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF29370EEF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8FB70EEF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239879AbjEXHHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S239894AbjEXHH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239793AbjEXHHC (ORCPT
+        with ESMTP id S239804AbjEXHHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:07:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC47E6
+        Wed, 24 May 2023 03:07:04 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A503DFC
         for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:07:00 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684912018;
+        s=2020; t=1684912019;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3nPoc4ex9ONP2BmQpTyzqK0BECnFowWD2Bg10S9sUhQ=;
-        b=ygmvl73RIKtg2CvGUhk/vWDDvl4mJ296sHFwke/NlcFYGUeimMzJVFINJlSkfCGe9tiExJ
-        djEqcpnCw8xR0lTyXMg3hlI9V4Mo3Idol2TFcDFpgwnSjVHcMoB/LrG5IQPL+jbbrzbRyT
-        IAiOZuEWqLH26XKLgRDNcYc7rSPGK/QJobgGL/co7LsFVcqY3M46RTYIC85fp8My1OB+4y
-        3PN4dydZktD7gqvWs2ubcK5VK4tMRC16SLC07VXXjzLxfHSMBlsagGS2T5IEFQjTFBtaVp
-        cJeqU6NRotBD0Z9Ry/UTaVYStzAwHHgyG+lqelGd3wFZooDCP0hZjnuedx6guQ==
+        bh=V5ghRq1p1UzQMeOe2kb9B0X1weJSuecItqx6Ppb2A0s=;
+        b=2WjbYAAV6lbiLJ7V0U3sea1cyaYFl/TwuQaIWaGpI+OU2Z7fWTKSIC80eyHe7aLx1fL9kD
+        jPpHpVJMr6UJIt15OB9iEZJIFXv1ZTS+jnkaoFk8YgGjh4B8CKX7N+BOvvMt7N6LtZcOyM
+        kZ11fSAH3zJY1NuCS7d3Ms4jjw17WweDB8lWYUQMcJIQA+wLrQ36SehwsuiY96QAb00ROR
+        c2RGtT7WJG4T7ODze3SjqrVV8ez5psTj/LHMHDChPJrWJnl5SliMnrQI8qcnLBQuxLlXos
+        wzxFw2x2z02YRz1x9W+6OxvSARzVl1LzXL332lDXqMBuwW2fvZ/XVN1CtN9LZw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684912018;
+        s=2020e; t=1684912019;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3nPoc4ex9ONP2BmQpTyzqK0BECnFowWD2Bg10S9sUhQ=;
-        b=nyt4KIqCFq0Er9OWDgdt9jN0tYGg+h+0Ojga3OXErmHJ3T8wH27jM7FPc9tt//rkAMhiMx
-        Yd9vKAN+xKRWpVBg==
+        bh=V5ghRq1p1UzQMeOe2kb9B0X1weJSuecItqx6Ppb2A0s=;
+        b=JVr0tIqLMcWr2kJTnV1Dpt+Euh05MXC73CvKJbxWlZr9gT7yeSneT2L6w6+7X1drsNAr7U
+        b1hvvIv2dm5FiUDA==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -52,11 +52,10 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>,
         Lukasz Luba <lukasz.luba@arm.com>,
         "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH v7 06/21] timer: Rework idle logic
-Date:   Wed, 24 May 2023 09:06:14 +0200
-Message-Id: <20230524070629.6377-7-anna-maria@linutronix.de>
+        Anna-Maria Behnsen <anna-maria@linutronix.de>
+Subject: [PATCH v7 07/21] timers: Introduce add_timer() variants which modify timer flags
+Date:   Wed, 24 May 2023 09:06:15 +0200
+Message-Id: <20230524070629.6377-8-anna-maria@linutronix.de>
 In-Reply-To: <20230524070629.6377-1-anna-maria@linutronix.de>
 References: <20230524070629.6377-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -71,66 +70,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Timer might be used as pinned timer (using add_timer_on()) and later on as
+non pinned timers using add_timer(). When the NOHZ timer pull at expiry
+model is in place, TIMER_PINNED flag is required to be used whenever a
+timer needs to expire on a dedicated CPU. Flag must no be set, if
+expiration on a dedicated CPU is not required.
 
-To improve readability of the code, split base->idle calculation and
-expires calculation into separate parts.
+add_timer_on()'s behavior will be changed during the preparation patches
+for the NOHZ timer pull at expiry model to unconditionally set TIMER_PINNED
+flag. To be able to reset/set the flag when queueing a timer, two variants
+of add_timer() are introduced.
 
-Thereby the following subtle change happens if the next event is just one
-jiffy ahead and the tick was already stopped: Originally base->is_idle
-remains true in this situation. Now base->is_idle turns to false. This may
-spare an IPI if a timer is enqueued remotely to an idle CPU that is going
-to tick on the next jiffy.
+This is a preparatory patch and has no functional change.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 ---
-v4: Change condition to force 0 delta and update commit message (Frederic)
+New in v6
 ---
- kernel/time/timer.c | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ include/linux/timer.h |  2 ++
+ kernel/time/timer.c   | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index 9162f275819a..6f96661480dd 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -180,6 +180,8 @@ extern int timer_reduce(struct timer_list *timer, unsigned long expires);
+ #define NEXT_TIMER_MAX_DELTA	((1UL << 30) - 1)
+ 
+ extern void add_timer(struct timer_list *timer);
++extern void add_timer_local(struct timer_list *timer);
++extern void add_timer_global(struct timer_list *timer);
+ 
+ extern int try_to_del_timer_sync(struct timer_list *timer);
+ extern int timer_delete_sync(struct timer_list *timer);
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 1a61977f9efa..1522fb81887e 100644
+index 1522fb81887e..ab9a8bb11a8a 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -1957,21 +1957,20 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
- 			base->clk = nextevt;
- 	}
+@@ -1242,6 +1242,40 @@ void add_timer(struct timer_list *timer)
+ }
+ EXPORT_SYMBOL(add_timer);
  
--	if (time_before_eq(nextevt, basej)) {
--		expires = basem;
--		base->is_idle = false;
--	} else {
--		if (base->timers_pending)
--			expires = basem + (u64)(nextevt - basej) * TICK_NSEC;
--		/*
--		 * If we expect to sleep more than a tick, mark the base idle.
--		 * Also the tick is stopped so any added timer must forward
--		 * the base clk itself to keep granularity small. This idle
--		 * logic is only maintained for the BASE_STD base, deferrable
--		 * timers may still see large granularity skew (by design).
--		 */
--		if ((expires - basem) > TICK_NSEC)
--			base->is_idle = true;
-+	/*
-+	 * Base is idle if the next event is more than a tick away. Also
-+	 * the tick is stopped so any added timer must forward the base clk
-+	 * itself to keep granularity small. This idle logic is only
-+	 * maintained for the BASE_STD base, deferrable timers may still
-+	 * see large granularity skew (by design).
-+	 */
-+	base->is_idle = time_after(nextevt, basej + 1);
++/**
++ * add_timer_local - Start a timer on the local CPU
++ * @timer:	The timer to be started
++ *
++ * Same as add_timer() except that the timer flag TIMER_PINNED is set.
++ *
++ * See add_timer() for further details.
++ */
++void add_timer_local(struct timer_list *timer)
++{
++	if (WARN_ON_ONCE(timer_pending(timer)))
++		return;
++	timer->flags |= TIMER_PINNED;
++	__mod_timer(timer, timer->expires, MOD_TIMER_NOTPENDING);
++}
++EXPORT_SYMBOL(add_timer_local);
 +
-+	if (base->timers_pending) {
-+		/* If we missed a tick already, force 0 delta */
-+		if (time_before(nextevt, basej))
-+			nextevt = basej;
-+		expires = basem + (u64)(nextevt - basej) * TICK_NSEC;
- 	}
- 	raw_spin_unlock(&base->lock);
- 
++/**
++ * add_timer_global - Start a timer without TIMER_PINNED flag set
++ * @timer:	The timer to be started
++ *
++ * Same as add_timer() except that the timer flag TIMER_PINNED is unset.
++ *
++ * See add_timer() for further details.
++ */
++void add_timer_global(struct timer_list *timer)
++{
++	if (WARN_ON_ONCE(timer_pending(timer)))
++		return;
++	timer->flags &= ~TIMER_PINNED;
++	__mod_timer(timer, timer->expires, MOD_TIMER_NOTPENDING);
++}
++EXPORT_SYMBOL(add_timer_global);
++
+ /**
+  * add_timer_on - Start a timer on a particular CPU
+  * @timer:	The timer to be started
 -- 
 2.30.2
 
