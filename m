@@ -2,94 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1846970FF06
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B2470FF09
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236312AbjEXUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S232845AbjEXUQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjEXUQG (ORCPT
+        with ESMTP id S236188AbjEXUQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:16:06 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9253110B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:16:01 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-394c7ba4cb5so309155b6e.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:16:01 -0700 (PDT)
+        Wed, 24 May 2023 16:16:07 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13B6187
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:16:05 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba69d93a6b5so2624802276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684959361; x=1687551361;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=esoimroWkrL9UG9uMCk43F+mfgKePk35ZCciJnQDAkc=;
-        b=jR0U4eVs+HCQeyO0rmH9Zxj+N0VyaYsQvTzC7psBsfJbGQ6nS5u9eJT0i0j85cIHvk
-         czRu1HV2uwA/KDRFg1j5fn/Dd4R9z5b6aw90ZBdWflA6NG0Z5ske/4njAKixpkB17Kox
-         /Eugws1hC6JcHmeJ6WEozM+6Sl2LdLs6LJ2ns=
+        d=google.com; s=20221208; t=1684959365; x=1687551365;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=et28JU3wkykvEfV7tUaeZmOsEZymHIt/E70MuyiU1No=;
+        b=G2x7cKfO2HsF6MKrRXtuGOoWc4Yj9Z0Q1nyrd66b5CwhWsYKjq6PGytnNGnWnoUbYg
+         0jM5j8y6re71Mo5bG/5Ojl0FuWMuSP9Eaoaxj5HQpFpkslAfyM1khFmi/TCdIov7pGs1
+         35dPUO8OrPbZFQbz/PVLHobvQlt75SleU+2ukbo6ZGqKu4GeU1PfbY6dp1LYUPK5l9gh
+         L9G4O1nBLIgKKq1HPdPHhPEBqnrucIszUNCbUVyzwlbALVm3SP6WSm1IH5u9OT/3syhL
+         D/r8JPmU9oz+tOmHzugTg/xI95+Lz3S8lUd5+91fPkwHf4Yn5e/eFKasubnMlzF3zHuL
+         SiTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684959361; x=1687551361;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=esoimroWkrL9UG9uMCk43F+mfgKePk35ZCciJnQDAkc=;
-        b=Yne4wiTu1vgEQVxkkw/18j0fDp5ynryP7nUhxsaYWs7am4xsqofgq0ijwR3NLldPqc
-         +ZWqSjBNhakkiThMLSicL8PNPhOb9biMYSH1hrzx4XSJpAQ/51K8QQAh0LHnWdxYrQWO
-         IHoVsy142O0Y39LsF4avoQUO2/6U3kCwzOJT+ajkGhbsk2qVRsronTEgQFv9GPWfAaaY
-         b18rWMmCk097YePkEeiSQe7TO+x8hF/FtQOAisr78Igo7KU8TPSN8nr7rLhp13fGk4TE
-         bTA7Yx23UBOI9a9CjvjRl1yNskaB0WwCOZwTRf7TM+Q8mjizMGMRIEmm1R87ozvoOlIS
-         u1cA==
-X-Gm-Message-State: AC+VfDy9vfDCcGaKGsrQJzR4rmi5WXo6/OPuZM/JrCpI8RbSGynnsTaf
-        QpnfDQe9LKNAFbdYUr5RSM4gEIvMDKRp6dP0BP2+Xw==
-X-Google-Smtp-Source: ACHHUZ4vEvWyW3CX9DBeFwy4Iuv22tTqCB/I2KaWZyvUNUxdCQPP/KLsw7NzO3Qpm9DIvGHyd/tz++Pg5pVjG53Rskk=
-X-Received: by 2002:a54:480b:0:b0:398:105b:530b with SMTP id
- j11-20020a54480b000000b00398105b530bmr5216910oij.33.1684959360986; Wed, 24
- May 2023 13:16:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
- <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com> <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
- <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com> <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
- <b69f6809-b483-158f-8be9-4976fad918d8@intel.com> <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
- <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com> <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
- <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
-In-Reply-To: <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Wed, 24 May 2023 13:15:50 -0700
-Message-ID: <CABi2SkUzwdBGyjHjXtyFK5dtLVB2keKCpZpkpiuaStd6b2cEWA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jeff Xu <jeffxu@google.com>,
-        =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
-        luto@kernel.org, jorgelo@chromium.org, keescook@chromium.org,
-        groeck@chromium.org, jannh@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684959365; x=1687551365;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=et28JU3wkykvEfV7tUaeZmOsEZymHIt/E70MuyiU1No=;
+        b=Jval9gY3LssxIv3kRoJXUp2JyHkab2kh3EbO7LvI9VobyLzEYi6OHGea22i5GWCQLF
+         DnP6WM2BOlfiVZaUTGOdJHoP403vnNMeVUqmCStPILgAMDiWsRCWM+Rks3QTldm/bKPA
+         IKjJbQNtB/4Dpsx/qy0EzR4wLhTBiKZev/1I8arXKwwnY/qHbxPL64cSpLW0KTvBH2pm
+         TpyBjMEuYsAPVvOZJL7EF9AyzAxaO2a1RAZiMtQYlOv9QbOQ0p6hJjiZb+5exkVf52XD
+         KXTcT7H/hv+UPVgDTKHJejckFZ/9L2jiqRU98WjWv0N8npXphVRmxb6nUNvxnkPlk1ly
+         IXfQ==
+X-Gm-Message-State: AC+VfDydShL0MFXtMR8QN7XJ1IbeA2quJVFTKk1wTMfDXui9KpSTycVW
+        Hey1y6OkvK4QN4Q3yq6JZQnjzeo1SDE=
+X-Google-Smtp-Source: ACHHUZ6+sl+l+zuedDR2LRUIRB6sxCHVVBdT9tzV4JiB2otIi8oPUFcdAUNp1gY5P1OZhcp9jKCI0u1SitE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:ba05:0:b0:ba8:95dd:3ccb with SMTP id
+ t5-20020a25ba05000000b00ba895dd3ccbmr566879ybg.5.1684959365091; Wed, 24 May
+ 2023 13:16:05 -0700 (PDT)
+Date:   Wed, 24 May 2023 13:16:03 -0700
+In-Reply-To: <ZG2qv9sWl2RUnGqd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+Mime-Version: 1.0
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-9-chao.p.peng@linux.intel.com> <ZGxo9ylqYI8JXjGn@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <ZGzLf4zgxpBjghaF@google.com> <ZG2qv9sWl2RUnGqd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+Message-ID: <ZG5wg3VbG4rCYrfk@google.com>
+Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for bringing this to my attention. Regarding io_uring:
->
-> io_uring fundamentally doesn't have the same checks.  The kernel side
-> work can be done from an asynchronous kernel thread.  That kernel thread
-> doesn't have a meaningful PKRU value.  The register has a value, but
-> it's not really related to the userspace threads that are sending it
-> requests.
->
+On Wed, May 24, 2023, Kautuk Consul wrote:
+> On 2023-05-23 07:19:43, Sean Christopherson wrote:
+> > On Tue, May 23, 2023, Kautuk Consul wrote:
+> > > On 2022-07-06 16:20:10, Chao Peng wrote:
+> > > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > > index e9153b54e2a4..c262ebb168a7 100644
+> > > > --- a/include/linux/kvm_host.h
+> > > > +++ b/include/linux/kvm_host.h
+> > > > @@ -765,10 +765,10 @@ struct kvm {
+> > > >  
+> > > >  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+> > > >  	struct mmu_notifier mmu_notifier;
+> > > > -	unsigned long mmu_notifier_seq;
+> > > > -	long mmu_notifier_count;
+> > > > -	gfn_t mmu_notifier_range_start;
+> > > > -	gfn_t mmu_notifier_range_end;
+> > > > +	unsigned long mmu_updating_seq;
+> > > > +	long mmu_updating_count;
+> > > 
+> > > Can we convert mmu_updating_seq and mmu_updating_count to atomic_t ?
+> > 
+> > Heh, can we?  Yes.  Should we?  No.
+> > 
+> > > I see that not all accesses to these are under the kvm->mmu_lock
+> > > spinlock.
+> > 
+> > Ya, working as intended.  Ignoring gfn_to_pfn_cache for the moment, all accesses
+> > to mmu_invalidate_in_progress (was mmu_notifier_count / mmu_updating_count above)
+> > are done under mmu_lock.  And for for mmu_notifier_seq (mmu_updating_seq above),
+> > all writes and some reads are done under mmu_lock.  The only reads that are done
+> > outside of mmu_lock are the initial snapshots of the sequence number.
+> > 
+> > gfn_to_pfn_cache uses a different locking scheme, the comments in
+> > mmu_notifier_retry_cache() do a good job explaining the ordering.
+> > 
+> > > This will also remove the need for putting separate smp_wmb() and
+> > > smp_rmb() memory barriers while accessing these structure members.
+> > 
+> > No, the memory barriers aren't there to provide any kind of atomicity.  The barriers
+> > exist to ensure that stores and loads to/from the sequence and invalidate in-progress
+> > counts are ordered relative to the invalidation (stores to counts) and creation (loads)
+> > of SPTEs.  Making the counts atomic changes nothing because atomic operations don't
+> > guarantee the necessary ordering.
+> I'm not saying that the memory barriers provide atomicity.
+> My comment was based on the assumption that "all atomic operations are
+> implicit memory barriers". If that assumption is true then we won't need
+> the memory barriers here if we use atomic operations for protecting
+> these 2 structure members.
 
-I asked the question to the io_uring list [1].  io_uring thread will
-respect PKRU of the user thread, async or not,  the behavior is the
-same as regular syscall. There will be no issue for io_uring, i.e if
-it decides to add more memory mapping syscalls to supported cmd in
-future.
+Atomics aren't memory barriers on all architectures, e.g. see the various
+definitions of smp_mb__after_atomic().
 
-[1] https://lore.kernel.org/io-uring/CABi2SkUp45HEt7eQ6a47Z7b3LzW=4m3xAakG35os7puCO2dkng@mail.gmail.com/
+Even if atomic operations did provide barriers, using an atomic would be overkill
+and a net negative.  On strongly ordered architectures like x86, memory barriers are
+just compiler barriers, whereas atomics may be more expensive.  Of course, the only
+accesses outside of mmu_lock are reads, so on x86 that "atomic" access is just a
+READ_ONCE() load, but that's not the case for all architectures.
 
-Thanks.
--Jeff
+Anyways, the point is that atomics and memory barriers are different things that
+serve different purposes.
