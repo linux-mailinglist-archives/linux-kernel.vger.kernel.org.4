@@ -2,150 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8750F70F487
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515A370F48D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjEXKsS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 06:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S234006AbjEXKtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbjEXKsQ (ORCPT
+        with ESMTP id S233961AbjEXKs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:48:16 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBFE1A8;
-        Wed, 24 May 2023 03:48:03 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-561f10b6139so7345777b3.2;
-        Wed, 24 May 2023 03:48:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684925283; x=1687517283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QnWIVHFoNbsQTI/EkqM6iBpWOcV5CSw3JS4i0UJMOqA=;
-        b=gCIXS72YrHlzIeOO6bfhahYysz0R+nKKEVwaB7pVFp1Y4OBEw5KXwXXH+X1HnUUhP/
-         JxgdLKsWHzt+MUzT7wSVFk1x/bdH2Xn81aJVPlW+0HickVg98davDmwyJPnos/2AKuUz
-         8tkhHBtoGQl0kaJCAEDcoy5NbwlThbJnfT2HbAwUaA6nlj111GF5Zk+MUvtIn0xeyq9O
-         r3KoGLoDb22GpWBPc6XSat5v3o02KeQCA8zkrug83WJY/SZeoohNTqQBEJNGMQ52i+gh
-         vhSIq4GQrDa4II22N0AP3C9Akp427mCylGXKhhYWg2UvglG9r7Lus4be4FQUvzomqAYT
-         TlJw==
-X-Gm-Message-State: AC+VfDzq6hoF2oqU9/JetA4mVauUbIqI2r2jQTyv598GbnmdC9dSlqlc
-        piNTKRsFkZeVqWAW09qtbThyT5UnVPI16A==
-X-Google-Smtp-Source: ACHHUZ7XM7Y5p15ds3axmbh3RNuqUrz/Md0p+ksEKg0Wt7Cli5FfL3qJtQqaju5PnUgDLitlhj7OUQ==
-X-Received: by 2002:a81:6c43:0:b0:561:a7fd:4fe4 with SMTP id h64-20020a816c43000000b00561a7fd4fe4mr18794588ywc.28.1684925282680;
-        Wed, 24 May 2023 03:48:02 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id x11-20020a817c0b000000b0055a4fe11ce0sm1485796ywc.130.2023.05.24.03.48.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 03:48:01 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-563b1e5f701so7313997b3.3;
-        Wed, 24 May 2023 03:48:01 -0700 (PDT)
-X-Received: by 2002:a81:9245:0:b0:561:beec:89d3 with SMTP id
- j66-20020a819245000000b00561beec89d3mr20362339ywg.6.1684925281318; Wed, 24
- May 2023 03:48:01 -0700 (PDT)
+        Wed, 24 May 2023 06:48:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA5298;
+        Wed, 24 May 2023 03:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684925337; x=1716461337;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fFQMtvVG7ki8pPGjTDT6bQARnkhhcTO/Zz59VEKkRBM=;
+  b=WaIvyEGLCsWuta0acv1ErYg3X/8Jeisl6uFn0+AxizZ321YwdL+H7OjN
+   LABF/1MAsZQJEKgLhnSz+OLnQKc7/L47zPUlaFeONUtT/jDIYaUlgJA/K
+   WYgyefT/NruohD9Kb+FsiJn8K459AXdRFpbV04kgndr/jl3/k7JT4hjZ4
+   tWsUJ/HoYPXMwP7/AFGRN0KFPUVOEV3oVCDwAU4HHqOv1oopDZJnoB7E1
+   +8hqBejYkiQxep0jS35AH+vbMmZ1dByJAeSASdGCGHLHvWFfgdYDojnhC
+   XEz+n9kRg5FkBGjeYaSTEYtXU6QBwkYB3P6FPT1TsNYrpLjK5matf4/y/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="342989648"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="342989648"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 03:48:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="654760743"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="654760743"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 03:48:54 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to debugfs
+Date:   Wed, 24 May 2023 16:17:54 +0530
+Message-Id: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
- <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
- <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
- <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
- <20230523140844.5895d645@kernel.org> <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
-In-Reply-To: <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
-From:   Luca Boccassi <bluca@debian.org>
-Date:   Wed, 24 May 2023 11:47:50 +0100
-X-Gmail-Original-Message-ID: <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
-Message-ID: <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 at 11:43, Aleksandr Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> On Tue, May 23, 2023 at 11:08 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> >
-> > On Tue, 23 May 2023 11:44:01 +0100 Luca Boccassi wrote:
-> > > > I really would like to avoid that because it will just mean that someone
-> > > > else will abuse that function and then make an argument why we should
-> > > > export the other function.
-> > > >
-> > > > I think it would be ok if we required that unix support is built in
-> > > > because it's not unprecedented either and we're not breaking anything.
-> > > > Bpf has the same requirement:
-> > > >
-> > > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
-> > > >   struct bpf_unix_iter_state {
-> > > >           struct seq_net_private p;
-> > > >           unsigned int cur_sk;
-> > > >           unsigned int end_sk;
-> > > >           unsigned int max_sk;
-> > > >           struct sock **batch;
-> > > >           bool st_bucket_done;
-> > > >   };
-> > > >
-> > > > and
-> > > >
-> > > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
-> > > >   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
-> > > >                        struct unix_sock *unix_sk, uid_t uid)
-> >
-> > Don't think we should bring BPF into arguments about uAPI consistency :S
-> >
-> > > Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
-> > > ship with CONFIG_UNIX=y, so a missing SCM_PIDFD in unlikely to have a
-> > > widespread impact, and if it does, it might encourage someone to
-> > > review their kconfig.
-> >
-> > IDK how you can argue that everyone sets UNIX to =y so hiding SCM_PIDFD
-> > is fine and at the same time not be okay with making UNIX a bool :S
-> >
-> > > As mentioned on the v5 thread, we are waiting for this API to get the
-> > > userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
-> > > really grateful if we could start with the simplest and most
-> > > conservative approach (which seems to be the current one in v6 to me),
-> > > and then eventually later decide whether to export more functions, or
-> > > to deprecate CONFIG_UNIX=m, or something else entirely, as that
-> > > doesn't really affect the shape of the UAPI, just the details of its
-> > > availability. Thank you.
-> >
-> > Just throw in a patch to make UNIX a bool and stop arguing then.
->
-> Dear Jakub,
->
-> Thanks for your attention to these patch series!
->
-> I'm ready to prepare/send a patch to make CONFIG_UNIX bool.
->
-> I will send SO_PEERPIDFD as an independent patch too, because it
-> doesn't require this change with CONFIG_UNIX
-> and we can avoid waiting until CONFIG_UNIX change will be merged.
-> I've a feeling that the discussion around making CONFIG_UNIX  to be a
-> boolean won't be easy and fast ;-)
+IOM status has a crucial role during debugging to check the
+current state of the type-C port.
+There are ways to fetch the status, but all those require the
+IOM port status offset, which could change with platform.
 
-Thank you, that sounds great to me, I can start using SO_PEERPIDFD
-independently of SCM_PIDFD, there's no hard dependency between the
-two.
+Make a debugfs directory for intel_pmc_mux and expose the status
+under it per port basis.
 
-Kind regards,
-Luca Boccassi
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+
+v5: Remove #ifdef macro for the dentry in struct pmc_usb
+
+v4:
+1. Maintain a root directory for PMC module and incorporate devices
+under it
+2. Add the debugfs module under '/sys/kernel/debug/usb'
+3. Use the platform device 'pmc->dev' to assign the device's name
+
+v3: Allocate the debugfs directory name for the platform device with
+its ACPI dev name included
+
+v2:
+1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
+2. Remove explicitly defined one-liner functions
+
+ drivers/usb/typec/mux/intel_pmc_mux.c | 52 ++++++++++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 34e4188a40ff..4969f4a2d445 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -15,6 +15,8 @@
+ #include <linux/usb/typec_mux.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_tbt.h>
++#include <linux/debugfs.h>
++#include <linux/usb.h>
+ 
+ #include <asm/intel_scu_ipc.h>
+ 
+@@ -143,8 +145,12 @@ struct pmc_usb {
+ 	struct acpi_device *iom_adev;
+ 	void __iomem *iom_base;
+ 	u32 iom_port_status_offset;
++
++	struct dentry *dentry;
+ };
+ 
++static struct dentry *pmc_mux_debugfs_root;
++
+ static void update_port_status(struct pmc_usb_port *port)
+ {
+ 	u8 port_num;
+@@ -639,6 +645,29 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
+ 	return 0;
+ }
+ 
++static int port_iom_status_show(struct seq_file *s, void *unused)
++{
++	struct pmc_usb_port *port = s->private;
++
++	update_port_status(port);
++	seq_printf(s, "0x%08x\n", port->iom_status);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(port_iom_status);
++
++static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port)
++{
++	struct dentry *debugfs_dir;
++	char name[6];
++
++	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
++
++	debugfs_dir = debugfs_create_dir(name, port->pmc->dentry);
++	debugfs_create_file("iom_status", 0400, debugfs_dir, port,
++			    &port_iom_status_fops);
++}
++
+ static int pmc_usb_probe(struct platform_device *pdev)
+ {
+ 	struct fwnode_handle *fwnode = NULL;
+@@ -674,6 +703,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	pmc->dentry = debugfs_create_dir(dev_name(pmc->dev), pmc_mux_debugfs_root);
++
+ 	/*
+ 	 * For every physical USB connector (USB2 and USB3 combo) there is a
+ 	 * child ACPI device node under the PMC mux ACPI device object.
+@@ -688,6 +719,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 			fwnode_handle_put(fwnode);
+ 			goto err_remove_ports;
+ 		}
++
++		pmc_mux_port_debugfs_init(&pmc->port[i]);
+ 	}
+ 
+ 	platform_set_drvdata(pdev, pmc);
+@@ -703,6 +736,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	debugfs_remove(pmc->dentry);
++
+ 	return ret;
+ }
+ 
+@@ -719,6 +754,8 @@ static int pmc_usb_remove(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	debugfs_remove(pmc->dentry);
++
+ 	return 0;
+ }
+ 
+@@ -737,7 +774,20 @@ static struct platform_driver pmc_usb_driver = {
+ 	.remove = pmc_usb_remove,
+ };
+ 
+-module_platform_driver(pmc_usb_driver);
++static int __init pmc_usb_init(void)
++{
++	pmc_mux_debugfs_root = debugfs_create_dir("intel_pmc_mux", usb_debug_root);
++
++	return platform_driver_register(&pmc_usb_driver);
++}
++module_init(pmc_usb_init);
++
++static void __exit pmc_usb_exit(void)
++{
++	platform_driver_unregister(&pmc_usb_driver);
++	debugfs_remove(pmc_mux_debugfs_root);
++}
++module_exit(pmc_usb_exit);
+ 
+ MODULE_AUTHOR("Heikki Krogerus <heikki.krogerus@linux.intel.com>");
+ MODULE_LICENSE("GPL v2");
+-- 
+2.34.1
+
