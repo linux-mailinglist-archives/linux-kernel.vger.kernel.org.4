@@ -2,162 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF80470EF26
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A75F70EF2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239440AbjEXHPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
+        id S239730AbjEXHQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240173AbjEXHPT (ORCPT
+        with ESMTP id S240283AbjEXHPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:15:19 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B5EB3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:13:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VjN6v8P_1684912430;
-Received: from 30.97.48.247(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjN6v8P_1684912430)
-          by smtp.aliyun-inc.com;
-          Wed, 24 May 2023 15:13:51 +0800
-Message-ID: <fd4d0429-4da3-8217-6c13-14fd8a198920@linux.alibaba.com>
-Date:   Wed, 24 May 2023 15:13:49 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: dm overlaybd: targets mapping OverlayBD image
-To:     Alexander Larsson <alexl@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Du Rui <durui@linux.alibaba.com>
-Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Alasdair Kergon <agk@redhat.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>
-References: <9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com>
- <ZGz32yw7ecKhW+lj@redhat.com>
- <CAL7ro1FPEqXyOuX_WPMYdsT6rW-bD5EU=v=oWKsd6XscykLF6Q@mail.gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <CAL7ro1FPEqXyOuX_WPMYdsT6rW-bD5EU=v=oWKsd6XscykLF6Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 03:15:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F4610D0;
+        Wed, 24 May 2023 00:14:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E568E1F8AF;
+        Wed, 24 May 2023 07:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684912474; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9kSKZu1XbpZDKX9dfP2mGYle5KVVElwyZwMlqtknGE8=;
+        b=vQLcuzAnG7vI/74domn+u5K2iYjcuQd23YeyD3vsii5tb4uMBnIrIpeOiChq14EmF64e85
+        yzWHlA+3I4Zh+7Wou5E6YhcEVa1fgA0YWAst1f2QElAzUmvFVdQoO4uVUYrKX/2iLN5PNU
+        oBvQ6c2oX3AEf2oMK5ConbS/q74cIbc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684912474;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9kSKZu1XbpZDKX9dfP2mGYle5KVVElwyZwMlqtknGE8=;
+        b=o81q43jjugn/Tk38op5Oxr+BwcKYBj38l5OtmU8/mcGXJzDmQCUmeWxShPfZH8a8cjSINx
+        BNJZz7nv2eqMGuBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C60A013425;
+        Wed, 24 May 2023 07:14:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id t6CGL1q5bWQoOAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 24 May 2023 07:14:34 +0000
+Date:   Wed, 24 May 2023 09:14:34 +0200
+Message-ID: <87353mfbfp.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sound tree
+In-Reply-To: <20230524135448.3ecad334@canb.auug.org.au>
+References: <20230524135448.3ecad334@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/5/24 23:43, Alexander Larsson wrote:
-> On Tue, May 23, 2023 at 7:29 PM Mike Snitzer <snitzer@kernel.org> wrote:
->>
->> On Fri, May 19 2023 at  6:27P -0400,
->> Du Rui <durui@linux.alibaba.com> wrote:
->>
->>> OverlayBD is a novel layering block-level image format, which is design
->>> for container, secure container and applicable to virtual machine,
->>> published in USENIX ATC '20
->>> https://www.usenix.org/system/files/atc20-li-huiba.pdf
->>>
->>> OverlayBD already has a ContainerD non-core sub-project implementation
->>> in userspace, as an accelerated container image service
->>> https://github.com/containerd/accelerated-container-image
->>>
->>> It could be much more efficient when do decompressing and mapping works
->>> in the kernel with the framework of device-mapper, in many circumstances,
->>> such as secure container runtime, mobile-devices, etc.
->>>
->>> This patch contains a module, dm-overlaybd, provides two kinds of targets
->>> dm-zfile and dm-lsmt, to expose a group of block-devices contains
->>> OverlayBD image as a overlaid read-only block-device.
->>>
->>> Signed-off-by: Du Rui <durui@linux.alibaba.com>
->>
->> <snip, original patch here: [1] >
+On Wed, 24 May 2023 05:54:48 +0200,
+Stephen Rothwell wrote:
 > 
-> A long long time ago I wrote a docker container image based on
-> dm-snapshot that is vaguely similar to this one. It is still
-> available, but nobody really uses it. It has several weaknesses. First
-> of all the container image is an actual filesystem, so you need to
-> pre-allocate a fixed max size for images at construction time.
-> Secondly, all the lvm volume changes and mounts during runtime caused
-> weird behaviour (especially at scale) that was painful to manage (just
-> search the docker issue tracker for devmapper backend). In the end
-> everyone moved to a filesystem based implementation (overlayfs based).
-
-Yeah, and I think reproducibility issue is another problem, which means
-it's quite hard to select a random fs without some change to get the
-best result.  I do find these guys work on e2fsprogs again and again.
-
-I've already told them internally again and again, but.. They only focus
-on some minor points such as how to do I/O and CPU prefetch to get
-(somewhat) better performance and beat EROFS.  I don't know, I have no
-enough time to even look into that whether this new kernel stuffs is
-fine: because of a very simplist idea:
-
-  stacked storage overhead generally takes double runtime/memory
-footprints:
-    filesystem + block drivers
-
+> Hi all,
 > 
->> I appreciate that this work is being done with an eye toward
->> containerd "community" and standardization but based on my limited
->> research it appears that this format of OCI image storage/use is only
->> used by Alibaba? (but I could be wrong...)
->>
->> But you'd do well to explain why the userspace solution isn't
->> acceptable. Are there security issues that moving the implementation
->> to kernel addresses?
->>
->> I also have doubts that this solution is _actually_ more performant
->> than a proper filesystem based solution that allows page cache sharing
->> of container image data across multiple containers.
+> After merging the sound tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 > 
-> This solution doesn't even allow page cache sharing between shared
-> layers (like current containers do), much less between independent
-> layers.
+> In file included from sound/core/seq/seq_ump_convert.c:11:
+> include/sound/ump_msg.h:196:13: error: duplicate member 'reserved'
+>   196 |         u32 reserved:8;
+>       |             ^~~~~~~~
+> include/sound/ump_msg.h:197:13: error: duplicate member 'program'
+>   197 |         u32 program:8;
+>       |             ^~~~~~~
+> include/sound/ump_msg.h:198:13: error: duplicate member 'channel'
+>   198 |         u32 channel:4;
+>       |             ^~~~~~~
+> include/sound/ump_msg.h:199:13: error: duplicate member 'status'
+>   199 |         u32 status:4;
+>       |             ^~~~~~
+> include/sound/ump_msg.h:200:13: error: duplicate member 'group'
+>   200 |         u32 group:4;
+>       |             ^~~~~
+> include/sound/ump_msg.h:201:13: error: duplicate member 'type'
+>   201 |         u32 type:4;
+>       |             ^~~~
 > 
->> There is an active discussion about, and active development effort
->> for, using overlayfs + erofs for container images.  I'm reluctant to
->> merge this DM based container image approach without wider consensus
->> from other container stakeholders.
->>
->> But short of reaching wider consensus on the need for these DM
->> targets: there is nothing preventing you from carrying these changes
->> in your alibaba kernel.
+> Caused by commit
 > 
-> Erofs already has some block-level support for container images (with
-> nydus), and composefs works with current in-kernel EROFS+overlayfs.
-> And this new approach doesn't help for the IMHO current weak spot we
-> have, which is unprivileged container images.
+>   0b5288f5fe63 ("ALSA: ump: Add legacy raw MIDI support")
 > 
-> Also, while OCI artifacts can be used to store any kind of image
-> formats (or any other kind of file) I think for an actual standardized
-> new image format it would be better to work with the OCI org to come
-> up with a OCI v2 standard image format.
+> I have applied the following fix patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 24 May 2023 13:39:38 +1000
+> Subject: [PATCH] fix up for "ALSA: ump: Add legacy raw MIDI support"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Agreed, I hope you guys could actually sit down and evaluate a proper
-solution on the next OCI v2, currently I know there are:
+Thanks!  This was a late change and I have skipped testing big-endian
+since then, as it seems...
 
-  - Composefs
-  - (e)stargz   https://github.com/containerd/stargz-snapshotter
-  - Nydus       https://github.com/containerd/nydus-snapshotter
-  - OverlayBD   https://github.com/containerd/accelerated-container-image
-  - SOCI        https://github.com/awslabs/soci-snapshotter
-  - Tarfs
-  - (maybe even more..)
+I queued up your fix patch.
 
-Honestly, I do think OSTree/Composefs is the best approach for now for
-deduplication and page cache sharing (due to kernel limitation of page
-cache sharing and overlayfs copyup limitation).  I'm too tired of
-container image stuffs honestly.  Too much unnecessary manpower waste.
 
-Thanks,
-Gao Xiang
+Takashi
 
+> ---
+>  include/sound/ump_msg.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> But, I don't really speak for the block layer developers, so take my
-> opinions with a pinch of salt.
+> diff --git a/include/sound/ump_msg.h b/include/sound/ump_msg.h
+> index c76c39944a5f..a594ef951b54 100644
+> --- a/include/sound/ump_msg.h
+> +++ b/include/sound/ump_msg.h
+> @@ -192,13 +192,13 @@ struct snd_ump_midi1_msg_program {
+>  	u32 program:8;
+>  	u32 reserved:8;
+>  #else
+> -#endif
+>  	u32 reserved:8;
+>  	u32 program:8;
+>  	u32 channel:4;
+>  	u32 status:4;
+>  	u32 group:4;
+>  	u32 type:4;
+> +#endif
+>  } __packed;
+>  
+>  /* MIDI 1.0 Channel Pressure (32bit) */
+> -- 
+> 2.39.2
 > 
+> -- 
+> Cheers,
+> Stephen Rothwell
