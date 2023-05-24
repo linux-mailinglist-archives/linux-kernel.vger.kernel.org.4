@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3418970EBC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5761C70EBCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239343AbjEXDQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 23:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S239133AbjEXDU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 23:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239314AbjEXDPe (ORCPT
+        with ESMTP id S239314AbjEXDTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 23:15:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3631735;
-        Tue, 23 May 2023 20:14:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C09106382F;
-        Wed, 24 May 2023 03:14:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0213BC433D2;
-        Wed, 24 May 2023 03:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684898063;
-        bh=KIWo62hjuIIQjA6MUc+tEoVlrU/qrhKfIVtzXSXkHW4=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=Ww54UMhzlzXsB6DNy7UABtfpofJS3dGNZxoo9gMXj4mMGmsAPK0jsmAxFk/gP5xgu
-         Tw/3rxo0pFWRAek6vLcNSkDhLKj5idly1Q71EUqwonQY4FucM5ApwyZ7FdGzx3Jx6d
-         vx69BlFGVKkEeEwl2pbdwy07KDNO4xUu4ttnvOol4dMvd00HIyUhc8qfGeH9KOdofs
-         UQ9L0extPBEmMfuOgHqBkdRKkspU0NcCnbArALRZ0TXQCNLZ1ypCC0G8MmLK/6YR/e
-         r4mrwlLVOIa4hN9tELhUlmggdR54CrVFIXVX6o0YX6elLdjk0fiYUvGL3mRKJwEGqO
-         AsY/5o50J3n4Q==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 24 May 2023 06:14:20 +0300
-Message-Id: <CSU6IJAP1LIT.1278627S9KWPC@suppilovahvero>
-Subject: Re: [PATCH v3] tpm_tis_spi: Release chip select when flow control
- fails
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     <shaopeijie@cestc.cn>, <pmenzel@molgen.mpg.de>
-Cc:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230522070140.33719-1-shaopeijie@cestc.cn>
- <20230523024536.4294-1-shaopeijie@cestc.cn>
-In-Reply-To: <20230523024536.4294-1-shaopeijie@cestc.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Tue, 23 May 2023 23:19:47 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F1B91B9;
+        Tue, 23 May 2023 20:19:06 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dx_+spgm1kkkkAAA--.628S3;
+        Wed, 24 May 2023 11:19:05 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axo8Aogm1kbbdyAA--.60316S3;
+        Wed, 24 May 2023 11:19:05 +0800 (CST)
+Subject: Re: [PATCH 1/2] perf arm64: Handle __NR3264_ prefixed syscall number
+To:     Alexander Kapshuk <alexander.kapshuk@gmail.com>
+References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
+ <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
+ <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Hans-Peter Nilsson <hp@axis.com>, Leo Yan <leo.yan@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <49e98308-ab8d-5811-66a8-9e17f22bb8c4@loongson.cn>
+Date:   Wed, 24 May 2023 11:19:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axo8Aogm1kbbdyAA--.60316S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7WF47CrWDKryktF47tFyxKrg_yoW8KFW8pr
+        n5Aay5tay8WF12kwn7ursIqrySy3ykJr90gryvk39xu3WDt3Z5Kr10v3Z0kFWxXr1xKrWr
+        uF10qFyUX3WrX3DanT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,35 +75,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue May 23, 2023 at 5:45 AM EEST,  wrote:
-> From: Peijie Shao <shaopeijie@cestc.cn>
->
-> The failure paths in tpm_tis_spi_transfer() do not deactivate
-> chip select. Send an empty message (cs_select =3D=3D 0) to overcome
-> this.
->
-> The patch is tested by two ways.
-> One way needs to touch hardware:
->    1. force pull MISO pin down to GND, it emulates a forever
->       'WAIT' timing.
->    2. probe cs pin by an oscilloscope.
->    3. load tpm_tis_spi.ko.
-> After loading, dmesg prints:
->     "probe of spi0.0 failed with error -110"
-> and oscilloscope shows cs pin goes high(deactivated) after
-> the failure. Before the patch, cs pin keeps low.
->
-> Second way is by writing a fake spi controller.
->    1. implement .transfer_one method, fill all rx buf with 0.
->    2. implement .set_cs method, print the state of cs pin.
->    we can see cs goes high after the failure.
->
-> Signed-off-by: Peijie Shao <shaopeijie@cestc.cn>
 
-Thanks I substitute the patch that I applied with this.
 
-Again:
+On 05/23/2023 08:31 PM, Alexander Kapshuk wrote:
+> On Tue, May 23, 2023 at 1:22 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
+>> in the generated syscall table file syscalls.c, there exist some
+>> __NR3264_ prefixed syscall numbers such as [__NR3264_ftruncate],
+>> it looks like not so good, just do some small filter operations
+>> to handle __NR3264_ prefixed syscall number as a digital number.
+>>
+>> Without this patch:
+>>
+>>   [__NR3264_ftruncate] = "ftruncate",
+>>
+>> With this patch:
+>>
+>>   [46] = "ftruncate",
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 7 ++++---
+>>  1 file changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+>> index 22cdf91..59ab7939 100755
+>> --- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+>> +++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+>> @@ -39,7 +39,8 @@ create_table()
+>>         echo "};"
+>>  }
+>>
+>> -$gcc -E -dM -x c -I $incpath/include/uapi $input \
+>> -       |sed -ne 's/^#define __NR_//p' \
+>> -       |sort -t' ' -k2 -n             \
+>> +$gcc -E -dM -x c -I $incpath/include/uapi $input               \
+>> +       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
+>> +       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
+>> +       |sort -t' ' -k2 -n                                      \
+>>         |create_table
+>> --
+>> 2.1.0
+>>
+>
+> As an aside, the awk + sed + sort parts of the command line may be
+> reduced to the following awk script, if desired:
+> awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
+>         sub("^#define __NR_", "")
+>         sub("^#define __NR3264_", "")
+>         print | "sort -k2 -n"
+> }'
+>
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Hi Alexander,
 
-BR, Jarkko
+Thanks, it seems more simple and works well as expected.
+Let us wait for more review comments before respin.
+
+If no any objections, I will send v2 with the following
+changes based on the current patch in the next week.
+
+-$gcc -E -dM -x c -I $incpath/include/uapi $input               \
+-       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
+-       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
+-       |sort -t' ' -k2 -n                                      \
++$gcc -E -dM -x c -I $incpath/include/uapi $input \
++       |awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
++               sub("^#define __NR_", "")
++               sub("^#define __NR3264_", "")
++               print | "sort -k2 -n"}' \
+         |create_table
+
+Thanks,
+Tiezhu
+
