@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766D270F802
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C7370F804
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbjEXNt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
+        id S235280AbjEXNuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjEXNto (ORCPT
+        with ESMTP id S235146AbjEXNuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:49:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B089E;
-        Wed, 24 May 2023 06:49:43 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBF796605943;
-        Wed, 24 May 2023 14:49:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684936181;
-        bh=eOWh+03SOK7Ma/sA2JICrBy2SCdrGT1dVFFRySHiFBI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O7Qsp6hFFseZyO9Y61woxfnLQ7oR35mF7vipm2dk/c4+9mVrNZYJLFloqs/vzkHst
-         NrXlx5DLBKi34JaJdpL5g8XeVnpTlzsW4/xk3V8t+gXa2zuznY0LAqrLAYRYuHn3Ti
-         lIHEczYNcFyW27XPdxT0t3G2zOmhyMPQlnJ11kywsGHd/Upwnl6hF1rPQq/216bbAC
-         ArGaN+tOO9X4EZdXoDgRiujGsWcSvSn91tBjvfhmDXPbdKPlyHXdXkj2FpWBRBq+6W
-         XsAVJZlkxnVTIZcYOkIfsV7BbB16dPeBJjBSKvtXvx/JnHNl21yGoHmRQmeIKqTU6b
-         gnueVO9Dpr0Pw==
-Message-ID: <cfa23203-1626-440b-ec27-efe56cb297d2@collabora.com>
-Date:   Wed, 24 May 2023 16:49:37 +0300
+        Wed, 24 May 2023 09:50:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E359AAA;
+        Wed, 24 May 2023 06:50:18 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OCibAj013324;
+        Wed, 24 May 2023 13:50:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=LQQrfZVPT5E9wHqNJdtcY7zkZ8sWfdNxcom8AZHCpRk=;
+ b=gVeY6Dnk9GfY5pyAAdkqPXpwDChIEkAuZ4XdzPbQmoXS47LXXYdJHDGj8KBejhkbWkvA
+ APIp2t3hPPv5kiewmbOYDVUk8RV6djBk3bGTJRwXjBHNleeh4U9Vntma8c3jYu612HsN
+ h/X2COHlbnVjzD2u1gGA35VpSQNWwsg3wKkF1JH2hZhzF3U73w2NRLFIoB14pClZJxLQ
+ ttTeKi0JuK9NmcaDQIjl5gYYZN+h5afO1I4WOEVvMvppViSdHr/1H3HUjj+qw0d+1sB2
+ Jzn+rDlECIDVn72BkZRdhAMa3bUPsZY1bjfYjwmHDTUlIyGraZ76KrFFBOx8hAoVZkz9 1Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs4df9uxh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 13:50:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ODoDvg000739
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 13:50:13 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 24 May 2023 06:50:11 -0700
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [PATCH v2] usb: common: usb-conn-gpio: Set last role to unknown before initial detection
+Date:   Wed, 24 May 2023 19:20:07 +0530
+Message-ID: <1684936207-23529-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] ASoC: es8316: Increment max value for ALC Capture
- Target Volume control
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Zhu Ning <zhuning0077@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        David Yang <yangxiaohua@everest-semi.com>,
-        Daniel Drake <drake@endlessm.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, kernel@collabora.com
-References: <20230524074156.147387-1-cristian.ciocaltea@collabora.com>
- <20230524074156.147387-2-cristian.ciocaltea@collabora.com>
- <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
-Content-Language: en-US
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hNRLGsQXfAB3vaHGlEc6Kj-YRVtz-eMI
+X-Proofpoint-ORIG-GUID: hNRLGsQXfAB3vaHGlEc6Kj-YRVtz-eMI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_09,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=930
+ suspectscore=0 impostorscore=0 phishscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305240113
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,59 +76,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 13:30, Mark Brown wrote:
-> On Wed, May 24, 2023 at 10:41:54AM +0300, Cristian Ciocaltea wrote:
-> 
->> This means that either the hardware default is wrongly set to 0xB
->> instead of 0xA, or the specs are incorrect and instead of having the
->> range 0xA-0xF mapped to -1.5 dB, the single value 0xA should have been
->> mapped to -1.5 dB and the remaining range 0xB-0xF to 0 dB.
-> 
->> Increment the max value allowed for ALC Capture Target Volume control,
->> so that it matches the hardware default.
-> 
->> -	SOC_SINGLE_TLV("ALC Capture Target Volume", ES8316_ADC_ALC3, 4, 10, 0,
->> +	SOC_SINGLE_TLV("ALC Capture Target Volume", ES8316_ADC_ALC3, 4, 11, 0,
->>  		       alc_target_tlv),
-> 
-> The description above of what the control does doesn't seem to match
-> what alc_target_tlv specifies - it is:
-> 
->   static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(alc_target_tlv, -1650, 150, 0);
-> 
-> which is saying that the value goes from -16.5dB up in steps of 1.5dB
-> but your description above says that 0-10 map to -1.5dB and other values
-> are 0dB.
+Currently if we bootup a device without cable connected, then
+usb-conn-gpio won't call set_role() since last_role is same as
+current role. This happens because during probe last_role gets
+initialized to zero.
 
-My description above mentioned only the 0xA-0xF (10-15) range, anything
-before that is fine and the implementation matches the specs:
+To avoid this, added a new constant in enum usb_role, last_role
+is set to USB_ROLE_UNKNOWN before performing initial detection.
 
-0000 –> -16.5 dB
-0001 –> -15.0 dB
-0010 –> -13.5 dB
-...
-0111 –>  -6.0 dB
-1000 –>  -4.5 dB
-1001 –>  -3.0 dB
+Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+v2: Added USB_ROLE_UNKNWON to enum usb_role
 
-The inconsistency is here:
-1010-1111 –> -1.5 dB
+ drivers/usb/common/usb-conn-gpio.c | 3 +++
+ include/linux/usb/role.h           | 1 +
+ 2 files changed, 4 insertions(+)
 
-Since the hardware default is 1011 (11) instead of 1010 (10), I assumed
-the specs could be wrong and probably should have provided the following
-mappings:
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index e20874c..30bdb81 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, info);
+ 	device_set_wakeup_capable(&pdev->dev, true);
+ 
++	/* Set last role to unknown before performing the initial detection */
++	info->last_role = USB_ROLE_UNKNOWN;
++
+ 	/* Perform initial detection */
+ 	usb_conn_queue_dwork(info, 0);
+ 
+diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
+index b5deafd..221d462 100644
+--- a/include/linux/usb/role.h
++++ b/include/linux/usb/role.h
+@@ -8,6 +8,7 @@
+ struct usb_role_switch;
+ 
+ enum usb_role {
++	USB_ROLE_UNKNOWN = -1,
+ 	USB_ROLE_NONE,
+ 	USB_ROLE_HOST,
+ 	USB_ROLE_DEVICE,
+-- 
+2.7.4
 
-1010 ->  -1.5 dB
-1011-1111 -> 0 dB
-
-> Presumably you can check the effects of changing the value?  It seems
-> plausible that what's written in the code might be accurate and the
-> higher values might actually change the gain but it'd be better to
-> check.
-
-I haven't noticed a (measurable) change in gain when switching between
-10 and 11, but my testing equipment is also not that great. Will try to
-improve the tests accuracy.
-
-Thanks,
-Cristian
