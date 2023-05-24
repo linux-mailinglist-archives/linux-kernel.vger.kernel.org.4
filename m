@@ -2,231 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB5470F206
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E1D70F218
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240528AbjEXJUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S240632AbjEXJU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240312AbjEXJTt (ORCPT
+        with ESMTP id S240307AbjEXJUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:19:49 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2096.outbound.protection.outlook.com [40.107.237.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB5A8E;
-        Wed, 24 May 2023 02:19:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VI+k664UPmFfIZapjp+PnZey4ZulwOAuXwcaicd4MnhrZkdRdX4V7Eg672pPWzZTdmHLs6m7XUFvEImdAAIDjky2yXqaCs6QIZRlQ0KlW54GlkehqiYam3QxPrA+fmnFm3oO8iFZ5N3LuRezi3+6caokPXo0pBYZ9MI5lgQhYWyyElbGU28JGJVACzs52EUsPXrMrbyQv2jrES5gixL90PjPiIp+RDU47K5Zo7zEMiYJtOtHxh0E/HJ2v5WhFvqzn4+SF5XLNKAiHQBER4OTN0mUztGemMagv5UkwZRzbwpG4M81Arptv+DdCmYcqffhe57CfnwElU27veCw8U0lNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EjysrcvpIysM4nTXMnOYFhEOXkbaTSCVxp780VDwaqo=;
- b=GLa3PF9kGJ4kzaKKYunFRXaQz2LEJMKzRBoXh32qLvOatDvI6aA6Cx5YqufmTRR+G/EsiEL6UJZKnsS9dAvLIDaBdPFJMeJuPae+BlbosXMJH6L+UqrqtiqS4Lh+BHfz66cbbSS4vqN0ZA1OQN4CRrDn59Xqil8yDFFCc8cKSaPZh0E8thveObPJEIwoh4xJWcvv7YGy+0hQvLqvAHtWw6YeG8jYoRUTsRGKfJr/R1+zzO8I1wxjcKx1YEvb0MhcssJ396WcjFy7vwtUZUFqTH7CEsoXpNoelylFwafOSLc4cg/tRg6JcbIteq2OJLgs9Oy3oJ50bExkoosnmh2c2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 24 May 2023 05:20:54 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AECF198;
+        Wed, 24 May 2023 02:20:49 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso119929866b.1;
+        Wed, 24 May 2023 02:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EjysrcvpIysM4nTXMnOYFhEOXkbaTSCVxp780VDwaqo=;
- b=QZMz7gXH/Y1CIW0Gsf9SH1tcomfJIKNBtJ/qO6vLRO8v+ZuBoe2YPQceTvqwsdDBVAFN6ihc3P9FzXSTAvrlcmtyS4UJs5XMCmyO4XZsuwQXuv0z3dKDz8KlWMuFETKqsovIhqLCMd5xosHc2jWKAzK7IQnSRHJTYCuX007MGoo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB3642.namprd13.prod.outlook.com (2603:10b6:5:24b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 09:19:44 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Wed, 24 May 2023
- 09:19:44 +0000
-Date:   Wed, 24 May 2023 11:19:35 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Justin Chen <justin.chen@broadcom.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com, justinpopo6@gmail.com,
-        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        richardcochran@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, conor@kernel.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: Re: [PATCH net-next v4 3/6] net: bcmasp: Add support for ASP2.0
- Ethernet controller
-Message-ID: <ZG3Wp2HhwLrwpvHq@corigine.com>
-References: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
- <1684878827-40672-4-git-send-email-justin.chen@broadcom.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1684878827-40672-4-git-send-email-justin.chen@broadcom.com>
-X-ClientProxiedBy: AS4P251CA0004.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d2::6) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1684920047; x=1687512047;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2shygy+5ofzXJ/pEFBWa4IfYxYA2SshZRxJ/ZfDq4fI=;
+        b=pgaeEgmCgQKJ5VEe5Vt33KkOgeG0ACByAB7nbgXYN2sAsk7fs7F1+vNgp5PpM7XFJZ
+         IEwEDTKmnWfbLKg3IUprDuN6dhXPghWldHLbTrZdkiOpZuR50HKA4ewF42k9ll5ewi2L
+         RCYgabIyKC/55/tyn9FWeEREbNbjP8M03N/80YEY7btshtN3MyGB1uilFTo6hWJJHrxd
+         Z9ZJtXNwtgoEHzG0YfsBLw/vuELggqFWZTBTUAx1kTEdu759E0HpZLClbkiaOm8v+YV3
+         sCpSRNgDLEbTtQdo996DYi7V7KtKHMRikYvzNUTOqMIn8/SLjoIgXKZAYpdNIKlGDABT
+         TJaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684920048; x=1687512048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2shygy+5ofzXJ/pEFBWa4IfYxYA2SshZRxJ/ZfDq4fI=;
+        b=fAmIww2pLsZg3zPSBZScyQsN2zK3J1tJq6ct0Ol/is6T/2rsQxv70LFc2angqAH+Hp
+         z1/KRdtgt8IOx7guQtkpOD9JyV0Ax+8lNonq7hkae8Gbz+waLPd+39kLhTxHBAlRgdDi
+         TAZ2GX4aLthDleapcyBBdOUN3BUzwf5XDs2DrPUMbs6qKkKEglNoCLGOiQWH/QCo7xqk
+         CRYwYRuLyfxtc+97HD5em4hdyJFGeSXdwXfC8YahT6tkNkOBPiq14pD1YEyZmRkebzJa
+         YKcXEOVaZ/vPjaOQi8671cL6wAk2zS+Pg12PHEo+Ni+Se/RSBMYXwOYaF/DPPM9jHFY0
+         xmCw==
+X-Gm-Message-State: AC+VfDxzV4DO84FpAT4ej2A0JcLGAbIKuebTZjK+fdGpZ++SqAyGM2aq
+        vHlSBAGVmVOfs6tAyChzDOo=
+X-Google-Smtp-Source: ACHHUZ7dGcncY9GWyZcVBG8PqRsil8FRN/Attc2ihiuDKZpSuzjyouk5B8pq11/elF7YD4w0t8q6Mw==
+X-Received: by 2002:a17:907:72d2:b0:973:8198:bbf6 with SMTP id du18-20020a17090772d200b009738198bbf6mr1468633ejc.3.1684920047403;
+        Wed, 24 May 2023 02:20:47 -0700 (PDT)
+Received: from wslxew193.ultratronik.de (p200300c78700c900fd67df8b3b199594.dip0.t-ipconnect.de. [2003:c7:8700:c900:fd67:df8b:3b19:9594])
+        by smtp.gmail.com with ESMTPSA id jy22-20020a170907763600b0096fbc516a93sm4579527ejc.211.2023.05.24.02.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 02:20:47 -0700 (PDT)
+From:   Boerge Struempfel <boerge.struempfel@gmail.com>
+Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
+        andy.shevchenko@gmail.com, festevam@gmail.com,
+        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/5] spi: add SPI_MOSI_IDLE_LOW mode bit
+Date:   Wed, 24 May 2023 11:19:43 +0200
+Message-Id: <20230524091948.41779-1-boerge.struempfel@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3642:EE_
-X-MS-Office365-Filtering-Correlation-Id: a532a5fb-dbac-47c3-dd71-08db5c3802df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6/HDXRdXjeRT+BBZWHeNgMXJCPnRcox2BM9mOWKfPTC75+SplE/4QNvAGn7X04p4c6ebHitDZV+naqXcDlbmgQ3x2GoJawkZw+CCYpvwz7acTc4UmgWidJ8eZHqGbDc32S2aDoMPOLJ+aN2Oe3K8eYOBBhPbxw1pmrOZ71rjc4O8DcRFo3x8txKUXHMhKsANeTcnSvUWNr+u3msCTCy+KbqickewMjSPzoFDItHFIHCE56cjEqX1tqkqDJWJ69N4ZGxrp2/+7xMG++YR73OXyAZj1XodSbcuX5TTstUHrfbcK7GTzDLr6Emw2yAUujcv5hWfgNEnLyNyT4XnJshKSrOmjufLSm8M8ZnaYYMFIVK094kMwcPNi8Phj+miiEZq/qQ0fngGWsZuTBt1mMvGFLpsgGudhO/asuedk0k3J6xJLEy70WqVOZ8qCPQv2eAyozV76KJMaOYlT5ILsuCxGIVuQnhGVWJjPxuhmR6vs7AxT4GrSpMTpUE/cKoklKDZauNFIqpJZ8enxtaGF339x62v1fQJBeXLTPbgINFV1YNhFupkiah7MKXz/Ji1VEq630Fve/B297iFqgOGO7iGSxp4RbPHrjB2+cb8DsUQ574=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(346002)(136003)(39830400003)(451199021)(83380400001)(8676002)(8936002)(7416002)(44832011)(5660300002)(6506007)(6512007)(86362001)(186003)(2616005)(38100700002)(6916009)(478600001)(6486002)(66946007)(66556008)(6666004)(41300700001)(4326008)(316002)(36756003)(66476007)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ghITYONGQeCr9IMo/JR/w6i+oJ+spMJrn0Ha6W6Muo7JsrNl/7ih8gSIu1o5?=
- =?us-ascii?Q?uKu8MIexmnYD+6ZSMu8J6gqO4saX7+KgHY6nrMcHEReOHVotIvPgKQQQOpH6?=
- =?us-ascii?Q?LzBH1yx292ShVnd996UuZT7bBY0/J+z02keQl58jq3DXckFIOS5Gs3KJg899?=
- =?us-ascii?Q?VR5JMH65Bh6b+r4+H8TaCFBIEL474VglctFCYttgwpXy8hMT2taTVSq18FIR?=
- =?us-ascii?Q?QegWYYYut/G3nhH88MU96xL8kiHXnl/fUiOApu3bWTeZAdN+LGIQqU8ck/vD?=
- =?us-ascii?Q?Z9OWyTOAUvAA4J8JO//u3h676Unq0e16S0TwOF9DNevpnjcnisRHacD4eD7E?=
- =?us-ascii?Q?aE9KtzcTGamwxP1sbkIp8nLbpUGUYEPxTDEqxgWdEJSaAk7/G+4kyh9g21f5?=
- =?us-ascii?Q?nV4eDu5dvwJpfW5jUphBrxki6bt6whefVH85pVG3R8kgzyc1nuw3rC7DfR/X?=
- =?us-ascii?Q?b86P4eLEIwHj5s+RL5HXQfyPVYcawYn3GdNSqSORW8fN+0XJuiggQUYvL2Z8?=
- =?us-ascii?Q?5OLuA3wbjCD9dgFfbtrh9GumK2YU5gjgjlRaN4pNK+vGKRoJBnjgPtOigtng?=
- =?us-ascii?Q?erhkb591Gtn93tgvh2avXIORXjcZsmn3/jeU0CfjH7SWsq0CriLF+L8fTD8J?=
- =?us-ascii?Q?XrXpg9FqD8tNo1lkulaysrIc6BOnsa4QQBf2r5aAt4CiTIr1dcbJRNUmKLtS?=
- =?us-ascii?Q?OY25/8CSTYK08y0wKalEhsX+fbV1WOYpXMlv0eVEVaLdouqYpVzGApd6+V+3?=
- =?us-ascii?Q?0HGeJ++rwqosFbiH8ExwCfFFDAfqeHKMsMKGggL49bNppBGIhnN20JQs/DJW?=
- =?us-ascii?Q?ifrtszkmYSihBnzG6oOVOkWfszRqUzROsFzsixWlOdBSbWIQckwzxRtrwfoA?=
- =?us-ascii?Q?DqxmyOQ9Dx2E9I3WfCcpwe1/52VeNYS46xQao2WL5k/mE3ZtEKQrr7kMG14M?=
- =?us-ascii?Q?NSz27GBAP1xoQ5dMzOP271f83f8r2Un5l10wSyeEpjdsEBTLKen6HMG8yBp6?=
- =?us-ascii?Q?nLlO4DE6rnBvtNyNGzqBrUZZJzGcWpjoZwz2xkX5ekgON0ChOLGB+A9kPwqD?=
- =?us-ascii?Q?KmGyk4V2iVM2XvQeKRK6BrszXGkUEB1bvNqLWLhEFP17JJIHQyLWd/rE2fmq?=
- =?us-ascii?Q?Cc5/817vy3aIQwIe3R5EfBJ06uhP3cs1MPmp3eyR0yUEm2n79H35G1BcAzpx?=
- =?us-ascii?Q?uzaL/vFDnEPrOevvJGAr7srvO4Fb5dSRXabYcpJDUaImW6lCT2NYIAPwNjIi?=
- =?us-ascii?Q?vsE9DHZGkPmYqdQpx3U02gvZs2Hf5FWw1H6nWHqxwtFa0/g7hXVr1kgZFZuU?=
- =?us-ascii?Q?tj250NxKn6FkP5egKO8ILIo6KkkDbvzLxi0Qs0r4QVXAyVQVoZbLuEYG8nkh?=
- =?us-ascii?Q?bjs3gFKzCo6ADnqBA/zbqiwETToI4IWrMpyOY6kQdBw/ShpBTNsqS/4Ttau9?=
- =?us-ascii?Q?KYyRm6GqxBKn25Oj9ngjweTj12ISbEsBYAsBbzDhKkGXcUntvjkc/5VuPke3?=
- =?us-ascii?Q?5Fpi0wCNBXUqpoTKZlVHVwxMZWQfRpmMxlgDFjgeOJX9LWAEX7yinvdK+3rC?=
- =?us-ascii?Q?EajnnbIVy6loy4Qm4wgwD0K6mRMPMpMn9ISYqDMTLrO5+4caO9kd2vt289NZ?=
- =?us-ascii?Q?ow7j6D53F6U26pK3yygoiByQbGtVCJxSS+m4O7lZwav8sUuXuArMQvcWXTJN?=
- =?us-ascii?Q?lA8PQA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a532a5fb-dbac-47c3-dd71-08db5c3802df
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 09:19:44.1080
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j+UKJ4CfP4AVH2osVxIu4zUsZcxVUyY3HDmnTWatGC5jT3E5IIPqN3Yu1Ztek6fBvMTzoMDDAdkHwC6JpGlCdG8gvMcKtAxJmt+EPoC/vz0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3642
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 02:53:44PM -0700, Justin Chen wrote:
-> Add support for the Broadcom ASP 2.0 Ethernet controller which is first
-> introduced with 72165. This controller features two distinct Ethernet
-> ports that can be independently operated.
-> 
-> This patch supports:
-> 
-> - Wake-on-LAN using magic packets
-> - basic ethtool operations (link, counters, message level)
-> - MAC destination address filtering (promiscuous, ALL_MULTI, etc.)
-> 
-> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+Some spi controller switch the mosi line to high, whenever they are
+idle. This may not be desired in all use cases. For example neopixel
+leds can get confused and flicker due to misinterpreting the idle state.
+Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+can be overwritten on a per device basis.
 
-Hi Justin,
+---
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Link for versions:
+  v1 and v2: https://lore.kernel.org/linux-spi/20230511135632.78344-1-bstruempfel@ultratronik.de/
+  v3: https://lore.kernel.org/linux-spi/20230517103007.26287-1-boerge.struempfel@gmail.com/T/#t
+  v4: https://lore.kernel.org/linux-spi/CAEktqctboF3=ykVNtPsifcmHzF6dWwoEcVh+O4H1u-R=TT6gHg@mail.gmail.com/T/#t
+  v5: https://lore.kernel.org/linux-spi/20230520190856.34720-1-boerge.struempfel@gmail.com/T/#t
 
-As I see there will be a v5 I have added a few nits from my side.
-Feel free to ignore them as you see fit.
+Changes from V5:
+  - Added a patch to reorder the command line options for
+    spidev_test in order to increase usability. The indentation
+    fixes were also done in this patch.
 
-...
+Changes from V4:
+  - Added the SPI_3WIRE_HIZ mode bit to spidev
+  - Added the SPI_MOSI_IDLE_LOW mode bit to the spidev_test
+    userspace tool and added the two other missing spi mode
+    bits (SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) to it as well.
 
-> +int bcmasp_netfilt_check_dup(struct bcmasp_intf *intf,
-> +			     struct ethtool_rx_flow_spec *fs)
+Changes from V3:
+  - Added missing paranthesis which caused builderrors
 
-nit: the return type of this function could be bool
+Changes from V2:
+  - Removed the device-tree binding since this should not be managed by
+    the DT but by the device itself.
+  - Replaced all occurences of spi->chip_select with the corresponding
+    macro spi_get_chipselect(spi,0)
 
-> +{
-> +	struct bcmasp_priv *priv = intf->parent;
-> +	struct ethtool_rx_flow_spec *cur;
-> +	size_t fs_size = 0;
-> +	int i;
-> +
-> +	for (i = 0; i < NUM_NET_FILTERS; i++) {
-> +		if (!priv->net_filters[i].claimed ||
-> +		    priv->net_filters[i].port != intf->port)
-> +			continue;
-> +
-> +		cur = &priv->net_filters[i].fs;
-> +
-> +		if (cur->flow_type != fs->flow_type ||
-> +		    cur->ring_cookie != fs->ring_cookie)
-> +			continue;
-> +
-> +		switch (fs->flow_type & ~(FLOW_EXT | FLOW_MAC_EXT)) {
-> +		case ETHER_FLOW:
-> +			fs_size = sizeof(struct ethhdr);
-> +			break;
-> +		case IP_USER_FLOW:
-> +			fs_size = sizeof(struct ethtool_usrip4_spec);
-> +			break;
-> +		case TCP_V6_FLOW:
-> +		case UDP_V6_FLOW:
-> +			fs_size = sizeof(struct ethtool_tcpip6_spec);
-> +			break;
-> +		case TCP_V4_FLOW:
-> +		case UDP_V4_FLOW:
-> +			fs_size = sizeof(struct ethtool_tcpip4_spec);
-> +			break;
-> +		default:
-> +			continue;
-> +		}
-> +
-> +		if (memcmp(&cur->h_u, &fs->h_u, fs_size) ||
-> +		    memcmp(&cur->m_u, &fs->m_u, fs_size))
-> +			continue;
-> +
-> +		if (cur->flow_type & FLOW_EXT) {
-> +			if (cur->h_ext.vlan_etype != fs->h_ext.vlan_etype ||
-> +			    cur->m_ext.vlan_etype != fs->m_ext.vlan_etype ||
-> +			    cur->h_ext.vlan_tci != fs->h_ext.vlan_tci ||
-> +			    cur->m_ext.vlan_tci != fs->m_ext.vlan_tci ||
-> +			    cur->h_ext.data[0] != fs->h_ext.data[0])
-> +				continue;
-> +		}
-> +		if (cur->flow_type & FLOW_MAC_EXT) {
-> +			if (memcmp(&cur->h_ext.h_dest,
-> +				   &fs->h_ext.h_dest, ETH_ALEN) ||
-> +			    memcmp(&cur->m_ext.h_dest,
-> +				   &fs->m_ext.h_dest, ETH_ALEN))
-> +				continue;
-> +		}
-> +
-> +		return 1;
-> +	}
-> +
-> +	return 0;
-> +}
+Changes from V1:
+  - Added patch, introducing the new devicetree binding flag
+  - Split the generic spi part of the patch from the imx-spi specific
+    part
+  - Replaced SPI_CPOL and SPI_CPHA by the combined SPI_MODE_X_MASK bit
+    in the imx-spi.c modebits.
+  - Added the SPI_MOSI_IDLE_LOW bit to spidev
 
-...
+Boerge Struempfel (5):
+  spi: add SPI_MOSI_IDLE_LOW mode bit
+  spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
+  spi: spidev: add two new spi mode bits
+  spi: spidev_test: Sorted the options into logical groups
+  spi: spidev_test Add three missing spi mode bits
 
-> +static int bcmasp_is_port_valid(struct bcmasp_priv *priv, int port)
-> +{
-> +	/* Quick sanity check
-> +	 *   Ports 0/1 reserved for unimac
-> +	 *   Max supported ports is 2
-> +	 */
-> +	return (port == 0 || port == 1);
+ drivers/spi/spi-imx.c        |   9 ++-
+ drivers/spi/spidev.c         |   3 +-
+ include/uapi/linux/spi/spi.h |   3 +-
+ tools/spi/spidev_test.c      | 107 +++++++++++++++++++++--------------
+ 4 files changed, 76 insertions(+), 46 deletions(-)
 
-nit: unnecessary parentheses
-
-> +}
-
-...
+-- 
+2.40.1
 
