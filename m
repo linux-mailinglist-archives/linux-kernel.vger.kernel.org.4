@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8F570F64E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED33D70F655
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjEXMZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S229879AbjEXM0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjEXMZd (ORCPT
+        with ESMTP id S232939AbjEXM0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:25:33 -0400
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1F59C;
-        Wed, 24 May 2023 05:25:30 -0700 (PDT)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id 0127411BF7BF;
-        Wed, 24 May 2023 15:25:28 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 0127411BF7BF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1684931128; bh=9mAjhgzeqJ7XN8wp3Dnu2jv0mqJQOccXz7CqEQVQHKw=;
-        h=From:To:CC:Subject:Date:From;
-        b=VC2xCnBzIQNPacx5/gYtdGIZGnKlrudWZOCCQvxEqdQYUZ04IaeWNAHEPDb2F+T+9
-         BCzL9RVCOe1TSp5dT2TbtzAu91SVVPE63JSU60dxW/u95+axQPOweYkVdCFWxgAzJ3
-         UdhvCdJkPLEtSm8UqZxc4ELLgzf7l0W4SfSlkGn8=
-Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
-        by mx0.infotecs-nt (Postfix) with ESMTP id EE1F530CF59E;
-        Wed, 24 May 2023 15:25:27 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-CC:     Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: [PATCH net] netfilter: nf_tables: Add null check for
- nla_nest_start_noflag() in nft_dump_basechain_hook()
-Thread-Topic: [PATCH net] netfilter: nf_tables: Add null check for
- nla_nest_start_noflag() in nft_dump_basechain_hook()
-Thread-Index: AQHZjjrSqRHcp0pJTUepPr3ePI89VQ==
-Date:   Wed, 24 May 2023 12:25:27 +0000
-Message-ID: <20230524122448.1860908-1-Ilia.Gavrilov@infotecs.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 177575 [May 24 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 513 513 41a024eb192917672f8141390381bc9a34ec945f, {Tracking_from_domain_doesnt_match_to}, infotecs.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/05/24 11:31:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/24 09:52:00 #21416728
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 08:26:44 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08150139
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:26:43 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-513f8141094so941816a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684931201; x=1687523201;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tIkJCVY+tMqNuU9Hdw7jNNdVzKzit4T0GD2WdhoZSXQ=;
+        b=Rf0miXKtnbI4iEIXnusCA82/4rOsQIVvu9oayiSk1I7Dqc9En3wSLFxnjUErf0qLVa
+         5KAMme6jheRdEI8gnBPwkCmhQVED/QGDHTgZLbzMB5ZR4iUnlN/djzTMiy0JZO/TF2s1
+         nJzbPCf3eo3CYZdvYUnOuLyl/r03i2DjvnXQ3lunbiMziTZ6KXC93Jrz6kEUbg3r+eY3
+         6Qb0Mzv2vDX1y4Ut2U5vyMmQcwLtKMbzG874bgg1SOn6cwo7hhWFWsaWl+Cc97/FrTN6
+         ZYndWmGkM+enrawaHU4L38v9HejkFTTP3gjfqq9l7YY9WhVBau7Kt4lMFE49Rt6tgjGu
+         v2NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684931201; x=1687523201;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tIkJCVY+tMqNuU9Hdw7jNNdVzKzit4T0GD2WdhoZSXQ=;
+        b=M61R43OulVGwpU+K0tn6cPwUT1KkfXIZRpITQaMGZOiOdb0g3NhR2SNMqFW+Fcxr3F
+         yYEcu2ccuI+wJ3EsbqXHQcrMZlv6XGrUQSxpQjjZrM+/4n48LLIF46A2PGwMs47aJmLP
+         g4R/uVldNv4G6BFDOrgC7RRgxqSv2/wKlQNtZ853m2JZ5mctcybLEMmgX89cfrFpHKA/
+         1i9JI7eeJei3Sv+G5xKQa5OcbYwIJ/PYsie4tiETxtUuvU+rOBIlKfVSXOg5TJgRx30i
+         KiXJ+BLWXNvy9NDKAl8yWLpksPpiUgMWZNVf/Vm59+6qtNiCpJ71mYXS03TROTw3Oxn+
+         I0eQ==
+X-Gm-Message-State: AC+VfDx7V/pvwyZTPgvy8mqbjQJrHz9NvmJxkdLjkLZI1pgy8UKZNl+a
+        RTEue74NJv+9FRXy+PDdfBqXLQ4iOTbi78g=
+X-Google-Smtp-Source: ACHHUZ6lrbZQBWSWqXTum+8RwDWhnUR59VF9KPwRaF43x13cn/85dwpHjlzTnW6IWF9TZhfFxQQ3n0FHhXp7TVc=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a50:bb64:0:b0:50c:d8e:5f4b with SMTP id
+ y91-20020a50bb64000000b0050c0d8e5f4bmr820708ede.8.1684931201472; Wed, 24 May
+ 2023 05:26:41 -0700 (PDT)
+Date:   Wed, 24 May 2023 12:26:39 +0000
+In-Reply-To: <20230523164818.0a44fec8.gary@garyguo.net>
+Mime-Version: 1.0
+References: <20230523164818.0a44fec8.gary@garyguo.net>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230524122639.2500848-1-aliceryhl@google.com>
+Subject: Re: [PATCH v1 2/7] rust: add offset_of! macro
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     gary@garyguo.net
+Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
+        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        tj@kernel.org, wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nla_nest_start_noflag() function may fail and return NULL;
-the return value needs to be checked.
+Gary Guo <gary@garyguo.net> writes:
+> On Wed, 17 May 2023 20:31:14 +0000
+> Alice Ryhl <aliceryhl@google.com> wrote:
+>> +#[macro_export]
+>> +macro_rules! offset_of {
+>> +    ($type:ty, $field:ident) => {{
+>> +        let tmp = ::core::mem::MaybeUninit::<$type>::uninit();
+>> +        let outer = tmp.as_ptr();
+>> +        // To avoid warnings when nesting `unsafe` blocks.
+>> +        #[allow(unused_unsafe)]
+>> +        // SAFETY: The pointer is valid and aligned, just not initialised; `addr_of` ensures that
+>> +        // we don't actually read from `outer` (which would be UB) nor create an intermediate
+>> +        // reference.
+>> +        let inner = unsafe { ::core::ptr::addr_of!((*outer).$field) } as *const u8;
+>> +        // To avoid warnings when nesting `unsafe` blocks.
+>> +        #[allow(unused_unsafe)]
+>> +        // SAFETY: The two pointers are within the same allocation block.
+>> +        unsafe {
+>> +            inner.offset_from(outer as *const u8) as usize
+>> +        }
+> 
+> This has no protection against using `Deref`. The memoffset crate has a 
+> 
+> let $type { $field: _, .. };
+> 
+> line to ensure that the field is a direct member of type and deref is
+> not happening.
 
-Found by InfoTeCS on behalf of Linux Verification Center
-(linuxtesting.org) with SVACE.
+Added. I had to change `$type:ty` to `$type:path` to get that to
+compile, since otherwise you can't use the token in a pattern. However,
+I think it's fine - this is temporary anyway until the standard library
+gets the macro.
+ 
+>> +    }};
+>> +}
+>> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+>> index 9f94fc83f086..ec583d13dde2 100644
+>> --- a/scripts/Makefile.build
+>> +++ b/scripts/Makefile.build
+>> @@ -277,7 +277,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
+>>  # Compile Rust sources (.rs)
+>>  # ---------------------------------------------------------------------------
+>>  
+>> -rust_allowed_features := core_ffi_c,explicit_generic_args_with_impl_trait,new_uninit,pin_macro
+>> +rust_allowed_features := const_ptr_offset_from,const_refs_to_cell,core_ffi_c,explicit_generic_args_with_impl_trait,new_uninit,pin_macro
+> 
+> Side note: once we bump our compiler to 1.71, we should switch to the
+> built-in `offset_of!` macro and get rid of these unstable features.
 
-Fixes: d54725cd11a5 ("netfilter: nf_tables: support for multiple devices pe=
-r netdev hook")
-Signed-off-by: Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
----
- net/netfilter/nf_tables_api.c | 2 ++
- 1 file changed, 2 insertions(+)
+Agreed. I mentioned that in the commit message.
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 8c09e4d12ac1..b49f7f877ba6 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -1588,6 +1588,8 @@ static int nft_dump_basechain_hook(struct sk_buff *sk=
-b, int family,
-=20
- 	if (nft_base_chain_netdev(family, ops->hooknum)) {
- 		nest_devs =3D nla_nest_start_noflag(skb, NFTA_HOOK_DEVS);
-+		if (!nest_devs)
-+			goto nla_put_failure;
- 		list_for_each_entry(hook, &basechain->hook_list, list) {
- 			if (!first)
- 				first =3D hook;
---=20
-2.30.2
+Alice
