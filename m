@@ -2,87 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB4670EB8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246E070EB94
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbjEXCwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 22:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S239206AbjEXCyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 22:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235511AbjEXCwe (ORCPT
+        with ESMTP id S239215AbjEXCyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 22:52:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E22139;
-        Tue, 23 May 2023 19:52:33 -0700 (PDT)
+        Tue, 23 May 2023 22:54:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801C2E9;
+        Tue, 23 May 2023 19:54:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 307E263822;
-        Wed, 24 May 2023 02:52:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63644C433EF;
-        Wed, 24 May 2023 02:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684896752;
-        bh=8pknsu26G/MZFoo3umZIWDOGFjEyKKgnX58CS1U2u8I=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=D3j2XYr4Ab1zXbSEdoRyP1mDfCVJuxB/8L1S1td0JKTtFMXSmSZkdQc+GQbWRTitX
-         rOHdNoP7G/QBnHzhnCtDe0GSLS/C9BUZAJUUgG+0s0Eb2cWNXH1Vjg8+k3EMv41TeP
-         qSGP7tygfPalJxvMHbXBloV2eAobnU+4iHRCvZMncebVYkj0Mk5sI0PIhTsoKYEjXb
-         Cn02s5kV0rKtaYLjiCoU+saMFnjkzul/+PH+gP6tLGkl1PVYIO6VpG8b1uYl0W34gS
-         l4VsmfQTT+CXJJ/4o7nJszplPI+I9sp98dnlAAvgElvAGu+sft3sWsQagiXkwHCiNn
-         NHzKpwqDpftJw==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 24 May 2023 05:52:29 +0300
-Message-Id: <CSU61T6XP2L8.3RHK45A4J0C2C@suppilovahvero>
-Subject: Re: [PATCH v2] tpm_tis_spi: fix:release chip select when flow
- control fails
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Paul Menzel" <pmenzel@molgen.mpg.de>,
-        "Peijie Shao" <shaopeijie@cestc.cn>
-Cc:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230522070140.33719-1-shaopeijie@cestc.cn>
- <7840f8c2-a903-7d80-c4bd-8568ad1c8682@molgen.mpg.de>
-In-Reply-To: <7840f8c2-a903-7d80-c4bd-8568ad1c8682@molgen.mpg.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0812F63615;
+        Wed, 24 May 2023 02:54:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3513C433D2;
+        Wed, 24 May 2023 02:54:38 +0000 (UTC)
+Date:   Tue, 23 May 2023 22:54:29 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux trace kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] tracing/selftests: Update synthetic event selftest to use
+ common_stacktrace
+Message-ID: <20230523225402.55951f2f@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon May 22, 2023 at 11:17 AM EEST, Paul Menzel wrote:
-> Dear Peijie,
->
->
-> Thank you for your patch.
->
-> The fix: tag in your commit message summary is uncommon. I suggest:
->
-> > tpm_tis_spi: Release chip select when flow control fails
->
->
-> Am 22.05.23 um 09:01 schrieb shaopeijie@cestc.cn:
-> > From: Peijie Shao <shaopeijie@cestc.cn>
-> >=20
-> > The failure paths in tpm_tis_spi_transfer() do not deactivate
-> > chip select. Send an empty message (cs_select =3D=3D 0) to overcome
-> > this.
->
-> Does the standard require to deactivate it?
->
-> A note on your test setup would be nice to have in the commit message.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-I think it is "good enough", not to say it couldn't be improved.
+With the rename of the stacktrace field to common_stacktrace, update the
+selftests to reflect this change. Copy the current selftest to test the
+backward compatibility "stacktrace" keyword. Also the "requires" of that
+test was incorrect, so it would never actually ran before. That is fixed
+now.
 
-I can accept as it is, or substitute with one with an updated commit
-message. This is going earliest to v6.5.
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ .../trigger-synthetic-event-stack-legacy.tc   | 24 +++++++++++++++++++
+ .../trigger-synthetic-event-stack.tc          |  5 ++--
+ 2 files changed, 26 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
 
-BR, Jarkko
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
+new file mode 100644
+index 000000000000..d0cd91a93069
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
+@@ -0,0 +1,24 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: event trigger - test inter-event histogram trigger trace action with dynamic string param (legacy stack)
++# requires: set_event synthetic_events events/sched/sched_process_exec/hist "long[] stack' >> synthetic_events":README
++
++fail() { #msg
++    echo $1
++    exit_fail
++}
++
++echo "Test create synthetic event with stack"
++
++# Test the old stacktrace keyword (for backward compatibility)
++echo 's:wake_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
++echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
++echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(wake_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
++echo 1 > events/synthetic/wake_lat/enable
++sleep 1
++
++if ! grep -q "=>.*sched" trace; then
++    fail "Failed to create synthetic event with stack"
++fi
++
++exit 0
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
+index 755dbe94ccf4..8f1cc9a86a06 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # description: event trigger - test inter-event histogram trigger trace action with dynamic string param
+-# requires: set_event synthetic_events events/sched/sched_process_exec/hist "long[]' >> synthetic_events":README
++# requires: set_event synthetic_events events/sched/sched_process_exec/hist "can be any field, or the special string 'common_stacktrace'":README
+ 
+ fail() { #msg
+     echo $1
+@@ -10,9 +10,8 @@ fail() { #msg
+ 
+ echo "Test create synthetic event with stack"
+ 
+-
+ echo 's:wake_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
+-echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
++echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=common_stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
+ echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(wake_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
+ echo 1 > events/synthetic/wake_lat/enable
+ sleep 1
+-- 
+2.39.2
+
