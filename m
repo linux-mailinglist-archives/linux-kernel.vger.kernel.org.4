@@ -2,96 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D213A70FEB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A70870FEBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbjEXTt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S229778AbjEXTum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjEXTtW (ORCPT
+        with ESMTP id S229551AbjEXTuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:49:22 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F874139;
-        Wed, 24 May 2023 12:49:18 -0700 (PDT)
-Date:   Wed, 24 May 2023 21:49:16 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1684957756; bh=ZaelfMuK9nEHZvEYR6H9kLGszov8JzRnhm0N2fM3xgc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V5YQaFPevn8tMPELIZ3rL/vARmEGIWBtjWcHmaPhYF+yDj//no8UtMhib8t1RCkgD
-         2Qx7BcHZAYGtIOSIglBrEkhtnKk7vUQ+wwzP5FZ4tpjHk02fB++Qe+2p0hXbCVEoF0
-         7NG4Qy6bNq2lDmpXMc3SwckumYi786BO2HxEJScI=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Subject: Re: [PATCH 04/13] selftests/nolibc: syscall_args: use __NR_statx for
- rv32
-Message-ID: <09d60dc2-e298-4c22-8e2f-8375861bd9be@t-8ch.de>
-References: <cover.1684949267.git.falcon@tinylab.org>
- <b306ae7b53d67acad6d1e2f63d43505d79f81241.1684949267.git.falcon@tinylab.org>
+        Wed, 24 May 2023 15:50:39 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACFBB6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:50:38 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-5552cbcda35so703461eaf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684957838; x=1687549838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FltIaokl6US61SmteGHT2ZHdFzbBsYCMluzlsNH7Eo0=;
+        b=AP1ELHPauM/XYUZc5qS9ndLT4WMva+aBaHm1pYtsTx1VEfCnRozy3iF4efGEjOeoFK
+         w+57cNa7WZ7or57mRibrY9sqtjXQfEPCyon9DJS+I4tfwnbcjo93c2ojBKiSLYQU/QDF
+         Qfpg13BJ7MAu8urcumV8LwA7WFyIxvD0/knPiqXeuwTGPGziOqAY/MN4xzJ7gvLVTsBf
+         jE/FI6h87EbZNay1qjO8QRNfrBG7JWvFvT1ixYy1no1JNutkUhKcwvc9veHcfeqXp+bW
+         kHbDtf1XjAOWjGhkB/soxOR1fiuGnGExdjmOgLlZzQ2JSDpJY3SYy//WL0WCRUkVVyjF
+         W7Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684957838; x=1687549838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FltIaokl6US61SmteGHT2ZHdFzbBsYCMluzlsNH7Eo0=;
+        b=JP4uVt4RISAotjhlFhwSkLr/eOEdej5vJcXvqCe1cj7LWtGAC/+MfLVKrXSRLOc5Xd
+         oi3oyTKpg4y0I6u+D+aleINAhdsUAUDY49KCMu/cBa26/cT7/wCa7YCiX4moi4sKSzCI
+         7eLafuHSX8HZAjJWzjuyg9o0rJU2RrTi9P7efx1iu4/iuPaL+Us5Z2Ml8p+THT0HAJYQ
+         ZtIwTbn6cBRPV4gYUA7wAuQFqISvTq2EH598RMwtcUC3AtR/sXhDFo++194ObBGqW1xk
+         V3O/AeXKxWTCXlIYSVxUtJvYoIfXpir1octP5rTcSC1G+IyicwcrTU3Hxyk4iA5UP/jg
+         WmDw==
+X-Gm-Message-State: AC+VfDzNriYavHxSG1HQ8SAvvpHPmWt9ueqwGaVHGIkDlZG8Pz/feOuh
+        /cBbO/JxgwFXpTDrkZzWkoVTOSri56ClTZqYg1M=
+X-Google-Smtp-Source: ACHHUZ5phGsstqTL/HGb4xw/DFAIglHfkZRy/nFUcrYNP92cyOgPNC1xID5jsm5zX9Yc/biCl0nfqoak7gA2iDavfZQ=
+X-Received: by 2002:a4a:6107:0:b0:54c:8991:5f8b with SMTP id
+ n7-20020a4a6107000000b0054c89915f8bmr8782798ooc.5.1684957837694; Wed, 24 May
+ 2023 12:50:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b306ae7b53d67acad6d1e2f63d43505d79f81241.1684949267.git.falcon@tinylab.org>
+References: <20230524191955.252212-1-hamza.mahfooz@amd.com>
+ <CADnq5_Mz6aPFYGnr8J8C8UeTpbo7JDg+uvjqAxo7o4vmTGej2A@mail.gmail.com>
+ <DM6PR12MB3996C4248CBC968A7B08341583419@DM6PR12MB3996.namprd12.prod.outlook.com>
+ <BL1PR12MB589849F37FBE98A3A06A316185419@BL1PR12MB5898.namprd12.prod.outlook.com>
+ <3fefc712-913a-a391-bc7b-c0c75eff1c3d@amd.com>
+In-Reply-To: <3fefc712-913a-a391-bc7b-c0c75eff1c3d@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 24 May 2023 15:50:26 -0400
+Message-ID: <CADnq5_OdWbg6zKjPrRwd2QSDnHgFuThF+OQHM=tVWj-2ySCu_A@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/amd/display: enable more strict compile checks
+To:     Felix Kuehling <felix.kuehling@amd.com>
+Cc:     "Russell, Kent" <Kent.Russell@amd.com>,
+        "Ho, Kenny" <Kenny.Ho@amd.com>,
+        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-25 01:48:11+0800, Zhangjin Wu wrote:
-> When compile nolibc-test.c for rv32, we got such error:
-> 
->     tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: ‘__NR_fstat’ undeclared (first use in this function)
->       599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
-> 
-> The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
-> support __NR_fstat, use __NR_statx instead:
-> 
->     Running test 'syscall'
->     69 syscall_noargs = 1                                            [OK]
->     70 syscall_args = -1 EFAULT                                      [OK]
-> 
-> As tools/include/nolibc/sys.h shows, __NR_statx is either not supported
-> by all platforms, so, both __NR_fstat and __NR_statx are required.
-> 
-> Btw, the latest riscv libc6-dev package is required, otherwise, we would
-> also get such error:
-> 
->     In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
->                      from /usr/riscv64-linux-gnu/include/features.h:461,
->                      from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
->                      from /usr/riscv64-linux-gnu/include/limits.h:26,
->                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
->                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
->                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
->                      from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
->     /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
->        28 | # error "rv32i-based targets are not supported"
-> 
-> The glibc commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
-> implementation") fixed up above error, so, glibc >= 2.33 (who includes
-> this commit) is required.
+On Wed, May 24, 2023 at 3:46=E2=80=AFPM Felix Kuehling <felix.kuehling@amd.=
+com> wrote:
+>
+> Sure, I think we tried enabling warnings as errors before and had to
+> revert it because of weird compiler quirks or the variety of compiler
+> versions that need to be supported.
+>
+> Alex, are you planning to upstream this, or is this only to enforce more
+> internal discipline about not ignoring warnings?
 
-It seems weird to require limits.h from the system libc at all.
+I'd like to upstream it.  Upstream already has CONFIG_WERROR as a
+config option, but it's been problematic to enable in CI because of
+various breakages outside of the driver and in different compilers.
+That said, I don't know how much trouble enabling it will cause with
+various compilers in the wild.
 
-The only thing used from there are INT_MAX and INT_MIN.
-Instead we could define our own versions of INT_MAX and INT_MIN in
-stdint.h.
+Alex
 
-#ifndef INT_MAX
-#define INT_MAX __INT_MAX__
-#endif
-
-#ifndef INT_MIN
-#define INT_MIN (- __INT_MAX__ - 1)
-#endif
-
-Thomas
+>
+> Regards,
+>    Felix
+>
+>
+> On 2023-05-24 15:41, Russell, Kent wrote:
+> >
+> > [AMD Official Use Only - General]
+> >
+> >
+> > (Adding Felix in CC)
+> >
+> > I=E2=80=99m a fan of adding it to KFD as well. Felix, can you foresee a=
+ny
+> > issues here?
+> >
+> > Kent
+> >
+> > *From:* amd-gfx <amd-gfx-bounces@lists.freedesktop.org> *On Behalf Of
+> > *Ho, Kenny
+> > *Sent:* Wednesday, May 24, 2023 3:23 PM
+> > *To:* Alex Deucher <alexdeucher@gmail.com>; Mahfooz, Hamza
+> > <Hamza.Mahfooz@amd.com>
+> > *Cc:* Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Wentland, Harry
+> > <Harry.Wentland@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; Siqueira,
+> > Rodrigo <Rodrigo.Siqueira@amd.com>; linux-kernel@vger.kernel.org;
+> > dri-devel@lists.freedesktop.org; amd-gfx@lists.freedesktop.org; Daniel
+> > Vetter <daniel@ffwll.ch>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; David Airlie <airlied@gmail.com>; Koenig,
+> > Christian <Christian.Koenig@amd.com>
+> > *Subject:* Re: [PATCH v2] drm/amd/display: enable more strict compile
+> > checks
+> >
+> > [AMD Official Use Only - General]
+> >
+> > [AMD Official Use Only - General]
+> >
+> > (+ Felix)
+> >
+> > Should we do the same for other modules under amd (amdkfd)?  I was
+> > going to enable full kernel werror in the kconfig used by my CI but
+> > this is probably better.
+> >
+> > Kenny
+> >
+> > -----------------------------------------------------------------------=
+-
+> >
+> > *From:*Alex Deucher <alexdeucher@gmail.com>
+> > *Sent:* Wednesday, May 24, 2023 3:22 PM
+> > *To:* Mahfooz, Hamza <Hamza.Mahfooz@amd.com>
+> > *Cc:* amd-gfx@lists.freedesktop.org <amd-gfx@lists.freedesktop.org>;
+> > Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Ho, Kenny <Kenny.Ho@amd.com>;
+> > Pan, Xinhui <Xinhui.Pan@amd.com>; Siqueira, Rodrigo
+> > <Rodrigo.Siqueira@amd.com>; linux-kernel@vger.kernel.org
+> > <linux-kernel@vger.kernel.org>; dri-devel@lists.freedesktop.org
+> > <dri-devel@lists.freedesktop.org>; Daniel Vetter <daniel@ffwll.ch>;
+> > Deucher, Alexander <Alexander.Deucher@amd.com>; David Airlie
+> > <airlied@gmail.com>; Wentland, Harry <Harry.Wentland@amd.com>; Koenig,
+> > Christian <Christian.Koenig@amd.com>
+> > *Subject:* Re: [PATCH v2] drm/amd/display: enable more strict compile
+> > checks
+> >
+> > On Wed, May 24, 2023 at 3:20=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@am=
+d.com>
+> > wrote:
+> > >
+> > > Currently, there are quite a number of issues that are quite easy for
+> > > the CI to catch, that slip through the cracks. Among them, there are
+> > > unused variable and indentation issues. Also, we should consider all
+> > > warnings to be compile errors, since the community will eventually en=
+d
+> > > up complaining about them. So, enable -Werror, -Wunused and
+> > > -Wmisleading-indentation for all kernel builds.
+> > >
+> > > Cc: Alex Deucher <alexander.deucher@amd.com>
+> > > Cc: Harry Wentland <harry.wentland@amd.com>
+> > > Cc: Kenny Ho <kenny.ho@amd.com>
+> > > Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> > > ---
+> > > v2: fix grammatical error
+> > > ---
+> > >  drivers/gpu/drm/amd/display/Makefile | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/drivers/gpu/drm/amd/display/Makefile
+> > b/drivers/gpu/drm/amd/display/Makefile
+> > > index 0d610cb376bb..3c44162ebe21 100644
+> > > --- a/drivers/gpu/drm/amd/display/Makefile
+> > > +++ b/drivers/gpu/drm/amd/display/Makefile
+> > > @@ -26,6 +26,8 @@
+> > >
+> > >  AMDDALPATH =3D $(RELATIVE_AMD_DISPLAY_PATH)
+> > >
+> > > +subdir-ccflags-y +=3D -Werror -Wunused -Wmisleading-indentation
+> > > +
+> >
+> > Care to enable this for the rest of amdgpu as well?  Or send out an
+> > additional patch to do that?  Either way:
+> > Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+> >
+> > Alex
+> >
+> > >  subdir-ccflags-y +=3D -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/
+> > >  subdir-ccflags-y +=3D -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/hw
+> > >  subdir-ccflags-y +=3D -I$(FULL_AMD_DISPLAY_PATH)/dc/clk_mgr
+> > > --
+> > > 2.40.1
+> > >
+> >
