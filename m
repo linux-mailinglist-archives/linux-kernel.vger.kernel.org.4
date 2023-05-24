@@ -2,127 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBED70F423
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBA970F429
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbjEXK1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
+        id S229968AbjEXK1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjEXK0p (ORCPT
+        with ESMTP id S229614AbjEXK1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:26:45 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50C4BF;
-        Wed, 24 May 2023 03:26:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jgfgt/xjOKBNv4bIjoBLVTNEUrmoreyN9tM7PvZA+B1gRNPB94BZ7m5ZH+1eaE8ttWIOi8PA4NVvhJCBy2NOVD39qfEDnkwmLb/cEgy9stoQIFqV8Y4PoxFGwyqYz+Tbj9+I5uDChs5bVcWwH2E5qpes/aSIj8XrcI84ulTnypAvGSJSlpvA7Fj8vLZ7lDaWOrVpeZ72HJEldSa7hlfX3ilj4Qblmyhiz6twbHNUDv4Jd07XvjkRbOddxYhYtsJlhIBsYcy8wMRAkakFN34q+pVnkYlLjfPW4g0TnmM2oJy2V7uxcOPfmwvdQLKsUprkIzzRMLsEhMKi4lCX6qAmhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IVz6IOw7DMAlZHNXO6XAu89h66htV7u3E15z8QD+oBY=;
- b=jzf0BlbkO3AYyRRRXU2kQpgnyZ7ya5/AMxUfj9Uf9gNpflNhWtBwJC0oRUi48Yj8cth3VV+VpL448oQFFliNX1aYhNizlhj2clJrHacNKB0qDOp/UtN6umXjNxRqEe3Tqg+hL/3Usris2GpdCgkt4uUM5rT949NGCBYHLGJcDC0N4FGY/OtRlfnNYHlKQxvFQHXMXIWUUTTWtrpuIMt3swIvn1vYQ7ovrdcvYec9rD/IXLmY2dnXL9OV3ONIvNv13O94PrAb6zAmwb3HuyYP7eWAtgfRktkzfmmSBiUZLjRLffPNj9jD02QTnzXhZfhfVYl0B9sQ5zOt7BRVx7HBJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IVz6IOw7DMAlZHNXO6XAu89h66htV7u3E15z8QD+oBY=;
- b=Z0rKgKTLTkzDMYScmgPGe2iCLe0Nl+z3EFTBFFXmSPzXINUUIeUD5mQZbLJb3YxbJ6rfQ0uIAGbDqtObzFqDcNzSgaE8eLkXPtEulpYBFQ2bW2sXrjx85IZvhg/sYC11JotrxBO3TekC1KhmSHc/uUlx7m6AdJfTW+LCPF+xNvg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SN4PR13MB5790.namprd13.prod.outlook.com (2603:10b6:806:219::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 10:26:42 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Wed, 24 May 2023
- 10:26:42 +0000
-Date:   Wed, 24 May 2023 12:26:36 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-wireless@vger.kernel.org
-Subject: Re: [PATCH wireless] wl3501_cs: Fix an error handling path in
- wl3501_probe()
-Message-ID: <ZG3mXH+I3qx2O0I1@corigine.com>
-References: <7cc9c9316489b7d69b36aeb0edd3123538500b41.1684569865.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cc9c9316489b7d69b36aeb0edd3123538500b41.1684569865.git.christophe.jaillet@wanadoo.fr>
-X-ClientProxiedBy: AM0PR04CA0010.eurprd04.prod.outlook.com
- (2603:10a6:208:122::23) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 24 May 2023 06:27:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9730719D;
+        Wed, 24 May 2023 03:27:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 048EF63BEA;
+        Wed, 24 May 2023 10:27:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 630DCC4339C;
+        Wed, 24 May 2023 10:27:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684924048;
+        bh=Ru0fWfqqlX6KQv5nM4MMh2953U7nWaI2cFpOL79ZxOU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ou3dXMmmPknNr2EpgEOhpDzxeenu+FqECpv0vDlyeCIAqxkkvc8omfRowZI9qL48y
+         qNboz4BBDS0oAYCxUfsAjuUpmemUoTPXEe4GkBjgypmE3BTYcgI2CvjvOIpvX5PV+j
+         JcdFpPZhd58XXhMkyxR4poMWU0nEkvRzm7yrIZ3/2LAzZoOnGAB30mjep9cIH4lz0x
+         DwNb/vZTUGgA44zsH8NtXvrLWGDSeUyPbrb4CkFeUE9oKfS4yHu6pFV4i9nMHIf8Cs
+         uNTd7+kDg2Txb8WPRjbfDLH+dnxZBEu5pmUV3H7f9zDLUxWvV9S/dZih7PQoDz4PpF
+         gXGrI5yvj9X9g==
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-561deaad117so10695727b3.0;
+        Wed, 24 May 2023 03:27:28 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwUqEzQc7f72nSzai4bT7edow66ZmYFGBsnoAdDvPth9DqWLqCn
+        1PK7VfMVXUQs3WYC2a3EiQZGOn5C2fd52A3vJ9c=
+X-Google-Smtp-Source: ACHHUZ5blUe2/ANdrbIUSBlAoc9jfa/cZWRA1ZwikgWcjIP8zS77ACL+X48iAferYBWCpvxnTrwKVSnp1f7b/AK/qBY=
+X-Received: by 2002:a0d:fa82:0:b0:55a:18c0:daba with SMTP id
+ k124-20020a0dfa82000000b0055a18c0dabamr17616723ywf.50.1684924047318; Wed, 24
+ May 2023 03:27:27 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5790:EE_
-X-MS-Office365-Filtering-Correlation-Id: 965e0b06-3cbd-4255-32f8-08db5c415de1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LTszSAa8iSJVvPdN1LT3rr+JpvKisO6tS7dUMG3eXqg81cRZjaf79tdieBbzBGVEh9aH8JaA68BbqkjENXwWPojjtYkrBxByh0nzg9XuBXWvvJD0Bpw9G+GOf3Jyk0afRXWvb67BBChUvjb2kP2/hnvWyChTzpc04Mk5i9bPdAzkykpbMNzG6kV0woY5tR9TwFrpw81itO3di8epJHaYUfxBnIMFTmaF+hmw/ke+Riv0H5i//ucHGpVY/ic1FppaIjqrpCBLLy+86L+sZRujNQ7uGmMOsrkcnituho/NO368BkiEllzSi6VB0PCLO1tl1PmVe+TH0mIJY7no6KF3n0TnRPyxHwJG7XeXCkhDemfgTPeW66yvkmMNerFG8xYgb9uvW8gvunbT2gN++DWq59KLSsgkPIse1Q+Q5Wb5+S5hU4+uGvyHB0zn5Ksxq/K5PmffsNzKYUEDTkqpNXaMygUWWksX4XzPtOn1gPuJWuVyVPLqjkr+shq1rM/rrdrz/GOXsSeR7rcKhD7zy+Ir3s9MQh3zcDlv4sSjXBinIfkCGMMcWYKf/BmNRkwllJggsJN4Yu46gdq0JbfaNRA/W/kIV6qx/ysBKZ/EY3XWneVOig0ZewMz411pW15xCSXN7ao8LtnpYVEGYsiyyTUdvg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(39840400004)(366004)(451199021)(2906002)(54906003)(4744005)(5660300002)(8936002)(8676002)(478600001)(44832011)(6666004)(41300700001)(66476007)(66946007)(66556008)(36756003)(4326008)(6916009)(316002)(6486002)(6506007)(6512007)(2616005)(38100700002)(86362001)(186003)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XC/EcgdDslXgrsIiyQecb/aMCBMX9NntAMhJAyHARXcqKvunKeXsMdT/vGsN?=
- =?us-ascii?Q?QUVUaoVJ8WQx+81/X45OTEVef8grhuhNuN/mbtYCd1hanM8FscufKoNbd0+z?=
- =?us-ascii?Q?e+1gsLIyMzLa8Je8CDDs2say2PL7HXl53+19W9qDRYL5chJ8f0RBFVt1NUvZ?=
- =?us-ascii?Q?DuGzCFRSj9PuTCTAFgqYU/KBJ25OLb7L/bwprFQ+ITP93qJqrRTZHTSnxCP1?=
- =?us-ascii?Q?FNhjkzACws3Ry9ySkjOnylw3vFhskJGTSm9dny+Tu/N+wM6TkPV1SDBbHWkF?=
- =?us-ascii?Q?rtvJZ+HQ+/MbIFoWQ7nyOo25q4lT0/bfJFryhihsmEKUaAaW/7dztqbIFQQg?=
- =?us-ascii?Q?5RNTbEGqbVlFW8sahiQtdluLHhsAEWjIXxT43oqB2tFIWveFyFGveYSXEhfy?=
- =?us-ascii?Q?v+sFVa76nQj6YsdicepXtHJNJ36+WQQep3ojLB/Tv+6TW15fPls2LVs45F/A?=
- =?us-ascii?Q?8XQGqUKRzqGoD9OQZb93buyXTfdw4iJS1COhwH26srqnnv7XExcV+0QvjqbF?=
- =?us-ascii?Q?7wSAHNpVdqdTL9B86F+lBZLH++nTz1GfRmYK7C4ywMazl/PKHGjogFI+mM1t?=
- =?us-ascii?Q?jPRtrxZhRJexoeBHTOoiWtm+9zSkjVBFz/WxlGzJ01t5xiH0vf+k/oAOvSgG?=
- =?us-ascii?Q?L1YJIlVDxhr+Ogz2sI5VJUSVlhwypkHFVkhjDeOdkY/B5Si4OfdrR1y2ygjW?=
- =?us-ascii?Q?70+UNdj9yKvSSND6VGJg+CZv6VRHqcqtT+fYAumkGC2p40MmVQIcCAKb1Sjb?=
- =?us-ascii?Q?UIy5Ij9v4MmJolQ6oJkACUwAvHifR88dZ2ZU+IG+P3DmMSyT4WcRA7MkHQlX?=
- =?us-ascii?Q?M3zVc657k0PB3ydlQf4HoLuX+lOJfFReqUKpESYMRutNE+qQleg0qAMm28OF?=
- =?us-ascii?Q?Ohc/MYASQtD3Ji7XKUGNQwUHYdVHpD9u8RM40bLBfHGgrgxQHL9Sg+vSxb9J?=
- =?us-ascii?Q?5Fn+6eT8L+XPhKh6KYQlme4fEAjyNPJJirk04sGVDsVyBHIs6RUZrIvxPOtF?=
- =?us-ascii?Q?Q8hgqmoe8KzeGonJAdkFZNoqjEROoxiCSn0ePnOEbLHPFHAtC9s2pFCBSC1+?=
- =?us-ascii?Q?jzqFn8R76NzhM/i2F3YttSNoYobWbjCsUtMv9ElcnLwsdY87Xwn6GjAR6H9E?=
- =?us-ascii?Q?6m/5C4PJBH4PcUymKIMLsnljW098fnUBS/FObiJ9m3Nl2bqZA5ZkkH51yftV?=
- =?us-ascii?Q?TDm+NjyO8yRb5J0/Jilm6Y6SJXKSBdIo/mPZ0LpaXt+fcWoUXqiDqZz3GLDe?=
- =?us-ascii?Q?3iLUwcLA3ZQl+tiGpUT2dbVH1dEPhgg2dpOFk/jDlDIJFnfUFXdlg/+6vJzY?=
- =?us-ascii?Q?ntGf+Slygq/shVVWYmAo51BJNDvcz8jOyDzELIhWH0VivFpPcwrujVpWVtxE?=
- =?us-ascii?Q?fSdQ0p8asi5a5ZAvvjFjR3Dh3v2ap2sBlusxEvLsvORn0XOQB/Iz2+JfOje1?=
- =?us-ascii?Q?OmKRlrCDOL89949l5VWYHyN+tnqHgYG9+X+XETt+HbmcG1OhRqdjcQhgWVlL?=
- =?us-ascii?Q?b1oWOVXpyg0Y0KdWSWKaXlQOsdXLA3acGYV9SJEh8hS3P661OH6iMog0n/XN?=
- =?us-ascii?Q?qwAHO4wgi4TZG5qObWg34Mlkp+axq34+tSTpMmq5l51mOPVKLEGLjB/Yyjs0?=
- =?us-ascii?Q?BFOLUUkBx0Mn1U4LUnhr4PhcmNDUXF54qEsV4icIBbsIdA0dQFq5GPCZs5M3?=
- =?us-ascii?Q?jrC9SQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 965e0b06-3cbd-4255-32f8-08db5c415de1
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 10:26:42.1987
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q7A6SH+0T7BUvtOjkcs9pyWLjmyztlR/m/QcFJ3UzB2wDABl5NNbXKi7K0MpKAfOWhKTzUUYvtxcXxEfAIP1SliEY1pR9KRWrSi/ZCwWmsU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5790
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517145237.295461-1-abailon@baylibre.com> <d0807fe4-dba2-8244-f655-d04e80973572@quicinc.com>
+ <7ha5xud3m7.fsf@baylibre.com>
+In-Reply-To: <7ha5xud3m7.fsf@baylibre.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Wed, 24 May 2023 13:27:00 +0300
+X-Gmail-Original-Message-ID: <CAFCwf10hNjGtEYDi24LREnMLRGT7mRECvqQMdZWv=-uA7YELYg@mail.gmail.com>
+Message-ID: <CAFCwf10hNjGtEYDi24LREnMLRGT7mRECvqQMdZWv=-uA7YELYg@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Add a DRM driver to support AI Processing Unit (APU)
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Alexandre Bailon <abailon@baylibre.com>, airlied@gmail.com,
+        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de,
+        devicetree@vger.kernel.org, conor+dt@kernel.org, bero@baylibre.com,
+        jstephan@baylibre.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
+        linaro-mm-sig@lists.linaro.org, robh+dt@kernel.org,
+        linux-mediatek@lists.infradead.org, nbelin@baylibre.com,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 10:05:08AM +0200, Christophe JAILLET wrote:
-> Should wl3501_config() fail, some resources need to be released as already
-> done in the remove function.
-> 
-> Fixes: 15b99ac17295 ("[PATCH] pcmcia: add return value to _config() functions")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Wed, May 24, 2023 at 2:34=E2=80=AFAM Kevin Hilman <khilman@baylibre.com>=
+ wrote:
+>
+> Jeffrey Hugo <quic_jhugo@quicinc.com> writes:
+>
+> > On 5/17/2023 8:52 AM, Alexandre Bailon wrote:
+> >> This adds a DRM driver that implements communication between the CPU a=
+nd an
+> >> APU. The driver target embedded device that usually run inference usin=
+g some
+> >> prebuilt models. The goal is to provide common infrastructure that cou=
+ld be
+> >> re-used to support many accelerators. Both kernel, userspace and firmw=
+are tries
+> >> to use standard and existing to leverage the development and maintenan=
+ce effort.
+> >> The series implements two platform drivers, one for simulation and ano=
+ther one for
+> >> the mt8183 (compatible with mt8365).
+> >
+> > This looks like the 3 existing Accel drivers.  Why is this in DRM?
+>
+> Yes, this belongs in accel.  I think Alex had some issues around the
+> infra in accel with device nodes not appearing/opening properly, but
+> I'll let him comment there.  But either way, the right approach should
+> be to fix any issues in accel and move it there.
+>
+> [...]
+>
+> >>   .../devicetree/bindings/gpu/mtk,apu-drm.yaml  |  38 ++
+> >>   drivers/gpu/drm/Kconfig                       |   2 +
+> >>   drivers/gpu/drm/Makefile                      |   1 +
+> >>   drivers/gpu/drm/apu/Kconfig                   |  22 +
+> >>   drivers/gpu/drm/apu/Makefile                  |  10 +
+> >>   drivers/gpu/drm/apu/apu_drv.c                 | 282 +++++++++
+> >>   drivers/gpu/drm/apu/apu_gem.c                 | 230 +++++++
+> >>   drivers/gpu/drm/apu/apu_internal.h            | 205 ++++++
+> >>   drivers/gpu/drm/apu/apu_sched.c               | 592 ++++++++++++++++=
+++
+> >>   drivers/gpu/drm/apu/simu_apu.c                | 313 +++++++++
+> >>   include/uapi/drm/apu_drm.h                    |  81 +++
+> >
+> > "apu" seems too generic.  We already have 3 "AI processing units" over
+> > in drivers/accel already...
+>
+> Indeed, it is generic, but that's kind of the point for this driver
+> since it's targetted at generalizing the interface with "AI processing
+> units" on a growing number of embedded SoCs (ARM, RISC-V, etc.)  In
+> addition, the generic naming is intentional because the goal is bigger
+> than the kernel and is working towards a generic, shared "libAPU"
+> userspace[1], but also common firmware for DSP-style inference engines
+> (e.g. analgous Sound Open Firmware for audio DSPs.)
+>
+> As usual, the various SoC vendors use different names (APU, NPU, NN
+> unit, etc.)  but we'd like a generic name for the class of devices
+> targetted by this driver.  And unfortunately, it looks like the equally
+> generic "Versatile processing unit" is already taken Intel's
+> drivers/accel/ivpu. :)
+>
+> Maybe since this is more about generalizing the interface between the
+> CPU running linux and the APU, what about the name apu_if?  But I guess
+> that applies to the other 3 drivers in drivers/accell also.  Hmmm...
+>
+> Naming things is hard[2], so we're definitly open to other ideas.  Any
+> suggestions?
+Maybe model it according to the tiny driver in drm display ? You can
+then call it tiny_apu :-)
+Disclosure: It was Daniel's suggestion, he can chime in with more
+details on the tiny driver concept.
+Oded
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
+>
+> Kevin
+>
+> [1] https://gitlab.baylibre.com/baylibre/libapu/libapu
+>
+> [2]
+> "There are 2 hard problems in computer science: cache invalidation,
+>  naming things and off-by-1 errors."
+>  -- https://twitter.com/secretGeek/status/7269997868
+>
