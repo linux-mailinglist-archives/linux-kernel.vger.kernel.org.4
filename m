@@ -2,135 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021A170FE5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934A770FE5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbjEXTQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S234429AbjEXTQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEXTQv (ORCPT
+        with ESMTP id S229758AbjEXTQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:16:51 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E3A12F;
-        Wed, 24 May 2023 12:16:49 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id E38276019E;
-        Wed, 24 May 2023 21:16:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684955806; bh=yLzaJ3BZwmUfDHcCkUlzajM4xei2/G1Dqqs+yKtQYnw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FwExTAdritu5OMXZ1qimA82muaBvAAZZP9XBYSiUddU0pu0CSSAIeiku1fL1gF1y3
-         8EK/gCCmyEga+zgVCB2NfEgYdD64pQDj59fti+yQBcsDDYQLU8nQEglkyaQnbSzcUB
-         ALVYZpu9C7Vo6WTt+2w3JEtwox0IcKUhmk9HkARI4u7JB161oEorrGKgAw2kq+YNc5
-         O3Z8JwiY8ZQ7TAcxQk1ciBtRiUqn1Vjj2mcXeeW6ddyQk08RwQJRL/4jE1VgeD/aQB
-         6u9Cu0Np+gUO0Xt+ua81WcpoY3xdu0SqTmKbI3ekVyqYPYGZhPjaKPEi6UIOdHlEiz
-         WFePpPOkjoy4Q==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GjDZ7k-lC9gp; Wed, 24 May 2023 21:16:44 +0200 (CEST)
-Received: from defiant.. (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id 4223F601A1;
-        Wed, 24 May 2023 21:16:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684955804; bh=yLzaJ3BZwmUfDHcCkUlzajM4xei2/G1Dqqs+yKtQYnw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=u7TmgFJs2EolMF9HnPBHEVBeNWJMWTMs5t+225/p8LX5Dt/IADJxHsgO4k6VH5Tn/
-         OS+4VGrPeIma2C3Mj+3T4iXihBQZBoH/HsXG4Y7pg0bx8NSzwxwGQorHiK3MrvyeyK
-         x+r6AxPcZ6ZbZh/ZgTBJdTradXznD0Rbrdy0rYsb3c0FdJpw5sRF9Hr38zx1E6FEYb
-         gryy52wn3nADaEkPq61+RoqBtc35H6bmGeGHejPcFnECNZOiMxLlcQx7F5C571z3zq
-         7N/RPnI1YMbTo4GzTs2pr83GpzeflkEcYideSpWU4lzhWwSHu/uMOvSpayLDEoLnfu
-         RXjxMeYZJMXzA==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Takashi Iwai <tiwai@suse.com>, Shuah Khan <shuah@kernel.org>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [PATCH v1 1/1] selftests: alsa: pcm-test: Fix compiler warnings about the format
-Date:   Wed, 24 May 2023 21:15:29 +0200
-Message-Id: <20230524191528.13203-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.34.1
+        Wed, 24 May 2023 15:16:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF01D12E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:16:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DC8661861
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 19:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3C75C4339B;
+        Wed, 24 May 2023 19:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684955769;
+        bh=4mFWjvJ+t1kSPCQ+e4sFDTvSwcTu1Vk+zaiSOpA9zes=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UdOk8ktRA7imVgBv39lMLCuKeq676Uwm7qBwKZ7BVB6XwTU6VH0cCnIbUJXw1O7C0
+         qMjEPdaTmBUVaZPJT4+uvgpVe1pmq2x9vxEppccPJqxfWxEtDsdifumefUaVAS7U4Y
+         v/2G2mQrg7oopC04Vv7E/CIr7GKzE8fDt0XRgnYvkXQW6cHqqVFQUBejKBVpWp6bZk
+         ixcsF3T6Tii9Ij1GDKhTxRAI8E0QzrKx/f1Hs/seVqpSzjf3TInUP1sB8q+prHF0uq
+         tG0Q4LpFewo7MKG9rPj8sLy/B/l40HPAGnpZvdMrdwNhSMVFaSrsaQBbccKcmJSEgM
+         ph9WRDRgDvF8w==
+Date:   Wed, 24 May 2023 22:15:49 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH] mm: page_isolation: write proper kerneldoc
+Message-ID: <20230524191549.GS4967@kernel.org>
+References: <20230519111652.40658-1-hannes@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519111652.40658-1-hannes@cmpxchg.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC 11.3.0 issues warnings in this module about wrong sizes of format
-specifiers:
+On Fri, May 19, 2023 at 01:16:52PM +0200, Johannes Weiner wrote:
+> And remove the incorrect header comments.
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> ---
+>  include/linux/page-isolation.h | 24 ++++++------------------
+>  mm/page_isolation.c            | 29 ++++++++++++++++++++++++-----
+>  2 files changed, 30 insertions(+), 23 deletions(-)
+> 
+> diff --git a/include/linux/page-isolation.h b/include/linux/page-isolation.h
+> index 5456b7be38ae..0ab089e89db4 100644
+> --- a/include/linux/page-isolation.h
+> +++ b/include/linux/page-isolation.h
+> @@ -37,24 +37,12 @@ void set_pageblock_migratetype(struct page *page, int migratetype);
+>  int move_freepages_block(struct zone *zone, struct page *page,
+>  				int migratetype, int *num_movable);
+>  
+> -/*
+> - * Changes migrate type in [start_pfn, end_pfn) to be MIGRATE_ISOLATE.
+> - */
+> -int
+> -start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+> -			 int migratetype, int flags, gfp_t gfp_flags);
+> -
+> -/*
+> - * Changes MIGRATE_ISOLATE to MIGRATE_MOVABLE.
+> - * target range is [start_pfn, end_pfn)
+> - */
+> -void
+> -undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+> -			int migratetype);
+> -
+> -/*
+> - * Test all pages in [start_pfn, end_pfn) are isolated or not.
+> - */
+> +int start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+> +			     int migratetype, int flags, gfp_t gfp_flags);
+> +
+> +void undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+> +			     int migratetype);
+> +
+>  int test_pages_isolated(unsigned long start_pfn, unsigned long end_pfn,
+>  			int isol_flags);
+>  
+> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+> index c6f3605e37ab..e7d7685104de 100644
+> --- a/mm/page_isolation.c
+> +++ b/mm/page_isolation.c
+> @@ -481,8 +481,7 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
+>  }
+>  
+>  /**
+> - * start_isolate_page_range() - make page-allocation-type of range of pages to
+> - * be MIGRATE_ISOLATE.
+> + * start_isolate_page_range() - mark page range MIGRATE_ISOLATE
+>   * @start_pfn:		The lower PFN of the range to be isolated.
+>   * @end_pfn:		The upper PFN of the range to be isolated.
 
-pcm-test.c: In function ‘test_pcm_time’:
-pcm-test.c:384:68: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 5 \
-				has type ‘unsigned int’ [-Wformat=]
-  384 |                 snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
-pcm-test.c:455:53: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has \
-				type ‘long int’ [-Wformat=]
-  455 |                                          "expected %d, wrote %li", rate, frames);
-pcm-test.c:462:53: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has \
-				type ‘long int’ [-Wformat=]
-  462 |                                          "expected %d, wrote %li", rate, frames);
-pcm-test.c:467:53: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has \
-				type ‘long int’ [-Wformat=]
-  467 |                                          "expected %d, wrote %li", rate, frames);
+I don't remember seeing lower and upper to describe memory ranges in our
+docs. Do you mind changing these to first/last?
 
-Simple fix according to compiler's suggestion removed the warnings.
+>   * @migratetype:	Migrate type to set in error recovery.
+> @@ -571,8 +570,14 @@ int start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+>  	return 0;
+>  }
+>  
+> -/*
+> - * Make isolated pages available again.
+> +/**
+> + * undo_isolate_page_range - undo effects of start_isolate_page_range()
+> + * @start_pfn:		The lower PFN of the isolated range
+> + * @end_pfn:		The upper PFN of the isolated range
 
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- tools/testing/selftests/alsa/pcm-test.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Here as well
 
-diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
-index 3e390fe67eb9..b7eef32addb4 100644
---- a/tools/testing/selftests/alsa/pcm-test.c
-+++ b/tools/testing/selftests/alsa/pcm-test.c
-@@ -381,7 +381,7 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
- 		goto __close;
- 	}
- 	if (rrate != rate) {
--		snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
-+		snprintf(msg, sizeof(msg), "rate mismatch %ld != %d", rate, rrate);
- 		goto __close;
- 	}
- 	rperiod_size = period_size;
-@@ -447,24 +447,24 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
- 			frames = snd_pcm_writei(handle, samples, rate);
- 			if (frames < 0) {
- 				snprintf(msg, sizeof(msg),
--					 "Write failed: expected %d, wrote %li", rate, frames);
-+					 "Write failed: expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 			if (frames < rate) {
- 				snprintf(msg, sizeof(msg),
--					 "expected %d, wrote %li", rate, frames);
-+					 "expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 		} else {
- 			frames = snd_pcm_readi(handle, samples, rate);
- 			if (frames < 0) {
- 				snprintf(msg, sizeof(msg),
--					 "expected %d, wrote %li", rate, frames);
-+					 "expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 			if (frames < rate) {
- 				snprintf(msg, sizeof(msg),
--					 "expected %d, wrote %li", rate, frames);
-+					 "expected %ld, wrote %li", rate, frames);
- 				goto __close;
- 			}
- 		}
+> + * @migratetype:	New migrate type to set on the range
+> + *
+> + * This finds every MIGRATE_ISOLATE page block in the given range
+> + * and switches it to @migratetype.
+>   */
+>  void undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+>  			    int migratetype)
+> @@ -631,7 +636,21 @@ __test_page_isolated_in_pageblock(unsigned long pfn, unsigned long end_pfn,
+>  	return pfn;
+>  }
+>  
+> -/* Caller should ensure that requested range is in a single zone */
+> +/**
+> + * test_pages_isolated - check if pageblocks in range are isolated
+> + * @start_pfn:		The first PFN of the isolated range
+> + * @end_pfn:		The first PFN *after* the isolated range
+> + * @isol_flags:		Testing mode flags
+> + *
+> + * This tests if all in the specified range are free.
+> + *
+> + * If %MEMORY_OFFLINE is specified in @flags, it will consider
+> + * poisoned and offlined pages free as well.
+> + *
+> + * Caller must ensure the requested range doesn't span zones.
+> + *
+> + * Returns 0 if true, -EBUSY if one or more pages are in use.
+> + */
+>  int test_pages_isolated(unsigned long start_pfn, unsigned long end_pfn,
+>  			int isol_flags)
+>  {
+> -- 
+> 2.40.0
+> 
+> 
+
 -- 
-2.34.1
-
+Sincerely yours,
+Mike.
