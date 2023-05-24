@@ -2,154 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17F870FA69
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC22570FA60
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237118AbjEXPgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        id S236906AbjEXPf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbjEXPfM (ORCPT
+        with ESMTP id S236556AbjEXPfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:35:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F5E123
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684942430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PZf0byHPp2E2QKGUTDTD+TlMjPhCnr7dpojTO1v28qY=;
-        b=jWzDHD7qRb45gP5eAEdveVXJvNr8sK15Oep6MRqqVvJ2Sovbdc5Sd7u6eODXgpIfZzpYO+
-        SlxXksB1FMqy7MtnvE8BFdOQN8hwzWz5zmTP/DyJITyMqPBNZzRK3je9LvwakkG2VZAwIg
-        qS8l8D5yMR71WoeA6oF+EpBDVcXcgog=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-26-wF7-Cb2KPtKxfSJZIAw0Dg-1; Wed, 24 May 2023 11:33:46 -0400
-X-MC-Unique: wF7-Cb2KPtKxfSJZIAw0Dg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 24 May 2023 11:35:07 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A203E7B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:45 -0700 (PDT)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E46EB811E85;
-        Wed, 24 May 2023 15:33:45 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4289240C6EC4;
-        Wed, 24 May 2023 15:33:44 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E29F53F196
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:34:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684942444;
+        bh=VOsvDeo72Li4A+MGz8y/FXCiDvmbWTjb5uUMq09Z+GE=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=gWZurhxT3fpyDMIpY77JZvx4PwqkyY55Hc00DdcdOYztydiLIGYoifVtCs4mY8MIa
+         ZcsHOyJkkF4TImSP8JTVQ3o6LuOPpT0l/y/hlaf2s6QXPAF8bYWqmKwHHGkR9hBBrL
+         JR6JDvFZ0j4k16Kq91Cdd1QRvMd8AkU+++VHZYxiz7PphVXcvGAeUk6s5gz7ZKO95E
+         MZjGao1DtzPoAPe/70t/3FmgTniZj6iDRtIIa5gkSpOrdewvRvZFvhEcR0sGwe6GXC
+         OvbqVUp0s9LIjXIjkFb1hlcl+6PnYJ3DK/lKKIpsqy8ze78clGszML8MEKIdxJeMn3
+         TG10RXmVv5ceQ==
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-50bf847b267so1341538a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684942444; x=1687534444;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VOsvDeo72Li4A+MGz8y/FXCiDvmbWTjb5uUMq09Z+GE=;
+        b=YPvSggpxBidgzZplnj7Edj9esrO7Qg4pctSpQ4aU5FfzcMEaKQAnDGXrP/Bq6LlfeQ
+         BkYkBAXM2bV2jRymuVlXV0xOPzdaEv/knGGPPiv4TFHkkvnjTr0epcvvmekml/20Eyoe
+         eQSkBIgIFPqjlRQW2XY0vEGU8iQQ+JYZSnJ3aCFd0GBQDp8oq9gcAZHRBoIJ1te3sgTh
+         MAOLpWZjxicRS11dM7ShSDmMnk+Sz9gjL66aoMucDl/yNXRy4ITRSwlwfIQKHRniAfbA
+         nwGfbVZqLZpIdCGRz0vNACSoMFdy7V2elGIPwt4Pg4jhBbQ2tu4ngNWLQLGToFCBSMy/
+         nDbw==
+X-Gm-Message-State: AC+VfDwaEvWMgMNOZ+bWkP6b/UY3J79QqBbPZSBuxUuPbPWlVhmxzvTb
+        lqBIuCykcDsCyVNX7jtiHR95wDxoqxE9zQnzYisB0Ss/0/Fdb1GSiiHkmNXjX+hSNEVU64rqaXu
+        xeiB/ZXtfiVcfLqCVF2DCx9MOT1drJVTlk9wGqgZTXw==
+X-Received: by 2002:a17:906:5044:b0:96a:63d4:24c5 with SMTP id e4-20020a170906504400b0096a63d424c5mr16834948ejk.77.1684942444420;
+        Wed, 24 May 2023 08:34:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7gBpqHitu+lLhIckipr6Iw+ZMNPeoZej+/zA1KHtSCkxGa9OwcqI2J/tv0ifrYtmEPsQMuyg==
+X-Received: by 2002:a17:906:5044:b0:96a:63d4:24c5 with SMTP id e4-20020a170906504400b0096a63d424c5mr16834933ejk.77.1684942444258;
+        Wed, 24 May 2023 08:34:04 -0700 (PDT)
+Received: from amikhalitsyn.local (dslb-088-074-206-207.088.074.pools.vodafone-ip.de. [88.74.206.207])
+        by smtp.gmail.com with ESMTPSA id p26-20020a17090664da00b0096f7105b3a6sm5986979ejn.189.2023.05.24.08.34.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 08:34:03 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     xiubli@redhat.com
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 08/12] net: Copy slab data for sendmsg(MSG_SPLICE_PAGES)
-Date:   Wed, 24 May 2023 16:33:07 +0100
-Message-Id: <20230524153311.3625329-9-dhowells@redhat.com>
-In-Reply-To: <20230524153311.3625329-1-dhowells@redhat.com>
-References: <20230524153311.3625329-1-dhowells@redhat.com>
+Subject: [PATCH v2 05/13] ceph: allow idmapped symlink inode op
+Date:   Wed, 24 May 2023 17:33:07 +0200
+Message-Id: <20230524153316.476973-6-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If sendmsg() is passed MSG_SPLICE_PAGES and is given a buffer that contains
-some data that's resident in the slab, copy/coalesce it rather than
-returning EIO.
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Eric Dumazet <edumazet@google.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: David Ahern <dsahern@kernel.org>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
+Enable ceph_symlink() to handle idmapped mounts. This is just a matter
+of passing down the mount's idmapping.
+
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: Ilya Dryomov <idryomov@gmail.com>
+Cc: ceph-devel@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- include/linux/skbuff.h |  3 +++
- net/core/skbuff.c      | 33 ++++++++++++++++++++++++++++++---
- 2 files changed, 33 insertions(+), 3 deletions(-)
+ fs/ceph/dir.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index e11a765fe7fa..11d98990f5f1 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -5084,6 +5084,9 @@ static inline void skb_mark_for_recycle(struct sk_buff *skb)
- #endif
- }
- 
-+ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
-+			     ssize_t maxsize, gfp_t gfp);
-+
- ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
- 			     ssize_t maxsize, gfp_t gfp);
- 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index c2840b0dcad9..a16499b9942b 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -6927,17 +6927,44 @@ ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
- 			break;
- 		}
- 
-+		if (space == 0 &&
-+		    !skb_can_coalesce(skb, skb_shinfo(skb)->nr_frags,
-+				      pages[0], off)) {
-+			iov_iter_revert(iter, len);
-+			break;
-+		}
-+
- 		i = 0;
- 		do {
- 			struct page *page = pages[i++];
- 			size_t part = min_t(size_t, PAGE_SIZE - off, len);
--
--			ret = -EIO;
--			if (WARN_ON_ONCE(!sendpage_ok(page)))
-+			bool put = false;
-+
-+			if (PageSlab(page)) {
-+				const void *p;
-+				void *q;
-+
-+				p = kmap_local_page(page);
-+				q = page_frag_memdup(NULL, p + off, part, gfp,
-+						     ULONG_MAX);
-+				kunmap_local(p);
-+				if (!q) {
-+					iov_iter_revert(iter, len);
-+					ret = -ENOMEM;
-+					goto out;
-+				}
-+				page = virt_to_page(q);
-+				off = offset_in_page(q);
-+				put = true;
-+			} else if (WARN_ON_ONCE(!sendpage_ok(page))) {
-+				ret = -EIO;
- 				goto out;
-+			}
- 
- 			ret = skb_append_pagefrags(skb, page, off, part,
- 						   frag_limit);
-+			if (put)
-+				put_page(page);
- 			if (ret < 0) {
- 				iov_iter_revert(iter, len);
- 				goto out;
+diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+index 8d3fedb3629b..3996572060da 100644
+--- a/fs/ceph/dir.c
++++ b/fs/ceph/dir.c
+@@ -956,6 +956,7 @@ static int ceph_symlink(struct mnt_idmap *idmap, struct inode *dir,
+ 	req->r_num_caps = 2;
+ 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED | CEPH_CAP_AUTH_EXCL;
+ 	req->r_dentry_unless = CEPH_CAP_FILE_EXCL;
++	req->r_mnt_idmap = idmap;
+ 	if (as_ctx.pagelist) {
+ 		req->r_pagelist = as_ctx.pagelist;
+ 		as_ctx.pagelist = NULL;
+-- 
+2.34.1
 
