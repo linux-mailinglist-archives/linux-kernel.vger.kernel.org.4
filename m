@@ -2,157 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7685170F474
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64B170F477
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbjEXKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S231127AbjEXKpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbjEXKny (ORCPT
+        with ESMTP id S229735AbjEXKpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:43:54 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBBA98
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:43:53 -0700 (PDT)
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4C5D844298
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684925028;
-        bh=VcR2dM9dZkrtIAYuc+uEYt6q6RFFCfHdSpmFwxj+wQM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ICYhzP3alsOukQOEQWvvrws87UFBIOwILO305wzr8xWUwsG1L4ZC9c0oKite3wrPL
-         EseAWN1gLDwCqoX3G1/6Z8nMAfkDgMAPmA4HdaANqOUc7IlhRJsf+ZlnL3qXx8dKOT
-         9IuEpcRvvkymZJigK9A5WSkegXUrLgYF0YGQhSvn+RVQEMhmipANGe1WOoLhiOo6qK
-         HFnthkYPVbRSjYMocf5lqIbMy1ST66igp5lJXNyT2z7xUfmFcdb1jQOOI2VqKbahpi
-         rKzNsvbY31qL/+0z+2KTWUfYO+UFEU45GTtC6mykSut3tXiSaJ/0Rqcwj/bh/+nW0d
-         4mYdjt8HJCEYA==
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-5655d99d636so18132577b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:43:48 -0700 (PDT)
+        Wed, 24 May 2023 06:45:05 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4682297
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:45:04 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ae74ab3089so852285ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:45:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684925104; x=1687517104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VtRzF/V811hHQRykzcLAvSFnaLT71WU5kRzUX+bgWt4=;
+        b=gK22slI4F9VxzMYBSv1MOTCo5S+N/Ky2iaqDfM9pZ0jfk4Fc0rVfCQGAT6vXONAEq5
+         A0RyBZYpqWqqP3sx3o4fA6AG1wqodNX7n5+i3YJLDwaY9tAxMy/Fhd4LsYPzllUHRw38
+         i8k4+pn0AymobT5Z4+KOqbsUhaL7xF9pKvWPKbhz1iSMxA4oOSnRpL86Pqc58N6voRW2
+         PT+dfYD3Ra/Nhb8zYGshciIVccgFmJJvMwMPNSSn/wG7K5nOKfaaQZsaM+U/oXDIen0M
+         CJFgjcMQKlFbcS4RJH1AuyV4eR43K4CHpDHfMis5UuilrC4zF4/L+HJz7UGdUndPr8Sm
+         KF6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684925027; x=1687517027;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VcR2dM9dZkrtIAYuc+uEYt6q6RFFCfHdSpmFwxj+wQM=;
-        b=SjFZXe9+00f8NKaMpYEyIFrYDXIEL7esuIimaMYW+NI6hcIYddwNEzDBkuV1v3FgQi
-         LfCQeKzHUZ0mqX6K4jcqFVRLfCHmTRpbPPzb34OjVVvqe+oGSNTkAcbV50D99PPtg9Vo
-         aulztg48h6h1lwG9/HAKh2LcPsG5axMQGm7uB4AlfoUHE/+iokW/Jkc39D1DPmvQHmPz
-         ujt0PF65MGnXcqY8AJYZohAQ8vb2e9WxyzbcBAzCUQjIZbOSTwNpJ/qEp8LrNe24JTPz
-         /b+U++FU6kupPFedZqAf/Iq1UgA4mba2IMrenekimbVUnHaPw0eRmmRUMxpwAqtZngLG
-         vD/w==
-X-Gm-Message-State: AC+VfDzeG6sXfG2T3JiBD3qtXZfAHMsaDQeREAq+tVyyBTY25SFGeFgM
-        j29D0N+mK3V8lsdg2Zug4e4RYCTxMjYQjTD0q6/MAogbjdxgjloJj06XLN1yiyngZ/ctqQVB5Wk
-        mdVTUyRhFWqU2srbq7kwzFMmQeDbp1Cemi1Jj67HczJF7BVyqnWvE877J9w==
-X-Received: by 2002:a81:ab50:0:b0:561:179b:1276 with SMTP id d16-20020a81ab50000000b00561179b1276mr16277647ywk.26.1684925027357;
-        Wed, 24 May 2023 03:43:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4iOk/L3sMlt+J6yeXjbzBVkYzcNAS9i5TiiFe4XzBVBtPC3NhYAtD5clOw6pJbtiOOIbVSK/C8SNjWhkpcZOY=
-X-Received: by 2002:a81:ab50:0:b0:561:179b:1276 with SMTP id
- d16-20020a81ab50000000b00561179b1276mr16277633ywk.26.1684925027137; Wed, 24
- May 2023 03:43:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684925104; x=1687517104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VtRzF/V811hHQRykzcLAvSFnaLT71WU5kRzUX+bgWt4=;
+        b=OgTfV+r6FWr+xhup/hMrJ5BRwnRt0Ot1Jh9efBscHE+20CvJCLl3XY/ipHPUP9zgYc
+         ShYciNOeDFLqQCoriLDkhJI0uT2JAuVoT6NrCTw94p7MoiQQid5ICCLbrDLXD5R6SvZ8
+         JcBh4osbayRcIyGIgnVFmZ/tTxeCnI3y2eanvY870lKOOrMkmf9fY734R5vwiMbWe2z6
+         //aXVbQ40x3uCyUnhPho6ew0S/utgpP5GMm+77z3Nk3YsFMAp93DrUl9l35DBYczfxSo
+         JmqENJTyvMnMvfdJDIBBGK/AhDNpQHuFE0YD+2CCVHvyOxbCZt7bJBBZKiX+wHoii+WK
+         ismA==
+X-Gm-Message-State: AC+VfDy1dKigQsKmPRA6q9Yu7SHpGIpcm95ep+Sv2iDHz4wYzeANQmsa
+        mMvrK6LN2uu/ywBhqDjg1RMzLA==
+X-Google-Smtp-Source: ACHHUZ7yp/3qCuXXyzRjDvlc5CIdAlNssZWI56gB0O/qKx4HHLXmX4FoNbKuolTI1ecTUxOvnQBNhg==
+X-Received: by 2002:a17:902:ced0:b0:1af:babd:7b57 with SMTP id d16-20020a170902ced000b001afbabd7b57mr9292713plg.25.1684925103784;
+        Wed, 24 May 2023 03:45:03 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id o18-20020a170902d4d200b001ac7ab3e97csm8407519plg.260.2023.05.24.03.45.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 03:45:03 -0700 (PDT)
+Date:   Wed, 24 May 2023 16:15:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Zhipeng Wang <zhipeng.wang_1@nxp.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpufreq: dt-platdev: Add MODULE_LICENSE
+Message-ID: <20230524104501.uhgs6geb5dtk3wnt@vireshk-i7>
+References: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
 MIME-Version: 1.0
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
- <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
- <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
- <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com> <20230523140844.5895d645@kernel.org>
-In-Reply-To: <20230523140844.5895d645@kernel.org>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Wed, 24 May 2023 12:43:36 +0200
-Message-ID: <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Luca Boccassi <bluca@debian.org>,
-        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 11:08=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
-rote:
->
-> On Tue, 23 May 2023 11:44:01 +0100 Luca Boccassi wrote:
-> > > I really would like to avoid that because it will just mean that some=
-one
-> > > else will abuse that function and then make an argument why we should
-> > > export the other function.
-> > >
-> > > I think it would be ok if we required that unix support is built in
-> > > because it's not unprecedented either and we're not breaking anything=
-.
-> > > Bpf has the same requirement:
-> > >
-> > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
-> > >   struct bpf_unix_iter_state {
-> > >           struct seq_net_private p;
-> > >           unsigned int cur_sk;
-> > >           unsigned int end_sk;
-> > >           unsigned int max_sk;
-> > >           struct sock **batch;
-> > >           bool st_bucket_done;
-> > >   };
-> > >
-> > > and
-> > >
-> > >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defin=
-ed(CONFIG_PROC_FS)
-> > >   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
-> > >                        struct unix_sock *unix_sk, uid_t uid)
->
-> Don't think we should bring BPF into arguments about uAPI consistency :S
->
-> > Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
-> > ship with CONFIG_UNIX=3Dy, so a missing SCM_PIDFD in unlikely to have a
-> > widespread impact, and if it does, it might encourage someone to
-> > review their kconfig.
->
-> IDK how you can argue that everyone sets UNIX to =3Dy so hiding SCM_PIDFD
-> is fine and at the same time not be okay with making UNIX a bool :S
->
-> > As mentioned on the v5 thread, we are waiting for this API to get the
-> > userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
-> > really grateful if we could start with the simplest and most
-> > conservative approach (which seems to be the current one in v6 to me),
-> > and then eventually later decide whether to export more functions, or
-> > to deprecate CONFIG_UNIX=3Dm, or something else entirely, as that
-> > doesn't really affect the shape of the UAPI, just the details of its
-> > availability. Thank you.
->
-> Just throw in a patch to make UNIX a bool and stop arguing then.
+On 24-05-23, 15:34, Zhipeng Wang wrote:
+> Add MODULE_LICENSE to support building as module.
+> 
+> Signed-off-by: Zhipeng Wang <zhipeng.wang_1@nxp.com>
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 338cf6cc6596..54529aa16d53 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -214,3 +214,4 @@ static int __init cpufreq_dt_platdev_init(void)
+>  			       sizeof(struct cpufreq_dt_platform_data)));
+>  }
+>  core_initcall(cpufreq_dt_platdev_init);
+> +MODULE_LICENSE("GPL");
 
-Dear Jakub,
+Any specific reason why you need this as a module ? Just curious.
 
-Thanks for your attention to these patch series!
-
-I'm ready to prepare/send a patch to make CONFIG_UNIX bool.
-
-I will send SO_PEERPIDFD as an independent patch too, because it
-doesn't require this change with CONFIG_UNIX
-and we can avoid waiting until CONFIG_UNIX change will be merged.
-I've a feeling that the discussion around making CONFIG_UNIX  to be a
-boolean won't be easy and fast ;-)
-
-Kind regards,
-Alex
+-- 
+viresh
