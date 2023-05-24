@@ -2,137 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480EA70F830
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB6770F834
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbjEXOB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S235726AbjEXOEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235696AbjEXOBz (ORCPT
+        with ESMTP id S231573AbjEXOEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:01:55 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0395B18B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:01:53 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso179289566b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:01:52 -0700 (PDT)
+        Wed, 24 May 2023 10:04:14 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE302E7;
+        Wed, 24 May 2023 07:04:12 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d2a613ec4so729793b3a.1;
+        Wed, 24 May 2023 07:04:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684936911; x=1687528911;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GcnYDNNJKRDTvBz4U4x4piA3wZfgWR11rBlHqZISUZw=;
-        b=cBRG8OIciHgkJG5NeGpDKgXBLwB/ZRieicor/6NiIG3NMQ1B/bIFDyoHjCsFWSj6Dh
-         NYPSkHxVPzMFS6zrRvk8Vu4wSKDXgHIdsXNG7HnJKoV5jngMjC6m4+4Ejb8cwJUNzh+K
-         h0sFoTKIuc9638A6aDq/12b39F8dap8vN6cb6grcVRU2GiUnjeB0guaTZmwOq50n7yOh
-         J0q9yFNPRJi9f0Wa6yREWvws/Fx+13BXqhhFWliMovEX8xKUGyVmNEXP1E2hfNKuamPq
-         7gEAJqSSubtg7vrG8Pbj6UFiCAAl6bxS9menFiATiRgE+bcmLH7U+40V3RlZcSfKzzU7
-         QJ5Q==
+        d=gmail.com; s=20221208; t=1684937052; x=1687529052;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h3ryO674tidvGL1C9R3/slJDmhuMCbCkck5NhlxC3KY=;
+        b=RgZqaiWy3OZvMhNNe3yzbZncIgpHeGmAP60B0EbMXzoTRrkHxdzBX62D+EtuSmYRSb
+         nzN1f0JlhG79e9kH9Ombee+VqZhU1WyhNmscn/9TuZ4HXNoprChl0pYJIJh4ZJYvNWY1
+         YHQIXyaQDvTCC23a8ECbT5HIZguFJTKPjueRZKfhYTsbBIlyOXOp2zCmrVmCkKxtsw0s
+         Pv3eKzcj/44o94PlMW495nM6SEUl8P353kZPVKG2k6eqo9dNme3hdgQD0VQbfbYDnMHM
+         Ay0SlZDOSie11UJok8uF5xIc4+cAPKsIlNZUgZ+NMTri0HoEDfQ5neEheSkm7bSc2U9q
+         /ZHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684936911; x=1687528911;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1684937052; x=1687529052;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GcnYDNNJKRDTvBz4U4x4piA3wZfgWR11rBlHqZISUZw=;
-        b=CpSy4o9JmzN/lb4JoudAofcVkqk5RCzHeIoPM6SixcWNhnnW9cTnNBMTU6mABFyeCZ
-         7BHyjdtyDhpciH4U9i8mOX6Y0jJH0s63dl3SGswKE/dWkh3vBv6MFUNGAI23MV7pfE/V
-         8HdXOVka9ksBz2h2UjBlRImP/x0eZ8NUWzST2YYyfsmuyd7NTDIFMnW2M+Ytn8iSKm/t
-         EmU6geLls1GPrrAmqjgGC7vcsQVYFPmKU64oMqEDGw7od/nqzLGuuB/yWXVGZQ93QLPi
-         NdFtNyeztPAO1yFufQmdueIJk+PzrdTOr8RYGJMNFCwyBFP+HkGqwOuR45TgslyHuElt
-         wHRA==
-X-Gm-Message-State: AC+VfDz8p6hq1LzEeoPdB2M4bidte/d7KHCzvGFgYbICmbyFoIJBZIvz
-        Qrt9cV4HOOqUCuZ7FTeE/g6ngkpfq+skFfKoQLU=
-X-Google-Smtp-Source: ACHHUZ5LJ1RLFW3yyptH2uNq3JrXu9MBzFBIvQQGDf110Gc3zDntoLPKWCyt9dTiL0jQ3+akZGR55w==
-X-Received: by 2002:a17:907:1686:b0:973:91a5:bfdf with SMTP id hc6-20020a170907168600b0097391a5bfdfmr1347603ejc.4.1684936911458;
-        Wed, 24 May 2023 07:01:51 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id p25-20020a1709060dd900b0096f67b55b0csm5860748eji.115.2023.05.24.07.01.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 07:01:51 -0700 (PDT)
-Date:   Wed, 24 May 2023 16:01:50 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-kernel@vger.kernel.org,
-        christoph.muellner@vrull.eu, David.Laight@aculab.com,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: Re: [PATCH v3 1/2] riscv: don't include kernel.h into alternative.h
-Message-ID: <20230524-1ae0ba16b93b71a150320a6d@orel>
-References: <20230521114715.955823-1-heiko.stuebner@vrull.eu>
- <20230521114715.955823-2-heiko.stuebner@vrull.eu>
+        bh=h3ryO674tidvGL1C9R3/slJDmhuMCbCkck5NhlxC3KY=;
+        b=lc0xKOtAc7k/fCJC3bFKbddcg2iJrNgdSIDRatm70PfPdE2ZdxonpS/eemJ9W7I9u1
+         GTxLX6RCVsJZg/RVVgmTwrhMMOo6Sym36IfXUUtHRqcl7/SjBaRWf+5bqNLobc+hppS1
+         OX19W76cuEYxy1gCXO1cTEkvA93Z6uh85qxXAt4h8JnwsjT+RBbFJHaLt6bSshazIDrc
+         vliKZi5H6/+JtEi+t4EgDqtFqhBT/PWR4nceAVzkR04bsN25NJh65UJR/I8G1IwHd5Vz
+         IzlYS28KVLkm1Dkpl9TnEq+grV/Py1y3thHJEU+5NonArQrijHU2OTxuyFHCRsdG4vju
+         jIWw==
+X-Gm-Message-State: AC+VfDw0MPtWpHXYL5h331oZy5zdUYuCHGF5LYTwwOv5y2GUOvF/KIvL
+        RE7OTS+0+jKxLqFcyeR5mXHqTyAeP1Y=
+X-Google-Smtp-Source: ACHHUZ7oPIMU1hwIO/kIU9m19ryJ8QuU5rEftRMFOj9EKTu/ieIgyRqUpzo1f47E0KdfOP9/VnKZCQ==
+X-Received: by 2002:a05:6a00:1356:b0:64c:c841:4e8a with SMTP id k22-20020a056a00135600b0064cc8414e8amr3528455pfu.22.1684937051813;
+        Wed, 24 May 2023 07:04:11 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id q20-20020a63e954000000b00502ecc282e2sm7939127pgj.5.2023.05.24.07.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 07:04:11 -0700 (PDT)
+Message-ID: <96d6930b-78b1-4b4c-63e3-c385a764d6e3@gmail.com>
+Date:   Wed, 24 May 2023 23:03:58 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230521114715.955823-2-heiko.stuebner@vrull.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 24/26] locking/atomic: scripts: generate kerneldoc
+ comments
+To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org
+Cc:     boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
+        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
+        linux-doc@vger.kernel.org, paulmck@kernel.org,
+        peterz@infradead.org, sstabellini@kernel.org, will@kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20230522122429.1915021-1-mark.rutland@arm.com>
+ <20230522122429.1915021-25-mark.rutland@arm.com>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20230522122429.1915021-25-mark.rutland@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 01:47:14PM +0200, Heiko Stuebner wrote:
-> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Hi Mark,
+
+Thank you for the nice documentation improvements!
+
+Please see inline comments for minor nits.
+
+On Mon, 22 May 2023 13:24:27 +0100, Mark Rutland wrote:
+> Currently the atomics are documented in Documentation/atomic_t.txt, and
+> have no kerneldoc comments. There are a sufficient number of gotchas
+> (e.g. semantics, noinstr-safety) that it would be nice to have comments
+> to call these out, and it would be nice to have kerneldoc comments such
+> that these can be collated.
 > 
-> This include is not currently needed for alternatives and creates
-> possible issues when we want to add alternatives to deeper kernel
-> infrastructure.
+> While it's possible to derive the semantics from the code, this can be
+> painful given the amount of indirection we currently have (e.g. fallback
+> paths), and it's easy to be mislead by naming, e.g.
 > 
-> The issue in question came from trying to introduce Zawrs alternatives,
-> which resulted in a somewhat circular dependency like:
+> * The unconditional void-returning ops *only* have relaxed variants
+>   without a _relaxed suffix, and can easily be mistaken for being fully
+>   ordered.
 > 
-> In file included from ../include/linux/bitops.h:34,
->                  from ../include/linux/kernel.h:22,
->                  from ../arch/riscv/include/asm/alternative.h:16,
->                  from ../arch/riscv/include/asm/errata_list.h:8,
->                  from ../arch/riscv/include/asm/barrier.h:15,
->                  from ../include/linux/list.h:11,
->                  from ../include/linux/preempt.h:11,
->                  from ../include/linux/spinlock.h:56,
->                  from ../include/linux/mmzone.h:8,
->                  from ../include/linux/gfp.h:7,
->                  from ../include/linux/mm.h:7,
->                  from ../arch/riscv/kernel/asm-offsets.c:10:
-> ../include/asm-generic/bitops/generic-non-atomic.h: In function ‘generic_test_bit_acquire’:
-> ../include/asm-generic/bitops/generic-non-atomic.h:140:23: error: implicit declaration of function ‘smp_load_acquire’ [-Werror=implicit-function-declaration]
->   140 |         return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
->       |                       ^~~~~~~~~~~~~~~~
+>   It would be nice to give these a _relaxed() suffix, but this would
+>   result in significant churn throughout the kernel.
 > 
-> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> * Our naming of conditional and unconditional+test ops is rather
+>   inconsistent, and it can be difficult to derive the name of an
+>   operation, or to identify where an op is conditional or
+>   unconditional+test.
+> 
+>   Some ops are clearly conditional:
+>   - dec_if_positive
+>   - add_unless
+>   - dec_unless_positive
+>   - inc_unless_negative
+> 
+>   Some ops are clearly unconditional+test:
+>   - sub_and_test
+>   - dec_and_test
+>   - inc_and_test
+> 
+>   However, what exactly those test is not obvious. A _test_zero suffix
+>   might be clearer.
+> 
+>   Others could be read ambiguously:
+>   - inc_not_zero	// conditional
+>   - add_negative	// unconditional+test
+> 
+>   It would probably be worth renaming these, e.g. to inc_unless_zero and
+>   add_test_negative.
+> 
+> As a step towards making this more consistent and easier to understand,
+> this patch adds kerneldoc comments for all generated *atomic*_*()
+> functions. These are generated from templates, with some common text
+> shared, making it easy to extend these in future if necessary.
+> 
+> I've tried to make these as consistent and clear as possible, and I've
+> deliberately ensured:
+> 
+> * All ops have their ordering explicitly mentioned in the short and long
+>   description.
+> 
+> * All test ops have "test" in their short description.
+> 
+> * All ops are described as an expression using their usual C operator.
+>   For example:
+> 
+>   andnot: "Atomically updates @v to (@v & ~@i)"
+
+The kernel-doc script converts "~@i" into reST source of "~**i**",
+where the emphasis of i is not recognized by Sphinx.
+
+For the "@" to work as expected, please say "~(@i)" or "~ @i".
+My preference is the former.
+
+>   inc:    "Atomically updates @v to (@v + 1)"
+> 
+>   Which may be clearer to non-naative English speakers, and allows all
+                            non-native
+
+>   the operations to be described in the same style.
+> 
+> * All conditional ops have their condition described as an expression
+>   using the usual C operators. For example:
+> 
+>   add_unless: "If (@v != @u), atomically updates @v to (@v + @i)"
+>   cmpxchg:    "If (@v == @old), atomically updates @v to @new"
+> 
+>   Which may be clearer to non-naative English speakers, and allows all
+
+Ditto.
+
+>   the operations to be described in the same style.
+> 
+> * All bitwise ops (and,andnot,or,xor) explicitly mention that they are
+>   bitwise in their short description, so that they are not mistaken for
+>   performing their logical equivalents.
+> 
+> * The noinstr safety of each op is explicitly described, with a
+>   description of whether or not to use the raw_ form of the op.
+> 
+> There should be no functional change as a result of this patch.
+> 
+> Reported-by: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+
+FWIW,
+
+Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+
+        Thanks, Akira
+
 > ---
->  arch/riscv/include/asm/alternative.h | 1 -
->  1 file changed, 1 deletion(-)
+>  include/linux/atomic/atomic-arch-fallback.h  | 1848 +++++++++++-
+>  include/linux/atomic/atomic-instrumented.h   | 2771 +++++++++++++++++-
+>  include/linux/atomic/atomic-long.h           |  925 +++++-
+>  scripts/atomic/atomic-tbl.sh                 |  112 +-
+>  scripts/atomic/gen-atomic-fallback.sh        |    2 +
+>  scripts/atomic/gen-atomic-instrumented.sh    |    2 +
+>  scripts/atomic/gen-atomic-long.sh            |    2 +
+>  scripts/atomic/kerneldoc/add                 |   13 +
+>  scripts/atomic/kerneldoc/add_negative        |   13 +
+>  scripts/atomic/kerneldoc/add_unless          |   18 +
+>  scripts/atomic/kerneldoc/and                 |   13 +
+>  scripts/atomic/kerneldoc/andnot              |   13 +
+>  scripts/atomic/kerneldoc/cmpxchg             |   14 +
+>  scripts/atomic/kerneldoc/dec                 |   12 +
+>  scripts/atomic/kerneldoc/dec_and_test        |   12 +
+>  scripts/atomic/kerneldoc/dec_if_positive     |   12 +
+>  scripts/atomic/kerneldoc/dec_unless_positive |   12 +
+>  scripts/atomic/kerneldoc/inc                 |   12 +
+>  scripts/atomic/kerneldoc/inc_and_test        |   12 +
+>  scripts/atomic/kerneldoc/inc_not_zero        |   12 +
+>  scripts/atomic/kerneldoc/inc_unless_negative |   12 +
+>  scripts/atomic/kerneldoc/or                  |   13 +
+>  scripts/atomic/kerneldoc/read                |   12 +
+>  scripts/atomic/kerneldoc/set                 |   13 +
+>  scripts/atomic/kerneldoc/sub                 |   13 +
+>  scripts/atomic/kerneldoc/sub_and_test        |   13 +
+>  scripts/atomic/kerneldoc/try_cmpxchg         |   15 +
+>  scripts/atomic/kerneldoc/xchg                |   13 +
+>  scripts/atomic/kerneldoc/xor                 |   13 +
+>  29 files changed, 5940 insertions(+), 7 deletions(-)
+>  create mode 100644 scripts/atomic/kerneldoc/add
+>  create mode 100644 scripts/atomic/kerneldoc/add_negative
+>  create mode 100644 scripts/atomic/kerneldoc/add_unless
+>  create mode 100644 scripts/atomic/kerneldoc/and
+>  create mode 100644 scripts/atomic/kerneldoc/andnot
+>  create mode 100644 scripts/atomic/kerneldoc/cmpxchg
+>  create mode 100644 scripts/atomic/kerneldoc/dec
+>  create mode 100644 scripts/atomic/kerneldoc/dec_and_test
+>  create mode 100644 scripts/atomic/kerneldoc/dec_if_positive
+>  create mode 100644 scripts/atomic/kerneldoc/dec_unless_positive
+>  create mode 100644 scripts/atomic/kerneldoc/inc
+>  create mode 100644 scripts/atomic/kerneldoc/inc_and_test
+>  create mode 100644 scripts/atomic/kerneldoc/inc_not_zero
+>  create mode 100644 scripts/atomic/kerneldoc/inc_unless_negative
+>  create mode 100644 scripts/atomic/kerneldoc/or
+>  create mode 100644 scripts/atomic/kerneldoc/read
+>  create mode 100644 scripts/atomic/kerneldoc/set
+>  create mode 100644 scripts/atomic/kerneldoc/sub
+>  create mode 100644 scripts/atomic/kerneldoc/sub_and_test
+>  create mode 100644 scripts/atomic/kerneldoc/try_cmpxchg
+>  create mode 100644 scripts/atomic/kerneldoc/xchg
+>  create mode 100644 scripts/atomic/kerneldoc/xor
 > 
-> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> index 6a41537826a7..05885de6048c 100644
-> --- a/arch/riscv/include/asm/alternative.h
-> +++ b/arch/riscv/include/asm/alternative.h
-> @@ -13,7 +13,6 @@
->  #ifdef CONFIG_RISCV_ALTERNATIVE
->  
->  #include <linux/init.h>
-> -#include <linux/kernel.h>
->  #include <linux/types.h>
->  #include <linux/stddef.h>
->  #include <asm/hwcap.h>
-> -- 
-> 2.39.0
->
+[...]
 
-Removing this include doesn't break compilation because the only callers
-of PATCH_ID_CPUFEATURE_ID() and PATCH_ID_CPUFEATURE_VALUE(), which are
-defined with lower/upper_16_bits(), are in arch/riscv/kernel/cpufeature.c,
-which includes at least one thing which eventually includes linux/kernel.h
-(the first path I found was linux/module.h -> linux/moduleparam.h ->
-linux/kernel.h). Ideally we wouldn't rely on that luck. We can open
-code the PATCH_ID_* macros to drop the lower/upper_16_bits() dependencies
-or move the macros elsewhere, maybe, for now, just to
-arch/riscv/kernel/cpufeature.c
-
-Thanks,
-drew
