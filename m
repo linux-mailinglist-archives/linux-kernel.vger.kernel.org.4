@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E94670FC57
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECEB70FC5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjEXRKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 13:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S231391AbjEXRKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235354AbjEXRKX (ORCPT
+        with ESMTP id S235479AbjEXRKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 May 2023 13:10:23 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72014E9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B312212E;
         Wed, 24 May 2023 10:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1684948222; x=1716484222;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=ijlcQTB25JWDSKBgGP5PTsXN7m/nFm/uJsgOpwUsehM=;
-  b=Px9bjV8KcPQp8HlylKwq9Ltagdu/1WgscYrrdRJzGGTiv6bJNJddONRC
-   xCO0URfB1srE7vNMaeHaoeEmlygq3PKs/EZxuP+hTp57jGMLwKX4dsb5K
-   mxZGQx0txQQRpAuZ4+mAazllr6MJ1MWY5IgurGc4tL4c2tkAqCXBnPNMJ
-   EM0ELV0mLdKu8SNC4EHHR4SI9XNKsAWtZ0HENK6DyHjNm0eSasXdMxNeI
-   9ODPVHsbBZnZjZufBMrhD7/9SI7ziHMA4G3chWZj60pMWhTaE+CS3GO53
-   cnVoDyBuk5KYfBCca3vTqq9TvgQFK3XdFhJmJIFyu61vf98azwKGSTesc
+  bh=WDTSl+X1XPquNKqotXNY0s7uU9PS6vgLhf4WACna8JI=;
+  b=WrlKRdicL43PumcC2o26eSslUaBSm0AYEGCDlCXP8q400wzmattc3dCt
+   jHpMqFq6FJl0Tkte5iAnCNy98bpa6Qa+zpdEk+2JQNCSXrdUJNg+A8sMO
+   1NGo+1kdK4Q29RlELyPUucFdayd3LoGEOYXwVKtHG6rsgviV8ehaXpHLg
+   5AoE+DhgpCREP7dEpFCQoLxRtC3I+bh06Qoo9tmuA+wnku2UavW+9VnI/
+   02CfwsnL08jkZ8D9/7BRIw48JhokZOtld5p0dnEXkkieeFzGWLylvqR2h
+   k9V9HoqiZkhGCpamENpafujbQjPBigNcBkBCq7iZ13Rl5oAl5snfBfdWz
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338206700"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338206713"
 X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="338206700"
+   d="scan'208";a="338206713"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 10:09:52 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 10:09:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="704427344"
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="704427349"
 X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="704427344"
+   d="scan'208";a="704427349"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by orsmga002.jf.intel.com with ESMTP; 24 May 2023 10:09:52 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
@@ -51,11 +51,10 @@ Cc:     ebiggers@kernel.org, elliott@hpe.com, gmazyland@gmail.com,
         lalithambika.krishnakumar@intel.com, nhuck@google.com,
         chang.seok.bae@intel.com, Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v7 04/12] x86/asm: Add a wrapper function for the LOADIWKEY instruction
-Date:   Wed, 24 May 2023 09:57:09 -0700
-Message-Id: <20230524165717.14062-5-chang.seok.bae@intel.com>
+Subject: [PATCH v7 05/12] x86/msr-index: Add MSRs for Key Locker wrapping key
+Date:   Wed, 24 May 2023 09:57:10 -0700
+Message-Id: <20230524165717.14062-6-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230524165717.14062-1-chang.seok.bae@intel.com>
 References: <20230410225936.8940-1-chang.seok.bae@intel.com>
@@ -70,16 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Key Locker introduces a CPU-internal wrapping key to encode a user key
-to a key handle. Then a key handle is referenced instead of the plain
-text key.
+The CPU state that contains the wrapping key is in the same power
+domain as the cache. So any sleep state that would invalidate the
+cache (like S3) also invalidates the state of the wrapping key.
 
-LOADIWKEY loads a wrapping key in the software-inaccessible CPU state.
-It operates only in kernel mode.
+But, since the state is inaccessible to software, it needs a special
+mechanism to save and restore the key during deep sleep.
 
-The kernel will use this to load a new key at boot time. Establish a
-wrapper to prepare for this use. Also, define struct iwkey to pass the
-key value to it.
+A set of new MSRs are provided as an abstract interface to save and
+restore the wrapping key, and to check the key status. The wrapping
+key is saved in a platform-scoped state of non-volatile media. The
+backup itself and its path from the CPU are encrypted and integrity
+protected.
+
+Define those MSRs to be used to save and restore the key for S3/4
+sleep states.
+
+But the backup storage's non-volatility is not architecturally
+guaranteed across off-states, such as S5 and G3. Then, the kernel may
+generate a new key on the next boot.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
@@ -88,112 +96,36 @@ Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
 Changes from v6:
-* Massage the changelog -- clarify the reason and the changes a bit.
-
-Changes from v5:
-* Fix a typo: kernel_cpu_begin() -> kernel_fpu_begin()
+* Tweak the changelog -- put the last for those about other sleep
+  states
 
 Changes from RFC v2:
-* Separate out the code as a new patch.
-* Improve the usability with the new struct as an argument. (Dan
-  Williams)
-
-Note, Dan wondered if:
-  WARN_ON(!irq_fpu_usable());
-would be appropriate in the load_xmm_iwkey() function.
+* Update the changelog. (Dan Williams)
+* Rename the MSRs. (Dan Williams)
 ---
- arch/x86/include/asm/keylocker.h     | 25 ++++++++++++++++++++++
- arch/x86/include/asm/special_insns.h | 32 ++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
- create mode 100644 arch/x86/include/asm/keylocker.h
+ arch/x86/include/asm/msr-index.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/include/asm/keylocker.h b/arch/x86/include/asm/keylocker.h
-new file mode 100644
-index 000000000000..9b3bec452b31
---- /dev/null
-+++ b/arch/x86/include/asm/keylocker.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef _ASM_KEYLOCKER_H
-+#define _ASM_KEYLOCKER_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/fpu/types.h>
-+
-+/**
-+ * struct iwkey - A temporary wrapping key storage.
-+ * @integrity_key:	A 128-bit key to check that key handles have not
-+ *			been tampered with.
-+ * @encryption_key:	A 256-bit encryption key used in
-+ *			wrapping/unwrapping a clear text key.
-+ *
-+ * This storage should be flushed immediately after loaded.
-+ */
-+struct iwkey {
-+	struct reg_128_bit integrity_key;
-+	struct reg_128_bit encryption_key[2];
-+};
-+
-+#endif /*__ASSEMBLY__ */
-+#endif /* _ASM_KEYLOCKER_H */
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index de48d1389936..dd2d8b40fce3 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -9,6 +9,7 @@
- #include <asm/processor-flags.h>
- #include <linux/irqflags.h>
- #include <linux/jump_label.h>
-+#include <asm/keylocker.h>
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 3aedae61af4f..cd8555c0f3c2 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -1117,4 +1117,10 @@
+ 						* a #GP
+ 						*/
  
- /*
-  * The compiler should not reorder volatile asm statements with respect to each
-@@ -283,6 +284,37 @@ static __always_inline void tile_release(void)
- 	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
- }
- 
-+/**
-+ * load_xmm_iwkey - Load a CPU-internal wrapping key
-+ * @key:	A struct iwkey pointer.
-+ *
-+ * Load @key to XMMs then do LOADIWKEY. After this, flush XMM
-+ * registers. Caller is responsible for kernel_fpu_begin().
-+ */
-+static inline void load_xmm_iwkey(struct iwkey *key)
-+{
-+	struct reg_128_bit zeros = { 0 };
++/* MSRs for managing a CPU-internal wrapping key for Key Locker. */
++#define MSR_IA32_IWKEY_COPY_STATUS		0x00000990
++#define MSR_IA32_IWKEY_BACKUP_STATUS		0x00000991
++#define MSR_IA32_BACKUP_IWKEY_TO_PLATFORM	0x00000d91
++#define MSR_IA32_COPY_IWKEY_TO_LOCAL		0x00000d92
 +
-+	asm volatile ("movdqu %0, %%xmm0; movdqu %1, %%xmm1; movdqu %2, %%xmm2;"
-+		      :: "m"(key->integrity_key), "m"(key->encryption_key[0]),
-+			 "m"(key->encryption_key[1]));
-+
-+	/*
-+	 * LOADIWKEY %xmm1,%xmm2
-+	 *
-+	 * EAX and XMM0 are implicit operands. Load a key value
-+	 * from XMM0-2 to a software-invisible CPU state. With zero
-+	 * in EAX, CPU does not do hardware randomization and the key
-+	 * backup is allowed.
-+	 *
-+	 * This instruction is supported by binutils >= 2.36.
-+	 */
-+	asm volatile (".byte 0xf3,0x0f,0x38,0xdc,0xd1" :: "a"(0));
-+
-+	asm volatile ("movdqu %0, %%xmm0; movdqu %0, %%xmm1; movdqu %0, %%xmm2;"
-+		      :: "m"(zeros));
-+}
-+
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_X86_SPECIAL_INSNS_H */
+ #endif /* _ASM_X86_MSR_INDEX_H */
 -- 
 2.17.1
 
