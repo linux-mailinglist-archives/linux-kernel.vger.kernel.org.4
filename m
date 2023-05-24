@@ -2,110 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EAE70F08E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1590870F090
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjEXIYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S239759AbjEXIYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234171AbjEXIYG (ORCPT
+        with ESMTP id S234870AbjEXIYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:24:06 -0400
-Received: from smtp.tom.com (smtprz25.163.net [106.38.219.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67E612B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:24:04 -0700 (PDT)
-Received: from my-app02.tom.com (my-app02.tom.com [127.0.0.1])
-        by freemail02.tom.com (Postfix) with ESMTP id 72110B00D37
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:24:01 +0800 (CST)
-Received: from my-app02.tom.com (HELO smtp.tom.com) ([127.0.0.1])
-          by my-app02 (TOM SMTP Server) with SMTP ID 594827488
-          for <linux-kernel@vger.kernel.org>;
-          Wed, 24 May 2023 16:24:01 +0800 (CST)
-Received: from antispam1.tom.com (unknown [172.25.16.55])
-        by freemail02.tom.com (Postfix) with ESMTP id 4ACE0B00CBF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:24:01 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
-        t=1684916641; bh=pK9utf2+TTB2BqTHLR4D+VpjAz3YXX/EvXNU8ORYyBA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GCud4YdqwTMexDSYQqxCH8FlFCFY1dorSiB2ryCn9qCth6ORu8ATRqnXN9M5u6H4K
-         AwoIsVGUBm3huzLaXHKErGXzmY6tBLwP6JyxTNjJG5/xGrknPvlmUodmsZhNg7v751
-         jB/DuAKjmDD4WPAXm611b8F6Zmhld0R0aU6qYePg=
-Received: from antispam1.tom.com (antispam1.tom.com [127.0.0.1])
-        by antispam1.tom.com (Postfix) with ESMTP id 3190FD41AD1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:24:01 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at antispam1.tom.com
-Received: from antispam1.tom.com ([127.0.0.1])
-        by antispam1.tom.com (antispam1.tom.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VmGR4O6u3zn3 for <linux-kernel@vger.kernel.org>;
-        Wed, 24 May 2023 16:24:00 +0800 (CST)
-Received: from [172.30.38.103] (unknown [180.167.10.98])
-        by antispam1.tom.com (Postfix) with ESMTPA id 99329D416F1;
-        Wed, 24 May 2023 16:23:57 +0800 (CST)
-Message-ID: <5e03a89f-726d-9351-6235-9b610e8a9389@tom.com>
-Date:   Wed, 24 May 2023 16:23:57 +0800
+        Wed, 24 May 2023 04:24:32 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C49132
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:24:29 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so40025255e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684916668; x=1687508668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7S8YiFtaRj/FEKOy7ugtwuuXH8gMTMGNxbGTnZXrWWI=;
+        b=B5xRig/b/0O5ZspeIVwHcd2M9muwN88/QZRDW59sLhCQYsBHlIcilk7vC/3SmMOjRU
+         mI1attXluGofNHO3o6zqrKvE3BmGB5S/5zYDmbiuXBaCaXImX0+to+5MTi4kqnVcc9QD
+         3aqeFqty+0UtS3XO637GAT+m3befp2T36c7i4PTWoxC+JIku2s1alA6g0csYQL1upeGT
+         G9xOnmWDmyDhOTsPZ3JwulfFUvpfaWlNuJbAIoa8XZpcUxS1owE5hKXG5wPfWi6XO7jE
+         9DeVb2J43woXjJH4G8/ZCAcbl8x89gq4Iuvvka8TWcU6RAuIkdwOYhY8iEQTUFUj9KxJ
+         6v5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684916668; x=1687508668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7S8YiFtaRj/FEKOy7ugtwuuXH8gMTMGNxbGTnZXrWWI=;
+        b=ZJRdFgsebBDe/m9UXsXxX63oUQwYqQDbtsfa13J65IyUDkzlPsGe72dR13NlAUvry6
+         uTRR+9sAWjINXmq3xGJ+eIMftiIuRCawEw8j6LLHd28+mf6wDA1JMf8M48Q0311U6V+H
+         A73I7/J6KrSVEeCndlaeu+QRRNVqxRnxoGFkDbdOWt2WAg8YzPNtWS2vn1FM15u2qe+x
+         Xair1gS4TcVg0IupyNRczqwTRnA+DrRkexaUrFz+oC0rTIXwarjOQhQ6zBeKsac3+Art
+         3UxgoyBiVq79AIfd6IseQmf1bywetfSGqq1lcRxxmFoqFojm/eUdtfFtd0wHzRG6NXOq
+         FARw==
+X-Gm-Message-State: AC+VfDzTLtBw1gds6Rya+PQP9DtiaRTlNbIUWk4Ty6UygOaY0wgVaGHC
+        JYsUY94VVNVfZ5csToMS7B4=
+X-Google-Smtp-Source: ACHHUZ5ZmbHPHGD6ALC2KbVxj8uSXpU83tkbIWRAvSFK1QMXXPAx3969ZTiAxeTn9+lcd3dwirOrlw==
+X-Received: by 2002:a7b:c385:0:b0:3f6:8ba:6ea2 with SMTP id s5-20020a7bc385000000b003f608ba6ea2mr4775407wmj.15.1684916667799;
+        Wed, 24 May 2023 01:24:27 -0700 (PDT)
+Received: from lucifer.home (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
+        by smtp.googlemail.com with ESMTPSA id s4-20020a5d4244000000b00307bc4e39e5sm13467258wrr.117.2023.05.24.01.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 01:24:26 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@infradead.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH] lib/test_vmalloc.c: avoid garbage in page array
+Date:   Wed, 24 May 2023 09:24:24 +0100
+Message-Id: <20230524082424.10022-1-lstoakes@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] media: dvb_ringbuffer: Return -EFAULT if copy fails
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Su Hui <suhui@nfschina.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        YongSu Yoo <yongsuyoo0215@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <41a9c6a6-4b9a-4d84-9e32-09bf64c65b6c@kili.mountain>
- <aab14cc4-0400-c114-f180-6db943fd7e32@nfschina.com>
- <7466fead-1b99-4a78-86cb-5dd8a9baec19@kili.mountain>
-From:   Longsuhui <Jack_sun@tom.com>
-In-Reply-To: <7466fead-1b99-4a78-86cb-5dd8a9baec19@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/24 15:20, Dan Carpenter wrote:
-> On Wed, May 24, 2023 at 01:20:27PM +0800, Su Hui wrote:
->> It's confusing about the comment on function declaration.
->>
->>      /**
->>       * dvb_ringbuffer_write_user - Writes a buffer received via a user
->> pointer
->>
->>      ..........
->>
->>       * Return: number of bytes transferred or -EFAULT
->>
->> But the function Only returns  the number of bytes transferred.
->>
->> Maybe the comment should be modified because it never returns -EFAULT.
-> To be honest, I think that -EFAULT is probably a better return.  But
-> there is no way we could apply the patch with that commit message.  The
-> commit message doesn't explain the problem for the user or why returning
-> the number of bytes copied is not correct in this case.
->
-> I think that maybe it's not too late to change this to return -EFAULT,
-> but it would have been easier to make the change in 2014 before there
-> were many users.  Also it would be easier if you were testing this on
-> real hardware.
->
-> Possibly other people think the current behavior is correct or that it
-> is too late to change it.  That's also fine.  I'm not a domain expert
-> here.
-I understand it.
-Thanks a lot!
+It turns out that alloc_pages_bulk_array() does not treat the page_array
+parameter as an output parameter, but rather reads the array and skips any
+entries that have already been allocated.
 
-Su Hui
+This is somewhat unexpected and breaks this test, as we allocate the pages
+array uninitialised on the assumption it will be overwritten.
 
->
-> regards,
-> dan carpenter
->
+As a result, the test was referencing uninitialised data and causing the
+PFN to not be valid and thus a WARN_ON() followed by a null pointer deref
+and panic.
+
+In addition, this is an array of pointers not of struct page objects, so we
+need only allocate an array with elements of pointer size.
+
+We solve both problems by simply using kcalloc() and referencing
+sizeof(struct page *) rather than sizeof(struct page).
+
+Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+---
+ lib/test_vmalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
+index 9dd9745d365f..3718d9886407 100644
+--- a/lib/test_vmalloc.c
++++ b/lib/test_vmalloc.c
+@@ -369,7 +369,7 @@ vm_map_ram_test(void)
+ 	int i;
+ 
+ 	map_nr_pages = nr_pages > 0 ? nr_pages:1;
+-	pages = kmalloc(map_nr_pages * sizeof(struct page), GFP_KERNEL);
++	pages = kcalloc(map_nr_pages, sizeof(struct page *), GFP_KERNEL);
+ 	if (!pages)
+ 		return -1;
+ 
+-- 
+2.40.1
+
