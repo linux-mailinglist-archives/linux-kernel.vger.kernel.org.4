@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED53870F744
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6014E70F74D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbjEXNHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S233291AbjEXNIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjEXNHw (ORCPT
+        with ESMTP id S234096AbjEXNIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:07:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC7C9B;
-        Wed, 24 May 2023 06:07:48 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C5C241F8AA;
-        Wed, 24 May 2023 13:07:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1684933666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1uzlbCLytRmf0lA+DtAHijJtX4O3Gwzv81/iHYbX4xM=;
-        b=dNCKCmzrAguc4Zu0EVLMzkQBOnzySCfPWd6UAjSLLX4F7lVFU/qdF2897g72w3J9pbcyo7
-        hMgY3ZZMBUMpYla7bUIKkhKJHRHTtECbW305O4opeysKGun6LgnV0dOKn6b9AFAsXyiSo6
-        MTyA6XI74c0YA2S//W5ap7ZCPSlLK1c=
-Received: from suse.cz (dhcp129.suse.cz [10.100.51.129])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B798F2C141;
-        Wed, 24 May 2023 13:07:44 +0000 (UTC)
-Date:   Wed, 24 May 2023 15:07:44 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
-        npiggin@gmail.com, davem@davemloft.net,
-        Marc Zyngier <maz@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
-        christophe.leroy@csgroup.eu,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
-        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH v5 11/18] watchdog/hardlockup: Move perf hardlockup
- watchdog petting to watchdog.c
-Message-ID: <ZG4MIFNPi6zwO_WV@alley>
-References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
- <20230519101840.v5.11.I00dfd6386ee00da25bf26d140559a41339b53e57@changeid>
+        Wed, 24 May 2023 09:08:16 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85FAB6;
+        Wed, 24 May 2023 06:08:14 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 01960FF810;
+        Wed, 24 May 2023 13:08:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684933693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Dlu+LIg1CB+EdnEPMRmgOuwoUG3Sx5A6cdZB48OIf+o=;
+        b=TXeMRzQjPBVJLFm8zj+9XMU3hmTOf+SK7zuShVTqMztutIcqd118u6v0w9R/KPPCE7h8qp
+        GZbNPXSmJBJUYjLN9W01if1NHI2dXvYZbS517YQJ8EetG4J6DpBW5wjXXkPOA08EqBu3TP
+        KxLLjyy2yl/fWTUx0ccinXmfglU9jXnmoVlfviY3awUi6quztjFfpQR1nFhRG7IceaZuri
+        0RR0QA3LX/w8M2UH/wiT/VpdyWMCD8hGm7InL3BIxtVzA6Fkx0TsCMLbZGNNzPbozgN+yo
+        aJcC+0s+iS9aJYCZU2PM7+PLdc8TUnkwkpvzHajszsWdSoVUUGJdVsz6VJ6C3A==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>, davem@davemloft.net
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Subject: [PATCH net-next 0/4] net: add a regmap-based mdio driver and drop TSE PCS
+Date:   Wed, 24 May 2023 15:08:03 +0200
+Message-Id: <20230524130807.310089-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519101840.v5.11.I00dfd6386ee00da25bf26d140559a41339b53e57@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,21 +64,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-05-19 10:18:35, Douglas Anderson wrote:
-> In preparation for the buddy hardlockup detector, which wants the same
-> petting logic as the current perf hardlockup detector, move the code
-> to watchdog.c. While doing this, rename the global variable to match
-> others nearby. As part of this change we have to change the code to
-> account for the fact that the CPU we're running on might be different
-> than the one we're checking.
-> 
-> Currently the code in watchdog.c is guarded by
-> CONFIG_HARDLOCKUP_DETECTOR_PERF, which makes this change seem
-> silly. However, a future patch will change this.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Hello everyone,
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+This series follows-up on the worki [1] aiming at dropping the altera TSE PCS
+driver, as it turns out to be a version of the Lynx PCS exposed as a
+memory-mapped block, instead of living on an MDIO bus.
 
-Best Regards,
-Petr
+One step of this removal involved creating a regmap-based mdio driver
+that translates MDIO accesses into the actual underlying bus that
+exposes the register. The register layout must of course match the
+standard MDIO layout, but we can now account for differences in stride
+with recent work on the regmap subsystem [2].
+
+Mark, Net maintainers, this series depends on the patch e12ff2876493 that was
+recently merged into the regmap tree [3].
+
+For this series to be usable in net-next, this patch must be applied
+beforehand. Should Mark create a tag that would then be merged into
+net-next ?
+
+This series introduces a new MDIO driver, and uses it to convert Altera
+TSE from the actual TSE PCS driver to Lynx PCS.
+
+Since it turns out dwmac_socfpga also uses a TSE PCS block, port that
+driver to Lynx as well.
+
+Thanks,
+
+Maxime
+
+[1] : https://lore.kernel.org/all/20230324093644.464704-1-maxime.chevallier@bootlin.com/
+[2] : https://lore.kernel.org/all/20230407152604.105467-1-maxime.chevallier@bootlin.com/#t
+[3] : https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git/commit/?id=e12ff28764937dd58c8613f16065da60da149048
+
+Maxime Chevallier (4):
+  net: mdio: Introduce a regmap-based mdio driver
+  net: ethernet: altera-tse: Convert to mdio-regmap and use PCS Lynx
+  net: pcs: Drop the TSE PCS driver
+  net: stmmac: dwmac-sogfpga: use the lynx pcs driver
+
+ MAINTAINERS                                   |  14 +-
+ drivers/net/ethernet/altera/Kconfig           |   2 +
+ drivers/net/ethernet/altera/altera_tse.h      |   1 +
+ drivers/net/ethernet/altera/altera_tse_main.c |  57 +++-
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   2 +-
+ .../ethernet/stmicro/stmmac/altr_tse_pcs.c    | 257 ------------------
+ .../ethernet/stmicro/stmmac/altr_tse_pcs.h    |  29 --
+ drivers/net/ethernet/stmicro/stmmac/common.h  |   1 +
+ .../ethernet/stmicro/stmmac/dwmac-socfpga.c   |  90 ++++--
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  12 +-
+ drivers/net/mdio/Kconfig                      |  10 +
+ drivers/net/mdio/Makefile                     |   1 +
+ drivers/net/mdio/mdio-regmap.c                |  85 ++++++
+ drivers/net/pcs/Kconfig                       |   6 -
+ drivers/net/pcs/Makefile                      |   1 -
+ drivers/net/pcs/pcs-altera-tse.c              | 160 -----------
+ include/linux/mdio/mdio-regmap.h              |  25 ++
+ include/linux/pcs-altera-tse.h                |  17 --
+ 19 files changed, 258 insertions(+), 513 deletions(-)
+ delete mode 100644 drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
+ delete mode 100644 drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
+ create mode 100644 drivers/net/mdio/mdio-regmap.c
+ delete mode 100644 drivers/net/pcs/pcs-altera-tse.c
+ create mode 100644 include/linux/mdio/mdio-regmap.h
+ delete mode 100644 include/linux/pcs-altera-tse.h
+
+-- 
+2.40.1
+
