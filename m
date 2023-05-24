@@ -2,84 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE75A70ED40
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E8370ED43
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbjEXFoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S239239AbjEXFpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239474AbjEXFog (ORCPT
+        with ESMTP id S239488AbjEXFpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:44:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B6E13E;
-        Tue, 23 May 2023 22:44:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 24 May 2023 01:45:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456D213E;
+        Tue, 23 May 2023 22:45:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C5A360EB2;
-        Wed, 24 May 2023 05:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4DBC433EF;
-        Wed, 24 May 2023 05:44:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684907074;
-        bh=BAIEHKqWdw+wiFDljo7B9HdVaW+uTTTgwVeC0xa0/ao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eHUMXZt2BKIzx0FxwovB47fimiy4gupnFQON8FyBp2umdWGOZJafZc2PciYaqPyL/
-         18/1fL5ttqnT/pVs2mnirkPLZaR7vEGCYJAfxGasl9Oaqk36/cmhC6+qVHnvFsNwix
-         jHW3+XsOPA7BXqjtSHcd1cV+s55xQqL9m9yiEewEHh9Xp6Dj5D1U70pTbUColbo40T
-         EkZt2OFrJ7BcbbG5hAeHme6kRcSsJM1k25BMINl4kR1fDwumiAXY89WwtFOWypCFai
-         bpfdDbfFFCxixf7IMvy2mZiteUnRCZD9VY1Rtp1JT4Gl9YLPxGApALXwKf/kRJZHA7
-         NddS8fUQz49hQ==
-Date:   Wed, 24 May 2023 11:14:29 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        dmaengine@vger.kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        narayan.ranganathan@intel.com
-Subject: Re: [PATCH v7 4/4] dmaengine/idxd: Re-enable kernel workqueue under
- DMA API
-Message-ID: <ZG2kPbwMmW4B2PFB@matsya>
-References: <20230523173451.2932113-1-jacob.jun.pan@linux.intel.com>
- <20230523173451.2932113-5-jacob.jun.pan@linux.intel.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QR0Wc4rDSz4x3x;
+        Wed, 24 May 2023 15:45:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684907101;
+        bh=f/I3/vdedLsXjJMBa5rvDPJjW/XaG4l9x0WeCUQ8xnc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LHazJkIR0mYp7cwMQWHa5XR0THC7X2J1C9fVb6mRyhu4OBFxND7ZQslu/UNRhn1mc
+         Cq3asJ0a9YwtdeTd9+VH+bGn8dWpM2NYc5xLUBw0U2PtHgYZC0ro6+ZUQmYHTrcCck
+         VzxopJnCbVg+1R7o3+9P5C4Wd3hYKHzoVvXtqzLYPyW+XYD+T9MribWIFpeAR/mLaZ
+         M86EBZSZhx1NYYDBSHgzMw+BSzkslTJVkj0oWj3l/oReFEqaFH6cOu4qkMHpwwoGDr
+         YpM7u2rrwtj0D/q1IEp0wBf3R4LGD8v562S2aW2rLGownULrZfgKLCN4MDh1+aU+r6
+         XQYHUWJ25TFtw==
+Date:   Wed, 24 May 2023 15:44:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: linux-next: boot failure after merge of the tip tree
+Message-ID: <20230524154459.48cda184@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523173451.2932113-5-jacob.jun.pan@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_//tEoMQJMHAPUW9maNvLvEo/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-05-23, 10:34, Jacob Pan wrote:
-> Kernel workqueues were disabled due to flawed use of kernel VA and SVA
-> API. Now that we have the support for attaching PASID to the device's
-> default domain and the ability to reserve global PASIDs from SVA APIs,
-> we can re-enable the kernel work queues and use them under DMA API.
-> 
-> We also use non-privileged access for in-kernel DMA to be consistent
-> with the IOMMU settings. Consequently, interrupt for user privilege is
-> enabled for work completion IRQs.
+--Sig_//tEoMQJMHAPUW9maNvLvEo/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Vinod Koul <vkoul@kernel.org>
+Hi all,
 
--- 
-~Vinod
+After merging the tip tree, today's linux-next build (powerpc
+pseries_le_defconfig) failed to boot like this:
+
+ Built 1 zonelists, mobility grouping on.  Total pages: 32736
+ Policy zone: Normal
+ mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+ Memory: 2027392K/2097152K available (17984K kernel code, 3328K rwdata, 147=
+84K rodata, 6080K init, 1671K bss, 69760K reserved, 0K cma-reserved)
+
+*crickets*
+
+Bisected to commit
+
+  f4ab23558310 ("slub: Replace cmpxchg_double()")
+
+I have reverted that commit (and the following one) for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_//tEoMQJMHAPUW9maNvLvEo/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtpFsACgkQAVBC80lX
+0GwVDAgAlL5vAXSXgHZv3lw2Zu0vvMEbO3IR//QNs9XHsQULb4rYnoVBbEQ3vZds
+z3Gm0yaTMgz7LjjSllEUKHw2FBNzHq4yfnwUVf/6tV5IxqQOQMD4JfKs9y54TTIX
+WK3A1q4YwcW9ORDo4Yn3tl6ETu8sYKnpOdoehx7jodsFUv55RE+z14zTx4sy1Eex
+g85vnkegD8CAHEt28tZYwyuu8nErMzYrNRd3wfHogtLtZPwx+5/pr8zY1CQvn+XV
+xZDIqnBNPweCNgVreFLp64XZD+RG5Q2vRbhn8KnscCid3yCULfm7ouMOXOuCuAa7
+GeKrtrG3epuZqLwlmmfegN4cZkStwQ==
+=l2Q4
+-----END PGP SIGNATURE-----
+
+--Sig_//tEoMQJMHAPUW9maNvLvEo/--
