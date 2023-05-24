@@ -2,122 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1248870F1DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9AA70F1E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240380AbjEXJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
+        id S240556AbjEXJMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239858AbjEXJLl (ORCPT
+        with ESMTP id S229723AbjEXJMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:11:41 -0400
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64130FC
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:11:40 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id E6A06802BFCF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:11:39 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 776EA10041C7A
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:11:39 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 1kWxq4hPpNX2a1kWxqcYei; Wed, 24 May 2023 09:11:39 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=646dd4cb
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=P0xRbXHiH_UA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=4PzeazIDGJN80CO3zooA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=osxXOXLBbA0T3As3FGP+kctZJL7l5/hEZuPqD8FHtoo=; b=I62uzNFAmPRIusl2RbUuYTSS95
-        h1vQ0wIseGummGt9Tki6YFJixeHaSki/zC/5q6pUAhYbdNIQ0lEJwnzo7owmB3NDNzScJioQk2IaK
-        BDQTYTm77Al8cTkxe1ercT37AxkoHdkD51ZWgc1fjDiAPwDGQ21SDOVShW8trkOB8RPX8gt1Ju1e8
-        0sZSq92b6uVmdp98MdDXeVp5vQjMrMr6niwUc7Vg9//OyixwkeY59Svw92ICtfsARFwZS55MfwrS+
-        YjEpBR30tKd+tOCVOdZHg98G2QOEXFbJMbaxietkT81t4r/m5tkG1bAXh0ezwB6PZre9WEMUpJcUl
-        mZF47dAA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:41144 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q1kWw-003qDl-7B;
-        Wed, 24 May 2023 03:11:38 -0600
-Subject: Re: [PATCH 6.3 000/363] 6.3.4-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230523164950.435226211@linuxfoundation.org>
-In-Reply-To: <20230523164950.435226211@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <1814f1d4-d768-9e08-ad20-436a30b30b3d@w6rz.net>
-Date:   Wed, 24 May 2023 02:11:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 24 May 2023 05:12:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D0D189
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684919505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pcora42m3cheTOIBvw6GkIZ5gCuxPX3EpEruDFY9GWU=;
+        b=jMHrwZAKnFFu9t/9XA2FV0phoRFe0jalPqO2bKEdW+AIjy0y3oS8reQIqWlik2m8AkTl0O
+        ivA2W6RuUrc6x/eM8A1ZxLIVwXFaz6QYvVCjMjwMO132rIWVxZGIPXHfj5lQAT60P6H9FR
+        H46lMcGkgMyeTqXdiOnfJnFfqWo90rk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-hVQaceg0MZSamyZzzZYVcg-1; Wed, 24 May 2023 05:11:44 -0400
+X-MC-Unique: hVQaceg0MZSamyZzzZYVcg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3097ebd267dso219870f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:11:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684919503; x=1687511503;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pcora42m3cheTOIBvw6GkIZ5gCuxPX3EpEruDFY9GWU=;
+        b=BtP3DJlLtFQb4EjTOK0RPmm5B1Mon1cx1mQQjHzKsdFPG2h98OoATLPP4fU7XXYyy0
+         LBIlN1H6Du3WwCyBotRVgDrpRBxTHaZ1Au1sZEJmCbrLPWfx4OHvqAoWmvcLH/IGpBay
+         2nxqqD/fOpQN0nl2L4wGNXN8Blpdn9c082NP6Sc2PqYjxQ1JtDZ/wOwmr2g2H5ojzwGl
+         U9bTC6gwH4raF/GsfiQVtXtasuFNOmwD6o94RHHFlsRDTFEpvvkQI6LoKAuGbOUUFVKI
+         7oHXUdv0J0+ApHxkNFYN9YODzR4SVXYp/bOHJ+o7+91luMcUv32V9x4k0nrJF3WfFLqF
+         Zaxw==
+X-Gm-Message-State: AC+VfDyNi6C97wlSZRex6FEU5/tadTRi0hMsYn6fNtg+Id/IyoB98Bhu
+        lJGqBdNlalrvvwyc8ftu3MMvHBUq5lhnDm4t93H89AM2xx96MwR3Xc9NYlYuvMgIhNWkfEzH59P
+        jr3HPT7nDjFxtJ0us9PUjWIu5
+X-Received: by 2002:a5d:6083:0:b0:30a:ab38:3104 with SMTP id w3-20020a5d6083000000b0030aab383104mr1140209wrt.34.1684919503308;
+        Wed, 24 May 2023 02:11:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5CQILuzjlrD3B4P8U9hT6uxcQuhQfkt1q2wkryb51NsaKxV8s6VcEUl52yg/LGWKdqkGTnLQ==
+X-Received: by 2002:a5d:6083:0:b0:30a:ab38:3104 with SMTP id w3-20020a5d6083000000b0030aab383104mr1140179wrt.34.1684919502962;
+        Wed, 24 May 2023 02:11:42 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70d:f700:24cd:855:1c60:1ff4? (p200300cbc70df70024cd08551c601ff4.dip0.t-ipconnect.de. [2003:cb:c70d:f700:24cd:855:1c60:1ff4])
+        by smtp.gmail.com with ESMTPSA id l9-20020a05600012c900b003078354f774sm13644544wrx.36.2023.05.24.02.11.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 02:11:41 -0700 (PDT)
+Message-ID: <84c00f9d-0b83-e4a2-de6f-617cf23b6444@redhat.com>
+Date:   Wed, 24 May 2023 11:11:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q1kWw-003qDl-7B
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:41144
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 20
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
+Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+References: <202305241351365661923@zte.com.cn>
+ <20230524055906.20614-1-yang.yang29@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v9 5/5] selftest: add a testcase of ksm zero pages
+In-Reply-To: <20230524055906.20614-1-yang.yang29@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 10:01 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.4 release.
-> There are 363 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 25 May 2023 16:48:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.4-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+[...]
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> +static void test_unmerge_zero_pages(void)
+> +{
+> +	const unsigned int size = 2 * MiB;
+> +	char *map;
+> +	unsigned long pages_expected;
+> +
+> +	ksft_print_msg("[RUN] %s\n", __func__);
+> +
+> +	if (ksm_zero_pages_fd < 0) {
+> +		ksft_test_result_skip("open(\"/sys/kernel/mm/ksm/ksm_zero_pages\") failed\n");
+> +		return;
+> +	}
+> +	if (ksm_use_zero_pages_fd < 0) {
+> +		ksft_test_result_skip("open \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
+> +		return;
+> +	}
+> +	if (write(ksm_use_zero_pages_fd, "1", 1) != 1) {
+> +		ksft_test_result_skip("write \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
+> +		return;
+> +	}
 
-Tested-by: Ron Economos <re@w6rz.net>
+I realize that this test will fail if there is any other process in the system that has KSM
+enabled with a suitable page filled with zeroes ... maybe instead of checking the global
+KSM zeropages, check the per-mm ones instead? That should be better.
+
+> +
+> +	/* Mmap zero pages */
+
+Maybe better:
+
+/* Let KSM deduplicate zero pages. */
+
+> +	map = mmap_and_merge_range(0x00, size, false);
+> +	if (map == MAP_FAILED)
+> +		return;
+> +
+> +	/* Check if ksm_zero_pages can be update correctly after merging */
+
+s/can be updated/is updated/
+
+> +	pages_expected = size / pagesize;
+> +	if (pages_expected != get_ksm_zero_pages()) {
+> +		ksft_test_result_fail("'ksm_zero_pages' updated after merging\n");
+> +		goto unmap;
+> +	}
+> +
+> +	/* try to unmerge half of the region */
+> +	if (madvise(map, size / 2, MADV_UNMERGEABLE)) {
+> +		ksft_test_result_fail("MADV_UNMERGEABLE failed\n");
+> +		goto unmap;
+> +	}
+> +
+> +	/* Check if ksm_zero_pages can be update correctly after unmerging */
+> +	pages_expected /= 2;
+> +	if (pages_expected != get_ksm_zero_pages()) {
+> +		ksft_test_result_fail("'ksm_zero_pages' updated after unmerging\n");
+> +		goto unmap;
+> +	}
+
+You could do something like the following on top (I recall you had some kind of COW
+tests previously, this should be a simplified version of it):
+
+diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+index ea060c683c80..160675a4e3d2 100644
+--- a/tools/testing/selftests/mm/ksm_functional_tests.c
++++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+@@ -182,6 +182,7 @@ static void test_unmerge(void)
+  static void test_unmerge_zero_pages(void)
+  {
+  	const unsigned int size = 2 * MiB;
++	unsigned int offs;
+  	char *map;
+  	unsigned long pages_expected;
+  
+@@ -225,8 +226,18 @@ static void test_unmerge_zero_pages(void)
+  		goto unmap;
+  	}
+  
++	/* Trigger unmerging of the other half by writing to the pages. */
++	for (offs = size / 2; offs < size; offs += pagesize)
++		*((unsigned int *)&map[offs]) = offs;
++
++	/* We should have no zeropages remaining. */
++	if (get_ksm_zero_pages()) {
++		ksft_test_result_fail("'ksm_zero_pages' updated after write fault\n");
++		goto unmap;
++	}
++
+  	/* Check if ksm zero pages are really unmerged */
+-	ksft_test_result(!range_maps_duplicates(map, size / 2),
++	ksft_test_result(!range_maps_duplicates(map, size),
+  				"KSM zero pages were unmerged\n");
+  unmap:
+  	munmap(map, size);
+-- 
+2.40.1
+
+
+You could also test manual discard (MADV_DONTNEED) and munmap(). Just a thought about which
+tests to add eventually later.
+
+-- 
+Thanks,
+
+David / dhildenb
 
