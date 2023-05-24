@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E167870FD52
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F5C70FD54
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236429AbjEXR5Y convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 13:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S236464AbjEXR5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbjEXR5W (ORCPT
+        with ESMTP id S231658AbjEXR5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:57:22 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE27E7;
-        Wed, 24 May 2023 10:57:21 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9739440b60bso9866166b.0;
-        Wed, 24 May 2023 10:57:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684951040; x=1687543040;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uDaTsBUf1OgMPXWfUFesGffUSXTmr0WAjmxiqPIpJXM=;
-        b=jRZfssBO3Z0gAtjQ7xkVHLa+731DjhHuYjFSr6S9NShyOiF355PJ8XuNmn9PqIdV3n
-         ouLPrw6Y7u/802DpxNnnUJ5JWhJz2PxR55a+2q9E3FqnC4AUbBsRqCUblWu/ogCelILh
-         VL4QWhuSF0NWLmZV00QgIViqHjultpapAdBBTngR2J5qah9XNvdqI9A3tIX6kH2a4f6b
-         xGNdfaFMOhS9mwClZ9Pn3/6X50TbSDk0ssNEk0FdbulvsGlE+LXAnZtMTYxVEAJrPwPM
-         /9J1KCQNEj/5umErEpZSz485pGaErA8Fj2dUIPPWtip+Ww7Fcukf8fgKIu8aX0gOgkdL
-         sqTQ==
-X-Gm-Message-State: AC+VfDw+TBxF1V5zhmYzOAbYKUzfZYh5r9EmzPJjZB2E30NoJVBCNPWE
-        oyISjjLhqjbRvxiiIwm+qvsk7irXo5wZHS8DU0Y=
-X-Google-Smtp-Source: ACHHUZ4criG6PnfbTYVLtyJdpKEmKZbgfsMT1E18yEjxhfz0rkOiO5USzlAnLe2+r0DjL6eMAtPtsBBsSZqbyRSy70s=
-X-Received: by 2002:a17:906:5199:b0:965:9602:3ee1 with SMTP id
- y25-20020a170906519900b0096596023ee1mr15757691ejk.2.1684951039851; Wed, 24
- May 2023 10:57:19 -0700 (PDT)
+        Wed, 24 May 2023 13:57:39 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BA398;
+        Wed, 24 May 2023 10:57:36 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1684951051toedm1f2
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 May 2023 01:57:30 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 1U/NVTUyJNR0Bdf3bNTIg9tVMMQ36KW+m0gOe7QYfuSjie+syXUksgUIyPwT9
+        XfFw8T5ZcY0Gquio8enXfYroGAwnsHycofnfTqboltbdqCDUUnRUVfDdQvLU4WvGApwZDmN
+        bAN6znioI8PEsk337ISXWj6upRE/YjYx52ag3fsAJyiq4tZ26fjpekhGMHr/nYoxUoDKTYU
+        6S9Cj0J1aASneoJI34cnjcZTI00YRCWzxAihgavquQbYb9F5spPI4fNfgj/l9yZIVq6KWXo
+        a6u2uupdH0bFQEDqTZhEIceDjXFL2DwMqyhdHjNld9/7nfjCGEzUsIU/oflxOuhOMH7GnTA
+        mW8SbP+DccbvKioNg2HMYwFQW6yUW75OfYEsj38yT1ZpwZ2SpCTFlWISeGvAQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 7132561189251988013
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
+Subject: [PATCH 09/13] tools/nolibc: sys_poll: riscv: use __NR_ppoll_time64 for rv32
+Date:   Thu, 25 May 2023 01:57:24 +0800
+Message-Id: <ec5af2ae25264eddce4b50380bfd24f9490eca75.1684949268.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
+References: <cover.1684949267.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230518055819.71585-1-wyes.karny@amd.com>
-In-Reply-To: <20230518055819.71585-1-wyes.karny@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:57:08 +0200
-Message-ID: <CAJZ5v0iR0tvS74s+EnzaSN-7urAWZGPgOEF4OTgaKgWNFueOgw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: amd-pstate: Update policy->cur for adjust perf
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gautham.shenoy@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 7:58 AM Wyes Karny <wyes.karny@amd.com> wrote:
->
-> Driver should update policy->cur after updating the frequency.
-> Currently amd_pstate doesn't update policy->cur when `adjust_perf`
-> is used. Which causes /proc/cpuinfo to show wrong cpu frequency.
-> Fix this by updating policy->cur with correct frequency value in
-> adjust_perf function callback.
->
-> - Before the fix: (setting min freq to 1.5 MHz)
->
-> [root@amd]# cat /proc/cpuinfo | grep "cpu MHz" | sort | uniq --count
->       1 cpu MHz         : 1777.016
->       1 cpu MHz         : 1797.160
->       1 cpu MHz         : 1797.270
->     189 cpu MHz         : 400.000
->
-> - After the fix: (setting min freq to 1.5 MHz)
->
-> [root@amd]# cat /proc/cpuinfo | grep "cpu MHz" | sort | uniq --count
->       1 cpu MHz         : 1753.353
->       1 cpu MHz         : 1756.838
->       1 cpu MHz         : 1776.466
->       1 cpu MHz         : 1776.873
->       1 cpu MHz         : 1777.308
->       1 cpu MHz         : 1779.900
->     183 cpu MHz         : 1805.231
->       1 cpu MHz         : 1956.815
->       1 cpu MHz         : 2246.203
->       1 cpu MHz         : 2259.984
->
-> Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
->
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 5a3d4aa0f45a..736dab69ba1e 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -479,12 +479,14 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->                                    unsigned long capacity)
->  {
->         unsigned long max_perf, min_perf, des_perf,
-> -                     cap_perf, lowest_nonlinear_perf;
-> +                     cap_perf, lowest_nonlinear_perf, max_freq;
->         struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->         struct amd_cpudata *cpudata = policy->driver_data;
-> +       unsigned int target_freq;
->
->         cap_perf = READ_ONCE(cpudata->highest_perf);
->         lowest_nonlinear_perf = READ_ONCE(cpudata->lowest_nonlinear_perf);
-> +       max_freq = READ_ONCE(cpudata->max_freq);
->
->         des_perf = cap_perf;
->         if (target_perf < capacity)
-> @@ -501,6 +503,10 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->         if (max_perf < min_perf)
->                 max_perf = min_perf;
->
-> +       des_perf = clamp_t(unsigned long, des_perf, min_perf, max_perf);
-> +       target_freq = div_u64(des_perf * max_freq, max_perf);
-> +       policy->cur = target_freq;
-> +
->         amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true,
->                         policy->governor->flags);
->         cpufreq_cpu_put(policy);
-> --
+rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
+__NR_ppoll after kernel commit d4c08b9776b3 ("riscv: Use latest system
+call ABI"), use __NR_ppoll_time64 instead.
 
-Applied under an edited subject, thanks!
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/std.h   | 1 +
+ tools/include/nolibc/sys.h   | 7 ++++++-
+ tools/include/nolibc/types.h | 6 ++++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
-I think you'd like this to go into 6.4 and "stable", right?
+diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
+index 83c0b0cb9564..221385c0e823 100644
+--- a/tools/include/nolibc/std.h
++++ b/tools/include/nolibc/std.h
+@@ -32,6 +32,7 @@ typedef   signed long         off_t;
+ typedef   signed long     blksize_t;
+ typedef   signed long      blkcnt_t;
+ typedef   signed long        time_t;
++typedef     long long       time64_t;
+ typedef     long long        loff_t;
+ 
+ #endif /* _NOLIBC_STD_H */
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 0ff77c0a06d7..08d38175bd7b 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -923,8 +923,13 @@ int pivot_root(const char *new, const char *old)
+ static __attribute__((unused))
+ int sys_poll(struct pollfd *fds, int nfds, int timeout)
+ {
+-#if defined(__NR_ppoll)
++#if defined(__NR_ppoll) || defined(__NR_ppoll_time64)
++#ifdef __NR_ppoll
+ 	struct timespec t;
++#else
++	struct timespec64 t;
++#define __NR_ppoll __NR_ppoll_time64
++#endif
+ 
+ 	if (timeout >= 0) {
+ 		t.tv_sec  = timeout / 1000;
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 15b0baffd336..ee914391439c 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -203,6 +203,12 @@ struct stat {
+ 	time_t    st_ctime;   /* time of last status change */
+ };
+ 
++/* needed by time64 syscalls */
++struct timespec64 {
++	time64_t	tv_sec;		/* seconds */
++	long		tv_nsec;	/* nanoseconds */
++};
++
+ /* WARNING, it only deals with the 4096 first majors and 256 first minors */
+ #define makedev(major, minor) ((dev_t)((((major) & 0xfff) << 8) | ((minor) & 0xff)))
+ #define major(dev) ((unsigned int)(((dev) >> 8) & 0xfff))
+-- 
+2.25.1
+
