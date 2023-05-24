@@ -2,317 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8B670F30D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBA070F30E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjEXJh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        id S231325AbjEXJhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjEXJgz (ORCPT
+        with ESMTP id S229460AbjEXJhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:36:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9EBA7;
-        Wed, 24 May 2023 02:36:54 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O7lGw1002007;
-        Wed, 24 May 2023 09:36:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=KO04TejNcw+K1nlzoaCwibJTPYCBLhl01pLzVmpMwK8=;
- b=B9Hg1Blpb2zA7DE/mAMdj6tYe5BoVFaiVp4Ep1rvk7tQ9IxpS2gbpFPdgBlmjTwQNPI8
- YLtMbSTQXykc8JKRU6SPiLHjMzIZJH7ormOJ28Y/5Y9qy/g5szffkxmT0eU+WaDcIPcB
- /G5sRUYi5obM+XXfC9GmhFEJxqlPNYn9c7H5W/00YEUHJ/iC66gkXSXUb0hIoPSZoHDN
- J3ZMVzhLhFCdQyZ4iJkz7uCxgp8FStjGQCrfZWG2JbyzXCgotRjYKU9Z7Q0mP0vogusw
- l4UrZlkNggwV4P2iGsUrl053i4dDW2Lz2vbk1nB2ycxXrNb2XHG54zxgiP6IUGL7u7dE jQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs805h044-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:36:40 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O9adLE011777
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:36:39 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 24 May 2023 02:36:33 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: [PATCH v4 3/3] arm64: dts: qcom: ipq9574: add thermal zone nodes
-Date:   Wed, 24 May 2023 15:06:11 +0530
-Message-ID: <e95b1413d825b1131c9b0bd1bffde1e0b3bb497b.1684920389.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1684920389.git.quic_varada@quicinc.com>
-References: <cover.1684920389.git.quic_varada@quicinc.com>
+        Wed, 24 May 2023 05:37:03 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DF2A1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:37:01 -0700 (PDT)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QR5Z61K5gz18LhL;
+        Wed, 24 May 2023 17:32:30 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 17:36:58 +0800
+Message-ID: <b0a08101-2f20-825a-5120-6662e1436821@huawei.com>
+Date:   Wed, 24 May 2023 17:36:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: StEralnYJLPvI1gyZ6G20ph9wnlWQhFf
-X-Proofpoint-GUID: StEralnYJLPvI1gyZ6G20ph9wnlWQhFf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_05,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- mlxlogscore=967 phishscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305240081
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     <andersson@kernel.org>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <soc@kernel.org>, <wanghuiqiang@huawei.com>,
+        <tanxiaofei@huawei.com>, <liuyonglong@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <20230522072211.8894-1-lihuisong@huawei.com>
+ <20230522072211.8894-2-lihuisong@huawei.com>
+ <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+ <928a893b-6596-8d40-ce0e-80059a363d11@huawei.com>
+ <20230523134135.jkkhcwfihflp775m@bogus>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230523134135.jkkhcwfihflp775m@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds thermal zone nodes for the various
-sensors present in IPQ9574
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
- 1 file changed, 208 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 15c9447..d162851 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -969,6 +969,214 @@
- 		};
- 	};
- 
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 3>;
-+
-+			trips {
-+				nss-top-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 4>;
-+
-+			trips {
-+				ubi_0-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 5>;
-+
-+			trips {
-+				ubi_1-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 6>;
-+
-+			trips {
-+				ubi_2-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 7>;
-+
-+			trips {
-+				ubi_3-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 8>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 9>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 10>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 11>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 12>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 13>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		wcss-phyb-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 14>;
-+
-+			trips {
-+				wcss_phyb-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		top-glue-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 15>;
-+
-+			trips {
-+				top_glue-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--- 
-2.7.4
-
+在 2023/5/23 21:41, Sudeep Holla 写道:
+> On Tue, May 23, 2023 at 07:57:42PM +0800, lihuisong (C) wrote:
+>> 在 2023/5/23 17:39, Sudeep Holla 写道:
+>>> On Mon, May 22, 2023 at 03:22:10PM +0800, Huisong Li wrote:
+>>>> The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
+>>>> for ensuring cache coherent on HiSilicon SoC. The performance of
+>>>> the application may be affected if some hccs ports are in non-full
+>>>> lane status, have a large number of CRC errors and so on.
+>>>>
+>>>> This driver provides the query interface of the health status and
+>>>> port information of HCCS on Kunpeng SoC.
+>>>>
+>>>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>>>> ---
+>>>>    MAINTAINERS                          |    6 +
+>>>>    drivers/soc/Kconfig                  |    1 +
+>>>>    drivers/soc/Makefile                 |    1 +
+>>>>    drivers/soc/hisilicon/Kconfig        |   19 +
+>>>>    drivers/soc/hisilicon/Makefile       |    2 +
+>>>>    drivers/soc/hisilicon/kunpeng_hccs.c | 1287 ++++++++++++++++++++++++++
+>>>>    drivers/soc/hisilicon/kunpeng_hccs.h |  196 ++++
+>>>>    7 files changed, 1512 insertions(+)
+>>>>    create mode 100644 drivers/soc/hisilicon/Kconfig
+>>>>    create mode 100644 drivers/soc/hisilicon/Makefile
+>>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
+>>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index eddbc48c61e9..fe0e796e8445 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -9399,6 +9399,12 @@ S:	Maintained
+>>>>    W:	http://www.hisilicon.com
+>>>>    F:	drivers/spi/spi-hisi-sfc-v3xx.c
+>>>> +HISILICON KUNPENG SOC HCCS DRIVER
+>>> s/HCCS/HCCS INFO or QUERY/ ?
+>>  From the current features, what you suggest is suitable.
+>> But this driver will support to the setting feature.
+> Ah OK, I wasn't aware of that, in that case it is fine to keep it as is
+> and add comment about future feature expansions so that the name makes
+It's not suitable to add it in advance.
+> more sense them. I assumed it is more a query interface.
+Yes, most of them are query interfaces.
+>
+> I also assume the settings with just control performance and is fully
+> safe and stability of the system is taken care.
+Yes, it will has an impact on performance and power consumption, but not 
+functionality.
+>
+> [...]
+>
+>>>> +
+>>>> +/* PCC defines */
+>>>> +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
+>>>> +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
+>>> I am not really sure if we keep duplicating this. I will try to cook up
+>>> a patch consolidating these.
+>> Yes, these info is better placed in a global header.
+>> Do I need to do this in this series?
+>> Or do not modify it, and then process all related code in your patch.
+> Fair enough, we can do that later. I don't want to block this for that reason.
+ok, thanks. will send v3 ASAP.
+>
