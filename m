@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4470370F812
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBFF70F813
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235554AbjEXNxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S235548AbjEXNxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235548AbjEXNxP (ORCPT
+        with ESMTP id S232786AbjEXNxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:53:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4B0D8
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:53:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2DC9621F38;
-        Wed, 24 May 2023 13:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684936392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dT1yNCcJpvvO2QbPL8e/KP4ylMe8xLmnrwlKlxBl7s=;
-        b=0rUGUqYV5NMfb+s8ioG0P3bHJ0LK8zZPW4FP2G6Og/U7/d2QSl3HEXqlTuj9Gc1IFFSiLB
-        c5A3n7TkekRBLR/JHb9HBbigaRnaM2hHlvoA5OGiR8jkWYinqSuF22iS6KSB2lZrvXvIdl
-        TcZEOp42qbvGQXyCkMTVVitu6pNW5p8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684936392;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dT1yNCcJpvvO2QbPL8e/KP4ylMe8xLmnrwlKlxBl7s=;
-        b=Lvoy8xSOk+0NSyEgmzvbYikH0sfGnRnwQIbb5QjsAMef3qho/SkyMcrerwqEN73h7SwZS5
-        lUC+CtlFrheoaqDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B318133E6;
-        Wed, 24 May 2023 13:53:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tosrAsgWbmS5FQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 13:53:12 +0000
-Message-ID: <70763661-b2a2-4bf2-f589-e0d71083f1bd@suse.cz>
-Date:   Wed, 24 May 2023 15:53:11 +0200
+        Wed, 24 May 2023 09:53:30 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3682BE7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:53:29 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-456f1cc1791so370864e0c.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684936408; x=1687528408;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gwD6u1FQmyHWNrVCzQVq2EupUkbSzu1n+bmMUn2xors=;
+        b=x/OZhZZmSq2dRD6mNfeySJSSo5YA2o1iEYhRSagkWYS+paY/sFf+hH4dawfGRb6O3D
+         2YSJSG2OMaxH4TOVaFT/323ksWvRuysQnKioxonW9WK8dz7/3Y/Pn4QGyt3wZs1cnxhR
+         bITZjBEWzrDMCMhKRykdkq6mjKXNd7WtpMAA3qsmcnw/tzyGAaxsilF/CwwTXEVhg2qL
+         TK07U+VsK6baeyFZyEP9sVAiAKKUySIt9MAj+VZe63dQQOcpfvDqxws6IEDWTK4Q8X3e
+         Do//jn2rCILhv9VPcHzNw3b/cLcytyFUxpM/GsUuwFt8B4riooXcCIaePYgNzpvMEXGL
+         WKWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684936408; x=1687528408;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gwD6u1FQmyHWNrVCzQVq2EupUkbSzu1n+bmMUn2xors=;
+        b=IP21DAJ4xQPpQSJyaZ43uz9tN9O18dPjpyIXF+fDHDddiwu2mo4sKMoXYZ4vzQ3IOS
+         EUJd/MKXM7xvSvSOrNlad5agHRsqf8fFjO+dnDmdzVgxv8PIhiV58NhtujmTsFemublj
+         npSzF1QcDzKwT3U9KddzT8TrPL5pVrn0tfwp0cZpux+JFYkSqYnG7aVGysFRVM6EcMgZ
+         UXMePnX2kZdDVrK4I2Xzw3qA2VLYzEIDucEif/Gxm4EQi9maNrynITuCSxA9mpn9PUPu
+         PqYhnQoOiEjvZx1Kfjd7u/TY6hPqJbiI6SkaBhGTb9mN/Tcx3fEgzdHZGWGHcZf/IqYB
+         uXsQ==
+X-Gm-Message-State: AC+VfDyYgNOczfnIpvl6VjFjBK73mIA77QTT+DTvwYXYCs4jxm8Yve5S
+        TWhPvA8YypqdhaILzAGLNbY9VfkkeuaFxksRVEpN2Q==
+X-Google-Smtp-Source: ACHHUZ5hKnnbNmvZwSmfJRv7UockG0+EXF9t2SP/QqfNqqmViCdG/K2WYajE36GExnQ2HykigEf0KdRa65oxKj0Nn9g=
+X-Received: by 2002:a1f:438d:0:b0:44f:ef57:c49a with SMTP id
+ q135-20020a1f438d000000b0044fef57c49amr5770132vka.11.1684936408028; Wed, 24
+ May 2023 06:53:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] mm/slab: add new flag SLAB_NO_MERGE to avoid merging per
- slab
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        David Sterba <dsterba@suse.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Roman Gushchin <roman.gushchin@linux.dev>
-References: <20230524101748.30714-1-dsterba@suse.com>
- <ZG4JYr14RpNQb8li@debian-BULLSEYE-live-builder-AMD64>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <ZG4JYr14RpNQb8li@debian-BULLSEYE-live-builder-AMD64>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230524035339.25185-1-qiang.zhang1211@gmail.com>
+In-Reply-To: <20230524035339.25185-1-qiang.zhang1211@gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 24 May 2023 19:23:16 +0530
+Message-ID: <CA+G9fYtXCMWObuaS64qb3FofiokK_nrq2tm8b8g2xDd8tyKTxw@mail.gmail.com>
+Subject: Re: [PATCH v3] workqueue: Fix WARN_ON_ONCE() triggers in worker_enter_idle()
+To:     Zqiang <qiang.zhang1211@gmail.com>
+Cc:     tj@kernel.org, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,59 +69,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 14:56, Hyeonggon Yoo wrote:
-> On Wed, May 24, 2023 at 12:17:48PM +0200, David Sterba wrote:
->> Add a flag that allows to disable merging per slab. This can be used for
->> more fine grained control over the caches or for debugging builds where
->> separate slabs can verify that no objects leak.
->> The slab_nomerge boot option is too coarse and would need to be enabled
->> on all testing hosts. 
-> 
-> Hello David,
-> 
-> There is no users nor interface to set this flag, I guess you're going
-> to use it by modifying source code, when debugging?
-> 
-> Does introducing new slub_debug option (i.e. slub_debug=N,pid_namespace)
-> work for your use case? (there are some boot-time slub_debug options described in
-> Documentation/mm/slub.rst)
++ Anders, LKFT
 
-Yeah, it supports globbing so it would be e.g. slub_debug=N,btrfs*
-That would deal with the "too coarse" aspect slab_nomerge. As for "need to
-be enabled on all testing hosts", is it more convenient to deploy a debug
-kernel build on them? Might be because you do that for other reasons
-already? Just want to clarify.
+On Wed, 24 May 2023 at 09:23, Zqiang <qiang.zhang1211@gmail.com> wrote:
+>
+> Currently, the nr_running can be modified from timer tick, that means
+> the timer tick can run in not-irq-protected critical section to modify
+> nr_runnig, consider the following scenario:
+>
+> CPU0
+> kworker/0:2 (events)
+>    worker_clr_flags(worker, WORKER_PREP | WORKER_REBOUND);
+>    ->pool->nr_running++;  (1)
+>
+>    process_one_work()
+>    ->worker->current_func(work);
+>      ->schedule()
+>        ->wq_worker_sleeping()
+>          ->worker->sleeping = 1;
+>          ->pool->nr_running--;  (0)
+>            ....
+>        ->wq_worker_running()
+>                ....
+>                CPU0 by interrupt:
+>                wq_worker_tick()
+>                ->worker_set_flags(worker, WORKER_CPU_INTENSIVE);
+>                  ->pool->nr_running--;  (-1)
+>                  ->worker->flags |= WORKER_CPU_INTENSIVE;
+>                ....
+>          ->if (!(worker->flags & WORKER_NOT_RUNNING))
+>            ->pool->nr_running++;    (will not execute)
+>          ->worker->sleeping = 0;
+>          ....
+>     ->worker_clr_flags(worker, WORKER_CPU_INTENSIVE);
+>       ->pool->nr_running++;  (0)
+>     ....
+>     worker_set_flags(worker, WORKER_PREP);
+>     ->pool->nr_running--;   (-1)
+>     ....
+>     worker_enter_idle()
+>     ->WARN_ON_ONCE(pool->nr_workers == pool->nr_idle && pool->nr_running);
+>
+> if the nr_workers is equal to nr_idle, due to the nr_running is not zero,
+> will trigger WARN_ON_ONCE().
+>
+> [    2.460602] WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999 worker_enter_idle+0xb2/0xc0
+> [    2.462163] Modules linked in:
+> [    2.463401] CPU: 0 PID: 63 Comm: kworker/0:2 Not tainted 6.4.0-rc2-next-20230519 #1
+> [    2.463771] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> [    2.465127] Workqueue:  0x0 (events)
+> [    2.465678] RIP: 0010:worker_enter_idle+0xb2/0xc0
+> ...
+> [    2.472614] Call Trace:
+> [    2.473152]  <TASK>
+> [    2.474182]  worker_thread+0x71/0x430
+> [    2.474992]  ? _raw_spin_unlock_irqrestore+0x28/0x50
+> [    2.475263]  kthread+0x103/0x120
+> [    2.475493]  ? __pfx_worker_thread+0x10/0x10
+> [    2.476355]  ? __pfx_kthread+0x10/0x10
+> [    2.476635]  ret_from_fork+0x2c/0x50
+> [    2.477051]  </TASK>
+>
+> This commit therefore add the check of worker->sleeping in wq_worker_tick(),
+> if the worker->sleeping is not zero, directly return.
+>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230519/testrun/17078554/suite/boot/test/clang-nightly-lkftconfig/log
+> Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
 
-BTW this was proposed as RFC few months ago but not pursued:
-https://lore.kernel.org/all/167396280045.539803.7540459812377220500.stgit@firesoul/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Tested-by: Anders Roxell <anders.roxell@linaro.org>
 
-I have no big objections, just wouldn't like to see its usage proliferate
-unconditionally into non-debug builds.
+Since the probability of occurrence of this problem is only 3%,
+Anders took this up and applied this on top of Linux next and
+tested for 500 boot tests and all looked good.
+Thanks, Anders.
 
->> There are some other ways how to disable merging,
->> e.g. a slab constructor but this disables poisoning besides that it adds
->> additional overhead. Other flags are internal and may have other
->> semantics.
->>
->> A concrete example what motivates the flag. During 'btrfs balance' slab
->> top reported huge increase in caches like
->> 
->>   1330095 1330095 100%    0.10K  34105       39    136420K Acpi-ParseExt
->>   1734684 1734684 100%    0.14K  61953       28    247812K pid_namespace
->>   8244036 6873075  83%    0.11K 229001       36    916004K khugepaged_mm_slot
->> 
->> which was confusing and that it's because of slab merging was not the
->> first idea.  After rebooting with slab_nomerge all the caches were from
->> btrfs_ namespace as expected.
->>
->> Signed-off-by: David Sterba <dsterba@suse.com>
->> ---
->>  include/linux/slab.h | 3 +++
->>  mm/slab_common.c     | 2 +-
->>  2 files changed, 4 insertions(+), 1 deletion(-)
->> 
->> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> 
-> Thanks,
-> 
+- Naresh
 
+> ---
+>  kernel/workqueue.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 9c5c1cfa478f..a028b851333e 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -1051,7 +1051,7 @@ void wq_worker_running(struct task_struct *task)
+>  {
+>         struct worker *worker = kthread_data(task);
+>
+> -       if (!worker->sleeping)
+> +       if (!READ_ONCE(worker->sleeping))
+>                 return;
+>
+>         /*
+> @@ -1071,7 +1071,7 @@ void wq_worker_running(struct task_struct *task)
+>          */
+>         worker->current_at = worker->task->se.sum_exec_runtime;
+>
+> -       worker->sleeping = 0;
+> +       WRITE_ONCE(worker->sleeping, 0);
+>  }
+>
+>  /**
+> @@ -1097,10 +1097,10 @@ void wq_worker_sleeping(struct task_struct *task)
+>         pool = worker->pool;
+>
+>         /* Return if preempted before wq_worker_running() was reached */
+> -       if (worker->sleeping)
+> +       if (READ_ONCE(worker->sleeping))
+>                 return;
+>
+> -       worker->sleeping = 1;
+> +       WRITE_ONCE(worker->sleeping, 1);
+>         raw_spin_lock_irq(&pool->lock);
+>
+>         /*
+> @@ -1143,8 +1143,13 @@ void wq_worker_tick(struct task_struct *task)
+>          * If the current worker is concurrency managed and hogged the CPU for
+>          * longer than wq_cpu_intensive_thresh_us, it's automatically marked
+>          * CPU_INTENSIVE to avoid stalling other concurrency-managed work items.
+> +        *
+> +        * The worker->sleeping is true means that the worker doing voluntary
+> +        * switch and will not hogged the CPU, or the worker is running again
+> +        * but the worker->sleeping has not been reset, in the process of executing
+> +        * wq_worker_running().
+>          */
+> -       if ((worker->flags & WORKER_NOT_RUNNING) ||
+> +       if ((worker->flags & WORKER_NOT_RUNNING) || READ_ONCE(worker->sleeping) ||
+>             worker->task->se.sum_exec_runtime - worker->current_at <
+>             wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
+>                 return;
+> --
+> 2.17.1
+>
