@@ -2,55 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E2070EE9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F314B70EEA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239644AbjEXGyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S239734AbjEXGyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239787AbjEXGxV (ORCPT
+        with ESMTP id S239748AbjEXGyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:53:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A8C18D;
-        Tue, 23 May 2023 23:52:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D69663997;
-        Wed, 24 May 2023 06:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B12FC433D2;
-        Wed, 24 May 2023 06:52:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684911175;
-        bh=lmwb1wYkgWX0fEzusZ87So9a04WPkfbmwCPCTbS/1F4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YKWZD4VMWbep7swzgp5lKOZv0zxBlSQGwGGfbgnlaO2O9Cg/+UnGmWzDRl3ncpAuE
-         Bn53CH5r1Hgbo3OAlE1CzunTtTghYM+T6uLL8PZ7R8fD+taqrjIk6ai4T0ucmSudaq
-         CoPR0uUcUdt8Knpkh15IPaSSHD8TMaWfowKmYiRdHaDJXOMyWlCSQouEihChRwXIa8
-         FyEM1CZpBcko7yDpINz8BwJrfWWi4RU5JLVkRA9n2PklfQubPR2xYwq3Tz6hTWe31O
-         +Rd+OSWLnOEsLKPVB9tYTBnuBmwyHy954rGys3hRENCgrOQXN72rgcxsZ4OjvSO00C
-         pYFOS7M1fGUTQ==
-Date:   Wed, 24 May 2023 12:22:51 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Subject: Re: [PATCH v2] dmaengine: qcom: bam_dma: allow omitting
- num-{channels,ees}
-Message-ID: <ZG20Q3GFxIO+SQ9d@matsya>
-References: <20230518-bamclk-dt-v2-1-a1a857b966ca@gerhold.net>
+        Wed, 24 May 2023 02:54:02 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10E61720
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:53:21 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id 71dfb90a1353d-4571d25d288so427170e0c.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684911201; x=1687503201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JO87M/SJhovAggTv+SZMv/UEkxC893mdoY4ZmtFqCiM=;
+        b=rfQ7bSP2vE7mJKsJC4cAWkHJ/cLEDIQJVeErbHBkoaK3JPALG9MrILncV9y83nqlEk
+         yuITnM5++sV2wowMHpRnbzrsoR45eaNVVxGuKuHeuSGjCxTzXCBQasOeX4aFDIUGe21C
+         FYyq22JGvDaxRdI/Rr7BZrpOtwsdRqBr+VAxT6eRYCGvSTyLX9Ebb6wE1DEEArTTUEPi
+         yXywhhzjoCUlNtuMT/vz+Qp73x2wc+cZNpVKWNQNU+QwZi402iNNmp+fsZ8KjYroHUzC
+         ZEp1f6xOjghQ9UjEkcnO61uQ/ms5/1e59RVQlKSwqhsqarbsbdHq++1iWYvOq+Mp2sBG
+         TI2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684911201; x=1687503201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JO87M/SJhovAggTv+SZMv/UEkxC893mdoY4ZmtFqCiM=;
+        b=IH5q0lJ7H+HuzISJWiiEszj3o58p2bWcNx44wiGRCQQTKmwZP2UQTqCh3ei8TZeKKP
+         RkXjX/w7C/dz8tfunPxCwL8czolNaxg1w58kgyXjp9EavgWMntZ29DJSCwDMmRu6kh3/
+         zj4cbcVMlO4cJnvbFzGe2pZ+iKV9x0BPwQZavQeJL3Z2eD+AwUOBxjzWl66ppzgDNmwK
+         M1sNw9bVMARgZllyukghuYjVthf2gaC7kkXikPgmeAG06Y8P8nyBFhlwnvE/r1sNlfzA
+         qdf6p98Fqsz8aDHZLYc7ThaCGCrYGrYuqxeDxKA9cpJE2hcsYS5+R4S4wtO+sewVbJQF
+         V1KA==
+X-Gm-Message-State: AC+VfDx+65oG3xpagqXgBIb8G2pB0iJ7OUUzHOfamoYs1gqAwHzPVnUX
+        NL7Nr+LAzK+s1SQ2IfAOG702YKztRDj/8yoQyXeZ9Q==
+X-Google-Smtp-Source: ACHHUZ50MQjnVQqFvLZLa4pXsE5ODRH7KIMjO/rsm9DDDSnGx3AZ8r/oCWy2VtFRm7AgjClyg4HJ9OCW8zhPFdHDGmM=
+X-Received: by 2002:a1f:3d81:0:b0:44f:e192:d407 with SMTP id
+ k123-20020a1f3d81000000b0044fe192d407mr6119073vka.9.1684911200780; Tue, 23
+ May 2023 23:53:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518-bamclk-dt-v2-1-a1a857b966ca@gerhold.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230523164950.435226211@linuxfoundation.org>
+In-Reply-To: <20230523164950.435226211@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 24 May 2023 12:23:09 +0530
+Message-ID: <CA+G9fYtu2VeQfsjbLngwEnV9rEP3oBiuyaJjMSOe7z+ys5hdig@mail.gmail.com>
+Subject: Re: [PATCH 6.3 000/363] 6.3.4-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,33 +73,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19-05-23, 13:00, Stephan Gerhold wrote:
-> The bam_dma driver needs to know the number of channels and execution
-> environments (EEs) at probe time. If we are in full control of the BAM
-> controller this information can be obtained from the BAM identification
-> registers (BAM_REVISION/BAM_NUM_PIPES).
-> 
-> When the BAM is "controlled remotely" it is more complicated. The BAM
-> might not be on at probe time, so reading the registers could fail.
-> This is why the information must be added to the device tree in this
-> case, using "num-channels" and "qcom,num-ees".
-> 
-> However, there are also some BAM instances that are initialized by
-> something else but we still have a clock that allows to turn it on when
-> needed. This can be set up in the DT with "qcom,controlled-remotely"
-> and "clocks" and is already supported by the bam_dma driver. Examples
-> for this are the typical BLSP BAM instances on older SoCs, QPIC BAM
-> (for NAND) and the crypto BAM on some SoCs.
-> 
-> In this case, there is no need to read "num-channels" and
-> "qcom,num-ees" from the DT. The BAN can be turned on using the clock
-> so we can just read it from the BAM registers like in the normal case.
-> 
-> Check for the BAM clock earlier and skip reading "num-channels" and
-> "qcom,num-ees" if it is present to allow simplifying the DT description
-> a bit.
+On Tue, 23 May 2023 at 22:31, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.3.4 release.
+> There are 363 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 25 May 2023 16:48:37 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.3.4-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Applied, thanks
 
--- 
-~Vinod
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.3.4-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.3.y
+* git commit: a37c304c022dd76ffb05897280b5a45da06cb119
+* git describe: v6.3.3-364-ga37c304c022d
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.3=
+-364-ga37c304c022d
+
+## Test Regressions (compared to v6.3.3)
+
+## Metric Regressions (compared to v6.3.3)
+
+## Test Fixes (compared to v6.3.3)
+
+## Metric Fixes (compared to v6.3.3)
+
+## Test result summary
+total: 182851, pass: 158943, fail: 3522, skip: 20124, xfail: 262
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 145 total, 144 passed, 1 failed
+* arm64: 54 total, 53 passed, 1 failed
+* i386: 41 total, 40 passed, 1 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 36 passed, 2 failed
+* riscv: 26 total, 25 passed, 1 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 46 total, 46 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-mincore
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
