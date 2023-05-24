@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BEA710094
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9CA710096
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbjEXWCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S236358AbjEXWDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjEXWC1 (ORCPT
+        with ESMTP id S229547AbjEXWDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:02:27 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6504E122
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:02:25 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ae3ed1b0d6so5476605ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:02:25 -0700 (PDT)
+        Wed, 24 May 2023 18:03:32 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BF210B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:03:31 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d2e8a842cso1138246b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:03:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684965745; x=1687557745;
+        d=gmail.com; s=20221208; t=1684965811; x=1687557811;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3YWyl8KAnYMY3D/I21UIgHLYmM84T0Q3/Sm/8BPVQUI=;
-        b=LPqbmdVX9HYUkaHYFz3nBxx/67eBf1zbvSVPtwLhCxDrgm1FK/D+UJD7XfB7nb9kOM
-         HTVVfuFV9nBTVTXbHtsnE1daP6kyCjbOb1q5muMThNVmmJAuDwKH8V7zI6/6Zk26hd10
-         hrwfbspSp0no4vIButevlsq+4nQQ4M0X+QedN7XPQqdEnpiGQpnDiUcnYsY7aALmm96p
-         nrJLRH1s+AGyzoH9LJbX8e3bUWlHaEXpZi9ZNE4t0QlUnqjxMyqj+nxWUAJKUop6Kfjp
-         0+4ETBPtINT/qwQEB6ASt3YG/xtEpLGQuPuAU4+r38xqJnCeq1YWSD3Qg+kA6+2A6zKy
-         hwmw==
+        bh=JZ5PDW7meFLPxJz6yk7BxpA6R+nIgkvFNvqiUV7WSgc=;
+        b=Ayznotjh2PSxFB94LzDpF4LwhkttUa6Fw0rGnuKWalMVacOTK7mV4CL0xBF1LKo1ml
+         8F9adX46inH2F4zNJq0jstItuu8nRm0U+Duu/2IoiUC7lDVQUy7ShxgNrnKcLAlFXFxm
+         2S2KchlyJGh9sf/KftGjh4MBYGE20QWUh+Ke+AqYZMipx5+PvGbpNAlWuEO2RxATkKLZ
+         w5DUiOJTClo0Ug7sbG2GdQC1F2ZRPDgmmi9Fjtrni/cJTqtSIW8YXDBRO1cdytCaotLo
+         Up5sehrer4IUUfIPZQmj06mLUB01EYvtDvdjYGulrgJh+XXbKrA1qt3e2khdwgD1VEgi
+         P8pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684965745; x=1687557745;
+        d=1e100.net; s=20221208; t=1684965811; x=1687557811;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3YWyl8KAnYMY3D/I21UIgHLYmM84T0Q3/Sm/8BPVQUI=;
-        b=HIXK421ZspB6MkCaRqvZyQeiUROXChRvsArbhUzz/iYN7f7k/J7g7wjR5LJK5xjddQ
-         /b1KLPCaEC3/w2Oo/VyTdOAP0t3muQrQxxzz4lhtS+ko3LWyLzEotjbRL5/KHWy1gFsY
-         hAfDQIVPW9AhYt+7fdJNxwNuRA3eFfIObPX0+Np2Ih5HQmBe2Y5AHRkk5sQPGYpQ6P6e
-         53HYJ0XbWbQx2Bql2QKOrtghEKhBF6aMt3BQYJ5NgBmb2CfIwp5n0TX/wVX9K3IbOj13
-         4dyqHHA9+D1kGJIXtrPS9ABvw09TjKRQEW2+dFt/9xX2JDZEf+FZROaMrFSLDDIBbcBb
-         aJCw==
-X-Gm-Message-State: AC+VfDz3AJ5Lfn2mNGqQH/VUO+i96c1IAOLt9g5MZDc7DKPktsEh9HQD
-        3xdfkd4ygNK2XkbDhgb3fZXSPQARgjg=
-X-Google-Smtp-Source: ACHHUZ77I9UbO05antuwYvXJvLrG1aVY9oWbhzV8QaHmfWLYDdLaShWYUZWsbXsd0eWsozGunOjKIA==
-X-Received: by 2002:a17:903:25c1:b0:19f:8ad5:4331 with SMTP id jc1-20020a17090325c100b0019f8ad54331mr15961594plb.38.1684965744510;
-        Wed, 24 May 2023 15:02:24 -0700 (PDT)
+        bh=JZ5PDW7meFLPxJz6yk7BxpA6R+nIgkvFNvqiUV7WSgc=;
+        b=XHIPlwNRgfqZN4a3xyeqGHX4TUJ9b/N0QRnkDdWsBspNI6SrB7T5319lml7Yj9RrVF
+         SJAsdU5Nf5yKHwHUx9Buw5Z/YNNXRxn9F+EJ1YmATDAIx3+a91X1Oyh0IhDbiY0FkKI+
+         igPcQPzneqbJWJbm/lrzTyOXVTsk2X0BLtmK454RQv7me1l5ayccnrPD1QTZtfseYwoo
+         9rbjUHnCVf6f9c1Mffy+//bJyvQVkRlhJs0PTC1ZhQhqa0r1qBIAbrPHpkcvLKsBa7Nc
+         tEmpCGo4xqLD2Nw5P0BCK1A2CelzJWD11ljECE1orjXXWRv+6WKpTo6h4nlXiIypPiWK
+         0KHg==
+X-Gm-Message-State: AC+VfDzZeipSxx6FpZHGTxQi9MiNUruFkwZBPILGa0RAboOMo3jLmcHT
+        bpdPrfb9q393Wrz/pG1bTco=
+X-Google-Smtp-Source: ACHHUZ6NAjayIhqnURTW454ydwuEShK8anCKtU3THGGPIXmBPlPIkL3oyYf8zNJ7j4GkKAkqxncbHQ==
+X-Received: by 2002:a05:6a00:1248:b0:643:96bc:b292 with SMTP id u8-20020a056a00124800b0064396bcb292mr5226948pfi.5.1684965810460;
+        Wed, 24 May 2023 15:03:30 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::5:be57])
-        by smtp.gmail.com with ESMTPSA id bj6-20020a170902850600b001a183ade911sm9216980plb.56.2023.05.24.15.02.23
+        by smtp.gmail.com with ESMTPSA id y21-20020aa78555000000b00642c5ef6050sm8125987pfn.173.2023.05.24.15.03.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 15:02:24 -0700 (PDT)
+        Wed, 24 May 2023 15:03:30 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 24 May 2023 12:02:22 -1000
+Date:   Wed, 24 May 2023 12:03:28 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Zqiang <qiang.zhang1211@gmail.com>
-Cc:     jiangshanlai@gmail.com, naresh.kamboju@linaro.org,
-        linux-kernel@vger.kernel.org
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Zqiang <qiang.zhang1211@gmail.com>, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org
 Subject: Re: [PATCH v3] workqueue: Fix WARN_ON_ONCE() triggers in
  worker_enter_idle()
-Message-ID: <ZG6JbudBJ3wAcSaU@slm.duckdns.org>
+Message-ID: <ZG6JsJvWRWu8kZYC@slm.duckdns.org>
 References: <20230524035339.25185-1-qiang.zhang1211@gmail.com>
+ <CA+G9fYtXCMWObuaS64qb3FofiokK_nrq2tm8b8g2xDd8tyKTxw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230524035339.25185-1-qiang.zhang1211@gmail.com>
+In-Reply-To: <CA+G9fYtXCMWObuaS64qb3FofiokK_nrq2tm8b8g2xDd8tyKTxw@mail.gmail.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -75,141 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, May 24, 2023 at 07:23:16PM +0530, Naresh Kamboju wrote:
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> 
+> Since the probability of occurrence of this problem is only 3%,
+> Anders took this up and applied this on top of Linux next and
+> tested for 500 boot tests and all looked good.
+> Thanks, Anders.
 
-I updated the comment and description and applied the patch to wq/for-6.5.
+This was a tricky bug and I really appreciate the bug report and testing.
+Thank you so much.
 
-Thanks.
-
-From c8f6219be2e58d7f676935ae90b64abef5d0966a Mon Sep 17 00:00:00 2001
-From: Zqiang <qiang.zhang1211@gmail.com>
-Date: Wed, 24 May 2023 11:53:39 +0800
-Subject: [PATCH] workqueue: Fix WARN_ON_ONCE() triggers in worker_enter_idle()
-
-Currently, pool->nr_running can be modified from timer tick, that means the
-timer tick can run nested inside a not-irq-protected section that's in the
-process of modifying nr_running. Consider the following scenario:
-
-CPU0
-kworker/0:2 (events)
-   worker_clr_flags(worker, WORKER_PREP | WORKER_REBOUND);
-   ->pool->nr_running++;  (1)
-
-   process_one_work()
-   ->worker->current_func(work);
-     ->schedule()
-       ->wq_worker_sleeping()
-         ->worker->sleeping = 1;
-         ->pool->nr_running--;  (0)
-           ....
-       ->wq_worker_running()
-               ....
-               CPU0 by interrupt:
-               wq_worker_tick()
-               ->worker_set_flags(worker, WORKER_CPU_INTENSIVE);
-                 ->pool->nr_running--;  (-1)
-	         ->worker->flags |= WORKER_CPU_INTENSIVE;
-               ....
-         ->if (!(worker->flags & WORKER_NOT_RUNNING))
-           ->pool->nr_running++;    (will not execute)
-         ->worker->sleeping = 0;
-         ....
-    ->worker_clr_flags(worker, WORKER_CPU_INTENSIVE);
-      ->pool->nr_running++;  (0)
-    ....
-    worker_set_flags(worker, WORKER_PREP);
-    ->pool->nr_running--;   (-1)
-    ....
-    worker_enter_idle()
-    ->WARN_ON_ONCE(pool->nr_workers == pool->nr_idle && pool->nr_running);
-
-if the nr_workers is equal to nr_idle, due to the nr_running is not zero,
-will trigger WARN_ON_ONCE().
-
-[    2.460602] WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999 worker_enter_idle+0xb2/0xc0
-[    2.462163] Modules linked in:
-[    2.463401] CPU: 0 PID: 63 Comm: kworker/0:2 Not tainted 6.4.0-rc2-next-20230519 #1
-[    2.463771] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-[    2.465127] Workqueue:  0x0 (events)
-[    2.465678] RIP: 0010:worker_enter_idle+0xb2/0xc0
-...
-[    2.472614] Call Trace:
-[    2.473152]  <TASK>
-[    2.474182]  worker_thread+0x71/0x430
-[    2.474992]  ? _raw_spin_unlock_irqrestore+0x28/0x50
-[    2.475263]  kthread+0x103/0x120
-[    2.475493]  ? __pfx_worker_thread+0x10/0x10
-[    2.476355]  ? __pfx_kthread+0x10/0x10
-[    2.476635]  ret_from_fork+0x2c/0x50
-[    2.477051]  </TASK>
-
-This commit therefore add the check of worker->sleeping in wq_worker_tick(),
-if the worker->sleeping is not zero, directly return.
-
-tj: Updated comment and description.
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
-Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230519/testrun/17078554/suite/boot/test/clang-nightly-lkftconfig/log
-Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
----
- kernel/workqueue.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index ee16ddb0647c..3ad6806c7161 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1051,7 +1051,7 @@ void wq_worker_running(struct task_struct *task)
- {
- 	struct worker *worker = kthread_data(task);
- 
--	if (!worker->sleeping)
-+	if (!READ_ONCE(worker->sleeping))
- 		return;
- 
- 	/*
-@@ -1071,7 +1071,7 @@ void wq_worker_running(struct task_struct *task)
- 	 */
- 	worker->current_at = worker->task->se.sum_exec_runtime;
- 
--	worker->sleeping = 0;
-+	WRITE_ONCE(worker->sleeping, 0);
- }
- 
- /**
-@@ -1097,10 +1097,10 @@ void wq_worker_sleeping(struct task_struct *task)
- 	pool = worker->pool;
- 
- 	/* Return if preempted before wq_worker_running() was reached */
--	if (worker->sleeping)
-+	if (READ_ONCE(worker->sleeping))
- 		return;
- 
--	worker->sleeping = 1;
-+	WRITE_ONCE(worker->sleeping, 1);
- 	raw_spin_lock_irq(&pool->lock);
- 
- 	/*
-@@ -1143,8 +1143,15 @@ void wq_worker_tick(struct task_struct *task)
- 	 * If the current worker is concurrency managed and hogged the CPU for
- 	 * longer than wq_cpu_intensive_thresh_us, it's automatically marked
- 	 * CPU_INTENSIVE to avoid stalling other concurrency-managed work items.
-+	 *
-+	 * Set @worker->sleeping means that @worker is in the process of
-+	 * switching out voluntarily and won't be contributing to
-+	 * @pool->nr_running until it wakes up. As wq_worker_sleeping() also
-+	 * decrements ->nr_running, setting CPU_INTENSIVE here can lead to
-+	 * double decrements. The task is releasing the CPU anyway. Let's skip.
-+	 * We probably want to make this prettier in the future.
- 	 */
--	if ((worker->flags & WORKER_NOT_RUNNING) ||
-+	if ((worker->flags & WORKER_NOT_RUNNING) || READ_ONCE(worker->sleeping) ||
- 	    worker->task->se.sum_exec_runtime - worker->current_at <
- 	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
- 		return;
 -- 
-2.40.1
-
+tejun
