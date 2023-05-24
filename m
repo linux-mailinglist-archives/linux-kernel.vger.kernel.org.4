@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FE470F910
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E865E70F912
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbjEXOs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S235594AbjEXOsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234014AbjEXOsZ (ORCPT
+        with ESMTP id S231773AbjEXOsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:48:25 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBB0130;
-        Wed, 24 May 2023 07:48:24 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3a166f8e9so1069993e87.0;
-        Wed, 24 May 2023 07:48:24 -0700 (PDT)
+        Wed, 24 May 2023 10:48:30 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20987130;
+        Wed, 24 May 2023 07:48:28 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-76c5558ba95so32047939f.1;
+        Wed, 24 May 2023 07:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684939702; x=1687531702;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XMA9OrU/15fPUa0Dy5HWt9/3JbIUzxDlly+e73u9etQ=;
-        b=SRGgeknfaJW9HxYvJDQYT3/MtL3CtkbovJiM1N4FuHjrfmsuijxccWeL8T6BZ8srnn
-         B67fpywaBScdbX4GcRdGuZu9+uQcFIvdYrmuUY4lfx6++q0iUdE/J0mIAZ/0D7f14YpP
-         h77AhZOR8avLjbV++eaHDlilOwr3Yn9StKQqMsVsEvZovwU1IL0b+HVgg++Xv4w1RRYN
-         mLsmXdy2ZHn8Ltv1yQEXmYTBtZjzju/HSAg8hg8pJR3VkMm+/5pqG6WoHf//uxqcp+nY
-         iiGopGp1bIbWstvn8UufMhd8O0tJV/pIO8kSJq11hZ9wBlT0wc+l0E1uqZgs0IcJPu3C
-         wOJw==
+        d=gmail.com; s=20221208; t=1684939707; x=1687531707;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fXem3yKXOihJJdx17tUBQkjwgvhxr2WQLiz8jXaVkhE=;
+        b=FlMIwTim4LKgFxNH+zhsenhJP4RenIiD00DuPobzZ27zTWHuvDDRdkoGECsDn4pA96
+         rkU1L103lIgwpF6y43ixGXnqBUUuIprszE9K+CKXdIQWIfRVutaWNL1MgscqT4Ebumsl
+         W6rPW03pey7/xLqD9DxGYOy3tLc3ChnBm19L48mzT9aIrJCrW/VYL1W8LfRH6uPXwCZQ
+         luv2DwDSGJYi1JKn6Wzwpyn3tYFfjYdJ/t8VSBqCEvO3w1hNuHMBNPswH0ieG9a2JQRi
+         TUfrb6eUmrdziGVOnlIYXB/7chtRC7Pq/4K7+JFXFInkLgax0x2fJhoKmNmKdeOWzmul
+         Q6Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684939702; x=1687531702;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XMA9OrU/15fPUa0Dy5HWt9/3JbIUzxDlly+e73u9etQ=;
-        b=eWiu+Q2CW308vnDpsP4Hgg7Ga0VIl6WyFebjn8uyjBu1W3cuKpSMyFm0RWIbzS/hll
-         Q08xLhaevcyLiOfqktRNSq68VzHAmBgFZCttzObE7fyO8rdr/1uFyVgLZ+wzzid1mazI
-         obcZHPweK+/HqyePlhZLhMwiigzW4P8zpF7GD5KhuN7Ns2jkgodVEQVCItPTY5LFXNBc
-         LwJX+OPR2fsm6E+ksh8lwgvrSs/qc2A5TLazZ21bKekvS3JupNA4PsNfPom47mXx8raa
-         Tyu6f1z0bFoIELKSWmno/Vy7X5fjtr3L1K5erVN5YMTjjftVRI3JyG90fbGYo9tRNLJm
-         AaPw==
-X-Gm-Message-State: AC+VfDwY0Nryz0cb8gJw4saC2mukfJhe6/NUEhT+FAXqyHIiWgAgzdp5
-        62E8VFQs315npLjkqnlbJS4=
-X-Google-Smtp-Source: ACHHUZ5XkiPQ059g/mB5V15M6VwZz2Sbq592VYrkn4uU78BxhyGBj66JRl7gvxctkgOXcoC2bcw4Gg==
-X-Received: by 2002:a05:6512:3d0d:b0:4f4:7a5:e800 with SMTP id d13-20020a0565123d0d00b004f407a5e800mr3788949lfv.10.1684939702123;
-        Wed, 24 May 2023 07:48:22 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id u22-20020ac243d6000000b004f14535a962sm1750995lfl.174.2023.05.24.07.48.19
+        d=1e100.net; s=20221208; t=1684939707; x=1687531707;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fXem3yKXOihJJdx17tUBQkjwgvhxr2WQLiz8jXaVkhE=;
+        b=PHOwvtng37BpTMehbTyD9v6LROvhyMrECkASOhcFmCnh6E+PSpi14I4yN6GcrHHyfL
+         PVnEvAnzWiVEWNKqsPNiL9wTywuJvtf5FfSg5ZTYSEx29o3twTKo5z7xg+4/M1BixmC3
+         Blkmb7vDESnvMr6bizqXEjOV2KimEKmmZ14YHw9jMpngxyv3HedtlLYjMn4mJg9f6qBf
+         IQkDMa5tyu35y6fZ41wXtVgmWDmL4/jUXkLklVExb03YKnuHwmPh4maDq3OLVy/vsUXn
+         6GMAYWoL53RcW4hIMgSIbBWArEIDRi67jDT1qkAWV7/ySisCwPQ5TLVmL7VhEAVXOjOE
+         K3yA==
+X-Gm-Message-State: AC+VfDwfA+V1UKosug2zPInDGyDKvPs77g9ZBeEdqmdqkXypQmgJh2cb
+        inTxAMo13mQ5bSoDYu1IS0m0U6e4yYRAZA==
+X-Google-Smtp-Source: ACHHUZ7JrqUKTCOM6ub887EdDypsGhllvk8ADf8XHgpBckkrWx13A81YEYd+2AW3oPp9iVKGhBTZ0A==
+X-Received: by 2002:a6b:750c:0:b0:760:ed78:a252 with SMTP id l12-20020a6b750c000000b00760ed78a252mr11717592ioh.9.1684939707197;
+        Wed, 24 May 2023 07:48:27 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id r22-20020a6bd916000000b0076efc7f0dd4sm3398910ioc.42.2023.05.24.07.48.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 07:48:21 -0700 (PDT)
-Date:   Wed, 24 May 2023 17:48:17 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 03/30] net: dsa: mt7530: properly support
- MT7531AE and MT7531BE
-Message-ID: <20230524144817.dubqwmfbthes2ggh@skbuf>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-4-arinc.unal@arinc9.com>
+        Wed, 24 May 2023 07:48:26 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>
+Subject: [PATCH v2] leds: as3645a: Replace strlcpy with strscpy
+Date:   Wed, 24 May 2023 14:48:23 +0000
+Message-ID: <20230524144824.2360607-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230522121532.86610-4-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:15:05PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Introduce the p5_sgmii field to store the information for whether port 5
-> has got SGMII or not.
-> 
-> Move the comment about MT7531AE and MT7531BE to mt7531_setup(), where the
-> switch is identified.
-> 
-> Get rid of mt7531_dual_sgmii_supported() now that priv->p5_sgmii stores the
-> information. Address the code where mt7531_dual_sgmii_supported() is used.
-> 
-> Get rid of mt7531_is_rgmii_port() which just prints the opposite of
-> priv->p5_sgmii.
-> 
-> Remove P5_INTF_SEL_GMAC5_SGMII. The p5_interface_select enum is supposed to
-> represent the mode that port 5 is being used in, not the hardware
-> information of port 5. Set p5_intf_sel to P5_INTF_SEL_GMAC5 instead, if
-> port 5 is not dsa_is_unused_port().
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Acked-by: Daniel Golle <daniel@makrotopia.org>
-> ---
+Part of a tree-wide effort to remove deprecated strlcpy()[1] and replace
+it with strscpy()[2]. No return values were used, so direct replacement
+is safe.
 
-Pretty busy patch, and after reading it, I'm not sure:
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-- why? (this seems to be absent from the commit message)
-- how are MT7531AE and MT7531BE supported any more properly after this
-  change, as the commit title claims
-- what is the overall effect, other than just refactoring. If that's
-  all, what's written on the tin needs to be a better representation of
-  what's inside.
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+v1: https://lore.kernel.org/all/20230523021150.2406032-1-azeemshaikh38@gmail.com/
 
-Pure refactoring is not a bad goal in itself, as long as we're on the
-same page that there is a justification which makes the new code better
-than the old one.
+Changes in v2:
+ - Updated subject and commit log.
+ 
+ drivers/leds/flash/leds-as3645a.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/leds/flash/leds-as3645a.c b/drivers/leds/flash/leds-as3645a.c
+index bb2249771acb..7dc574b18f5f 100644
+--- a/drivers/leds/flash/leds-as3645a.c
++++ b/drivers/leds/flash/leds-as3645a.c
+@@ -651,8 +651,8 @@ static int as3645a_v4l2_setup(struct as3645a *flash)
+ 		},
+ 	};
+ 
+-	strlcpy(cfg.dev_name, led->dev->kobj.name, sizeof(cfg.dev_name));
+-	strlcpy(cfgind.dev_name, flash->iled_cdev.dev->kobj.name,
++	strscpy(cfg.dev_name, led->dev->kobj.name, sizeof(cfg.dev_name));
++	strscpy(cfgind.dev_name, flash->iled_cdev.dev->kobj.name,
+ 		sizeof(cfgind.dev_name));
+ 
+ 	flash->vf = v4l2_flash_init(
+-- 
+2.40.1.698.g37aff9b760-goog
+
+
