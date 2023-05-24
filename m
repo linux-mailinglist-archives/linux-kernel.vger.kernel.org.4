@@ -2,395 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C1570F1EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF4770F207
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbjEXJO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S240064AbjEXJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240322AbjEXJO2 (ORCPT
+        with ESMTP id S240660AbjEXJUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:14:28 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED7F90;
-        Wed, 24 May 2023 02:14:26 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O9CPV4021273;
-        Wed, 24 May 2023 09:14:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RrGBhtQ1IB2u4c/+dFXnmueROB9DXKPn4rWiF4pSDKM=;
- b=lubalDbZ0lYhRooMJymNP8tMgwx0EKbioh3Fljg/TpBGOqvaglzi1L1/lYsOjn+VBAMq
- k3G0SVvdXhpKIMapIXLT19QPkqE4azOj7N0YBavGpK29pVz2LcOdVaicb5bTYCcvXVyp
- UOXF9Tlcobh5sxNUzluLW3IiyDTRFwgEeyMvRiJmcM8jDPwgfRlqVJi0nRNi7feX+iwB
- 3+UL376TfIerHD0dxNMJMjU+OkKcHoLVSGgwwDJWhzKyX4WmFFPeZe3hY6bxGalBnjF6
- pNhcYGcQ5j8LKVcXx0FMUWJ9Lnbmtkz4L6LLuYZIk0xGCS3W/ZhMxV353oe/qkVBLXPQ 4g== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsa0v8qen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:14:06 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O9Dg6Z020541
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:13:42 GMT
-Received: from [10.201.3.104] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 24 May
- 2023 02:13:40 -0700
-Message-ID: <7f2f1322-2f1d-b846-1213-28a0fa327e1e@quicinc.com>
-Date:   Wed, 24 May 2023 14:43:36 +0530
+        Wed, 24 May 2023 05:20:08 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE2190;
+        Wed, 24 May 2023 02:20:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C3A2522452;
+        Wed, 24 May 2023 09:20:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684920004;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XqhDqAWF822dUjbzoUy3YfL5MEAfeA0mXDj6BA7NVe4=;
+        b=u56OFL9DCCQ4HGgpm1H3zcV8NU4UIrXiwE9OYk+jz/eHnP8HRHtdB0tdiUN19sKjqo74nQ
+        3WhqinSSce9/65AQ6qMlzninUJT+KnkW+SRONQvzCUCdWoLUY3GnAlb/OHVq+sPT8GjVlH
+        ZtM9ldkQuBlqbZUi+G0GgQ8WaTRly1o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684920004;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XqhDqAWF822dUjbzoUy3YfL5MEAfeA0mXDj6BA7NVe4=;
+        b=7PpJ1JFte3cJBYnZqUGAb7tl55Yd9SIbD69eqEO0pIQEoAN+cSUIsfIbH5iWwWyficwCd5
+        UgLVULIvlfWStRDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 79D49133E6;
+        Wed, 24 May 2023 09:20:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NO0aHcTWbWSZegAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Wed, 24 May 2023 09:20:04 +0000
+Date:   Wed, 24 May 2023 11:13:57 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Forza <forza@tnonline.net>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Stable <stable@vger.kernel.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
+Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
+ kernel 6.3.x
+Message-ID: <20230524091357.GH32559@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
+ <fcf1d04.faed4a1a.18844d8e78f@tnonline.net>
+ <ZGwcVTpQNBoJHBB+@debian.me>
+ <ZGyVVQxnw6Tn7Xb8@pc636>
+ <c9db92d.faed4a1c.1884c5550fb@tnonline.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/5] mtd: rawnand: qcom: Implement exec_op()
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     <mani@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_srichara@quicinc.com>
-References: <20230511133017.6307-1-quic_mdalam@quicinc.com>
- <20230511133017.6307-2-quic_mdalam@quicinc.com>
- <20230522153519.6b574789@xps-13>
-Content-Language: en-US
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20230522153519.6b574789@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ili35ntPZq8zEivADv3K7-EJWmapLhYS
-X-Proofpoint-ORIG-GUID: ili35ntPZq8zEivADv3K7-EJWmapLhYS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_05,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- impostorscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1011
- bulkscore=0 priorityscore=1501 spamscore=0 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305240078
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9db92d.faed4a1c.1884c5550fb@tnonline.net>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This looks like a different set of problems, though all of them seem to
+start on the compression write path in btrfs.
 
+On Wed, May 24, 2023 at 07:57:19AM +0200, Forza wrote:
+> [   8.641506] 8021q: adding VLAN 0 to HW filter on device enp4s0
+> [   13.841691] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+> [   13.841705] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+> [13917.280527] ------------[ cut here ]------------
+> [13917.280753] default_enter_idle leaked IRQ state
+> [13917.281004] WARNING: CPU: 3 PID: 0 at drivers/cpuidle/cpuidle.c:269 cpuidle_enter_state+0x3bb/0x430
 
-On 5/22/2023 7:05 PM, Miquel Raynal wrote:
-> Hello,
-> 
-> quic_mdalam@quicinc.com wrote on Thu, 11 May 2023 19:00:13 +0530:
-> 
->> Implement exec_op() so we can later get rid of the legacy interface
->> implementation.
->>
->> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
->> ---
->> Change in [v2]
->>
->> * Missed to post Cover-letter, so posting v2 patch with cover-letter
->>   
->>   drivers/mtd/nand/raw/qcom_nandc.c | 214 +++++++++++++++++++++++++++++-
->>   1 file changed, 213 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
->> index 72d6168d8a1b..dae460e2aa0b 100644
->> --- a/drivers/mtd/nand/raw/qcom_nandc.c
->> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
->> @@ -157,6 +157,7 @@
->>   #define	OP_PAGE_PROGRAM_WITH_ECC	0x7
->>   #define	OP_PROGRAM_PAGE_SPARE		0x9
->>   #define	OP_BLOCK_ERASE			0xa
->> +#define	OP_CHECK_STATUS			0xc
->>   #define	OP_FETCH_ID			0xb
->>   #define	OP_RESET_DEVICE			0xd
->>   
->> @@ -235,6 +236,7 @@ nandc_set_reg(chip, reg,			\
->>    */
->>   #define NAND_ERASED_CW_SET		BIT(4)
->>   
->> +#define MAX_ADDRESS_CYCLE		5
->>   /*
->>    * This data type corresponds to the BAM transaction which will be used for all
->>    * NAND transfers.
->> @@ -447,6 +449,29 @@ struct qcom_nand_boot_partition {
->>   	u32 page_size;
->>   };
->>   
->> +/*
->> + * Qcom op for each exec_op transfer
->> + *
->> + * @data_instr:			data instruction pointer
->> + * @data_instr_idx:		data instruction index
->> + * @rdy_timeout_ms:		wait ready timeout in ms
->> + * @rdy_delay_ns:		Additional delay in ns
->> + * @addr1_reg:			Address1 register value
->> + * @addr2_reg:			Address2 register value
->> + * @cmd_reg:			CMD register value
->> + * @flag:			flag for misc instruction
->> + */
->> +struct qcom_op {
->> +	const struct nand_op_instr *data_instr;
->> +	unsigned int data_instr_idx;
->> +	unsigned int rdy_timeout_ms;
->> +	unsigned int rdy_delay_ns;
->> +	u32 addr1_reg;
->> +	u32 addr2_reg;
->> +	u32 cmd_reg;
->> +	u8 flag;
->> +};
->> +
->>   /*
->>    * NAND chip structure
->>    *
->> @@ -1517,7 +1542,8 @@ static void pre_command(struct qcom_nand_host *host, int command)
->>   	clear_read_regs(nandc);
->>   
->>   	if (command == NAND_CMD_RESET || command == NAND_CMD_READID ||
->> -	    command == NAND_CMD_PARAM || command == NAND_CMD_ERASE1)
->> +	    command == NAND_CMD_PARAM || command == NAND_CMD_ERASE1 ||
->> +	    command == NAND_CMD_STATUS)
-> 
-> I don't like this much, is there another way to derive whether
-> clear_bam_transaction() is needed? What is the rationale behind it?
+Warning in cpuilde
 
-   clear_bam_transcation() is resting all the bam realted counter to 0 before starting new transcation.
-   I will move these all condition check to exec_ops() specific API , and remove pre_command itself.
-   Will fix this in next patch V3.
-> 
->>   		clear_bam_transaction(nandc);
->>   }
->>   
->> @@ -2867,8 +2893,194 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
->>   	return 0;
->>   }
->>   
->> +static int qcom_op_cmd_mapping(struct qcom_nand_controller *nandc, u8 cmd,
->> +			       struct qcom_op *q_op)
->> +{
->> +	int ret = 0;
->> +
->> +	switch (cmd) {
->> +	case NAND_CMD_RESET:
->> +		ret = OP_RESET_DEVICE;
->> +		break;
->> +	case NAND_CMD_READID:
->> +		ret = OP_FETCH_ID;
->> +		break;
->> +	case NAND_CMD_PARAM:
->> +		if (nandc->props->qpic_v2)
->> +			ret = OP_PAGE_READ_ONFI_READ;
->> +		else
->> +			ret = OP_PAGE_READ;
->> +		break;
->> +	case NAND_CMD_ERASE1:
->> +	case NAND_CMD_ERASE2:
->> +		ret = OP_BLOCK_ERASE;
->> +		break;
->> +	case NAND_CMD_STATUS:
->> +		ret = OP_CHECK_STATUS;
->> +		break;
->> +	case NAND_CMD_PAGEPROG:
->> +		ret = OP_PROGRAM_PAGE;
->> +		break;
->> +	default:
-> 
-> This should error out and the error be catch in the check_only path.
+> [13917.281046] Modules linked in: wireguard curve25519_x86_64 libcurve25519_generic ip6_udp_tunnel udp_tunnel cfg80211 rfkill 8021q garp mrp stp llc binfmt_misc intel_rapl_msr intel_rapl_common kvm_amd iTCO_wdt ccp intel_pmc_bxt iTCO_vendor_support kvm i2c_i801 virtio_gpu irqbypass pcspkr virtio_dma_buf joydev i2c_smbus drm_shmem_helper lpc_ich virtio_balloon drm_kms_helper crct10dif_pclmul crc32_pclmul crc32c_intel polyval_clmulni polyval_generic ghash_clmulni_intel sha512_ssse3 virtio_console virtio_net net_failover virtio_scsi failover serio_raw virtio_blk qemu_fw_cfg
+> [13917.281140] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 6.3.1-gentoo-mm-patched #4
+> [13917.281150] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+> [13917.281154] RIP: 0010:cpuidle_enter_state+0x3bb/0x430
+> [13917.281176] RSP: 0018:ffffa153c00b7ea0 EFLAGS: 00010286
+> [13917.281182] RAX: ffff8c15ebfafa28 RBX: ffffc153bfd80900 RCX: 000000000000083f
+> [13917.281186] RDX: 000000000118feed RSI: 00000000000000f6 RDI: 000000000000083f
+> [13917.281189] RBP: 0000000000000001 R08: 0000000000000000 R09: ffffa153c00b7d60
+> [13917.281193] R10: 0000000000000003 R11: ffffffffacb399e8 R12: ffffffffacc2e320
+> [13917.281196] R13: ffffffffacc2e3a0 R14: 0000000000000001 R15: 0000000000000000
+> [13917.281202] FS:  0000000000000000(0000) GS:ffff8c15ebf80000(0000) knlGS:0000000000000000
+> [13917.281206] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [13917.281210] CR2: 00007f71840b39c8 CR3: 0000000102998000 CR4: 00000000003506e0
+> [13917.281217] Call Trace:
+> [13917.281221]  <TASK>
+> [13917.281228]  cpuidle_enter+0x29/0x40
+> [13917.281244]  do_idle+0x19b/0x200
+> [13917.281292]  cpu_startup_entry+0x19/0x20
+> [13917.281297]  start_secondary+0x101/0x120
+> [13917.281324]  secondary_startup_64_no_verify+0xe5/0xeb
+> [13917.281343]  </TASK>
+> [13917.281346] ---[ end trace 0000000000000000 ]---
+> [17206.750165] BTRFS info (device vdb): using xxhash64 (xxhash64-generic) checksum algorithm
+> [17206.750190] BTRFS info (device vdb): using free space tree
+> [17206.904010] BTRFS info (device vdb): auto enabling async discard
+> [17206.933302] BTRFS info (device vdb): checking UUID tree
+> [17344.541839] sched: RT throttling activated
+> [18284.216538] hrtimer: interrupt took 23434934 ns
+> [18737.100477] BUG: unable to handle page fault for address: 0000000079e0afc0
 
-   Will fix it in next patch V3.
-> 
->> +		break;
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->> +/* NAND framework ->exec_op() hooks and related helpers */
->> +static void qcom_parse_instructions(struct nand_chip *chip,
->> +				    const struct nand_subop *subop,
->> +					struct qcom_op *q_op)
->> +{
->> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
->> +	const struct nand_op_instr *instr = NULL;
->> +	unsigned int op_id;
->> +	int i;
->> +
->> +	memset(q_op, 0, sizeof(*q_op));
->> +
->> +	for (op_id = 0; op_id < subop->ninstrs; op_id++) {
->> +		unsigned int offset, naddrs;
->> +		const u8 *addrs;
->> +
->> +		instr = &subop->instrs[op_id];
->> +
->> +		switch (instr->type) {
->> +		case NAND_OP_CMD_INSTR:
->> +			q_op->cmd_reg = qcom_op_cmd_mapping(nandc, instr->ctx.cmd.opcode, q_op);
->> +			q_op->rdy_delay_ns = instr->delay_ns;
->> +			break;
->> +
->> +		case NAND_OP_ADDR_INSTR:
->> +			offset = nand_subop_get_addr_start_off(subop, op_id);
->> +			naddrs = nand_subop_get_num_addr_cyc(subop, op_id);
->> +			addrs = &instr->ctx.addr.addrs[offset];
->> +			for (i = 0; i < min(5U, naddrs); i++) {
-> 
-> Is this min() useful? You already limit the number of cycles to 5,
-> otherwise the pattern won't match, right?
+BUG
 
-   Yeah you are right. If address cycle is fixed to 5 , then this min not required.
-   will fix this in next v3 patch.
-> 
->> +				if (i < 4)
->> +					q_op->addr1_reg |= (u32)addrs[i] << i * 8;
->> +				else
->> +					q_op->addr2_reg |= addrs[i];
->> +			}
->> +			q_op->rdy_delay_ns = instr->delay_ns;
->> +			break;
->> +
->> +		case NAND_OP_DATA_IN_INSTR:
->> +			q_op->data_instr = instr;
->> +			q_op->data_instr_idx = op_id;
->> +			q_op->rdy_delay_ns = instr->delay_ns;
->> +			fallthrough;
->> +		case NAND_OP_DATA_OUT_INSTR:
->> +			q_op->rdy_delay_ns = instr->delay_ns;
->> +			break;
->> +
->> +		case NAND_OP_WAITRDY_INSTR:
->> +			q_op->rdy_timeout_ms = instr->ctx.waitrdy.timeout_ms;
->> +			q_op->rdy_delay_ns = instr->delay_ns;
->> +			break;
->> +		}
->> +	}
->> +}
->> +
->> +static int qcom_read_status_exec(struct nand_chip *chip,
->> +				 const struct nand_subop *subop)
->> +{
->> +	return 0;
->> +}
->> +
->> +static int qcom_erase_cmd_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	return 0;
->> +}
->> +
->> +static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_subop *subop)
->> +{
->> +	return 0;
->> +}
->> +
->> +static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	return 0;
->> +}
->> +
->> +static int qcom_misc_cmd_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	return 0;
->> +}
->> +
->> +static int qcom_data_read_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	/* currently read_exec_op() return 0 , and all the read operation handle in
->> +	 * actual API itself
->> +	 */
->> +	return 0;
-> 
-> Please make all exec_op additions in the same patch, unless you're
-> truly adding a feature, in this case it can be split, but no pattern
-> should match what's unsupported by ->exec_op(). This way we avoid these
-> very strange (and wrong) empty functions).
+> [18737.100883] #PF: supervisor read access in kernel mode
+> [18737.101155] #PF: error_code(0x0000) - not-present page
+> [18737.101462] PGD 0 P4D 0 
+> [18737.101715] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> [18737.101968] CPU: 1 PID: 25287 Comm: kworker/u8:7 Tainted: G        W          6.3.1-gentoo-mm-patched #4
+> [18737.102391] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+> [18737.102860] Workqueue: btrfs-delalloc btrfs_work_helper
+> [18737.103346] RIP: 0010:find_free_extent+0x20a/0x15c0
+> [18737.103900] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
+> [18737.104851] RSP: 0018:ffffa153c0923bd0 EFLAGS: 00010203
+> [18737.105456] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
+> [18737.106044] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
+> [18737.106519] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
+> [18737.107036] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0923dd7
+> [18737.107363] R13: ffffa153c0923c90 R14: 0000000000000001 R15: 0000000079e0af10
+> [18737.107676] FS:  0000000000000000(0000) GS:ffff8c15ebe80000(0000) knlGS:0000000000000000
+> [18737.107971] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [18737.108260] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506e0
+> [18737.108606] Call Trace:
+> [18737.108964]  <TASK>
+> [18737.109273]  btrfs_reserve_extent+0x148/0x260
+> [18737.109601]  submit_compressed_extents+0x14f/0x490
+> [18737.109934]  async_cow_submit+0x37/0x90
+> [18737.110237]  btrfs_work_helper+0x13d/0x360
+> [18737.110542]  process_one_work+0x20f/0x410
+> [18737.110883]  worker_thread+0x4a/0x3b0
+> [18737.111185]  ? __pfx_worker_thread+0x10/0x10
+> [18737.111482]  kthread+0xda/0x100
+> [18737.111800]  ? __pfx_kthread+0x10/0x10
+> [18737.112097]  ret_from_fork+0x2c/0x50
+> [18737.112387]  </TASK>
+> [18737.112676] Modules linked in: wireguard curve25519_x86_64 libcurve25519_generic ip6_udp_tunnel udp_tunnel cfg80211 rfkill 8021q garp mrp stp llc binfmt_misc intel_rapl_msr intel_rapl_common kvm_amd iTCO_wdt ccp intel_pmc_bxt iTCO_vendor_support kvm i2c_i801 virtio_gpu irqbypass pcspkr virtio_dma_buf joydev i2c_smbus drm_shmem_helper lpc_ich virtio_balloon drm_kms_helper crct10dif_pclmul crc32_pclmul crc32c_intel polyval_clmulni polyval_generic ghash_clmulni_intel sha512_ssse3 virtio_console virtio_net net_failover virtio_scsi failover serio_raw virtio_blk qemu_fw_cfg
+> [18737.114021] CR2: 0000000079e0afc0
+> [18737.114366] ---[ end trace 0000000000000000 ]---
+> [18737.114712] RIP: 0010:find_free_extent+0x20a/0x15c0
+> [18737.115059] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
+> [18737.115864] RSP: 0018:ffffa153c0923bd0 EFLAGS: 00010203
+> [18737.116415] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
+> [18737.117090] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
+> [18737.117882] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
+> [18737.118611] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0923dd7
+> [18737.119416] R13: ffffa153c0923c90 R14: 0000000000000001 R15: 0000000079e0af10
+> [18737.120221] FS:  0000000000000000(0000) GS:ffff8c15ebe80000(0000) knlGS:0000000000000000
+> [18737.120994] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [18737.121868] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506e0
+> [18737.122624] note: kworker/u8:7[25287] exited with irqs disabled
+> [19006.920558] BUG: unable to handle page fault for address: 0000000079e0afc0
 
-   Sure, will take care this in patch V3.
-> 
->> +}
->> +
->> +static int qcom_data_write_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	/* currently write_exec_op() return 0, and all the write operation handle in
->> +	 * actual API itself
->> +	 */
->> +	struct qcom_op q_op;
->> +
->> +	qcom_parse_instructions(chip, subop, &q_op);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct nand_op_parser qcom_op_parser = NAND_OP_PARSER(
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_misc_cmd_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_read_id_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDRESS_CYCLE),
->> +			NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 8)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_param_page_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDRESS_CYCLE),
->> +			NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
->> +			NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 512)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_read_status_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 1)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_erase_cmd_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDRESS_CYCLE),
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_data_read_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDRESS_CYCLE),
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
->> +			NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 2048)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_data_write_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(true),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(true, MAX_ADDRESS_CYCLE)),
->> +		);
->> +
->> +static int qcom_nand_exec_op(struct nand_chip *chip,
->> +			     const struct nand_operation *op,
->> +			bool check_only)
->> +{
->> +	if (check_only)
->> +		return 0;
-> 
-> This is wrong, you cannot blindly return 0 if check_only is true.
+And again, so something is going wrong
 
-   Will fix this in next patch V3.
+> [19006.922015] #PF: supervisor read access in kernel mode
+> [19006.923354] #PF: error_code(0x0000) - not-present page
+> [19006.924636] PGD 0 P4D 0 
+> [19006.925868] Oops: 0000 [#2] PREEMPT SMP NOPTI
+> [19006.927066] CPU: 0 PID: 24329 Comm: crawl_writeback Tainted: G      D W          6.3.1-gentoo-mm-patched #4
+> [19006.928510] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+> [19006.929817] RIP: 0010:find_free_extent+0x20a/0x15c0
+> [19006.931050] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
+> [19006.933653] RSP: 0018:ffffa153c0d0f568 EFLAGS: 00010203
+> [19006.934972] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
+> [19006.936236] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
+> [19006.937480] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
+> [19006.938750] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0d0f757
+> [19006.939986] R13: ffffa153c0d0f628 R14: 0000000000000001 R15: 0000000079e0af10
+> [19006.941255] FS:  00007fb245ffb6c0(0000) GS:ffff8c15ebe00000(0000) knlGS:0000000000000000
+> [19006.942579] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [19006.943830] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506f0
+> [19006.945278] Call Trace:
+> [19006.946730]  <TASK>
+> [19006.947792]  ? release_pages+0x13e/0x490
+> [19006.948741]  btrfs_reserve_extent+0x148/0x260
+> [19006.949637]  cow_file_range+0x199/0x610
+> [19006.950396]  btrfs_run_delalloc_range+0x103/0x520
+> [19006.951135]  ? find_lock_delalloc_range+0x1ea/0x210
+> [19006.951802]  writepage_delalloc+0xb9/0x180
+> [19006.952401]  __extent_writepage+0xeb/0x410
+> [19006.952985]  extent_write_cache_pages+0x152/0x3d0
+> [19006.953552]  extent_writepages+0x4c/0x100
+> [19006.954116]  do_writepages+0xbe/0x1d0
+> [19006.954672]  ? memcmp_extent_buffer+0xa2/0xe0
+> [19006.955199]  filemap_fdatawrite_wbc+0x5f/0x80
+> [19006.955726]  __filemap_fdatawrite_range+0x4a/0x60
+> [19006.956219]  btrfs_rename+0x529/0xb60
+> [19006.956711]  ? psi_group_change+0x168/0x400
+> [19006.957280]  btrfs_rename2+0x2a/0x60
+> [19006.957799]  vfs_rename+0x5d4/0xeb0
+> [19006.958308]  ? lookup_dcache+0x17/0x60
+> [19006.958784]  ? do_renameat2+0x507/0x580
+> [19006.959239]  do_renameat2+0x507/0x580
+> [19006.959702]  __x64_sys_renameat+0x45/0x60
+> [19006.960293]  do_syscall_64+0x5b/0xc0
+> [19006.960848]  ? syscall_exit_to_user_mode+0x17/0x40
+> [19006.961331]  ? do_syscall_64+0x67/0xc0
+> [19006.961812]  ? syscall_exit_to_user_mode+0x17/0x40
+> [19006.962401]  ? do_syscall_64+0x67/0xc0
+> [19006.963371]  ? do_syscall_64+0x67/0xc0
+> [19006.964020]  ? do_syscall_64+0x67/0xc0
+> [19006.965001]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [19006.965952] RIP: 0033:0x7fb25eba492a
+> [19006.966485] Code: 48 8b 15 d9 44 17 00 f7 d8 64 89 02 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 89 ca b8 08 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 06 c3 0f 1f 44 00 00 48 8b 15 a1 44 17 00 f7
+> [19006.967545] RSP: 002b:00007fb245ff8a08 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
+> [19006.968076] RAX: ffffffffffffffda RBX: 0000559a70a039f0 RCX: 00007fb25eba492a
+> [19006.968623] RDX: 0000000000000004 RSI: 00007fb134000fc0 RDI: 0000000000000004
+> [19006.977319] RBP: 00007fb245ff8c60 R08: 0000000000000000 R09: 0000000000000000
+> [19006.977877] R10: 0000559a70a03a00 R11: 0000000000000246 R12: 00007fb245ff8c80
+> [19006.978301] R13: 0000000000000004 R14: 00007fb245ff8c60 R15: 00000000000070b5
+> [19006.978727]  </TASK>
+> [19006.979118] Modules linked in: wireguard curve25519_x86_64 libcurve25519_generic ip6_udp_tunnel udp_tunnel cfg80211 rfkill 8021q garp mrp stp llc binfmt_misc intel_rapl_msr intel_rapl_common kvm_amd iTCO_wdt ccp intel_pmc_bxt iTCO_vendor_support kvm i2c_i801 virtio_gpu irqbypass pcspkr virtio_dma_buf joydev i2c_smbus drm_shmem_helper lpc_ich virtio_balloon drm_kms_helper crct10dif_pclmul crc32_pclmul crc32c_intel polyval_clmulni polyval_generic ghash_clmulni_intel sha512_ssse3 virtio_console virtio_net net_failover virtio_scsi failover serio_raw virtio_blk qemu_fw_cfg
+> [19006.981463] CR2: 0000000079e0afc0
+> [19006.982193] ---[ end trace 0000000000000000 ]---
+> [19006.982938] RIP: 0010:find_free_extent+0x20a/0x15c0
+> [19006.983565] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
+> [19006.984863] RSP: 0018:ffffa153c0923bd0 EFLAGS: 00010203
+> [19006.985500] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
+> [19006.986195] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
+> [19006.986877] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
+> [19006.987581] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0923dd7
+> [19006.988252] R13: ffffa153c0923c90 R14: 0000000000000001 R15: 0000000079e0af10
+> [19006.988984] FS:  00007fb245ffb6c0(0000) GS:ffff8c15ebe00000(0000) knlGS:0000000000000000
+> [19006.989646] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [19006.990336] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506f0
+> [19006.991037] note: crawl_writeback[24329] exited with irqs disabled
 > 
->> +	return nand_op_parser_exec_op(chip, &qcom_op_parser,
->> +			op, check_only);
->> +}
->> +
->>   static const struct nand_controller_ops qcom_nandc_ops = {
->>   	.attach_chip = qcom_nand_attach_chip,
->> +	.exec_op = qcom_nand_exec_op,
->>   };
->>   
->>   static void qcom_nandc_unalloc(struct qcom_nand_controller *nandc)
+>  
 > 
 > 
-> Thanks,
-> Miquèl
+> 
+> 
+> 
