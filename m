@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E107E70EC13
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A0570EC20
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 05:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239223AbjEXDtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 23:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S239361AbjEXDwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 23:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239273AbjEXDtW (ORCPT
+        with ESMTP id S229595AbjEXDwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 23:49:22 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481A31A7;
-        Tue, 23 May 2023 20:49:13 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-513fd8cc095so154815a12.0;
-        Tue, 23 May 2023 20:49:13 -0700 (PDT)
+        Tue, 23 May 2023 23:52:13 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC13C1;
+        Tue, 23 May 2023 20:52:12 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510ea8d0bb5so948158a12.0;
+        Tue, 23 May 2023 20:52:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684900151; x=1687492151;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684900330; x=1687492330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+/2vcU3rfSk9ugDsVe4zLqIGe3H0V4ejxElXFrJjh6w=;
-        b=YmYY+H/VoSoR+ArQyGVV1V1UF2SRlDFlntlkRjjvYEDRUxNgXoYh4pExSzlB8fjnyD
-         LUOkERUALMd4w7b8N1d3zkN4kJ4rYsuA/1rEbEX8IrWKsjwHPAYPJAK8qhw7PGesJvQn
-         Ok1d9bXYW6R8sjei/SN5+PceeLeuKVX+GO9sFOiIaRPCiqC5HZ1X5R6BURfKKvPRZvvk
-         REeSwcTEMwe9xyzLU/7nlhJ0qpohOto7nbdeWZ9kf7oVvlKmC+OayM8w9KuxBqyegAIk
-         lD5KQywmhEBMHqC/EcRw74YS8e6eOcpfRn8grmPnMI5I+1dQ+49C54UYRHh7dloDlyrZ
-         CMpw==
+        bh=PIplVH84mQzYA92Hw7xyqoi7EjdVHd4BsS3gkqLQQZk=;
+        b=TBfSbXLJmCCNrWLz0DQ3lWQZTgzmLHDVqbff5CzHHTeayTSAofA0cIRgRSTzP5t8xM
+         r0mDziKrlLeyb0G0ILOj6BmWCzNUImSkR3LPI6ylI7Y36SaHhr5VQnOZzgyqZrqaxq6d
+         i/StgdEy4BNKyaHWQL89/YIhZuyK8DtwHnfoKVoj8FEGbGTn67ffjUA/BIiUge9xiduJ
+         ZgKUub24uTk3bO5IyWCooJjv3tthXMZv2cfo20ZOZtxFXX+dYvS1nX8mierZNLuNlf5x
+         3lv2spmlOoDVkvnUbVXlevqhK4vmJPSRODPGmByXtwDykUx33aRuIcUj8kp5et6mN8Gj
+         hPEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684900151; x=1687492151;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684900330; x=1687492330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+/2vcU3rfSk9ugDsVe4zLqIGe3H0V4ejxElXFrJjh6w=;
-        b=Fh95OvZnsDa2nab9raJLzeczJlkSnZAOa+I5Kced5mTRGsri2Nb4V6MLUc0njme2Hi
-         TYH3BiqnOgo3Nit+LXeIdUObggTQjYNdrtnKbH2jz2dPZPnBgYUorL4xYpZsC8qwKimT
-         LD4/Lf36PLYjadMxLx1b6Z689iBC0O7ypCJwvysOyuysCR28U8+LM733pnysoCMYzHEo
-         WGLEF8c2cQQDN199XKa3DuNjrvq2vA3Ho5t50xsOhQACWjSMJvXlDIHwNWnZSSrBiaPY
-         Hpc7gIzDgLfvYC1rHL7TLgOQIRmYSGzOCGmhPw/5riMRhl4RcS0kbPtQAEF9k6ei+z4t
-         ljcA==
-X-Gm-Message-State: AC+VfDwI4lMc1+fu0lUuJ592PTOwkp8gvJ2nQFGUdYalORrzLKUqzbzq
-        Fyg6lSMCN7pR6JI/6Bcx4uE=
-X-Google-Smtp-Source: ACHHUZ4E2aCABHLtTxEIZdPJoT06zmAKgAfupT38TPqKIbH6rGwHi1/k1wUYqwPXrsR+6TBWas4mig==
-X-Received: by 2002:a17:906:7393:b0:96f:56f1:e89e with SMTP id f19-20020a170906739300b0096f56f1e89emr12763657ejl.0.1684900150958;
-        Tue, 23 May 2023 20:49:10 -0700 (PDT)
-Received: from localhost ([192.55.46.56])
-        by smtp.gmail.com with ESMTPSA id qx15-20020a170906fccf00b00965f98eefc1sm5213304ejb.116.2023.05.23.20.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 20:49:10 -0700 (PDT)
-Date:   Wed, 24 May 2023 11:48:59 +0800
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, will@kernel.org,
-        catalin.marinas@arm.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        nicolinc@nvidia.com, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, jgg@nvidia.com,
-        John Hubbard <jhubbard@nvidia.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 1/2] mmu_notifiers: Restore documentation for
- .invalidate_range()
-Message-ID: <20230524114859.000016e3.zhi.wang.linux@gmail.com>
-In-Reply-To: <3cece716fc09724793aa832e755abfc9d70a8bb3.1684892404.git-series.apopple@nvidia.com>
-References: <3cece716fc09724793aa832e755abfc9d70a8bb3.1684892404.git-series.apopple@nvidia.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        bh=PIplVH84mQzYA92Hw7xyqoi7EjdVHd4BsS3gkqLQQZk=;
+        b=IkucrMOgfXfuvQAJARTtZzsIw/1q2B8WzwekuqIS5iSzye9Gb3+4HWNpxOZ4y6zQX/
+         ttldwsjtccqBi8XFPOrhLITY9ySoulzgMmbji2dfQWPRazp90uY5TFYjVug2zajrp55w
+         Tq7q8LHl+XJVT2Zw3yYrSzyX3ZhCmjKdiaEKV9Dvfapn7mXR8USvIyMSXpkd8ugGXfha
+         42GkXgVHMBE0h+FSkkF3Wu2BNIA+0smJ/0jd/kqNrs/FkP9HYiySiv3hv/Zzle1AjbqH
+         kgUIlJIWLGZ0EAKrhsHlE7mNk4MJcbdR0mosbsWwGlB1F99bbhvf8NAgGJfaC9F6HbBS
+         EHLw==
+X-Gm-Message-State: AC+VfDyeW43fZjgMi8g9pVfjw0RbWD0lbHjpfgBNtcIejJE5dsRpY1Ql
+        xCl1WAP0TnsdXJGkMJMnmABzzN2qJCo/FSMiH0M=
+X-Google-Smtp-Source: ACHHUZ6o2RJCD20bEVdQypVWzIEQEchtzyPWUv7LpdCIUlnwbBJvIbiQgM+DVQFKu7YuYOi5+Fgc15NV6gQiWSBwTzk=
+X-Received: by 2002:aa7:dd10:0:b0:510:a5a1:b36d with SMTP id
+ i16-20020aa7dd10000000b00510a5a1b36dmr901501edv.33.1684900330454; Tue, 23 May
+ 2023 20:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220515203653.4039075-1-jolsa@kernel.org> <20230520094722.5393-1-zegao@tencent.com>
+ <b4f66729-90ab-080a-51ec-bf435ad6199d@meta.com> <CAD8CoPAXse1GKAb15O5tZJwBqMt1N_btH+qRe7c_a-ryUMjx7A@mail.gmail.com>
+ <ZGp+fW855gmWuh9W@krava> <CAD8CoPDASe7hpkFbK+UzJats7j4sbgsCh_P4zaQYVuKD7jWu2w@mail.gmail.com>
+ <20230523101041.23ca7cc8@rorschach.local.home>
+In-Reply-To: <20230523101041.23ca7cc8@rorschach.local.home>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Wed, 24 May 2023 11:51:58 +0800
+Message-ID: <CAD8CoPCHnTMOzqxJT+9Bg7aP=y8Jt4VUV1=xpBopNZv7VkBU8w@mail.gmail.com>
+Subject: Re: kprobes and rcu_is_watching()
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Yonghong Song <yhs@meta.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
+        paulmck@kernel.org, songliubraving@fb.com,
+        Ze Gao <zegao@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 11:47:28 +1000
-Alistair Popple <apopple@nvidia.com> wrote:
+Thanks Steven, I think we've come to a consensus on this.
 
-It is actually commit 4e15a073a168 ("Revert "mm, mmu_notifier:
-annotate mmu notifiers with blockable invalidate callbacks"")'s problem.
-It tries to revert commit 5ff7091f5a2c but forgets to get back this
-piece of comment.
+The question here is whether bpf tracing fentry i.e.,
+__bpf_prog_enter{_sleepable}
+needs to check rcu_is_watching as well before using rcu related
+calls. And Yonghong suggested making a change when there is
+indeed some bad case occurring since it's rare the tracee is in the idle pa=
+th.
 
-It would be better to have a Fixes tag in the commit message.
 
-> The .invalidate_range() callback is called by
-> mmu_notifier_invalidate_range() which is often called while holding
-> the ptl spin-lock. Therefore any implementations of this callback must
-> not sleep. This was originally documented when the call back was added
-> in commit 0f0a327fa12c ("mmu_notifier: add the callback for
-> mmu_notifier_invalidate_range()") but appears to have been
-> inadvertently removed by commit 5ff7091f5a2c ("mm, mmu_notifier:
-> annotate mmu notifiers with blockable invalidate callbacks").
-> 
-> Restore the comment to make it clear that .invalidate_range()
-> callbacks may not sleep.
-> 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> ---
->  include/linux/mmu_notifier.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
-> index 64a3e05..447d757 100644
-> --- a/include/linux/mmu_notifier.h
-> +++ b/include/linux/mmu_notifier.h
-> @@ -200,6 +200,9 @@ struct mmu_notifier_ops {
->  	 * external TLB range needs to be flushed. For more in depth
->  	 * discussion on this see Documentation/mm/mmu_notifier.rst
->  	 *
-> +	 * The invalidate_range() function is called under the ptl
-> +	 * spin-lock and not allowed to sleep.
-> +	 *
->  	 * Note that this function might be called with just a sub-range
->  	 * of what was passed to invalidate_range_start()/end(), if
->  	 * called between those functions.
-> 
-> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+Regards,
+Ze
 
+On Tue, May 23, 2023 at 10:10=E2=80=AFPM Steven Rostedt <rostedt@goodmis.or=
+g> wrote:
+>
+> [ Added a subject, as I always want to delete these emails as spam! ]
+>
+> On Mon, 22 May 2023 10:07:42 +0800
+> Ze Gao <zegao2021@gmail.com> wrote:
+>
+> > Oops, I missed that. Thanks for pointing that out, which I thought is
+> > conditional use of rcu_is_watching before.
+> >
+> > One last point, I think we should double check on this
+> >      "fentry does not filter with !rcu_is_watching"
+> > as quoted from Yonghong and argue whether it needs
+> > the same check for fentry as well.
+> >
+>
+> Note that trace_test_and_set_recursion() (which is used by
+> ftrace_test_recursion_trylock()) checks for rcu_is_watching() and
+> returns false if it isn't (and the trylock will fail).
+>
+> -- Steve
