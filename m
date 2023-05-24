@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F08E70F947
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1D170F949
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbjEXOxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S236234AbjEXOx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235990AbjEXOx2 (ORCPT
+        with ESMTP id S235990AbjEXOxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:53:28 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A19E19D;
-        Wed, 24 May 2023 07:53:04 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OEnSNM011188;
-        Wed, 24 May 2023 14:52:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=8T/9E3hQqnERSQbAml5XpoEmJIhSNa9G1/LwUpkmURU=;
- b=X970MkOP11ERKD132J5pEh/Hjy30P08Cm44QMb4xG4UR/A+LYh09m5QOriiIymm5GAXv
- EJVpu2gMec7Cg9JjKEyW9fXtEMmqJpJNKkrU/KgnMa8+RiHgeWMckuIxFyjiAj2G4/vh
- b8G9t7k9o0vXM5wTUoSoc4gESIR8WohNIX4bYadyZGupy7g2SRwwCZ91wIjP5r+QiM6J
- 7SjT0NFY3HdbC69bz/FP8y3zK1Nl0p2wnaULHsmKr9RkUOuecBESe1+5DoF3aXcaZ+Eh
- adeX94zzkG/3PfHQ7irAAQjrU+Izt23uWrs+RipYwAJOeqW+EvbBEHg/568xTqdY5kXs og== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qscgmh5ws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 14:52:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34OEqjjx007570
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 14:52:45 GMT
-Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 24 May 2023 07:52:40 -0700
-From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Jagadeesh Kona" <quic_jkona@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        "Ajit Pandey" <quic_ajipan@quicinc.com>
-Subject: [PATCH V2 4/4] arm64: dts: qcom: sm8550: Add video clock controller
-Date:   Wed, 24 May 2023 20:22:03 +0530
-Message-ID: <20230524145203.13153-5-quic_jkona@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230524145203.13153-1-quic_jkona@quicinc.com>
-References: <20230524145203.13153-1-quic_jkona@quicinc.com>
+        Wed, 24 May 2023 10:53:44 -0400
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30788E70
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:53:13 -0700 (PDT)
+Date:   Wed, 24 May 2023 14:52:50 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1684939988; x=1685199188;
+        bh=eSrghzPVl/vMIb4NdzZs1ocOvP6Tdr8M0tKbZLF7eVs=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Rnu8bNMaBm93xHDRKTGpLoOO13wio9NMVOcEnC9UiYVEp4iwjoqaObiHpUVn/OW4e
+         N58XCN7EgfSRJuPTpBKSZGQSCAaT5WSC20n4WYuWCF2bwyRNfORWDHo/hwX2NNsReP
+         rvlgjkXYdXunSgTG7+C7IXo+cge1m5PGGe61fpF/sFG1+seG4RrQ8ctzJR6QMve2aJ
+         ySzlsJTrMx5W9gWnsDTxkFB6Wl+hNdp7bx8wINQ4Z9P24YHzXGHZ+hEnBZJfwjYMa3
+         eA9l2QHnt1j4Y4qg0sZqrxTG1Rcenjmf4G7khiC7EBKPuFBWBREv6v60ecawqPvgXC
+         s1C8Tg67nHkCg==
+To:     Alice Ryhl <aliceryhl@google.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v1 7/7] rust: workqueue: add `try_spawn` helper method
+Message-ID: <xAv635eVJdklAFBXcwxhVWRvgkMs37YDjANEArFkcOdoyH27NSHwbBGgJ6b9Q1EvX8gACiNqkaDYNvwdMWy6YHbeGM4qz1xW54-02UjzzZA=@proton.me>
+In-Reply-To: <20230517203119.3160435-8-aliceryhl@google.com>
+References: <20230517203119.3160435-1-aliceryhl@google.com> <20230517203119.3160435-8-aliceryhl@google.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BusvOzsAMveekdRgsOqg35q6ELoU-Ao_
-X-Proofpoint-ORIG-GUID: BusvOzsAMveekdRgsOqg35q6ELoU-Ao_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_09,2023-05-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 bulkscore=0 clxscore=1015 spamscore=0
- adultscore=0 malwarescore=0 phishscore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305240120
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device node for video clock controller on Qualcomm SM8550 platform.
+On Wednesday, May 17th, 2023 at 22:31, Alice Ryhl <aliceryhl@google.com> wr=
+ote:
+> This adds a convenience method that lets you spawn a closure for
+> execution on a workqueue. This will be the most convenient way to use
+> workqueues, but it is fallible because it needs to allocate memory.
+>=20
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+>  rust/kernel/workqueue.rs | 40 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>=20
+> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
+> index 007005ddcaf0..303b72efd95f 100644
+> --- a/rust/kernel/workqueue.rs
+> +++ b/rust/kernel/workqueue.rs
+> @@ -57,6 +57,42 @@ impl Queue {
+>              })
+>          }
+>      }
+> +
+> +    /// Tries to spawn the given function or closure as a work item.
+> +    ///
+> +    /// This method can fail because it allocates memory to store the wo=
+rk item.
+> +    pub fn try_spawn<T: 'static + Send + Fn()>(&self, func: T) -> Result=
+ {
 
-Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
----
-Changes since V1:
- - Sorted DT node by unit address
- - Reused SM8450 videocc header file for SM8550
+Why is this `Fn()` instead of `FnOnce()`?
 
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> +        let init =3D pin_init!(ClosureWork {
+> +            work <- Work::new(),
+> +            func: Some(func),
+> +        });
+> +
+> +        self.enqueue(Box::pin_init(init)?);
+> +        Ok(())
+> +    }
+> +}
+> +
+> +/// A helper type used in `try_spawn`.
+> +#[pin_data]
+> +struct ClosureWork<T> {
+> +    #[pin]
+> +    work: Work<Pin<Box<ClosureWork<T>>>>,
+> +    func: Option<T>,
+> +}
+> +
+> +impl<T> ClosureWork<T> {
+> +    fn project(self: Pin<&mut Self>) -> &mut Option<T> {
+> +        // SAFETY: The `func` field is not structurally pinned.
+> +        unsafe { &mut self.get_unchecked_mut().func }
+> +    }
+> +}
+> +
+> +impl<T: FnOnce()> BoxWorkItem for ClosureWork<T> {
+> +    fn run(mut self: Pin<Box<Self>>) {
+> +        if let Some(func) =3D self.as_mut().project().take() {
+> +            (func)()
+> +        }
+> +    }
+>  }
+>=20
+>  /// A work item.
+> @@ -280,6 +316,10 @@ macro_rules! impl_has_work {
+>      )*};
+>  }
+>=20
+> +impl_has_work! {
+> +    impl<T> HasWork<Pin<Box<Self>>> for ClosureWork<T> { self.work }
+> +}
+> +
+>  /// Declares that [`Arc<Self>`] should implement [`WorkItem`].
+>  ///
+>  /// # Examples
+> --
+> 2.40.1.606.ga4b1b128d6-goog
+>=20
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 6e9bad8f6f33..bef33b253813 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -4,6 +4,7 @@
-  */
- 
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,sm8450-videocc.h>
- #include <dt-bindings/clock/qcom,sm8550-gcc.h>
- #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
- #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
-@@ -2385,6 +2386,18 @@ opp-202000000 {
- 			};
- 		};
- 
-+		videocc: clock-controller@aaf0000 {
-+			compatible = "qcom,sm8550-videocc";
-+			reg = <0 0x0aaf0000 0 0x10000>;
-+			clocks = <&bi_tcxo_div2>,
-+				 <&gcc GCC_VIDEO_AHB_CLK>;
-+			power-domains = <&rpmhpd SM8550_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		mdss: display-subsystem@ae00000 {
- 			compatible = "qcom,sm8550-mdss";
- 			reg = <0 0x0ae00000 0 0x1000>;
--- 
-2.40.1
-
+--
+Cheers,
+Benno
