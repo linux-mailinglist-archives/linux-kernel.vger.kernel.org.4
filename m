@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFC970FB0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1447E70FB0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbjEXP7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S238077AbjEXP7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238061AbjEXP66 (ORCPT
+        with ESMTP id S238023AbjEXP65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:58:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73A4122;
-        Wed, 24 May 2023 08:58:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A99763ECC;
-        Wed, 24 May 2023 15:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D40C4339B;
-        Wed, 24 May 2023 15:57:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684943869;
-        bh=+KqoP3LhTsQa9GQ0Ybe2LD4KSpKGXfBUa30qiNhCBtQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=daZgqaaeCoiz9eE1VnqIy4YX/SGhIyUvD4NNCpCN+gRWiY07Eoq8/Y3e8pV4rrJTX
-         CujWWx06kJxt7a5ZIj5i0uii3zMRERTcO1OJjWtRpmOY2VN/j/GUZm+HNz8X2i5KDI
-         kushL5JyiOxDkaofe2isWayHQK5jAEcSyn3YehBY=
-Date:   Wed, 24 May 2023 16:57:46 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/363] 6.3.4-rc2 review
-Message-ID: <2023052423-flint-importer-0609@gregkh>
-References: <20230523164950.435226211@linuxfoundation.org>
- <52e30fae-36df-f098-2b1f-e7e9d00c8f0b@gmail.com>
+        Wed, 24 May 2023 11:58:57 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989A510E5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:58:13 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6238da9c235so9740146d6.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:58:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1684943892; x=1687535892;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lo1Bd8kQQKok6XtJWBuvliy13W3lA66R3FmWEDQGTs8=;
+        b=2VEdtsMcvvWFefWeiXYVDgLPH8JWObDrEJKYw1yXU4atsvZ1jZ4qTM94DTLUYSLPHp
+         XRgahDkBOLaIGTfz9hRXc1671KG4VLdjlEt3w8BoM2hu3Hdzx7DH9NS9oVfrYKzWgiYJ
+         hhueoStgujR8NChqyj+y8GrXQPAx3dJEnJTiJ9F+pskcByaurrE18+DKRQBT+Lq3AcX/
+         OXQXsFOognFhXNzTyOaBQoE30ZVrwbE2aoKd8pVnpH2nnsosKJn/A6eH7WeLN2+zzMsT
+         c63wQ/DnNCE2+Wg00CMsWEZvDURToZBhe1feccq7068rbO0Wlhyum/5ZK02njya7f5h+
+         lGoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684943892; x=1687535892;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lo1Bd8kQQKok6XtJWBuvliy13W3lA66R3FmWEDQGTs8=;
+        b=NtnuSfzWwEJu5w3j7cYrYe3vIR4V02IVbYt3Z5RNbaxV8wHUSQ1G2KnP4KPW6iQPsK
+         7aCVTSX7sey/haX1l/Z/+tOonGr6E7iyXcURty7RBxI/UHwtUzdZrPvq+4oQdSyBYx5G
+         5EFwlchHSfLU0l0twIar5jtulc7M8UjteoZsAi485YgZDx4jUdg3KIvJIsge8ytlFGSs
+         Ab26YpRUV3wty7u0B9MBMDpg7nWxkPROuR+1wG+f+wNMOcdhio3P9c6bBzZzk+CEi4yU
+         oHWPyuyaXe1zOX+M+ABeJE87MQ/d+9U5Csp/QZ3HLmWlmvyRv6fogMveXhNNknRksbgz
+         FTcA==
+X-Gm-Message-State: AC+VfDyvcRzYNMX6qrFQMLAj4c3zbGcMbBGK/5cVjS0TwrWZDFpGs+tw
+        HIyPXevyX3JyVKOPz9RWAvgbAK7/GUkxc1NVf8s=
+X-Google-Smtp-Source: ACHHUZ5PxIGt+Zc5ZcfzkXBmoWXbMEoEPZ8JoJKNs82T+X93QbJGrVVBdWsQ9j+GYYcm6SQrGhmtcg==
+X-Received: by 2002:a05:6214:c4e:b0:5ef:6eb6:e26e with SMTP id r14-20020a0562140c4e00b005ef6eb6e26emr26359735qvj.6.1684943892343;
+        Wed, 24 May 2023 08:58:12 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:8bb6])
+        by smtp.gmail.com with ESMTPSA id l16-20020a056214029000b0062168714c8fsm3642179qvv.120.2023.05.24.08.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 08:58:11 -0700 (PDT)
+Date:   Wed, 24 May 2023 11:58:11 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH] mm: compaction: avoid GFP_NOFS ABBA deadlock
+Message-ID: <20230524155811.GA14306@cmpxchg.org>
+References: <20230519111359.40475-1-hannes@cmpxchg.org>
+ <8fd1a56d-5a22-4bde-59a5-169a4696219e@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <52e30fae-36df-f098-2b1f-e7e9d00c8f0b@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8fd1a56d-5a22-4bde-59a5-169a4696219e@suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:51:52AM -0700, Florian Fainelli wrote:
-> 
-> 
-> On 5/23/2023 10:01 AM, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 6.3.4 release.
-> > There are 363 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
+On Wed, May 24, 2023 at 11:21:43AM +0200, Vlastimil Babka wrote:
+> On 5/19/23 13:13, Johannes Weiner wrote:
+> > During stress testing with higher-order allocations, a deadlock
+> > scenario was observed in compaction: One GFP_NOFS allocation was
+> > sleeping on mm/compaction.c::too_many_isolated(), while all CPUs in
+> > the system were busy with compactors spinning on buffer locks held by
+> > the sleeping GFP_NOFS allocation.
 > > 
-> > Responses should be made by Thu, 25 May 2023 16:48:37 +0000.
-> > Anything received after that time might be too late.
+> > Reclaim is susceptible to this same deadlock; we fixed it by granting
+> > GFP_NOFS allocations additional LRU isolation headroom, to ensure it
+> > makes forward progress while holding fs locks that other reclaimers
+> > might acquire. Do the same here.
 > > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.4-rc2.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
+> > This code has been like this since compaction was initially merged,
+> > and I only managed to trigger this with out-of-tree patches that
+> > dramatically increase the contexts that do GFP_NOFS compaction. While
+> > the issue is real, it seems theoretical in nature given existing
+> > allocation sites. Worth fixing now, but no Fixes tag or stable CC.
 > 
-> On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on
-> BMIPS_GENERIC:
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 > 
-> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Greg, could you queue up:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3522340199cc060b70f0094e3039bdb43c3f6ee1
+> So IIUC the change is done by not giving GFP_NOFS extra headroom, but
+> instead restricting the headroom of __GFP_FS allocations. But the original
+> one was probably too generous anyway so it should be fine?
 
-Please send this as a separate email, with what trees it should go to,
-otherwise it will be lost in this thread.
+Yes, the original limit is generally half the LRU, which is quite high.
 
-thanks,
+The new limit is 1/16th of the LRU for regular compactors and half for
+GFP_NOFS ones. Note that I didn't make these up; they're stolen from
+too_many_isolated() in vmscan.c. I figured those are proven values and
+no sense in deviating from them until we have a reason to do so.
 
-greg k-h
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+Thanks!
