@@ -2,265 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05EF70F800
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766D270F802
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235077AbjEXNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S235509AbjEXNt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjEXNtk (ORCPT
+        with ESMTP id S230189AbjEXNto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:49:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF546A7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:49:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 24 May 2023 09:49:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B089E;
+        Wed, 24 May 2023 06:49:43 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.27.34.213])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6578B632DA
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71930C433EF;
-        Wed, 24 May 2023 13:49:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684936177;
-        bh=FUTP1mbfy6I1wRKtWTlWctBObh3m57kq+FA25r2OZK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BikjzReTPHEj0Vt6ScGzym8/ZWPpoYr7dNGmwJofgnsf5nOEnTfdK5U3wBfkw1429
-         PXHe3Nm5xXA+EwGmyBBSHFrnkwESJug6W/n5CrrOVSWnbbr9CDSM0uuV0wkYkFTPUX
-         93B1wuex8U+/MbbWngX5fQn2Iq2BFWsZWvfkPaLg1psc7jtx3ekFn+tTqpJniKUeB/
-         Tyj0Y8J/CWq3u4to0NVaY++sKIJutK1Zq5lIMH6kSwmQ1tAl2JFP5twrTVz51u3lIW
-         J0j+JyV+YeJID/Q4xce6bV3FNGld+V39biB+q+MmhTBwwHU1/jEsPisN1hAoVYmEO0
-         77Hfs3VO8W3+A==
-Date:   Wed, 24 May 2023 14:49:31 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Song Shuai <suagrfillet@gmail.com>, robh@kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>, palmer@rivosinc.com,
-        jeeheng.sia@starfivetech.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Sunil V L <sunilvl@ventanamicro.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-Message-ID: <20230524-wasp-charm-fe5c5478957a@spud>
-References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
- <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
- <CAHVXubj92O_dwGShOJgrYezqk2pA2NtFyhNFbAPyhn7=PztK6Q@mail.gmail.com>
- <20230517-preacher-primer-f41020b3376a@wendy>
- <CAHVXubhMLgb54_7zV2yFuGPoMKCkUXwozHbDvghc7kQqNLK-JA@mail.gmail.com>
- <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
- <fe8d716c-fb4f-1f3f-6c69-de1d8b9fb6af@ghiti.fr>
- <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBF796605943;
+        Wed, 24 May 2023 14:49:40 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684936181;
+        bh=eOWh+03SOK7Ma/sA2JICrBy2SCdrGT1dVFFRySHiFBI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=O7Qsp6hFFseZyO9Y61woxfnLQ7oR35mF7vipm2dk/c4+9mVrNZYJLFloqs/vzkHst
+         NrXlx5DLBKi34JaJdpL5g8XeVnpTlzsW4/xk3V8t+gXa2zuznY0LAqrLAYRYuHn3Ti
+         lIHEczYNcFyW27XPdxT0t3G2zOmhyMPQlnJ11kywsGHd/Upwnl6hF1rPQq/216bbAC
+         ArGaN+tOO9X4EZdXoDgRiujGsWcSvSn91tBjvfhmDXPbdKPlyHXdXkj2FpWBRBq+6W
+         XsAVJZlkxnVTIZcYOkIfsV7BbB16dPeBJjBSKvtXvx/JnHNl21yGoHmRQmeIKqTU6b
+         gnueVO9Dpr0Pw==
+Message-ID: <cfa23203-1626-440b-ec27-efe56cb297d2@collabora.com>
+Date:   Wed, 24 May 2023 16:49:37 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JfSOowhxP3xt+heO"
-Content-Disposition: inline
-In-Reply-To: <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/3] ASoC: es8316: Increment max value for ALC Capture
+ Target Volume control
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Zhu Ning <zhuning0077@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        David Yang <yangxiaohua@everest-semi.com>,
+        Daniel Drake <drake@endlessm.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, kernel@collabora.com
+References: <20230524074156.147387-1-cristian.ciocaltea@collabora.com>
+ <20230524074156.147387-2-cristian.ciocaltea@collabora.com>
+ <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
+Content-Language: en-US
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/24/23 13:30, Mark Brown wrote:
+> On Wed, May 24, 2023 at 10:41:54AM +0300, Cristian Ciocaltea wrote:
+> 
+>> This means that either the hardware default is wrongly set to 0xB
+>> instead of 0xA, or the specs are incorrect and instead of having the
+>> range 0xA-0xF mapped to -1.5 dB, the single value 0xA should have been
+>> mapped to -1.5 dB and the remaining range 0xB-0xF to 0 dB.
+> 
+>> Increment the max value allowed for ALC Capture Target Volume control,
+>> so that it matches the hardware default.
+> 
+>> -	SOC_SINGLE_TLV("ALC Capture Target Volume", ES8316_ADC_ALC3, 4, 10, 0,
+>> +	SOC_SINGLE_TLV("ALC Capture Target Volume", ES8316_ADC_ALC3, 4, 11, 0,
+>>  		       alc_target_tlv),
+> 
+> The description above of what the control does doesn't seem to match
+> what alc_target_tlv specifies - it is:
+> 
+>   static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(alc_target_tlv, -1650, 150, 0);
+> 
+> which is saying that the value goes from -16.5dB up in steps of 1.5dB
+> but your description above says that 0-10 map to -1.5dB and other values
+> are 0dB.
 
---JfSOowhxP3xt+heO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+My description above mentioned only the 0xA-0xF (10-15) range, anything
+before that is fine and the implementation matches the specs:
 
-Alex, Anup,
+0000 –> -16.5 dB
+0001 –> -15.0 dB
+0010 –> -13.5 dB
+...
+0111 –>  -6.0 dB
+1000 –>  -4.5 dB
+1001 –>  -3.0 dB
 
-On Thu, May 18, 2023 at 07:34:16PM +0530, Anup Patel wrote:
-> On Thu, May 18, 2023 at 5:39=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr> w=
-rote:
-> > On 5/18/23 08:53, Anup Patel wrote:
-> > > On Wed, May 17, 2023 at 8:26=E2=80=AFPM Alexandre Ghiti <alexghiti@ri=
-vosinc.com> wrote:
-> > >> On Wed, May 17, 2023 at 1:28=E2=80=AFPM Conor Dooley <conor.dooley@m=
-icrochip.com> wrote:
-> > >>> On Wed, May 17, 2023 at 10:58:02AM +0200, Alexandre Ghiti wrote:
-> > >>>> On Tue, May 16, 2023 at 1:12=E2=80=AFPM Alexandre Ghiti <alexghiti=
-@rivosinc.com> wrote:
-> > >>>>> On Tue, May 16, 2023 at 11:24=E2=80=AFAM Song Shuai <suagrfillet@=
-gmail.com> wrote:
-> > >>>>> I actually removed this flag a few years ago, and I have to admit=
- that
-> > >>>>> I need to check if that's necessary: the goal of commit 3335068f8=
-721
-> > >>>>> ("riscv: Use PUD/P4D/PGD pages for the linear mapping") is to exp=
-ose
-> > >>>>> the "right" start of DRAM so that we can align virtual and physic=
-al
-> > >>>>> addresses on a 1GB boundary.
-> > >>>>>
-> > >>>>> So I have to check if a nomap region is actually added as a
-> > >>>>> memblock.memory.regions[] or not: if yes, that's perfect, let's a=
-dd
-> > >>>>> the nomap attributes to the PMP regions, otherwise, I don't think=
- that
-> > >>>>> is a good solution.
-> > >>>> So here is the current linear mapping without nomap in openSBI:
-> > >>>>
-> > >>>> ---[ Linear mapping ]---
-> > >>>> 0xff60000000000000-0xff60000000200000    0x0000000080000000       =
-  2M
-> > >>>> PMD     D A G . . W R V
-> > >>>> 0xff60000000200000-0xff60000000e00000    0x0000000080200000       =
- 12M
-> > >>>> PMD     D A G . . . R V
-> > >>>>
-> > >>>> And below the linear mapping with nomap in openSBI:
-> > >>>>
-> > >>>> ---[ Linear mapping ]---
-> > >>>> 0xff60000000080000-0xff60000000200000    0x0000000080080000      1=
-536K
-> > >>>> PTE     D A G . . W R V
-> > >>>> 0xff60000000200000-0xff60000000e00000    0x0000000080200000       =
- 12M
-> > >>>> PMD     D A G . . . R V
-> > >>>>
-> > >>>> So adding nomap does not misalign virtual and physical addresses, =
-it
-> > >>>> prevents the usage of 1GB page for this area though, so that's a
-> > >>>> solution, we just lose this 1GB page here.
-> > >>>>
-> > >>>> But even though that may be the fix, I think we also need to fix t=
-hat
-> > >>>> in the kernel as it would break compatibility with certain version=
-s of
-> > >>>> openSBI *if* we fix openSBI...So here are a few solutions:
-> > >>>>
-> > >>>> 1. we can mark all "mmode_resv" nodes in the device tree as nomap,
-> > >>>> before the linear mapping is established (IIUC, those nodes are ad=
-ded
-> > >>>> by openSBI to advertise PMP regions)
-> > >>>>      -> This amounts to the same fix as opensbi and we lose the 1G=
-B hugepage.
-> > >>> AFAIU, losing the 1 GB hugepage is a regression, which would make t=
-his
-> > >>> not an option, right?
-> > >> Not sure this is a real regression, I'd rather avoid it, but as
-> > >> mentioned in my first answer, Mike Rapoport showed that it was making
-> > >> no difference performance-wise...
-> > >>
-> > >>>> 2. we can tweak pfn_is_nosave function to *not* save pfn correspon=
-ding
-> > >>>> to PMP regions
-> > >>>>      -> We don't lose the 1GB hugepage \o/
-> > >>>> 3. we can use register_nosave_region() to not save the "mmode_resv"
-> > >>>> regions (x86 does that
-> > >>>> https://elixir.bootlin.com/linux/v6.4-rc1/source/arch/x86/kernel/e=
-820.c#L753)
-> > >>>>      -> We don't lose the 1GB hugepage \o/
-> > >>>> 4. Given JeeHeng pointer to
-> > >>>> https://elixir.bootlin.com/linux/v6.4-rc1/source/kernel/power/snap=
-shot.c#L1340,
-> > >>>> we can mark those pages as non-readable and make the hibernation
-> > >>>> process not save those pages
-> > >>>>      -> Very late-in-the-day idea, not sure what it's worth, we al=
-so
-> > >>>> lose the 1GB hugepage...
-> > >>> Ditto here re: introducing another regression.
-> > >>>
-> > >>>> To me, the best solution is 3 as it would prepare for other similar
-> > >>>> issues later, it is similar to x86 and it allows us to keep 1GB
-> > >>>> hugepages.
-> > >>>>
-> > >>>> I have been thinking, and to me nomap does not provide anything si=
-nce
-> > >>>> the kernel should not address this memory range, so if it does, we
-> > >>>> must fix the kernel.
-> > >>>>
-> > >>>> Let me know what you all think, I'll be preparing a PoC of 3 in th=
-e meantime!
-> > >>> #3 would probably get my vote too. It seems like you could use it
-> > >>> dynamically if there was to be a future other provider of "mmode_re=
-sv"
-> > >>> regions, rather than doing something location-specific.
-> > >>>
-> > >>> We should probably document these opensbi reserved memory nodes tho=
-ugh
-> > >>> in a dt-binding or w/e if we are going to be relying on them to not
-> > >>> crash!
-> > > Depending on a particular node name is fragile. If we really need
-> > > information from DT then I suggest adding "no-save-restore" DT
-> > > property in reserved memory nodes.
-> >
-> >
-> > I understand your point, the node name is the only thing I found that
-> > would work with current opensbi: any other idea what we could use inste=
-ad?
-> >
-> >
-> > >> Yes, you're right, let's see what Atish and Anup think!
-> > > I think we have two possible approaches:
-> > >
-> > > 1) Update OpenSBI to set "no-map" DT property for firmware
-> > >      reserved regions. We were doing this previously but removed
-> > >      it later for performance reasons mentioned by Alex. It is also
-> > >      worth mentioning that ARM Trusted Firmware also sets "no-map"
-> > >      DT property for firmware reserved regions.
-> > >
-> > > 2) Add a new "no-save-restore" DT property in the reserved
-> > >      memory DT bindings. The hibernate support of Linux arch/riscv
-> > >      will use this DT property to exclude memory regions from
-> > >      save-restore. The EFI implementation of EDK2 and U-Boot
-> > >      should do the following:
-> > >      1) Treat all memory having "no-map" DT property as EFI
-> > >          reserved memory
-> > >      2) Treat all memory not having "no-map" DT property and
-> > >          not having "no-save-restore" DT property as EfiBootServicesD=
-ata
-> > >      3) Treat all memory not having "no-map" DT property and
-> > >           having "no-save-restore" DT property as EfiRuntimeServiceDa=
-ta
-> > >           (Refer,
-> > > https://devicetree-specification.readthedocs.io/en/latest/chapter3-de=
-vicenodes.html#reserved-memory-and-uefi)
-> > >
-> > > Personally, I am leaning towards approach#1 since approach#2
-> > > will require changing DeviceTree specification as well.
-> >
-> >
-> > If needed, indeed #1 is the simplest, but I insist, to me it is not
-> > needed (and we don't have it in the current opensbi), if you have
-> > another opinion, I'm open to discuss it!
->=20
-> I agree with you, backward compatibility with older firmwares
-> is important.
->=20
-> Let's go with your proposed change to treat reserved DT nodes
-> with "mmode_resv*" name as M-mode firmware memory (it could
-> be any M-mode firmware). We will certainly need to document it
-> somewhere as an expectation of Linux RISC-V kernel.
+The inconsistency is here:
+1010-1111 –> -1.5 dB
 
-Actually, you two both probably know the answer to this, but was there a
-release done of OpenSBI where the reserved memory region was not
-specified to be no-map?
+Since the hardware default is 1011 (11) instead of 1010 (10), I assumed
+the specs could be wrong and probably should have provided the following
+mappings:
 
->=20
-> @Sunil How about treating "mmode_resv*" as
-> EfiRuntimeServiceData in EDK2 ? Other reserved memory
-> nodes can follow the device tree specification.
+1010 ->  -1.5 dB
+1011-1111 -> 0 dB
 
+> Presumably you can check the effects of changing the value?  It seems
+> plausible that what's written in the code might be accurate and the
+> higher values might actually change the gain but it'd be better to
+> check.
 
---JfSOowhxP3xt+heO
-Content-Type: application/pgp-signature; name="signature.asc"
+I haven't noticed a (measurable) change in gain when switching between
+10 and 11, but my testing equipment is also not that great. Will try to
+improve the tests accuracy.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG4V6wAKCRB4tDGHoIJi
-0l2fAP9VB11nIqsvVNkavW5WcNBM3RgPlCXyA1ltDlnR+igeOQD+OEGhixkjuJOY
-zp+FBKQesQLe4PtD2luSO8SXfFAxcgc=
-=Yqlw
------END PGP SIGNATURE-----
-
---JfSOowhxP3xt+heO--
+Thanks,
+Cristian
