@@ -2,91 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99AC70ED6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAA770ED73
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239527AbjEXFzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S239553AbjEXF5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236309AbjEXFzk (ORCPT
+        with ESMTP id S239548AbjEXF5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:55:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703C2132;
-        Tue, 23 May 2023 22:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jdIJRr6SVbAXSsPF/i2aTGQx/YOfpWz8tHC0SKlBXi4=; b=bhZ/q6+BbvgH//aJqOs/m6J8Iz
-        +iluoYt2ZJ8g0cscenhvfA5X65IhkckRAUYzkya87DkwdCo6YdN/coXONlstI7WVrcH5dus57/fiH
-        AQTRj4f+Vb6RLA1cThpIX+mFOj5ujUWhXudJ/myZanGPeMkNoZDObVmAa9ltm3JaJbn5FU9gJ4QmT
-        DNs8PzSe0nSinW1wti1EPfTh2gjMRRUCm0frJG/MHSioDV6HUIwJp5pBMy27IJjPsvGjOdzbGK0HE
-        WSfIn5enW2dqrNATZaCM45sX/ZnHVxMALuPL3qYle7MGsW99GH5SgmSDaybr3b2VwkPMUiZTyqgMD
-        Giy06sZQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1hT6-00CRbU-25;
-        Wed, 24 May 2023 05:55:28 +0000
-Date:   Tue, 23 May 2023 22:55:28 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: Extending page pinning into fs/direct-io.c
-Message-ID: <ZG2m0PGztI2BZEn9@infradead.org>
-References: <ZGxfrOLZ4aN9/MvE@infradead.org>
- <20230522205744.2825689-1-dhowells@redhat.com>
- <3068545.1684872971@warthog.procyon.org.uk>
+        Wed, 24 May 2023 01:57:33 -0400
+Received: from ubuntu20 (unknown [193.203.214.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D104198
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 22:57:30 -0700 (PDT)
+Received: by ubuntu20 (Postfix, from userid 1003)
+        id A86C3E1EDF; Wed, 24 May 2023 13:57:13 +0800 (CST)
+From:   Yang Yang <yang.yang29@zte.com.cn>
+To:     akpm@linux-foundation.org, david@redhat.com
+Cc:     yang.yang29@zte.com.cn, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn
+Subject: [PATCH v9 1/5] ksm: support unsharing KSM-placed zero pages
+Date:   Wed, 24 May 2023 13:57:11 +0800
+Message-Id: <20230524055711.20387-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202305241351365661923@zte.com.cn>
+References: <202305241351365661923@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3068545.1684872971@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_NON_FQDN_1,
+        HEADER_FROM_DIFFERENT_DOMAINS,HELO_NO_DOMAIN,NO_DNS_FOR_FROM,
+        RCVD_IN_PBL,RDNS_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL_NO_RDNS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 09:16:11PM +0100, David Howells wrote:
-> I've been poking at it this afternoon, but it doesn't look like it's going to
-> be straightforward, unfortunately.  The mm folks have been withdrawing access
-> to the pinning API behind the ramparts of the mm/ dir.  Further, the dio code
-> will (I think), under some circumstances, arbitrarily insert the zero_page
-> into a list of things that are maybe pinned or maybe unpinned, but I can (I
-> think) also be given a pinned zero_page from the GUP code if the page tables
-> point to one and a DIO-write is requested - so just doing if page == zero_page
-> isn't sufficient.
+From: xu xin <xu.xin16@zte.com.cn>
 
-Yes.  I think the proper workaround is to add a MM helper that just
-pins a single page and make it available to direct-io.c.  It should not
-be exported and clearly marked to not be used in new code.  
+When use_zero_pages of ksm is enabled, madvise(addr, len, MADV_UNMERGEABLE)
+and other ways (like write 2 to /sys/kernel/mm/ksm/run) to trigger
+unsharing will *not* actually unshare the shared zeropage as placed by KSM
+(which is against the MADV_UNMERGEABLE documentation). As these KSM-placed
+zero pages are out of the control of KSM, the related counts of ksm pages
+don't expose how many zero pages are placed by KSM (these special zero
+pages are different from those initially mapped zero pages, because the
+zero pages mapped to MADV_UNMERGEABLE areas are expected to be a complete
+and unshared page).
 
-> What I'd like to do is to make the GUP code not take a ref on the zero_page
-> if, say, FOLL_DONT_PIN_ZEROPAGE is passed in, and then make the bio cleanup
-> code always ignore the zero_page.
+To not blindly unshare all shared zero_pages in applicable VMAs, the patch
+use pte_mkdirty (related with architecture) to mark KSM-placed zero pages.
+Thus, MADV_UNMERGEABLE will only unshare those KSM-placed zero pages.
 
-I don't think that'll work, as we can't mix different pin vs get types
-in a bio.  And that's really a good thing.
+In addition, we'll reuse this mechanism to reliably identify KSM-placed
+ZeroPages to properly account for them (e.g., calculating the KSM profit
+that includes zeropages) in the latter patches.
 
-> Something that I noticed is that the dio code seems to wangle to page bits on
-> the target pages for a DIO-read, which seems odd, but I'm not sure I fully
-> understand the code yet.
+The patch will not degrade the performance of use_zero_pages as it doesn't
+change the way of merging empty pages in use_zero_pages's feature.
 
-I don't understand this sentence.
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Suggested-by: David Hildenbrand <david@redhat.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ include/linux/ksm.h |  8 ++++++++
+ mm/ksm.c            | 11 ++++++++---
+ 2 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+index 899a314bc487..4fd5f4a50bac 100644
+--- a/include/linux/ksm.h
++++ b/include/linux/ksm.h
+@@ -26,6 +26,12 @@ int ksm_disable(struct mm_struct *mm);
+ 
+ int __ksm_enter(struct mm_struct *mm);
+ void __ksm_exit(struct mm_struct *mm);
++/*
++ * To identify zeropages that were mapped by KSM, we reuse the dirty bit
++ * in the PTE. If the PTE is dirty, the zeropage was mapped by KSM when
++ * deduplicating memory.
++ */
++#define is_ksm_zero_pte(pte)	(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte))
+ 
+ static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
+ {
+@@ -95,6 +101,8 @@ static inline void ksm_exit(struct mm_struct *mm)
+ {
+ }
+ 
++#define is_ksm_zero_pte(pte)	0
++
+ #ifdef CONFIG_MEMORY_FAILURE
+ static inline void collect_procs_ksm(struct page *page,
+ 				     struct list_head *to_kill, int force_early)
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 0156bded3a66..f31c789406b1 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -447,7 +447,8 @@ static int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long nex
+ 		if (is_migration_entry(entry))
+ 			page = pfn_swap_entry_to_page(entry);
+ 	}
+-	ret = page && PageKsm(page);
++	/* return 1 if the page is an normal ksm page or KSM-placed zero page */
++	ret = (page && PageKsm(page)) || is_ksm_zero_pte(*pte);
+ 	pte_unmap_unlock(pte, ptl);
+ 	return ret;
+ }
+@@ -1220,8 +1221,12 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+ 		page_add_anon_rmap(kpage, vma, addr, RMAP_NONE);
+ 		newpte = mk_pte(kpage, vma->vm_page_prot);
+ 	} else {
+-		newpte = pte_mkspecial(pfn_pte(page_to_pfn(kpage),
+-					       vma->vm_page_prot));
++		/*
++		 * Use pte_mkdirty to mark the zero page mapped by KSM, and then
++		 * we can easily track all KSM-placed zero pages by checking if
++		 * the dirty bit in zero page's PTE is set.
++		 */
++		newpte = pte_mkdirty(pte_mkspecial(pfn_pte(page_to_pfn(kpage), vma->vm_page_prot)));
+ 		/*
+ 		 * We're replacing an anonymous page with a zero page, which is
+ 		 * not anonymous. We need to do proper accounting otherwise we
+-- 
+2.15.2
