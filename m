@@ -2,102 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F355770EB16
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803AC70EB18
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239075AbjEXCDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 22:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S238698AbjEXCGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 22:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbjEXCDu (ORCPT
+        with ESMTP id S231317AbjEXCGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 22:03:50 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF95185
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:03:48 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a7e639656so906014276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684893828; x=1687485828;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XOon+WJOJI8+JwO5uO9f8iJb1ORFwlHFloJ3UvTpfgc=;
-        b=UFEAXGWkCrWSSfXmpcK4Hs6xsXEnrzSBJxTqWM4F7szWa9/aDVp1VjCZ+UKcK+xoHM
-         PmAOLGT5LfEuMIEKnBZ4wabefUZ+LVmIUFHWn5xPd/bykUkGQPp9j+LZxAlUxONq5uk7
-         yRSm5vIBLRm+wpD08KvTiIaL4QxV9z3DUzne98cb8hqRzh8ZjvRvYreYH6IzQBrEz9eu
-         2UY4MdNfRRyWRFSHaJzQdppmy0L4PtosL8GWXlVCnaPSeXr+e1FJhuwhAiy12y8ENowQ
-         39b1yiQnYgOliG3KAI1y99BlfHwmgGwiStE3PaSK8nM90UWnO9Pg2d6fCU5FbkcPbjrL
-         8vkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684893828; x=1687485828;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XOon+WJOJI8+JwO5uO9f8iJb1ORFwlHFloJ3UvTpfgc=;
-        b=C0f4Mn0zIdEtEKDzt+luej+NOTXnQnXpKQg97UFcuYglgrDDGcNMHaK6d9xdMkJde2
-         1rpWnsa8Vz3GjR0FbEN0IjMJ3YVakLLBfEnAibqLml19+uKRHs7hmV27MJF5M8+BHnSu
-         rvKS8nMbCBeZdQX4lg9xdcSyB39hTMWcll//28vT20M3Tcpe/6aCFi1c/fIYi5myJ4JW
-         2llwQ5WfW8eB1Y9yXOiBd82uJWNMxqBeH08g4LXjrQPV9vBT3UJCyOKJJguXNOS1nMD7
-         qWZODqj524lawmz+rpENFc8fOAo/WvUVRW1u1dpt0sXdhNh+AOexfPK81XQDiS+lDWYk
-         8mMg==
-X-Gm-Message-State: AC+VfDxKkeJW17FS+2kdMlk3ZK3a43oCtCmPLfRh3ZFTnX7B8eEMORoW
-        IaP+QCCYsliI74bdM6W/4Y42J/CDnae3bZq7cRcq
-X-Google-Smtp-Source: ACHHUZ7gejpbuXJwcXtecq2tYyFg25U/Vh6AH2Ix5ntTdGeydgt5znEovV4qhhLIpcEdd+FNyhP4IJNOMr/SKEzPnpg=
-X-Received: by 2002:a25:b120:0:b0:ba6:f32b:28e3 with SMTP id
- g32-20020a25b120000000b00ba6f32b28e3mr17242402ybj.6.1684893827701; Tue, 23
- May 2023 19:03:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
- <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
-In-Reply-To: <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 23 May 2023 22:03:36 -0400
-Message-ID: <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
-Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Eric Paris <eparis@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 23 May 2023 22:06:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428F9B5;
+        Tue, 23 May 2023 19:06:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0E5761118;
+        Wed, 24 May 2023 02:06:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C02C433D2;
+        Wed, 24 May 2023 02:06:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684893972;
+        bh=GhEwIZj3aSbyxIefFCwUKUtxrj24KTZ/dxPQOWeLZzc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=By4SDccw9VtWV0z+TuZHGC3nwb9A2zIqlXKlPDPl6kiSUSqAIBwSyqkSa9q7Nw7bv
+         AJsp+3fNzYTbhApQgpVQTE5uWkxpYlke5T7kSb6T4W+u1m4jqk+6rtbxAcWMS2Pkp6
+         At+JSNti+S5Dfr17VQygXg1dsBPWAJbua2z/cwLCuCVuSyxPDLfDyBsltmV4HajfO1
+         7aNHP9w4+yt48B4R/LLjw2JUiPEfaYG9mv+U5FgJq3m75KxJr6xh3vHCNXegO6JCrm
+         UzU7gt1wVgsowgf8oqagJhZwnrOwCa704vZhU1fdd5UH74JtBudpQ5FqPjpyDYWYO0
+         S0zV3KWEmGEUA==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 24 May 2023 05:06:09 +0300
+Message-Id: <CSU52BU1D59A.1J8RKQA5FLAV3@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     <shaopeijie@cestc.cn>, <pmenzel@molgen.mpg.de>
+Cc:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] tpm_tis_spi: Release chip select when flow control
+ fails
+X-Mailer: aerc 0.14.0
+References: <20230522070140.33719-1-shaopeijie@cestc.cn>
+ <20230523024536.4294-1-shaopeijie@cestc.cn>
+In-Reply-To: <20230523024536.4294-1-shaopeijie@cestc.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 5:50=E2=80=AFPM Ivan Babrou <ivan@cloudflare.com> w=
-rote:
-> On Tue, May 23, 2023 at 12:59=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
- wrote:
-> > Before seriously considering something like this, I would really like
-> > to see some time put into profiling the original overhead and some
-> > designs on how that could be improved.  Without that, patches like
-> > this look like drive-by band-aids which have already caused enough
-> > headaches for audit maintenance.
+On Tue May 23, 2023 at 5:45 AM EEST,  wrote:
+> From: Peijie Shao <shaopeijie@cestc.cn>
 >
-> Hello Paul,
+> The failure paths in tpm_tis_spi_transfer() do not deactivate
+> chip select. Send an empty message (cs_select =3D=3D 0) to overcome
+> this.
 >
-> Could you elaborate on what exactly you would like to see added? It's
-> not clear to me what is missing.
+> The patch is tested by two ways.
+> One way needs to touch hardware:
+>    1. force pull MISO pin down to GND, it emulates a forever
+>       'WAIT' timing.
+>    2. probe cs pin by an oscilloscope.
+>    3. load tpm_tis_spi.ko.
+> After loading, dmesg prints:
+>     "probe of spi0.0 failed with error -110"
+> and oscilloscope shows cs pin goes high(deactivated) after
+> the failure. Before the patch, cs pin keeps low.
+>
+> Second way is by writing a fake spi controller.
+>    1. implement .transfer_one method, fill all rx buf with 0.
+>    2. implement .set_cs method, print the state of cs pin.
+>    we can see cs goes high after the failure.
+>
+> Signed-off-by: Peijie Shao <shaopeijie@cestc.cn>
 
-I should have been more clear, let me try again ...
+Looks good to me + great explanation, thank you.
 
-From my perspective, this patch adds code and complexity to deal with
-the performance impact of auditing.  In some cases that is the right
-thing to do, but I would much rather see a more in-depth analysis of
-where the audit hot spots are in this benchmark, and some thoughts on
-how we might improve that.  In other words, don't just add additional
-processing to bypass (slower, more involved) processing; look at the
-processing that is currently being done and see if you can find a way
-to make it faster.  It will likely take longer, but the results will
-be much more useful.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Does that make sense?
-
---=20
-paul-moore.com
+BR, Jarkko
