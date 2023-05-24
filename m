@@ -2,113 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D7470FDD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9C170FD4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbjEXSZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
+        id S230255AbjEXR4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237775AbjEXSZH (ORCPT
+        with ESMTP id S235363AbjEXR4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:25:07 -0400
-X-Greylist: delayed 1712 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 May 2023 11:25:02 PDT
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6578613E;
-        Wed, 24 May 2023 11:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Cc:To:Message-Id:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Subject:Date:From:References:In-Reply-To:Sender:
-        Reply-To:Content-ID:Content-Description;
-        bh=SPrqV6ntExTuKWUGea554T7MrMdxYL653Yvti6t/SiQ=; b=QxbJe9w+BZfDdaA+dQgy0917EL
-        /AGNlLaD6S2fxjGnGhkr9zUNSsXN67n/7C1/hCqU7sQwp31g1SSiBKuRluPdKJdT5kVWn0TCBq/Nf
-        coK8ehnJxJgzCvV0lSlzRBLsWcdRERV9AZiJAXE1F+EdmjsOg4BkjMEBtl59SdPZYKBslHubkmx4H
-        FlVhfuAhpsYhGdeF4XAkcSYaz+KxChhAcyJJN7YtpfKbgPwM6yRE+nu0Y8412hCotoJqi3/QR6I1l
-        +yqQEX13g05r68Ga3dmwVH8phbTvG2ikw+W3oYqlAaPik1WnlgJXKWIcOTZwAZjlv/aqlCbdsnbpr
-        dHpziR2Q==;
-Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1q1sio-002A2x-Ty; Wed, 24 May 2023 19:56:26 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date:   Wed, 24 May 2023 19:56:21 +0200
-Subject: [PATCH] opp: Fix use-after-free in lazy_opp_tables after probe
- deferral
+        Wed, 24 May 2023 13:56:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CDD119
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:56:29 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q1sip-0000nx-Ee; Wed, 24 May 2023 19:56:27 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q1sio-0002iZ-TK; Wed, 24 May 2023 19:56:26 +0200
+Date:   Wed, 24 May 2023 19:56:26 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
+        Vladimir Oltean <olteanv@gmail.com>, kernel@pengutronix.de,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v1 4/5] net: dsa: microchip: ksz8: Prepare
+ ksz8863_smi for regmap register access validation
+Message-ID: <20230524175626.GC7074@pengutronix.de>
+References: <20230524123220.2481565-1-o.rempel@pengutronix.de>
+ <20230524123220.2481565-5-o.rempel@pengutronix.de>
+ <584bb123-28c7-4d56-bad7-efcc2c343ecb@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
-X-B4-Tracking: v=1; b=H4sIAMVPbmQC/x2N0QqDMAwAf0XybCCrOsRfGT6kXZyBUkuLsk389
- 4U93sFxJ1QpKhWm5oQih1bdksGtbSCsnF6C+jQGR66jwfW45YyRvx/cecE7MVHvu3GQAJZ4roK
- +cAqrRWmP0WQusuj7/3jM1/UDqZFnUnMAAAA=
-To:     Viresh Kumar <vireshk@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <584bb123-28c7-4d56-bad7-efcc2c343ecb@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When dev_pm_opp_of_find_icc_paths() in _allocate_opp_table() returns
--EPROBE_DEFER, the opp_table is freed again, to wait until all the
-interconnect paths are available.
+On Wed, May 24, 2023 at 06:59:28PM +0200, Andrew Lunn wrote:
+> On Wed, May 24, 2023 at 02:32:19PM +0200, Oleksij Rempel wrote:
+> > This patch prepares the ksz8863_smi part of ksz8 driver to utilize the
+> > regmap register access validation feature.
+> > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >  drivers/net/dsa/microchip/ksz8863_smi.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> > 
+> > diff --git a/drivers/net/dsa/microchip/ksz8863_smi.c b/drivers/net/dsa/microchip/ksz8863_smi.c
+> > index 2af807db0b45..303a4707c759 100644
+> > --- a/drivers/net/dsa/microchip/ksz8863_smi.c
+> > +++ b/drivers/net/dsa/microchip/ksz8863_smi.c
+> > @@ -104,6 +104,7 @@ static const struct regmap_config ksz8863_regmap_config[] = {
+> >  		.cache_type = REGCACHE_NONE,
+> >  		.lock = ksz_regmap_lock,
+> >  		.unlock = ksz_regmap_unlock,
+> > +		.max_register = BIT(8) - 1,
+> 
+> Maybe SZ_256 - 1 is more readable?
 
-However, if the OPP table is using required-opps then it may already
-have been added to the global lazy_opp_tables list. The error path
-does not remove the opp_table from the list again.
+It is the same way used in other regmap_config in this driver.
 
-This can cause crashes later when the provider of the required-opps
-is added, since we will iterate over OPP tables that have already been
-freed. E.g.:
+As for me, U8_MAX is probably more understandable way, since addressing
+since is 8bit.
 
-  Unable to handle kernel NULL pointer dereference when read
-  CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.4.0-rc3
-  PC is at _of_add_opp_table_v2 (include/linux/of.h:949
-  drivers/opp/of.c:98 drivers/opp/of.c:344 drivers/opp/of.c:404
-  drivers/opp/of.c:1032) -> lazy_link_required_opp_table()
+> >  	},
+> >  	{
+> >  		.name = "#16",
+> > @@ -113,6 +114,7 @@ static const struct regmap_config ksz8863_regmap_config[] = {
+> >  		.cache_type = REGCACHE_NONE,
+> >  		.lock = ksz_regmap_lock,
+> >  		.unlock = ksz_regmap_unlock,
+> > +		.max_register = BIT(8) - 2,
+> 
+> - 2?
+> 
+> Is this the 16 bit regmap? So it has 1/2 the number of registers of
+> the 8 bit regmap? So i would of thought it should be BIT(7)-1, or
+> SZ_128-1 ?
 
-Fix this by removing the opp_table from the list before freeing it.
+Sorry, it is a typo.
 
-Cc: stable@vger.kernel.org
-Fixes: 7eba0c7641b0 ("opp: Allow lazy-linking of required-opps")
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
-This fixes the crash I ran into after adding an OPP table with
-both "required-opps" and interconnect paths (opp-peak-kBps).
-
-By the way, the "lazy_opp_tables" does not seem to be protected by any
-locks(?) so I could imagine that theoretically there could be a race
-condition while adding/removing OPP tables there. This is unrelated
-to the crash I saw, though.
----
- drivers/opp/core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 85cbc8de407c..6a3a320be7df 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1358,6 +1358,7 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
- 	return opp_table;
- 
- remove_opp_dev:
-+	list_del(&opp_table->lazy);
- 	_remove_opp_dev(opp_dev, opp_table);
- err:
- 	kfree(opp_table);
-
----
-base-commit: 9e28f7a74581204807f20ae46568939038e327aa
-change-id: 20230524-opp-lazy-uaf-60a004b385ec
-
-Best regards,
 -- 
-Stephan Gerhold
-Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
