@@ -2,137 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A9F70F55E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8A170F565
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjEXLec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
+        id S232027AbjEXLg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbjEXLeb (ORCPT
+        with ESMTP id S231167AbjEXLgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:34:31 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EE812E;
-        Wed, 24 May 2023 04:34:29 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q1ml8-0000gO-RQ; Wed, 24 May 2023 13:34:26 +0200
-Message-ID: <175578ec-9dec-7a9c-8d3a-43f24ff86b92@leemhuis.info>
-Date:   Wed, 24 May 2023 13:34:26 +0200
+        Wed, 24 May 2023 07:36:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA13C5;
+        Wed, 24 May 2023 04:36:20 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9C4BE1FDC9;
+        Wed, 24 May 2023 11:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684928179; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FwAKYD0z8pW+9JaKpkN3toV9DOYGVk/tLA54UTMvFvs=;
+        b=fuotTz0Kyq5RkgGokrnxG609dhdlh7eXS5CeqjYq8WXFYQqLE3agWtLLSFpliodMeB7s5V
+        xx7rusJnt2o8u0wKAllTdf9IBYj+WdwndCGv/le9IbX/t2yIPOWBM2uADVMEuQDfpGTlvu
+        EOMqQltqypCXcFmrWIB/10NPqWeXfio=
+Received: from suse.cz (dhcp129.suse.cz [10.100.51.129])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7D0452C141;
+        Wed, 24 May 2023 11:36:15 +0000 (UTC)
+Date:   Wed, 24 May 2023 13:36:15 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
+        npiggin@gmail.com, davem@davemloft.net,
+        Marc Zyngier <maz@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
+        christophe.leroy@csgroup.eu,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
+        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH v5 10/18] watchdog/hardlockup: Add a "cpu" param to
+ watchdog_hardlockup_check()
+Message-ID: <ZG32r9Izc9K1Z3IJ@alley>
+References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
+ <20230519101840.v5.10.I3a7d4dd8c23ac30ee0b607d77feb6646b64825c0@changeid>
+ <ZGzjm9h85fpYZJMc@alley>
+ <CAD=FV=VeGKTvw2=qhSqkSEtYwVrXGLNzNbgBAwrmn2CWWfJckQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: build error while building arch/x86/purgatory/sha256.o: invalid
- 'asm': operand is not a condition code [...]
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1684928069;8444b3c6;
-X-HE-SMSGID: 1q1ml8-0000gO-RQ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAD=FV=VeGKTvw2=qhSqkSEtYwVrXGLNzNbgBAwrmn2CWWfJckQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi! My linux-next builds for Fedora[1] since yesterday fail with the
-following error:
+On Tue 2023-05-23 09:34:37, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, May 23, 2023 at 9:02 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > On Fri 2023-05-19 10:18:34, Douglas Anderson wrote:
+> > > In preparation for the buddy hardlockup detector where the CPU
+> > > checking for lockup might not be the currently running CPU, add a
+> > > "cpu" parameter to watchdog_hardlockup_check().
+> > >
+> > > As part of this change, make hrtimer_interrupts an atomic_t since now
+> > > the CPU incrementing the value and the CPU reading the value might be
+> > > different. Technially this could also be done with just READ_ONCE and
+> > > WRITE_ONCE, but atomic_t feels a little cleaner in this case.
+> > >
+> > > While hrtimer_interrupts is made atomic_t, we change
+> > > hrtimer_interrupts_saved from "unsigned long" to "int". The "int" is
+> > > needed to match the data type backing atomic_t for hrtimer_interrupts.
+> > > Even if this changes us from 64-bits to 32-bits (which I don't think
+> > > is true for most compilers), it doesn't really matter. All we ever do
+> > > is increment it every few seconds and compare it to an old value so
+> > > 32-bits is fine (even 16-bits would be). The "signed" vs "unsigned"
+> > > also doesn't matter for simple equality comparisons.
+> > >
+> > > hrtimer_interrupts_saved is _not_ switched to atomic_t nor even
+> > > accessed with READ_ONCE / WRITE_ONCE. The hrtimer_interrupts_saved is
+> > > always consistently accessed with the same CPU. NOTE: with the
+> > > upcoming "buddy" detector there is one special case. When a CPU goes
+> > > offline/online then we can change which CPU is the one to consistently
+> > > access a given instance of hrtimer_interrupts_saved. We still can't
+> > > end up with a partially updated hrtimer_interrupts_saved, however,
+> > > because we end up petting all affected CPUs to make sure the new and
+> > > old CPU can't end up somehow read/write hrtimer_interrupts_saved at
+> > > the same time.
+> > >
+> > > --- a/kernel/watchdog.c
+> > > +++ b/kernel/watchdog.c
+> > > @@ -87,29 +87,34 @@ __setup("nmi_watchdog=", hardlockup_panic_setup);
+> > >
+> > >  #if defined(CONFIG_HARDLOCKUP_DETECTOR_PERF)
+> > >
+> > > -static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts);
+> > > -static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts_saved);
+> > > +static DEFINE_PER_CPU(atomic_t, hrtimer_interrupts);
+> > > +static DEFINE_PER_CPU(int, hrtimer_interrupts_saved);
+> > >  static DEFINE_PER_CPU(bool, watchdog_hardlockup_warned);
+> > >  static unsigned long watchdog_hardlockup_all_cpu_dumped;
+> > >
+> > > -static bool is_hardlockup(void)
+> > > +static bool is_hardlockup(unsigned int cpu)
+> > >  {
+> > > -     unsigned long hrint = __this_cpu_read(hrtimer_interrupts);
+> > > +     int hrint = atomic_read(&per_cpu(hrtimer_interrupts, cpu));
+> > >
+> > > -     if (__this_cpu_read(hrtimer_interrupts_saved) == hrint)
+> > > +     if (per_cpu(hrtimer_interrupts_saved, cpu) == hrint)
+> > >               return true;
+> > >
+> > > -     __this_cpu_write(hrtimer_interrupts_saved, hrint);
+> > > +     /*
+> > > +      * NOTE: we don't need any fancy atomic_t or READ_ONCE/WRITE_ONCE
+> > > +      * for hrtimer_interrupts_saved. hrtimer_interrupts_saved is
+> > > +      * written/read by a single CPU.
+> > > +      */
+> > > +     per_cpu(hrtimer_interrupts_saved, cpu) = hrint;
+> > >
+> > >       return false;
+> > >  }
+> > >
+> > >  static void watchdog_hardlockup_kick(void)
+> > >  {
+> > > -     __this_cpu_inc(hrtimer_interrupts);
+> > > +     atomic_inc(raw_cpu_ptr(&hrtimer_interrupts));
+> >
+> > Is there any particular reason why raw_*() is needed, please?
+> >
+> > My expectation is that the raw_ API should be used only when
+> > there is a good reason for it. Where a good reason might be
+> > when the checks might fail but the consistency is guaranteed
+> > another way.
+> >
+> > IMHO, we should use:
+> >
+> >         atomic_inc(this_cpu_ptr(&hrtimer_interrupts));
+> >
+> > To be honest, I am a bit lost in the per_cpu API definitions.
+> >
+> > But this_cpu_ptr() seems to be implemented the same way as
+> > per_cpu_ptr() when CONFIG_DEBUG_PREEMPT is enabled.
+> > And we use per_cpu_ptr() in is_hardlockup().
+> >
+> > Also this_cpu_ptr() is used more commonly:
+> >
+> > $> git grep this_cpu_ptr | wc -l
+> > 1385
+> > $> git grep raw_cpu_ptr | wc -l
+> > 114
+> 
+> Hmmm, I think maybe I confused myself. The old code purposely used the
+> double-underscore prefixed version of this_cpu_inc(). I couldn't find
+> a double-underscore version of this_cpu_ptr() and I somehow convinced
+> myself that the raw() version was the right equivalent version.
+> 
+> You're right that this_cpu_ptr() is a better choice here and I don't
+> see any reason why we'd need the raw version.
 
-> In file included from <command-line>:
-> ./include/crypto/sha256_base.h: In function ‘lib_sha256_base_do_update.constprop.isra’:
-> ././include/linux/compiler_types.h:332:20: error: invalid 'asm': operand is not a condition code, invalid operand code 'c'
->   332 | #define asm_inline asm __inline
->       |                    ^~~
+I was confused too. Honestly, it looks a bit messy to me.
 
-See below for the full error message[2]. This happens on Fedora rawhide
-and 38 (both use gcc13), but not on Fedora 37 (which uses gcc12).
+My understanding is that this_cpu*() API has the following semantic:
 
-Is this known already or do I have to bisect this?
+    + this_cpu_*()* actively disables interrupts/preemption
 
-Ciao, Thorsten
+    + __this_cpu_*() just warns when the task could migrate
+		between CPUs.
 
-[1] https://copr.fedorainfracloud.org/coprs/g/kernel-vanilla/next/
+    + raw_cpu_*() can be used in preemtible context when
+		the validity is guaranteed another way.
 
-[2]
-> # CC      arch/x86/purgatory/sha256.o
->  
-> gcc -Wp,-MMD,arch/x86/purgatory/.sha256.o.d -nostdinc
-> -I./arch/x86/include -I./arch/x86/include/generated  -I./include
-> -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi
-> -I./include/uapi -I./include/generated/uapi -include
-> ./include/linux/compiler-version.h -include ./include/linux/kconfig.h
-> -include ./include/linux/compiler_types.h -D__KERNEL__
-> -fmacro-prefix-map=./= -Wall -Wundef -Werror=strict-prototypes
-> -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE
-> -Werror=implicit-function-declaration -Werror=implicit-int
-> -Werror=return-type -Wno-format-security -funsigned-char -std=gnu11
-> -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -fcf-protection=branch
-> -fno-jump-tables -m64 -falign-jumps=1 -falign-loops=1 -mno-80387
-> -mno-fp-ret-in-387 -mpreferred-stack-boundary=3 -mskip-rax-setup
-> -mtune=generic -mno-red-zone -Wno-sign-compare
-> -fno-asynchronous-unwind-tables -fno-jump-tables -mharden-sls=all
-> -fpatchable-function-entry=16,16 -fno-delete-null-pointer-checks
-> -Wno-frame-address -Wno-format-truncation -Wno-format-overflow
-> -Wno-address-of-packed-member -O2 -fno-allow-store-data-races
-> -Wframe-larger-than=2048 -Wno-main -Wno-unused-but-set-variable
-> -Wno-unused-const-variable -Wno-dangling-pointer
-> -ftrivial-auto-var-init=zero -fno-stack-clash-protection
-> -DCC_USING_FENTRY -falign-functions=16 -Wdeclaration-after-statement
-> -Wvla -Wno-pointer-sign -Wcast-function-type -fstrict-flex-arrays=3
-> -Wno-stringop-truncation -Wno-stringop-overflow -Wno-restrict
-> -Wno-maybe-uninitialized -Wno-array-bounds -Wno-alloc-size-larger-than
-> -Wimplicit-fallthrough=5 -fno-strict-overflow -fno-stack-check
-> -fconserve-stack -Werror=date-time -Werror=incompatible-pointer-types
-> -Werror=designated-init -Wno-packed-not-aligned -g -D__DISABLE_EXPORTS
-> -mcmodel=large -ffreestanding -fno-zero-initialized-in-bss -g0
-> -DDISABLE_BRANCH_PROFILING -fno-stack-protector
-> -DKBUILD_MODFILE='"arch/x86/purgatory/sha256"'
-> -DKBUILD_BASENAME='"sha256"' -DKBUILD_MODNAME='"sha256"'
-> -D__KBUILD_MODNAME=kmod_sha256 -c -o arch/x86/purgatory/sha256.o
-> lib/crypto/sha256.c
->
-> In file included from <command-line>:
-> ./include/crypto/sha256_base.h: In function ‘lib_sha256_base_do_update.constprop.isra’:
-> ././include/linux/compiler_types.h:332:20: error: invalid 'asm': operand is not a condition code, invalid operand code 'c'
->   332 | #define asm_inline asm __inline
->       |                    ^~~
-> ./arch/x86/include/asm/bug.h:28:9: note: in expansion of macro ‘asm_inline’
->    28 |         asm_inline volatile("1:\t" ins "\n"                             \
->       |         ^~~~~~~~~~
-> ./arch/x86/include/asm/bug.h:83:9: note: in expansion of macro ‘_BUG_FLAGS’
->    83 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
->       |         ^~~~~~~~~~
-> ./include/asm-generic/bug.h:107:17: note: in expansion of macro ‘__WARN_FLAGS’
->   107 |                 __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
->       |                 ^~~~~~~~~~~~
-> ./include/asm-generic/bug.h:134:17: note: in expansion of macro ‘__WARN_printf’
->   134 |                 __WARN_printf(TAINT_WARN, format);                      \
->       |                 ^~~~~~~~~~~~~
-> ./include/linux/once_lite.h:31:25: note: in expansion of macro ‘WARN’
->    31 |                         func(__VA_ARGS__);                              \
->       |                         ^~~~
-> ./include/asm-generic/bug.h:152:9: note: in expansion of macro ‘DO_ONCE_LITE_IF’
->   152 |         DO_ONCE_LITE_IF(condition, WARN, 1, format)
->       |         ^~~~~~~~~~~~~~~
-> ./include/linux/fortify-string.h:641:9: note: in expansion of macro ‘WARN_ONCE’
->   641 |         WARN_ONCE(fortify_memcpy_chk(__fortify_size, __p_size,          \
->       |         ^~~~~~~~~
-> ./include/linux/fortify-string.h:693:26: note: in expansion of macro ‘__fortify_memcpy_chk’
->   693 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
->       |                          ^~~~~~~~~~~~~~~~~~~~
-> ./include/crypto/sha256_base.h:69:17: note: in expansion of macro ‘memcpy’
->    69 |                 memcpy(sctx->buf + partial, data, len);
->       |                 ^~~~~~
-> make[3]: *** [arch/x86/purgatory/Makefile:13: arch/x86/purgatory/sha256.o] Error 1
-> make[2]: *** [scripts/Makefile.build:494: arch/x86/purgatory] Error 2
-> make[1]: *** [scripts/Makefile.build:494: arch/x86] Error 2
-> make: *** [Makefile:2032: .] Error 2
+this_cpu_ptr() does not fit the above. I guess that it is
+because it is just providing the address and it is not
+accessing the data. So it is enough to read the current
+CPU id an atomic way.
+
+IMHO, it would make sense to distinguish how the pointer is
+going to be used. From this POV, __this_cpu_ptr() and
+raw_cpu_ptr() would make more sense to me.
+
+But it looks to me that this_cpu_ptr() has the same semantic
+as per_cpu_ptr().
+
+> Neither change seems urgent though both are important to fix, I'll
+> wait a day or two to see if you have feedback on any of the other
+> patches and I'll send a fixup series.
+
+Yup, I am going to review the rest.
+
+Best Regards,
+Petr
