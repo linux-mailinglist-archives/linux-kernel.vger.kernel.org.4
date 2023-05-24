@@ -2,215 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA6270F370
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1B470F371
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjEXJuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S231717AbjEXJuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjEXJuS (ORCPT
+        with ESMTP id S231534AbjEXJuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:50:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F779E;
-        Wed, 24 May 2023 02:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684921816; x=1716457816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AHaPKxRJsJfEmgKrbdk7X9VP2w6I/wDac/mkRqDZPHc=;
-  b=TXG0osg+lJ/THftiF1qdFiQkN1f7kjjLd/S7ywmephPPvvGWzCRC3jSP
-   S5iJ4rfG7oftnAWdO59b7hWY3jutxWKzGUw7julpzGl2Z1/V1xEMrOdoS
-   F3h01YJgO8Vp6A2I8AMMOAE9paRmLld2Hml08OBC9sC8ZsmhpvkdOv/uh
-   mRa75CSndg1WGXTnqi0niiA96eP5zn89JJyiUWEzLOTWLGINZmfgOMvDm
-   mICdHjNvgeR1ufB7PzQN10rwW1hzyrmaXmOOVGlPz6fFfKgGTonCm7DvE
-   VlKj+hJdN5jQlglXxtA6Msp4PgsFIHvfxvkq3HITdzD0+9LYbuiEXBHU6
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="333140065"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="333140065"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 02:50:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="848676445"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="848676445"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 May 2023 02:50:11 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 24 May 2023 12:50:10 +0300
-Date:   Wed, 24 May 2023 12:50:10 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <khsieh@codeaurora.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Vara Reddy <varar@codeaurora.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Benson Leung <bleung@chromium.org>
-Subject: Re: [RFC] drm/msm/dp: Allow attaching a drm_panel
-Message-ID: <ZG3d0pW1qN55lWTZ@kuha.fi.intel.com>
-References: <YVyMwsvLl6XalJxB@ripper>
- <CAD=FV=WY+g38p7--QKZCaQnSqx7VvdwC36jH-VKnrEWoxK=XHQ@mail.gmail.com>
- <YV0KBWxVtKgOp2Cj@ripper>
- <CAD=FV=X5JFE3u9BtxxocaUrYNSpYXJN90UJ8HOvXZE6oYiVsDQ@mail.gmail.com>
- <CACeCKac4b_ej87cQD692TNwpsoFsmBwDcSeLy5fp+pvLX1si7g@mail.gmail.com>
- <YV7JNH9QvI4cBz5s@kuha.fi.intel.com>
- <YV8dEKMhNKKl20j6@ripper>
- <YWA7vXp+4QbKWU1S@kuha.fi.intel.com>
- <do5veo5axxbvmcddpqf7u5rfer6soxzy5selfnjv5sn6n57h47@q3hfznslndba>
- <20230522215348.uoyboow26n2o3tel@ripper>
+        Wed, 24 May 2023 05:50:19 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3733A1;
+        Wed, 24 May 2023 02:50:17 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2af28a07be9so9852591fa.2;
+        Wed, 24 May 2023 02:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684921816; x=1687513816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bIFS61j7iDPSL85BcFHlWNxY6AjWNgDQmUG8g1ETRCk=;
+        b=erPEwsZP3SMwCMrsS/EXircokdB5BtnQdxFnUmKYDYxLt6lJa7p/JIUni1uEzHPenh
+         mg4H4avg9/ZtIhi4jj3T+p+zg4fk6VvGlAlKYkDHPKL2uQFJvv3aONqDF0Dm3cAwMIfL
+         gOHNKlzfqUd12Ypidot26YVTfqu2ebvxzpSRpcBI+BoWMQ9t6nmw2M6Pm9N+ILcrf98J
+         bygtUEqMSZ005BBb5opzPqq9qL6xMtorByvFRZOZrEfICCsVlOyqDZfjVp2n66oeIsN8
+         MXcIsQ4eSCKtoD+OMMedMguyxF47QN+qltyxxfjKoWsnlFVKsLvDehn7NhO3LnqYBKMa
+         zA+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684921816; x=1687513816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bIFS61j7iDPSL85BcFHlWNxY6AjWNgDQmUG8g1ETRCk=;
+        b=GSwO0asqjXicQgzpzyr2ZjyVysE393gABreBpHoJyveSgR2if95VG80D1d8WRSVvrs
+         XQX8/o78T0f1juRDjtdO336LVMPpPbUlnenFCmccO5xdJy+Q6TZnyGZm83oOs2eUqmIO
+         21igaFbdiuZDiL9yGAU0Jq0YGNCa+e9U9DGyWKMHTaI9zSstWcufK2FY5HgfmP081xq1
+         UABFUzyf9JMS1Y6zMEGo+pdIIfBmRMlFLIe/Mh4FewH9EhwyZNm30CfiouhF9sdy/JCv
+         +zWyIgKe//hbqKLePT0cehUKU6UtnmTxox9lyHYTg1+7OCCvvjQnqCFE0x5rDiSAewMR
+         /QVw==
+X-Gm-Message-State: AC+VfDzJrxGncaQWiVKgiLFhQ0kMwthPJ+ephS9cPG6yv8U2pnCmI08K
+        IBMpWOVHwMAUEeA2Su8M2WE=
+X-Google-Smtp-Source: ACHHUZ4EM5PUh0Z6UbF6nimxtZU9JpqNcBDMDxV2BFsVhit4pH91VVFq7DCBYIckGfm0xuta2qhLBg==
+X-Received: by 2002:ac2:4ac2:0:b0:4f3:b1ae:311e with SMTP id m2-20020ac24ac2000000b004f3b1ae311emr4371885lfp.53.1684921815706;
+        Wed, 24 May 2023 02:50:15 -0700 (PDT)
+Received: from pc636 (host-90-235-19-70.mobileonline.telia.com. [90.235.19.70])
+        by smtp.gmail.com with ESMTPSA id s6-20020a19ad46000000b004eff530efe7sm228459lfd.93.2023.05.24.02.50.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 02:50:15 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Wed, 24 May 2023 11:50:12 +0200
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        linux-xfs@vger.kernel.org
+Subject: Re: [PATCH 0/9] Mitigate a vmap lock contention
+Message-ID: <ZG3d1FUXiCk3QL3D@pc636>
+References: <20230522110849.2921-1-urezki@gmail.com>
+ <ZGyqiaRnMJPFhxR6@debian-BULLSEYE-live-builder-AMD64>
+ <ZGzX3vRMlGHIcYCe@pc636>
+ <ZG0AE9mjHkRZIGmr@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522215348.uoyboow26n2o3tel@ripper>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZG0AE9mjHkRZIGmr@debian-BULLSEYE-live-builder-AMD64>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 02:53:48PM -0700, Bjorn Andersson wrote:
-> On Mon, May 22, 2023 at 03:51:01PM -0500, Bjorn Andersson wrote:
-> > On Fri, Oct 08, 2021 at 03:38:21PM +0300, Heikki Krogerus wrote:
-> > > Hi,
+On Wed, May 24, 2023 at 03:04:28AM +0900, Hyeonggon Yoo wrote:
+> On Tue, May 23, 2023 at 05:12:30PM +0200, Uladzislau Rezki wrote:
+> > > > 2. Motivation.
+> > > > 
+> > > > - The vmap code is not scalled to number of CPUs and this should be fixed;
+> > > > - XFS folk has complained several times that vmalloc might be contented on
+> > > >   their workloads:
+> > > > 
+> > > > <snip>
+> > > > commit 8dc9384b7d75012856b02ff44c37566a55fc2abf
+> > > > Author: Dave Chinner <dchinner@redhat.com>
+> > > > Date:   Tue Jan 4 17:22:18 2022 -0800
+> > > > 
+> > > >     xfs: reduce kvmalloc overhead for CIL shadow buffers
+> > > >     
+> > > >     Oh, let me count the ways that the kvmalloc API sucks dog eggs.
+> > > >     
+> > > >     The problem is when we are logging lots of large objects, we hit
+> > > >     kvmalloc really damn hard with costly order allocations, and
+> > > >     behaviour utterly sucks:
 > > > 
-> > > On Thu, Oct 07, 2021 at 09:15:12AM -0700, Bjorn Andersson wrote:
-> > > > The one thing that I still don't understand though is, if the typec_mux
-> > > > is used by the typec controller to inform _the_ mux about the function
-> > > > to be used, what's up with the complexity in typec_mux_match()? This is
-> > > > what lead me to believe that typec_mux was enabling/disabling individual
-> > > > altmodes, rather just flipping the physical switch at the bottom.
+> > > based on the commit I guess xfs should use vmalloc/kvmalloc is because
+> > > it allocates large buffers, how large could it be?
 > > > 
-> > > Ah, typec_mux_match() is a mess. I'm sorry about that. I think most of
-> > > the code in that function is not used by anybody. If I remember
-> > > correctly, all that complexity is attempting to solve some
-> > > hypothetical corner case(s). Probable a case where we have multiple
-> > > muxes per port to deal with.
+> > They use kvmalloc(). When the page allocator is not able to serve a
+> > request they fallback to vmalloc. At least what i see, the sizes are:
+> > 
+> > from 73728 up to 1048576, i.e. 18 pages up to 256 pages.
+> > 
+> > > > 3. Test
+> > > > 
+> > > > On my: AMD Ryzen Threadripper 3970X 32-Core Processor, i have below figures:
+> > > > 
+> > > >     1-page     1-page-this-patch
+> > > > 1  0.576131   vs   0.555889
+> > > > 2   2.68376   vs    1.07895
+> > > > 3   4.26502   vs    1.01739
+> > > > 4   6.04306   vs    1.28924
+> > > > 5   8.04786   vs    1.57616
+> > > > 6   9.38844   vs    1.78142
 > > > 
-> > > I think it would probable be best to clean the function to the bare
-> > > minimum by keeping only the parts that are actually used today
-> > > (attached).
+> > > <snip>
 > > > 
-> > 
-> > Sorry for not replying to this in a timely manner Heikki. I've been
-> > ignoring this issue for a long time now, just adding "svid" to our dts
-> > files. But, this obviously shows up in DT validation - and I'd prefer
-> > not defining these properties as valid.
-> > 
-> > The attached patch works as expected.
-> > 
-> 
-> Sorry, I must have failed at applying the patch - it doesn't work...
-> 
-> > Could you please spin this as a proper patch, so we can get it merged?
-> > 
-> > Regards,
-> > Bjorn
-> > 
-> > > thanks,
+> > > > 29    20.06   vs    3.59869
+> > > > 30  20.4353   vs     3.6991
+> > > > 31  20.9082   vs    3.73028
+> > > > 32  21.0865   vs    3.82904
+> > > > 
+> > > > 1..32 - is a number of jobs. The results are in usec and is a vmallco()/vfree()
+> > > > pair throughput.
 > > > 
-> > > -- 
-> > > heikki
-> > 
-> > > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> > > index c8340de0ed495..44f168c9bd9bf 100644
-> > > --- a/drivers/usb/typec/mux.c
-> > > +++ b/drivers/usb/typec/mux.c
-> > > @@ -193,56 +193,15 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
-> > >  static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
-> > >  			     void *data)
-> > >  {
-> > > -	const struct typec_altmode_desc *desc = data;
-> > >  	struct device *dev;
-> > > -	bool match;
-> > > -	int nval;
-> > > -	u16 *val;
-> > > -	int ret;
-> > > -	int i;
-> > >  
-> > >  	/*
-> > > -	 * Check has the identifier already been "consumed". If it
-> > > -	 * has, no need to do any extra connection identification.
-> > > +	 * The connection identifier will be needed with device graph (OF graph).
-> > > +	 * Device graph is not supported by this code yet, so bailing out.
-> > >  	 */
-> > > -	match = !id;
-> > > -	if (match)
-> > > -		goto find_mux;
-> > > -
-> > > -	/* Accessory Mode muxes */
-> > > -	if (!desc) {
-> > > -		match = fwnode_property_present(fwnode, "accessory");
-> > > -		if (match)
-> > > -			goto find_mux;
-> > > -		return NULL;
-> > > -	}
-> > > -
-> > > -	/* Alternate Mode muxes */
-> > > -	nval = fwnode_property_count_u16(fwnode, "svid");
-> > > -	if (nval <= 0)
-> > > -		return NULL;
-> > > -
-> > > -	val = kcalloc(nval, sizeof(*val), GFP_KERNEL);
-> > > -	if (!val)
-> > > -		return ERR_PTR(-ENOMEM);
-> > > -
-> > > -	ret = fwnode_property_read_u16_array(fwnode, "svid", val, nval);
-> > > -	if (ret < 0) {
-> > > -		kfree(val);
-> > > -		return ERR_PTR(ret);
-> > > -	}
-> > > -
-> > > -	for (i = 0; i < nval; i++) {
-> > > -		match = val[i] == desc->svid;
-> > > -		if (match) {
-> > > -			kfree(val);
-> > > -			goto find_mux;
-> > > -		}
-> > > -	}
-> > > -	kfree(val);
-> > > -	return NULL;
-> > > +	if (id)
+> > > I would be more interested in real numbers than synthetic benchmarks,
+> > > Maybe XFS folks could help performing profiling similar to commit 8dc9384b7d750
+> > > with and without this patchset?
+> > > 
+> > I added Dave Chinner <david@fromorbit.com> to this thread.
 > 
-> We pass id as "mode-switch", so this will never be NULL. But we also only
-> want to consider endpoints with "mode-switch", otherwise we'll fail if
-> any of the referred endpoints is not implementing a typec_mux...
+> Oh, I missed that, and it would be better to [+Cc linux-xfs]
 > 
-> So this needs the same snippet we find in typec_switch_match():
+> > But. The contention exists.
 > 
-> 	/*
-> 	 * Device graph (OF graph) does not give any means to identify the
-> 	 * device type or the device class of the remote port parent that @fwnode
-> 	 * represents, so in order to identify the type or the class of @fwnode
-> 	 * an additional device property is needed. With typec switches the
-> 	 * property is named "orientation-switch" (@id). The value of the device
-> 	 * property is ignored.
-> 	 */
-> 	if (id && !fwnode_property_present(fwnode, id))
-> 	        return NULL;
+> I think "theoretically can be contended" doesn't necessarily mean it's actually
+> contended in the real world.
 > 
-> With that, this works as expected!
+> Also I find it difficult to imagine vmalloc being highly contended because it was
+> historically considered slow and thus discouraged when performance is important.
+> 
+> IOW vmalloc would not be contended when allocation size is small because we have
+> kmalloc/buddy API, and therefore I wonder which workloads are allocating very large
+> buffers and at the same time allocating very frequently, thus performance-sensitive.
+> 
+> I am not against this series, but wondering which workloads would benefit ;)
+> 
+> > Apart of that per-cpu-KVA allocator can go away if we make it generic instead.
+> 
+> Not sure I understand your point, can you elaborate please?
+> 
+> And I would like to ask some side questions:
+> 
+> 1. Is vm_[un]map_ram() API still worth with this patchset?
+> 
+It is up to community to decide. As i see XFS needs it also. Maybe in
+the future it can be removed(who knows). If the vmalloc code itself can
+deliver such performance as vm_map* APIs.
 
-Okay. I'll change that and send the patch out.
+>
+> 2. How does this patchset deals with 32-bit machines where
+>    vmalloc address space is limited?
+> 
+It can deal without any problems. Though i am not sure it is needed for
+32-bit systems. The reason is, the vmalloc code was a bit slow when it
+comes to lookup time, it used to be O(n). After that it was improved to
+O(logn).
 
-thanks,
+vm_map_ram() and friends interface was added because of vmalloc drawbacks.
+I am not sure that there are 32-bit systems with 10/20/30... CPUs on board.
+In that case it is worth care about contention.
 
--- 
-heikki
+--
+Uladzislau Rezki
