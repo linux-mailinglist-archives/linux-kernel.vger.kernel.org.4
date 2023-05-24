@@ -2,187 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFF970FDC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF1E70FDC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235553AbjEXSVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S236638AbjEXSVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbjEXSVe (ORCPT
+        with ESMTP id S235553AbjEXSVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:21:34 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9639197;
-        Wed, 24 May 2023 11:21:24 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 10A713200900;
-        Wed, 24 May 2023 14:21:20 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Wed, 24 May 2023 14:21:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1684952480; x=1685038880; bh=8n
-        +IaACCh27iHdXNW61G4VevMtyUcvcfnjZ1YrA0koc=; b=KqOCSdZ5YUv4mmgOHf
-        kYbggNn3wN+1mm4PTofyVOyKgUuvCo7vxLQuTcAY70f8cgoKrgZgvH/PbhL953zQ
-        vOUUWGNVJo6VYxQWH38I377Ftb8N/P97u1Z9CFj+UT03Sk9+kVhNsoK8TZ6agGGn
-        24X+kUwBM2aFWK/hTZ1SUa9HNm73HXG5nSANAoqR6IBXfoKuujb2/Q/uE2317MzI
-        s6oh/QHyfoLLbqK2GBPQBdQXDC4NoNqpJIobsRndCFFfg/pYfYolW23xpe2Lsizd
-        qqQ2Y067azKCmd0aDUZjhrCMOjLKtKAEjHOnm0pMuxVyrM6EkHFOG+IsmE6VilZa
-        9QFg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684952480; x=1685038880; bh=8n+IaACCh27iH
-        dXNW61G4VevMtyUcvcfnjZ1YrA0koc=; b=MldM9qZm6OhWPsXGkL0VBnaZuYGZP
-        gf99J8vJoDBcgoxpGvjKLjuFdBOXJ/XRm6Qpy7/Ggm/X2uG9LNsUWwV5gy8CSnai
-        kXNuuSO1diQDsemCLIT0l6Q9lnrGVO1CZhEMXSct0R6BeecWEPKqcxLyrxfCbrmn
-        k09kHxNwIrMuwVIQ4uuW45r4/T/gSXnTP/n7R4aj353nrN4IovAYrZV6EMrLGBXS
-        sESRl4NjmIlBBBwZbTqFpaB5L2BCFTh/drdkCrkxJ5W6T3jLwn0WtSsHJp5X4MeV
-        QfBIWRRv+90KSPjLjnactkU+zGpm9t92ke1niluTifZLBhmBScSNSCj8g==
-X-ME-Sender: <xms:oFVuZCjNka_Imn4qup0lSC_qfuLzv1zQqzTOZ9V9wzBrzFqNqVcP0w>
-    <xme:oFVuZDBmPNgQOglVVNfv9GeJoJlgQf959kzz2fzBMbomlvo3Uo3ZRSBo6xshVhBV1
-    auN7MlhhSh-a51Bfoc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfo
-    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
-    gsrdgtrgeqnecuggftrfgrthhtvghrnhepteehgfeftdevgfehleejgedujeetkeevuefh
-    hfejteeuueeuiedvgfeihefghfehnecuffhomhgrihhnpehlvghnohhvohgtughrthdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehm
-    phgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:oFVuZKH6JiF4HZqekEpONS8HypflHSZd8ou1wzg3sXYTlY8eCmedvg>
-    <xmx:oFVuZLTIFBJUWrp67EQE_XKNeWd-8h9CSEqZlrpC5qzGCxFjx7f0Bw>
-    <xmx:oFVuZPzwXrlA1dj51AidMUNuRnvXHhQKzds-0zVJkf3yp3fa6oVkTg>
-    <xmx:oFVuZIq2sCaw-i6IF_4wurXHqAJDdC291HbRVKhRL7jDZJbj6OsR8w>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 56CC0C60091; Wed, 24 May 2023 14:21:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+        Wed, 24 May 2023 14:21:18 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF7B19C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:21:11 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba83fed50e1so264624276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684952471; x=1687544471;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qPsi238rs8TxWyOeKtKvTzn4rwQLMVznAU//DI9C/Fc=;
+        b=SumpIGVcdp1FlCuK8wvas4tCL9gYHm+b/9ecCoPMly6UmaHRRyaqZai1hWo8VL52eE
+         rO+GvgMtSYjcBxMGZbq/dZA86sbJK5+oE7ekmWRkdmUHma5Xl6+eAz1ZWzXlb/ZvFP/2
+         rqZLMqweS60eJQ7w2SKgnJhOyZ3bQk+AiQeFG5Qw+/Df4TXSzIcLnSV7Mgcj+bkeUjci
+         Gxecsfp5VhT1uSIuPM30UyVQ2+mwzZxTt8v1R5r6pbqiGwNfAYOK1zVFxSOFZEKzQq8m
+         fcB0/Dt51GfurrVgw+4h3U5a9FQR2h6O513ATmNWA/GAZIi9bUbAzGHD3ejRtiHYMwIZ
+         RpgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684952471; x=1687544471;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qPsi238rs8TxWyOeKtKvTzn4rwQLMVznAU//DI9C/Fc=;
+        b=Wt84TMAfySNlKsPAINVOBETakDFosBCVZ7N5NyU+e+j/w3ILsQQrIp09jgSEtwCSYx
+         eqNIyo9ktBq3z3Shr0NZv0hSQxuOoo46Fz/CdGDl2KcagogquP/a5fq9IHYHA5qZNwQy
+         mjWQfzi6APpFdOn3uO0ZNJgG4M1XJgYCvvRIPaYObiP9NnyVlIkvccXy02Omw53VACXB
+         0awDWYzZagZ8eVLlcVhncR/NaQ52tRn7RpRxgkslomCyOQdj26QUYLpdNSlqiazdaBhi
+         58nVa66hLaavHfDWmLCMl78VGWwO3RxS2xTAATcjOyYR1yvGEkDsPl6k9iyJFbIEzKng
+         K/HA==
+X-Gm-Message-State: AC+VfDwE7V5KR26bMp2wlQaAviZ5WmnFN0iIgJf4mJ9aGrO7r0+QqWiL
+        WyXpDKwrQm4nb665cTd0BHSA+1xfDs8=
+X-Google-Smtp-Source: ACHHUZ7Mrw8IB3CapOcyNB8qee3TbVkirdrXYndgINHZkLlBJnAh/DbOKNQWc8zO92vRy2Bi/YuirGSlDG4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:b15:b0:ba8:1e5f:8514 with SMTP id
+ ch21-20020a0569020b1500b00ba81e5f8514mr160580ybb.5.1684952471190; Wed, 24 May
+ 2023 11:21:11 -0700 (PDT)
+Date:   Wed, 24 May 2023 11:21:09 -0700
+In-Reply-To: <ZG3vB052ubr1vBQA@yzhao56-desk.sh.intel.com>
 Mime-Version: 1.0
-Message-Id: <71d0ddfa-ccca-43ee-aaac-6daf6b876824@app.fastmail.com>
-In-Reply-To: <04415f83-64fa-4d70-91fa-4425e163b350@app.fastmail.com>
-References: <mpearson-lenovo@squebb.ca>
- <20230517181945.3725-1-mpearson-lenovo@squebb.ca>
- <b79fa66c-b8bc-125c-ccfa-9dae727022e9@redhat.com>
- <04415f83-64fa-4d70-91fa-4425e163b350@app.fastmail.com>
-Date:   Wed, 24 May 2023 14:20:59 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     "Hans de Goede" <hdegoede@redhat.com>
-Cc:     "markgross@kernel.org" <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] platform/x86: think-lmi: Enable opcode support on BIOS
- settings
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+References: <20230509134825.1523-1-yan.y.zhao@intel.com> <20230509135300.1855-1-yan.y.zhao@intel.com>
+ <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com> <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
+ <ZG1WsnYST4zLqTnv@google.com> <ZG3vB052ubr1vBQA@yzhao56-desk.sh.intel.com>
+Message-ID: <ZG5VlRzJkcwo9Qju@google.com>
+Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Robert Hoo <robert.hoo.linux@gmail.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On Wed, May 24, 2023, Yan Zhao wrote:
+> On Tue, May 23, 2023 at 05:13:38PM -0700, Sean Christopherson wrote:
+> > On Tue, May 23, 2023, Yan Zhao wrote:
+> > > As also suggested in SDM, the guest OS manipulates MTRRs in this way:
+> > > 
+> > > for each online CPUs {
+> > > 	disable MTRR
+> > > 	update fixed/var MTRR ranges
+> > > 	enable MTRR
+> > > }
+> > > Guest OS needs to access memory only after this full pattern.
+> > 
+> > FWIW, that Linux doesn't use that approach.  Linux instead only puts the cache
+> > into no-fill mode (CR0.CD=1) when modifying MTRRs.  OVMF does both (and apparently
+> > doesn't optimize for self-snoop?).
+> I think Linux also follows this patten.
+> This is the call trace I found out in my environment.
+> cache_cpu_init
+>     cache_disable
+>         write_cr0 to CD=1, NW=0
+>         mtrr_disable
 
-On Tue, May 23, 2023, at 8:36 AM, Mark Pearson wrote:
-> Thanks Hans,
->
-> On Tue, May 23, 2023, at 6:46 AM, Hans de Goede wrote:
->> Hi Mark,
->>
->> On 5/17/23 20:19, Mark Pearson wrote:
->>> Whilst reviewing some documentation from the FW team on using WMI on
->>> Lenovo system I noticed that we weren't using Opcode support when
->>> changing BIOS settings in the thinkLMI driver.
->>> 
->>> We should be doing this to ensure we're future proof as the old
->>> non-opcode mechanism has been deprecated.
->>> 
->>> Tested on X1 Carbon G10 and G11.
->>> 
->>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
->>> ---
->>>  drivers/platform/x86/think-lmi.c | 23 ++++++++++++++++++++++-
->>>  1 file changed, 22 insertions(+), 1 deletion(-)
->>> 
->>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->>> index 1138f770149d..d9341305eba9 100644
->>> --- a/drivers/platform/x86/think-lmi.c
->>> +++ b/drivers/platform/x86/think-lmi.c
->>> @@ -1001,7 +1001,28 @@ static ssize_t current_value_store(struct kobject *kobj,
->>>  				tlmi_priv.pwd_admin->save_signature);
->>>  		if (ret)
->>>  			goto out;
->>
->>> -	} else { /* Non certiifcate based authentication */
->>> +	} else if (tlmi_priv.opcode_support) {
->>> +		/* If opcode support is present use that interface */
->>> +		set_str = kasprintf(GFP_KERNEL, "%s,%s;", setting->display_name,
->>> +					new_setting);
->>> +		if (!set_str) {
->>> +			ret = -ENOMEM;
->>> +			goto out;
->>> +		}
->>> +
->>> +		ret = tlmi_simple_call(LENOVO_SET_BIOS_SETTINGS_GUID, set_str);
->>> +		if (ret)
->>> +			goto out;
->>> +
->>> +		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
->>> +			ret = tlmi_opcode_setting("WmiOpcodePasswordAdmin",
->>> +					tlmi_priv.pwd_admin->password);
->>> +			if (ret)
->>> +				goto out;
->>> +		}
->>> +
->>> +		ret = tlmi_save_bios_settings("");
->>
->> I'm a bit confused about how this works. You are calling the same
->> LENOVO_SET_BIOS_SETTINGS_GUID as the old non opcode based authentication method
->> without any auth string.
->>
->> And then afterwards you are calling LENOVO_OPCODE_IF_GUID with
->> "WmiOpcodePasswordAdmin:<passwd>"
->>
->> Won't the initial LENOVO_SET_BIOS_SETTINGS_GUID get rejected since
->> it does not include an auth-string and you have not authenticated
->> yet using the opcode mechanism either. IOW shouldn't the opcode
->> auth call go first ?
->>
->> And how does this work timing wise, vs races with userspace doing
->> multiple sysfs writes at once.
->>
->> If the authentication done afterwards really acks the last
->> LENOVO_SET_BIOS_SETTINGS_GUID call then a userspace based
->> attacker could try to race and overwrite the last
->> LENOVO_SET_BIOS_SETTINGS_GUID call before the ack happens... ?
->>
->> If this code really is correct I think we need to introduce
->> a mutex to avoid this race.
->>
->> And this also needs some comments to explain what is going on.
->
-> Agreed - and looking at it now....I'm questioning it myself. This was 
-> tested so it works...but I wonder if that was more luck than judgement.
-> Let me do some checking - I think I may have messed up here.
->
+Huh, I somehow missed this call to mtrr_disable().  I distinctly remember looking
+at this helper, no idea how I missed that.
 
-Looked at this and the code is correct - even if it is a bit weird :)
-https://docs.lenovocdrt.com/#/bios/wmi/wmi_guide?id=set-and-save-a-bios-setting-on-newer-models
+>     mtrr_generic_set_state
+>         mtrr_wrmsr to fixed/var ranges
+>     cache_enable
+>         mtrr_enable
+>         write_cr0(read_cr0() & ~X86_CR0_CD);
+> 
 
-The save_bios_settings would fail if a password was not set (if it's required).
+...
 
-With regards to race conditions - that does seem somewhat unlikely in real life but I can add a mutex around this to catch that condition. I think I should probably do the same in a couple of other places (e.g. certificate_store and new_password_store) where multiple WMI calls are needed to complete an operation. 
+> > Picking a single vCPU will always be subject to edge cases.  E.g. I can see something
+> > like kexec() "offlining" KVM's chosen vCPU and then having problems because KVM
+> > ignores MTRR updates from other vCPUs in the new kernel.
+> >
+> Not familiar with kexec().
+> I wanted to trap APIC_SPIV and finding the lowest online vCPU id by checking
+> apic->sw_enabled status. Then only MTRR state of vCPU whose id equals to
+> the lowest online vCPU id can be written to per-VM MTRR state.
+> Will that work for kexec()?
 
-Is it OK if I do that as a separate commit on the end of the series or would you rather it was included in this commit? As the scope is, I think, more than just this function I'm leaning towards a separate commit but let me know what best practice is.
+kexec() allows "booting" into a new kernel without transitioning through BIOS
+and without doing a full reboot.  The scenario I'm worried about is if the new
+kernel offlines KVM's chosen CPU for whatever reason and also modifies MTRRs.  I
+think it's an extremely unlikely scenario, but my point is that selecting a single
+vCPU to control the MTRRs works if and only if that vCPU stays online for the
+entire lifetime of the VM, which KVM can't guarantee.
 
-Thanks
-Mark
+> > One idea would be to let all vCPUs write the per-VM state, and zap if and only if
+> > the MTRRs are actually different.  But as above, I'm on the fence about diverging
+> > from what hardware actually does with respect to MTRRs.
+
+...
+
+> > So, if KVM zaps SPTEs when CR0.CD is cleared (even when the quirk is enabled),
+> > then KVM can skip the MTRR zaps when CR0.CD=1 because KVM is ignoring the MTRRs
+> > and will zap when CR0.CD is cleared.  And to avoid regressing the CR0.CD case,
+> > if KVM honors guest PAT for the bizarro CR0.CD quirk, then KVM only needs to
+> > zap non-WB MTRR ranges when CR0.CD is cleared.  Since WB is weak, looking for
+> > non-WB MTRR ranges doesn't need to actually resolve the memtype, i.e. can be simple
+> > and just
+> > process MTRRs one by one.
+> > 
+> > Did that make sense?  Minus the code to identify non-WB MTRR ranges (and much
+> > needed comments), the below is what I'm thinking.  If more intelligent zapping
+> > provides the desired performance improvements, then I think/hope we avoid trying
+> > to play games with MTRRs.
+> > 
+> > ---
+> >  arch/x86/kvm/mtrr.c    | 19 +++++++++++++++++++
+> >  arch/x86/kvm/vmx/vmx.c |  8 ++------
+> >  arch/x86/kvm/x86.c     |  6 ++----
+> >  3 files changed, 23 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+> > index a67c28a56417..e700c230268b 100644
+> > --- a/arch/x86/kvm/mtrr.c
+> > +++ b/arch/x86/kvm/mtrr.c
+> > @@ -323,6 +323,9 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+> >  	if (!kvm_mmu_honors_guest_mtrrs(vcpu->kvm))
+> >  		return;
+> >  
+> > +	if (kvm_is_cr0_bit_set(vcpu, X86_CR0_CD))
+> > +		return;
+> This will always make update_mtrr() return here for Linux and OVMF. 
+
+Yes, that's the intent.  If the CR0.CD quirk is _disabled_, then all SPTEs are
+UC, i.e. there's no need to zap.  If the quirk is enabled (the common case,
+unfortunately), then KVM isn't honoring MTRRs, i.e. non-coherent DMA won't function
+properly, and so zapping SPTEs is pointless.  And in both cases, KVM will zap
+relevant SPTEs when CR0.CD is cleared.
+
+And this is actually already the behavior for all MTRRs execpt for MSR_MTRRdefType
+due to the !mtrr_is_enabled() clause below.
+
+> >  	if (!mtrr_is_enabled(mtrr_state) && msr != MSR_MTRRdefType)
+> >  		return;
+> >  
+> > @@ -375,6 +378,22 @@ static void set_var_mtrr_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data)
+> >  	}
+> >  }
+> >  
+> > +void kvm_mtrr_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+> > +{
+> > +	if (cr0 & X86_CR0_CD)
+> > +		return;
+> > +
+> > +	if (!kvm_mmu_honors_guest_mtrrs(vcpu->kvm))
+> > +		return;
+> > +
+> > +	if (!kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED)) {
+> > +		kvm_zap_gfn_range(vcpu->kvm, 0, ~0ULL);
+> > +		return;
+> > +	}
+> > +
+> > +	<zap non-WB memory>;
+> This zap looks will happen on each vCPU.
+
+Yes, on CR0.CD 1=>0 transition.
+
+> Then only half of zaps are saved compared to the original count of zaps in
+> update_mtrr().
+
+I don't think the current code is functionally correct though, even if we define
+"correct" to only apply when CR0.CD=0 (because the CR0.CD=1 case when the quirk
+can't possibly be correct).  Keeping stale WB+IGMT entries that were installed
+while CR0.CD=1 is broken.  As mentioned in my previous mail, I suspect it works
+only because KVM doesn't install SPTEs for DMA'd ranges.  FWIW, the WB memtype
+is unlikely to be a problem, but setting IGMT definitely is.  Though of course
+we can and should fix the IGMT thing separately.
+
+> And pieces of no-WB memory might produce more kvm_zap_gfn_range()?
+
+Yes, but they'll be much, much more precise.  And the bajillion fixed MTRRs can
+be batched into a single zap by sacrificing a tiny amount of precision, i.e. zap
+from the lowest non-WB fixed MTRR to the highest.  Crucially, assuming BIOS and
+the kernel aren't doing something bizarre, that should preserve the SPTEs for the
+code the guest is executing from (0 - VGA hole should be WB).
+
+And if we want to squeeze more performance out of this path, there are other
+optimizations we can make.  E.g. I'm guessing one of the problems, perhaps even
+_the_ problem, is that there's contention on mmu_lock in kvm_zap_gfn_range() when
+bringing up APs, which is likely why you observe slow downs even when there are
+no SPTEs to zap.  A thought for handling that would be to do something akin to
+kvm_recalculate_apic_map().  E.g. instead of having every vCPU zap, track (a)
+if a zap is in-progress and (b) the ranges being zapped.  There will still be
+lock contention to add ranges, but it should be fairly short in duration compared
+to zapping all possible SPTEs (current behavior).
+
+Something like
+
+	struct tbd *range = NULL;
+	bool do_zap = false;
+
+	<gather non-wb ranges>
+
+	for_each_non_wb_range(...) {
+		if (!range)
+			range = kmalloc(...);
+
+		spin_lock(&kvm->arch.mtrr_zap_lock);
+		if (<range not in list>) {
+			list_add_tail(&range->list, &kvm->arch.mtrr_zap_list);
+			range = NULL;
+
+			if (!kvm->arch.mtrr_zapping) {
+				do_zap = true;
+				kvm->arch.mtrr_zapping = true;
+			}
+		}
+		spin_unlock(&kvm->arch.mtrr_zap_lock);
+	}
+
+	kfree(zap_entry);
+
+	if (do_zap) {
+		spin_lock(&kvm->arch.mtrr_zap_lock);
+
+		while (!list_empty(&kvm->arch.mtrr_zap_list)) {
+			struct tbd *range;
+
+			range = list_first_entry(&kvm->arch.mtrr_zap_list);
+			list_del(range->list);
+
+			spin_unlock(&kvm->arch.mtrr_zap_lock);
+
+			kvm_zap_gfn_range(..., range->start, range->end);
+			kfree(range);
+		
+			spin_lock(&kvm->arch.mtrr_zap_lock);
+		}
+
+		/* Clear under lock to ensure new entries are processed. */
+		kvm->arch.mtrr_zapping = false;
+
+		spin_unlock(&kvm->arch.mtrr_zap_lock);
+	}
+
+	/* Wait for the zap to complete. */
+	while (READ_ONCE(kvm->arch.mtrr_zapping))
+		cpu_relax();
+
+and I'm sure someone that's better at lockless programming could optimize that
+even further if necessary, e.g. by checking for "range in list" outside of the
+spinlock.
+
+E.g. in my OVMF based VM, the precise zap would target only two ranges, the VGA
+hole and the 32-bit PCI:
+
+  kvm: vCPU0 default type = 6
+  kvm: vCPU0 fixed MTRR range 0 - 15 == 6
+  kvm: vCPU0 fixed MTRR range 16 - 87 == 0
+  kvm: vCPU0 variable MTRR range 80000000 - 100000000  = 0
+
+That bumps up to three ranges for the kernel, which adds what I suspect is the
+64-bit PCI hole:
+
+  kvm: vCPU0 default type = 6                                                   
+  kvm: vCPU0 fixed MTRR range 0 - 15 == 6                                       
+  kvm: vCPU0 fixed MTRR range 16 - 87 == 0
+  kvm: vCPU0 variable MTRR range 800000000 - 1000000000  = 0
+  kvm: vCPU0 variable MTRR range 80000000 - 100000000  = 0
+
+The above is distilled information from this hack-a-print:
+
+diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+index 9fac1ec03463..6259c7a4bcd3 100644
+--- a/arch/x86/kvm/mtrr.c
++++ b/arch/x86/kvm/mtrr.c
+@@ -304,12 +304,42 @@ static void var_mtrr_range(struct kvm_mtrr_range *range, u64 *start, u64 *end)
+        *end = (*start | ~mask) + 1;
+ }
+ 
++
++static bool var_mtrr_range_is_valid(struct kvm_mtrr_range *range)
++{
++       return (range->mask & (1 << 11)) != 0;
++}
++
+ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+ {
+        struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
+        gfn_t start, end;
+        int index;
+ 
++       if (mtrr_is_enabled(mtrr_state) && msr == MSR_MTRRdefType) {
++               struct kvm_mtrr_range *range;
++               int i;
++
++               pr_warn("vCPU%u default type = %u\n", vcpu->vcpu_idx, (u8)(mtrr_state->deftype & 0xff));
++
++               if (!fixed_mtrr_is_enabled(mtrr_state)) {
++                       pr_warn("vCPU%u fixed MTRRs disabled\n", vcpu->vcpu_idx);
++               } else {
++                       for (i = 0; i < ARRAY_SIZE(mtrr_state->fixed_ranges); i++)
++                               pr_warn("vCPU%u fixed MTRR range %u == %u\n",
++                                       vcpu->vcpu_idx, i, mtrr_state->fixed_ranges[i]);
++               }
++
++               list_for_each_entry(range, &mtrr_state->head, node) {
++                       if (!var_mtrr_range_is_valid(range))
++                               continue;
++
++                       var_mtrr_range(range, &start, &end);
++                       pr_warn("vCPU%d variable MTRR range %llx - %llx  = %u\n",
++                               vcpu->vcpu_idx, start, end, (u8)(range->base & 0xff));
++               }
++       }
++
+        if (msr == MSR_IA32_CR_PAT || !tdp_enabled ||
+              !kvm_arch_has_noncoherent_dma(vcpu->kvm))
+                return;
+@@ -333,11 +363,6 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+        kvm_zap_gfn_range(vcpu->kvm, gpa_to_gfn(start), gpa_to_gfn(end));
+ }
+ 
+-static bool var_mtrr_range_is_valid(struct kvm_mtrr_range *range)
+-{
+-       return (range->mask & (1 << 11)) != 0;
+-}
+-
+ static void set_var_mtrr_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data)
+ {
+        struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
+
