@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938EF70F777
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814D670F77A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjEXNTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S234127AbjEXNU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjEXNTG (ORCPT
+        with ESMTP id S229632AbjEXNUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:19:06 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82649B;
-        Wed, 24 May 2023 06:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=LN1VY0drdJalomyEpkD7+FhVOeln3OrXx82cPKL/2rU=; b=t3YL7yHK8KVYi2L4cBWsJ4J4ST
-        9wW/jJhDHimEmeAJeQoD/IlijHMm86jqdx+dPLlZNOWpQkE7odV+iIJMijP2vTJ0THDrIvZsxk9pq
-        wT0aMxzjJY+4a95l3JirT5Mxo/af1B/ClkeiemevHsEMopFYWFdOTB1MvAniXO9Xv6AAH+C1QrmKU
-        f8cTQfJaLUmliKvzBinpIK422UQ27i73eKXj5usn15PzEkxxK1X8Ex4fnyOEnCDmN5M29T+lWtNBM
-        5TEfe6YBG111wrXbAFvdIcd2hWmxJQ4UJx77qxNEiLuoLO6pVkzQJ2O4NfnVkGPEsCleuuA8jxjwi
-        vjWuWmXA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51056)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q1oOC-0002PQ-Rb; Wed, 24 May 2023 14:18:52 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q1oO9-0001f6-HN; Wed, 24 May 2023 14:18:49 +0100
-Date:   Wed, 24 May 2023 14:18:49 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        paul.arola@telus.com, scott.roberts@telus.com,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [PATCH net-next v3 2/7] net: dsa: mv88e6xxx: pass directly chip
- structure to mv88e6xxx_phy_is_internal
-Message-ID: <ZG4OuWllZp3MZxO8@shell.armlinux.org.uk>
-References: <20230524130127.268201-1-alexis.lothore@bootlin.com>
- <20230524130127.268201-3-alexis.lothore@bootlin.com>
+        Wed, 24 May 2023 09:20:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8125F9B;
+        Wed, 24 May 2023 06:20:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCA1D1042;
+        Wed, 24 May 2023 06:20:56 -0700 (PDT)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1B6753F840;
+        Wed, 24 May 2023 06:20:08 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     coresight@lists.linaro.org, denik@chromium.org
+Cc:     James Clark <james.clark@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] perf cs-etm: Track exception level
+Date:   Wed, 24 May 2023 14:19:54 +0100
+Message-Id: <20230524131958.2139331-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230524130127.268201-3-alexis.lothore@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 03:01:22PM +0200, Alexis Lothoré wrote:
-> Since this function is a simple helper, we do not need to pass a full
-> dsa_switch structure, we can directly pass the mv88e6xxx_chip structure.
-> Doing so will allow to share this function with any other function
-> not manipulating dsa_switch structure but needing info about number of
-> internal phys
-> 
-> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> ---
-> Changes since v2:
-> - add reviewed-by tags
-> 
-> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-> ---
+Some fixes to support an issue reported by Denis Nikitin where decoding
+trace that contains different EL1 and EL2 kernels can crash or go into
+an infinite loop because the wrong kernel maps are used for the decode.
 
-It never ceases to amaze me the way human beings can find creative ways
-to mess things up, no matter how well things are documented. The above
-commit message (and the others that I've looked at) are all broken
-because of this creativity.
+This still doesn't support distinguishing guest and host userspace,
+we'd still have to fix the timestamps and do a bit more work to
+correlate that. And I've removed PERF_RECORD_MISC_HYPERVISOR as a
+possible outcome of cs_etm__cpu_mode(). As far as I know this could
+never have been returned anyway because machine__is_host(machine) was
+always true due to session.machines.host being hard coded. And I'm not
+sure of the relevance of the difference between PERF_RECORD_MISC_KERNEL
+and PERF_RECORD_MISC_HYPERVISOR in this scenario.
 
-In effect, because of the really weird format you've come up with here,
-your patches are in effect *not* signed off by you.
+The first commit is a tidy up, second fixes a bug that I found when
+comparing the exception level and thread of branch records, the third
+is the main fix, and the last commit is some extra error checking. 
 
-The patch format is in Documentation/process/submitting-patches.rst
-under the section marked "The canonical patch format". Please review.
+Applies to acme/perf-tools (4e111f0cf0)
 
-Please wait a while (a few days) to see if anyone responds to _this_
-posting with any other comments. Thanks.
+James Clark (4):
+  perf cs-etm: Only track threads instead of PID and TIDs
+  perf cs-etm: Use previous thread for branch sample source IP
+  perf cs-etm: Track exception level
+  perf cs-etm: Add exception level consistency check
+
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  13 +-
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.h |   4 +-
+ tools/perf/util/cs-etm.c                      | 220 +++++++++---------
+ tools/perf/util/cs-etm.h                      |   5 +-
+ 4 files changed, 126 insertions(+), 116 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1
+
