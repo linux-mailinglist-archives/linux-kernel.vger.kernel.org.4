@@ -2,89 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8D370FCE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D7570FCE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbjEXRmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 13:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S235819AbjEXRo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234734AbjEXRmm (ORCPT
+        with ESMTP id S235540AbjEXRoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:42:42 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8B8E62
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:42:30 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75b0b2d0341so1562385a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684950149; x=1687542149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Xad8XQzT/EPDQLWCF9hW+e8DHp/sy9XMO4KserFr8E=;
-        b=V+icCz8Wkib87kWDCS02h4LhRjsobBVVm1jhD52MjTvZmMBlrKW78D/7dLXkzzi12q
-         6XXNonAITz3cc8q0J+zQ1M+Qste3MQhp/Bv7b324jyGSWhLTHIvgo/IozK/brYE4+mhO
-         XQVs4A8fNuBbryXY4ncKCfTMncEVlMS2ozRaA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950149; x=1687542149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Xad8XQzT/EPDQLWCF9hW+e8DHp/sy9XMO4KserFr8E=;
-        b=Oo5k0TJG4n8n+jLXe0lqnTUf9r7/Km4sm4Gz5fJ9yWiQySdbtREI0p4Y7i1lH2Wk1n
-         9gKMttHVxFFxdkh3Ivq3d5j5i116zHmd0vNEGE88GMNysZPDUob6OgRHVbg2nUJ7reTk
-         1RuoSs1NbyoiaBY2+3zFc+8VHjEpf8Ks5tD7NgEcXj/A1wxqaCWOZ9BpajTjGzN3LYv5
-         6C0y8yIHWFJHVd+0MZsfOzEJgB1i/urzWmKoS6dPusbOoL73ZoCYPQoxA6tEnIgZiKOT
-         zGiy4nXT5N31+JC3yqSg6Rve/RM9PPydN8ho1+MHSM3w00yaBsWPAuXQshjBpGz6TBqb
-         QTNQ==
-X-Gm-Message-State: AC+VfDweHbtDIlmdDzrLKj4t4YXDbOSyGa3sPecQpbxO8BUVXMCvCUkz
-        7XZYX3+gurnMQ1zWuU8lXINPV9d/Ts3NnsxMQuTmcA==
-X-Google-Smtp-Source: ACHHUZ7VuoEl/eBzhNV09bqyw11BoMXJFgg/WXWeo6+8EEukNTKi78vrfyLQnNkdab7TTr1fcrkG9J5e3zT0+Gm80uo=
-X-Received: by 2002:a05:6214:c6c:b0:623:8494:9946 with SMTP id
- t12-20020a0562140c6c00b0062384949946mr26307431qvj.45.1684950149123; Wed, 24
- May 2023 10:42:29 -0700 (PDT)
+        Wed, 24 May 2023 13:44:54 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C84E72;
+        Wed, 24 May 2023 10:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=WUCMd7nAkdTG9RTCxIujSC2FhmjjnNJeOfZn/CMRpwQ=; b=hu
+        mYlhGm6fmZKdKqUq3Bi1K4cY2SDCzaQ1PpXviPNN1fsQYuGbX4YgxnwoxPSQLNWDY7XWGKBjwTv2J
+        oxX+URnxMXC3wpyePSX8hTWwNgsxYjDN/e+ZpIQsC9HDzm4LPlFmiYYapX3DyPlHRr9s1H3hvB3HS
+        NUgGHTtmFKjl840=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q1sVz-00Dosl-9s; Wed, 24 May 2023 19:43:11 +0200
+Date:   Wed, 24 May 2023 19:43:11 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kenny Ho <y2kenny@gmail.com>
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        Kenny Ho <Kenny.Ho@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Remove hardcoded static string length
+Message-ID: <5b1355b8-17f7-49c8-b7b5-3d9ecdb146ce@lunn.ch>
+References: <20230523223944.691076-1-Kenny.Ho@amd.com>
+ <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
+ <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
+ <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch>
+ <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230524122901.53659-1-heikki.krogerus@linux.intel.com> <20230524122901.53659-3-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20230524122901.53659-3-heikki.krogerus@linux.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 24 May 2023 10:42:18 -0700
-Message-ID: <CACeCKaendr7Z8xE44uQw-QZ66wMdV-jd8SQ+ZPUeOdVpkq8ZHw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] usb: typec: mux: Remove alt mode parameters from
- the API
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
+On Wed, May 24, 2023 at 01:02:36PM -0400, Kenny Ho wrote:
+> On Wed, May 24, 2023 at 12:02 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > So the compiler warning/error needs to be fixed a different want.
+> 
+> Understood.  Would caping the length at iov_len with a ternary be sufficient?
 
-On Wed, May 24, 2023 at 5:29=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> The alt mode descriptor parameters are not used anymore.
->
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Prashant Malani <pmalani@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Bjorn Andersson <andersson@kernel.org>
+The quoted text said 'string'. It is not clear if that means c-string,
+with a trailing \0. If you just cap iov_len you could end up with a
+string which is not terminated.
 
-For cros-ec-typec:
-Acked-by: Prashant Malani <pmalani@chromium.org>
+The other end of the socket should not blow up, because that would be
+an obvious DOS or buffer overwrite attack vector. So you need to
+decide, do you want to expose such issues and see if anything does
+actually blow up, or do you want to do a bit more work and correctly
+terminate the string when capped?
 
-Thanks,
-
--Prashant
+	Andrew
