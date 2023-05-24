@@ -2,133 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EB270F3CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AEB70F3D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjEXKKz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 06:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S231903AbjEXKNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjEXKKv (ORCPT
+        with ESMTP id S229608AbjEXKNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:10:51 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4BFFC;
-        Wed, 24 May 2023 03:10:50 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-563b1e5f701so7005407b3.3;
-        Wed, 24 May 2023 03:10:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684923049; x=1687515049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qjsS8fRbVoZU8c34Ms8NTam545AKBDbkDG6TRRcdYb4=;
-        b=LjtrAJ8Z85MESZw25ozmK2IDUbJ9EQMNlRFB6a03PSPp4vRG2qSs1Xg2B0+QfdYUFh
-         eVkflIxZznOABD692XTjfe1/1FPAUSBS3CRDVW9S01s3nQm5CuDOCfgujL6x5l9LqqGR
-         lOUYTKkPrDTcXfxbg2lQC/G31quMWfuJYyS50PXfZecOBQ9XKvtwjnmejuX6M6ph9ifS
-         YNdgRDaUkf+P2AGyiQyjctdX/K6TbSgtmfrYGBR1wySp7yPQDkJGrEOrPNtStAPzhB0a
-         NeOznzVlGZBWO+yqYk9bBJkPvs/O5nETJXfFNWpdWYIaF+PfrpGORLnB7RjtSpbCyTTo
-         ZjPQ==
-X-Gm-Message-State: AC+VfDym/LE86ixzpJ1ERmgA30CdRPCAfKBsXebaWw40QH16Y8jR5SMI
-        TVvob1fPlxCo0OsJu5CQ3Jt23SJ7iF53pg==
-X-Google-Smtp-Source: ACHHUZ5iDHVW2SFTOZawBoCCVCzpPNS9w2ap/ITNnKDoHEGYnsZlsEJ+/es5jF9jSwYIutFcnmWOBw==
-X-Received: by 2002:a81:a107:0:b0:55a:1f2:ef6 with SMTP id y7-20020a81a107000000b0055a01f20ef6mr16756863ywg.9.1684923049215;
-        Wed, 24 May 2023 03:10:49 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id x11-20020a817c0b000000b0055aaccfa2c7sm3592626ywc.91.2023.05.24.03.10.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 03:10:48 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-564dc3dc075so7136977b3.1;
-        Wed, 24 May 2023 03:10:48 -0700 (PDT)
-X-Received: by 2002:a0d:c007:0:b0:560:ee0d:1d95 with SMTP id
- b7-20020a0dc007000000b00560ee0d1d95mr18669163ywd.3.1684923047913; Wed, 24 May
- 2023 03:10:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230503-virt-to-pfn-v6-4-rc1-v3-0-a16c19c03583@linaro.org> <20230503-virt-to-pfn-v6-4-rc1-v3-2-a16c19c03583@linaro.org>
-In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v3-2-a16c19c03583@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 24 May 2023 12:10:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXafb3SYUgu=ZWFRSiqGdt5ahvPEa75v6jGPBPGARaBhw@mail.gmail.com>
-Message-ID: <CAMuHMdXafb3SYUgu=ZWFRSiqGdt5ahvPEa75v6jGPBPGARaBhw@mail.gmail.com>
-Subject: Re: [PATCH v3 02/12] m68k: Pass a pointer to virt_to_pfn() virt_to_page()
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>, linux-mm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 06:13:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC36BF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:13:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1762C62CA7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17016C433EF;
+        Wed, 24 May 2023 10:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684923188;
+        bh=timqMsiiUF6SVTULwvrbIIEUkmxde+B0yhggAUidBVo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hreptOiJ0NRQKCvyDjxjGamRdRz3dACjdl6wdOaWgjnnboWkpPyK66+kTnR9DCO5K
+         A2DWiNkFER3CVOPm5tOa1uedDhtBF5q/8SqbiwBGlwAgrI/eNeP9kN8ot2koJyDkBq
+         hAcx+AjRwacohDxBQ9XTGM/K8cAxyyJo4dfPknPLJTxpPX+8AXrt0BZUPtOBuzZhsS
+         wLwqFpHdNlJMa+g60yinNwpHIFp42yfcA/Gu9GBL11wHFTMquyXDg9psOm3dob9Pwd
+         h7MSHky1G9PgAKtmQfFKeJgutno4NAtVxHVREgOnI10FOHydbpQ2oomXSMDINr63GH
+         tBA4vx6x+ifdg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator fixes for v6.4-rc3
+Date:   Wed, 24 May 2023 11:12:57 +0100
+Message-Id: <20230524101308.17016C433EF@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-On Tue, May 23, 2023 at 4:05 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> Functions that work on a pointer to virtual memory such as
-> virt_to_pfn() and users of that function such as
-> virt_to_page() are supposed to pass a pointer to virtual
-> memory, ideally a (void *) or other pointer. However since
-> many architectures implement virt_to_pfn() as a macro,
-> this function becomes polymorphic and accepts both a
-> (unsigned long) and a (void *).
->
-> Fix up the offending calls in arch/m68k with explicit casts.
->
-> The page table include <asm/pgtable.h> will include different
-> variants of the defines depending on whether you build for
-> classic m68k, ColdFire or Sun3, so fix all variants.
->
-> Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-Thanks for your patch!
+are available in the Git repository at:
 
-> ---
-> ChangeLog v2->v3:
-> - Fix up versioning. This is v3.
-> - Let Coldfire __pte_page() return a (void *) instead of __va
-> - Delete Coldfire pte_pagenr() which was using unsigned long
->   semantics from __pte_page()
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.4-rc3
 
-You may want to mention this removal in the patch descriptin.
+for you to fetch changes up to a511637502b1caa135046d0f8fdabd55a31af8ef:
 
-> - Drop ill-advised change to Coldfire pmd_page_vaddr()
+  regulator: mt6359: add read check for PMIC MT6359 (2023-05-18 19:24:47 +0900)
 
-> --- a/arch/m68k/include/asm/sun3_pgtable.h
-> +++ b/arch/m68k/include/asm/sun3_pgtable.h
+----------------------------------------------------------------
+regulator: Fixes for v6.4
 
-> @@ -111,7 +111,7 @@ static inline void pte_clear (struct mm_struct *mm, unsigned long addr, pte_t *p
->
->  #define pte_page(pte)          virt_to_page(__pte_page(pte))
->  #define pmd_pfn(pmd)           (pmd_val(pmd) >> PAGE_SHIFT)
-> -#define pmd_page(pmd)          virt_to_page(pmd_page_vaddr(pmd))
-> +#define pmd_page(pmd)          virt_to_page((void  *)pmd_page_vaddr(pmd))
+Some fixes that came in since the merge window, nothing terribly
+exciting - a couple of driver specific fixes and a fix for the error
+handling when setting up the debugfs for the devices.
 
-There's an extra space between "void" and "*".
+----------------------------------------------------------------
+Alexander Stein (1):
+      regulator: pca9450: Fix BUCK2 enable_mask
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Osama Muhammad (1):
+      regulator: Fix error checking for debugfs_create_dir
 
-Gr{oetje,eeting}s,
+Sen Chu (1):
+      regulator: mt6359: add read check for PMIC MT6359
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ drivers/regulator/core.c              | 4 ++--
+ drivers/regulator/mt6359-regulator.c  | 7 +++++--
+ drivers/regulator/pca9450-regulator.c | 4 ++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
