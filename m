@@ -2,96 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F1870FF90
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E2F70FF92
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbjEXVB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
+        id S234077AbjEXVCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjEXVB4 (ORCPT
+        with ESMTP id S229646AbjEXVB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:01:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5C912B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684962068;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dODs5ZTn+ErGWbdibvZPgi03pCRB3lhisq+Guk0Aefs=;
-        b=QCfb8KwLrgMgQrXtuEAXRBuPRHG0M8Iz+46fLCyfk3Lci4UH3xBUp3xzUkx3JtCIKedYf4
-        S2XsGKD3/lbWwWKSWVsFQCLG8qu4rpfKwwAdrhQ8Uk/TDg3yf0FVye/k8+yYWcndDhj7mf
-        NZM4SVi/rDIVijTwSm2bpT+n6W30ZZM=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-575-Nnkk3kx2PpyfXym6GcCK3A-1; Wed, 24 May 2023 17:01:06 -0400
-X-MC-Unique: Nnkk3kx2PpyfXym6GcCK3A-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-623a303a27eso4039856d6.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:01:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684962066; x=1687554066;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Wed, 24 May 2023 17:01:59 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B1EB3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:01:57 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510e5a8704bso783a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684962116; x=1687554116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dODs5ZTn+ErGWbdibvZPgi03pCRB3lhisq+Guk0Aefs=;
-        b=Oas0f6m/Zgmg/+oLtkYRPDL8lEQgW+6j5vWYJtESeLTm6uMcaNihRIS9Piz1yasThP
-         xD8CHHk5paJM1yeirQxUQZU/AwsjzSBU59JJtaFbgzGuAeHkOSSCJ1iVYicgPiPLCpHK
-         pHC8T+Kian2301wkw/ZDcTnKiXeUoggY+JGdf/SnDaA7mc2n7GuLgH3saWdx9gmJOS0H
-         5fG7lqEoHeEDFofQkTmtglqMo2Ie4VBlFEqKb6Cv+uS6sqQr4p3KbY1kTRPd2BT0BEBv
-         2gwY0aU3AyyKvZNhKbHiv33pdAy7r+P2LyDyKzTQBxmGDRJVW1jQ8Rbhq3rhwwlNopzg
-         1FKQ==
-X-Gm-Message-State: AC+VfDx9AHgkWblpiN5xPhqZyfQRkrDsiw63ZIMc4bYA9stVEvcYCunK
-        YsHlhxxHa5/GhqSTLSX+yrQepjsUIdXsLPeD9D617EWKl2pFpyJPGCSFxTqADfeFLM4O4QKeTsy
-        9SgzkMK7AGjVtKeSRUW+KnJDg
-X-Received: by 2002:ad4:5f0f:0:b0:5f1:6892:7440 with SMTP id fo15-20020ad45f0f000000b005f168927440mr33130478qvb.23.1684962066219;
-        Wed, 24 May 2023 14:01:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7O/5uTpY0b5HdIavkAWDeSIAxBpa10qbCz5cuioocwwPtQwVYPGqqlIFOfsx4TYmU37r8V5A==
-X-Received: by 2002:ad4:5f0f:0:b0:5f1:6892:7440 with SMTP id fo15-20020ad45f0f000000b005f168927440mr33130452qvb.23.1684962065941;
-        Wed, 24 May 2023 14:01:05 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::3e])
-        by smtp.gmail.com with ESMTPSA id bt8-20020ad455c8000000b005e750d07153sm3841558qvb.135.2023.05.24.14.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 14:01:05 -0700 (PDT)
-Date:   Wed, 24 May 2023 14:01:02 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>
-Subject: Re: vmlinux.o: warning: objtool: xen_sched_clock+0x4a: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <20230524210102.h2bbhlvujcg77wuw@treble>
-References: <202305242215.M2ZKRxS0-lkp@intel.com>
- <20230524142954.GN4253@hirez.programming.kicks-ass.net>
+        bh=ecRHb3a4uZb7D9V7KAm1/nNRXIsZmVIjd+RGF7WArC0=;
+        b=Y5GLMKGFPpIlQIqkAD39okDyWwz+EMI6KjtjQk4TVsTOtaWHy4Lt7mmHTJmGhBmz/S
+         7Xp5+LCH0/jjszqdPtFwYFtRNcaNAmMyWgsMV8z+snOmyhRqZ/RFPxUc/O05u+Wt8z27
+         wkUu4Mkt1sKkoHYscyuLFbyJzwHe3LU0BW2Ks=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684962116; x=1687554116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ecRHb3a4uZb7D9V7KAm1/nNRXIsZmVIjd+RGF7WArC0=;
+        b=P3V6CjQLl3Wrp2xrR7yqXrW3+cewOTvGEJ0+H/rXIb5fkm3ez3TS2q4mXy60QZ9zlj
+         rAcdCD/4kTvDPq60MZkg8HrpsCMzIruNuSMufZuQYP43i6QNidFYvXs5of+sl2WUJx0m
+         s/AkUeoIrLi4gj11sMyCc+f0ssKEpQ59Xju3//gqHbfJrd/29WX9yco5s0pFZcWox4tl
+         XP8pAm0b/4RkmqnTKrP7C3l05gtEfXK2hqhtbmU1FUGug75V40wx+OJV85XbM+EMq+wG
+         gURXYuuvo4A1f2EOb2G4h1viATpeMFFDL6O41rikNFcp90qyB/ks+TSxK1/XfL5K9kTY
+         P7Aw==
+X-Gm-Message-State: AC+VfDyfvEYsbtd94K76JPg+TBsNLyKmOLtbya6W/Rnoh+8ifbHsYXE8
+        S1MBRyWJTfJ1Gb02ygvkZ4nNBDnGPS98U36CKztDhg==
+X-Google-Smtp-Source: ACHHUZ6ZLl9FAFgZv7T7gZGWy3LVOp7WfMUJpmQRoNZp2N//Vp6blt2TIamig2Vgxpe5PVROXbu3CI1TU8VYliv/Kzk=
+X-Received: by 2002:a50:cd47:0:b0:4bc:dee8:94ca with SMTP id
+ d7-20020a50cd47000000b004bcdee894camr23378edj.7.1684962116191; Wed, 24 May
+ 2023 14:01:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230524142954.GN4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230518072657.1.If9539da710217ed92e764cc0ba0f3d2d246a1aee@changeid>
+ <CALs4sv2+Uu=Bry=B3FYzWdNrHjGWDvPCDhTFcNERVpWTjpmEyA@mail.gmail.com>
+ <CANEJEGuzoBa_yYHRCa0KygUe=AOhUkSg4u6gWx+QNCuGtKod2Q@mail.gmail.com>
+ <52cfebaf-79f6-c318-c14b-3716555d0e8f@intel.com> <SJ0PR11MB5866456B9007E3DC55FD8728E5419@SJ0PR11MB5866.namprd11.prod.outlook.com>
+In-Reply-To: <SJ0PR11MB5866456B9007E3DC55FD8728E5419@SJ0PR11MB5866.namprd11.prod.outlook.com>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Wed, 24 May 2023 14:01:44 -0700
+Message-ID: <CANEJEGsOU3KkG5rQ5ph3EQOiBvPXmhUk7aPvM3nj5V5KudP=ZA@mail.gmail.com>
+Subject: Re: [PATCH] igb: Fix igb_down hung on surprise removal
+To:     "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+Cc:     "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        Grant Grundler <grundler@chromium.org>,
+        Pavan Chebbi <pavan.chebbi@broadcom.com>,
+        "Neftin, Sasha" <sasha.neftin@intel.com>,
+        "Ruinskiy, Dima" <dima.ruinskiy@intel.com>,
+        Ying Hsu <yinghsu@chromium.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 04:29:54PM +0200, Peter Zijlstra wrote:
-> >    vmlinux.o: warning: objtool: acpi_idle_enter+0x65: call to ftrace_likely_update() leaves .noinstr.text section
-> >    vmlinux.o: warning: objtool: ibt_selftest+0x1e: return with modified stack frame
-> 
-> Robot folks; could you please discard all:
-> 
->  ftrace_likey_update.*noinstr
-> 
-> warnings, they're -EWONTFIX.
+On Wed, May 24, 2023 at 5:34=E2=80=AFAM Loktionov, Aleksandr
+<aleksandr.loktionov@intel.com> wrote:
+>
+> Good day Tony
+>
+> We reviewed the patch and have nothing against.
 
-Could we just make CONFIG_TRACE_BRANCH_PROFILING incompatible with
-CONFIG_NOINSTR_VALIDATION?
+Thank you for reviewing!
 
--- 
-Josh
+Can I take this as the equivalent of "Signed-off-by: Loktionov,
+Aleksandr <aleksandr.loktionov@intel.com>"?
 
+Or since Tony is listed in MAINTAINERS for drivers/net/ethernet/intel,
+is he supposed to provide that?
+
+cheers,
+grant
+
+>
+> With the best regards
+> Alex
+> ND ITP Linux 40G base driver TL
+>
+>
+>
+> > -----Original Message-----
+> > From: Nguyen, Anthony L <anthony.l.nguyen@intel.com>
+> > Sent: Tuesday, May 23, 2023 8:04 PM
+> > To: Grant Grundler <grundler@chromium.org>; Pavan Chebbi
+> > <pavan.chebbi@broadcom.com>; Loktionov, Aleksandr
+> > <aleksandr.loktionov@intel.com>; Neftin, Sasha <sasha.neftin@intel.com>=
+;
+> > Ruinskiy, Dima <dima.ruinskiy@intel.com>
+> > Cc: Ying Hsu <yinghsu@chromium.org>; netdev@vger.kernel.org; David S.
+> > Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
+> > Jakub Kicinski <kuba@kernel.org>; Brandeburg, Jesse
+> > <jesse.brandeburg@intel.com>; Paolo Abeni <pabeni@redhat.com>; intel-
+> > wired-lan@lists.osuosl.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH] igb: Fix igb_down hung on surprise removal
+> >
+> > On 5/22/2023 1:16 PM, Grant Grundler wrote:
+> > > On Thu, May 18, 2023 at 3:36=E2=80=AFAM Pavan Chebbi
+> > <pavan.chebbi@broadcom.com> wrote:
+> > >>
+> > >> On Thu, May 18, 2023 at 12:58=E2=80=AFPM Ying Hsu <yinghsu@chromium.=
+org>
+> > wrote:
+> > >>>
+> > >>> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c
+> > >>> b/drivers/net/ethernet/intel/igb/igb_main.c
+> > >>> index 58872a4c2540..a8b217368ca1 100644
+> > >>> --- a/drivers/net/ethernet/intel/igb/igb_main.c
+> > >>> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
+> > >>> @@ -9581,6 +9581,11 @@ static pci_ers_result_t
+> > igb_io_error_detected(struct pci_dev *pdev,
+> > >>>          struct net_device *netdev =3D pci_get_drvdata(pdev);
+> > >>>          struct igb_adapter *adapter =3D netdev_priv(netdev);
+> > >>>
+> > >>> +       if (state =3D=3D pci_channel_io_normal) {
+> > >>> +               dev_warn(&pdev->dev, "Non-correctable non-fatal err=
+or
+> > reported.\n");
+> > >>> +               return PCI_ERS_RESULT_CAN_RECOVER;
+> > >>> +       }
+> > >>> +
+> > >>
+> > >> This code may be good to have. But not sure if this should be the fi=
+x
+> > >> for igb_down() synchronization.
+> > >
+> > > I have the same opinion. This appears to solve the problem - but I
+> > > don't know if there is a better way to solve this problem.
+> > >
+> > >> Intel guys may comment.
+> > >
+> > > Ping? Can we please get feedback from IGB/IGC maintainers this week?
+> > >
+> > > (I hope igc maintainers can confirm this isn't an issue for igc.)
+> >
+> > Adding some of the igb and igc developers.
+> >
+> > > cheers,
+> > > grant
+> > >
+> > >>
+> > >>>          netif_device_detach(netdev);
+> > >>>
+> > >>>          if (state =3D=3D pci_channel_io_perm_failure)
+> > >>> --
+> > >>> 2.40.1.606.ga4b1b128d6-goog
+> > >>>
+> > >>>
