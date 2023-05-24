@@ -2,180 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E7170ED08
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFC070ED0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239254AbjEXF0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S239344AbjEXF15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjEXF0f (ORCPT
+        with ESMTP id S229920AbjEXF1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:26:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3277113E;
-        Tue, 23 May 2023 22:26:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZgvfolGox3uzjBIvn/zvlH6IbQJKAlBVVhbBRQoBAFc=; b=p8otjwLeYkd+K+o+o8Q27CmKGp
-        z9rYA2K0u4yWt9KybnLrn+phprc+yCHtXydznHJpjtOZt16iv6H1WY2DA+mk9JR4PiSX4ME85chJ7
-        7vYJDTctL5volJOigSCeHUq+bKTuuWYYNAWlGzcLKy07dhU7JKPU73jd9clQS0IRSRB/oDRlIW+IB
-        3aP7jO48NmARb0ls0utJqr/nMIzLZr/pkd5J0wOBF4gW4Wv5I8L4PIVmDgZ6lsbc6UVbX7PE2vAxQ
-        6DvHP8Acwd5oARsqbdGRhQSqvDcvPwGne0PXxSh6AMHWLUwjlhcTAU/tOV4wXm6qzvWQvQfoOxQeB
-        9GH0Uj6w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1h12-00COyT-2I;
-        Wed, 24 May 2023 05:26:28 +0000
-Date:   Tue, 23 May 2023 22:26:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] modules/firmware: add a new option to denote a firmware
- group to choose one.
-Message-ID: <ZG2gBJbwX73owRYu@bombadil.infradead.org>
-References: <20230419043652.1773413-1-airlied@gmail.com>
- <ck2dzxvllhhh74oa3vjlacutc7rdmgl7cfrfq7vgx4w3jcufrz@7jbgxcat42yn>
- <CAPM=9tw0Y2A4DvuTHT_yd58Eit+tUmo63pbEOHwRJ66LeqznEQ@mail.gmail.com>
- <fsleccud43leoioli6bj4xoydwbdcjb5qr4denuf6morhgtqki@t6xya2mygon5>
- <ZEcJNcz+ArLfUSJ1@bombadil.infradead.org>
- <n6gwizwt26ucpuva2kt35rprth6iqeibi3inq2qrn5qhs3aa3b@4hjbhgnskutq>
- <CAPM=9txLf2NbuZSM5CLYT4wA5mbQ=+ssm9tdzh6JJ=gtEBeqAA@mail.gmail.com>
+        Wed, 24 May 2023 01:27:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BDF13E;
+        Tue, 23 May 2023 22:27:53 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O5QJMQ011402;
+        Wed, 24 May 2023 05:27:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vDRlbCPueHl+m8WtGe+G1vGaIcLuvwNJ0UbZoqCVEc0=;
+ b=QXoCVMQch7LvvVFKg6nD4rTAUdUKkfjc4PsppUClxRYNfNrqQU8GtXGU4g7rQ+GbXDtx
+ eSx4M328aAR7wtWLYr9LDSWQ9vVxpPyHXVDBs3/gnIYmX5iPBt2Kl0s/a8jYHyhMVKcM
+ WVn//4FE0D28FKDyIM7HvWPZEDilcx1NjIhVAaBFsOb5vJD4qTdZeAKO7Xq5rIY3ZkT0
+ iNWFq8N3QkU+5f8DNMEHm39wgNN8OAjgr10lRSSjclPyrAYzVoNmZElbMXAgyyQUAupy
+ ikHOpBo/W/6waIbnoH32r1MvTazBtpz4vjx60AN5fStDlILlXDA77KmtREK25os4t2f+ ZA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qscaur0fj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 05:27:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O5RdS0010827
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 05:27:39 GMT
+Received: from [10.216.39.178] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
+ 2023 22:27:32 -0700
+Message-ID: <28a4d1e6-224d-9ecb-6b94-cffc3ecb408d@quicinc.com>
+Date:   Wed, 24 May 2023 10:57:28 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPM=9txLf2NbuZSM5CLYT4wA5mbQ=+ssm9tdzh6JJ=gtEBeqAA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V3 4/4] arm64: dts: qcom: ipq9574: Enable crypto nodes
+To:     <bhupesh.sharma@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <thara.gopinath@gmail.com>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <linux-arm-msm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
+References: <20230518141105.24741-1-quic_anusha@quicinc.com>
+ <20230518141105.24741-5-quic_anusha@quicinc.com>
+ <93db4ee5-4fb8-f159-0cf4-ec1669c36dd1@linaro.org>
+From:   Anusha Canchi <quic_anusha@quicinc.com>
+In-Reply-To: <93db4ee5-4fb8-f159-0cf4-ec1669c36dd1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4xb4uA5YvSKQvmVFDQ08UJ5O6mIQuv41
+X-Proofpoint-GUID: 4xb4uA5YvSKQvmVFDQ08UJ5O6mIQuv41
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_02,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 clxscore=1015 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305240045
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 01:19:31PM +1000, Dave Airlie wrote:
-> >
-> > >
-> > >> > the GROUP until after the FIRMWARE, so this can't work, as it already
-> > >> > will have included all the ones below, hence why I bracketed top and
-> > >> > bottom with a group.
-> > >>
-> > >> well... that is something that can be adapted easily by using a 2 pass
-> > >> approach, filtering out the list based on the groups.
-> > >>
-> > >> I agree that yours is simpler though.  If we can rely on the
-> > >> order produced by the compiler and we document the expectations of
-> > >> MODULE_FIRMWARE_GROUP_ONLY_ONE, then I believe we can stay with the
-> > >> simpler approach.
-> > >>
-> > >> Luis, any thoughts here?
-> > >
-> > >I see the Dracut code indicates that the order says now that you should
-> > >put the preferred firmware last, and that seems to match most coding
-> > >conventions, ie, new firmwares likely get added last, so it's a nice
-> >
-> > not all. i915 for example keeps it newest first so when attempting
-> > multiple firmware versions it starts from the preferred version.  It
-> > will be harder to convert since it also uses a x-macro to make sure the
-> > MODULE_FIRMWARE() and the the platform mapping are actually using the same
-> > firmware.
-> >
-> > >coincidence. Will this always work? I don't know. But if you like to
-> >
-> > short answer: it depends if your compiler is gcc *and* -O2 is used
-> > Longer debug ahead. Simple test with the expansion of MODULE_FIRMWARE
-> > baked in:
-> >
-> >         $ cat /tmp/a.c
-> >         static const __attribute__((section("__modinfo_manual"), used, aligned(1))) char foo[] = "modinfo_manual_foo";
-> >         static const __attribute__((section("__modinfo_manual"), used, aligned(1))) char bar[] = "modinfo_manual_bar";
-> >         $ gcc -c -o /tmp/a.o /tmp/a.c
-> >         $ objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual
-> >         $ strings /tmp/modinfo_manual
-> >         modinfo_manual_foo
-> >         modinfo_manual_bar
-> >
-> > However that doesn't match when building modules. In kmod:
-> >
-> > diff --git a/testsuite/module-playground/mod-simple.c b/testsuite/module-playground/mod-simple.c
-> > index 503e4d8..6dd5771 100644
-> > --- a/testsuite/module-playground/mod-simple.c
-> > +++ b/testsuite/module-playground/mod-simple.c
-> > @@ -30,3 +30,9 @@ module_exit(test_module_exit);
-> >
-> >   MODULE_AUTHOR("Lucas De Marchi <lucas.demarchi@intel.com>");
-> >   MODULE_LICENSE("GPL");
-> > +
-> > +
-> > +static const char __UNIQUE_ID_firmware404[] __attribute__((__used__)) __attribute__((__section__("__modinfo_cpp"))) __attribute__((__aligned__(1))) = "modinfo_cpp_foo";
-> > +static const char __UNIQUE_ID_firmware405[] __attribute__((__used__)) __attribute__((__section__("__modinfo_cpp"))) __attribute__((__aligned__(1))) = "modinfo_cpp_bar";
-> >
-> >         $ make ....
-> >         $ objcopy -O binary --only-section=__modinfo_cpp testsuite/module-playground/mod-simple.ko /tmp/modinfo_cpp
-> >         $ strings /tmp/modinfo_cpp
-> >         modinfo_cpp_bar
-> >         modinfo_cpp_foo
-> >
-> > It doesn't seem to be ./scripts/Makefile.modfinal neither as it's also
-> > inverted in testsuite/module-playground/mod-simple.o
-> >
-> > After checking the options passed to gcc, here is the "culprit": -O2
-> >
-> >         $ gcc -c -o /tmp/a.o /tmp/a.c && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
-> >         modinfo_manual_foo
-> >         modinfo_manual_bar
-> >         $ gcc -O2 -c -o /tmp/a.o /tmp/a.c && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
-> >         modinfo_manual_bar
-> >         modinfo_manual_foo
-> >
-> > It seems anything but -O0 inverts the section.
-> >
-> >         $ gcc --version
-> >         gcc (GCC) 12.2.1 20230201
-> >
-> > It doesn't match the behavior described in its man page though. Manually
-> > specifying all the options that -O1 turns on doesn't invert it.
-> >
-> >         $ gcc -fauto-inc-dec -fbranch-count-reg -fcombine-stack-adjustments \
-> >                 -fcompare-elim -fcprop-registers -fdce -fdefer-pop -fdelayed-branch
-> >                 -fdse -fforward-propagate -fguess-branch-probability -fif-conversion \
-> >                 -fif-conversion2 -finline-functions-called-once -fipa-modref \
-> >                 -fipa-profile -fipa-pure-const -fipa-reference -fipa-reference-addressable \
-> >                 -fmerge-constants -fmove-loop-stores -fomit-frame-pointer -freorder-blocks \
-> >                 -fshrink-wrap -fshrink-wrap-separate -fsplit-wide-types -fssa-backprop \
-> >                 -fssa-phiopt -ftree-bit-ccp -ftree-ccp -ftree-ch -ftree-coalesce-vars \
-> >                 -ftree-copy-prop -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-forwprop \
-> >                 -ftree-fre -ftree-phiprop -ftree-pta -ftree-scev-cprop -ftree-sink -ftree-slsr \
-> >                 -ftree-sra -ftree-ter -funit-at-a-time -c -o /tmp/a.o /tmp/a.c \
-> >                 && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
-> >         cc1: warning: this target machine does not have delayed branches
-> >         modinfo_manual_foo
-> >         modinfo_manual_bar
-> >
-> 
-> Thanks Lucas,
-> 
-> -ftoplevel-reorder is the one that does it, now that does mean how
-> I've done it isn't going to be robust.
-> 
-> I will reconsider but in order to keep backwards compat, it might be
-> easier to add firmware groups as an explicit list, but also spit out
-> the individual names, but not sure how clean this will end up on
-> dracut side.
-> 
-> I'll take a look at the other options, but it does seem like reworking
-> dracut is going to be the harder end of this, esp if I still want to
-> keep compat with older ones.
 
-Hey Dave, just curious if there was going to be another follow up patch
-for this or if it was already posted. I don't see it clearly so just
-wanted to double check.
 
-  Luis
+On 5/22/2023 2:23 PM, bhupesh.sharma@linaro.org wrote:
+> On 5/18/23 7:41 PM, Anusha Rao <quic_anusha@quicinc.com> wrote:
+>> Enable crypto support for ipq9574.
+>>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> ---
+>>   Changes in V3:
+>>     - No change.
+>>
+>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
+>> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> index fea15f3cf910..6e52d35a6a15 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> @@ -123,6 +123,26 @@
+>>               clock-names = "core";
+>>           };
+>>   +        cryptobam: dma-controller@704000 {
+>> +            compatible = "qcom,bam-v1.7.0";
+>
+> Please confirm if this is "qcom,bam-v1.7.4" or "qcom,bam-v1.7.0". If 
+> "qcom,bam-v1.7.4" please use the newer compatible format.
+Sure, will update.
+
+Thanks,
+Anusha
+>
+> Thanks,
+> Bhupesh
+>
+>> +            reg = <0x00704000 0x20000>;
+>> +            interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
+>> +            #dma-cells = <1>;
+>> +            qcom,ee = <1>;
+>> +            qcom,controlled-remotely;
+>> +        };
+>> +
+>> +        crypto: crypto@73a000 {
+>> +            compatible = "qcom,ipq9574-qce", "qcom,ipq4019-qce", 
+>> "qcom,qce";
+>> +            reg = <0x0073a000 0x6000>;
+>> +            clocks = <&gcc GCC_CRYPTO_AHB_CLK>,
+>> +                 <&gcc GCC_CRYPTO_AXI_CLK>,
+>> +                 <&gcc GCC_CRYPTO_CLK>;
+>> +            clock-names = "iface", "bus", "core";
+>> +            dmas = <&cryptobam 2>, <&cryptobam 3>;
+>> +            dma-names = "rx", "tx";
+>> +        };
+>> +
+>>           tlmm: pinctrl@1000000 {
+>>               compatible = "qcom,ipq9574-tlmm";
+>>               reg = <0x01000000 0x300000>;
+>>
+
