@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C3870FD70
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B419070FD75
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235079AbjEXSFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S236708AbjEXSFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235126AbjEXSFM (ORCPT
+        with ESMTP id S236780AbjEXSFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:05:12 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FB8180
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:05:08 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30789a4c537so853929f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:05:08 -0700 (PDT)
+        Wed, 24 May 2023 14:05:32 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94EDD3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:05:28 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-333eb36e453so2596155ab.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:05:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1684951506; x=1687543506;
+        d=chromium.org; s=google; t=1684951527; x=1687543527;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nGNgbJnX0tVJRsKgUg1OydGKxpSLVGxD0LmlnA5I/bM=;
-        b=T3bmdGNXzv6F/ZNJVh0QwRzqZQCki3KwhMEXYoFLZNVZ5sc0qmYH8Fw8Tzu+29lruu
-         yEXlDnvHD/EQop4XIpBtPbjIHYvfCVyHtfiVhOtp22z5Nuk0mjwClPsGrymFR4Dlcz5i
-         kC+uv1iA7XZSuF5J3ShKIQMHCCh4rd5bTUStI=
+        bh=44b0PKgEdAmvPMK/xx0MGvfJ3YhuyNSIZwFS/bsN7rE=;
+        b=NCjxBpJKdVXzBcNpeQNaKFqGZ3CcKOMSs8JIQn8I72fsb3CUlC48hmAWn+M+pcjv63
+         tCbPiacvRhMrRSaqWDD7TwGCNTsyH0A4FmVAbqlgSkWm/1M/pG11nRztUdsIrVb3UwQl
+         uf3jtK3oAfw9aH0aC9QEygAHnWAbm8N26Dbw4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684951506; x=1687543506;
+        d=1e100.net; s=20221208; t=1684951527; x=1687543527;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nGNgbJnX0tVJRsKgUg1OydGKxpSLVGxD0LmlnA5I/bM=;
-        b=b7//kkxz3HE1qg6vF2C+qtc+dpBMq+tp/mOXg2vM7JY4HdoYIv+xrM/GosNXK5l/bT
-         InasHD6OliJAPdiIWVrWquRuXmwN3tuRh3nsDf7/yNMAX8HgLKBhi34qCmSQAz7Yr6Gb
-         EWugJ0Py2fwVnMfLpftqqiSIWhHV4MMS96gOlD/VxBaiEVpRUnLJ53CCJlv4YJzBJHjm
-         cIEFimLNz40k3n7sR0BFxGPmX52G4QDbGbi2Qf8uPsE+BUkIo+ldZZseXQUActkfQM+v
-         m6S6kSiwMpxKNB6uju8jg7W/cLZzVl7t94cb7GjHVL3D09jLRvDxNfpXmSz9/RDAMMUA
-         d8hw==
-X-Gm-Message-State: AC+VfDyVByTwuEhIDiMkPTX/sVtVf3jUGjrBR1ao7zD4Kxn5nO7RR1Ty
-        3Qfy1A77DHAeocu5XXIv2TIbQzLJBUsBfkFJHlLl6Q==
-X-Google-Smtp-Source: ACHHUZ6ALmCPhK5rkszARkB26zQAaXHx/UD16iJSre39FqEv+jJsUXS7DYivRjjrf/EemoUmrobXzoF8NaU0TSLh2OI=
-X-Received: by 2002:adf:f58a:0:b0:307:a7af:402c with SMTP id
- f10-20020adff58a000000b00307a7af402cmr422705wro.41.1684951506392; Wed, 24 May
- 2023 11:05:06 -0700 (PDT)
+        bh=44b0PKgEdAmvPMK/xx0MGvfJ3YhuyNSIZwFS/bsN7rE=;
+        b=Ts9QIJyZW0suYxpHDw2SnEbooFwCiIKdckQZojtPrEwNX3ved6hApLaZj9qaadFutV
+         sMrg0i1m9zBcBni81OFzEXuhJnv4FTFFlv5QSHf7+m2ZyA+m+hAI/TnM4rKJpZeHwUWz
+         FH9aob7pukcgB2iw28moGrikDlPCS6Tm5TlGrzHsxQC5ePk8D3LFfGP/3SK5y+T3hPFN
+         k/eTeApfpSIFlIFg4AQM3uXBKp6Q75NOpy+YEndgnwZA76CtUioQO+xgzHhFCYtUwVmi
+         RAG+m4L0VB0HEYW1l5KAKSTAfYG5B/a2qZChx44mH6BNDuMypgkUDvM9zxBm0ILb/gE9
+         DH8Q==
+X-Gm-Message-State: AC+VfDxkOI2sull/4meduPKxPEZvt42pawyvzFgDoMrXG8Ci3h1s3R1S
+        nQNlauyAQOS6fZ/ExbyXjko2N7Uqz58ZZHdDzHU=
+X-Google-Smtp-Source: ACHHUZ50YLv5VDfXoL4sGcFW6eJh55VfsDILgLTeMct2fcavl/yxqPXT7W71gjrgmhi/m/qmFTeMbQ==
+X-Received: by 2002:a92:c00f:0:b0:338:17de:8e5a with SMTP id q15-20020a92c00f000000b0033817de8e5amr11868540ild.22.1684951527524;
+        Wed, 24 May 2023 11:05:27 -0700 (PDT)
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com. [209.85.166.181])
+        by smtp.gmail.com with ESMTPSA id c2-20020a92cf42000000b003312915e615sm180323ilr.28.2023.05.24.11.05.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 11:05:26 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-33164ec77ccso15595ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:05:26 -0700 (PDT)
+X-Received: by 2002:a92:cd8b:0:b0:32e:561d:b42d with SMTP id
+ r11-20020a92cd8b000000b0032e561db42dmr12623ilb.16.1684951526390; Wed, 24 May
+ 2023 11:05:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
- <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com> <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Wed, 24 May 2023 11:04:55 -0700
-Message-ID: <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
-Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Eric Paris <eparis@redhat.com>
+References: <20230523122324.1668396-1-trix@redhat.com> <CAD=FV=W5HrBFakvoX-cQ5G=4xV1upkFPZ6aSR8me+d+aCpirgg@mail.gmail.com>
+In-Reply-To: <CAD=FV=W5HrBFakvoX-cQ5G=4xV1upkFPZ6aSR8me+d+aCpirgg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 24 May 2023 11:05:15 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V_i5wR4oNy+xarA9e=VcgpH6i3U1uxFKtsaOe5AQX=Zw@mail.gmail.com>
+Message-ID: <CAD=FV=V_i5wR4oNy+xarA9e=VcgpH6i3U1uxFKtsaOe5AQX=Zw@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: set variables watchdog_soft,hardlockup_user_enabled
+ storage-class-specifier to static
+To:     Tom Rix <trix@redhat.com>
+Cc:     akpm@linux-foundation.org, pmladek@suse.com, kernelfans@gmail.com,
+        lecopzer.chen@mediatek.com, ldufour@linux.ibm.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,43 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
-> > Could you elaborate on what exactly you would like to see added? It's
-> > not clear to me what is missing.
+Hi,
+
+On Tue, May 23, 2023 at 7:12=E2=80=AFAM Doug Anderson <dianders@chromium.or=
+g> wrote:
 >
-> I should have been more clear, let me try again ...
+> Hi,
 >
-> From my perspective, this patch adds code and complexity to deal with
-> the performance impact of auditing.  In some cases that is the right
-> thing to do, but I would much rather see a more in-depth analysis of
-> where the audit hot spots are in this benchmark, and some thoughts on
-> how we might improve that.  In other words, don't just add additional
-> processing to bypass (slower, more involved) processing; look at the
-> processing that is currently being done and see if you can find a way
-> to make it faster.  It will likely take longer, but the results will
-> be much more useful.
+> On Tue, May 23, 2023 at 5:23=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+> >
+> > smatch reports
+> > kernel/watchdog.c:40:19: warning: symbol
+> >   'watchdog_hardlockup_user_enabled' was not declared. Should it be sta=
+tic?
+> > kernel/watchdog.c:41:19: warning: symbol
+> >   'watchdog_softlockup_user_enabled' was not declared. Should it be sta=
+tic?
+> >
+> > These variabled are only used in their defining file, so it should be s=
+tatic.
+>
+> s/variabled/variables
+>
+> >
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  kernel/watchdog.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> While your fix is valid (thanks!), it's only half the fix.
+>
+> I wondered why smatch would have suddenly noticed this since the
+> change that touched this variable recently was only a rename. When I
+> dug deeper, I realized that the old names actually _were_ referenced
+> outside this file and my rename missed them. The reason I missed them
+> is that the only reference is an "extern" reference in
+> `include/linux/nmi.h`. The references in `include/linux/nmi.h`
+> probably should have been removed in commit dd0693fdf054 ("watchdog:
+> move watchdog sysctl interface to watchdog.c")
+>
+> ...so a more complete fix would also remove references to the old
+> names (nmi_watchdog_user_enabled and soft_watchdog_user_enabled) in
+> `include/linux/nmi.h`.
 
-The fastest way to do something is to not do it to begin with. The
-next best thing I could think of is checking a trivial condition (int
-equality + bit check) to bypass the work in the hot path, which is
-what this patch does. I'm not even adding a new condition for this,
-I'm using the existing context->dummy. It is also 100% transparent for
-end users, which get the benefits as long as they don't have any rules
-that target all syscalls.
+FWIW, Petr has the other half of the fix at:
 
-It's not very useful to see futex() and stat() syscalls being audited
-when we have no rules that target those. The processing of rules in
-exit is already fast for a reasonable set of rules, but we don't have
-to do it to begin with. List iteration is not going to be faster than
-a bit check. For VFS related things we also have to collect paths
-accessed during processing and it's just not useful when we know that
-there is no way these are going to be used.
+https://lore.kernel.org/r/ZG4TW--j-DdSsUO6@alley
 
-We started with a ruleset that was matching all syscalls and this was
-very expensive. We reduced it to targeting specific syscalls, which
-made it a lot cheaper, but it's still a very noticeable fraction of
-overall CPU usage (the benchmark in the commit is the evidence of
-that). Not enabling auditing on syscall entry is the next logical step
-in making audit cheap enough to not feel guilty about using it in the
-first place.
+Any chance you could send out a v2 and include that? If I don't see
+something by tomorrow morning I'll try to send out a v2 for you that
+squashes your and his changes.
+
+-Doug
