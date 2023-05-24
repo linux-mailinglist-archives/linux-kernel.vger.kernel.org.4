@@ -2,84 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F0A70F686
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A37870F691
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjEXMeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S233663AbjEXMfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjEXMeO (ORCPT
+        with ESMTP id S229611AbjEXMfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:34:14 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A251AC
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:33:34 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-513f5318ff2so988871a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684931612; x=1687523612;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZafPqgI9Fb4pogcf8RRb1JCJ1KFVqaaBis24tWL2C0=;
-        b=6nLPqQkHIbAbRRsrRMRjIaMSxB8wTAHe51+mF9Ro3EK6sZAGVNp7lyfPZztpFwZTXh
-         z8VZPUGKeJukHFmyAzqI20VUE9rUSlxm9G3Yi95DGQZOPXEmEh0BXj5AaG9ZfAfiTVDh
-         +3wCp8HgcDP32GpMMLsnNDm51CUz/p2Y0dDom6bYLprj56kHfnOsr1Et+ErbIdGbMejk
-         /RVyC0E1D4dgHkbc16XZf6WQqd2INAcwgj+mcu3N/MTQpix6xA5GC+F8JDCyf6aYcMc7
-         /nUgh1gRYQieFevxn19EJByi5XLeozkDDxrJYxrncCvqtGMUsihyArzJ4VQ/mgEzuyjF
-         2oVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684931612; x=1687523612;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZafPqgI9Fb4pogcf8RRb1JCJ1KFVqaaBis24tWL2C0=;
-        b=ZMYOBQjaqTFBfBkMj5k9NBhDa45pX2/Ja5gynQFCKEdj7RRfbzTGEMtap9UBRX/NB6
-         kRVs+aGGgqxhup6aE0hfYFThK9t7pO2j5Vmwf3tNB2kHRh/6yMzBzllAOD9P0BC/wPlH
-         7PN5jKFiLVgb5G1Qqa5lLefu4+IASL7aMGeqw3Sucq+HLj/3e3hoMDYo/Kd6mWY/c9+b
-         O3orJBikt9/n/3zegmPNjRfAApCFZ48xUfs1koB6eyxrJ7IzKo1Qaqth+JdzVaNdR/oi
-         FGFhmtwGqI3VFNTURNG2REySga6SSPAUQQfzmrQtqhLbgJnv75V54hzZo951UhthctzG
-         5nTg==
-X-Gm-Message-State: AC+VfDxovsOd7gq2Cd0DPb0tbvkbvXbab/80HRBKNOpkdTPixPmGCqn3
-        Ol9OjhSlWd6yJRIuPDlDrUdbgeNhQIhLiso=
-X-Google-Smtp-Source: ACHHUZ6nEk5+MTTdAeuKBA1sa0MKBRxd3bRqOe3lsS32BwxY4I+/jQylsZCoMoxlY0J3DOW/9hm18x4HO2Uf4a8=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a50:9f2d:0:b0:50b:fc7b:de7f with SMTP id
- b42-20020a509f2d000000b0050bfc7bde7fmr922098edf.2.1684931612445; Wed, 24 May
- 2023 05:33:32 -0700 (PDT)
-Date:   Wed, 24 May 2023 12:33:30 +0000
-In-Reply-To: <87ilcjdthc.fsf@metaspace.dk>
-Mime-Version: 1.0
-References: <87ilcjdthc.fsf@metaspace.dk>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Message-ID: <20230524123330.2501843-1-aliceryhl@google.com>
-Subject: Re: [PATCH v1 0/7] Bindings for the workqueue
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     nmi@metaspace.dk
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        tj@kernel.org, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 08:35:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F71B4;
+        Wed, 24 May 2023 05:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684931719; x=1716467719;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cDUi7dMP4jWcg8AZDD0CYW+YYB1jCuGrGLccF6biMqg=;
+  b=NEqU+MDXdhryxuP4Eqep7iTDiDRKbsQsjJ/PGH8arl50IPOG0Qh2wbqk
+   D9mw61hnJ68oZGdy5ze5BtpKa0mh+crDLsnTPpi6bOnV/6wNUxjEQYTyn
+   s44P0uVF989WF5W8eAkzj2vmpNYHyA+m7eu7DJs7kRuks0RmiyYZDeP6g
+   AYDnfDTM6k0pSp+8IKYxFjDFDC0flYxXc/W2EAiX9cJ0pTwW4femCGXmP
+   3Wwwro8n9RHHtNkic/tfBUYXgyqKi4XtPndENou8DHWOaiE0A95aaqxFl
+   BWQPK14OUavveUrrjg5B/EK0z6BRkC4xzN5P+M9urz6Na6yZ1Hza8tDNE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="353572618"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="353572618"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 05:33:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="1034516581"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="1034516581"
+Received: from mylly.fi.intel.com (HELO [10.237.72.160]) ([10.237.72.160])
+  by fmsmga005.fm.intel.com with ESMTP; 24 May 2023 05:33:32 -0700
+Message-ID: <bf392104-96b0-a85b-f68e-088bd3884d9a@linux.intel.com>
+Date:   Wed, 24 May 2023 15:33:31 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v1] i2c: designware: Handle invalid SMBus block data
+ response length
+Content-Language: en-US
+To:     Tam Nguyen <tamnguyenchi@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     patches@amperecomputing.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        chuong@os.amperecomputing.com, darren@os.amperecomputing.com,
+        stable@vger.kernel.org
+References: <20230523082118.10935-1-tamnguyenchi@os.amperecomputing.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20230523082118.10935-1-tamnguyenchi@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andreas Hindborg <nmi@metaspace.dk> writes:
-> This does not compile for me. Could you link dependencies to be applied
-> first?
+Hi
 
-I messed up something related to the patch for specifying error type on
-`Result` [1]. This patch doesn't _need_ to depend on that though, so the
-next version of this patchset should compile without it.
+On 5/23/23 11:21, Tam Nguyen wrote:
+> In I2C_FUNC_SMBUS_BLOCK_DATA case, the I2C Designware driver does not
+> handle correctly when it receives the length of SMBus block data
+> response from SMBus slave device, which is outside the range 1-32 bytes.
+> Consequently, the I2C Designware bus is stuck and cannot recover.
+> Because if IC_EMPTYFIFO_HOLD_MASTER_EN is set, which cannot be detected
+> from the registers, the controller can be disabled if the STOP bit is set.
+> But it is only set after receiving block data response length.
+> 
+> Hence, to prevent the bus from stuck condition, after receiving the
+> invalid block data response length, the driver will read another byte
+> with STOP bit set.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++++++--
+>   1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+> index 55ea91a63382..94dadd785ed0 100644
+> --- a/drivers/i2c/busses/i2c-designware-master.c
+> +++ b/drivers/i2c/busses/i2c-designware-master.c
+> @@ -527,8 +527,19 @@ i2c_dw_read(struct dw_i2c_dev *dev)
+>   
+>   			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
+>   			/* Ensure length byte is a valid value */
+> -			if (flags & I2C_M_RECV_LEN &&
+> -			    (tmp & DW_IC_DATA_CMD_DAT) <= I2C_SMBUS_BLOCK_MAX && tmp > 0) {
+> +			if (flags & I2C_M_RECV_LEN) {
+> +				/*
+> +				 * if IC_EMPTYFIFO_HOLD_MASTER_EN is set, which cannot be
+> +				 * detected from the registers, the controller can be
+> +				 * disabled if the STOP bit is set. But it is only set
+> +				 * after receiving block data response length in
+> +				 * I2C_FUNC_SMBUS_BLOCK_DATA case. That needs to read
+> +				 * another byte with STOP bit set when the block data
+> +				 * response length is invalid to complete the transaction.
+> +				 */
+> +				if ((tmp & DW_IC_DATA_CMD_DAT) > I2C_SMBUS_BLOCK_MAX || tmp == 0)
+> +					tmp = 1;
+> +
+>   				len = i2c_dw_recv_len(dev, tmp);
+>   			}
+>   			*buf++ = tmp;
 
-Alice
-
-[1]: https://lore.kernel.org/all/20230502124015.356001-1-aliceryhl@google.com/
+Looks otherwise good to me but I'm wondering the "tmp == 0" test can it 
+have the bit 11 set (on a HW where it's supported) and should it be 
+covered with DW_IC_DATA_CMD_DAT mask too? Please see commit f53f15ba5a85 
+("i2c: designware: Get right data length").
