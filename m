@@ -2,188 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B08070F5FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D241E70F602
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbjEXMO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S231565AbjEXMPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjEXMOY (ORCPT
+        with ESMTP id S229542AbjEXMPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:14:24 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DEA18B;
-        Wed, 24 May 2023 05:14:17 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 11A0CFF814;
-        Wed, 24 May 2023 12:14:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684930455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WGhKGOeeQ5Auujw7usU7+enotiHVhoYjEj7//E+Utu0=;
-        b=PD2zGS7Vle6F3VIeArgHoQYFFY32gQQSjXDofYUypw57c33BOV7vaP2lBWfdnJTZ55V+8X
-        U7tOiQjse0fmxwNTbWXqNmZ7f2c9epmNUX85oXqL+EjUhQNjZe7YFNHKGfsheneSVnV9lc
-        7IcFO7ZwDvFgwSrZTH6ymcoVIz9JB5L2Qa4xutbXMvyMwBlwbix5arl8bzu0hd6JCDVEnG
-        iS95qVSSGUN6s+ETrne3A6gAPcnTc7T0olZS6/5Ae6t8ww2q1crog8irzWdWca5bc9q7wa
-        opstLKM6IEp+kM6kK6Vt/oJYm0o8o/0PZDiUgeEtaQzkcS3Xp8Yrf9Xjc2HG1A==
-Date:   Wed, 24 May 2023 14:14:11 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        Wed, 24 May 2023 08:15:16 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B60D130;
+        Wed, 24 May 2023 05:15:15 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96f9cfa7eddso152484766b.2;
+        Wed, 24 May 2023 05:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684930513; x=1687522513;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sUEzEX3IxY8Nj/uA0tEcwms+OAaTSJtcQdltzfG1TQM=;
+        b=X/G1NRsS65NS3/nroiKeHVMFrgfmO06b1WCf9NBEt/zESPE47jw43hqRGOAShFpJE1
+         m3xTu1TjLQMjTgoqDmVUZDyyzU+a73NtinuXY5ckIzQysyIOpXo1M0SM0qStrdIeekUi
+         R3/tDDkULOtYtQ3A+VMR4+u88WPvDgZlz4jmSvCrI6Rw6mVnE8R5UT+HiB0mvhHS943V
+         CznrLkLGsxNCrfXDWJUd4jL+UP2LUKr3KtZm3nuiTtkGOvoh+OVqIikKR3QINUszw30m
+         YV1e62+euP4Zvn4f7sRunatEnf80HQsWQYwxtUvjyelOFbKOSyWcQ9aHnRUcTDX1apva
+         RRHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684930513; x=1687522513;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sUEzEX3IxY8Nj/uA0tEcwms+OAaTSJtcQdltzfG1TQM=;
+        b=ecKzj4DxxtOFTLd8cxJoymIzFDOERoYSTPr9gEkVVEcjIue2SeYCMZIxbs4pEdoFkI
+         ezwK7A9F5goUdgSMkSgnv/dTukKwSxUt5Oj4bvhP4eSNflNX95/JH8BbMOOTFfgMkJnT
+         jNwbXaMD9y9p52Qa8F0mqP2taOLvwVvo0SsYW/KDx2k0rWJ0I8qR67YiljM00R2LuaXH
+         o6v4TKhpJOhiTNvOBglrsCk6Dqbiu8Au/dXqdqwVbYouQEVFsEYX/AumevIwfedPpCXN
+         fmiOB6KDE5lhyqEt1l3xNBbLuyzohX30Uhu9y0RNXDdNNerQOS+mR9iGjsFPTmcVZNXa
+         2zxA==
+X-Gm-Message-State: AC+VfDzp3zn4CepPkesjngbC7CXliMkV0C8PAGFsH6y7rwjIeHng4ePY
+        C7ygFWpR4t2aAhHsqQ5+72l2z/oMDVS+zuLtQcI=
+X-Google-Smtp-Source: ACHHUZ51AUAOCcHb4T/Z3x9qqA2jZVV2HPi2un7zsMK9HeI68/1biA1xYkNAn9I+KTD2GDPMckgYEPnNIWHEvtCefbA=
+X-Received: by 2002:a17:907:72d2:b0:973:8198:bbf6 with SMTP id
+ du18-20020a17090772d200b009738198bbf6mr2018665ejc.3.1684930513259; Wed, 24
+ May 2023 05:15:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230524082744.3215427-1-bigunclemax@gmail.com>
+ <20230524082744.3215427-2-bigunclemax@gmail.com> <20230524110105.4928906c@donnerap.cambridge.arm.com>
+ <ZG3vzxWicUgndMqv@smile.fi.intel.com>
+In-Reply-To: <ZG3vzxWicUgndMqv@smile.fi.intel.com>
+From:   Maxim Kiselev <bigunclemax@gmail.com>
+Date:   Wed, 24 May 2023 15:14:54 +0300
+Message-ID: <CALHCpMhhUnkko7COzg6W9AqLUfwzKA+EAmcZ+Vwmy_7KB=UdWg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/4] iio: adc: Add Allwinner D1/T113s/R329 SoCs GPADC
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andre Przywara <andre.przywara@arm.com>, linux-iio@vger.kernel.org,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 9/9] ASoC: simple-card: Handle additional devices
-Message-ID: <20230524141411.28765782@bootlin.com>
-In-Reply-To: <87mt1u7fql.wl-kuninori.morimoto.gx@renesas.com>
-References: <20230523151223.109551-1-herve.codina@bootlin.com>
-        <20230523151223.109551-10-herve.codina@bootlin.com>
-        <87mt1u7fql.wl-kuninori.morimoto.gx@renesas.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kuninori,
+Andre Przywara <andre.przywara@arm.com> wrote:
+> Or we follow the other idea of reading the number of channels from a DT
+> property, which means we would already support every IP with up to 16
+> channels, without further driver changes in the future.
 
-On Wed, 24 May 2023 00:08:50 +0000
-Kuninori Morimoto <kuninori.morimoto.gx@renesas.com> wrote:
+I like this idea. This will rid us from duplicating code, and we could also
+use a common DT node for D1 and T113.
 
-> Hi
-> 
-> > An additional-devs subnode can be present in the simple-card top node.
-> > This subnode is used to declared some "virtual" additional devices.
-> > 
-> > Create related devices from this subnode and avoid this subnode presence
-> > to interfere with the already supported subnodes analysis.
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---  
-> 
-> simple-card is used in many boards, but is old.
-> Adding new feature on audio-graph-card/audio-graph-card2 instead of simple-card
-> is my ideal, but it is OK.
-> 
-> simple-card is possible to handle multiple DAI links by using
-> "dai-link" node on 1 Sound Card. see
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/sound/simple-card.yaml?h=v6.4-rc3#n294
-> 
-> Is this "additional-devs" available only one per 1 Card ?
-> If it is possible to use 1 additional-devs per 1 DAI link, I think this patch want to
-> care "dai-link".
-> Or adding temporally NOTE or FIXME message like /* NOTE: it doesn't support dai-link so far */
-> is good idea.
+> Is there any particular reason you chose a regmap to model this here?
+> Isn't that just straight-forward MMIO, which we could just drive using
+> readl()/writel()?
 
-As you said on your other mail 1 "additional-devs" per 1 Card.
-And further more, I think that "additional-devs" has nothing to do with
-DAI link.
-These additional devices are really related to the the Card itself and
-not DAI links.
+Actually there is no special reason. I just made it in the same way as
+in the sun4i-gpadc-iio driver.
 
-simple_populate_aux() needs to be called once per Card.
+> I wonder if this should be either moved out to some multiplexer: the DT
+> bindings suggest that such a thing could be independent.
 
-> 
-> >  static int asoc_simple_probe(struct platform_device *pdev)
-> >  {
-> >  	struct asoc_simple_priv *priv;
-> > @@ -688,6 +731,11 @@ static int asoc_simple_probe(struct platform_device *pdev)
-> >  		return ret;
-> >  
-> >  	if (np && of_device_is_available(np)) {
-> > +		ret = simple_populate_aux(priv);
-> > +		if (ret < 0) {
-> > +			dev_err_probe(dev, ret, "populate aux error\n");
-> > +			goto err;
-> > +		}
-> >  
-> >  		ret = simple_parse_of(priv, li);
-> >  		if (ret < 0) {
-> > -- 
-> > 2.40.1
-> >   
-> 
-> Calling simple_populate_aux() before calling simple_parse_of() is possible,
-> but looks strange for me.
-> see below
-> 
-> > diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
-> > index 5a5e4ecd0f61..4992ab433d6a 100644
-> > --- a/sound/soc/generic/simple-card.c
-> > +++ b/sound/soc/generic/simple-card.c  
-> (snip)
-> > @@ -359,6 +360,8 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
-> >  		is_top = 1;
-> >  	}
-> >  
-> > +	add_devs = of_get_child_by_name(top, PREFIX "additional-devs");  
-> 
-> I think better position to call simple_populate_aux() is here.
-> But __simple_for_each_link() will be called multiple times for CPU and for Codec.
-> So maybe you want to calling it under CPU turn.
-> 
-> 	 /* NOTE: it doesn't support dai-link so far */
-> 	add_devs = of_get_child_by_name(top, PREFIX "additional-devs");
-> 	if (add_devs && li->cpu) {
-> 		ret = simple_populate_aux(priv);
-> 		...
-> 	}
+Sorry I didn't quite get it :)
 
-So, IMHO, calling simple_populate_aux() from __simple_for_each_link() is
-not correct as it has nothing to do with DAI links and must be call once
-per Card.
+> But at least we could cater for the possibility that this channel is
+> already selected, and skip this part then?
 
-simple_populate_aux() could be called by simple_parse_of() itself or after
-simple_parse_of() call.
+Thanks for that suggestion.
 
-I would prefer calling it before snd_soc_of_parse_aux_devs() because
-this function parses aux-devs phandles and these phandles can refer an
-auxiliary device present in the additional-devs node.
+> Couldn't taking the lock go into the function? It seems to be only one
+> caller,
 
-The current code has no issue with this but some evolution can lead to
-EPROBE_DEFER if the device related to the phandle was not probed.
-If simple_populate_aux() is called after snd_soc_of_parse_aux_devs(),
-an EPROBE_DEFER related to the missing probe() call has no chance to
-be resolved.
+Yes, we could. Thanks for the remark.
 
-Tell be what you prefer:
-  a) Call before simple_parse_of() (no changes)
-or
-  b) Call at the very beginning of simple_parse_of()
-or
-  c) Other suggestion ...
+> and we need the lock in any case, it seems?
+
+This lock is used in others ADC drivers to protects a read access from
+ocurring before another one has finished.
 
 
-Thanks a lot for your review.
-Best regards,
-Hervé
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> Even though regmap adds a few nice features that might be used.
+> For example, locking. But I dunno if this driver actually uses it
+> OR uses it correctly.
 
-> 
-> Thank you for your help !!
-> 
-> Best regards
-> ---
-> Kuninori Morimoto
+Just I wrote above, I made it in the same way as in the
+sun4i-gpadc-iio driver
+
+> > > + config = of_device_get_match_data(&pdev->dev);
+>
+> Please, avoid using OF-centric APIs in the new IIO drivers.
+>
+> config = device_get_match_data(&pdev->dev);
+>
+> should suffice.
+
+> > + irq = platform_get_irq(pdev, 0);
+> > + if (irq < 0)
+> > + return dev_err_probe(&pdev->dev, irq, "failed to get irq\n");
+>
+> > > We should not repeat the message that printed by platform core.
+
+> > > + ret = devm_request_irq(&pdev->dev, irq, sun20i_gpadc_irq_handler,
+> > > + 0, dev_name(&pdev->dev), info);
+>
+> You can simplify your life with
+>
+> struct device *dev = &pdev->dev;
+>
+> at the definition block of the function.
+> > > + .data = &sun20i_d1_gpadc_channels[1]
+>
+> Also, leave comma here.
+
+Thanks for the remarks, I'll fix this in the next version.
