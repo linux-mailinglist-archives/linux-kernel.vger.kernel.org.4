@@ -2,164 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E33370EB89
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CC670EB8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbjEXCuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 22:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S239187AbjEXCu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 22:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbjEXCuR (ORCPT
+        with ESMTP id S233836AbjEXCuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 22:50:17 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F134E9;
-        Tue, 23 May 2023 19:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684896616; x=1716432616;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=iy8HlYRDqt3tXLphVOEER8uov6OIiCPDFaIxoHEF37I=;
-  b=Yslgza5582WMMVslzPF8brlUDceluotRBk1GMKRAc/1uMl4GUE7MOM6q
-   onW4e8GT4KeTp0rwTez5bnp3uYM/Ehj6vlhYXLKIJEe+Y2oJnwhPO9668
-   bvFYTp4yzhqpOgiTTD7BW6k/RoWmORBAvfIp8OL8YEhwODS67Ci3POZG9
-   pSN/DaB46tZQU7rOBRlHaumrgjFKT/Eivx8cgLAXfG1xuSWa3e10Pjn5r
-   iUOfrlQh6W+qOncPRGcCiap7emPGpe8gsK3NnO39fj1HU3SBPqRQAtxpu
-   QODHE+5Dw8UNEWNZNzDcdqveTQfrdKLQH0etn1qN0LCaSR07EdFmWufTX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="356657056"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="356657056"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 19:50:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="848555376"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="848555376"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 23 May 2023 19:50:15 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 23 May 2023 19:50:15 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 23 May 2023 19:50:14 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 23 May 2023 19:50:14 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 23 May 2023 19:50:14 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WhtTe93Q7oA3e3AWcmAkxcRObGJESTXKZUY1oSPj0smjGQxs9aI+G3a8R2SVDOOk9TLDIEbCrlzaOS/9wU/3ufFVbKWzkEseveSc8YrzjY/ck/8wmb2s6G687ZRv7N3jWn7WI3O06kCsgszsWZc55mvsD0jl1RhdQo91UeebgHSIP2q88nyq5WXarBxJX3HnCBQaHdXqYGDs2BVVO9UX9Em6e00zVO2GmBkhHuZeCHoaH+xXE4qC39n8Hy91n1pIecijJEGfcs2YZwsYklIjIkbFjYhdjh+dlA0oLUXlN7e8Gzf5GPn6cgS2ODPQQX4eSMA9LvNt8KW49XtXPPYokQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vohWCFghueASazTNVNWygIGi21x99ZxSLFpyHQPj0aU=;
- b=nzKDt9564JLFikegtSluJy/eUxKMirl/XsZIAgxQ4Mtxkt03S1g9IBPkZTHo5zoG7x5KuiW9969PD9gdtTTuu/TSm3lZentIz7GkiHWZmTPeoPlUAXyOh3gZxikZnYgAVAKRWHOAYnp9cdt8AiCnR49ItaPZJODn9vAy02rvN+M/DB09bqdLGuwDxSA5QMW2X8ADAmElCJ9dmMdgoi5k4XjBSPsvZ/wFP9tkKtYV757/VTE+InYgInxFG88vwge1YcOdNum0ul09ebjJKTazn02pzIdQM97TMbSmlhuYJJpoQOvJVF1QWz1+6ZjnZmAUIRHbgiIDj+TEdrYRuWJ6pQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by DS0PR11MB6493.namprd11.prod.outlook.com (2603:10b6:8:c3::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 02:50:12 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::4f96:4b14:c54e:6261]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::4f96:4b14:c54e:6261%2]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 02:50:11 +0000
-Message-ID: <72852c92-265e-5ae2-6f88-044181f8a1aa@intel.com>
-Date:   Wed, 24 May 2023 10:49:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 13/21] KVM:VMX: Emulate reads and writes to CET MSRs
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-CC:     <seanjc@google.com>, <pbonzini@redhat.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <peterz@infradead.org>,
-        <rppt@kernel.org>, <rick.p.edgecombe@intel.com>,
-        <john.allen@amd.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
- <20230511040857.6094-14-weijiang.yang@intel.com>
- <30c89021-5b82-c676-bb58-1b572e57436a@linux.intel.com>
-Content-Language: en-US
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <30c89021-5b82-c676-bb58-1b572e57436a@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR06CA0252.apcprd06.prod.outlook.com
- (2603:1096:4:ac::36) To PH0PR11MB4965.namprd11.prod.outlook.com
- (2603:10b6:510:34::7)
+        Tue, 23 May 2023 22:50:21 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E2BE9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:50:20 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba6d024a196so404906276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684896620; x=1687488620;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CXoxikPl3gEJxlnM6PPv+fB+r1BmUcnQVHMJHjf9m9w=;
+        b=E242buCI6Gers0XctOZ0oDN64lMMOcafyfENPz5whRcrKDFQx6LDEoH8FZYFW88CBK
+         q5UjVKR4tfE+oWLtkypPnF7Sf1S6e4tRr0QDHX62SpT+aOGz3v9yx+U1GHBkbpHp8zpF
+         oJa6tqNPuQRrDOBcC9YETc6fGxIMIZdl5GjggCjTtDw8nULfK7I0UrUct6FvAsV//fiV
+         1+xuEX4PvoShCuPVta1XDAffD/sk2GMjAwgTzDBphXrLcHGQUCTXsYVgE2IRZJyQlTBh
+         6FB6zwFl3S5jC41456lkVhfaI4/7djXgJjieao8l05wxylkq9Ufz8v6W5fk4/I4b4Gsi
+         5CuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684896620; x=1687488620;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CXoxikPl3gEJxlnM6PPv+fB+r1BmUcnQVHMJHjf9m9w=;
+        b=PKZnu6ZYYXK9zKKhgUo9HTUxSVlNXwKJHzK/0oaebHKeOgUoNpM53U3wyyqo7rn6JL
+         Zus7vEB0NHzcwshQkksB5Yi6g5XMGPwtvpX+1yvLjLaAiFfmHo36V3gGny1V2ekehVo0
+         cLddimsGPWxNKoNrZQdkHVUnpE4h5cHwgReRQKscEkByTyQtygBSh6mkAM1esx9rVgl4
+         fUMUMUOvtNa7I/WLJ7Trpw3DcnETvGrrXz0w+8Yldel6fLyiY0gRIV0VwvbyYDae4Gp6
+         quQx3JMoaVrvUUwEQPRFiCztDLNmkyhdSL+I2fXYif0QDHN5e74kSQ1nOhUKrACy43IC
+         XvDQ==
+X-Gm-Message-State: AC+VfDw4pmXmzvT+scJsk3lwTTbPH+2BkKQbO6SvvzHjP9h096OOEigK
+        TTkS1YQlJ//2UtsFPl/+aW4eaQ==
+X-Google-Smtp-Source: ACHHUZ4iJ+u6pCZV4miMKFbhg+2eSHrwqr7FXyA957lHKdcq3XE9+TzdSP6uIBPbGEMy4RtZzKy33g==
+X-Received: by 2002:a81:75c4:0:b0:561:f6eb:d18a with SMTP id q187-20020a8175c4000000b00561f6ebd18amr16272154ywc.13.1684896619945;
+        Tue, 23 May 2023 19:50:19 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id f126-20020a0dc384000000b00560df23d30csm3381845ywd.117.2023.05.23.19.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 19:50:19 -0700 (PDT)
+Date:   Tue, 23 May 2023 19:50:16 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Qi Zheng <qi.zheng@linux.dev>
+cc:     Alistair Popple <apopple@nvidia.com>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 13/31] mm/hmm: retry if pte_offset_map() fails
+In-Reply-To: <1d5d7f30-1a6a-5ea1-165f-65d34e7658e9@linux.dev>
+Message-ID: <89461cb2-ec2c-719c-8a50-1f76e8048ef@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <2edc4657-b6ff-3d6e-2342-6b60bfccc5b@google.com> <0e3c5937-2f04-25d9-98eb-01e4c2b04150@linux.dev> <87353n9354.fsf@nvidia.com> <1d5d7f30-1a6a-5ea1-165f-65d34e7658e9@linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|DS0PR11MB6493:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c5bb1c4-639d-4ce8-b4d1-08db5c0197bd
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /CEuwoPkXcBKAvMNknsQKD0FSF2r+APxSC0kv9tHfSwnEHDQS2cvTEa9YoQPL8Y4P//fZu3xlrEarfE32a1VinHFWlyrg8NTfdgvq5vm5m0FUnUEI5MTZE4P130/ntI/OHHKVogqLggH7cFlMPaRKRN63otgLi7WwKOocxBwrU1hEHrprWLNb7cFzM4oh7pziH4PGu5By/W6+574oLC3D0zPE1l5JhTs1wcc4jx9SXXm9D+3csBqduriTqyrm7zZm627uPr+9TqFrrOkXidIO8Ne5NdS0c6kF6WKABs/MMybEUr9gmVLIUito961YHTCWKTte4Ri3vcTv6JdDINy7g0weZxWSvHC2reVnfKJreTCf/5qE1PnEAmAGz6E5laCTE/WLLAmoTPIEP/3/IBm+ygbM+JG1ZsZ4P0D2qQDKUr3T3FvFnr2mr6ifXUjvcJ0F0na6GJ9dhQfd/qAfPVc3D0ACxBtaO39y13kzlVsBoHF+aDdJEkO5OHnjX/pbK06f+/j8BhmrCAkwWOmVjQwBpfUkNns0lxsralQHwr+KChcO4yOxD+T8gOaZMg00CIO2+WQwu8rUknZvjj8wkXORIDUjA4G53M6ew/DIDe7qV2gEr4pUXWu9rZ0f5MMYvSNDKqDrlrvkxBqdVvUwR5OUA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(39860400002)(376002)(366004)(136003)(451199021)(6486002)(41300700001)(31686004)(478600001)(31696002)(316002)(66556008)(66476007)(6916009)(4326008)(6666004)(66946007)(5660300002)(86362001)(8936002)(8676002)(38100700002)(6512007)(82960400001)(6506007)(26005)(186003)(53546011)(83380400001)(2906002)(2616005)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkUreitKUVBiN1kvMWJsMDJJRGcrTHdySndDRWtoKytMNXc3Rm1QZXAydHh6?=
- =?utf-8?B?TnZWNzBDN3QwV0ltK2Q2THhOUjZvMVJtNEIyWDQyWVRtbW9FYW9PWXJnb3l5?=
- =?utf-8?B?VFR3VXRPMXRVK3RoWTNiSUNEMnFWMCtBdldMb3l4bnQ3MWRqdGhlZDZ5WGVP?=
- =?utf-8?B?eTdNd1llL3JzTVlEOWd5Lzg1TXVnSU1mRDk1UUE4dFMrc1Z4a3ZCSlhHUm4y?=
- =?utf-8?B?S3loanZlUCtpdGlPdzdzRjlUc0N4MlhaUFhNNzFUeWxWbjFJbmZtcVZWTVda?=
- =?utf-8?B?bFhnTG5JYWtvUWtTNnNlWmtuakxrejZLMWM5Zm91QWtwMElzZUx6WmxEOUxS?=
- =?utf-8?B?YjBpbWlhOWh4TERMRGsyM05pTjB2dXlFRmV5Qnp2a0c2bmxZNlFkcGk0QlBF?=
- =?utf-8?B?UDVIN0FUQWVBeUthb2Q2M0hmV3VlKzdUbUYvZFFoU3lJc21sRDB6UlZxYXFW?=
- =?utf-8?B?TGdqQWV4T3NpOWY3MUJOQmUvSllPWEtDQWs1WEhIRzhjTUc2S2d5ODlDVlhp?=
- =?utf-8?B?YmwxM2xsczV1K3NhdVdpVXdsdWUxUmZGM0hGVVViZkM2aDF4elU5em5Jcmph?=
- =?utf-8?B?U3FGZTA5TXU2ZVJlN1RtVzIzTU52WmVyQkpHSi9pb0lmTFB6OXNTdzVPWDJt?=
- =?utf-8?B?b0xJaGJ1WHFsanRWMTJXZmNpcjZnNyszRDJWUVJUWkVKVXRhanFVRjFFNUVa?=
- =?utf-8?B?NDVXaElYZWlVVUkza2FzVFVVaWdJWk1OM1FqbzFBWFA1amVPVGJMTS9CcEJN?=
- =?utf-8?B?UFF6ZFltRE54OTdQUnFuMlJVcGx5dG5lb045aEYxWFMrQ3E5dTBMd3hUY3By?=
- =?utf-8?B?cVo5U28wS2ZvZ2F5MmUwdlJvRnYvSjYwOUpWbE5JUDNQS054SUlyaWQ2MitC?=
- =?utf-8?B?cy9Yd1ZXc0grbHRNNWJydEpJMTducFBrZGcrOXhYQVRtUEhNMVRqLzdmSll2?=
- =?utf-8?B?U2poQ3BybDRLbEZ4L2Nhc3BjQ2s3Uy9KcE1JeGQyaGxWcnVUZDRKMS9mMnFz?=
- =?utf-8?B?emxqL2ZyUkVGb1F5MkN2QjY0UFJmUEdWcW5kM0JPNnhNMWJRTkFYYUljemU4?=
- =?utf-8?B?aHV1OEIrM0xNZE1OUU4vVGxVcHZ1aW9JcjlwRjBqa3lpNFRBZzBJbDNLU1hL?=
- =?utf-8?B?MHpYTnA1QkxyWEUrakhaSDlMNTdiVy91R0pDYk9nUXB1M0tZWU5PVnVWSjZR?=
- =?utf-8?B?cVZ5bVBvSndnRFk0WWNicktlMFZRWDlzTXNZUzJsd0NMYkk0OWtBT25iOHZ5?=
- =?utf-8?B?VkNDUFdJMWtmdjJtNEtMQnhOcXk3YXYrdWtBeXNFQy9kZ1FlcEczK1llNGZE?=
- =?utf-8?B?ZS9uTWF2bWxUcWNYZ0d2bHZDcTRxdDBhaHJWVEE1OTNTUVJjMmZZNnVSbktz?=
- =?utf-8?B?dnJaeUVrSWRVQU9vSFhaSkpTdHFMM1dPN1NGY0c2S094ckJHVnFGMHhOSzR0?=
- =?utf-8?B?R3dHQnc1TUtGWmdSMkYwaHkrbllyOUdyTUJaakdudEIrclRGYjlucnNvdlBs?=
- =?utf-8?B?bVZyZStlRWJzRW1lZmRTVCtGVU5ic1FzRy93WnpSWFozOE0zN2NORVRoWExF?=
- =?utf-8?B?SmJXcFl0d0Q5bzVEY2NEZnhqQmZVanhGWGZ1THF6ZXI1VTh6WEgrYTBzNjNK?=
- =?utf-8?B?VjZIcUtiMVVYVVFYS3ZwaW9kSjU4cGJGUGt0UEZsaFNYWkRlSmhEbmUyUXZG?=
- =?utf-8?B?WFZpSmdaSlhYdGIwOVVxbDJDUlZxZUdWR2N5cW5kOUMyTzg3NVIyMVhWd3lH?=
- =?utf-8?B?UEFxWFBxWWVJT04vS0NVUWNSOWx3K0dLVHUrbUxDck4rdmV0R3RVelFkRTBr?=
- =?utf-8?B?MS9CZWtFNWtqd1lwYWY3ajQ1Z1BFMSs3K2ZkTlpIdWN6WEhPM3dmSHkzclFJ?=
- =?utf-8?B?MzZKcDdET0FtNmFCbGJQWWhYc21yRmp6MjhCVWFlOURvUG51SHh5dkYya3o0?=
- =?utf-8?B?V01RSUJvNi9BUVRzK1lZQUxvMzNUeVdBTDBKcG5IVVFCOGZGOWMyOXZSb0Nk?=
- =?utf-8?B?dkczVmJTcDNsWnhMS1RZWVBHekxhZWZwUkFTdDRNdGI5ZC9IV0Y0NGZxc3VR?=
- =?utf-8?B?M3ZVVytoa2xtNHN3SVMrbW9LUFdtL1dzNDBLSHZHb2w1a0J4K2ZmQXlFR3Ur?=
- =?utf-8?B?WVJsRmQxRDVNR1FVRFM5VUhhQlpxbWczbHIrVHg1WTdFaDMzenJBLzNmNGNK?=
- =?utf-8?B?QlE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c5bb1c4-639d-4ce8-b4d1-08db5c0197bd
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 02:50:11.6959
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f+HZpvxya7yhgBXwDZUGCfaZql5JhsNYoT2EAJUbTKQyVaytslxAwhlFQPLLcfyWYKFCnXery8Fw6RUKBid1IA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6493
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -167,44 +100,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 23 May 2023, Qi Zheng wrote:
+> On 2023/5/23 10:39, Alistair Popple wrote:
+> > Qi Zheng <qi.zheng@linux.dev> writes:
+> >> On 2023/5/22 13:05, Hugh Dickins wrote:
+> >>> hmm_vma_walk_pmd() is called through mm_walk, but already has a goto
+> >>> again loop of its own, so take part in that if pte_offset_map() fails.
+> >>> Signed-off-by: Hugh Dickins <hughd@google.com>
+> >>> ---
+> >>>    mm/hmm.c | 2 ++
+> >>>    1 file changed, 2 insertions(+)
+> >>> diff --git a/mm/hmm.c b/mm/hmm.c
+> >>> index e23043345615..b1a9159d7c92 100644
+> >>> --- a/mm/hmm.c
+> >>> +++ b/mm/hmm.c
+> >>> @@ -381,6 +381,8 @@ static int hmm_vma_walk_pmd(pmd_t *pmdp,
+> >>>     }
+> >>>      	ptep = pte_offset_map(pmdp, addr);
+> >>> +	if (!ptep)
+> >>> +		goto again;
+> >>>     for (; addr < end; addr += PAGE_SIZE, ptep++, hmm_pfns++) {
+> >>>      int r;
+> >>>    
+> >>
+> >> I haven't read the entire patch set yet, but taking a note here.
+> >> The hmm_vma_handle_pte() will unmap pte and then call
+> >> migration_entry_wait() to remap pte, so this may fail, we need to
+> >> handle this case like below:
+> > 
+> > I don't see a problem here. Sure, hmm_vma_handle_pte() might return
+> > -EBUSY but that will get returned up to hmm_range_fault() which will
+> > retry the whole thing again and presumably fail when looking at the PMD.
+> 
+> Yeah. There is no problem with this and the modification to
+> migration_entry_wait() can be simplified. My previous thought was that
+> we can finish the retry logic in hmm_vma_walk_pmd() without handing it
+> over to the caller. :)
 
-On 5/23/2023 4:21 PM, Binbin Wu wrote:
->
->
-> On 5/11/2023 12:08 PM, Yang Weijiang wrote:
->> Add support for emulating read and write accesses to CET MSRs.
->> CET MSRs are universally "special" as they are either context switched
->> via dedicated VMCS fields or via XSAVES, i.e. no additional in-memory
->> tracking is needed, but emulated reads/writes are more expensive.
-[...]
->> +
->> +    if (!guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
->> +        !guest_cpuid_has(vcpu, X86_FEATURE_IBT))
->> +        return false;
->> +
->> +    if (msr->index == MSR_IA32_PL3_SSP &&
->> +        !guest_cpuid_has(vcpu, X86_FEATURE_SHSTK))
->> +        return false;
-> It may be better to merge the two if statements into one to avoid 
-> calling guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) twice.
->
-Yeah, it sounds good to me, thanks!
+Okay, Alistair has resolved this one, thanks, I agree; but what is
+"the modification to migration_entry_wait()" that you refer to there?
 
-> e.g,
->
->     if (!guest_cpuid_has(vcpu, X86_FEATURE_SHSTK) &&
->         (!guest_cpuid_has(vcpu, X86_FEATURE_IBT) || msr->index == 
-> MSR_IA32_PL3_SSP))
->         return false;
->
->
->> +
->> +    return true;
->> +}
->> +EXPORT_SYMBOL_GPL(kvm_cet_is_msr_accessible);
->> +
->>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_entry);
->>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_exit);
->>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_fast_mmio);
->>
-> ...
+I don't think there's any need to make it a bool, it's normal for there
+to be races on entry to migration_entry_wait(), and we're used to just
+returning to caller (and back up to userspace) when it does not wait.
+
+Hugh
