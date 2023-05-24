@@ -2,108 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C2C70F583
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F4F70F582
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbjEXLmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S232316AbjEXLmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjEXLmT (ORCPT
+        with ESMTP id S230197AbjEXLmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:42:19 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2120.outbound.protection.outlook.com [40.107.255.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95A58F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:42:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dyIgxJo40a2wRzUNybSdByExNwz7MOOV0QmGydBS0dlnIPzIXz6eP3rTcNEoLzHi0g2ADgG7qSyo7KbbX7O5o9UEDX3/+9pdZLV2k7Ve0Bve5TrJEC58LKWj1NJWFa0qRlnGBk3BKKA5eITuPiCTYky2flCYYrDdPAycGqQVNK7+GqyT8XFxkdelL92s+p3H27FYEip30o9PH6TcDTWtvjJvfFMvF/DnbQ/9dS58UfiEv95xnr3ogGLDv5utX01U3dZwJBx8d9y2PnyGdAttTMx/ZlGvhnxdluRmQxT9U+352oSBZO4GSeiULCx6j6a9l8SOUhYvvNMIL4sKWnognw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LDPB60qnAsGtdLjHbrjnEpWwkuDDha+scDL5xys3n6o=;
- b=D9kRzFeR2UVUDpfKFOQzepKYkYXThHkXs7XYm/n1SKU3I0i9rTFLSIk5uSwhDCtAt5wL7XR+GiZTyS8TKn78cKPf21xIRd3T4ToWyWUTjov/5cPv+wTJ32IxfqTT97Kcf9GGqTgQponOy2YrVqCPgQprmXjrmz79C8WKwuvPumBrkAl04XM6dz9/km4pIZRvSBef70Nxj2ZFyUEgjTuCIWw+RkVUfSCqG2AJo5RFetBrb3A9E+AJreFd/YfJlXjaFAMwXIlZIh2Ow9GNqWpLEwnv7hzFy2pAhU1jvXl4P7isowhbDgHXPHn1NVDbp0crd0fDhwacldxVJzhcvM0qQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LDPB60qnAsGtdLjHbrjnEpWwkuDDha+scDL5xys3n6o=;
- b=PzMZrr8x0JFDJSLhpwbxSWA33Nz6ArhOdKMvDPWj4WxOSuGu6CeJyaJ1fnXjLMCcKKVCXC3+bMrGB4OttQzb9TI7BaSGbypOk22Jpiz4EhK1UAJmNGQJ0Ap0Ww7jX0G7tG896ZSf8jgwj51QqFoJE09FYJCnZiEHoToGp67VcyQsqkI390bgEq3m0fciu6pN/hE2SJYptkyOZ7N4VBO7R08sMG2Vg5jxdfHMg7HnY5qzyqk8qDy1SOR6fbkD1IWQTPl0fsEX2BEX001u7S5K/4S9gD+DqMDEkxkcE7Rc9IcVDGkKA+uodlk7ON9s/RbpscmPXNx94awMIigS+ALyEg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3227.apcprd06.prod.outlook.com (2603:1096:100:3f::10)
- by TYUPR06MB6079.apcprd06.prod.outlook.com (2603:1096:400:347::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 11:42:15 +0000
-Received: from SL2PR06MB3227.apcprd06.prod.outlook.com
- ([fe80::9990:c35e:45dc:a76f]) by SL2PR06MB3227.apcprd06.prod.outlook.com
- ([fe80::9990:c35e:45dc:a76f%6]) with mapi id 15.20.6411.029; Wed, 24 May 2023
- 11:42:14 +0000
-From:   Qi Han <hanqi@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Qi Han <hanqi@vivo.com>
-Subject: [PATCH] f2fs: allows setting compress option to files which marked with FI_MMAP_FILE
-Date:   Wed, 24 May 2023 19:41:59 +0800
-Message-Id: <20230524114159.8999-1-hanqi@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0031.apcprd02.prod.outlook.com
- (2603:1096:4:195::16) To SL2PR06MB3227.apcprd06.prod.outlook.com
- (2603:1096:100:3f::10)
+        Wed, 24 May 2023 07:42:17 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE458F;
+        Wed, 24 May 2023 04:42:15 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae54b623c2so1386285ad.3;
+        Wed, 24 May 2023 04:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684928535; x=1687520535;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6t/BheQqzH7C1thiA7W22M56MvUugUWYCFOmf6TXyi8=;
+        b=O8lF963QXa1rK3JIut29atBtSNYTj03rWg5RToTbICooU2WFfy2rBsu0vR1rNGbhFS
+         YrHX6cA8XiDjYwgGBZbboMerOmFh3BcswJeqK4as7vnHd80/drVCj94BW3sUhMFdmWgu
+         go+R4JDS8bXpDQAivwhpJ2rD6v4UZ6ceBorGw+yDoEKIWxBrdurX3ni1UUxADscs2PFj
+         XQBseeg6jza77HVRmnWW7BrET5UDWOkPB6I9u4RdBoapY6XCzRrEEyT8nvdFA84ECPxV
+         KPuS5UdAIx9ZA2cMQfu0nFKLk3FNQAdWg9KWNjWsghRmN00Bk+wt8hXmQ6eh6yXAYXbY
+         i75Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684928535; x=1687520535;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6t/BheQqzH7C1thiA7W22M56MvUugUWYCFOmf6TXyi8=;
+        b=T+5fOyZA/bWcsjDu9uMzNHG9XdfY1meRc3BPOzK3TOoatYF6q24+RkDnoc1Gbaarsg
+         gZwjETnPvIT8wIP573C6XHhsGWiSwOu9gd4ZI4a/BHxm1L6W1wVryi/anRlh7FOfyVJD
+         v47gcFpMYJx4EKPpfgYIATsyHGxoBhLLZiFAr0WCw9WeCCIs4LzbOLDS7hMrYXWp/fLa
+         Atc7jrhjAf4r+V1sgW0D4c1cJhYkzMEthsXtVjk0ACKQYZMIIlu7WNiZ94KOOsmc01or
+         cuEMdR83IEIUHGQC06DtEhWo2iCr1LU6bQvFk5/o3MGweygiCWcM1PXz9q9sQBJbTsp/
+         ocYw==
+X-Gm-Message-State: AC+VfDwoBrJtFKjvRaw1lxPY1poZG56sI8cpDXgRf3N6rJSbTizq9VGc
+        rqOPFfWilS+Z8wdCcyrBOmDyqbg1jKAz4Wrk5i++9UxzEX2pVA==
+X-Google-Smtp-Source: ACHHUZ4/LomLYl/ANxGiVFIZ7yz3yirbhchgDJXwFQC0wuMugNVhb5lNTnCy3udFOtbGYAc9uaHhI+B/s/6I5pWlsbU=
+X-Received: by 2002:a17:902:7683:b0:1a6:82ac:f277 with SMTP id
+ m3-20020a170902768300b001a682acf277mr15979064pll.14.1684928535303; Wed, 24
+ May 2023 04:42:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3227:EE_|TYUPR06MB6079:EE_
-X-MS-Office365-Filtering-Correlation-Id: 51de8b13-a18f-48bc-ca18-08db5c4beb0d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0PHomqFu1UwzGe+/jbIWih3/WAX+nkyqSr5pvDJCY61vBRHR9mBNuuKRmpztspKgx8Y/fUhUIbjYacTeZxgvZ7bUYeqUtsGcc6GlFOvRrgPkkyBsoCZomMDoVZg5rh0tyf+U4kP1Ox2BGao/uEbhT4P1NR4gMhpTcfkwTMWp7gMBA7TarjMryFXb0KX1lrkO3t7aTNdZ4Wh54HywSUz/b+qvBLkGZaF8jfEPThfvgPFwQXTpq7OrK6WEZmzFibsSo4nRAKciHpWQWvqQ7UGRmwMNRTysakifOXM9RTiHS4RxPMa5IrdnMrdHXH0tpuiVsJqnSo1jUY6hn21su8Mosm/U456Y0bo7wuNxmbcpkf4DYfup5iXoMB0y13vqvRirSD6/iJl1hvdcZNqyqKuYT6R06nZZ3oNsmCGQ0RZA2PCGaRIhXEil46XORw/RLtSN4Ik008sO9FSGcE/IDjWfjoO4R7J96yth4qEqG5d0+AsGA8/MGdAN8Hd86uJNBdc+zYDvk0Pq5P8sx0UCD9yM//jww18sFTUY3V/Xwdatp3C50lOe7f2w6VBfGXyIqPkTBfHYsZx0WVVa/RTI66g4UrdkrW8vuTCeNcbG8lhmHoQOnFhgou9SyxC/vzmPtQ/N
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3227.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199021)(38100700002)(6486002)(41300700001)(52116002)(478600001)(316002)(4326008)(86362001)(6666004)(66946007)(66556008)(66476007)(5660300002)(8936002)(8676002)(38350700002)(2906002)(107886003)(1076003)(26005)(6512007)(6506007)(186003)(83380400001)(2616005)(36756003)(4744005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lxyU28GXWTB+aLgU+8feDpUFTcmLXzFxsof6VuVGCnzjR7Z9XaJMcQEZ9m9G?=
- =?us-ascii?Q?vr7rlg95CvmWP46MkuNhBW+d0aOpePJHaPSi0GZb0bkFa9O7kwv2aTA8pHTH?=
- =?us-ascii?Q?DJ7NkQeu0RgBdVXciermo5nOCTkKlMR1sRq6+/8Q8VGXknmHwLSv7uQ/e8C4?=
- =?us-ascii?Q?7ySi2CXb5SXsABdwNdlXYyV5f9Tg+fel8oDEQIFsGO80WkxsmJthh2s6RE3a?=
- =?us-ascii?Q?tJvMVCakLfZs8VXJmEiN+QAR7xcoh4BaZY/4oU6BshIeYuhEGqJ+ICOrWmEG?=
- =?us-ascii?Q?xksum/qo2lM83t23jNVM5dJcdO+QPvI+ufJPOWQKYkz6yKFCZaEL6mDgnAPl?=
- =?us-ascii?Q?W8vBqryF0qD7utxtLsuGwWPCxrTfpH+qEbiLfhqjNG4+km7eNmoLc/7awSNd?=
- =?us-ascii?Q?W11jXmY60ShhYIDqc6xg4dO4Ho+gTDLTBGogM3zlfT3qjWoYfbL4sAkJH6bZ?=
- =?us-ascii?Q?XBB7RZ8a7RdO4YDHvRWJUMOmXpOHz4jofaDfXeEW8WYHLCCYKMLOpbBWuWxm?=
- =?us-ascii?Q?8a/QyB0/26rpGWJ6nZubSYUDtBcjz6JMFxH/Vgzy1xmuVnW1aYxfc2coTxDl?=
- =?us-ascii?Q?fb/UnXkv0ST+VspfqV9PGTlLxbdSGwQaNgVR/sX2ll5FImUsTcLh0WPzrChw?=
- =?us-ascii?Q?5kP+PumOf0hGgWkDuGDn7XTj6YBBdAVzjRgXcu5SgmIGjxm/VREpUIWEbKwZ?=
- =?us-ascii?Q?OXmMibTM9RYf60fB3vGiCMghnbI26wf5LzVuA5T3VvWaN060WfyXBAL1F3+x?=
- =?us-ascii?Q?wwvreRX9hGqmq85wkvNwJMeHgu2GH8Z0+ye8uQP8kJaN1jufUpfxQbjyW4Ar?=
- =?us-ascii?Q?1xtM5PkxHJmJedFm8av5Xtr84nXU1Z25nWGb/wWnxYE/zN27/DffTXhOKLVB?=
- =?us-ascii?Q?dm9tF5UrheyUhr62+cjk28NY7rZ1ldoFx3RzCoUs3chky0EvVmV6+mPungHf?=
- =?us-ascii?Q?NWUFWU1Tt2I+vnJB1vd4yba5mx354bAxWW7DXXmxC3kst8xyccb2XIKWCR2Z?=
- =?us-ascii?Q?GF6brutMGmE/NVIG/du+c0buHVSDp8n3ybVZDSdhmXbkOuLXg0jomAoSO5jB?=
- =?us-ascii?Q?lMlro8pTlzCNFiZZmg9Im0WFw+zyxDcGXHEoks8wj/0FeqSNmek3chhkHZGm?=
- =?us-ascii?Q?HRbbwAXARE936QHJIyz69UWiK4YaBsWapjSmOJGnhXZt1JJh6lM3thtprjq3?=
- =?us-ascii?Q?Mm39KJyBWg0/kHOA5WglUYfeq73ZpubbyBPigmMITJ5cy3bGn+/VA/HEX8gq?=
- =?us-ascii?Q?IJCSM0jTGww9wz4AWz7E9I8XVWPTYycWwzWmqnbJXoUJu44k3aKY5n+XFFyc?=
- =?us-ascii?Q?MW9aR9Ai/WE+I/rcKYZRgMZqPYqSM+vKn4YvsVs32YckKy/PjD6wb8y7EUbM?=
- =?us-ascii?Q?D7DLF9HD9irCaj3zk9HcbrsRoUR9P1LySD/R7DKiM9VEsKO8KEAEYkhJX9dZ?=
- =?us-ascii?Q?BU2p2rUCUZI5i2xMdn6uxLO1RmB8QiHH/e5SZTaZQvdBwdPEa6GmEMGuubNZ?=
- =?us-ascii?Q?zjlSk4tGfE/4rMltk0pEDutDCrFKjUsWoJ0uoa1JP18AhlUGBqtyGcDWYpd1?=
- =?us-ascii?Q?jtR2IaMzn+zxLuzifpLiiAH89Ye36EayN4ZosQc5?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51de8b13-a18f-48bc-ca18-08db5c4beb0d
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3227.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 11:42:14.3129
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Il22ncSA2qiEekmF08qPuuKkMZtgDUoAKbzzPQVx3T4fJsTmqtFwK3C6LN+Ia72mvb6bgKTJz53XJ/g+xuKJ3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR06MB6079
+References: <20230524091948.41779-1-boerge.struempfel@gmail.com>
+ <20230524091948.41779-3-boerge.struempfel@gmail.com> <8cc00e92-512a-f65e-ef4a-4ea859ee3e31@kontron.de>
+In-Reply-To: <8cc00e92-512a-f65e-ef4a-4ea859ee3e31@kontron.de>
+From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
+Date:   Wed, 24 May 2023 13:42:04 +0200
+Message-ID: <CAEktqctAZzMifTpba5cgFoAVF_r0LmG-9kNM0mM1PhA764R-ww@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW
+ mode bit
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
+        festevam@gmail.com, amit.kumar-mahapatra@amd.com,
+        broonie@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, gch981213@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,32 +77,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow to compress mmap files in commit e3c548323d32 ("f2fs: let's
-allow compression for mmap files"). However, we cannot set the
-compress option to the mmap file. To keep the same concept in both
-compress_modes, f2fs_ioc_set_compress_option should also allow it.
+Am Mi., 24. Mai 2023 um 11:47 Uhr schrieb Frieder Schrempf
+<frieder.schrempf@kontron.de>:
+>
+> On 24.05.23 11:19, Boerge Struempfel wrote:
+> > By default, the spi-imx controller pulls the mosi line high, whenever i=
+t
+> > is idle. This behaviour can be inverted per CS by setting the
+> > corresponding DATA_CTL bit in the config register of the controller.
+> >
+> > Also, since the controller mode-bits have to be touched anyways, the
+> > SPI_CPOL and SPI_CPHA are replaced by the combined SPI_MODE_X_MASK flag=
+.
+> >
+> > Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
+>
+> Thanks for working on this! We used a similar downstream patch for
+> driving NeoPixels with i.MX. I'm happy to see a proper upstream solution.
+>
 
-Let's remove checking mmap files in f2fs_ioc_set_compress_option so
-that we can set compress option to the mmap files.
+Thanks for your reply. I'm glad to see that there is an interest for this
+and I'm not the only one, who is working with this.
 
-Signed-off-by: Qi Han <hanqi@vivo.com>
----
- fs/f2fs/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> I also have this Python module [1] around for using spidev to drive the
+> LEDs. It would be nice to see support for SPI_MOSI_IDLE_LOW in py-spidev
+> [2] so we could use it there. Though the latter looks a bit like it is
+> not properly maintained anymore.
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 5ac53d2627d2..3a97b753a074 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -3957,7 +3957,7 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg)
- 	file_start_write(filp);
- 	inode_lock(inode);
- 
--	if (f2fs_is_mmap_file(inode) || get_dirty_pages(inode)) {
-+	if (get_dirty_pages(inode)) {
- 		ret = -EBUSY;
- 		goto out;
- 	}
--- 
-2.39.0
+The python modules looks interesting.
 
+FYI: there is already another patch by Chuanhong Guo on the mailing
+list, which implements a proper driver for neopixel leds. It also allows
+to add them via DT and access them via sys-fs. It might be an
+interesting upstream alternative for your python module if it gets
+accepted.
+
+https://lore.kernel.org/lkml/20221212045558.69602-1-gch981213@gmail.com/
+
+>
+> [1] https://github.com/fschrempf/py-neopixel-spidev
+> [2] https://github.com/doceme/py-spidev
+>
+> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+
+--
+Kind Regards,
+B=C3=B6rge Str=C3=BCmpfel
