@@ -2,133 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8644E710122
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D94E710123
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236839AbjEXWtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
+        id S237125AbjEXWwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjEXWtr (ORCPT
+        with ESMTP id S229682AbjEXWwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:49:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11C790;
-        Wed, 24 May 2023 15:49:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88FCC637C6;
-        Wed, 24 May 2023 22:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F20C433D2;
-        Wed, 24 May 2023 22:49:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684968585;
-        bh=GVSpmgDJgKvtnAYJ89QgN844pnETkbbglcC/+ts5s7Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qYc36qtVDq8cKr5n/fDlSZeY8kAuJ4wIpgJ1hDdKF3Rm44LlF0AKfrYuUVdJRqUyv
-         +7ByDmoIwoJh5WhieEAM6odTnCMOGmFmDR/ifYr8voksEKgq3LjEMCg2t+XXg93H13
-         TIrY2+59udREprIfv+C62vJlIOblMaxQqsA3DEePbbkqY5MI63MkWgG0GPXsxw6i8c
-         NIyiq99BeA/5fsOi9qxAyu0ciR/TGH8CdOilkxdGsIcWZi3rAVf2iT1yvorOw/wSme
-         j3e2owtgwiDUy4dcIVnVeg7OqEFFkzhj9LvJR7Rn4O6kud6KoaMolaioyCE3+ZtiV0
-         yhMyqo3Iu5wUQ==
-Date:   Wed, 24 May 2023 23:49:41 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next <linux-next@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
-Message-ID: <20230524-scalping-number-63ec10c1f7bf@spud>
-References: <mhng-e172207d-d67d-46ab-ab95-85f0a854ace2@palmer-ri-x1c9a>
- <65124759-26de-4111-bc54-545a00620d75@app.fastmail.com>
- <8af1acf1-64a5-5868-9702-0929fe279761@infradead.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vifRCZgSv5ueTTCK"
-Content-Disposition: inline
-In-Reply-To: <8af1acf1-64a5-5868-9702-0929fe279761@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 18:52:37 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7702399
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:52:36 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-561eadd916fso30527057b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684968755; x=1687560755;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XQzJt7PVzKE0RYFdY1/R7evjIQ4fazx/fIwgD8umm1c=;
+        b=UOZwS8V9j5Vj7d6BBP7lbPtOOLPMognA4evyDEpUyGLMRrcV3vgnjijCWqXJ/5ltPU
+         U/2EPX4zrJ1eKb4Q8NLvxVex6T5Ef3lsZ+VdAPcoeYlEVCYMKRy57K39xvYAg/PFtCfq
+         wrBALWHCCZ1+AmBbdvK5bhdoQK+FyI1SOnq5HJI/peN0LRAXsi2iLy2VRfVaTyqdwzWM
+         KebH4Oj1WwtZrCDJILN6und2ITGTKK8RdBaPUY/eqiVzxiFQUdM7N8CXWuEhIpV89n6W
+         ZmB4aRYkuRZeu3eUWuXSahUmkeOPfoXOGGBKuM5cusjBU/DhJdgjHaXioqtV4DS3T2hK
+         +X1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684968755; x=1687560755;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XQzJt7PVzKE0RYFdY1/R7evjIQ4fazx/fIwgD8umm1c=;
+        b=QDR1OAPVMyduoEEYc8WTR1tOa+2g4bDy6fJSkzAAJh/SsXgEoGBwM+YawTmR38ddUV
+         dXPLEPyPtBaxRlVieBkebm2pNRuha3+RNfKaqC5vUPi1ZHvFA2CalATI3VlESv+BhKBY
+         7owzqkoJFArMqXdk1Q/jh3tSCgIVnhI7OI7hCr3lRSblRlteqDksBtu6zWY6pLyfcnAl
+         afJETxWFZXuNJWHHWWbS+nfoIvpQ13n1j3fsOWxIsvnJ6hmcRHI+M4xMaWHbrqBJnUqx
+         CTtWPRu6Txz+E3TQkXGPAnNTjX0lR9mex6Kumc2+rCFwReH/xQLdJ7+tg7ankPq14Vnl
+         5JMA==
+X-Gm-Message-State: AC+VfDzNU/xFWwoKchh3IUI2acB0BqTH0ELsjhQyyQ1Z/ZGJfd35gBNL
+        1E7KEjF+3uv5ZhemO55uH1FUeSMWlLQ=
+X-Google-Smtp-Source: ACHHUZ7OAaaoJI95qhata3HKErnQCfVYLGT5GDZUYkSPYRW9Lty5Acw8p9+3sQpUzr+WaRtb9wncucayCQM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:441b:0:b0:55d:9484:f153 with SMTP id
+ r27-20020a81441b000000b0055d9484f153mr12017925ywa.7.1684968755778; Wed, 24
+ May 2023 15:52:35 -0700 (PDT)
+Date:   Wed, 24 May 2023 15:52:34 -0700
+In-Reply-To: <20230323072714.82289-8-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230323072714.82289-1-likexu@tencent.com> <20230323072714.82289-8-likexu@tencent.com>
+Message-ID: <ZG6VMrYK2xgR/v95@google.com>
+Subject: Re: [PATCH 7/7] KVM: selftests: Test Intel counters' bit width emulation
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 23, 2023, Like Xu wrote:
+> +static uint64_t test_ctrs_bit_width_setup(struct kvm_vcpu *vcpu,
+> +					  uint8_t bit_width,
+> +					  uint64_t perf_cap,
+> +					  uint32_t msr_base)
+> +{
+> +	struct kvm_cpuid_entry2 *entry;
+> +	bool fw_wr = perf_cap & PMU_CAP_FW_WRITES;
+> +	uint64_t kvm_width;
+> +	uint64_t value;
+> +
+> +	entry = vcpu_get_cpuid_entry(vcpu, 0xa);
+> +	if (msr_base != MSR_CORE_PERF_FIXED_CTR0) {
+> +		kvm_width = kvm_gp_ctr_bit_width();
+> +		entry->eax = (entry->eax & ~GP_WIDTH_MASK) |
+> +			(bit_width << GP_WIDTH_OFS_BIT);
+> +	} else {
+> +		kvm_width = kvm_fixed_ctr_bit_width();
+> +		entry->edx = (entry->edx & ~FIXED_WIDTH_MASK) |
+> +			(bit_width << FIXED_WIDTH_OFS_BIT);
+> +	}
+> +	TEST_REQUIRE(kvm_width > 31);
 
---vifRCZgSv5ueTTCK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, May 24, 2023 at 03:41:15PM -0700, Randy Dunlap wrote:
-> On 5/23/23 23:23, Arnd Bergmann wrote:
-> > On Wed, May 24, 2023, at 03:29, Palmer Dabbelt wrote:
-> >> On Tue, 23 May 2023 17:22:20 PDT (-0700), rdunlap@infradead.org wrote:
-> >>> On 5/23/23 06:07, Alexandre Ghiti wrote:
-> >>>> On 23/05/2023 04:28, Randy Dunlap wrote:
-> >>>>> On 5/19/23 03:42, Alexandre Ghiti wrote:
-> >>>>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux=
--ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section=
- .text LMA [00000000000f09d4,00000000033562ab]
-> >>>>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux=
--ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps=
- section .data LMA [000000000041a000,00000000075bffd7]
-> >>>>>>>
-> >>>>>>> I'll check this one too which seems to be related to kernel/pi in=
-troduction.
-> >>>>>>
-> >>>>>> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to h=
-ave limited size, hence the overlap, so no fix for this one. Is there a way=
- to exclude this config from randconfig?
-> >>>>> Does this mean exclude XIP_KERNEL or something else from randconfig=
-s?
-> >>>>
-> >>>>
-> >>>> I meant excluding XIP_KERNEL from randconfigs: it has very strict co=
-nstraints regarding what can/can't be enabled then it needs human intervent=
-ion to make sure the error above does not happen. So I would not bother tes=
-ting this in randconfigs if possible.
-> >>>
-> >>> I can exclude it from my randconfig builds, but I don't know of a way=
- to exclude it from randconfig builds in general (i.e., for everyone).
-> >>
-> >> Arnd had suggested a trick related to menus that would result in=20
-> >> randconfig never enabling some config.  It'd suggested for=20
-> >> CONFIG_NONPORTABLE, but we didn't use it because it'd reduce randconfi=
-g=20
-> >> coverage.
-> >>
-> >> Maybe we should add a CONFIG_VERYSPECIAL of some sort and hide things=
-=20
-> >> like XIP behind it (maybe M-mode too)?
-> >=20
-> > I usually add 'depends on !COMPILE_TEST', that excludes it from most
-> > build bots.
->=20
-> XIP_KERNEL already has "depends on !COMPILE_TEST", since April of 2021.
-
-Half of me wants to say just remove XIP_KERNEL entirely. Or make it
-depend on BROKEN, since noone seems to actually test it and I don't
-think we even know if it works right now?
-
---vifRCZgSv5ueTTCK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG6UhQAKCRB4tDGHoIJi
-0gQCAQDJF5AaPKZcpLOA853nW9fm061vxB5oKFNYpcO+ZBM5ogEA0VCjHShKVo6P
-t1yS9OcbEhAlJC3/btQ7ILZI557nWA4=
-=wzlZ
------END PGP SIGNATURE-----
-
---vifRCZgSv5ueTTCK--
+Unfortunately, using TEST_REQUIRE() in a subtest is generally a bad idea.  This
+will skip _all_ tests if the requirement isn't met.  That might be a signal that
+the test is doing too much, i.e. should be split into multiple tests.  Unlike KUT,
+selftests are more geared towards lots of small tests, not a handful of massive
+tests.
