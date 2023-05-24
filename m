@@ -2,161 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D5070F4C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5617D70F4BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbjEXLFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S234329AbjEXLEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbjEXLFM (ORCPT
+        with ESMTP id S234317AbjEXLEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:05:12 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B931B9;
-        Wed, 24 May 2023 04:04:58 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QR7ZS4FLmzLm9b;
-        Wed, 24 May 2023 19:02:56 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 19:04:24 +0800
-Message-ID: <93960845-2af5-ac2b-c562-d8c89ad961a4@huawei.com>
-Date:   Wed, 24 May 2023 19:04:23 +0800
+        Wed, 24 May 2023 07:04:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E691AE;
+        Wed, 24 May 2023 04:04:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C01F63BB1;
+        Wed, 24 May 2023 11:04:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F720C433EF;
+        Wed, 24 May 2023 11:04:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684926271;
+        bh=afkaeFx0ab/vSGv0Hu2IOltH+7rU/mCIFnFsmEYzd6U=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=k5v+PymPmEws7orUUcVTez97drKQq+JQzlK8hGFUPa3l0M/n+sqt1pbaYetlIpc88
+         P1Eo3JT5XLDxH14Hyqrg8P01Vik/rf7NPiJoHwGTOvCId4I5e/pf6EdTwBRuhthGwG
+         +RdygwbQLH1Qmm/n2fO2dtRr/embB0CZeDACEssm4KjZP9GT7AHqnQxVSsHcnM7LYQ
+         gDahNNgIoo2V2hqc3BoeJeuKdiqui6GS+nZCfl2mSUAJ4dQVxu7rI0+GVkOADnxMc0
+         lYLCXWjDbMQFoMJoQHEIGPXSoV5/kSX7pwSw9d0dyGpg8h46qsFquQ2iNccssWzkSd
+         msBh0gmFeuwXQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     conor+dt@kernel.org,
+        David Rau <David.Rau.opensource@dm.renesas.com>
+Cc:     support.opensource@diasemi.com, lgirdwood@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20230523161821.4260-1-David.Rau.opensource@dm.renesas.com>
+References: <20230523161821.4260-1-David.Rau.opensource@dm.renesas.com>
+Subject: Re: [PATCH 0/3] ASoC: da7219: Add jack insertion detection
+ polarity
+Message-Id: <168492626936.37175.18228969711177024530.b4-ty@kernel.org>
+Date:   Wed, 24 May 2023 12:04:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 4/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, Zhangjin Wu <falcon@tinylab.org>,
-        Guo Ren <guoren@kernel.org>, Bin Meng <bmeng@tinylab.org>
-References: <20230523165502.2592-1-jszhang@kernel.org>
- <20230523165502.2592-5-jszhang@kernel.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230523165502.2592-5-jszhang@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 23 May 2023 16:18:18 +0000, David Rau wrote:
+> This patchset adds the support of DA7219 Jack insertion detection
+> polarity selection.
+> 
+> The first patch replaces the old txt binding with a new schema binding.
+> 
+> The second patch adds `dlg,jack-ins-det-pty` property for Jack
+> insertion detection polarity selection.
+> 
+> [...]
 
+Applied to
 
-On 2023/5/24 0:55, Jisheng Zhang wrote:
-> From: Zhangjin Wu <falcon@tinylab.org>
-> 
-> Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
-> the user to enable dead code elimination. In order for this to work,
-> ensure that we keep the alternative table by annotating them with KEEP.
-> 
-> This boots well on qemu with both rv32_defconfig & rv64 defconfig, but
-> it only shrinks their builds by ~1%, a smaller config is thereforce
-> customized to test this feature:
-> 
->            | rv32                   | rv64
->    --------|------------------------|---------------------
->     No DCE | 4460684                | 4893488
->        DCE | 3986716                | 4376400
->     Shrink |  473968 (~10.6%)       |  517088 (~10.5%)
-> 
-> The config used above only reserves necessary options to boot on qemu
-> with serial console, more like the size-critical embedded scenes:
-> 
->    - rv64 config: https://pastebin.com/crz82T0s
->    - rv32 config: rv64 config + 32-bit.config
-> 
-> Here is Jisheng's original commit-msg:
-> When trying to run linux with various opensource riscv core on
-> resource limited FPGA platforms, for example, those FPGAs with less
-> than 16MB SDRAM, I want to save mem as much as possible. One of the
-> major technologies is kernel size optimizations, I found that riscv
-> does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
-> passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
-> --gc-sections flag to the linker.
-> 
-> This not only benefits my case on FPGA but also benefits defconfigs.
-> Here are some notable improvements from enabling this with defconfigs:
-> 
-> nommu_k210_defconfig:
->     text    data     bss     dec     hex
-> 1112009  410288   59837 1582134  182436     before
->   962838  376656   51285 1390779  1538bb     after
-> 
-> rv32_defconfig:
->     text    data     bss     dec     hex
-> 8804455 2816544  290577 11911576 b5c198     before
-> 8692295 2779872  288977 11761144 b375f8     after
-> 
-> defconfig:
->     text    data     bss     dec     hex
-> 9438267 3391332  485333 13314932 cb2b74     before
-> 9285914 3350052  483349 13119315 c82f53     after
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> Co-developed-by: Jisheng Zhang <jszhang@kernel.org>
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-> Tested-by: Bin Meng <bmeng@tinylab.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Thanks!
 
-> ---
->   arch/riscv/Kconfig              | 1 +
->   arch/riscv/kernel/vmlinux.lds.S | 6 +++---
->   2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 8f55aa4aae34..62e84fee2cfd 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -115,6 +115,7 @@ config RISCV
->   	select HAVE_KPROBES if !XIP_KERNEL
->   	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
->   	select HAVE_KRETPROBES if !XIP_KERNEL
-> +	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
->   	select HAVE_MOVE_PMD
->   	select HAVE_MOVE_PUD
->   	select HAVE_PCI
-> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-> index e5f9f4677bbf..492dd4b8f3d6 100644
-> --- a/arch/riscv/kernel/vmlinux.lds.S
-> +++ b/arch/riscv/kernel/vmlinux.lds.S
-> @@ -85,11 +85,11 @@ SECTIONS
->   	INIT_DATA_SECTION(16)
->   
->   	.init.pi : {
-> -		*(.init.pi*)
-> +		KEEP(*(.init.pi*))
->   	}
->   
->   	.init.bss : {
-> -		*(.init.bss)	/* from the EFI stub */
-> +		KEEP(*(.init.bss*))	/* from the EFI stub */
->   	}
->   	.exit.data :
->   	{
-> @@ -112,7 +112,7 @@ SECTIONS
->   	. = ALIGN(8);
->   	.alternative : {
->   		__alt_start = .;
-> -		*(.alternative)
-> +		KEEP(*(.alternative))
->   		__alt_end = .;
->   	}
->   	__init_end = .;
+[1/3] ASoC: dt-bindings: dialog,da7219: convert to dtschema
+      commit: 345585b776e6f6f1cab846eb3efbef32c53fc0e3
+[2/3] ASoC: dt-bindings: da7219: Add jack-ins-det-pty property
+      commit: c28dc3bdfcd9e93b6cf1f3f0bb3c51e819fc977f
+[3/3] ASoC: da7219: Add Jack insertion detection polarity
+      commit: dc0ff0fa3a9bf9f7be3a9530f8f6079324f54fa5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
