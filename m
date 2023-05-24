@@ -2,37 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403D970EAC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1FA70EAC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238979AbjEXB1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 21:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S238982AbjEXB3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 21:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238962AbjEXB1w (ORCPT
+        with ESMTP id S231317AbjEXB3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 21:27:52 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 54346126;
-        Tue, 23 May 2023 18:27:49 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 932E018002B642;
-        Wed, 24 May 2023 09:27:35 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Su Hui <suhui@nfschina.com>
-Subject: [PATCH] media: dvb_ringbuffer: Return -EFAULT if copy fails
-Date:   Wed, 24 May 2023 09:27:33 +0800
-Message-Id: <20230524012733.414441-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Tue, 23 May 2023 21:29:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B9FE5;
+        Tue, 23 May 2023 18:29:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FEE7637BA;
+        Wed, 24 May 2023 01:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6D3C433D2;
+        Wed, 24 May 2023 01:29:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684891745;
+        bh=L8rNn85YTf6zDLUEoc9Hm5F9QIebVUAKQ95REQj8Ctg=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=F3sq/CyWzbUgVWCxGrl0nwSVGS9Sa9NE8DhNz2S92oZSWwYpTL8nkvKxTBSEDQe+f
+         T4f6oO1YO8l8pm2oEAcdRraMFpM0LFQwYSGOjCYY8TVuBeOUVxkso4pOasbnvgYQ3u
+         RkW+kIuGqX7lWykISd49dUGZGZ/OFvC/X0R3+HVOepV9YpTSBp4x2zXMZ002ZNmbou
+         UTz2IFJpixhkiHIPd0y3YWs+idmMorzszWrCuM/hjeITa1FzS+Kn4J7MUdPTJ8llV1
+         HWnwfMJoPZ+WAU/tXddFyYpSDH61ChRrAzRVze9BVdTX2qCBk3H9YVXx1Hr2qOGKnp
+         fvXu0568HjbSQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 24 May 2023 04:29:00 +0300
+Message-Id: <CSU49W63M584.3VBYBMYWJZ3H5@suppilovahvero>
+Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
+        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
+        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lukas@wunner.de>,
+        <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH 2/2] tpm, tpm_tis: reuse code in disable_interrupts()
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
+        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>
+X-Mailer: aerc 0.14.0
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <20230522143105.8617-2-LinoSanfilippo@gmx.de>
+ <CSTW5YGZ50O1.16RYO14HOQRH2@suppilovahvero>
+ <f22d2c28-5934-a989-3aea-4ff4d20b6326@kunbus.com>
+In-Reply-To: <f22d2c28-5934-a989-3aea-4ff4d20b6326@kunbus.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,37 +64,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The copy_to/from_user() functions return the number of bytes remaining
-to be copied, but we want to return -EFAULT to the user.
+On Tue May 23, 2023 at 11:52 PM EEST, Lino Sanfilippo wrote:
+>
+>
+> On 23.05.23 21:07, Jarkko Sakkinen wrote:
+>
+> >=20
+> > NAK as invidual change w/o further discussion.
+> >=20
+> > Would need to be seen in context. This does not change kernel for
+> > better.
+> >=20
+> > If you want to wrap, please do it in 1/2 and then we can evaluate
+> > whether it makes sense or not.
+> >=20
+>
+> Ok, will do so.
 
-Fixes: 04da2daee383 ("[media] ngene: properly handle __user ptr")
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/media/dvb-core/dvb_ringbuffer.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+And generally: keep it *minimal* :-) We want to exactly fix the bug,
+and take absolutely no other action.
 
-diff --git a/drivers/media/dvb-core/dvb_ringbuffer.c b/drivers/media/dvb-core/dvb_ringbuffer.c
-index 7d4558de8e83..f132578840ad 100644
---- a/drivers/media/dvb-core/dvb_ringbuffer.c
-+++ b/drivers/media/dvb-core/dvb_ringbuffer.c
-@@ -216,7 +216,7 @@ ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
- 	if (split > 0) {
- 		status = copy_from_user(rbuf->data+rbuf->pwrite, buf, split);
- 		if (status)
--			return len - todo;
-+			return -EFAULT;
- 		buf += split;
- 		todo -= split;
- 		/* smp_store_release() for write pointer update to ensure that
-@@ -228,7 +228,7 @@ ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
- 	}
- 	status = copy_from_user(rbuf->data+rbuf->pwrite, buf, todo);
- 	if (status)
--		return len - todo;
-+		return -EFAULT;
- 	/* smp_store_release() for write pointer update, see above */
- 	smp_store_release(&rbuf->pwrite, (rbuf->pwrite + todo) % rbuf->size);
- 
--- 
-2.30.2
-
+BR, Jarkko
