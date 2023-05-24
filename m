@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D2670F807
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B30B70F80A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbjEXNv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S235486AbjEXNv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbjEXNv1 (ORCPT
+        with ESMTP id S235431AbjEXNvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:51:27 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA8BAA;
-        Wed, 24 May 2023 06:51:25 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q1ote-0007rz-CU; Wed, 24 May 2023 15:51:22 +0200
-Message-ID: <36e5798e-72e2-0212-fe61-94d0075099d2@leemhuis.info>
-Date:   Wed, 24 May 2023 15:51:21 +0200
+        Wed, 24 May 2023 09:51:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0166AA9;
+        Wed, 24 May 2023 06:51:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92D6763385;
+        Wed, 24 May 2023 13:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D27C433EF;
+        Wed, 24 May 2023 13:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684936313;
+        bh=4GshjE8EW0mcvOVEahGR8w89BqqKhoLGoZQ3w7o8H08=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=qb7DMQdqOOKgXs40GCoO7DiAHU3CqIJUwI6k/zcLHnFlxV0vPhuZ+ABymC3UdvBc+
+         jDVceNK4HT6uiJurdC9kJGtaCi53cui792N3JJezYf27fShgJO1/R1tJ27DiEicmWT
+         98Vetx7LGHGulW+FsTonnfiibRJ18SgXV9nmJ6AImrarvRLfbdO1sXrI5w/SUUUXVv
+         f21t9Wz93Fl1AGuXVRxb8JbTECtyCYNV9xUdqtZwAz5cUge9EhdX6C+MwIswLWw30W
+         r9mAc9oxqwQoPxAF0Adx59N5sFnSISZyikjIoXpZYrGFaVKJQlgVjOIwP9SiQd2/Vr
+         JQVfl7gpDNkaw==
+Date:   Wed, 24 May 2023 06:51:52 -0700
+From:   Kees Cook <kees@kernel.org>
+To:     =?ISO-8859-1?Q?Daniel_D=EDaz?= <daniel.diaz@linaro.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux- stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        ndesaulniers@google.com, rientjes@google.com,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: =?US-ASCII?Q?Re=3A_Stable_backport_request=3A_skbuff=3A_Pro?= =?US-ASCII?Q?actively_round_up_to_kmalloc_bucket_size?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAEUSe794ifGiY9tsXfnqDsDSJ+UOOB1kJrm1Jb8kZ5fsoBZ5Sg@mail.gmail.com>
+References: <CAEUSe78ip=wkHUSz3mBFMcd-LjQAnByuJm1Oids5GSRm-J-dzA@mail.gmail.com> <e2f5ed62-eb6b-ea99-0e4d-da02160e99c8@suse.cz> <CAEUSe794ifGiY9tsXfnqDsDSJ+UOOB1kJrm1Jb8kZ5fsoBZ5Sg@mail.gmail.com>
+Message-ID: <5A79C566-3213-456A-8CA3-8F0F1A2D9781@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [PATCH] Revert "regulator: qcom-rpmh: Revert "regulator:
- qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS""
-Content-Language: en-US, de-DE
-To:     Amit Pundir <amit.pundir@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20230515145323.1693044-1-amit.pundir@linaro.org>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <20230515145323.1693044-1-amit.pundir@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684936285;c676f6b5;
-X-HE-SMSGID: 1q1ote-0007rz-CU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+On May 23, 2023 8:52:53 PM PDT, "Daniel D=C3=ADaz" <daniel=2Ediaz@linaro=2E=
+org> wrote:
+>Hello!
+>
+>On Tue, 23 May 2023 at 00:28, Vlastimil Babka <vbabka@suse=2Ecz> wrote:
+>> On 5/22/23 20:23, Daniel D=C3=ADaz wrote:
+>> > Hello!
+>> >
+>> > Would the stable maintainers please consider backporting the followin=
+g
+>> > commit to the 6=2E1? We are trying to build gki_defconfig (plus a few
+>> > extras) on Arm64 and test it under Qemu-arm64, but it fails to boot=
+=2E
+>> > Bisection has pointed here=2E
+>>
+>> You mean the bisection was done to find the first "good" commit between=
+ 6=2E1
+>> and e=2Eg=2E 6=2E3?
+>>
+>> As others said, this commit wasn't expected to be a fix to a known bug=
+=2E
+>> Maybe you found one that we didn't know of, or it might be accidentaly
+>> masking some other bug=2E
+>
+>How interesting! Yes, we happened to run a bisection between v6=2E1 and
+>v6=2E3 and we found where it started working with the following
+>configuration:
+>  https://storage=2Etuxsuite=2Ecom/public/linaro/daniel/builds/2QA2CHQUpq=
+Ke27FyMZrBNILVwXi/config
 
-On 15.05.23 16:53, Amit Pundir wrote:
-> This reverts commit ad44ac082fdff7ee57fe125432f7d9d7cb610a23.
-> 
-> This patch restores the synchronous probing for
-> qcom-rpmh-regulator because asynchronous probing broke
-> Dragonboard 845c (SDM845) running AOSP. UFSHC fail to
-> initialize properly and DB845c fails to boot regardless
-> of "rootwait" bootarg being present or not
-> https://bugs.linaro.org/show_bug.cgi?id=5975.
-> 
-> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-> ---
->  drivers/regulator/qcom-rpmh-regulator.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
-> index b0a58c62b1e2..30659922b0aa 100644
-> --- a/drivers/regulator/qcom-rpmh-regulator.c
-> +++ b/drivers/regulator/qcom-rpmh-regulator.c
-> @@ -1517,7 +1517,7 @@ MODULE_DEVICE_TABLE(of, rpmh_regulator_match_table);
->  static struct platform_driver rpmh_regulator_driver = {
->  	.driver = {
->  		.name = "qcom-rpmh-regulator",
-> -		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-> +		.probe_type = PROBE_FORCE_SYNCHRONOUS,
->  		.of_match_table	= of_match_ptr(rpmh_regulator_match_table),
->  	},
->  	.probe = rpmh_regulator_probe,
+Ah yes, from CONFIG_UBSAN_BOUNDS=3Dy and CONFIG_UBSAN_TRAP=3Dy
 
-Amit, just wondering: what happened to this? It seems there was some
-agreement to go down this route to fix your regression, but then nothing
-happened anymore since about a week. Or am I missing something?
+This was a known issue in upstream, oddly only exposed on arm64=2E Somethi=
+ng re-broke with __alloc_size after commit 93dd04ab0b2b had tried to work a=
+round it=2E I didn't think any kernel released with this broken, though, so=
+ perhaps what broke it got added to -stable?
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+>With that patch on top of v6=2E1=2E29 it boots fine under Qemu-arm64; as
+>v6=2E1=2Ey stands, it panics with this:
 
-#regzbot ^backmonitor:
-https://lore.kernel.org/lkml/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
+It should be fine to backport the patch, IMO=2E
+
+
+--=20
+Kees Cook
