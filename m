@@ -2,170 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73505710004
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE724710000
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjEXV3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S229447AbjEXV3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjEXV33 (ORCPT
+        with ESMTP id S229504AbjEXV3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:29:29 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54992132;
-        Wed, 24 May 2023 14:29:28 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34OLT2i8064437;
-        Wed, 24 May 2023 16:29:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684963742;
-        bh=e4GDbMukzYM0sutIg07akQTX4m7teKg+iSzWf6JpbVw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=osx4bQruuwfuw/qTFQTJi70kmOO9xoW5EbPAmzdfupB844Gj4QdAoglP+DmHV+2Oy
-         zv1H4PxxOFmGNej8TT5KPGmbb+bOhpxap8HmZ86fpAOb5Vu4SQbPRoR/vpgoRKFSmQ
-         fHKE6aJWNJORuKCAM92E00NL24xQPHihIVWAM/DA=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34OLT2jn105929
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 24 May 2023 16:29:02 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 24
- May 2023 16:29:01 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 24 May 2023 16:29:01 -0500
-Received: from [128.247.81.105] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34OLT1fJ007319;
-        Wed, 24 May 2023 16:29:01 -0500
-Message-ID: <8985ea03-a7dc-a0bc-a238-3099caadf740@ti.com>
-Date:   Wed, 24 May 2023 16:29:01 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 2/2] can: m_can: Add hrtimer to generate software
- interrupt
-Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        <linux-can@vger.kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Tony Lindgren <tony@atomide.com>
-References: <20230523023749.4526-1-jm@ti.com>
- <20230523023749.4526-3-jm@ti.com> <ZGyfAhp8op4GMElN@corigine.com>
-From:   Judith Mendez <jm@ti.com>
-In-Reply-To: <ZGyfAhp8op4GMElN@corigine.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 17:29:20 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0423C5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:29:18 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2555076ea4dso703437a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684963758; x=1687555758;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NmXoxiVgRE7SmAinCpL+lNfwn7nPu1XoUg7jzLhb6pk=;
+        b=VX+Tx2GTB8aJk7yC/5Q+jNM8QcPoGjvnErCdx5/U1zJTWZOwTFm3QJW4oXcwryuqZ+
+         LpzHk/BLzcrtfBl5bs1y9IhZAuppC8LzdHIHVFWjZN2ghDD54bDHM+ZjnSgP0l2nIv+w
+         zAJ6aFWJM2TR9cBhuCeMFzk1OgTFswNBnk64UKDxlSZQU545TeG++wgQOqOR391zpFUo
+         q5S0NmBWN9ThOh/DIOe1m354+0ia7L6jkxucjgaWX340kLQrOSNwvj+n6jfsQDpzk5rD
+         MA+7Zk20yw6aZrVGdEGKFzKL3qkMpt/PNc82S2DxMa1t94K3rGMfc+sUdV7qQs8u6GfT
+         wDxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684963758; x=1687555758;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NmXoxiVgRE7SmAinCpL+lNfwn7nPu1XoUg7jzLhb6pk=;
+        b=jh56dzr2vF3VyCEz8+aoYbdq55FS4leytkHijDgDVVYL26qv5cXMCL0MTLDgz3ZoDU
+         xVRY5ayehIOTIvX1O7ZTvD5tZZ+pPkzmM0bXClKx4yKdZtVoWvTMudMm+Y9yZhL+q9eT
+         F/ckep8LixoMluZOgaVF4xxgNIn9o9XYaJprO6EioCbSE6th//jfhM5ZzTGEeONdmr03
+         GtgAmLQ1upr/Y3ks0b+of/RmonNdocv8RZvDJX+/eVhKa4Cgh2Ik3FO15GzmQ5+dDTb1
+         YML4/odWa5nkjWRfuVGF4gzM8ixWC6XV7nKCHiFIhjfqyaCy3gd/h+C5T/FjkHOIEz9I
+         6HiA==
+X-Gm-Message-State: AC+VfDzSXAsF2VGYA27vhvcJ4twn4QXAysSmNW6pAEkcZuSHroLxbHYn
+        W++e6g40QAio+yRPJwdblgMsAHdrT70=
+X-Google-Smtp-Source: ACHHUZ7DbFecq83fvKDHU9wMBCuDxDf5o6gqzF6LAr/mfcJhV/RSo8MI46phyac1Or5gPRP5WZVXPnGPuKU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1083:b0:24d:f3d9:48b5 with SMTP id
+ gj3-20020a17090b108300b0024df3d948b5mr4488024pjb.3.1684963758357; Wed, 24 May
+ 2023 14:29:18 -0700 (PDT)
+Date:   Wed, 24 May 2023 14:29:17 -0700
+In-Reply-To: <CALMp9eR_xYapRm=zJ3OdAzBVFjpzeQWYv9nTs1ZstAsugEwWRQ@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-6-likexu@tencent.com>
+ <ZC99f+AO1tZguu1I@google.com> <509b697f-4e60-94e5-f785-95f7f0a14006@gmail.com>
+ <ZDAvDhV/bpPyt3oX@google.com> <34b5dd08-edac-e32f-1884-c8f2b85f7971@gmail.com>
+ <59ef9af0-9528-e220-625a-ff16e6971f23@amd.com> <ZG52cgmjgaqY8jvq@google.com> <CALMp9eR_xYapRm=zJ3OdAzBVFjpzeQWYv9nTs1ZstAsugEwWRQ@mail.gmail.com>
+Message-ID: <ZG6BrSXDnOdDvUZh@google.com>
+Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
+ VMRUN instruction
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sandipan Das <sandipan.das@amd.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        "Tom Lendacky (AMD)" <thomas.lendacky@amd.com>,
+        Ananth Narayan <ananth.narayan@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Simon,
+On Wed, May 24, 2023, Jim Mattson wrote:
+> On Wed, May 24, 2023 at 1:41=E2=80=AFPM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> >
+> > On Wed, Apr 26, 2023, Sandipan Das wrote:
+> > > Hi Sean, Like,
+> > >
+> > > On 4/19/2023 7:11 PM, Like Xu wrote:
+> > > >> Heh, it's very much explicable, it's just not desirable, and you a=
+nd I would argue
+> > > >> that it's also incorrect.
+> > > >
+> > > > This is completely inaccurate from the end guest pmu user's perspec=
+tive.
+> > > >
+> > > > I have a toy that looks like virtio-pmu, through which guest users =
+can get hypervisor performance data.
+> > > > But the side effect of letting the guest see the VMRUN instruction =
+by default is unacceptable, isn't it ?
+> > > >
+> > > >>
+> > > >> AMD folks, are there plans to document this as an erratum?=C3=AF=
+=C2=BF=C2=BD I agree with Like that
+> > > >> counting VMRUN as a taken branch in guest context is a CPU bug, ev=
+en if the behavior
+> > > >> is known/expected.
+> > > >
+> > >
+> > > This behaviour is architectural and an erratum will not be issued. Ho=
+wever, for clarity, a future
+> > > release of the APM will include additional details like the following=
+:
+> > >
+> > >   1) From the perspective of performance monitoring counters, VMRUNs =
+are considered as far control
+> > >      transfers and VMEXITs as exceptions.
+> > >
+> > >   2) When the performance monitoring counters are set up to count eve=
+nts only in certain modes
+> > >      through the "OsUserMode" and "HostGuestOnly" bits, instructions =
+and events that change the
+> > >      mode are counted in the target mode. For example, a SYSCALL from=
+ CPL 3 to CPL 0 with a
+> > >      counter set to count retired instructions with USR=3D1 and OS=3D=
+0 will not cause an increment of
+> > >      the counter. However, the SYSRET back from CPL 0 to CPL 3 will c=
+ause an increment of the
+> > >      counter and the total count will end up correct. Similarly, when=
+ counting PMCx0C6 (retired
+> > >      far control transfers, including exceptions and interrupts) with=
+ Guest=3D1 and Host=3D0, a VMRUN
+> > >      instruction will cause an increment of the counter. However, the=
+ subsequent VMEXIT that occurs,
+> > >      since the target is in the host, will not cause an increment of =
+the counter and so the total
+> > >      count will end up correct.
+> >
+> > The count from the guest's perspective does not "end up correct".  Unli=
+ke SYSCALL,
+> > where _userspace_ deliberately and synchronously executes a branch inst=
+ruction,
+> > VMEXIT and VMRUN are supposed to be transparent to the guest and can be=
+ completely
+> > asynchronous with respect to guest code execution, e.g. if the host is =
+spamming
+> > IRQs, the guest will see a potentially large number of bogus (from it's=
+ perspective)
+> > branches retired.
+>=20
+> The reverse problem occurs when a PMC is configured to count "CPUID
+> instructions retired." Since KVM intercepts CPUID and emulates it, the
+> PMC will always read 0, even if the guest executes a tight loop of
+> CPUID instructions.
+>
+> The PMU is not virtualizable on AMD CPUs without significant
+> hypervisor corrections. I have to wonder if it's really worth the
+> effort.
 
-On 5/23/23 6:09 AM, Simon Horman wrote:
-> On Mon, May 22, 2023 at 09:37:49PM -0500, Judith Mendez wrote:
->> Add an hrtimer to MCAN class device. Each MCAN will have its own
->> hrtimer instantiated if there is no hardware interrupt found in
->> device tree M_CAN node.
->>
->> The hrtimer will generate a software interrupt every 1 ms. In
->> hrtimer callback, we check if there is a transaction pending by
->> reading a register, then process by calling the isr if there is.
->>
->> Signed-off-by: Judith Mendez <jm@ti.com>
-> 
-> ...
-> 
->> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
->> index 94dc82644113..b639c9e645d3 100644
->> --- a/drivers/net/can/m_can/m_can_platform.c
->> +++ b/drivers/net/can/m_can/m_can_platform.c
->> @@ -5,6 +5,7 @@
->>   //
->>   // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
->>   
->> +#include <linux/hrtimer.h>
->>   #include <linux/phy/phy.h>
->>   #include <linux/platform_device.h>
->>   
->> @@ -96,12 +97,30 @@ static int m_can_plat_probe(struct platform_device *pdev)
->>   		goto probe_fail;
->>   
->>   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
->> -	irq = platform_get_irq_byname(pdev, "int0");
->> -	if (IS_ERR(addr) || irq < 0) {
->> -		ret = -EINVAL;
->> +	if (IS_ERR(addr)) {
->> +		ret = PTR_ERR(addr);
->>   		goto probe_fail;
->>   	}
->>   
->> +	if (device_property_present(mcan_class->dev, "interrupts") ||
->> +	    device_property_present(mcan_class->dev, "interrupt-names")) {
->> +		irq = platform_get_irq_byname(pdev, "int0");
->> +		mcan_class->polling = false;
->> +		if (irq == -EPROBE_DEFER) {
->> +			ret = -EPROBE_DEFER;
->> +			goto probe_fail;
->> +		}
->> +		if (irq < 0) {
->> +			ret = -ENXIO;
->> +			goto probe_fail;
->> +		}
->> +	} else {
->> +		mcan_class->polling = true;
->> +		dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
->> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
->> +			     HRTIMER_MODE_REL_PINNED);
->> +	}
-> 
-> Hi Judith,
-> 
-> it seems that with this change irq is only set in the first arm of
-> the above conditional. But later on it is used unconditionally.
-> That is, it may be used uninitialised.
-> 
-> Reported by gcc-12 as:
-> 
->   drivers/net/can/m_can/m_can_platform.c: In function 'm_can_plat_probe':
->   drivers/net/can/m_can/m_can_platform.c:150:30: warning: 'irq' may be used uninitialized [-Wmaybe-uninitialized]
->     150 |         mcan_class->net->irq = irq;
->         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~
->   drivers/net/can/m_can/m_can_platform.c:86:13: note: 'irq' was declared here
->      86 |         int irq, ret = 0;
->         |             ^~~
-> 
+Per our offlist chat, my understanding is that there are caveats with vPMUs=
+ that
+it's simply not feasible for a hypervisor to handle.  I.e. virtualizing any=
+ x86
+PMU with 100% accuracy isn't happening anytime soon.
 
-Maybe a good solution is to initialize irq=0 here.
-
->> +
->>   	/* message ram could be shared */
->>   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
->>   	if (!res) {
->> -- 
->> 2.17.1
-
-
-~Judith
+The way forward is likely to evaluate each caveat on a case-by-case basis t=
+o
+determine whether or not the cost of the fixup in KVM is worth the benefit =
+to
+the guest.  E.g. emulating "CPUID instructions retired" seems like it would=
+ be
+fairly straightforward.  AFAICT, fixing up the VMRUN stuff is quite difficu=
+lt though.
