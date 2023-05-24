@@ -2,414 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010F370FB96
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB3F70FB99
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 18:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbjEXQWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 12:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S233733AbjEXQXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 12:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjEXQWu (ORCPT
+        with ESMTP id S230029AbjEXQXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 12:22:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D30E9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684945327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yPwyuS1OongKitLVaU9z5x5rdysTI14nc2mLRrtatWw=;
-        b=M7brJvW4XeufFfq0alht3QbiDMsny8/180yGOAWWsv9VqXnfJfuiQHsvom5AXKN2ELo4Vf
-        rL9/yLE5bR0NKtHocc04aLEbu/beTw2o+DQkeaPh+X2pCByRfP8AcIZ7Jta6lDoDp3UVDc
-        OcuMIf6vUYaDeix1nPE5K1nErolmz3M=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-117--niw7dG6MSOmNg_ABK_lOQ-1; Wed, 24 May 2023 12:22:06 -0400
-X-MC-Unique: -niw7dG6MSOmNg_ABK_lOQ-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-623a2273194so1956386d6.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 09:22:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684945326; x=1687537326;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yPwyuS1OongKitLVaU9z5x5rdysTI14nc2mLRrtatWw=;
-        b=GKKWmTlaROZCLAmYRWb+Cwa8NT7f/0Zt6Zz3wdKIdsr/yVNIhjXlz8Td2VEgtcu3Nf
-         lEBxHEBJRNEUCQmb8q8rsK0Vp1rqHpvK2iIAcMGA6kaxT64hsePMy07j3zCaxVwvonXo
-         DitgcmnAWe2g06lFrjfgHjAOet3OHcwyGXetBUovA/buORuNBzH8d+D/wpqvSuujJzRm
-         3RdTLVptdcJdqMEyixCscw9gEXvLJLnTnXudIrsDpp4VfF6Cl+sY5mhVbs2KegP6l5BU
-         Cv02joeouu1zO2YvicVDp5LP7d6mdGBj4r+tvDtvwYTKNP9Z/LlSjqdPMBEGVbf199Cw
-         lKRw==
-X-Gm-Message-State: AC+VfDzZFvQ/TTbqCCYfmS7bG+TqlYPaKRPOAeluad71gBN2aDtGahJV
-        GRLByS8q++7HpnscdMT5+txiHAZIE5k/dthIWFAffKL/L8gXGPSvk8bFAwCL4bCcmbEhS771R7y
-        2tJEtqYNLl0dJ9R2SRc+6DORE
-X-Received: by 2002:a05:6214:4118:b0:622:265e:3473 with SMTP id kc24-20020a056214411800b00622265e3473mr26910200qvb.1.1684945326064;
-        Wed, 24 May 2023 09:22:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ44gSuxNK5fKTIYGrmxrxLmxwCMv6vwRSeYWoCsOBEZjRDG+1NMNWBC7tmoLEdae6sAzBVCjg==
-X-Received: by 2002:a05:6214:4118:b0:622:265e:3473 with SMTP id kc24-20020a056214411800b00622265e3473mr26910168qvb.1.1684945325673;
-        Wed, 24 May 2023 09:22:05 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id bz16-20020ad44c10000000b00621253d19f9sm3649443qvb.98.2023.05.24.09.22.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 09:22:04 -0700 (PDT)
-Date:   Wed, 24 May 2023 12:22:03 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Stevens <stevensd@chromium.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
-Message-ID: <ZG45q0xJSnA6NKQN@x1n>
-References: <20230330085802.2414466-1-stevensd@google.com>
- <20230330085802.2414466-2-stevensd@google.com>
- <ZGvUsf7lMkrNDHuE@google.com>
+        Wed, 24 May 2023 12:23:16 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2130.outbound.protection.outlook.com [40.107.117.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7062D139;
+        Wed, 24 May 2023 09:23:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PPyu8c9kMXoxiWwKet6J+RncomwP4IXFqshVdIzUDid4HMepJhBV7WDVVe0H4UZOY1LCd3gcSPtpkiVwxYF8CgA6GOBU5ds3Iq847gbZAdd2vWvM/JKGjc/0Q0cd8koe0i8CuKTBIEzU/8z8lrz+9d9YXXQhLW7QwLIdLG+XP43wHvoPLReIlfBsXqZgOX64RJ4l5Ger2+M7Nkcsf4MnZUxembmCUOXaBrlDpM/04oPKumDI46W0+iGcL4oALMSxnDkHQGTVKKdCvgCUgSrsCpGoaERd7GuqKKie5EJzaqJi/C0dkzb07mfshTSr2LBW2aluzi/G//myd9iPsz1RQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7FTkjaW7HdLfdIZhw/thwdfy9eJplsc7Txwo7oYYN+E=;
+ b=fUEAqBo4LR71DKtIYUlesccAt3i54QTMZmB1tScLhhLJV4xFbV1paFCyqmSark0kNEgm0ZkxXeZhJXty809B2oE3HxbZcL8Yn3PHjoT9+ei9oz1SU7oGGTBOyrK7LHHCb04PIxlv1sNv8GkBa3dwy5jkpBW7SiVkHl0i5iiiQ900kCS50JIes516ogVcdq7xscnV7dsuL5925/v1eZclaJTNo4fIyZZh57d26UmzNQRiVe2E2RLC0LZuRojumYAFs6NKztWmnlTWIQ63LSvkVldS20iziojS/gw+bml0qVS1D8vfWwn3oXNn7vX5jipH8RYHF7yGActawqhml11Vvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7FTkjaW7HdLfdIZhw/thwdfy9eJplsc7Txwo7oYYN+E=;
+ b=N6s0BSZbdKoNZiqaDwh81l0O7ahQRi77v8FSePRERR92FBCjRI4mRKNruOW4GfF64336vpLzsCw+f/WP7gIXApFqMEDMYjOA+5mrCZXyD+TWt565h8N13lsslCKwZ6PpDsYyU9ZUoqB4jHPVNcKmTgRepxxBCWHSGupt0nXT8tQ=
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM (2603:1096:301:e6::8) by
+ PUZP153MB0786.APCP153.PROD.OUTLOOK.COM (2603:1096:301:fe::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.7; Wed, 24 May 2023 16:23:03 +0000
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11]) by PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11%2]) with mapi id 15.20.6455.004; Wed, 24 May 2023
+ 16:23:03 +0000
+From:   Saurabh Singh Sengar <ssengar@microsoft.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: [PATCH 1/2] x86/Kconfig: Allow CONFIG_X86_MPPARSE
+ disable for OF platforms
+Thread-Topic: [EXTERNAL] Re: [PATCH 1/2] x86/Kconfig: Allow CONFIG_X86_MPPARSE
+ disable for OF platforms
+Thread-Index: AQHZhBiUq424crV8z0Sj0fJkb54l069oNpQAgAF1oEA=
+Date:   Wed, 24 May 2023 16:23:03 +0000
+Message-ID: <PUZP153MB074959D2F85EAD559ED7B544BE41A@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+References: <1683816877-10747-1-git-send-email-ssengar@linux.microsoft.com>
+ <9b88ddaf-c5c5-0244-5be7-12400ee54e11@intel.com>
+In-Reply-To: <9b88ddaf-c5c5-0244-5be7-12400ee54e11@intel.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=c9c10bbb-8710-4138-87f2-f8bb703ab180;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-24T16:10:03Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PUZP153MB0749:EE_|PUZP153MB0786:EE_
+x-ms-office365-filtering-correlation-id: 84e9f326-2698-4928-1e2e-08db5c7325f5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8TmN0atgh46EAOF6MJcudeFlT0H/CgKsv2tLVBGagUcPHtHxWQld8ERZ4HSeNEVAed9+uAqYxYRZqJVuBFxfEteWO+5scrzR0QuODuX15zm5AofYx55FKSIO0RpYSF24bj1So+MZWxd0gjH2VcofO1/zyO4k7SPnmDm1yhZ9atHG4huDiPOFzLp1VVxMkHAOBNTAPik+mvAV9kRxZDVR6+z7AdY93L1jLsuj8oQN1bUMQ3e6RcOjN2okyg1aHkIDKEbC+5cV4PuyNitsKj+gy7afbhZ9SIYm43FZp8mKgdAoxU8ZM625g5oR6uJaT25eouyWkoc8e03Zx3Wl2/2newIWO2vPw6UK1P4GLuM8IcTz8xLuXhF1kZofAAaQsf1sTm+eZJfJdrNug+ecFQYUnEwGvtnv6mFvN2j4V6hrhEPyvma/yirQIgbkAprmED2bDyAnKdXQu33LVJ4bBjqfuWeSMNZOIfQwUdCnnrLCV/MqFVBYIe1wxLHH0kOtaPiTlaAB7rW9hffC1JOBSCQdHxfbWsTAjLcEUOGYwku9Mu5nlSFo+eTJAy3v1QQ1X5nynVoyrEANikrzCnRMKRpAdJTInQwNy7j+TMAedwxBhbrGpc1mg1s0S0L0QwYq1/O/4iN3oRS5KDfrgmoiFqgaaCR1D0m65mNhJ7IPEJqp91/FxXM80RFY1QBx4GFUw5tM
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZP153MB0749.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(396003)(376002)(39860400002)(451199021)(38100700002)(41300700001)(55016003)(38070700005)(71200400001)(8990500004)(110136005)(2906002)(7416002)(7696005)(478600001)(9686003)(86362001)(53546011)(10290500003)(6506007)(8936002)(8676002)(76116006)(33656002)(186003)(52536014)(5660300002)(66946007)(83380400001)(66476007)(316002)(786003)(64756008)(122000001)(66446008)(921005)(82950400001)(66556008)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YmtsZ3VZcFVVc3dHOS9VUS8vanR4WGY1QUh0c2orSndTS011WkozS2tpakpV?=
+ =?utf-8?B?VHhScC92Q0VlTlpaVEQxMW80Y3JITnVKakxQRFhDOGNTWldnQmZaZHVmd3Ez?=
+ =?utf-8?B?ZXZLSDJTWStSeGp2ejlWajRkYTlWbkxRMnNGV1puVHV2djlVTXd0SHZTUjlu?=
+ =?utf-8?B?czgxbDMwWmtSYTB6T29CM0tUcGVvRU9CUlVNckFCRzBTSkdlYnhzWDE4N1RY?=
+ =?utf-8?B?eVlvVnJ2OWVNdS8wMERhNEJubUs5Z0pwNjdYWWYvWEdwNEUrZTdqL1E1TzlR?=
+ =?utf-8?B?NWlRT3N1REt2aG5vVVF6a292eGpsTUg4UFNqRlE3Z1BxMGhHRFZNd3FJalNl?=
+ =?utf-8?B?dnFTS2pSMnFUODdTdkFtQ0h4aG8rKytwc0hjV3ZGTWtYY21iaHRzNm8zc1Ix?=
+ =?utf-8?B?UlBWRGtkenduNVVKRmpicGE3ZW5YNDBIZ3FpcG5nZFo4ZTJuMGd3RDloMVV3?=
+ =?utf-8?B?VmQ2a3J4UmVtdjZYcHNsWW92TDNLY1VlRVhxZE1JM1NGWFIvRGN3V2QzOEta?=
+ =?utf-8?B?Q3RJWlY3enJPUnhsOTZTYWl4dFptaEZDQkw4WDlkSU9VNGdZZDFMZE9kYTRI?=
+ =?utf-8?B?U2JDdlprNTc1ZDBCa2V1eFBybTVCMjZBazdPVUN3QTBvMFczZjZ1RUpDRWw3?=
+ =?utf-8?B?bkZnL3VVMlNvblh5K3IzbHFDdUw3QU10ME9FekROTWltVEVsdnZSbHQxbjZU?=
+ =?utf-8?B?NjF6aGNhWDZ3bWM1bk0vY2dzQ1F3TUFZeUo2SjY1c3YweHZLa3Q0MDJacElv?=
+ =?utf-8?B?SGtOUXkwU1VWRDJZTWRTZFVoRmRLSTFpZXBlNE4xSzMweXRLTlhiTllFUFR6?=
+ =?utf-8?B?TXZsL1dteWhKMTBHSEdvNmp5N28xUGxRaGoyOEVFR0xiRlpwSlJNVFU3NEVj?=
+ =?utf-8?B?ZE9PSEEwWm5nZ0lpdEJnTDQ1eWtKamt6WXJLU1cyOVRXUVRkVU9CVnZXTGxu?=
+ =?utf-8?B?NlFmL3E1S0oyU3grdXgxTmd6TFJkNC9ZYVduOVVoa3lraFcwSVNaTnNzM1Vy?=
+ =?utf-8?B?WHQxM2J2Q3VlYVJxdmsrNEtka0RSa0RtZTZIdkVmT3AyUUF6enZLd2dKd0Nn?=
+ =?utf-8?B?QkZwUGxOQlhBbDUzVWJoNklFUUZYcjV3eFBhbEt2WjFCVlZtTkwrMFFUWm03?=
+ =?utf-8?B?U0FPSkxBM2dVLzZwNzJGd0tGUUdwOU5kR0lscmY4OE5aRGJmWTZlcG1XMUFP?=
+ =?utf-8?B?SHZjQVEvVUtDa01hUEZ0NVN2aHdic1UxZEw2Q1Q3RWJaNG43b0tJdHJtL2Zs?=
+ =?utf-8?B?Q3VkL2pOMHN4Rzdha0lFUU4yY0loOWl3d1o2VDR3LzliZnc4RnNBTWQ0aXRx?=
+ =?utf-8?B?Zm1DWWEzTjZzakx0eUo1MmxlY04xSi9JR2Yvb3ZqclplOFBKQm5qUVJGanpM?=
+ =?utf-8?B?RkVSVDdheU8yTzNTK2xSLzZPVVBVNUkydlJDS0RXTjRVbzNVdUZCR3pxTE9C?=
+ =?utf-8?B?V1Q3Zk02QmxXZW15UThSL016Y1ZhMUg2N1RJTzRCSGJSR2FhbGdhcm5kMVlD?=
+ =?utf-8?B?QnFsWFRxQTVGcDRzcUJBZW1nWDZzcnlqcUJ3UmVZbFJmanFTMlFXbXFxRHBU?=
+ =?utf-8?B?WEZFbFhDbmNQS2VZZXBzc2hqSkVCUzNGZk9sQU9MUW1QT3Nha3VXUHRjVDRH?=
+ =?utf-8?B?cnVybm1UZ2RJWXN2UzRWSTNJem1veWdHd2djdUZxTnhVRkdUelpWamdFQ2xm?=
+ =?utf-8?B?bm5RUTgvbWdzRE01clovbThwZWRwdEpPbkJsVnEzQnU4VzB0Mmlqb0tTdElt?=
+ =?utf-8?B?OXVsazhSdjlXdndUVnhKRlp1Y2lPR0JBOUQxeEorL0J0cE9TaW1HN2t3WW43?=
+ =?utf-8?B?OWJyOVgwbjV3Y2J2YmY0MWN1enVhekVkWlZFWng1NFcwMng2bGtjUkpTQWRx?=
+ =?utf-8?B?Y1M0a2RseG9JU002YkhTc3p2VXd1aG1ia0Y0RTdhZlpGQTh1OHUydCs1aTE3?=
+ =?utf-8?B?UFRDaU41TUJuL1dWbHNtNllTallqU1QyeW0wbFAzWE4yNUhRSEg5MGc3RXZO?=
+ =?utf-8?B?RlQvWitmZGswSlNoV21QcEpFcDNlRXpyOXlQdmE2eFBBdTlrS09QZXViU0th?=
+ =?utf-8?B?UnZCcnp4QTFzZDBKeFRKQlU4aG1jUVZkSFZIbDZNYURibG1FVk4yNWxTa3lh?=
+ =?utf-8?Q?PS52SbY0/8g7m7PNm8AySRc6M?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZGvUsf7lMkrNDHuE@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84e9f326-2698-4928-1e2e-08db5c7325f5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2023 16:23:03.0778
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zwXw5E86b1dgfinVvab7/QCc/XrlaAvYdaUxCyqasOlwA1J0PSfO+ssHUkWycEQLJRdVD90EirhgSqfYJfbiZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZP153MB0786
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 01:46:41PM -0700, Sean Christopherson wrote:
-> +Peter
-> 
-> On Thu, Mar 30, 2023, David Stevens wrote:
-> > From: David Stevens <stevensd@chromium.org>
-> > 
-> > Introduce new gfn_to_pfn_noref functions that parallel existing
-> > gfn_to_pfn functions. These functions can be used when the caller does
-> > not need to maintain a reference to the returned pfn (i.e. when usage is
-> > guarded by a mmu_notifier). The noref functions take an out parameter
-> > that is used to return the struct page if the hva was resolved via gup.
-> > The caller needs to drop its reference such a returned page.
-> 
-> I dislike the "noref" name and the approach itself (of providing an entirely
-> separate set of APIs).  Using "noref" is confusing because the callers do actually
-> get a reference to the page (if a refcounted page is found).
-> 
-> As for the approach, I really, really don't want to end up with yet more APIs
-> for getting PFNs from GFNs.  We already have far too many.  In the short term,
-> I think we'll need to carry multiple sets of APIs, as converting all architectures
-> to any new API will be too much for a single series.  But I want to have line of
-> sight to convering on a single, as-small-as-possible set of APIs, and I think/hope
-> it should be possible to make the old APIs, e.g. gfn_to_pfn(), to be shims around
-> the new APIs.
-> 
-> And since this series is essentially overhauling the gfn_to_pfn APIs, I think it's
-> the right series to take on refactoring the APIs to clean up the growing flag
-> problem.  There was a bit of discussion back when "interruptible" support was
-> added (https://lore.kernel.org/all/YrTbKaRe497n8M0o@xz-m1.loca), but it got punted
-> because it wasn't necessary, and because there wasn't immediate agreement on what
-> exactly the APIs should look like.
-> 
-> Overhauling the APIs would also let us clean up things like async #PF, specifically
-> replacing the unintuitive "*async = true" logic with something like this:
-> 
-> 		if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
-> 			pfn = KVM_PFN_ERR_FAULT_MINOR;
-> 		else
-> 			pfn = KVM_PFN_ERR_FAULT;
-> 
-> Lastly, I think there's also an opportunity here to harden KVM's interaction with
-> mmu_notifiers, and to dedup arch code in KVM .  Specifically, even when the proposed
-> "allow_unsafe_kmap" is true, KVM should either (a) be "in" an mmu_notifier sequence
-> or (b) _want_ to grab a reference.  And when KVM does NOT want a reference, the core
-> API can/should immediately drop the reference even before returning.
-> 
-> My thought is it provide an "entirely" new API, named something like kvm_follow_pfn()
-> to somewhat mirror follow_{pfn,pte,phys}().  Ideally something to pair with gup()
-> would be nice, but having a dedicated KVM helper to get _only_ struct page memory
-> doesn't work well because KVM almost never wants only struct page memory.
-> 
-> As for the flags vs. bools debate (see link above), I think the best approach is
-> a mix of the two.  Specifically, reuse the FOLL_* flags as-is for inputs, and use
-> booleans for outputs.  I don't _think_ there are any input bools/flags that don't
-> map 1:1 with existing FOLL_* flags.
-> 
-> As a very, *very* rough sketch, provide APIs that look a bit like this.
-
-Unifying ref vs nonref cases does look a bit cleaner to me too.
-
-> 
->   kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
->   {
-> 	kvm_pfn_t pfn;
-> 
-> 	if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
-
-IMHO we may not want to rely on mmu_seq==0 either for unlucky very initial
-mmu_seq being zero, or avoid overflows?
-
-I'd say we can stick with FOLL_GET in this case to identify ref vs nonref
-and always assume mmu_seq a pure random number.
-
-> 		return KVM_PFN_ERR_FAULT;
-> 
-> 	pfn = ???;
-> 
-> 	if (foll->page && !(foll->flags & FOLL_GET))
-> 		put_page(foll->page);
-> 
-> 	return pfn;
->   }
-> 
->   kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
->   {
-> 	struct kvm_follow_pfn foll = {
-> 		.flags = FOLL_GET | FOLL_WRITE,
-> 	};
-> 
-> 	<more stuff here?>
-> 
-> 	foll.slot = ???;
-> 	if (!foll.slot || foll.slot->flags & KVM_MEMSLOT_INVALID)
-> 		return KVM_HVA_ERR_BAD;
-> 
-> 	if (memslot_is_readonly(foll.slot))
-> 		return KVM_HVA_ERR_RO_BAD;
-> 
-> 	return __kvm_follow_pfn(&foll);
->   }
-> 
-> and a few partially converted users
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 67e2ac799aa7..5eaf0395ed87 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -550,12 +550,14 @@ static bool mmu_spte_update(u64 *sptep, u64 new_spte)
->  
->         if (is_accessed_spte(old_spte) && !is_accessed_spte(new_spte)) {
->                 flush = true;
-> -               kvm_set_pfn_accessed(spte_to_pfn(old_spte));
-> +               if (is_refcounted_page_pte(old_spte))
-
-One question is how to impl is_refcounted_page_pte() here to identify
-non-refcountable pages.
-
-IIUC those pages are mostly identical to a normal page (so !PG_reserved)
-but it has page_ref_count(page)==0 always, am I right?  I got that roughly
-from reading f8be156be1 only though, so I could miss a lot of things..
-
-When thinking about that, I'm also wondering whether we can trivially allow
-kvm to support such mapping (without overhaul of the kvm pfn API) by
-something like this:
-
-===8<===
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 51e4882d0873..467acbac1a96 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -192,7 +192,13 @@ struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn)
-
-        page = pfn_to_page(pfn);
-        if (!PageReserved(page))
--               return page;
-+               /*
-+                * When page_ref_count(page)==0 it might be speical page
-+                * that do not support refcounting.  Treating them the same
-+                * as normal reserved (e.g. MMIO) pages by returning NULL,
-+                * so they're exempt of refcounting.
-+                */
-+               return page_ref_count(page) == 0 ? NULL : page;
-
-        /* The ZERO_PAGE(s) is marked PG_reserved, but is refcounted. */
-        if (is_zero_pfn(pfn))
-===8<===
-
-So that we treat those special pages the same as normal PFNMAP ones by
-skipping all refcountings on inc/dec.  This is based on the fact that kvm
-should always hold at least 1 ref on a normal page so a normal page should
-never hit ref==0 here, but again I could miss something somewhere..
-
-> +                       kvm_set_page_accessed(pfn_to_page(spte_to_pfn));
->         }
->  
->         if (is_dirty_spte(old_spte) && !is_dirty_spte(new_spte)) {
->                 flush = true;
-> -               kvm_set_pfn_dirty(spte_to_pfn(old_spte));
-> +               if (is_refcounted_page_pte(old_spte))
-> +                       kvm_set_page_dirty(pfn_to_page(spte_to_pfn));
->         }
->  
->         return flush;
-> @@ -4278,6 +4280,10 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
->  
->  static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  {
-> +       struct kvm_follow_pfn foll = {
-> +               .mmu_seq = fault->mmu_seq,
-> +               .gfn = fault->gfn,
-> +       };
->         struct kvm_memory_slot *slot = fault->slot;
->         bool async;
->  
-> @@ -4309,12 +4315,16 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->                         return RET_PF_EMULATE;
->         }
->  
-> -       async = false;
-> -       fault->pfn = __gfn_to_pfn_noref_memslot(slot, fault->gfn, false, false, &async,
-> -                                               fault->write, &fault->map_writable,
-> -                                               &fault->hva, &fault->page);
-> -       if (!async)
-> -               return RET_PF_CONTINUE; /* *pfn has correct page already */
-> +       foll.flags = FOLL_NOWAIT;
-> +       if (fault->write)
-> +               foll.flags |= FOLL_WRITE;
-> +
-> +       fault->pfn = __kvm_follow_pfn(&foll);
-> +       if (!is_error_noslot_pfn(fault->pfn))
-> +               goto success;
-> +
-> +       if (!is_fault_minor_pfn(fault->pfn))
-> +               return RET_PF_CONTINUE;
->  
->         if (!fault->prefetch && kvm_can_do_async_pf(vcpu)) {
->                 trace_kvm_try_async_get_page(fault->addr, fault->gfn);
-> @@ -4332,9 +4342,18 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->          * to wait for IO.  Note, gup always bails if it is unable to quickly
->          * get a page and a fatal signal, i.e. SIGKILL, is pending.
->          */
-> -       fault->pfn = __gfn_to_pfn_noref_memslot(slot, fault->gfn, false, true, NULL,
-> -                                               fault->write, &fault->map_writable,
-> -                                               &fault->hva, &fault->page);
-> +       foll.flags |= FOLL_INTERRUPTIBLE;
-> +       foll.flags &= ~FOLL_NOWAIT;
-> +
-> +       fault->pfn = kvm_follow_pfn(&foll);
-> +       if (!is_error_noslot_pfn(fault->pfn))
-> +               goto success;
-> +
-> +       return RET_PF_CONTINUE;
-> +success:
-> +       fault->hva = foll.hva;
-> +       fault->page = foll.page;
-> +       fault->map_writable = foll.writable;
->         return RET_PF_CONTINUE;
->  }
->  
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 360eaa24456f..0bae253c88dd 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2663,9 +2663,10 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
->                 if (r < 0)
->                         pfn = KVM_PFN_ERR_FAULT;
->         } else {
-> -               if (async && vma_is_valid(vma, write_fault))
-> -                       *async = true;
-> -               pfn = KVM_PFN_ERR_FAULT;
-> +               if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
-> +                       pfn = KVM_PFN_ERR_FAULT_MINOR;
-> +               else
-> ...skipping...
-> +       fault->pfn = kvm_follow_pfn(&foll);
-> +       if (!is_error_noslot_pfn(fault->pfn))
-> +               goto success;
-> +
-> +       return RET_PF_CONTINUE;
-> +success:
-> +       fault->hva = foll.hva;
-> +       fault->page = foll.page;
-> +       fault->map_writable = foll.writable;
->         return RET_PF_CONTINUE;
->  }
->  
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 360eaa24456f..0bae253c88dd 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2663,9 +2663,10 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
->                 if (r < 0)
->                         pfn = KVM_PFN_ERR_FAULT;
->         } else {
-> -               if (async && vma_is_valid(vma, write_fault))
-> -                       *async = true;
-> -               pfn = KVM_PFN_ERR_FAULT;
-> +               if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
-> +                       pfn = KVM_PFN_ERR_FAULT_MINOR;
-> +               else
-> +                       pfn = KVM_PFN_ERR_FAULT;
->         }
->  exit:
->         mmap_read_unlock(current->mm);
-> @@ -2732,6 +2733,30 @@ kvm_pfn_t __gfn_to_pfn_noref_memslot(const struct kvm_memory_slot *slot, gfn_t g
->  }
->  EXPORT_SYMBOL_GPL(__gfn_to_pfn_noref_memslot);
->  
-> +kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
-> +{
-> +       kvm_pfn_t pfn;
-> +
-> +       if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
-> +               return KVM_PFN_ERR_FAULT;
-> +
-> +       pfn = __gfn_to_pfn_noref_memslot(...);
-> +
-> +       if (foll->page && !(foll->flags & FOLL_GET))
-> +               put_page(foll->page);
-> +
-> +       return pfn;
-> +}
-> +
-> +kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
-> +{
-> +       struct kvm_follow_pfn foll = {
-> +               .flags = FOLL_GET | FOLL_WRITE,
-> +       };
-> +
-> +       return __kvm_follow_pfn(&foll);
-> +}
-> +
->  kvm_pfn_t gfn_to_pfn_noref_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
->                                 bool *writable, struct page **page)
->  {
-> @@ -2910,25 +2935,23 @@ void kvm_release_pfn(kvm_pfn_t pfn, bool dirty)
->  
->  int kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map)
->  {
-> +       struct page *page;
->         kvm_pfn_t pfn;
->         void *hva = NULL;
-> -       struct page *page = KVM_UNMAPPED_PAGE;
->  
->         if (!map)
->                 return -EINVAL;
->  
-> -       pfn = gfn_to_pfn(vcpu->kvm, gfn);
-> +       pfn = kvm_follow_pfn(vcpu->kvm, gfn, &page)
->         if (is_error_noslot_pfn(pfn))
->                 return -EINVAL;
->  
-> -       if (pfn_valid(pfn)) {
-> -               page = pfn_to_page(pfn);
-> +       if (page)
->                 hva = kmap(page);
->  #ifdef CONFIG_HAS_IOMEM
-> -       } else {
-> +       else if (allow_unsafe_kmap)
->                 hva = memremap(pfn_to_hpa(pfn), PAGE_SIZE, MEMREMAP_WB);
->  #endif
-> -       }
->  
->         if (!hva)
->                 return -EFAULT;
-> 
-
--- 
-Peter Xu
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRGF2ZSBIYW5zZW4gPGRh
+dmUuaGFuc2VuQGludGVsLmNvbT4NCj4gU2VudDogVHVlc2RheSwgTWF5IDIzLCAyMDIzIDExOjIz
+IFBNDQo+IFRvOiBTYXVyYWJoIFNlbmdhciA8c3NlbmdhckBsaW51eC5taWNyb3NvZnQuY29tPjsg
+dGdseEBsaW51dHJvbml4LmRlOw0KPiBtaW5nb0ByZWRoYXQuY29tOyBicEBhbGllbjguZGU7IGRh
+dmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbTsNCj4geDg2QGtlcm5lbC5vcmc7IGhwYUB6eXRvci5j
+b207IEtZIFNyaW5pdmFzYW4gPGt5c0BtaWNyb3NvZnQuY29tPjsNCj4gSGFpeWFuZyBaaGFuZyA8
+aGFpeWFuZ3pAbWljcm9zb2Z0LmNvbT47IHdlaS5saXVAa2VybmVsLm9yZzsgRGV4dWFuIEN1aQ0K
+PiA8ZGVjdWlAbWljcm9zb2Z0LmNvbT47IE1pY2hhZWwgS2VsbGV5IChMSU5VWCkgPG1pa2VsbGV5
+QG1pY3Jvc29mdC5jb20+Ow0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC1o
+eXBlcnZAdmdlci5rZXJuZWwub3JnDQo+IENjOiBTYXVyYWJoIFNpbmdoIFNlbmdhciA8c3Nlbmdh
+ckBtaWNyb3NvZnQuY29tPg0KPiBTdWJqZWN0OiBbRVhURVJOQUxdIFJlOiBbUEFUQ0ggMS8yXSB4
+ODYvS2NvbmZpZzogQWxsb3cNCj4gQ09ORklHX1g4Nl9NUFBBUlNFIGRpc2FibGUgZm9yIE9GIHBs
+YXRmb3Jtcw0KPiANCj4gT24gNS8xMS8yMyAwNzo1NCwgU2F1cmFiaCBTZW5nYXIgd3JvdGU6DQo+
+ID4gWDg2X01QUEFSU0UgaXMgb25seSBzZWxlY3RhYmxlIHdoZW4gQUNQSSBpcyBlbmFibGVkLiBI
+b3dldmVyLCBvbg0KPiA+IERldmljZXRyZWUgcGxhdGZvcm1zIHdoZXJlIEFDUEkgaXMgZGlzYWJs
+ZWQsIGl0IGlzIGFsd2F5cyBlbmFibGVkLg0KPiA+IEFsbG93IFg4Nl9NUFBBUlNFIHRvIGJlIHNl
+bGVjdGVkIGJ5IE9GIHBsYXRmb3JtcyBhcyB3ZWxsLg0KPiANCj4gSSdtIGZpbmRpbmcgdGhpcyBj
+aGFuZ2Vsb2cgcmVhbGx5IGhhcmQgdG8gcmVhZC4NCj4gDQo+IEluIEtjb25maWcsIHlvdSBjYW4g
+InNlbGVjdCBGT08iLiAgQnV0IGluIHRoaXMgY2hhbmdlbG9nLCBpdCBtZWFucyBzb21ldGhpbmcN
+Cj4gZGlmZmVyZW50LiAgSSB0aGluayAic2VsZWN0YWJsZSIgaGVyZSBtZWFucyB0aGF0IHRoZXJl
+J3MgYSB1c2VyIHByb21wdCBmb3IgdGhlDQo+IG9wdGlvbi4NCj4gDQo+IENvdWxkIHlvdSBwbGVh
+c2UgcmVwaHJhc2UgdGhpcyB0byBiZSBsZXNzIGNvbmZ1c2luZz8NCg0KVGhhbmtzIGZvciB5b3Vy
+IHJldmlldy4gQ3VycmVudGx5LCBpbiB0aGUgYWJzZW5jZSBvZiBBQ1BJLCBpdCBpcyBpbXBvc3Np
+YmxlIHRvDQpkaXNhYmxlIFg4Nl9NUFBBUlNFLiBJbiB0aGUgY2FzZSBvZiBBQ1BJIGJlaW5nIGVu
+YWJsZWQsIG9uZSBoYXMgdGhlDQpvcHRpb24gdG8gZWl0aGVyIGVuYWJsZSBvciBkaXNhYmxlIFg4
+Nl9NUEFSU0UuIE15IGludGVudGlvbiBpcyB0byBwZXJtaXQNClg4Nl9NUFBBUlNFPW4gZm9yIE9G
+IHBsYXRmb3JtcyB3aGVyZSBBQ1BJPW4uIFRvIGRlc2NyaWJlIHRoZSBjYXBhYmlsaXR5DQpvZiBj
+aG9vc2luZyBhbnkgZGVzaXJlZCB2YWx1ZSBmb3IgTVBQQVJTRSwgSSB1c2VkIHRoZSB0ZXJtICdz
+ZWxlY3RhYmxlLicNClBlcmhhcHMgJ2NvbmZpZ3VyYWJsZScgd291bGQgYmUgYSBtb3JlIGFwcHJv
+cHJpYXRlIHdvcmQgaW4gdGhpcyBjb250ZXh0Pw0KSSBjYW4gZml4IHRoaXMgYW5kIGluY2x1ZGUg
+aXQgaW4gVjIuDQoNCj4gDQo+IFRoaXMgaXMgYWxzbyBvbmUgb2YgdGhvc2UgcGF0Y2hlcyB3aGVy
+ZSBJIHdvbmRlcjogV2h5IGRvIF95b3VfIGNhcmUgYWJvdXQNCj4gdGhpcz8gIEFyZSB5b3UganVz
+dCB0cnlpbmcgdG8gYmUgbmljZT8gIElzIHRoaXMgaW50ZW5kZWQgYXMgc29tZSBraW5kIG9mIGNs
+ZWFudXA/DQoNCg0KSXQgc29sdmVzIGFuIGlzc3VlIGZvciBIeXBlci1WIFZCUyBzZXR1cCwgcGxl
+YXNlIHJlZmVyIHRvIHRoZSAyLzIgb2YgdGhpcyBwYXRjaA0Kc2VyaWVzLg0KDQpSZWdhcmRzLA0K
+U2F1cmFiaA0K
