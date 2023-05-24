@@ -2,211 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B02970F594
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5E470F596
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjEXLs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        id S229473AbjEXLsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjEXLs1 (ORCPT
+        with ESMTP id S229476AbjEXLsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:48:27 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5A712E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:48:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aiP9zb4kXvNP5MZOjAWLD/udPgmgj5suLXGjAKCmqjkhcq0XTQkHCW9QZJM01p3S3SDeAlkwMLBr+xCDAtLwb4yHDvgHC+W3Pl/ZRf4vG2fq9wR+qZVhsM15G4sgObIgKy7HJjq9dV8L7y8rTiMR1nqbYknutO5xjrA70mYWmrY3jcvH1qtzqE0mDmuAIIkhiDfHSF4KeIXBPcj61F7KqmztP5NOcI2oeuyFRuSxLKn3kfKyg959vD41oTGsJMe/sywAAPEhZMAUGhTNFAkuWlWedQhoY9plY6w+S+HGR2YY9HsAkNQUchm3WdWbrYgXvTI2U4uUDmeq76kCH+xr1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kYM0iOM1AuyPnfikZZGdw3XgQbjuhqJ9wiH/NzQFmAY=;
- b=RSpS4LozMjExDr+qqkgwrrVDz1ki9786XvgwZU/cSCdL2Ic/jKqj685Sb4/y/K3lGwh3Pw7Yirb2cc6/55EKDa0sT9WZf5UyhY1lMaElR9l11M3m4BcvWeV5tU2BN3XJzxkhWEDnlTcGAssHl/snujnXvNsQyaZD7pyL+V+dPNIElWkQRIxKBhr5vf89JyERsnS1tfn6pBUjvIQK5jLTfEO+V9ZJ6TJwp9JXPcJAl+hmBmc8Pz3zTG8sgFMkI1dWIaMMIlJPWYjH1yWAlffdGpz9txZkPUT1wZaXqg3Jh3rXedY7ZCfSjdEAV5TN68jtGOemjH6b3DzsOSbxfOibsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kYM0iOM1AuyPnfikZZGdw3XgQbjuhqJ9wiH/NzQFmAY=;
- b=olf3r7/v/hsFYaLvAc9Tkja1TA/JdaGW+hS26k7ireLKhXfhaqmNoziv6k10rWJUORYs2td8fWenPhJvXK8ebLwzboGh/8LrYexaJpH1pMGGxO0Ia6xYABIyIN6LtlyCxZByIU/oNYmWsfpZBIAS6oIAWBHobLxBGSNqxLfUMymlF0xaaSXb6df9NWpm9STTaj++ET9s9mZX0MsTytvfrCNAEQNl/QmruOSqsulTTerOoAaiFWamT0GRjnbkkai4HHTKH+Za768iHx7TN2qF5LvRFMnjabT/HbjDLWWh6YLHkDzn4fZ1yURDCETGQY7njkkcMlrVpHOVU6UYL5WrOw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- IA0PR12MB8983.namprd12.prod.outlook.com (2603:10b6:208:490::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 11:48:24 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::847b:988d:86fe:a0f8]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::847b:988d:86fe:a0f8%5]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 11:48:24 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        doru iorgulescu <doru.iorgulescu1@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Disha Goel <disgoel@linux.vnet.ibm.com>
-Subject: Re: ./include/linux/mmzone.h:1735:2: error: #error Allocator
- MAX_ORDER exceeds SECTION_SIZE (v6.4-rc3 build regression)
-Date:   Wed, 24 May 2023 07:48:21 -0400
-X-Mailer: MailMate (1.14r5964)
-Message-ID: <D0217FEF-6E59-4458-BC34-A5FDB3097176@nvidia.com>
-In-Reply-To: <2a1cd5e6-01f7-66f9-1f9d-c655cc3f919b@gmail.com>
-References: <2a1cd5e6-01f7-66f9-1f9d-c655cc3f919b@gmail.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_6BECA252-51F8-4F56-A924-E26362AA67F0_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BLAPR03CA0047.namprd03.prod.outlook.com
- (2603:10b6:208:32d::22) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+        Wed, 24 May 2023 07:48:33 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC3D135;
+        Wed, 24 May 2023 04:48:31 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id d2ade69f61d9e4a3; Wed, 24 May 2023 13:48:30 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id C4D4169D7E2;
+        Wed, 24 May 2023 13:48:29 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 6/6] ACPI: property: Dig "rotation" property for devices with CSI2 _CRS
+Date:   Wed, 24 May 2023 13:48:22 +0200
+Message-ID: <1957117.usQuhbGJ8B@kreacher>
+In-Reply-To: <13276375.uLZWGnKmhe@kreacher>
+References: <13276375.uLZWGnKmhe@kreacher>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|IA0PR12MB8983:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3902b260-92fc-4b4b-80aa-08db5c4cc7bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2fZlfIK+IFIdNVvD7+gI05mdPYDfHjZMLMqFW6orC5G0x3treqX3ZGEKDqsIG0ae6fYSZtXbASiBapgsqeUGWdRp2bC4h9L8DsFhSJKH/hjt0nT3yAMsMl3rrMR+APK+TyC2GRfs+qy7lvT5odB2wvS97S8BWoF/PLDotd4fpIpMLLignulUK6H3d+uMW94k22ClB7F9+o2fZnvgCT67SJMF4x5cjIkkB9AdUVS3/4tSP7KKWrU50dHNQCs5fyamdZW667hI6OQnDjP9OGdnk6jocYNrsUc6UpYzokQdBl9KM+niDh1ZaUM8XiDvTYPGub0GsnLQywVSMN91qeEq5a79/AxtqoLTgHkPdOptKMoLgUGcgpsxoDpHAdncnSbH4hrt1R12RUXJAQB6qrknjVmeu8X5/b1jDoueS2T3kG9P+KfWhjito9F6jZNWRmfESQFAMxH8m0RIs2uh9n4ShP91yAJtMmTiVt0MrewgQuyGWPtzmsPsGv1fIjzDDfP5tQCbk9PupzGu0m+Hxo11cCgPPTHYvToX/LfAvNaGhbeyWu38n93hie2tIIT+lUJjeJSVByQ5EX/FUsjt1HfEQzLTS3oMwKjKdamrowiv4xK0uFO0x2eAsfNdgtkbJvnShwKaIyHyKLGpj0WUd6uJYSZK+mIL5SCku9V3O59d2ORI8Cq7HZJEJNae+v3WXAjZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199021)(38100700002)(6486002)(54906003)(41300700001)(966005)(478600001)(316002)(4326008)(6916009)(86362001)(6666004)(66946007)(66556008)(66476007)(235185007)(5660300002)(8936002)(8676002)(2906002)(26005)(6512007)(6506007)(33656002)(186003)(53546011)(7416002)(83380400001)(2616005)(36756003)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2T/7WMClc3vydjuMIMHPVchUiOcsfiJ+fkhXM5Hxeuc1wNBid4ubghFOjo1N?=
- =?us-ascii?Q?wNImqFeR4wy9mEeIYUmaZCNTnLNtbnWkhAttKg1owCDIly8DfdfgIZPy+FK6?=
- =?us-ascii?Q?lcf6gcTRtbbEnY04Ve49/KPb+UGpYnQyN7Vtsf3c1tWjHinSBVvC/jhAmkZ+?=
- =?us-ascii?Q?MUYklaXng+1gMUO+Sb9q7L+Dkp3BvBNcJoArxtB6aJiAZiACQIj7UYVAyrD8?=
- =?us-ascii?Q?GzO4DKZsRGMXs1eiKyBXwJgkIY2LuE6kUhNxe3/r8B05N0CVWxv6TpQpqIa+?=
- =?us-ascii?Q?eiXPtFQPt8qYEl3yCqgKxKq6LSqfZIk2olFAcyWiISlBkOyMXB0VZXaOc94Y?=
- =?us-ascii?Q?0XsLHLnWOm9RNu+xYo1GytqLx8Q6gVLEZVDKjfzErtF+7NRaKrJS4LtuoC9d?=
- =?us-ascii?Q?OI3P4/Gj2nWOiag918HOXUtEBJc6YWvJUeARXVgEwgHq0a2PZ251XRDbNFVv?=
- =?us-ascii?Q?USxaFl2MjFlnXGljUpFkKf/o8jiujULEWAu0KeKabhNLPAfkF54frs3rLnxR?=
- =?us-ascii?Q?U2CP7HEXAc57h0zWoaEoJvDpP4rqO7b+lvfLXitEUgWyU0DQCr9/h7wYD0we?=
- =?us-ascii?Q?DM+gc4L+qTw9lAMq12gwJAVmz7lUhBZkGUim2uexupUfMtlOi9DnTKR9ct6U?=
- =?us-ascii?Q?c0r/ScfzlvoPaf3bAgg4xYwj5h8LJRNu7UptiqyITH20oiuXOOUPWJjS+Oo0?=
- =?us-ascii?Q?mnaGGp1yVVds5ywKbHhN+8VlNB509z1oe5l0mufHGxghbY9NpeixejZr94Ap?=
- =?us-ascii?Q?dVmUkFAcIHwU2rONryVcz6hDDHIuQz0V+Fi0twDsKSbwneyaTpfPDhLNnpKy?=
- =?us-ascii?Q?D/hkWTfmux2okwOSMUlM2JCZ+wqGEuEWVEodSQROLilShyZ/Cig2VuGxI4W3?=
- =?us-ascii?Q?zTtLBES7CKXfDotk26QJYvkS2KrP51iJGll53Xs290w2jKAmlceWQhWRnbn0?=
- =?us-ascii?Q?VB2j/modtiTaK5303cbPBozbd4UwCCyNRpZJt+9B6Dh4n7z1ZSECTyggVAxT?=
- =?us-ascii?Q?k0PtY4atQXMGkRVHohFSSRTU0QUx/ibWje0CojXCU4zO4xuISlrm1rctqHl+?=
- =?us-ascii?Q?SI9lQ83V/9FiLQg+UqoHVDj+DUt0jWAuKDLtnMtuI5nunVLQhJz+8R9KbLnn?=
- =?us-ascii?Q?pAl8NX7j0nFKkAhBXeSOQ0CsDwyZo0R7bAk0I75g5RgAhvz1qFXsTRG59IYd?=
- =?us-ascii?Q?OKP9q9P6yyES0aF/pOcpS7HcaFnxcsNi2OdRCFU7RGbFQ7ZWj0mZ8fSAYPTr?=
- =?us-ascii?Q?HxECcdLX/XzcExiAE0Vn29ZN/O0JFNu8XMH8ySnOWAXPyHXPULW6hda1JUZ7?=
- =?us-ascii?Q?m1VNun/ihK16ew2k7Gryh6tyS2iPrBwuY6Z95oFZ53nh5iT2BoWmLXUEQ0jS?=
- =?us-ascii?Q?l+UHIuZV007U5gQgpI3t65sPEWKdbgbS9GNKEHHJpTTJprX8VpuYyPHUlXsm?=
- =?us-ascii?Q?bN2RgLg9LduXwBuIyxHXImqKG9YKjiFsQ8MvWLYK8TJ4o7UhAljFPE4UG2kH?=
- =?us-ascii?Q?BIAogBzUehj3Cn3qu+AXXOoERv1xeHQ2IqBYTeCNnEwOXyqp2JHqhwMhjGkJ?=
- =?us-ascii?Q?wzfnr4Z3JXbyhmOpD3I=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3902b260-92fc-4b4b-80aa-08db5c4cc7bd
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 11:48:24.3194
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XC1ns+UdL96cK8rcgiFBNIhaR7cdxbDkCqM9NNx53bbjBzjEhi1gnBimEV3pjMgc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8983
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedggeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhguvghgohgv
+ uggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_6BECA252-51F8-4F56-A924-E26362AA67F0_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-On 24 May 2023, at 6:58, Bagas Sanjaya wrote:
+Find the "rotation" property value for devices with _CRS CSI-2 resource
+descriptors and use it to add the "rotation" property to the software
+nodes representing the CSI-2 connection graph.  That value typically
+comes from the _PLD (Physical Location of Device) object if it is
+present for the given device.
 
-> Hi,
->
-> I notice a powerpc[64?] build regression on Bugzilla [1]. Quoting from =
-it:
->
->>  CC      arch/powerpc/kernel/asm-offsets.s
->> In file included from ./include/linux/gfp.h:7,
->>                 from ./include/linux/xarray.h:15,
->>                 from ./include/linux/list_lru.h:14,
->>                 from ./include/linux/fs.h:13,
->>                 from ./include/linux/compat.h:17,
->>                 from arch/powerpc/kernel/asm-offsets.c:12:
->> ./include/linux/mmzone.h:1735:2: error: #error Allocator MAX_ORDER exc=
-eeds SECTION_SIZE
->> 1735 | #error Allocator MAX_ORDER exceeds SECTION_SIZE
->>      |  ^~~~~
->> make[5]: *** [scripts/Makefile.build:114: arch/powerpc/kernel/asm-offs=
-ets.s] Error 1
+This way, camera sensor drivers that know the "rotation" property do not
+need to care about _PLD on systems using ACPI.
 
-By checking the config file from the bugzilla, ARCH_FORCE_MAX_ORDER is se=
-t to 9,
-(SECTION_SIZE is 24 and 64KB page is used, so 9+16=3D25>24) but it should=
- be 8
-after recent MAX_ORDER changes. I guess the user was using an old config =
-file.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+[ rjw: Changelog edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-Changing ARCH_FORCE_MAX_ORDER to 8 in the config should fix the issue.
+Code changes same as in
 
->
-> Apparently removing the errored line solves the problem for the reporte=
-r
-> (the attached dmesg on [2] looks fine at a glance).
->
-> Anyway, I'm adding it to regzbot:
->
-> #regzbot introduced: 23baf831a32c04f https://bugzilla.kernel.org/show_b=
-ug.cgi?id=3D217477
-> #regzbot title: Allocator MAX_ORDER exceeds SECTION_SIZE caused by MAX_=
-ORDER redefinition
->
-> Thanks.
->
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217477
-> [2]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217477#c1
->
-> -- =
+https://patchwork.kernel.org/project/linux-acpi/patch/20230329100951.1522322-8-sakari.ailus@linux.intel.com
 
-> An old man doll... just what I always wanted! - Clara
+changelog edited.
 
---
-Best Regards,
-Yan, Zi
+---
+ drivers/acpi/mipi-disco-imaging.c |   17 +++++++++++++++++
+ include/acpi/acpi_bus.h           |    1 +
+ 2 files changed, 18 insertions(+)
 
---=_MailMate_6BECA252-51F8-4F56-A924-E26362AA67F0_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
+Index: linux-pm/drivers/acpi/mipi-disco-imaging.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/mipi-disco-imaging.c
++++ linux-pm/drivers/acpi/mipi-disco-imaging.c
+@@ -529,6 +529,7 @@ static void init_crs_csi2_swnodes(struct
+ 	struct acpi_buffer buffer = { .length = ACPI_ALLOCATE_BUFFER };
+ 	struct acpi_device_software_nodes *swnodes = csi2->swnodes;
+ 	acpi_handle handle = csi2->handle;
++	unsigned int prop_index = 0;
+ 	struct fwnode_handle *adev_fwnode;
+ 	struct acpi_device *adev;
+ 	acpi_status status;
+@@ -541,6 +542,22 @@ static void init_crs_csi2_swnodes(struct
+ 
+ 	adev_fwnode = acpi_fwnode_handle(adev);
+ 
++	/*
++	 * If the "rotation" property is not present, but _PLD is there,
++	 * evaluate it to get the "rotation" value.
++	 */
++	if (!fwnode_property_present(adev_fwnode, "rotation")) {
++		struct acpi_pld_info *pld;
++
++		status = acpi_get_physical_device_location(handle, &pld);
++		if (ACPI_SUCCESS(status)) {
++			swnodes->dev_props[NEXT_PROPERTY(prop_index, DEV_ROTATION)] =
++					PROPERTY_ENTRY_U32("rotation",
++							   pld->rotation * 45U);
++			kfree(pld);
++		}
++	}
++
+ 	status = acpi_get_name(handle, ACPI_FULL_PATHNAME, &buffer);
+ 	if (ACPI_FAILURE(status)) {
+ 		acpi_handle_info(handle, "Unable to get the path name\n");
+Index: linux-pm/include/acpi/acpi_bus.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpi_bus.h
++++ linux-pm/include/acpi/acpi_bus.h
+@@ -369,6 +369,7 @@ struct acpi_gpio_mapping;
+ #define ACPI_DEVICE_SWNODE_PORT_NAME_LENGTH	8
+ 
+ enum acpi_device_swnode_dev_props {
++	ACPI_DEVICE_SWNODE_DEV_ROTATION,
+ 	ACPI_DEVICE_SWNODE_DEV_NUM_OF,
+ 	ACPI_DEVICE_SWNODE_DEV_NUM_ENTRIES
+ };
 
------BEGIN PGP SIGNATURE-----
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmRt+YYPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU7G8QAJOGYRCE4YMQwhMeW2+N/KMD+JdFub8OIoCB
-P8HgjWXlv1vFZ7jOnQfx1EPXFkfImwjIUdPwajGzCaBFI2AkILjAzYuhb0TVGJyJ
-1ivu2DzXAsSjR2w849kgSEjDQRm1QM9qcfktVULJfURS9ZbX1wa21xAvmicDu3ho
-aegFDnzcn2Sb8Ct15CiWe1IerAL8zSlDHjGnZM07j7m2wJrtif2940eR2ZKyaS6D
-JcEtzPwkF0JpHi+JFnhwdYKbQxzuPMrGm9DJm9JK+1EeqfAC6gBt46kkrKuhBBVV
-qj2QMukcFRIxxJttaPXcm3SnRB+mQ9mKRDE7czhUGyHai8yZiGiIJYGS6DR7XLzb
-OjXUdSz7OUxBwND1g4D8vP0u0s7k2Z/1Vpq16Kkag3ePtO3fVXWfoH2Bef3/PWLs
-F0IqHO7eX7ZF/CTNSP854pFcl7/NmqBlu3JLkrklWFsFod0oMyev153XIVyJK8Up
-hnHeT7fg0fiBKlr9Cn4XQIbtF5a1Bhq6ukQJJ0cbiu2Tbo8ws5EWrcWamsEQU9H7
-Objge4EB3S2oEUpMIEeF34xMCxcLvRU1bpSZtNXdXSPCq+AL+FUHvtR6XCAFxHee
-5+GHTAIBistEEvB2bMQK3ounSvn+56+dbKoaroSs3sijuBHXjQZdaRJjDVxvL7Ev
-bO2Evk2g
-=t3bz
------END PGP SIGNATURE-----
 
---=_MailMate_6BECA252-51F8-4F56-A924-E26362AA67F0_=--
