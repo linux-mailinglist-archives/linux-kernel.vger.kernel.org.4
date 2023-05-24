@@ -2,150 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14F470F48F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CF570F48B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbjEXKtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S233941AbjEXKs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjEXKtH (ORCPT
+        with ESMTP id S231731AbjEXKsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:49:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EA7198
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684925296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1b7B2eWvrCdXsO/LwBEusNkxbQCx1woNLXNuitI/A7s=;
-        b=dwfxW93sDlxGEQbxyXKyhPO5pfNGrIPKEJbckudx+oZ42mlmRmVF1Pb5EzGcgEEBfgJuau
-        V+lK7G6iVbz8iqryGo4+P1HLKSYbzt0Et/mvEUBj+T/nUP9+4pCg4dWCOwc8kvbJKEic8g
-        IIyW3ONqPTJu9zSfF8mOCbRLA1hdQU4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-178-w0HYiZ6tN_qJ6p3SozTy0A-1; Wed, 24 May 2023 06:48:13 -0400
-X-MC-Unique: w0HYiZ6tN_qJ6p3SozTy0A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35BEC85A5AA;
-        Wed, 24 May 2023 10:48:13 +0000 (UTC)
-Received: from localhost (unknown [10.39.192.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D2564492B0A;
-        Wed, 24 May 2023 10:48:12 +0000 (UTC)
-From:   Giuseppe Scrivano <gscrivan@redhat.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     Alexander Larsson <alexl@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Du Rui <durui@linux.alibaba.com>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>
-Subject: Re: dm overlaybd: targets mapping OverlayBD image
-References: <9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com>
-        <ZGz32yw7ecKhW+lj@redhat.com>
-        <CAL7ro1FPEqXyOuX_WPMYdsT6rW-bD5EU=v=oWKsd6XscykLF6Q@mail.gmail.com>
-        <fd4d0429-4da3-8217-6c13-14fd8a198920@linux.alibaba.com>
-        <87r0r6ywri.fsf@redhat.com>
-        <02524ece-956f-f5d8-fb21-adc4e5617dc6@linux.alibaba.com>
-Date:   Wed, 24 May 2023 12:48:11 +0200
-In-Reply-To: <02524ece-956f-f5d8-fb21-adc4e5617dc6@linux.alibaba.com> (Gao
-        Xiang's message of "Wed, 24 May 2023 16:26:25 +0800")
-Message-ID: <87mt1uyphw.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Wed, 24 May 2023 06:48:55 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C2FA3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:48:54 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-7868d32ace2so604477241.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684925333; x=1687517333;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=izjtzCWSO3V30nPY/lKoLTSymypWksl9aXq+SMrSSR4=;
+        b=eIrDBzI2+Y6c3ajP2t6EfqTU7yrqOLMZnBSNdLYLBo5Ge+Kpnmz3xI2NDLuXGJUx9B
+         IJK1edBpN8tWETbLzwnxqmUm180YNQyONPhZfihmxtC/8lxgDIMPa3oTAjz9fytgiymC
+         k0Ucea9q/KKmAxDL56o7Lw3RLYNjjlxrZ72qN5wi6cVqMnYrhV1qc4TJ9KT1e6SlGedB
+         9JNlsczyLltriaG9hWfSIBJ9C85xhFt35DVOv78ovRPwRmqSZFz0X+dq6Jtg+G1brGsS
+         WWc8Q6uG1FodpCiDTvXX14CfOX0Og6D7zhB8IDOPUXJogq5ek6sIrWs9xmYANFfq+vmA
+         rbYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684925333; x=1687517333;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=izjtzCWSO3V30nPY/lKoLTSymypWksl9aXq+SMrSSR4=;
+        b=GkCGb1NJZJOkK+VJKtDtbERxWtKKoPDLSTb6XBPPXbsedxsTjsFRNCfFYvEUFtpagO
+         gg3/wj3z+28J3mNSteFIGKQEUnJYrJiB1RMyRgqKl43gQ1h3eH1Nsbb38pifJ+OYZLSW
+         xpeaZYCxNINPi54QdyRhjDMv7a6FZNgVKFxNIvKL+GfWIZlE2K7gsnsDubBGMlWZbEhr
+         GIHj1SAf2U/co71S7JRcYFk2oGinjdIje7if0t6q5ElvkgqBI8doCr49hn0Jv7kw4pHQ
+         aOM1HZs2UtgVlPlX2F9DbGqf1fiikgW2/SOwJSoT6Bgq0EeLUG7hE8JqkynGa6nrp6Ky
+         /UOw==
+X-Gm-Message-State: AC+VfDz6NGVnAf9Yk5KGiFQ5C0p483cJxseBIkHJ+EJ5Vav/MnVatP5L
+        AtYvCsSyKYm0IHv7Pp/HjmSaf9zlksAVj8WPP5spDw==
+X-Google-Smtp-Source: ACHHUZ7dGXhAAYQ0ZVMH5xXIrESE7KpD6AKM288xP3S7MG24zrh10Wcemw5hhk9LGDL9KAGbU0DtksYgalPfF1DMPBQ=
+X-Received: by 2002:a67:f148:0:b0:434:2f6a:6009 with SMTP id
+ t8-20020a67f148000000b004342f6a6009mr5715027vsm.8.1684925333160; Wed, 24 May
+ 2023 03:48:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 24 May 2023 16:18:42 +0530
+Message-ID: <CA+G9fYvGM6a3wct+_o0z-B=k1ZBg1FuBBpfLH71ULihnTo5RrQ@mail.gmail.com>
+Subject: LTP: syscalls: statx06.c:138: TFAIL: Modified time > after_time
+To:     LTP List <ltp@lists.linux.it>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org
+Cc:     chrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gao Xiang <hsiangkao@linux.alibaba.com> writes:
+LTP syscalls statx06 fails on NFS mounted devices using external hard drives
+for testing and running on Linux next 6.4.0-rc3-next-20230524.
 
-> Hi Giuseppe,
->
-> On 2023/5/24 01:11, Giuseppe Scrivano wrote:
->> Gao Xiang <hsiangkao@linux.alibaba.com> writes:
->> 
->
-> ...
->
->>> Agreed, I hope you guys could actually sit down and evaluate a proper
->>> solution on the next OCI v2, currently I know there are:
->>>
->>>   - Composefs
->>>   - (e)stargz   https://github.com/containerd/stargz-snapshotter
->>>   - Nydus       https://github.com/containerd/nydus-snapshotter
->>>   - OverlayBD   https://github.com/containerd/accelerated-container-image
->>>   - SOCI        https://github.com/awslabs/soci-snapshotter
->>>   - Tarfs
->>>   - (maybe even more..)
->>>
->>> Honestly, I do think OSTree/Composefs is the best approach for now for
->>> deduplication and page cache sharing (due to kernel limitation of page
->>> cache sharing and overlayfs copyup limitation).  I'm too tired of
->>> container image stuffs honestly.  Too much unnecessary manpower waste.
->> for a file-based storage model, I am not sure a new format would
->> really
->> buy us much or it can be significantly different.
->> Without a proper support from the kernel, a new format would still
->> need
->> to create the layout overlay expects, so it won't be much different than
->> what we have now.
->
-> I've seen lot efforts on this, for example,
-> https://docs.google.com/presentation/d/1lBKVrYzm9JEYuw-gIEsrcePSK0jL1Boe/edit#slide=id.p22
->
-> Merging the writable layer and read-only layers with overlayfs is
-> feasible. I mean, at least for composefs model on backing XFS/btrfs, we
-> could merge these layers with overlayfs so that I guess reflink could
-> be done to avoid full copyup as well?  I do think that's a net win.
->
->> The current OCI format, with some tweaks like (e)stargz or
->> zstd:chunked,
->> already make its content addressable and a client can retrieve only the
->> subset of the files that are needed.  At the same time we maintain the
->> simplicity of a tarball and it won't break existing clients.
->
-> (e)stargz or zstd:chunked still needs to be converted by the publisher
-> and not all exist OCI images are stored in this way.  But apart from
-> detailed comparsion, disk mapping image approaches seems really a
-> drawback at least on my side.
+Test case fails on x86_64, i386 and arm64 Juno-r2.
 
-these images can be treated as if all their files are missing and the
-checksum is calculated on the receiver side.  They will still be stored
-locally indexed by their checksum.  We lose the possibility to pull only
-the missing files but we maintain the other advantages at runtime.  In
-this way moving to a new format can be done incrementally without
-breaking what we have now.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> Anyway, I think it's what OCIv2 would like to eventually address
-> anyway.
->
->> IMO, the most interesting problem is how to store these images
->> locally
->> and how the kernel can help with that.
->
-> I think composefs model can do both sides. But I'm not sure the final
-> conclusion, I tend to leave it to the OCI guys.
->
->> The idea behind composefs is to replace the existing storage model
->> used
->> for overlay, where each layer has its own directory, with a single
->> directory where all the files are stored by their checksum.  The
->> expected layout then is recreated at runtime.
->
-> Yes, what I'd like to say, without finer page cache sharing mechanism,
-> the composefs way sounds better to me honestly to the whole system.
->
-> Thanks,
-> Gao Xiang
 
+Linux version 6.4.0-rc3-next-20230524 (tuxmake@tuxmake)
+(x86_64-linux-gnu-gcc (Debian 11.3.0-12) 11.3.0, GNU ld (GNU Binutils
+for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1684908723
+...
+
+[    1.396191] Mountpoint-cache hash table entries: 32768 (order: 6,
+262144 bytes, linear)
+[    1.397234] sysctl table check failed: kernel/usermodehelper Not a file
+[    1.398166] sysctl table check failed: kernel/usermodehelper No proc_handler
+[    1.399165] sysctl table check failed: kernel/usermodehelper bogus .mode 0555
+[    1.400166] sysctl table check failed: kernel/keys Not a file
+[    1.401165] sysctl table check failed: kernel/keys No proc_handler
+[    1.402165] sysctl table check failed: kernel/keys bogus .mode 0555
+[    1.403166] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+6.4.0-rc3-next-20230524 #1
+[    1.404165] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.5 11/26/2020
+[    1.404165] Call Trace:
+[    1.404165]  <TASK>
+[    1.404165]  dump_stack_lvl+0x72/0x90
+[    1.404165]  dump_stack+0x14/0x20
+[    1.404165]  __register_sysctl_table+0x570/0x840
+[    1.404165]  __register_sysctl_init+0x29/0x60
+[    1.404165]  sysctl_init_bases+0x27/0x80
+[    1.404165]  proc_sys_init+0x37/0x40
+[    1.404165]  proc_root_init+0x7b/0x90
+[    1.404165]  start_kernel+0x403/0x6a0
+[    1.404165]  x86_64_start_reservations+0x1c/0x30
+[    1.404165]  x86_64_start_kernel+0xcb/0xe0
+[    1.404165]  secondary_startup_64_no_verify+0x179/0x17b
+[    1.404165]  </TASK>
+[    1.404165] failed when register_sysctl kern_table to kernel
+
+....
+./runltp -f syscalls -d /scratch
+
+...
+
+[ 1192.088987] loop0: detected capacity change from 0 to 614400
+tst_device.c:93: TINFO: Found free device 0 '/dev/loop0'
+tst_test.c:1093: TINFO: Formatting /dev/loop0 with ext4 opts='-I 256'
+extra opts=''
+mke2fs 1.46.5 (30-Dec-2021)
+[ 1192.337350] EXT4-fs (loop0): mounted filesystem
+dfe9283c-5d2f-43f8-840e-a2bbbff5b202 r/w with ordered data mode. Quota
+mode: none.
+tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
+
+statx06.c:140: TPASS: Birth time Passed
+statx06.c:138: TFAIL: Modified time > after_time
+statx06.c:140: TPASS: Access time Passed
+statx06.c:140: TPASS: Change time Passed
+
+
+links,
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230524/testrun/17171892/suite/ltp-syscalls/test/statx06/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230524/testrun/17171892/suite/ltp-syscalls/test/statx06/history/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230524/testrun/17171892/suite/ltp-syscalls/test/statx06/details/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
