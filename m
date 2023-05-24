@@ -2,115 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7789B70FA62
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0F870FA6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236952AbjEXPgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S236806AbjEXPgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235905AbjEXPfI (ORCPT
+        with ESMTP id S230443AbjEXPfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:35:08 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF6210CC
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:46 -0700 (PDT)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 24 May 2023 11:35:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DE512B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684942435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/e3etHO5quwZ5TcFINBOwsTOV20jtXx9aa4v5VXGvJw=;
+        b=CFqr511ZS72WA1Ald2VELwastPSRF0Pj6qsMLrKecrxT8tl8/ALvKHG8GU6mYE5w+pMAH9
+        kg7d4Tsj6fh06+TCCGy3QEDrl6sAPmcPNxK1JR2J/K1OojDlhzF+g56uuH1np2/6AeuoBF
+        1HNDjdOuQQ48yoXNcyaAhJFUo+VdXmw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-519-Sq90ewIjPbyQ2MCsFbryuA-1; Wed, 24 May 2023 11:33:52 -0400
+X-MC-Unique: Sq90ewIjPbyQ2MCsFbryuA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9651D40750
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684942449;
-        bh=lZbP4iiEH03HfqTDqSU+Hv1fOneGFOzGKwUObj1rpGo=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=I3E0jdM/pfErHRIphNzhKnsh5L9WeN7ntnBbe9vwyWYIhBgjK9M7V8W5GmfbCHuYf
-         2iSxLj5n5ypyNfkq1knJTgqipGUdqqaqkMZCia2l+K4qZkdo9IqT2Q6szRoapQqByU
-         JdqFbBz8/bIvkMZx/K8tlUiq3rGAoR/B90qoB3hoFa9IgaXtO3K3c0/vfpD3iE194o
-         XZR8KUpCoDBU0XlCrcZ2qscSVND+UXv5TqpHUdIWNIbp0szuToqEMzg3PP51Vg95dc
-         RNd4XpzPvsAHZ54gPH5feRO9PGsQOBT3kMuIRKvWQlC6nIinfGGHRTMlP4YJMRSTWL
-         qJIF15ScYVJtQ==
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-96f4f1bb838so105782366b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684942449; x=1687534449;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lZbP4iiEH03HfqTDqSU+Hv1fOneGFOzGKwUObj1rpGo=;
-        b=gVepCgn5XVVWkjbBVsInH5MXHsksssEFqLDiuhKH9MTlSr1w0QQPokwe3jD1LSkq5p
-         lReEMrEYmEDW07k1rKCHTR0N8L1IkZgB+kYNaRgCI9fYQNzLtcFbl64GtN6KBAo4ai6h
-         yxdnMaIhDlgdFxj80v6GkV1/n+tSirXk02lTNAsfbx1BsI9aP4qLqWiUNyZ/W793sY4L
-         c8FK/JqrAI64mO3OPE0P6RA3EG4LOWmd4ozQZkbx2b8U0YXh2Z97xvxDUSc7+jAkeWwr
-         5TqyHwjApE1Q1d8ZB4Y4lC4NRJvXhmpQNfM+u10vRu31WF06G3NzhXfnlMu72c6rpw+f
-         vPIA==
-X-Gm-Message-State: AC+VfDxiVMFRCQGB0FdJf7xID7TiMdzO4JX0OtYtlNYoLWWccq1tPj5v
-        ixAm2tn5AmK4KRqrG0YZOJrPv21CmDZOK3bCrG8TpkFo1VRmVyEedO0hDRsihVSZTS1Z0mkm2ah
-        z5lVkujO2tF8zsSNFYexYRwTqxZ8ecP3s1tFiacEI6A==
-X-Received: by 2002:a17:907:26c6:b0:969:f677:11b4 with SMTP id bp6-20020a17090726c600b00969f67711b4mr16979973ejc.37.1684942448869;
-        Wed, 24 May 2023 08:34:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6GkqD2mx9edhZF+fiZhPW/iOs1zLB2TI7gEZMH8nbEv37OBHOLISYOfgzS57PLOIkRd9L02g==
-X-Received: by 2002:a17:907:26c6:b0:969:f677:11b4 with SMTP id bp6-20020a17090726c600b00969f67711b4mr16979950ejc.37.1684942448627;
-        Wed, 24 May 2023 08:34:08 -0700 (PDT)
-Received: from amikhalitsyn.local (dslb-088-074-206-207.088.074.pools.vodafone-ip.de. [88.74.206.207])
-        by smtp.gmail.com with ESMTPSA id p26-20020a17090664da00b0096f7105b3a6sm5986979ejn.189.2023.05.24.08.34.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 08:34:08 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     xiubli@redhat.com
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 07/13] ceph: allow idmapped rename inode op
-Date:   Wed, 24 May 2023 17:33:09 +0200
-Message-Id: <20230524153316.476973-8-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 74E1D8032F5;
+        Wed, 24 May 2023 15:33:51 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 74180C164ED;
+        Wed, 24 May 2023 15:33:49 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH net-next 10/12] tls/sw: Convert tls_sw_sendpage() to use MSG_SPLICE_PAGES
+Date:   Wed, 24 May 2023 16:33:09 +0100
+Message-Id: <20230524153311.3625329-11-dhowells@redhat.com>
+In-Reply-To: <20230524153311.3625329-1-dhowells@redhat.com>
+References: <20230524153311.3625329-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Brauner <christian.brauner@ubuntu.com>
+Convert tls_sw_sendpage() and tls_sw_sendpage_locked() to use sendmsg()
+with MSG_SPLICE_PAGES rather than directly splicing in the pages itself.
 
-Enable ceph_rename() to handle idmapped mounts. This is just a matter of
-passing down the mount's idmapping.
+[!] Note that tls_sw_sendpage_locked() appears to have the wrong locking
+    upstream.  I think the caller will only hold the socket lock, but it
+    should hold tls_ctx->tx_lock too.
 
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: Ilya Dryomov <idryomov@gmail.com>
-Cc: ceph-devel@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+This allows ->sendpage() to be replaced by something that can handle
+multiple multipage folios in a single transaction.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Chuck Lever <chuck.lever@oracle.com>
+cc: Boris Pismenny <borisp@nvidia.com>
+cc: John Fastabend <john.fastabend@gmail.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Eric Dumazet <edumazet@google.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: netdev@vger.kernel.org
 ---
- fs/ceph/dir.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/tls/tls_sw.c | 164 +++++++++--------------------------------------
+ 1 file changed, 30 insertions(+), 134 deletions(-)
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index a4b1ee5ce6b6..7ae02a690464 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -1327,6 +1327,7 @@ static int ceph_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 	req->r_old_dentry_unless = CEPH_CAP_FILE_EXCL;
- 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED;
- 	req->r_dentry_unless = CEPH_CAP_FILE_EXCL;
-+	req->r_mnt_idmap = idmap;
- 	/* release LINK_RDCACHE on source inode (mds will lock it) */
- 	req->r_old_inode_drop = CEPH_CAP_LINK_SHARED | CEPH_CAP_LINK_EXCL;
- 	if (d_really_is_positive(new_dentry)) {
--- 
-2.34.1
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 0ccef8aa9951..1a5926cc3e84 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -972,7 +972,7 @@ static int rls_sw_sendmsg_splice(struct sock *sk, struct msghdr *msg,
+ 	return 0;
+ }
+ 
+-int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
++static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+ {
+ 	long timeo = sock_sndtimeo(sk, msg->msg_flags & MSG_DONTWAIT);
+ 	struct tls_context *tls_ctx = tls_get_ctx(sk);
+@@ -995,15 +995,6 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 	int ret = 0;
+ 	int pending;
+ 
+-	if (msg->msg_flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
+-			       MSG_CMSG_COMPAT))
+-		return -EOPNOTSUPP;
+-
+-	ret = mutex_lock_interruptible(&tls_ctx->tx_lock);
+-	if (ret)
+-		return ret;
+-	lock_sock(sk);
+-
+ 	if (unlikely(msg->msg_controllen)) {
+ 		ret = tls_process_cmsg(sk, msg, &record_type);
+ 		if (ret) {
+@@ -1204,157 +1195,62 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 
+ send_end:
+ 	ret = sk_stream_error(sk, msg->msg_flags, ret);
+-
+-	release_sock(sk);
+-	mutex_unlock(&tls_ctx->tx_lock);
+ 	return copied > 0 ? copied : ret;
+ }
+ 
+-static int tls_sw_do_sendpage(struct sock *sk, struct page *page,
+-			      int offset, size_t size, int flags)
++int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ {
+-	long timeo = sock_sndtimeo(sk, flags & MSG_DONTWAIT);
+ 	struct tls_context *tls_ctx = tls_get_ctx(sk);
+-	struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_ctx);
+-	struct tls_prot_info *prot = &tls_ctx->prot_info;
+-	unsigned char record_type = TLS_RECORD_TYPE_DATA;
+-	struct sk_msg *msg_pl;
+-	struct tls_rec *rec;
+-	int num_async = 0;
+-	ssize_t copied = 0;
+-	bool full_record;
+-	int record_room;
+-	int ret = 0;
+-	bool eor;
+-
+-	eor = !(flags & MSG_SENDPAGE_NOTLAST);
+-	sk_clear_bit(SOCKWQ_ASYNC_NOSPACE, sk);
+-
+-	/* Call the sk_stream functions to manage the sndbuf mem. */
+-	while (size > 0) {
+-		size_t copy, required_size;
+-
+-		if (sk->sk_err) {
+-			ret = -sk->sk_err;
+-			goto sendpage_end;
+-		}
+-
+-		if (ctx->open_rec)
+-			rec = ctx->open_rec;
+-		else
+-			rec = ctx->open_rec = tls_get_rec(sk);
+-		if (!rec) {
+-			ret = -ENOMEM;
+-			goto sendpage_end;
+-		}
+-
+-		msg_pl = &rec->msg_plaintext;
+-
+-		full_record = false;
+-		record_room = TLS_MAX_PAYLOAD_SIZE - msg_pl->sg.size;
+-		copy = size;
+-		if (copy >= record_room) {
+-			copy = record_room;
+-			full_record = true;
+-		}
+-
+-		required_size = msg_pl->sg.size + copy + prot->overhead_size;
+-
+-		if (!sk_stream_memory_free(sk))
+-			goto wait_for_sndbuf;
+-alloc_payload:
+-		ret = tls_alloc_encrypted_msg(sk, required_size);
+-		if (ret) {
+-			if (ret != -ENOSPC)
+-				goto wait_for_memory;
+-
+-			/* Adjust copy according to the amount that was
+-			 * actually allocated. The difference is due
+-			 * to max sg elements limit
+-			 */
+-			copy -= required_size - msg_pl->sg.size;
+-			full_record = true;
+-		}
+-
+-		sk_msg_page_add(msg_pl, page, copy, offset);
+-		sk_mem_charge(sk, copy);
+-
+-		offset += copy;
+-		size -= copy;
+-		copied += copy;
+-
+-		tls_ctx->pending_open_record_frags = true;
+-		if (full_record || eor || sk_msg_full(msg_pl)) {
+-			ret = bpf_exec_tx_verdict(msg_pl, sk, full_record,
+-						  record_type, &copied, flags);
+-			if (ret) {
+-				if (ret == -EINPROGRESS)
+-					num_async++;
+-				else if (ret == -ENOMEM)
+-					goto wait_for_memory;
+-				else if (ret != -EAGAIN) {
+-					if (ret == -ENOSPC)
+-						ret = 0;
+-					goto sendpage_end;
+-				}
+-			}
+-		}
+-		continue;
+-wait_for_sndbuf:
+-		set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
+-wait_for_memory:
+-		ret = sk_stream_wait_memory(sk, &timeo);
+-		if (ret) {
+-			if (ctx->open_rec)
+-				tls_trim_both_msgs(sk, msg_pl->sg.size);
+-			goto sendpage_end;
+-		}
++	int ret;
+ 
+-		if (ctx->open_rec)
+-			goto alloc_payload;
+-	}
++	if (msg->msg_flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
++			       MSG_CMSG_COMPAT | MSG_SPLICE_PAGES |
++			       MSG_SENDPAGE_NOTLAST | MSG_SENDPAGE_NOPOLICY))
++		return -EOPNOTSUPP;
+ 
+-	if (num_async) {
+-		/* Transmit if any encryptions have completed */
+-		if (test_and_clear_bit(BIT_TX_SCHEDULED, &ctx->tx_bitmask)) {
+-			cancel_delayed_work(&ctx->tx_work.work);
+-			tls_tx_records(sk, flags);
+-		}
+-	}
+-sendpage_end:
+-	ret = sk_stream_error(sk, flags, ret);
+-	return copied > 0 ? copied : ret;
++	ret = mutex_lock_interruptible(&tls_ctx->tx_lock);
++	if (ret)
++		return ret;
++	lock_sock(sk);
++	ret = tls_sw_sendmsg_locked(sk, msg, size);
++	release_sock(sk);
++	mutex_unlock(&tls_ctx->tx_lock);
++	return ret;
+ }
+ 
+ int tls_sw_sendpage_locked(struct sock *sk, struct page *page,
+ 			   int offset, size_t size, int flags)
+ {
++	struct bio_vec bvec;
++	struct msghdr msg = { .msg_flags = flags | MSG_SPLICE_PAGES, };
++
+ 	if (flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
+ 		      MSG_SENDPAGE_NOTLAST | MSG_SENDPAGE_NOPOLICY |
+ 		      MSG_NO_SHARED_FRAGS))
+ 		return -EOPNOTSUPP;
++	if (flags & MSG_SENDPAGE_NOTLAST)
++		msg.msg_flags |= MSG_MORE;
+ 
+-	return tls_sw_do_sendpage(sk, page, offset, size, flags);
++	bvec_set_page(&bvec, page, size, offset);
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, size);
++	return tls_sw_sendmsg_locked(sk, &msg, size);
+ }
+ 
+ int tls_sw_sendpage(struct sock *sk, struct page *page,
+ 		    int offset, size_t size, int flags)
+ {
+-	struct tls_context *tls_ctx = tls_get_ctx(sk);
+-	int ret;
++	struct bio_vec bvec;
++	struct msghdr msg = { .msg_flags = flags | MSG_SPLICE_PAGES, };
+ 
+ 	if (flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
+ 		      MSG_SENDPAGE_NOTLAST | MSG_SENDPAGE_NOPOLICY))
+ 		return -EOPNOTSUPP;
++	if (flags & MSG_SENDPAGE_NOTLAST)
++		msg.msg_flags |= MSG_MORE;
+ 
+-	ret = mutex_lock_interruptible(&tls_ctx->tx_lock);
+-	if (ret)
+-		return ret;
+-	lock_sock(sk);
+-	ret = tls_sw_do_sendpage(sk, page, offset, size, flags);
+-	release_sock(sk);
+-	mutex_unlock(&tls_ctx->tx_lock);
+-	return ret;
++	bvec_set_page(&bvec, page, size, offset);
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, size);
++	return tls_sw_sendmsg(sk, &msg, size);
+ }
+ 
+ static int
 
