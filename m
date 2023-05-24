@@ -2,67 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B3370EF73
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBFE70EF79
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbjEXHcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S239921AbjEXHdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbjEXHcG (ORCPT
+        with ESMTP id S233637AbjEXHdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:32:06 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7578F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:32:04 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-457201c47f6so251177e0c.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684913523; x=1687505523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eLkU6OSVP4u1TGTSrobiqBnALvD7urgOWG7UmhaSjK0=;
-        b=S6GCmUOTnQaygwzlmQSJizaQ0qVionEBzcOpG7bOSWbvK6PcyyDTogcihkp9WyG7Dq
-         Vj7XW2IJKxiNyo2vcQ+JnLFDKhDDaKt23EWSBzOu30++p8ECrA/R/OBjOnh4A+6N2mw4
-         rDQaphwzUDGmZzBa+0fQU8OTrai9L2xHRB/oINhcNZ+O+rUWuvCgw9OvW/dCbrGQiRBc
-         rxEocPe6SPKQU2g6PhXEisQ+Xc22ENIHrf40x4+tfoxy6JWuluuzFvVhNVfTMHkClF0E
-         tEO3t4OHeeWeEjzdN4taHX/pCcanONyIKGMU8o60rskSoIfDw8vJVhpWe9S/j7wWoLeg
-         elPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684913523; x=1687505523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eLkU6OSVP4u1TGTSrobiqBnALvD7urgOWG7UmhaSjK0=;
-        b=XIhB49zBOnIuTdw24gaP8vNAU8F184mcIef3/ergZgy5bCRl7THa4StzBROcSFe0MB
-         fOtWPF1H+3zFkTmAQmqGahNRxC81souSPZjFJ5hyNJ0VU3f60f9KDSPzkrFxBtGDutuq
-         RCyENiaefXdVWP/nXjqUiWzDiF3FukXY7fnK6YSNgoOIipZpqSoe3HJ7fSvxFmGhlfFq
-         p84PGTX0+CApB20W8FVuOmRUkHtTSmXEjxzc7cE9UF4VFn8yyY++5jH5XnCU/tvybdyR
-         fUcXJtTqDk+FOsWWUsFAblMpJ0348GKWF1ICBRSoqDl1Uto0GhJIHvl+OJXHVkweO44D
-         sdEQ==
-X-Gm-Message-State: AC+VfDw5bmsOIXoM6a5+rqiF+w1El+gc+rhNNQxx7058RcjWiOihLId0
-        d2MotpE6TxUTWO/Uanzern2gWfqb/dbJSHMl2mzJ1g==
-X-Google-Smtp-Source: ACHHUZ6xj27SeRhKxZe6B9Oz9l14143MF9T0C68M2A8TJ5SpaUKT+GjQN151QpQqJerHN1UiF4BX7HieLYs+/+R11FE=
-X-Received: by 2002:a1f:5e07:0:b0:457:400a:f3fc with SMTP id
- s7-20020a1f5e07000000b00457400af3fcmr3975468vkb.2.1684913523270; Wed, 24 May
- 2023 00:32:03 -0700 (PDT)
+        Wed, 24 May 2023 03:33:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF768F;
+        Wed, 24 May 2023 00:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684913626; x=1716449626;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=0oNpebSttc8jt0CQoPqlpvbac8FK6pH0n1MH5O8TXeQ=;
+  b=U1dC2gTo5jW6g5dk2gfgViIDSlUuYw1MF1JrhvmCLBnAn1xPnhxiM3Dg
+   m5wmst5ROyQm+SpW+MMNW1Jas9uXN6uPCq91nFo4NaV+a3CkK2tmGvDzn
+   f25EeaREKCsZWK8ds5ZJ01Q3x5P0CLiGJdIuMZo4r06PkxIPeeMdxdZyy
+   maB3uEF7C4D8IgDtD0HQ1lpY9DQ+Asger997/ty5s7i70sSq4NZjRcqHW
+   zxLs3Eqc26+Ref8RFV0eJhZYUnHhG6aL8HKBufZDNbMrd8i4FZqCrVIOg
+   M/BTaZLzvqAaEWeDLwL6sNI8VVQmeCDU7bfEir6cGhzn0Ho4ozADyQFsS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="416946433"
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="scan'208";a="416946433"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 00:33:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="735074480"
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="scan'208";a="735074480"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 24 May 2023 00:33:45 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 00:33:45 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 00:33:45 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 24 May 2023 00:33:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UGHMJaw63kVKNV6tugFZokp2WhXkuIwUUBS/Oh+nid7PE21n/JBpupKCZgN7SxqV1tKqsis3cljWLtb4uOny1Ny9P9WLcdWVEKQrhTALzGwXwrvsDPh8OG8Gtq6La8DQAsYEZsExk2ObBCFXRX8qjKwezRD3sg9IIs4NnnalqsC/6Ff1nKOsrboIgUdG1D2qB62GliQVGbjoyeYTuNw7SRG4NGdlga/emnCOVUWMLJuuKPE5buA17bDYC8nv4G15/SbNNTjp4gal32acbu0CZGecBqMjhaBK1FJnk4a1B68YlB4r8SNKal3oSZ53elLBbUG0shRVj49attcduOgF4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4tc/CXy5379TtOgziMzY/f9HzMHAsvpNBDuPK+7rNHM=;
+ b=OVlKJd8Ci+JuYOqMNM8Vz0T4+HlJU27JGA5GUQy89WHxNqOyKIuGCF+FRLrOSMSE3NeelFLsaKKFMLt7H0XgzKvRAM7omlandbynAmtbJp4CVFabCMbRYpLZyI9egEaXgBdolDYmfD/4TVy8G2akx/Xajj2nELAqZVUqZf663JpJ9PGg3NfJfyaRUyjWaBIh1YUQhB8w6M7UeOsIZMer0KjlCADWlowyCZho/Gc5f17WGqGjuzW6cR7k+yGXK3s1L/EUF72vzLskha9LrLEfKymKMl1g8Bwr6mG8zfm43Gv4shmhnizSxcjGiDv/YL4CrQXK2bnxMsi34CESdz7UGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by CH0PR11MB8143.namprd11.prod.outlook.com (2603:10b6:610:193::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
+ 2023 07:33:43 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::dd3:4277:e348:9e00]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::dd3:4277:e348:9e00%3]) with mapi id 15.20.6433.015; Wed, 24 May 2023
+ 07:33:43 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: RE: [PATCH v3 07/10] iommu/vt-d: Add iotlb flush for nested domain
+Thread-Topic: [PATCH v3 07/10] iommu/vt-d: Add iotlb flush for nested domain
+Thread-Index: AQHZhBgQjFIbgwyTRUizGAHHxi4eh69pGL1w
+Date:   Wed, 24 May 2023 07:33:42 +0000
+Message-ID: <BN9PR11MB52768C95F6E9B943066F39218C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230511145110.27707-1-yi.l.liu@intel.com>
+ <20230511145110.27707-8-yi.l.liu@intel.com>
+In-Reply-To: <20230511145110.27707-8-yi.l.liu@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CH0PR11MB8143:EE_
+x-ms-office365-filtering-correlation-id: efcc19eb-b6ef-48d4-d55d-08db5c293321
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tHVeWtC6IrlsSYAk7enxsdJSVX9ta1YAHMGZbxSVdJykpD6euITTyHPuL3wo2iPp6S5VHtb/66yp360MRhE0FXUA+eqhWMZEqjoU85+tSTaV35l5d7tdYpgf4LBoHQyqzrO1MMjUembX64SOGKewIW2G+TqpBvPsPNxyHc1KkBP0p3qqx298xwfmwkRMgsfmcEkyH54nNL0/8puMsxReIW2hoXA+jghL2nWNmyDQnFVXZDsDM/TAUXe4+HzgM/6IbkizkCGu7wvVgUPiLymCUhgTC8HkyDpYnR1aHjql1CPmsd0js9S0kJNtI6kg5MYedjNxNJyPq66FBQ7XRyEBxiLTjWpSzuimTk1GWPrByXWFEDtoWkLxgMGOhd0Veh7CVQumIrGdcMnHBsgyn8uC4Mol2LIGznmIkMJ0GSfHNwY7ndRWPen3bV2a65dK1RSwbJYAwqU0NJIVABU0SjP4IrViXNjITbITW3238U+9Z+rOy/N6YHtB1sgHEoXksbyh/rWiPDTygzUAY8Gt4rrPLIOtJrMQMoPOWIzpV9gQbQNysn4VwOKf2JeD5BkxjsHzqM9OngYQOCt+WoG6l2FsHyPPmPnQPK6PZZBZsNxohSgsUJF8Ep0zYzeQNzQft4y4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(396003)(39860400002)(346002)(451199021)(54906003)(86362001)(7696005)(41300700001)(478600001)(110136005)(316002)(55016003)(66446008)(64756008)(4326008)(76116006)(66556008)(66476007)(71200400001)(66946007)(52536014)(5660300002)(38070700005)(8676002)(8936002)(38100700002)(122000001)(33656002)(26005)(9686003)(186003)(82960400001)(7416002)(6506007)(83380400001)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NWi3VR17YKAVlphJrckdcvdpojdpr/iEBCYcA/ivFykMXYURRdFsDY2+j4Z2?=
+ =?us-ascii?Q?6U6i9sUBSmltAhDPKPXm5fHuh/o/GaSACoudeK70w/iovNSc0TL8tqbcdzoo?=
+ =?us-ascii?Q?muFGuWbWDLvyxMCt97z+Y69zweXT9bcJgnshmqumQ+QmPCFw4wqnpkrQBA6H?=
+ =?us-ascii?Q?68YTeyVFMOF2Ev6YY0xLoVd6SsEa+KD3CgVHq+MwSLf0tdN9MVgZJIjLaSgk?=
+ =?us-ascii?Q?p7x7o3/btPzeUoGPgeIM7mjnp3Hu00BuwYsmUGgVt9fZDuY6Eq7l/htNZr0S?=
+ =?us-ascii?Q?waG2D4sm2M70ySS/oyivGLpRdYTDSAHaENmCURz7EIK1JzLsfeldfjYShuNR?=
+ =?us-ascii?Q?TXRpME9ltphe9+TPDlxG4y+5CL+lMcwxLWQa9UvjY0P09/QdrIDxQvVXH6Nd?=
+ =?us-ascii?Q?79aCy5GT/Ns7+byF1EKP000tMHuCWflooHS0Y6pm+6QtZoJhjqXtZKYOU5rN?=
+ =?us-ascii?Q?eJcSHUkhAHXrA8WLJPjtgJE2b6T2Hj7J/ImqJcGdYj5C22WmjjtUpB3u3TgA?=
+ =?us-ascii?Q?empfzsyFS16nHHH1QTweMAFYL2wLVFnD7k2mTPOuKWC5UOngRpSvRe7nuwFM?=
+ =?us-ascii?Q?VX5c8ei1tZWShXkIDf+OuA0gt55bDb2zzCqpFm1sSIXfx+SB9+RWtQHsFNIG?=
+ =?us-ascii?Q?Pj+dSi8vdH8AjXlKh376n9UULcsCc5B9oyIqobgt+Bnz7dq+VlSB9gev2W24?=
+ =?us-ascii?Q?5O7A5Y7k/CJJcqsxiWJ5EfxnsVekDmfUKRwokT93H9qb+cmrd0GTYARgodj+?=
+ =?us-ascii?Q?CsG4Q1uK+sCFPjjxHsfZMbTurn2YkvngyRT6+mxxCMqaBUWmAtmgD3RQ59nR?=
+ =?us-ascii?Q?nsFxTSm5NY3Abt5iQR9zCrmcbd7Uo7x2zefaCbeSnRm6OtBBberruYtvOFjC?=
+ =?us-ascii?Q?07wRy3rr7ig7hwTk1kECHCo8/trQ97ukvPpp1ssrit3d5rk2mM/f+7tSsFbe?=
+ =?us-ascii?Q?iBOTpYotEEa9BPW8u1sPNCjoeW6QOidOIn0uKuGbKubA1o8IfhAf87Khxp+v?=
+ =?us-ascii?Q?gwLq1P+4+0jnNPRu/vEbz7YmKn9FN39PHqTMJsiZ9cSw7E9bES8ik8wFGjVr?=
+ =?us-ascii?Q?hbecPpFFXDQHfGJkcJztYx5/wLwqDNNcxreqRbz0O6/3u2RilRiM/mwdmNZN?=
+ =?us-ascii?Q?+/Qf/dmQWSxBkBz2Vvkw+5JeuGa/XZQd0RUrsdrB1HSqAN1pAQRU5pWb0C0Y?=
+ =?us-ascii?Q?qKyvG/Y+CiMoHeUO2gehmL71wVaNPX+pJS8BNiM0SA9O40iiqAR2Orsw2nRO?=
+ =?us-ascii?Q?XZJC1MJP5nZoWII492ibBoPIZ6OE3q6qNASTPCClwyn3gHhGJlWYbd2EvC+N?=
+ =?us-ascii?Q?yi5hNwvhsjxD5rnh/JQPxojO34MdCZqCQBozdbtLaGspDuNwIB6wnqqxfv/H?=
+ =?us-ascii?Q?YV3Tkd8A9UJoRpVkjjDp0s5aFkDw+DjCzHtwWmt2aXLk+1atEgVeNCSeHL1J?=
+ =?us-ascii?Q?eWOQUDzJGq2+V64XNZeO874dfQDYyt5yyBZT/ME1wofXlKoShKPnHywy2rc3?=
+ =?us-ascii?Q?nXJ6Z51iwAoW3fuiMbQLo86VNWKyfzqJPrLNezzZD7vva8I8UUAHqNcYMoJ0?=
+ =?us-ascii?Q?O5QiPK9k/NFuO4JYzQ04zBeQsFqFFLv2MEv3hJO6?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230517143311.585080-1-sumit.garg@linaro.org> <CAN5uoS9h6OmO-SZWmBdRUkT+ih9QK+mTo8Kvmn3ePQ4NrKriBw@mail.gmail.com>
-In-Reply-To: <CAN5uoS9h6OmO-SZWmBdRUkT+ih9QK+mTo8Kvmn3ePQ4NrKriBw@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 24 May 2023 13:01:52 +0530
-Message-ID: <CAFA6WYPCOqsyedjP-ffAQiyX3manDV+oE3akFpeuRZukro_dRg@mail.gmail.com>
-Subject: Re: [PATCH v9 3/4] tee: optee: support tracking system threads
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org, jens.wiklander@linaro.org,
-        sudeep.holla@arm.com, cristian.marussi@arm.com,
-        vincent.guittot@linaro.org,
-        etienne carriere <Etienne.carriere@st.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: efcc19eb-b6ef-48d4-d55d-08db5c293321
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2023 07:33:42.3983
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Bysw+D4j+hsf2YNrMRVCwKWTh12v2XBmMzfBPoD1PG62RsJL0YvA+xxlpQumdr0WK/I60c8irdRE/25sXy8sNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB8143
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,333 +168,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 at 12:41, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Hello Sumit,
->
->
-> On Wed, 17 May 2023 at 16:33, Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > From: Etienne Carriere <etienne.carriere@linaro.org>
-> >
-> > Adds support in the OP-TEE driver to keep track of reserved system
-> > threads. The optee_cq_*() functions are updated to handle this if
-> > enabled. The SMC ABI part of the driver enables this tracking, but the
-> > FF-A ABI part does not.
-> >
-> > The logic allows atleast 1 OP-TEE thread can be reserved to TEE system
-> > sessions. For sake of simplicity, initialization of call queue
-> > management is factorized into new helper function optee_cq_init().
-> >
-> > Co-developed-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > Co-developed-by: Sumit Garg <sumit.garg@linaro.org>
-> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> > ---
-> >
-> > Disclaimer: Compile tested only
-> >
-> > Hi Etienne,
-> >
-> > Overall the idea we agreed upon was okay but the implementation looked
-> > complex to me. So I thought it would be harder to explain that via
-> > review and I decided myself to give a try at simplification. I would
-> > like you to test it if this still addresses the SCMI deadlock problem or
-> > not. Also, feel free to include this in your patchset if all goes fine
-> > wrt testing.
->
-> With these changes, there is no more a specific waiting list for TEE
-> system threads hence when a waiting queue can complete, we'll pick any
-> TEE thread, not a TEE system thread first..
+> From: Liu, Yi L <yi.l.liu@intel.com>
+> Sent: Thursday, May 11, 2023 10:51 PM
+>=20
+> This is needed as the stage-1 page table of the nested domain is
+> maintained outside the iommu subsystem, hence, needs to support iotlb
+> flush requests.
+>=20
+> This adds the data structure for flushing iotlb for the nested domain
+> allocated with IOMMU_HWPT_TYPE_VTD_S1 type and the related callback
+> to accept iotlb flush request from IOMMUFD.
+>=20
+> This only exposes the interface for invalidating IOTLB, but no for
+> device-TLB as device-TLB invalidation will be covered automatically
+> in IOTLB invalidation if the affected device is ATS-capable.
+>=20
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 
-I had thought about this but I can't see any value in having a
-separate wait queue for system threads. Here we only need to provide
-an extra privileged thread for system sessions (kernel clients) such
-that user-space doesn't contend for that thread. This prevents kernel
-client's starvation or deadlock like in the SCMI case.
+Following how you split patches in former part of the series this should
+be split into three patches: one to introduce the uAPI changes, the 2nd
+to export symbols and the last to actually add iotlb flush.
 
-> Also, as stated in a below answer, these change unconditionally
-> reserve a TEE thread for TEE system calls even if no TEE client
-> reserved such.
+> +static int intel_nested_cache_invalidate_user(struct iommu_domain
+> *domain,
+> +					      void *user_data)
+> +{
+> +	struct iommu_hwpt_invalidate_request_intel_vtd *req =3D user_data;
+> +	struct iommu_hwpt_invalidate_intel_vtd *inv_info =3D user_data;
+> +	struct dmar_domain *dmar_domain =3D to_dmar_domain(domain);
+> +	unsigned int entry_size =3D inv_info->entry_size;
+> +	u64 uptr =3D inv_info->inv_data_uptr;
+> +	u64 nr_uptr =3D inv_info->entry_nr_uptr;
+> +	struct device_domain_info *info;
+> +	u32 entry_nr, index;
+> +	unsigned long flags;
+> +	int ret =3D 0;
+> +
+> +	if (WARN_ON(!user_data))
+> +		return 0;
 
-I don't think we should make thread reservations based on the presence
-of TEE clients. You never know how much user-space or kernel TEE
-clients you are dealing with. And reserving a single privileged thread
-unconditionally for system sessions shouldn't be much of a burden for
-memory constrained devices too.
+WARN_ON should lead to error returned.
 
-Also, this way we would enable every kernel TEE client to leverage
-system sessions as it's very likely they wouldn't like to compete with
-user-space for thread availability. Two other kernel TEE clients that
-are on top of my head are HWRNG and Trusted Keys which can benefit
-from this feature.
+> +
+> +	if (get_user(entry_nr, (uint32_t __user *)u64_to_user_ptr(nr_uptr)))
+> +		return -EFAULT;
+> +
+> +	if (!entry_nr)
+> +		return -EINVAL;
 
-> >
-> > Changes since v8:
-> > - Simplified system threads tracking implementation.
-> >
-> >  drivers/tee/optee/call.c          | 72 +++++++++++++++++++++++++++++--
-> >  drivers/tee/optee/ffa_abi.c       |  3 +-
-> >  drivers/tee/optee/optee_private.h | 16 +++++++
-> >  drivers/tee/optee/smc_abi.c       | 16 ++++++-
-> >  4 files changed, 99 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> > index 42e478ac6ce1..09e824e4dcaf 100644
-> > --- a/drivers/tee/optee/call.c
-> > +++ b/drivers/tee/optee/call.c
-> > @@ -39,9 +39,27 @@ struct optee_shm_arg_entry {
-> >         DECLARE_BITMAP(map, MAX_ARG_COUNT_PER_ENTRY);
-> >  };
-> >
-> > +void optee_cq_init(struct optee_call_queue *cq, int thread_count)
-> > +{
-> > +       mutex_init(&cq->mutex);
-> > +       INIT_LIST_HEAD(&cq->waiters);
-> > +       /*
-> > +        * If cq->total_thread_count is 0 then we're not trying to keep
-> > +        * track of how many free threads we have, instead we're relying on
-> > +        * the secure world to tell us when we're out of thread and have to
-> > +        * wait for another thread to become available.
-> > +        */
-> > +       cq->total_thread_count = thread_count;
-> > +       cq->free_thread_count = thread_count;
-> > +}
-> > +
-> >  void optee_cq_wait_init(struct optee_call_queue *cq,
-> >                         struct optee_call_waiter *w, bool sys_thread)
-> >  {
-> > +       bool need_wait = false;
-> > +
-> > +       memset(w, 0, sizeof(*w));
-> > +
-> >         /*
-> >          * We're preparing to make a call to secure world. In case we can't
-> >          * allocate a thread in secure world we'll end up waiting in
-> > @@ -53,15 +71,43 @@ void optee_cq_wait_init(struct optee_call_queue *cq,
-> >         mutex_lock(&cq->mutex);
-> >
-> >         /*
-> > -        * We add ourselves to the queue, but we don't wait. This
-> > -        * guarantees that we don't lose a completion if secure world
-> > -        * returns busy and another thread just exited and try to complete
-> > -        * someone.
-> > +        * We add ourselves to a queue, but we don't wait. This guarantees
-> > +        * that we don't lose a completion if secure world returns busy and
-> > +        * another thread just exited and try to complete someone.
-> >          */
-> >         init_completion(&w->c);
-> >         list_add_tail(&w->list_node, &cq->waiters);
-> >
-> > +       if (cq->total_thread_count && sys_thread) {
-> > +               if (cq->free_thread_count > 0)
-> > +                       cq->free_thread_count--;
-> > +               else
-> > +                       need_wait = true;
-> > +       } else if (cq->total_thread_count) {
-> > +               if (cq->free_thread_count > 1)
->
-> This unconditionally reserves a TEE thread for TEE system calls, even
-> if no client has claimed such system thread reservation.
+Having zero number of entries is instead not an error. Just means no work
+to do.
 
-See my response above.
+> +
+> +	for (index =3D 0; index < entry_nr; index++) {
+> +		ret =3D copy_struct_from_user(req, sizeof(*req),
+> +					    u64_to_user_ptr(uptr + index *
+> entry_size),
+> +					    entry_size);
+> +		if (ret) {
+> +			pr_err_ratelimited("Failed to fetch invalidation
+> request\n");
+> +			break;
+> +		}
+> +
+> +		if (req->__reserved || (req->flags &
+> ~IOMMU_VTD_QI_FLAGS_LEAF) ||
+> +		    !IS_ALIGNED(req->addr, VTD_PAGE_SIZE)) {
+> +			ret =3D -EINVAL;
+> +			break;
+> +		}
+> +
+> +		spin_lock_irqsave(&dmar_domain->lock, flags);
+> +		list_for_each_entry(info, &dmar_domain->devices, link)
+> +			intel_nested_invalidate(info->dev, dmar_domain,
+> +						req->addr, req->npages);
+> +		spin_unlock_irqrestore(&dmar_domain->lock, flags);
+> +	}
+> +
+> +	if (ret && put_user(index, (uint32_t __user
+> *)u64_to_user_ptr(nr_uptr)))
+> +		return -EFAULT;
 
->
->
-> > +                       cq->free_thread_count--;
-> > +               else
-> > +                       need_wait = true;
-> > +       }
-> > +
-> >         mutex_unlock(&cq->mutex);
-> > +
-> > +       while (need_wait) {
-> > +               optee_cq_wait_for_completion(cq, w);
-> > +               mutex_lock(&cq->mutex);
-> > +               if (sys_thread) {
-> > +                       if (cq->free_thread_count > 0) {
-> > +                               cq->free_thread_count--;
-> > +                               need_wait = false;
-> > +                       }
-> > +               } else {
-> > +                       if (cq->free_thread_count > 1) {
-> > +                               cq->free_thread_count--;
-> > +                               need_wait = false;
-> > +                       }
-> > +               }
-> > +               mutex_unlock(&cq->mutex);
-> > +       }
-> >  }
-> >
-> >  void optee_cq_wait_for_completion(struct optee_call_queue *cq,
-> > @@ -104,6 +150,8 @@ void optee_cq_wait_final(struct optee_call_queue *cq,
-> >         /* Get out of the list */
-> >         list_del(&w->list_node);
-> >
-> > +       cq->free_thread_count++;
-> > +
-> >         /* Wake up one eventual waiting task */
-> >         optee_cq_complete_one(cq);
-> >
-> > @@ -361,6 +409,22 @@ int optee_open_session(struct tee_context *ctx,
-> >         return rc;
-> >  }
-> >
-> > +int optee_system_session(struct tee_context *ctx, u32 session)
-> > +{
-> > +       struct optee_context_data *ctxdata = ctx->data;
-> > +       struct optee_session *sess;
-> > +
-> > +       mutex_lock(&ctxdata->mutex);
-> > +
-> > +       sess = find_session(ctxdata, session);
-> > +       if (sess && !sess->use_sys_thread)
-> > +               sess->use_sys_thread = true;
-> > +
-> > +       mutex_unlock(&ctxdata->mutex);
-> > +
-> > +       return 0;
->
-> Nitpicking: should rather return 0 only upon session is valid
-> (sess!=NULL here)  and system thread reservation is supported
-> (total_thread_count > 0).
-> But that's not a big deal I guess, can be addressed.
+You want to always update the nr no matter success or failure
 
-Thanks for pointing it out. If this approach works for you then it can
-be addressed while integrating in your patch-set.
+> diff --git a/drivers/iommu/iommufd/main.c
+> b/drivers/iommu/iommufd/main.c
+> index 39922f83ce34..b338b082950b 100644
+> --- a/drivers/iommu/iommufd/main.c
+> +++ b/drivers/iommu/iommufd/main.c
+> @@ -282,6 +282,12 @@ union ucmd_buffer {
+>  #ifdef CONFIG_IOMMUFD_TEST
+>  	struct iommu_test_cmd test;
+>  #endif
+> +	/*
+> +	 * hwpt_type specific structure used in the cache invalidation
+> +	 * path.
+> +	 */
+> +	struct iommu_hwpt_invalidate_intel_vtd vtd;
+> +	struct iommu_hwpt_invalidate_request_intel_vtd req_vtd;
+>  };
 
--Sumit
+Can you add some explanation in commit msg why such vendor
+specific structures must be put in the generic ucmd_buffer?
 
->
->
->
->
-> > +}
-> > +
-> >  int optee_close_session_helper(struct tee_context *ctx, u32 session,
-> >                                bool system_thread)
-> >  {
-> > diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> > index 5fde9d4100e3..0c9055691343 100644
-> > --- a/drivers/tee/optee/ffa_abi.c
-> > +++ b/drivers/tee/optee/ffa_abi.c
-> > @@ -852,8 +852,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
-> >         if (rc)
-> >                 goto err_unreg_supp_teedev;
-> >         mutex_init(&optee->ffa.mutex);
-> > -       mutex_init(&optee->call_queue.mutex);
-> > -       INIT_LIST_HEAD(&optee->call_queue.waiters);
-> > +       optee_cq_init(&optee->call_queue, 0);
-> >         optee_supp_init(&optee->supp);
-> >         optee_shm_arg_cache_init(optee, arg_cache_flags);
-> >         ffa_dev_set_drvdata(ffa_dev, optee);
-> > diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-> > index b68273051454..6dcecb83c893 100644
-> > --- a/drivers/tee/optee/optee_private.h
-> > +++ b/drivers/tee/optee/optee_private.h
-> > @@ -40,15 +40,29 @@ typedef void (optee_invoke_fn)(unsigned long, unsigned long, unsigned long,
-> >                                 unsigned long, unsigned long,
-> >                                 struct arm_smccc_res *);
-> >
-> > +/*
-> > + * struct optee_call_waiter - TEE entry may need to wait for a free TEE thread
-> > + * @list_node          Reference in waiters list
-> > + * @c                  Waiting completion reference
-> > + */
-> >  struct optee_call_waiter {
-> >         struct list_head list_node;
-> >         struct completion c;
-> >  };
-> >
-> > +/*
-> > + * struct optee_call_queue - OP-TEE call queue management
-> > + * @mutex                      Serializes access to this struct
-> > + * @waiters                    List of threads waiting to enter OP-TEE
-> > + * @total_thread_count         Overall number of thread context in OP-TEE or 0
-> > + * @free_thread_count          Number of threads context free in OP-TEE
-> > + */
-> >  struct optee_call_queue {
-> >         /* Serializes access to this struct */
-> >         struct mutex mutex;
-> >         struct list_head waiters;
-> > +       int total_thread_count;
-> > +       int free_thread_count;
-> >  };
-> >
-> >  struct optee_notif {
-> > @@ -254,6 +268,7 @@ int optee_supp_send(struct tee_context *ctx, u32 ret, u32 num_params,
-> >  int optee_open_session(struct tee_context *ctx,
-> >                        struct tee_ioctl_open_session_arg *arg,
-> >                        struct tee_param *param);
-> > +int optee_system_session(struct tee_context *ctx, u32 session);
-> >  int optee_close_session_helper(struct tee_context *ctx, u32 session,
-> >                                bool system_thread);
-> >  int optee_close_session(struct tee_context *ctx, u32 session);
-> > @@ -303,6 +318,7 @@ static inline void optee_to_msg_param_value(struct optee_msg_param *mp,
-> >         mp->u.value.c = p->u.value.c;
-> >  }
-> >
-> > +void optee_cq_init(struct optee_call_queue *cq, int thread_count);
-> >  void optee_cq_wait_init(struct optee_call_queue *cq,
-> >                         struct optee_call_waiter *w, bool sys_thread);
-> >  void optee_cq_wait_for_completion(struct optee_call_queue *cq,
-> > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-> > index e2763cdcf111..3314ffeb91c8 100644
-> > --- a/drivers/tee/optee/smc_abi.c
-> > +++ b/drivers/tee/optee/smc_abi.c
-> > @@ -1209,6 +1209,7 @@ static const struct tee_driver_ops optee_clnt_ops = {
-> >         .release = optee_release,
-> >         .open_session = optee_open_session,
-> >         .close_session = optee_close_session,
-> > +       .system_session = optee_system_session,
-> >         .invoke_func = optee_invoke_func,
-> >         .cancel_req = optee_cancel_req,
-> >         .shm_register = optee_shm_register,
-> > @@ -1356,6 +1357,16 @@ static bool optee_msg_exchange_capabilities(optee_invoke_fn *invoke_fn,
-> >         return true;
-> >  }
-> >
-> > +static unsigned int optee_msg_get_thread_count(optee_invoke_fn *invoke_fn)
-> > +{
-> > +       struct arm_smccc_res res;
-> > +
-> > +       invoke_fn(OPTEE_SMC_GET_THREAD_COUNT, 0, 0, 0, 0, 0, 0, 0, &res);
-> > +       if (res.a0)
-> > +               return 0;
-> > +       return res.a1;
-> > +}
-> > +
-> >  static struct tee_shm_pool *
-> >  optee_config_shm_memremap(optee_invoke_fn *invoke_fn, void **memremaped_shm)
-> >  {
-> > @@ -1609,6 +1620,7 @@ static int optee_probe(struct platform_device *pdev)
-> >         struct optee *optee = NULL;
-> >         void *memremaped_shm = NULL;
-> >         unsigned int rpc_param_count;
-> > +       unsigned int thread_count;
-> >         struct tee_device *teedev;
-> >         struct tee_context *ctx;
-> >         u32 max_notif_value;
-> > @@ -1636,6 +1648,7 @@ static int optee_probe(struct platform_device *pdev)
-> >                 return -EINVAL;
-> >         }
-> >
-> > +       thread_count = optee_msg_get_thread_count(invoke_fn);
-> >         if (!optee_msg_exchange_capabilities(invoke_fn, &sec_caps,
-> >                                              &max_notif_value,
-> >                                              &rpc_param_count)) {
-> > @@ -1725,8 +1738,7 @@ static int optee_probe(struct platform_device *pdev)
-> >         if (rc)
-> >                 goto err_unreg_supp_teedev;
-> >
-> > -       mutex_init(&optee->call_queue.mutex);
-> > -       INIT_LIST_HEAD(&optee->call_queue.waiters);
-> > +       optee_cq_init(&optee->call_queue, thread_count);
-> >         optee_supp_init(&optee->supp);
-> >         optee->smc.memremaped_shm = memremaped_shm;
-> >         optee->pool = pool;
-> > --
-> > 2.34.1
-> >
+>=20
+> +/**
+> + * enum iommu_hwpt_intel_vtd_invalidate_flags - Flags for Intel VT-d
+
+enum iommu_hwpt_vtd_s1_invalidate_flags
+
+> + *                                              stage-1 page table cache
+> + *                                              invalidation
+> + * @IOMMU_VTD_QI_FLAGS_LEAF: The LEAF flag indicates whether only the
+> + *                           leaf PTE caching needs to be invalidated
+> + *                           and other paging structure caches can be
+> + *                           preserved.
+> + */
+
+what about "Drain Reads" and "Drain Writes"? Is the user allowed/required
+to provide those hints?
+> +
+> +/**
+> + * struct iommu_hwpt_invalidate_request_intel_vtd - Intel VT-d cache
+> invalidation request
+
+here you put "intel_vtd" in the end of the name. let's follow the same orde=
+r
+as earlier definitions.
+
+struct iommu_hwpt_vtd_s1_invalidate_desc
+
+> + * @addr: The start address of the addresses to be invalidated.
+> + * @npages: Number of contiguous 4K pages to be invalidated.
+> + * @flags: Combination of enum iommu_hwpt_intel_vtd_invalidate_flags
+> + * @__reserved: Must be 0
+> + *
+> + * The Intel VT-d specific invalidation data for user-managed stage-1 ca=
+che
+> + * invalidation under nested translation. Userspace uses this structure =
+to
+> + * tell host about the impacted caches after modifying the stage-1 page
+> table.
+> + *
+> + * Invalidating all the caches related to the hw_pagetable by setting
+> + * @addr=3D=3D0 and @npages=3D=3D__u64(-1).
+> + */
+> +struct iommu_hwpt_invalidate_request_intel_vtd {
+> +	__u64 addr;
+> +	__u64 npages;
+> +	__u32 flags;
+> +	__u32 __reserved;
+> +};
+> +
+> +/**
+> + * struct iommu_hwpt_invalidate_intel_vtd - Intel VT-d cache invalidatio=
+n
+> info
+
+iommu_hwpt_vtd_s1_invalidate
+
+> + * @flags: Must be 0
+> + * @entry_size: Size in bytes of each cache invalidation request
+> + * @entry_nr_uptr: User pointer to the number of invalidation requests.
+> + *                 Kernel reads it to get the number of requests and
+> + *                 updates the buffer with the number of requests that
+> + *                 have been processed successfully. This pointer must
+> + *                 point to a __u32 type of memory location.
+> + * @inv_data_uptr: Pointer to the cache invalidation requests
+> + *
+> + * The Intel VT-d specific invalidation data for a set of cache invalida=
+tion
+> + * requests. Kernel loops the requests one-by-one and stops when failure
+> + * is encountered. The number of handled requests is reported to user by
+> + * writing the buffer pointed by @entry_nr_uptr.
+> + */
+> +struct iommu_hwpt_invalidate_intel_vtd {
+> +	__u32 flags;
+> +	__u32 entry_size;
+> +	__u64 entry_nr_uptr;
+> +	__u64 inv_data_uptr;
+> +};
+> +
+>  /**
+>   * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
+>   * @size: sizeof(struct iommu_hwpt_invalidate)
+> @@ -520,6 +577,8 @@ struct iommu_hw_info {
+>   *
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =3D=3D=3D=3D=3D=3D=3D=3D+
+>   * | @hwpt_type                   |     Data structure in @data_uptr    =
+   |
+>   * +------------------------------+-------------------------------------=
+---+
+> + * | IOMMU_HWPT_TYPE_VTD_S1       | struct
+> iommu_hwpt_invalidate_intel_vtd |
+> + * +------------------------------+-------------------------------------=
+---+
+>   */
+>  struct iommu_hwpt_invalidate {
+>  	__u32 size;
+> --
+> 2.34.1
+
