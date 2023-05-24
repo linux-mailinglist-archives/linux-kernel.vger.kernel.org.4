@@ -2,78 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11DE70FDC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DB970FDBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbjEXSUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S235673AbjEXSU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjEXSUt (ORCPT
+        with ESMTP id S229742AbjEXSU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:20:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2A898
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684952403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ZTQVTNtbSjFralO95zP3DggQ38BxzblGXjifW+msbk=;
-        b=JYrHq+TtnpMs3rZg1z3bTzFYN7ktvtvDELDXszNrr0RojxVDD0I7tJF0jAb7PBbDV4mdeC
-        xpst8mYx8PzqZgsD01Zau/b+H3U0WjqfVOjiNvfZCnd9iNu227+65cFQCMMEeDSTtCkUAJ
-        9+1fZAjdbmN2yQA4ABf9cEgxnWGkyDM=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-608-44l646uCMwScEgQGUzxFlA-1; Wed, 24 May 2023 14:20:02 -0400
-X-MC-Unique: 44l646uCMwScEgQGUzxFlA-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-623a23f8439so470796d6.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:20:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684952401; x=1687544401;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ZTQVTNtbSjFralO95zP3DggQ38BxzblGXjifW+msbk=;
-        b=eQyEiFDmzyi8No+GiE3YpdRfC4g/0GWlc4TLHcuRIHuhP7Nowdbl/xyIoS3u2jHtBr
-         xfthOdtk7rXA1ty7vaNTpJcHcl+9bPRZrK26RlCmn+ZmYR/bFK/H+jTOMnteWG+2SDoU
-         oPYF4IaHUe5z9W+K8uai/3Zn9Dc35FcGLtONBQNprKcVFjBxG3EPnY46ffe8wIGXsk9m
-         BTIzwz0qJX8/QW4FdLPkz4R9hme3Rlgq1hWtJWcdgwCAwz029/GvBe4GABzlBrMNCGDY
-         VF5WlbtuK/K+l8kzYa2O0cWcY54YecbyRAesB2DCGfjGbIWiyrDkpw2H8HF7FDd0IrsX
-         gKEA==
-X-Gm-Message-State: AC+VfDxaELvIJ41OMJ7PnqdsbrjIdn6l9AVMjaTUj9WSpOtcuMZjvLsV
-        V8aAbVH4U0yihswKRGod3SgcfsP8qSEXofM/fRhIzytmgrWOzuaDfjC0cDJAk+SXq6SGK5G/X32
-        3WDcs2zZigWqrLij9oPOiDMrO
-X-Received: by 2002:a05:6214:1247:b0:621:65de:f5fa with SMTP id r7-20020a056214124700b0062165def5famr27747451qvv.15.1684952401599;
-        Wed, 24 May 2023 11:20:01 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7f3Vt+J1XtSPftvonejF4syJO11uEZJU7VnSKTfSx/HrkvpsDniAGelrWceaGNtfjLcIO5aw==
-X-Received: by 2002:a05:6214:1247:b0:621:65de:f5fa with SMTP id r7-20020a056214124700b0062165def5famr27747441qvv.15.1684952401391;
-        Wed, 24 May 2023 11:20:01 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id g3-20020a0cf083000000b0062594434760sm1763829qvk.21.2023.05.24.11.20.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 11:20:00 -0700 (PDT)
-Date:   Wed, 24 May 2023 11:19:59 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>
-Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Michael Haener <michael.haener@siemens.com>
-Subject: Re: [PATCH 1/2] tpm: tis_i2c: Limit read bursts to
- I2C_SMBUS_BLOCK_MAX (32) bytes
-Message-ID: <2cuk33wgfakjzzjtm2qhr4i34v4qst46pe5zk3n2szq534sggj@qvmj53emcg76>
-References: <20230524154040.1204030-1-alexander.sverdlin@siemens.com>
+        Wed, 24 May 2023 14:20:28 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92DE7;
+        Wed, 24 May 2023 11:20:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684952412; i=deller@gmx.de;
+        bh=WG+hAFG6SEqXxehKbXada6K5tJh0Wir0acFKWq+QDkw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=c8kE61iUyxR982QVAOXYSZ1lUUPesqKNJ9fBPljDhDpd/P8qCc/m1jJfP5dBqt56l
+         pvd2dkey9aAmeTeihGFkzp1JwmuG49t/Otd6hc3ALQWni0f/kHHSmwyES6n+74UkEz
+         EcPaiBg6xYgr+Smti1OVgceXGk0XtegRcvIhf8JglUyI4Fq6aJxvhWFyNe+xnP7679
+         KRYkV0bE6AW/zr4mYK7oKh9ak0X/P9RDxpiXOBp4EnLaAZo5k+tQv04LSAAMLoxQmE
+         N2htGNHM3BFJL8MOIN4XMmTdcSxCjXP4lUANhQ4vCMgtaJCKZ7RnpzJ5cMdeYfINbV
+         g1fQljGwM0vGg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.145.4]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M9Wuk-1q5ALI2lQS-005akz; Wed, 24
+ May 2023 20:20:12 +0200
+Message-ID: <7e5643de-5d64-272e-cb36-bbe1e5c187ec@gmx.de>
+Date:   Wed, 24 May 2023 20:20:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524154040.1204030-1-alexander.sverdlin@siemens.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/4] fbdev: imsttfb: Fix error handling in init_imstt()
+Content-Language: en-US
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Zheng Wang <zyytlz.wz@163.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        hackerzheng666@gmail.com
+References: <069f2f78-01f3-9476-d860-2b695c122649@gmx.de>
+ <97807a2d-ccf2-1fbf-06f7-085bb1bdf451@web.de>
+ <c551c670-7458-ed50-eb2f-5a2b7ba421a8@web.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <c551c670-7458-ed50-eb2f-5a2b7ba421a8@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:25L6+tdLvR4JdvEn3uP+W2huNpRBdOtgMf3hNVOXNlS8iHzDWLl
+ dwlVc8x1mOgG/YP+IbLRva/kxwk8YRsFr0g+oGyEbvW/2mlu/c7HFLAb+YCEwYNhqWkRJOf
+ A+aOPeqcWy613Hk2U4Ophw9PQAQJgIzfv2cVEE3YteWoKLY2MUhamhxzmaIMmrizmCZ/8uw
+ KX121419r/X+/eMQ/L9+g==
+UI-OutboundReport: notjunk:1;M01:P0:LIBBXwL4Mpc=;wGLcB2nki+J2zLaqM56D3MfI3ik
+ 4WuVQeBGN+TpSXMsre4dHsLrKrQj3c0wtcHsO8e2jA1Sl7lOv5kdctLwlM15e4r6dhGmxr4dM
+ VgrjoUiMwNFwEbEo2fEXVyxo5NPgNfO9W7momdfWv28jZ3DLTTJQ2XKqiXvEKrmAM5xRRHxLC
+ Pe0vFK1fa994OKWM2Y7HP+kOJb65040qmo1kYxatIaVOA2RoE5+JYGKIt7Ehgf/2sbGKIUpfl
+ DadgCyqv7R9ic1xHp604qKx0m2e3In6FGGtPpGoYRZjGWN+CKSgFlGjECBqlbUnurbAy10jVs
+ mmG4jJ6L0Eaz91eeSW1HhankzDQNzj6/Dvl1reneMGBcs9Eg9uBUlOcT6O5p1LHKmJCL3Sbwt
+ tjfOvWfGqrnm58+bKVk/amzeqoDpwawoAulJ6UAfJyEefuJSWXjlPJVoNsPyNl3OPFighbewL
+ JY3pirmnAQV99MDTIhmHmIiQsMgEZcIxVtD5iP4DKCYItaGans6gkTsU0pRVobODzgCxmVB1K
+ eKxqeBXdaMPLipOvx42QgrWmeGupp72V+nouU7lQaGcdto9CQHM8TKuGNpPvvLCdKkwteSDzd
+ ey+kI6Fm1r3TixAJ5eSg37GmwZ3P6YhEstrCGNTGlu/IJwxqZAiG9nlCKCbtYe2MChdyGeBaG
+ GaEwDtyLRdP4pB0iMN49gbaHmnvBc0CTkp2Nz96Fx9ML63IVrTYIXR2aBqBxd9trjTKsV7Z+n
+ EVFPmLlglWuztNxm2s1E64Ao8dBPxupQ8mtoNLLgmJZXdkNgzaqYrPsCtsacqGR0sx2TFAIaR
+ KlPkK0VeQpFM8RSxDZj/WMW41rSPjzXQV+6VR9+/X4Z5NSRX/+VDhqIPyWCVi7d0NJ/dthRGH
+ 4LcXZGZJ8nNW/qMI6c9X7Kkq/6m2KD2U2ms1R8/T7AR1CyclMmOh289BKOciFPsZe7kqT+KAk
+ 6HvK+SuJCIH9ofv+JVrv7wlwE+Y=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,77 +82,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 05:40:39PM +0200, A. Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> 
-> Underlying I2C bus drivers not always support longer transfers and
-> imx-lpi2c for instance doesn't. SLB 9673 offers 427-bytes packets.
-> 
-> Visible symptoms are:
-> 
-> tpm tpm0: Error left over data
-> tpm tpm0: tpm_transmit: tpm_recv: error -5
-> tpm_tis_i2c: probe of 1-002e failed with error -5
-> 
-> Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
-> Tested-by: Michael Haener <michael.haener@siemens.com>
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-
+On 5/23/23 19:38, Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Tue, 23 May 2023 14:32:39 +0200
+>
+> The return value was overlooked from a call of
+> the function =E2=80=9Cfb_alloc_cmap=E2=80=9D.
+>
+> * Thus use a corresponding error check.
+>
+> * Add two jump targets so that a bit of exception handling
+>    can be better reused at the end of this function.
+>
+>
+> Reported-by: Helge Deller <deller@gmx.de>
+> Link: https://lore.kernel.org/dri-devel/069f2f78-01f3-9476-d860-2b695c12=
+2649@gmx.de/
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Fixes: c75f5a550610 ("fbdev: imsttfb: Fix use after free bug in imsttfb_=
+probe")
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 > ---
->  drivers/char/tpm/tpm_tis_i2c.c | 37 ++++++++++++++++++++--------------
->  1 file changed, 22 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-> index c8c34adc14c0..106fd20d94e4 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> @@ -189,21 +189,28 @@ static int tpm_tis_i2c_read_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
->  	int ret;
->  
->  	for (i = 0; i < TPM_RETRY; i++) {
-> -		/* write register */
-> -		msg.len = sizeof(reg);
-> -		msg.buf = &reg;
-> -		msg.flags = 0;
-> -		ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
-> -		if (ret < 0)
-> -			return ret;
-> -
-> -		/* read data */
-> -		msg.buf = result;
-> -		msg.len = len;
-> -		msg.flags = I2C_M_RD;
-> -		ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
-> -		if (ret < 0)
-> -			return ret;
-> +		u16 read = 0;
+>   drivers/video/fbdev/imsttfb.c | 18 +++++++++++++-----
+>   1 file changed, 13 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/imsttfb.c b/drivers/video/fbdev/imsttfb=
+.c
+> index 975dd682fae4..d3532def4707 100644
+> --- a/drivers/video/fbdev/imsttfb.c
+> +++ b/drivers/video/fbdev/imsttfb.c
+> @@ -1351,6 +1351,7 @@ static int init_imstt(struct fb_info *info)
+>   {
+>   	struct imstt_par *par =3D info->par;
+>   	__u32 i, tmp, *ip, *end;
+> +	int ret;
+>
+>   	tmp =3D read_reg_le32(par->dc_regs, PRC);
+>   	if (par->ramdac =3D=3D IBM)
+> @@ -1419,8 +1420,7 @@ static int init_imstt(struct fb_info *info)
+>   	if ((info->var.xres * info->var.yres) * (info->var.bits_per_pixel >> =
+3) > info->fix.smem_len
+>   	    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres)))=
+ {
+>   		printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->va=
+r.yres, info->var.bits_per_pixel);
+> -		framebuffer_release(info);
+> -		return -ENODEV;
+> +		goto e_nodev;
+>   	}
+>
+>   	sprintf(info->fix.id, "IMS TT (%s)", par->ramdac =3D=3D IBM ? "IBM" :=
+ "TVP");
+> @@ -1452,17 +1452,25 @@ static int init_imstt(struct fb_info *info)
+>   	              FBINFO_HWACCEL_FILLRECT |
+>   	              FBINFO_HWACCEL_YPAN;
+>
+> -	fb_alloc_cmap(&info->cmap, 0, 0);
+> +	ret =3D fb_alloc_cmap(&info->cmap, 0, 0);
+> +	if (ret)
+> +		goto release_framebuffer;
+>
+>   	if (register_framebuffer(info) < 0) {
+> -		framebuffer_release(info);
+> -		return -ENODEV;
+> +		fb_dealloc_cmap(&info->cmap);
+> +		goto e_nodev;
+>   	}
+>
+>   	tmp =3D (read_reg_le32(par->dc_regs, SSTATUS) & 0x0f00) >> 8;
+>   	fb_info(info, "%s frame buffer; %uMB vram; chip version %u\n",
+>   		info->fix.id, info->fix.smem_len >> 20, tmp);
+>   	return 0;
 > +
-> +		while (read < len) {
-> +			/* write register */
-> +			msg.len = sizeof(reg);
-> +			msg.buf = &reg;
-> +			msg.flags = 0;
-> +			ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
-> +			if (ret < 0)
-> +				return ret;
-> +
-> +			/* read data */
-> +			msg.buf = result + read;
-> +			msg.len = len - read;
-> +			msg.flags = I2C_M_RD;
-> +			if (msg.len > I2C_SMBUS_BLOCK_MAX)
-> +				msg.len = I2C_SMBUS_BLOCK_MAX;
-> +			ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
-> +			if (ret < 0)
-> +				return ret;
-> +			read += msg.len;
-> +		}
->  
->  		ret = tpm_tis_i2c_sanity_check_read(reg, len, result);
->  		if (ret == 0)
-> -- 
+> +e_nodev:
+> +	ret =3D -ENODEV;
+
+I think the return value isn't checked at all, so you could
+simply return below "-ENODEV" for all cases (instead of "return ret").
+Then you don't need the e_nodev label and can simplify the flow.
+
+Helge
+
+
+> +release_framebuffer:
+> +	framebuffer_release(info);
+> +	return ret;
+>   }
+>
+>   static int imsttfb_probe(struct pci_dev *pdev, const struct pci_device=
+_id *ent)
+> --
 > 2.40.1
-> 
+>
 
