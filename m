@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D3770FFED
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10E870FFF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjEXVXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S234687AbjEXVXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjEXVXE (ORCPT
+        with ESMTP id S233222AbjEXVXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:23:04 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A6D12E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:23:03 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-4d9b2045e1cso1002a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:23:03 -0700 (PDT)
+        Wed, 24 May 2023 17:23:37 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F09E48
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:23:32 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1ae852a536cso4714755ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:23:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684963382; x=1687555382;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8Qg2K654YRlKmz23V8WpWN+Y6cHXvK/b2p7jnK6OQs=;
-        b=t5sPqCEeZFf9HQQ4ntEgMZTuOcPaVIMzfbEpscsappcH0P0d2ASkDmPicxu7wnamVk
-         fP7ckKxxzZ8Oa9e8Y9KxlAfJjjPM4n8ovg48npe8rUJGnj7kJB9mv+7kiXrASjqNkq5S
-         HPROKIUIYb5aqkZrRAAnNwuIAEmtdGTHM/cDqQd8FPOPOnje75XJUaV+Q09uhuVLt1T9
-         PD5ShFEzQOAIiyfSv9ZpYIXNf+CmJFUy+EMFb0xxxyEyumo7jL/Awq1K/4H3SO2dKs3p
-         1dM9K37a6Go1bNHi7BE+tQSRYg8qJUjyB/Lpfxuo3TZAxAHFUUP0hfPsR+l7dFF/rLuc
-         CWQA==
+        d=google.com; s=20221208; t=1684963412; x=1687555412;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JEC6s7mxrmJW/qJXvSUfSppcL9dTMu3PeI1H7wdJu4o=;
+        b=kUFLMfq/EU/JxYWEoNpgfdV32zEogT/IVEPIdwmuuhVeDqn0/Rhquhj0wBlX8kzhbX
+         M+xC6R2ifCPK9ID49FHEsHDGO1bn0OWib+2nblUbJxZGBF7ivplJc3A7GVRHYgEWswbX
+         VawzPj/sgZEhlVV4e0x2Swe/cASalC/oxXH+zJp7u0UMeX/FiepejkRis/QNiKZ84HWT
+         f32k59t++Bjnka1+8FjPhq4fzYRA8/Nir84Qyo6XI06NrAZ458D34s1DuL4JQ4pKcaal
+         3Ylqv/u2nBlm/adLYBeTVtSafnmMGtFmN98B6aLdxOyOOa18W6vZH7hnzGGQWZo+kZJI
+         zttw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684963382; x=1687555382;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T8Qg2K654YRlKmz23V8WpWN+Y6cHXvK/b2p7jnK6OQs=;
-        b=MPAH5tfkb9qd5q87RXlQPLMhP+8cxccOFf56oMM4PMbEjx00aAyieFPjW9SRIRtOVI
-         Hs3a5QoQRFzY85B/kHD1Lyafh+2ZSRwzMmQ3deqZiW9c2/NveoGkfuo255Y68SUVr2H4
-         7NTgYcKGrT0nKC24AbDnDSn5BAMayxTdav6I2lm5tYsB/1BwE3yjeuqTYknmhD7sTagi
-         xA3TPOxc3ozL/RGJHHdlGYq4XvIbwo1+jjDjX56+MQe75AtpV4l/6OB06TqNSjT55gqe
-         tgGYOWos3zK+qgKRJihwCPmU44C5a+qRBAyG7O8P26O+8loKRWbUfl8esVYBB6ExFmbA
-         h5QA==
-X-Gm-Message-State: AC+VfDzQNreV+2L+3YSfZ2272Q1ugTdAk3hFmqdTEat8Oi7C+oWyVzr0
-        S8nCS+3K0ViyvawaUMdx3uVKEnn1cTJI1urHkSfPFg==
-X-Google-Smtp-Source: ACHHUZ5yTS6/RmEjOM02kGVgahV7AKQIXPIdgnvD5TrNps0XUfGtHGCFrSRoBOWokdISojFDAn2sBb1/6+NP+V2CyXM=
-X-Received: by 2002:a50:9317:0:b0:506:b280:4993 with SMTP id
- m23-20020a509317000000b00506b2804993mr48726eda.2.1684963381628; Wed, 24 May
- 2023 14:23:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230518083849.2631178-1-davidgow@google.com> <20230518083849.2631178-4-davidgow@google.com>
-In-Reply-To: <20230518083849.2631178-4-davidgow@google.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Wed, 24 May 2023 17:22:49 -0400
-Message-ID: <CA+GJov6nq+RHsc5wU_WJw8nfMO=YEW=f2OsHM+_=hZP7xf92wQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] Documentation: kunit: Add usage notes for kunit_add_action()
-To:     David Gow <davidgow@google.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1684963412; x=1687555412;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JEC6s7mxrmJW/qJXvSUfSppcL9dTMu3PeI1H7wdJu4o=;
+        b=Vtg/hkeSI076W2Zu3ncXP09U3sFDvchMEmeCrVGt7z7jIlc5EBSwG6Z+SLo9tXehw2
+         QF4jM1TFQCY4v2upps6s9fbJJtOg4fY2cP9AAVy+frHCSznpOMV5m83zKR9nOZDLt/LT
+         dqOdtsVl6K4wz0T+eRzzNtJDRLcqe4WrN9r57qVPeRIvpGAEyRWM2oNHTYxIKxNRswA2
+         N1FI4bMAuxaltF/k5W8M+KsSTsNunL3Zvhnyd2lFhi0JFOWqXee1DcYBuZc0lamEZGe9
+         +GY63dDO/3L5bVHsmKa4js7Tku7FAe6fmUYhnqlhF25AfQufUH0/gnbigmENzmYv2y48
+         uTCg==
+X-Gm-Message-State: AC+VfDwZ2d1iuB4xW4IHLfFGmIw8DtxccVdbyTYVGeGgdrbsFv4LtL49
+        dI5sBL4nTGtLKVUnL9ugnvGB7r/fV74=
+X-Google-Smtp-Source: ACHHUZ5TwSJv84NMm6TKmquWZFOBFb9xnIuIGMkoQC/5kxFbkxekPZjSnZuTvEsWUYK1+mmYKgMBcxtlOck=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:e0c5:b0:1ae:739a:5242 with SMTP id
+ e5-20020a170902e0c500b001ae739a5242mr4551730pla.0.1684963411811; Wed, 24 May
+ 2023 14:23:31 -0700 (PDT)
+Date:   Wed, 24 May 2023 14:23:30 -0700
+In-Reply-To: <20230310105346.12302-6-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-6-likexu@tencent.com>
+Message-ID: <ZG6AUjci2J9WpT2z@google.com>
+Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
+ VMRUN instruction
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,106 +69,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 4:39=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
->
-> Add some basic documentation for kunit_add_action() and related
-> deferred action functions.
+On Fri, Mar 10, 2023, Like Xu wrote:
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index adb92fc4d7c9..d6fcbf233cb3 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -561,6 +561,10 @@ struct kvm_pmu {
+>  	 */
+>  	u64 host_cross_mapped_mask;
+>  
+> +	/* Flags to track any HW quirks that need to be fixed by vPMU. */
+> +	u64 quirk_flags;
+> +	DECLARE_BITMAP(hide_vmrun_pmc_idx, X86_PMC_IDX_MAX);
 
-Hi David!
+Since it sounds like AMD isn't changing the behavior, let's forego the quirk and
+just hardcode the fixup.
 
-This looks good to me. Just two typos below. Thanks!
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 2a0504732966..315dca021d57 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -254,6 +254,7 @@ static void pmc_pause_counter(struct kvm_pmc *pmc)
+>  	counter += perf_event_pause(pmc->perf_event, true);
+>  	pmc->counter = counter & pmc_bitmask(pmc);
+>  	pmc->is_paused = true;
+> +	kvm_mark_pmc_is_quirky(pmc);
+>  }
+>  
+>  static bool pmc_resume_counter(struct kvm_pmc *pmc)
+> @@ -822,6 +823,19 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp)
+>  	return r;
+>  }
+>  
+> +static inline bool event_is_branch_instruction(struct kvm_pmc *pmc)
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+How about pmc_is_counting_branches()?  The "event" itself isn't a branch
+instruction.
 
->
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> This patch is new in v2.
->
-> ---
->  Documentation/dev-tools/kunit/usage.rst | 51 +++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
->
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-=
-tools/kunit/usage.rst
-> index 46957d1cbcbb..c2f0ed648385 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -615,6 +615,57 @@ For example:
->                 KUNIT_ASSERT_STREQ(test, buffer, "");
->         }
->
-> +Registering Cleanup Actions
-> +---------------------------
-> +
-> +If you need to perform some cleanup beyond simple use of ``kunit_kzalloc=
-``,
-> +you can register a cusom "deferred action", which is a cleanup function
+> +{
+> +	return eventsel_match_perf_hw_id(pmc, PERF_COUNT_HW_INSTRUCTIONS) ||
+> +		eventsel_match_perf_hw_id(pmc,
+> +					  PERF_COUNT_HW_BRANCH_INSTRUCTIONS);
 
-Looks like a typo here: "custom"
+Let this poke out.
 
-> +run when the test exits (whether cleanly, or via a failed assertion).
+> +}
 > +
-> +Actions are simple functions with no return value, and a single ``void*`=
-`
-> +context argument, and forfil the same role as "cleanup" functions in Pyt=
-hon
+> +static inline bool quirky_pmc_will_count_vmrun(struct kvm_pmc *pmc)
+> +{
+> +	return event_is_branch_instruction(pmc) && event_is_allowed(pmc) &&
+> +		!static_call(kvm_x86_get_cpl)(pmc->vcpu);
+> +}
+> +
+>  void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> @@ -837,6 +851,10 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
+>  
+>  		reprogram_counter(pmc);
+>  		kvm_pmu_handle_pmc_overflow(pmc);
+> +
+> +		if (vcpu_has_pmu_quirks(vcpu) &&
+> +		    quirky_pmc_will_count_vmrun(pmc))
+> +			set_bit(pmc->idx, pmu->hide_vmrun_pmc_idx);
 
-Another small typo here as Bagas noted.
+Doesn't this need to adjust the count _before_ handling overflow?  I.e. isn't it
+possible for the bogus counts to cause bogus overflow?
 
-> +and Go tests, "defer" statements in languages which support them, and
-> +(in some cases) destructors in RAII languages.
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index a47b579667c6..30f6f58f4c38 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -18,6 +18,9 @@
+>  #define VMWARE_BACKDOOR_PMC_REAL_TIME		0x10001
+>  #define VMWARE_BACKDOOR_PMC_APPARENT_TIME	0x10002
+>  
+> +#define X86_PMU_COUNT_VMRUN	BIT_ULL(0)
+> +#define X86_PMU_QUIRKS_MASK	X86_PMU_COUNT_VMRUN
 > +
-> +These are very useful for unregistering things from global lists, closin=
-g
-> +files or other resources, or freeing resources.
+>  struct kvm_pmu_ops {
+>  	bool (*hw_event_available)(struct kvm_pmc *pmc);
+>  	bool (*pmc_is_enabled)(struct kvm_pmc *pmc);
+> @@ -54,14 +57,33 @@ static inline void kvm_pmu_request_counter_reprogram(struct kvm_pmc *pmc)
+>  	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+>  }
+>  
+> +static inline bool vcpu_has_pmu_quirks(struct kvm_vcpu *vcpu)
+> +{
+> +	return vcpu_to_pmu(vcpu)->quirk_flags & X86_PMU_QUIRKS_MASK;
+> +}
 > +
-> +For example:
+> +/*
+> + * The time to mark pmc is when the accumulation value returned
+> + * by perf API based on a HW counter has just taken effect.
+> + */
+> +static inline void kvm_mark_pmc_is_quirky(struct kvm_pmc *pmc)
+> +{
+> +	if (!vcpu_has_pmu_quirks(pmc->vcpu))
+> +		return;
 > +
-> +.. code-block:: C
+> +	kvm_pmu_request_counter_reprogram(pmc);
+> +}
 > +
-> +       static void cleanup_device(void *ctx)
-> +       {
-> +               struct device *dev =3D (struct device *)ctx;
+>  static inline u64 pmc_read_counter(struct kvm_pmc *pmc)
+>  {
+>  	u64 counter, enabled, running;
+>  
+>  	counter = pmc->counter;
+> -	if (pmc->perf_event && !pmc->is_paused)
+> +	if (pmc->perf_event && !pmc->is_paused) {
+>  		counter += perf_event_read_value(pmc->perf_event,
+>  						 &enabled, &running);
+> +		kvm_mark_pmc_is_quirky(pmc);
+> +	}
+>  	/* FIXME: Scaling needed? */
+>  	return counter & pmc_bitmask(pmc);
+>  }
+> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+> index 5fa939e411d8..130991a97f22 100644
+> --- a/arch/x86/kvm/svm/pmu.c
+> +++ b/arch/x86/kvm/svm/pmu.c
+> @@ -187,6 +187,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+>  	pmu->nr_arch_fixed_counters = 0;
+>  	pmu->global_status = 0;
+>  	bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counters);
+> +	pmu->quirk_flags |= X86_PMU_COUNT_VMRUN;
+>  }
+>  
+>  static void amd_pmu_init(struct kvm_vcpu *vcpu)
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index f41d96e638ef..f6b33d172481 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3919,6 +3919,31 @@ static fastpath_t svm_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+>  	return EXIT_FASTPATH_NONE;
+>  }
+>  
+> +static void pmu_hide_vmrun(struct kvm_vcpu *vcpu)
+
+This needs to be noinstr.
+
+> +{
+> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> +	struct kvm_pmc *pmc;
+> +	unsigned int i;
 > +
-> +               device_unregister(dev);
-> +       }
+> +	for_each_set_bit(i, pmu->hide_vmrun_pmc_idx, X86_PMC_IDX_MAX) {
+> +		clear_bit(i, pmu->hide_vmrun_pmc_idx);
+
+Clearing the bit will hide only the first VMRUN after the guest attempts to read
+the counter, no?  The fixup needs to apply to every VMRUN that is executed after
+the PMC is programmed.  Or am I misreading the patch?
+
 > +
-> +       void example_device_test(struct kunit *test)
-> +       {
-> +               struct my_device dev;
+> +		/* AMD doesn't have fixed counters at now. */
+> +		if (i >= pmu->nr_arch_gp_counters)
+> +			continue;
 > +
-> +               device_register(&dev);
+> +		/*
+> +		 * The prerequisite for fixing HW quirks is that there is indeed
+> +		 * HW working and perf has no chance to retrieve the counter.
+
+I don't follow the "perf has no chance to retrieve the counter" part.
+
+> +		 */
+> +		pmc = &pmu->gp_counters[i];
+> +		if (!pmc->perf_event || pmc->perf_event->hw.idx < 0)
+> +			continue;
 > +
-> +               kunit_add_action(test, &cleanup_device, &dev);
-> +       }
+> +		pmc->counter--;
+> +	}
+> +}
 > +
-> +Note that, for functions like device_unregister which only accept a sing=
-le
-> +pointer-sized argument, it's possible to directly cast that function to
-> +a ``kunit_action_t`` rather than writing a wrapper function, for example=
-:
+>  static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu, bool spec_ctrl_intercepted)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -3986,6 +4011,9 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
+>  
+>  	kvm_wait_lapic_expire(vcpu);
+>  
+> +	if (vcpu->kvm->arch.enable_pmu && vcpu_has_pmu_quirks(vcpu))
+> +		pmu_hide_vmrun(vcpu);
 > +
-> +.. code-block:: C
-> +
-> +       kunit_add_action(test, (kunit_action_t *)&device_unregister, &dev=
-);
-> +
-> +``kunit_add_action`` can fail if, for example, the system is out of memo=
-ry.
-> +You can use ``kunit_add_action_or_reset`` instead which runs the action
-> +immediately if it cannot be deferred.
-> +
-> +If you need more control over when the cleanup function is called, you
-> +can trigger it early using ``kunit_release_action``, or cancel it entire=
-ly
-> +with ``kunit_remove_action``.
-> +
->
->  Testing Static Functions
->  ------------------------
-> --
-> 2.40.1.698.g37aff9b760-goog
->
+>  	/*
+>  	 * If this vCPU has touched SPEC_CTRL, restore the guest's value if
+>  	 * it's non-zero. Since vmentry is serialising on affected CPUs, there
+> -- 
+> 2.39.2
+> 
