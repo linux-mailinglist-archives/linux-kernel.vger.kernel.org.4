@@ -2,113 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DA070F9D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFB470F9DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbjEXPLY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 11:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
+        id S235967AbjEXPLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbjEXPLW (ORCPT
+        with ESMTP id S235945AbjEXPLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:11:22 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71951E9;
-        Wed, 24 May 2023 08:11:20 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96f72e6925cso24433166b.1;
-        Wed, 24 May 2023 08:11:20 -0700 (PDT)
+        Wed, 24 May 2023 11:11:38 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCA518D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:11:35 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-ba827c74187so1597445276.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1684941094; x=1687533094;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HqqN7STJH2LoGCrwrill0kIUbhodoox7qSOdJoH92o8=;
+        b=EFehSwqT4xP3Dsgl9bmiZS3CIEPYx7oE8YP/dagGWOYw22jxpzPgKbLa+z/ZmWlOwX
+         sbDUYJK1SF3CUXwmwlypvEibDRI9nS0D2DX+1qVKP8T5GElGdyojL5b5LWCxsc3eJabx
+         TAQKujaM7/wvTwHsVvSiJVHxSnfB7NkBNEEEy0m67Z1moTU+gNl374iCNxVEG4RM6sZW
+         9VpQVnKwVC9ltwPttucugKAFTxlXCjokxJbv+TppvKl4cWmkpEiNAzPg+S0RLyaHL2T5
+         8746YxI3TCs5u9PRcnTlk2UxGUeRQTfCZaRTwVv3wIyHrEIF5SBSX4BfjZzx6oLbdaGJ
+         X1Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684941079; x=1687533079;
+        d=1e100.net; s=20221208; t=1684941094; x=1687533094;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7nss0ucgr/ESmy+PjCm3qpugQV6w2aHePkSgyOIXHvM=;
-        b=KgMx/g88W0NvPJ8qpLn3QiZhmXVyC+ZUqAr4C0z4GRvwVGKAFmtaT9XH0dR3gP/UCi
-         /GNSq1qDV3dtRltoMdWU3HjoUdPCO6fi97cnLFzqwTgmr5tL+gg54y+/ebbkBTHIq+EL
-         iASfWQ5z5h0h93BLzjwIJgMaQoDWb9MYHdWkBrAZBMw6JiIhuymUzMcxZYl+XkwuwEPq
-         4X6o7XRIY6DePMWiUeytNbOPCIC5o1kMlWV5ME527tgEdbMAXjNpofgFOVzLz9w8DCQ1
-         Il91kHf8xFnopVfk5lMachMglS+d+21gO7vk7iCVzLswl9tcTS1sauZJmbY6KDrOe3A+
-         uxWQ==
-X-Gm-Message-State: AC+VfDzAu7INL2m6rsmeLNyRRWd9oevzUXmcuQ/ijTAJT15Z7xXZvWwz
-        u9bZsk/dFsaAXFRSLIF/3ZV3S+LoMA4h8TUQW6g=
-X-Google-Smtp-Source: ACHHUZ641vcCCJosn7JXJ2lfLp7dhRWsBrg3n4CiXJeo2ypbFDpFROYj8sMPWI3wOIZFsVcQsGEKXSE/sDtoTunVh74=
-X-Received: by 2002:a17:906:72ce:b0:96f:56ab:c69b with SMTP id
- m14-20020a17090672ce00b0096f56abc69bmr2531918ejl.3.1684941078712; Wed, 24 May
- 2023 08:11:18 -0700 (PDT)
+        bh=HqqN7STJH2LoGCrwrill0kIUbhodoox7qSOdJoH92o8=;
+        b=laDadDnMTElc6+4b7ddjWpm7UhcWxo4yYuVyxcXgmfN2PfQQVhmym0sfwmQ96BQklY
+         6dUPIokxFA+NwmZU6mmbppzu2a6fLZS/XT+lwaTlUYcsoXWpq3ILzVSTcdS5JVkhWOcT
+         l9M0UGEnFi1zMEO0dOthkXp3hgaZ/mApCrHo39s3FQw0m7VhvdEwIhHTK/juyIdZ+a4y
+         xHR8oMJjy6WzA7Cj6VXvN8K+kL6Rg4XdMswDxaMYfcboJDgxkXps/h2vZGG1vt1UJSFr
+         cKy96jM7PkEf53v6fG9xJ3e3tgPn0g8lt3JR8aRevY8JAQ3Vnh+fOBsQ16kewgz9ssh5
+         KV0Q==
+X-Gm-Message-State: AC+VfDzqODiYt4ReMYZOSDnoTM95jhp+Echqe0KlotUZ2W7er1yk51UM
+        18/WMKf/iIksvRxFxhJW+maiqGjh0JVVebaMYxUd
+X-Google-Smtp-Source: ACHHUZ7h5ztNlZIBSemxHTQoG+pdx9LkR0k/enQ4NmhLwlTYFQsLUTSuCVlVruca0i0KPIlmFIwlSwu/781g1QjhNk8=
+X-Received: by 2002:a0d:cc95:0:b0:561:7ec:cf90 with SMTP id
+ o143-20020a0dcc95000000b0056107eccf90mr18983019ywd.42.1684941094273; Wed, 24
+ May 2023 08:11:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230309140724.2152712-1-cristian.marussi@arm.com> <20230309140724.2152712-4-cristian.marussi@arm.com>
-In-Reply-To: <20230309140724.2152712-4-cristian.marussi@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 17:11:07 +0200
-Message-ID: <CAJZ5v0gUf3Vh=baW7PgPMnFcgV6CjMc2kNayhzP-MC=UvQogKA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] powercap: arm_scmi: Add support for disabling
- powercaps on a zone
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
-        f.fainelli@gmail.com, vincent.guittot@linaro.org,
-        tarek.el-sherbiny@arm.com, nicola.mazzucato@arm.com,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        wbartczak@marvell.com, "Rafael J. Wysocki" <rafael@kernel.org>
+References: <000000000000be039005fc540ed7@google.com> <00000000000018faf905fc6d9056@google.com>
+In-Reply-To: <00000000000018faf905fc6d9056@google.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 24 May 2023 11:11:23 -0400
+Message-ID: <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com>
+Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
+To:     linux-security-module@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 3:07 PM Cristian Marussi
-<cristian.marussi@arm.com> wrote:
+On Wed, May 24, 2023 at 5:59=E2=80=AFAM syzbot
+<syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
 >
-> Add support to disable/enable powercapping on a zone.
+> syzbot has bisected this issue to:
 >
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+> Author: Roberto Sassu <roberto.sassu@huawei.com>
+> Date:   Fri Mar 31 12:32:18 2023 +0000
+>
+>     reiserfs: Add security prefix to xattr name in reiserfs_security_writ=
+e()
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D11c3963928=
+0000
+> start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.linux=
+-..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D13c3963928=
+0000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D15c3963928000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7d8067683055e=
+3f5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0a684c061589dcc=
+30e51
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D14312791280=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12da860528000=
+0
+>
+> Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
+> Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reis=
+erfs_security_write()")
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Roberto, I think we need to resolve this somehow.  As I mentioned
+earlier, I don't believe this to be a fault in your patch, rather that
+patch simply triggered a situation that had not been present before,
+likely because the reiserfs code always failed when writing LSM
+xattrs.  Regardless, we still need to fix the deadlocks that sysbot
+has been reporting.
 
-> ---
->  drivers/powercap/arm_scmi_powercap.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-> index 05d0e516176a..5231f6d52ae3 100644
-> --- a/drivers/powercap/arm_scmi_powercap.c
-> +++ b/drivers/powercap/arm_scmi_powercap.c
-> @@ -70,10 +70,26 @@ static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
->         return 0;
->  }
->
-> +static int scmi_powercap_zone_enable_set(struct powercap_zone *pz, bool mode)
-> +{
-> +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-> +
-> +       return powercap_ops->cap_enable_set(spz->ph, spz->info->id, mode);
-> +}
-> +
-> +static int scmi_powercap_zone_enable_get(struct powercap_zone *pz, bool *mode)
-> +{
-> +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-> +
-> +       return powercap_ops->cap_enable_get(spz->ph, spz->info->id, mode);
-> +}
-> +
->  static const struct powercap_zone_ops zone_ops = {
->         .get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
->         .get_power_uw = scmi_powercap_get_power_uw,
->         .release = scmi_powercap_zone_release,
-> +       .set_enable = scmi_powercap_zone_enable_set,
-> +       .get_enable = scmi_powercap_zone_enable_get,
->  };
->
->  static void scmi_powercap_normalize_cap(const struct scmi_powercap_zone *spz,
-> --
-> 2.34.1
->
+Has anyone dug into the reiserfs code to try and resolve the deadlock?
+ Considering the state of reiserfs, I'm guessing no one has, and I
+can't blame them; I personally would have a hard time justifying
+significant time spent on reiserfs at this point.  Unless someone has
+any better ideas, I'm wondering if we shouldn't just admit defeat with
+reiserfs and LSM xattrs and disable/remove the reiserfs LSM xattr
+support?  Given the bug that Roberto was fixing with the patch in
+question, it's unlikely this was working anyway.
+
+--
+paul-moore.com
