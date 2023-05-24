@@ -2,139 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8174270EFBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36F970EFC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240057AbjEXHoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S240022AbjEXHpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239918AbjEXHn5 (ORCPT
+        with ESMTP id S240071AbjEXHpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:43:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA2F1A8;
-        Wed, 24 May 2023 00:43:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 053FA22435;
-        Wed, 24 May 2023 07:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684914227; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m23zQd722rFvXAhBGJs8LPiDmoALgown5nmTI8wZCyE=;
-        b=AMcYtBSGTyukaFhARs5QWXPuXXZ1EJgnXMFjsQQDcLhz2AaIBNRZeWAJc/Cm4cF005lKVF
-        WyYlRR7rSiCgQvPl0CG7JUXXkn4AJWX2u4aQqbotGfJbLEbSK0AqPTOkQLUImic/KiMaQ0
-        5DrxxJDies1ktO+xe1wNeelZzLCR4dg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684914227;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m23zQd722rFvXAhBGJs8LPiDmoALgown5nmTI8wZCyE=;
-        b=8VQzQ1WnYs/uW23z078iBZUmUk5PmBAsJech/nFhLPH6X8LVStwWh9aAWQ02pIHang1HFq
-        rfWRm/ByEgRznFCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3258413425;
-        Wed, 24 May 2023 07:43:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Qb20CjLAbWSVRgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 24 May 2023 07:43:46 +0000
-Date:   Wed, 24 May 2023 09:43:44 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Justin Stitt <justinstitt@google.com>,
-        Yuan Can <yuancan@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] misc: Switch i2c drivers back to use .probe()
-Message-ID: <20230524094344.44baaf45@endymion.delvare>
-In-Reply-To: <20230517220135.170379-1-u.kleine-koenig@pengutronix.de>
-References: <20230517220135.170379-1-u.kleine-koenig@pengutronix.de>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        Wed, 24 May 2023 03:45:09 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257CF9D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:45:08 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d2e8a842cso428564b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1684914307; x=1687506307;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XcvZIGJdFMrCWPf6vbR4FP3VGTx+Sg81oee61Qyy4FY=;
+        b=a6ymZgcQ68mWVErWlm3JSIwEUV4yrM9n4Oyt1TNQHZZXikodQmdoIC/fYxMWFYI9ti
+         Sc50MNeIbHjvX/Tsy8AZe1RXOILO+LAYIkT6oQIaRmIGwtQaZTQUGSiphIQpetl68tGZ
+         1F3T0zntb+BQ6FE82KoNFDZdG0OMoweo9xHit/m28dnmQbVJ21Go03e5GWTXspGSVhCG
+         WfwgHWV3uBuYj8/B8Cl1Utb99LHBc3/QO3iHBPyXUfCbUCX2Vmrj+XPb8zwWYu/5WLFS
+         e7UJEJytrpvxLYInjo7ddZpvRGdDiGALfniwkszUIM/fR+T5Rw+Elk2GEIhcCRisu9n2
+         p5vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684914307; x=1687506307;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XcvZIGJdFMrCWPf6vbR4FP3VGTx+Sg81oee61Qyy4FY=;
+        b=P+pLB7cQ1s0TEu2Y7gDMTI8fB1GOB7qutPrcgQgcEfQneTS9wUUyNzlKCFhL8QgziN
+         bnge87i2e0FBmdwMg+m6umhWk9V7PRAaOZvZ6pRopmSBE6zgNI9G7kkpMywLHGjkBqE0
+         pDN0CNKkkyUtrvmpqIZcMhFv87qlww0K3aJ6evH310Dfeiz7e0sYQ5rtI6GvC73yxuX8
+         FceLy9MkG0dX0sCg0FAu6TGZjveS3qVKZ4aZ3I5w5Zl5fPZ8DdScSP+W6eCjq1la91Nf
+         iPf2/nsvH40x6C86oWFQAHW0skeVuz3aW9Phuo2phZbPpMw/86KMSSJhnSwMYR6fLEKD
+         YJwQ==
+X-Gm-Message-State: AC+VfDyCzBKs51rNoP8fnZCtTTW0zbeQsMbzKgQqGfaJE2whCMIbhNmn
+        /qm/vSG+Ed5Ly0Se5wXNSGrLnA==
+X-Google-Smtp-Source: ACHHUZ6k+sUhyKEZAV3qBA7O7TPMGVoC2tx9dOmF1yFyZ9sAvW1pFXnSidJsHEO5fgbQBrlW/ZP9yg==
+X-Received: by 2002:a05:6a21:329a:b0:10b:4f58:3fef with SMTP id yt26-20020a056a21329a00b0010b4f583fefmr11847954pzb.2.1684914307412;
+        Wed, 24 May 2023 00:45:07 -0700 (PDT)
+Received: from yc.huaqin.com ([101.78.151.214])
+        by smtp.gmail.com with ESMTPSA id j6-20020a62e906000000b0063d29df1589sm6801336pfh.136.2023.05.24.00.45.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 00:45:06 -0700 (PDT)
+From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+To:     dianders@google.com, daniel@ffwll.ch, neil.armstrong@linaro.org,
+        sam@ravnborg.org, airlied@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
+        conor+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Subject: [v2 2/4] dt-bindings: display: panel: Add compatible for Starry himax83102-j02
+Date:   Wed, 24 May 2023 15:44:53 +0800
+Message-Id: <20230524074455.1172064-1-yangcong5@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAD=FV=WRecTWsFM96k81YAx1=jJT0vpS4EPP0ZfWFUGHNFx9Tw@mail.gmail.com>
+References: <CAD=FV=WRecTWsFM96k81YAx1=jJT0vpS4EPP0ZfWFUGHNFx9Tw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 00:01:35 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type"), all drivers being converted to .probe_new() and then
-> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
-> back to (the new) .probe() to be able to eventually drop .probe_new() from
-> struct i2c_driver.
->=20
-> While touching these drivers, fix alignment in apds990x.c and bh1770glc.c.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->=20
-> I used v6.4-rc1 as base for this patch, but it also fits on top of
-> today's next master. If there are some conflicts when you apply it, feel
-> free to just drop all conflicting hunks, I'll care about the fallout
-> later.
->=20
-> I chose to do this in a single patch for all drivers below drivers/misc
-> If you want me to split it, just tell me.
->=20
-> Best regards
-> Uwe
->=20
->  drivers/misc/ad525x_dpot-i2c.c         | 2 +-
->  drivers/misc/apds9802als.c             | 2 +-
->  drivers/misc/apds990x.c                | 4 ++--
->  drivers/misc/bh1770glc.c               | 4 ++--
->  drivers/misc/ds1682.c                  | 2 +-
->  drivers/misc/eeprom/at24.c             | 2 +-
->  drivers/misc/eeprom/ee1004.c           | 2 +-
->  drivers/misc/eeprom/eeprom.c           | 2 +-
->  drivers/misc/eeprom/idt_89hpesx.c      | 2 +-
->  drivers/misc/eeprom/max6875.c          | 2 +-
->  drivers/misc/hmc6352.c                 | 2 +-
->  drivers/misc/ics932s401.c              | 2 +-
->  drivers/misc/isl29003.c                | 2 +-
->  drivers/misc/isl29020.c                | 2 +-
->  drivers/misc/lis3lv02d/lis3lv02d_i2c.c | 2 +-
->  drivers/misc/tsl2550.c                 | 2 +-
->  16 files changed, 18 insertions(+), 18 deletions(-)
-> (...)
+The STARRY himax83102-j02 is a 10.51" WUXGA TFT LCD panel,
+which fits in nicely with the existing panel-boe-tv101wum-nl6
+driver. Hence, we add a new compatible with panel specific config.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+---
+ .../devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml     | 2 ++
+ 1 file changed, 2 insertions(+)
 
---=20
-Jean Delvare
-SUSE L3 Support
+diff --git a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
+index aed55608ebf6..28a7beeb8f92 100644
+--- a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
++++ b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml
+@@ -32,6 +32,8 @@ properties:
+       - innolux,hj110iz-01a
+         # STARRY 2081101QFH032011-53G 10.1" WUXGA TFT LCD panel
+       - starry,2081101qfh032011-53g
++        # STARRY himax83102-j02 10.51" WUXGA TFT LCD panel
++      - starry,himax83102-j02
+ 
+   reg:
+     description: the virtual channel number of a DSI peripheral
+-- 
+2.25.1
+
