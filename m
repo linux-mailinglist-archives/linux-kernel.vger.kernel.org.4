@@ -2,73 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ACF70EFC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F4E70EFC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbjEXHpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S239835AbjEXHpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240111AbjEXHpU (ORCPT
+        with ESMTP id S240082AbjEXHpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:45:20 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F62E9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:45:18 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d30ab1f89so430605b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1684914317; x=1687506317;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qHFyXbVxT+ByBWsXQ617wmi3BUvoSFwNbCdboPImjUY=;
-        b=XXDy6lzLEBIcYuug9p2+U2Q7Vhfx27QS/ZV7Zpm+hcawoHPt7oNmnjzYKTBhSbrtMh
-         LZkSlX+Y1t6dhEZVgb2LLT66WrjAooK9l9tdSFR0B6Tf4y6IrTtfrRTuP585/NABJxak
-         fAY7UeWcOVAzw0TzdOphHoUkU1Cl4PH884lsiaWUe4YMoePfNiH4VE4gD/359GSlzGyB
-         qXxsOySsBueOamcMhdPk5Wz5hCGEclQ5dKP+66YmZsxl0JAK88Rab/3j1ljeFVbegzK8
-         qTO75EcKhscszXWA+mIFeHeH3uIktCOx0cwtP2EVtKtzAf2Za10H0aACHUbt9dd5Z+1t
-         h2rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684914317; x=1687506317;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qHFyXbVxT+ByBWsXQ617wmi3BUvoSFwNbCdboPImjUY=;
-        b=aD2uWgtRMQImn9SuVPh+TGu++63aOLWsYkIF2kMHB4qQQ4+VNcELZclpp42PVrj9QH
-         e6jpi5impKr8TpHBxDt2GcLJVZIRy/x+X4eyN/4oLigoxjbBexv68vcxMjrwMT08SuG4
-         STwrWwutpIi1PWQGnI8VFjt5rxvA1XadTRTUvYSy4SLcrylIUvd8Ovf7JKMf1Du+gqHJ
-         DMmZuMPyC5CYicP4mqkfvT/TzeAXwna7RRs8vQ+oQXmqGUs7Mly5PMj+Ma/hSdBaD1eP
-         H9IK1l+QN1pZoDxxM9XX+TJQBDCVsrE/vXZ3t6iM00SKOBRyvGT371q0bHJf19V8nIG8
-         fUhQ==
-X-Gm-Message-State: AC+VfDwQEKZ5RWIjikJ6JEC9+J/W0f/FnMDRNjZ8uGKxexb4a+z3mnma
-        /l+YYBoFc1wTWrJFG1MY37ztgRfv4qyxsaM0UdQ=
-X-Google-Smtp-Source: ACHHUZ4qanfJSAH7c1KsjUI6dRHhsEZBKvGsRy9QHuhkelx87nYRNCXvzH+cCy95D8ivOrUz4Dzj9g==
-X-Received: by 2002:a05:6a00:a1a:b0:64a:f8c9:a421 with SMTP id p26-20020a056a000a1a00b0064af8c9a421mr2703413pfh.32.1684914317439;
-        Wed, 24 May 2023 00:45:17 -0700 (PDT)
-Received: from yc.huaqin.com ([101.78.151.214])
-        by smtp.gmail.com with ESMTPSA id j6-20020a62e906000000b0063d29df1589sm6801336pfh.136.2023.05.24.00.45.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 00:45:16 -0700 (PDT)
-From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-To:     dianders@google.com, daniel@ffwll.ch, neil.armstrong@linaro.org,
-        sam@ravnborg.org, airlied@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
-        conor+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-Subject: [v2 3/4] drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
-Date:   Wed, 24 May 2023 15:44:54 +0800
-Message-Id: <20230524074455.1172064-2-yangcong5@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230524074455.1172064-1-yangcong5@huaqin.corp-partner.google.com>
-References: <CAD=FV=WRecTWsFM96k81YAx1=jJT0vpS4EPP0ZfWFUGHNFx9Tw@mail.gmail.com>
- <20230524074455.1172064-1-yangcong5@huaqin.corp-partner.google.com>
+        Wed, 24 May 2023 03:45:00 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C1391;
+        Wed, 24 May 2023 00:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684914298; x=1716450298;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=krFLkK1i5DTqs2wxDrK9/zUXO021C+SH6hgSBp172mk=;
+  b=cG+i/lMFo9ttpL/Hm8M5t19RrpuleF+0N9XuM77FSeBZ1c16OCHUuxxl
+   4WICf6sWcpc4COjoPYSm9122mI13A5hEZMGdqpP3RPM04XjxU3j1YnBO3
+   3fVyaY9ZVqij9vM+crBi5y5tVyw0E3geKceahgWcQCYlN3tG/nOM3NFgo
+   ucFj6Fz3mfc+zztEyncxsJ9FUMxyhZWb5j6cXFSPvQan0qH92yVq34NQP
+   to+JQBBAGlQhtI2Lt87pdIx+QwLI5pNfFORWK2NU8+uYNLokhlXsJiybs
+   QNjiysVEydJmji40RRoQO+sM3kwWnLuASn/eHRnsqJO05Bws37Kx3XS4y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="355845042"
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="scan'208";a="355845042"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 00:44:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="707396678"
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="scan'208";a="707396678"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga007.fm.intel.com with ESMTP; 24 May 2023 00:44:57 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 00:44:57 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 00:44:57 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 00:44:57 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 24 May 2023 00:44:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N4CVhiqtfFsH4uNssHWVbE4hautddTdAESfVQU0MCtviKHGKQADKTv2GLWWQ7ysBe4lXytAw38TkGwVmZr8Ew1lX6sjBmib2lzFzcVaioyGJvFSyM2whHn/VjoFeMwDMhuFhcmQ3u5+Qeiest2t60NDmWXPHwDnjzVPil7nyl0bcJnypivj7sqe8R9vokru1JocQitmRT5UiBsg6o0KH7t8sK56YPmbsd5YnUp3++1RGiIGQD1xVTgY7utRzOc1aVVgVJEpwKKw9ALW1nEBBZMhHYutVtA5oCEa/6ALBREhiU0rlznnu5l4vJAq7k3alu/HHlhemJeTRu8NskZXEdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Su3zlrTMX2tabpiZmrEaQOmPZRumi81l1MSiaMquDP8=;
+ b=dv/XuWqO2sTeC74e2wUjkCnxDfgTIhO13gk89dgYqh3jt+z90IYeFfuHcwEowWhr1zVc1UIt6MLQYe180obxHAFWBdN+YhLGz2myUUBYiKOdxTEqJI2Kx86R0H0pg6w9UsmZQncE0G/ErmU7GLfHW/kfmWkDi3gHNm/UnlaZrshisShUp2CLvHW2gExxK8nkmtKoD1kId082gcjqY3tqnwubxcndF4RSWVpZ+5++/quX+BZwqnLj8SBA68C1ky5gRlGdEQnv1JiQUMovzDexA8IPBnY8EDca4J8JVjKG7ibT1304v+0NMS1ZqRhO8EiCHTMzmnAhth8L0qhh7yKXAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DM4PR11MB5406.namprd11.prod.outlook.com (2603:10b6:5:395::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
+ 2023 07:44:54 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::dd3:4277:e348:9e00]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::dd3:4277:e348:9e00%3]) with mapi id 15.20.6433.015; Wed, 24 May 2023
+ 07:44:54 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: RE: [PATCH v3 10/10] iommu/vt-d: Disallow nesting on domains with
+ read-only mappings
+Thread-Topic: [PATCH v3 10/10] iommu/vt-d: Disallow nesting on domains with
+ read-only mappings
+Thread-Index: AQHZhBgSYJ72BBeg/EuD31moJcjTo69pHH+Q
+Date:   Wed, 24 May 2023 07:44:54 +0000
+Message-ID: <BN9PR11MB527673E35A8C123648997A238C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230511145110.27707-1-yi.l.liu@intel.com>
+ <20230511145110.27707-11-yi.l.liu@intel.com>
+In-Reply-To: <20230511145110.27707-11-yi.l.liu@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM4PR11MB5406:EE_
+x-ms-office365-filtering-correlation-id: 4aa04d42-6b93-4d3b-85ef-08db5c2ac3e0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2OQL37vjIPY/twyqNWszWl7lXHr0WCdL6Aqyl+QbW2DE5TyLjUz64NhDxBGT8nnROWtZ9Ms8nXHzuP30ybnuMLBGqETv/kkN0hjjcYwoEqFGF+9BVgpmzv92gapS70+VybYzhK9gbpuUkOlz69Nn/d3eXwzllEhyoXhMNxUB1qALq9wur2f4jEjROopzqLzvFP9Qxga7mOpUTm48pE6AedXvZEy7GBHcUIEwSY3bhTkTdfU4zRwvDv0FmlMRGL324e5QBMhheFJakFrq3YCwHHkiV7HvlRI5hr6p5Bt0oEssWlITHqnj3aO3jbbg2rXm1P4JRywvfLrQyH+VG+NJBIMATqnhLsnlDzbOsjC4gRt0ZKh99vCamNshk9NtCytXyz+Jorsf7pqQRl4gpRbz0A8tK7ZTNBCHt6O+W9211hqEbKUlorquBCnf726I4FfmndcU0n8jpzzgMH7FGspAxRmRnS1pUV2iytdbbuRc94/jgIWz1F/5QCc9G2aockg2uXiPM7svnNL7DGLAKGPYymD/5o+Qvsn+g6uN0sHluQMWVl+dyP0P5H7Ck7yuUNO/Ik9vl974JWwOS4QAVvVeMFvXql1bkCjIkZGphEUyGuRqSRgeFmQ4mjgXE1VZqilJ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(376002)(366004)(346002)(451199021)(71200400001)(7416002)(8676002)(8936002)(5660300002)(55016003)(52536014)(26005)(186003)(9686003)(6506007)(41300700001)(33656002)(83380400001)(38100700002)(38070700005)(82960400001)(110136005)(54906003)(122000001)(66946007)(86362001)(478600001)(66556008)(66476007)(66446008)(64756008)(76116006)(316002)(4326008)(7696005)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eyaCp6xmotwMZ3+x1WdFQ/4XFelhgTsKd8U/y/hRVmvC8AOIJWyknnUHPVzJ?=
+ =?us-ascii?Q?wQdffA7WI309uM5b+ixEUXxcL9pmgKab4e/iEBcN4/LetrXXkz5h4DGQ6c1W?=
+ =?us-ascii?Q?G9Bo8DHvDxepp0VBPuOZsSYBuS65xYDZ5RjQ9jfUP9fS4/5caacyhKZaimmL?=
+ =?us-ascii?Q?nDkbKpcjepuETpI3ngWQc6x00rl+jwzNXj7uCXAKjIcNKYvhkAvRToWIwawY?=
+ =?us-ascii?Q?sjOVwQKpKENPMgTVHizKFKW4KSsF2j7U0GdtTv0a19UDRJB+U+VXZflpVD+v?=
+ =?us-ascii?Q?nzn0g1HQ9zB65ryJX6tc2rLo0YvvqcBo6OH0vGyNZd/6bop6z+QHMsRmWt83?=
+ =?us-ascii?Q?MmyU2yXM2L7LX5ouJjGsIwJqx1wpJI8ReH2ElQJhyxroj2bSAnZ+vL21oiQZ?=
+ =?us-ascii?Q?tLXcYMnBZhUot2lSj5asOraVv39Pt5K7hhD5tBh89j8e3u9/YH91Sbp2Ymgo?=
+ =?us-ascii?Q?1GDGJr8tqCQyVcEoRU/L/T3Tep5bnmDp0TASJy5YPwn3CGwCwre7I4k26TfV?=
+ =?us-ascii?Q?D9BcWjhMMr1hzFtLFFXAGNoP6cUx0h4yfmbUfK8IkyJYY7trTvu1JOv7+mg4?=
+ =?us-ascii?Q?Fswp6NDqOjAB5Lcubr7hMv2aEGslo4HiAmxt9pGZePqHMuUSPVDAjyQE7OY9?=
+ =?us-ascii?Q?WfxjfFhglFXdI/WQRahC8TuKk/CMUKRDroa9v0H0N3u1ZgvNwnZlVfGG+xqq?=
+ =?us-ascii?Q?9T7cPLF+p15WIOGtknzpe+xKGzXYARilC8sR/msIrFANIuf4S4SiE0DrE7NF?=
+ =?us-ascii?Q?36sUOj6sI67l/lrWOqiGRqg1dFETzn3PkrkGgm+tmUNVUmCu+5BafV8SQUbf?=
+ =?us-ascii?Q?U9ORjTwMgaVN5qYyCXVtjmRwmC3+Q9xjyFyTA7dM4JlyReqdMXon0jlzlKKE?=
+ =?us-ascii?Q?EEZ1UuHzX3z68aG/D5zN0tNZIMvNrFjDVKkt7lN3P7gL9FwyY3jIvnp4vjAS?=
+ =?us-ascii?Q?KHgRPN3lF55wXQBPvagKv/31UoYHUuAui/ZW5dauByK+kiD06wCjtAcIdHuw?=
+ =?us-ascii?Q?O5PgeVgYf15BF1y5JqEBD/qo9WQmXEbfdkc53BiiNYQ4R9KLgjioyXztKAal?=
+ =?us-ascii?Q?RA7cmYjNFTliOJKl7xVSVf9sxf21t5MAY++XpHA3Rx99fO9kNk+Sx5+Ql7e4?=
+ =?us-ascii?Q?QdPp9MRWWsC9FO67MvpcvVeosfNXYb9F+ch+1iab3cp230QoWP0J4xI4xaoQ?=
+ =?us-ascii?Q?+i7jtqGIvd1Hm9hJ9hk9w7W32rV+6/UX900dz/lvpTYYZ1uMM3jMUGgia6cy?=
+ =?us-ascii?Q?uS0fP36NKq6GGeliVkdbIQzUVSqglJ2vwozRHuj8Yx4BlZ/FAloKKltKUYxw?=
+ =?us-ascii?Q?Ysy7MDIm9mcQcRsKUuJ608q1n/jFP+AlVY8mRJ5e2FGtWhotv6a5451XYNS/?=
+ =?us-ascii?Q?j+zC3I15GzGW4j78rgYuo+mwiHhm9tfpXaFsCP1Ybk/ry9YensndSnqLCHTL?=
+ =?us-ascii?Q?DtIPDQD3DyPWWR4P4WbbTFX3iKpuFnBZfiY1tQYqPhouSGhETpcIGPso2H0J?=
+ =?us-ascii?Q?eTNZQ0UGYEzlnZBDmdxYrgvST8vlFUlMzCSjLgOjIdqc8PAtmzKFr93r9jqK?=
+ =?us-ascii?Q?teGZs6OSmowchAqjpTIRKhAt4xd83cZla2npYMD7?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4aa04d42-6b93-4d3b-85ef-08db5c2ac3e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2023 07:44:54.7671
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0i/hEd8deqmvMj/vwbqFjPTreNkCuM2sNpTYWVimiyHCrXChEnfP7ZiJHltVtCNvOhoU86wQfB3rVSszB4uJ0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5406
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,412 +174,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Starry-ili9882 is a 10.51" WUXGA TFT panel. which fits in nicely with
-the existing panel-boe-tv101wum-nl6 driver. From the datasheet,MIPI need
-to keep the LP11 state before the lcm_reset pin is pulled high. So add
-lp11_before_reset flag.
+> From: Liu, Yi L <yi.l.liu@intel.com>
+> Sent: Thursday, May 11, 2023 10:51 PM
+>=20
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+>=20
+> When remapping hardware is configured by system software in scalable
+> mode
+> as Nested (PGTT=3D011b) and with PWSNP field Set in the PASID-table-entry=
+,
+> it may Set Accessed bit and Dirty bit (and Extended Access bit if enabled=
+)
+> in first-stage page-table entries even when second-stage mappings indicat=
+e
+> that corresponding first-stage page-table is Read-Only.
+>=20
+> As the result, contents of pages designated by VMM as Read-Only can be
+> modified by IOMMU via PML5E (PML4E for 4-level tables) access as part of
+> address translation process due to DMAs issued by Guest.
+>=20
+> Disallow the nested translation when there are read-only pages in the
+> corresponding second-stage mappings. And, no read-only pages are allowed
+> to be configured in the second-stage table of a nested translation.
+> For the latter, an alternative is to disallow read-only mappings in
+> any stage-2 domain as long as it's ever been used as a parent. In this
+> way, we can simply replace the user counter with a flag.
+>=20
+> In concept if the user understands this errata and does expect to
+> enable nested translation it should never install any RO mapping
+> in stage-2 in the entire VM life cycle."
 
-Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
----
- .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 371 ++++++++++++++++++
- 1 file changed, 371 insertions(+)
+IMHO the alternative is reasonable and simpler. If the user decides to
+enable nesting it should keep the nesting-friendly configuration static
+since whether nesting is enabled on a device is according to viommu
+configuration (i.e. whether the guest attaches the device to identity
+domain or non-identity domain) and it's not good to break the nesting
+setup just because the host inadvertently adds a RO mapping to s2 in
+the middle between guest is detached/put back to identity domain
+and then re-attach to an unmanaged domain.
+>=20
+> +	if (!(prot & DMA_PTE_WRITE) && !domain->read_only_mapped) {
+> +		spin_lock_irqsave(&domain->lock, flags);
+> +		if (domain->nested_users > 0) {
+> +			spin_unlock_irqrestore(&domain->lock, flags);
+> +			return -EINVAL;
+> +		}
+> +
 
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-index 5c8ec263e11f..896c8f4f1278 100644
---- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-@@ -145,6 +145,346 @@ static const struct panel_init_cmd starry_himax83102_j02_init_cmd[] = {
- 	{},
- };
- 
-+static const struct panel_init_cmd starry_ili9882t_init_cmd[] = {
-+	_INIT_DELAY_CMD(5),
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x01),
-+	_INIT_DCS_CMD(0x00, 0x42),
-+	_INIT_DCS_CMD(0x01, 0x11),
-+	_INIT_DCS_CMD(0x02, 0x00),
-+	_INIT_DCS_CMD(0x03, 0x00),
-+
-+	_INIT_DCS_CMD(0x04, 0x01),
-+	_INIT_DCS_CMD(0x05, 0x11),
-+	_INIT_DCS_CMD(0x06, 0x00),
-+	_INIT_DCS_CMD(0x07, 0x00),
-+
-+	_INIT_DCS_CMD(0x08, 0x80),
-+	_INIT_DCS_CMD(0x09, 0x81),
-+	_INIT_DCS_CMD(0x0A, 0x71),
-+	_INIT_DCS_CMD(0x0B, 0x00),
-+
-+	_INIT_DCS_CMD(0x0C, 0x00),
-+	_INIT_DCS_CMD(0x0E, 0x1A),
-+
-+	_INIT_DCS_CMD(0x24, 0x00),
-+	_INIT_DCS_CMD(0x25, 0x00),
-+	_INIT_DCS_CMD(0x26, 0x00),
-+	_INIT_DCS_CMD(0x27, 0x00),
-+
-+	_INIT_DCS_CMD(0x2C, 0xD4),
-+	_INIT_DCS_CMD(0xB9, 0x40),
-+
-+	_INIT_DCS_CMD(0xB0, 0x11),
-+
-+	_INIT_DCS_CMD(0xE6, 0x32),
-+	_INIT_DCS_CMD(0xD1, 0x30),
-+
-+	_INIT_DCS_CMD(0xD6, 0x55),
-+
-+	_INIT_DCS_CMD(0xD0, 0x01),
-+	_INIT_DCS_CMD(0xE3, 0x93),
-+	_INIT_DCS_CMD(0xE4, 0x00),
-+	_INIT_DCS_CMD(0xE5, 0x80),
-+
-+	_INIT_DCS_CMD(0x31, 0x07),
-+	_INIT_DCS_CMD(0x32, 0x07),
-+	_INIT_DCS_CMD(0x33, 0x07),
-+	_INIT_DCS_CMD(0x34, 0x07),
-+	_INIT_DCS_CMD(0x35, 0x07),
-+	_INIT_DCS_CMD(0x36, 0x01),
-+	_INIT_DCS_CMD(0x37, 0x00),
-+	_INIT_DCS_CMD(0x38, 0x28),
-+	_INIT_DCS_CMD(0x39, 0x29),
-+	_INIT_DCS_CMD(0x3A, 0x11),
-+	_INIT_DCS_CMD(0x3B, 0x13),
-+	_INIT_DCS_CMD(0x3C, 0x15),
-+	_INIT_DCS_CMD(0x3D, 0x17),
-+	_INIT_DCS_CMD(0x3E, 0x09),
-+	_INIT_DCS_CMD(0x3F, 0x0D),
-+	_INIT_DCS_CMD(0x40, 0x02),
-+	_INIT_DCS_CMD(0x41, 0x02),
-+	_INIT_DCS_CMD(0x42, 0x02),
-+	_INIT_DCS_CMD(0x43, 0x02),
-+	_INIT_DCS_CMD(0x44, 0x02),
-+	_INIT_DCS_CMD(0x45, 0x02),
-+	_INIT_DCS_CMD(0x46, 0x02),
-+
-+	_INIT_DCS_CMD(0x47, 0x07),
-+	_INIT_DCS_CMD(0x48, 0x07),
-+	_INIT_DCS_CMD(0x49, 0x07),
-+	_INIT_DCS_CMD(0x4A, 0x07),
-+	_INIT_DCS_CMD(0x4B, 0x07),
-+	_INIT_DCS_CMD(0x4C, 0x01),
-+	_INIT_DCS_CMD(0x4D, 0x00),
-+	_INIT_DCS_CMD(0x4E, 0x28),
-+	_INIT_DCS_CMD(0x4F, 0x29),
-+	_INIT_DCS_CMD(0x50, 0x10),
-+	_INIT_DCS_CMD(0x51, 0x12),
-+	_INIT_DCS_CMD(0x52, 0x14),
-+	_INIT_DCS_CMD(0x53, 0x16),
-+	_INIT_DCS_CMD(0x54, 0x08),
-+	_INIT_DCS_CMD(0x55, 0x0C),
-+	_INIT_DCS_CMD(0x56, 0x02),
-+	_INIT_DCS_CMD(0x57, 0x02),
-+	_INIT_DCS_CMD(0x58, 0x02),
-+	_INIT_DCS_CMD(0x59, 0x02),
-+	_INIT_DCS_CMD(0x5A, 0x02),
-+	_INIT_DCS_CMD(0x5B, 0x02),
-+	_INIT_DCS_CMD(0x5C, 0x02),
-+
-+	_INIT_DCS_CMD(0x61, 0x07),
-+	_INIT_DCS_CMD(0x62, 0x07),
-+	_INIT_DCS_CMD(0x63, 0x07),
-+	_INIT_DCS_CMD(0x64, 0x07),
-+	_INIT_DCS_CMD(0x65, 0x07),
-+	_INIT_DCS_CMD(0x66, 0x01),
-+	_INIT_DCS_CMD(0x67, 0x00),
-+	_INIT_DCS_CMD(0x68, 0x28),
-+	_INIT_DCS_CMD(0x69, 0x29),
-+	_INIT_DCS_CMD(0x6A, 0x16),
-+	_INIT_DCS_CMD(0x6B, 0x14),
-+	_INIT_DCS_CMD(0x6C, 0x12),
-+	_INIT_DCS_CMD(0x6D, 0x10),
-+	_INIT_DCS_CMD(0x6E, 0x0C),
-+	_INIT_DCS_CMD(0x6F, 0x08),
-+	_INIT_DCS_CMD(0x70, 0x02),
-+	_INIT_DCS_CMD(0x71, 0x02),
-+	_INIT_DCS_CMD(0x72, 0x02),
-+	_INIT_DCS_CMD(0x73, 0x02),
-+	_INIT_DCS_CMD(0x74, 0x02),
-+	_INIT_DCS_CMD(0x75, 0x02),
-+	_INIT_DCS_CMD(0x76, 0x02),
-+
-+	_INIT_DCS_CMD(0x77, 0x07),
-+	_INIT_DCS_CMD(0x78, 0x07),
-+	_INIT_DCS_CMD(0x79, 0x07),
-+	_INIT_DCS_CMD(0x7A, 0x07),
-+	_INIT_DCS_CMD(0x7B, 0x07),
-+	_INIT_DCS_CMD(0x7C, 0x01),
-+	_INIT_DCS_CMD(0x7D, 0x00),
-+	_INIT_DCS_CMD(0x7E, 0x28),
-+	_INIT_DCS_CMD(0x7F, 0x29),
-+	_INIT_DCS_CMD(0x80, 0x17),
-+	_INIT_DCS_CMD(0x81, 0x15),
-+	_INIT_DCS_CMD(0x82, 0x13),
-+	_INIT_DCS_CMD(0x83, 0x11),
-+	_INIT_DCS_CMD(0x84, 0x0D),
-+	_INIT_DCS_CMD(0x85, 0x09),
-+	_INIT_DCS_CMD(0x86, 0x02),
-+	_INIT_DCS_CMD(0x87, 0x07),
-+	_INIT_DCS_CMD(0x88, 0x07),
-+	_INIT_DCS_CMD(0x89, 0x07),
-+	_INIT_DCS_CMD(0x8A, 0x07),
-+	_INIT_DCS_CMD(0x8B, 0x07),
-+	_INIT_DCS_CMD(0x8C, 0x07),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x02),
-+	_INIT_DCS_CMD(0x29, 0x3A),
-+	_INIT_DCS_CMD(0x2A, 0x3B),
-+
-+	_INIT_DCS_CMD(0x06, 0x01),
-+	_INIT_DCS_CMD(0x07, 0x01),
-+	_INIT_DCS_CMD(0x08, 0x0C),
-+	_INIT_DCS_CMD(0x09, 0x44),
-+
-+	_INIT_DCS_CMD(0x3C, 0x0A),
-+	_INIT_DCS_CMD(0x39, 0x11),
-+	_INIT_DCS_CMD(0x3D, 0x00),
-+	_INIT_DCS_CMD(0x3A, 0x0C),
-+	_INIT_DCS_CMD(0x3B, 0x44),
-+
-+	_INIT_DCS_CMD(0x53, 0x1F),
-+	_INIT_DCS_CMD(0x5E, 0x40),
-+	_INIT_DCS_CMD(0x84, 0x00),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x03),
-+	_INIT_DCS_CMD(0x20, 0x01),
-+	_INIT_DCS_CMD(0x21, 0x3C),
-+	_INIT_DCS_CMD(0x22, 0xFA),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0A),
-+	_INIT_DCS_CMD(0xE0, 0x01),
-+	_INIT_DCS_CMD(0xE2, 0x01),
-+	_INIT_DCS_CMD(0xE5, 0x91),
-+	_INIT_DCS_CMD(0xE6, 0x3C),
-+	_INIT_DCS_CMD(0xE7, 0x00),
-+	_INIT_DCS_CMD(0xE8, 0xFA),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x12),
-+	_INIT_DCS_CMD(0x87, 0x2C),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x05),
-+	_INIT_DCS_CMD(0x73, 0xE5),
-+	_INIT_DCS_CMD(0x7F, 0x6B),
-+	_INIT_DCS_CMD(0x6D, 0xA4),
-+	_INIT_DCS_CMD(0x79, 0x54),
-+	_INIT_DCS_CMD(0x69, 0x97),
-+	_INIT_DCS_CMD(0x6A, 0x97),
-+	_INIT_DCS_CMD(0xA5, 0x3F),
-+	_INIT_DCS_CMD(0x61, 0xDA),
-+	_INIT_DCS_CMD(0xA7, 0xF1),
-+	_INIT_DCS_CMD(0x5F, 0x01),
-+	_INIT_DCS_CMD(0x62, 0x3F),
-+	_INIT_DCS_CMD(0x1D, 0x90),
-+	_INIT_DCS_CMD(0x86, 0x87),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x06),
-+	_INIT_DCS_CMD(0xC0, 0x80),
-+	_INIT_DCS_CMD(0xC1, 0x07),
-+	_INIT_DCS_CMD(0xCA, 0x58),
-+	_INIT_DCS_CMD(0xCB, 0x02),
-+	_INIT_DCS_CMD(0xCE, 0x58),
-+	_INIT_DCS_CMD(0xCF, 0x02),
-+	_INIT_DCS_CMD(0x67, 0x60),
-+	_INIT_DCS_CMD(0x10, 0x00),
-+	_INIT_DCS_CMD(0x92, 0x22),
-+	_INIT_DCS_CMD(0xD3, 0x08),
-+	_INIT_DCS_CMD(0xD6, 0x55),
-+	_INIT_DCS_CMD(0xDC, 0x38),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x08),
-+	_INIT_DCS_CMD(0xE0, 0x00, 0x10, 0x2A, 0x4D, 0x61, 0x56, 0x6A, 0x6E, 0x79, 0x76, 0x8F, 0x95, 0x98, 0xAE, 0xAA, 0xB2, 0xBB, 0xCE, 0xC6, 0xBD, 0xD5, 0xE2, 0xE8),
-+	_INIT_DCS_CMD(0xE1, 0x00, 0x10, 0x2A, 0x4D, 0x61, 0x56, 0x6A, 0x6E, 0x79, 0x76, 0x8F, 0x95, 0x98, 0xAE, 0xAA, 0xB2, 0xBB, 0xCE, 0xC6, 0xBD, 0xD5, 0xE2, 0xE8),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x04),
-+	_INIT_DCS_CMD(0xBA, 0x81),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0C),
-+	_INIT_DCS_CMD(0x00, 0x02),
-+	_INIT_DCS_CMD(0x01, 0x00),
-+	_INIT_DCS_CMD(0x02, 0x03),
-+	_INIT_DCS_CMD(0x03, 0x01),
-+	_INIT_DCS_CMD(0x04, 0x03),
-+	_INIT_DCS_CMD(0x05, 0x02),
-+	_INIT_DCS_CMD(0x06, 0x04),
-+	_INIT_DCS_CMD(0x07, 0x03),
-+	_INIT_DCS_CMD(0x08, 0x03),
-+	_INIT_DCS_CMD(0x09, 0x04),
-+	_INIT_DCS_CMD(0x0A, 0x04),
-+	_INIT_DCS_CMD(0x0B, 0x05),
-+	_INIT_DCS_CMD(0x0C, 0x04),
-+	_INIT_DCS_CMD(0x0D, 0x06),
-+	_INIT_DCS_CMD(0x0E, 0x05),
-+	_INIT_DCS_CMD(0x0F, 0x07),
-+	_INIT_DCS_CMD(0x10, 0x04),
-+	_INIT_DCS_CMD(0x11, 0x08),
-+	_INIT_DCS_CMD(0x12, 0x05),
-+	_INIT_DCS_CMD(0x13, 0x09),
-+	_INIT_DCS_CMD(0x14, 0x05),
-+	_INIT_DCS_CMD(0x15, 0x0A),
-+	_INIT_DCS_CMD(0x16, 0x06),
-+	_INIT_DCS_CMD(0x17, 0x0B),
-+	_INIT_DCS_CMD(0x18, 0x05),
-+	_INIT_DCS_CMD(0x19, 0x0C),
-+	_INIT_DCS_CMD(0x1A, 0x06),
-+	_INIT_DCS_CMD(0x1B, 0x0D),
-+	_INIT_DCS_CMD(0x1C, 0x06),
-+	_INIT_DCS_CMD(0x1D, 0x0E),
-+	_INIT_DCS_CMD(0x1E, 0x07),
-+	_INIT_DCS_CMD(0x1F, 0x0F),
-+	_INIT_DCS_CMD(0x20, 0x06),
-+	_INIT_DCS_CMD(0x21, 0x10),
-+	_INIT_DCS_CMD(0x22, 0x07),
-+	_INIT_DCS_CMD(0x23, 0x11),
-+	_INIT_DCS_CMD(0x24, 0x07),
-+	_INIT_DCS_CMD(0x25, 0x12),
-+	_INIT_DCS_CMD(0x26, 0x08),
-+	_INIT_DCS_CMD(0x27, 0x13),
-+	_INIT_DCS_CMD(0x28, 0x07),
-+	_INIT_DCS_CMD(0x29, 0x14),
-+	_INIT_DCS_CMD(0x2A, 0x08),
-+	_INIT_DCS_CMD(0x2B, 0x15),
-+	_INIT_DCS_CMD(0x2C, 0x08),
-+	_INIT_DCS_CMD(0x2D, 0x16),
-+	_INIT_DCS_CMD(0x2E, 0x09),
-+	_INIT_DCS_CMD(0x2F, 0x17),
-+	_INIT_DCS_CMD(0x30, 0x08),
-+	_INIT_DCS_CMD(0x31, 0x18),
-+	_INIT_DCS_CMD(0x32, 0x09),
-+	_INIT_DCS_CMD(0x33, 0x19),
-+	_INIT_DCS_CMD(0x34, 0x09),
-+	_INIT_DCS_CMD(0x35, 0x1A),
-+	_INIT_DCS_CMD(0x36, 0x0A),
-+	_INIT_DCS_CMD(0x37, 0x1B),
-+	_INIT_DCS_CMD(0x38, 0x0A),
-+	_INIT_DCS_CMD(0x39, 0x1C),
-+	_INIT_DCS_CMD(0x3A, 0x0A),
-+	_INIT_DCS_CMD(0x3B, 0x1D),
-+	_INIT_DCS_CMD(0x3C, 0x0A),
-+	_INIT_DCS_CMD(0x3D, 0x1E),
-+	_INIT_DCS_CMD(0x3E, 0x0A),
-+	_INIT_DCS_CMD(0x3F, 0x1F),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x04),
-+	_INIT_DCS_CMD(0xBA, 0x01),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0E),
-+	_INIT_DCS_CMD(0x02, 0x0C),
-+	_INIT_DCS_CMD(0x20, 0x10),
-+	_INIT_DCS_CMD(0x25, 0x16),
-+	_INIT_DCS_CMD(0x26, 0xE0),
-+	_INIT_DCS_CMD(0x27, 0x00),
-+	_INIT_DCS_CMD(0x29, 0x71),
-+	_INIT_DCS_CMD(0x2A, 0x46),
-+	_INIT_DCS_CMD(0x2B, 0x1F),
-+	_INIT_DCS_CMD(0x2D, 0xC7),
-+	_INIT_DCS_CMD(0x31, 0x02),
-+	_INIT_DCS_CMD(0x32, 0xDF),
-+	_INIT_DCS_CMD(0x33, 0x5A),
-+	_INIT_DCS_CMD(0x34, 0xC0),
-+	_INIT_DCS_CMD(0x35, 0x5A),
-+	_INIT_DCS_CMD(0x36, 0xC0),
-+	_INIT_DCS_CMD(0x38, 0x65),
-+	_INIT_DCS_CMD(0x80, 0x3E),
-+	_INIT_DCS_CMD(0x81, 0xA0),
-+	_INIT_DCS_CMD(0xB0, 0x01),
-+	_INIT_DCS_CMD(0xB1, 0xCC),
-+	_INIT_DCS_CMD(0xC0, 0x12),
-+	_INIT_DCS_CMD(0xC2, 0xCC),
-+	_INIT_DCS_CMD(0xC3, 0xCC),
-+	_INIT_DCS_CMD(0xC4, 0xCC),
-+	_INIT_DCS_CMD(0xC5, 0xCC),
-+	_INIT_DCS_CMD(0xC6, 0xCC),
-+	_INIT_DCS_CMD(0xC7, 0xCC),
-+	_INIT_DCS_CMD(0xC8, 0xCC),
-+	_INIT_DCS_CMD(0xC9, 0xCC),
-+	_INIT_DCS_CMD(0x30, 0x00),
-+	_INIT_DCS_CMD(0x00, 0x81),
-+	_INIT_DCS_CMD(0x08, 0x02),
-+	_INIT_DCS_CMD(0x09, 0x00),
-+	_INIT_DCS_CMD(0x07, 0x21),
-+	_INIT_DCS_CMD(0x04, 0x10),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x1E),
-+	_INIT_DCS_CMD(0x60, 0x00),
-+	_INIT_DCS_CMD(0x64, 0x00),
-+	_INIT_DCS_CMD(0x6D, 0x00),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0B),
-+	_INIT_DCS_CMD(0xA6, 0x44),
-+	_INIT_DCS_CMD(0xA7, 0xB6),
-+	_INIT_DCS_CMD(0xA8, 0x03),
-+	_INIT_DCS_CMD(0xA9, 0x03),
-+	_INIT_DCS_CMD(0xAA, 0x51),
-+	_INIT_DCS_CMD(0xAB, 0x51),
-+	_INIT_DCS_CMD(0xAC, 0x04),
-+	_INIT_DCS_CMD(0xBD, 0x92),
-+	_INIT_DCS_CMD(0xBE, 0xA1),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x05),
-+	_INIT_DCS_CMD(0x86, 0x87),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x06),
-+	_INIT_DCS_CMD(0x92, 0x22),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x00),
-+	_INIT_DCS_CMD(0x11),
-+	_INIT_DELAY_CMD(120),
-+	_INIT_DCS_CMD(0x29),
-+	_INIT_DELAY_CMD(20),
-+	{},
-+};
-+
- static const struct panel_init_cmd boe_tv110c9m_init_cmd[] = {
- 	_INIT_DCS_CMD(0xFF, 0x20),
- 	_INIT_DCS_CMD(0xFB, 0x01),
-@@ -1795,6 +2135,34 @@ static const struct panel_desc starry_himax83102_j02_desc = {
- 	.lp11_before_reset = true,
- };
- 
-+static const struct drm_display_mode starry_ili9882t_default_mode = {
-+	.clock = 165280,
-+	.hdisplay = 1200,
-+	.hsync_start = 1200 + 32,
-+	.hsync_end = 1200 + 32 + 30,
-+	.htotal = 1200 + 32 + 30 + 32,
-+	.vdisplay = 1920,
-+	.vsync_start = 1920 + 68,
-+	.vsync_end = 1920 + 68 + 2,
-+	.vtotal = 1920 + 68 + 2 + 10,
-+	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
-+};
-+
-+static const struct panel_desc starry_ili9882t_desc = {
-+	.modes = &starry_ili9882t_default_mode,
-+	.bpc = 8,
-+	.size = {
-+		.width_mm = 141,
-+		.height_mm = 226,
-+	},
-+	.lanes = 4,
-+	.format = MIPI_DSI_FMT_RGB888,
-+	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
-+		      MIPI_DSI_MODE_LPM,
-+	.init_cmds = starry_ili9882t_init_cmd,
-+	.lp11_before_reset = true,
-+};
-+
- static int boe_panel_get_modes(struct drm_panel *panel,
- 			       struct drm_connector *connector)
- {
-@@ -1971,6 +2339,9 @@ static const struct of_device_id boe_of_match[] = {
- 	{ .compatible = "starry,himax83102-j02",
- 	  .data = &starry_himax83102_j02_desc
- 	},
-+	{ .compatible = "starry,ili9882t",
-+	  .data = &starry_ili9882t_desc
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, boe_of_match);
--- 
-2.25.1
-
+this is worth a one-off warning. Same in the other path.
