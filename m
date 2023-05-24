@@ -2,217 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB91670ED10
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC5870ED14
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 07:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239381AbjEXF2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 01:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
+        id S239347AbjEXF3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 01:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239349AbjEXF2j (ORCPT
+        with ESMTP id S233010AbjEXF33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 01:28:39 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CBA18B;
-        Tue, 23 May 2023 22:28:38 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ae52ce3250so5586415ad.2;
-        Tue, 23 May 2023 22:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684906118; x=1687498118;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6d5AcXkE4ZWFgJOqcetC1ECS3Bjvt7gCvqCnn13vov8=;
-        b=U/BHPbdbcWy/tkay45yCh6xlRSq7ZzCreo8ZiM9J0SXDcn99NXpAe/6uBP9lyA7d2F
-         P66J/y87FhsajG+llr9lw+iS+WAFfXRQjBbjrx90jSB1w6M+WbLdpwXgh42ZsBCVHzK/
-         sjWVz6jeW//tv12oxCuZlJL3ODxEouLF1qdAEPsC0H2fxkZoHfbu9emTvI1G4gWvxMFW
-         +6VJ3rNekRwNLSjeQUun0Kw/0UVQGvg5n+aT4td90BUKhmQJD/dFW0UAy8SLHlY0Rul4
-         cIc+ph3gnJqoxbLoGWQND8q3IkqR/o5w5lSLHbKnTVu5e8+xCiCF2qWrQK+QYZCyxL/0
-         3F9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684906118; x=1687498118;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6d5AcXkE4ZWFgJOqcetC1ECS3Bjvt7gCvqCnn13vov8=;
-        b=Zu2Q+9HO7qOHoWmtq8e/yTOUInQ0HCXxSb02Sl4FoW1WFneziyX0XsqX1uKJrx9rsy
-         x+bsarFnBYwauhGp04CR98FWXFT2cM9GmAWq6sd7rTvHucTks95iIacxJMQ00nCcBOyf
-         denE4tvvN7hp87xBvy5S9shPQDIy5iT7z1TZq+jGWs2nQc/QFaKWYExfV6tR+/7oh8MC
-         bP/bMQVlOWw5lU30bDTed0LpaOzoHcnZGJ8zyh4O0TpSvfSs2bDhDdkgvunQjsg4Zb6f
-         RBxaTA+JNeYitQymvUy8Nvkwa6TBfdnIaCvTO4orqWHhj+MnWV0SSMXiqY9iRKK/85cj
-         eHRg==
-X-Gm-Message-State: AC+VfDyZuto9kM/PLSwBJC7aI3nYMT2yVk8xJR8XhVbnDmcu+f+2AK6R
-        LklZMLFaVQ4i1IGQH4tRvSY=
-X-Google-Smtp-Source: ACHHUZ49Fu91ZoPMgmRtyS2Yb8f7gQ/M+CoSj7B1dJgLO8HV4yrvDhWIi3QEUfgvw+pSXTSk+Q8tPA==
-X-Received: by 2002:a17:902:ecd0:b0:1a1:b3bb:cd5b with SMTP id a16-20020a170902ecd000b001a1b3bbcd5bmr17037366plh.62.1684906117768;
-        Tue, 23 May 2023 22:28:37 -0700 (PDT)
-Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:806f:2bdc:cf65:f76b])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170902ce8a00b001a64011899asm7706626plg.25.2023.05.23.22.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 22:28:37 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 2/2] perf annotate: Remove x86 instructions with suffix
-Date:   Tue, 23 May 2023 22:28:34 -0700
-Message-ID: <20230524052834.1041418-2-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-In-Reply-To: <20230524052834.1041418-1-namhyung@kernel.org>
-References: <20230524052834.1041418-1-namhyung@kernel.org>
+        Wed, 24 May 2023 01:29:29 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2048.outbound.protection.outlook.com [40.107.237.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F31BE42;
+        Tue, 23 May 2023 22:29:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i4b+fQv4JoFY4hH0XkJRifxXeGZHoLRlS3Qegz5rk+QAGTnVFJpCLPiIKHY0RHevFa75MhY6+jUAWjkRpsuxQB1MbLMOrlIPsyR5RvqSogMmA2+710Nsqq80sU7WwTJwnyRBDvJ6bA7lN/sXGngYCr1mt9dr3YKpJOOcLRQ2lLSVTsxRGy3m6x4Cv4xwqHAFJLD7K9smg5K7oP0hIxxyn8FmuaPsxJhI2S24WZKxQIMWuDM11NtdvEMQVAsh9OV1am6h6MTGoY7UjTxm9ZTK0Dzaalu7JYsggGfs0iWZsn0XsTukWmuKU7SrmEE6NXeE/GIWFKisAXFJ5N0sTQvbvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wvfwQoZfrqTObA72tgti7k79DDvDqAnry1KMIR7N3iw=;
+ b=l9GkFmQPoPDrgl21opvExFfOvIkfwIzObrlyi29Q0hn7erOK3fkI3qs+OMhcj9Q36FImn+Xqh7wyjwPrLxCAqxZNgEoaqfcfNTAlW6WZFgPuJ18QNpLSZ1r2/AIagcYGpBU0+fddeYfzpdCpaT56AH7abbYLkMBvKRWGtOJKA3tmkp8DHf8opsNUZ+roSd20Tz8ueR0GlpEBsCcC7zO28+YBMdbbUZbsUnLCJCVBTgSKqjzrQII8ewBpEBMGAiuTIr0WWhX6o/r1R2gfPhyM/K3HDk+39rXRjiZvE4OtIjauPyBHV4R4QLctkgryknWU8cwf/JxFdYkQ7Tv+W40N+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wvfwQoZfrqTObA72tgti7k79DDvDqAnry1KMIR7N3iw=;
+ b=OsumY7yaUOdkAkL2EacWUtfFmZd4i/IJQguipc7HQfWg67wpPfdbRpDxkiGsx+VUtazL1rMk5gSfUZR5TksuGRWhhU4xbS00FDDxcHVaOwK8c9ahdWkZDljuyzhOG8VRj/9G6PQ73XPYVWykg7nu/FU3O3rQQToBMGDPbQDa7IdvDiYjvOUuOmtETQFOheApUfiNxLqAjuVkk+hbKFDw8t8s76/jHtU5eGedfcNvY1nBcw2rAOtiqJA/C3WftrpXCJOBuwOofDZFv54zE4VLle+AxnDeT30ntRaX/3S9cnSpckKN2GgFyEpS0TUUs8bvBmcg67Qa9G6+u3d7GCZBMg==
+Received: from DS0PR17CA0011.namprd17.prod.outlook.com (2603:10b6:8:191::13)
+ by MW4PR12MB7288.namprd12.prod.outlook.com (2603:10b6:303:223::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 24 May
+ 2023 05:29:06 +0000
+Received: from DM6NAM11FT058.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:191:cafe::b8) by DS0PR17CA0011.outlook.office365.com
+ (2603:10b6:8:191::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15 via Frontend
+ Transport; Wed, 24 May 2023 05:29:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT058.mail.protection.outlook.com (10.13.172.216) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.29 via Frontend Transport; Wed, 24 May 2023 05:29:05 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 23 May 2023
+ 22:28:47 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 23 May
+ 2023 22:28:46 -0700
+Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Tue, 23 May 2023 22:28:45 -0700
+Date:   Tue, 23 May 2023 22:28:44 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v2 02/11] iommu: Add nested domain support
+Message-ID: <ZG2gjCdz7FoggnZZ@Asurada-Nvidia>
+References: <20230511143844.22693-1-yi.l.liu@intel.com>
+ <20230511143844.22693-3-yi.l.liu@intel.com>
+ <BL1PR11MB52717388249F052433A7FBB08C7C9@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <ZGfEqmD0mrE0NTDW@Asurada-Nvidia>
+ <BN9PR11MB52764EEC5A6048FF2487F61B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52764EEC5A6048FF2487F61B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT058:EE_|MW4PR12MB7288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 50647eb2-b656-422f-9b58-08db5c17caae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +6BaTrH7Ex0x5mToGJyfMKmD6z1bxlGxge4S64oeKeEZTPtdMydje+tVb+cWBPPNwRWAEe8vZ3kQFylORzz7lkU86wcZzDkgdwHyyklqMNwtui3/SqEsxBGGgK2rZ+LIZkSQ/BE3ioouzI/cRFfFaIvNAII1RJzABJZ7PdGKZOP0T9QD316a3BzDZ5Rh1vyu//lHNB/ylbmBOhsO07caibWJRas0Jedmgzv4wLnEvDMJzLyfLNQXiFBm3kDdme7IbuDDby1YGguNQ4wULTvcGD4j8We3MvDo/yL9WIKD2jS3eDy2+M9t0p1+zL32HEaIyN4VvEzA0hUl9+c2LlEi9hVOTXrSU59kKfcHqoK7PdBVdKmV+0vCjIqmxxgFIM1h0DCAgxVxQLi+AxiTEUQI9xygWzOmB1aYwRfskPkaO1ktU9Tu4rZWn9YFYRXUd1vcKfBGPk8aKPeYjfRPQBalDl9Zi7zGirLnOO+rBD2VxxmEZidgPKUcsW4WILjkYmeaX1IqZyZT7fOVk8X8iBaqE6SKTFNQeyxify78XFHUk/y/mQR5hAZ5Q8VJEVe2/JLSYffO7QC/pXyI86dmgFRRFUgOf+v78SkmYzmCbLbx6puoe3XgjhH2HLbLzTUOZULBDGuVBCE8tkHqCKr2Fk2wBYF/Hg310krSM7rEmtFyLxpGiXEiWrv0MsQnsLrK14/CkrxDh0SE3WF9dojtSDaAh+hccUpi2h8GhLoexQM4dFfD5HdMi0XDyb8ztNACL+9W
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199021)(46966006)(40470700004)(36840700001)(5660300002)(40460700003)(8676002)(8936002)(86362001)(26005)(9686003)(47076005)(83380400001)(2906002)(336012)(426003)(36860700001)(186003)(7416002)(40480700001)(55016003)(70586007)(70206006)(7636003)(356005)(33716001)(82740400003)(6916009)(316002)(4326008)(54906003)(478600001)(82310400005)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 05:29:05.6094
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50647eb2-b656-422f-9b58-08db5c17caae
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7288
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not the suffix is handled in the general code.  Let's get rid of them.
+On Wed, May 24, 2023 at 05:03:37AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Saturday, May 20, 2023 2:49 AM
+> >
+> > On Fri, May 19, 2023 at 08:51:21AM +0000, Tian, Kevin wrote:
+> >
+> > > > @@ -346,6 +350,10 @@ struct iommu_ops {
+> > > >   * @iotlb_sync_map: Sync mappings created recently using @map to the
+> > > > hardware
+> > > >   * @iotlb_sync: Flush all queued ranges from the hardware TLBs and
+> > empty
+> > > > flush
+> > > >   *            queue
+> > > > + * @cache_invalidate_user: Flush hardware TLBs caching user space IO
+> > > > mappings
+> > > > + * @cache_invalidate_user_data_len: Defined length of input user data
+> > for
+> > > > the
+> > > > + *                                  cache_invalidate_user op, being sizeof the
+> > > > + *                                  structure in include/uapi/linux/iommufd.h
+> > >
+> > > same as comment to last patch, can this be merged with @hw_info?
+> >
+> > I think it's better to keep them separate, since this is added
+> > in struct iommu_domain_ops, given it is domain/hwpt specific,
+> > while the hw_info is in struct iommu_ops?
+> >
+> 
+> Just be curious whether there are real examples in which the data
+> len might be different upon the hwpt type...
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/arch/x86/annotate/instructions.c | 44 +--------------------
- 1 file changed, 2 insertions(+), 42 deletions(-)
+Likely "no" on top of my head. Yet it's a bit odd to see the
+data length for cache_invalidate_user being added along with
+the hw_info, since they belong to two different structs, and
+even two different series?
 
-diff --git a/tools/perf/arch/x86/annotate/instructions.c b/tools/perf/arch/x86/annotate/instructions.c
-index 5c7bec25fee4..714fd8784d99 100644
---- a/tools/perf/arch/x86/annotate/instructions.c
-+++ b/tools/perf/arch/x86/annotate/instructions.c
-@@ -1,48 +1,29 @@
- // SPDX-License-Identifier: GPL-2.0
- static struct ins x86__instructions[] = {
- 	{ .name = "adc",	.ops = &mov_ops,  },
--	{ .name = "adcb",	.ops = &mov_ops,  },
--	{ .name = "adcl",	.ops = &mov_ops,  },
- 	{ .name = "add",	.ops = &mov_ops,  },
--	{ .name = "addl",	.ops = &mov_ops,  },
--	{ .name = "addq",	.ops = &mov_ops,  },
- 	{ .name = "addsd",	.ops = &mov_ops,  },
--	{ .name = "addw",	.ops = &mov_ops,  },
- 	{ .name = "and",	.ops = &mov_ops,  },
--	{ .name = "andb",	.ops = &mov_ops,  },
--	{ .name = "andl",	.ops = &mov_ops,  },
- 	{ .name = "andpd",	.ops = &mov_ops,  },
- 	{ .name = "andps",	.ops = &mov_ops,  },
--	{ .name = "andq",	.ops = &mov_ops,  },
--	{ .name = "andw",	.ops = &mov_ops,  },
- 	{ .name = "bsr",	.ops = &mov_ops,  },
- 	{ .name = "bt",		.ops = &mov_ops,  },
- 	{ .name = "btr",	.ops = &mov_ops,  },
- 	{ .name = "bts",	.ops = &mov_ops,  },
--	{ .name = "btsq",	.ops = &mov_ops,  },
- 	{ .name = "call",	.ops = &call_ops, },
--	{ .name = "callq",	.ops = &call_ops, },
- 	{ .name = "cmovbe",	.ops = &mov_ops,  },
- 	{ .name = "cmove",	.ops = &mov_ops,  },
- 	{ .name = "cmovae",	.ops = &mov_ops,  },
- 	{ .name = "cmp",	.ops = &mov_ops,  },
--	{ .name = "cmpb",	.ops = &mov_ops,  },
--	{ .name = "cmpl",	.ops = &mov_ops,  },
--	{ .name = "cmpq",	.ops = &mov_ops,  },
--	{ .name = "cmpw",	.ops = &mov_ops,  },
- 	{ .name = "cmpxch",	.ops = &mov_ops,  },
- 	{ .name = "cmpxchg",	.ops = &mov_ops,  },
- 	{ .name = "cs",		.ops = &mov_ops,  },
- 	{ .name = "dec",	.ops = &dec_ops,  },
--	{ .name = "decl",	.ops = &dec_ops,  },
--	{ .name = "decq",	.ops = &dec_ops,  },
- 	{ .name = "divsd",	.ops = &mov_ops,  },
- 	{ .name = "divss",	.ops = &mov_ops,  },
- 	{ .name = "gs",		.ops = &mov_ops,  },
- 	{ .name = "imul",	.ops = &mov_ops,  },
- 	{ .name = "inc",	.ops = &dec_ops,  },
--	{ .name = "incl",	.ops = &dec_ops,  },
--	{ .name = "incq",	.ops = &dec_ops,  },
- 	{ .name = "ja",		.ops = &jump_ops, },
- 	{ .name = "jae",	.ops = &jump_ops, },
- 	{ .name = "jb",		.ops = &jump_ops, },
-@@ -56,7 +37,6 @@ static struct ins x86__instructions[] = {
- 	{ .name = "jl",		.ops = &jump_ops, },
- 	{ .name = "jle",	.ops = &jump_ops, },
- 	{ .name = "jmp",	.ops = &jump_ops, },
--	{ .name = "jmpq",	.ops = &jump_ops, },
- 	{ .name = "jna",	.ops = &jump_ops, },
- 	{ .name = "jnae",	.ops = &jump_ops, },
- 	{ .name = "jnb",	.ops = &jump_ops, },
-@@ -83,49 +63,31 @@ static struct ins x86__instructions[] = {
- 	{ .name = "mov",	.ops = &mov_ops,  },
- 	{ .name = "movapd",	.ops = &mov_ops,  },
- 	{ .name = "movaps",	.ops = &mov_ops,  },
--	{ .name = "movb",	.ops = &mov_ops,  },
- 	{ .name = "movdqa",	.ops = &mov_ops,  },
- 	{ .name = "movdqu",	.ops = &mov_ops,  },
--	{ .name = "movl",	.ops = &mov_ops,  },
--	{ .name = "movq",	.ops = &mov_ops,  },
- 	{ .name = "movsd",	.ops = &mov_ops,  },
- 	{ .name = "movslq",	.ops = &mov_ops,  },
- 	{ .name = "movss",	.ops = &mov_ops,  },
- 	{ .name = "movupd",	.ops = &mov_ops,  },
- 	{ .name = "movups",	.ops = &mov_ops,  },
--	{ .name = "movw",	.ops = &mov_ops,  },
- 	{ .name = "movzbl",	.ops = &mov_ops,  },
- 	{ .name = "movzwl",	.ops = &mov_ops,  },
- 	{ .name = "mulsd",	.ops = &mov_ops,  },
- 	{ .name = "mulss",	.ops = &mov_ops,  },
- 	{ .name = "nop",	.ops = &nop_ops,  },
--	{ .name = "nopl",	.ops = &nop_ops,  },
--	{ .name = "nopw",	.ops = &nop_ops,  },
- 	{ .name = "or",		.ops = &mov_ops,  },
--	{ .name = "orb",	.ops = &mov_ops,  },
--	{ .name = "orl",	.ops = &mov_ops,  },
- 	{ .name = "orps",	.ops = &mov_ops,  },
--	{ .name = "orq",	.ops = &mov_ops,  },
- 	{ .name = "pand",	.ops = &mov_ops,  },
- 	{ .name = "paddq",	.ops = &mov_ops,  },
- 	{ .name = "pcmpeqb",	.ops = &mov_ops,  },
- 	{ .name = "por",	.ops = &mov_ops,  },
--	{ .name = "rclb",	.ops = &mov_ops,  },
--	{ .name = "rcll",	.ops = &mov_ops,  },
-+	{ .name = "rcl",	.ops = &mov_ops,  },
- 	{ .name = "ret",	.ops = &ret_ops,  },
--	{ .name = "retq",	.ops = &ret_ops,  },
- 	{ .name = "sbb",	.ops = &mov_ops,  },
--	{ .name = "sbbl",	.ops = &mov_ops,  },
- 	{ .name = "sete",	.ops = &mov_ops,  },
- 	{ .name = "sub",	.ops = &mov_ops,  },
--	{ .name = "subl",	.ops = &mov_ops,  },
--	{ .name = "subq",	.ops = &mov_ops,  },
- 	{ .name = "subsd",	.ops = &mov_ops,  },
--	{ .name = "subw",	.ops = &mov_ops,  },
- 	{ .name = "test",	.ops = &mov_ops,  },
--	{ .name = "testb",	.ops = &mov_ops,  },
--	{ .name = "testl",	.ops = &mov_ops,  },
--	{ .name = "testq",	.ops = &mov_ops,  },
- 	{ .name = "tzcnt",	.ops = &mov_ops,  },
- 	{ .name = "ucomisd",	.ops = &mov_ops,  },
- 	{ .name = "ucomiss",	.ops = &mov_ops,  },
-@@ -139,11 +101,9 @@ static struct ins x86__instructions[] = {
- 	{ .name = "vsubsd",	.ops = &mov_ops,  },
- 	{ .name = "vucomisd",	.ops = &mov_ops,  },
- 	{ .name = "xadd",	.ops = &mov_ops,  },
--	{ .name = "xbeginl",	.ops = &jump_ops, },
--	{ .name = "xbeginq",	.ops = &jump_ops, },
-+	{ .name = "xbegin",	.ops = &jump_ops, },
- 	{ .name = "xchg",	.ops = &mov_ops,  },
- 	{ .name = "xor",	.ops = &mov_ops, },
--	{ .name = "xorb",	.ops = &mov_ops, },
- 	{ .name = "xorpd",	.ops = &mov_ops, },
- 	{ .name = "xorps",	.ops = &mov_ops, },
- };
--- 
-2.40.1.698.g37aff9b760-goog
-
+Thanks
+Nic
