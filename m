@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C335470FF1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD4870FF20
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236420AbjEXUW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S234154AbjEXUWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234154AbjEXUW2 (ORCPT
+        with ESMTP id S236438AbjEXUWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:22:28 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE86113;
-        Wed, 24 May 2023 13:22:26 -0700 (PDT)
-Date:   Wed, 24 May 2023 22:22:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1684959744; bh=EZ62Sf3mRrrPLSec0HPbs+OLV5rrKu4uVLhKELY8M5g=;
+        Wed, 24 May 2023 16:22:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BE1191;
+        Wed, 24 May 2023 13:22:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9C8B64047;
+        Wed, 24 May 2023 20:22:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4C9C433EF;
+        Wed, 24 May 2023 20:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684959759;
+        bh=s5ykL53eIy5CGwh+Iw+O4G1LCAdTOLiMVsk4kKJJvAs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QjChkd239g3RKukdNJOfd4jriqUOjWg6EsxNpjJouusbCRUq1ohoACpbDzB4CYPJE
-         /b2S1nQ5oF+NE0YA7lESkIYRuHZYf0jazv61JOm7P1ro1uzDo7b+fcjAL3aPLEzrwg
-         1CTfm7DDfvwSbUeJ9IPSeVj1Hns6GkOTyJ5Csi8M=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Subject: Re: [PATCH 11/13] tools/nolibc: sys_select: riscv: use
- __NR_pselect6_time64 for rv32
-Message-ID: <83339ea6-6653-41fe-af75-e0d51a4fa920@t-8ch.de>
-References: <cover.1684949267.git.falcon@tinylab.org>
- <9359ab11b52ef7c1799337f475e1e27c0cb00e3b.1684949268.git.falcon@tinylab.org>
+        b=ic/gA1SoNxVphLi9Yr09q1NOWlRi4n7QtIlO8PiDMPO/5AjhF6tN41JSTraVU1rZ1
+         EsrhMklEgX39a0oHewCQ10+hcL0SEAdgS8IbzVpihF5ydl2kBE8JBBtWHHuniBvlTj
+         FzhJaENSXzTgkjYx4bCwnq8kJACAT1YwCIps5tGdyoP3z75f3+0/orOyLTDr9dlliX
+         K+tXhcvgKpbBYK39Mfgm9Xq3R0b2qbHSW7bKfJ6YQar/5Rtp+mBokGvN/eQ67bCzsz
+         Wrfc/rAdnq9ZO1clL5tM/tzth/oShl3jjHA3YfFdkdlp81/59hY37IpGAbjx+BTTfe
+         wPLGlfRd7LJag==
+Date:   Wed, 24 May 2023 21:22:34 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     dianders@google.com, daniel@ffwll.ch, neil.armstrong@linaro.org,
+        sam@ravnborg.org, airlied@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 0/4] Support Starry-himax83102-j02 and Starry-ili9882t TDDI
+ MIPI-DSI panel
+Message-ID: <20230524-dispense-luster-7962b13074c5@spud>
+References: <CAD=FV=WRecTWsFM96k81YAx1=jJT0vpS4EPP0ZfWFUGHNFx9Tw@mail.gmail.com>
+ <20230524072816.1131039-1-yangcong5@huaqin.corp-partner.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="rgZPHXM2KOTwBnaO"
 Content-Disposition: inline
-In-Reply-To: <9359ab11b52ef7c1799337f475e1e27c0cb00e3b.1684949268.git.falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230524072816.1131039-1-yangcong5@huaqin.corp-partner.google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-25 01:59:55+0800, Zhangjin Wu wrote:
-> rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
-> __NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
-> system call ABI"), use __NR_pselect6_time64 instead.
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/include/nolibc/sys.h | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index c0335a84f880..00c7197dcd50 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
->  		struct timeval *t;
->  	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
->  	return my_syscall1(__NR_select, &arg);
-> -#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
-> +#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
-> +#ifdef __NR_pselect6
->  	struct timespec t;
-> +#else
-> +	struct timespec64 t;
-> +#define __NR_pselect6 __NR_pselect6_time64
 
-Wouldn't this #define leak to the users of nolibc and lead to calls to
-pselect6_time64 with the ABI of the __NR_pselect6 if userspace is doing
-its own raw syscalls?
+--rgZPHXM2KOTwBnaO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +#endif
->  
->  	if (timeout) {
->  		t.tv_sec  = timeout->tv_sec;
-> -- 
-> 2.25.1
-> 
+On Wed, May 24, 2023 at 03:28:12PM +0800, Cong Yang wrote:
+> Compare V1:Add compatible for Starry himax83102-j02 and Starry-ili9882t
+> in dt-bindings.
+
+BTW, my mailer doesn't like how you threaded these patches, I guess you
+sent them as a reply to something I was not CCed on.
+
+>   dt-bindings: display: panel: Add compatible for Starry himax83102-j02
+>   dt-bindings: display: panel: Add compatible for Starry ili9882t
+
+These two are
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+--rgZPHXM2KOTwBnaO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG5yCgAKCRB4tDGHoIJi
+0mNmAP9AKMIRtWN+rUBErdb+/gBM5rXYpT7EtNguO7DBe0rJsgEAz1171lVSS3no
+TFIgyfCnddHmw1ar3lRdb02Reqyxcg4=
+=TsDO
+-----END PGP SIGNATURE-----
+
+--rgZPHXM2KOTwBnaO--
