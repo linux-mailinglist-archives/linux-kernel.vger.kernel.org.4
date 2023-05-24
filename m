@@ -2,185 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABDE70EEEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C776870EEF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbjEXHE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        id S239863AbjEXHHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbjEXHEX (ORCPT
+        with ESMTP id S239770AbjEXHHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:04:23 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2070e.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::70e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BABEE43;
-        Wed, 24 May 2023 00:04:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VDJQiDcttyihxXUuz9jJ401tpDJ8im7yz1C0GxhBcu31i3gRRAmVbCgTvUQ/lfib3nHzWoFhPCyIOI6Txq73an8Prv7jwogzZFKWYGfiTE59ZgmfExuyhGeRSN/zup0ZyqJBGxIoid4pnjcN+PnAu334p9vOYCIzXfWWzCnJ6IBi/pa/662jFlDH2gTUiXsl42cu7yblhyA/Q9Wx0iUBUkrMaE7nhdLTgtUNsOGqR7GqTPp4h7tFC1X2+8YAcYY1wGZ+YZLmVvahDgb8Aj4g76acupnKXR5LMSNi0upUI41mm39cYY5S/jzQEzXxDOSNxNbZ2eRgqA+7OUw/Psvz8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kbIiLhDSOb3ep4comWGnDxc3ZUf6czjFJ/ODm6Tyfi4=;
- b=WIhna/n9pzc32JoLPFm2L0IEi5Bv7N86np8LWioLaYtkijGrg61zoymMkjgnzT7ClhyWz8X9dHQX8eVkg0U6TrcCY22v2jDezx98bq474da5ST6ZrLhFlWLkPImR5i8XHlJyWjdfTuwmOAP69lNeNSoGQKOexbZFQxAkGA8QXTXTnngn11C36qzAynMxuDNsWD1hMHu9a/qTW/osTUXHCA1bLiI6hFsFDuQrl5apMM2nOFJ+iw+rmWaPBRi/4bSpWVDYb2RYTH5crizIlX7P1DrNMA1Bn9dMrCgM5TZAmUpZbPr9u8u3kL1K2mFHWifohfXtOkuQlLkUZg5gpe90QQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kbIiLhDSOb3ep4comWGnDxc3ZUf6czjFJ/ODm6Tyfi4=;
- b=ikCw8ufFJsmt5GLLMu4yeCNj1IGtRUmj3G4J2OuY7qYC8Su8S0q7mattN3+6+x2wRKWfT2mhgdd8zTfkgCUS/cBa50TNI/jtFHqtKK1Uv7kp9KrJVGapjOgbHNW3HYMUGsHCogysv1K22YQdPuzmkWwwfaSCKgqBQv7wItofse4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA3PR13MB6324.namprd13.prod.outlook.com (2603:10b6:806:397::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.14; Wed, 24 May
- 2023 07:04:08 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Wed, 24 May 2023
- 07:04:07 +0000
-Date:   Wed, 24 May 2023 09:03:59 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] hv_netvsc: Allocate rx indirection table size dynamically
-Message-ID: <ZG2236VbHkOpjau2@corigine.com>
-References: <1684907844-23224-1-git-send-email-shradhagupta@linux.microsoft.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1684907844-23224-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-ClientProxiedBy: AM0PR02CA0083.eurprd02.prod.outlook.com
- (2603:10a6:208:154::24) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 24 May 2023 03:07:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984EC95
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:06:57 -0700 (PDT)
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684912015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oG0P3Z6Aqy9wdU0NQGeZBKBmZlcDJWfSzkwq8vH+jcc=;
+        b=0AOPHj1/su0ZFg74f+vLahFNvHmJZxnffInd7LSqsAEzt5zHWqVAd5ZAshL2ztBrJTzFLc
+        mwgCgt/mMyWcHTF3ivVdx+ORFMy2zol1jCnqM2O3c0QwP/tlp4k8NaHkpAqHBa+5CWfN90
+        sxhf7AH8DioX95NduoA2+gFofYxs+xU+9aA7Z4AzWCA8lwzGMhsz7zpz4DNQ94ccZwlhmG
+        I7ZnOXO1W/SZyUP861xcrbwBajXlral5ATt7Kf5zPMN+Ffjt/EMixIvMAHRQxuGSW3pr2H
+        aDWAjtuK1TwNKCaVXA1KTS0gBQcQB+zgL5FIUcwyJn+PeGiI+nC2wyK8BdauOw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684912015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oG0P3Z6Aqy9wdU0NQGeZBKBmZlcDJWfSzkwq8vH+jcc=;
+        b=fW1VV2Z58nvX8NcpdwjHVaS/5Uf0kVWH/bIi5MW8wtv9kM1LvO8tAgUhl2GYdS8CZbA17C
+        kJqz2LR4jLyq5dAw==
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>
+Subject: [PATCH v7 00/21] timer: Move from a push remote at enqueue to a pull at expiry model
+Date:   Wed, 24 May 2023 09:06:08 +0200
+Message-Id: <20230524070629.6377-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA3PR13MB6324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6aeff96e-e486-4df8-aff4-08db5c25111a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cFcuKYXWJcEj/1RUZ4G6Qpz7mUpQ2AiQ9rThkOiGeL6FOqzp2RPmb2hmZSRDBbme1j13XftdQfZ4rFa2jcCvlQvTcGXtJCB2v1knUzQLYshIW55kyLB78k7+x1B7Rycz/X0hFGYKmwig++//fx2KkHomCamn4ZpUeKhpjUlHADT6zIRFGRP8mOHhwPFKlnl/NnWsF3+PNbX+rXFPZCFEeBtSnEcNkiRitambt5U1TKsJu/ayLksQZyvS51lDByWKYe7OBpcTvIbOJdp6/InUD79soLrEhjQZgrKde/sGWi5q3XiCIqgwXozhrTQzlVP7GSttbGrfn06bRe3wnev6j6fXjxzuzQoS5bG2DdE1VB95NVmfPyl0rL7I0AWjeWTZXCgPwV3F+eWlHd3IrKE339l0TBdM92nrJzmjy2DorCx7aCfzCx4HlJLpIoCvb5UXJINgLaB9TgWKHqaZ9Ag6ckH20UZyMXSZbLTgsvIvW0YYR+mIXFrNhu4xqFvM6MrWsfBNuNG5cK5gv2GSKsHfOAa6ByVncvSvNE4O8doDvyyXG4xhY5R+ppW2cwtG4TXXlnavHFK3Z03bk0vkf0Nr38/bHyt15Y1vB58M4aumHfw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39840400004)(366004)(396003)(376002)(451199021)(38100700002)(66946007)(66556008)(66476007)(6916009)(478600001)(6486002)(6666004)(54906003)(316002)(41300700001)(4326008)(86362001)(8676002)(5660300002)(8936002)(7416002)(44832011)(6512007)(186003)(6506007)(83380400001)(2906002)(2616005)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BPucOg8INLBhWCX71smmaN7Ei/tcIkWE0pXDLRyhVYaAnn6j2OGkKQVEPtLn?=
- =?us-ascii?Q?jo8Q8IcjdIyJCCG8QDiniScHiI+Red2QKXiD4f2NVPyGjt5ujhXTQZeat5lw?=
- =?us-ascii?Q?SjrlUb7r9v5D/mDxErYoKRMLyqPUFq6eRlMTfH+SEaaJjdXg+lGuDAmjguzl?=
- =?us-ascii?Q?qvIBNsAZkREUmf7NkhJuX5M/FfUNH7Kzr5ifpWQtBYqy8OX7oCbUdDW9wS1O?=
- =?us-ascii?Q?4kcI7E7BrjmJyS9vmM9kchKq/abqBpDIuSDYLrgZsDOdSmPOiaDTJ+vgqOsg?=
- =?us-ascii?Q?i+6hmAjP5uPeRpHgyephqqbwWiNNu1z8CkluIJQa8KJLHeIIbq8TlFPqQ/S4?=
- =?us-ascii?Q?sX5CE97epUWg/h6RIXbh8jbvwdk30nPLOeFa31qwx+vqVOixWj3ZnHlBjtLG?=
- =?us-ascii?Q?zEaD8ZC233+W72crGUQSAggFD1KXPfTknsf9x2DEFKG7kIhN0mMvogDLfjg8?=
- =?us-ascii?Q?64PilqtwvcZzp0E9/KTbjFqzppXBnDpK295ULZ+pkeQrtnsfslYcPTbeCPJx?=
- =?us-ascii?Q?HP+TFE8sTJihiagSprveO3s8iEKdoUkBZKYlUOmYiYuVOnwqYtMpUMnXyUyU?=
- =?us-ascii?Q?7Z67vEqmfsvhyo7arReAIH1DCVTZqmVRRsuIlSqKJrPx0s/1awhrPRdGRQHs?=
- =?us-ascii?Q?O87s6QDAFiuU2/tpC1Hal5jjeITqmNGbu5r4PC7I47/xXFObMM+VPHSH9nAB?=
- =?us-ascii?Q?4Fq7ifTOXwKfIsSADmOa/US6/53sEjFELyhIDwxiYgsPK+ixtLwsfKzRYpii?=
- =?us-ascii?Q?Tz6IJ387/+r6DkfFvMmkX62zN8hh+yHUxVLpsQ6V20EuddNl0WZkJKRroYN0?=
- =?us-ascii?Q?1EOOXZnKsLAXqrkk8LM3X8okz1M3mwajrPFeoovZDudxCp1kgjUP+YJHOF3W?=
- =?us-ascii?Q?hwbVNGYJZPS9OIz+QGYMiIZC8BeInqXEjfuD5eJ9hxgeS49epso5rfTIKg3l?=
- =?us-ascii?Q?urKuV+jL5cVfV4LFbBbt96DAF13s3KtRZ+CcXlbZf+eBfHN+s/qsSR0VeGtP?=
- =?us-ascii?Q?iWnexIktqqJm9+8vU0OTPSeNxbbIZj4nQhS2a+iUMGJ4wsrpLPxEajOCdCxz?=
- =?us-ascii?Q?p/XhWjeosE/p3/Dk13lTaa8WEJxK5+CF0NW3M2ODqb6q0pqXrZRw6v8nkDQ8?=
- =?us-ascii?Q?Yl2AoNwhlS95In7Xv9XWMrjvnlgOxQZYAJWD2TrhT2WI5JMjkKLvijcgYSEM?=
- =?us-ascii?Q?aL+FSWUSD8RFU4ehYm8ziWS32gSwR7jEK1CNV2eFQvd7jEGkf+Uf/NYa03yB?=
- =?us-ascii?Q?JWknh5W6JMxjXGU9lMq2pMN9YpjmQGa8qu1YmwNS6hMcNmHscPCiUgp1Ghwb?=
- =?us-ascii?Q?lwYdBhkaYBD5wXLHUOixMd4q88YPfDYe/2Cb9wYgMEYqFwJFAkddJA1iqfnN?=
- =?us-ascii?Q?Yt0qc8+MHGKqSMzOV9S6ftbY4uyZwtuiEgAtdPmdfj5uZHuSRa884cgTU7FX?=
- =?us-ascii?Q?mCmLByBaVln6+C9jhHZgdmrQVHRBIyV/4savjBl9I2nSnUsUsVFGVYva9TJU?=
- =?us-ascii?Q?q7RtJ3/gczmGuPZZpS7O9fX7vM1n68h6m9SxNA11pye9icNKwAvRq2rMZQrJ?=
- =?us-ascii?Q?GTuoGU3U1rirSw5F1kJBdzLFYPbVYR+rjBNHwRP+0UFMr+jte6ovoeDVC1bl?=
- =?us-ascii?Q?Avpoo64HmKXcZzQCYufyvMOPzO4CxC/QSnt9CVCxZuvbqSDSYKUaTXlGrzP0?=
- =?us-ascii?Q?4CH1FQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6aeff96e-e486-4df8-aff4-08db5c25111a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 07:04:07.6400
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QPioUT8bZytTPm6LWbKoQuN+ZIXGt1QPUUKcubymVBUXDE/QaCxnIWDEUxWZQYW132W8NPN+wzt/4TY5KVJHUFmGxeWS2mMht19u8yyGIPg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR13MB6324
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:57:24PM -0700, Shradha Gupta wrote:
-> Allocate the size of rx indirection table dynamically in netvsc
-> from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
-> query instead of using a constant value of ITAB_NUM.
-> 
-> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+Placing timers at enqueue time on a target CPU based on dubious heuristics
+does not make any sense:
 
-Hi Shradha,
+ 1) Most timer wheel timers are canceled or rearmed before they expire.
 
-thanks for your patch.
+ 2) The heuristics to predict which CPU will be busy when the timer expires
+    are wrong by definition.
 
-> @@ -1548,6 +1548,21 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
->  	if (ret || rsscap.num_recv_que < 2)
->  		goto out;
->  
-> +	if (rsscap.num_indirect_tabent &&
-> +		rsscap.num_indirect_tabent <= ITAB_NUM_MAX) {
+So placing the timers at enqueue wastes precious cycles.
 
-nit: the line above is not indented correctly,
-     it should line up with the inside of the opening parentheses
-     on the preceding line.
+The proper solution to this problem is to always queue the timers on the
+local CPU and allow the non pinned timers to be pulled onto a busy CPU at
+expiry time.
 
-     Also, I don't think the curly-brackets are needed.
+Therefore split the timer storage into local pinned and global timers:
+Local pinned timers are always expired on the CPU on which they have been
+queued. Global timers can be expired on any CPU.
 
-	if (rsscap.num_indirect_tabent &&
-	    rsscap.num_indirect_tabent <= ITAB_NUM_MAX) {
+As long as a CPU is busy it expires both local and global timers. When a
+CPU goes idle it arms for the first expiring local timer. If the first
+expiring pinned (local) timer is before the first expiring movable timer,
+then no action is required because the CPU will wake up before the first
+movable timer expires. If the first expiring movable timer is before the
+first expiring pinned (local) timer, then this timer is queued into a idle
+timerqueue and eventually expired by some other active CPU.
 
-> +		ndc->rx_table_sz = rsscap.num_indirect_tabent;
-> +	} else {
-> +		ndc->rx_table_sz = ITAB_NUM;
-> +	}
-> +
-> +	ndc->rx_table = kzalloc(sizeof(u16) * ndc->rx_table_sz,
-> +				GFP_KERNEL);
-> +	if (ndc->rx_table) {
+To avoid global locking the timerqueues are implemented as a hierarchy. The
+lowest level of the hierarchy holds the CPUs. The CPUs are associated to
+groups of 8, which are separated per node. If more than one CPU group
+exist, then a second level in the hierarchy collects the groups. Depending
+on the size of the system more than 2 levels are required. Each group has a
+"migrator" which checks the timerqueue during the tick for remote timers to
+be expired.
 
-More importantly, it looks like the condition is inverted here.
-Which seems unlikely to lead to anything good happening.
+If the last CPU in a group goes idle it reports the first expiring event in
+the group up to the next group(s) in the hierarchy. If the last CPU goes
+idle it arms its timer for the first system wide expiring timer to ensure
+that no timer event is missed.
 
-	if (!ndc->rx_table) {
 
-> +		netdev_err(net, "Error in allocating rx indirection table of size %d\n",
-> +				ndc->rx_table_sz);
-> +		goto out;
-> +	}
-> +
->  	/* This guarantees that num_possible_rss_qs <= num_online_cpus */
->  	num_possible_rss_qs = min_t(u32, num_online_cpus(),
->  				    rsscap.num_recv_que);
-> @@ -1558,7 +1573,7 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
->  	net_device->num_chn = min(net_device->max_chn, device_info->num_chn);
->  
->  	if (!netif_is_rxfh_configured(net)) {
-> -		for (i = 0; i < ITAB_NUM; i++)
-> +		for (i = 0; i < ndc->rx_table_sz; i++)
->  			ndc->rx_table[i] = ethtool_rxfh_indir_default(
->  						i, net_device->num_chn);
->  	}
+Testing
+~~~~~~~
+
+The impact of wasting cycles during enqueue by using the heuristic in
+contrast to always queuing the timer on the local CPU was measured with a
+micro benchmark. Therefore a timer is enqueued and dequeued in a loop with
+1000 repetitions on a isolated CPU. The time the loop takes is measured. A
+quarter of the remaining CPUs was kept busy. This measurement was repeated
+several times. With the patch queue the average duration was reduced by
+approximately 25%.
+
+	145ns	plain v6
+	109ns	v6 with patch queue
+
+
+Furthermore the impact of residence in deep idle states of an idle system
+was investigated. The patch queue doesn't downgrade this behavior.
+
+
+During testing on a mostly idle machine a ping pong game could be observed:
+a process_timeout timer is expired remotely on a non idle CPU. Then the CPU
+where the schedule_timeout() was executed to enqueue the timer comes out of
+idle and restarts the timer using schedule_timeout() and goes back to idle
+again. This is due to the fair scheduler which tries to keep the task on
+the CPU which it previously executed on.
+
+
+Next Steps
+~~~~~~~~~~
+
+Simple deferrable timers are no longer required as they can be converted to
+global timers. If a CPU goes idle, a formerly deferrable timer will not
+prevent the CPU to sleep as long as possible. Only the last migrator CPU
+has to take care of them. Deferrable timers with timer pinned flags needs
+to be expired on the specified CPU but must not prevent CPU from going
+idle. They require their own timer base which is never taken into account
+when calculating the next expiry time. This conversation and required
+cleanup will be done in a follow up series.
+
+v6..v7:
+  - Address review feedback of Frederic and bigeasy
+  - Change lock, unlock fetch next timer interrupt logic after remote expiry
+  - Move timer_expire_remote() into tick-internal.h
+  - Add documentation section about "Required event and timerqueue update
+    after remote expiry"
+  - Fix fallout of kernel test robot
+
+
+v5..v6:
+
+  - Address review of Frederic Weisbecker and Peter Zijlstra (spelling,
+    locking, race in tmigr_handle_remote_cpu())
+
+  - unconditionally set TIMER_PINNED flag in add_timer_on(); introduce
+    add_timer() variants which set/unset TIMER_PINNED flag; drop fixing
+    add_timer_on() call sites, as TIMER_PINNED flag is set implicitly;
+    Fixing workqueue to use add_timer_global() instead of simply
+    add_timer() for unbound work.
+
+  - Drop support for siblings to end up in the same level 0 group (could be
+    added again in a better way as an improvement later on)
+
+  - Do not send IPI for new first deferrable timers
+
+v4..v5:
+  - address review feedback of Frederic Weisbecker
+  - fix issue with group timer update after remote expiry
+
+v3..v4:
+  - address review feedback of Frederic Weisbecker
+  - address kernel test robot fallout
+  - Move patch 16 "add_timer_on(): Make sure callers have TIMER_PINNED
+    flag" at the begin of the queue to prevent timers to end up in global
+    timer base when they were queued using add_timer_on()
+  - Fix some comments and typos
+
+v2..v3: https://lore.kernel.org/r/20170418111102.490432548@linutronix.de/
+  - Minimize usage of locks by storing data using atomic_cmpxchg() for
+    migrator information and information about active cpus.
+
+
+Thanks,
+
+	Anna-Maria
+
+
+
+Anna-Maria Behnsen (18):
+  tick-sched: Warn when next tick seems to be in the past
+  timer: Do not IPI for deferrable timers
+  timer: Add comment to get_next_timer_interrupt() description
+  timer: Move store of next event into __next_timer_interrupt()
+  timer: Split next timer interrupt logic
+  timers: Introduce add_timer() variants which modify timer flags
+  workqueue: Use global variant for add_timer()
+  timer: add_timer_on(): Make sure TIMER_PINNED flag is set
+  timers: Ease code in run_local_timers()
+  timers: Create helper function to forward timer base clk
+  timer: Keep the pinned timers separate from the others
+  timer: Retrieve next expiry of pinned/non-pinned timers separately
+  timer: Split out "get next timer interrupt" functionality
+  timer: Add get next timer interrupt functionality for remote CPUs
+  timer: Check if timers base is handled already
+  timer: Implement the hierarchical pull model
+  timer_migration: Add tracepoints
+  timer: Always queue timers on the local CPU
+
+Richard Cochran (linutronix GmbH) (2):
+  timer: Restructure internal locking
+  tick/sched: Split out jiffies update helper function
+
+Thomas Gleixner (1):
+  timer: Rework idle logic
+
+ include/linux/cpuhotplug.h             |    1 +
+ include/linux/timer.h                  |   16 +-
+ include/trace/events/timer_migration.h |  277 +++++
+ kernel/time/Makefile                   |    3 +
+ kernel/time/tick-internal.h            |   12 +
+ kernel/time/tick-sched.c               |   20 +-
+ kernel/time/timer.c                    |  458 ++++++--
+ kernel/time/timer_migration.c          | 1435 ++++++++++++++++++++++++
+ kernel/time/timer_migration.h          |  136 +++
+ kernel/workqueue.c                     |    2 +-
+ 10 files changed, 2254 insertions(+), 106 deletions(-)
+ create mode 100644 include/trace/events/timer_migration.h
+ create mode 100644 kernel/time/timer_migration.c
+ create mode 100644 kernel/time/timer_migration.h
 
 -- 
-pw-bot: cr
+2.30.2
 
