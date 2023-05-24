@@ -2,107 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C7C70FFC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B1270FFCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjEXVNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
+        id S229737AbjEXVNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjEXVNB (ORCPT
+        with ESMTP id S234043AbjEXVNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:13:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA26C1;
-        Wed, 24 May 2023 14:13:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67ECB61221;
-        Wed, 24 May 2023 21:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E658EC433EF;
-        Wed, 24 May 2023 21:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684962779;
-        bh=O4tVFqzxzYJMltd6cz92CwwCySf1erTEHtbiFOsH+OE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JT1cBJ8PDH+s5KW76ymG6ic5d90KB6voto/Su6ZJ9TqYi7V8g2DOZk2okNs55QIPE
-         8SCSO5VIxb9bhz7yo9xHKRD9tp0lU247Ry6q3CUpKQMN7EYac1jYaVmwxCaS4baQLd
-         W8G3XXoStpIoECvbRhH/nWgM3hQV2izBXajGk9bSdz6jgq4kKPPBXDgBvO2xh7F67Y
-         KR10V2K+fEUYWUtVs/IDwChbPcb4vUovO2qaT7VVrFKkF2yV6Y7y0hFrQqfuGc1MxH
-         4Pm0ZVv//CR5CnivIeiRzrbO2nCR3Qq1y2PGbIxJJP76azryjt5r6PQY7e2AyC800Y
-         fWmUTD6Bb755Q==
-Date:   Wed, 24 May 2023 22:12:54 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] dt-bindings: sram: qcom,ocmem: Add msm8226 support
-Message-ID: <20230524-sesame-badly-b641dd49b2f2@spud>
-References: <20230506-msm8226-ocmem-v2-0-177d697e43a9@z3ntu.xyz>
- <20230506-msm8226-ocmem-v2-4-177d697e43a9@z3ntu.xyz>
- <20230524-conjure-gag-731ab10fd7ff@spud>
+        Wed, 24 May 2023 17:13:19 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0AB1BF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:13:11 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-338458a9304so17265ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684962791; x=1687554791;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JYUYf+N7n/RZ7xlXddX7wNd0LbOcdLHs3IxcHa82qlo=;
+        b=4JAsb3Sq8eYnNptcyhuiR93ia3f1K0xKdNBjprpWrE5qliQAJXglHYyW3atv7s77B/
+         DefLbBv5NMlKXTvmsIR4oi4kCZuuiCrKM/AfEbvJGi+DhN0XW+AWDnoL+A8KT/w5QmG0
+         Dduyku8/9uL1vByLm1/VXsBz/2hfnH6kn4/kVi7f/0KPl0pU0ZECFIci2NvIZ3VWaC0j
+         7mui8/OJTkvY13CMIm3LSNImLAMXDNxwK3kM5aYk2dPRnu3sDw/x+wU2oPHKVM4EJBQm
+         rqnjs2DgodJw4Et8WPvWkQeYTnJOX0/9Z8F48sa2SnTAZYjxDbBUGMSC/m9dDYZDUZFc
+         U7ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684962791; x=1687554791;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JYUYf+N7n/RZ7xlXddX7wNd0LbOcdLHs3IxcHa82qlo=;
+        b=LP/0+nm6dO3EPuD2DLJPT4AR0mThxdxav90NSRWdAgNVf1SLDdQFRjh06k2Doa1fgf
+         dJEWzm80gaM5MGwAde1vYwZEswZ95Hqxqk3LzSd9o2/xazKdoQUE0P7xmtS9tj5/LEAl
+         oVgLvq7IuieFRrPNb/h2zdEZIiqC9rlXmh1esuY8xZ9plzCskY2eMkEId2yReE2sbLew
+         CqR/HvmqAqH4meiH6D6HgxGphQcPpgfpHUxtsi+irlOOuVG6NMW3zRW5NfBrM+kJdvrx
+         e0SNOB7hWTUBosxBsEzH4AMYSYvKYFCv7QBuBEB6EETp9EeN+l3SqK5fe0DzeDj/BFzK
+         TbvA==
+X-Gm-Message-State: AC+VfDwoOqqpaB8oJc/eAKJ51MEb0a0SgHpAWTR8Cz/FXCjXTVYUO35z
+        W5F26TT9TRuKZxDe84hfBYb8fmhQHugKkMoNbEzSxQ==
+X-Google-Smtp-Source: ACHHUZ4rKi36fvG7ashFJnQT9G8kZS2ONK9sJ+HfcAMU13wMJoqPvrtULzbE6RXkxl+wNc2IhTHUmkoG9V47OwdbgBU=
+X-Received: by 2002:a05:6e02:1bc6:b0:337:c28c:3d0f with SMTP id
+ x6-20020a056e021bc600b00337c28c3d0fmr60287ilv.6.1684962791070; Wed, 24 May
+ 2023 14:13:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MRlk0mJGvtQbkhPr"
-Content-Disposition: inline
-In-Reply-To: <20230524-conjure-gag-731ab10fd7ff@spud>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAD=FV=WRecTWsFM96k81YAx1=jJT0vpS4EPP0ZfWFUGHNFx9Tw@mail.gmail.com>
+ <20230524074455.1172064-1-yangcong5@huaqin.corp-partner.google.com> <20230524074455.1172064-2-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230524074455.1172064-2-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@google.com>
+Date:   Wed, 24 May 2023 14:12:59 -0700
+Message-ID: <CAD=FV=VmBAbZ9itTSugwsYownu09XPLiW75N68Vvu=cVq8bRxA@mail.gmail.com>
+Subject: Re: [v2 3/4] drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     daniel@ffwll.ch, neil.armstrong@linaro.org, sam@ravnborg.org,
+        airlied@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---MRlk0mJGvtQbkhPr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, May 24, 2023 at 12:45=E2=80=AFAM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> The Starry-ili9882 is a 10.51" WUXGA TFT panel. which fits in nicely with
+> the existing panel-boe-tv101wum-nl6 driver. From the datasheet,MIPI need
+> to keep the LP11 state before the lcm_reset pin is pulled high. So add
+> lp11_before_reset flag.
+>
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> ---
+>  .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 371 ++++++++++++++++++
+>  1 file changed, 371 insertions(+)
 
-On Wed, May 24, 2023 at 09:34:06PM +0100, Conor Dooley wrote:
-> On Tue, May 23, 2023 at 10:55:11PM +0200, Luca Weiss wrote:
-> > Add the compatible for the OCMEM found on msm8226 which compared to
-> > msm8974 only has a core clock and no iface clock.
-> >=20
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->=20
-> Could you please either send me the cover-letter or include the
-> changelog in the patch under the ---?
+Assuming you order the table in the proper place like I requested for
+("drm/panel: Support for Starry-himax83102-j02 TDDI MIPI-DSI panel"),
+then:
 
-Apparently I did get the cover, but in another mailbox for IDK what
-reason. Sorry!
-
->=20
-> Otherwise,
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> Thanks,
-> Conor.
-
-
-
---MRlk0mJGvtQbkhPr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG591gAKCRB4tDGHoIJi
-0gInAP0UWgoIftKXeOkrEkouygZ+REuYZ1hiD+xn6WbVRSDAyAD/b8FuHIVmUBmu
-6jmEoMlmJSBHbbVNJe40n8+/NNOO1QE=
-=G8Yn
------END PGP SIGNATURE-----
-
---MRlk0mJGvtQbkhPr--
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
