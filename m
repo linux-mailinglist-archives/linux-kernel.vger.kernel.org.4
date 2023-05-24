@@ -2,121 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B31F70FD0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9175E70FD1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236230AbjEXRqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 13:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        id S236245AbjEXRrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbjEXRqL (ORCPT
+        with ESMTP id S236143AbjEXRrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:46:11 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5D01A8;
-        Wed, 24 May 2023 10:45:39 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso2451961a12.2;
-        Wed, 24 May 2023 10:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684950338; x=1687542338;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nWBdICZs1ylHFsz8zslSqh0ccqIAuQOZUPv8JnOg1n4=;
-        b=Ph7hH4NN5Xzd3WzBdsSVQS8+U87aBSWIrpyy7+WW0QkU1h5rnmAglEqXX+qT8idyBn
-         tuGBsqy4bNR0P53kYTfSXcv1RVx8P56JrjDguFJ2xDB2Jik1T7xuU68m7BLTI6vydpBx
-         4/vYBbe6gwOchR/v4SnWspk2/qa+klTSroJ/HZE9nio1csB5CsvtuWQBAw3X2wM5N72V
-         RWOe1yPtyX+SB1o+4y7Vfl1FqeSZah/FtQcfO7aAisxjzo96nvUquvYRLFzTHHRJYfMB
-         we7KhGHMmZmN1xxtrD17MLFmjbw8pI8ji/9G6fRM7laNyrmArTJCgVKO4wfxQTUk5mg6
-         DTXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950338; x=1687542338;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nWBdICZs1ylHFsz8zslSqh0ccqIAuQOZUPv8JnOg1n4=;
-        b=aHYMhV6KrwbFanPLkA1Fb+EeyhXNrNwpq+xnD1VAJG2fvV3hLnmDNHHwBVS1XWLjqE
-         RBu74f7+nLJL1pBKrigxM0OSE/k9lHeE95pn/T9SzvW5nSOroQMYCipXxFTZNAo7DZII
-         xdCYe7OsWpKZDMq3o65vBAV5aZAXFgfNwSghQol8Q/jtVQB0SCDAUWiDuBmZclXYlpnn
-         ot4jmPoj0BOUf5v4WHtH1H+J2LQ3BtQjrJfSe953GoXQ/8/WWMxyh5O/NbR16CMimAwt
-         Ecoe2FuGoqNJES/9OPBFyZk6FIXboUBcDCUs14HpZyZXeYBSUel4ZaYdfDLoqdUGTC9m
-         IWXQ==
-X-Gm-Message-State: AC+VfDxouFjzlxxp1QMP6RU0E5KfFpP+Lr3VXDdMzQW5eu2PXqPCHHrg
-        JV9+K4n824n+KBmI3xrr2Ps=
-X-Google-Smtp-Source: ACHHUZ5kNjjMXypD+xFlWxn/uIyXBW8jfQ4bsLcwCAUAU/F/MLjAg+8IbDjx5a+657iaeX5f2L+AEg==
-X-Received: by 2002:a17:907:9809:b0:966:23e5:c8f7 with SMTP id ji9-20020a170907980900b0096623e5c8f7mr17741535ejc.62.1684950338056;
-        Wed, 24 May 2023 10:45:38 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id ja26-20020a170907989a00b0096b55be592asm6025738ejc.92.2023.05.24.10.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 10:45:37 -0700 (PDT)
-Date:   Wed, 24 May 2023 20:45:34 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 07/30] net: dsa: mt7530: do not run
- mt7530_setup_port5() if port 5 is disabled
-Message-ID: <20230524174534.hcxn6tjhjmho6io7@skbuf>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-8-arinc.unal@arinc9.com>
- <20230522121532.86610-8-arinc.unal@arinc9.com>
+        Wed, 24 May 2023 13:47:40 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E49E69;
+        Wed, 24 May 2023 10:47:09 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1684950423t77e0lrx
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 May 2023 01:47:01 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: znfcQSa1hKZBlxy494Gp/CUTxDNxeJi9g6MNrUFAmf11ZBmaQQlpsB9yjSoP9
+        kCNyyfNK4LVYRCC+QxI5nml5abQCRTMKoiHD1uZbPRTZ1RzErA2+ejZ5gCTE4aaBmHm5bj/
+        ZQ1bgyUYryKHFl0PJWO5ymVDxnE2EuM41izSnz1UsJHmnDxwhtoG9KaU3OBjNXlgs+zbNtw
+        5i9MDjM0WHVF2a96ojpLDypn3LHo2HPKKA40Q0jjS2qTrMgN6Fci78eZmVfBjVwe6Rx4Pj+
+        NvUiNs0b9UznWltOOMBCnR8UPvdOzT4vkcsKKbIerPec1+SV01TSUsBd4hWFiKtvEnBRr9S
+        KVY5EDSIESXpdffOq9gmaBnmtPOtzRkYz4oX4hJkkwSFjsyihUHNRYIIYhw7Um6ZkKDhbVj
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10920217601069788465
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
+Subject: [PATCH 03/13] selftests/nolibc: print name instead of number for EOVERFLOW
+Date:   Thu, 25 May 2023 01:46:54 +0800
+Message-Id: <e3c9bf5ccdae920f0609486256c52de8233aecb6.1684949267.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
+References: <cover.1684949267.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230522121532.86610-8-arinc.unal@arinc9.com>
- <20230522121532.86610-8-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:15:09PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> There's no need to run all the code on mt7530_setup_port5() if port 5 is
-> disabled. The only case for calling mt7530_setup_port5() from
-> mt7530_setup() is when PHY muxing is enabled. That is because port 5 is not
-> defined as a port on the devicetree, therefore, it cannot be controlled by
-> phylink.
-> 
-> Because of this, run mt7530_setup_port5() if priv->p5_intf_sel is
-> P5_INTF_SEL_PHY_P0 or P5_INTF_SEL_PHY_P4. Remove the P5_DISABLED case from
-> mt7530_setup_port5().
-> 
-> Stop initialising the interface variable as the remaining cases will always
-> call mt7530_setup_port5() with it initialised.
-> 
-> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
+EOVERFLOW will be used in the coming time64 syscalls support.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index c570bb848c1a..227ef2a3ebba 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -106,6 +106,7 @@ const char *errorname(int err)
+ 	CASE_ERR(EDOM);
+ 	CASE_ERR(ERANGE);
+ 	CASE_ERR(ENOSYS);
++	CASE_ERR(EOVERFLOW);
+ 	default:
+ 		return itoa(err);
+ 	}
+-- 
+2.25.1
+
