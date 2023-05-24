@@ -2,92 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37E4710180
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A05710183
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238826AbjEXXFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 19:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        id S238671AbjEXXIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 19:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238687AbjEXXFk (ORCPT
+        with ESMTP id S236356AbjEXXI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 19:05:40 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F026A1A1;
-        Wed, 24 May 2023 16:05:34 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50db91640d3so2813791a12.0;
-        Wed, 24 May 2023 16:05:34 -0700 (PDT)
+        Wed, 24 May 2023 19:08:28 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25595A4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:08:27 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a950b982d4so63055ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684969533; x=1687561533;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GxzgFxfx+TiykE1Xh7O/xgq+W33H38gTkL9jRqPtEs=;
-        b=rrYsnM4KPn6tO5D7xGsfGPwlyWMsLT2AEb1zyF4C1gnFiH07WSRSz58+hy/oolz/vK
-         8EnW0MBhN7noJvbAX4d/AXU9PNFDIAZIOv+JC2wxraLBkfTpCgtOUyNs+pTFYg79a516
-         9Ggu5E5s0Ry6nnDYQzpEfuYNcJAXwW8ieD7lCqfmVdh00eEZxXpYdD0D1dAaAQ8gZvPX
-         7EaQzCDqU5ZYNnK5djzJL9pXlAIMufaDqP2HjjU+3MySoAtb/oMsXteku2xHIHuw/sXB
-         4JeLvXUpKkTtQ1bgOpGL/lAH7UaXkun6cbOdYK7vdI6Of7rgBBZTwaqUKF4mpoyLho3S
-         PhKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684969533; x=1687561533;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1684969706; x=1687561706;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3GxzgFxfx+TiykE1Xh7O/xgq+W33H38gTkL9jRqPtEs=;
-        b=A+u7onaKw6E24zwRO7KXnZ9rcysXF3YZ8axFQaRXVhk47pDVuN5HQutehFpDo8lEcO
-         pObBH04ATqIH1Z0R/5gO3o9vNjK2nH6J7TeUuJ/xRzGymhoN6F0puzIHXLPUbn2GdlWO
-         u+8sOXDS4RXDPsjHnVpYVQWFev24GMMGLV2awgeQdS1xhxvYm6zH/EkVWrgTaaIad7T3
-         zE9sqVU48t2kvfm7KeSzAn2IkHK23OMSHyOyrE+NqgatFNoeEv8UVvWlASEEn26s9o5K
-         EUxPJTNQ9AisAIuCaoX59KxNlVv2/fEkZJ8HAs51p5zZORdoPWf8FGZQL+HVk7pyoq2W
-         MZzw==
-X-Gm-Message-State: AC+VfDzlz2liq1PRJpN3UFfQXJsQJ4w2IEMo99bma6jfIVU/9eGDFFDR
-        yk0zJGzoRxWlARbkZ4l2Me+IOnLVHzzjuw==
-X-Google-Smtp-Source: ACHHUZ7Rqz2GAY35oKipEF/f4kZ9HSWyjBNdexIQnogNGNYtRhUG9pdKdSTq0qjRXerZPH2T40IDcg==
-X-Received: by 2002:aa7:c3ca:0:b0:50d:f881:1afc with SMTP id l10-20020aa7c3ca000000b0050df8811afcmr2869223edr.23.1684969533077;
-        Wed, 24 May 2023 16:05:33 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id ay24-20020a056402203800b0050690bc07a3sm374208edb.18.2023.05.24.16.05.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 16:05:32 -0700 (PDT)
-Date:   Thu, 25 May 2023 02:05:30 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net v3 4/4] net: phy: mscc: enable VSC8501/2 RGMII RX
- clock
-Message-ID: <20230524230530.ahnoz6cfedcz4pri@skbuf>
-References: <20230523153108.18548-1-david.epping@missinglinkelectronics.com>
- <20230523153108.18548-5-david.epping@missinglinkelectronics.com>
+        bh=7uIGf3DX/t1yVaRSBiF6g+nRghGOxxs2qgmm7TStiZI=;
+        b=pQrJjkly+JWvSS6WqrgX7WVhttD3oD0FFoWQv+S/8U7sVToiGsLNnF9FRRorNzzKQt
+         ga5G21bM9rOSj8ju6vs+UgU77HkWgoc6XFOkBJOQ8p/fbBWygnsmRgahJnflVUOsvq94
+         8ZQUR+3mEOD1JMflV0LxgIf3LKCu00Q+zfD/h2GUtIDbXGetUU+iXHvsNed+aX7G9CqM
+         0GrQdXHigVrfBoab2kGUkcu0L1j2ypPndAIkdTl7MZgSHfwLUL8LFRQpvfVi2UEBnQYm
+         nb1tRVb9MgmpKc6JVlPSX/sc2ResWe5XgSWqtnNj5Ti5rmUa/tncoMssQsKBEcVGR/25
+         af+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684969706; x=1687561706;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7uIGf3DX/t1yVaRSBiF6g+nRghGOxxs2qgmm7TStiZI=;
+        b=P8XwLgZ65S3I1JrUMTBh5WbhDEIieHtV9SBy7KxteBKsZUFDdcjHiodYOVEkPCWfrN
+         nC1EVKCw2SjR6m/2yNXIMMsYUMuyzcbLU67hYEDpFpo/jh0YFlZz1Bi9pcjo6mFCLbqJ
+         RUaJiei8DosD38D37tItazqTQkmiobOi5krGuuw/AkLVCl9Vn6GihOX3IXOkAS7UhvPq
+         eu0p6FJbv7koclUvPl2S1RmWDlOv1eSQPL5g0Tsi9OJTbvLQJTs3yrpeVmM4uI8SWaPD
+         moe5TPDKHdQ6O4nMpNRPQD6ntxX37pWukKuZCay7wyPn/1Z6FFq2zV1VUVmhSHKKI0Ie
+         TXfg==
+X-Gm-Message-State: AC+VfDwFKUiHGbt20wUeMjbup5URPn4NdttHA4TU8mY5TfKo8P3540qW
+        3pcKGIcbJlsDc/lIQd2/YnDg+/kqYjsemaMkZ3JCrw==
+X-Google-Smtp-Source: ACHHUZ63+Idbw/qt4T1qFTdyJfOJ0ruqx7xMAaVHR2RRTjlcbT6hGthEciYIg12Lx4T0cEZdAzOgYIooXEwjRHzh860=
+X-Received: by 2002:a17:902:e5c3:b0:1a6:6a2d:18f0 with SMTP id
+ u3-20020a170902e5c300b001a66a2d18f0mr23477plf.9.1684969706417; Wed, 24 May
+ 2023 16:08:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523153108.18548-5-david.epping@missinglinkelectronics.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230323072714.82289-1-likexu@tencent.com> <20230323072714.82289-5-likexu@tencent.com>
+In-Reply-To: <20230323072714.82289-5-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 24 May 2023 16:08:15 -0700
+Message-ID: <CALMp9eT1e0OB0sRkGu_EhuAa_B5wQUQ9KajEQvN3gg231Pqzaw@mail.gmail.com>
+Subject: Re: [PATCH 4/7] KVM: selftests: Test consistency of CPUID with num of
+ Fixed counters
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 05:31:08PM +0200, David Epping wrote:
-> By default the VSC8501 and VSC8502 RGMII/GMII/MII RX_CLK output is
-> disabled. To allow packet forwarding towards the MAC it needs to be
-> enabled.
-> 
-> For other PHYs supported by this driver the clock output is enabled
-> by default.
-> 
-> Signed-off-by: David Epping <david.epping@missinglinkelectronics.com>
+On Thu, Mar 23, 2023 at 12:28=E2=80=AFAM Like Xu <like.xu.linux@gmail.com> =
+wrote:
+>
+> From: Jinrong Liang <cloudliang@tencent.com>
+>
+> Add test to check if non-existent counters can be accessed in guest after
+> determining the number of Intel generic performance counters by CPUID.
+> Per SDM, fixed-function performance counter 'i' is supported if ECX[i] ||
+> (EDX[4:0] > i). KVM doesn't emulate more counters than it can support.
+>
+> Co-developed-by: Like Xu <likexu@tencent.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
 > ---
+>  .../selftests/kvm/x86_64/pmu_cpuid_test.c     | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c b/tools/=
+testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+> index 50902187d2c9..c934144be287 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+> @@ -74,6 +74,22 @@ static uint8_t kvm_gp_ctrs_num(void)
+>         return (kvm_entry->eax & GP_CTR_NUM_MASK) >> GP_CTR_NUM_OFS_BIT;
+>  }
+>
+> +static uint8_t kvm_fixed_ctrs_num(void)
+> +{
+> +       const struct kvm_cpuid_entry2 *kvm_entry;
+> +
+> +       kvm_entry =3D get_cpuid_entry(kvm_get_supported_cpuid(), 0xa, 0);
+> +       return kvm_entry->edx & FIXED_CTR_NUM_MASK;
+> +}
+> +
+> +static uint32_t kvm_fixed_ctrs_bitmask(void)
+> +{
+> +       const struct kvm_cpuid_entry2 *kvm_entry;
+> +
+> +       kvm_entry =3D get_cpuid_entry(kvm_get_supported_cpuid(), 0xa, 0);
+> +       return kvm_entry->ecx;
+> +}
+> +
+>  static struct kvm_vcpu *new_vcpu(void *guest_code)
+>  {
+>         struct kvm_vm *vm;
+> @@ -230,6 +246,39 @@ static void test_oob_gp_counter_setup(struct kvm_vcp=
+u *vcpu, uint8_t eax_gp_num,
+>         vm_install_exception_handler(vcpu->vm, GP_VECTOR, guest_gp_handle=
+r);
+>  }
+>
+> +static uint64_t test_oob_fixed_counter_setup(struct kvm_vcpu *vcpu,
+> +                                            uint8_t edx_fix_num,
+> +                                            uint32_t fixed_bitmask)
+> +{
+> +       struct kvm_cpuid_entry2 *entry;
+> +       uint32_t ctr_msr =3D MSR_CORE_PERF_FIXED_CTR0;
+> +       uint8_t idx =3D edx_fix_num;
+> +       bool is_supported =3D true;
+> +       uint64_t ret =3D 0xffffULL;
+> +
+> +       entry =3D vcpu_get_cpuid_entry(vcpu, 0xa);
+> +       entry->ecx =3D fixed_bitmask;
+> +       entry->edx =3D (entry->edx & ~FIXED_CTR_NUM_MASK) | edx_fix_num;
+> +       vcpu_set_cpuid(vcpu);
+> +
+> +       /* Per Intel SDM, FixCtr[i]_is_supported :=3D ECX[i] || (EDX[4:0]=
+ > i). */
+> +       is_supported =3D (entry->ecx & BIT_ULL(idx) ||
+> +                       ((entry->edx & FIXED_CTR_NUM_MASK) > idx));
+> +
+> +       /* KVM doesn't emulate more fixed counters than it can support. *=
+/
+> +       if (idx >=3D kvm_fixed_ctrs_num())
+> +               is_supported =3D false;
+> +
+> +       if (!is_supported) {
+> +               vm_install_exception_handler(vcpu->vm, GP_VECTOR, guest_g=
+p_handler);
+> +               ret =3D GP_VECTOR;
+> +       }
+> +
+> +       vcpu_args_set(vcpu, 4, ctr_msr, ret, idx, 1);
+> +
+> +       return ret;
+> +}
+> +
+>  static void intel_check_arch_event_is_unavl(uint8_t idx)
+>  {
+>         const char *msg =3D "Unavailable arch event is counting.";
 
-Fixes: d3169863310d ("net: phy: mscc: add support for VSC8502")
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+This test seems bogus to me. The event may not be available because it
+is inaccurate. That doesn't imply that the count will always be zero.
+
+> @@ -267,10 +316,23 @@ static void test_oob_gp_counter(uint8_t eax_gp_num,=
+ uint64_t perf_cap)
+>         free_vcpu(vcpu);
+>  }
+>
+> +static void intel_test_oob_fixed_ctr(uint8_t edx_fix_num, uint32_t fixed=
+_bitmask)
+> +{
+> +       const char *msg =3D "At least one unsupported Fixed counter is vi=
+sible.";
+
+This test seems bogus to me. Unsupported does not imply invisible.
+
+> +       struct kvm_vcpu *vcpu;
+> +       uint64_t ret;
+> +
+> +       vcpu =3D new_vcpu(guest_wr_and_rd_msrs);
+> +       ret =3D test_oob_fixed_counter_setup(vcpu, edx_fix_num, fixed_bit=
+mask);
+> +       run_vcpu(vcpu, msg, first_uc_arg_equals, (void *)ret);
+> +       free_vcpu(vcpu);
+> +}
+> +
+>  static void intel_test_counters_num(void)
+>  {
+>         uint8_t kvm_gp_num =3D kvm_gp_ctrs_num();
+>         unsigned int i;
+> +       uint32_t ecx;
+>
+>         TEST_REQUIRE(kvm_gp_num > 2);
+>
+> @@ -289,6 +351,12 @@ static void intel_test_counters_num(void)
+>                 /* KVM doesn't emulate more counters than it can support.=
+ */
+>                 test_oob_gp_counter(kvm_gp_num + 1, perf_caps[i]);
+>         }
+> +
+> +       for (ecx =3D 0; ecx <=3D kvm_fixed_ctrs_bitmask() + 1; ecx++) {
+> +               intel_test_oob_fixed_ctr(0, ecx);
+> +               intel_test_oob_fixed_ctr(kvm_fixed_ctrs_num(), ecx);
+> +               intel_test_oob_fixed_ctr(kvm_fixed_ctrs_num() + 1, ecx);
+> +       }
+>  }
+>
+>  static void intel_test_arch_events(void)
+> --
+> 2.40.0
+>
