@@ -2,51 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F1270F009
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D81470EFF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239639AbjEXH54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S235074AbjEXHy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbjEXH5z (ORCPT
+        with ESMTP id S235456AbjEXHyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:57:55 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E4393;
-        Wed, 24 May 2023 00:57:52 -0700 (PDT)
-Received: from [IPV6:2001:250:4000:511d:8894:e09e:de:de24] ([172.16.0.254])
-        (user=lyx2022@hust.edu.cn mech=PLAIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 34O7rxBA003146-34O7rxBB003146
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Wed, 24 May 2023 15:53:59 +0800
-Message-ID: <60946593-0df4-a131-fc4b-5c43b73df6ea@hust.edu.cn>
-Date:   Wed, 24 May 2023 15:53:59 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] clk: imx: clk-imx8mp: improve error handling in
- imx8mp_clocks_probe()
-To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230503070607.2462-1-lyx2022@hust.edu.cn>
-From:   Yuxing Liu <lyx2022@hust.edu.cn>
-In-Reply-To: <20230503070607.2462-1-lyx2022@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 24 May 2023 03:54:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036CB93;
+        Wed, 24 May 2023 00:54:22 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O7j72e000529;
+        Wed, 24 May 2023 07:54:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=d5QAF16BJKDuMg4CE8wCgJ8dMnnIFqFme5RRke6iDFA=;
+ b=XEyL8zw10tjh/hvNzSk2aRRknxFC/Jzx7CglgwPl+o4F9J6gXLd0FkldvvZ+QF5DBplU
+ MkzdWKohEv94lBW583NzTdIRTXq7dmRJTLbjPf+VlsVF9GKKmW7WY1BBu+BkU+RVie55
+ LiSuJdSFklzWazs1ffSK2IfUFv0bTAxPns0TnQu8MTbaeYuawud/yxbmewcxdKAinfkH
+ z3jRK3Ng8c78ySGIGdPUrIrUHaEZmyotydXsnl437ht/90XmwjCO6IPhSRiWSUAeXoJg
+ r0Xe2RiO/cGsH7RJ2DRnKs00YP7+qDz0MO6nrsOmw8qCaqyk0jQEl/OAndDazXLOTvEf zQ== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qse4kgmmv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 07:54:18 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34O2v3Le000965;
+        Wed, 24 May 2023 07:54:15 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3qppcf1hc6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 07:54:15 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34O7sCjo30802350
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 May 2023 07:54:12 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E66F020043;
+        Wed, 24 May 2023 07:54:11 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B53020040;
+        Wed, 24 May 2023 07:54:11 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 24 May 2023 07:54:11 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: [PATCH net-next] s390/ism: Set DMA coherent mask
+Date:   Wed, 24 May 2023 09:54:10 +0200
+Message-Id: <20230524075411.3734141-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IP9jPuNTbIrXKI-7-cVVuXaYW72dL7NF
+X-Proofpoint-ORIG-GUID: IP9jPuNTbIrXKI-7-cVVuXaYW72dL7NF
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: lyx2022@hust.edu.cn
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_03,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=955
+ lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 phishscore=0
+ impostorscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305240064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,77 +91,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping?
+A future change will convert the DMA API implementation from the
+architecture specific arch/s390/pci/pci_dma.c to using the common code
+drivers/iommu/dma-iommu.c which the utilizes the same IOMMU hardware
+through the s390-iommu driver. Unlike the s390 specific DMA API this
+requires devices to correctly set the coherent mask to be allowed to use
+IOVAs >2^32 in dma_alloc_coherent(). This was however not done for ISM
+devices. ISM requires such addresses since currently the DMA aperture
+for PCI devices starts at 2^32 and all calls to dma_alloc_coherent()
+would thus fail.
 
-在 2023/5/3 15:06, Yuxing Liu 写道:
-> Replace of_iomap() and kzalloc() with devm_of_iomap() and devm_kzalloc()
-> which can automatically release the related memory when the device
-> or driver is removed or unloaded to avoid potential memory leak.
->
-> In this case, iounmap(anatop_base) in line 427,433 are removed
-> as manual release is not required.
->
-> Besides, referring to clk-imx8mq.c, check the return code of
-> of_clk_add_hw_provider, if it returns negtive, print error info
-> and unregister hws, which makes the program more robust.
->
-> Fixes: 9c140d992676 ("clk: imx: Add support for i.MX8MP clock driver")
-> Signed-off-by: Yuxing Liu <lyx2022@hust.edu.cn>
-> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
-> This issue is found by static analysis and remains untested.
-> ---
->   drivers/clk/imx/clk-imx8mp.c | 24 +++++++++++++-----------
->   1 file changed, 13 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-> index 3253589851ff..de7d2d2176be 100644
-> --- a/drivers/clk/imx/clk-imx8mp.c
-> +++ b/drivers/clk/imx/clk-imx8mp.c
-> @@ -414,25 +414,22 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
->   	struct device *dev = &pdev->dev;
->   	struct device_node *np;
->   	void __iomem *anatop_base, *ccm_base;
-> +	int err;
->   
->   	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mp-anatop");
-> -	anatop_base = of_iomap(np, 0);
-> +	anatop_base = devm_of_iomap(dev, np, 0, NULL);
->   	of_node_put(np);
-> -	if (WARN_ON(!anatop_base))
-> -		return -ENOMEM;
-> +	if (WARN_ON(IS_ERR(anatop_base)))
-> +		return PTR_ERR(anatop_base);
->   
->   	np = dev->of_node;
->   	ccm_base = devm_platform_ioremap_resource(pdev, 0);
-> -	if (WARN_ON(IS_ERR(ccm_base))) {
-> -		iounmap(anatop_base);
-> +	if (WARN_ON(IS_ERR(ccm_base)))
->   		return PTR_ERR(ccm_base);
-> -	}
->   
-> -	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, IMX8MP_CLK_END), GFP_KERNEL);
-> -	if (WARN_ON(!clk_hw_data)) {
-> -		iounmap(anatop_base);
-> +	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws, IMX8MP_CLK_END), GFP_KERNEL);
-> +	if (WARN_ON(!clk_hw_data))
->   		return -ENOMEM;
-> -	}
->   
->   	clk_hw_data->num = IMX8MP_CLK_END;
->   	hws = clk_hw_data->hws;
-> @@ -721,7 +718,12 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
->   
->   	imx_check_clk_hws(hws, IMX8MP_CLK_END);
->   
-> -	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
-> +	err = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
-> +	if (err < 0) {
-> +		dev_err(dev, "failed to register hws for i.MX8MP\n");
-> +		imx_unregister_hw_clocks(hws, IMX8MP_CLK_END);
-> +		return err;
-> +	}
->   
->   	imx_register_uart_clocks();
->   
+Link: https://lore.kernel.org/all/20230310-dma_iommu-v9-1-65bb8edd2beb@linux.ibm.com/
+Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+Note: This was previously sent and reviewed as part of multiple versions of the
+s390 DMA API conversion series which requires this change as a pre-requisite
+with the latest version at the Link. Sending separately to add the net-next
+prefix so this can be integrated.
+
+ drivers/s390/net/ism_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
+index 8acb9eba691b..1399b5dc646c 100644
+--- a/drivers/s390/net/ism_drv.c
++++ b/drivers/s390/net/ism_drv.c
+@@ -660,7 +660,7 @@ static int ism_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (ret)
+ 		goto err_disable;
+ 
+-	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
++	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	if (ret)
+ 		goto err_resource;
+ 
+-- 
+2.39.2
+
