@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2BA70EC53
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE2470EC54
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239528AbjEXEBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 00:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        id S239503AbjEXEBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 00:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239485AbjEXEAo (ORCPT
+        with ESMTP id S239494AbjEXEAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 May 2023 00:00:44 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26025E62
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:00:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VjMYJa-_1684900814;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VjMYJa-_1684900814)
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EC2E6E
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:00:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VjMVrSC_1684900815;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VjMVrSC_1684900815)
           by smtp.aliyun-inc.com;
-          Wed, 24 May 2023 12:00:15 +0800
+          Wed, 24 May 2023 12:00:16 +0800
 From:   Yang Li <yang.lee@linux.alibaba.com>
 To:     alexander.deucher@amd.com
 Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
@@ -27,9 +27,9 @@ Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Yang Li <yang.lee@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next 11/13] drm/amd/display: remove unused definition
-Date:   Wed, 24 May 2023 11:59:50 +0800
-Message-Id: <20230524035952.123590-11-yang.lee@linux.alibaba.com>
+Subject: [PATCH -next 12/13] drm/amd/display: remove unused definition
+Date:   Wed, 24 May 2023 11:59:51 +0800
+Message-Id: <20230524035952.123590-12-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 In-Reply-To: <20230524035952.123590-1-yang.lee@linux.alibaba.com>
 References: <20230524035952.123590-1-yang.lee@linux.alibaba.com>
@@ -46,23 +46,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Eliminate the following warnings:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn316/dcn316_resource.c:1355:43: warning: unused variable 'res_create_maximus_funcs'
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn316/dcn316_resource.c:899:38: warning: unused variable 'debug_defaults_diags'
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn321/dcn321_resource.c:1346:43: warning: unused variable 'res_create_maximus_funcs'
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn321/dcn321_resource.c:735:38: warning: unused variable 'debug_defaults_diags'
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5296
 Fixes: 00df97e1df57 ("drm/amd/display: Clean FPGA code in dc")
 Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- .../amd/display/dc/dcn316/dcn316_resource.c   | 27 -------------------
- 1 file changed, 27 deletions(-)
+ .../amd/display/dc/dcn321/dcn321_resource.c   | 30 -------------------
+ 1 file changed, 30 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
-index a3be61cc541f..b6e0aa2ab27a 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
-@@ -886,24 +886,6 @@ static const struct dc_debug_options debug_defaults_drv = {
- 	},
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+index af0bb3e94250..bbcd3579fea6 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+@@ -732,27 +732,6 @@ static const struct dc_debug_options debug_defaults_drv = {
+ 	.fpo_vactive_max_blank_us = 1000,
  };
  
 -static const struct dc_debug_options debug_defaults_diags = {
@@ -72,6 +72,7 @@ index a3be61cc541f..b6e0aa2ab27a 100644
 -	.clock_trace = true,
 -	.disable_dpp_power_gate = true,
 -	.disable_hubp_power_gate = true,
+-	.disable_dsc_power_gate = true,
 -	.disable_clock_gate = true,
 -	.disable_pplib_clock_request = true,
 -	.disable_pplib_wm_range = true,
@@ -80,26 +81,28 @@ index a3be61cc541f..b6e0aa2ab27a 100644
 -	.dwb_fi_phase = -1, // -1 = disable
 -	.dmub_command_table = true,
 -	.enable_tri_buf = true,
--	.use_max_lb = true
+-	.use_max_lb = true,
+-	.force_disable_subvp = true,
 -};
 -
- static const struct dc_panel_config panel_config_defaults = {
- 	.psr = {
- 		.disable_psr = false,
-@@ -1352,15 +1334,6 @@ static const struct resource_create_funcs res_create_funcs = {
- 	.create_hwseq = dcn31_hwseq_create,
+-
+ static struct dce_aux *dcn321_aux_engine_create(
+ 	struct dc_context *ctx,
+ 	uint32_t inst)
+@@ -1343,15 +1322,6 @@ static const struct resource_create_funcs res_create_funcs = {
+ 	.create_hwseq = dcn321_hwseq_create,
  };
  
 -static const struct resource_create_funcs res_create_maximus_funcs = {
 -	.read_dce_straps = NULL,
 -	.create_audio = NULL,
 -	.create_stream_encoder = NULL,
--	.create_hpo_dp_stream_encoder = dcn31_hpo_dp_stream_encoder_create,
--	.create_hpo_dp_link_encoder = dcn31_hpo_dp_link_encoder_create,
--	.create_hwseq = dcn31_hwseq_create,
+-	.create_hpo_dp_stream_encoder = dcn321_hpo_dp_stream_encoder_create,
+-	.create_hpo_dp_link_encoder = dcn321_hpo_dp_link_encoder_create,
+-	.create_hwseq = dcn321_hwseq_create,
 -};
 -
- static void dcn316_resource_destruct(struct dcn316_resource_pool *pool)
+ static void dcn321_resource_destruct(struct dcn321_resource_pool *pool)
  {
  	unsigned int i;
 -- 
