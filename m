@@ -2,58 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC37470FE78
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A7A70FE7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbjEXTWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S233887AbjEXTWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjEXTWG (ORCPT
+        with ESMTP id S232958AbjEXTWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:22:06 -0400
-Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FBA13A
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:22:04 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 1u3ZqjgFD6SBs1u3ZqO29a; Wed, 24 May 2023 21:22:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684956121;
-        bh=KtBT+/p9xVKfZAX03YFetjgjS9Yj6TbdtHzoGVVDnNc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=U3T+9+/bzvuKJZkdEtXplHrNUCt3U8B7B5FVVPHXaSPFIKXIxZFx0jVWh1hdNMkMV
-         qj+rbDbiyfXCUdfrgaDWT3IoFiAuQKVt/M+cyIG2PXvlDNotSJ/XnzAD4ja4TYzdEe
-         CHdI2vONfcl2GwloTsUQNOuZT28gZSSb9bIQQ/0ubBIzwClGowNmimV/n9p4W3H6I3
-         g77sskh9b2pS1JlhNwuOKOkF6CJvqHNpdxRYOhtG5DV9PplfZK9cX401ZYt2691dkz
-         FdBsbkqGTmnuNtS6xeNgoadoiwLDCxFQeUlKLxr5W6pNL0HkMGyBC0P06YMYtcmsy2
-         dLEKu8tgJp5uw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 24 May 2023 21:22:01 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
-Date:   Wed, 24 May 2023 21:21:56 +0200
+        Wed, 24 May 2023 15:22:34 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D1A18C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:22:33 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-55239f43426so723247eaf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684956152; x=1687548152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S2MKQchWUI0FAkJHrQVirdj5xxCSU2CZ+/GrJRPq7B8=;
+        b=qmcA7bO+beP8btIoBYHwlyAwgiDEqzN6A1J0CvnsA911MD/8axY2IazqByJunWum8v
+         ff5MHC6Nv0BhDOZ1jh6ZzFKh7yXQ/dqPfbsqiixPqW+xDoLLuaMNN9wYgf5onfgt8ttO
+         R4TNEtErOuIX9D/cWyZYCGvo7kKNMjzRn+gP9RNwsKFQ5XdwAYd6WjNply4dSc35lILj
+         G3M6RM8aPa2h9mxWRDqFYuBD0bhw1oHO1PkYiGiCa1RlTISx711Yo/2sbeMtvgulKCXW
+         SVkdV4hyAKdNmFqy2mIKteOwn+vbM6hpPmlJDQctv/PJIAHwq3BjqL59lNeMcdsKLdFv
+         FXhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684956152; x=1687548152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S2MKQchWUI0FAkJHrQVirdj5xxCSU2CZ+/GrJRPq7B8=;
+        b=bOffmuRNJdv8HuWAvc0IGmZXdvVqzvhGc8FH6JhW8dxUHHkmDOvMvclyXOA0j1hVjO
+         pYZh2yNPRm17sjK1MIcTUAB0jQq+pjkbd2i/8WV6wmIXdt466zqjrrifuvPTq8+3XwA4
+         4iBDaAu2riBULkVScMt19va3WTtySOYno1wTVaDxGu6d5TWirEZggXlv3KZLKUBecT3W
+         MPQt2gi0/fjoSsTNUwDT6BEgHVhFSfDOTA/BOtgT4X91MNDp2cX+uEJCyhWS2SOxDMZ+
+         g+j2ySb5gsdGX1Mrn99uc1PMLfaj+KNZyj5YnCGBWInhsDJ2bcVR5Jmetp2hg7q9TL6s
+         /j7A==
+X-Gm-Message-State: AC+VfDyhBTlLz4UgN3tR7rc0XIA8aP1c3iyK3Golp88EyULxd8c5fq0F
+        1nx/ZcHPHojfk25EDxqpeDQIVql44UsBo8eRv4k=
+X-Google-Smtp-Source: ACHHUZ6+o43wIGXEkDmzv0/0EngB13qldFCGeSitptxs3zpaCN7kPY6u37qi2JoztOJVQXZzTysmEZNfLSW0dIKL58U=
+X-Received: by 2002:a05:6808:3b4:b0:397:f715:5e6e with SMTP id
+ n20-20020a05680803b400b00397f7155e6emr6895688oie.56.1684956152482; Wed, 24
+ May 2023 12:22:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
-To:     Wang Zhang <silver_code@hust.edu.cn>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@linaro.org>
-References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
- <20230524154318.2259-1-silver_code@hust.edu.cn>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230524154318.2259-1-silver_code@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230524191955.252212-1-hamza.mahfooz@amd.com>
+In-Reply-To: <20230524191955.252212-1-hamza.mahfooz@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 24 May 2023 15:22:21 -0400
+Message-ID: <CADnq5_Mz6aPFYGnr8J8C8UeTpbo7JDg+uvjqAxo7o4vmTGej2A@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/amd/display: enable more strict compile checks
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
+        Kenny Ho <kenny.ho@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,168 +77,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 24/05/2023 à 17:43, Wang Zhang a écrit :
-> While it is not entirely clear why the original author implemented this
-> behavior, there may have been certain circumstances or issues that were not
-> apparent to us. It's possible that they were trying to work around a bug by
-> employing an unconventional solution.Using `devm_clk_get_enabled()` rather
-> than devm_clk_get() can automatically track the usage of clocks and free
-> them when they are no longer needed or an error occurs.
-> 
-> fixing it by changing `ocores_i2c_of_probe` to use
-> `devm_clk_get_optional_enabled()` rather than `devm_clk_get()`, changing
-> `goto err_clk' to direct return and removing `err_clk`.
-> 
-> Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+On Wed, May 24, 2023 at 3:20=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@amd.co=
+m> wrote:
+>
+> Currently, there are quite a number of issues that are quite easy for
+> the CI to catch, that slip through the cracks. Among them, there are
+> unused variable and indentation issues. Also, we should consider all
+> warnings to be compile errors, since the community will eventually end
+> up complaining about them. So, enable -Werror, -Wunused and
+> -Wmisleading-indentation for all kernel builds.
+>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: Harry Wentland <harry.wentland@amd.com>
+> Cc: Kenny Ho <kenny.ho@amd.com>
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 > ---
-> v2->v3: use `devm_clk_get_optional_enabled()` to manage clks
-> v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
+> v2: fix grammatical error
 > ---
->   drivers/i2c/busses/i2c-ocores.c | 57 +++++++++++++--------------------
->   1 file changed, 22 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-> index 2e575856c5cd..316d72cde3b9 100644
-> --- a/drivers/i2c/busses/i2c-ocores.c
-> +++ b/drivers/i2c/busses/i2c-ocores.c
-> @@ -552,16 +552,14 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
->   							&clock_frequency);
->   	i2c->bus_clock_khz = 100;
->   
-> -	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-> +	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
->   
-> -	if (!IS_ERR(i2c->clk)) {
-> -		int ret = clk_prepare_enable(i2c->clk);
-> -
-> -		if (ret) {
-> -			dev_err(&pdev->dev,
-> -				"clk_prepare_enable failed: %d\n", ret);
-> -			return ret;
-> -		}
-> +	if (IS_ERR(i2c->clk)) {
-> +		dev_err(&pdev->dev,
-> +			"devm_clk_get_optional_enabled failed\n");
-
-Maybe dev_err_probe() would be nice here. This would log the error code, 
-and filter -EPROBE_DEFER, should it happen.
-
-> +		return PTR_ERR(i2c->clk);
-> +	}
-> +	if (i2c->clk) {
->   		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
->   		if (clock_frequency_present)
->   			i2c->bus_clock_khz = clock_frequency / 1000;
-> @@ -573,7 +571,6 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
->   			if (!clock_frequency_present) {
->   				dev_err(&pdev->dev,
->   					"Missing required parameter 'opencores,ip-clock-frequency'\n");
-> -				clk_disable_unprepare(i2c->clk);
->   				return -ENODEV;
->   			}
->   			i2c->ip_clock_khz = clock_frequency / 1000;
-> @@ -678,8 +675,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
->   		default:
->   			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
->   				i2c->reg_io_width);
-> -			ret = -EINVAL;
-> -			goto err_clk;
-> +			return -EINVAL;
->   		}
->   	}
->   
-> @@ -710,13 +706,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
->   						   pdev->name, i2c);
->   		if (ret) {
->   			dev_err(&pdev->dev, "Cannot claim IRQ\n");
-> -			goto err_clk;
-> +			return ret;
->   		}
->   	}
->   
->   	ret = ocores_init(&pdev->dev, i2c);
->   	if (ret)
-> -		goto err_clk;
-> +		return ret;
->   
->   	/* hook up driver to tree */
->   	platform_set_drvdata(pdev, i2c);
-> @@ -728,7 +724,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
->   	/* add i2c adapter to i2c tree */
->   	ret = i2c_add_adapter(&i2c->adap);
->   	if (ret)
-> -		goto err_clk;
-> +		return ret;
->   
->   	/* add in known devices to the bus */
->   	if (pdata) {
-> @@ -737,10 +733,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
->   	}
->   
->   	return 0;
-> -
-> -err_clk:
-> -	clk_disable_unprepare(i2c->clk);
-> -	return ret;
->   }
->   
->   static int ocores_i2c_remove(struct platform_device *pdev)
-> @@ -755,9 +747,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
->   	/* remove adapter & data */
->   	i2c_del_adapter(&i2c->adap);
->   
-> -	if (!IS_ERR(i2c->clk))
-> -		clk_disable_unprepare(i2c->clk);
-> -
->   	return 0;
->   }
->   
-> @@ -771,8 +760,7 @@ static int ocores_i2c_suspend(struct device *dev)
->   	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
->   	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
->   
-> -	if (!IS_ERR(i2c->clk))
-> -		clk_disable_unprepare(i2c->clk);
-> +	clk_disable_unprepare(i2c->clk);
->   	return 0;
->   }
->   
-> @@ -780,19 +768,18 @@ static int ocores_i2c_resume(struct device *dev)
->   {
->   	struct ocores_i2c *i2c = dev_get_drvdata(dev);
->   
-> -	if (!IS_ERR(i2c->clk)) {
-> -		unsigned long rate;
-> -		int ret = clk_prepare_enable(i2c->clk);
-> +	unsigned long rate;
-> +	int ret = clk_prepare_enable(i2c->clk);
->   
-> -		if (ret) {
-> -			dev_err(dev,
-> -				"clk_prepare_enable failed: %d\n", ret);
-> -			return ret;
-> -		}
-> -		rate = clk_get_rate(i2c->clk) / 1000;
-> -		if (rate)
-> -			i2c->ip_clock_khz = rate;
-> +	if (ret) {
-> +		dev_err(dev,
-> +			"clk_prepare_enable failed: %d\n", ret);
-> +		return ret;
->   	}
-> +	rate = clk_get_rate(i2c->clk) / 1000;
-
-Now (because of the devm_clk_get_optional_enabled()), i2c->clk can be 
-NULL, so this would deference a NULL pointer.
-
-CJ
-
-
-> +	if (rate)
-> +		i2c->ip_clock_khz = rate;
+>  drivers/gpu/drm/amd/display/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/display/Makefile b/drivers/gpu/drm/amd/d=
+isplay/Makefile
+> index 0d610cb376bb..3c44162ebe21 100644
+> --- a/drivers/gpu/drm/amd/display/Makefile
+> +++ b/drivers/gpu/drm/amd/display/Makefile
+> @@ -26,6 +26,8 @@
+>
+>  AMDDALPATH =3D $(RELATIVE_AMD_DISPLAY_PATH)
+>
+> +subdir-ccflags-y +=3D -Werror -Wunused -Wmisleading-indentation
 > +
->   	return ocores_init(dev, i2c);
->   }
->   
 
+Care to enable this for the rest of amdgpu as well?  Or send out an
+additional patch to do that?  Either way:
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+
+Alex
+
+>  subdir-ccflags-y +=3D -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/
+>  subdir-ccflags-y +=3D -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/hw
+>  subdir-ccflags-y +=3D -I$(FULL_AMD_DISPLAY_PATH)/dc/clk_mgr
+> --
+> 2.40.1
+>
