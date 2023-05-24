@@ -2,181 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C3270EF3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1432B70EF43
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbjEXHSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S239538AbjEXHVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbjEXHSs (ORCPT
+        with ESMTP id S239476AbjEXHVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:18:48 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2660591;
-        Wed, 24 May 2023 00:18:32 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Bx2fFHum1kqFYAAA--.961S3;
-        Wed, 24 May 2023 15:18:31 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqrZEum1keVRzAA--.61319S3;
-        Wed, 24 May 2023 15:18:29 +0800 (CST)
-Subject: Re: [PATCH 1/2] perf arm64: Handle __NR3264_ prefixed syscall number
-To:     Alexander Kapshuk <alexander.kapshuk@gmail.com>
-References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
- <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
- <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com>
- <49e98308-ab8d-5811-66a8-9e17f22bb8c4@loongson.cn>
- <CAJ1xhMV=WaYbdGpiRedLUGnYp8JLzcP81Ksw1k1610xeHCiGBA@mail.gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Hans-Peter Nilsson <hp@axis.com>, Leo Yan <leo.yan@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <2932e212-ba17-090b-761b-b18e8f9c33e8@loongson.cn>
-Date:   Wed, 24 May 2023 15:18:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Wed, 24 May 2023 03:21:44 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE08A1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:21:39 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QR2Yv4h87zqT2D;
+        Wed, 24 May 2023 15:17:07 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 15:21:37 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <yu.c.chen@intel.com>, <linuxarm@huawei.com>,
+        <prime.zeng@huawei.com>, <wangjie125@huawei.com>,
+        <yangyicong@hisilicon.com>
+Subject: [PATCH] sched/fair: Don't balance task to its current running CPU
+Date:   Wed, 24 May 2023 15:20:18 +0800
+Message-ID: <20230524072018.62204-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-In-Reply-To: <CAJ1xhMV=WaYbdGpiRedLUGnYp8JLzcP81Ksw1k1610xeHCiGBA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxqrZEum1keVRzAA--.61319S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWF1rCr4fXF4kXw18XF17GFg_yoW5urWfpr
-        n5Aay5tay0gF12kwn29rsIqrySy34ktr1DWryqyws3u3WDt3Z3Kr10vF4YkFWxXw4xKrW5
-        Zr10qFy7X3W5Z3DanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.50.163.32]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yicong Yang <yangyicong@hisilicon.com>
 
+We've run into the case that the balancer tries to balance a migration
+disabled task and trigger the warning in set_task_cpu() like below:
 
-On 05/24/2023 02:43 PM, Alexander Kapshuk wrote:
-> On Wed, May 24, 2023 at 6:19 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->>
->>
->> On 05/23/2023 08:31 PM, Alexander Kapshuk wrote:
->>> On Tue, May 23, 2023 at 1:22 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>>>
->>>> After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
->>>> in the generated syscall table file syscalls.c, there exist some
->>>> __NR3264_ prefixed syscall numbers such as [__NR3264_ftruncate],
->>>> it looks like not so good, just do some small filter operations
->>>> to handle __NR3264_ prefixed syscall number as a digital number.
->>>>
->>>> Without this patch:
->>>>
->>>>   [__NR3264_ftruncate] = "ftruncate",
->>>>
->>>> With this patch:
->>>>
->>>>   [46] = "ftruncate",
->>>>
->>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>>> ---
->>>>  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 7 ++++---
->>>>  1 file changed, 4 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
->>>> index 22cdf91..59ab7939 100755
->>>> --- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
->>>> +++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
->>>> @@ -39,7 +39,8 @@ create_table()
->>>>         echo "};"
->>>>  }
->>>>
->>>> -$gcc -E -dM -x c -I $incpath/include/uapi $input \
->>>> -       |sed -ne 's/^#define __NR_//p' \
->>>> -       |sort -t' ' -k2 -n             \
->>>> +$gcc -E -dM -x c -I $incpath/include/uapi $input               \
->>>> +       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
->>>> +       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
->>>> +       |sort -t' ' -k2 -n                                      \
->>>>         |create_table
->>>> --
->>>> 2.1.0
->>>>
->>>
->>> As an aside, the awk + sed + sort parts of the command line may be
->>> reduced to the following awk script, if desired:
->>> awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
->>>         sub("^#define __NR_", "")
->>>         sub("^#define __NR3264_", "")
->>>         print | "sort -k2 -n"
->>> }'
->>>
->>
->> Hi Alexander,
->>
->> Thanks, it seems more simple and works well as expected.
->> Let us wait for more review comments before respin.
->>
->> If no any objections, I will send v2 with the following
->> changes based on the current patch in the next week.
->>
->> -$gcc -E -dM -x c -I $incpath/include/uapi $input               \
->> -       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
->> -       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
->> -       |sort -t' ' -k2 -n                                      \
->> +$gcc -E -dM -x c -I $incpath/include/uapi $input \
->> +       |awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
->> +               sub("^#define __NR_", "")
->> +               sub("^#define __NR3264_", "")
->> +               print | "sort -k2 -n"}' \
->>          |create_table
->>
->> Thanks,
->> Tiezhu
->>
->
-> Hi Tiezhu,
->
-> Thanks for your prompt feedback.
-> It was merely a suggestion entirely subject to your discretion.
->
-> If no other patterns are anticipated to be processed by the sub
+ ------------[ cut here ]------------
+ WARNING: CPU: 7 PID: 0 at kernel/sched/core.c:3115 set_task_cpu+0x188/0x240
+ Modules linked in: hclgevf xt_CHECKSUM ipt_REJECT nf_reject_ipv4 <...snip>
+ CPU: 7 PID: 0 Comm: swapper/7 Kdump: loaded Tainted: G           O       6.1.0-rc4+ #1
+ Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B221.01 12/09/2021
+ pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : set_task_cpu+0x188/0x240
+ lr : load_balance+0x5d0/0xc60
+ sp : ffff80000803bc70
+ x29: ffff80000803bc70 x28: ffff004089e190e8 x27: ffff004089e19040
+ x26: ffff007effcabc38 x25: 0000000000000000 x24: 0000000000000001
+ x23: ffff80000803be84 x22: 000000000000000c x21: ffffb093e79e2a78
+ x20: 000000000000000c x19: ffff004089e19040 x18: 0000000000000000
+ x17: 0000000000001fad x16: 0000000000000030 x15: 0000000000000000
+ x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000000
+ x11: 0000000000000001 x10: 0000000000000400 x9 : ffffb093e4cee530
+ x8 : 00000000fffffffe x7 : 0000000000ce168a x6 : 000000000000013e
+ x5 : 00000000ffffffe1 x4 : 0000000000000001 x3 : 0000000000000b2a
+ x2 : 0000000000000b2a x1 : ffffb093e6d6c510 x0 : 0000000000000001
+ Call trace:
+  set_task_cpu+0x188/0x240
+  load_balance+0x5d0/0xc60
+  rebalance_domains+0x26c/0x380
+  _nohz_idle_balance.isra.0+0x1e0/0x370
+  run_rebalance_domains+0x6c/0x80
+  __do_softirq+0x128/0x3d8
+  ____do_softirq+0x18/0x24
+  call_on_irq_stack+0x2c/0x38
+  do_softirq_own_stack+0x24/0x3c
+  __irq_exit_rcu+0xcc/0xf4
+  irq_exit_rcu+0x18/0x24
+  el1_interrupt+0x4c/0xe4
+  el1h_64_irq_handler+0x18/0x2c
+  el1h_64_irq+0x74/0x78
+  arch_cpu_idle+0x18/0x4c
+  default_idle_call+0x58/0x194
+  do_idle+0x244/0x2b0
+  cpu_startup_entry+0x30/0x3c
+  secondary_start_kernel+0x14c/0x190
+  __secondary_switched+0xb0/0xb4
+ ---[ end trace 0000000000000000 ]---
 
-Yes, there are only 2 patterns such as "__NR_" and "__NR3264_",
-I confirmed that in include/uapi/asm-generic/unistd.h.
+Further investigation shows that the warning is superfluous, the migration
+disabled task is just going to be migrated to its current running CPU.
+This is because that on load balance if the dst_cpu is not allowed by the
+task, we'll re-select a new_dst_cpu as a candidate. If no task can be
+balanced to dst_cpu we'll try to balance the task to the new_dst_cpu
+instead. In this case when the migration disabled task is not on CPU it
+only allows to run on its current CPU, load balance will select its
+current CPU as new_dst_cpu and later triggers the the warning above.
 
-> routines, they may be combined into a single sub routine like so:
-> awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
->         sub("^#define __NR(3264)?_", "")
->         print | "sort -k2 -n"
-> }'
+This patch tries to solve this by not select the task's current running
+CPU as new_dst_cpu in the load balance.
 
-Thanks again, I tested the above code, it also works well and
-looks better, I will modify the code as you suggested in v2.
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+---
+Thanks Valentin for the knowledge of migration disable. Previous discussion can
+be found at
+https://lore.kernel.org/all/20230313065759.39698-1-yangyicong@huawei.com/
 
-Thanks,
-Tiezhu
+ kernel/sched/fair.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 7a1b1f855b96..3c4f3a244c1d 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -8456,7 +8456,8 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
+ 
+ 		/* Prevent to re-select dst_cpu via env's CPUs: */
+ 		for_each_cpu_and(cpu, env->dst_grpmask, env->cpus) {
+-			if (cpumask_test_cpu(cpu, p->cpus_ptr)) {
++			if (cpumask_test_cpu(cpu, p->cpus_ptr) &&
++			    cpu != env->src_cpu) {
+ 				env->flags |= LBF_DST_PINNED;
+ 				env->new_dst_cpu = cpu;
+ 				break;
+-- 
+2.24.0
 
