@@ -2,153 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B55470F06C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1756770F07C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240117AbjEXIQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S240127AbjEXITf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjEXIQ2 (ORCPT
+        with ESMTP id S229848AbjEXITd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:16:28 -0400
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A9AC0;
-        Wed, 24 May 2023 01:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-        s=default2211; h=To:References:Message-Id:Content-Transfer-Encoding:Cc:Date:
-        In-Reply-To:From:Subject:Mime-Version:Content-Type:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=1NwnIlTOqdPMfCb/zd+hT2W58rXXL5MXAz8bOWIpyp8=;
-        b=mOl1DhJgCAVRYSAsI/pI3+XI0qfVkyyyS1ZjPSkF2wJwwsgITfqRFT/cp8z/ZtunBPWJbMCmE26
-        HSWGJfRbMdtPl6iy4jATOF4uA+BMhtAQnY8mlJqeCPYX4kVb2JHUF3W2kVvDl7fhtvnRiWGZIaPoI
-        0RUGFBLQBbtMMyMyECJYjCvVjvzFJrVgMHiIk+EKacp9HaGogjuh+gA2+vwCcPGpBP4PD7Y6eXrpi
-        gY44PtUdKRzJJkwd3UedeiJkrwHRmISS6Vax9aGSUsmaiQ58AnjmgAre9/0gaLrzq3aFxhIgOkvJB
-        8qL1/vw+LDtLO7/8WlEzKpPZYZAc1rEQkddg==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sean@geanix.com>)
-        id 1q1jfV-000I86-29; Wed, 24 May 2023 10:16:25 +0200
-Received: from [185.17.218.86] (helo=smtpclient.apple)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sean@geanix.com>)
-        id 1q1jfU-000Trg-MJ; Wed, 24 May 2023 10:16:24 +0200
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH v2 3/3] dt-bindings: mfd: stpmic1: add fsl,pmic-poweroff
- property
-From:   =?utf-8?Q?Sean_Nyekj=C3=A6r?= <sean@geanix.com>
-In-Reply-To: <20230523-flaccid-fossil-c9d09838dc64@spud>
-Date:   Wed, 24 May 2023 10:16:13 +0200
-Cc:     robh+dt@kernel.org, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        pascal Paillet <p.paillet@foss.st.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <658510B5-702B-464A-BA55-01E2B315BE39@geanix.com>
-References: <20230516132225.3012541-1-sean@geanix.com>
- <20230516132225.3012541-3-sean@geanix.com>
- <20230516-footprint-handoff-bcd553ff6146@spud>
- <9B1EE405-77D3-4980-9A13-9D4F87C1A64F@geanix.com>
- <20230523-flaccid-fossil-c9d09838dc64@spud>
-To:     Conor Dooley <conor@kernel.org>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-Authenticated-Sender: sean@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26917/Wed May 24 09:28:43 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 24 May 2023 04:19:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C04132
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684916333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tr17fslrkCiphsGkEGKeZVhavScCHFO7w1RXhH4sGc0=;
+        b=WxxqVTlATJ40JI/7vB9FNakcabu+r6NOM57ShygFbQN2CKBM5o7c+fi+j/n38BPMws613V
+        4NPjyk8Gjesm1fDrYIthtbvd1502Os9MO/FGFARKyMluBPQrAFYZ1k4z9S3jwBGsPyPe0P
+        pBHLmwhUd6WZr813H+Dnp7yQTP1Pk8c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-193-2JRr0exkNyGTgTbJbqvnjw-1; Wed, 24 May 2023 04:18:50 -0400
+X-MC-Unique: 2JRr0exkNyGTgTbJbqvnjw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD9EC3C02B62;
+        Wed, 24 May 2023 08:18:49 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-13-76.pek2.redhat.com [10.72.13.76])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 356C6140EBD7;
+        Wed, 24 May 2023 08:18:44 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com, xuanzhuo@linux.alibaba.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alvaro.karsz@solid-run.com
+Subject: [PATCH V3 net-next 0/2] virtio-net: don't busy poll for cvq command
+Date:   Wed, 24 May 2023 16:18:40 +0800
+Message-Id: <20230524081842.3060-1-jasowang@redhat.com>
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hi all:
 
-> On 23 May 2023, at 19.29, Conor Dooley <conor@kernel.org> wrote:
->=20
-> On Tue, May 23, 2023 at 11:55:50AM +0200, Sean Nyekj=C3=A6r wrote:
->>> On 16 May 2023, at 20.06, Conor Dooley <conor@kernel.org> wrote:
->>> On Tue, May 16, 2023 at 03:22:24PM +0200, Sean Nyekjaer wrote:
->>>> Document the new optional "fsl,pmic-poweroff" property.
->>>>=20
->>>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
->>>> ---
->>>> Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 8 ++++++++
->>>> 1 file changed, 8 insertions(+)
->>>>=20
->>>> diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml =
-b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
->>>> index 9573e4af949e..5183a7c660d2 100644
->>>> --- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
->>>> +++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
->>>> @@ -26,6 +26,14 @@ properties:
->>>>=20
->>>>  interrupt-controller: true
->>>>=20
->>>> +  st,pmic-poweroff:
->>>> +    $ref: /schemas/types.yaml#/definitions/flag
->>>> +    description: |
->>>> +      if present, configure the PMIC to shutdown all power rails =
-when
->>>> +      power off sequence have finished.
->>>> +      Use this option if the SoC should be powered off by external =
-power management
->>>> +      IC (PMIC).
->>>=20
->>> Just reading this description, this is sounding quite like a =
-"software
->>> behaviour" type of property, which are not permitted, rather than
->>> describing some element of the hardware. Clearly you are trying to =
-solve
->>> an actual problem though, so try re-phrasing the description (and
->>> property name) to focus on what exact hardware configuration it is =
-that
->>> you are trying to special-case.
->>> Krzysztof suggested that the samsung,s2mps11-acokb-ground property =
-in
->>> samsung,s2mps11.yaml is addressing a similar problem, so that could =
-be
->>> good to look at.
->>=20
->> Better wording?
->>      Indicates that the power management IC (PMIC) is used to power =
-off the board.
->>      So as the last step in the power off sequence set the SWOFF bit =
-in the
->>      main control register (MAIN_CR) register, to shutdown all power =
-rails.
->=20
-> The description for the property that Krzysztof mentioned is
->  samsung,s2mps11-acokb-ground:
->    description: |
->      Indicates that ACOKB pin of S2MPS11 PMIC is connected to the =
-ground so
->      the PMIC must manually set PWRHOLD bit in CTRL1 register to turn =
-off the
->      power. Usually the ACOKB is pulled up to VBATT so when PWRHOLD =
-pin goes
->      low, the rising ACOKB will trigger power off.
->=20
-> In other words, I am asking what (abnormal?) scenario there is that =
-means
-> you need the property, rather than what setting the property does.
-> Or am I totally off, and this is the only way this PMIC works?
+The code used to busy poll for cvq command which turns out to have
+several side effects:
 
-Indicates that the power management IC (PMIC) turn-off condition is met
-by setting the SWOFF bit in the main control register (MAIN_CR) =
-register.
-Turn-off condition can still be reached by the PONKEY input.
+1) infinite poll for buggy devices
+2) bad interaction with scheduler
 
-?
+So this series tries to use cond_resched() in the waiting loop. Before
+doing this we need first make sure the cvq command is not executed in
+atomic environment, so we need first convert rx mode handling to a
+workqueue.
 
-I must admit I=E2=80=99m somewhat lost here :)
+Please review.
 
-/Sean
+Thanks
+
+Changes since V2:
+
+- Don't use interrupt but cond_resched()
+
+Changes since V1:
+
+- use RTNL to synchronize rx mode worker
+- use completion for simplicity
+- don't try to harden CVQ command
+
+Changes since RFC:
+
+- switch to use BAD_RING in virtio_break_device()
+- check virtqueue_is_broken() after being woken up
+- use more_used() instead of virtqueue_get_buf() to allow caller to
+  get buffers afterwards
+  - break the virtio-net device when timeout
+  - get buffer manually since the virtio core check more_used() instead
+
+Jason Wang (2):
+  virtio-net: convert rx mode setting to use workqueue
+  virtio-net: add cond_resched() to the command waiting loop
+
+ drivers/net/virtio_net.c | 59 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 55 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
 
