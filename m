@@ -2,161 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA5370F76C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF6670F76E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235430AbjEXNMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
+        id S235351AbjEXNMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbjEXNLp (ORCPT
+        with ESMTP id S235354AbjEXNMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:11:45 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DDC1B5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:11:36 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba1815e12efso838664276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684933895; x=1687525895;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HhgnwAIyg9ROUXM0L6/ZAuKoK3jhzVh9JsVx69YO1KM=;
-        b=MYDNqTo1bpq9NIQ3/rF5thaPiqmsb9Qc15tZKJNXUvpKf4mT2K3IcrXWXcArzhqzFt
-         kVXoo67F0C6k4uReBaWd/e83uk78UJTOE+nnEGlBlFw9CF/q5CABWfoJPMWzJuTiStb2
-         wSt8XU8WHU3o7pi3Yw2pNP/PVoBru9HfXdHilyyRkvcuA8IB1Ks2D8TpVU0t2kBKaQxP
-         +ONHixoNuldTLEVPQG5tLnr5aeQmmrfpRWN4ceWNuIpm8gN/XMd/YV4QYFo5+zB7Jt6y
-         G7v6XW6Z8BuzAModSE/Mvq92x7BlLwiTo4dNVeStwI6Sb++4azsiudcRuZE/+4x/U3kt
-         huwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684933895; x=1687525895;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HhgnwAIyg9ROUXM0L6/ZAuKoK3jhzVh9JsVx69YO1KM=;
-        b=O1CCl/YwWGELdKYCvB1uaVmjCCrbXmzFVu+I4jL8qZsqUwxyFY/poPoBoApf9DBSGf
-         r1CLNHk0UjlpToAllXrelS/CNKAnP3OtMwkEGPkmVm6YmnXQO2iD+I4WE+aIKUcWYpfs
-         IrpUonzN5Qwv+fm0tHHgulnJI22YQibpwmqgCZ0ElgjH1fAeN3DRxQleP9lsZZa8vbsj
-         N2iS9edrx+zCOLBQ5/NVsqkmhLARB8pK7PMaRGp0mvxHcXk87Y25hRhBbtaVjAeNf9Mj
-         QHdPtltX7eWlxdUkhMLH5mzx9CabOpiDfxh86ltdzkI5GzTaMux5qX6v2sZPYyc2ifxR
-         nx6w==
-X-Gm-Message-State: AC+VfDx8VYHJ+J0gtK/CRUyBso6jQYCaZyXvkT1WkvU6AnrI4hj/FacL
-        sMklxXpwnDOb1yeQKOv0H+5QgTYU8tkyZKFYt9Ud3HaQy9F2FN9N
-X-Google-Smtp-Source: ACHHUZ53EcD1EWc15pHU2C/SQX48n1mVShKiznRsFWM7OfXIExFLwTk6450FERUJrDG2TqL/PVh98YJqi6PUYvmrepY=
-X-Received: by 2002:a25:407:0:b0:bab:c46f:c7f3 with SMTP id
- 7-20020a250407000000b00babc46fc7f3mr13165694ybe.24.1684933895541; Wed, 24 May
- 2023 06:11:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <36e805fa-338d-a945-2621-75c5077572fc@intel.com> <20230518101216.369970-1-asuk4.q@gmail.com>
-In-Reply-To: <20230518101216.369970-1-asuk4.q@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 24 May 2023 15:10:59 +0200
-Message-ID: <CAPDyKFqrXteKEj6AnWfefijK5xL2004yt8YRozWWgUt89jqSWw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: Remove unnecessary error checks and change
- return type
-To:     Yeqi Fu <asuk4.q@gmail.com>
-Cc:     CLoehle@hyperstone.com, adrian.hunter@intel.com,
-        avri.altman@wdc.com, axboe@kernel.dk, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 09:12:17 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D921A4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 06:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684933929; x=1716469929;
+  h=date:from:to:cc:subject:message-id;
+  bh=YO4bJuuFmkRxqmaUt6tlf/TX9Hb4iR1HovJAFu5H+xo=;
+  b=Nrw+uuh6Q/uJO+PKMVWSXUqlRju3zAnzfD6vGKnrsilrcqdeklxWmJgb
+   tpZqikeXo/Aqw7uOc7qXn0I3NdbdTyP4NWFl8otoClhGmqPThrbwbdKUB
+   rNiU0FUKDlLMVLIq5vLNdGg7X7aoTeRjAzE4Ld6zDhoNTkJaldxzUTfJw
+   DlBweapslLaZekG5PS9glfXJAK4ggxkUOxKaPVyGmQu94Z5FUScK+5bCA
+   GmCBc5Kx3zyzS7FNAf4KEv51Lxm94zG4VoF/MzLWZRH7A+cFQfec+WhWj
+   AKVtSktkm9XY0YwK/kOBLO1OEh7dIYZqWD6Dbr8dlxzDfjJc/1hZ7cRmc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="352402146"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="352402146"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 06:12:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="737295359"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="737295359"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 24 May 2023 06:12:06 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q1oHd-000EqK-2Z;
+        Wed, 24 May 2023 13:12:05 +0000
+Date:   Wed, 24 May 2023 21:11:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230523] BUILD SUCCESS
+ ca6e12f4b71ce03758011e1e2d6e02eeb97d1e3f
+Message-ID: <20230524131141.0mhqf%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 at 12:13, Yeqi Fu <asuk4.q@gmail.com> wrote:
->
-> The error checks in mmc_blk_add_debugfs() and mmc_blk_remove_debugfs()
-> are extraneous. Therefore, this patch removes all error checks from
-> both functions.
-> Additionally, mmc_blk_add_debugfs() has been changed to return void
-> instead of an integer value that was never used. This simplifies the
-> function and improves its clarity.
->
-> Signed-off-by: Yeqi Fu <asuk4.q@gmail.com>
+tree/branch: INFO setup_repo_specs: /db/releases/20230524204625/lkp-src/repo/*/gustavoars
+https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230523
+branch HEAD: ca6e12f4b71ce03758011e1e2d6e02eeb97d1e3f  media: pci: cx18-av-vbi: Replace one-element array with flexible-array member
 
-Applied for next, thanks!
+elapsed time: 725m
 
-Kind regards
-Uffe
+configs tested: 155
+configs skipped: 9
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> ---
->  drivers/mmc/core/block.c | 25 +++++++------------------
->  1 file changed, 7 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index 00c33edb9fb9..81f33200b893 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -2894,12 +2894,12 @@ static const struct file_operations mmc_dbg_ext_csd_fops = {
->         .llseek         = default_llseek,
->  };
->
-> -static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
-> +static void mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
->  {
->         struct dentry *root;
->
->         if (!card->debugfs_root)
-> -               return 0;
-> +               return;
->
->         root = card->debugfs_root;
->
-> @@ -2908,19 +2908,13 @@ static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
->                         debugfs_create_file_unsafe("status", 0400, root,
->                                                    card,
->                                                    &mmc_dbg_card_status_fops);
-> -               if (!md->status_dentry)
-> -                       return -EIO;
->         }
->
->         if (mmc_card_mmc(card)) {
->                 md->ext_csd_dentry =
->                         debugfs_create_file("ext_csd", S_IRUSR, root, card,
->                                             &mmc_dbg_ext_csd_fops);
-> -               if (!md->ext_csd_dentry)
-> -                       return -EIO;
->         }
-> -
-> -       return 0;
->  }
->
->  static void mmc_blk_remove_debugfs(struct mmc_card *card,
-> @@ -2929,22 +2923,17 @@ static void mmc_blk_remove_debugfs(struct mmc_card *card,
->         if (!card->debugfs_root)
->                 return;
->
-> -       if (!IS_ERR_OR_NULL(md->status_dentry)) {
-> -               debugfs_remove(md->status_dentry);
-> -               md->status_dentry = NULL;
-> -       }
-> +       debugfs_remove(md->status_dentry);
-> +       md->status_dentry = NULL;
->
-> -       if (!IS_ERR_OR_NULL(md->ext_csd_dentry)) {
-> -               debugfs_remove(md->ext_csd_dentry);
-> -               md->ext_csd_dentry = NULL;
-> -       }
-> +       debugfs_remove(md->ext_csd_dentry);
-> +       md->ext_csd_dentry = NULL;
->  }
->
->  #else
->
-> -static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
-> +static void mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
->  {
-> -       return 0;
->  }
->
->  static void mmc_blk_remove_debugfs(struct mmc_card *card,
-> --
-> 2.37.2
->
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r004-20230522   gcc  
+alpha                randconfig-r033-20230521   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r015-20230523   gcc  
+arc                  randconfig-r043-20230521   gcc  
+arc                  randconfig-r043-20230522   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r004-20230524   gcc  
+arm          buildonly-randconfig-r006-20230524   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r025-20230523   clang
+arm                  randconfig-r032-20230522   clang
+arm                  randconfig-r046-20230521   clang
+arm                  randconfig-r046-20230522   gcc  
+arm                         socfpga_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r004-20230521   clang
+arm64                randconfig-r035-20230521   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r002-20230521   gcc  
+csky                 randconfig-r011-20230522   gcc  
+hexagon      buildonly-randconfig-r003-20230524   clang
+hexagon              randconfig-r005-20230521   clang
+hexagon              randconfig-r011-20230523   clang
+hexagon              randconfig-r016-20230522   clang
+hexagon              randconfig-r026-20230523   clang
+hexagon              randconfig-r036-20230521   clang
+hexagon              randconfig-r041-20230521   clang
+hexagon              randconfig-r041-20230522   clang
+hexagon              randconfig-r045-20230521   clang
+hexagon              randconfig-r045-20230522   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i051-20230524   gcc  
+i386                 randconfig-i052-20230524   gcc  
+i386                 randconfig-i053-20230524   gcc  
+i386                 randconfig-i054-20230524   gcc  
+i386                 randconfig-i055-20230524   gcc  
+i386                 randconfig-i056-20230524   gcc  
+i386                 randconfig-i061-20230524   gcc  
+i386                 randconfig-i062-20230524   gcc  
+i386                 randconfig-i063-20230524   gcc  
+i386                 randconfig-i064-20230524   gcc  
+i386                 randconfig-i065-20230524   gcc  
+i386                 randconfig-i066-20230524   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r003-20230522   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze           randconfig-r006-20230522   gcc  
+microblaze           randconfig-r032-20230521   gcc  
+microblaze           randconfig-r034-20230521   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath79_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r003-20230521   gcc  
+nios2                randconfig-r006-20230521   gcc  
+nios2                randconfig-r012-20230523   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r015-20230522   gcc  
+parisc               randconfig-r016-20230523   gcc  
+parisc               randconfig-r021-20230523   gcc  
+parisc               randconfig-r036-20230522   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                     ksi8560_defconfig   clang
+powerpc              randconfig-r013-20230522   clang
+powerpc              randconfig-r031-20230521   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230521   clang
+riscv                randconfig-r002-20230522   gcc  
+riscv                randconfig-r042-20230521   gcc  
+riscv                randconfig-r042-20230522   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                          debug_defconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r014-20230522   clang
+s390                 randconfig-r044-20230521   gcc  
+s390                 randconfig-r044-20230522   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230524   gcc  
+sh                          rsk7264_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r024-20230523   gcc  
+sparc                randconfig-r033-20230522   gcc  
+sparc64      buildonly-randconfig-r001-20230524   gcc  
+sparc64              randconfig-r005-20230522   gcc  
+sparc64              randconfig-r034-20230522   gcc  
+sparc64              randconfig-r035-20230522   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230522   gcc  
+x86_64               randconfig-a002-20230522   gcc  
+x86_64               randconfig-a003-20230522   gcc  
+x86_64               randconfig-a004-20230522   gcc  
+x86_64               randconfig-a005-20230522   gcc  
+x86_64               randconfig-a006-20230522   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64               randconfig-x051-20230522   clang
+x86_64               randconfig-x052-20230522   clang
+x86_64               randconfig-x053-20230522   clang
+x86_64               randconfig-x054-20230522   clang
+x86_64               randconfig-x055-20230522   clang
+x86_64               randconfig-x056-20230522   clang
+x86_64               randconfig-x061-20230522   clang
+x86_64               randconfig-x062-20230522   clang
+x86_64               randconfig-x063-20230522   clang
+x86_64               randconfig-x064-20230522   clang
+x86_64               randconfig-x065-20230522   clang
+x86_64               randconfig-x066-20230522   clang
+x86_64               randconfig-x071-20230522   gcc  
+x86_64               randconfig-x072-20230522   gcc  
+x86_64               randconfig-x073-20230522   gcc  
+x86_64               randconfig-x074-20230522   gcc  
+x86_64               randconfig-x075-20230522   gcc  
+x86_64               randconfig-x076-20230522   gcc  
+x86_64               randconfig-x081-20230522   gcc  
+x86_64               randconfig-x082-20230522   gcc  
+x86_64               randconfig-x083-20230522   gcc  
+x86_64               randconfig-x084-20230522   gcc  
+x86_64               randconfig-x085-20230522   gcc  
+x86_64               randconfig-x086-20230522   gcc  
+x86_64               randconfig-x091-20230524   clang
+x86_64               randconfig-x092-20230524   clang
+x86_64               randconfig-x093-20230524   clang
+x86_64               randconfig-x094-20230524   clang
+x86_64               randconfig-x095-20230524   clang
+x86_64               randconfig-x096-20230524   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r012-20230522   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
