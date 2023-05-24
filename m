@@ -2,283 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88BB70EF59
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6C770EF5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239815AbjEXH1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
+        id S239821AbjEXH2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbjEXH1v (ORCPT
+        with ESMTP id S239806AbjEXH2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:27:51 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6765590;
-        Wed, 24 May 2023 00:27:49 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O5rba6027956;
-        Wed, 24 May 2023 07:27:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=zilBaHhhEhQPzJrg42op7WNp6aL5EvHpWP3rublqI4I=;
- b=TPTzSRvMTvx3aSTmODqfxWcxksfXaiJf3tRMJ0ZT+B7kCW/shtYMoclXrsbJTt5Z+wdj
- 1ENmuF0YMbmVuJfWUW5Hfbc8ZN7VfZLdtIMLPpRtlrRzH9EeB2KI1a+YLvE9RRZRua+e
- SUImCJDdbs60/JWYyvoUAMPwBBa2vAzG55bwx7LeAAZzXxSMn0/yumohNFj/Rnc4k/88
- ifjAM+T/sRov/3UzobfoBS6ymEBhEJQt8/+QEo79SppSeiUB/zCeTO6kBCW4+xhUqg1G
- Sj7z2vhkXIUqPbPWbgSoMSuIzlMJjB4xkNrLtxwuV1VyvvxPUeA/4LIP1GQhVQCYsT0H lQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qscpmr6nk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 07:27:45 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O7Ribw012824
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 07:27:44 GMT
-Received: from tjiang-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 24 May 2023 00:27:42 -0700
-From:   Tim Jiang <quic_tjiang@quicinc.com>
-To:     <marcel@holtmann.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <quic_tjiang@quicinc.com>,
-        <quic_bgodavar@quicinc.com>, <quic_hemantg@quicinc.com>,
-        <mka@chromium.org>
-Subject: [PATCH v6] Bluetooth: hci_qca: Add support for Qualcomm Bluetooth SoC QCA2066
-Date:   Wed, 24 May 2023 15:27:33 +0800
-Message-ID: <20230524072733.23955-1-quic_tjiang@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 24 May 2023 03:28:17 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4855D90
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:28:14 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f1411e8111so523017e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 00:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684913292; x=1687505292;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xma854wZg/j3dSWW85gZHGX8CceCdQFgSqI38gArUzE=;
+        b=CbRnf+zgnJ6tfty/KxBoNeTJ/1h8SvkqHmQvuCxZiyuSnHxerVCEVMnGHEk+fC6nVf
+         N4u3uYU6eBvDpnWyodMgc1dtdQd6sYtI5IzGpeCapa0DsnYmTVHkgZ5afILbh1LDDUGZ
+         yDiKvJCZQyskyxk0IUxAMySw2CrU1Qncrfp7rBnGkZw8407luQ2QNTNTkNhJgftKThva
+         eV0j9F1d0NaiijvvyhGs1qFY93eIuQFv8uJAZ2LDyuHrlP3IPsR1fEbQjdAOeIDgaEiH
+         HO1basusLh+jPs5PvL1LXfnzxYOgcfOMIARDbcTzS18Wb5LNNP5liq3Jx1lih+3BpE5y
+         MmlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684913292; x=1687505292;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xma854wZg/j3dSWW85gZHGX8CceCdQFgSqI38gArUzE=;
+        b=DRE1NIytyIA2G5TRSoBVC+hxhg8dL7ra0i1PSZ1fa/DcRByITuq7ylPtGsIrzTMsKM
+         ltRg3q7NZbd7DqkPz/LvyrFUjW4F7nRXUNyknKgEoFSrmvN1n9kjDVeZPs0XjsSWltLf
+         u3LVwQmooQpgieoYHH2PUfJrWbDJOzXEOlsa2TyVHSuIXUAqxarZ6A1f18fE7bw1nuE9
+         ejeG1EDBAMlJfLH0Yq7KAkwJUacjVOo5+aCUqjvvXr5rxXP8azAyRwtPJQInagEnez4x
+         CgxOJ5N7XMRqKZmV/dEoNvH52aXn5mBTI9eiHj3nnw0mir8jO7qQxgw7U+Y1K1r8LH6x
+         kQ/A==
+X-Gm-Message-State: AC+VfDwdaCSu5agjAjVjNazucVQMaXbTNBKBpCAviTJpme/N+/yf7Xjn
+        o7kuin0jzmAYhB+RnyJlZEE=
+X-Google-Smtp-Source: ACHHUZ70G6wCVJjotS+eOukCxLcNwUnaEWlGXJgEHvEJXYPMmSiTgVeczf/yj2Ogk+kXlMigsEw2FQ==
+X-Received: by 2002:a19:7003:0:b0:4ef:eda6:c14 with SMTP id h3-20020a197003000000b004efeda60c14mr4676578lfc.35.1684913292039;
+        Wed, 24 May 2023 00:28:12 -0700 (PDT)
+Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id q11-20020ac246eb000000b004f001b0eda2sm1618786lfo.56.2023.05.24.00.28.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 00:28:11 -0700 (PDT)
+Message-ID: <5584a484-df7f-b927-9701-33dcea6230d0@gmail.com>
+Date:   Wed, 24 May 2023 10:28:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZRt1ywvdYF27MQeg1lBdn4CYmFf7NQWU
-X-Proofpoint-GUID: ZRt1ywvdYF27MQeg1lBdn4CYmFf7NQWU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_02,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 adultscore=0
- malwarescore=0 bulkscore=0 spamscore=0 suspectscore=0 mlxscore=0
- phishscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305240063
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, en-GB
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     DLG-Adam.Ward.opensource@dm.renesas.com, benjamin.bara@skidata.com,
+        broonie@kernel.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, support.opensource@diasemi.com
+References: <9641aa06-4925-051c-2ebe-22e43bf9dd4f@gmail.com>
+ <20230523115101.627722-1-bbara93@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH RFC v3 1/5] regulator: move monitor handling into own
+ function
+In-Reply-To: <20230523115101.627722-1-bbara93@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for QCA2066 firmware patch and nvm downloading.
-as the RF performance of qca2066 soc chip from different foundries will
-be difference, so we use different nvm to configure them by according
-to board id.
+On 5/23/23 14:51, Benjamin Bara wrote:
+> Hi Matti,
+> 
+> thanks for the feedback!
+> 
+> On Tue, 23 May 2023 at 11:46, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>> As far as I see, this changes the existing logic. Previously the
+>> monitoring was unconditionally enabled for all regulators, now it gets
+>> only enabled for regulators which are marked as enabled.
+>>
+>> Furthermore, if I am not reading this wrong, the code tries to disable
+>> all protections if regulator is not enabled at startup(?)
+>>
+>> I am not saying this is wrong. I am just saying that things will
+>> change here and likely to break something.
+>>
+>> There are PMICs like ROHM BD9576, where the protection can not be
+>> disabled.
+> 
+> Thanks for letting me know! I dropped my initial "disable monitor while
+> disabling the regulator" property, and activated it per default instead.
+> But this basically means something like that will be required. I guess
+> it might make sense to have a property which is called something like
+> "monitor always on", to let the driver inform the core that the monitors
+> cannot or should not be disabled, instead. > Except if you think there is a general problem with keeping monitors
+> disabled while the regulator is disabled, then I might have to do it
+> differently.
 
-Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
----
- drivers/bluetooth/btqca.c   | 76 ++++++++++++++++++++++++++++++++++++-
- drivers/bluetooth/btqca.h   |  4 ++
- drivers/bluetooth/hci_qca.c |  9 ++++-
- 3 files changed, 87 insertions(+), 2 deletions(-)
+I am thinking that maybe the default should still be to not touch the 
+monitoring unless explicitly requested. My thinking is that the hardware 
+should by default be able to handle the voltage change / enable / 
+disable etc while monitoring is enabled. Hardware which requires 
+explicit monitoring disabling sounds (to me) like a 'design problem' and 
+disabling the monitoring sounds (to me) like a workaround. I wouldn't 
+make this workaround default. Furthermore, monitoring is a safety 
+feature, and as such core should not autonomously disable it (unless 
+such behaviour is requested). Well, experience has proven that my 
+thinking is not _always_ right, so feel free to voice other opinions :)
 
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index fd0941fe8608..a278a58cb6fa 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -205,6 +205,48 @@ static int qca_send_reset(struct hci_dev *hdev)
- 	return 0;
- }
- 
-+static int qca_read_fw_board_id(struct hci_dev *hdev, u16 *bid)
-+{
-+	u8 cmd;
-+	struct sk_buff *skb;
-+	struct edl_event_hdr *edl;
-+	int err = 0;
-+	int bid_len;
-+
-+	bt_dev_dbg(hdev, "QCA read board ID");
-+
-+	cmd = EDL_GET_BID_REQ_CMD;
-+	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CMD_LEN,
-+				&cmd, 0, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		err = PTR_ERR(skb);
-+		bt_dev_err(hdev, "Reading QCA board ID failed (%d)", err);
-+		return err;
-+	}
-+
-+	edl = skb_pull_data(skb, sizeof(*edl));
-+	if (!edl) {
-+		bt_dev_err(hdev, "QCA read board ID with no header");
-+		err = -EILSEQ;
-+		goto out;
-+	}
-+
-+	if (edl->cresp != EDL_CMD_REQ_RES_EVT ||
-+	    edl->rtype != EDL_GET_BID_REQ_CMD) {
-+		bt_dev_err(hdev, "QCA Wrong packet: %d %d", edl->cresp, edl->rtype);
-+		err = -EIO;
-+		goto out;
-+	}
-+
-+	bid_len = edl->data[0];
-+	*bid = (edl->data[1] << 8) + edl->data[2];
-+	bt_dev_info(hdev, "%s: bid len = %x, bid = %x", __func__, bid_len, *bid);
-+
-+out:
-+	kfree_skb(skb);
-+	return err;
-+}
-+
- int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
- {
- 	struct sk_buff *skb;
-@@ -574,6 +616,29 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
- }
- EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
- 
-+static void qca_generate_nvm_name(struct hci_dev *hdev, char *fwname,
-+		   size_t max_size, struct qca_btsoc_version ver, u16 bid)
-+{
-+	u8 rom_ver = 0;
-+	u32 soc_ver;
-+	const char *variant;
-+
-+	soc_ver = get_soc_ver(ver.soc_id, ver.rom_ver);
-+	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
-+
-+	if ((le32_to_cpu(ver.soc_id) & 0x0000ff00) == QCA_HSP_GF_SOC_ID)  /* hsp gf chip */
-+		variant = "g";
-+	else
-+		variant = "";
-+
-+	if (bid == 0x0)
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.bin", rom_ver, variant);
-+	else
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.%x", rom_ver, variant, bid);
-+
-+	bt_dev_info(hdev, "%s: nvm name is %s", __func__, fwname);
-+}
-+
- int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 		   enum qca_btsoc_type soc_type, struct qca_btsoc_version ver,
- 		   const char *firmware_name)
-@@ -582,6 +647,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	int err;
- 	u8 rom_ver = 0;
- 	u32 soc_ver;
-+	u16 boardid = 0;
- 
- 	bt_dev_dbg(hdev, "QCA setup on UART");
- 
-@@ -604,6 +670,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	if (qca_is_wcn399x(soc_type)) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/crbtfw%02x.tlv", rom_ver);
-+	} else if (soc_type == QCA_QCA2066) {
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/hpbtfw%02x.tlv", rom_ver);
- 	} else if (soc_type == QCA_QCA6390) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htbtfw%02x.tlv", rom_ver);
-@@ -631,6 +700,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	/* Give the controller some time to get ready to receive the NVM */
- 	msleep(10);
- 
-+	if (soc_type == QCA_QCA2066)
-+		qca_read_fw_board_id(hdev, &boardid);
-+
- 	/* Download NVM configuration */
- 	config.type = TLV_TYPE_NVM;
- 	if (firmware_name)
-@@ -644,7 +716,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 			snprintf(config.fwname, sizeof(config.fwname),
- 				 "qca/crnv%02x.bin", rom_ver);
- 		}
--	}
-+	} else if (soc_type == QCA_QCA2066)
-+		qca_generate_nvm_name(hdev, config.fwname, sizeof(config.fwname),
-+				ver, boardid);
- 	else if (soc_type == QCA_QCA6390)
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htnv%02x.bin", rom_ver);
-diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index b884095bcd9d..7c9b3464ae4a 100644
---- a/drivers/bluetooth/btqca.h
-+++ b/drivers/bluetooth/btqca.h
-@@ -13,6 +13,7 @@
- #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
- #define EDL_GET_BUILD_INFO_CMD		(0x20)
- #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
-+#define EDL_GET_BID_REQ_CMD		(0x23)
- #define EDL_PATCH_CONFIG_CMD		(0x28)
- #define MAX_SIZE_PER_TLV_SEGMENT	(243)
- #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
-@@ -48,6 +49,8 @@
- 
- #define QCA_FW_BUILD_VER_LEN		255
- 
-+#define QCA_HSP_GF_SOC_ID		0x1200
-+
- 
- enum qca_baudrate {
- 	QCA_BAUDRATE_115200 	= 0,
-@@ -145,6 +148,7 @@ enum qca_btsoc_type {
- 	QCA_WCN3990,
- 	QCA_WCN3998,
- 	QCA_WCN3991,
-+	QCA_QCA2066,
- 	QCA_QCA6390,
- 	QCA_WCN6750,
- 	QCA_WCN6855,
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 1b064504b388..dd9eab8ee345 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1729,7 +1729,7 @@ static int qca_setup(struct hci_uart *hu)
- 	bt_dev_info(hdev, "setting up %s",
- 		qca_is_wcn399x(soc_type) ? "wcn399x" :
- 		(soc_type == QCA_WCN6750) ? "wcn6750" :
--		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
-+		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390/QCA2066");
- 
- 	qca->memdump_state = QCA_MEMDUMP_IDLE;
- 
-@@ -1874,6 +1874,11 @@ static const struct qca_device_data qca_soc_data_qca6390 __maybe_unused = {
- 	.num_vregs = 0,
- };
- 
-+static const struct qca_device_data qca_soc_data_qca2066 __maybe_unused = {
-+	.soc_type = QCA_QCA2066,
-+	.num_vregs = 0,
-+};
-+
- static const struct qca_device_data qca_soc_data_wcn6750 __maybe_unused = {
- 	.soc_type = QCA_WCN6750,
- 	.vregs = (struct qca_vreg []) {
-@@ -2356,6 +2361,7 @@ static SIMPLE_DEV_PM_OPS(qca_pm_ops, qca_suspend, qca_resume);
- 
- #ifdef CONFIG_OF
- static const struct of_device_id qca_bluetooth_of_match[] = {
-+	{ .compatible = "qcom,qca2066-bt", .data = &qca_soc_data_qca2066},
- 	{ .compatible = "qcom,qca6174-bt" },
- 	{ .compatible = "qcom,qca6390-bt", .data = &qca_soc_data_qca6390},
- 	{ .compatible = "qcom,qca9377-bt" },
-@@ -2371,6 +2377,7 @@ MODULE_DEVICE_TABLE(of, qca_bluetooth_of_match);
- 
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
-+	{ "QCOM2066", (kernel_ulong_t)&qca_soc_data_qca2066 },
- 	{ "QCOM6390", (kernel_ulong_t)&qca_soc_data_qca6390 },
- 	{ "DLA16390", (kernel_ulong_t)&qca_soc_data_qca6390 },
- 	{ "DLB16390", (kernel_ulong_t)&qca_soc_data_qca6390 },
+>> I am unsure if we might also have cases where some regulator could
+>> really be enabled w/o core knowing it.
+> 
+> Unfortunately, I am not 100% sure what you mean by that.
+
+I was thinking of a case where regulator state is not readable - I'm not 
+100% sure how core thinks of their state. Another case could be a 
+regulator which is not registered to the core but shares monitoring with 
+some other regulator. This falls under the common monitoring category 
+mentioned below.
+
+> On the da9063, for example, it might be possible that a monitor is
+> activated by the OTP, without that the kernel actually activates it.
+> I think it is not recommended, but it is possible.
+> 
+> 
+>> There can also be a problem if we have hardware where monitoring is
+>> common for all regulators, eg either globally enabled / disabled.
+> 
+> Yes, but I think in this case it should be the responsibility of the
+> driver to ensure that either all or no regulator is monitored, because
+> the same requirement is valid for implementing the protection ops.
+
+If I didn't misread the code, the differences here are that existing 
+"ideology" is to a) only touch the monitoring (enable/disable) when 
+explicitly requested for a given level and b) knowing that all monitors 
+that are requested to be enabled are enabled at the end of the probe.
+
+In my eyes change a) is problematic. For example, if a board using 
+BD9576 wants to have protection disabled via device-tree (let's assume 
+there is a board where we know that some disturbance to voltages will 
+occur under specific conditions) - it is very valid to complain 
+disabling protection is not supported. Go fix your board design message 
+needs to be given because protection can't be disabled. This is very 
+different from case where we just try disabling monitoring because 
+regulator is turned off. In latter case with BD9576 the failure to 
+disable protection should just be silently ignored. When we use same 
+callbacks for both the initial configuration and the runtime 
+enable/disable/voltage-change handling the driver has no way knowing if 
+this is an error or not. Writing this leads me back to thinking that the 
+monitor configuration for enable/disable/voltage-change should be done 
+via separate driver callback - that would allow driver to separate these 
+use-cases. If this was change I wrote, I might try creating separate 
+driver callbacks for 
+enable/disable/voltage_change_start/voltage_change_done which get the 
+initial monitor configuration (as was read from device-tree) as an 
+argument. Do you think that could give the flexibility to handle all 
+different hardware quirks?
+
+The change b) does also have consequences. Some PMICs like the BD9576 do 
+use same IRQ for indicating either ERROR or WARNING level problem. 
+Whether to use WARNING or ERROR is selected at star-up when the 
+device-tree flags are read. Eg, the .set_<XXX>_protection callbacks 
+store the severity information (WARNING or ERROR) and complain if both 
+are tried to be used. With the current approach we know the validity of 
+this configuration is checked right when regulator is registered, not 
+later at runtime when regulator is enabled.
+
+Another example regarding design that uses the knowledge that all 
+requested monitors are enabled when regulator is registered is BD96801 - 
+which is not upstream (although I've had patches in my outbox for an 
+year already waiting for permission from the HQ to actually send them... 
+Don't ask...). This PMIC can configure fatality of the fault monitoring. 
+This driver checks that all regulators did agree on whether to use 
+PROTECTION or ERROR/WARNING level monitoring at the end of the probe - 
+and toggles the IRQ fatality accordingly. I truly believe that 
+out-of-tree drivers must not mandate upstream design - but I equally 
+believe that we may see similar HW designs in upstream and considering 
+this now makes sense :) Yes, in order to paper over b) a driver can for 
+sure go and parse all the monitoring properties from device-tree itself 
+and decide things based on that - but it might be quite a lot of 
+duplicated code.
+
+To sum up my view - I do definitely like the idea that core supports 
+toggling the monitors for duration of enable/disable/voltage-change as 
+this is needed by some real world ICs.
+
+I, however, think drivers should be able to separate the "set the 
+default monitoring config" request from the "change config to something 
+we use for duration of this operation" - because the best monitoring 
+config that is required for an operation may not be a "disable all". 
+Hence, we should leave it for the driver to decide what config to set 
+for the duration of an enable/disable/voltage_set-operation.
+
+Furthermore, I believe the default should be "don't touch the 
+monitoring" and not to try disable/enable it w/o explicit request.
+
+Again, thank you for working on this and including me in the discussion :)
+
+Yours,
+	-- Matti
+
+
+
 -- 
-2.17.1
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
