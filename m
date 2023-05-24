@@ -2,69 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4938C70FAAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D6D70FAEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235646AbjEXPpO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 11:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
+        id S237757AbjEXPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237914AbjEXPpI (ORCPT
+        with ESMTP id S237758AbjEXPz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:45:08 -0400
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F6DE4D;
-        Wed, 24 May 2023 08:44:40 -0700 (PDT)
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-64d2981e3abso857051b3a.1;
-        Wed, 24 May 2023 08:44:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684943011; x=1687535011;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TrdToRO/bP+geIejtXExyfPp1Jsz9iDuLIlZnoMhAw4=;
-        b=P/Z3sLeAmsP8pEEDEAueNGGJmHzU2puBjrruJ+DqSV6RK3O3677kqzeJ2At91Zpjpu
-         PAK9vizjcbIzwk5a0VqzdyAlfBijUK52E9yGI1y4roZdb17pDkiN17JZK1o1juzTgHyV
-         VUsBmFniitcUF6WqqLAzU2bFnHW5BFx9IgItaEuYIf+NO/2O2oH/GlApsSZzLuJcK8sm
-         FH3FB4xmBIaha08cjq454ZE0MHyUJx70BV1wu/m/ZcpQ7uRv9Coe12S6clVYbTO4hD8m
-         qXVYQ1zqdquxQTGCqG4z8VfhBze6q0cU967P3XJAwN+4k7y56W2HVrB5KakFBkOF8ic3
-         8FmQ==
-X-Gm-Message-State: AC+VfDx6s/qTZNlHCJyGbg9bFpn6S2wkuzJZQmSt0nGjJYgUV8CA5Qki
-        cLdZncfNDoqL7rvRR1hmwwRXhKu6Ps8=
-X-Google-Smtp-Source: ACHHUZ4RvB86TUSb68aXdsprcG5wd0nzPx/ZN+jMVjsHyN+i36qEg/CQLdWfQdCwdGen4OL8SAc61w==
-X-Received: by 2002:a17:902:bf06:b0:1a6:bd5c:649d with SMTP id bi6-20020a170902bf0600b001a6bd5c649dmr15565269plb.56.1684943010704;
-        Wed, 24 May 2023 08:43:30 -0700 (PDT)
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com. [209.85.216.45])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170902ea0a00b001a0448731c2sm8911493plg.47.2023.05.24.08.43.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 08:43:30 -0700 (PDT)
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2537a79b9acso321149a91.3;
-        Wed, 24 May 2023 08:43:30 -0700 (PDT)
-X-Received: by 2002:a17:90b:1003:b0:253:669b:4dbc with SMTP id
- gm3-20020a17090b100300b00253669b4dbcmr16813007pjb.41.1684943010142; Wed, 24
- May 2023 08:43:30 -0700 (PDT)
+        Wed, 24 May 2023 11:55:29 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F6A1BB;
+        Wed, 24 May 2023 08:55:10 -0700 (PDT)
+Received: from van1shing-pc.localdomain ([10.12.182.0])
+        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 34OFhl0k029330-34OFhl0l029330
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 24 May 2023 23:43:50 +0800
+From:   Wang Zhang <silver_code@hust.edu.cn>
+To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Wang Zhang <silver_code@hust.edu.cn>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] i2c: ocores: use devm_ managed clks
+Date:   Wed, 24 May 2023 23:43:18 +0800
+Message-Id: <20230524154318.2259-1-silver_code@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
+References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
 MIME-Version: 1.0
-References: <20230523223944.691076-1-Kenny.Ho@amd.com> <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
-In-Reply-To: <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
-From:   Marc Dionne <marc.dionne@auristor.com>
-Date:   Wed, 24 May 2023 12:43:18 -0300
-X-Gmail-Original-Message-ID: <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
-Message-ID: <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
-Subject: Re: [PATCH] Remove hardcoded static string length
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Kenny Ho <Kenny.Ho@amd.com>, David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        y2kenny@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: silver_code@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,50 +43,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 9:50 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Tue, May 23, 2023 at 06:39:44PM -0400, Kenny Ho wrote:
-> > UTS_RELEASE length can exceed the hardcoded length.  This is causing
-> > compile error when WERROR is turned on.
-> >
-> > Signed-off-by: Kenny Ho <Kenny.Ho@amd.com>
-> > ---
-> >  net/rxrpc/local_event.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
-> > index 19e929c7c38b..61d53ee10784 100644
-> > --- a/net/rxrpc/local_event.c
-> > +++ b/net/rxrpc/local_event.c
-> > @@ -16,7 +16,7 @@
-> >  #include <generated/utsrelease.h>
-> >  #include "ar-internal.h"
-> >
-> > -static const char rxrpc_version_string[65] = "linux-" UTS_RELEASE " AF_RXRPC";
-> > +static const char rxrpc_version_string[] = "linux-" UTS_RELEASE " AF_RXRPC";
->
-> This is not an area of the network stack i know about, so please
-> excuse what might be a dumb question.
->
-> How is the protocol defined here? Is there an RFC or some other sort
-> of standard?
->
-> A message is being built and sent over a socket. The size of that
-> message was fixed, at 65 + sizeof(whdr). Now the message is variable
-> length. Does the protocol specification actually allow this?
->
->         Andrew
+While it is not entirely clear why the original author implemented this
+behavior, there may have been certain circumstances or issues that were not
+apparent to us. It's possible that they were trying to work around a bug by
+employing an unconventional solution.Using `devm_clk_get_enabled()` rather
+than devm_clk_get() can automatically track the usage of clocks and free
+them when they are no longer needed or an error occurs.
 
-I don't think there is an RFC describing RX, but the closest thing to
-a spec (https://web.mit.edu/kolya/afs/rx/rx-spec) states:
+fixing it by changing `ocores_i2c_of_probe` to use
+`devm_clk_get_optional_enabled()` rather than `devm_clk_get()`, changing
+`goto err_clk' to direct return and removing `err_clk`.
 
-"If a server receives a packet with a type value of 13, and the
-client-initiated flag set, it should respond with a 65-byte payload
-containing a string that identifies the version of AFS software it is
-running."
+Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+v2->v3: use `devm_clk_get_optional_enabled()` to manage clks
+v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
+---
+ drivers/i2c/busses/i2c-ocores.c | 57 +++++++++++++--------------------
+ 1 file changed, 22 insertions(+), 35 deletions(-)
 
-So while it may not actually cause any issues (the few things that
-look at the data just truncate past 65), it's probably best to keep
-the response at a fixed 65 bytes.
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index 2e575856c5cd..316d72cde3b9 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -552,16 +552,14 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 							&clock_frequency);
+ 	i2c->bus_clock_khz = 100;
+ 
+-	i2c->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
+ 
+-	if (!IS_ERR(i2c->clk)) {
+-		int ret = clk_prepare_enable(i2c->clk);
+-
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
++	if (IS_ERR(i2c->clk)) {
++		dev_err(&pdev->dev,
++			"devm_clk_get_optional_enabled failed\n");
++		return PTR_ERR(i2c->clk);
++	}
++	if (i2c->clk) {
+ 		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
+ 		if (clock_frequency_present)
+ 			i2c->bus_clock_khz = clock_frequency / 1000;
+@@ -573,7 +571,6 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 			if (!clock_frequency_present) {
+ 				dev_err(&pdev->dev,
+ 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
+-				clk_disable_unprepare(i2c->clk);
+ 				return -ENODEV;
+ 			}
+ 			i2c->ip_clock_khz = clock_frequency / 1000;
+@@ -678,8 +675,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 		default:
+ 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
+ 				i2c->reg_io_width);
+-			ret = -EINVAL;
+-			goto err_clk;
++			return -EINVAL;
+ 		}
+ 	}
+ 
+@@ -710,13 +706,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 						   pdev->name, i2c);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
+-			goto err_clk;
++			return ret;
+ 		}
+ 	}
+ 
+ 	ret = ocores_init(&pdev->dev, i2c);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* hook up driver to tree */
+ 	platform_set_drvdata(pdev, i2c);
+@@ -728,7 +724,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	/* add i2c adapter to i2c tree */
+ 	ret = i2c_add_adapter(&i2c->adap);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* add in known devices to the bus */
+ 	if (pdata) {
+@@ -737,10 +733,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return 0;
+-
+-err_clk:
+-	clk_disable_unprepare(i2c->clk);
+-	return ret;
+ }
+ 
+ static int ocores_i2c_remove(struct platform_device *pdev)
+@@ -755,9 +747,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
+ 	/* remove adapter & data */
+ 	i2c_del_adapter(&i2c->adap);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
+-
+ 	return 0;
+ }
+ 
+@@ -771,8 +760,7 @@ static int ocores_i2c_suspend(struct device *dev)
+ 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
+ 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
++	clk_disable_unprepare(i2c->clk);
+ 	return 0;
+ }
+ 
+@@ -780,19 +768,18 @@ static int ocores_i2c_resume(struct device *dev)
+ {
+ 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
+ 
+-	if (!IS_ERR(i2c->clk)) {
+-		unsigned long rate;
+-		int ret = clk_prepare_enable(i2c->clk);
++	unsigned long rate;
++	int ret = clk_prepare_enable(i2c->clk);
+ 
+-		if (ret) {
+-			dev_err(dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
+-		rate = clk_get_rate(i2c->clk) / 1000;
+-		if (rate)
+-			i2c->ip_clock_khz = rate;
++	if (ret) {
++		dev_err(dev,
++			"clk_prepare_enable failed: %d\n", ret);
++		return ret;
+ 	}
++	rate = clk_get_rate(i2c->clk) / 1000;
++	if (rate)
++		i2c->ip_clock_khz = rate;
++
+ 	return ocores_init(dev, i2c);
+ }
+ 
+-- 
+2.34.1
 
-Marc
