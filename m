@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB06C70FD79
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF13770FD7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbjEXSG2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 14:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S236653AbjEXSI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233755AbjEXSG0 (ORCPT
+        with ESMTP id S231260AbjEXSIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:06:26 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C37E7;
-        Wed, 24 May 2023 11:06:23 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-9739440b60bso10041766b.0;
-        Wed, 24 May 2023 11:06:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684951581; x=1687543581;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JCb55Zgn6mVQwYnYnhdrcQMfFu1FfHYcI82tnxgFFXY=;
-        b=TB8LWL7r9QMoFuxPJYnPwdKXpm7lla4zdSzM9yN/KwAUtvdcJJiR2jsKXUazIbGS7H
-         Yw+7ibdssgQVJT3nyJR2w1PqPfV5Ld55iLrh9SSZxf84O6M80ZjuoY/R1/vzeRHNHajI
-         j/nSkiEJaSMm96Kb7kob2DalbOsNI3UglLIPPlorxYWFJLMtD+NfUCpeTa2DGe9+2fAW
-         QyGN1hpkhmSxMgJAn9rOQx2sBidhkh2zT4vWrklgYXX+rYX9WeV8Sysm47M97EhzQ7aR
-         cOLEEDlpoWpNIxrdZ1Zw3466vHL83yHv0/0ZTG47B02bP978mEObVJgB3MjhFrmdnfB+
-         aQgg==
-X-Gm-Message-State: AC+VfDztXK5D7mEw+UGlWFDnx8gEcW1+/qBhF24WE9/S9pL7S22Nc0I8
-        mD33V57iJ5gipp98Qecty6dmwTA2CLjb1P23LNiAzqXH
-X-Google-Smtp-Source: ACHHUZ4Zau31Zkqmffi9M8T99R9vE1X8UU2tRT/1M11kJ81h2dfM+6yB1chLKny5LEPIzuZcNbHgeerTLPjpRJfoU0w=
-X-Received: by 2002:a17:906:739d:b0:965:9db5:3821 with SMTP id
- f29-20020a170906739d00b009659db53821mr17548734ejl.7.1684951580645; Wed, 24
- May 2023 11:06:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <13276375.uLZWGnKmhe@kreacher>
-In-Reply-To: <13276375.uLZWGnKmhe@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 20:06:09 +0200
-Message-ID: <CAJZ5v0gKaheHVfRcgFx_3JdBp9bw5nUQXYp9vZP4RVVXzdb7uw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] ACPI: scan: MIPI DiSco for Imaging support
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 14:08:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262ABB6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:08:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BE05121CF6;
+        Wed, 24 May 2023 18:08:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684951702; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jwFVly4kq5P6O0lbSrbMpskCnnMKPILSg3+DmnDJtHM=;
+        b=W/JGEKPzGSdFmt/xBO/G+AdQJ1Lk9JJ3bnAxTtHsa8NrfErL9OUyHjbt9FMQ0STCNZzNso
+        iFFNf3ZTtlT6caTNOazuu6fKyuT39u+9qxDiqSjuqgfyCj+k7kBqt+g9hMSJBgxrATdVcu
+        oDsjGO9xUy5Z2Zl206Z7drjppV6EsFM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684951702;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jwFVly4kq5P6O0lbSrbMpskCnnMKPILSg3+DmnDJtHM=;
+        b=LxmziIUKjKrDoGdbykUCH3t1MtwcU7rTcuug5MKLe/glVgmQR5vZGBAt8RBl8xx1PD8Ih8
+        lgNf5mzMkCFUszCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D972133E6;
+        Wed, 24 May 2023 18:08:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2aroFZZSbmSDCwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 24 May 2023 18:08:22 +0000
+Date:   Wed, 24 May 2023 20:08:21 +0200
+Message-ID: <87o7m9d2lm.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stuart Henderson <stuarth@opensource.cirrus.com>
+Cc:     Luke Jones <luke@ljones.dev>, <linux-kernel@vger.kernel.org>,
+        <tiwai@suse.com>, <sbinding@opensource.cirrus.com>,
+        <perex@perex.cz>, <tangmeng@uniontech.com>,
+        <andy.chi@canonical.com>, <p.jungkamp@gmx.net>,
+        <kasper93@gmail.com>, <yangyuchi66@gmail.com>, <armas@codux.tech>,
+        <ealex95@gmail.com>, <james.schulman@cirrus.com>,
+        <david.rhodes@cirrus.com>, <tanureal@opensource.cirrus.com>,
+        <rf@opensource.cirrus.com>, <patches@opensource.cirrus.com>,
+        <alsa-devel@alsa-project.org>
+Subject: Re: CSC3551 and devices missing related _DSD bits
+In-Reply-To: <b4c202b2-ab29-e2aa-b141-0c967b2c1645@opensource.cirrus.com>
+References: <1991650.PYKUYFuaPT@fedora>
+        <87jzx3zaf8.wl-tiwai@suse.de>
+        <b4c202b2-ab29-e2aa-b141-0c967b2c1645@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 1:48â€¯PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> Hi Folks,
->
-> This basically is a re-write of a recent patch series from Sakari:
->
-> https://lore.kernel.org/linux-acpi/20230329100951.1522322-1-sakari.ailus@linux.intel.com
->
-> The general idea is the same - CSI-2 resource descriptors, introduced in
-> ACPI 6.4 and defined by
->
-> https://uefi.org/specs/ACPI/6.5/06_Device_Configuration.html#camera-serial-interface-csi-2-connection-resource-descriptor
->
-> are found and used for creating a set of software nodes that represent the CSI-2
-> connection graph.
->
-> These software nodes need to be available before any scan handlers or ACPI drivers
-> are bound to any struct acpi_device objects, so all of that is done at the early
-> stage of ACPI device enumeration, but unnecessary ACPI namespace walks are avoided.
->
-> The CSI-2 software nodes are populated with data extracted from the CSI-2 resource
-> descriptors themselves and from device properties defined by the MIPI DiSco for
-> Imaging specification (see https://www.mipi.org/specifications/mipi-disco-imaging).
->
-> Patches [4,6/6] come from the original series directly, but the other patches have
-> been changes substantially, so I've decided to re-start patch series versioning from
-> scratch.
->
-> This series is based on the patch at
->
-> https://patchwork.kernel.org/project/linux-acpi/patch/12223415.O9o76ZdvQC@kreacher/
->
-> applied on top of 6.4-rc3.
->
-> Later on, I'll put all of this material into a special git branch for easier
-> access.
+On Wed, 24 May 2023 18:36:04 +0200,
+Stuart Henderson wrote:
+> 
+> 
+> > The problem is that this can really easily blow up your machine if
+> > some incorrect bit is applied.  And more easily applicable, more
+> > chance to break by novice users, simply by believing what a chat bot
+> > speaks :)
+> > That's the very reason why this kind of change should be via ACPI
+> > table officially set up by the vendor.  That said, the question is
+> > only who and how can be responsible for this kind of change.  It's
+> > no technical issue, per se.
+> > 
+> > If BIOS can't be updated, at least, the configuration change has to be
+> > confirmed by ASUS people.  If ASUS still ignores the inquires and
+> > requests, we may put the quirk but with a bit fat warning (and maybe
+> > complaints to ASUS) to be shown in the log as a very last resort.
+> > 
+> > Let's see what happens.
+> 
+> Thanks Takashi.
+> 
+> Just a note to say we're not ignoring this and are investigating the
+> best way to support released laptops with ACPI incompatible with
+> Linux.  We're hoping this is going to be less of an issue going
+> forward.  Please bear with us while we look into this.
 
-The patches are now available from the acpi-mipi-disco-imaging branch
-in the linux-pm.git tree at kernel.org.
+Good to hear that you're working on it!
+Sure, it's no urgent issue and better wait for a proper solution.
 
-Thanks!
+
+thanks,
+
+Takashi
