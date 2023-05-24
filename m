@@ -2,174 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6946070F57E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF4270F59E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbjEXLlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S232955AbjEXLtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbjEXLlG (ORCPT
+        with ESMTP id S229614AbjEXLsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:41:06 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D4CC5;
-        Wed, 24 May 2023 04:41:04 -0700 (PDT)
-Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id EF695342601;
-        Wed, 24 May 2023 14:41:02 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=jrRDmOqJ59jFD1JNUC
-        yXP6sJZgAfaOqXnTVjJmcIeoo=; b=fw6HS4Uux6dCkhlCJ3z2lin2OUVtEwQ6cO
-        qXr45cZnPhDw6DnKzfIQLetqz4+NonMxVNzEz9IZzdgg9KHXcT+EpI5J4LQ7A8l4
-        dsbAdQ42fSqXJ7uUsLHVq1gTk0Pd/RhtC3hPI7F0S0Y6BmKRwN+sSnbmAQuRy1Az
-        /9uGsdUk8=
-Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 24 May 2023 07:48:45 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E6A12E;
+        Wed, 24 May 2023 04:48:34 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 3b00b2c833d42bdd; Wed, 24 May 2023 13:48:33 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id E65B83425F3;
-        Wed, 24 May 2023 14:41:02 +0300 (MSK)
-Received: from xpad.Home (10.199.28.63) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 24 May
- 2023 14:41:02 +0300
-From:   Vladimir Barinov <v.barinov@yadro.com>
-To:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vladimir Barinov <v.barinov@yadro.com>, <linux@yadro.com>
-Subject: [PATCH 2/2] dt-bindings: leds: Document Awinic AW2016 bindings
-Date:   Wed, 24 May 2023 14:40:56 +0300
-Message-ID: <20230524114056.196518-1-v.barinov@yadro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230524113910.196321-1-v.barinov@yadro.com>
-References: <20230524113910.196321-1-v.barinov@yadro.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id C020069D7E2;
+        Wed, 24 May 2023 13:48:32 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/6] ACPI: property: Support using strings in reference properties
+Date:   Wed, 24 May 2023 13:41:06 +0200
+Message-ID: <8228386.T7Z3S40VBb@kreacher>
+In-Reply-To: <13276375.uLZWGnKmhe@kreacher>
+References: <13276375.uLZWGnKmhe@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.28.63]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedggeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrghkrghrihdrrghilhhusheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhuggvghhovgguvgesrhgvughhrghtrdgtohhmpdhrtghpthht
+ oheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Awinic AW2026 binding documentation
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Vladimir Barinov <v.barinov@yadro.com>
+In order to allow referencing data nodes directly, which is not possible
+currently, add support for representing references in device properties
+as strings (relative or absolute name paths).  For example, after this
+change, the "mipi-img-flash-leds" property in the ASL snippet below will
+be treated as a proper reference to the LED0 object under LEDD.
+
+ Package ()
+ {
+     "mipi-img-flash-leds",  "\\_SB.PCI0.I2C2.LEDD.LED0",
+ }
+
+ Device (LEDD)
+ {
+     Name (_DSD, Package ()  // _DSD: Device-Specific Data
+     {
+         ToUUID ("dbb8e3e6-5886-4ba6-8795-1319f52a966b"), /* Hierarchical Data Extension */,
+         Package ()
+         {
+             Package ()
+             {
+                 "mipi-img-flash-led-0", 
+                 "LED0",
+             }
+         },
+     })
+     Name (LED0, Package ()  // _DSD: Device-Specific Data
+     {
+         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device Properties */,
+         Package ()
+         {
+             Package ()
+             {
+                 "mipi-img-max-current", 
+                 1000000,
+             }
+         }
+     })
+ }
+
+Also remove the mechanism allowing data nodes to be referenced
+indirectly, with the help of an object reference pointing to the
+"ancestor" device and a path relative to it (this mechanism is not
+expected to be in use in any production platform firmware in the field).
+
+Note that this change allows also using strings for referencing device
+objects, in addition to object references that have been supported
+already.
+
+While at it, add pr_fmt() macro to prefix printouts and update
+copyright.
+
+Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- .../bindings/leds/awinic,aw2026.yaml          | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/leds/awinic,aw2026.yaml
+ drivers/acpi/property.c |  102 ++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 82 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/leds/awinic,aw2026.yaml b/Documentation/devicetree/bindings/leds/awinic,aw2026.yaml
-new file mode 100664
-index 000000000000..abacf746677b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/awinic,aw2026.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/awinic,aw2026.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+Index: linux-pm/drivers/acpi/property.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/property.c
++++ linux-pm/drivers/acpi/property.c
+@@ -2,14 +2,17 @@
+ /*
+  * ACPI device specific properties support.
+  *
+- * Copyright (C) 2014, Intel Corporation
++ * Copyright (C) 2014 - 2023, Intel Corporation
+  * All rights reserved.
+  *
+  * Authors: Mika Westerberg <mika.westerberg@linux.intel.com>
+  *          Darren Hart <dvhart@linux.intel.com>
+  *          Rafael J. Wysocki <rafael.j.wysocki@intel.com>
++ *          Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
+ 
++#define pr_fmt(fmt) "ACPI: " fmt
 +
-+title: Awinic AW2026 3-channel LED Driver
+ #include <linux/acpi.h>
+ #include <linux/device.h>
+ #include <linux/export.h>
+@@ -800,27 +803,15 @@ static int acpi_get_ref_args(struct fwno
+ 	u32 nargs = 0, i;
+ 
+ 	/*
+-	 * Find the referred data extension node under the
+-	 * referred device node.
+-	 */
+-	for (; *element < end && (*element)->type == ACPI_TYPE_STRING;
+-	     (*element)++) {
+-		const char *child_name = (*element)->string.pointer;
+-
+-		ref_fwnode = acpi_fwnode_get_named_child_node(ref_fwnode, child_name);
+-		if (!ref_fwnode)
+-			return -EINVAL;
+-	}
+-
+-	/*
+ 	 * Assume the following integer elements are all args. Stop counting on
+-	 * the first reference or end of the package arguments. In case of
+-	 * neither reference, nor integer, return an error, we can't parse it.
++	 * the first reference (possibly represented as a string) or end of the
++	 * package arguments. In case of neither reference, nor integer, return
++	 * an error, we can't parse it.
+ 	 */
+ 	for (i = 0; (*element) + i < end && i < num_args; i++) {
+ 		acpi_object_type type = (*element)[i].type;
+ 
+-		if (type == ACPI_TYPE_LOCAL_REFERENCE)
++		if (type == ACPI_TYPE_LOCAL_REFERENCE || type == ACPI_TYPE_STRING)
+ 			break;
+ 
+ 		if (type == ACPI_TYPE_INTEGER)
+@@ -844,6 +835,44 @@ static int acpi_get_ref_args(struct fwno
+ 	return 0;
+ }
+ 
++static struct fwnode_handle *acpi_parse_string_ref(const struct fwnode_handle *fwnode,
++						   const char *refstring)
++{
++	acpi_handle scope, handle;
++	struct acpi_data_node *dn;
++	struct acpi_device *device;
++	acpi_status status;
 +
-+maintainers:
-+  - Vladimir Barinov <v.barinov@yadro.com>
++	if (is_acpi_device_node(fwnode)) {
++		scope = to_acpi_device_node(fwnode)->handle;
++	} else if (is_acpi_data_node(fwnode)) {
++		scope = to_acpi_data_node(fwnode)->handle;
++	} else {
++		pr_debug("Bad node type for node %pfw\n", fwnode);
++		return NULL;
++	}
 +
-+description: |
-+  The AW2026 is a 3-channel LED driver with I2C interface. It can control
-+  LED brightness with PWM output. It supports hardware blinking and
-+  hardware patterns.
++	status = acpi_get_handle(scope, refstring, &handle);
++	if (ACPI_FAILURE(status)) {
++		acpi_handle_debug(scope, "Unable to get an ACPI handle for %s\n",
++				  refstring);
++		return NULL;
++	}
 +
-+properties:
-+  compatible:
-+    const: awinic,aw2026
++	device = acpi_fetch_acpi_dev(handle);
++	if (device)
++		return acpi_fwnode_handle(device);
 +
-+  reg:
-+    maxItems: 1
++	status = acpi_get_data_full(handle, acpi_nondev_subnode_tag,
++				    (void **)&dn, NULL);
++	if (ACPI_FAILURE(status) || !dn) {
++		acpi_handle_debug(handle, "Subnode not found\n");
++		return NULL;
++	}
 +
-+  "#address-cells":
-+    const: 1
++	return &dn->fwnode;
++}
 +
-+  "#size-cells":
-+    const: 0
+ /**
+  * __acpi_node_get_property_reference - returns handle to the referenced object
+  * @fwnode: Firmware node to get the property from
+@@ -886,6 +915,7 @@ int __acpi_node_get_property_reference(c
+ 	const union acpi_object *element, *end;
+ 	const union acpi_object *obj;
+ 	const struct acpi_device_data *data;
++	struct fwnode_handle *ref_fwnode;
+ 	struct acpi_device *device;
+ 	int ret, idx = 0;
+ 
+@@ -909,16 +939,30 @@ int __acpi_node_get_property_reference(c
+ 
+ 		args->fwnode = acpi_fwnode_handle(device);
+ 		args->nargs = 0;
 +
-+  awinic,led-max-microamp:
-+    description:
-+      Maximum current at LED output
-+    enum:
-+      [3000, 6375, 12750, 25500]
++		return 0;
++	case ACPI_TYPE_STRING:
++		if (index)
++			return -ENOENT;
 +
-+  vcc-supply:
-+    description: Regulator providing power to the "VBAT" pin.
++		ref_fwnode = acpi_parse_string_ref(fwnode, obj->string.pointer);
++		if (!ref_fwnode)
++			return -EINVAL;
 +
-+patternProperties:
-+  "^led@[0-2]$":
-+    type: object
-+    $ref: common.yaml#
++		args->fwnode = ref_fwnode;
++		args->nargs = 0;
 +
-+    properties:
-+      reg:
-+        description: Index of the LED.
-+        minimum: 0
-+        maximum: 2
+ 		return 0;
+ 	case ACPI_TYPE_PACKAGE:
+ 		/*
+ 		 * If it is not a single reference, then it is a package of
+-		 * references followed by number of ints as follows:
++		 * references, followed by number of ints as follows:
+ 		 *
+ 		 *  Package () { REF, INT, REF, INT, INT }
+ 		 *
+-		 * The index argument is then used to determine which reference
+-		 * the caller wants (along with the arguments).
++		 * Here, REF may be either a local reference or a string. The
++		 * index argument is then used to determine which reference the
++		 * caller wants (along with the arguments).
+ 		 */
+ 		break;
+ 	default:
+@@ -946,6 +990,24 @@ int __acpi_node_get_property_reference(c
+ 			if (ret < 0)
+ 				return ret;
+ 
++			if (idx == index)
++				return 0;
 +
-+required:
-+  - compatible
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
++			break;
++		case ACPI_TYPE_STRING:
++			ref_fwnode = acpi_parse_string_ref(fwnode,
++							   element->string.pointer);
++			if (!ref_fwnode)
++				return -EINVAL;
 +
-+additionalProperties: false
++			element++;
 +
-+examples:
-+  - |
-+    #include <dt-bindings/leds/common.h>
++			ret = acpi_get_ref_args(idx == index ? args : NULL,
++						ref_fwnode, &element, end,
++						num_args);
++			if (ret < 0)
++				return ret;
 +
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        led-controller@64 {
-+                compatible = "awinic,aw2026";
-+                reg = <0x64>;
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                awinic,led-max-microamp = <6375>;
-+                vcc-supply = <&vcc_3v3_s0>;
-+
-+                led@0 {
-+                        reg = <0>;
-+                        function = LED_FUNCTION_INDICATOR;
-+                        color = <LED_COLOR_ID_RED>;
-+                };
-+
-+                led@1 {
-+                        reg = <1>;
-+                        function = LED_FUNCTION_INDICATOR;
-+                        color = <LED_COLOR_ID_BLUE>;
-+                };
-+
-+                led@2 {
-+                        reg = <2>;
-+                        function = LED_FUNCTION_INDICATOR;
-+                        color = <LED_COLOR_ID_GREEN>;
-+                };
-+        };
-+...
--- 
-2.34.1
+ 			if (idx == index)
+ 				return 0;
+ 
+
 
 
