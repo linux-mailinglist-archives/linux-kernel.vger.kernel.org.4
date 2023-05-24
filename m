@@ -2,115 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515D670FEE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9E270FEF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbjEXUAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
+        id S234774AbjEXUDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjEXUAp (ORCPT
+        with ESMTP id S231426AbjEXUDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:00:45 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F5BBB;
-        Wed, 24 May 2023 13:00:44 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8EB125C0041;
-        Wed, 24 May 2023 16:00:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 24 May 2023 16:00:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684958441; x=1685044841; bh=Z6
-        85X3s6lr/pGMeM6m/E6EEB6rBEVa5HnxnBbFtkgqs=; b=IrycefV5/kRwKBVlkj
-        gPLAV/1DOJiUWDDDMhExRNgNXq1KTFTzVl8p7o55kA3ZPKLAiqhzoA2yb4vNt+9n
-        gf1xsLnwGGMLt3neuQhs5liAL4RviPL2G4ToHFfisDYR9EBwQX20dEXjBrbV+roL
-        c9R+jbhIK/d/S1oT2fSR9O8PBNZ0kX/OunlmJeSA6/HayB3vZeUvechOorYlxZp4
-        kAl92/nbmP34SGM/8HqbvyekaUSpfL8AKSHHxtReqzamPTkKsUoJwPMohxDKTt1S
-        rhpMiEVrOhDrYHsF4FvOjHCob8UkI9w3RvGq3zUsGBCG6NeCpPNR0hHI3crIiG55
-        k6Iw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684958441; x=1685044841; bh=Z685X3s6lr/pG
-        MeM6m/E6EEB6rBEVa5HnxnBbFtkgqs=; b=o69JxLntHustMK0x1nRHWVwxWc2ti
-        903LG96W/NtxmX3I23aCR2t7PCjnP1ob4vXnsVhbiAgcz0w4ArWdXlyPfj1EP9Gx
-        iYmqiuMOhvYV/FduuMlyB65xxD78WrPgq9sTAsncaQ+bPsQIRCkzVQ8zFr5eG5fA
-        fcx1CUYfmZvaNzvNDPGv7zznTd2KAcFzw0D6jrx2kIPMKFzlyZ9FasdkGkAYydaL
-        fOq3PhwyQU75hv53Rmmf+8WEZAIfZUF86r8/mLXbBZoHh48vj6tHS5X6MQ9EKviE
-        mrqsPNETGb6b6wzuRghK+ruoudSWmQIEIfP//zACa0BRoGUOxWsOgBcGA==
-X-ME-Sender: <xms:6GxuZLSWczlarO1-UynyBF1EW07ihGI4ulnpj5CIM-noa3CNJGRwMA>
-    <xme:6GxuZMz-gp07UgEUjgOcMyCJmOB1IpPqQQK7N61W5tKEe93Eoj6Riej0ksYE-ACQO
-    R9PgpiFcEZb5N4oLic>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:6GxuZA0dIoXNbdvrJh0-PvY8JpYSBfYfcfx-5M2oq_yglhFLsiFkWA>
-    <xmx:6GxuZLB4f6g2ysoM1ftXUJJMZQgI7ByRZAwSF69sRBZy4y9o_3kH8w>
-    <xmx:6GxuZEhHOGPfwNhGzCsm7-v_EAcIyvDX-sj-NeRgP5Kqh-MWGljpjw>
-    <xmx:6WxuZNsQHeiiRa6WgQXQTTk06eodTz6S5QZfK2-8E8mt9ZkDfeM5pw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 73314B60086; Wed, 24 May 2023 16:00:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <3e131821-7665-47f0-a8a6-44b3e4d7a88a@app.fastmail.com>
-In-Reply-To: <20230524152633.203927-2-deller@gmx.de>
-References: <20230524152633.203927-1-deller@gmx.de>
- <20230524152633.203927-2-deller@gmx.de>
-Date:   Wed, 24 May 2023 22:00:14 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Helge Deller" <deller@gmx.de>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Dinh Nguyen" <dinguyen@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-parisc@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/3] arm: Fix flush_dcache_page() for usage from irq context
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 16:03:42 -0400
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F55210B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:02:52 -0700 (PDT)
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-75b015c0508so10334185a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:02:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684958571; x=1687550571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wc0lEJ6PvCd/xSxo1AL44vYdysUGzpOXm110SXEKBVE=;
+        b=aUPogNaqfycvLb22HX6hkhNkyfQ8kSCeQbZ26LS8BJk24Dj7FHl0SlZX4T4D21I/yG
+         AJk22xtexGj9Q93InXCDte26eDAb9AkQMxAgVfYFZa5ITiDsom1AL787EWDyQZL8PzqQ
+         Wr+mBxnawgL4BD+9qp9k2PNnDHoZLWru7ajKjyUokE1axZCbPfonIoyhn9tKHeyVbVYc
+         r9WbPNsbtWVDde4/Mpk0Pec2Ab4MaPnBvpFpOh5qZiiMIShd1iOLToskGPDxEjP5nJbn
+         cWJI9HC2qi9jfiewiqxqemRp4WxArW78um2hYB85AiiuMxToKj7rHnTjCygVR6G8YkOY
+         1r9A==
+X-Gm-Message-State: AC+VfDxQGOFRCjBFALXbv3wnOGTgiramcxQeK5x6FUq1Bu97rFnczdKs
+        nl7WucmLEiF02NboiNRjgMic
+X-Google-Smtp-Source: ACHHUZ5Edu25T8oAO0AIn9AjhlUZ+gCHN9Nh8NKCZqGZXLB9J8KM/t5ZexjNCLqFmWACVt0TS1EBUg==
+X-Received: by 2002:ae9:d60e:0:b0:75b:23a1:3671 with SMTP id r14-20020ae9d60e000000b0075b23a13671mr9242472qkk.50.1684958571318;
+        Wed, 24 May 2023 13:02:51 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id v20-20020a05620a123400b0074d60b697a6sm3496740qkj.12.2023.05.24.13.02.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 13:02:50 -0700 (PDT)
+Date:   Wed, 24 May 2023 16:02:49 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZG5taYoXDRymo/e9@redhat.com>
+References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+ <ZGb2Xi6O3i2pLam8@infradead.org>
+ <ZGeKm+jcBxzkMXQs@redhat.com>
+ <ZGgBQhsbU9b0RiT1@dread.disaster.area>
+ <ZGu0LaQfREvOQO4h@redhat.com>
+ <ZGzIJlCE2pcqQRFJ@bfoster>
+ <ZGzbGg35SqMrWfpr@redhat.com>
+ <ZG1dAtHmbQ53aOhA@dread.disaster.area>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG1dAtHmbQ53aOhA@dread.disaster.area>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023, at 17:26, Helge Deller wrote:
-> Since at least kernel 6.1, flush_dcache_page() is called with IRQs
-> disabled, e.g. from aio_complete().
+On Tue, May 23 2023 at  8:40P -0400,
+Dave Chinner <david@fromorbit.com> wrote:
+
+> On Tue, May 23, 2023 at 11:26:18AM -0400, Mike Snitzer wrote:
+> > On Tue, May 23 2023 at 10:05P -0400, Brian Foster <bfoster@redhat.com> wrote:
+> > > On Mon, May 22, 2023 at 02:27:57PM -0400, Mike Snitzer wrote:
+> > > ... since I also happen to think there is a potentially interesting
+> > > development path to make this sort of reserve pool configurable in terms
+> > > of size and active/inactive state, which would allow the fs to use an
+> > > emergency pool scheme for managing metadata provisioning and not have to
+> > > track and provision individual metadata buffers at all (dealing with
+> > > user data is much easier to provision explicitly). So the space
+> > > inefficiency thing is potentially just a tradeoff for simplicity, and
+> > > filesystems that want more granularity for better behavior could achieve
+> > > that with more work. Filesystems that don't would be free to rely on the
+> > > simple/basic mechanism provided by dm-thin and still have basic -ENOSPC
+> > > protection with very minimal changes.
+> > > 
+> > > That's getting too far into the weeds on the future bits, though. This
+> > > is essentially 99% a dm-thin approach, so I'm mainly curious if there's
+> > > sufficient interest in this sort of "reserve mode" approach to try and
+> > > clean it up further and have dm guys look at it, or if you guys see any
+> > > obvious issues in what it does that makes it potentially problematic, or
+> > > if you would just prefer to go down the path described above...
+> > 
+> > The model that Dave detailed, which builds on REQ_PROVISION and is
+> > sticky (by provisioning same blocks for snapshot) seems more useful to
+> > me because it is quite precise.  That said, it doesn't account for
+> > hard requirements that _all_ blocks will always succeed.
+> 
+> Hmmm. Maybe I'm misunderstanding the "reserve pool" context here,
+> but I don't think we'd ever need a hard guarantee from the block
+> device that every write bio issued from the filesystem will succeed
+> without ENOSPC.
+> 
+> If the block device can provide a guarantee that a provisioned LBA
+> range is always writable, then everything else is a filesystem level
+> optimisation problem and we don't have to involve the block device
+> in any way. All we need is a flag we can ready out of the bdev at
+> mount time to determine if the filesystem should be operating with
+> LBA provisioning enabled...
+> 
+> e.g. If we need to "pre-provision" a chunk of the LBA space for
+> filesystem metadata, we can do that ahead of time and track the
+> pre-provisioned range(s) in the filesystem itself.
+> 
+> In XFS, That could be as simple as having small chunks of each AG
+> reserved to metadata (e.g. start with the first 100MB) and limiting
+> all metadata allocation free space searches to that specific block
+> range. When we run low on that space, we pre-provision another 100MB
+> chunk and then allocate all metadata out of that new range. If we
+> start getting ENOSPC to pre-provisioning, then we reduce the size of
+> the regions and log low space warnings to userspace. If we can't
+> pre-provision any space at all and we've completely run out, we
+> simply declare ENOSPC for all incoming operations that require
+> metadata allocation until pre-provisioning succeeds again.
+
+This is basically saying the same thing but:
+
+It could be that the LBA space is fragmented and so falling back to
+the smallest region size (that matches the thinp block size) would be
+the last resort?  Then if/when thinp cannot even service allocating a
+new free thin block, dm-thinp will transition to out-of-data-space
+mode.
+
+> This is built entirely on the premise that once proactive backing
+> device provisioning fails, the backing device is at ENOSPC and we
+> have to wait for that situation to go away before allowing new data
+> to be ingested. Hence the block device really doesn't need to know
+> anything about what the filesystem is doing and vice versa - The
+> block dev just says "yes" or "no" and the filesystem handles
+> everything else.
+
+Yes.
+
+> It's worth noting that XFS already has a coarse-grained
+> implementation of preferred regions for metadata storage. It will
+> currently not use those metadata-preferred regions for user data
+> unless all the remaining user data space is full.  Hence I'm pretty
+> sure that a pre-provisioning enhancment like this can be done
+> entirely in-memory without requiring any new on-disk state to be
+> added.
+> 
+> Sure, if we crash and remount, then we might chose a different LBA
+> region for pre-provisioning. But that's not really a huge deal as we
+> could also run an internal background post-mount fstrim operation to
+> remove any unused pre-provisioning that was left over from when the
+> system went down.
+
+This would be the FITRIM with extension you mention below?  Which is a
+filesystem interface detail? So dm-thinp would _not_ need to have new
+state that tracks "provisioned but unused" block?  Nor would the block
+layer need an extra discard flag for a new class of "provisioned"
+blocks.
+
+If XFS tracked this "provisioned but unused" state, dm-thinp could
+just discard the block like its told.  Would be nice to avoid dm-thinp
+needing to track "provisioned but unused".
+
+That said, dm-thinp does still need to know if a block was provisioned
+(given our previous designed discussion, to allow proper guarantees
+from this interface at snapshot time) so that XFS and other
+filesystems don't need to re-provision areas they already
+pre-provisioned.
+
+However, it may be that if thinp did track "provisioned but unused"
+it'd be useful to allow snapshots to share provisioned blocks that
+were never used.  Meaning, we could then avoid "breaking sharing" at
+snapshot-time for "provisioned but unused" blocks.  But allowing this
+"optimization" undercuts the gaurantee that XFS needs for thinp
+storage that allows snapshots... SO, I think I answered my own
+question: thinp doesnt need to track "provisioned but unused" blocks
+but we must always ensure snapshots inherit provisoned blocks ;)
+
+> Further, managing shared pool exhaustion doesn't require a
+> reservation pool in the backing device and for the filesystems to
+> request space from it. Filesystems already have their own reserve
+> pools via pre-provisioning. If we want the filesystems to be able to
+> release that space back to the shared pool (e.g. because the shared
+> backing pool is critically short on space) then all we need is an
+> extension to FITRIM to tell the filesystem to also release internal
+> pre-provisioned reserves.
+
+So by default FITRIM will _not_ discard provisioned blocks.  Only if
+a flag is used will it result in discarding provisioned blocks.
+
+My dwelling on this is just double-checking that the 
+ 
+> Then the backing pool admin (person or automated daemon!) can simply
+> issue a trim on all the filesystems in the pool and spce will be
+> returned. Then filesystems will ask for new pre-provisioned space
+> when they next need to ingest modifications, and the backing pool
+> can manage the new pre-provisioning space requests directly....
 >
-> But the current implementation for flush_dcache_page() on ARM
-> unintentionally re-enables IRQs, which may lead to deadlocks.
->
-> Fix it by using xa_lock_irqsave() and xa_unlock_irqrestore()
-> for the flush_dcache_mmap_*lock() macros instead.
->
-> Cc: Russell King (Oracle) <linux@armlinux.org.uk>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Helge Deller <deller@gmx.de>
+> Hence I think if we get the basic REQ_PROVISION overwrite-in-place
+> guarantees defined and implemented as previously outlined, then we
+> don't need any special coordination between the fs and block devices
+> to avoid fatal ENOSPC issues with sparse and/or snapshot capable
+> block devices...
+> 
+> As a bonus, if we can implement the guarantees in dm-thin/-snapshot
+> and have a filesystem make use of it, then we also have a reference
+> implementation to point at device vendors and standards
+> associations....
 
-Cc: stable@vger.kernel.org
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Yeap.
 
-From what I can tell, the behavior in aio_complete has been
-there for over 10 years, since 21b40200cfe96 ("aio: use
-flush_dcache_page()"). Others may have done the same already
-back then.
-
-I also see you sent patches for nios2 and parisc, but not
-for csky, which appears to need the same thing.
-
-     Arnd
+Thanks,
+Mike
