@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5317570EC7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459A570EC84
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 06:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235138AbjEXEUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 00:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S234811AbjEXEXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 00:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjEXEU2 (ORCPT
+        with ESMTP id S231534AbjEXEXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 00:20:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24768FC;
-        Tue, 23 May 2023 21:20:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6273638A9;
-        Wed, 24 May 2023 04:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F6A1C433EF;
-        Wed, 24 May 2023 04:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684902026;
-        bh=GNZhXKomMT54g+LtxRjYbIBwQk2dt/X5HlQu3jjOZZI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gM2mno2MgOChhOSkSovPlMxLYxjoipeN7KkmD4t7OmgDq07CzCzYvbwfVkq0CF1XE
-         OKoJULyvIioS1mde9iSOK4qXTB3XWrM7F61AzejUoiX7rsdjKSawUWd4Iy42ZqiIU4
-         8C5+2JbcvgTBU9PjkRKn/aJF9wdUcTevPuepr4o+6K7wbxgmaAj0H4PrUcoe7ECbey
-         RrijNJVfKTqMHUjjzD69kYlZ341wTdtNpGq0+2k0Inj4kPIETtAUp+Q2eeFWdsuesZ
-         s/NsNJ8n26DjwStiP9UxaNIAiQaTZTH3+CLcN6BksluYexGIwQueLU9ZVzSNMIJXrH
-         QnCQr9zSFE4hA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EF55CC395F8;
-        Wed, 24 May 2023 04:20:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 24 May 2023 00:23:53 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A6CC1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:23:51 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f606912ebaso5876415e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 21:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684902230; x=1687494230;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NRuouVRQ/wxWNbz483jQ6XwRBWGjdIht0MWlJ69UoUA=;
+        b=E/fGatXFNqKdWxkPWD9mXlTuSPelkKO0WqUWrvcbItn6kVUIET/dSBO007AFcMzAKx
+         hsSXgHv/nIgsK9yQnbhZRXWCpeB7iuVVUaGMGhIL/2sx62FAcruy2IwnOC30Dnw3uxq5
+         l5M5l4Er+LkCx5p90jjZePrbZIvUw6+pV6PKfKFO6/D9welB6T182phEFh9SsHwMbWjC
+         /APE36L9kPdKaVcGhlgx5P1GYeI2xtATH3RavQv4QwpR3EGs9Rq9Zte3hgcHkTimzS5c
+         ykE6jMx9eJmlVTSPsXmUxypKJosyVNGAHb3T/wOaHopP6Kkh22GE77UhiK92RwSDkM6S
+         mWmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684902230; x=1687494230;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NRuouVRQ/wxWNbz483jQ6XwRBWGjdIht0MWlJ69UoUA=;
+        b=BrOsFtue32nVSe1UgXDsZMnVHhO1NM2oEHAWrOCmKsiBOV2QB/QUcfkVb4r2sjcQ0G
+         g7JoOGVNnoegbieV8khiDDDVFrsA+3BcOERaFOd7H1RqmJgUMYoNsyiZE7VyVhsnRYBE
+         EtP/S+ffIfoISzS7bqdUCLGv1H9mp0rbWZGNxlB8tHmHlHaKp3IuFt3qhBk/sp4aSuet
+         NcGa4x7nSz9Ldb0PqzhXia+I6XUCMUlj9I12ex+ojm88qrFq5utcEg2raxVPHFJLck1H
+         9uVNcAoK2OVTCGJpW8pqnQ1ghmq6LIsuGXpu3AyNZ9CmOu21Q3xwvz1SmvVbqopWgM10
+         skyw==
+X-Gm-Message-State: AC+VfDw2V/3t1Uc3cjyd/3h75cOerUCwCJDIrXxoJuxBHdDUABecuOKv
+        pf24Lg9vtEX+T7mk7FKwEzpaWg==
+X-Google-Smtp-Source: ACHHUZ5bXIvY/MYTDZ3QyksukcRe9NgWXvGJ8opvFz9oK2jEFj4vnk1wHV2hU+CEWFJE/NKSAkrGqQ==
+X-Received: by 2002:a7b:c7d8:0:b0:3f4:f0c2:143 with SMTP id z24-20020a7bc7d8000000b003f4f0c20143mr11868819wmk.20.1684902230014;
+        Tue, 23 May 2023 21:23:50 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id z10-20020a7bc7ca000000b003f602e2b653sm815605wmk.28.2023.05.23.21.23.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 21:23:47 -0700 (PDT)
+Date:   Wed, 24 May 2023 07:23:45 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Su Hui <suhui@nfschina.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        YongSu Yoo <yongsuyoo0215@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] media: dvb_ringbuffer: Return -EFAULT if copy fails
+Message-ID: <7af16b9a-09d1-46ff-b9f9-c178173cf940@kili.mountain>
+References: <20230524012733.414441-1-suhui@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v10 00/16] splice,
- net: Replace sendpage with sendmsg(MSG_SPLICE_PAGES), part 1
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168490202597.21222.4656712429626955049.git-patchwork-notify@kernel.org>
-Date:   Wed, 24 May 2023 04:20:25 +0000
-References: <20230522121125.2595254-1-dhowells@redhat.com>
-In-Reply-To: <20230522121125.2595254-1-dhowells@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
-        willy@infradead.org, viro@zeniv.linux.org.uk, hch@infradead.org,
-        axboe@kernel.dk, jlayton@kernel.org, brauner@kernel.org,
-        chuck.lever@oracle.com, torvalds@linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524012733.414441-1-suhui@nfschina.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,61 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 22 May 2023 13:11:09 +0100 you wrote:
-> Here's the first tranche of patches towards providing a MSG_SPLICE_PAGES
-> internal sendmsg flag that is intended to replace the ->sendpage() op with
-> calls to sendmsg().  MSG_SPLICE_PAGES is a hint that tells the protocol
-> that it should splice the pages supplied if it can and copy them if not.
+On Wed, May 24, 2023 at 09:27:33AM +0800, Su Hui wrote:
+> The copy_to/from_user() functions return the number of bytes remaining
+> to be copied, but we want to return -EFAULT to the user.
 > 
-> This will allow splice to pass multiple pages in a single call and allow
-> certain parts of higher protocols (e.g. sunrpc, iwarp) to pass an entire
-> message in one go rather than having to send them piecemeal.  This should
-> also make it easier to handle the splicing of multipage folios.
+> Fixes: 04da2daee383 ("[media] ngene: properly handle __user ptr")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+>  drivers/media/dvb-core/dvb_ringbuffer.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> [...]
+> diff --git a/drivers/media/dvb-core/dvb_ringbuffer.c b/drivers/media/dvb-core/dvb_ringbuffer.c
+> index 7d4558de8e83..f132578840ad 100644
+> --- a/drivers/media/dvb-core/dvb_ringbuffer.c
+> +++ b/drivers/media/dvb-core/dvb_ringbuffer.c
+> @@ -216,7 +216,7 @@ ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
+>  	if (split > 0) {
+>  		status = copy_from_user(rbuf->data+rbuf->pwrite, buf, split);
+>  		if (status)
+> -			return len - todo;
+> +			return -EFAULT;
 
-Here is the summary with links:
-  - [net-next,v10,01/16] net: Declare MSG_SPLICE_PAGES internal sendmsg() flag
-    https://git.kernel.org/netdev/net-next/c/b841b901c452
-  - [net-next,v10,02/16] net: Pass max frags into skb_append_pagefrags()
-    https://git.kernel.org/netdev/net-next/c/96449f902407
-  - [net-next,v10,03/16] net: Add a function to splice pages into an skbuff for MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/2e910b95329c
-  - [net-next,v10,04/16] tcp: Support MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/270a1c3de47e
-  - [net-next,v10,05/16] tcp: Convert do_tcp_sendpages() to use MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/c5c37af6ecad
-  - [net-next,v10,06/16] tcp_bpf: Inline do_tcp_sendpages as it's now a wrapper around tcp_sendmsg
-    https://git.kernel.org/netdev/net-next/c/ebf2e8860eea
-  - [net-next,v10,07/16] espintcp: Inline do_tcp_sendpages()
-    https://git.kernel.org/netdev/net-next/c/7f8816ab4bae
-  - [net-next,v10,08/16] tls: Inline do_tcp_sendpages()
-    https://git.kernel.org/netdev/net-next/c/e117dcfd646e
-  - [net-next,v10,09/16] siw: Inline do_tcp_sendpages()
-    https://git.kernel.org/netdev/net-next/c/c2ff29e99a76
-  - [net-next,v10,10/16] tcp: Fold do_tcp_sendpages() into tcp_sendpage_locked()
-    https://git.kernel.org/netdev/net-next/c/5367f9bbb86a
-  - [net-next,v10,11/16] ip, udp: Support MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/7da0dde68486
-  - [net-next,v10,12/16] ip6, udp6: Support MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/6d8192bd69bb
-  - [net-next,v10,13/16] udp: Convert udp_sendpage() to use MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/7ac7c987850c
-  - [net-next,v10,14/16] ip: Remove ip_append_page()
-    https://git.kernel.org/netdev/net-next/c/c49cf2663291
-  - [net-next,v10,15/16] af_unix: Support MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/a0dbf5f818f9
-  - [net-next,v10,16/16] unix: Convert unix_stream_sendpage() to use MSG_SPLICE_PAGES
-    https://git.kernel.org/netdev/net-next/c/57d44a354a43
+No no no.  This is obviously deliberate.  It's returning the number of
+bytes that were successfully copied.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+(I'm not sure I like this API.  If buf is a bad address then shouldn't
+we report that to the user?  It's not like we ran out of space or hit
+some limit in the kernel, it's just a bug in the user space program.
+However, changing the API is dangerous and could break user space).
 
+Same for the other.
+
+regards,
+dan carpenter
 
