@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED84770F8BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E3C70F8C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbjEXOaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S233872AbjEXOcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjEXOaK (ORCPT
+        with ESMTP id S229524AbjEXOcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:30:10 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FAD132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nc519PSu5SWSabTfI9++VrdsO+ErJ6GJg/mXPX8sTiY=; b=OLgIJNeGEIf7a6jVCmM2zaw4k9
-        IbyTrT330wN0Muw33nS4mdJDVFueMoA7fm+BOYhEZU4NUCOUrKNqYRhTYEZK1Xscl+g/r36R1pR73
-        Tss2+tZ8lourfOi+Kh4d4KUpJWO/66NoEQRq3s+YLpsNlbrPwqIQC4gx2CIDzH5963TnSBhRGr5eI
-        ZbEHa2ZHJjrL9f8Zf7/kYjInnzFHCbVFByDSnRAvaMXm9n80IIcYyjt8PcrYrq7nX43G0QLMAujgg
-        p9qC3z4Y3timz6Via63D19BI/C5yZ3q3YJnBk4wr/vHoGafeU2ny+CLIqTTKK4AWb9L54BGNR8j24
-        JMFAFcjg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q1pUx-00BHWF-TB; Wed, 24 May 2023 14:29:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F3F13002C5;
-        Wed, 24 May 2023 16:29:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1DFED2423AA01; Wed, 24 May 2023 16:29:54 +0200 (CEST)
-Date:   Wed, 24 May 2023 16:29:54 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: vmlinux.o: warning: objtool: xen_sched_clock+0x4a: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <20230524142954.GN4253@hirez.programming.kicks-ass.net>
-References: <202305242215.M2ZKRxS0-lkp@intel.com>
+        Wed, 24 May 2023 10:32:06 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E04912E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:32:04 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-19a347d69c8so276627fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1684938723; x=1687530723;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IDyGaU5vY520HnRjaMujkkWoZrPH9Gy1gshhTzYah3M=;
+        b=FfTgFnJkkoNOzvnk6oEE9OPOuc8tf6bsjZ9BjuQ6mCdPMyGsAzpYo7OE4+isfzgzY1
+         pEfY++1lTgtDnpl5xPZ2qdf9djm0iwGAMzLTIvITVu7pAQpyE0xh2aPkuLSRoowRXeLx
+         L7R165r7QeGBPbhuwFBrr6ThCdviuhTQ9bXCxn6O0ypDoDF2YkQdx2bHveTHpHpv8x1O
+         NeUCVyJEnXyZKEYnTXPjelAbnpeETChz5KzihEjpnpGZONEPf/BGAUS5blax2LQdJc7h
+         7QPjUWVn7wVz+WxqzYt1OOFIkZH1Fh7lvcGnb5UcdwvKI0JAFB9gxH5p5gx2Td8N5fG2
+         fsQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684938723; x=1687530723;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IDyGaU5vY520HnRjaMujkkWoZrPH9Gy1gshhTzYah3M=;
+        b=YVCJ6BWrU9Ri8xAkGtHUzFPzvlqWL53rfNmn0gl2vM/Xs46Mh1iX1CjW1r2/SphS8O
+         SbM3wk3b7xXFjnbUB2Gn4I+BChIGzq08cN0UBTS+yYWVPsk3glj13+g3My9UfWMUKy95
+         RHCY1rgPKd6JdoX5ufBgs+LRHaDrH6iD+aEQmsn9wWZEYHcXJjCfsYMk30CJQ8huskVl
+         A81Y5CNN7SgTfkPfDLqDxlHCaqevyh7lQ2paRWjdycazABhBsvK5FspiPiWqv5vhHDvc
+         UE5NzLzIrlREvubhg8zWQ6r2wCfHLxJyoNsmluwoJFvaEwLwXG0fyYt51yMomBzi9J4M
+         z1lw==
+X-Gm-Message-State: AC+VfDytseQImTZQ/4m6TcWIVvWvEumKsebN0qvziMQhInZmPwuM4xw2
+        j2JOiLVMklj3VCgtDp8TjPyttQX574QRPIdKBBo=
+X-Google-Smtp-Source: ACHHUZ5FsadYXL4czxLL/bHmeVCASD9xFCcwU6J9Jb8HfL+5NU91k63PTMY1pBl3/JZ1F7qDeLMBdg==
+X-Received: by 2002:a05:6870:e493:b0:199:a8cc:13dc with SMTP id v19-20020a056870e49300b00199a8cc13dcmr20766oag.9.1684938723334;
+        Wed, 24 May 2023 07:32:03 -0700 (PDT)
+Received: from ?IPV6:2804:14d:5c5e:44fb:522c:f73f:493b:2b5? ([2804:14d:5c5e:44fb:522c:f73f:493b:2b5])
+        by smtp.gmail.com with ESMTPSA id dt40-20020a0568705aa800b001968dd2e1fesm2814oab.3.2023.05.24.07.32.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 07:32:02 -0700 (PDT)
+Message-ID: <f309f841-3997-93cf-3f30-fa2b06560fc0@mojatatu.com>
+Date:   Wed, 24 May 2023 11:31:58 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305242215.M2ZKRxS0-lkp@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+To:     syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
+Cc:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
+        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
+References: <0000000000006cf87705f79acf1a@google.com>
+Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in
+ mini_qdisc_pair_swap
+Content-Language: en-US
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <0000000000006cf87705f79acf1a@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,70 +78,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 10:22:42PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   9d646009f65d62d32815f376465a3b92d8d9b046
-> commit: 8739c6811572b087decd561f96382087402cc343 sched/clock/x86: Mark sched_clock() noinstr
-> date:   4 months ago
-> config: x86_64-randconfig-a002-20230524
-> compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8739c6811572b087decd561f96382087402cc343
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 8739c6811572b087decd561f96382087402cc343
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=x86_64 olddefconfig
->         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305242215.M2ZKRxS0-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    vmlinux.o: warning: objtool: ibt_selftest+0x11: sibling call from callable instruction with modified stack frame
->    vmlinux.o: warning: objtool: __asan_memset+0x3b: call to __memset() with UACCESS enabled
->    vmlinux.o: warning: objtool: __asan_memmove+0x4d: call to __memmove() with UACCESS enabled
->    vmlinux.o: warning: objtool: __asan_memcpy+0x4d: call to __memcpy() with UACCESS enabled
-> >> vmlinux.o: warning: objtool: xen_sched_clock+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: __rdgsbase_inactive+0x26: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: __wrgsbase_inactive+0x2a: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: fixup_bad_iret+0x7f: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: noist_exc_debug+0x45: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: exc_nmi+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: poke_int3_handler+0x36: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: native_sched_clock+0x8c: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x30: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: mce_start+0x6d: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: do_machine_check+0x57: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: exc_machine_check+0x58: call to ftrace_likely_update() leaves .noinstr.text section
-> >> vmlinux.o: warning: objtool: kvm_clock_read+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: pvclock_clocksource_read_nowd+0x82: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: irqentry_nmi_enter+0x53: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: irqentry_nmi_exit+0x4b: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: enter_from_user_mode+0x38: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x38: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x38: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: irqentry_exit+0x32: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_kernel_exit_state+0x27: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_kernel_enter_state+0x27: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_kernel_enter.constprop.0+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_kernel_exit.constprop.0+0x49: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_idle_enter+0x18: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_nmi_enter+0x40: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_irq_enter+0x2a: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ct_irq_exit+0x2a: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: mwait_idle+0x33: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: acpi_processor_ffh_cstate_enter+0xfb: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x85: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: acpi_idle_enter+0x65: call to ftrace_likely_update() leaves .noinstr.text section
->    vmlinux.o: warning: objtool: ibt_selftest+0x1e: return with modified stack frame
+#syz test: git://gitlab.com/tammela/net.git peilin-patches
 
-Robot folks; could you please discard all:
-
- ftrace_likey_update.*noinstr
-
-warnings, they're -EWONTFIX.
+Double checking with syzbot
