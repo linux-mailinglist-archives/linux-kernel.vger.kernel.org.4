@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6032A70EA7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE7270EA81
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbjEXBCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 21:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S238833AbjEXBD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 21:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjEXBCE (ORCPT
+        with ESMTP id S229632AbjEXBDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 21:02:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82035BB;
-        Tue, 23 May 2023 18:02:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1543D61363;
-        Wed, 24 May 2023 01:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2291C433EF;
-        Wed, 24 May 2023 01:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684890119;
-        bh=5dnUQ4pjfrK9bWBSdJN1gcKy4pk1uQ6ojZnBVfBmkLA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kZK/frRKsrnxx20kLX7i/jq0KeCayOeJ+a7lANjggm9JiIxbtoubWaSsQrxu4Xy4c
-         G+tgJtYdl4gwBRmupiz5OYtgCkLaBnMjQup0YBsBNgnY/nkXIpCPVlGGnxSat2AtTq
-         rc5YzI3v88e6m5u/LOgMafoZIUJE3lwZoy0IOJBN3g/wJfPR4W/idu5/Rvn82x8r5b
-         g4bhG3v1kFNhCm/z/NWrL8SDfkZjBnqSdSUN6UCtFsZHr94gMnUxTgzcovJVroC3jL
-         SdQ9Dz+zz8eWLgWDY3jjebUHYMa/OJUWK4EbB06q33CWINdnPI4MGCh2TtNPc1vRvk
-         7VzJm0c7/SWgQ==
-Date:   Tue, 23 May 2023 21:01:56 -0400
-From:   Chuck Lever <cel@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] nfsd: Replace one-element array with
- flexible-array member
-Message-ID: <ZG1iBLw85MxtysWI@manet.1015granger.net>
-References: <ZG1d51tGG4c97qqb@work>
+        Tue, 23 May 2023 21:03:52 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E397BB;
+        Tue, 23 May 2023 18:03:51 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ae4be0b1f3so2585595ad.0;
+        Tue, 23 May 2023 18:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684890231; x=1687482231;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Scbr+czzutjcyOp4HOTyf4rXyCANGJqRT5giW6dSzns=;
+        b=VUHlx0hdrMJeI24jSkn2EnyYpoHpIyLCzUsiVdwuMpETvnvFXQwq+SLSzRgm4knxNz
+         pZV2np2QA76RnNOcUf1vztGhCv+L+o84mgV/G21TqNs3iChUROFMroxAo8dAUp391eAp
+         6e2cRJHsoDz5H0buGQrpHHmGI6kasmrjNRKKWJEZ2qjKNOiCSXFz2OTvuUiZiEzfQY1k
+         zMQzE8CVCiCZfvw9PDNxnXzJgu6TrlxexoPt+WvoRwECAHIqSMpjP8UvHSfXB9x08esU
+         yv3OzQides6Ohaddqhx4sEcfwiib66R6Mor4BEwY+JuCIFYJ5+HIgw60GPkN62iKGfuC
+         8+MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684890231; x=1687482231;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Scbr+czzutjcyOp4HOTyf4rXyCANGJqRT5giW6dSzns=;
+        b=NiKBMD9weiFbMlNomhtJEHDBWDRkLJhjReesKAHe6yoyZeGnSRppNCD8a+xt4cbqq6
+         BK3N7ClafaJ49bcYktbC0d9xkQpg8PGMsbsgHU3oqqUBImjQ35471j2D/kqpF70gN/yo
+         A4ydWEkiKvvsFpnfmOPyfYz2myh+4Xh+AtZnshJ3uHyHtP+TdwEMSgkmBajq9xzTUa55
+         G3Ii82ggePvBhC2Mw7cpz6bGiMIjW7XqmgeQwRJQWV8xlpXdvEYw+6HOU9gD1wblo5dB
+         +eOLQk6BJClBQwJrYmyqdwwqTUV4dMghmeLC7WtghWiUo2Y0+RDAkZ+eXsN3rMy23wxV
+         gqmA==
+X-Gm-Message-State: AC+VfDzf71PLXJq4r8rhIdeB4rr3EoevTeyVq7bZC8jnbPLbiBFj1gS5
+        lCbG748c2gQRum0bbXBGId4=
+X-Google-Smtp-Source: ACHHUZ5iY7CoRA4A35tUPceEOlzHvdghzUGl9NlWcSBqdQflyGW3bnKeWyF5cfg8O+er6f06wPuQCA==
+X-Received: by 2002:a17:902:ea0f:b0:1ac:8062:4f0b with SMTP id s15-20020a170902ea0f00b001ac80624f0bmr16597872plg.59.1684890230365;
+        Tue, 23 May 2023 18:03:50 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-87.three.co.id. [180.214.233.87])
+        by smtp.gmail.com with ESMTPSA id g8-20020a1709029f8800b001aaf6353736sm7417553plq.80.2023.05.23.18.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 May 2023 18:03:49 -0700 (PDT)
+Message-ID: <dbcd41cb-3355-d052-07a0-093638e36a2b@gmail.com>
+Date:   Wed, 24 May 2023 08:03:43 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZG1d51tGG4c97qqb@work>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] fs: udf: Replace GPL 2.0 boilerplate license
+ notice with SPDX identifier
+To:     J Lovejoy <opensource@jilayne.com>,
+        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Cc:     Jan Kara <jack@suse.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+References: <20230522005434.22133-1-bagasdotme@gmail.com>
+ <20230522005434.22133-2-bagasdotme@gmail.com>
+ <05210fe3-8392-08ac-2cc0-cf7fd9b6a05d@jilayne.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <05210fe3-8392-08ac-2cc0-cf7fd9b6a05d@jilayne.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 06:44:23PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with
-> flexible array members instead. So, replace a one-element array
-> with a flexible-arrayº member in struct vbi_anc_data and refactor
-
-I don't know what "struct vbi_anc_data" is. Is the patch description
-correct?
-
-
-> the rest of the code, accordingly.
+On 5/24/23 00:58, J Lovejoy wrote:
+> it looks like in a couple cases you have removed the word, "COPYRIGHT" and in the other cases you have not. I could be consistent one way or another and lean towards removing it, as I see it as a heading for the old license notice, but Richard may have a different view :)
 > 
-> This results in no differences in binary output.
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/298
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-> ---
->  fs/nfsd/nfs4callback.c | 2 +-
->  fs/nfsd/xdr4.h         | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/nfsd/nfs4callback.c b/fs/nfsd/nfs4callback.c
-> index 4039ffcf90ba..2c688d51135d 100644
-> --- a/fs/nfsd/nfs4callback.c
-> +++ b/fs/nfsd/nfs4callback.c
-> @@ -353,7 +353,7 @@ encode_cb_recallany4args(struct xdr_stream *xdr,
->  {
->  	encode_nfs_cb_opnum4(xdr, OP_CB_RECALL_ANY);
->  	encode_uint32(xdr, ra->ra_keep);
-> -	encode_bitmap4(xdr, ra->ra_bmval, ARRAY_SIZE(ra->ra_bmval));
-> +	encode_bitmap4(xdr, ra->ra_bmval, 1);
+I don't have the context that you mean (I have no idea what
+code you're referring to). Please reply inline with appropriate
+context in the future.
 
-I find the new code less self-documenting.
+-- 
+An old man doll... just what I always wanted! - Clara
 
-
->  	hdr->nops++;
->  }
->  
-> diff --git a/fs/nfsd/xdr4.h b/fs/nfsd/xdr4.h
-> index 510978e602da..68072170eac8 100644
-> --- a/fs/nfsd/xdr4.h
-> +++ b/fs/nfsd/xdr4.h
-> @@ -899,7 +899,7 @@ struct nfsd4_operation {
->  struct nfsd4_cb_recall_any {
->  	struct nfsd4_callback	ra_cb;
->  	u32			ra_keep;
-> -	u32			ra_bmval[1];
-> +	u32			ra_bmval[];
-
-This is not a placeholder for "1 or more elements". We actually want
-just a single u32 element in this array. Doesn't this change the
-sizeof(struct nfsd4_cb_recall_any) ?
-
-
->  };
->  
->  #endif
-> -- 
-> 2.34.1
-> 
