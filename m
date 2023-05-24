@@ -2,258 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF4770F207
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C904770F1F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240064AbjEXJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
+        id S240606AbjEXJQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240660AbjEXJUI (ORCPT
+        with ESMTP id S236531AbjEXJP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:20:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE2190;
-        Wed, 24 May 2023 02:20:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C3A2522452;
-        Wed, 24 May 2023 09:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684920004;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 24 May 2023 05:15:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233CA90
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684919712;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XqhDqAWF822dUjbzoUy3YfL5MEAfeA0mXDj6BA7NVe4=;
-        b=u56OFL9DCCQ4HGgpm1H3zcV8NU4UIrXiwE9OYk+jz/eHnP8HRHtdB0tdiUN19sKjqo74nQ
-        3WhqinSSce9/65AQ6qMlzninUJT+KnkW+SRONQvzCUCdWoLUY3GnAlb/OHVq+sPT8GjVlH
-        ZtM9ldkQuBlqbZUi+G0GgQ8WaTRly1o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684920004;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XqhDqAWF822dUjbzoUy3YfL5MEAfeA0mXDj6BA7NVe4=;
-        b=7PpJ1JFte3cJBYnZqUGAb7tl55Yd9SIbD69eqEO0pIQEoAN+cSUIsfIbH5iWwWyficwCd5
-        UgLVULIvlfWStRDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 79D49133E6;
-        Wed, 24 May 2023 09:20:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NO0aHcTWbWSZegAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 24 May 2023 09:20:04 +0000
-Date:   Wed, 24 May 2023 11:13:57 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Forza <forza@tnonline.net>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Stable <stable@vger.kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
-Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
- kernel 6.3.x
-Message-ID: <20230524091357.GH32559@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
- <fcf1d04.faed4a1a.18844d8e78f@tnonline.net>
- <ZGwcVTpQNBoJHBB+@debian.me>
- <ZGyVVQxnw6Tn7Xb8@pc636>
- <c9db92d.faed4a1c.1884c5550fb@tnonline.net>
+        bh=3hkGvluokZd4WakcwJ7QYs3rVKN2R+Qvo5TsPCzHhJ8=;
+        b=RnyNLteD0+IZfWemVukKwvJ00X6Rb5uE7rtCvJTTUxqJj8g0fGyGIa2eaVhmnEn9vfdFe2
+        ioyS3AB5AhqyfENu4Hrsw896yxsoD9EahXb2MDXijtRgLWr68/x4WHPCRt/DnsQMxNLB89
+        J4RAAgOnTcgaSk/em55ai6irHtYj/l0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-427-ksULk4e6M220jU3imp-T-w-1; Wed, 24 May 2023 05:15:08 -0400
+X-MC-Unique: ksULk4e6M220jU3imp-T-w-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3093cb05431so366802f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 02:15:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684919708; x=1687511708;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3hkGvluokZd4WakcwJ7QYs3rVKN2R+Qvo5TsPCzHhJ8=;
+        b=C47xqU0+LgkehQMmhXhhe9M//gOE21GYhijA4ONVYjdpl9uik51tSY8FWDuRvr5aSj
+         +BEqjijjuePgnxPq+pDjnYkdwC/j8q4Xr1n/VGBCdWugtboK1hbCu2tYS4uS/63hnw5j
+         S0kN6T/xKc5HjuUTadslcdWC6kV1JRC+x36jAoFgEHNuCBkxOUhbdQS+5RPtsvsyUIbA
+         X6q3eu0QD3QlylgeKzba66qCxWu6nrlPJI5FW5t/klXBCXajozBg6pN7+1PxEznqFJ5j
+         QS5QQ/+EiuHprcOCQHeKNThk7Tcm5zrIEENNSLRuL4BT9jgn+UAF/IkCViG69E8kretW
+         3/tA==
+X-Gm-Message-State: AC+VfDzIQlnHrF5UcNfoiFE8lQqFbh04EHB2NtcDo0Bg55DmzEYCALZq
+        oi+BalrNhrKK2xlhJMYaknmN4j0Q13xzL4na+mrnqN0K72U1X3dlyIT5jHnE9q8S6QUduyNIfbE
+        dCpvhb+ziK30xSycOIuSQc8TB
+X-Received: by 2002:a5d:6145:0:b0:309:4df9:fa19 with SMTP id y5-20020a5d6145000000b003094df9fa19mr11480025wrt.23.1684919707860;
+        Wed, 24 May 2023 02:15:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ72mwklu7Hok3zzBwPfcLf9xSxlN8mmEOsWMqCqoghOrOhOz5L7HNzKD5hCSRcShSWlZBWcxQ==
+X-Received: by 2002:a5d:6145:0:b0:309:4df9:fa19 with SMTP id y5-20020a5d6145000000b003094df9fa19mr11480005wrt.23.1684919707505;
+        Wed, 24 May 2023 02:15:07 -0700 (PDT)
+Received: from redhat.com ([2.52.29.218])
+        by smtp.gmail.com with ESMTPSA id q3-20020adff783000000b002e61e002943sm13685876wrp.116.2023.05.24.02.15.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 02:15:06 -0700 (PDT)
+Date:   Wed, 24 May 2023 05:15:03 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     xuanzhuo@linux.alibaba.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alvaro.karsz@solid-run.com
+Subject: Re: [PATCH V3 net-next 1/2] virtio-net: convert rx mode setting to
+ use workqueue
+Message-ID: <20230524050604-mutt-send-email-mst@kernel.org>
+References: <20230524081842.3060-1-jasowang@redhat.com>
+ <20230524081842.3060-2-jasowang@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c9db92d.faed4a1c.1884c5550fb@tnonline.net>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230524081842.3060-2-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This looks like a different set of problems, though all of them seem to
-start on the compression write path in btrfs.
-
-On Wed, May 24, 2023 at 07:57:19AM +0200, Forza wrote:
-> [   8.641506] 8021q: adding VLAN 0 to HW filter on device enp4s0
-> [   13.841691] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-> [   13.841705] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> [13917.280527] ------------[ cut here ]------------
-> [13917.280753] default_enter_idle leaked IRQ state
-> [13917.281004] WARNING: CPU: 3 PID: 0 at drivers/cpuidle/cpuidle.c:269 cpuidle_enter_state+0x3bb/0x430
-
-Warning in cpuilde
-
-> [13917.281046] Modules linked in: wireguard curve25519_x86_64 libcurve25519_generic ip6_udp_tunnel udp_tunnel cfg80211 rfkill 8021q garp mrp stp llc binfmt_misc intel_rapl_msr intel_rapl_common kvm_amd iTCO_wdt ccp intel_pmc_bxt iTCO_vendor_support kvm i2c_i801 virtio_gpu irqbypass pcspkr virtio_dma_buf joydev i2c_smbus drm_shmem_helper lpc_ich virtio_balloon drm_kms_helper crct10dif_pclmul crc32_pclmul crc32c_intel polyval_clmulni polyval_generic ghash_clmulni_intel sha512_ssse3 virtio_console virtio_net net_failover virtio_scsi failover serio_raw virtio_blk qemu_fw_cfg
-> [13917.281140] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 6.3.1-gentoo-mm-patched #4
-> [13917.281150] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-> [13917.281154] RIP: 0010:cpuidle_enter_state+0x3bb/0x430
-> [13917.281176] RSP: 0018:ffffa153c00b7ea0 EFLAGS: 00010286
-> [13917.281182] RAX: ffff8c15ebfafa28 RBX: ffffc153bfd80900 RCX: 000000000000083f
-> [13917.281186] RDX: 000000000118feed RSI: 00000000000000f6 RDI: 000000000000083f
-> [13917.281189] RBP: 0000000000000001 R08: 0000000000000000 R09: ffffa153c00b7d60
-> [13917.281193] R10: 0000000000000003 R11: ffffffffacb399e8 R12: ffffffffacc2e320
-> [13917.281196] R13: ffffffffacc2e3a0 R14: 0000000000000001 R15: 0000000000000000
-> [13917.281202] FS:  0000000000000000(0000) GS:ffff8c15ebf80000(0000) knlGS:0000000000000000
-> [13917.281206] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [13917.281210] CR2: 00007f71840b39c8 CR3: 0000000102998000 CR4: 00000000003506e0
-> [13917.281217] Call Trace:
-> [13917.281221]  <TASK>
-> [13917.281228]  cpuidle_enter+0x29/0x40
-> [13917.281244]  do_idle+0x19b/0x200
-> [13917.281292]  cpu_startup_entry+0x19/0x20
-> [13917.281297]  start_secondary+0x101/0x120
-> [13917.281324]  secondary_startup_64_no_verify+0xe5/0xeb
-> [13917.281343]  </TASK>
-> [13917.281346] ---[ end trace 0000000000000000 ]---
-> [17206.750165] BTRFS info (device vdb): using xxhash64 (xxhash64-generic) checksum algorithm
-> [17206.750190] BTRFS info (device vdb): using free space tree
-> [17206.904010] BTRFS info (device vdb): auto enabling async discard
-> [17206.933302] BTRFS info (device vdb): checking UUID tree
-> [17344.541839] sched: RT throttling activated
-> [18284.216538] hrtimer: interrupt took 23434934 ns
-> [18737.100477] BUG: unable to handle page fault for address: 0000000079e0afc0
-
-BUG
-
-> [18737.100883] #PF: supervisor read access in kernel mode
-> [18737.101155] #PF: error_code(0x0000) - not-present page
-> [18737.101462] PGD 0 P4D 0 
-> [18737.101715] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [18737.101968] CPU: 1 PID: 25287 Comm: kworker/u8:7 Tainted: G        W          6.3.1-gentoo-mm-patched #4
-> [18737.102391] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-> [18737.102860] Workqueue: btrfs-delalloc btrfs_work_helper
-> [18737.103346] RIP: 0010:find_free_extent+0x20a/0x15c0
-> [18737.103900] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
-> [18737.104851] RSP: 0018:ffffa153c0923bd0 EFLAGS: 00010203
-> [18737.105456] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
-> [18737.106044] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
-> [18737.106519] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
-> [18737.107036] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0923dd7
-> [18737.107363] R13: ffffa153c0923c90 R14: 0000000000000001 R15: 0000000079e0af10
-> [18737.107676] FS:  0000000000000000(0000) GS:ffff8c15ebe80000(0000) knlGS:0000000000000000
-> [18737.107971] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [18737.108260] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506e0
-> [18737.108606] Call Trace:
-> [18737.108964]  <TASK>
-> [18737.109273]  btrfs_reserve_extent+0x148/0x260
-> [18737.109601]  submit_compressed_extents+0x14f/0x490
-> [18737.109934]  async_cow_submit+0x37/0x90
-> [18737.110237]  btrfs_work_helper+0x13d/0x360
-> [18737.110542]  process_one_work+0x20f/0x410
-> [18737.110883]  worker_thread+0x4a/0x3b0
-> [18737.111185]  ? __pfx_worker_thread+0x10/0x10
-> [18737.111482]  kthread+0xda/0x100
-> [18737.111800]  ? __pfx_kthread+0x10/0x10
-> [18737.112097]  ret_from_fork+0x2c/0x50
-> [18737.112387]  </TASK>
-> [18737.112676] Modules linked in: wireguard curve25519_x86_64 libcurve25519_generic ip6_udp_tunnel udp_tunnel cfg80211 rfkill 8021q garp mrp stp llc binfmt_misc intel_rapl_msr intel_rapl_common kvm_amd iTCO_wdt ccp intel_pmc_bxt iTCO_vendor_support kvm i2c_i801 virtio_gpu irqbypass pcspkr virtio_dma_buf joydev i2c_smbus drm_shmem_helper lpc_ich virtio_balloon drm_kms_helper crct10dif_pclmul crc32_pclmul crc32c_intel polyval_clmulni polyval_generic ghash_clmulni_intel sha512_ssse3 virtio_console virtio_net net_failover virtio_scsi failover serio_raw virtio_blk qemu_fw_cfg
-> [18737.114021] CR2: 0000000079e0afc0
-> [18737.114366] ---[ end trace 0000000000000000 ]---
-> [18737.114712] RIP: 0010:find_free_extent+0x20a/0x15c0
-> [18737.115059] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
-> [18737.115864] RSP: 0018:ffffa153c0923bd0 EFLAGS: 00010203
-> [18737.116415] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
-> [18737.117090] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
-> [18737.117882] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
-> [18737.118611] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0923dd7
-> [18737.119416] R13: ffffa153c0923c90 R14: 0000000000000001 R15: 0000000079e0af10
-> [18737.120221] FS:  0000000000000000(0000) GS:ffff8c15ebe80000(0000) knlGS:0000000000000000
-> [18737.120994] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [18737.121868] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506e0
-> [18737.122624] note: kworker/u8:7[25287] exited with irqs disabled
-> [19006.920558] BUG: unable to handle page fault for address: 0000000079e0afc0
-
-And again, so something is going wrong
-
-> [19006.922015] #PF: supervisor read access in kernel mode
-> [19006.923354] #PF: error_code(0x0000) - not-present page
-> [19006.924636] PGD 0 P4D 0 
-> [19006.925868] Oops: 0000 [#2] PREEMPT SMP NOPTI
-> [19006.927066] CPU: 0 PID: 24329 Comm: crawl_writeback Tainted: G      D W          6.3.1-gentoo-mm-patched #4
-> [19006.928510] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-> [19006.929817] RIP: 0010:find_free_extent+0x20a/0x15c0
-> [19006.931050] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
-> [19006.933653] RSP: 0018:ffffa153c0d0f568 EFLAGS: 00010203
-> [19006.934972] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
-> [19006.936236] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
-> [19006.937480] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
-> [19006.938750] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0d0f757
-> [19006.939986] R13: ffffa153c0d0f628 R14: 0000000000000001 R15: 0000000079e0af10
-> [19006.941255] FS:  00007fb245ffb6c0(0000) GS:ffff8c15ebe00000(0000) knlGS:0000000000000000
-> [19006.942579] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [19006.943830] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506f0
-> [19006.945278] Call Trace:
-> [19006.946730]  <TASK>
-> [19006.947792]  ? release_pages+0x13e/0x490
-> [19006.948741]  btrfs_reserve_extent+0x148/0x260
-> [19006.949637]  cow_file_range+0x199/0x610
-> [19006.950396]  btrfs_run_delalloc_range+0x103/0x520
-> [19006.951135]  ? find_lock_delalloc_range+0x1ea/0x210
-> [19006.951802]  writepage_delalloc+0xb9/0x180
-> [19006.952401]  __extent_writepage+0xeb/0x410
-> [19006.952985]  extent_write_cache_pages+0x152/0x3d0
-> [19006.953552]  extent_writepages+0x4c/0x100
-> [19006.954116]  do_writepages+0xbe/0x1d0
-> [19006.954672]  ? memcmp_extent_buffer+0xa2/0xe0
-> [19006.955199]  filemap_fdatawrite_wbc+0x5f/0x80
-> [19006.955726]  __filemap_fdatawrite_range+0x4a/0x60
-> [19006.956219]  btrfs_rename+0x529/0xb60
-> [19006.956711]  ? psi_group_change+0x168/0x400
-> [19006.957280]  btrfs_rename2+0x2a/0x60
-> [19006.957799]  vfs_rename+0x5d4/0xeb0
-> [19006.958308]  ? lookup_dcache+0x17/0x60
-> [19006.958784]  ? do_renameat2+0x507/0x580
-> [19006.959239]  do_renameat2+0x507/0x580
-> [19006.959702]  __x64_sys_renameat+0x45/0x60
-> [19006.960293]  do_syscall_64+0x5b/0xc0
-> [19006.960848]  ? syscall_exit_to_user_mode+0x17/0x40
-> [19006.961331]  ? do_syscall_64+0x67/0xc0
-> [19006.961812]  ? syscall_exit_to_user_mode+0x17/0x40
-> [19006.962401]  ? do_syscall_64+0x67/0xc0
-> [19006.963371]  ? do_syscall_64+0x67/0xc0
-> [19006.964020]  ? do_syscall_64+0x67/0xc0
-> [19006.965001]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [19006.965952] RIP: 0033:0x7fb25eba492a
-> [19006.966485] Code: 48 8b 15 d9 44 17 00 f7 d8 64 89 02 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 89 ca b8 08 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 06 c3 0f 1f 44 00 00 48 8b 15 a1 44 17 00 f7
-> [19006.967545] RSP: 002b:00007fb245ff8a08 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
-> [19006.968076] RAX: ffffffffffffffda RBX: 0000559a70a039f0 RCX: 00007fb25eba492a
-> [19006.968623] RDX: 0000000000000004 RSI: 00007fb134000fc0 RDI: 0000000000000004
-> [19006.977319] RBP: 00007fb245ff8c60 R08: 0000000000000000 R09: 0000000000000000
-> [19006.977877] R10: 0000559a70a03a00 R11: 0000000000000246 R12: 00007fb245ff8c80
-> [19006.978301] R13: 0000000000000004 R14: 00007fb245ff8c60 R15: 00000000000070b5
-> [19006.978727]  </TASK>
-> [19006.979118] Modules linked in: wireguard curve25519_x86_64 libcurve25519_generic ip6_udp_tunnel udp_tunnel cfg80211 rfkill 8021q garp mrp stp llc binfmt_misc intel_rapl_msr intel_rapl_common kvm_amd iTCO_wdt ccp intel_pmc_bxt iTCO_vendor_support kvm i2c_i801 virtio_gpu irqbypass pcspkr virtio_dma_buf joydev i2c_smbus drm_shmem_helper lpc_ich virtio_balloon drm_kms_helper crct10dif_pclmul crc32_pclmul crc32c_intel polyval_clmulni polyval_generic ghash_clmulni_intel sha512_ssse3 virtio_console virtio_net net_failover virtio_scsi failover serio_raw virtio_blk qemu_fw_cfg
-> [19006.981463] CR2: 0000000079e0afc0
-> [19006.982193] ---[ end trace 0000000000000000 ]---
-> [19006.982938] RIP: 0010:find_free_extent+0x20a/0x15c0
-> [19006.983565] Code: 4d 8d ba 10 ff ff ff 48 83 c0 0f 49 8d 97 f0 00 00 00 48 c1 e0 04 48 01 d8 48 39 c2 0f 84 c5 03 00 00 41 c6 85 84 00 00 00 00 <45> 8b 9f b0 00 00 00 45 85 db 0f 85 d8 0c 00 00 45 8b 75 28 4c 89
-> [19006.984863] RSP: 0018:ffffa153c0923bd0 EFLAGS: 00010203
-> [19006.985500] RAX: ffff8c14869240f0 RBX: ffff8c1486924000 RCX: 0000000000000001
-> [19006.986195] RDX: 0000000079e0b000 RSI: 0000000000000100 RDI: ffff8c14869bcc00
-> [19006.986877] RBP: ffff8c148b100000 R08: 0000000000000000 R09: 0000000000000000
-> [19006.987581] R10: 0000000079e0b000 R11: 000000000000151b R12: ffffa153c0923dd7
-> [19006.988252] R13: ffffa153c0923c90 R14: 0000000000000001 R15: 0000000079e0af10
-> [19006.988984] FS:  00007fb245ffb6c0(0000) GS:ffff8c15ebe00000(0000) knlGS:0000000000000000
-> [19006.989646] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [19006.990336] CR2: 0000000079e0afc0 CR3: 00000001055e8000 CR4: 00000000003506f0
-> [19006.991037] note: crawl_writeback[24329] exited with irqs disabled
+On Wed, May 24, 2023 at 04:18:41PM +0800, Jason Wang wrote:
+> This patch convert rx mode setting to be done in a workqueue, this is
+> a must for allow to sleep when waiting for the cvq command to
+> response since current code is executed under addr spin lock.
 > 
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+> Changes since V1:
+> - use RTNL to synchronize rx mode worker
+> ---
+>  drivers/net/virtio_net.c | 55 +++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 52 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 56ca1d270304..5d2f1da4eaa0 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -265,6 +265,12 @@ struct virtnet_info {
+>  	/* Work struct for config space updates */
+>  	struct work_struct config_work;
 >  
-> 
-> 
-> 
-> 
-> 
+> +	/* Work struct for config rx mode */
+
+With a bit less abbreviation maybe? setting rx mode?
+
+> +	struct work_struct rx_mode_work;
+> +
+> +	/* Is rx mode work enabled? */
+
+Ugh not a great comment.
+
+> +	bool rx_mode_work_enabled;
+> +
+
+
+
+>  	/* Does the affinity hint is set for virtqueues? */
+>  	bool affinity_hint_set;
+>  
+> @@ -388,6 +394,20 @@ static void disable_delayed_refill(struct virtnet_info *vi)
+>  	spin_unlock_bh(&vi->refill_lock);
+>  }
+>  
+> +static void enable_rx_mode_work(struct virtnet_info *vi)
+> +{
+> +	rtnl_lock();
+> +	vi->rx_mode_work_enabled = true;
+> +	rtnl_unlock();
+> +}
+> +
+> +static void disable_rx_mode_work(struct virtnet_info *vi)
+> +{
+> +	rtnl_lock();
+> +	vi->rx_mode_work_enabled = false;
+> +	rtnl_unlock();
+> +}
+> +
+>  static void virtqueue_napi_schedule(struct napi_struct *napi,
+>  				    struct virtqueue *vq)
+>  {
+> @@ -2341,9 +2361,11 @@ static int virtnet_close(struct net_device *dev)
+>  	return 0;
+>  }
+>  
+> -static void virtnet_set_rx_mode(struct net_device *dev)
+> +static void virtnet_rx_mode_work(struct work_struct *work)
+>  {
+> -	struct virtnet_info *vi = netdev_priv(dev);
+> +	struct virtnet_info *vi =
+> +		container_of(work, struct virtnet_info, rx_mode_work);
+> +	struct net_device *dev = vi->dev;
+>  	struct scatterlist sg[2];
+>  	struct virtio_net_ctrl_mac *mac_data;
+>  	struct netdev_hw_addr *ha;
+> @@ -2356,6 +2378,8 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  	if (!virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_RX))
+>  		return;
+>  
+> +	rtnl_lock();
+> +
+>  	vi->ctrl->promisc = ((dev->flags & IFF_PROMISC) != 0);
+>  	vi->ctrl->allmulti = ((dev->flags & IFF_ALLMULTI) != 0);
+>  
+> @@ -2373,14 +2397,19 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  		dev_warn(&dev->dev, "Failed to %sable allmulti mode.\n",
+>  			 vi->ctrl->allmulti ? "en" : "dis");
+>  
+> +	netif_addr_lock_bh(dev);
+> +
+>  	uc_count = netdev_uc_count(dev);
+>  	mc_count = netdev_mc_count(dev);
+>  	/* MAC filter - use one buffer for both lists */
+>  	buf = kzalloc(((uc_count + mc_count) * ETH_ALEN) +
+>  		      (2 * sizeof(mac_data->entries)), GFP_ATOMIC);
+>  	mac_data = buf;
+> -	if (!buf)
+> +	if (!buf) {
+> +		netif_addr_unlock_bh(dev);
+> +		rtnl_unlock();
+>  		return;
+> +	}
+>  
+>  	sg_init_table(sg, 2);
+>  
+> @@ -2401,6 +2430,8 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  	netdev_for_each_mc_addr(ha, dev)
+>  		memcpy(&mac_data->macs[i++][0], ha->addr, ETH_ALEN);
+>  
+> +	netif_addr_unlock_bh(dev);
+> +
+>  	sg_set_buf(&sg[1], mac_data,
+>  		   sizeof(mac_data->entries) + (mc_count * ETH_ALEN));
+>  
+> @@ -2408,9 +2439,19 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  				  VIRTIO_NET_CTRL_MAC_TABLE_SET, sg))
+>  		dev_warn(&dev->dev, "Failed to set MAC filter table.\n");
+>  
+> +	rtnl_unlock();
+> +
+>  	kfree(buf);
+>  }
+>  
+> +static void virtnet_set_rx_mode(struct net_device *dev)
+> +{
+> +	struct virtnet_info *vi = netdev_priv(dev);
+> +
+> +	if (vi->rx_mode_work_enabled)
+> +		schedule_work(&vi->rx_mode_work);
+> +}
+> +
+
+>  static int virtnet_vlan_rx_add_vid(struct net_device *dev,
+>  				   __be16 proto, u16 vid)
+>  {
+> @@ -3181,6 +3222,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
+>  
+>  	/* Make sure no work handler is accessing the device */
+>  	flush_work(&vi->config_work);
+> +	disable_rx_mode_work(vi);
+> +	flush_work(&vi->rx_mode_work);
+>  
+>  	netif_tx_lock_bh(vi->dev);
+>  	netif_device_detach(vi->dev);
+
+Hmm so queued rx mode work will just get skipped
+and on restore we get a wrong rx mode.
+Any way to make this more robust?
+
+
+> @@ -3203,6 +3246,7 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+>  	virtio_device_ready(vdev);
+>  
+>  	enable_delayed_refill(vi);
+> +	enable_rx_mode_work(vi);
+>  
+>  	if (netif_running(vi->dev)) {
+>  		err = virtnet_open(vi->dev);
+> @@ -4002,6 +4046,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	vdev->priv = vi;
+>  
+>  	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
+> +	INIT_WORK(&vi->rx_mode_work, virtnet_rx_mode_work);
+>  	spin_lock_init(&vi->refill_lock);
+>  
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF)) {
+> @@ -4110,6 +4155,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (vi->has_rss || vi->has_rss_hash_report)
+>  		virtnet_init_default_rss(vi);
+>  
+> +	enable_rx_mode_work(vi);
+> +
+>  	/* serialize netdev register + virtio_device_ready() with ndo_open() */
+>  	rtnl_lock();
+>  
+> @@ -4207,6 +4254,8 @@ static void virtnet_remove(struct virtio_device *vdev)
+>  
+>  	/* Make sure no work handler is accessing the device. */
+>  	flush_work(&vi->config_work);
+> +	disable_rx_mode_work(vi);
+> +	flush_work(&vi->rx_mode_work);
+>  
+>  	unregister_netdev(vi->dev);
+>  
+> -- 
+> 2.25.1
+
