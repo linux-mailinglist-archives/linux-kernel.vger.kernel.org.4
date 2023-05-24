@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B694970EE59
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C7970EE6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239491AbjEXGpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S239434AbjEXGrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbjEXGpQ (ORCPT
+        with ESMTP id S239140AbjEXGpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:45:16 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABECE49;
-        Tue, 23 May 2023 23:43:54 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f6094cb26eso6925805e9.2;
-        Tue, 23 May 2023 23:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684910633; x=1687502633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zk6upt+vsp22fV0++FGxdKmhDI8OOl/jL66VSuvL1JM=;
-        b=AxTSMOstnaCEH6JLjXZ30ppxzYQ3gx4X0lJps4UcVJnw5vRPswnqJwfk8CYMqfRPr4
-         opcE4dpKqAfWzoiv3xfPmIhzQTjpch5wscao9Y0sycTStG6q100U8ksj+Bin6F/4tvdr
-         xqrdSrRwL5VtstDm64URGQmtDKj8PXNf/1Wp87mGYcH3hTfI/0gOnLwnHa0DpihSWB1e
-         Lt3J9POr3MLWbh1QTVsnWpR2zh0zah1gCKpLYDF9UIHQgQ4RPDzdHAo8W4Icc9yhBkj9
-         tzD39+/S9vIhYNyn2/sg8Tb8PrB+7Igl2KZALyOaoPHfpwzdQ/nSn49HEDiWfHqVvvzs
-         0jVw==
+        Wed, 24 May 2023 02:45:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E391BB
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684910625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mAf4XjOaef4P+4MQgCAxHVADzrgzQEnmBFIEaQXIdMU=;
+        b=NVWOmxUjHrt4jbrWKDH1GjXd54Itbxz6osA6g5WGqXhTj8VGSxBej6NBXPXq3oo/UjaPgP
+        0rNiMxSR9Ax45NGnxnGwTbj06ev+6ninRL2G93Qel7eMpi01eM60os7wzao5JmmqniAptv
+        LxWIhAuJQftPFjxAUKiUGo03Zxkhim4=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-145-ObRZtJ2GN4y10ExFgswjIw-1; Wed, 24 May 2023 02:43:43 -0400
+X-MC-Unique: ObRZtJ2GN4y10ExFgswjIw-1
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33a8d572f29so2202065ab.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:43:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684910633; x=1687502633;
+        d=1e100.net; s=20221208; t=1684910620; x=1687502620;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zk6upt+vsp22fV0++FGxdKmhDI8OOl/jL66VSuvL1JM=;
-        b=krd8Wry/CSQ5e640ToO+VffIEKee/DcXWaFt29QzssGboTSgcwJEHYS6Psjpxo9/Ly
-         dYVy9QPUJuM2sR5GJhAFfxEz0uKMSN/AzY8m6jgoucebnss4qJhWi9pb1ORO25DSb3iR
-         84oeApApP/djg2Xp7a1fTFme+fPYResh/Zj2FYnM2Oqpx+52NQ9MYw8RDI+9CvXrVlRQ
-         1W8gwc2MwuU2TESlO1eRjmASnkFYuXoApITojyJUs84QrUyJknKJL/RufeBTB0aV/KtA
-         yFOa79AfI3PBnkDyqCpXRyNoT+BD2XjpsLX2z5tRwkXdg51ZUHwzXIepLTlcHgnwebGh
-         TCng==
-X-Gm-Message-State: AC+VfDwyuGnEjoFv5V8PnaZMdK6txZTUUlSHXrUC6+2cOISvH45rgUtn
-        C2GOdj29cxeR2TXrWSdsZWOxQqGW+7NDi7zP1/Ib9t3eFaLGo003
-X-Google-Smtp-Source: ACHHUZ4QMq9vrYxYRJbuOvFf+VzJiwYOaYoO+O+HFuEtol5pJ+0yyOn0JHLMYZu524VVWgLx4kJjNJwyzL+wyIB+xCU=
-X-Received: by 2002:a05:600c:3795:b0:3f4:2737:a016 with SMTP id
- o21-20020a05600c379500b003f42737a016mr12308388wmr.29.1684910632858; Tue, 23
- May 2023 23:43:52 -0700 (PDT)
+        bh=mAf4XjOaef4P+4MQgCAxHVADzrgzQEnmBFIEaQXIdMU=;
+        b=XxVynPH2Ht2pjgdZCItYvgiFD7UI5mUZzTbM/7RIzMVET4FmKBThzSTYI+XSyP2JLW
+         9W10YPwnvy8Au8bh8nO3Sd6p5kv8ihvzb8Xotpb1aLWrziDgb0HHY5yoHWCaxVi6yNyH
+         +AHOp+/hEmrJIONcQLW/+7Q9twzt/83twWDxn6NrnY9I8O8rAQpsAEfV+ZzWZaAfKFpa
+         As7+6mrGp3nkd6U9imNjbncxqdrgmc/yd7r47ZPOrGvp6NDaGUqUnd/AeuvvYQO/lGpd
+         aZC2Uh0bfKDOzOhaHCAYIpwx2je2WYobaWyRRO9KxoBCf4I3t/KgexspVYuo2RKSWqjt
+         M5fg==
+X-Gm-Message-State: AC+VfDzHFo/BdFPeF8yE8eKxqAzWyObvyt+SVHZpeirAGZD1g8K6dT/I
+        zrrc8F97Ijd4qb/flbenf5RmSKLctVA4HSaVjwduHfHk7HoN+br/UaqZZL4r0HDq/R0EYDh4vSC
+        J3CimZlhhSYCnVZ7fnDRVEmo0WtzwssM3ocIWxew+4nThiD96
+X-Received: by 2002:a92:d24a:0:b0:334:309a:2492 with SMTP id v10-20020a92d24a000000b00334309a2492mr11059504ilg.20.1684910620250;
+        Tue, 23 May 2023 23:43:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4gisdUFPTBh/gvzouw9Kn7wkeIB7YdSvtLl57t9HrQvgU2mTukFJo4qMdPjHfxXLpJMrEpeEdKGGs2Hs9o6rw=
+X-Received: by 2002:a92:d24a:0:b0:334:309a:2492 with SMTP id
+ v10-20020a92d24a000000b00334309a2492mr11059497ilg.20.1684910619996; Tue, 23
+ May 2023 23:43:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
- <1684837327-18203-2-git-send-email-yangtiezhu@loongson.cn>
- <CAJ1xhMUZoO66b=LNVnjBN1GbHvXdo2b2y+YeONC36Ok=Xn5XFg@mail.gmail.com> <49e98308-ab8d-5811-66a8-9e17f22bb8c4@loongson.cn>
-In-Reply-To: <49e98308-ab8d-5811-66a8-9e17f22bb8c4@loongson.cn>
-From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
-Date:   Wed, 24 May 2023 09:43:17 +0300
-Message-ID: <CAJ1xhMV=WaYbdGpiRedLUGnYp8JLzcP81Ksw1k1610xeHCiGBA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf arm64: Handle __NR3264_ prefixed syscall number
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Hans-Peter Nilsson <hp@axis.com>, Leo Yan <leo.yan@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+References: <9505927dabc3b6695d62dfe1be371b12f5bdebf7.1684491648.git.durui@linux.alibaba.com>
+ <ZGz32yw7ecKhW+lj@redhat.com>
+In-Reply-To: <ZGz32yw7ecKhW+lj@redhat.com>
+From:   Alexander Larsson <alexl@redhat.com>
+Date:   Wed, 24 May 2023 08:43:29 +0200
+Message-ID: <CAL7ro1FPEqXyOuX_WPMYdsT6rW-bD5EU=v=oWKsd6XscykLF6Q@mail.gmail.com>
+Subject: Re: dm overlaybd: targets mapping OverlayBD image
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Du Rui <durui@linux.alibaba.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,95 +77,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 6:19=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
+On Tue, May 23, 2023 at 7:29=E2=80=AFPM Mike Snitzer <snitzer@kernel.org> w=
+rote:
 >
+> On Fri, May 19 2023 at  6:27P -0400,
+> Du Rui <durui@linux.alibaba.com> wrote:
 >
->
-> On 05/23/2023 08:31 PM, Alexander Kapshuk wrote:
-> > On Tue, May 23, 2023 at 1:22=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongso=
-n.cn> wrote:
-> >>
-> >> After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
-> >> in the generated syscall table file syscalls.c, there exist some
-> >> __NR3264_ prefixed syscall numbers such as [__NR3264_ftruncate],
-> >> it looks like not so good, just do some small filter operations
-> >> to handle __NR3264_ prefixed syscall number as a digital number.
-> >>
-> >> Without this patch:
-> >>
-> >>   [__NR3264_ftruncate] =3D "ftruncate",
-> >>
-> >> With this patch:
-> >>
-> >>   [46] =3D "ftruncate",
-> >>
-> >> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> >> ---
-> >>  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 7 ++++---
-> >>  1 file changed, 4 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools=
-/perf/arch/arm64/entry/syscalls/mksyscalltbl
-> >> index 22cdf91..59ab7939 100755
-> >> --- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
-> >> +++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
-> >> @@ -39,7 +39,8 @@ create_table()
-> >>         echo "};"
-> >>  }
-> >>
-> >> -$gcc -E -dM -x c -I $incpath/include/uapi $input \
-> >> -       |sed -ne 's/^#define __NR_//p' \
-> >> -       |sort -t' ' -k2 -n             \
-> >> +$gcc -E -dM -x c -I $incpath/include/uapi $input               \
-> >> +       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
-> >> +       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
-> >> +       |sort -t' ' -k2 -n                                      \
-> >>         |create_table
-> >> --
-> >> 2.1.0
-> >>
+> > OverlayBD is a novel layering block-level image format, which is design
+> > for container, secure container and applicable to virtual machine,
+> > published in USENIX ATC '20
+> > https://www.usenix.org/system/files/atc20-li-huiba.pdf
 > >
-> > As an aside, the awk + sed + sort parts of the command line may be
-> > reduced to the following awk script, if desired:
-> > awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
-> >         sub("^#define __NR_", "")
-> >         sub("^#define __NR3264_", "")
-> >         print | "sort -k2 -n"
-> > }'
+> > OverlayBD already has a ContainerD non-core sub-project implementation
+> > in userspace, as an accelerated container image service
+> > https://github.com/containerd/accelerated-container-image
 > >
+> > It could be much more efficient when do decompressing and mapping works
+> > in the kernel with the framework of device-mapper, in many circumstance=
+s,
+> > such as secure container runtime, mobile-devices, etc.
+> >
+> > This patch contains a module, dm-overlaybd, provides two kinds of targe=
+ts
+> > dm-zfile and dm-lsmt, to expose a group of block-devices contains
+> > OverlayBD image as a overlaid read-only block-device.
+> >
+> > Signed-off-by: Du Rui <durui@linux.alibaba.com>
 >
-> Hi Alexander,
->
-> Thanks, it seems more simple and works well as expected.
-> Let us wait for more review comments before respin.
->
-> If no any objections, I will send v2 with the following
-> changes based on the current patch in the next week.
->
-> -$gcc -E -dM -x c -I $incpath/include/uapi $input               \
-> -       |awk '{if ($2~"__NR" && $3 !~"__NR3264_") {print}}'     \
-> -       |sed -ne 's/^#define __NR_//p;s/^#define __NR3264_//p'  \
-> -       |sort -t' ' -k2 -n                                      \
-> +$gcc -E -dM -x c -I $incpath/include/uapi $input \
-> +       |awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
-> +               sub("^#define __NR_", "")
-> +               sub("^#define __NR3264_", "")
-> +               print | "sort -k2 -n"}' \
->          |create_table
->
-> Thanks,
-> Tiezhu
->
+> <snip, original patch here: [1] >
 
-Hi Tiezhu,
+A long long time ago I wrote a docker container image based on
+dm-snapshot that is vaguely similar to this one. It is still
+available, but nobody really uses it. It has several weaknesses. First
+of all the container image is an actual filesystem, so you need to
+pre-allocate a fixed max size for images at construction time.
+Secondly, all the lvm volume changes and mounts during runtime caused
+weird behaviour (especially at scale) that was painful to manage (just
+search the docker issue tracker for devmapper backend). In the end
+everyone moved to a filesystem based implementation (overlayfs based).
 
-Thanks for your prompt feedback.
-It was merely a suggestion entirely subject to your discretion.
+> I appreciate that this work is being done with an eye toward
+> containerd "community" and standardization but based on my limited
+> research it appears that this format of OCI image storage/use is only
+> used by Alibaba? (but I could be wrong...)
+>
+> But you'd do well to explain why the userspace solution isn't
+> acceptable. Are there security issues that moving the implementation
+> to kernel addresses?
+>
+> I also have doubts that this solution is _actually_ more performant
+> than a proper filesystem based solution that allows page cache sharing
+> of container image data across multiple containers.
 
-If no other patterns are anticipated to be processed by the sub
-routines, they may be combined into a single sub routine like so:
-awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
-        sub("^#define __NR(3264)?_", "")
-        print | "sort -k2 -n"
-}'
+This solution doesn't even allow page cache sharing between shared
+layers (like current containers do), much less between independent
+layers.
+
+> There is an active discussion about, and active development effort
+> for, using overlayfs + erofs for container images.  I'm reluctant to
+> merge this DM based container image approach without wider consensus
+> from other container stakeholders.
+>
+> But short of reaching wider consensus on the need for these DM
+> targets: there is nothing preventing you from carrying these changes
+> in your alibaba kernel.
+
+Erofs already has some block-level support for container images (with
+nydus), and composefs works with current in-kernel EROFS+overlayfs.
+And this new approach doesn't help for the IMHO current weak spot we
+have, which is unprivileged container images.
+
+Also, while OCI artifacts can be used to store any kind of image
+formats (or any other kind of file) I think for an actual standardized
+new image format it would be better to work with the OCI org to come
+up with a OCI v2 standard image format.
+
+But, I don't really speak for the block layer developers, so take my
+opinions with a pinch of salt.
+
+--=20
+=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
+-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D
+ Alexander Larsson                                Red Hat, Inc
+       alexl@redhat.com         alexander.larsson@gmail.com
+
