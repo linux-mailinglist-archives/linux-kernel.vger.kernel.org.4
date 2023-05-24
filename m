@@ -2,184 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB17F70FE88
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3163870FE93
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235634AbjEXT2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
+        id S235797AbjEXTfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjEXT2E (ORCPT
+        with ESMTP id S229547AbjEXTfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:28:04 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2063.outbound.protection.outlook.com [40.107.94.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A46D12F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:28:03 -0700 (PDT)
+        Wed, 24 May 2023 15:35:01 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6275A12F;
+        Wed, 24 May 2023 12:34:59 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 34OHZQSa013199;
+        Wed, 24 May 2023 12:34:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=NUbjI9MblHHjXelwd2qnUO01v3T/AoeWVodmyQDpBag=;
+ b=lXwn6zaXY5Rw15LA5ILTb2tc56j8KScMuBQbJ/INJxMX0hEDAIBwcm4/LPcA2CmhumCs
+ T8FRDVDikDwNnkZ1iABOWRHl9F+zVnhrMmaw4yJdYc2w+hs+tIJxo31U8tTfm/Q8txp3
+ Pr45eIVXYyCp7MjjaJ1mrgny91BDyCvs8wjNtcRGxRnhDArp88JwAtst/jiMG4KkiZ5P
+ DwvpfTio8XYzR7ArmUSFq6Sm9/A2YmUNBJH+Dsq/f0lSW50BDnr19cVRqFy1xA9o501F
+ Zr6R9bZgLZ2+mZ861E60aEoc3VMrK0e/UdI2zpf1FPiZOI/trFBbchw52nk6suh3daSH +g== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3qs8emxgt2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 12:34:37 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hs6uiefz92yCQ6GpT7zKCgVdoxZsAon7WsSTj16ClpG+7cPWwaVVGGqNTj8bT8FFOTPh8scMc+QglLXELTeaP6imJm4SDgyZYWhAuixHuocduERO9/yBaH/v1uJ61WGAawuSPEQJI83Y2Q8e+8xZ8JiVUB0Sl2qUpzwvtTmyHoVcwygv4M1BxbGNKjsJZPdn+UCx9z0GwULUc6SMlhpxLq8Ha04KxuWs3Y3YcyzI2/3o5jIpnGJTgZhgU+oDj4rgsSFiJ18C1XzbEhKu7lxU2h3yv0EhlUaUqetjMhllLpYFNwRurHtgRrigDQtHZhK+6Z85BoM46sOSuc5jGQIqJQ==
+ b=HLUvemTl36xcKawMFhYSJs4j1ChzR09j29/ddIePRrZNnD+qfs4YVoQWyWXiRvdkn+iSqa72Drdp3WBu9gGAQZRfSMZgRBKmQmuRN+Qe/wmW60x+e+NZVW1DAaabLY7891wYHUqy6YGvZOeyrbh3nnZknt5/FEkF8CDI+yEQph5G0EdxWwbKQn75N+74wkX83LxDfw3P2HVu+YQ5ggX/4yvxZa9RzSpsjR+HN6Rw5A6ecf/nPIuEpLLfRzCOxWjnNbrPbVls64BdNvTVjfFn4gmi8B/Xb6dgj8CFu+e4jYAqEJWmunqzMVGjjrpMCFDNKrSDtRbsZfZtE/ZYvIcLNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iljURUTwpeHL+08A2m+8VQaM77j/U63Md7+kkqMll98=;
- b=MeKvuQRttX64MNX+oQA1RFTn8nmOCxifNM8GsL8zTDEkNZtTuAiND8Ao6637RS0fr0TrCxaI6KMPy6ItWtf0g5YnuIoQ4XuSlgPAGbk2wyJ21kSQYkMdigmt+Eg8mXYu2XEu5i3A7/ySYm4EyVrLW2GKQL1mUO+6inZ7HnLNr4SPKdo+gn3IcckpPlGnRUvyxTiyYTOhIS3Hyu7R4VzxuJKYio+VzNusssehSDEKYaqGNMFHMco+aFla/R92ui/luSpV7FBuOI2tNCUz1dkh6YzYKmcZGxivxwyGxeSQugNURXyQ2IeIXPp92YoFl4HokImGlJZKGKdfhFDK7Dioiw==
+ bh=NUbjI9MblHHjXelwd2qnUO01v3T/AoeWVodmyQDpBag=;
+ b=dtLkX6Xzfn/KaMP7qYziVHw6Zu3H8DJdhndcImmM73PhI3epeNyUjpQGL2FRDY41CV+OnW9EG1OQsP9YYuxIPboZN47Otsf06aKgUN4wn40M/DlRWraFv+Lo/Uz2e1MW4lr1v7V8QybIyYZfPfOWnAOLhLwwvo+uT3B0/NDuqghnT9EDQ93JZFZjLSkkjvwjUk1paJR75k5ntV5nFk9zuDSHAJgz7JEAOn4ZV9ggRQLArKkU1sTqRPlDlr4VulOZQPI6v7vMkzSz9zIs91fnTNdL1LI/kJFt9fFMM6UeUP5E7R5uNwf4/6jM7kEUaKkZ7Ga8xldi8bqE9WQGOuHObA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iljURUTwpeHL+08A2m+8VQaM77j/U63Md7+kkqMll98=;
- b=NR+fsDliR/CVPkGGDmdMVzYwIr4CyytP7GS1uD9RuAF/77LeKP6YhbiutQ94WWyrZGnMP5c+PJNCLdymBBBWi2TAM8Btly/UQgA/6M6KseaAyn5Qs9mz+Oi6TYEZ4gK2lsIl0ga78nhpYHiYG7AjNzwgQhqcZtvrMp1aHmKcdHU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- SJ1PR12MB6243.namprd12.prod.outlook.com (2603:10b6:a03:456::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 19:28:00 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%7]) with mapi id 15.20.6411.028; Wed, 24 May 2023
- 19:28:00 +0000
-Message-ID: <cede79cd-4986-ce3c-ab74-a4497e9e1230@amd.com>
-Date:   Wed, 24 May 2023 15:27:55 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] drm/amd/display: enable more strict compile checks
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by DM4PR15MB5504.namprd15.prod.outlook.com (2603:10b6:8:88::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6433.16; Wed, 24 May 2023 19:34:35 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53%7]) with mapi id 15.20.6411.028; Wed, 24 May 2023
+ 19:34:35 +0000
+Message-ID: <113dc8c1-0840-9ee3-2840-28246731604c@meta.com>
+Date:   Wed, 24 May 2023 12:34:31 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [bug] kernel: bpf: syscall: a possible sleep-in-atomic bug in
+ __bpf_prog_put()
 Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     amd-gfx@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
-        Kenny Ho <kenny.ho@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230524191955.252212-1-hamza.mahfooz@amd.com>
- <CADnq5_Mz6aPFYGnr8J8C8UeTpbo7JDg+uvjqAxo7o4vmTGej2A@mail.gmail.com>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <CADnq5_Mz6aPFYGnr8J8C8UeTpbo7JDg+uvjqAxo7o4vmTGej2A@mail.gmail.com>
+To:     Teng Qi <starmiku1207184332@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230516111823.2103536-1-starmiku1207184332@gmail.com>
+ <e37c0a65-a3f6-e2e6-c2ad-367db20253a0@meta.com>
+ <CALyQVax8X63qekZVhvRTmZFFs+ucPKRkBB7UnRZk6Hu3ggi7Og@mail.gmail.com>
+ <57dc6a0e-6ba9-e77c-80ac-6bb0a6e2650a@meta.com>
+ <CALyQVazb=D1ejapiFdTnan6JbjFJA2q9ifhSsmF4OC9MDz3oAw@mail.gmail.com>
+ <d027cb6b-e32c-36ad-3aba-9a7b1177f89f@meta.com>
+ <CALyQVayW7e4FPbaMNNuOmYGYt5pcd47zsx2xVkrekEDaVm7H2g@mail.gmail.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <CALyQVayW7e4FPbaMNNuOmYGYt5pcd47zsx2xVkrekEDaVm7H2g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR0101CA0173.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:f::16) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
-MIME-Version: 1.0
+X-ClientProxiedBy: BYAPR11CA0044.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::21) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SJ1PR12MB6243:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95361d51-1f79-4e82-3927-08db5c8cfc1e
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DM4PR15MB5504:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4f58cf6-aabb-4c78-209d-08db5c8de7bb
+X-FB-Source: Internal
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Qt/HOmtKn0YegPNf9Yex883mJ/FfWTZubbH6+gtldbtRbQTXR7290A5kd42yNrpnQAuQpUVcBAtbcw/ZkBYiNWyBU/40egQtxY9vkV6QZzFdjztbDgPRLuH4wULr7MypcLMLdjk8+bsRQZGRiHGuqpKQ4SGd++WMTNTXwfpzdS/p4DsoHzw+knmw5uXjJBlxFaapRRcsETtiOeOJhk5figZ6ofv5i7m9K9CJvCdYsHoUVVWTpv4taRazCD1H8XuG4syYJgdoOLF+yCLXnDOV/rwr92uLojNPS2eLBvHouD0vPUt6AitxjoU5HMuwwzFV1H+IMhHdyJUS797BiqN83KtUPxuRmiBOPHXU7TPVbeAYFUDKYv5o+qc0CbNMxqPB8A5LsOopIcMbwI7rEgYwOKRVzrkdTI9xRNPC6XqGvx7FPJOG597qdhKEM+/tujlHgMlC5MWGs621hOYwv/GhkzUc9DyQncxFFo3Lq32ecYLvCaqP470pPgygskWHsKjZpG0TNZi5g9LDLWKCovVI9XryzsXotpz+G+xdoLwiyQ3APKUU3WVziqF+I/TkHP6zPTUzq49Yo0mghei3quOv+DDYChhj3qh6ZMuX2eTnPAVqQ1T1To2BnqwRct4c+s+zoV/XWSzB+MOwMfwsOM/X7g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(451199021)(31686004)(54906003)(41300700001)(31696002)(86362001)(6486002)(478600001)(316002)(66556008)(6916009)(66476007)(4326008)(6666004)(66946007)(8936002)(5660300002)(8676002)(38100700002)(44832011)(6506007)(6512007)(26005)(186003)(53546011)(2906002)(83380400001)(2616005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: gCp3b3oBs+Ut5586tqSbr+lnuFqORjpi+aPx96PQV3yb6Hb+iUJjD2beEJejejA/iSsZqdZhcgD/taS1mMVRZ3kbDalIryXCwLlE8YudjpJEn8RvrhiGXY0a8YqSIiM+iWy6xI5aOc+gVjpSapqGd/nlFsrKNZvkTPeU2x8Vss8T9KC4SmGoVn5XjuEnIvqKOyBjrWEcAni82JBjSlKc5QxyqXGCJz2KTE6UxAlctlM2YKscbktssHREfy1a1UNIwl4sbclMfNsE6I/4wMAgRoGRiTDBzAlQJPQfKLCGLOBoe8S96vkb6RYSuBGmQnS3GURoQZzcfJ7CSmd0LwfIZEcGyhuxgcwckqDwwmJrCP/eJjY+VYZp4xecKkTWALJMBzDqma244X43dIqidStmOHjpoSY2jwyRpNJDEMk1MP+gieA040SsH9b3x11/RzLRArr8S2K1cdyvLeIt92UTsiFSdNHdJXWXvMsJvf0/iqKAADy8sd70t0XvCcJxSQxafuXNfZ1vO+KCTx6NAmua+iYCV4e4RMpoSxJDkkx7YMWkmFybz4jj/6/BsTgNUG44ibuUzjrTaFV2flSrVoI/cCUzy/i9bzH7JaJ6KtRuunDbp6KxklaFtQvl7Dj+W9QfcpP0d4sWpdT7vSqQSaZc9Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(366004)(451199021)(6916009)(7416002)(36756003)(8676002)(8936002)(5660300002)(478600001)(4326008)(31686004)(66556008)(66946007)(66476007)(316002)(6666004)(6486002)(41300700001)(38100700002)(2906002)(6512007)(6506007)(30864003)(186003)(83380400001)(2616005)(31696002)(86362001)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGZrL1BrMGVaanhPa1Z2SHVabnQ4OWd5MGJJM0Vzc1BqYXNzUVpUaFNBeXh4?=
- =?utf-8?B?QTNRUkVXMkNwcWNobVZIWWpOeUJ5Ykl0N0Vvd21VWHkyRVFUR3NSZHFqU2pO?=
- =?utf-8?B?TFlHakNjWkUrS1l1VkxiY2d6QStSVGt4bE1ZajRZNis3RHJzN0pPZmVCSlV4?=
- =?utf-8?B?OWsvNjUxTUJyaTkzazUrSHdIZnRqY1dxT2UwN09xOHVmRHJYMUdoaU1Yc2NJ?=
- =?utf-8?B?TmE3TkFQRDNtWTU2T1Q2VWo4dE1WcjNwUk9LaWdEUG1IR2lNYVJ0cTh5Qk9R?=
- =?utf-8?B?dVdXZ0NsRW03RmtqYkRlQU9RMnlaaHRPaW50Q2J6emN3enkyd0RNY3EyZHds?=
- =?utf-8?B?RDFYV2JONVh6WlI1bzdodDg5MXZaRmZsUDlvdmU4QWpJaHVXWENYdHpkYlJR?=
- =?utf-8?B?c0U2dnI3UlU1aWp3UkZYbEY0SDBEUExLOTFqOUljbjRpeUpxWnRHMm5SMWw3?=
- =?utf-8?B?WkFBUkhlcWhSSHNHb0FFVHBndGcvODlzOHRkTWFoMjc0R3ovWjJ0eHQ2VEJS?=
- =?utf-8?B?TUpMaUc4ZWtJZzBpbXd3VFRrRHpXY3huVzJ0MGMzR1pVNldtTTFIaWRubTZR?=
- =?utf-8?B?eXpaODU1L0xDdVFpOUJQK2pDSng1THI4TEFZTWJ3NWwyZ0srOGU2QzJ2UDRX?=
- =?utf-8?B?aWovaC9Gb2FmbGxQZFRtM09YSCtCazI0bHkxVGNOaFBXYmN3YWVnc0FTMjVE?=
- =?utf-8?B?Zk1DZFM1WVExNVZQR09vbmpwM2JkZnVqUUtRR0ZJUXFUU3VFWk9WT2JLUHNu?=
- =?utf-8?B?M2lkL0QwbkJZSTNrOGRyZzhsd1N5QndRc3BNL0dxeEd6eDE3YnFMVDlIRTgv?=
- =?utf-8?B?ZkdUZzVidU5tclJwM2poWDE3b2NMRHpPbUE2eHpnTHMwallDRGY3U0tkbHBp?=
- =?utf-8?B?RmdXRU9rbXlNSlRTclhqbXdhK3BGWmlRNkthZ2ZNZ25PSzFBS2dXenYzbnJC?=
- =?utf-8?B?R0Q5MVZKNVZhTEg0a0o1d2JIQkhEenJOQWdnWm1HZ2dlUFdidmdEVkYzRW9W?=
- =?utf-8?B?d1A4aWZSc0E2cEJtc1dQWUdSVjMrajBtRVJtUGdLbkkxRzB3SXZjOUd6ZGNp?=
- =?utf-8?B?WlN2RDFZekRBZU1XNW5pWTdnVWtNZ1B5dGR1N2RpMC9XdWdlNzJVdzJwSkFM?=
- =?utf-8?B?VVlidmkwMEt5VlZmMFlGMURnVDA3NEM3Z1FYM1lYcnlOV3pJNVVsYk1hRzlZ?=
- =?utf-8?B?ck9MT0VKK1FBeXk4YkxubFBPdDA4LzRnbEkzdk1FV3hlOHlUNTNDYVJnaDVs?=
- =?utf-8?B?eXp5S1RhMlMxREh5Q0pKQjdLdFBpbXJORGdQeC9NckR6R2NCM2xSYUI5YkRw?=
- =?utf-8?B?bm9xVmduYW0ybEZqNzhXRlFRQlIrdERUY1V3NGQrckZ6QXFXaWxlTVhoTmRQ?=
- =?utf-8?B?NTBQd1RtMWFtNHFvV1BXYmxXNmwzY2laN3hGTXhSaFpObnp5MjVFS3Y5RXlS?=
- =?utf-8?B?QkdsQ0k3TytIWGpPTFdrNUNsbUVxMmZ5b3pRV0V0TC9IazJ1SEFMU2FFanNy?=
- =?utf-8?B?Tm5JSEtVWU9ReFBZdXRYQ1p0clBIbCtOdWF5Z2p1OEZMdFBqZjhGQXBrcnVT?=
- =?utf-8?B?SnU5NVFZSWY3RXJsc3Jlem85VDJDL1phV2VTUTdIRTh0cjAwbVVFRUd2ejdK?=
- =?utf-8?B?M2EzVG81dXJpc3lrbFlKZy9WckVqT28zRUwzbUI5ZEloQWprMDR2ck1vRHFj?=
- =?utf-8?B?eTJqZnFXVVk3NXBzdDlPU3RIMHV5eUo2Y2h1eUNZeVdYMzdYWW5DOTVyUk1G?=
- =?utf-8?B?TFpORytwVUMzQWl3QUxVMUZVL3IzU0NMYkZHWXBJOUJ6d3U4azJXbm1ycGRK?=
- =?utf-8?B?TGJOVEw1WDlzZ3Jub3poazlyOVgyZ2hzcERPQzc2WWFzd0NsL3JiK0FMZDQr?=
- =?utf-8?B?RFk4c0Fobm9kSTlNT2RMU1B6NURiSnFVbDdTdnp0T0UrVldUOGF5SkFCZVMx?=
- =?utf-8?B?WUJmYjZPV0dFR1RCRTc5SnpsdFRvN3ZVaXVENllpMzNzMXpzNnBLa3lJMHQx?=
- =?utf-8?B?Y21hU1dsZTNtT2pWaWFFbWFwWlhDdnFTK29wT2pnbVhadFZDWmVoZnU2SmF3?=
- =?utf-8?B?L0VSR3hYOVRLZlB0SG5vSEJqUFluWGRkZE1IelJYMjl3S1FpU2p5YU4rL3RW?=
- =?utf-8?Q?rEGRWmHpKWUz4xN/17nheXB0u?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95361d51-1f79-4e82-3927-08db5c8cfc1e
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0tRc1dDcjZVY01yTXhSTUZEem1rRVFadlNSQTZndjBIM1NmVEZEQkg0QjF4?=
+ =?utf-8?B?L2hLRTcydHVrL29xakFmeStsVDF0QmgxZVZ2MkVDbHNSems4eTFTNUVVN2lU?=
+ =?utf-8?B?SXFWSEZ1a2RLQTljREZCTElndnZYOUFiNTZpenF3Sy9vR0VxWkRoMXRvZVl4?=
+ =?utf-8?B?RlRQNjYvZG5WMGd1WjhTZXpWNjlIVTRqakZXdnp6RmgyREprd1JIRG5NNjha?=
+ =?utf-8?B?eGZScUNjeXF0QlVITDk0WEd3ZDJzSnp5YlkzNm5zaUluVy9vYU12M1JmRjda?=
+ =?utf-8?B?eGo0d1Fud3RUdlVTeDNJLzAwazk0VjN5Ulk2OVFlRXRpa01FTHcraVdraXE1?=
+ =?utf-8?B?eVRJTGZDK2FqKzBHZ2NLZGZQK3lYVi9QSTRYYTdHbHNKTUNPcnVxN21vWCtn?=
+ =?utf-8?B?Y1BaeGVta205NWNuUkJ2dTZuaWZoSlp4R2Z3eWF1R0M5MDU0ODZaSWpQVkZu?=
+ =?utf-8?B?anlaNTg0QUV5cWgvZUp5OE14UGIra1ZybHVPVkowQk5LOWhPVDhGbThjakY4?=
+ =?utf-8?B?QURjT0FQRU01SUgvd3NadlRCb3lwa2xVbWU1U2FlUmFZNTgwcVp6bDBlSVFz?=
+ =?utf-8?B?aFhpMllpSFM4U2RFL3ozWjFmRTRzdXlwVUFBMzhobTYrc25UQjMvZDd0eEtM?=
+ =?utf-8?B?dVdmUGhVQW5pUTNEK3VzVk5OL2owNGlLL0dDMDNyb3BLNEVmYTdjWVNRK2JT?=
+ =?utf-8?B?elE2MC9EZG9tQnpobjlHZElKdFJuMDc4US9UM240dzJodk5Eb1dvUkJURWdh?=
+ =?utf-8?B?NWx5MjQweWN6T3BLSkNpUlJIVEZNN0RsR2FwSTJSRGsrcnlKVEVSTGo1ZnA0?=
+ =?utf-8?B?bGNYQ0dMYVVEL0w0Yk80dG9qV212VFJVMnkzMXhva3dtYTc1QWtOTUlJZUxV?=
+ =?utf-8?B?M0llT1JTVDBUZ2ZkM29VRlJ2ck9yVXk2S1orRVRFZm1mVmdtdUV6VHVGN1NJ?=
+ =?utf-8?B?ay8rcTNZU3VHeUJaQitmekwyNDU1MVFvOEhKWFk3ckluYUkwODYxWHpHK21C?=
+ =?utf-8?B?Vm1Ra2dBb28rOVJONkhSaitzem1jOXFtUjU5b2RlVzdZN0NVTHphWU1xUEhr?=
+ =?utf-8?B?QTRDdWpaQzBsSTJmYytIdjVpUWdSNzQyODRzOFNEaUVXL3Y2RnBST0E2UVNN?=
+ =?utf-8?B?UFNnUnI4eC9LSCs0bmdVQzgzcVNOY2ozQWJDL0Nhd1FtRzJlL0JzYmsxZzhq?=
+ =?utf-8?B?VWRNYmhFeTNDaHg0RTVpYStKZVdXNXcydUwrNHBScVdJR0xoSWRleUltdGZF?=
+ =?utf-8?B?d01vbWcybEFQSEEvUU1wdzhQeCtBMFVaSzVNSU5aZ0dHSGprcUk5ZTlYTE5D?=
+ =?utf-8?B?dFVpemdMRkJhSlNoT3Q4ejhqOWgyZEtNcDVEVWFVbklrOTFsamE2V3gzTTNt?=
+ =?utf-8?B?ck1yeWZLajd6bjVnQVcva2hUdDZybEpnUDRjemp2OWNpTXgwTUliUFQyemNV?=
+ =?utf-8?B?eGFob3ZxRUlSdlJuazFyaTljL3ZGMERGc0txMWdoYzJ1WFRITW5HMlFkV1BN?=
+ =?utf-8?B?bC9laHUwMVhIcU5ZRHU1c1pWeGdYSWE3K1cyaEIwUE02QUsrOXNVd3VqOVNH?=
+ =?utf-8?B?a0QwRnF2NHVON21RdFdyK2pvbE9EaUJoL2krNER4aWVMcjJKZitEc29ySDZa?=
+ =?utf-8?B?dTgyNXJBZ0dOajdXSVhxZklNU0x4NHhIVGlrQXc2ejdzSmIybnFBaFJ0MFIv?=
+ =?utf-8?B?WUlaMDVFRkVnd2p5NUVOUVJVMmI0REEwRkV5aFhnRFZod3NTQmJsSFZvaThk?=
+ =?utf-8?B?ZzVDdGhyQWdqb2tXL0lGQ2d0SE5SWWJISWFuNEx6blZTSUhEenFaMDdJRVgv?=
+ =?utf-8?B?SFFESi93V0VZZW9vYzF0Y084K3FqRGhDTjJkeG1Kd09SWS9wSWI0M2Q2Ulp0?=
+ =?utf-8?B?MDRaKzZubDhoOUZkcTNnamRYMEdOK0wyVWNkY0NNVTdCSytHUVdiZ05ieFAv?=
+ =?utf-8?B?QllFVTR1UlV6bW5nUmN6YzB3ZnpoWStuSHFiZWt6NGU1Qzd0T0NiNnU2UXpS?=
+ =?utf-8?B?b01kRDhiRjFReldsNWFJVUZBYW1tcFhBeGxmUU4wNmdlZWhzdXhlbm9pTS9F?=
+ =?utf-8?B?VSt5OWNRWjhub2g3UC95bEVVYWtLUTRzMkdmMXNyci84WXNLY0Rja3Rnek9n?=
+ =?utf-8?B?d1lEZThucTNQblNaM2tWeW9RYVdZUVBkYW9HWDdiUk55Wmw3ekJ6WGN2czVC?=
+ =?utf-8?B?d3c9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4f58cf6-aabb-4c78-209d-08db5c8de7bb
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 19:28:00.0603
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 19:34:35.2696
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 02hgy0i4UKp3iaad1XvDSC9GfIoBoB59Sf2QVLi9uSnz0PDTkuF65Dn9vCMc1R5rojJoFKdzJTLDsT4MvxumIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6243
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: WpV5UqqAjDQTyZG+zdpkDsu4zIJx8jzu8NqUJz9Aeeub5wHOimwQUSpC+3aOmsmy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR15MB5504
+X-Proofpoint-ORIG-GUID: oQfOaX5fGVUzra92MjMlIkI5XhqGWcIY
+X-Proofpoint-GUID: oQfOaX5fGVUzra92MjMlIkI5XhqGWcIY
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_14,2023-05-24_01,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 15:22, Alex Deucher wrote:
-> On Wed, May 24, 2023 at 3:20 PM Hamza Mahfooz <hamza.mahfooz@amd.com> wrote:
->>
->> Currently, there are quite a number of issues that are quite easy for
->> the CI to catch, that slip through the cracks. Among them, there are
->> unused variable and indentation issues. Also, we should consider all
->> warnings to be compile errors, since the community will eventually end
->> up complaining about them. So, enable -Werror, -Wunused and
->> -Wmisleading-indentation for all kernel builds.
->>
->> Cc: Alex Deucher <alexander.deucher@amd.com>
->> Cc: Harry Wentland <harry.wentland@amd.com>
->> Cc: Kenny Ho <kenny.ho@amd.com>
->> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
->> ---
->> v2: fix grammatical error
->> ---
->>   drivers/gpu/drm/amd/display/Makefile | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/amd/display/Makefile b/drivers/gpu/drm/amd/display/Makefile
->> index 0d610cb376bb..3c44162ebe21 100644
->> --- a/drivers/gpu/drm/amd/display/Makefile
->> +++ b/drivers/gpu/drm/amd/display/Makefile
->> @@ -26,6 +26,8 @@
->>
->>   AMDDALPATH = $(RELATIVE_AMD_DISPLAY_PATH)
->>
->> +subdir-ccflags-y += -Werror -Wunused -Wmisleading-indentation
->> +
-> 
-> Care to enable this for the rest of amdgpu as well?  Or send out an
-> additional patch to do that?  Either way:
-> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 
-As far as I can tell, if `CONFIG_DRM_AMD_DC` is set it will run these
-checks on at least the base driver code.
+
+On 5/24/23 5:42 AM, Teng Qi wrote:
+> Thank you.
+> 
+>> We cannot use rcu_read_lock_held() in the 'if' statement. The return
+>> value rcu_read_lock_held() could be 1 for some configurations regardless
+>> whether rcu_read_lock() is really held or not. In most cases,
+>> rcu_read_lock_held() is used in issuing potential warnings.
+>> Maybe there are other ways to record whether rcu_read_lock() is held or not?
+> 
+> Sorry. I was not aware of the dependency of configurations of
+> rcu_read_lock_held().
+> 
+>> If we cannot resolve rcu_read_lock() presence issue, maybe the condition
+>> can be !in_interrupt(), so any process-context will go to a workqueue.
+> 
+> I agree that using !in_interrupt() as a condition is an acceptable solution.
+
+This should work although it could be conservative.
 
 > 
-> Alex
+>> Alternatively, we could have another solution. We could add another
+>> function e.g., bpf_prog_put_rcu(), which indicates that bpf_prog_put()
+>> will be done in rcu context.
 > 
->>   subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/
->>   subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/hw
->>   subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/clk_mgr
->> --
->> 2.40.1
->>
--- 
-Hamza
+> Implementing a new function like bpf_prog_put_rcu() is a solution that involves
+> more significant changes.
 
+Maybe we can change signature of bpf_prog_put instead? Like
+    void bpf_prog_put(struct bpf_prog *prog, bool in_rcu)
+and inside bpf_prog_put we can add
+    WARN_ON_ONCE(in_rcu && !bpf_rcu_lock_held());
+
+> 
+>> So if in_interrupt(), do kvfree, otherwise,
+>> put into a workqueue.
+> 
+> Shall we proceed with submitting a patch following this approach?
+
+You could choose either of the above although I think with newer 
+bpf_prog_put() is better.
+
+BTW, please do create a test case, e.g, sockmap test case which
+can show the problem with existing code base.
+
+> 
+> I would like to mention something unrelated to the possible bug. At this
+> moment, things seem to be more puzzling. vfree() is safe under in_interrupt()
+> but not safe under other atomic contexts.
+> This disorder challenges our conventional belief, a monotonic incrementation
+> of limitations of the hierarchical atomic contexts, that programer needs
+> to be more and more careful to write code under rcu read lock, spin lock,
+> bh disable, interrupt...
+> This disorder can lead to unexpected consequences, such as code being safe
+> under interrupts but not safe under spin locks.
+> The disorder makes kernel programming more complex and may result in more bugs.
+> Even though we find a way to resolve the possible bug about the bpf_prog_put(),
+> I feel sad for undermining of kernel`s maintainability and disorder of
+> hierarchy of atomic contexts.
+> 
+> -- Teng Qi
+> 
+> On Tue, May 23, 2023 at 12:33 PM Yonghong Song <yhs@meta.com> wrote:
+>>
+>>
+>>
+>> On 5/21/23 6:39 AM, Teng Qi wrote:
+>>> Thank you.
+>>>
+>>>   > Your above analysis makes sense if indeed that kvfree cannot appear
+>>>   > inside a spin lock region or RCU read lock region. But is it true?
+>>>   > I checked a few code paths in kvfree/kfree. It is either guarded
+>>>   > with local_irq_save/restore or by
+>>>   > spin_lock_irqsave/spin_unlock_
+>>>   > irqrestore, etc. Did I miss
+>>>   > anything? Are you talking about RT kernel here?
+>>>
+>>> To see the sleepable possibility of kvfree, it is important to analyze the
+>>> following calling stack:
+>>> mm/util.c: 645 kvfree()
+>>> mm/vmalloc.c: 2763 vfree()
+>>>
+>>> In kvfree(), to call vfree, if the pointer addr points to memory
+>>> allocated by
+>>> vmalloc(), it calls vfree().
+>>> void kvfree(const void *addr)
+>>> {
+>>>           if (is_vmalloc_addr(addr))
+>>>                   vfree(addr);
+>>>           else
+>>>                   kfree(addr);
+>>> }
+>>>
+>>> In vfree(), in_interrupt() and might_sleep() need to be considered.
+>>> void vfree(const void *addr)
+>>> {
+>>>           // ...
+>>>           if (unlikely(in_interrupt()))
+>>>           {
+>>>                   vfree_atomic(addr);
+>>>                   return;
+>>>           }
+>>>           // ...
+>>>           might_sleep();
+>>>           // ...
+>>> }
+>>
+>> Sorry. I didn't check vfree path. So it does look like that
+>> we need to pay special attention to non interrupt part.
+>>
+>>>
+>>> The vfree() may sleep if in_interrupt() == false. The RCU read lock region
+>>> could have in_interrupt() == false and spin lock region which only disables
+>>> preemption also has in_interrupt() == false. So the kvfree() cannot appear
+>>> inside a spin lock region or RCU read lock region if the pointer addr points
+>>> to memory allocated by vmalloc().
+>>>
+>>>   > > Therefore, we propose modifying the condition to include
+>>>   > > in_atomic(). Could we
+>>>   > > update the condition as follows: "in_irq() || irqs_disabled() ||
+>>>   > > in_atomic()"?
+>>>   > Thank you! We look forward to your feedback.
+>>>
+>>> We now think that ‘irqs_disabled() || in_atomic() ||
+>>> rcu_read_lock_held()’ is
+>>> more proper. irqs_disabled() is for irq flag reg, in_atomic() is for
+>>> preempt count and rcu_read_lock_held() is for RCU read lock region.
+>>
+>> We cannot use rcu_read_lock_held() in the 'if' statement. The return
+>> value rcu_read_lock_held() could be 1 for some configuraitons regardless
+>> whether rcu_read_lock() is really held or not. In most cases,
+>> rcu_read_lock_held() is used in issuing potential warnings.
+>> Maybe there are other ways to record whether rcu_read_lock() is held or not?
+>>
+>> I agree with your that 'irqs_disabled() || in_atomic()' makes sense
+>> since it covers process context local_irq_save() and spin_lock() cases.
+>>
+>> If we cannot resolve rcu_read_lock() presence issue, maybe the condition
+>> can be !in_interrupt(), so any process-context will go to a workqueue.
+>>
+>> Alternatively, we could have another solution. We could add another
+>> function e.g., bpf_prog_put_rcu(), which indicates that bpf_prog_put()
+>> will be done in rcu context. So if in_interrupt(), do kvfree, otherwise,
+>> put into a workqueue.
+>>
+>>
+>>>
+>>> -- Teng Qi
+>>>
+>>> On Sun, May 21, 2023 at 11:45 AM Yonghong Song <yhs@meta.com
+>>> <mailto:yhs@meta.com>> wrote:
+>>>
+>>>
+>>>
+>>>      On 5/19/23 7:18 AM, Teng Qi wrote:
+>>>       > Thank you for your response.
+>>>       >  > Looks like you only have suspicion here. Could you find a real
+>>>      violation
+>>>       >  > here where __bpf_prog_put() is called with !in_irq() &&
+>>>       >  > !irqs_disabled(), but inside spin_lock or rcu read lock? I
+>>>      have not seen
+>>>       >  > things like that.
+>>>       >
+>>>       > For the complex conditions to call bpf_prog_put() with 1 refcnt,
+>>>      we have
+>>>       > been
+>>>       > unable to really trigger this atomic violation after trying to
+>>>      construct
+>>>       > test cases manually. But we found that it is possible to show
+>>>      cases with
+>>>       > !in_irq() && !irqs_disabled(), but inside spin_lock or rcu read lock.
+>>>       > For example, even a failed case, one of selftest cases of bpf,
+>>>      netns_cookie,
+>>>       > calls bpf_sock_map_update() and may indirectly call bpf_prog_put()
+>>>       > only inside rcu read lock: The possible call stack is:
+>>>       > net/core/sock_map.c: 615 bpf_sock_map_update()
+>>>       > net/core/sock_map.c: 468 sock_map_update_common()
+>>>       > net/core/sock_map.c:  217 sock_map_link()
+>>>       > kernel/bpf/syscall.c: 2111 bpf_prog_put()
+>>>       >
+>>>       > The files about netns_cookie include
+>>>       > tools/testing/selftests/bpf/progs/netns_cookie_prog.c and
+>>>       > tools/testing/selftests/bpf/prog_tests/netns_cookie.c. We
+>>>      inserted the
+>>>       > following code in
+>>>       > ‘net/core/sock_map.c: 468 sock_map_update_common()’:
+>>>       > static int sock_map_update_common(..)
+>>>       > {
+>>>       >          int inIrq = in_irq();
+>>>       >          int irqsDisabled = irqs_disabled();
+>>>       >          int preemptBits = preempt_count();
+>>>       >          int inAtomic = in_atomic();
+>>>       >          int rcuHeld = rcu_read_lock_held();
+>>>       >          printk("in_irq() %d, irqs_disabled() %d, preempt_count() %d,
+>>>       >            in_atomic() %d, rcu_read_lock_held() %d", inIrq,
+>>>      irqsDisabled,
+>>>       >            preemptBits, inAtomic, rcuHeld);
+>>>       > }
+>>>       >
+>>>       > The output message is as follows:
+>>>       > root@(none):/root/bpf# ./test_progs -t netns_cookie
+>>>       > [  137.639188] in_irq() 0, irqs_disabled() 0, preempt_count() 0,
+>>>       > in_atomic() 0,
+>>>       >          rcu_read_lock_held() 1
+>>>       > #113     netns_cookie:OK
+>>>       > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>       >
+>>>       > We notice that there are numerous callers in kernel/, net/ and
+>>>      drivers/,
+>>>       > so we
+>>>       > highly suggest modifying __bpf_prog_put() to address this gap.
+>>>      The gap
+>>>       > exists
+>>>       > because __bpf_prog_put() is only safe under in_irq() ||
+>>>      irqs_disabled()
+>>>       > but not in_atomic() || rcu_read_lock_held(). The following code
+>>>      snippet may
+>>>       > mislead developers into thinking that bpf_prog_put() is safe in all
+>>>       > contexts.
+>>>       > if (in_irq() || irqs_disabled()) {
+>>>       >          INIT_WORK(&aux->work, bpf_prog_put_deferred);
+>>>       >          schedule_work(&aux->work);
+>>>       > } else {
+>>>       >          bpf_prog_put_deferred(&aux->work);
+>>>       > }
+>>>       >
+>>>       > Implicit dependency may lead to issues.
+>>>       >
+>>>       >  > Any problem here?
+>>>       > We mentioned it to demonstrate the possibility of kvfree() being
+>>>       > called by __bpf_prog_put_noref().
+>>>       >
+>>>       > Thanks.
+>>>       > -- Teng Qi
+>>>       >
+>>>       > On Wed, May 17, 2023 at 1:08 AM Yonghong Song <yhs@meta.com
+>>>      <mailto:yhs@meta.com>
+>>>       > <mailto:yhs@meta.com <mailto:yhs@meta.com>>> wrote:
+>>>       >
+>>>       >
+>>>       >
+>>>       >     On 5/16/23 4:18 AM, starmiku1207184332@gmail.com
+>>>      <mailto:starmiku1207184332@gmail.com>
+>>>       >     <mailto:starmiku1207184332@gmail.com
+>>>      <mailto:starmiku1207184332@gmail.com>> wrote:
+>>>       >      > From: Teng Qi <starmiku1207184332@gmail.com
+>>>      <mailto:starmiku1207184332@gmail.com>
+>>>       >     <mailto:starmiku1207184332@gmail.com
+>>>      <mailto:starmiku1207184332@gmail.com>>>
+>>>       >      >
+>>>       >      > Hi, bpf developers,
+>>>       >      >
+>>>       >      > We are developing a static tool to check the matching between
+>>>       >     helpers and the
+>>>       >      > context of hooks. During our analysis, we have discovered some
+>>>       >     important
+>>>       >      > findings that we would like to report.
+>>>       >      >
+>>>       >      > ‘kernel/bpf/syscall.c: 2097 __bpf_prog_put()’ shows that
+>>>      function
+>>>       >      > bpf_prog_put_deferred() won`t be called in the condition of
+>>>       >      > ‘in_irq() || irqs_disabled()’.
+>>>       >      > if (in_irq() || irqs_disabled()) {
+>>>       >      >      INIT_WORK(&aux->work, bpf_prog_put_deferred);
+>>>       >      >      schedule_work(&aux->work);
+>>>       >      > } else {
+>>>       >      >
+>>>       >      >      bpf_prog_put_deferred(&aux->work);
+>>>       >      > }
+>>>       >      >
+>>>       >      > We suspect this condition exists because there might be
+>>>      sleepable
+>>>       >     operations
+>>>       >      > in the callees of the bpf_prog_put_deferred() function:
+>>>       >      > kernel/bpf/syscall.c: 2097 __bpf_prog_put()
+>>>       >      > kernel/bpf/syscall.c: 2084 bpf_prog_put_deferred()
+>>>       >      > kernel/bpf/syscall.c: 2063 __bpf_prog_put_noref()
+>>>       >      > kvfree(prog->aux->jited_linfo);
+>>>       >      > kvfree(prog->aux->linfo);
+>>>       >
+>>>       >     Looks like you only have suspicion here. Could you find a real
+>>>       >     violation
+>>>       >     here where __bpf_prog_put() is called with !in_irq() &&
+>>>       >     !irqs_disabled(), but inside spin_lock or rcu read lock? I
+>>>      have not seen
+>>>       >     things like that.
+>>>       >
+>>>       >      >
+>>>       >      > Additionally, we found that array prog->aux->jited_linfo is
+>>>       >     initialized in
+>>>       >      > ‘kernel/bpf/core.c: 157 bpf_prog_alloc_jited_linfo()’:
+>>>       >      > prog->aux->jited_linfo = kvcalloc(prog->aux->nr_linfo,
+>>>       >      >    sizeof(*prog->aux->jited_linfo),
+>>>      bpf_memcg_flags(GFP_KERNEL |
+>>>       >     __GFP_NOWARN));
+>>>       >
+>>>       >     Any problem here?
+>>>       >
+>>>       >      >
+>>>       >      > Our question is whether the condition 'in_irq() ||
+>>>       >     irqs_disabled() == false' is
+>>>       >      > sufficient for calling 'kvfree'. We are aware that calling
+>>>       >     'kvfree' within the
+>>>       >      > context of a spin lock or an RCU lock is unsafe.
+>>>
+>>>      Your above analysis makes sense if indeed that kvfree cannot appear
+>>>      inside a spin lock region or RCU read lock region. But is it true?
+>>>      I checked a few code paths in kvfree/kfree. It is either guarded
+>>>      with local_irq_save/restore or by
+>>>      spin_lock_irqsave/spin_unlock_irqrestore, etc. Did I miss
+>>>      anything? Are you talking about RT kernel here?
+>>>
+>>>
+>>>       >      >
+>>>       >      > Therefore, we propose modifying the condition to include
+>>>       >     in_atomic(). Could we
+>>>       >      > update the condition as follows: "in_irq() ||
+>>>      irqs_disabled() ||
+>>>       >     in_atomic()"?
+>>>       >      >
+>>>       >      > Thank you! We look forward to your feedback.
+>>>       >      >
+>>>       >      > Signed-off-by: Teng Qi <starmiku1207184332@gmail.com
+>>>      <mailto:starmiku1207184332@gmail.com>
+>>>       >     <mailto:starmiku1207184332@gmail.com
+>>>      <mailto:starmiku1207184332@gmail.com>>>
+>>>       >
+>>>
