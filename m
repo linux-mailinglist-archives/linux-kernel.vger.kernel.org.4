@@ -2,220 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A43370FC6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B230670FC6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236041AbjEXROn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 13:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S232718AbjEXRPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236372AbjEXRON (ORCPT
+        with ESMTP id S232688AbjEXRPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:14:13 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DAA18E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:13:50 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7747f76946bso1178739f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684948427; x=1687540427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EdS+q/K7TdrybGLIQtx2Ez7oq5UvktWCfD/foZoBFes=;
-        b=U7BIgnrXPTfSBZPqP2ftRmyQUkaADhylgdggEtlKNZj/NkdDpyIu1i84qN7WxOE8kx
-         RJaMka57NYeTMxg9lUsiVUd78BF+qshvEoBKUL01tg5MJplsp1zPvh9F8XXA6rjuNswv
-         ztpqedBDo5cUIaOMd1JECBIkU8k1uFR4QMkNU=
+        Wed, 24 May 2023 13:15:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4A5E48
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684948450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EyHzZjPPIFiS8KYpIWrxQRKT3huMDr2umMnS3bHEjoo=;
+        b=Rw1AUTouDBSbLQ5bW7WOFNxMYFZBzX1RCLupyHQtmaUWUqCa+RtiTrxPICD5blXZpDEm9s
+        0YYHIcG31E6HArI5iE1gbQrfsVqtq987heVeujja1ggi930dGmni3jBe9a6zYrZYGZjMCt
+        zoKyk5bESN47Nz4EC99+827aZDTfnCM=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-230-Cq2uUuW0Nw6PUM2aiagUew-1; Wed, 24 May 2023 13:14:09 -0400
+X-MC-Unique: Cq2uUuW0Nw6PUM2aiagUew-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f6c58d57adso546131cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:14:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684948427; x=1687540427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EdS+q/K7TdrybGLIQtx2Ez7oq5UvktWCfD/foZoBFes=;
-        b=aooIbMF6XzZo+vSQB7zdhwV5TcyZhaxeim/dlaF2CpOlwxvBRSHIbsQzdCYUCvl20x
-         gSWCkT3cLUSIuJzUMKximGU1k1vdcewdAsA8eyk6OngJqBdov71mXKV5Mch8JhT8jlAx
-         3qSuOn22ZFgJavTjx9D8e7VkhrDQRZqEHBMhgrSKqHIIlAb6MqzqLFNBuSGd/cPMDan0
-         ukNWXlDNpb6b2VuaJ65q8U7bkNbVnr4S4vTlueU37LM6eSs+4qSPQnrR/ms8+sQ4Crqh
-         RqgDKV8og7fCTuvn2k7srmW70S2eJPunMLmHHsg1SKS7OCU8nVlKrxe/KKA6La5pQEBw
-         BKPw==
-X-Gm-Message-State: AC+VfDzGOPpf6yHVplFlKMBNDSHrT8Rt1/E//hsFQk/DQ+q/dtxmGwJZ
-        BxX1iAqnLCp7EjEOCKKGI86LYVeV6cl1zRXgk4U=
-X-Google-Smtp-Source: ACHHUZ4AVlqXGHDeTUQ3fV7lKrIi2MkPs9s46MNTUnajRMjMfL3+magusJP3fR20gCIialt0u3ENzA==
-X-Received: by 2002:a05:6e02:e0e:b0:335:b2b2:6710 with SMTP id a14-20020a056e020e0e00b00335b2b26710mr8872ilk.15.1684948426906;
-        Wed, 24 May 2023 10:13:46 -0700 (PDT)
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com. [209.85.166.172])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056638020200b00411bf6b457bsm3370907jaq.101.2023.05.24.10.13.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 10:13:46 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-33a8f766b64so5925ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:13:45 -0700 (PDT)
-X-Received: by 2002:a05:6e02:20c7:b0:32a:f2a9:d1b7 with SMTP id
- 7-20020a056e0220c700b0032af2a9d1b7mr411499ilq.10.1684948425265; Wed, 24 May
- 2023 10:13:45 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684948449; x=1687540449;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EyHzZjPPIFiS8KYpIWrxQRKT3huMDr2umMnS3bHEjoo=;
+        b=U2xCCwvxqufQ+wrFEh6d3p4pmiMiHXc2aJzeLvoBfivWpDFQrBHADiRUZoMGmvAOoN
+         /yefcSwq1LqMVocgG3pD2uj6MqkuHLQfpsMsXxTQ2lEM1oXxkHO1ZUnqo3TvBLhI79pe
+         FRNoxsh8dtnJmxfNLWl3WcLu80xwVBCg3fBhTA1jtpAqgkjgQtHJ2/h7QtyyJzf8FNM1
+         cC3/eqHIPMc7vI9OjJUr/dZHHH3RhqjFRBu/WnJ4Qk3P7kB9h0oJ0z941t+RwrMaWkTg
+         da/Zomvb+ZZJxneSTNZJpn5/TfYyS3zGFY8f0cccAdM9wi21nFviIZ+7sQ0LPSJC9uTU
+         Hijg==
+X-Gm-Message-State: AC+VfDwpHPKB/3Ae+yXcm3j4fqUJbpNlcVIPwdplZ+9eetbOvXtdzkyb
+        weOkcUnLGHMWLe9SS4oVXYb7MZ5EcSK27bGtpQ/BacpaYqH1IVLyEA+dXD3zHx1i/4hXXO0UebM
+        eTnfUsBH7IMYWdGjyM0v24m3M
+X-Received: by 2002:a05:622a:1813:b0:3f7:df68:7b09 with SMTP id t19-20020a05622a181300b003f7df687b09mr546674qtc.6.1684948448725;
+        Wed, 24 May 2023 10:14:08 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6xtGx76nP2e7ci9cMhYQQ8+ofaA2V0fY49xRSBW32J2t3CuEqII3+T4PPYMGd+CYf9BXSPiQ==
+X-Received: by 2002:a05:622a:1813:b0:3f7:df68:7b09 with SMTP id t19-20020a05622a181300b003f7df687b09mr546639qtc.6.1684948448325;
+        Wed, 24 May 2023 10:14:08 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id h10-20020ac85e0a000000b003f38b4167e5sm1587574qtx.2.2023.05.24.10.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 10:14:07 -0700 (PDT)
+Date:   Wed, 24 May 2023 13:14:06 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Stevens <stevensd@chromium.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
+Message-ID: <ZG5F3igFgdIAwrn4@x1n>
+References: <20230330085802.2414466-1-stevensd@google.com>
+ <20230330085802.2414466-2-stevensd@google.com>
+ <ZGvUsf7lMkrNDHuE@google.com>
+ <ZG45q0xJSnA6NKQN@x1n>
+ <ZG4/VdHu2LqLTlct@google.com>
 MIME-Version: 1.0
-References: <20230427232848.5200-1-quic_abhinavk@quicinc.com>
- <053819bd-b3c4-a72c-9316-85d974082ad6@linaro.org> <ZGzalLjTvUfzEADU@hovoldconsulting.com>
- <f530691b-989d-b059-6b06-e66abb740bdb@quicinc.com> <ZG216qoxK9hQ-kQs@hovoldconsulting.com>
- <4f2556e2-52ab-eb1d-b388-52546044f460@linaro.org>
-In-Reply-To: <4f2556e2-52ab-eb1d-b388-52546044f460@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 24 May 2023 10:13:33 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VYczHFHv_h1tt-O+AagE1-KzgYd2B=Cx6fK_s4jR8iTw@mail.gmail.com>
-Message-ID: <CAD=FV=VYczHFHv_h1tt-O+AagE1-KzgYd2B=Cx6fK_s4jR8iTw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: add module parameter for PSR
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
-        swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZG4/VdHu2LqLTlct@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 24, 2023 at 09:46:13AM -0700, Sean Christopherson wrote:
+> On Wed, May 24, 2023, Peter Xu wrote:
+> > On Mon, May 22, 2023 at 01:46:41PM -0700, Sean Christopherson wrote:
+> > > As for the flags vs. bools debate (see link above), I think the best approach is
+> > > a mix of the two.  Specifically, reuse the FOLL_* flags as-is for inputs, and use
+> > > booleans for outputs.  I don't _think_ there are any input bools/flags that don't
+> > > map 1:1 with existing FOLL_* flags.
+> > > 
+> > > As a very, *very* rough sketch, provide APIs that look a bit like this.
+> > 
+> > Unifying ref vs nonref cases does look a bit cleaner to me too.
+> > 
+> > > 
+> > >   kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
+> > >   {
+> > > 	kvm_pfn_t pfn;
+> > > 
+> > > 	if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
+> > 
+> > IMHO we may not want to rely on mmu_seq==0 either for unlucky very initial
+> > mmu_seq being zero, or avoid overflows?
+> 
+> I was thinking we could initialize mmu_seq to '1' and make it a u64 to avoid
+> overflow.
 
-On Wed, May 24, 2023 at 1:06=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 24/05/2023 09:59, Johan Hovold wrote:
-> > On Tue, May 23, 2023 at 12:23:04PM -0700, Abhinav Kumar wrote:
-> >> On 5/23/2023 8:24 AM, Johan Hovold wrote:
-> >>> On Fri, May 12, 2023 at 09:13:04PM +0300, Dmitry Baryshkov wrote:
-> >>>> On 28/04/2023 02:28, Abhinav Kumar wrote:
-> >>>>> On sc7280 where eDP is the primary display, PSR is causing
-> >>>>> IGT breakage even for basic test cases like kms_atomic and
-> >>>>> kms_atomic_transition. Most often the issue starts with below
-> >>>>> stack so providing that as reference
-> >>>>>
-> >>>>> Call trace:
-> >
-> >>>>> ---[ end trace 0000000000000000 ]---
-> >>>>> [drm-dp] dp_ctrl_push_idle: PUSH_IDLE pattern timedout
-> >>>>>
-> >>>>> Other basic use-cases still seem to work fine hence add a
-> >>>>> a module parameter to allow toggling psr enable/disable till
-> >>>>> PSR related issues are hashed out with IGT.
-> >>>>
-> >>>> For the reference: Bjorn reported that he has issues with VT on a
-> >>>> PSR-enabled laptops. This patch fixes the issue for him
-> >>>
-> >>> Module parameters are almost never warranted, and it is definitely no=
-t
-> >>> the right way to handle a broken implementation.
-> >>>
-> >>> I've just sent a revert that unconditionally disables PSR support unt=
-il
-> >>> the implementation has been fixed:
-> >>>
-> >>>     https://lore.kernel.org/lkml/20230523151646.28366-1-johan+linaro@=
-kernel.org/
-> >>
-> >> I dont completely agree with this. Even the virtual terminal case was
-> >> reported to be fixed by one user but not the other. So it was probably
-> >> something missed out either in validation or reproduction steps of the
-> >> user who reported it to be fixed OR the user who reported it not fixed=
-.
-> >> That needs to be investigated now.
-> >
-> > Yes, there may still be some time left to fix it, but it's pretty damn
-> > annoying to find that an issue reported two months ago still is not
-> > fixed at 6.4-rc3. (I even waited to make the switch to 6.4 so that I
-> > would not have to spend time on this.)
-> >
-> > I didn't see any mail from Bjorn saying that the series that claimed to
-> > fix the VT issue actually did fix the VT issue. There's only the commen=
-t
-> > above from Dmitry suggesting that disabling this feature is the only wa=
-y
-> > to get a working terminal back.
->
-> Originally this issue was reported by Doug, and at [1] he reported that
-> an issue is fixed for him. So, for me it looks like we have hardware
-> where VT works and hardware where it doesn't.
+Yeah, that's fine too.
 
-As I understand it, the problem was originally reported by Bjorn over
-IRC. When he reported the problem on VT2, Stephen Boyd confirmed that
-he could see the same problem on our hardware when using VT2. I
-confirmed I could reproduce and also tested the fix. I don't remember
-if Bjorn ever tested the fix. I think many of us assumed that it was
-the same issue so a fix for one person would also fix the other.
+> 
+> > I'd say we can stick with FOLL_GET in this case to identify ref vs nonref
+> > and always assume mmu_seq a pure random number.
+> 
+> The intent of checking mmu_seq is to flag cases where the caller doesn't specify
+> FOLL_GET and isn't protected by mmu_invalidate_seq, i.e. isn't tapped into the
+> mmu_notifiers.  I.e. this is a sanity check, not functionally necessary.
+> 
+> > 
+> > > 		return KVM_PFN_ERR_FAULT;
+> > > 
+> > > 	pfn = ???;
+> > > 
+> > > 	if (foll->page && !(foll->flags & FOLL_GET))
+> > > 		put_page(foll->page);
+> > > 
+> > > 	return pfn;
+> > >   }
+> > > 
+> > >   kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
+> > >   {
+> > > 	struct kvm_follow_pfn foll = {
+> > > 		.flags = FOLL_GET | FOLL_WRITE,
+> > > 	};
+> > > 
+> > > 	<more stuff here?>
+> > > 
+> > > 	foll.slot = ???;
+> > > 	if (!foll.slot || foll.slot->flags & KVM_MEMSLOT_INVALID)
+> > > 		return KVM_HVA_ERR_BAD;
+> > > 
+> > > 	if (memslot_is_readonly(foll.slot))
+> > > 		return KVM_HVA_ERR_RO_BAD;
+> > > 
+> > > 	return __kvm_follow_pfn(&foll);
+> > >   }
+> > > 
+> > > and a few partially converted users
+> > > 
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 67e2ac799aa7..5eaf0395ed87 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -550,12 +550,14 @@ static bool mmu_spte_update(u64 *sptep, u64 new_spte)
+> > >  
+> > >         if (is_accessed_spte(old_spte) && !is_accessed_spte(new_spte)) {
+> > >                 flush = true;
+> > > -               kvm_set_pfn_accessed(spte_to_pfn(old_spte));
+> > > +               if (is_refcounted_page_pte(old_spte))
+> > 
+> > One question is how to impl is_refcounted_page_pte() here to identify
+> > non-refcountable pages.
+> 
+> KVM would use a software available bit in its PTEs to explicitly track which SPTEs
+> point at refcounted pages.  E.g. I think bit 59 is available for EPT and 64-bit
+> paging.  PAE paging doesn't have high available bits, which is why I called out
+> that this would have to be 64-bit only.
+> 
+> > IIUC those pages are mostly identical to a normal page (so !PG_reserved)
+> > but it has page_ref_count(page)==0 always, am I right?  I got that roughly
+> > from reading f8be156be1 only though, so I could miss a lot of things..
+> > 
+> > When thinking about that, I'm also wondering whether we can trivially allow
+> > kvm to support such mapping (without overhaul of the kvm pfn API) by
+> > something like this:
+> > 
+> > ===8<===
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 51e4882d0873..467acbac1a96 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -192,7 +192,13 @@ struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn)
+> > 
+> >         page = pfn_to_page(pfn);
+> >         if (!PageReserved(page))
+> > -               return page;
+> > +               /*
+> > +                * When page_ref_count(page)==0 it might be speical page
+> > +                * that do not support refcounting.  Treating them the same
+> > +                * as normal reserved (e.g. MMIO) pages by returning NULL,
+> > +                * so they're exempt of refcounting.
+> > +                */
+> > +               return page_ref_count(page) == 0 ? NULL : page;
+> 
+> Heh, because I got burned by this recently, using page_ref_count() is wrong.  This
+> needs to be page_count() so that tail pages of refcounted compound pages are
+> properly identified.
 
+:-D
 
-> Doug, can you please confirm whether you can reproduce the PSR+VT issue
-> on 6.4-rc (without extra patches) or if the issue is fixed for you?
->
-> [1]
-> https://lore.kernel.org/dri-devel/CAD=3DFV=3DVSHmQPtsQfWjviEZeErms-VEOTmf=
-ozejASUC9zsMjAbA@mail.gmail.com/
+Actually when I was replying I explicitly didn't use page_count() to make
+sure we're reading the tail page, but I just noticed that's exactly the way
+how we identify the special page with a PageCompound()==true tail page.
 
-Ugh. Unfortunately, it's not easy for me to test this particular
-feature directly on upstream Linux. :( I typically run with a ChromeOS
-root filesystem, which works pretty well with mainline. One place
-where it doesn't work with mainline is VT2. The VT2 feature for
-Chromebooks is implemented with "frecon" and takes advantage of a
-downstream patch that we've carried in the ChromeOS kernel trees for
-years allowing handoff of who the DRM "master" is.
+Yeah, if we'd like that it needs to be page_count()==0.
 
-For testing the fix previously, I confirmed that I could reproduce the
-problem on our downstream kernel (which had the PSR patches picked)
-and that the fixes worked for me in that context.
+> 
+> > 
+> >         /* The ZERO_PAGE(s) is marked PG_reserved, but is refcounted. */
+> >         if (is_zero_pfn(pfn))
+> > ===8<===
+> > 
+> > So that we treat those special pages the same as normal PFNMAP ones by
+> > skipping all refcountings on inc/dec.  This is based on the fact that kvm
+> > should always hold at least 1 ref on a normal page so a normal page should
+> > never hit ref==0 here, but again I could miss something somewhere..
+> 
+> This would "work" from a functionality perspective, and might be acceptable as an
+> out-of-tree patch to unblock the ChromeOS use case, but I don't want to rely on
+> this heuristic on the backend in KVM because it will suppress any and all
+> use-after-free bugs in KVM's MMU (see patch 4 of this series).  I really want to
+> go in the opposite direction and harden KVM against MMU bugs, e.g. I'm planning
+> on posting the below (which is how I learned about page_count() vs. page_ref_count()).
+> 
+> Today, KVM gets partial protection from check_new_page_bad(), which detects *some*
+> cases where KVM marks a page dirty after the page is freed.  But it's racy, and
+> the detection occurs well after the fact since it fires only when the page is
+> re-allocated.
+> 
+> If we hack kvm_pfn_to_refcounted_page(), then all of those protections are lost
+> because KVM would drop its assertions and also skip dirtying pages, i.e. would
+> effectively suppress the latent detection by check_new_page_bad().
 
-Ah, but it shouldn't be too hard to pick that one patch. Let's see if
-that works. I'll pick ("CHROMIUM: drm: Add drm_master_relax debugfs
-file (non-root set/drop master ioctls)"). Indeed, it works!
+So it's probably that I totally have no idea what are the attributes for
+those special pages so I don't understand enough on why we need to handle
+those pages differently from e.g. PFNMAP pages, and also the benefits.
 
-OK, so with the top of Linus's tree (v6.4-rc3-17-g9d646009f65d) plus
-the CHROMIUM patch to enable my VT2, I can confirm that I don't see
-the issue. I can switch to VT2 and typing works fine. I will say that
-on herobrine the backlight is all messed up, but I assume that's an
-unrelated issue.
+I think what I can tell is that they're pages that doesn't have
+PageCompound bits set on either head or tails, however it's still a
+multi-2-order large page.  Is there an example on how these pages are used
+and allocated?  Why would we need those pages, and whether these pages need
+to be set dirty/accessed after all?
 
--Doug
+> 
+> Author: Sean Christopherson <seanjc@google.com>
+> Date:   Wed May 17 13:26:54 2023 -0700
+> 
+>     KVM: Assert that a page's refcount is elevated when marking accessed/dirty
+>     
+>     Assert that a page's refcount is elevated, i.e. that _something_ holds a
+>     reference to the page, when KVM marks a page as accessed and/or dirty.
+>     KVM typically doesn't hold a reference to pages that are mapped into the
+>     guest, e.g. to allow page migration, compaction, swap, etc., and instead
+>     relies on mmu_notifiers to react to changes in the primary MMU.
+>     
+>     Incorrect handling of mmu_notifier events (or similar mechanisms) can
+>     result in KVM keeping a mapping beyond the lifetime of the backing page,
+>     i.e. can (and often does) result in use-after-free.  Yelling if KVM marks
+>     a freed page as accessed/dirty doesn't prevent badness as KVM usually
+>     only does A/D updates when unmapping memory from the guest, i.e. the
+>     assertion fires well after an underlying bug has occured, but yelling
+>     does help detect, triage, and debug use-after-free bugs.
+>     
+>     Note, the assertion must use page_count(), NOT page_ref_count()!  For
+>     hugepages, the returned struct page may be a tailpage and thus not have
+>     its own refcount.
+>     
+>     Signed-off-by: Sean Christopherson <seanjc@google.com>
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index d1abb331ea68..64f18697096c 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2882,6 +2882,19 @@ EXPORT_SYMBOL_GPL(kvm_vcpu_unmap);
+>  
+>  static bool kvm_is_ad_tracked_page(struct page *page)
+>  {
+> +       /*
+> +        * Assert that KVM isn't attempting to mark a freed page as Accessed or
+> +        * Dirty, i.e. that KVM's MMU doesn't have a use-after-free bug.  KVM
+> +        * (typically) doesn't pin pages that are mapped in KVM's MMU, and
+> +        * instead relies on mmu_notifiers to know when a mapping needs to be
+> +        * zapped/invalidated.  Unmapping from KVM's MMU must happen _before_
+> +        * KVM returns from its mmu_notifier, i.e. the page should have an
+> +        * elevated refcount at this point even though KVM doesn't hold a
+> +        * reference of its own.
+> +        */
+> +       if (WARN_ON_ONCE(!page_count(page)))
+> +               return false;
+> +
+>         /*
+>          * Per page-flags.h, pages tagged PG_reserved "should in general not be
+>          * touched (e.g. set dirty) except by its owner".
+> 
 
+This looks like a good thing to have, indeed.  But again it doesn't seem
+like anything special to the pages we're discussing here, say, !Compound &&
+refcount==0 ones.
 
+-- 
+Peter Xu
 
-> > Regressions happen and sometimes there are corner cases that are harder
-> > to find, but this is a breakage of a fundamental feature that was
-> > reported before the code was even merged into mainline.
-> >
-> >> We should have ideally gone with the modparam with the feature patches
-> >> itself knowing that it gets enabled for all sinks if PSR is supported.
-> >
-> > Modparams are things of the past should not be used to enable broken
-> > features so that some vendor can tick of their internal lists of
-> > features that have been "mainlined".
->
-> We have had a history of using modparam with i915 and IIRC amdgpu /
-> radeon drivers to allow users to easily check whether new feature works
-> for their hardware. My current understanding is that PSR+VT works for on
-> some laptops and doesn't on some other laptops, which makes it a valid ca=
-se.
->
-> >
-> > You can carry that single patch out-of-tree to enable this if you need
-> > it for some particular use case where you don't care about VTs.
-> >
-> > But hopefully you can just get this sorted quickly. If not, the revert =
-I
-> > posted is the way to go rather than adding random module parameters.
-> >
-> > Johan
->
-> --
-> With best wishes
-> Dmitry
->
