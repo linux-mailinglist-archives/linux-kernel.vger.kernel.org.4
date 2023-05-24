@@ -2,156 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6BD70FF80
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407C970FF82
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbjEXUyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S232199AbjEXUye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjEXUyF (ORCPT
+        with ESMTP id S232808AbjEXUyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:54:05 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770BE12F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:54:03 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3bb395e69so1489064e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:54:03 -0700 (PDT)
+        Wed, 24 May 2023 16:54:31 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECCB18D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:54:26 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-528ab71c95cso428618a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684961642; x=1687553642;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RghDh28+7g+TaguFQxnhYvL8i8BlC9jxTCIf1i/XiNU=;
-        b=jm1uPR4NGQIKoPJlqVurWr93RpffzLVO8sirXr/usFhSwkmA2UR7Hyvx6vDagsOCdj
-         8GPQxhuBS4l7I4KuG2msHW/8wBLGLzHlbhscsiKYDE63YhH6TtmuVS3Kf2Aji1Ww+25e
-         aK5N3bjKrEgf2oklTSuSYKL2pwIGL8x6VitXDweQp1ybzjh3cXotbkFRz2y08NMTS77e
-         Q2Q8r+SiDRzxVhSaFKXuzQLwOm+nHtdGzFdpssKTosxNh7tU9FW9jHLv5MSABegmBsjE
-         g/xsLKHuRDXGrrHfYFySIqOmJfsizpPpM0sVclvPjc7nht/qUTqrxSSdVhb+rK/Pigs7
-         wFNw==
+        d=google.com; s=20221208; t=1684961665; x=1687553665;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9TXhZ+RcN2Ognzp8oG5yYSbm5kQG0D1S7pQBiGgog54=;
+        b=2h8rqjYFPpwx20+8Yus2Hv3Lx5qrGrNNiOfzsYxA8jNNXcXLIYMNwFXRSu9nTmloVx
+         b36BMiaIOxdoRW0NliLzsShWH1H+AfN9X1Lg/wDyJr7JpbvRnVYXbDhpMq+Cm2UouQ3w
+         yJ74x2vVorasmuB3ksM/+65kRjrVyg4CHGgisKXxtBY3fMUsoWqZSIwUTAd4x6r2NdO+
+         0opK4OzY7ZIDVy/eKGLL/+ICbkH6MqcEImqNubWW/QDDYzqJCazivH2L+0RwFOuUxMFs
+         MOvWyhEwQQKdd1GRrsQcT6+fZbcdMx1V2uh0jisUPwVT9+fDlgGMel1ao5QTl2Owq6fm
+         UvnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684961642; x=1687553642;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RghDh28+7g+TaguFQxnhYvL8i8BlC9jxTCIf1i/XiNU=;
-        b=B15j8IOEh8p7Cty3NEeo65a+bCHN8FmvHyCCxQn3j+dBxu2x/maFCqynxe2TJcFxKY
-         q9VnaMcAjRMzPA3kC82K8xHvzsE4PeKC5GieaxEh1uZ19/fENFIIwrANNjTJMWzPy19F
-         reJQQNzdlwPuPx0PE/8CiFabTFJryE1uIZFwCwyBDgcag/jc/e+8REw6cutBhbHvvgDp
-         vGtl/UvuGLoTqd/wiTTIF1+kGohHawhNN9mx6ovYlb25WTdvRtl/eP45303BFbZ4cW+3
-         j1Iprdz2huF71tArQiJuAPTxtKodnStlTmK/XWnvMh3ZyhzyWvDtQdS2qhVwxZSSknrx
-         S2Rw==
-X-Gm-Message-State: AC+VfDx+X910DdR3JLp9NIZcixvQe55kO7TNCa/UwKaekI1y0nW/YkNL
-        lppnomfa7t5jfgWstWgJpbC4Hw==
-X-Google-Smtp-Source: ACHHUZ6ykTSJV1djGpNWri0xeikO1g6KbWvJrrnGQsinyvFLuwSwswDJLWUnUa92++AD9z6FWaMkSw==
-X-Received: by 2002:ac2:4118:0:b0:4ef:d742:4dfe with SMTP id b24-20020ac24118000000b004efd7424dfemr5119019lfi.65.1684961641679;
-        Wed, 24 May 2023 13:54:01 -0700 (PDT)
-Received: from [192.168.1.101] (abyk138.neoplus.adsl.tpnet.pl. [83.9.30.138])
-        by smtp.gmail.com with ESMTPSA id p15-20020ac246cf000000b004f0c9120a41sm1824882lfo.214.2023.05.24.13.54.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 13:54:01 -0700 (PDT)
-Message-ID: <d50f56c0-96a3-356b-3027-961108532109@linaro.org>
-Date:   Wed, 24 May 2023 22:53:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/4] soc: qcom: smem: introduce qcom_smem_get_msm_id()
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        andersson@kernel.org, ilia.lin@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230524162329.819770-1-robimarko@gmail.com>
- <20230524162329.819770-2-robimarko@gmail.com>
- <47c0faf0-f855-d3c4-6825-e51a1a1a7c83@quicinc.com>
- <d9406953-6452-2394-ab3f-4ce1d8986fce@linaro.org>
- <646e6c18.050a0220.12e7c.6043@mx.google.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <646e6c18.050a0220.12e7c.6043@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684961665; x=1687553665;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9TXhZ+RcN2Ognzp8oG5yYSbm5kQG0D1S7pQBiGgog54=;
+        b=BObhb9h/5wjQ1bxFf6JjhmXXQpvJL7ZAmz1crAC/0YXTFCphpVLTsEwf+/82JDfEah
+         KbCluW1l51hi8oqqc88oF3U4lR8XX+ACS7plnZdTgM+Hbw+rIJoXsW9uwoZo209fEtUD
+         jT9oyyChdtHoOoKDB3doVrHKz+ZmJLAtaPn6UpDcY4iB0IKw2XYPjYivb5N16Yg5o8bV
+         Awu94d0J7mIAjYzGpdzlgFzxbn2Bedo9Pl2vQB9d7K29rGoQybgSOp90ZPZIkzT8t2mA
+         GPpy21kHtksmuMq/Elc2wpZJcewWYd879iLVVFQeIvETj1NJqu+0hMoor92KHvwHTpmh
+         pm+A==
+X-Gm-Message-State: AC+VfDz3JEniivjSwCnaCZPLPH07Kg9hj6/3hhXNZ9DYfVEZKHk9vCNe
+        oMP4Ekcwy6p/M8Yy4QV5g3u4GhseC+Y=
+X-Google-Smtp-Source: ACHHUZ59PvRbm7Gs1FWHPgxapZORSTXDU5xMszFYvqWO85C6Ht301jisiRZ2GoB/1Jqq2QkPdarpBp94re8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:3349:0:b0:51b:8f87:6da4 with SMTP id
+ z70-20020a633349000000b0051b8f876da4mr4463245pgz.11.1684961665658; Wed, 24
+ May 2023 13:54:25 -0700 (PDT)
+Date:   Wed, 24 May 2023 13:54:23 -0700
+In-Reply-To: <20230310105346.12302-3-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-3-likexu@tencent.com>
+Message-ID: <ZG55f55fVreCi/pI@google.com>
+Subject: Re: [PATCH 2/5] KVM: x86/pmu: Add a helper to check if pmc has PEBS
+ mode enabled
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24.05.2023 21:57, Christian Marangi wrote:
-> On Wed, May 24, 2023 at 08:27:03PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 24.05.2023 20:16, Trilok Soni wrote:
->>> On 5/24/2023 9:23 AM, Robert Marko wrote:
->>>> Introduce a helper to return the SoC SMEM ID, which is used to identify the
->>>> exact SoC model as there may be differences in the same SoC family.
->>>>
->>>> Currently, cpufreq-nvmem does this completely in the driver and there has
->>>> been more interest expresed for other drivers to use this information so
->>>> lets expose a common helper to prevent redoing it in individual drivers
->>>> since this field is present on every SMEM table version.
->>>>
->>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>>> ---
->>>>   drivers/soc/qcom/smem.c       | 19 +++++++++++++++++++
->>>>   include/linux/soc/qcom/smem.h |  2 ++
->>>>   2 files changed, 21 insertions(+)
->>>>
->>>> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
->>>> index 6be7ea93c78c..0d6ba9bce8cb 100644
->>>> --- a/drivers/soc/qcom/smem.c
->>>> +++ b/drivers/soc/qcom/smem.c
->>>> @@ -14,6 +14,7 @@
->>>>   #include <linux/sizes.h>
->>>>   #include <linux/slab.h>
->>>>   #include <linux/soc/qcom/smem.h>
->>>> +#include <linux/soc/qcom/socinfo.h>
->>>>     /*
->>>>    * The Qualcomm shared memory system is a allocate only heap structure that
->>>> @@ -772,6 +773,24 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
->>>>   }
->>>>   EXPORT_SYMBOL(qcom_smem_virt_to_phys);
->>>>   +/**
->>>> + * qcom_smem_get_msm_id() - return the SoC ID
->>>> + *
->>>> + * Look up SoC ID from HW/SW build ID and return it.
->>>> + */
->>>> +int qcom_smem_get_msm_id(void)
->> On top of Trilok's point, this should return le32, or at least unsigned int.
->>
+On Fri, Mar 10, 2023, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Mhhh why unsigned? We would lose error and qcom_smem_get can return all
-> sort of errors. Also I think le32 is problematic as we are converting
-> the value with __le32_to_cpu.
-Hm right.. Qcom didn't really think this through then, but hopefully
-they don't randomly jump from e.g. 547 to 1<<31
+> Add a helper to check if pmc has PEBS mode enabled so that more new
+> code may reuse this part and opportunistically drop a pmu reference.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/pmu.c | 3 +--
+>  arch/x86/kvm/pmu.h | 7 +++++++
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index d1c89a6625a0..01a6b7ffa9b1 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -191,7 +191,6 @@ static int pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type, u64 config,
+>  				 bool exclude_user, bool exclude_kernel,
+>  				 bool intr)
+>  {
+> -	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+>  	struct perf_event *event;
+>  	struct perf_event_attr attr = {
+>  		.type = type,
+> @@ -203,7 +202,7 @@ static int pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type, u64 config,
+>  		.exclude_kernel = exclude_kernel,
+>  		.config = config,
+>  	};
+> -	bool pebs = test_bit(pmc->idx, (unsigned long *)&pmu->pebs_enable);
+> +	bool pebs = pebs_is_enabled(pmc);
+>  
+>  	attr.sample_period = get_sample_period(pmc, pmc->counter);
+>  
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index cff0651b030b..db4262fe8814 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -189,6 +189,13 @@ static inline void kvm_pmu_request_counter_reprogram(struct kvm_pmc *pmc)
+>  	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+>  }
+>  
+> +static inline bool pebs_is_enabled(struct kvm_pmc *pmc)
 
-Konrad
-> 
->>>> +{
->>>> +    size_t len;
->>>> +    struct socinfo *info;
->>>> +
->>>> +    info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
->>>> +    if (IS_ERR(info))
->>>> +        return PTR_ERR(info);
->>>> +
->>>> +    return __le32_to_cpu(info->id);
->>>> +}
->>>> +EXPORT_SYMBOL(qcom_smem_get_msm_id);
->>>
->>> EXPORT_SYMBOL_GPL please?
->>>
->>> Please change it for other symbols in the driver as well w/ separate patch.
->>>
->>> ---Trilok Soni
->>>
->>>
-> 
+pebs_is_enabled() is a bit too generic, e.g. at a glance I would expect it to return
+true if PEBS as a whole is enabled.  What about something like pmc_is_pebs() or
+pmc_is_pebs_enabled()?
