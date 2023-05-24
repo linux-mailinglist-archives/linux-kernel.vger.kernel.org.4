@@ -2,174 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B8070FD67
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED5570FD65
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbjEXSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S236109AbjEXSCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236522AbjEXSCc (ORCPT
+        with ESMTP id S235865AbjEXSCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:02:32 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E189130;
-        Wed, 24 May 2023 11:02:29 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1684951344tml8b7ly
-Received: from linux-lab-host.localdomain ( [116.30.125.36])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 May 2023 02:02:21 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: Xz3VOcA7Mr0KaqdkQOpzZ+GPBYPXJApKLC+NLroSL35n8g1DvXnk4MI0nnhSq
-        eCA8abIJEj5/MMX0E0nOiq1r3tRW1Dzuj8kKIhMISCxuR2R+vSH+y9iUTtbM2YLkEZQFbl4
-        Gwj6XvvvAj46eYzyPG97x4/H3sFl0piFoY4Qhzz2TCtETlBg073vgdEKgIponO7WU5ihXTG
-        7USD/hZHC2KRfmWeEOarJtk8QF/O+zSJAue55HVToyJnWjy0g89EeUu6x7BvEne9Q56B8z+
-        H1qfJhUBHAXsIGNQEAnBLXLdMPINADkwqTscOIIy4rgBZdHW6p9iKZ9pgDu/AIDCanwCLue
-        Hp87XNtP5SGMjLlCeXCoFJZ6Z7QZPlB5zQMCyidc1VKdP9xYKKKx3ND7Gh9AA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6618908142304380197
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
-Subject: [PATCH 12/13] tools/nolibc: sys_wait4: riscv: use __NR_waitid for rv32
-Date:   Thu, 25 May 2023 02:02:17 +0800
-Message-Id: <7a55e771c3cacf2e5b1a4750efac747289dbc54b.1684949268.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
-References: <cover.1684949267.git.falcon@tinylab.org>
+        Wed, 24 May 2023 14:02:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B51712E;
+        Wed, 24 May 2023 11:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684951342; x=1716487342;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=0Qgjez3azYWXKRDMwPKOvjl8Rsxp+siO8MztZ6+bs+8=;
+  b=h0Wx38qxd+MzDl8NBP8JGw167yG6420HqOQFM2SHWy3RWbYLQGOA5qwA
+   HJtThYI+kKgEQV/uacFKz6Xyu9Mrvo1SPiNE8LKhqNhmgmVASBuzLjQK5
+   Iky63oQfGZ21Lq30ltC/2MVb7gB1djSjMAI+BqYOIglys0KSRpvW8008Q
+   3QwS022M2WjNwOf6rUcN8ukfKcnfHIClRxudmObioM3tzKFWPo0Gqrbv8
+   nK7snQf72rZLmI93qK1bgGceYwJhsf1AIIMl4UWa9G6+ud+hjw00cZteW
+   4kwnci/tA4/80m+29FD8duBgJ7PtF1mBONn+geOGimFQqj5Z0+PvySUO7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="440006148"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="440006148"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 11:02:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="737407519"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="737407519"
+Received: from kknopp-mobl1.amr.corp.intel.com (HELO [10.212.186.147]) ([10.212.186.147])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 11:02:11 -0700
+Message-ID: <33d7800b-7870-6755-b057-f734fa7accd6@intel.com>
+Date:   Wed, 24 May 2023 11:02:42 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [EXTERNAL] Re: [PATCH 1/2] x86/Kconfig: Allow CONFIG_X86_MPPARSE
+ disable for OF platforms
+Content-Language: en-US
+To:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+References: <1683816877-10747-1-git-send-email-ssengar@linux.microsoft.com>
+ <9b88ddaf-c5c5-0244-5be7-12400ee54e11@intel.com>
+ <PUZP153MB074959D2F85EAD559ED7B544BE41A@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <PUZP153MB074959D2F85EAD559ED7B544BE41A@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
-__NR_wait4 after kernel commit d4c08b9776b3 ("riscv: Use latest system
-call ABI"), use __NR_waitid instead.
+On 5/24/23 09:23, Saurabh Singh Sengar wrote:
+>> Could you please rephrase this to be less confusing?
+> 
+> Thanks for your review. Currently, in the absence of ACPI, it is impossible to
+> disable X86_MPPARSE. In the case of ACPI being enabled, one has the
+> option to either enable or disable X86_MPARSE. My intention is to permit
+> X86_MPPARSE=n for OF platforms where ACPI=n. To describe the capability
+> of choosing any desired value for MPPARSE, I used the term 'selectable.'
+> Perhaps 'configurable' would be a more appropriate word in this context?
+> I can fix this and include it in V2.
 
-This code is based on sysdeps/unix/sysv/linux/wait4.c of glibc.
+OK, so this particular Hyper-V setup doesn't run normal normal distro
+kernels?  It requires a very specialized kernel?  Or it's just _better_
+that the kernel is configured this way?
 
-Notes: The kernel wait4 syscall has the 'pid == INT_MIN' path and
-returns -ESRCH, but the kernel waitid syscall has no such path, to let
-this __NR_waitid based sys_wait4 has the same return value and pass the
-'waitpid_min' test, we emulate such path in our new nolibc __NR_waitid
-branch.
+>> This is also one of those patches where I wonder: Why do _you_ care about
+>> this?  Are you just trying to be nice?  Is this intended as some kind of cleanup?
+> 
+> It solves an issue for Hyper-V VBS setup, please refer to the 2/2 of this patch
+> series.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h   | 54 ++++++++++++++++++++++++++++++++++++
- tools/include/nolibc/types.h | 15 +++++++++-
- 2 files changed, 68 insertions(+), 1 deletion(-)
+Heh, that changelog is even more confusing than _this_ one.  It doesn't
+say that there's a problem, only that it removes "not required" code.
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 00c7197dcd50..2642b380c6aa 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -12,6 +12,7 @@
- 
- /* system includes */
- #include <asm/unistd.h>
-+#include <asm/siginfo.h> /* for siginfo_t */
- #include <asm/signal.h>  /* for SIGCHLD */
- #include <asm/ioctls.h>
- #include <asm/mman.h>
-@@ -1333,7 +1334,60 @@ int unlink(const char *path)
- static __attribute__((unused))
- pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- {
-+#ifdef __NR_wait4
- 	return my_syscall4(__NR_wait4, pid, status, options, rusage);
-+#elif defined(__NR_waitid)
-+	siginfo_t infop;
-+	int idtype = P_PID;
-+	int ret;
-+
-+	/* emulate the 'pid == INT_MIN' path of wait4 */
-+	if (pid == INT_MIN)
-+		return -ESRCH;
-+
-+	if (pid < -1) {
-+		idtype = P_PGID;
-+		pid *= -1;
-+	} else if (pid == -1) {
-+		idtype = P_ALL;
-+	} else if (pid == 0) {
-+		idtype = P_PGID;
-+	}
-+
-+	options |= WEXITED;
-+
-+	ret = my_syscall5(__NR_waitid, idtype, pid, &infop, options, rusage);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (status) {
-+		switch (infop.si_code) {
-+		case CLD_EXITED:
-+			*status = W_EXITCODE(infop.si_status, 0);
-+			break;
-+		case CLD_DUMPED:
-+			*status = __WCOREFLAG | infop.si_status;
-+			break;
-+		case CLD_KILLED:
-+			*status = infop.si_status;
-+			break;
-+		case CLD_TRAPPED:
-+		case CLD_STOPPED:
-+			*status = W_STOPCODE(infop.si_status);
-+			break;
-+		case CLD_CONTINUED:
-+			*status = __W_CONTINUED;
-+			break;
-+		default:
-+			*status = 0;
-+			break;
-+		}
-+	}
-+
-+	return infop.si_pid;
-+#else
-+#error Neither __NR_wait4 nor __NR_waitid defined, cannot implement sys_wait4()
-+#endif
- }
- 
- static __attribute__((unused))
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index ee914391439c..c4f95c267607 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -92,8 +92,21 @@
- #define WTERMSIG(status)    ((status) & 0x7f)
- #define WIFSIGNALED(status) ((status) - 1 < 0xff)
- 
--/* waitpid() flags */
-+/* waitpid() and waitid() flags */
- #define WNOHANG      1
-+#define WEXITED      0x00000004
-+
-+/* first argument for waitid() */
-+#define P_ALL        0
-+#define P_PID        1
-+#define P_PGID       2
-+#define P_PIDFD      3
-+
-+/* Macros used on waitid's status setting */
-+#define W_EXITCODE(ret, sig) ((ret) << 8 | (sig))
-+#define W_STOPCODE(sig)      ((sig) << 8 | 0x7f)
-+#define __W_CONTINUED        0xffff
-+#define __WCOREFLAG          0x80
- 
- /* standard exit() codes */
- #define EXIT_SUCCESS 0
--- 
-2.25.1
-
+I'm still confused by this whole thing.
