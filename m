@@ -2,276 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6697670FA68
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F89570FA42
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236748AbjEXPgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S235402AbjEXPej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236678AbjEXPfM (ORCPT
+        with ESMTP id S235342AbjEXPef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:35:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC171A4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684942412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uN3mSK+PjIP6JAbZhfDAmtnx0lnfpAA82MAUedDHiDA=;
-        b=bP62N1dupkuCW43Pb7TDZG9ocoOp2S5lyB2lhWFEX+jJLTNZkk+WbXl29K0T1G1+F9i6UI
-        vBX/k5DkEWqhFn0X7rTLNFnjO5mOSp1v6TzfcnDvNxks2VDFGTiCAihCsPqn0BvbKAARKI
-        RJwAFG32pMR6uzYvS9Nqto2XMnkDxz8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-Arb27wHhPVquoWD2zvAqmw-1; Wed, 24 May 2023 11:33:28 -0400
-X-MC-Unique: Arb27wHhPVquoWD2zvAqmw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 24 May 2023 11:34:35 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20428119
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:34:10 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB53C3C0D185;
-        Wed, 24 May 2023 15:33:26 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 12905492B0B;
-        Wed, 24 May 2023 15:33:22 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        Shailend Chand <shailend@google.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org
-Subject: [PATCH net-next 03/12] mm: Make the page_frag_cache allocator alignment param a pow-of-2
-Date:   Wed, 24 May 2023 16:33:02 +0100
-Message-Id: <20230524153311.3625329-4-dhowells@redhat.com>
-In-Reply-To: <20230524153311.3625329-1-dhowells@redhat.com>
-References: <20230524153311.3625329-1-dhowells@redhat.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 558573F179
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:33:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684942429;
+        bh=EWhp3bFE5YGNYZTeqnLuyw/BwJKRfP8fBMMP2Kg8LVA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=hEvuMSZ2BeoPvQPD4BTr1eV8g6z5we1ykH5gFhohLxheGvp+kArJWQulAp9eHXJV9
+         xFh9rtaD8PI1fEJnLWBjpsylLgVGZIkd5/drPM7U6/jH++tnpmwfPdxUwLdezxPCYo
+         sD56Sn3vKNdgQHzN7bzeNinlXhtGqrQK+qnfQYkTwyRiiJKENXhwDyOGaoqLiyhg7y
+         yuJsRUlKVHBu7kLvkRSZ56+v9yWBcgPNjgIwu6yHhrWKbztzFRnbFaXZ5aaKNvoyHg
+         OH7fuN2bpUeXWPsQLsg9+EVEFvR57hr1fmspNjj1bo9937jVrOgbc6WEkk+LpepzrJ
+         Bma0EvkEcjmuQ==
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-9715654ab36so109486066b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:33:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684942429; x=1687534429;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EWhp3bFE5YGNYZTeqnLuyw/BwJKRfP8fBMMP2Kg8LVA=;
+        b=Afha7gtXtnwYvtxBtdso61iFjhVFAlL/uNH/5TUaTs7IBrhjToxYyqmErtjYsQyIPi
+         gtIr6GALlRHUtQpnj5kBizUQTww/kLUBA6sZxHLG0VONyVz0MVlUlkSDgX92gQrEHtIT
+         VUlQApydkmEG5oPEiLD4SAleqUMiOUI5dO8qW5L7cUgWro/MQutBzEJ3AiUMrSeDcumu
+         cvRPqlFFI91h1jPbjGpFwQ/+JWN+ZKq7USUcd57kdmGCtEYCGcXjPjMa+5Od3S9/bYWm
+         aZXgcAJ2H13j7aS/jE9chRZXPnhxadqpcGsLIUXZK0LRIspbVHDmKURnThbD9AqrtbQg
+         Uqew==
+X-Gm-Message-State: AC+VfDzVlF3lqUScF6VajbwYePUgVEHRzhDLGy2FBRRrS+VQrJ2kxsp5
+        f4K4oE+gXPdnhCB3VE6d1F6YiOdobZuL15frfuScKyo2wYPb2/LG2H+RW4Y/ZHmwXksWWwOQI0e
+        /hU2P+7wFYYqN0AFKoHE8zl7z3VBXxsnXxN762qgoYg==
+X-Received: by 2002:a17:906:ee81:b0:96f:1629:3e9a with SMTP id wt1-20020a170906ee8100b0096f16293e9amr7864682ejb.34.1684942428986;
+        Wed, 24 May 2023 08:33:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6FfHlSp740KFdG3fkWYcfhprliWqIMlIui+VfDoltbt8piUfLCsAuDVK0xOfy9qveDfEPafg==
+X-Received: by 2002:a17:906:ee81:b0:96f:1629:3e9a with SMTP id wt1-20020a170906ee8100b0096f16293e9amr7864653ejb.34.1684942428590;
+        Wed, 24 May 2023 08:33:48 -0700 (PDT)
+Received: from amikhalitsyn.local (dslb-088-074-206-207.088.074.pools.vodafone-ip.de. [88.74.206.207])
+        by smtp.gmail.com with ESMTPSA id p26-20020a17090664da00b0096f7105b3a6sm5986979ejn.189.2023.05.24.08.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 08:33:48 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     xiubli@redhat.com
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/13] ceph: support idmapped mounts
+Date:   Wed, 24 May 2023 17:33:02 +0200
+Message-Id: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the page_frag_cache allocator's alignment parameter a power of 2
-rather than a mask and give a warning if it isn't.
+Dear friends,
 
-This means that it's consistent with {napi,netdec}_alloc_frag_align() and
-allows __{napi,netdev}_alloc_frag_align() to be removed.
+This patchset was originally developed by Christian Brauner but I'll continue
+to push it forward. Christian allowed me to do that :)
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Jeroen de Borst <jeroendb@google.com>
-cc: Catherine Sullivan <csully@google.com>
-cc: Shailend Chand <shailend@google.com>
-cc: Felix Fietkau <nbd@nbd.name>
-cc: John Crispin <john@phrozen.org>
-cc: Sean Wang <sean.wang@mediatek.com>
-cc: Mark Lee <Mark-MC.Lee@mediatek.com>
-cc: Lorenzo Bianconi <lorenzo@kernel.org>
-cc: Matthias Brugger <matthias.bgg@gmail.com>
-cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-cc: Keith Busch <kbusch@kernel.org>
-cc: Jens Axboe <axboe@fb.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Sagi Grimberg <sagi@grimberg.me>
-cc: Chaitanya Kulkarni <kch@nvidia.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
-cc: linux-arm-kernel@lists.infradead.org
-cc: linux-mediatek@lists.infradead.org
-cc: linux-nvme@lists.infradead.org
-cc: linux-mm@kvack.org
----
- include/linux/gfp.h    |  4 ++--
- include/linux/skbuff.h | 22 ++++------------------
- mm/page_frag_alloc.c   |  8 +++++---
- net/core/skbuff.c      | 14 +++++++-------
- 4 files changed, 18 insertions(+), 30 deletions(-)
+This feature is already actively used/tested with LXD/LXC project.
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 03504beb51e4..fa30100f46ad 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -306,12 +306,12 @@ struct page_frag_cache;
- extern void __page_frag_cache_drain(struct page *page, unsigned int count);
- extern void *page_frag_alloc_align(struct page_frag_cache *nc,
- 				   unsigned int fragsz, gfp_t gfp_mask,
--				   unsigned int align_mask);
-+				   unsigned int align);
- 
- static inline void *page_frag_alloc(struct page_frag_cache *nc,
- 			     unsigned int fragsz, gfp_t gfp_mask)
- {
--	return page_frag_alloc_align(nc, fragsz, gfp_mask, ~0u);
-+	return page_frag_alloc_align(nc, fragsz, gfp_mask, 1);
- }
- 
- void page_frag_cache_clear(struct page_frag_cache *nc);
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 1b2ebf6113e0..41b63e72c6c3 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -3158,7 +3158,7 @@ void skb_queue_purge(struct sk_buff_head *list);
- 
- unsigned int skb_rbtree_purge(struct rb_root *root);
- 
--void *__netdev_alloc_frag_align(unsigned int fragsz, unsigned int align_mask);
-+void *netdev_alloc_frag_align(unsigned int fragsz, unsigned int align);
- 
- /**
-  * netdev_alloc_frag - allocate a page fragment
-@@ -3169,14 +3169,7 @@ void *__netdev_alloc_frag_align(unsigned int fragsz, unsigned int align_mask);
-  */
- static inline void *netdev_alloc_frag(unsigned int fragsz)
- {
--	return __netdev_alloc_frag_align(fragsz, ~0u);
--}
--
--static inline void *netdev_alloc_frag_align(unsigned int fragsz,
--					    unsigned int align)
--{
--	WARN_ON_ONCE(!is_power_of_2(align));
--	return __netdev_alloc_frag_align(fragsz, -align);
-+	return netdev_alloc_frag_align(fragsz, 1);
- }
- 
- struct sk_buff *__netdev_alloc_skb(struct net_device *dev, unsigned int length,
-@@ -3236,18 +3229,11 @@ static inline void skb_free_frag(void *addr)
- 	page_frag_free(addr);
- }
- 
--void *__napi_alloc_frag_align(unsigned int fragsz, unsigned int align_mask);
-+void *napi_alloc_frag_align(unsigned int fragsz, unsigned int align);
- 
- static inline void *napi_alloc_frag(unsigned int fragsz)
- {
--	return __napi_alloc_frag_align(fragsz, ~0u);
--}
--
--static inline void *napi_alloc_frag_align(unsigned int fragsz,
--					  unsigned int align)
--{
--	WARN_ON_ONCE(!is_power_of_2(align));
--	return __napi_alloc_frag_align(fragsz, -align);
-+	return napi_alloc_frag_align(fragsz, 1);
- }
- 
- struct sk_buff *__napi_alloc_skb(struct napi_struct *napi,
-diff --git a/mm/page_frag_alloc.c b/mm/page_frag_alloc.c
-index e02b81d68dc4..9d3f6fbd9a07 100644
---- a/mm/page_frag_alloc.c
-+++ b/mm/page_frag_alloc.c
-@@ -64,13 +64,15 @@ void page_frag_cache_clear(struct page_frag_cache *nc)
- EXPORT_SYMBOL(page_frag_cache_clear);
- 
- void *page_frag_alloc_align(struct page_frag_cache *nc,
--		      unsigned int fragsz, gfp_t gfp_mask,
--		      unsigned int align_mask)
-+			    unsigned int fragsz, gfp_t gfp_mask,
-+			    unsigned int align)
- {
- 	unsigned int size = PAGE_SIZE;
- 	struct page *page;
- 	int offset;
- 
-+	WARN_ON_ONCE(!is_power_of_2(align));
-+
- 	if (unlikely(!nc->va)) {
- refill:
- 		page = __page_frag_cache_refill(nc, gfp_mask);
-@@ -129,7 +131,7 @@ void *page_frag_alloc_align(struct page_frag_cache *nc,
- 	}
- 
- 	nc->pagecnt_bias--;
--	offset &= align_mask;
-+	offset &= ~(align - 1);
- 	nc->offset = offset;
- 
- 	return nc->va + offset;
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index f4a5b51aed22..cc507433b357 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -289,17 +289,17 @@ void napi_get_frags_check(struct napi_struct *napi)
- 	local_bh_enable();
- }
- 
--void *__napi_alloc_frag_align(unsigned int fragsz, unsigned int align_mask)
-+void *napi_alloc_frag_align(unsigned int fragsz, unsigned int align)
- {
- 	struct napi_alloc_cache *nc = this_cpu_ptr(&napi_alloc_cache);
- 
- 	fragsz = SKB_DATA_ALIGN(fragsz);
- 
--	return page_frag_alloc_align(&nc->page, fragsz, GFP_ATOMIC, align_mask);
-+	return page_frag_alloc_align(&nc->page, fragsz, GFP_ATOMIC, align);
- }
--EXPORT_SYMBOL(__napi_alloc_frag_align);
-+EXPORT_SYMBOL(napi_alloc_frag_align);
- 
--void *__netdev_alloc_frag_align(unsigned int fragsz, unsigned int align_mask)
-+void *netdev_alloc_frag_align(unsigned int fragsz, unsigned int align)
- {
- 	void *data;
- 
-@@ -307,18 +307,18 @@ void *__netdev_alloc_frag_align(unsigned int fragsz, unsigned int align_mask)
- 	if (in_hardirq() || irqs_disabled()) {
- 		struct page_frag_cache *nc = this_cpu_ptr(&netdev_alloc_cache);
- 
--		data = page_frag_alloc_align(nc, fragsz, GFP_ATOMIC, align_mask);
-+		data = page_frag_alloc_align(nc, fragsz, GFP_ATOMIC, align);
- 	} else {
- 		struct napi_alloc_cache *nc;
- 
- 		local_bh_disable();
- 		nc = this_cpu_ptr(&napi_alloc_cache);
--		data = page_frag_alloc_align(&nc->page, fragsz, GFP_ATOMIC, align_mask);
-+		data = page_frag_alloc_align(&nc->page, fragsz, GFP_ATOMIC, align);
- 		local_bh_enable();
- 	}
- 	return data;
- }
--EXPORT_SYMBOL(__netdev_alloc_frag_align);
-+EXPORT_SYMBOL(netdev_alloc_frag_align);
- 
- static struct sk_buff *napi_skb_cache_get(void)
- {
+v2 is just a rebased version of the original series with some small field naming change.
+
+Git tree (based on https://github.com/ceph/ceph-client.git master):
+https://github.com/mihalicyn/linux/tree/fs.idmapped.ceph.v2
+
+Original description from Christian:
+========================================================================
+This patch series enables cephfs to support idmapped mounts, i.e. the
+ability to alter ownership information on a per-mount basis.
+
+Container managers such as LXD support sharaing data via cephfs between
+the host and unprivileged containers and between unprivileged containers.
+They may all use different idmappings. Idmapped mounts can be used to
+create mounts with the idmapping used for the container (or a different
+one specific to the use-case).
+
+There are in fact more use-cases such as remapping ownership for
+mountpoints on the host itself to grant or restrict access to different
+users or to make it possible to enforce that programs running as root
+will write with a non-zero {g,u}id to disk.
+
+The patch series is simple overall and few changes are needed to cephfs.
+There is one cephfs specific issue that I would like to discuss and
+solve which I explain in detail in:
+
+[PATCH 02/12] ceph: handle idmapped mounts in create_request_message()
+
+It has to do with how to handle mds serves which have id-based access
+restrictions configured. I would ask you to please take a look at the
+explanation in the aforementioned patch.
+
+The patch series passes the vfs and idmapped mount testsuite as part of
+xfstests. To run it you will need a config like:
+
+[ceph]
+export FSTYP=ceph
+export TEST_DIR=/mnt/test
+export TEST_DEV=10.103.182.10:6789:/
+export TEST_FS_MOUNT_OPTS="-o name=admin,secret=$password
+
+and then simply call
+
+sudo ./check -g idmapped
+
+========================================================================
+
+Alexander Mikhalitsyn (1):
+  fs: export mnt_idmap_get/mnt_idmap_put
+
+Christian Brauner (12):
+  ceph: stash idmapping in mdsc request
+  ceph: handle idmapped mounts in create_request_message()
+  ceph: allow idmapped mknod inode op
+  ceph: allow idmapped symlink inode op
+  ceph: allow idmapped mkdir inode op
+  ceph: allow idmapped rename inode op
+  ceph: allow idmapped getattr inode op
+  ceph: allow idmapped permission inode op
+  ceph: allow idmapped setattr inode op
+  ceph/acl: allow idmapped set_acl inode op
+  ceph/file: allow idmapped atomic_open inode op
+  ceph: allow idmapped mounts
+
+ fs/ceph/acl.c                 |  2 +-
+ fs/ceph/dir.c                 |  4 ++++
+ fs/ceph/file.c                | 10 ++++++++--
+ fs/ceph/inode.c               | 15 +++++++++++----
+ fs/ceph/mds_client.c          | 29 +++++++++++++++++++++++++----
+ fs/ceph/mds_client.h          |  1 +
+ fs/ceph/super.c               |  2 +-
+ fs/mnt_idmapping.c            |  2 ++
+ include/linux/mnt_idmapping.h |  3 +++
+ 9 files changed, 56 insertions(+), 12 deletions(-)
+
+-- 
+2.34.1
 
