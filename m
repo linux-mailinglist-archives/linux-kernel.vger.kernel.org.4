@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB1A70F036
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A5070F031
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240099AbjEXIIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
+        id S239975AbjEXIH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240011AbjEXIIF (ORCPT
+        with ESMTP id S239229AbjEXIH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:08:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244EE132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684915677; x=1716451677;
-  h=date:from:to:cc:subject:message-id;
-  bh=NXdyBysXSqELcLNZaY5wSU3KQhy0Z5bIOWnFh1mTnlg=;
-  b=A7oErXw9rqzgtgFnUBq+IBZQOU4NgwApr9Wm2c6gVDBO0PhZ0dJRcJyc
-   vovEKrTzvKC2rsVh66FnAEkNAweGtQhKlpnuQMoWxoHlLyE9oktSxnUj2
-   baOL3X0DNqdgvzMdKisEWJXr1a4rXaSwe7m4VAD4m1Aex13kVOXp7ccru
-   1CVy/fYodmqtj11yx6zAnW4Qx2SdQMAoU7pRlPnI8OW1zas4FLkzIkz8g
-   0t5FvXn6E+3wJMIKGu2t94DewHgIHI9CBUSvc6asyH2pFLYH9RBgh7UBj
-   GRqG6d8ZT0KPAH4xOIj0vq57y5o8/0S9IDiG78cgxZ7eoGyv+GyYj6zLQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="333114811"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="333114811"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 01:07:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="737203561"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="737203561"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 May 2023 01:07:55 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q1jXG-000Ea7-1C;
-        Wed, 24 May 2023 08:07:54 +0000
-Date:   Wed, 24 May 2023 16:07:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 60901dadfadcc152ae5cad7ebae802272497a812
-Message-ID: <20230524080721.yiX2k%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 24 May 2023 04:07:57 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E16135;
+        Wed, 24 May 2023 01:07:47 -0700 (PDT)
+X-UUID: 0ee95122fa0a11ed9cb5633481061a41-20230524
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=zcBxf2JopgBE0/qefhNOXKZs3dhHmLYOk2K3RwkLF5k=;
+        b=uerNzmrFlA4034mRp3mKfUr7D9bQ3UxtQmBe8+oFYEpiZ+qTWBINipS+da1GTlwHJyiQ27zcLSHjYqGbYL9T94krlb5o8eTsCMk7/VFCv6QUyZTb/SbFTR9+e76JocyI+JdhnQBwfnD7LzQ638xrba3dXSUqUg3kFNWSNOR7ewU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:9eb73153-1f49-476b-ac03-5d2f496705d0,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:4cabd76c-2f20-4998-991c-3b78627e4938,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 0ee95122fa0a11ed9cb5633481061a41-20230524
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1115863944; Wed, 24 May 2023 16:07:42 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 24 May 2023 16:07:41 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 24 May 2023 16:07:40 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v7,0/2] media: mediatek: vcodec: add hevc stateless decoder driver in MT8195
+Date:   Wed, 24 May 2023 16:07:37 +0800
+Message-ID: <20230524080739.17264-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,164 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230524154417/lkp-src/repo/*/paulmck-rcu
-https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 60901dadfadcc152ae5cad7ebae802272497a812  rcuscale: Measure grace-period kthread CPU time
+Add hevc stateless decoder driver to support hardware decode in MT8195, and the driver
+need num_delta_pocs_of_ref_rps_idx value to parse slice header short_term_ref_pic_set().
 
-elapsed time: 724m
+patch 1 add num_delta_pocs_of_ref_rps_idx field.
+patch 2 add hevc stateless decoder driver.
+---
+Changed from v6:
+- fix AngeloGioacchino's suggestion.
 
-configs tested: 144
-configs skipped: 8
+Changed from v5:
+- checkpatch/kernel-doc pass/build pass.
+- fix warning: struct vdec_av1_slice_fb -> struct vdec_hevc_slice_fb.
+- fix warning: remove unused comment for param "trans_start" and "trans_end"
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Changed from v4:
+- fix some comments according to Nathan's suggestion.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230521   gcc  
-alpha        buildonly-randconfig-r006-20230522   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r022-20230521   gcc  
-alpha                randconfig-r024-20230521   gcc  
-alpha                randconfig-r025-20230521   gcc  
-alpha                randconfig-r026-20230522   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r003-20230521   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r013-20230521   gcc  
-arc                  randconfig-r016-20230522   gcc  
-arc                  randconfig-r023-20230521   gcc  
-arc                  randconfig-r023-20230522   gcc  
-arc                  randconfig-r043-20230521   gcc  
-arc                  randconfig-r043-20230522   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r004-20230521   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230522   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230521   clang
-arm64                randconfig-r012-20230522   clang
-arm64                randconfig-r021-20230522   clang
-arm64                randconfig-r033-20230521   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230522   gcc  
-csky                 randconfig-r015-20230521   gcc  
-csky                 randconfig-r031-20230521   gcc  
-csky                 randconfig-r031-20230522   gcc  
-csky                 randconfig-r032-20230522   gcc  
-hexagon              randconfig-r024-20230522   clang
-hexagon              randconfig-r032-20230521   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230522   gcc  
-i386                 randconfig-a002-20230522   gcc  
-i386                 randconfig-a003-20230522   gcc  
-i386                 randconfig-a004-20230522   gcc  
-i386                 randconfig-a005-20230522   gcc  
-i386                 randconfig-a006-20230522   gcc  
-i386                 randconfig-r003-20230522   gcc  
-i386                 randconfig-r033-20230522   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r001-20230522   gcc  
-ia64         buildonly-randconfig-r002-20230521   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r015-20230522   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r002-20230522   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r005-20230521   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r013-20230522   gcc  
-m68k                 randconfig-r036-20230522   gcc  
-microblaze   buildonly-randconfig-r005-20230522   gcc  
-microblaze   buildonly-randconfig-r006-20230521   gcc  
-microblaze           randconfig-r036-20230521   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r004-20230522   clang
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r014-20230522   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r021-20230521   gcc  
-powerpc              randconfig-r034-20230521   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230521   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r026-20230521   gcc  
-s390                 randconfig-r044-20230521   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r001-20230521   gcc  
-sh                   randconfig-r001-20230522   gcc  
-sh                   randconfig-r002-20230521   gcc  
-sh                   randconfig-r004-20230521   gcc  
-sh                   randconfig-r035-20230522   gcc  
-sparc        buildonly-randconfig-r004-20230522   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r005-20230522   gcc  
-sparc                randconfig-r014-20230521   gcc  
-sparc64      buildonly-randconfig-r003-20230522   gcc  
-sparc64              randconfig-r011-20230521   gcc  
-sparc64              randconfig-r016-20230521   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230522   gcc  
-x86_64               randconfig-a002-20230522   gcc  
-x86_64               randconfig-a003-20230522   gcc  
-x86_64               randconfig-a004-20230522   gcc  
-x86_64               randconfig-a005-20230522   gcc  
-x86_64               randconfig-a006-20230522   gcc  
-x86_64               randconfig-a011-20230522   clang
-x86_64               randconfig-a012-20230522   clang
-x86_64               randconfig-a013-20230522   clang
-x86_64               randconfig-a014-20230522   clang
-x86_64               randconfig-a015-20230522   clang
-x86_64               randconfig-a016-20230522   clang
-x86_64               randconfig-r022-20230522   clang
-x86_64               randconfig-r025-20230522   clang
-x86_64               randconfig-x051-20230522   clang
-x86_64               randconfig-x052-20230522   clang
-x86_64               randconfig-x053-20230522   clang
-x86_64               randconfig-x054-20230522   clang
-x86_64               randconfig-x055-20230522   clang
-x86_64               randconfig-x056-20230522   clang
-x86_64               randconfig-x061-20230522   clang
-x86_64               randconfig-x062-20230522   clang
-x86_64               randconfig-x063-20230522   clang
-x86_64               randconfig-x064-20230522   clang
-x86_64               randconfig-x065-20230522   clang
-x86_64               randconfig-x066-20230522   clang
-x86_64               randconfig-x071-20230522   gcc  
-x86_64               randconfig-x072-20230522   gcc  
-x86_64               randconfig-x073-20230522   gcc  
-x86_64               randconfig-x074-20230522   gcc  
-x86_64               randconfig-x075-20230522   gcc  
-x86_64               randconfig-x076-20230522   gcc  
-x86_64               randconfig-x081-20230522   gcc  
-x86_64               randconfig-x082-20230522   gcc  
-x86_64               randconfig-x083-20230522   gcc  
-x86_64               randconfig-x084-20230522   gcc  
-x86_64               randconfig-x085-20230522   gcc  
-x86_64               randconfig-x086-20230522   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r006-20230522   gcc  
+Changed from v3:
+- add the dependency patch to this patch series for patch 1.
+
+Changed from v2:
+- fix one build warning.
+- add the dependency patch link.
+
+Changed from v1:
+- fix build error when build 32bit system.
+- hevc fluster test result: 132/147 (not support: 10bit => 11 and resolution => 4).
+---
+Benjamin Gaignard (1):
+  media: uapi: HEVC: Add num_delta_pocs_of_ref_rps_idx field
+
+Yunfei Dong (1):
+  media: mediatek: vcodec: support stateless hevc decoder
+
+ .../media/v4l/ext-ctrls-codec-stateless.rst   |    7 +
+ .../media/platform/mediatek/vcodec/Makefile   |    1 +
+ .../vcodec/mtk_vcodec_dec_stateless.c         |   59 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |    1 +
+ .../vcodec/vdec/vdec_hevc_req_multi_if.c      | 1097 +++++++++++++++++
+ .../platform/mediatek/vcodec/vdec_drv_if.c    |    4 +
+ .../platform/mediatek/vcodec/vdec_drv_if.h    |    1 +
+ include/uapi/linux/v4l2-controls.h            |    6 +-
+ 8 files changed, 1174 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
