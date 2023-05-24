@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B0371016C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2D071017D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236226AbjEXXEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 19:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S238114AbjEXXF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 19:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjEXXEj (ORCPT
+        with ESMTP id S236356AbjEXXFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 19:04:39 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0751E73;
-        Wed, 24 May 2023 16:04:10 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3f697a1da09so1767071cf.3;
-        Wed, 24 May 2023 16:04:10 -0700 (PDT)
+        Wed, 24 May 2023 19:05:19 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7561CA4;
+        Wed, 24 May 2023 16:05:18 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75b14216386so21392985a.0;
+        Wed, 24 May 2023 16:05:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684969449; x=1687561449;
+        d=gmail.com; s=20221208; t=1684969517; x=1687561517;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OoTnwldgTHnhUuNWL04YkEejXlnGtSWGcde0hm+P0A8=;
-        b=Z3AO/wfVMDTFVpsingvFFnZdKWcTKkweyn7Eu9sYVITZzzmtHpfhVzmjFHaKY7H8OL
-         EEFxmdZIqVxNrCX/M3WZKnFMLlxnK4D5EvVywt3WHVR2XHxVMjtT3gs+uwnGRzJprO22
-         ckXXq7DT20gtB0dIqRkG1PcMoVGBd5akcIxFiDYvgMDVZur8GFG+9ckij3ZvZg653z5b
-         Sc/Xyu7rxiw8EJe+NznqWHfjA5gPx49riLQ3CZ8fLra01s0fF//jSc/o2Qsqjjam80l0
-         BjQuG4K4unAVcNNi5awldSckSXlGrWYqIABIxCkbIsH/I0CC1kSRGxLHd5bve2vrvlbW
-         L8lA==
+        bh=nUSAAG9pfUB1ZTX71jFjFbloAT5u0vNKnYB6yXCHfu0=;
+        b=bHV702UhCY4TRJGzeAncS7APMg1HomAan8iZ3h6+IvELJEmEmls9hYz/WISv4CknSM
+         sFP2DUoyaNuIjbU1rB6fZkA8eufsKGbxunYltb/DCAiG/AabABhAZamRZ8AqS5597MRa
+         Bh5ECtgPg4zpeelycObq6Qve50gBYNxmfH4GKLvzjzDQJzBWABmyMrChpoR/WMxVarMz
+         u8YHS94y0mvvtO4t7hNUes/Px5R3/3pQXu7URsYMV8vI0JWiwD7t7qnDth9ZE8klpz6A
+         Q8Gb2uWkC6cqbSP/h4lywg8zSmb+htd1qe6vjgOgQ3sCK4jUuKPal1VurqYKSczCANT2
+         oTxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684969449; x=1687561449;
+        d=1e100.net; s=20221208; t=1684969517; x=1687561517;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OoTnwldgTHnhUuNWL04YkEejXlnGtSWGcde0hm+P0A8=;
-        b=T0Z70PiQtQXD2EBJSc1EW++3dtF1Zn/vbNGFQgSzEP508yjaQo7yz/7bf5JY2BjIio
-         v79Woz3S1B2Ty9njykiFwajVeov9XGzLsvgbPUZL0+FBEo5t55hfYPHIMtG9yyxCwCbh
-         XEHGX+FMt579XTVKgK4Bm8WaHuiDc9tu+tzeNhnuNQFNSc4qy5Dj8631Rp+9RrmyS7Zk
-         7Mywjm6gfPrhF8BZIW03gO08K4HCb2aFuYZTW6zHizYs7MC+p58TkWlDbQutny19aavq
-         8nxt0TFJw0Q4sRpoHH01uqqYmd3mItUpTW+UsO8H/bUnoGepqrKlhc2TJ8lxlxxHl+4w
-         qQMA==
-X-Gm-Message-State: AC+VfDyQLTOPwZQdRXCzcOaBRNp0s6nRDEPiKhV6jgLYMUXVaRwRqyVL
-        AzHoX2nbgSBAOsTvQN5NjXQCm8JviMzlkw==
-X-Google-Smtp-Source: ACHHUZ4RZOOSVikIYLXezOIlVZwKU+GPBXK09N1oVnSS3lZAOgd3AjSlbPFXBD9AeJf9c+dCLcUrqA==
-X-Received: by 2002:ac8:58d4:0:b0:3f5:2be9:89fe with SMTP id u20-20020ac858d4000000b003f52be989femr30105447qta.35.1684969449286;
-        Wed, 24 May 2023 16:04:09 -0700 (PDT)
+        bh=nUSAAG9pfUB1ZTX71jFjFbloAT5u0vNKnYB6yXCHfu0=;
+        b=YkMKqRFSpg13sCcBp+NiQAoSaOInxxp13OKQwNpkdCn951NqStKnUx+fVngklTiitT
+         DzZfVLFKIJKUoGyA8y2hiJdeR1tWV+RtYa/mIq7N7YV+nnT1FyEPcL7ao7vItd2ZZ8/c
+         hAVepFVjpzufxRgPDBxWvgtkvBgNdhQTxR0iUqVxPeZCEHEDCuiQ1uNLYmFAeGIEWtW7
+         mJSRAxKEHcbez6c5Zic2TKSNETqU3H7j52eqi8NF8AQjAwpRr4647iVTKZBZj4jmisx1
+         QhfrbfG6YpevQ0dbirOc9x9en9SF9ZI68DcMqGoaQVbQVa3ZowAkseAGFFewwttv5mHp
+         /Ykw==
+X-Gm-Message-State: AC+VfDyTdXpkKQbwvdTWbMv6TOlI5K06904FBzyQmFs1azTCcTXzBqVh
+        dbYT4XAJBOfXrXtvZnzGOJI=
+X-Google-Smtp-Source: ACHHUZ5Bs24l8Epn2wrNFBabv2Tzpalpn6WpE7byhruVeuHJkWcn1oO5NZhD/W5m/RzgutJcG1iS2g==
+X-Received: by 2002:a05:6214:dad:b0:625:aa1a:b6dd with SMTP id h13-20020a0562140dad00b00625aa1ab6ddmr3625488qvh.63.1684969517456;
+        Wed, 24 May 2023 16:05:17 -0700 (PDT)
 Received: from Latitude-E6420.mynetworksettings.com ([2600:4040:2007:9800:650f:ad8b:38f6:d091])
-        by smtp.gmail.com with ESMTPSA id i24-20020ac84898000000b003e388264753sm4073322qtq.65.2023.05.24.16.04.08
+        by smtp.gmail.com with ESMTPSA id ea15-20020ad458af000000b0062075f40f61sm3914019qvb.73.2023.05.24.16.05.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 16:04:08 -0700 (PDT)
+        Wed, 24 May 2023 16:05:17 -0700 (PDT)
 From:   Rudraksha Gupta <guptarud@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     david@ixit.cz, Rudraksha Gupta <guptarud@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: Add missing msm8960 for list of strings
-Date:   Wed, 24 May 2023 19:03:37 -0400
-Message-Id: <20230524230338.120619-1-guptarud@gmail.com>
+Subject: [PATCH 1/5] ARM: Add label to sleep_clk in qcom-msm8960.dtsi
+Date:   Wed, 24 May 2023 19:04:54 -0400
+Message-Id: <20230524230459.120681-1-guptarud@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,26 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list of supported 'SoC's didn't include msm8960 even though
-qcom,msm8960-cdp exists.
+Allows msm8960 DTS files to reference the sleep_clk node.
 
 Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/qcom-msm8960.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index d9dd25695c3d..3ffa682cd079 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -40,6 +40,7 @@ description: |
-         msm8939
-         msm8953
-         msm8956
-+        msm8960
-         msm8974
-         msm8976
-         msm8992
+diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+index 2a668cd535cc..a4d8dd2d24a6 100644
+--- a/arch/arm/boot/dts/qcom-msm8960.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+@@ -71,7 +71,7 @@ pxo_board: pxo_board {
+ 			clock-output-names = "pxo_board";
+ 		};
+ 
+-		sleep_clk {
++		sleep_clk: sleep_clk {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
+ 			clock-frequency = <32768>;
 -- 
 2.34.1
 
