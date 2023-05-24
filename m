@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D851B70F85B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D234A70F85A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbjEXOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S234371AbjEXOLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjEXOLm (ORCPT
+        with ESMTP id S231249AbjEXOLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:11:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBA4E7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:10:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684937457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iPDHvMEUis0KqFn0g9sdEWNou1uipYbK1YxLUoZQd9c=;
-        b=CycOpfWu+sTlV7HaVUqju48wWI0tk/gOlSaQFyNdjJhgZ098cr8pS5d1zYPRDEkhgCGGeU
-        mfMcOOYP+ikUHS9UIQtJmEfzdvqPVGSRfxTIGevzHLd8cFqaETzZbCjIcwVARowO7FBWjl
-        N+DgOFOSQDud8PLqIIlji1C9kQg7tmo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-549-wrRr0K_BP-6rHN-OLbSdNw-1; Wed, 24 May 2023 10:10:49 -0400
-X-MC-Unique: wrRr0K_BP-6rHN-OLbSdNw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7A3B80027F;
-        Wed, 24 May 2023 14:10:43 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.231])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3E5B7407DEC6;
-        Wed, 24 May 2023 14:10:40 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 24 May 2023 16:10:27 +0200 (CEST)
-Date:   Wed, 24 May 2023 16:10:23 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230524141022.GA19091@redhat.com>
-References: <20230522025124.5863-1-michael.christie@oracle.com>
- <20230522025124.5863-4-michael.christie@oracle.com>
- <20230522123029.GA22159@redhat.com>
- <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
- <20230522174757.GC22159@redhat.com>
- <20230523121506.GA6562@redhat.com>
- <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
+        Wed, 24 May 2023 10:11:00 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D66F11D;
+        Wed, 24 May 2023 07:10:59 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d2981e3abso762634b3a.1;
+        Wed, 24 May 2023 07:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684937459; x=1687529459;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PZXHIJ1hE3Wn+dGAzyqj5Sw4G3dlZ7dy5S0jADJahDY=;
+        b=kolivbo7O//ztvRulM/fswXePIEri2OVOIH0rWnvUOK8CWvZKaz91KPME1yXlzHjPa
+         hgNfJEFrCSHn3CdgUm3qUrUo7EOXsJZRuQ3h56WqxwLd165ztZEHoSiUTrmmnLOjV3eI
+         8XIXRQUsTKr8fNEBAqvKJsI7rXPEemuKIUFu8O86W/w916R1nTUVMDcJ2C2+704LNwpo
+         di+HzETrpEkeQRTxghmTOqT8lQ4S/cAdV0vK5BoZoIySGqqnPdFfFdAo95TvGrEIge26
+         h9ItnPgmdn4FjlzxekTZFNl7Let8SnFQKsLN/lWYpmOLdJ/I5T/4MO4PecRgKZ30qLdK
+         uUqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684937459; x=1687529459;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PZXHIJ1hE3Wn+dGAzyqj5Sw4G3dlZ7dy5S0jADJahDY=;
+        b=ioNLCI0fVamEkLrmzSUs2MvIAeYMtT2M+yCiG774YxUIZogZGlbALZDVBJQXsz+3W8
+         gZt3NUt5Qosii6E6L3LfIidrHGTwe5Edd20MfXyQuQfGpDOHfLgYb6/FTJ/LakR30Ye9
+         fUEwKKFGgKQgTiU6s/ZKxiBUMViVTO+E0GS62EFDYjhQUgZFi35JZxPYdNrjKYPzUWXd
+         09NaKb1hvzMQELsVHV34NRY2b0vhSZZ0Z3WLkFT2545EI0z6GpnHuI26LNj2BprZnxD4
+         /jU1fjauvECUdHCY9OtkcRlbeywZFCLST4RMeVxS8o9Or+L2tPnjg0EmcZNxJIIJBaa8
+         StOg==
+X-Gm-Message-State: AC+VfDyh/hUo1XGDh7aUWRLlmS1YQ77AlYz9OtO84N3S/d4A08WNAnJE
+        VBG6IckarVcdOfGk3EibL2Q=
+X-Google-Smtp-Source: ACHHUZ7tROb/e++EO999/hYdjimsPclsdkSAE44Dy2aIvZ32lzmzELI9fDW2ryyZEdLApDmlJeEjvQ==
+X-Received: by 2002:a05:6a20:7d96:b0:10e:2fd5:510d with SMTP id v22-20020a056a207d9600b0010e2fd5510dmr1307544pzj.11.1684937458962;
+        Wed, 24 May 2023 07:10:58 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id i20-20020aa78d94000000b006439bc7d791sm7520091pfr.57.2023.05.24.07.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 07:10:58 -0700 (PDT)
+Message-ID: <c38c6875-7ca2-55dd-a1ec-ce7f903b795d@gmail.com>
+Date:   Wed, 24 May 2023 23:10:48 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 25/26] locking/atomic: docs: Add atomic operations to the
+ driver basic API documentation
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org
+Cc:     boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
+        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
+        linux-doc@vger.kernel.org, paulmck@kernel.org,
+        peterz@infradead.org, sstabellini@kernel.org, will@kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20230522122429.1915021-1-mark.rutland@arm.com>
+ <20230522122429.1915021-26-mark.rutland@arm.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20230522122429.1915021-26-mark.rutland@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,29 +80,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/23, Eric W. Biederman wrote:
->
-> I want to point out that we need to consider not just SIGKILL, but
-> SIGABRT that causes a coredump, as well as the process peforming
-> an ordinary exit(2).  All of which will cause get_signal to return
-> SIGKILL in this context.
+On Mon, 22 May 2023 13:24:28 +0100, Mark Rutland wrote:
+> From: "Paul E. McKenney" <paulmck@kernel.org>
+> 
+> Add the generated atomic headers to driver-api/basics.rst in order to
+> provide documentation for the Linux kernel's atomic operations.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Akira Yokosawa <akiyks@gmail.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: <linux-doc@vger.kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> [Mark: add atomic-long.h]
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> ---
+>  Documentation/driver-api/basics.rst | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/driver-api/basics.rst b/Documentation/driver-api/basics.rst
+> index 4b4d8e28d3be4..a1fbd97fb79fb 100644
+> --- a/Documentation/driver-api/basics.rst
+> +++ b/Documentation/driver-api/basics.rst
+> @@ -87,6 +87,12 @@ Atomics
+>  .. kernel-doc:: arch/x86/include/asm/atomic.h
+>     :internal:
+>  
+> +.. kernel-doc:: include/linux/atomic/atomic-arch-fallback.h
+> +   :internal:
+> +
+> +.. kernel-doc:: include/linux/atomic/atomic-long.h
+> +   :internal:
+> +
 
-Yes, but probably SIGABRT/exit doesn't really differ from SIGKILL wrt
-vhost_worker().
+Why not add
 
-> It is probably not the worst thing in the world, but what this means
-> is now if you pass a copy of the vhost file descriptor to another
-> process the vhost_worker will persist, and thus the process will persist
-> until that copy of the file descriptor is closed.
+  .. kernel-doc:: include/linux/atomic/atomic-instrumented.h
+     :internal:
 
-Hadn't thought about it.
+as well ??
 
-I am fighting with internal bugzillas today, will try to write another
-email tomorrow.
+I think those kernel-doc comments are the most relevant ones
+for driver writers.
 
-But before that, I would like to have an answer to my "main" question in
-my previois email. Otherwise I am still not sure I understand what exactly
-we need to fix.
+        Thanks, Akira
 
-Oleg.
-
+>  Kernel objects manipulation
+>  ---------------------------
+>  
