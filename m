@@ -2,216 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDA970EDB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1438270EDB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239535AbjEXGOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S239655AbjEXGPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjEXGO3 (ORCPT
+        with ESMTP id S239356AbjEXGPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:14:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3F0132;
-        Tue, 23 May 2023 23:14:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684908868; x=1716444868;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BvET74+PGhFIHGpf69Hu1b65MfR/QvNJUm8CVbYFuIc=;
-  b=ZRtXs8mOsHpBkQceiKCDqdo+7ZLRbwXUqVZW9aEuvtt+t8dCGrzoXOOI
-   EEOYFTifBRGmaYS3pemq/yNtLHZFiGSeB6/NYG5LAE/avb7lUdB/o13P0
-   BtL/9eLoeJ1pMzcGQmZG4DJzAw53LWs3vbuqRP6t2OGOm2lJHZFAlGoTP
-   /8vsn2JtJWzkuP0TyDHglCPPO72J0jt7d76ZldbF4tZ26x7zvGDeEARln
-   RCKnODST/mZvd28xLz+O/IlWqpv1Uf6fEXpQEyLmaYtrnIWqHDcyeRf4w
-   Or1w8zF61xawzeCvzCnUl88bey67o1x5aZhqMJRXQ0YFOwv9V01PMr5nN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="350982962"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="350982962"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 23:14:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="654693856"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="654693856"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.223.197])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 23:14:24 -0700
-Message-ID: <a51d79b3-6ba4-e85f-0f47-a9a180ea057c@intel.com>
-Date:   Wed, 24 May 2023 09:14:20 +0300
+        Wed, 24 May 2023 02:15:16 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633D132;
+        Tue, 23 May 2023 23:15:14 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c40be1417so576365a12.1;
+        Tue, 23 May 2023 23:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684908914; x=1687500914;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lt0lGIpQnbErHODNwQ3cDengEUbpWKePGFq6txNOIKs=;
+        b=RAGhMbG8uOFFFCCrljvC4Hlt6lZKpOrXnJZBJuc+6CDr0+FBnbtd+sxDA+1SJpjzUC
+         aLfsNKz+j1G5RmQ6J2/dkjVTt/VYdCaJhfZNVPmX1rYCvZXSY+/1KWBCMywqmy3add74
+         L/V3gve/zC8GcldFhoOV29465IMljK6JFwkpGe2RUD0Rf/9KTy0gVmqcLMyRaSyhG015
+         AKjnzVZ/rK3LBOate3PwROFVWdl4lgD91wCC45CiIO34JyJPNmrG8+oZH+jm+fUYAEpR
+         oHGdWN/Y2mJpXswO8T/woskVa+kzsdptMlzC/R8POQdPMVBA1il1RXfkXQv/09c7PPRe
+         3QGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684908914; x=1687500914;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lt0lGIpQnbErHODNwQ3cDengEUbpWKePGFq6txNOIKs=;
+        b=jGeJjHOkDIi560SLHr8oV/yaFkD+gR/MZ/xsRi1Koloi9KiR49NjK30FHNOqA+ffZM
+         SAyYObdOugcvqQcpL4tv2A1OWTcA8RSy1j7l6XrZZrER/KHY+tVn4Cxk7rvRosFjQXAK
+         iv05neef/wIICYPQA+HilhaLUF+ph6rqbRDbxwF5ecpqLWD3Sobq9wZrtDKsykdKiThG
+         Qtiks0dxDMPp21vy7bthB0yCkoZbiYRq8IUjw3XbzW4ZUT45kH3tuCOjQa3TAFRKJlu4
+         KPU/uDeqijSkF9UfMcGv+D65VbfBrWUEXVB6G/6W88iaPInUWVV3LuK4IHYnS87+sKoy
+         AmrA==
+X-Gm-Message-State: AC+VfDyjXvMrij/VbbF1xv5G7c+MWSdfN2SDnuo/JQ2ciXGwz++x0hDQ
+        4r0wZ1xCdIaCeVlrI01SELE=
+X-Google-Smtp-Source: ACHHUZ5xpGBbFd9LGPJJ1namXeHHXVm+E0C/DmK6xw6rAGu3//TbvfHJdMcm+i5Ilzbz16HusfjvCA==
+X-Received: by 2002:a17:902:ecd0:b0:1af:d6fb:199c with SMTP id a16-20020a170902ecd000b001afd6fb199cmr2593761plh.16.1684908914137;
+        Tue, 23 May 2023 23:15:14 -0700 (PDT)
+Received: from debian-BULLSEYE-live-builder-AMD64 ([211.216.218.61])
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902d3c900b001a6d08eb054sm7836077plb.78.2023.05.23.23.15.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 23:15:13 -0700 (PDT)
+Date:   Wed, 24 May 2023 15:15:26 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     David Rientjes <rientjes@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        David Hildenbrand <david@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slab: remove HAVE_HARDENED_USERCOPY_ALLOCATOR
+Message-ID: <ZG2rX4PN03Db8l4C@debian-BULLSEYE-live-builder-AMD64>
+References: <20230523073136.4900-1-vbabka@suse.cz>
+ <310077ed-6f3f-41fe-afcf-36500a9408ec@lucifer.local>
+ <623a87c6-c0d2-799a-c39e-0d14dcdfa6df@suse.cz>
+ <ae3ff438-5e5a-4a75-b4e9-575324a584f7@lucifer.local>
+ <ca7860db-220f-ae77-93e6-2a38f6c1130a@redhat.com>
+ <202305231001.08BC6058@keescook>
+ <7a16b351-c7f6-b6a3-869b-5163c0d0793f@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] perf annotate: Remove x86 instructions with suffix
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-References: <20230524052834.1041418-1-namhyung@kernel.org>
- <20230524052834.1041418-2-namhyung@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230524052834.1041418-2-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a16b351-c7f6-b6a3-869b-5163c0d0793f@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/23 08:28, Namhyung Kim wrote:
-> Not the suffix is handled in the general code.  Let's get rid of them.
-
-Not -> Now ?
-
+On Tue, May 23, 2023 at 05:31:47PM -0700, David Rientjes wrote:
+> On Tue, 23 May 2023, Kees Cook wrote:
 > 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/arch/x86/annotate/instructions.c | 44 +--------------------
->  1 file changed, 2 insertions(+), 42 deletions(-)
+> > On Tue, May 23, 2023 at 10:14:24AM +0200, David Hildenbrand wrote:
+> > > On 23.05.23 09:56, Lorenzo Stoakes wrote:
+> > > > On Tue, May 23, 2023 at 09:46:46AM +0200, Vlastimil Babka wrote:
+> > > > > On 5/23/23 09:42, Lorenzo Stoakes wrote:
+> > > > > > On Tue, May 23, 2023 at 09:31:36AM +0200, Vlastimil Babka wrote:
+> > > > > > > With SLOB removed, both remaining allocators support hardened usercopy,
+> > > > > > > so remove the config and associated #ifdef.
+> > > > > > > 
+> > > > > > > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> > > > > > > ---
+> > > > > > >   mm/Kconfig       | 2 --
+> > > > > > >   mm/slab.h        | 9 ---------
+> > > > > > >   security/Kconfig | 8 --------
+> > > > > > >   3 files changed, 19 deletions(-)
+> > > > > > > 
+> > > > > > > diff --git a/mm/Kconfig b/mm/Kconfig
+> > > > > > > index 7672a22647b4..041f0da42f2b 100644
+> > > > > > > --- a/mm/Kconfig
+> > > > > > > +++ b/mm/Kconfig
+> > > > > > > @@ -221,7 +221,6 @@ choice
+> > > > > > >   config SLAB
+> > > > > > >   	bool "SLAB"
+> > > > > > >   	depends on !PREEMPT_RT
+> > > > > > > -	select HAVE_HARDENED_USERCOPY_ALLOCATOR
+> > > > > > >   	help
+> > > > > > >   	  The regular slab allocator that is established and known to work
+> > > > > > >   	  well in all environments. It organizes cache hot objects in
+> > > > > > > @@ -229,7 +228,6 @@ config SLAB
+> > > > > > > 
+> > > > > > >   config SLUB
+> > > > > > >   	bool "SLUB (Unqueued Allocator)"
+> > > > > > > -	select HAVE_HARDENED_USERCOPY_ALLOCATOR
+> > > > > > >   	help
+> > > > > > >   	   SLUB is a slab allocator that minimizes cache line usage
+> > > > > > >   	   instead of managing queues of cached objects (SLAB approach).
+> > > > > > > diff --git a/mm/slab.h b/mm/slab.h
+> > > > > > > index f01ac256a8f5..695ef96b4b5b 100644
+> > > > > > > --- a/mm/slab.h
+> > > > > > > +++ b/mm/slab.h
+> > > > > > > @@ -832,17 +832,8 @@ struct kmem_obj_info {
+> > > > > > >   void __kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab);
+> > > > > > >   #endif
+> > > > > > > 
+> > > > > > > -#ifdef CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR
+> > > > > > >   void __check_heap_object(const void *ptr, unsigned long n,
+> > > > > > >   			 const struct slab *slab, bool to_user);
+> > > > > > > -#else
+> > > > > > > -static inline
+> > > > > > > -void __check_heap_object(const void *ptr, unsigned long n,
+> > > > > > > -			 const struct slab *slab, bool to_user)
+> > > > > > > -{
+> > > > > > > -}
+> > > > > > > -#endif
+> > > > > > 
+> > > > > > Hm, this is still defined in slab.c/slub.c and invoked in usercopy.c, do we
+> > > > > > not want the prototype?
+> > > > > 
+> > > > > Well I didn't delete the prototype, just the ifdef/else around, so now it's
+> > > > > there unconditionally.
+> > > > > 
+> > > > > > Perhaps replacing with #ifdef
+> > > > > > CONFIG_HARDENED_USERCOPY instead? I may be missing something here :)
+> > > > > 
+> > > > > Putting it under that #ifdef would work and match that the implementations
+> > > > > of that function are under that same ifdef, but maybe it's unnecessary noise
+> > > > > in the header?
+> > > > > 
+> > > > 
+> > > > Yeah my brain inserted extra '-'s there, sorry!
+> > > > 
+> > > > Given we only define __check_heap_object() in sl[au]b.c if
+> > > > CONFIG_HARDENED_USERCOPY wouldn't we need to keep the empty version around
+> > > > if !CONFIG_HARDENED_USERCOPY since check_heap_object() appears to be called
+> > > > unconditionally?
+> > > > 
+> > > 
+> > > The file is only compiled with CONFIG_HARDENED_USERCOPY:
+> > > 
+> > > mm/Makefile:obj-$(CONFIG_HARDENED_USERCOPY) += usercopy.o
+> > 
+> > Right.
+> > 
+> > > Reviewed-by: David Hildenbrand <david@redhat.com>
+> > 
+> > Thanks!
+> > 
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > 
 > 
-> diff --git a/tools/perf/arch/x86/annotate/instructions.c b/tools/perf/arch/x86/annotate/instructions.c
-> index 5c7bec25fee4..714fd8784d99 100644
-> --- a/tools/perf/arch/x86/annotate/instructions.c
-> +++ b/tools/perf/arch/x86/annotate/instructions.c
-> @@ -1,48 +1,29 @@
->  // SPDX-License-Identifier: GPL-2.0
+> Acked-by: David Rientjes <rientjes@google.com>
 
-Could probably use a comment about how the table works
-with suffixes.
+looks fine to me,
 
->  static struct ins x86__instructions[] = {
->  	{ .name = "adc",	.ops = &mov_ops,  },
-> -	{ .name = "adcb",	.ops = &mov_ops,  },
-> -	{ .name = "adcl",	.ops = &mov_ops,  },
->  	{ .name = "add",	.ops = &mov_ops,  },
-> -	{ .name = "addl",	.ops = &mov_ops,  },
-> -	{ .name = "addq",	.ops = &mov_ops,  },
->  	{ .name = "addsd",	.ops = &mov_ops,  },
-> -	{ .name = "addw",	.ops = &mov_ops,  },
->  	{ .name = "and",	.ops = &mov_ops,  },
-> -	{ .name = "andb",	.ops = &mov_ops,  },
-> -	{ .name = "andl",	.ops = &mov_ops,  },
->  	{ .name = "andpd",	.ops = &mov_ops,  },
->  	{ .name = "andps",	.ops = &mov_ops,  },
-> -	{ .name = "andq",	.ops = &mov_ops,  },
-> -	{ .name = "andw",	.ops = &mov_ops,  },
->  	{ .name = "bsr",	.ops = &mov_ops,  },
->  	{ .name = "bt",		.ops = &mov_ops,  },
->  	{ .name = "btr",	.ops = &mov_ops,  },
->  	{ .name = "bts",	.ops = &mov_ops,  },
-> -	{ .name = "btsq",	.ops = &mov_ops,  },
->  	{ .name = "call",	.ops = &call_ops, },
-> -	{ .name = "callq",	.ops = &call_ops, },
->  	{ .name = "cmovbe",	.ops = &mov_ops,  },
->  	{ .name = "cmove",	.ops = &mov_ops,  },
->  	{ .name = "cmovae",	.ops = &mov_ops,  },
->  	{ .name = "cmp",	.ops = &mov_ops,  },
-> -	{ .name = "cmpb",	.ops = &mov_ops,  },
-> -	{ .name = "cmpl",	.ops = &mov_ops,  },
-> -	{ .name = "cmpq",	.ops = &mov_ops,  },
-> -	{ .name = "cmpw",	.ops = &mov_ops,  },
->  	{ .name = "cmpxch",	.ops = &mov_ops,  },
->  	{ .name = "cmpxchg",	.ops = &mov_ops,  },
->  	{ .name = "cs",		.ops = &mov_ops,  },
->  	{ .name = "dec",	.ops = &dec_ops,  },
-> -	{ .name = "decl",	.ops = &dec_ops,  },
-> -	{ .name = "decq",	.ops = &dec_ops,  },
->  	{ .name = "divsd",	.ops = &mov_ops,  },
->  	{ .name = "divss",	.ops = &mov_ops,  },
->  	{ .name = "gs",		.ops = &mov_ops,  },
->  	{ .name = "imul",	.ops = &mov_ops,  },
->  	{ .name = "inc",	.ops = &dec_ops,  },
-> -	{ .name = "incl",	.ops = &dec_ops,  },
-> -	{ .name = "incq",	.ops = &dec_ops,  },
->  	{ .name = "ja",		.ops = &jump_ops, },
->  	{ .name = "jae",	.ops = &jump_ops, },
->  	{ .name = "jb",		.ops = &jump_ops, },
-> @@ -56,7 +37,6 @@ static struct ins x86__instructions[] = {
->  	{ .name = "jl",		.ops = &jump_ops, },
->  	{ .name = "jle",	.ops = &jump_ops, },
->  	{ .name = "jmp",	.ops = &jump_ops, },
-> -	{ .name = "jmpq",	.ops = &jump_ops, },
->  	{ .name = "jna",	.ops = &jump_ops, },
->  	{ .name = "jnae",	.ops = &jump_ops, },
->  	{ .name = "jnb",	.ops = &jump_ops, },
-> @@ -83,49 +63,31 @@ static struct ins x86__instructions[] = {
->  	{ .name = "mov",	.ops = &mov_ops,  },
->  	{ .name = "movapd",	.ops = &mov_ops,  },
->  	{ .name = "movaps",	.ops = &mov_ops,  },
-> -	{ .name = "movb",	.ops = &mov_ops,  },
->  	{ .name = "movdqa",	.ops = &mov_ops,  },
->  	{ .name = "movdqu",	.ops = &mov_ops,  },
-> -	{ .name = "movl",	.ops = &mov_ops,  },
-> -	{ .name = "movq",	.ops = &mov_ops,  },
->  	{ .name = "movsd",	.ops = &mov_ops,  },
->  	{ .name = "movslq",	.ops = &mov_ops,  },
->  	{ .name = "movss",	.ops = &mov_ops,  },
->  	{ .name = "movupd",	.ops = &mov_ops,  },
->  	{ .name = "movups",	.ops = &mov_ops,  },
-> -	{ .name = "movw",	.ops = &mov_ops,  },
->  	{ .name = "movzbl",	.ops = &mov_ops,  },
->  	{ .name = "movzwl",	.ops = &mov_ops,  },
->  	{ .name = "mulsd",	.ops = &mov_ops,  },
->  	{ .name = "mulss",	.ops = &mov_ops,  },
->  	{ .name = "nop",	.ops = &nop_ops,  },
-> -	{ .name = "nopl",	.ops = &nop_ops,  },
-> -	{ .name = "nopw",	.ops = &nop_ops,  },
->  	{ .name = "or",		.ops = &mov_ops,  },
-> -	{ .name = "orb",	.ops = &mov_ops,  },
-> -	{ .name = "orl",	.ops = &mov_ops,  },
->  	{ .name = "orps",	.ops = &mov_ops,  },
-> -	{ .name = "orq",	.ops = &mov_ops,  },
->  	{ .name = "pand",	.ops = &mov_ops,  },
->  	{ .name = "paddq",	.ops = &mov_ops,  },
->  	{ .name = "pcmpeqb",	.ops = &mov_ops,  },
->  	{ .name = "por",	.ops = &mov_ops,  },
-> -	{ .name = "rclb",	.ops = &mov_ops,  },
-> -	{ .name = "rcll",	.ops = &mov_ops,  },
-> +	{ .name = "rcl",	.ops = &mov_ops,  },
->  	{ .name = "ret",	.ops = &ret_ops,  },
-> -	{ .name = "retq",	.ops = &ret_ops,  },
->  	{ .name = "sbb",	.ops = &mov_ops,  },
-> -	{ .name = "sbbl",	.ops = &mov_ops,  },
->  	{ .name = "sete",	.ops = &mov_ops,  },
->  	{ .name = "sub",	.ops = &mov_ops,  },
-> -	{ .name = "subl",	.ops = &mov_ops,  },
-> -	{ .name = "subq",	.ops = &mov_ops,  },
->  	{ .name = "subsd",	.ops = &mov_ops,  },
-> -	{ .name = "subw",	.ops = &mov_ops,  },
->  	{ .name = "test",	.ops = &mov_ops,  },
-> -	{ .name = "testb",	.ops = &mov_ops,  },
-> -	{ .name = "testl",	.ops = &mov_ops,  },
-> -	{ .name = "testq",	.ops = &mov_ops,  },
->  	{ .name = "tzcnt",	.ops = &mov_ops,  },
->  	{ .name = "ucomisd",	.ops = &mov_ops,  },
->  	{ .name = "ucomiss",	.ops = &mov_ops,  },
-> @@ -139,11 +101,9 @@ static struct ins x86__instructions[] = {
->  	{ .name = "vsubsd",	.ops = &mov_ops,  },
->  	{ .name = "vucomisd",	.ops = &mov_ops,  },
->  	{ .name = "xadd",	.ops = &mov_ops,  },
-> -	{ .name = "xbeginl",	.ops = &jump_ops, },
-> -	{ .name = "xbeginq",	.ops = &jump_ops, },
-> +	{ .name = "xbegin",	.ops = &jump_ops, },
->  	{ .name = "xchg",	.ops = &mov_ops,  },
->  	{ .name = "xor",	.ops = &mov_ops, },
-> -	{ .name = "xorb",	.ops = &mov_ops, },
->  	{ .name = "xorpd",	.ops = &mov_ops, },
->  	{ .name = "xorps",	.ops = &mov_ops, },
->  };
+Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
+-- 
+Hyeonggon Yoo
+
+Doing kernel stuff as a hobby
+Undergraduate | Chungnam National University
+Dept. Computer Science & Engineering
