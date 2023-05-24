@@ -2,229 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF96C70EB0E
+	by mail.lfdr.de (Postfix) with ESMTP id 5B53670EB0D
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 03:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239064AbjEXB51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 21:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S238893AbjEXB5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 21:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237665AbjEXB5Y (ORCPT
+        with ESMTP id S231588AbjEXB5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 21:57:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B4013E;
-        Tue, 23 May 2023 18:57:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F5FF637C7;
-        Wed, 24 May 2023 01:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76251C4339B;
-        Wed, 24 May 2023 01:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684893441;
-        bh=7ddKEhh0kiBc1mXu8T6uZMyQXUcxoMJ/u+OB30ZYfZ8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dtN1DTk78Zd6o7YTZTsV4ey2RqPRDR32Q/f7+ie7HMr3GgbfSIe77ro99gKns8qXf
-         ciBti6xdnIvaKyFyiflNNgHeG2HvbHCX8Ac8eyAWHmn4qj5B0R1iMbCMxq5+ePPArN
-         xXhMLIKjT9f9Y21LNZjlv7KEwPlqYm+JDPyEGaCrLMdr/Al29Kq4hXI+Sw/+k1Wf63
-         7iV0VELNIkF6tpb8/sSNmhOes/f/w7SvbWPKixSHZgRKWkXLeXnCJVlAiIJwMpGG5y
-         u7CSpc6PhaEqgVV5FOFSWXMqoXjygQgq3ppMEQ6IALB+JuLmDZWrcHUI7CmlWWjxL3
-         NiATnOs+PKwcQ==
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-510f3db1cd8so1054355a12.1;
+        Tue, 23 May 2023 21:57:23 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F98130
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 18:57:22 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-562191bcfb9so3872397b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 18:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684893441; x=1687485441;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D0tshfF7VbkB3ahpyG7j9+uSF5/xmyUxNJpS8HDSR6c=;
+        b=nmhTg7sdGevKSn3w9kE12d2P3CP7b9UiGfoMMR/+Y0y6b0wbVHGrG26hVbXCs3d7HX
+         qFb0dxId9p2cI8+fL/S8EjJhcbn7lA39do5yljFCYSveMEIOUmYELDjW9wtaiXClKwM9
+         B+pF7IoAQrTNexDIgtnV3yfScMywq9BJftsOjdrlWXkz9YzUwS848Vu8/D+vjTZa5HWh
+         PWQDtf1EGZyA5p9yViC7yHfAylqrKXOgwsgQK/zjUPY2UqTti8iJSu3TLEJdyO1niNAG
+         jn0SKqzTEBKg5wjGDls0FwQG6uXRSO5kfS7Uak+ZR6l8yn84qkhn4c04vhj5ZfgomU0O
+         H7gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684893441; x=1687485441;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D0tshfF7VbkB3ahpyG7j9+uSF5/xmyUxNJpS8HDSR6c=;
+        b=Goxd7tS7A9H7rK3esBmrpvmW5hq1DKPfMItXKPtgKZ16XI17IYG+mGGYWzCkcy1zW9
+         4h30SFkkAXcyY10wGYBsogZA4tIlvRxkrNnPOPq/bF2RPwvZTyrNEvJtHTQggv7OU8Fw
+         4M8SFGJxoSStYo8irqqnC12gdxLbHhMNRXnnR929oViQMO02j5XLtaI8/WBDhI2vf5DL
+         7jlxDRrxbtnyM7AxVjsdvpeJte6M5bDu+alvsgZDPOLKXMfCYJlXTMPk5HxN9/dEWara
+         dGHKvw7Th4gTnltnL658i4GPC5iT/4ewpDHrlx/CHg0yTWYcLRP8b3xA6rj6aE4Q5CIO
+         kL4Q==
+X-Gm-Message-State: AC+VfDykrVjcCF8PH6xfTcBIrIDdwzGtEiTi9DuLhscHgy1vAmIsz4q5
+        8h7YGdQCQg1HtytXqsh3Caa1jQ==
+X-Google-Smtp-Source: ACHHUZ5hwSzTNlGTHTlYTyfOqKrgBIkCHhpg4UIiTToJbDusA1qw++7BzNQhm/L3M56AFQhfKnYalw==
+X-Received: by 2002:a81:5289:0:b0:561:e7bb:1b24 with SMTP id g131-20020a815289000000b00561e7bb1b24mr16022359ywb.6.1684893441203;
         Tue, 23 May 2023 18:57:21 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxufS/jbYGEjuEmXAE6X5iG6jK66p8hCDxkHIa+n7pErzPoX+2k
-        E9hyMFWQt80+4AJJ6qkv3ZULs0kGJK1cYeR7hkk=
-X-Google-Smtp-Source: ACHHUZ6vO1jiuAGpmZaNYY9BE9/G3fiUoK5LrgSjqTJca/TnBH1NBozEBatdrHL1wewJixuFRcxxxxtRUaFQ0rUoPlY=
-X-Received: by 2002:a17:907:9807:b0:96f:e7cf:501b with SMTP id
- ji7-20020a170907980700b0096fe7cf501bmr9055951ejc.33.1684893439694; Tue, 23
- May 2023 18:57:19 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id d206-20020a814fd7000000b0054605c23114sm3346760ywb.66.2023.05.23.18.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 18:57:20 -0700 (PDT)
+Date:   Tue, 23 May 2023 18:57:17 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Alistair Popple <apopple@nvidia.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 02/31] mm/migrate: remove cruft from
+ migration_entry_wait()s
+In-Reply-To: <87bkib95uj.fsf@nvidia.com>
+Message-ID: <8bc94098-8a57-b62f-a26c-7c73bf945b41@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <1659568-468a-6d36-c26-6a52a335ab59@google.com> <87bkib95uj.fsf@nvidia.com>
 MIME-Version: 1.0
-References: <20230522093156.7108-1-zhuyinbo@loongson.cn> <20230522093156.7108-2-zhuyinbo@loongson.cn>
-In-Reply-To: <20230522093156.7108-2-zhuyinbo@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 24 May 2023 09:57:08 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5Your97dAMOWjGCMgq5QsGPS21QNPa7OmfOHO6vM8sqw@mail.gmail.com>
-Message-ID: <CAAhV-H5Your97dAMOWjGCMgq5QsGPS21QNPa7OmfOHO6vM8sqw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] loongarch: export loongarch pm interface
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Baoqi Zhang <zhangbaoqi@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yinbo,
+On Tue, 23 May 2023, Alistair Popple wrote:
+> 
+> Hugh Dickins <hughd@google.com> writes:
+> 
+> > migration_entry_wait_on_locked() does not need to take a mapped pte
+> > pointer, its callers can do the unmap first.  Annotate it with
+> > __releases(ptl) to reduce sparse warnings.
+> 
+> Thanks Hugh, I debated doing something similar when I reworked this to
+> not take a pageref. However I was unsure if the pte unmap/unlock
+> ordering mattered as this reverses the order of operations (from unlock
+> then unmap to unmap then unlock).
+> 
+> I never found any reason why that would be a problem though so please
+> add:
+> 
+> Reviewed-by: Alistair Popple <apopple@nvidia.com>
 
-The title can be regular:
- LoongArch: Export some arch-specific pm interfaces
+Thanks Alistair.  Right, the ordering doesn't matter: you might briefly
+think that because I'm going to put the rcu_read_unlock() into the
+pte_unmap(), that there's something wrong with doing that early; but
+you'd quickly realize that holding on to the spinlock is good enough.
 
-And in commit message,
-"Some Power Management Controllers" should be
-"Some power management controllers" or
-"Some PMC (Power Management Controllers)"
-
-Huacai
-
-On Mon, May 22, 2023 at 5:32=E2=80=AFPM Yinbo Zhu <zhuyinbo@loongson.cn> wr=
-ote:
->
-> Some Power Management Controllers need to support DTS and will use
-> the suspend interface thus this patch was to export such interface
-> for their use.
->
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  arch/loongarch/include/asm/acpi.h    |  5 ++---
->  arch/loongarch/include/asm/suspend.h | 10 ++++++++++
->  arch/loongarch/power/suspend.c       | 10 +++++-----
->  arch/loongarch/power/suspend_asm.S   |  8 ++++----
->  4 files changed, 21 insertions(+), 12 deletions(-)
->  create mode 100644 arch/loongarch/include/asm/suspend.h
->
-> diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/a=
-sm/acpi.h
-> index 976a810352c6..d63507cc705f 100644
-> --- a/arch/loongarch/include/asm/acpi.h
-> +++ b/arch/loongarch/include/asm/acpi.h
-> @@ -8,6 +8,7 @@
->  #ifndef _ASM_LOONGARCH_ACPI_H
->  #define _ASM_LOONGARCH_ACPI_H
->
-> +#include <asm/suspend.h>
->  #ifdef CONFIG_ACPI
->  extern int acpi_strict;
->  extern int acpi_disabled;
-> @@ -37,13 +38,11 @@ extern struct list_head acpi_wakeup_device_list;
->
->  extern int loongarch_acpi_suspend(void);
->  extern int (*acpi_suspend_lowlevel)(void);
-> -extern void loongarch_suspend_enter(void);
->
->  static inline unsigned long acpi_get_wakeup_address(void)
->  {
->  #ifdef CONFIG_SUSPEND
-> -       extern void loongarch_wakeup_start(void);
-> -       return (unsigned long)loongarch_wakeup_start;
-> +       return (unsigned long)loongson_wakeup_start;
->  #endif
->         return 0UL;
->  }
-> diff --git a/arch/loongarch/include/asm/suspend.h b/arch/loongarch/includ=
-e/asm/suspend.h
-> new file mode 100644
-> index 000000000000..a40b42f4f7f3
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/suspend.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_SUSPEND_H
-> +#define __ASM_SUSPEND_H
-> +
-> +void loongson_common_resume(void);
-> +void loongson_common_suspend(void);
-> +void loongson_suspend_enter(void);
-> +void loongson_wakeup_start(void);
-> +
-> +#endif
-> diff --git a/arch/loongarch/power/suspend.c b/arch/loongarch/power/suspen=
-d.c
-> index 5e19733e5e05..0587681b33ce 100644
-> --- a/arch/loongarch/power/suspend.c
-> +++ b/arch/loongarch/power/suspend.c
-> @@ -27,7 +27,7 @@ struct saved_registers {
->  };
->  static struct saved_registers saved_regs;
->
-> -static void arch_common_suspend(void)
-> +void loongson_common_suspend(void)
->  {
->         save_counter();
->         saved_regs.pgd =3D csr_read64(LOONGARCH_CSR_PGDL);
-> @@ -40,7 +40,7 @@ static void arch_common_suspend(void)
->         loongarch_suspend_addr =3D loongson_sysconf.suspend_addr;
->  }
->
-> -static void arch_common_resume(void)
-> +void loongson_common_resume(void)
->  {
->         sync_counter();
->         local_flush_tlb_all();
-> @@ -62,12 +62,12 @@ int loongarch_acpi_suspend(void)
->         enable_gpe_wakeup();
->         enable_pci_wakeup();
->
-> -       arch_common_suspend();
-> +       loongson_common_suspend();
->
->         /* processor specific suspend */
-> -       loongarch_suspend_enter();
-> +       loongson_suspend_enter();
->
-> -       arch_common_resume();
-> +       loongson_common_resume();
->
->         return 0;
->  }
-> diff --git a/arch/loongarch/power/suspend_asm.S b/arch/loongarch/power/su=
-spend_asm.S
-> index e2fc3b4e31f0..809abd3b119d 100644
-> --- a/arch/loongarch/power/suspend_asm.S
-> +++ b/arch/loongarch/power/suspend_asm.S
-> @@ -57,13 +57,13 @@
->         .align 12
->
->  /* Sleep/wakeup code for Loongson-3 */
-> -SYM_FUNC_START(loongarch_suspend_enter)
-> +SYM_FUNC_START(loongson_suspend_enter)
->         SETUP_SLEEP
->         bl              __flush_cache_all
->
->         /* Pass RA and SP to BIOS */
->         addi.d          a1, sp, 0
-> -       la.pcrel        a0, loongarch_wakeup_start
-> +       la.pcrel        a0, loongson_wakeup_start
->         la.pcrel        t0, loongarch_suspend_addr
->         ld.d            t0, t0, 0
->         jirl            a0, t0, 0 /* Call BIOS's STR sleep routine */
-> @@ -72,7 +72,7 @@ SYM_FUNC_START(loongarch_suspend_enter)
->          * This is where we return upon wakeup.
->          * Reload all of the registers and return.
->          */
-> -SYM_INNER_LABEL(loongarch_wakeup_start, SYM_L_GLOBAL)
-> +SYM_INNER_LABEL(loongson_wakeup_start, SYM_L_GLOBAL)
->         li.d            t0, CSR_DMW0_INIT       # UC, PLV0
->         csrwr           t0, LOONGARCH_CSR_DMWIN0
->         li.d            t0, CSR_DMW1_INIT       # CA, PLV0
-> @@ -89,4 +89,4 @@ SYM_INNER_LABEL(loongarch_wakeup_start, SYM_L_GLOBAL)
->         SETUP_WAKEUP
->         addi.d          sp, sp, PT_SIZE
->         jr              ra
-> -SYM_FUNC_END(loongarch_suspend_enter)
-> +SYM_FUNC_END(loongson_suspend_enter)
-> --
-> 2.20.1
->
+Hugh
