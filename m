@@ -2,333 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E805E70F194
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BDA70F196
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240498AbjEXI5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S240491AbjEXI6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240485AbjEXI5g (ORCPT
+        with ESMTP id S240485AbjEXI6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:57:36 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ADF9B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:57:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VjNRKW._1684918648;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VjNRKW._1684918648)
-          by smtp.aliyun-inc.com;
-          Wed, 24 May 2023 16:57:31 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 2/2] drm/amd/display: clean up some inconsistent indenting
-Date:   Wed, 24 May 2023 16:57:09 +0800
-Message-Id: <20230524085709.59128-2-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20230524085709.59128-1-jiapeng.chong@linux.alibaba.com>
-References: <20230524085709.59128-1-jiapeng.chong@linux.alibaba.com>
+        Wed, 24 May 2023 04:58:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F4B19D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:57:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B7263757
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:57:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BAC8C433D2;
+        Wed, 24 May 2023 08:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684918678;
+        bh=1cXXyBgnY1cQrBHLhyhzrkI4CCJ3rb6IDRXTv9L9PM4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CWHLwMNth3W2HD4LxrD97c9KK7zXWh+m3gX4ki59JhZiryYynEhbb7vNIqNlGbLAv
+         qpZc7VDkJ7Snzd7jKXxhCVqALkX/bJmdXn5G0KL8+YktYr4+doesbxfuVhnLBv+zBJ
+         /V/OZxE2PVb3Ht8uXtIbLXxwNsEG1aQHNbdvXOaYBb0OWxW0zUkJ2ldlBb3q6Z/HLA
+         dTG4qg/yBuYSU6CU5U2MmxdJaNPPNfhSp499CbM1Qzn7DAaAtz6BsVqecxLdJSjUaZ
+         S67DLl8IsGLcqK+K5K1JeZNLgyaM+klU6BTKoYcgkQxuSoDSD/AFWDKmC+6mU74Een
+         nXFijfbtV/cJg==
+Date:   Wed, 24 May 2023 11:57:38 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Yuwei Guan <ssawgyw@gmail.com>
+Cc:     akpm@linux-foundation.org, tsahu@linux.ibm.com,
+        anshuman.khandual@arm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] memblock: Add flags and nid info in memblock debugfs
+Message-ID: <20230524085738.GL4967@kernel.org>
+References: <20230519105321.333-1-ssawgyw@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519105321.333-1-ssawgyw@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+On Fri, May 19, 2023 at 06:53:21PM +0800, Yuwei Guan wrote:
+> Currently, the memblock debugfs can display the count of memblock_type and
+> the base and end of the reg. However, when memblock_mark_*() or
+> memblock_set_node() is executed on some range, the information in the
+> existing debugfs cannot make it clear why the address is not consecutive.
+> 
+> For example,
+> cat /sys/kernel/debug/memblock/memory
+>    0: 0x0000000080000000..0x00000000901fffff
+>    1: 0x0000000090200000..0x00000000905fffff
+>    2: 0x0000000090600000..0x0000000092ffffff
+>    3: 0x0000000093000000..0x00000000973fffff
+>    4: 0x0000000097400000..0x00000000b71fffff
+>    5: 0x00000000c0000000..0x00000000dfffffff
+>    6: 0x00000000e2500000..0x00000000f87fffff
+>    7: 0x00000000f8800000..0x00000000fa7fffff
+>    8: 0x00000000fa800000..0x00000000fd3effff
+>    9: 0x00000000fd3f0000..0x00000000fd3fefff
+>   10: 0x00000000fd3ff000..0x00000000fd7fffff
+>   11: 0x00000000fd800000..0x00000000fd901fff
+>   12: 0x00000000fd902000..0x00000000fd909fff
+>   13: 0x00000000fd90a000..0x00000000fd90bfff
+>   14: 0x00000000fd90c000..0x00000000ffffffff
+>   15: 0x0000000880000000..0x0000000affffffff
+> 
+> So we can add flags and nid to this debugfs.
+> 
+> For example,
+> cat /sys/kernel/debug/memblock/memory
+>    0: 0x0000000080000000..0x00000000901fffff    0 NONE
+>    1: 0x0000000090200000..0x00000000905fffff    0 NOMAP
+>    2: 0x0000000090600000..0x0000000092ffffff    0 NONE
+>    3: 0x0000000093000000..0x00000000973fffff    0 NOMAP
+>    4: 0x0000000097400000..0x00000000b71fffff    0 NONE
+>    5: 0x00000000c0000000..0x00000000dfffffff    0 NONE
+>    6: 0x00000000e2500000..0x00000000f87fffff    0 NONE
+>    7: 0x00000000f8800000..0x00000000fa7fffff    0 NOMAP
+>    8: 0x00000000fa800000..0x00000000fd3effff    0 NONE
+>    9: 0x00000000fd3f0000..0x00000000fd3fefff    0 NOMAP
+>   10: 0x00000000fd3ff000..0x00000000fd7fffff    0 NONE
+>   11: 0x00000000fd800000..0x00000000fd901fff    0 NOMAP
+>   12: 0x00000000fd902000..0x00000000fd909fff    0 NONE
+>   13: 0x00000000fd90a000..0x00000000fd90bfff    0 NOMAP
+>   14: 0x00000000fd90c000..0x00000000ffffffff    0 NONE
+>   15: 0x0000000880000000..0x0000000affffffff    0 NONE
+> 
+> Signed-off-by: Yuwei Guan <ssawgyw@gmail.com>
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn321/dcn321_fpu.c:556 dcn321_update_bw_bounding_box_fpu() warn: inconsistent indenting.
+Applied, thanks!
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5304
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- .../amd/display/dc/dml/dcn321/dcn321_fpu.c    | 242 +++++++++---------
- 1 file changed, 121 insertions(+), 121 deletions(-)
+> ---
+> v4:
+> - show string value for each memblock flag
+> ---
+>  mm/memblock.c | 24 ++++++++++++++++++++++--
+>  1 file changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 511d4783dcf1..10d0ddbeebc1 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2136,12 +2136,19 @@ void __init memblock_free_all(void)
+>  }
+>  
+>  #if defined(CONFIG_DEBUG_FS) && defined(CONFIG_ARCH_KEEP_MEMBLOCK)
+> +static const char * const flagname[] = {
+> +	[ilog2(MEMBLOCK_HOTPLUG)] = "HOTPLUG",
+> +	[ilog2(MEMBLOCK_MIRROR)] = "MIRROR",
+> +	[ilog2(MEMBLOCK_NOMAP)] = "NOMAP",
+> +	[ilog2(MEMBLOCK_DRIVER_MANAGED)] = "DRV_MNG",
+> +};
+>  
+>  static int memblock_debug_show(struct seq_file *m, void *private)
+>  {
+>  	struct memblock_type *type = m->private;
+>  	struct memblock_region *reg;
+> -	int i;
+> +	int i, j;
+> +	unsigned int count = ARRAY_SIZE(flagname);
+>  	phys_addr_t end;
+>  
+>  	for (i = 0; i < type->cnt; i++) {
+> @@ -2149,7 +2156,20 @@ static int memblock_debug_show(struct seq_file *m, void *private)
+>  		end = reg->base + reg->size - 1;
+>  
+>  		seq_printf(m, "%4d: ", i);
+> -		seq_printf(m, "%pa..%pa\n", &reg->base, &end);
+> +		seq_printf(m, "%pa..%pa ", &reg->base, &end);
+> +		seq_printf(m, "%4d ", memblock_get_region_node(reg));
+> +		if (reg->flags) {
+> +			for (j = 0; j < count; j++) {
+> +				if (reg->flags & (1U << j)) {
+> +					seq_printf(m, "%s\n", flagname[j]);
+> +					break;
+> +				}
+> +			}
+> +			if (j == count)
+> +				seq_printf(m, "%s\n", "UNKNOWN");
+> +		} else {
+> +			seq_printf(m, "%s\n", "NONE");
+> +		}
+>  	}
+>  	return 0;
+>  }
+> -- 
+> 2.34.1
+> 
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn321/dcn321_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn321/dcn321_fpu.c
-index ffd7c3c1b142..1aaff6f2d453 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn321/dcn321_fpu.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn321/dcn321_fpu.c
-@@ -553,148 +553,148 @@ void dcn321_update_bw_bounding_box_fpu(struct dc *dc, struct clk_bw_params *bw_p
- 	dc->dml.soc.dispclk_dppclk_vco_speed_mhz = dc->clk_mgr->dentist_vco_freq_khz / 1000.0;
- 
- 	/* Overrides Clock levelsfrom CLK Mgr table entries as reported by PM FW */
--		if (dc->debug.use_legacy_soc_bb_mechanism) {
--			unsigned int i = 0, j = 0, num_states = 0;
--
--			unsigned int dcfclk_mhz[DC__VOLTAGE_STATES] = {0};
--			unsigned int dram_speed_mts[DC__VOLTAGE_STATES] = {0};
--			unsigned int optimal_uclk_for_dcfclk_sta_targets[DC__VOLTAGE_STATES] = {0};
--			unsigned int optimal_dcfclk_for_uclk[DC__VOLTAGE_STATES] = {0};
--
--			unsigned int dcfclk_sta_targets[DC__VOLTAGE_STATES] = {615, 906, 1324, 1564};
--			unsigned int num_dcfclk_sta_targets = 4, num_uclk_states = 0;
--			unsigned int max_dcfclk_mhz = 0, max_dispclk_mhz = 0, max_dppclk_mhz = 0, max_phyclk_mhz = 0;
--
--			for (i = 0; i < MAX_NUM_DPM_LVL; i++) {
--				if (bw_params->clk_table.entries[i].dcfclk_mhz > max_dcfclk_mhz)
--					max_dcfclk_mhz = bw_params->clk_table.entries[i].dcfclk_mhz;
--				if (bw_params->clk_table.entries[i].dispclk_mhz > max_dispclk_mhz)
--					max_dispclk_mhz = bw_params->clk_table.entries[i].dispclk_mhz;
--				if (bw_params->clk_table.entries[i].dppclk_mhz > max_dppclk_mhz)
--					max_dppclk_mhz = bw_params->clk_table.entries[i].dppclk_mhz;
--				if (bw_params->clk_table.entries[i].phyclk_mhz > max_phyclk_mhz)
--					max_phyclk_mhz = bw_params->clk_table.entries[i].phyclk_mhz;
--			}
--			if (!max_dcfclk_mhz)
--				max_dcfclk_mhz = dcn3_21_soc.clock_limits[0].dcfclk_mhz;
--			if (!max_dispclk_mhz)
--				max_dispclk_mhz = dcn3_21_soc.clock_limits[0].dispclk_mhz;
--			if (!max_dppclk_mhz)
--				max_dppclk_mhz = dcn3_21_soc.clock_limits[0].dppclk_mhz;
--			if (!max_phyclk_mhz)
--				max_phyclk_mhz = dcn3_21_soc.clock_limits[0].phyclk_mhz;
--
--			if (max_dcfclk_mhz > dcfclk_sta_targets[num_dcfclk_sta_targets-1]) {
--				// If max DCFCLK is greater than the max DCFCLK STA target, insert into the DCFCLK STA target array
--				dcfclk_sta_targets[num_dcfclk_sta_targets] = max_dcfclk_mhz;
--				num_dcfclk_sta_targets++;
--			} else if (max_dcfclk_mhz < dcfclk_sta_targets[num_dcfclk_sta_targets-1]) {
--				// If max DCFCLK is less than the max DCFCLK STA target, cap values and remove duplicates
--				for (i = 0; i < num_dcfclk_sta_targets; i++) {
--					if (dcfclk_sta_targets[i] > max_dcfclk_mhz) {
--						dcfclk_sta_targets[i] = max_dcfclk_mhz;
--						break;
--					}
-+	if (dc->debug.use_legacy_soc_bb_mechanism) {
-+		unsigned int i = 0, j = 0, num_states = 0;
-+
-+		unsigned int dcfclk_mhz[DC__VOLTAGE_STATES] = {0};
-+		unsigned int dram_speed_mts[DC__VOLTAGE_STATES] = {0};
-+		unsigned int optimal_uclk_for_dcfclk_sta_targets[DC__VOLTAGE_STATES] = {0};
-+		unsigned int optimal_dcfclk_for_uclk[DC__VOLTAGE_STATES] = {0};
-+
-+		unsigned int dcfclk_sta_targets[DC__VOLTAGE_STATES] = {615, 906, 1324, 1564};
-+		unsigned int num_dcfclk_sta_targets = 4, num_uclk_states = 0;
-+		unsigned int max_dcfclk_mhz = 0, max_dispclk_mhz = 0, max_dppclk_mhz = 0, max_phyclk_mhz = 0;
-+
-+		for (i = 0; i < MAX_NUM_DPM_LVL; i++) {
-+			if (bw_params->clk_table.entries[i].dcfclk_mhz > max_dcfclk_mhz)
-+				max_dcfclk_mhz = bw_params->clk_table.entries[i].dcfclk_mhz;
-+			if (bw_params->clk_table.entries[i].dispclk_mhz > max_dispclk_mhz)
-+				max_dispclk_mhz = bw_params->clk_table.entries[i].dispclk_mhz;
-+			if (bw_params->clk_table.entries[i].dppclk_mhz > max_dppclk_mhz)
-+				max_dppclk_mhz = bw_params->clk_table.entries[i].dppclk_mhz;
-+			if (bw_params->clk_table.entries[i].phyclk_mhz > max_phyclk_mhz)
-+				max_phyclk_mhz = bw_params->clk_table.entries[i].phyclk_mhz;
-+		}
-+		if (!max_dcfclk_mhz)
-+			max_dcfclk_mhz = dcn3_21_soc.clock_limits[0].dcfclk_mhz;
-+		if (!max_dispclk_mhz)
-+			max_dispclk_mhz = dcn3_21_soc.clock_limits[0].dispclk_mhz;
-+		if (!max_dppclk_mhz)
-+			max_dppclk_mhz = dcn3_21_soc.clock_limits[0].dppclk_mhz;
-+		if (!max_phyclk_mhz)
-+			max_phyclk_mhz = dcn3_21_soc.clock_limits[0].phyclk_mhz;
-+
-+		if (max_dcfclk_mhz > dcfclk_sta_targets[num_dcfclk_sta_targets-1]) {
-+			// If max DCFCLK is greater than the max DCFCLK STA target, insert into the DCFCLK STA target array
-+			dcfclk_sta_targets[num_dcfclk_sta_targets] = max_dcfclk_mhz;
-+			num_dcfclk_sta_targets++;
-+		} else if (max_dcfclk_mhz < dcfclk_sta_targets[num_dcfclk_sta_targets-1]) {
-+			// If max DCFCLK is less than the max DCFCLK STA target, cap values and remove duplicates
-+			for (i = 0; i < num_dcfclk_sta_targets; i++) {
-+				if (dcfclk_sta_targets[i] > max_dcfclk_mhz) {
-+					dcfclk_sta_targets[i] = max_dcfclk_mhz;
-+					break;
- 				}
--				// Update size of array since we "removed" duplicates
--				num_dcfclk_sta_targets = i + 1;
- 			}
-+			// Update size of array since we "removed" duplicates
-+			num_dcfclk_sta_targets = i + 1;
-+		}
- 
--			num_uclk_states = bw_params->clk_table.num_entries;
-+		num_uclk_states = bw_params->clk_table.num_entries;
- 
--			// Calculate optimal dcfclk for each uclk
--			for (i = 0; i < num_uclk_states; i++) {
--				dcn321_get_optimal_dcfclk_fclk_for_uclk(bw_params->clk_table.entries[i].memclk_mhz * 16,
--						&optimal_dcfclk_for_uclk[i], NULL);
--				if (optimal_dcfclk_for_uclk[i] < bw_params->clk_table.entries[0].dcfclk_mhz) {
--					optimal_dcfclk_for_uclk[i] = bw_params->clk_table.entries[0].dcfclk_mhz;
--				}
-+		// Calculate optimal dcfclk for each uclk
-+		for (i = 0; i < num_uclk_states; i++) {
-+			dcn321_get_optimal_dcfclk_fclk_for_uclk(bw_params->clk_table.entries[i].memclk_mhz * 16,
-+					&optimal_dcfclk_for_uclk[i], NULL);
-+			if (optimal_dcfclk_for_uclk[i] < bw_params->clk_table.entries[0].dcfclk_mhz) {
-+				optimal_dcfclk_for_uclk[i] = bw_params->clk_table.entries[0].dcfclk_mhz;
- 			}
-+		}
- 
--			// Calculate optimal uclk for each dcfclk sta target
--			for (i = 0; i < num_dcfclk_sta_targets; i++) {
--				for (j = 0; j < num_uclk_states; j++) {
--					if (dcfclk_sta_targets[i] < optimal_dcfclk_for_uclk[j]) {
--						optimal_uclk_for_dcfclk_sta_targets[i] =
--								bw_params->clk_table.entries[j].memclk_mhz * 16;
--						break;
--					}
-+		// Calculate optimal uclk for each dcfclk sta target
-+		for (i = 0; i < num_dcfclk_sta_targets; i++) {
-+			for (j = 0; j < num_uclk_states; j++) {
-+				if (dcfclk_sta_targets[i] < optimal_dcfclk_for_uclk[j]) {
-+					optimal_uclk_for_dcfclk_sta_targets[i] =
-+							bw_params->clk_table.entries[j].memclk_mhz * 16;
-+					break;
- 				}
- 			}
-+		}
- 
--			i = 0;
--			j = 0;
--			// create the final dcfclk and uclk table
--			while (i < num_dcfclk_sta_targets && j < num_uclk_states && num_states < DC__VOLTAGE_STATES) {
--				if (dcfclk_sta_targets[i] < optimal_dcfclk_for_uclk[j] && i < num_dcfclk_sta_targets) {
--					dcfclk_mhz[num_states] = dcfclk_sta_targets[i];
--					dram_speed_mts[num_states++] = optimal_uclk_for_dcfclk_sta_targets[i++];
-+		i = 0;
-+		j = 0;
-+		// create the final dcfclk and uclk table
-+		while (i < num_dcfclk_sta_targets && j < num_uclk_states && num_states < DC__VOLTAGE_STATES) {
-+			if (dcfclk_sta_targets[i] < optimal_dcfclk_for_uclk[j] && i < num_dcfclk_sta_targets) {
-+				dcfclk_mhz[num_states] = dcfclk_sta_targets[i];
-+				dram_speed_mts[num_states++] = optimal_uclk_for_dcfclk_sta_targets[i++];
-+			} else {
-+				if (j < num_uclk_states && optimal_dcfclk_for_uclk[j] <= max_dcfclk_mhz) {
-+					dcfclk_mhz[num_states] = optimal_dcfclk_for_uclk[j];
-+					dram_speed_mts[num_states++] = bw_params->clk_table.entries[j++].memclk_mhz * 16;
- 				} else {
--					if (j < num_uclk_states && optimal_dcfclk_for_uclk[j] <= max_dcfclk_mhz) {
--						dcfclk_mhz[num_states] = optimal_dcfclk_for_uclk[j];
--						dram_speed_mts[num_states++] = bw_params->clk_table.entries[j++].memclk_mhz * 16;
--					} else {
--						j = num_uclk_states;
--					}
-+					j = num_uclk_states;
- 				}
- 			}
-+		}
- 
--			while (i < num_dcfclk_sta_targets && num_states < DC__VOLTAGE_STATES) {
--				dcfclk_mhz[num_states] = dcfclk_sta_targets[i];
--				dram_speed_mts[num_states++] = optimal_uclk_for_dcfclk_sta_targets[i++];
--			}
-+		while (i < num_dcfclk_sta_targets && num_states < DC__VOLTAGE_STATES) {
-+			dcfclk_mhz[num_states] = dcfclk_sta_targets[i];
-+			dram_speed_mts[num_states++] = optimal_uclk_for_dcfclk_sta_targets[i++];
-+		}
- 
--			while (j < num_uclk_states && num_states < DC__VOLTAGE_STATES &&
--					optimal_dcfclk_for_uclk[j] <= max_dcfclk_mhz) {
--				dcfclk_mhz[num_states] = optimal_dcfclk_for_uclk[j];
--				dram_speed_mts[num_states++] = bw_params->clk_table.entries[j++].memclk_mhz * 16;
--			}
-+		while (j < num_uclk_states && num_states < DC__VOLTAGE_STATES &&
-+				optimal_dcfclk_for_uclk[j] <= max_dcfclk_mhz) {
-+			dcfclk_mhz[num_states] = optimal_dcfclk_for_uclk[j];
-+			dram_speed_mts[num_states++] = bw_params->clk_table.entries[j++].memclk_mhz * 16;
-+		}
- 
--			dcn3_21_soc.num_states = num_states;
--			for (i = 0; i < dcn3_21_soc.num_states; i++) {
--				dcn3_21_soc.clock_limits[i].state = i;
--				dcn3_21_soc.clock_limits[i].dcfclk_mhz = dcfclk_mhz[i];
--				dcn3_21_soc.clock_limits[i].fabricclk_mhz = dcfclk_mhz[i];
--
--				/* Fill all states with max values of all these clocks */
--				dcn3_21_soc.clock_limits[i].dispclk_mhz = max_dispclk_mhz;
--				dcn3_21_soc.clock_limits[i].dppclk_mhz  = max_dppclk_mhz;
--				dcn3_21_soc.clock_limits[i].phyclk_mhz  = max_phyclk_mhz;
--				dcn3_21_soc.clock_limits[i].dscclk_mhz  = max_dispclk_mhz / 3;
--
--				/* Populate from bw_params for DTBCLK, SOCCLK */
--				if (i > 0) {
--					if (!bw_params->clk_table.entries[i].dtbclk_mhz) {
--						dcn3_21_soc.clock_limits[i].dtbclk_mhz  = dcn3_21_soc.clock_limits[i-1].dtbclk_mhz;
--					} else {
--						dcn3_21_soc.clock_limits[i].dtbclk_mhz  = bw_params->clk_table.entries[i].dtbclk_mhz;
--					}
--				} else if (bw_params->clk_table.entries[i].dtbclk_mhz) {
-+		dcn3_21_soc.num_states = num_states;
-+		for (i = 0; i < dcn3_21_soc.num_states; i++) {
-+			dcn3_21_soc.clock_limits[i].state = i;
-+			dcn3_21_soc.clock_limits[i].dcfclk_mhz = dcfclk_mhz[i];
-+			dcn3_21_soc.clock_limits[i].fabricclk_mhz = dcfclk_mhz[i];
-+
-+			/* Fill all states with max values of all these clocks */
-+			dcn3_21_soc.clock_limits[i].dispclk_mhz = max_dispclk_mhz;
-+			dcn3_21_soc.clock_limits[i].dppclk_mhz  = max_dppclk_mhz;
-+			dcn3_21_soc.clock_limits[i].phyclk_mhz  = max_phyclk_mhz;
-+			dcn3_21_soc.clock_limits[i].dscclk_mhz  = max_dispclk_mhz / 3;
-+
-+			/* Populate from bw_params for DTBCLK, SOCCLK */
-+			if (i > 0) {
-+				if (!bw_params->clk_table.entries[i].dtbclk_mhz) {
-+					dcn3_21_soc.clock_limits[i].dtbclk_mhz  = dcn3_21_soc.clock_limits[i-1].dtbclk_mhz;
-+				} else {
- 					dcn3_21_soc.clock_limits[i].dtbclk_mhz  = bw_params->clk_table.entries[i].dtbclk_mhz;
- 				}
-+			} else if (bw_params->clk_table.entries[i].dtbclk_mhz) {
-+				dcn3_21_soc.clock_limits[i].dtbclk_mhz  = bw_params->clk_table.entries[i].dtbclk_mhz;
-+			}
- 
--				if (!bw_params->clk_table.entries[i].socclk_mhz && i > 0)
--					dcn3_21_soc.clock_limits[i].socclk_mhz = dcn3_21_soc.clock_limits[i-1].socclk_mhz;
--				else
--					dcn3_21_soc.clock_limits[i].socclk_mhz = bw_params->clk_table.entries[i].socclk_mhz;
-+			if (!bw_params->clk_table.entries[i].socclk_mhz && i > 0)
-+				dcn3_21_soc.clock_limits[i].socclk_mhz = dcn3_21_soc.clock_limits[i-1].socclk_mhz;
-+			else
-+				dcn3_21_soc.clock_limits[i].socclk_mhz = bw_params->clk_table.entries[i].socclk_mhz;
- 
--				if (!dram_speed_mts[i] && i > 0)
--					dcn3_21_soc.clock_limits[i].dram_speed_mts = dcn3_21_soc.clock_limits[i-1].dram_speed_mts;
--				else
--					dcn3_21_soc.clock_limits[i].dram_speed_mts = dram_speed_mts[i];
-+			if (!dram_speed_mts[i] && i > 0)
-+				dcn3_21_soc.clock_limits[i].dram_speed_mts = dcn3_21_soc.clock_limits[i-1].dram_speed_mts;
-+			else
-+				dcn3_21_soc.clock_limits[i].dram_speed_mts = dram_speed_mts[i];
- 
--				/* These clocks cannot come from bw_params, always fill from dcn3_21_soc[0] */
--				/* PHYCLK_D18, PHYCLK_D32 */
--				dcn3_21_soc.clock_limits[i].phyclk_d18_mhz = dcn3_21_soc.clock_limits[0].phyclk_d18_mhz;
--				dcn3_21_soc.clock_limits[i].phyclk_d32_mhz = dcn3_21_soc.clock_limits[0].phyclk_d32_mhz;
--			}
--		} else {
--			build_synthetic_soc_states(bw_params, dcn3_21_soc.clock_limits, &dcn3_21_soc.num_states);
-+			/* These clocks cannot come from bw_params, always fill from dcn3_21_soc[0] */
-+			/* PHYCLK_D18, PHYCLK_D32 */
-+			dcn3_21_soc.clock_limits[i].phyclk_d18_mhz = dcn3_21_soc.clock_limits[0].phyclk_d18_mhz;
-+			dcn3_21_soc.clock_limits[i].phyclk_d32_mhz = dcn3_21_soc.clock_limits[0].phyclk_d32_mhz;
- 		}
-+	} else {
-+		build_synthetic_soc_states(bw_params, dcn3_21_soc.clock_limits, &dcn3_21_soc.num_states);
-+	}
- 
--		/* Re-init DML with updated bb */
--		dml_init_instance(&dc->dml, &dcn3_21_soc, &dcn3_21_ip, DML_PROJECT_DCN32);
--		if (dc->current_state)
--			dml_init_instance(&dc->current_state->bw_ctx.dml, &dcn3_21_soc, &dcn3_21_ip, DML_PROJECT_DCN32);
-+	/* Re-init DML with updated bb */
-+	dml_init_instance(&dc->dml, &dcn3_21_soc, &dcn3_21_ip, DML_PROJECT_DCN32);
-+	if (dc->current_state)
-+		dml_init_instance(&dc->current_state->bw_ctx.dml, &dcn3_21_soc, &dcn3_21_ip, DML_PROJECT_DCN32);
- }
- 
 -- 
-2.20.1.7.g153144c
-
+Sincerely yours,
+Mike.
