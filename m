@@ -2,75 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D13D70FAE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEFE70FAB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237684AbjEXPzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S236276AbjEXPq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbjEXPzU (ORCPT
+        with ESMTP id S235505AbjEXPqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:55:20 -0400
-X-Greylist: delayed 559 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 May 2023 08:55:02 PDT
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5F21A4;
-        Wed, 24 May 2023 08:55:01 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        Wed, 24 May 2023 11:46:55 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C21BE6A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:46:30 -0700 (PDT)
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 6DD7F28010365;
-        Wed, 24 May 2023 17:44:54 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 63A39261ABF; Wed, 24 May 2023 17:44:54 +0200 (CEST)
-Date:   Wed, 24 May 2023 17:44:54 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        linux-pm@vger.kernel.org, Iain Lane <iain@orangesquash.org.uk>
-Subject: Re: [PATCH v3] PCI: Don't assume root ports from > 2015 are power
- manageable
-Message-ID: <20230524154454.GA28455@wunner.de>
-References: <20230524152136.1033-1-mario.limonciello@amd.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 11BBB41BDF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684943138;
+        bh=92JsxtKc2doKzuIzI6aLPIX3GzuVF3Oem9Ak6r3By98=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Oy3mUJtsR8+daqdkE/eZzHg5GtrArvzXZSD1wf3sRtRff5lVcxrbz2iyIFQtBF4jW
+         vU1qslA5ZpVtSeNcxr6hTScry9QVUJltLo7awpa67Q8mjwRVvfXyINkvURd5aKkedm
+         LxrZN9cGORnnlFpxAHWwh1V7MDMdMcckZwdxNKPsUHe7x16BTCyrKosGZrj43uTYay
+         aH/oK+8BSMppKCIv1aQqEYcCpzgYq8PaiQuT9oX3BveCOvJZl+vtv4bqmsJDX3gChS
+         m3nfAGQsqCI9LYbQTgUEgNBxbDOeCCxfx5dl7kgE4vABU+w5Nai3HjYRpRNomwG6au
+         NjLnpJn/qo36g==
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-5655d99da53so26225357b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:45:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684943137; x=1687535137;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=92JsxtKc2doKzuIzI6aLPIX3GzuVF3Oem9Ak6r3By98=;
+        b=VqdsE1ifaaR+VgmmgufmIDpI9BGI+qRTIWGyVdN/Ak53JwnBbRAyercbYLXn5VpKeV
+         tAsVKNz2vb5px57aeBjT9V67NCSCs/BN2leUwo8mJxq54pGmptNwS8P5MoDwK6/juBcz
+         jjoaT03e1VNFFy1oTdBQGIT32sQ5RQJgC6hzFNGCcyh0brI22bPLdOss27A+ZkF8YiCB
+         qy8F33FtchvTHam3Pcq1ir3sjeEEZadyLHYtSQigqlausTUihcygPwvoZmnbrb/RRSHf
+         MkRPGH85xC1X7clzaZu/J2HuPyYU5ORIKGOw3zccMrpKX52iPIV50PqxvYmOxSfRCvmh
+         0pPQ==
+X-Gm-Message-State: AC+VfDyzGBHU1KeiEI4cgkGB5nLHEQmyyCUTHAWhVqEP1lkm0yfVn2K8
+        8JlgzA9UzTthyz7TOy1Knp1J+etGjKIdjQOcAYaOcdDwBkMd7g9dl54PILz5f/sQYWtyTsQxmiN
+        ocJmhC1xWQYT+MWmIDROabX8TtKsy8JrsD1TJbtttgZMzda1ynch7jixlmQ==
+X-Received: by 2002:a81:9a0e:0:b0:565:4c40:fc3 with SMTP id r14-20020a819a0e000000b005654c400fc3mr5833528ywg.23.1684943137037;
+        Wed, 24 May 2023 08:45:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4NCqrhc0yq/4yGhKiNRTK/xREKkd6tNR7bvv/mKO+Lk2sONFl/YAqyvoWKLnPhNWxGPsyLx7N9OEP4prvaTeQ=
+X-Received: by 2002:a81:9a0e:0:b0:565:4c40:fc3 with SMTP id
+ r14-20020a819a0e000000b005654c400fc3mr5833509ywg.23.1684943136808; Wed, 24
+ May 2023 08:45:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524152136.1033-1-mario.limonciello@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+ <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+ <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+ <20230523140844.5895d645@kernel.org> <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+ <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com> <20230524081933.44dc8bea@kernel.org>
+In-Reply-To: <20230524081933.44dc8bea@kernel.org>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Wed, 24 May 2023 17:45:25 +0200
+Message-ID: <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Luca Boccassi <bluca@debian.org>,
+        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 10:21:36AM -0500, Mario Limonciello wrote:
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -2976,6 +2976,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
->  
->  	switch (pci_pcie_type(bridge)) {
->  	case PCI_EXP_TYPE_ROOT_PORT:
-> +		if (!platform_pci_power_manageable(bridge))
-> +			return false;
-> +		fallthrough;
->  	case PCI_EXP_TYPE_UPSTREAM:
->  	case PCI_EXP_TYPE_DOWNSTREAM:
->  		if (pci_bridge_d3_disable)
+On Wed, May 24, 2023 at 5:19=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Wed, 24 May 2023 11:47:50 +0100 Luca Boccassi wrote:
+> > > I will send SO_PEERPIDFD as an independent patch too, because it
+> > > doesn't require this change with CONFIG_UNIX
+> > > and we can avoid waiting until CONFIG_UNIX change will be merged.
+> > > I've a feeling that the discussion around making CONFIG_UNIX  to be a
+> > > boolean won't be easy and fast ;-)
+> >
+> > Thank you, that sounds great to me, I can start using SO_PEERPIDFD
+> > independently of SCM_PIDFD, there's no hard dependency between the
+> > two.
+>
+> How about you put the UNIX -> bool patch at the end of the series,
+> (making it a 4 patch series) and if there's a discussion about it
+> I'll just skip it and apply the first 3 patches?
 
-This will exempt the Root Ports from pcie_port_pm=force.
-Not sure if that's desirable.
+Sure, I will do that!
 
-Thanks,
+>
+> In the (IMHO more likely) case that there isn't a discussion it saves
+> me from remembering to chase you to send that patch ;)
 
-Lukas
+Thanks a lot, Jakub!
+
+Kind regards,
+Alex
