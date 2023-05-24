@@ -2,153 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D2F70EEA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008C770EEB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239591AbjEXGzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S239690AbjEXG4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239887AbjEXGy6 (ORCPT
+        with ESMTP id S239212AbjEXG4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:54:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250DDE5B;
-        Tue, 23 May 2023 23:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8KBb13+iW5lHgISWlXzZrWpkxVTAvgdhmLhAgfS1JSE=; b=qNHrpBwvv/VP2p/XkyGUb2/5Hv
-        go0ooqBYhQhfBNfGjsZXwBrFRYAJgTsUxldrXbKszvEoWKSj6T5y+RxFRNR7F3eyX7RPhulT1tIXE
-        WlLvVgANXsbkGXACNMsQi9fG/rXawxmPc6n4mUMDr+FUGw+J8+tJsqgVNhGerf8BJZVy1OeFa0FfK
-        9AapODxcZR/zp+P14eRsp6Yw6PAMmqYznKEzyc/U6ayZQgr0V8HFoBLE7NjrSfuqVXz84/6643zhO
-        pGstaiKSy2Utlu2tW9o9ITjl3B855xR9FseGTnPcT5ZJvbtgRjacMdO13KIXLVHOlKGeiDnoPIdnx
-        cMjTt6Zw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1iNv-00CXY0-1w;
-        Wed, 24 May 2023 06:54:11 +0000
-Date:   Tue, 23 May 2023 23:54:11 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
-        nick.alcock@oracle.com
-Subject: Re: [PATCH v10 06/11] modpost: Add -b option for emitting built-in
- aliases
-Message-ID: <ZG20k5ZtAnlYQiQ2@bombadil.infradead.org>
-References: <20221219204619.2205248-1-allenwebb@google.com>
- <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-7-allenwebb@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-7-allenwebb@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 02:56:21 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB39BE71;
+        Tue, 23 May 2023 23:55:46 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QR25B1jLzz4f3kpy;
+        Wed, 24 May 2023 14:55:42 +0800 (CST)
+Received: from ubuntu1804.huawei.com (unknown [10.67.174.58])
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7PvtG1k22hiKA--.7544S4;
+        Wed, 24 May 2023 14:55:43 +0800 (CST)
+From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH -next v2] cgroup: Update out-of-date comment in cgroup_migrate()
+Date:   Wed, 24 May 2023 14:54:31 +0800
+Message-Id: <20230524065431.145434-1-xiujianfeng@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: gCh0CgCnD7PvtG1k22hiKA--.7544S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Wr43Cr1rWry3Jr1rtw43Wrg_yoW8Jry3pr
+        ykJ345K345u3Wqvw1UCas29ryfC3yFgF47t39xXwsayr13Jw1YgFy0ka13Zr1YvF4IkF47
+        tFWYva9YkFyqyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr
+        1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU189N3UUUUU==
+X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 02:00:25PM -0500, Allen Webb wrote:
-> This adds a command line option for writing the match-id based 
+Commit 674b745e22b3 ("cgroup: remove rcu_read_lock()/rcu_read_unlock()
+in critical section of spin_lock_irq()") has removed the rcu_read_lock,
+which makes the comment out-of-date, so update it.
 
-Can you explain in your commit log and in code what is "match-id" ?
-Do we not have this documeted anywhere perhaps where we can point to
-what it is?
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+v2: don't remove the comment, just update it.
+---
+ kernel/cgroup/cgroup.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-> built-in
-> aliases to a file. A future patch extends file2alias.c to support this
-> command.
-> 
-> The -b option accepts the output path as a parameter and requires
-> vmlinuz.o to be one of the input files for the aliases to be found.
-> 
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  scripts/mod/modpost.c | 30 ++++++++++++++++++++++++++++--
->  scripts/mod/modpost.h |  1 +
->  2 files changed, 29 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index efff8078e395..2e452aec0fc6 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2173,6 +2173,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
->  	write_buf(b, fname);
->  }
->  
-> +/* Write the builtin aliases to the specified file. */
-> +static void write_builtin(const char *fname)
-> +{
-> +	struct buffer buf = { };
-> +	struct module *mod;
-> +
-> +	list_for_each_entry(mod, &modules, list)
-> +		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
-> +
-> +	write_if_changed(&buf, fname);
-> +	free(buf.p);
-> +}
-> +
->  static void write_vmlinux_export_c_file(struct module *mod)
->  {
->  	struct buffer buf = { };
-> @@ -2329,13 +2342,23 @@ int main(int argc, char **argv)
->  {
->  	struct module *mod;
->  	char *missing_namespace_deps = NULL;
-> -	char *dump_write = NULL, *files_source = NULL;
-> +	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
->  	int opt;
->  	LIST_HEAD(dump_lists);
->  	struct dump_list *dl, *dl2;
->  
-> -	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-> +	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
->  		switch (opt) {
-> +		case 'b':
-> +			/*
-> +			 * Writes the match-id based built-in module aliases to
-> +			 * the specified path.
-> +			 *
-> +			 * vmlinuz.o needs to be one of the input files for the
-> +			 * aliases to be found.
-> +			 */
-> +			builtin_write = optarg;
-> +			break;
->  		case 'e':
->  			external_module = true;
->  			break;
-> @@ -2398,6 +2421,9 @@ int main(int argc, char **argv)
->  			write_mod_c_file(mod);
->  	}
->  
-> +	if (builtin_write)
-> +		write_builtin(builtin_write);
-> +
->  	if (missing_namespace_deps)
->  		write_namespace_deps_files(missing_namespace_deps);
->  
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index 34fe5fc0b02c..c55a6aeb46bf 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -123,6 +123,7 @@ struct module {
->  	bool has_init;
->  	bool has_cleanup;
->  	struct buffer dev_table_buf;
-> +	struct buffer modalias_buf;
->  	char	     srcversion[25];
->  	// Missing namespace dependencies
->  	struct list_head missing_namespaces;
-> -- 
-> 2.39.2
-> 
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index d8ba2c67910d..f10cef511ffa 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2872,9 +2872,11 @@ int cgroup_migrate(struct task_struct *leader, bool threadgroup,
+ 	struct task_struct *task;
+ 
+ 	/*
+-	 * Prevent freeing of tasks while we take a snapshot. Tasks that are
+-	 * already PF_EXITING could be freed from underneath us unless we
+-	 * take an rcu_read_lock.
++	 * We should take an rcu_read_lock to prevent freeing of tasks while
++	 * taking a snapshot, because tasks that are already PF_EXITING could
++	 * be freed when traversing all threads of leader. However rcu_read_lock
++	 * which disable preempt is implied by the spin_lock_irq, so no explicit
++	 * rcu call here.
+ 	 */
+ 	spin_lock_irq(&css_set_lock);
+ 	task = leader;
+-- 
+2.17.1
+
