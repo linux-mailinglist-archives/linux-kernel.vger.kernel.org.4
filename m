@@ -2,216 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A05710183
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F343D71018D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 01:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238671AbjEXXIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 19:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S237780AbjEXXLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 19:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236356AbjEXXI2 (ORCPT
+        with ESMTP id S236418AbjEXXLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 19:08:28 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25595A4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:08:27 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a950b982d4so63055ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:08:27 -0700 (PDT)
+        Wed, 24 May 2023 19:11:08 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6941A99
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:11:06 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d2467d640so1708677b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 16:11:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684969706; x=1687561706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7uIGf3DX/t1yVaRSBiF6g+nRghGOxxs2qgmm7TStiZI=;
-        b=pQrJjkly+JWvSS6WqrgX7WVhttD3oD0FFoWQv+S/8U7sVToiGsLNnF9FRRorNzzKQt
-         ga5G21bM9rOSj8ju6vs+UgU77HkWgoc6XFOkBJOQ8p/fbBWygnsmRgahJnflVUOsvq94
-         8ZQUR+3mEOD1JMflV0LxgIf3LKCu00Q+zfD/h2GUtIDbXGetUU+iXHvsNed+aX7G9CqM
-         0GrQdXHigVrfBoab2kGUkcu0L1j2ypPndAIkdTl7MZgSHfwLUL8LFRQpvfVi2UEBnQYm
-         nb1tRVb9MgmpKc6JVlPSX/sc2ResWe5XgSWqtnNj5Ti5rmUa/tncoMssQsKBEcVGR/25
-         af+w==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1684969866; x=1687561866;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pe7gaA9UsfRuwKM22JT9QpzO4MPDni9Xx35THIw0/Sc=;
+        b=nUdfLTJ9VXB4wv2uw4rTFXldJ6hEnnl/9n+CZ3JkG+aT0voqj3TrFZDAt2Q28c0THo
+         YuTu6F0JK3xReQo9yXuLvzzkW7tNgk6prvoCONpLoYmXY1Y4ecakBH1gWCVrDJ+SQpyX
+         UFtPcdm2Rg31k3hHkqztUBvjXqmUvL7y/O+HNbYDvmOixVWhoe6TzjT8bvdYVj6hn3G8
+         IGV2Et1NOv62l45AiIKSRhTuWJ+3xhb5DRJpW9N1ezgZeESSLDGqmvc31ujVFbFYvM7X
+         vNIHNigqhGdGFAWI5AEEFNMsBkR0bPjKtNWsj15aV3Oxz6XbI4uxvRF32GQPasV6ISns
+         T0gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684969706; x=1687561706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7uIGf3DX/t1yVaRSBiF6g+nRghGOxxs2qgmm7TStiZI=;
-        b=P8XwLgZ65S3I1JrUMTBh5WbhDEIieHtV9SBy7KxteBKsZUFDdcjHiodYOVEkPCWfrN
-         nC1EVKCw2SjR6m/2yNXIMMsYUMuyzcbLU67hYEDpFpo/jh0YFlZz1Bi9pcjo6mFCLbqJ
-         RUaJiei8DosD38D37tItazqTQkmiobOi5krGuuw/AkLVCl9Vn6GihOX3IXOkAS7UhvPq
-         eu0p6FJbv7koclUvPl2S1RmWDlOv1eSQPL5g0Tsi9OJTbvLQJTs3yrpeVmM4uI8SWaPD
-         moe5TPDKHdQ6O4nMpNRPQD6ntxX37pWukKuZCay7wyPn/1Z6FFq2zV1VUVmhSHKKI0Ie
-         TXfg==
-X-Gm-Message-State: AC+VfDwFKUiHGbt20wUeMjbup5URPn4NdttHA4TU8mY5TfKo8P3540qW
-        3pcKGIcbJlsDc/lIQd2/YnDg+/kqYjsemaMkZ3JCrw==
-X-Google-Smtp-Source: ACHHUZ63+Idbw/qt4T1qFTdyJfOJ0ruqx7xMAaVHR2RRTjlcbT6hGthEciYIg12Lx4T0cEZdAzOgYIooXEwjRHzh860=
-X-Received: by 2002:a17:902:e5c3:b0:1a6:6a2d:18f0 with SMTP id
- u3-20020a170902e5c300b001a66a2d18f0mr23477plf.9.1684969706417; Wed, 24 May
- 2023 16:08:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323072714.82289-1-likexu@tencent.com> <20230323072714.82289-5-likexu@tencent.com>
-In-Reply-To: <20230323072714.82289-5-likexu@tencent.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 24 May 2023 16:08:15 -0700
-Message-ID: <CALMp9eT1e0OB0sRkGu_EhuAa_B5wQUQ9KajEQvN3gg231Pqzaw@mail.gmail.com>
-Subject: Re: [PATCH 4/7] KVM: selftests: Test consistency of CPUID with num of
- Fixed counters
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684969866; x=1687561866;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pe7gaA9UsfRuwKM22JT9QpzO4MPDni9Xx35THIw0/Sc=;
+        b=WUk26OndCEE8jKAp622RFlo2x4m1NeafHINJv2E8vhJsiZYXPSzpXlNmdo0UB7X6Vz
+         vi6UgfWW0HOH2w/vNSqiIWkD3VDR7ucRENr4HJzusC+X0+SmfjsxVO00K3erpv0AuWq5
+         4Y6LESa+J2lwUNb4+40ZGKrfIvLIAAUZHvRP9REdzGbGrSLedvWmMFHgeRXyRzZwutlg
+         rSSaLeu2lDPuF2YtBgCMsb/9Oml2B1euC81RSxPLc8cG8gq3hedFdwdZFRk6t69S2kTG
+         JCv0s3K2LkxjyvJRjrT0JxTh2o2vnyeEFHtnt1j74YqYfVs9kvX7CVsgb1i64eaqEpVQ
+         Tvhg==
+X-Gm-Message-State: AC+VfDyVw+Te4A+DmPgGiKZQCgJjgoMDv9hv2FAqdN/tt7JZYLQtUAj9
+        phHoh0XTyV53Ie5hcQwVwEu56A==
+X-Google-Smtp-Source: ACHHUZ5obUwMpsIPazuOVWmOubniktGfHOyfscZDmvlWCHJd4LOz14T+fX5wTLTyVKpkDbu+dfUXGw==
+X-Received: by 2002:a05:6a20:728c:b0:ff:da37:ae9 with SMTP id o12-20020a056a20728c00b000ffda370ae9mr22151852pzk.53.1684969865718;
+        Wed, 24 May 2023 16:11:05 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id v4-20020a17090a458400b00246f9725ffcsm27113pjg.33.2023.05.24.16.11.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 16:11:05 -0700 (PDT)
+Date:   Wed, 24 May 2023 16:11:05 -0700 (PDT)
+X-Google-Original-Date: Wed, 24 May 2023 16:10:39 PDT (-0700)
+Subject:     Re: linux-next: Tree for May 15 (several RV64 build errors)
+In-Reply-To: <20230524-scalping-number-63ec10c1f7bf@spud>
+CC:     rdunlap@infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        alex@ghiti.fr, Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-29a35d51-8791-449e-96f6-a7faf77f3f36@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 12:28=E2=80=AFAM Like Xu <like.xu.linux@gmail.com> =
-wrote:
+On Wed, 24 May 2023 15:49:41 PDT (-0700), Conor Dooley wrote:
+> On Wed, May 24, 2023 at 03:41:15PM -0700, Randy Dunlap wrote:
+>> On 5/23/23 23:23, Arnd Bergmann wrote:
+>> > On Wed, May 24, 2023, at 03:29, Palmer Dabbelt wrote:
+>> >> On Tue, 23 May 2023 17:22:20 PDT (-0700), rdunlap@infradead.org wrote:
+>> >>> On 5/23/23 06:07, Alexandre Ghiti wrote:
+>> >>>> On 23/05/2023 04:28, Randy Dunlap wrote:
+>> >>>>> On 5/19/23 03:42, Alexandre Ghiti wrote:
+>> >>>>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
+>> >>>>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
+>> >>>>>>>
+>> >>>>>>> I'll check this one too which seems to be related to kernel/pi introduction.
+>> >>>>>>
+>> >>>>>> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
+>> >>>>> Does this mean exclude XIP_KERNEL or something else from randconfigs?
+>> >>>>
+>> >>>>
+>> >>>> I meant excluding XIP_KERNEL from randconfigs: it has very strict constraints regarding what can/can't be enabled then it needs human intervention to make sure the error above does not happen. So I would not bother testing this in randconfigs if possible.
+>> >>>
+>> >>> I can exclude it from my randconfig builds, but I don't know of a way to exclude it from randconfig builds in general (i.e., for everyone).
+>> >>
+>> >> Arnd had suggested a trick related to menus that would result in 
+>> >> randconfig never enabling some config.  It'd suggested for 
+>> >> CONFIG_NONPORTABLE, but we didn't use it because it'd reduce randconfig 
+>> >> coverage.
+>> >>
+>> >> Maybe we should add a CONFIG_VERYSPECIAL of some sort and hide things 
+>> >> like XIP behind it (maybe M-mode too)?
+>> > 
+>> > I usually add 'depends on !COMPILE_TEST', that excludes it from most
+>> > build bots.
+>> 
+>> XIP_KERNEL already has "depends on !COMPILE_TEST", since April of 2021.
 >
-> From: Jinrong Liang <cloudliang@tencent.com>
->
-> Add test to check if non-existent counters can be accessed in guest after
-> determining the number of Intel generic performance counters by CPUID.
-> Per SDM, fixed-function performance counter 'i' is supported if ECX[i] ||
-> (EDX[4:0] > i). KVM doesn't emulate more counters than it can support.
->
-> Co-developed-by: Like Xu <likexu@tencent.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> ---
->  .../selftests/kvm/x86_64/pmu_cpuid_test.c     | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c b/tools/=
-testing/selftests/kvm/x86_64/pmu_cpuid_test.c
-> index 50902187d2c9..c934144be287 100644
-> --- a/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
-> @@ -74,6 +74,22 @@ static uint8_t kvm_gp_ctrs_num(void)
->         return (kvm_entry->eax & GP_CTR_NUM_MASK) >> GP_CTR_NUM_OFS_BIT;
->  }
->
-> +static uint8_t kvm_fixed_ctrs_num(void)
-> +{
-> +       const struct kvm_cpuid_entry2 *kvm_entry;
-> +
-> +       kvm_entry =3D get_cpuid_entry(kvm_get_supported_cpuid(), 0xa, 0);
-> +       return kvm_entry->edx & FIXED_CTR_NUM_MASK;
-> +}
-> +
-> +static uint32_t kvm_fixed_ctrs_bitmask(void)
-> +{
-> +       const struct kvm_cpuid_entry2 *kvm_entry;
-> +
-> +       kvm_entry =3D get_cpuid_entry(kvm_get_supported_cpuid(), 0xa, 0);
-> +       return kvm_entry->ecx;
-> +}
-> +
->  static struct kvm_vcpu *new_vcpu(void *guest_code)
->  {
->         struct kvm_vm *vm;
-> @@ -230,6 +246,39 @@ static void test_oob_gp_counter_setup(struct kvm_vcp=
-u *vcpu, uint8_t eax_gp_num,
->         vm_install_exception_handler(vcpu->vm, GP_VECTOR, guest_gp_handle=
-r);
->  }
->
-> +static uint64_t test_oob_fixed_counter_setup(struct kvm_vcpu *vcpu,
-> +                                            uint8_t edx_fix_num,
-> +                                            uint32_t fixed_bitmask)
-> +{
-> +       struct kvm_cpuid_entry2 *entry;
-> +       uint32_t ctr_msr =3D MSR_CORE_PERF_FIXED_CTR0;
-> +       uint8_t idx =3D edx_fix_num;
-> +       bool is_supported =3D true;
-> +       uint64_t ret =3D 0xffffULL;
-> +
-> +       entry =3D vcpu_get_cpuid_entry(vcpu, 0xa);
-> +       entry->ecx =3D fixed_bitmask;
-> +       entry->edx =3D (entry->edx & ~FIXED_CTR_NUM_MASK) | edx_fix_num;
-> +       vcpu_set_cpuid(vcpu);
-> +
-> +       /* Per Intel SDM, FixCtr[i]_is_supported :=3D ECX[i] || (EDX[4:0]=
- > i). */
-> +       is_supported =3D (entry->ecx & BIT_ULL(idx) ||
-> +                       ((entry->edx & FIXED_CTR_NUM_MASK) > idx));
-> +
-> +       /* KVM doesn't emulate more fixed counters than it can support. *=
-/
-> +       if (idx >=3D kvm_fixed_ctrs_num())
-> +               is_supported =3D false;
-> +
-> +       if (!is_supported) {
-> +               vm_install_exception_handler(vcpu->vm, GP_VECTOR, guest_g=
-p_handler);
-> +               ret =3D GP_VECTOR;
-> +       }
-> +
-> +       vcpu_args_set(vcpu, 4, ctr_msr, ret, idx, 1);
-> +
-> +       return ret;
-> +}
-> +
->  static void intel_check_arch_event_is_unavl(uint8_t idx)
->  {
->         const char *msg =3D "Unavailable arch event is counting.";
+> Half of me wants to say just remove XIP_KERNEL entirely. Or make it
+> depend on BROKEN, since noone seems to actually test it and I don't
+> think we even know if it works right now?
 
-This test seems bogus to me. The event may not be available because it
-is inaccurate. That doesn't imply that the count will always be zero.
-
-> @@ -267,10 +316,23 @@ static void test_oob_gp_counter(uint8_t eax_gp_num,=
- uint64_t perf_cap)
->         free_vcpu(vcpu);
->  }
->
-> +static void intel_test_oob_fixed_ctr(uint8_t edx_fix_num, uint32_t fixed=
-_bitmask)
-> +{
-> +       const char *msg =3D "At least one unsupported Fixed counter is vi=
-sible.";
-
-This test seems bogus to me. Unsupported does not imply invisible.
-
-> +       struct kvm_vcpu *vcpu;
-> +       uint64_t ret;
-> +
-> +       vcpu =3D new_vcpu(guest_wr_and_rd_msrs);
-> +       ret =3D test_oob_fixed_counter_setup(vcpu, edx_fix_num, fixed_bit=
-mask);
-> +       run_vcpu(vcpu, msg, first_uc_arg_equals, (void *)ret);
-> +       free_vcpu(vcpu);
-> +}
-> +
->  static void intel_test_counters_num(void)
->  {
->         uint8_t kvm_gp_num =3D kvm_gp_ctrs_num();
->         unsigned int i;
-> +       uint32_t ecx;
->
->         TEST_REQUIRE(kvm_gp_num > 2);
->
-> @@ -289,6 +351,12 @@ static void intel_test_counters_num(void)
->                 /* KVM doesn't emulate more counters than it can support.=
- */
->                 test_oob_gp_counter(kvm_gp_num + 1, perf_caps[i]);
->         }
-> +
-> +       for (ecx =3D 0; ecx <=3D kvm_fixed_ctrs_bitmask() + 1; ecx++) {
-> +               intel_test_oob_fixed_ctr(0, ecx);
-> +               intel_test_oob_fixed_ctr(kvm_fixed_ctrs_num(), ecx);
-> +               intel_test_oob_fixed_ctr(kvm_fixed_ctrs_num() + 1, ecx);
-> +       }
->  }
->
->  static void intel_test_arch_events(void)
-> --
-> 2.40.0
->
+Ya, let's do it.  If it's broken and nobody has said anything but 
+randconfig, then probably nobody's using it.  Let's mark it as broken or 
+deprecated or whatever and then see if anyone complains.
