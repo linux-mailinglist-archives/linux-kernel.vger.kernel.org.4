@@ -2,139 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C352710045
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2151C710048
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 23:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbjEXV52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 17:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S234131AbjEXV7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 17:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjEXV50 (ORCPT
+        with ESMTP id S229652AbjEXV7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 17:57:26 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077CF187
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:57:25 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba86ec8047bso2177209276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:57:24 -0700 (PDT)
+        Wed, 24 May 2023 17:59:31 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11862119
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:59:30 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-255bd112757so246666a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 14:59:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684965444; x=1687557444;
+        d=gmail.com; s=20221208; t=1684965569; x=1687557569;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HnrQePs+guIncAtpR4LpewLTG9uJD1WVMzDg7x5+JnQ=;
-        b=MOJGgNeeZ2NTaZLOw5dLeQKOsSMdZuOUDLi4BpOvTiIWRhxlewpCkLWFm90AvCFDM0
-         dBbOiUgnwSF3tx2OCsfzW5pehrThLZTOsfw+byMilrUxH/Cj5v2axZNDxs+vrOsJ2N4v
-         IxXP53ZTgLR3muduWGVYPh1B5tWmAMwq4uWqW4WLkhKPpMI27Eee0C+v/cW+dzVTGCUZ
-         4A+99EiMuntUsoYNf+LzQB7aUOpYtEqfYo2C/g9I4lkOyTxkb7Zoy5dm+ieqK7BfUV0z
-         H7dMG4Is8HvC4rO8ie0Gg/xc9BXLT61Su2UirLdP/AoEm8mYapaDU29mprZAm7Yp+MSi
-         ymhg==
+        bh=ekGnm+ojmbb/fz8wYRstsminHdPrXuGm/8fgWUyPuhw=;
+        b=pykqwhY+ha3DQ4RES66QRd0SXwR8hR898iPiXoVOJhqVUf/p9Bdw+jbpkCHZFcq5FU
+         W4WjZ/mC8FIaEtcG2p+DytxElrp64iWpV+VMJiGhUesCQ3gx7MaH3Kw/7KU0oM86tXmd
+         SJu9J1BDXSYGj2qb8cS9rcWiQS5fQrfusIWyRvY9NCf2wnxePW7ja88MokGyZchF+xhr
+         8+GUpK0EGnrGBI62a1BxMxS4USuIoNLlSvtKhbLhSSaUarvsyUQAOiCqcjKGyR2gR7ol
+         YLZleSLztF3ULdZ/zXV7jRoTzMkhpjHNv5ieE3SNSx87ByHHhh0NaTuWWQmc2AOYJYi1
+         X7MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684965444; x=1687557444;
+        d=1e100.net; s=20221208; t=1684965569; x=1687557569;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HnrQePs+guIncAtpR4LpewLTG9uJD1WVMzDg7x5+JnQ=;
-        b=LgTGHw3heURsVdwkO3o5OVNpDQdS2v3e2/3rON7eqad0PLCAq66yTmuJojhxdJV+qf
-         7bwHaJiLmBbtj51QILt8F1AQTUp8osBPkDSZgiwBYnpBjtl6rfPgeHmZYmJ5zziTtBPa
-         4mWWSodPf6IER40sX0bp4XcCAd7vKlamqtCx5ddId89062gf42pab+Fr8/+tSi1N14AL
-         fRyHV9yJ7PPesX7zxUxyBxDmX/Fxv5g53NDop6wvTndAOqH1r9EzHwPp0eJDSwH1HJOP
-         ARGF3FQZnE2lzBOHW8g10kpe4KvKa8BJC5AWf6PJefLYuvsXDI/VqJM8GiFSYX9RMefs
-         NnAg==
-X-Gm-Message-State: AC+VfDwyC/gB7kWX2IraoBRlU4BJFqCb/h54v73TuQoAsMtYYfQVvwS8
-        lq14/8TeK+lUiEDWMF05KCv3fHFVFi/xw8XxRfSPoCOE+LjfNPY=
-X-Google-Smtp-Source: ACHHUZ6wwnRp26WVRb5bMlIwp5UO3NdT+DkO9QgYycHZoQNR88qp6I/wrFTyf14xwXWr/rrvRF6bugZWse9TXC6cuUE=
-X-Received: by 2002:a0d:e807:0:b0:55a:4ff4:f97d with SMTP id
- r7-20020a0de807000000b0055a4ff4f97dmr19964058ywe.48.1684965444190; Wed, 24
- May 2023 14:57:24 -0700 (PDT)
+        bh=ekGnm+ojmbb/fz8wYRstsminHdPrXuGm/8fgWUyPuhw=;
+        b=gBSMHHMDEKdmhHbDeC+SUrPEXK4qs/K2y5D2qP4wJU2M52jmdYzdJgDteEPYkEKSa8
+         Jr7DR5RL6MQaX/DEyScMA48jdDyvSmYXaJE2ceSqgVK0M+lAjp9Z2gA8hUtVyMykWT+9
+         zt1zdB1miYwEA10aI2R2PAA61RE0EIpD1mFZR4JOPTvfC2y+43mYWaoasrGu12710CeR
+         lq/mFAtsCDMraB/GmKMYPP+Du4CiVEYLnH8ZUTyHMs8mjC7B8Hmt0sV4GZXibXE9odJP
+         qbxgbfv/1M/v2lPXdsEj23u4Umk845SiR9SYtaHpNmxLMjphM72FP1qR9OZ7EHRm83fm
+         gk9g==
+X-Gm-Message-State: AC+VfDy7XAvJmX54tK29557BBm+D9Vgu8QkJsRyrVqf0XJkZk1B5CiLl
+        bOjDMhidftiuTdWlHug/R+I8m5sJuZnHQfZIDmE=
+X-Google-Smtp-Source: ACHHUZ66uapjDit/ygYxj7YqjsQL7g46/nJZtMfuAYZqTARwK1q/17VWytNuBvnYXegTkqOxlWu9p3y8qQ744nx8rjM=
+X-Received: by 2002:a17:90b:1e06:b0:253:6b3a:ab1e with SMTP id
+ pg6-20020a17090b1e0600b002536b3aab1emr738265pjb.6.1684965569410; Wed, 24 May
+ 2023 14:59:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000be039005fc540ed7@google.com> <00000000000018faf905fc6d9056@google.com>
- <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com> <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
-In-Reply-To: <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 24 May 2023 17:57:13 -0400
-Message-ID: <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
-Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <aef43be2-f877-b0f8-b41c-37f847d3a7b4@google.com> <CAHbLzkrf-Ft6geL0XKwGCY+Btn3cW=FMRjujQ48VJEnCfVki9g@mail.gmail.com>
+ <68dddbbb-bc3c-367d-798a-cbe2a69664@google.com>
+In-Reply-To: <68dddbbb-bc3c-367d-798a-cbe2a69664@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 24 May 2023 14:59:17 -0700
+Message-ID: <CAHbLzkrajUS78b8bM-E2ECmMQmZpOp_J5NYb_UELv3RSyqD9Dg@mail.gmail.com>
+Subject: Re: [PATCH 27/31] mm/khugepaged: allow pte_offset_map[_lock]() to fail
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:50=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Wed, 2023-05-24 at 11:11 -0400, Paul Moore wrote:
-> > On Wed, May 24, 2023 at 5:59=E2=80=AFAM syzbot
-> > <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
-> > > syzbot has bisected this issue to:
+On Tue, May 23, 2023 at 9:44=E2=80=AFPM Hugh Dickins <hughd@google.com> wro=
+te:
+>
+> On Mon, 22 May 2023, Yang Shi wrote:
+> > On Sun, May 21, 2023 at 10:24=E2=80=AFPM Hugh Dickins <hughd@google.com=
+> wrote:
 > > >
-> > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-> > > Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > Date:   Fri Mar 31 12:32:18 2023 +0000
+> > > __collapse_huge_page_swapin(): don't drop the map after every pte, it
+> > > only has to be dropped by do_swap_page(); give up if pte_offset_map()
+> > > fails; trace_mm_collapse_huge_page_swapin() at the end, with result;
+> > > fix comment on returned result; fix vmf.pgoff, though it's not used.
 > > >
-> > >     reiserfs: Add security prefix to xattr name in reiserfs_security_=
-write()
+> > > collapse_huge_page(): use pte_offset_map_lock() on the _pmd returned
+> > > from clearing; allow failure, but it should be impossible there.
+> > > hpage_collapse_scan_pmd() and collapse_pte_mapped_thp() allow for
+> > > pte_offset_map_lock() failure.
 > > >
-> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D11c396=
-39280000
-> > > start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.l=
-inux-..
-> > > git tree:       upstream
-> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D13c396=
-39280000
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D15c396392=
-80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7d8067683=
-055e3f5
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D0a684c06158=
-9dcc30e51
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1431279=
-1280000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12da86052=
-80000
-> > >
-> > > Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
-> > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in =
-reiserfs_security_write()")
-> > >
-> > > For information about bisection process see: https://goo.gl/tpsmEJ#bi=
-section
+> > > Signed-off-by: Hugh Dickins <hughd@google.com>
 > >
-> > Roberto, I think we need to resolve this somehow.  As I mentioned
-> > earlier, I don't believe this to be a fault in your patch, rather that
-> > patch simply triggered a situation that had not been present before,
-> > likely because the reiserfs code always failed when writing LSM
-> > xattrs.  Regardless, we still need to fix the deadlocks that sysbot
-> > has been reporting.
+> > Reviewed-by: Yang Shi <shy828301@gmail.com>
 >
-> Hi Paul
+> Thanks.
 >
-> ok, I will try.
+> >
+> > A nit below:
+> >
+> > > ---
+> > >  mm/khugepaged.c | 72 +++++++++++++++++++++++++++++++++--------------=
+--
+> > >  1 file changed, 49 insertions(+), 23 deletions(-)
+> > >
+> > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > > index 732f9ac393fc..49cfa7cdfe93 100644
+> > > --- a/mm/khugepaged.c
+> > > +++ b/mm/khugepaged.c
+> ...
+> > > @@ -1029,24 +1040,29 @@ static int __collapse_huge_page_swapin(struct=
+ mm_struct *mm,
+> > >                  * resulting in later failure.
+> > >                  */
+> > >                 if (ret & VM_FAULT_RETRY) {
+> > > -                       trace_mm_collapse_huge_page_swapin(mm, swappe=
+d_in, referenced, 0);
+> > >                         /* Likely, but not guaranteed, that page lock=
+ failed */
+> > > -                       return SCAN_PAGE_LOCK;
+> > > +                       result =3D SCAN_PAGE_LOCK;
+> >
+> > With per-VMA lock, this may not be true anymore, at least not true
+> > until per-VMA lock supports swap fault. It may be better to have a
+> > more general failure code, for example, SCAN_FAIL. But anyway you
+> > don't have to change it in your patch, I can send a follow-up patch
+> > once this series is landed on mm-unstable.
+>
+> Interesting point (I've not tried to wrap my head around what differences
+> per-VMA locking would make to old likelihoods here), and thank you for
+> deferring a change on it - appreciated.
+>
+> Something to beware of, if you do choose to change it: mostly those
+> SCAN codes (I'm not a fan of them!) are only for a tracepoint somewhere,
+> but madvise_collapse() and madvise_collapse_errno() take some of them
+> more seriously than others - I think SCAN_PAGE_LOCK ends up as an
+> EAGAIN (rightly), but SCAN_FAIL as an EINVAL (depends).
+>
+> But maybe there are layers in between which do not propagate the result
+> code, I didn't check.  All in all, not something I'd spend time on myself=
+.
 
-Thanks Roberto.  If it gets to be too challenging, let us know and we
-can look into safely disabling the LSM xattrs for reiserfs, I'll be
-shocked if anyone is successfully using LSM xattrs on reiserfs.
+Thanks, Hugh. A second look shows do_swap_page() should not return
+VM_FAULT_RETRY due to per-VMA lock since it depends on
+FAULT_FLAG_VMA_LOCK flag, but it is actually not set in khugepaged
+path. Khugepaged just has FAULT_FLAG_ALLOW_RETRY flag set. So we don't
+have to change anything.
 
-> > Has anyone dug into the reiserfs code to try and resolve the deadlock?
-> >  Considering the state of reiserfs, I'm guessing no one has, and I
-> > can't blame them; I personally would have a hard time justifying
-> > significant time spent on reiserfs at this point.  Unless someone has
-> > any better ideas, I'm wondering if we shouldn't just admit defeat with
-> > reiserfs and LSM xattrs and disable/remove the reiserfs LSM xattr
-> > support?  Given the bug that Roberto was fixing with the patch in
-> > question, it's unlikely this was working anyway.
-
---=20
-paul-moore.com
+>
+> Hugh
