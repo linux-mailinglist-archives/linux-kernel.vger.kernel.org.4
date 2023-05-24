@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C6470F15A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6180D70F15F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240087AbjEXIsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        id S240339AbjEXIsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239229AbjEXIsJ (ORCPT
+        with ESMTP id S239229AbjEXIsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:48:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3AA97
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684918041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CDhpK8+26Y4l0U6FHR/UwNa7pZESmpTlQt8dJppAy50=;
-        b=PWU6n06f07jGqHbgC1X3bSsaG0hcL/MQocaDiN8T2TXwa26kWJXtlMQqrVS8AYhnAJJUtg
-        Yp5xnPPvMo8kpCkaRZ/Q6XJ6pKlG/79SuGD3y2ILHNtKQhvj6q9STyg78F4pGrJoxKeqQQ
-        /LDghhJ42fKqGJrtpQqKo0XXoVLAYDA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-345-V0pDKK8rM169n3tqu65WWQ-1; Wed, 24 May 2023 04:47:14 -0400
-X-MC-Unique: V0pDKK8rM169n3tqu65WWQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 24 May 2023 04:48:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB9918D;
+        Wed, 24 May 2023 01:48:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08EC385A5AA;
-        Wed, 24 May 2023 08:47:14 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9CDA840CFD45;
-        Wed, 24 May 2023 08:47:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZG2m0PGztI2BZEn9@infradead.org>
-References: <ZG2m0PGztI2BZEn9@infradead.org> <ZGxfrOLZ4aN9/MvE@infradead.org> <20230522205744.2825689-1-dhowells@redhat.com> <3068545.1684872971@warthog.procyon.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: Extending page pinning into fs/direct-io.c
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8719663B0D;
+        Wed, 24 May 2023 08:48:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE400C433EF;
+        Wed, 24 May 2023 08:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684918100;
+        bh=KpjFPbvFSlimb9DAWRgMaEI2jvOp9NyA89GNu7e4BY0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=es/VwHVqsLur6WIp9leg0DG2PHZH82FJQLXe4vwZjMOwFkc4J4WljkFO1rk0ubqui
+         U2hskEoeGmhEmKnUV4wOsJuJZWTJzyN5fm6rPkktSGC1QHabMlAw3D32kCJlaEn0Sa
+         +5RxlOZRzyJvU8hugMxyI9Opi7c0RoPb+8gSoTVG6vEII12Z2f/ApSSlTcQc1EWUz5
+         8lFf/jbMnpfDuJVHWDWosMna5JC0nVYO65PK3XxtdoB4079MespPQNmj9gcaMDHoNg
+         Sr0eaLG7YbatumBu9CyCSNNpsftZ7wFEx1JkjtfnIc6bqfJMUMfTGnFJXi15T5BP51
+         +m/Bbvn61UwqQ==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5523bd97c64so3646863eaf.0;
+        Wed, 24 May 2023 01:48:19 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyApT2wUWhyAA4LcIt8tlxMVNVPaFBhTXr6awI5LHmzA+0p1KO2
+        P1qmgHHOZy3lsX5crun1Q5K3UERrr8fTQUPqLU4=
+X-Google-Smtp-Source: ACHHUZ4ZU7eeRyrC+6EILQ9/5BEfv306QfM/OBd/JWy60IPMJtRWvVOjhiiwd3pOr7t3XzKsWVm6EELrEZPuCunjp34=
+X-Received: by 2002:a4a:d24d:0:b0:541:87fe:5b75 with SMTP id
+ e13-20020a4ad24d000000b0054187fe5b75mr8497737oos.1.1684918099244; Wed, 24 May
+ 2023 01:48:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3215176.1684918030.1@warthog.procyon.org.uk>
+References: <20230511043852.25803-1-bagasdotme@gmail.com> <CAK7LNATY7EEWy6krs+J-XzXDzmuKQ4Ae4RrxEH6mX=SmcWCiPA@mail.gmail.com>
+ <1955521c-b3eb-d084-71c8-31db72753932@gmail.com>
+In-Reply-To: <1955521c-b3eb-d084-71c8-31db72753932@gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 24 May 2023 17:47:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATG=XFvUh-gLNpYyncU47-7mRahze3LBLzQKk=2zSZ02A@mail.gmail.com>
+Message-ID: <CAK7LNATG=XFvUh-gLNpYyncU47-7mRahze3LBLzQKk=2zSZ02A@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: module-signing: Mention
+ default_x509.genkey template
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Keyrings <keyrings@vger.kernel.org>,
+        Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 24 May 2023 09:47:10 +0100
-Message-ID: <3215177.1684918030@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+On Wed, May 24, 2023 at 11:40=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.co=
+m> wrote:
+>
+> On 5/11/23 23:55, Masahiro Yamada wrote:
+> > On Thu, May 11, 2023 at 1:39=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmail=
+.com> wrote:
+> >>
+> >> Commit f3a2ba44e93e2c ("certs: check-in the default x509 config file")
+> >> adds default x509 keypair config file template, but forgets to mention
+> >> it in kernel module signing documentation.
+> >
+> > What did it forget?
+> >
+>
+> I mean not mentioning the template.
 
-> > What I'd like to do is to make the GUP code not take a ref on the zero=
-_page
-> > if, say, FOLL_DONT_PIN_ZEROPAGE is passed in, and then make the bio cl=
-eanup
-> > code always ignore the zero_page.
-> =
 
-> I don't think that'll work, as we can't mix different pin vs get types
-> in a bio.  And that's really a good thing.
+f3a2ba44e93e2c192a872f2705fe66dbf39708d6
+is equivalent to what Makefile previously did.
 
-True - but I was thinking of just treating the zero_page specially and nev=
-er
-hold a pin or a ref on it.  It can be checked by address, e.g.:
 
-    static inline void bio_release_page(struct bio *bio, struct page *page=
-)
-    {
-	    if (page =3D=3D ZERO_PAGE(0))
-		    return;
-	    if (bio_flagged(bio, BIO_PAGE_PINNED))
-		    unpin_user_page(page);
-	    else if (bio_flagged(bio, BIO_PAGE_REFFED))
-		    put_page(page);
-    }
+You could manually copy certs/default_x509.genkey
+if you like, but you do not need to.
 
-I'm slightly concerned about the possibility of overflowing the refcount. =
- The
-problem is that it only takes about 2 million pins to do that (because the
-zero_page isn't a large folio) - which is within reach of userspace.  Crea=
-te
-an 8GiB anon mmap and do a bunch of async DIO writes from it.  You won't h=
-it
-ENOMEM because it will stick ~2 million pointers to zero_page into the pag=
-e
-tables.
 
-> > Something that I noticed is that the dio code seems to wangle to page =
-bits on
-> > the target pages for a DIO-read, which seems odd, but I'm not sure I f=
-ully
-> > understand the code yet.
-> =
 
-> I don't understand this sentence.
 
-I was looking at this:
 
-    static inline void dio_bio_submit(struct dio *dio, struct dio_submit *=
-sdio)
-    {
-    ...
-	    if (dio->is_async && dio_op =3D=3D REQ_OP_READ && dio->should_dirty)
-		    bio_set_pages_dirty(bio);
-    ...
-    }
+>
+> --
+> An old man doll... just what I always wanted! - Clara
+>
 
-but looking again, the lock is taken briefly and the dirty bit is set - wh=
-ich
-is reasonable.  However, should we be doing it before starting the I/O?
 
-David
-
+--=20
+Best Regards
+Masahiro Yamada
