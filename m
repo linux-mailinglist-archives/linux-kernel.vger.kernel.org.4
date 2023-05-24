@@ -2,88 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3544170EE8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7EC70EE8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239490AbjEXGwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S239082AbjEXGxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjEXGv7 (ORCPT
+        with ESMTP id S239799AbjEXGwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:51:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C7AE41;
-        Tue, 23 May 2023 23:51:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1375638E9;
-        Wed, 24 May 2023 06:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EED4C433D2;
-        Wed, 24 May 2023 06:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684911069;
-        bh=SQgChDcw6HLiiW8+cWOlKH9uJ8KGAUmFWwGc0/oyPJg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pmy70/a2keU9fBFBIbRvYksnt7YJ8/C1aPUk6iYC9AGC2xaG0JuUpdR+HkChT494N
-         oWedZdtvErqqabp2DhYJjB0wfnyf6R4GC0bNINaGmc4JifjeBx8ojnOyZNtwDbdQ8E
-         GAf+DWxagT9fhIINBfvpzq9ZBqxmvEPSJL7vhM5YGYzvzKFDtyvvuHtLfp+J7Cty8O
-         bjZWGGX2wsiLYpv//XMZFtH+mZ9kQxrMG1hUi1ARhBNcMHa6iYm+SEHoFj785Y5Jp0
-         mft6j3KD+UBezEuuZmknMqF389jBm43Uc4tD3XpHr/VtHpLRoruKtBm4ikpmvhzbhV
-         pFuE94THxBo9Q==
-Date:   Wed, 24 May 2023 12:21:05 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v11 0/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <ZG2z2U2Bm7kk7mqu@matsya>
-References: <20230520050854.73160-1-cai.huoqing@linux.dev>
+        Wed, 24 May 2023 02:52:21 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF1DE46;
+        Tue, 23 May 2023 23:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684911094; x=1716447094;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=shsR1rGUNM1EmQeYgf3G+zkshdxAvDAMpbx1W7WU4Gc=;
+  b=qImG/ic6v1owcJ3x2+ZCK460qsnKw8F+OYkAPisrWR4gRoIvmdc09kuJ
+   zsxE9B7ma5/58WH53nZLFpEwu/TGcoXZeukyg+f30XSK6Xg4t0ajBfGcf
+   vbPPL+2Y8dtKIKdQcKGFmT1glnnRoAqIEQP7zh4hgZKE4c//LZ8Bsik43
+   OVDHrTck6hvDtwZwVea578Ibuxf+XPNwWu8ocfaDjfkh/jEv87Hlf2Yc0
+   cOzWlTSnFyDGt8rVQVlK/4S9958AGxQx8lO7AFMcTvDxYvhcB1lb2tQ8R
+   xJ6fgdH/z6PT+YyHLMPUJ42LfJgmVUnKnj/k6NFIIzsKhwIxQTWwN6jhb
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="scan'208";a="217000363"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 May 2023 23:51:33 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 23 May 2023 23:51:33 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 23 May 2023 23:51:29 -0700
+Date:   Wed, 24 May 2023 07:51:07 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Justin Chen <justin.chen@broadcom.com>
+CC:     Conor Dooley <conor@kernel.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <bcm-kernel-feedback-list@broadcom.com>, <justinpopo6@gmail.com>,
+        <f.fainelli@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <opendmb@gmail.com>, <andrew@lunn.ch>, <hkallweit1@gmail.com>,
+        <linux@armlinux.org.uk>, <richardcochran@gmail.com>,
+        <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
+        <simon.horman@corigine.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+Subject: Re: [PATCH net-next v4 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
+ controller
+Message-ID: <20230524-scientist-enviable-7bfff99431cc@wendy>
+References: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
+ <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
+ <20230523-unfailing-twisting-9cb092b14f6f@spud>
+ <CALSSxFYMm5NYw41ERr1Ah-bejDgf9EdJd1dGNL9_sKVVmrpg3g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20230520050854.73160-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CALSSxFYMm5NYw41ERr1Ah-bejDgf9EdJd1dGNL9_sKVVmrpg3g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20-05-23, 13:08, Cai Huoqing wrote:
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
-> 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA,
-> so this patch add support for HDMA NATIVE mode.
-> 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.The same applies when
-> youhave multiple write channels.
-> 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are aligned to byte.
+Hey Justin,
+On Tue, May 23, 2023 at 04:27:12PM -0700, Justin Chen wrote:
+> On Tue, May 23, 2023 at 3:55=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
+rote:
+> > On Tue, May 23, 2023 at 02:53:43PM -0700, Justin Chen wrote:
+> >
+> > > +  compatible:
+> > > +    enum:
+> > > +      - brcm,asp-v2.0
+> > > +      - brcm,bcm72165-asp
+> > > +      - brcm,asp-v2.1
+> > > +      - brcm,bcm74165-asp
+> >
+> > > +        compatible =3D "brcm,bcm72165-asp", "brcm,asp-v2.0";
+> >
+> > You can't do this, as Rob's bot has pointed out. Please test the
+> > bindings :( You need one of these type of constructs:
+> >
+> > compatible:
+> >   oneOf:
+> >     - items:
+> >         - const: brcm,bcm72165-asp
+> >         - const: brcm,asp-v2.0
+> >     - items:
+> >         - const: brcm,bcm74165-asp
+> >         - const: brcm,asp-v2.1
+> >
+> > Although, given either you or Florian said there are likely to be
+> > multiple parts, going for an enum, rather than const for the brcm,bcm..
+> > entry will prevent some churn. Up to you.
+> >
+> Urg so close. Thought it was a trivial change, so didn't bother
+> retesting the binding. I think I have it right now...
+>=20
+>   compatible:
+>     oneOf:
+>       - items:
+>           - enum:
+>               - brcm,bcm72165-asp
+>               - brcm,bcm74165-asp
+>           - enum:
+>               - brcm,asp-v2.0
+>               - brcm,asp-v2.1
+>=20
+> Something like this look good?
 
-Applied, thanks
+I am still caffeine-less, but this implies that both of
+"brcm,bcm72165-asp", "brcm,asp-v2.0"
+_and_
+"brcm,bcm72165-asp", "brcm,asp-v2.1"
+are. I suspect that that is not the case, unless "brcm,asp-v2.0" is a
+valid fallback for "brcm,asp-v2.1"?
+The oneOf: also becomes redundant since you only have one items:.
 
--- 
-~Vinod
+> Will submit a v5 tomorrow.
+
+BTW, when you do, could you use the address listed in MAINTAINERS rather
+than the one you used for this version?
+
+Cheers,
+Conor.
