@@ -2,38 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903E670F5E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C45570F5EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjEXMGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S230027AbjEXMId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjEXMGv (ORCPT
+        with ESMTP id S229525AbjEXMIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:06:51 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4D195;
-        Wed, 24 May 2023 05:06:48 -0700 (PDT)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 2247A8472F;
-        Wed, 24 May 2023 14:06:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1684930006;
-        bh=2iFlhX4vNF+xS15redxx4hHKGfUKI/07uv78N8i0kRo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eCgnimGs9r6jIHikZdKRLsQPHC8HOpMZBXlz8LPw7qA8hXq+HRvutd+IA2rBfpNQO
-         zHh79uhH46qrjrN89Zu4ttrar/TYjmie4R3q+F7NDahFZJg9TyXEVJwmoBgxn1COlF
-         ORarW4Gcvbi78lrd4NTWO+jT7VQ7iSQgQt78PLhXWwg3GzdnKw0T5lOhDz7+ksR/qV
-         jRB3wEkTGepE1cJRfBsM7o/2WfQ99k7dGg5RWfld2BlHhHkT+7296/Ld5UnS87U8QM
-         3evPeZP0+zDz0DSpWQNiNH1MA79Z/V5h7j6SDbQISnDl2kLR0laL7KrmLkyi3qIKme
-         2zeWFDOaApJew==
-Date:   Wed, 24 May 2023 14:06:36 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+        Wed, 24 May 2023 08:08:30 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2304E135;
+        Wed, 24 May 2023 05:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Xf1YvtJ7TRchA12FbJ7TofxVs1riTDKRUCiMHm9yH28=; b=xS24z8dS5s7Ua2iR3VtLQF93c8
+        j71ah6GyBTetUVcQwO45zu2qwTUwaEGbIzOItL5IYQ6tR87VzTlbvPKhxyKc42b4JQ4G7dklcStZA
+        GNzmvB59EofcfOHEECAgLvbDWNrmqJrOMBmF6O9lmE5MvcZEz93BybB9aIoehPe0mmnt+MawTER1b
+        migEtx3dlizUFK8N1ED5CAOMzxCsybAZM6wmy+J0ByvOgjeLeTwAcimaMX3I+qrO13mHrEoePam0a
+        pMGZXRmVI+JGcJF52/ulfFDs+g8eEzz0uodnGalspgV+9Do67K7A5qbkk0jTrN/G+oM8GrmQGAPa5
+        kdMbopRA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59850)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q1nHw-0002FY-6v; Wed, 24 May 2023 13:08:20 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q1nHt-0001bK-76; Wed, 24 May 2023 13:08:17 +0100
+Date:   Wed, 24 May 2023 13:08:17 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Lukasz Majewski <lukma@denx.de>
 Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -44,21 +48,19 @@ Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v7 1/3] dsa: marvell: Define .set_max_frame_size()
  function for mv88e6250 SoC family
-Message-ID: <20230524140636.0cd31b13@wsk>
-In-Reply-To: <ZGzRE48DchoclbBl@shell.armlinux.org.uk>
+Message-ID: <ZG3+MT29vcRfmuC1@shell.armlinux.org.uk>
 References: <20230523142912.2086985-1-lukma@denx.de>
-        <20230523142912.2086985-2-lukma@denx.de>
-        <ZGzRE48DchoclbBl@shell.armlinux.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <20230523142912.2086985-2-lukma@denx.de>
+ <ZGzRE48DchoclbBl@shell.armlinux.org.uk>
+ <20230524140636.0cd31b13@wsk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MSbrG7CxauOY+Z1b8Ypc4Ka";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524140636.0cd31b13@wsk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,42 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MSbrG7CxauOY+Z1b8Ypc4Ka
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, May 24, 2023 at 02:06:36PM +0200, Lukasz Majewski wrote:
+> Hi Russell,
+> 
+> > Also, subject line should be "net: dsa: ..."
+> > 
+> 
+> Ok, I will correct that subject line.
 
-Hi Russell,
+Also, please use "mv88e6xxx" rather than "marvell" - consistency in the
+subject lines, particularly when referring to a part of the kernel tree
+is desirable.
 
-> Also, subject line should be "net: dsa: ..."
->=20
-
-Ok, I will correct that subject line.
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/MSbrG7CxauOY+Z1b8Ypc4Ka
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmRt/cwACgkQAR8vZIA0
-zr3hfwf+Je/DzQMi+GgW2qUv0ousX731gyC5TBznkPGI4IC2MnaIYHlFcUSN3c81
-sdg4EF9jVlTzofoYV1nRrXw0gxx7CV4ooxXLemBqvzgui2AZWvZzFH5Iy7XUn/nJ
-WpA1Xh2N81J2cyKyiTObqv+6i2BtW1yXbIyz/1EsXQ4FXsaL0QfOscEnJ7CZyUWA
-Ll9vaZvFEB2kalOAwSsMPXRpClILHiKHYpUyl40x8LecEO6y9clH9Jmygxx5O/w1
-W9qGATsrhFk+zWSspNJ7jkte7nPf79PLndCm/d/QqjJY5ePexiLSz1bG8Eztiqo+
-DBh6KYpPuQKh+b9RAd3OIo4fwbiRyA==
-=BFPP
------END PGP SIGNATURE-----
-
---Sig_/MSbrG7CxauOY+Z1b8Ypc4Ka--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
