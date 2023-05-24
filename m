@@ -2,115 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4746770F415
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0005070F3FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbjEXKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S233288AbjEXKTl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 06:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbjEXKYA (ORCPT
+        with ESMTP id S232495AbjEXKSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:24:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3065011D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:23:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C39E2223D9;
-        Wed, 24 May 2023 10:23:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1684923837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=hliaaV35ugS9mBcv4FyggOLg0wQ/iiY9Q3rhXXLm7AY=;
-        b=OnzsDya3ECMF2LW6Tu/DQER+kYAv7897Jlj7xXn2quQ6zFhHc52EY2t73zWroFdhxnRlS8
-        T0FQQgynmCyjp6WmPTUgows5xs+X177KlarU2SuH+TM+byVtXWtgxvH8lpKr9tMnUs4Efg
-        /phot2QbYeGI56UFHOBRcLzZLJxv7Zs=
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 1B9BA2C141;
-        Wed, 24 May 2023 10:23:57 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id DE97ADA7D7; Wed, 24 May 2023 12:17:50 +0200 (CEST)
-From:   David Sterba <dsterba@suse.com>
-To:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH] mm/slab: add new flag SLAB_NO_MERGE to avoid merging per slab
-Date:   Wed, 24 May 2023 12:17:48 +0200
-Message-Id: <20230524101748.30714-1-dsterba@suse.com>
-X-Mailer: git-send-email 2.40.0
+        Wed, 24 May 2023 06:18:35 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98973E6C;
+        Wed, 24 May 2023 03:18:08 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96f72e6925cso15689566b.1;
+        Wed, 24 May 2023 03:18:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684923487; x=1687515487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kIbASmk4FtEgWrqVYhKPUtwtIiST0CQZcy/ybdN1tZk=;
+        b=Y6910eTfj9aEfs0Ls+yYeG2938rtzbqHLvbCJwGed9VjTHpm0pNPNWN3kAm0mwMc+b
+         IBmm0W5sFUnavvcfTQ8yPsQ4Qpf39GpI++djl80kejHmV74Md+NFd1oBrDzKq4GISALx
+         ntwsnDfVDzYKech88Yx9Q1g5o1hdvL7IMIrpLVeoBLTzCtOAhklRy7/s6HaTiItc8P+r
+         qeIdFtRmhqjeAvASDvIf5XHa49ISrZXFxn97rjXEX0taMnjixEKNgxpiURZO9pSMPwVp
+         VrjasSiQaHF05109BgO4J7nC8Q61tM1z67A29KjwvElQqCAJc2xRiU4oFKbK1NIxGPc6
+         PXgg==
+X-Gm-Message-State: AC+VfDzLP7xNa/wS7iPWOdP6QLIOFf5EKqnl8kuxAqadzsVJmbjbDThr
+        l4rDkQ/TmwnuoRz+RUuGzF5J4Xn4EzpMDpEtMnQ=
+X-Google-Smtp-Source: ACHHUZ6MfeW4Iz0iuqbb/1bCIMVmiJssD4zE344ftV+J1YfKEI/cSISP7O/SQjiOiT3Mf9B/3DqQuKn/DFk7ERvm5zc=
+X-Received: by 2002:a17:906:77c5:b0:966:1f60:fd32 with SMTP id
+ m5-20020a17090677c500b009661f60fd32mr1471924ejn.6.1684923486802; Wed, 24 May
+ 2023 03:18:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <ZG0jhvzAZnfscSeC@bhelgaas> <654d2a59-9836-cc6d-c521-6835d725284d@amd.com>
+In-Reply-To: <654d2a59-9836-cc6d-c521-6835d725284d@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 May 2023 12:17:53 +0200
+Message-ID: <CAJZ5v0gTWJWR=cO+DXD15UW-CcCMaGRxxX11L8UWLm61w6gvbw@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: Don't assume root ports from > 2015 are power manageable
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        Iain Lane <iain@orangesquash.org.uk>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a flag that allows to disable merging per slab. This can be used for
-more fine grained control over the caches or for debugging builds where
-separate slabs can verify that no objects leak.
+On Tue, May 23, 2023 at 11:30 PM Limonciello, Mario
+<mario.limonciello@amd.com> wrote:
+>
+>
+> On 5/23/2023 3:35 PM, Bjorn Helgaas wrote:
+> > [+cc Rafael, Lukas, linux-pm]
+> >
+> > On Wed, May 17, 2023 at 10:08:27AM -0500, Mario Limonciello wrote:
+> >> Using an XHCI device to wakeup the system from s2idle fails when
+> >> that XHCI device is connected to a USB-C port for an AMD USB4
+> >> router.
+> > Are XHCI, USB-C, and the AMD USB4 router just examples?
+>
+> They're very specific to this case.  If XHCI
+> keyboard/mouse is connected to a type-C port that is
+> not connected to AMD USB4 router this issue doesn't occur.
+>
+> > I assume the
+> > same issue could happen with non-XHCI and non-AMD devices, too?
+> Based on what's wrong with Linux and fixed by this patch,
+> yes this *can* happen to any vendor that the root port doesn't
+> support waking from for D3 but Linux uses it anyway.
+> >
+> > I assume the problem has something to do with PME_Support and some
+> > device being put in a power state where it cannot generate or forward
+> > PME messages?  I think the PCIe protocol details would be helpful
+> > here.
+>
+> No; it's specific to an internal sequence in the SoC.
+>
+> If the problematic root port is in D3 during s0i3 this
+> problematic sequence happens.  If the root port is in D0
+> then it doesn't.
+>
+>  From discussion with others in AMD that's at least one
+> reason why the firmware doesn't advertise any power management
+> on this root port and why Linux shouldn't be using it.
+>
+> >> Comparing registers between Linux and Windows 11 this behavior to put root
+> >> ports into D3 at suspend is unique to Linux.  On an affected system
+> >> Windows does not put the root ports into D3 over Modern Standby.
+> >>
+> >> Windows doesn't put the root ports into D3 because root ports are not
+> >> power manageable; they're missing _PRW and _S0W.
+> > platform_pci_power_manageable() tests adev->flags.power_manageable,
+> > which is set by acpi_bus_get_power_flags() when a device has _PS0 or
+> > _PR0.
+> >
+> > So I don't know what's relevant out of _PRW, _S0W, _PS0, _PR0, but
+> > this sentence doesn't seem to match the code.
+>
+> The firmware doesn't have _PS0 or _PR0 either for this root
+> port.
+>
+> >> Linux shouldn't be assuming they support D3 just because they're newer
+> >> than 2015, the ports should also be deemed power manageable.
+> >> Add an extra check for this to ensure D3 isn't selected for such machines.
+> > Is this talking about D3hot or D3cold or both?  If we can make this
+> > explicit, it will help me out.  It's probably obvious to power
+> > experts, but I'm not one.
+> Both.
+> >> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> >> Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> >> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> >> ---
+> >>   drivers/pci/pci.c | 3 +++
+> >>   1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> >> index 5ede93222bc1..3fe27aef09e6 100644
+> >> --- a/drivers/pci/pci.c
+> >> +++ b/drivers/pci/pci.c
+> >> @@ -3010,6 +3010,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+> >>              if (dmi_check_system(bridge_d3_blacklist))
+> >>                      return false;
+> >>
+> >> +            if (!platform_pci_power_manageable(bridge))
+> >> +                    return false;
+> >> +
 
-The slab_nomerge boot option is too coarse and would need to be enabled
-on all testing hosts. There are some other ways how to disable merging,
-e.g. a slab constructor but this disables poisoning besides that it adds
-additional overhead. Other flags are internal and may have other
-semantics.
+This goes too far, because it causes all ports, not just root ports.
 
-A concrete example what motivates the flag. During 'btrfs balance' slab
-top reported huge increase in caches like
+If the intention is to address a problem with a root port, then the
+change in behavior should be limited to root ports.
 
-  1330095 1330095 100%    0.10K  34105       39    136420K Acpi-ParseExt
-  1734684 1734684 100%    0.14K  61953       28    247812K pid_namespace
-  8244036 6873075  83%    0.11K 229001       36    916004K khugepaged_mm_slot
+And yes, you can argue that for root ports, specifically, power
+management without firmware support is rather pointless if not
+harmful.
 
-which was confusing and that it's because of slab merging was not the
-first idea.  After rebooting with slab_nomerge all the caches were from
-btrfs_ namespace as expected.
+> >>              /*
+> >>               * It should be safe to put PCIe ports from 2015 or newer
+> >>               * to D3.
+> >> --
+> >> 2.34.1
+> Something that this patch makes me wonder is if the original
+> heuristic was actually correct.
 
-Signed-off-by: David Sterba <dsterba@suse.com>
----
- include/linux/slab.h | 3 +++
- mm/slab_common.c     | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Do you mean the cutoff date?
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 6b3e155b70bf..06b94dfbce65 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -106,6 +106,9 @@
- /* Avoid kmemleak tracing */
- #define SLAB_NOLEAKTRACE	((slab_flags_t __force)0x00800000U)
- 
-+/* Don't merge slab */
-+#define SLAB_NO_MERGE		((slab_flags_t __force)0x01000000U)
-+
- /* Fault injection mark */
- #ifdef CONFIG_FAILSLAB
- # define SLAB_FAILSLAB		((slab_flags_t __force)0x02000000U)
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 607249785c07..0e0a617eae7d 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -47,7 +47,7 @@ static DECLARE_WORK(slab_caches_to_rcu_destroy_work,
-  */
- #define SLAB_NEVER_MERGE (SLAB_RED_ZONE | SLAB_POISON | SLAB_STORE_USER | \
- 		SLAB_TRACE | SLAB_TYPESAFE_BY_RCU | SLAB_NOLEAKTRACE | \
--		SLAB_FAILSLAB | kasan_never_merge())
-+		SLAB_FAILSLAB | SLAB_NO_MERGE | kasan_never_merge())
- 
- #define SLAB_MERGE_SAME (SLAB_RECLAIM_ACCOUNT | SLAB_CACHE_DMA | \
- 			 SLAB_CACHE_DMA32 | SLAB_ACCOUNT)
--- 
-2.40.0
+> Did the PCIe ports from "older" machine have everything needed
+> to let them go to D3?
+>
+> Or would this change also let the heuristic be dropped?
 
+For root ports - probably.  In general - not at all.
