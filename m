@@ -2,162 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425C17100EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15267100ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237783AbjEXWZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S238039AbjEXWZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbjEXWZe (ORCPT
+        with ESMTP id S237843AbjEXWZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:25:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFBB99;
-        Wed, 24 May 2023 15:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6a4TWuzTGi7+tMMLrCXx2xS2HLm+fpIBXBWX9SQFhJc=; b=Olg5NsAiR4MXUKxEfN0JWQ26G+
-        48QUUb0p3dP2AO5RET1yB+OlmxpPgfW/OAuL8L3TmcLxGehBJ8zrOmr2kBjQvXnIDe74EGIXQUw5V
-        jrolzbG8yKU05ZkW5mpKw/LmaGIzjIW2osv7EnQcuMT1PVUpROY1wInr2AXsx/P1CtXqq68pLnhwc
-        o//oJNGyzcS02XIm8oZ0EkYqFxmeJvu+ZYfriDV2Rx6DKfxLwq6Z2WZASZL/SOiLmZyzD7t1ZY8rR
-        AcKIKrMHyGez7UPTrzHiDlh7DZpdMV2McGOt3pus8tAT+JlDrTHSf6mbJJPR2Ulm/XYS7au9Vkv2O
-        3mANUUxw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1wsv-00EnXL-1n;
-        Wed, 24 May 2023 22:23:09 +0000
-Date:   Wed, 24 May 2023 15:23:09 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>,
-        Daniel Gomez <da.gomez@samsung.com>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/17] block: open code __generic_file_write_iter for
- blkdev writes
-Message-ID: <ZG6OTWckNlz+P+mo@bombadil.infradead.org>
-References: <20230424054926.26927-1-hch@lst.de>
- <20230424054926.26927-15-hch@lst.de>
+        Wed, 24 May 2023 18:25:40 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F59E5A;
+        Wed, 24 May 2023 15:25:12 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d5b4c3ffeso1135388b3a.2;
+        Wed, 24 May 2023 15:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684966995; x=1687558995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8Ps4++BD4n2hLwrgjdjqi8hVhoVdzFMxyoqft8e+OG8=;
+        b=BxSoVxn1ynWjBrokKf8e2fM0dA5n50KyomGLR6Vb0G9LzB6NAEHYiFrT4g5TK2m6UL
+         oedNlWCgSX62iIQofjo1qmkaElTaq6b5I6kq6gGdjZXZ6K/+36AhJJbdkGXJD7iQffAh
+         McYJRjGRXeot0dRQzR3QWFJChJTGtNL0cCeLIM2ZM8Llf8ZlWQ3zIIi4hAAbHYtusfHE
+         qlumgkbFb1g3kUL/n1jwjxgRG+iyDv0MUW7EU7Kpq/QGyKc0U7Y+1x5IejkhicHrp3Md
+         TJLsGeLA+SCSNzpsj6GBh7jTyV4qBGQxUAh1gIJWUMLhW6bFwEU6srNqAr0MaVT9FIJr
+         e5pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684966995; x=1687558995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8Ps4++BD4n2hLwrgjdjqi8hVhoVdzFMxyoqft8e+OG8=;
+        b=PJatAMBXnrEW1Qj8lzN1B3AlBNOBpqkJoJ6kB741Ag/2d5Tl8e5xJfRrQd4NK9qEjA
+         s2B70DDYYzgvSqLiYPCRMIQtZyMB0bVmkUcfpM6chiYcQJLp6jWMRZa1dn6Hp6N1cTBs
+         1V4eVZ9fECadULL7L72yXJ14g/30agkBtih1Q7zGG8N+umqJi89jH0D4xqO/JB2NVNlA
+         Fff9IGMWLPPVToIBXVP50IqSj6p0uVW4Uh9ALrNVypUSjxkLYPn6ZwTCdBKHaXIM/D/q
+         DNsX1AsySRClqQbtxlYNQO7poXfHfH4cJNv/UlkKnjLmeNAT1HKltfWa3lKogSHXJe8U
+         7W4w==
+X-Gm-Message-State: AC+VfDzPTrkC9/5GUawNdqiOCgEwoS0WIofhIQjB4AyYMvEvs/AOYU17
+        MlUoUXE371VSDUp7xpsp4Sx7FwVVMBs=
+X-Google-Smtp-Source: ACHHUZ5Enbnh2fdhfla+lUXmQNVArh7/Bqso/Qp+N2hROwoFLV+PVVmFtiabhmRYaekl8gqM/3a4jw==
+X-Received: by 2002:a05:6a00:2352:b0:64f:40bc:74f3 with SMTP id j18-20020a056a00235200b0064f40bc74f3mr5277927pfj.13.1684966995101;
+        Wed, 24 May 2023 15:23:15 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:be57])
+        by smtp.gmail.com with ESMTPSA id t2-20020aa79382000000b0064d1d8fd24asm7912810pfe.60.2023.05.24.15.23.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 15:23:14 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 24 May 2023 12:23:13 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next v2] cgroup: Update out-of-date comment in
+ cgroup_migrate()
+Message-ID: <ZG6OURkhj4uQUTCo@slm.duckdns.org>
+References: <20230524065431.145434-1-xiujianfeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424054926.26927-15-hch@lst.de>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230524065431.145434-1-xiujianfeng@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 07:49:23AM +0200, Christoph Hellwig wrote:
-> Open code __generic_file_write_iter to remove the indirect call into
-> ->direct_IO and to prepare using the iomap based write code.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  block/fops.c | 46 ++++++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 44 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/fops.c b/block/fops.c
-> index b670aa7c5bb745..fd510b6142bd57 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -508,6 +508,29 @@ static int blkdev_close(struct inode *inode, struct file *filp)
->  	return 0;
->  }
->  
-> +static ssize_t
-> +blkdev_direct_write(struct kiocb *iocb, struct iov_iter *from)
-> +{
-> +	size_t count = iov_iter_count(from);
-> +	ssize_t written;
-> +
-> +	written = kiocb_invalidate_pages(iocb, count);
-> +	if (written) {
-> +		if (written == -EBUSY)
-> +			return 0;
-> +		return written;
-> +	}
-> +
-> +	written = blkdev_direct_IO(iocb, from);
-> +	if (written > 0) {
-> +		kiocb_invalidate_post_write(iocb, count);
-> +		iocb->ki_pos += written;
-> +	}
+Hello,
 
-Written can be negative here after blkdev_direct_IO()
+I further edited the comment and applied the patch to cgroup/for-6.5
 
-> +	if (written != -EIOCBQUEUED)
-> +		iov_iter_revert(from, count - written - iov_iter_count(from));
+Thanks.
 
-And we'll then use it here on iov_iter_revert() and this can crash on
-with some values. For example this can crash on a 4k write attempt
-on a 32k drive when experimenting wit large block sizes.
+From 659db0789c2e66c5d6a52d57008e3a7401a3ffff Mon Sep 17 00:00:00 2001
+From: Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+Date: Wed, 24 May 2023 14:54:31 +0800
+Subject: [PATCH] cgroup: Update out-of-date comment in cgroup_migrate()
 
-kernel BUG at lib/iov_iter.c:999!
-invalid opcode: 0000 [#1] PREEMPT SMP PTI
-CPU: 4 PID: 949 Comm: fio Not tainted 6.3.0-large-block-20230426-dirty#28
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
-1.16.0-debian-1.16.0-5        04/01/2014
-+RIP: 0010:iov_iter_revert.part.0+0x16e/0x170
-Code: f9 40 a2 63 af 74 07 03 56 08 89 d8 29 d0 89 45 08 44 89 6d 20
-<etc>
-RSP: 0018:ffffaa52006cfc60 EFLAGS: 00010246
-RAX: 0000000000000016 RBX: 0000000000000016 RCX: 0000000000000000
-RDX: 0000000000000004 RSI: 0000000000000006 RDI: ffffaa52006cfd08
-RBP: ffffaa52006cfd08 R08: 0000000000000000 R09: ffffaa52006cfb40
-R10: 0000000000000003 R11: ffffffffafcc21e8 R12: 0000000000004000
-R13: 0000000000003fea R14: ffff9de3d7565e00 R15: ffff9de3c1f68600
-FS:  00007f8bfe726c40(0000) GS:ffff9de43bd00000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8bf5eadd68 CR3: 0000000102c76001 CR4: 0000000000770ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
-blkdev_direct_write+0xf0/0x160
-blkdev_write_iter+0x11b/0x230
-io_write+0x10c/0x420
-? kmem_cache_alloc_bulk+0x2a1/0x410
-? fget+0x79/0xb0
-io_issue_sqe+0x60/0x3b0
-? io_prep_rw+0x5a/0x190
-io_submit_sqes+0x1e6/0x640
-__do_sys_io_uring_enter+0x54c/0xb90
-? handle_mm_fault+0x9a/0x340
-? preempt_count_add+0x47/0xa0
-? up_read+0x37/0x70
-? do_user_addr_fault+0x27c/0x780
-do_syscall_64+0x37/0x90
-entry_SYSCALL_64_after_hw
+Commit 674b745e22b3 ("cgroup: remove rcu_read_lock()/rcu_read_unlock()
+in critical section of spin_lock_irq()") has removed the rcu_read_lock,
+which makes the comment out-of-date, so update it.
 
-Although I fixed it with an early check on this routine
-with:
+tj: Updated the comment a bit.
 
-if (count < bdev_logical_block_size(bdev))
-	return -EINVAL; 
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+---
+ kernel/cgroup/cgroup.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I think this can just be fixed by also using the alignment
-check earier here:
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 9d809191a54f..f329f49529a2 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2872,9 +2872,9 @@ int cgroup_migrate(struct task_struct *leader, bool threadgroup,
+ 	struct task_struct *task;
+ 
+ 	/*
+-	 * Prevent freeing of tasks while we take a snapshot. Tasks that are
+-	 * already PF_EXITING could be freed from underneath us unless we
+-	 * take an rcu_read_lock.
++	 * The following thread iteration should be inside an RCU critical
++	 * section to prevent tasks from being freed while taking the snapshot.
++	 * spin_lock_irq() implies RCU critical section here.
+ 	 */
+ 	spin_lock_irq(&css_set_lock);
+ 	task = leader;
+-- 
+2.40.1
 
-if (blkdev_dio_unaligned(bdev, pos, iter))                               
-	return -EINVAL;  
-
-  Luis
