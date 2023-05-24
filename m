@@ -2,228 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B91270F023
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7476070F028
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbjEXIFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S239878AbjEXIGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239813AbjEXIFj (ORCPT
+        with ESMTP id S239782AbjEXIGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:05:39 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A0C1A6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:05:32 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QR3c21DlzzLmPw;
-        Wed, 24 May 2023 16:04:02 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 16:05:29 +0800
-CC:     <yangyicong@hisilicon.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <tim.c.chen@linux.intel.com>,
-        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
-        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
-        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
-        <john.garry@huawei.com>, <shenyang39@huawei.com>,
-        <kprateek.nayak@amd.com>, <wuyun.abel@bytedance.com>,
-        <tim.c.chen@intel.com>
-Subject: Re: [RESEND PATCH v7 2/2] sched/fair: Scan cluster before scanning
- LLC in wake-up path
-To:     Chen Yu <yu.c.chen@intel.com>
-References: <20220915073423.25535-1-yangyicong@huawei.com>
- <20220915073423.25535-3-yangyicong@huawei.com>
- <ZGsLy83wPIpamy6x@chenyu5-mobl1>
- <46e8d4fc-993b-e1d6-5e4c-cb33513d7888@huawei.com>
- <ZGzDLuVaHR1PAYDt@chenyu5-mobl1>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <9b3bdf37-2551-871c-1f68-ceddf4e933c3@huawei.com>
-Date:   Wed, 24 May 2023 16:05:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 24 May 2023 04:06:18 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299BD18C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:06:07 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f4bdcde899so535626e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684915565; x=1687507565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2di5F/Fsbly9FAD3Arcq2hIOC6OgudTqnppopyN/4nE=;
+        b=RSELJiQWTCvR5j8lZExyFCzoraNky4ZAabOHgGlH7yl/0Quby/lt2SDe6fTx3XbWAj
+         0XWa/vf1m8zEvRtZMM6rAZl2rRfVrXpvpynlU3epuM9Rs74RN5+L4X2pQT2jQD2CEo+G
+         4HLLTRWH4qDXGZoB9uRcOt7OVaTpTG2ilLXAY7SoNpVdiK6ilWc0uPg0mrD+NXT9P66S
+         T9A6JhgwUdZRbQi/fz9keYqnWpHWf//oOKVSeeKc+wHMRjUnD8taHhKov93BzWxjiW02
+         jYS0rmR920K+h2BVdf0nrgoicMfE+eSbL5IQDE+9g/bCyJzrwH0e4p5eQpm5b1jRQw1w
+         cKTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684915565; x=1687507565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2di5F/Fsbly9FAD3Arcq2hIOC6OgudTqnppopyN/4nE=;
+        b=Kc22ODS5lQbF9DHR1TayI9ZUR+iG/DjN1f1IcTizQFUmb3AEe1sanncL6AyfT7ET0v
+         0ATn9bjtJvGp4jbKW5MTlfoK3rUwyL1FMVEn8JASZSsWqpKngRrKHk1lEZRAgBEXO4fB
+         IzLbMIAFsEPA3aDHQkWlPei9Vc368jiZLjBvckcM0BzmpuZ0t8TCzF/u3sAHZ21LxrpW
+         ZLPF1UPJTsmU9MCy+vLIhIqO9goQ0lY5PIsYGT0/Ix2haFfGVF/eHy94d1q+b2j8oRwH
+         V5mPDnCQsKuGvJ2zoj9+QPweBSRxNgNtWVDZg7L6y3eG9jVf5NTPQrBmuuxSNup9tb65
+         kXnA==
+X-Gm-Message-State: AC+VfDxYDkYVHVgfqeRkcN4mlZmCXhT5qla2H3xiAp4Vy37Q1lIJEMYO
+        tkBgUSuRXFUZDwxIYenTsPnHVEX8DDgQgNGQIWw=
+X-Google-Smtp-Source: ACHHUZ6kVNyrtxkIjgkKymdHMZFb01K61ZNMGKdJOPA3oiVKK8AHjyd/9kt+dgwnEGIzjiA1+U7fLQ==
+X-Received: by 2002:ac2:4c9a:0:b0:4f1:4602:fb63 with SMTP id d26-20020ac24c9a000000b004f14602fb63mr5205614lfl.41.1684915565311;
+        Wed, 24 May 2023 01:06:05 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id 19-20020ac24853000000b004f3b4d17114sm1647259lfy.144.2023.05.24.01.06.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 01:06:04 -0700 (PDT)
+Message-ID: <4f2556e2-52ab-eb1d-b388-52546044f460@linaro.org>
+Date:   Wed, 24 May 2023 11:06:03 +0300
 MIME-Version: 1.0
-In-Reply-To: <ZGzDLuVaHR1PAYDt@chenyu5-mobl1>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drm/msm/dp: add module parameter for PSR
+Content-Language: en-GB
+To:     Johan Hovold <johan@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
+        swboyd@chromium.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230427232848.5200-1-quic_abhinavk@quicinc.com>
+ <053819bd-b3c4-a72c-9316-85d974082ad6@linaro.org>
+ <ZGzalLjTvUfzEADU@hovoldconsulting.com>
+ <f530691b-989d-b059-6b06-e66abb740bdb@quicinc.com>
+ <ZG216qoxK9hQ-kQs@hovoldconsulting.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <ZG216qoxK9hQ-kQs@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/23 21:44, Chen Yu wrote:
-> On 2023-05-22 at 20:42:19 +0800, Yicong Yang wrote:
->> Hi Chen,
->>
->> On 2023/5/22 14:29, Chen Yu wrote:
->>> Hi Yicong,
->>> On 2022-09-15 at 15:34:23 +0800, Yicong Yang wrote:
->>>> From: Barry Song <song.bao.hua@hisilicon.com>
+On 24/05/2023 09:59, Johan Hovold wrote:
+> On Tue, May 23, 2023 at 12:23:04PM -0700, Abhinav Kumar wrote:
+>> On 5/23/2023 8:24 AM, Johan Hovold wrote:
+>>> On Fri, May 12, 2023 at 09:13:04PM +0300, Dmitry Baryshkov wrote:
+>>>> On 28/04/2023 02:28, Abhinav Kumar wrote:
+>>>>> On sc7280 where eDP is the primary display, PSR is causing
+>>>>> IGT breakage even for basic test cases like kms_atomic and
+>>>>> kms_atomic_transition. Most often the issue starts with below
+>>>>> stack so providing that as reference
+>>>>>
+>>>>> Call trace:
+> 
+>>>>> ---[ end trace 0000000000000000 ]---
+>>>>> [drm-dp] dp_ctrl_push_idle: PUSH_IDLE pattern timedout
+>>>>>
+>>>>> Other basic use-cases still seem to work fine hence add a
+>>>>> a module parameter to allow toggling psr enable/disable till
+>>>>> PSR related issues are hashed out with IGT.
 >>>>
-> [snip...]
->>
->> Thanks for the further information. The result of netperf/tbench looks good as we
->> image, the cluster wakeup expects to gain more benefit when the system is under
->> loaded or well-loaded. May I know how many CPUs sharing cluster on Jacobsvilla?
->>
-> There are 4 CPUs per cluster on Jacobsville.
-> [snip...]
->>>> @@ -6550,7 +6574,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->>>>  	/*
->>>>  	 * If the previous CPU is cache affine and idle, don't be stupid:
->>>>  	 */
->>>> -	if (prev != target && cpus_share_cache(prev, target) &&
->>>> +	if (prev != target && cpus_share_lowest_cache(prev, target) &&
->>> This change impacts hackbench in socket mode a bit. It seems that for hackbench even
->>> putting the wakee on its previous CPU in the same LLC is better than putting it on
->>> current cluster. But it seems to be hackbench specific.
+>>>> For the reference: Bjorn reported that he has issues with VT on a
+>>>> PSR-enabled laptops. This patch fixes the issue for him
 >>>
+>>> Module parameters are almost never warranted, and it is definitely not
+>>> the right way to handle a broken implementation.
+>>>
+>>> I've just sent a revert that unconditionally disables PSR support until
+>>> the implementation has been fixed:
+>>>
+>>> 	https://lore.kernel.org/lkml/20230523151646.28366-1-johan+linaro@kernel.org/
 >>
->> ...without this do you still see the same improvement at under-loaded case (threads less-equal the CPU
->> numbers) for tbench/netperf? 
->> The idea here is to always try to wakeup in the same cluster of the
->> target to benefit from the cluster cache but the early test for the prev and recent used cpu may break
->> that. Keep it as is, at low load the prev cpu or recent used cpu get more chance to be idle so we take
->> less chance to benefit from the cluster and gain less performance improvement.
->>
-> Right. Without above change I saw lower improvement at lightly load case for netperf/tbench.
->> In the hackbench case as you noticed, the utilization can reach 100% ideally so the SIS_UTIL
->> will regulate the scanning number to 4 or around. If the prev/recent used CPU is not in the same
->> cluster with target, we're about to scanning the cluster and when found no idle CPU and has
->> run out of the scanning number, we'll fallback to wakeup on the target. That maybe the reason
->> why observed more wakeups on target rather than previous CPU.
->>
-> Looks reasonable. When the budget of scanning number is low, we can not find an idle target
-> on local cluster and terminates scanning for an idle prev on remote cluster, although that
-> prev could be a better choice than target cpu.
->> In this case I wondering choosing prev cpu or recent used cpu after scanning the cluster can help
->> the situation here, like the snippet below (kinds of messy though).
->>
-> This change makes sense to me. I only modified it a little bit to only give prev a second
-> chance. With your patch applied, the improvement of netperf/tbench remains while the
-> hackbench big regress was gone.
+>> I dont completely agree with this. Even the virtual terminal case was
+>> reported to be fixed by one user but not the other. So it was probably
+>> something missed out either in validation or reproduction steps of the
+>> user who reported it to be fixed OR the user who reported it not fixed.
+>> That needs to be investigated now.
 > 
+> Yes, there may still be some time left to fix it, but it's pretty damn
+> annoying to find that an issue reported two months ago still is not
+> fixed at 6.4-rc3. (I even waited to make the switch to 6.4 so that I
+> would not have to spend time on this.)
+> 
+> I didn't see any mail from Bjorn saying that the series that claimed to
+> fix the VT issue actually did fix the VT issue. There's only the comment
+> above from Dmitry suggesting that disabling this feature is the only way
+> to get a working terminal back.
 
-Thanks for the test, it looks justified to have this. Will include this change in next version.
+Originally this issue was reported by Doug, and at [1] he reported that 
+an issue is fixed for him. So, for me it looks like we have hardware 
+where VT works and hardware where it doesn't.
 
-> hackbench
-> =========
-> case            	load    	baseline(std%)	compare%( std%)
-> process-pipe    	1-groups	 1.00 (  2.35)	 -0.65 (  1.81)
-> process-pipe    	2-groups	 1.00 (  0.42)	 -2.16 (  1.12)
-> process-pipe    	4-groups	 1.00 (  1.84)	 +0.72 (  1.34)
-> process-pipe    	8-groups	 1.00 (  2.81)	 +1.12 (  3.88)
-> process-sockets 	1-groups	 1.00 (  1.88)	 -0.99 (  4.84)
-> process-sockets 	2-groups	 1.00 (  5.49)	 -4.50 (  4.09)
-> process-sockets 	4-groups	 1.00 (  3.54)	 +2.28 (  3.13)
-> process-sockets 	8-groups	 1.00 (  0.79)	 -0.13 (  1.28)
-> threads-pipe    	1-groups	 1.00 (  1.73)	 -2.39 (  0.40)
-> threads-pipe    	2-groups	 1.00 (  0.73)	 +2.88 (  1.94)
-> threads-pipe    	4-groups	 1.00 (  0.64)	 +1.12 (  1.82)
-> threads-pipe    	8-groups	 1.00 (  1.55)	 -1.59 (  1.20)
-> threads-sockets 	1-groups	 1.00 (  3.76)	 +3.21 (  3.56)
-> threads-sockets 	2-groups	 1.00 (  1.20)	 -5.56 (  2.64)
-> threads-sockets 	4-groups	 1.00 (  2.65)	 +1.48 (  4.91)
-> threads-sockets 	8-groups	 1.00 (  0.08)	 +0.18 (  0.15)
-> 
-> netperf
-> =======
-> case            	load    	baseline(std%)	compare%( std%)
-> TCP_RR          	6-threads	 1.00 (  0.91)	 +2.87 (  0.83)
-> TCP_RR          	12-threads	 1.00 (  0.22)	 +3.48 (  0.31)
-> TCP_RR          	18-threads	 1.00 (  0.41)	 +7.81 (  0.48)
-> TCP_RR          	24-threads	 1.00 (  1.02)	 -0.32 (  1.25)
-> TCP_RR          	30-threads	 1.00 (  4.67)	 -0.04 (  5.14)
-> TCP_RR          	36-threads	 1.00 (  4.53)	 -0.13 (  4.37)
-> TCP_RR          	42-threads	 1.00 (  3.92)	 -0.15 (  3.07)
-> TCP_RR          	48-threads	 1.00 (  2.07)	 -0.17 (  1.52)
-> UDP_RR          	6-threads	 1.00 (  0.98)	 +4.50 (  2.38)
-> UDP_RR          	12-threads	 1.00 (  0.26)	 +3.64 (  0.25)
-> UDP_RR          	18-threads	 1.00 (  0.27)	 +9.93 (  0.55)
-> UDP_RR          	24-threads	 1.00 (  1.22)	 +0.13 (  1.33)
-> UDP_RR          	30-threads	 1.00 (  3.86)	 -0.03 (  5.05)
-> UDP_RR          	36-threads	 1.00 (  2.81)	 +0.10 (  3.37)
-> UDP_RR          	42-threads	 1.00 (  3.51)	 -0.26 (  2.94)
-> UDP_RR          	48-threads	 1.00 ( 12.54)	 +0.74 (  9.44)
-> 
-> tbench
-> ======
-> case            	load    	baseline(std%)	compare%( std%)
-> loopback        	6-threads	 1.00 (  0.04)	 +2.94 (  0.26)
-> loopback        	12-threads	 1.00 (  0.30)	 +4.58 (  0.12)
-> loopback        	18-threads	 1.00 (  0.37)	+12.38 (  0.10)
-> loopback        	24-threads	 1.00 (  0.56)	 -0.27 (  0.50)
-> loopback        	30-threads	 1.00 (  0.17)	 -0.18 (  0.06)
-> loopback        	36-threads	 1.00 (  0.25)	 -0.73 (  0.44)
-> loopback        	42-threads	 1.00 (  0.10)	 -0.22 (  0.18)
-> loopback        	48-threads	 1.00 (  0.29)	 -0.48 (  0.19)
-> 
-> schbench
-> ========
-> case            	load    	baseline(std%)	compare%( std%)
-> normal          	1-mthreads	 1.00 (  0.00)	 +0.00 (  0.00)
-> normal          	2-mthreads	 1.00 (  0.00)	 +0.00 (  0.00)
-> normal          	4-mthreads	 1.00 (  6.80)	 +2.78 (  8.08)
-> normal          	8-mthreads	 1.00 (  3.65)	 -0.23 (  4.30)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 0989116b0796..07495b44c68f 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7127,7 +7127,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  	bool has_idle_core = false;
->  	struct sched_domain *sd;
->  	unsigned long task_util, util_min, util_max;
-> -	int i, recent_used_cpu;
-> +	int i, recent_used_cpu, prev_aff = -1;
->  
->  	/*
->  	 * On asymmetric system, update task utilization because we will check
-> @@ -7152,10 +7152,13 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  	/*
->  	 * If the previous CPU is cache affine and idle, don't be stupid:
->  	 */
-> -	if (prev != target && cpus_share_lowest_cache(prev, target) &&
-> +	if (prev != target && cpus_share_cache(prev, target) &&
->  	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
-> -	    asym_fits_cpu(task_util, util_min, util_max, prev))
-> -		return prev;
-> +	    asym_fits_cpu(task_util, util_min, util_max, prev)) {
-> +		if (cpus_share_lowest_cache(prev, target))
-> +			return prev;
-> +		prev_aff = prev;
-> +	}
->  
->  	/*
->  	 * Allow a per-cpu kthread to stack with the wakee if the
-> @@ -7223,6 +7226,13 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  	if ((unsigned)i < nr_cpumask_bits)
->  		return i;
->  
-> +	/*
-> +	 * Give prev another chance, in case prev has not been
-> +	 * scanned in select_idle_cpu() due to nr constrain.
-> +	 */
-> +	if (prev_aff != -1)
-> +		return prev_aff;
-> +
+Doug, can you please confirm whether you can reproduce the PSR+VT issue 
+on 6.4-rc (without extra patches) or if the issue is fixed for you?
 
-It looks neater. We should also give recent_used_cpu a chance based on the current implementation
-if it does no harm.
+[1] 
+https://lore.kernel.org/dri-devel/CAD=FV=VSHmQPtsQfWjviEZeErms-VEOTmfozejASUC9zsMjAbA@mail.gmail.com/
 
-Thanks,
-Yicong
+> 
+> Regressions happen and sometimes there are corner cases that are harder
+> to find, but this is a breakage of a fundamental feature that was
+> reported before the code was even merged into mainline.
+> 
+>> We should have ideally gone with the modparam with the feature patches
+>> itself knowing that it gets enabled for all sinks if PSR is supported.
+> 
+> Modparams are things of the past should not be used to enable broken
+> features so that some vendor can tick of their internal lists of
+> features that have been "mainlined".
+
+We have had a history of using modparam with i915 and IIRC amdgpu / 
+radeon drivers to allow users to easily check whether new feature works 
+for their hardware. My current understanding is that PSR+VT works for on 
+some laptops and doesn't on some other laptops, which makes it a valid case.
+
+> 
+> You can carry that single patch out-of-tree to enable this if you need
+> it for some particular use case where you don't care about VTs.
+> 
+> But hopefully you can just get this sorted quickly. If not, the revert I
+> posted is the way to go rather than adding random module parameters.
+> 
+> Johan
+
+-- 
+With best wishes
+Dmitry
+
