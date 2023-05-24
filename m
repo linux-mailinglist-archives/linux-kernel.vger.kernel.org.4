@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2682870F62B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FD170F62A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjEXMWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        id S232839AbjEXMWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjEXMW0 (ORCPT
+        with ESMTP id S230491AbjEXMWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:22:26 -0400
+        Wed, 24 May 2023 08:22:25 -0400
 Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6213F9E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E56199
         for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 05:22:22 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:59b9:3473:f0ae:e2b7])
         by laurent.telenet-ops.be with bizsmtp
-        id 0cNL2A00C5NiV2701cNLTe; Wed, 24 May 2023 14:22:20 +0200
+        id 0cNL2A00D5NiV2701cNLTf; Wed, 24 May 2023 14:22:20 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtp (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1q1nVF-002xw9-Aj;
+        id 1q1nVF-002xwB-BN;
         Wed, 24 May 2023 14:22:20 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1q1nVU-00DPCA-C7;
+        id 1q1nVU-00DPCD-Ci;
         Wed, 24 May 2023 14:22:20 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -33,9 +33,9 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
         Osama Muhammad <osmtendev@gmail.com>
 Cc:     linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 1/2] regulator: core: Fix more error checking for debugfs_create_dir()
-Date:   Wed, 24 May 2023 14:22:17 +0200
-Message-Id: <f8e4716278b0a6fe7d9e5537715eb21dcd991d1d.1684930647.git.geert+renesas@glider.be>
+Subject: [PATCH v2 2/2] regulator: core: Streamline debugfs operations
+Date:   Wed, 24 May 2023 14:22:18 +0200
+Message-Id: <adb012e80899ab9f5dfc80cfed7beb8406993e8e.1684930647.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1684930647.git.geert+renesas@glider.be>
 References: <cover.1684930647.git.geert+renesas@glider.be>
@@ -50,34 +50,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case of failure, debugfs_create_dir() does not return NULL, but an
-error pointer.  Most incorrect error checks were fixed, but the one in
-create_regulator() was forgotten.
+If CONFIG_DEBUG_FS is not set:
 
-Fix the remaining error check.
+    regulator: Failed to create debugfs directory
+    ...
+    regulator-dummy: Failed to create debugfs directory
+
+As per the comments for debugfs_create_dir(), errors returned by this
+function should be expected, and ignored:
+
+ * If debugfs is not enabled in the kernel, the value -%ENODEV will be
+ * returned.
+ *
+ * NOTE: it's expected that most callers should _ignore_ the errors returned
+ * by this function. Other debugfs functions handle the fact that the "dentry"
+ * passed to them could be an error and they don't crash in that case.
+ * Drivers should generally work fine even if debugfs fails to init anyway.
+
+Adhere to the debugfs spirit, and streamline all operations by:
+  1. Demoting the importance of the printed error messages to debug
+     level, like is already done in create_regulator(),
+  2. Further ignoring any returned errors, as by design, all debugfs
+     functions are no-ops when passed an error pointer.
 
 Fixes: 2bf1c45be3b8f3a3 ("regulator: Fix error checking for debugfs_create_dir")
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v2:
-  - Split off from "regulator: core: Streamline debugfs operations".
+  - Spin off error check fix into a separate patch,
+  - Improve rationale.
 ---
- drivers/regulator/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/regulator/core.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 698ab7f5004bf6b7..ad8baf65f63e369b 100644
+index ad8baf65f63e369b..d8e1caaf207e108f 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -1911,7 +1911,7 @@ static struct regulator *create_regulator(struct regulator_dev *rdev,
- 
- 	if (err != -EEXIST)
+@@ -1913,17 +1913,15 @@ static struct regulator *create_regulator(struct regulator_dev *rdev,
  		regulator->debugfs = debugfs_create_dir(supply_name, rdev->debugfs);
--	if (!regulator->debugfs) {
-+	if (IS_ERR(regulator->debugfs))
+ 	if (IS_ERR(regulator->debugfs))
  		rdev_dbg(rdev, "Failed to create debugfs directory\n");
- 	} else {
- 		debugfs_create_u32("uA_load", 0444, regulator->debugfs,
+-	} else {
+-		debugfs_create_u32("uA_load", 0444, regulator->debugfs,
+-				   &regulator->uA_load);
+-		debugfs_create_u32("min_uV", 0444, regulator->debugfs,
+-				   &regulator->voltage[PM_SUSPEND_ON].min_uV);
+-		debugfs_create_u32("max_uV", 0444, regulator->debugfs,
+-				   &regulator->voltage[PM_SUSPEND_ON].max_uV);
+-		debugfs_create_file("constraint_flags", 0444,
+-				    regulator->debugfs, regulator,
+-				    &constraint_flags_fops);
+-	}
++
++	debugfs_create_u32("uA_load", 0444, regulator->debugfs,
++			   &regulator->uA_load);
++	debugfs_create_u32("min_uV", 0444, regulator->debugfs,
++			   &regulator->voltage[PM_SUSPEND_ON].min_uV);
++	debugfs_create_u32("max_uV", 0444, regulator->debugfs,
++			   &regulator->voltage[PM_SUSPEND_ON].max_uV);
++	debugfs_create_file("constraint_flags", 0444, regulator->debugfs,
++			    regulator, &constraint_flags_fops);
+ 
+ 	/*
+ 	 * Check now if the regulator is an always on regulator - if
+@@ -5256,10 +5254,8 @@ static void rdev_init_debugfs(struct regulator_dev *rdev)
+ 	}
+ 
+ 	rdev->debugfs = debugfs_create_dir(rname, debugfs_root);
+-	if (IS_ERR(rdev->debugfs)) {
+-		rdev_warn(rdev, "Failed to create debugfs directory\n");
+-		return;
+-	}
++	if (IS_ERR(rdev->debugfs))
++		rdev_dbg(rdev, "Failed to create debugfs directory\n");
+ 
+ 	debugfs_create_u32("use_count", 0444, rdev->debugfs,
+ 			   &rdev->use_count);
+@@ -6179,7 +6175,7 @@ static int __init regulator_init(void)
+ 
+ 	debugfs_root = debugfs_create_dir("regulator", NULL);
+ 	if (IS_ERR(debugfs_root))
+-		pr_warn("regulator: Failed to create debugfs directory\n");
++		pr_debug("regulator: Failed to create debugfs directory\n");
+ 
+ #ifdef CONFIG_DEBUG_FS
+ 	debugfs_create_file("supply_map", 0444, debugfs_root, NULL,
 -- 
 2.34.1
 
