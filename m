@@ -2,179 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE97670FCA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5B070FCA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbjEXR3W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 13:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S232974AbjEXR3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjEXR3U (ORCPT
+        with ESMTP id S233462AbjEXR3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:29:20 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1ED93;
-        Wed, 24 May 2023 10:29:18 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-96f66fbd770so34915366b.1;
-        Wed, 24 May 2023 10:29:18 -0700 (PDT)
+        Wed, 24 May 2023 13:29:42 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15453FC
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:29:37 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7747df5b674so100680539f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684949374; x=1687541374;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yq6BLiBB15ZpThHz2GQJH12upVOih5oQeiwfZRvJZIs=;
+        b=QYLXFTbPT0b4rqKMgZ8/8tyMSyH6G/K6w4o90yWq/K8tpntKJ5mB9bGpaYWDcv36ZL
+         XAhIhOM52XaLx/LJa98fxubec+kMG8JuE0/r194/jOAQE15nSxAJxA8HpenwlZ6cBGOU
+         X/X8b9a1lbGgiRYIJYi+u2no2vILwgtYxCSRI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684949357; x=1687541357;
+        d=1e100.net; s=20221208; t=1684949374; x=1687541374;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Uyb/BR/z8u3ulReGvvxK6Q0tGW6dyhXAau/A1unrmWs=;
-        b=hVQq4ZCvYb+27wRpNueRjG/O+V6fx6A/v4zsfyvLocyprT5vMzLN+Gxk47HVcgDzJ/
-         Uz7orqWux45huwdloHrDt/csCkcvtLlOzgVqB1vMP0KtcLJuxzZ768FvxSkk9+AcrkVx
-         lqyPDdL7taAoxnpPOPlX50z78rU5JxuGIzbLyTeaDgg6NtlG/HqneY8/9qlhnJb5f1cv
-         magJJQgtbjjzXRbeO80hhaMCs3N9cF1Vh6wPv7GNMVbnkuj1N+QrVm+It5s5N/rwHk+j
-         QX8oXrK4dfHSf6UE6ZQZYFdBHCIIP2ixWkUynLOarppxj6x56rMm9e5MJWKcAXKf1Z5W
-         XvEw==
-X-Gm-Message-State: AC+VfDymHAOfFBKFao3NuN3uhEvC0Soa2DZ8DWnyEjuIPnG/VggYBIfj
-        qp4GgWqxPbwEf3PxMu2qIANd4rZasa5GIbZSYY2ebjjz
-X-Google-Smtp-Source: ACHHUZ7YqrPutCJvrzN1P8ylXeBNhlIpe2oavSEzUDQT7bXKqG1xa+Q8A0BHKiN0Jo5gxjlCGtNpixDrC6t8HPqz+x8=
-X-Received: by 2002:a17:906:729e:b0:96f:6590:cbdb with SMTP id
- b30-20020a170906729e00b0096f6590cbdbmr16630454ejl.6.1684949357047; Wed, 24
- May 2023 10:29:17 -0700 (PDT)
+        bh=yq6BLiBB15ZpThHz2GQJH12upVOih5oQeiwfZRvJZIs=;
+        b=kTffF7GVeD7Qtrf4A+ChW4ZNRb5PNf4bAb7NHjtm7ATxlgBgM16y6SFm03Lqc0qZLm
+         J1/d+uR8SOv/XrACDiWwV6GEnK35nZ8XW4uGkGY14RLYgSPPYnGE1Vw9cVMHAoxByaJs
+         JdGHleO1bVSGxPVli6XTxdxEVmt5Il3JcR6f9AZhQ4e3j1/kBwQMCoaV9U4SdqXPvfGl
+         vfiGqm/KvuI/u6aIcce0UwwSklQsuZ9NIM4lJmbkVlgShGAr0uYtoWIFjS4tsI1sGm2i
+         ziNm9TDDBwCzCpf6Gq22smWL3n5IK4dfnTMO0JFEAcAOu2RSb4NAf8RuZWq0zfbCW+rs
+         2fmw==
+X-Gm-Message-State: AC+VfDy8n/UL9uxbDV1GSg/uxQPaWugRU5pyzlLiY7vq53YaK6wvCSEc
+        gXoVk48ONS7N7m95xVmb3MWDXKh0Yx3ysbD1RvU=
+X-Google-Smtp-Source: ACHHUZ45RdCC/wNLusbloCvsIxO3vVaIJ8qI84B2BY8QnI8CIXlMPp5OrOQJA3JYwwWZ1QgvV090Jw==
+X-Received: by 2002:a5d:9646:0:b0:760:ec52:254d with SMTP id d6-20020a5d9646000000b00760ec52254dmr12072120ios.2.1684949374595;
+        Wed, 24 May 2023 10:29:34 -0700 (PDT)
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
+        by smtp.gmail.com with ESMTPSA id g191-20020a025bc8000000b004141e72be1asm3271272jab.175.2023.05.24.10.29.31
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 10:29:32 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-338458a9304so7415ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 10:29:31 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1b09:b0:335:a48:f668 with SMTP id
+ i9-20020a056e021b0900b003350a48f668mr199716ilv.15.1684949370785; Wed, 24 May
+ 2023 10:29:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230524152136.1033-1-mario.limonciello@amd.com>
- <20230524154454.GA28455@wunner.de> <MN0PR12MB6101E8F181DA892B0D6D7C1BE2419@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB6101E8F181DA892B0D6D7C1BE2419@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:29:05 +0200
-Message-ID: <CAJZ5v0gv_7CVk4JoEvoxC6ZiRXF=HoHbXytmGKDs_x67GdRaWw@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: Don't assume root ports from > 2015 are power manageable
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Iain Lane <iain@orangesquash.org.uk>
+References: <20230523193017.4109557-1-dianders@chromium.org> <20230523122802.7.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+In-Reply-To: <20230523122802.7.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 24 May 2023 10:29:13 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Ucn7BeWWGOOEX0ho7yH31VF-w7U60KFB8qSn4L1xn3fw@mail.gmail.com>
+Message-ID: <CAD=FV=Ucn7BeWWGOOEX0ho7yH31VF-w7U60KFB8qSn4L1xn3fw@mail.gmail.com>
+Subject: Re: [PATCH 7/9] HID: i2c-hid: Support being a panel follower
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>, hsinyi@google.com,
+        devicetree@vger.kernel.org,
+        yangcong5@huaqin.corp-partner.google.com,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-msm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 6:16 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [AMD Official Use Only - General]
->
-> > -----Original Message-----
-> > From: Lukas Wunner <lukas@wunner.de>
-> > Sent: Wednesday, May 24, 2023 10:45 AM
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>; Mika Westerberg
-> > <mika.westerberg@linux.intel.com>; Rafael J . Wysocki <rafael@kernel.org>;
-> > linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org; S-k, Shyam-sundar
-> > <Shyam-sundar.S-k@amd.com>; Natikar, Basavaraj
-> > <Basavaraj.Natikar@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; linux-pm@vger.kernel.org; Iain Lane
-> > <iain@orangesquash.org.uk>
-> > Subject: Re: [PATCH v3] PCI: Don't assume root ports from > 2015 are power
-> > manageable
-> >
-> > On Wed, May 24, 2023 at 10:21:36AM -0500, Mario Limonciello wrote:
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -2976,6 +2976,9 @@ bool pci_bridge_d3_possible(struct pci_dev
-> > *bridge)
-> > >
-> > >     switch (pci_pcie_type(bridge)) {
-> > >     case PCI_EXP_TYPE_ROOT_PORT:
-> > > +           if (!platform_pci_power_manageable(bridge))
-> > > +                   return false;
-> > > +           fallthrough;
-> > >     case PCI_EXP_TYPE_UPSTREAM:
-> > >     case PCI_EXP_TYPE_DOWNSTREAM:
-> > >             if (pci_bridge_d3_disable)
-> >
-> > This will exempt the Root Ports from pcie_port_pm=force.
-> > Not sure if that's desirable.
->
-> Right; It will only exempt root ports from pcie_port_pm=force
-> if they aren't power manageable.
->
-> If it's still desirable to let pcie_port_pm=force work on these
-> I think it's worth refactoring the function otherwise it's going
-> to be a nested if that matches the same variable as the
-> switch.
->
-> Something like this:
->
-> bool pci_bridge_d3_possible(struct pci_dev *bridge)
-> {
->         if (!pci_is_pcie(bridge))
->                 return false;
->
->         switch (pci_pcie_type(bridge)) {
->         case PCI_EXP_TYPE_ROOT_PORT:
->         case PCI_EXP_TYPE_UPSTREAM:
->         case PCI_EXP_TYPE_DOWNSTREAM:
->                 break;
->         default:
->                 return false;
->         }
->
->         if (pci_bridge_d3_disable)
->                 return false;
->
->         /*
->          * Hotplug ports handled by firmware in System Management Mode
->          * may not be put into D3 by the OS (Thunderbolt on non-Macs).
->          */
->         if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
->                 return false;
->
->         if (pci_bridge_d3_force)
->                 return true;
->
->         /* Even the oldest 2010 Thunderbolt controller supports D3. */
->         if (bridge->is_thunderbolt)
->                 return true;
->
->         /* Platform might know better if the bridge supports D3 */
->         if (platform_pci_bridge_d3(bridge))
->                 return true;
->
->         /*
->          * Hotplug ports handled natively by the OS were not validated
->          * by vendors for runtime D3 at least until 2018 because there
->          * was no OS support.
->          */
->         if (bridge->is_hotplug_bridge)
->                 return false;
->
->         if (dmi_check_system(bridge_d3_blacklist))
->                 return false;
->
->         /*
->          * It should be safe to put PCIe ports from 2015 or newer
->          * to D3.
->          */
->         if (dmi_get_bios_year() >= 2015)
->                 return true;
->
->         return false;
-> }
->
-> Then the check I'm proposing can injected anywhere after the force like this:
->
-> if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
->     !platform_pci_power_manageable(bridge)))
->         return false;
+Hi,
 
-Sounds reasonable.  I would even put it after the Thunderbolt check.
+On Tue, May 23, 2023 at 12:31=E2=80=AFPM Douglas Anderson <dianders@chromiu=
+m.org> wrote:
+>
+> As talked about in the patch ("drm/panel: Add a way for other devices
+> to follow panel state"), we really want to keep the power states of a
+> touchscreen and the panel it's attached to in sync with each other. In
+> that spirit, add support to i2c-hid to be a panel follower. This will
+> let the i2c-hid driver get informed when the panel is powered on and
+> off. From there we can match the i2c-hid device's power state to that
+> of the panel.
+>
+> NOTE: this patch specifically _doesn't_ use pm_runtime to keep track
+> of / manage the power state of the i2c-hid device, even though my
+> first instinct said that would be the way to go. Specific problems
+> with using pm_runtime():
+> * The initial power up couldn't happen in a runtime resume function
+>   since it create sub-devices and, apparently, that's not good to do
+>   in your resume function.
+> * Managing our power state with pm_runtime meant fighting to make the
+>   right thing happen at system suspend to prevent the system from
+>   trying to resume us only to suspend us again. While this might be
+>   able to be solved, it added complexity.
+> Overall the code without pm_runtime() ended up being smaller and
+> easier to understand.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>  drivers/hid/i2c-hid/i2c-hid-core.c | 82 +++++++++++++++++++++++++++++-
+>  1 file changed, 81 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c=
+-hid-core.c
+> index 34c0d98b4976..f1bb89377e8d 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-core.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+> @@ -38,6 +38,8 @@
+>  #include <linux/mutex.h>
+>  #include <asm/unaligned.h>
+>
+> +#include <drm/drm_panel.h>
+> +
+>  #include "../hid-ids.h"
+>  #include "i2c-hid.h"
+>
+> @@ -107,6 +109,8 @@ struct i2c_hid {
+>         struct mutex            reset_lock;
+>
+>         struct i2chid_ops       *ops;
+> +       struct drm_panel_follower panel_follower;
+> +       bool                    is_panel_follower;
+>  };
+>
+>  static const struct i2c_hid_quirks {
+> @@ -1058,6 +1062,34 @@ int i2c_hid_core_initial_power_up(struct i2c_hid *=
+ihid)
+>         return ret;
+>  }
+>
+> +int i2c_hid_core_panel_prepared(struct drm_panel_follower *follower)
+
+As pointed out by the kernel test robot, I clearly missed making
+several functions "static" in this patch series. :( I'll fix that in
+v2, but for now I'll hold off sending v2 to wait for additional
+feedback.
+
+-Doug
