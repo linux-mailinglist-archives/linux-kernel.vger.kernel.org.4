@@ -2,241 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38C870EA7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E9E70EA78
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 02:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238822AbjEXA43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 20:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        id S238752AbjEXAxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 20:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjEXA4W (ORCPT
+        with ESMTP id S231390AbjEXAxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 20:56:22 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A9BCD;
-        Tue, 23 May 2023 17:56:19 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 7F1085FD1B;
-        Wed, 24 May 2023 03:56:17 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1684889777;
-        bh=6UJu4At4JTYJZJm3ufdH8BuFWlW2L/vFJ5Zl0oCFuaU=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=DyrqPvLXGsYToa8iWySrhnm3P5Z/mM8+b7Ss+5iIy3ovu7u3BaO9/wkN1Etw9JcaC
-         KM+5eMnqEmclo/iRjGd1wbCsLYLRtR1RoyTQCBIh8jGIpXL94EUUWsynGEoFzXu/zQ
-         MGn2eFGDaedaH+FQ4a7EpO66CEP27dhPSjU8+Z0iLoBCzpX0d1gqziMwLIO49gjoal
-         0OhojjOEUcuE+5KLhe3++MIy7NihYhcUR7G4GPd2XMb7PqyGzrvDS8JLFlq4+Au+m5
-         J5CtV3pjcKpje3XRe36ZjodKBhW7PaL+TYPwu2E3dfg2//oRq4wxjJ2gLdqgAkQDLt
-         KwzwYfM0U4DOw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 24 May 2023 03:56:16 +0300 (MSK)
-Message-ID: <3fb39050-9543-f4a4-c8f2-a996e24c8e16@sberdevices.ru>
-Date:   Wed, 24 May 2023 03:52:06 +0300
+        Tue, 23 May 2023 20:53:04 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A76E5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:53:03 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ac65ab7432so10305ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 17:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684889582; x=1687481582;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R73rQupbGo8gxIgqNUbzX7tFkfS3FdlbSDCX+v9GPFU=;
+        b=DSSILEKw2P3DdNCdeOp5B3aoyrmq0ppDsVUFp5fFDhGbt7ZxTpi0cCUJuiVGww+So5
+         Vu6jPfkMFhdAoLq5xrc2DEVBGTvy/WT+LQQ5aUEmVfdthzYNZUL4/5lMUPHwZkZ2959Q
+         AWN0hu4WIaCF6Lb/FI0NjFr6kjVnCDjGBOXdnCClavOxu0u06cRn8NmUvf4nCSrApzVI
+         5ixgebMSLc6ewH9vw5dOVhRVUp2q1EVXFEur32rfm5RHyrQHXTh3tGMM96WaiLoExUX1
+         +FXHnum3I4dnd5eKabCsTMxQOtqT1UVnzEt4kp6CRDoInHkbUCJ6S7DQ2GsMm+N1x/vu
+         Vbeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684889582; x=1687481582;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R73rQupbGo8gxIgqNUbzX7tFkfS3FdlbSDCX+v9GPFU=;
+        b=j9JyN4BYbRr6xRe3UgrhUrLpuGUpWi1Ps2ycaqLET/geYxrhpZrYk3d7/c0yEjADON
+         XZtN2+1RkdtuFHxj8m6t1JaaUKKzMp+MQQ3IQMJ9WiKKB5WvsNtxo4A79d0HeYFy3VD7
+         IVehZgIbDroSGUgnPv0jmImq2Owqs8r5SAq5J7lFzVbROIC/vMT2lC9eZ9fVUrqpxgce
+         uh1aQycYIy/XUeDn2PYxR8Mctj8mj6JfO6EiVyImPUPNBTpJiJob2wleu3VNK8aowN7X
+         tCHG/hbxxF+g6qdkXHUgIC0t1JpLw4K7hnHRIa52puramOyqVZLjXTY6/fFH08aMiAgD
+         rnYw==
+X-Gm-Message-State: AC+VfDyGAhTgKwnyuWzIrWEBeTmoqvOzt7ZpAh4gXwMgcoa/Qlqq4S0B
+        XJeOW5aZepRrk4HwXiC5Y4fepg==
+X-Google-Smtp-Source: ACHHUZ6I8qmYZZpMAWacH6DVYzOZb4ptlZVkc9+WNlpK45yZCweyu1ykaPvSNL11GDYOfC6N/jYtbQ==
+X-Received: by 2002:a17:902:d4c2:b0:1aa:ea22:8043 with SMTP id o2-20020a170902d4c200b001aaea228043mr42900plg.7.1684889582328;
+        Tue, 23 May 2023 17:53:02 -0700 (PDT)
+Received: from [2620:0:1008:11:c789:c1fb:6667:1766] ([2620:0:1008:11:c789:c1fb:6667:1766])
+        by smtp.gmail.com with ESMTPSA id 19-20020aa79213000000b00639eae8816asm6282579pfo.130.2023.05.23.17.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 17:53:01 -0700 (PDT)
+Date:   Tue, 23 May 2023 17:53:00 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM
+ checks
+In-Reply-To: <CAHk-=wi6L6yZnGCYVEmLgQY+KEHNsAW2V69mfdUCMk4qS=GnKA@mail.gmail.com>
+Message-ID: <494440e9-b73f-2445-5b1f-0e4d2ab5f487@google.com>
+References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com> <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com> <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com> <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com> <b2bf7ae9-983d-6c20-0781-7f37a4454bfd@google.com>
+ <CAHk-=wi6L6yZnGCYVEmLgQY+KEHNsAW2V69mfdUCMk4qS=GnKA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
- controller driver
-Content-Language: en-US
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "jian.hu@amlogic.com" <jian.hu@amlogic.com>,
-        kernel <kernel@sberdevices.ru>,
-        "rockosov@gmail.com" <rockosov@gmail.com>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>
-References: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
- <20230426095805.15338-7-ddrokosov@sberdevices.ru>
- <CAFBinCA2OhtVaCJDi8ZfAFLSE4oUgxYBDScaP_WW63curEK8Mg@mail.gmail.com>
- <20230512140630.qd33rwzaalmadpmk@CAB-WSD-L081021>
- <CAFBinCA8e9evk+9hTEgoNOD_+3DBst6vYDcradmr2c996jdUmw@mail.gmail.com>
- <20230517103456.p3sjxzbepvg7cr2r@CAB-WSD-L081021>
- <CAFBinCCPf+asVakAxeBqV-jhsZp=i2zbShByTCXfYYAQ6cCnHg@mail.gmail.com>
- <573d96df-7b08-4fa2-668b-58ff674a314e@gmail.com>
- <20230522134425.pc5fhojf53v6q2jz@CAB-WSD-L081021>
- <a121266a-110a-8c4e-cd71-4e35165fc789@gmail.com>
-From:   George Stark <gnstark@sberdevices.ru>
-In-Reply-To: <a121266a-110a-8c4e-cd71-4e35165fc789@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/23 21:43:00 #21378639
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="2003089352-194657390-1684889581=:163077"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 23:36, Heiner Kallweit wrote:
-> On 22.05.2023 15:44, Dmitry Rokosov wrote:
->> Heiner,
->>
->> On Fri, May 19, 2023 at 06:10:50PM +0200, Heiner Kallweit wrote:
->>> On 18.05.2023 22:04, Martin Blumenstingl wrote:
->>>> Hi Dmitry,
->>>>
->>>> On Wed, May 17, 2023 at 12:34 PM Dmitry Rokosov
->>>> <ddrokosov@sberdevices.ru> wrote:
->>>> [...]
->>>>>>> Additionally, the CCF determines the best ancestor based on how close
->>>>>>> its rate is to the given one, based on arithmetic calculations. However,
->>>>>>> we have independent knowledge that a certain clock would be better, with
->>>>>>> less jitter and fewer intermediaries, which will likely improve energy
->>>>>>> efficiency. Sadly, the CCF cannot take this into account.
->>>>>> I agree that the implementation in CCF is fairly simple. There's ways
->>>>>> to trick it though: IIRC if there are multiple equally suitable clocks
->>>>>> it picks the first one. For me all of this has worked so far which is
->>>>>> what makes me curious in this case (not saying that anything is wrong
->>>>>> with your approach).
->>>>>>
->>>>>> Do you have a (real world) example where the RTC clock should be
->>>>>> preferred over another clock?
->>>>>>
->>>>> Yes, a real-life example is the need for a 32Khz clock for an external
->>>>> wifi chip. There is one option to provide this clock with high
->>>>> precision, which is RTC + GENCLK.
->>>>>
->>>>>> I'm thinking about the following scenario.
->>>>>> PWM parents:
->>>>>> - XTAL: 24MHz
->>>>>> - sys: not sure - let's say 166.67MHz
->>>>>> - RTC: 32kHz
->>>>>>
->>>>>> Then after that there's a divider and a gate.
->>>>>>
->>>>>> Let's say the PWM controller needs a 1MHz clock: it can take that from
->>>>>> XTAL or sys. Since XTAL is evenly divisible to 1MHz CCF will pick that
->>>>>> and use the divider.
->>>>>> But let's say the PWM controller needs a 32kHz clock: CCF would
->>>>>> automatically pick the RTC clock.
->>>>>> So is your implementation there to cover let's say 1kHz where
->>>>>> mathematically 24MHz can be divided evenly to 1kHz (and thus should
->>>>>> not result in any jitter) but RTC gives better precision in the real
->>>>>> world (even though it's off by 24Hz)?
->>>>>>
->>>>> I don't think so. The highest precision that RTC can provide is from a
->>>>> 32KHz rate only. However, I believe that a 1kHz frequency can also be
->>>>> achieved by using xtal 24MHz with a divider, which can provide high
->>>>> precision as well.
->>>> Thank you again for the great discussion on IRC today.
->>>> Here's my short summary so I don't forget before you'll follow up on this.
->>>>
->>>> In general there's two known cases where the RTC clock needs to be used:
->>>> a) When using the GENCLK output of the SoC to output the 32kHz RTC
->>>> clock and connect that to an SDIO WiFi chip clock input (this seems
->>>> useful in my understanding because the RTC clock provides high
->>>> precision)
->>>> b) When using the PWM controller to output a 32kHz clock signal. In
->>>> this case my understanding is that using the RTC clock as input to the
->>>> PWM controller results in the best possible signal
->>>>
->>>> The second case won't be supported with Heiner's patches [0] that use
->>>> CCF (common clock framework) in the PWM controller driver.
->>>> In this series the parent clock is calculated using:
->>>>    freq = div64_u64(NSEC_PER_SEC * (u64)0xffff, period);
->>>>
->>>> A 32kHz clock means a PWM period of 30518ns. So with the above
->>> To be precise: 30517,578125ns
->>> What means that the PWM framework can't say "I want 32768Hz",
->>> but just "I want something being very close to 32768Hz".
->>> So what you need is some simple heuristic to interpret the
->>> PWM request -> "PWM requests 30518ns, but supposedly it wants
->>> 32768Hz"
->>>
->>> NSEC_PER_SEC / 30518 = 32767 (rounded down from 32767,547)
->>> clk_round_rate(channel->clk, 32767) would return 0 (I *think*),
->>> because it tries to find the next lower clock.
->>>
->>> The SoC families I'm familiar with have fclkin2 as PWM parent.
->>> That's 1 GHz in my case, what results in a frequency of 32.767,547Hz
->>> for period = 30518n.
->>> What you're saying is that newer generations don't have PWM parents
->>>> 24MHz any longer?
->> No, of course not. For example, a fixed PLL (with all fclk_divX
->> settings) has rates higher than 24MHz. However, we need to consider the
->> 'heavy' background of such PWM.
->>
->> However, we have a "lightweight" clkin (special rtc32k) with a rate of
->> 32kHz that we could potentially use as an input to produce a 32kHz
->> output on the PWM lines. I don't see any reason why we should not
->> support such special cases.
->>
-> Two more things to consider:
-> 1. When wanting a 32kHz (well, 32768Hz) output with a 50% duty cycle,
->     then we need hi=0 and lo=0 with a 64kHz input clock.
->     See point 2 for an explanation of why 0 and not 1.
->     Means we couldn't use the RTC input clock. Did you consider this?
->     Or do I miss something?
-> 2. Seems the PWM block internally increments hi and lo, except the
->     constant_en bit is set on newer PWM block versions.
->     For bigger cnt values the impact is negligible, but for very small
->     values it's something we have to consider.
->     This was one additional motivation for me to choose an input
->     frequency that creates big cnt values.
->
-Hello Heiner
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-As I mentioned earlier I have some changes to take into account lo and hi regs incrementing.
+--2003089352-194657390-1684889581=:163077
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-But it's more convenient to base my patch on top on one of yours (https://lore.kernel.org/linux-amlogic/23fe625e-dc23-4db8-3dce-83167cd3b206@gmail.com/)
+On Mon, 22 May 2023, Linus Torvalds wrote:
 
-Is that ok if I resend your patch along with mine in series?
+> On Mon, May 22, 2023 at 5:52 PM David Rientjes <rientjes@google.com> wrote:
+> >
+> > Right now kernel.panic_on_warn can either be 0 or 1.  We can keep the
+> > lowest bit to be "panic on all warnings" and then bit-1 as "panic on debug
+> > VM warnings."  When CONFIG_DEBUG_VM is enabled, set the new bit by
+> > default so there's no behavior change.
+> 
+> So right now CONFIG_DEBUG_VM being off means that there's nothing at
+> all - not just no output, but also no code generation.
+> 
+> I don't think CONFIG_DEBUG_VM in itself should enable that bit-1 behavior.
+> 
+> That may be what *you* as a VM person wants, but VM people are not
+> exactly the common case.
+> 
+> So I think we've got several cases:
+> 
+>  (a) the "don't even build it" case (CONFIG_DEBUG_VM being off)
+> 
+>  (b) the "build it, and it is a WARN_ON_ONCE()" case
+> 
+>  (c) the *normal* "panic_on_warn=1" case, which by default would panic
+> on all warnings, including any warnings from CONFIG_DEBUG_VM
+> 
+>  (d) the "VM person" case, which might not panic on normal warnings,
+> but would panic on the VM warnings.
+> 
+> and I think the use-cases are for different classes of kernel use:
+> 
+>  (a) is for people who disable debugging code until they feel it is
+> needed (which I think covers a lot of kernel developers - I certainly
+> personally tend to not build with debug support unless I'm chasing
+> some issue down)
+> 
+>  (b) would probably be most distros - enable the warning so that the
+> distro can report it, but try not to kill the machine of random people
+> 
+>  (c) would be most cloud use cases, presumably together with reboot-on-panic
+> 
+>  (d) would be people who are actual VM developers, and basically want
+> the *current* behavior of VM_BUG_ON() with a machine that stops
+> 
+> and I think (d) is the smallest set of cases of all, but is the one
+> you're personally interested in.
+> 
 
-Best regards
-George
+If we want to change the behavior from today toward something that we 
+think is the more common case for enabling CONFIG_DEBUG_VM, that works 
+too.  If we fully remove VM_BUG_ON() in favor of VM_WARN_ON() + 
+kernel.panic_on_warn=1, then anybody relying on getting kernel panics when 
+they qualify new kernels with CONFIG_DEBUG_VM will start getting WARNINGs 
+but not panics unless they are already using kernel.panic_on_warn.
 
->>>
->>>> calculation the PWM driver is asking for a clock rate of >=2GHz.
->>>> We concluded that letting the common clock framework choose the best
->>>> possible parent (meaning: removing CLK_SET_RATE_NO_REPARENT here) can
->>>> be a way forward.
->>>> But this means that the PWM controller driver must try to find the
->>>> best possible parent somehow. The easiest way we came up with
->>>> (pseudo-code):
->>>>    freq = NSEC_PER_SEC / period;
->>>>    fin_freq = clk_round_rate(channel->clk, freq);
->>>>    if (fin_freq != freq) {
->>>>      freq = div64_u64(NSEC_PER_SEC * (u64)0xffff, period);
->>>>      fin_freq = clk_round_rate(channel->clk, freq);
->>>>    }
->>>>
->>>> The idea is: for a requested 32kHz signal the PWM period is 30518ns.
->>>> The updated logic would find that there's a matching clock input and
->>>> use that directly. If not: use the original logic as suggested by
->>>> Heiner.
->>>>
->>>>
->>>> Best regards,
->>>> Martin
->>>>
->>>>
->>>> [0] https://lore.kernel.org/linux-amlogic/9faca2e6-b7a1-4748-7eb0-48f8064e323e@gmail.com/
->
+I think that's fine, but is a change in behavior.  My use cases work both 
+ways.  If we don't set the bit-1 behavior by default on CONFIG_DEBUG_VM 
+then I just won't need to clear it.
 
+I'm personally interested in (d) for debugging issues, but the intent of 
+this patch was actually to allow for (b) too.  I want to deploy 
+CONFIG_DEBUG_VM with WARN_ON_ONCE() behavior to a small set of production 
+machines to catch latent kernel issues we don't know about, but without 
+impacting the workloads.
+
+That's also very valuable because I want to surface CONFIG_DEBUG_VM checks 
+that would never get hit because we panic before it can be, just because 
+of some other VM_BUG_ON().  Your idea of WARN_ON_ONCE() will be great for 
+that because we can make forward progress and not be too spammy to the 
+kernel log.
+
+There seems to be some agreement in the thread for removing VM_BUG_ON() 
+and friends in favor of VM_WARN_ON(), so I'll wait a couple days for 
+anymore feedback and then send a patch along.
+
+This seems like it will be very clean and allow for (b), which is great.
+--2003089352-194657390-1684889581=:163077--
