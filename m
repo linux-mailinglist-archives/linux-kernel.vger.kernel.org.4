@@ -2,150 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FC770F3DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE2D70F3D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjEXKO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
+        id S232365AbjEXKNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbjEXKNy (ORCPT
+        with ESMTP id S232245AbjEXKNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:13:54 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38F41A8
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:13:24 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae3fe67980so662255ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684923204; x=1687515204;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vapAR/6EU00paIGYHBQFHRt4cvB1CyiM1SCSQ+Z2hU8=;
-        b=so0mpKVWCF8cYXnovBMsyDPJZEGqiHOQ4bmJT5gSVpkt+zc4rKqCMo0yWecT0I5kxx
-         CSZzoncB3W45DsdGtdCM31I1OnKR/9pxx3bMJWEr+ACMiZ73quZ3PjFpDIUeqRwhHYMk
-         PRgbdAZf3FiegT5kg86vmqFFk153zUDVbkxfibnhPBmViR8Qxmps6RkYxJtkNMZ4K3yS
-         4aMddOG0ZHb+ZcSzwfF5sonRxm1Tb4deDTuRZI3r1sB0blpULUQ84HG90J6WfwnkO+06
-         a9aRSqyuExcoEW7hTsvoqsCoetGXtt/hAjKM8E/t6wkSv0hFP/TTgQRgK15J5g2N2TXh
-         k7Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684923204; x=1687515204;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vapAR/6EU00paIGYHBQFHRt4cvB1CyiM1SCSQ+Z2hU8=;
-        b=lk0FNFaUyqcELQrQ0SuK+vMWCpkazQ7NYs/G7lEncx6Jq3+lKXhii5euSPGTQbKXl5
-         PP/EDdlLJ2nvv9lEzEtzBdJ0kEd7mHss6UPWdBMFX8fbcBqTmFLv8oQizGLK/XY4/k9C
-         PowHX2J1GpyO9fLVs5FDjsiDJO8D3sEgPBLM971N88vbL9fa7DYYeZdMpqN/zxNU6hvx
-         3uLLhwZvB/wsYO2/drCq7QA6MI1Dtbn94AsPL3pNdwfnDUP7GZR8d+lUAjdLdlI+9KdZ
-         0UB1ActyY1siEqmgXqNQ/ttr3q7PLwz4bIIC57dfooVUx3Q2njyVpGaEczwt4AI4seJR
-         CMlQ==
-X-Gm-Message-State: AC+VfDzNONrXkCO92ibMrnHTg6zqWcvhzYVFvaFllfrBGg08gDJhO5BI
-        NBlUs3oU1l93nV4dM+9nxtDhMmWGR6Q=
-X-Google-Smtp-Source: ACHHUZ5LeRVvKkhFQ85kE1QNjWyAdmje+WlxaV87/yiqhzr6oFpOEm3bqufe8MgO9SN/ZdvjC530Dg==
-X-Received: by 2002:a17:902:ea0f:b0:1ad:c736:2090 with SMTP id s15-20020a170902ea0f00b001adc7362090mr19959331plg.3.1684923203810;
-        Wed, 24 May 2023 03:13:23 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id iw17-20020a170903045100b001aaed524541sm8336945plb.227.2023.05.24.03.13.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 03:13:23 -0700 (PDT)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     xiang@kernel.org, chao@kernel.org, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
-        zhangwen@coolpad.com
-Subject: [PATCH] erofs: remove end parameter from z_erofs_pcluster_readmore()
-Date:   Wed, 24 May 2023 18:13:05 +0800
-Message-Id: <20230524101305.22105-1-zbestahu@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 06:13:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D478F;
+        Wed, 24 May 2023 03:13:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 06883223C1;
+        Wed, 24 May 2023 10:13:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684923191; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ve4/TtYTb+xjne8MK5462M47xa5SsY8B2FkwW34+Ec=;
+        b=J854jhGb1iler25PD7IsLRhDY4qoNhjLVAy1/X25dxY5NIvulnv6l5hExoBxGabJwFyDN2
+        NtV6g1YcuEl6ruTvP88ymkpxRTHoCn0BVUvAOTmkCoZ9AwY1e9k1t94YkXMYx9xiS9PUiw
+        Yuh7KrysetiKHjdZq0ICvFqn8qChoMs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684923191;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ve4/TtYTb+xjne8MK5462M47xa5SsY8B2FkwW34+Ec=;
+        b=8PPtdtNJ/oSkIBJ1FkAulBoYKRBsmhFmFPjHKM7RavKLfxQz/S+ayzKm2bWdeCdLTnCg1b
+        YjnkN1s0fBFUg5Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45D9B13425;
+        Wed, 24 May 2023 10:13:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OFd2EDbjbWTwGgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 10:13:10 +0000
+Message-ID: <d2e02a4e-2a73-7b07-1bfb-ddf3f2a53ff1@suse.cz>
+Date:   Wed, 24 May 2023 12:13:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        torvalds@linux-foundation.org
+Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
+        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
+        mpe@ellerman.id.au
+References: <20230515075659.118447996@infradead.org>
+ <20230515080554.453785148@infradead.org>
+ <20230524093246.GP83892@hirez.programming.kicks-ass.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230524093246.GP83892@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yue Hu <huyue2@coolpad.com>
+On 5/24/23 11:32, Peter Zijlstra wrote:
+> On Mon, May 15, 2023 at 09:57:07AM +0200, Peter Zijlstra wrote:
+> 
+>> @@ -3008,6 +3029,22 @@ static inline bool pfmemalloc_match(stru
+>>  }
+>>  
+>>  #ifndef CONFIG_SLUB_TINY
+>> +static inline bool
+>> +__update_cpu_freelist_fast(struct kmem_cache *s,
+>> +			   void *freelist_old, void *freelist_new,
+>> +			   unsigned long tid)
+>> +{
+>> +#ifdef system_has_freelist_aba
+>> +	freelist_aba_t old = { .freelist = freelist_old, .counter = tid };
+>> +	freelist_aba_t new = { .freelist = freelist_new, .counter = next_tid(tid) };
+>> +
+>> +	return this_cpu_cmpxchg_freelist(s->cpu_slab->freelist_tid.full,
+>> +					 old.full, new.full) == old.full;
+>> +#else
+>> +	return false;
+>> +#endif
+>> +}
+>> +
+>>  /*
+>>   * Check the slab->freelist and either transfer the freelist to the
+>>   * per cpu freelist or deactivate the slab.
+>> @@ -3359,11 +3396,7 @@ static __always_inline void *__slab_allo
+>>  		 * against code executing on this cpu *not* from access by
+>>  		 * other cpus.
+>>  		 */
+>> -		if (unlikely(!this_cpu_cmpxchg_double(
+>> -				s->cpu_slab->freelist, s->cpu_slab->tid,
+>> -				object, tid,
+>> -				next_object, next_tid(tid)))) {
+>> -
+>> +		if (unlikely(!__update_cpu_freelist_fast(s, object, next_object, tid))) {
+>>  			note_cmpxchg_failure("slab_alloc", s, tid);
+>>  			goto redo;
+>>  		}
+>> @@ -3736,11 +3769,7 @@ static __always_inline void do_slab_free
+>>  
+>>  		set_freepointer(s, tail_obj, freelist);
+>>  
+>> -		if (unlikely(!this_cpu_cmpxchg_double(
+>> -				s->cpu_slab->freelist, s->cpu_slab->tid,
+>> -				freelist, tid,
+>> -				head, next_tid(tid)))) {
+>> -
+>> +		if (unlikely(!__update_cpu_freelist_fast(s, freelist, head, tid))) {
+>>  			note_cmpxchg_failure("slab_free", s, tid);
+>>  			goto redo;
+>>  		}
+> 
+> This isn't right; the this_cpu_cmpxchg_double() was unconditional and
+> relied on the local_irq_save() fallback when no native cmpxchg128 is
+> present.
+> 
+> The below delta makes things boot again when system_has_cmpxchg128 is
+> not defined.
 
-The `end` argument is pointless if it's not backmost.  And we already
-have `headoffset` in struct `*f`, so let's use this offset to get the
-`end` for backmost only instead in this function.
+Right, that should do.
 
-Also, remove linux/prefetch.h since it's not used anymore after commit
-386292919c25 ("erofs: introduce readmore decompression strategy").
+> I'm going to zap these patches from tip/locking/core for a few days and
+> fold the below back into the series and let it run through the robots
+> again.
 
-Signed-off-by: Yue Hu <huyue2@coolpad.com>
----
- fs/erofs/zdata.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
-
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 5cd971bcf95e..b7ebdc8f2135 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -5,7 +5,6 @@
-  * Copyright (C) 2022 Alibaba Cloud
-  */
- #include "compress.h"
--#include <linux/prefetch.h>
- #include <linux/psi.h>
- #include <linux/cpuhotplug.h>
- #include <trace/events/erofs.h>
-@@ -1825,16 +1824,16 @@ static void z_erofs_runqueue(struct z_erofs_decompress_frontend *f,
-  */
- static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
- 				      struct readahead_control *rac,
--				      erofs_off_t end,
--				      struct page **pagepool,
--				      bool backmost)
-+				      struct page **pagepool, bool backmost)
- {
- 	struct inode *inode = f->inode;
- 	struct erofs_map_blocks *map = &f->map;
--	erofs_off_t cur;
-+	erofs_off_t cur, end;
- 	int err;
- 
- 	if (backmost) {
-+		end = f->headoffset +
-+		      rac ? readahead_length(rac) : PAGE_SIZE - 1;
- 		map->m_la = end;
- 		err = z_erofs_map_blocks_iter(inode, map,
- 					      EROFS_GET_BLOCKS_READMORE);
-@@ -1894,10 +1893,9 @@ static int z_erofs_read_folio(struct file *file, struct folio *folio)
- 	trace_erofs_readpage(page, false);
- 	f.headoffset = (erofs_off_t)page->index << PAGE_SHIFT;
- 
--	z_erofs_pcluster_readmore(&f, NULL, f.headoffset + PAGE_SIZE - 1,
--				  &pagepool, true);
-+	z_erofs_pcluster_readmore(&f, NULL, &pagepool, true);
- 	err = z_erofs_do_read_page(&f, page, &pagepool);
--	z_erofs_pcluster_readmore(&f, NULL, 0, &pagepool, false);
-+	z_erofs_pcluster_readmore(&f, NULL, &pagepool, false);
- 
- 	(void)z_erofs_collector_end(&f);
- 
-@@ -1923,8 +1921,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
- 
- 	f.headoffset = readahead_pos(rac);
- 
--	z_erofs_pcluster_readmore(&f, rac, f.headoffset +
--				  readahead_length(rac) - 1, &pagepool, true);
-+	z_erofs_pcluster_readmore(&f, rac, &pagepool, true);
- 	nr_pages = readahead_count(rac);
- 	trace_erofs_readpages(inode, readahead_index(rac), nr_pages, false);
- 
-@@ -1947,7 +1944,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
- 				  page->index, EROFS_I(inode)->nid);
- 		put_page(page);
- 	}
--	z_erofs_pcluster_readmore(&f, rac, 0, &pagepool, false);
-+	z_erofs_pcluster_readmore(&f, rac, &pagepool, false);
- 	(void)z_erofs_collector_end(&f);
- 
- 	z_erofs_runqueue(&f, &pagepool,
--- 
-2.17.1
+I noticed some comments in mm/slub.c still mention "cmpxchg_double", dunno
+how much you want to clean it right now or can be postponed. Also some sysfs
+stats files for CONFIG_SLUB_STATS (not widely used) which we probably might
+try renaming without breaking anyone, but it's not guaranteed.
 
