@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB2970EF6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C3170EF71
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 09:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239802AbjEXHao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 03:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S239906AbjEXHb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 03:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbjEXHal (ORCPT
+        with ESMTP id S233663AbjEXHb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 03:30:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF858F;
-        Wed, 24 May 2023 00:30:40 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QR2p574FHzLpvb;
-        Wed, 24 May 2023 15:27:41 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 15:30:37 +0800
-Message-ID: <80efff2a-17e5-c5bd-3e61-59c207cc2343@huawei.com>
-Date:   Wed, 24 May 2023 15:30:37 +0800
+        Wed, 24 May 2023 03:31:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5401790;
+        Wed, 24 May 2023 00:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JWeiXDNejpnwIzLgTU/23od5O2F3Mmup/rXfS/mSgtU=; b=RbsSpdIBOq3BZKkwPoSgqQayF2
+        5P6+wfsjWDMtGKARnHgBscWBdI8H4uGcbVNEo5jf55w6njt21XXGOl1hcJObLAH3zJyCra5OVogsl
+        O41eYrcAYVeOwCzfqRIYnzPZHnh8uc0UYebhT5ua3goSwQL5KDfCwZ+4X+acQHOCb356auBFyjgE0
+        o3GsrgFTDP6HjbXxYfQgQCv4HzTpKMcv6HJvEPDjpWEv8hLSTmVuXqF4nQMi86BejMVFA1r0xnOcF
+        x1bEoniUEKfRuEBN/s7ldzV1qSMGHIdD2gvX/mr74+AebCG4APyA8vzfL+WNt8UJH7hQmkD8RZnoJ
+        tE0ldKYA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1ixB-00CcAF-0o;
+        Wed, 24 May 2023 07:30:37 +0000
+Date:   Wed, 24 May 2023 00:30:37 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
+        arnd@arndb.de, bp@alien8.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        luto@kernel.org, peterz@infradead.org, brgerst@gmail.com,
+        christophe.jaillet@wanadoo.fr, kirill.shutemov@linux.intel.com,
+        jroedel@suse.de, j.granados@samsung.com, akpm@linux-foundation.org,
+        willy@infradead.org, linux-parisc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] signal: move show_unhandled_signals sysctl to its
+ own file
+Message-ID: <ZG29HWE9NWn56hTg@bombadil.infradead.org>
+References: <20230522210814.1919325-1-mcgrof@kernel.org>
+ <20230522210814.1919325-3-mcgrof@kernel.org>
+ <d0fe7a6f-8cd9-0b81-758a-f3b444e74bab@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v4 00/12] ext4: fix WARNING in
- ext4_da_update_reserve_space
-Content-Language: en-US
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
-        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
-References: <20230424033846.4732-1-libaokun1@huawei.com>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230424033846.4732-1-libaokun1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d0fe7a6f-8cd9-0b81-758a-f3b444e74bab@intel.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A gentle ping too.
+On Tue, May 23, 2023 at 07:16:55AM -0700, Dave Hansen wrote:
+> On 5/22/23 14:08, Luis Chamberlain wrote:
+> > --- a/arch/x86/kernel/umip.c
+> > +++ b/arch/x86/kernel/umip.c
+> > @@ -12,6 +12,7 @@
+> >  #include <asm/insn.h>
+> >  #include <asm/insn-eval.h>
+> >  #include <linux/ratelimit.h>
+> > +#include <linux/signal.h>
+> 
+> Oh, so this is actually fixing a bug: umip.c uses
+> 'show_unhandled_signals' but it doesn't explicitly include
+> linux/signal.h where 'show_unhandled_signals' is declared.
 
-On 2023/4/24 11:38, Baokun Li wrote:
-> V1->V2:
->          Modify the patch 1 description and add the Fixes tag.
->          Add the patch 2 as suggested by Jan Kara.
-> V2->V3:
->          Remove the redundant judgment of count in Patch [1].
->          Rename ext4_es_alloc_should_nofail to ext4_es_must_keep.
->          Split Patch [2].
->          Make some functions return void to simplify the code.
-> V3->V4:
->          using nofail preallocation.
->
-> This patch set consists of three parts:
-> 1. Patch [1] fix WARNING in ext4_da_update_reserve_space.
-> 2. Patch [2]-[8] fix extent tree inconsistencies that may be caused
->     by memory allocation failures.
-> 3. Patch [9]-[12] is cleanup.
->
-> Baokun Li (12):
->    ext4: only update i_reserved_data_blocks on successful block
->      allocation
->    ext4: add a new helper to check if es must be kept
->    ext4: factor out __es_alloc_extent() and __es_free_extent()
->    ext4: use pre-allocated es in __es_insert_extent()
->    ext4: use pre-allocated es in __es_remove_extent()
->    ext4: using nofail preallocation in ext4_es_remove_extent()
->    ext4: using nofail preallocation in ext4_es_insert_delayed_block()
->    ext4: using nofail preallocation in ext4_es_insert_extent()
->    ext4: make ext4_es_remove_extent() return void
->    ext4: make ext4_es_insert_delayed_block() return void
->    ext4: make ext4_es_insert_extent() return void
->    ext4: make ext4_zeroout_es() return void
->
->   fs/ext4/extents.c        |  49 +++------
->   fs/ext4/extents_status.c | 207 ++++++++++++++++++++++++---------------
->   fs/ext4/extents_status.h |  14 +--
->   fs/ext4/indirect.c       |   8 ++
->   fs/ext4/inline.c         |  12 +--
->   fs/ext4/inode.c          |  49 ++-------
->   6 files changed, 169 insertions(+), 170 deletions(-)
->
+Fixes a non-critical bug perhaps, but I doubt it would be fixing
+a functional bug as otherwise folks would have reported a build bug, no?
 
+What or how it ends up including that file today to avoid build
+failures is beyond me.
+
+> It doesn't actually have anything to do with moving the
+> show_unhandled_signals sysctl, right?
+
+Well in my case it is making sure the sysctl variable used is declared
+as well.
+
+> If that's the case, it would be nice to have this in its own patch.
+
+If its not really fixing any build bugs or functional bugs I don't see
+the need. But if you really want it, I can do it.
+
+Let me know!
+
+  Luis
