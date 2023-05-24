@@ -2,74 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DA570F483
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EFD70F482
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbjEXKrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
+        id S231183AbjEXKro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 06:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbjEXKrn (ORCPT
+        with ESMTP id S233733AbjEXKrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:47:43 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67370A3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:47:38 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
-        by mail11.truemail.it (Postfix) with ESMTPA id EF0421F80A;
-        Wed, 24 May 2023 12:47:34 +0200 (CEST)
-Date:   Wed, 24 May 2023 12:47:30 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Otavio Salvador <otavio@ossystems.com.br>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Alistair Francis <alistair@alistair23.me>,
-        Fabio Estevam <festevam@gmail.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: imx_v6_v7_defconfig: Remove KERNEL_LZO config
-Message-ID: <ZG3rQppukyWCTQr6@francesco-nb.int.toradex.com>
-References: <20230523212829.2539417-1-otavio@ossystems.com.br>
- <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com>
+        Wed, 24 May 2023 06:47:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D5113E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:47:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 88CE01F896;
+        Wed, 24 May 2023 10:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684925256; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B6eofjmVUUNyLVYqaAyecwdLrDjG/xIisa/ISnr9R3w=;
+        b=i5DzOO5IUGWY11coV46xM2v1dZTVvivjtQjtvHKF2RZvDVoAq8wgXYwR9DJNy0cwZjeHUC
+        n021bMPaOazVIjMQEFVu5CBp01ZCVzA+b0u+2CuYTxE1vEPFaIJVNMomKkvAh8hJF5ht8t
+        bPC8uydePERM7+5xz0YhlLNC0KBjFqo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684925256;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B6eofjmVUUNyLVYqaAyecwdLrDjG/xIisa/ISnr9R3w=;
+        b=ocknsgsHyitBwRsrSK0dOT2s//PoN/27t60ftL4Kgx82BjE9d25ZnbFFVLOEDRHhB+d8wa
+        zyslt7AF6XLgsyBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B2FC133E6;
+        Wed, 24 May 2023 10:47:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id J3BJGUjrbWTbLQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 24 May 2023 10:47:36 +0000
+Message-ID: <2f516118-2183-400f-7efd-04c2766fa9d6@suse.de>
+Date:   Wed, 24 May 2023 12:47:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/ast: Fix modeset failed on DisplayPort
+Content-Language: en-US
+To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230425070330.8520-1-jammy_huang@aspeedtech.com>
+ <d43c0c09-ff6b-e2d1-01ae-68fe93188896@suse.de>
+ <d285566b-ed7c-8e2a-a078-7bdd5bac13e3@aspeedtech.com>
+ <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------h3sRk7wcYjp8AoDlXc0WzKbw"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:48:26AM +0200, Arnd Bergmann wrote:
-> On Tue, May 23, 2023, at 23:28, Otavio Salvador wrote:
-> > The KERNEL_GZIP is used in most config and is the default, there is no
-> > clear reason to diverge so let default be used.
-> >
-> > Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
-> 
-> If you are looking into cleaning up this file, maybe see if we can
-> kill off these options:
-> 
-> CONFIG_VIDEO_IMX_MEDIA=y # not graduated from staging after 6 years
-This would be a bad idea from my point of view, this is regularly used
-despite the fact that it is in staging.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------h3sRk7wcYjp8AoDlXc0WzKbw
+Content-Type: multipart/mixed; boundary="------------3FTifAi8yA0mKGX0gRMnKnrK";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-ID: <2f516118-2183-400f-7efd-04c2766fa9d6@suse.de>
+Subject: Re: [PATCH] drm/ast: Fix modeset failed on DisplayPort
+References: <20230425070330.8520-1-jammy_huang@aspeedtech.com>
+ <d43c0c09-ff6b-e2d1-01ae-68fe93188896@suse.de>
+ <d285566b-ed7c-8e2a-a078-7bdd5bac13e3@aspeedtech.com>
+ <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
+In-Reply-To: <1e4ca9bc-0e39-2708-8da8-b402139fe7ff@aspeedtech.com>
 
-Of course, I agree on the graduating thingy ...
+--------------3FTifAi8yA0mKGX0gRMnKnrK
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Francesco
+SGksDQoNCnRoaXMgcGF0Y2ggYWxzbyBmZWxsIHRocm91Z2ggdGhlIGNyYWNrcy4gQXBvbG9n
+aWVzLg0KDQpBbSAyNC4wNS4yMyB1bSAwNDoyOSBzY2hyaWViIEphbW15IEh1YW5nOg0KPiBI
+aSBUaG9tYXMsDQo+IA0KPiBEbyB5b3UgaGF2ZSBvdGhlciBzdWdnZXN0aW9uIGZvciB0aGlz
+IHBhdGNoPz8NCg0KVGhlIG1haW4gaXNzdWUgd2FzIHRoYXQgc3RydWN0IGFzdF9wcml2YXRl
+IGlzIG5vdyBjYWxsZWQgc3RydWN0IA0KYXN0X2RldmljZS4gIFNvIHRoZSBjdXJyZW50IHBh
+dGNoIGNhbm5vdCBiZSBhcHBsaWVkLg0KDQo+IA0KPiBQbGVhc2Uga2luZGx5IGFkdmlzZS4N
+Cj4gDQo+IE9uIDIwMjMvNC8yNSDkuIvljYggMDM6MzksIEphbW15IEh1YW5nIHdyb3RlOg0K
+Pj4gSGkgVGhvbWFzLA0KPj4NCj4+IEkgdGhpbmsgRFA1MDEgaXMgT0suIEl0IGRvZXNuJ3Qg
+dXNlIGlvcmVncyBpbiBhc3RfZHA1MDFfcmVhZF9lZGlkKCkuDQo+Pg0KPj4gT24gMjAyMy80
+LzI1IOS4i+WNiCAwMzoyNywgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+Pj4gSGkNCj4+
+Pg0KPj4+IEFtIDI1LjA0LjIzIHVtIDA5OjAzIHNjaHJpZWIgSmFtbXkgSHVhbmc6DQo+Pj4+
+IElmIHdlIHN3aXRjaCBkaXNwbGF5IGFuZCB1cGRhdGUgY3Vyc29yIHRvZ2V0aGVyLCBpdCBj
+b3VsZCBsZWFkIHRvDQo+Pj4+IG1vZGVzZXQgZmFpbGVkIGJlY2F1c2Ugb2YgY29uY3VycmVu
+dCBhY2Nlc3MgdG8gSU8gcmVnaXN0ZXJzLg0KPj4+Pg0KPj4+PiBBZGQgbG9jayBwcm90ZWN0
+aW9uIGluIERQJ3MgZWRpZCBhY2Nlc3MgdG8gYXZvaWQgdGhpcyBwcm9ibGVtLg0KPj4+DQo+
+Pj4gVGhhbmtzIGZvciB0aGUgcGF0Y2guIEkgdGhvdWdodCBJIGZpeGVkIHRoaXMgaXNzdWUg
+YWxyZWFkeSwgYnV0IHRoYXQgDQo+Pj4gYXBwYXJlbnRseSBvbmx5IGhhcHBlbmVkIGZvciBT
+SUwxNjQgYW5kIFZHQS4NCj4+Pg0KPj4+IFdoYXQgYWJvdXQgYXN0X2RwNTAxX2Nvbm5lY3Rv
+cl9oZWxwZXJfZ2V0X21vZGVzKCk/IERvZXMgaXQgcmVxdWlyZSANCj4+PiB0aGUgbG9ja2lu
+ZyBhcyB3ZWxsPw0KPj4+DQo+Pj4+DQo+Pj4+IFNpZ25lZC1vZmYtYnk6IEphbW15IEh1YW5n
+IDxqYW1teV9odWFuZ0Bhc3BlZWR0ZWNoLmNvbT4NCj4+Pj4gLS0tDQo+Pj4+IMKgIGRyaXZl
+cnMvZ3B1L2RybS9hc3QvYXN0X21vZGUuYyB8IDExICsrKysrKysrKysrDQo+Pj4+IMKgIDEg
+ZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMgDQo+Pj4+IGIvZHJpdmVycy9ncHUv
+ZHJtL2FzdC9hc3RfbW9kZS5jDQo+Pj4+IGluZGV4IDk4NGVjNTkwYTdlNy4uZmU1ZjFmZDYx
+MzYxIDEwMDY0NA0KPj4+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMN
+Cj4+Pj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+Pj4+IEBAIC0x
+NjM1LDYgKzE2MzUsOCBAQCBzdGF0aWMgaW50IGFzdF9kcDUwMV9vdXRwdXRfaW5pdChzdHJ1
+Y3QgDQo+Pj4+IGFzdF9wcml2YXRlICphc3QpDQo+Pj4+IMKgIHN0YXRpYyBpbnQgYXN0X2Fz
+dGRwX2Nvbm5lY3Rvcl9oZWxwZXJfZ2V0X21vZGVzKHN0cnVjdCANCj4+Pj4gZHJtX2Nvbm5l
+Y3RvciAqY29ubmVjdG9yKQ0KPj4+PiDCoCB7DQo+Pj4+IMKgwqDCoMKgwqAgdm9pZCAqZWRp
+ZDsNCj4+Pj4gK8KgwqDCoCBzdHJ1Y3QgZHJtX2RldmljZSAqZGV2ID0gY29ubmVjdG9yLT5k
+ZXY7DQo+Pj4+ICvCoMKgwqAgc3RydWN0IGFzdF9wcml2YXRlICphc3QgPSB0b19hc3RfcHJp
+dmF0ZShkZXYpOw0KPj4+DQo+Pj4gV2UndmUgbWVhbndoaWxlIHJlbmFtZWQgYXN0X3ByaXZh
+dGUgdG8gYXN0X2RldmljZS4gQ291bGQgeW91IHBsZWFzZSANCj4+PiBwcm92aWRlIGFuIHVw
+ZGF0ZWQgcGF0Y2ggZm9yIHRoZSBkcm0tbWlzYy1uZXh0IHRyZWU/DQo+Pj4NCj4+PiBCZXN0
+IHJlZ2FyZHMNCj4+PiBUaG9tYXMNCj4+Pg0KPj4+PiDCoCDCoMKgwqDCoMKgIGludCBzdWNj
+Ow0KPj4+PiDCoMKgwqDCoMKgIGludCBjb3VudDsNCj4+Pj4gQEAgLTE2NDMsMTAgKzE2NDUs
+MTggQEAgc3RhdGljIGludCANCj4+Pj4gYXN0X2FzdGRwX2Nvbm5lY3Rvcl9oZWxwZXJfZ2V0
+X21vZGVzKHN0cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+Pj4+IMKgwqDCoMKg
+wqAgaWYgKCFlZGlkKQ0KPj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBlcnJfZHJtX2Nv
+bm5lY3Rvcl91cGRhdGVfZWRpZF9wcm9wZXJ0eTsNCj4+Pj4gwqAgK8KgwqDCoCAvKg0KPj4+
+PiArwqDCoMKgwqAgKiBQcm90ZWN0IGFjY2VzcyB0byBJL08gcmVnaXN0ZXJzIGZyb20gY29u
+Y3VycmVudCBtb2Rlc2V0dGluZw0KPj4+PiArwqDCoMKgwqAgKiBieSBhY3F1aXJpbmcgdGhl
+IEkvTy1yZWdpc3RlciBsb2NrLg0KPj4+PiArwqDCoMKgwqAgKi8NCj4+Pj4gK8KgwqDCoCBt
+dXRleF9sb2NrKCZhc3QtPmlvcmVnc19sb2NrKTsNCj4+Pj4gKw0KPj4+PiDCoMKgwqDCoMKg
+IHN1Y2MgPSBhc3RfYXN0ZHBfcmVhZF9lZGlkKGNvbm5lY3Rvci0+ZGV2LCBlZGlkKTsNCj4+
+Pj4gwqDCoMKgwqDCoCBpZiAoc3VjYyA8IDApDQo+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBn
+b3RvIGVycl9rZnJlZTsNCj4+Pj4gwqAgK8KgwqDCoCBtdXRleF91bmxvY2soJmFzdC0+aW9y
+ZWdzX2xvY2spOw0KPj4+PiArDQo+Pj4+IMKgwqDCoMKgwqAgZHJtX2Nvbm5lY3Rvcl91cGRh
+dGVfZWRpZF9wcm9wZXJ0eShjb25uZWN0b3IsIGVkaWQpOw0KPj4+PiDCoMKgwqDCoMKgIGNv
+dW50ID0gZHJtX2FkZF9lZGlkX21vZGVzKGNvbm5lY3RvciwgZWRpZCk7DQo+Pj4+IMKgwqDC
+oMKgwqAga2ZyZWUoZWRpZCk7DQo+Pj4+IEBAIC0xNjU0LDYgKzE2NjQsNyBAQCBzdGF0aWMg
+aW50IA0KPj4+PiBhc3RfYXN0ZHBfY29ubmVjdG9yX2hlbHBlcl9nZXRfbW9kZXMoc3RydWN0
+IGRybV9jb25uZWN0b3IgKmNvbm5lY3RvcikNCj4+Pj4gwqDCoMKgwqDCoCByZXR1cm4gY291
+bnQ7DQo+Pj4+IMKgIMKgIGVycl9rZnJlZToNCg0KSGVyZSdzIGEgbWlub3IgaXNzdWUgdGhh
+dCB0aGUgZ290byBsYWJlbCBzaG91bGQgbm93IGJlIGNhbGxlZCANCmVycl9tdXRleF91bmxv
+Y2suDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4+Pj4gK8KgwqDCoCBtdXRleF91bmxv
+Y2soJmFzdC0+aW9yZWdzX2xvY2spOw0KPj4+PiDCoMKgwqDCoMKgIGtmcmVlKGVkaWQpOw0K
+Pj4+PiDCoCBlcnJfZHJtX2Nvbm5lY3Rvcl91cGRhdGVfZWRpZF9wcm9wZXJ0eToNCj4+Pj4g
+wqDCoMKgwqDCoCBkcm1fY29ubmVjdG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5KGNvbm5lY3Rv
+ciwgTlVMTCk7DQo+Pj4+DQo+Pj4+IGJhc2UtY29tbWl0OiA2MWQzMjVkY2JjMDVkOGZlZjg4
+MTEwZDM1ZWY3Nzc2ZjNhYzNmNjhiDQo+Pj4NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0K
+R3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2Vy
+bWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFu
+eQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRp
+ZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
 
+--------------3FTifAi8yA0mKGX0gRMnKnrK--
 
+--------------h3sRk7wcYjp8AoDlXc0WzKbw
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRt60cFAwAAAAAACgkQlh/E3EQov+AW
+xxAAy/ziqgA6zei6EXLe1AECLwK4wKA4yQhL87KBle1Se+eAuUQFWnQSCjao/Zv7nGuxGXnlJgFJ
+mnfHewlgoUzQnEJS8QgqTU3z9BEOsgr7MnBWHqrEUE3omDPsnx0Fo2QP4ukjvbBMwgPTdm4QzzzB
+XnXweFlgLKhM1957qRCbFTNetS6P9mQZZ1dPh4WTrXjTFBdY1geM8LqpE87f2ZcZsNc3oLwqvJv0
+s2D4oO5jXB39tLmqz+TZ9msKuytulukuGydBOq47SjHq2SUUU6u1a60ffBkjRkVgYMXceP6I636Y
+s66BKL+d2lya/J2MIleqsR5twBUJ41Dw9+N16HbAlt+1kwwOG5C7FMljn5eBdYUCfQ++Vw1aIgYm
+EzX03xXD4vRwvVPrAtSlyVhY3wYuNb6rBqXKEE6t9RjCfuu7yaxP4uxjniBJV3LpXTHpw/q6y7jl
+ZT8VNRbwMtW/UMxxNwsQNG+gzo65DdRVBMrC2AkRgg4XrQYKvYGWh0NbOzheIA0+++c0W8PlV+7v
+Lm9ap2PZuHncRNUaFvqVSR6V3qW1djgrlBIhyFFkm8Oi8M3KuxF/4ZFbtFoY8LUNxyA2YO/eWsXL
+E0OR/sT4nEKUMIoV/DfOm4oKa5lS6JlwePXdOv33usxtsq7yQdxIvhXa1npjB9/chmQ38KOQ3GvX
+loc=
+=lOPq
+-----END PGP SIGNATURE-----
+
+--------------h3sRk7wcYjp8AoDlXc0WzKbw--
