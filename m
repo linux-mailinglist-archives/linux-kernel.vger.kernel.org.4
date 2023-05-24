@@ -2,91 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48E87100F7
+	by mail.lfdr.de (Postfix) with ESMTP id 692C27100F6
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237797AbjEXW3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S237204AbjEXW2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbjEXW26 (ORCPT
+        with ESMTP id S235675AbjEXW2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:28:58 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAC413A
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:28:16 -0700 (PDT)
+        Wed, 24 May 2023 18:28:53 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A106C123
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:28:11 -0700 (PDT)
 Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id EE19A3F815;
-        Thu, 25 May 2023 00:26:52 +0200 (CEST)
-Date:   Thu, 25 May 2023 00:26:51 +0200
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DD8AA3F812;
+        Thu, 25 May 2023 00:27:08 +0200 (CEST)
+Date:   Thu, 25 May 2023 00:27:07 +0200
 From:   Marijn Suijten <marijn.suijten@somainline.org>
 To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
 Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
         sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
         vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
         agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
+        andersson@kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
         quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
         freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 01/10] drm/msm/dpu: set DSC flush bit correctly at
- MDP CTL flush register
-Message-ID: <y2mrt7f645vclt7umm7gcwczrtor4doim5skowppsxsvzdbfvx@is2xxhd2ri5z>
+Subject: Re: [PATCH v13 02/10] drm/msm/dpu: add dsc blocks to the catalog of
+ MSM8998 and SC8180X
+Message-ID: <nihammaqz2eklkxddojannftwtyvbushvrpptgfh64n6sy3l3h@74ei6r5isjga>
 References: <1684800039-18231-1-git-send-email-quic_khsieh@quicinc.com>
- <1684800039-18231-2-git-send-email-quic_khsieh@quicinc.com>
+ <1684800039-18231-3-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1684800039-18231-2-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1684800039-18231-3-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-22 17:00:30, Kuogee Hsieh wrote:
-> The DSC CTL_FLUSH register should be programmed with the 22th bit
+Title: DSC
 
-Sorry for botching this in v12 review, there's no DSC CTL_FLUSH
-register.  Drop DSC from "The DSC CTL_FLUSH register".
 
-> (DSC_IDX) to flush the DSC hardware blocks, not the literal value of
-> 22 (which corresponds to flushing VIG1, VIG2 and RGB1 instead).
+On 2023-05-22 17:00:31, Kuogee Hsieh wrote:
+> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > 
-> Changes in V12:
-> -- split this patch out of "separate DSC flush update out of interface"
+> Some platforms have DSC blocks which have not been declared in the catalog.
+> Complete DSC 1.1 support for all platforms by adding the missing blocks to
+> MSM8998 and SC8180X.
 > 
-> Changes in V13:
-> -- rewording the commit text
+> Changes in v9:
+> -- add MSM8998 and SC8180x to commit title
 > 
-> Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
+> Changes in v10:
+> -- fix grammar at commit text
+> 
+> Changes in v12:
+> -- fix "titil" with "title" at changes in v9
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
+>  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
+>  2 files changed, 18 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> index 4f7cfa9..69d0ea2 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> @@ -525,7 +525,7 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
->  		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
->  			      BIT(cfg->merge_3d - MERGE_3D_0));
->  	if (cfg->dsc) {
-> -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
-> +		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, BIT(DSC_IDX));
->  		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
->  	}
->  }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> index c0dd477..521cfd5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>  };
+>  
+> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
+> +};
+> +
+>  static const struct dpu_dspp_cfg msm8998_dspp[] = {
+>  	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
+>  		 &msm8998_dspp_sblk),
+> @@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+>  	.dspp = msm8998_dspp,
+>  	.pingpong_count = ARRAY_SIZE(msm8998_pp),
+>  	.pingpong = msm8998_pp,
+> +	.dsc_count = ARRAY_SIZE(msm8998_dsc),
+> +	.dsc = msm8998_dsc,
+>  	.intf_count = ARRAY_SIZE(msm8998_intf),
+>  	.intf = msm8998_intf,
+>  	.vbif_count = ARRAY_SIZE(msm8998_vbif),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> index e8057a1..fec1665 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> @@ -142,6 +142,15 @@ static const struct dpu_merge_3d_cfg sc8180x_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x83200),
+>  };
+>  
+> +static const struct dpu_dsc_cfg sc8180x_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_2", DSC_2, 0x80800, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_3", DSC_3, 0x80c00, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_4", DSC_4, 0x81000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_5", DSC_5, 0x81400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +};
+> +
+>  static const struct dpu_intf_cfg sc8180x_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x6a000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -206,6 +215,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
+>  	.mixer = sc8180x_lm,
+>  	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
+>  	.pingpong = sc8180x_pp,
+> +	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
+> +	.dsc = sc8180x_dsc,
+>  	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
+>  	.merge_3d = sc8180x_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sc8180x_intf),
 > -- 
 > 2.7.4
 > 
