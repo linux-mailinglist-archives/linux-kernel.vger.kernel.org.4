@@ -2,234 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA34670F01D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B91270F023
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239155AbjEXIE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 04:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S233407AbjEXIFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240023AbjEXIEy (ORCPT
+        with ESMTP id S239813AbjEXIFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 04:04:54 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5575F91
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:04:52 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25533eb3e5dso562518a91.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684915491; x=1687507491;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MCXe9wpGobKobnhNJNDfQmFcDDPhlo9IeOCxeO12Qzw=;
-        b=xh4/zjcx9pjBjorqzgTQuGQh0UR/y2zLdeH1lH1EnEo7E8pcw2lp7xSaT9tNGFx45t
-         AoLc0aAhQvCXsr4igvu05jiwE8vk3qj5g2hfJU/H/y14QZtx42LhTNuLG0uyISxjNgje
-         n+cAMbTwqIZPnreY2sIbzyNc5A17eS8Nc2RcwOdhYeSgrFyoceAMsKjcjm75a+ZKu0PD
-         pKV/ZZ5X0Wg/XrlkN6G4qnQtAmV2k5NqPMDGWFCAeK4nzeTFLvP3R5QBuYs296Se4jij
-         t+CNq69ZB/+Gq+8skYvAHfOFTgAadLSilLBpTtCzQhroVtEkIJ9mPXW6hdq/x2tWFDJS
-         Fixw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684915491; x=1687507491;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MCXe9wpGobKobnhNJNDfQmFcDDPhlo9IeOCxeO12Qzw=;
-        b=Y1kFKrj1oDtZbleqQJa6zvawqZNZGH/+PvJA2KJhD4FSKtN8B/z6PXdpYOSIFBbCvK
-         m+eMUwELAEea4GdXj4YBI3YTLTH4aLSkjVzaJrddXjnWjZOnWm26jZXXDiwksGUOks5U
-         toe8583/pKo6aTkFQvTa22nztE+iEKApMGk/uzzEvTPvr8vXV07pk1udhXRG4w6ovgyt
-         PEGCEt4hONeVvUmStwnfP0ODTviGJB33Jbni7qyML2/xIyieM/iQUvueERQCE7LlBfTK
-         //xFhwHCA2LczK4biJf+esRKl6usiEYmTxHfnJoAcRCwCQ4IBlsaxifAjoha1yZQjwVT
-         /X1w==
-X-Gm-Message-State: AC+VfDw4IuSnhRAZQGXKAtp8rI+RLEac3p+PROWz6xRlEclh53o7bjd0
-        fIUZ2vM4tSB/EXCWiUzND5btZQyVxSQi/cIGxfklzw==
-X-Google-Smtp-Source: ACHHUZ4l0bcfIYPhFemfwItjuek5lVevwVFOC/bZBLTHHbGE+vQq8hAuOarmLawCYhyiqDgOdkXapuxMlpJG5pjahVY=
-X-Received: by 2002:a17:90b:954:b0:24e:10b3:c9cc with SMTP id
- dw20-20020a17090b095400b0024e10b3c9ccmr14368535pjb.14.1684915491339; Wed, 24
- May 2023 01:04:51 -0700 (PDT)
+        Wed, 24 May 2023 04:05:39 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A0C1A6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:05:32 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QR3c21DlzzLmPw;
+        Wed, 24 May 2023 16:04:02 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 16:05:29 +0800
+CC:     <yangyicong@hisilicon.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <tim.c.chen@linux.intel.com>,
+        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
+        <john.garry@huawei.com>, <shenyang39@huawei.com>,
+        <kprateek.nayak@amd.com>, <wuyun.abel@bytedance.com>,
+        <tim.c.chen@intel.com>
+Subject: Re: [RESEND PATCH v7 2/2] sched/fair: Scan cluster before scanning
+ LLC in wake-up path
+To:     Chen Yu <yu.c.chen@intel.com>
+References: <20220915073423.25535-1-yangyicong@huawei.com>
+ <20220915073423.25535-3-yangyicong@huawei.com>
+ <ZGsLy83wPIpamy6x@chenyu5-mobl1>
+ <46e8d4fc-993b-e1d6-5e4c-cb33513d7888@huawei.com>
+ <ZGzDLuVaHR1PAYDt@chenyu5-mobl1>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <9b3bdf37-2551-871c-1f68-ceddf4e933c3@huawei.com>
+Date:   Wed, 24 May 2023 16:05:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-References: <20230511065330.26392-1-mike.leach@linaro.org> <PH0PR18MB5002D43DD267B8E778EC634DCE419@PH0PR18MB5002.namprd18.prod.outlook.com>
-In-Reply-To: <PH0PR18MB5002D43DD267B8E778EC634DCE419@PH0PR18MB5002.namprd18.prod.outlook.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 24 May 2023 09:04:40 +0100
-Message-ID: <CAJ9a7Vh1dStKR7XH-NGpF4UZ3tQqzee5NeEahPGT-Mk6MY1TsA@mail.gmail.com>
-Subject: Re: [EXT] [PATCH v6 0/6] coresight: syscfg: Add config table load via configfs
-To:     Linu Cherian <lcherian@marvell.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "acme@kernel.org" <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZGzDLuVaHR1PAYDt@chenyu5-mobl1>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linu
+On 2023/5/23 21:44, Chen Yu wrote:
+> On 2023-05-22 at 20:42:19 +0800, Yicong Yang wrote:
+>> Hi Chen,
+>>
+>> On 2023/5/22 14:29, Chen Yu wrote:
+>>> Hi Yicong,
+>>> On 2022-09-15 at 15:34:23 +0800, Yicong Yang wrote:
+>>>> From: Barry Song <song.bao.hua@hisilicon.com>
+>>>>
+> [snip...]
+>>
+>> Thanks for the further information. The result of netperf/tbench looks good as we
+>> image, the cluster wakeup expects to gain more benefit when the system is under
+>> loaded or well-loaded. May I know how many CPUs sharing cluster on Jacobsvilla?
+>>
+> There are 4 CPUs per cluster on Jacobsville.
+> [snip...]
+>>>> @@ -6550,7 +6574,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>>>>  	/*
+>>>>  	 * If the previous CPU is cache affine and idle, don't be stupid:
+>>>>  	 */
+>>>> -	if (prev != target && cpus_share_cache(prev, target) &&
+>>>> +	if (prev != target && cpus_share_lowest_cache(prev, target) &&
+>>> This change impacts hackbench in socket mode a bit. It seems that for hackbench even
+>>> putting the wakee on its previous CPU in the same LLC is better than putting it on
+>>> current cluster. But it seems to be hackbench specific.
+>>>
+>>
+>> ...without this do you still see the same improvement at under-loaded case (threads less-equal the CPU
+>> numbers) for tbench/netperf? 
+>> The idea here is to always try to wakeup in the same cluster of the
+>> target to benefit from the cluster cache but the early test for the prev and recent used cpu may break
+>> that. Keep it as is, at low load the prev cpu or recent used cpu get more chance to be idle so we take
+>> less chance to benefit from the cluster and gain less performance improvement.
+>>
+> Right. Without above change I saw lower improvement at lightly load case for netperf/tbench.
+>> In the hackbench case as you noticed, the utilization can reach 100% ideally so the SIS_UTIL
+>> will regulate the scanning number to 4 or around. If the prev/recent used CPU is not in the same
+>> cluster with target, we're about to scanning the cluster and when found no idle CPU and has
+>> run out of the scanning number, we'll fallback to wakeup on the target. That maybe the reason
+>> why observed more wakeups on target rather than previous CPU.
+>>
+> Looks reasonable. When the budget of scanning number is low, we can not find an idle target
+> on local cluster and terminates scanning for an idle prev on remote cluster, although that
+> prev could be a better choice than target cpu.
+>> In this case I wondering choosing prev cpu or recent used cpu after scanning the cluster can help
+>> the situation here, like the snippet below (kinds of messy though).
+>>
+> This change makes sense to me. I only modified it a little bit to only give prev a second
+> chance. With your patch applied, the improvement of netperf/tbench remains while the
+> hackbench big regress was gone.
+> 
 
+Thanks for the test, it looks justified to have this. Will include this change in next version.
 
+> hackbench
+> =========
+> case            	load    	baseline(std%)	compare%( std%)
+> process-pipe    	1-groups	 1.00 (  2.35)	 -0.65 (  1.81)
+> process-pipe    	2-groups	 1.00 (  0.42)	 -2.16 (  1.12)
+> process-pipe    	4-groups	 1.00 (  1.84)	 +0.72 (  1.34)
+> process-pipe    	8-groups	 1.00 (  2.81)	 +1.12 (  3.88)
+> process-sockets 	1-groups	 1.00 (  1.88)	 -0.99 (  4.84)
+> process-sockets 	2-groups	 1.00 (  5.49)	 -4.50 (  4.09)
+> process-sockets 	4-groups	 1.00 (  3.54)	 +2.28 (  3.13)
+> process-sockets 	8-groups	 1.00 (  0.79)	 -0.13 (  1.28)
+> threads-pipe    	1-groups	 1.00 (  1.73)	 -2.39 (  0.40)
+> threads-pipe    	2-groups	 1.00 (  0.73)	 +2.88 (  1.94)
+> threads-pipe    	4-groups	 1.00 (  0.64)	 +1.12 (  1.82)
+> threads-pipe    	8-groups	 1.00 (  1.55)	 -1.59 (  1.20)
+> threads-sockets 	1-groups	 1.00 (  3.76)	 +3.21 (  3.56)
+> threads-sockets 	2-groups	 1.00 (  1.20)	 -5.56 (  2.64)
+> threads-sockets 	4-groups	 1.00 (  2.65)	 +1.48 (  4.91)
+> threads-sockets 	8-groups	 1.00 (  0.08)	 +0.18 (  0.15)
+> 
+> netperf
+> =======
+> case            	load    	baseline(std%)	compare%( std%)
+> TCP_RR          	6-threads	 1.00 (  0.91)	 +2.87 (  0.83)
+> TCP_RR          	12-threads	 1.00 (  0.22)	 +3.48 (  0.31)
+> TCP_RR          	18-threads	 1.00 (  0.41)	 +7.81 (  0.48)
+> TCP_RR          	24-threads	 1.00 (  1.02)	 -0.32 (  1.25)
+> TCP_RR          	30-threads	 1.00 (  4.67)	 -0.04 (  5.14)
+> TCP_RR          	36-threads	 1.00 (  4.53)	 -0.13 (  4.37)
+> TCP_RR          	42-threads	 1.00 (  3.92)	 -0.15 (  3.07)
+> TCP_RR          	48-threads	 1.00 (  2.07)	 -0.17 (  1.52)
+> UDP_RR          	6-threads	 1.00 (  0.98)	 +4.50 (  2.38)
+> UDP_RR          	12-threads	 1.00 (  0.26)	 +3.64 (  0.25)
+> UDP_RR          	18-threads	 1.00 (  0.27)	 +9.93 (  0.55)
+> UDP_RR          	24-threads	 1.00 (  1.22)	 +0.13 (  1.33)
+> UDP_RR          	30-threads	 1.00 (  3.86)	 -0.03 (  5.05)
+> UDP_RR          	36-threads	 1.00 (  2.81)	 +0.10 (  3.37)
+> UDP_RR          	42-threads	 1.00 (  3.51)	 -0.26 (  2.94)
+> UDP_RR          	48-threads	 1.00 ( 12.54)	 +0.74 (  9.44)
+> 
+> tbench
+> ======
+> case            	load    	baseline(std%)	compare%( std%)
+> loopback        	6-threads	 1.00 (  0.04)	 +2.94 (  0.26)
+> loopback        	12-threads	 1.00 (  0.30)	 +4.58 (  0.12)
+> loopback        	18-threads	 1.00 (  0.37)	+12.38 (  0.10)
+> loopback        	24-threads	 1.00 (  0.56)	 -0.27 (  0.50)
+> loopback        	30-threads	 1.00 (  0.17)	 -0.18 (  0.06)
+> loopback        	36-threads	 1.00 (  0.25)	 -0.73 (  0.44)
+> loopback        	42-threads	 1.00 (  0.10)	 -0.22 (  0.18)
+> loopback        	48-threads	 1.00 (  0.29)	 -0.48 (  0.19)
+> 
+> schbench
+> ========
+> case            	load    	baseline(std%)	compare%( std%)
+> normal          	1-mthreads	 1.00 (  0.00)	 +0.00 (  0.00)
+> normal          	2-mthreads	 1.00 (  0.00)	 +0.00 (  0.00)
+> normal          	4-mthreads	 1.00 (  6.80)	 +2.78 (  8.08)
+> normal          	8-mthreads	 1.00 (  3.65)	 -0.23 (  4.30)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 0989116b0796..07495b44c68f 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -7127,7 +7127,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>  	bool has_idle_core = false;
+>  	struct sched_domain *sd;
+>  	unsigned long task_util, util_min, util_max;
+> -	int i, recent_used_cpu;
+> +	int i, recent_used_cpu, prev_aff = -1;
+>  
+>  	/*
+>  	 * On asymmetric system, update task utilization because we will check
+> @@ -7152,10 +7152,13 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>  	/*
+>  	 * If the previous CPU is cache affine and idle, don't be stupid:
+>  	 */
+> -	if (prev != target && cpus_share_lowest_cache(prev, target) &&
+> +	if (prev != target && cpus_share_cache(prev, target) &&
+>  	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
+> -	    asym_fits_cpu(task_util, util_min, util_max, prev))
+> -		return prev;
+> +	    asym_fits_cpu(task_util, util_min, util_max, prev)) {
+> +		if (cpus_share_lowest_cache(prev, target))
+> +			return prev;
+> +		prev_aff = prev;
+> +	}
+>  
+>  	/*
+>  	 * Allow a per-cpu kthread to stack with the wakee if the
+> @@ -7223,6 +7226,13 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>  	if ((unsigned)i < nr_cpumask_bits)
+>  		return i;
+>  
+> +	/*
+> +	 * Give prev another chance, in case prev has not been
+> +	 * scanned in select_idle_cpu() due to nr constrain.
+> +	 */
+> +	if (prev_aff != -1)
+> +		return prev_aff;
+> +
 
-On Wed, 24 May 2023 at 05:48, Linu Cherian <lcherian@marvell.com> wrote:
->
-> Hi Mike,
->
-> > -----Original Message-----
-> > From: Mike Leach <mike.leach@linaro.org>
-> > Sent: Thursday, May 11, 2023 12:23 PM
-> > To: linux-arm-kernel@lists.infradead.org; coresight@lists.linaro.org; linux-
-> > kernel@vger.kernel.org
-> > Cc: acme@kernel.org; Mike Leach <mike.leach@linaro.org>
-> > Subject: [EXT] [PATCH v6 0/6] coresight: syscfg: Add config table load via
-> > configfs
-> >
-> > External Email
-> >
-> > ----------------------------------------------------------------------
-> > This set extends the configuration management support to allow loading and
-> > unloading of configurations as structured tables.
-> >
-> > The existing coresight configuration configfs API is additionally extended to
-> > use this table functionality to load and unload configuration tables as binary
-> > files.
-> >
-> > This allows coresight configurations to be loaded at runtime, and
-> > independently of kernel version, without the requirement to re-compile as
-> > built in kernel modules.
-> >
-> > Additional attributes - load and unload are provided to in the /config/cs-
-> > syscfg subsytem base group to implement the load functionality.
-> >
-> > The load attribute is a configfs binary attribute, loading the configuration
-> > table in a similar way as the ACPI table binary attribute for that sub-system.
-> >
-> > The configfs binary attribute mechanism supplies a strictly size limited kernel
-> > buffer, providing better safety than other mechnisms, and also has the
-> > advantage of being accessible directly from the command line, and being part
-> > of the existing upstream coresight configuration mechanism in configfs
-> >
-> > Configurations loaded in this way are validated and loaded across the entire
-> > system of components atomically. If any part fails to load then the whole
-> > configuration load will be cancelled.
->
-> Currently configuration load is restricted to ETMs alone, CMIIW. Do you have plans to
-> extend the generic configuration load support to CTI component as well ?
->
+It looks neater. We should also give recent_used_cpu a chance based on the current implementation
+if it does no harm.
 
-Yes CTI support is in a follow up set.
-
-This set enables the load mechanisms - there are two follow up sets -
-the first that extends ETM support, and a second that allows
-programming of CTIs and other components as well.
-
-Regards
-
-Mike
-
-> >
-> > Routines to generate binary configuration table files are supplied in
-> > ./tools/coresight.
-> >
-> > Example generator and reader applications are provided.
-> >
-> > Tools may be cross compiled or built for use on host system.
-> >
-> > Documentation is updated to describe feature usage.
-> >
-> > Changes since v5:
-> > 1) Possible memory leak removed.
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <error27@gmail.com>
-> > 2) Reuse mechanism for reader code revised. (Christoph)
-> > 3) Unload mechnism now by name in standard attribute, rather than entire
-> > file
-> > 4) Mechanism to check last loaded configuration can be unloaded.
-> > 5) Documentation updates.
-> >
-> > Changes since v4:
-> > 1) Update coresight/next - 6.1-rc3
-> > 2) Update to lockdep fixes to avoid read lock race in configfs.
-> >
-> > Changes since v3:
-> > 1) Rebase & tested on coresight/next - 5.19-rc3 - which includes the fix patch
-> > for earlier configfs works.
-> > 2) Lockdep investigations resulted in re-design of some of the code accessing
-> > configfs.
-> > 3) moved load and unload attributes to root of cs-syscfg. (Mathieu)
-> > 4) Additional minor fixes suggested by Mathieu.
-> > 5) Memory for configfs loaded and unloaded configurations is now explicitly
-> > freed.
-> > 6) LOCKDEP nesting fix for configfs base code (fs/configfs/dir.c)
-> >
-> > Changes since v2:
-> > 1) Rebased & tested on coresight/next - 5.18-rc2
-> > 2) Moved coresight config generator and reader programs from samples to
-> > tools/coresight. Docs updated to match. (suggested by Mathieu)
-> > 3) userspace builds now use userspace headers from tools/...
-> > 4) Other minor fixes from Mathieu's review.
-> >
-> > Changes since v1:
-> > 1) Rebased to coresight/next - 5.16-rc1 with previous coresight config set
-> > applied.
-> > 2) Makefile.host fixed to default to all target.
-> >
-> > Mike Leach (6):
-> >   coresight: config: add config table runtime load functionality
-> >   coresight: configfs: Update memory allocation / free for configfs
-> >     elements
-> >   coresight: configfs: Add attributes to load config tables at runtime
-> >   coresight: config: extract shared structures to common header file
-> >   coresight: tools: Add config table file write and reader tools
-> >   Documentation: coresight: docs for config load via configfs
-> >
-> >  .../trace/coresight/coresight-config.rst      | 265 ++++++++-
-> >  MAINTAINERS                                   |   1 +
-> >  drivers/hwtracing/coresight/Makefile          |   3 +-
-> >  .../coresight/coresight-config-desc.h         | 105 ++++
-> >  .../coresight/coresight-config-table.c        | 431 +++++++++++++++
-> >  .../coresight/coresight-config-table.h        | 151 ++++++
-> >  .../hwtracing/coresight/coresight-config.h    |  98 +---
-> >  .../coresight/coresight-syscfg-configfs.c     | 513 ++++++++++++++++--
-> >  .../coresight/coresight-syscfg-configfs.h     |   5 +
-> >  .../hwtracing/coresight/coresight-syscfg.c    | 101 +++-
-> >  .../hwtracing/coresight/coresight-syscfg.h    |   6 +-
-> >  tools/coresight/Makefile                      |  56 ++
-> >  tools/coresight/coresight-cfg-bufw.c          | 309 +++++++++++
-> >  tools/coresight/coresight-cfg-bufw.h          |  26 +
-> >  tools/coresight/coresight-cfg-example1.c      |  62 +++
-> >  tools/coresight/coresight-cfg-example2.c      |  95 ++++
-> >  tools/coresight/coresight-cfg-examples.h      |  25 +
-> >  tools/coresight/coresight-cfg-file-gen.c      |  61 +++
-> >  tools/coresight/coresight-cfg-file-read.c     | 227 ++++++++
-> >  tools/coresight/coresight-config-uapi.h       | 105 ++++
-> >  20 files changed, 2503 insertions(+), 142 deletions(-)  create mode 100644
-> > drivers/hwtracing/coresight/coresight-config-desc.h
-> >  create mode 100644 drivers/hwtracing/coresight/coresight-config-table.c
-> >  create mode 100644 drivers/hwtracing/coresight/coresight-config-table.h
-> >  create mode 100644 tools/coresight/Makefile  create mode 100644
-> > tools/coresight/coresight-cfg-bufw.c
-> >  create mode 100644 tools/coresight/coresight-cfg-bufw.h
-> >  create mode 100644 tools/coresight/coresight-cfg-example1.c
-> >  create mode 100644 tools/coresight/coresight-cfg-example2.c
-> >  create mode 100644 tools/coresight/coresight-cfg-examples.h
-> >  create mode 100644 tools/coresight/coresight-cfg-file-gen.c
-> >  create mode 100644 tools/coresight/coresight-cfg-file-read.c
-> >  create mode 100644 tools/coresight/coresight-config-uapi.h
-> >
-> > --
-> > 2.17.1
-> >
-> > _______________________________________________
-> > CoreSight mailing list -- coresight@lists.linaro.org To unsubscribe send an
-> > email to coresight-leave@lists.linaro.org
-
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Thanks,
+Yicong
