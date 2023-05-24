@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F8970F8EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF27070F900
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbjEXOne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
+        id S236062AbjEXOpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjEXOnb (ORCPT
+        with ESMTP id S236032AbjEXOpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:43:31 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27051C1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:43:30 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-760dff4b701so7943439f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1684939409; x=1687531409;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IPXLDCSKwXBraRh8qU8X4kYe3FTw3OcmD0b0rwLV1YI=;
-        b=m48EBfWC4KuAg/PFZ/0kUI+QHNwJaQfIB+xzHweX9tEcZiaLYmKkAFrvooTQeD72mR
-         5nuIqn52bQsXOH+sDbEf2iilTBjDmzf5Vaug6zt+7NwPNUHqnF2YhFjnhAbi5jkuUDzR
-         7m+SmGTwfmjIdUhZdJqzT/9rqQlD2XBG3iLW1ma53pIxqASTEaEmzR8GeDn3e+oY0/Tb
-         EQY4e3uJbmu7K6DpzOYT+dvlXrh2ciUolwngPkZGHTcBmPtucatUj0435Ih4Cd11IoqE
-         AvcBuVbI3PnrGjxUZeHGtGMnQeL6zlgUeSkdNoMPcGy8RAUjK35BSKtBzNQwVhfkUwn5
-         Pydg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684939409; x=1687531409;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IPXLDCSKwXBraRh8qU8X4kYe3FTw3OcmD0b0rwLV1YI=;
-        b=A3Hh4AS0qT5NA0452BDUdwJkNPZCGO/z4VHyY9D78coovtCwO6wxj2pCg/cKwVt5Re
-         xH73FAP+6OzKrzLP5iGXJQHRKBLsM4YImMsCJmxUbOtFHxvBNnKGFDXI9AWURK6Pvg80
-         dAO34lMlTlRfo/GkSAQ08ahsh0R4KPRjU7+01+79OG6HAklFwMtgDBGmlqfj1+oEy8LA
-         JJbeLRs0pj63JMDyl/zU3dbtBHcAcQuvXiGP9iV/xKnOCi/Ak3RJelQ6U5Ov4fGRTf0G
-         FsAMatkcp1+r22UCfC/21SQkHJI/jaWedBy2XiJrOS83a9+qWApe3Run3yqH+pamt3mF
-         HvYA==
-X-Gm-Message-State: AC+VfDwf+8oC0Y2d7SOJC9BBP71TMm/Pe/x72tK4LVmiZ1GOY43QKwjl
-        pLmlWq/IcPCe6VYCF0VuOMKPtw==
-X-Google-Smtp-Source: ACHHUZ4ttTueGCVRrRMUAUl7Mb54HKL0lLyB7DUkcn/PC4TPkkAQ6M3t/qFZ/WO5l9qruO96ONfCvg==
-X-Received: by 2002:a05:6e02:1608:b0:338:1467:208f with SMTP id t8-20020a056e02160800b003381467208fmr9620690ilu.2.1684939409547;
-        Wed, 24 May 2023 07:43:29 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id w34-20020a05663837a200b004168295d33esm3311241jal.47.2023.05.24.07.43.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 07:43:28 -0700 (PDT)
-Message-ID: <90c73358-7c16-8918-50b3-b1e9101f7b21@kernel.dk>
-Date:   Wed, 24 May 2023 08:43:27 -0600
+        Wed, 24 May 2023 10:45:15 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE501A4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:45:07 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:32916)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q1pjc-007WwM-J3; Wed, 24 May 2023 08:45:04 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:53910 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q1pjb-00BGTu-L9; Wed, 24 May 2023 08:45:04 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+References: <20230522025124.5863-1-michael.christie@oracle.com>
+        <20230522025124.5863-4-michael.christie@oracle.com>
+        <20230522123029.GA22159@redhat.com>
+        <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
+        <20230522174757.GC22159@redhat.com> <20230523121506.GA6562@redhat.com>
+        <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
+        <20230524141022.GA19091@redhat.com>
+Date:   Wed, 24 May 2023 09:44:29 -0500
+In-Reply-To: <20230524141022.GA19091@redhat.com> (Oleg Nesterov's message of
+        "Wed, 24 May 2023 16:10:23 +0200")
+Message-ID: <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v21 0/6] block: Use page pinning
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Jason Gunthorpe <jgg@ziepe.ca>
-References: <20230522205744.2825689-1-dhowells@redhat.com>
- <168487791137.449781.3170440352656135902.b4-ty@kernel.dk>
- <ZG2mKMus29qquHia@infradead.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZG2mKMus29qquHia@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1q1pjb-00BGTu-L9;;;mid=<87ttw1zt4i.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX1/h3a+xGe9HgY6D1YHRegHcTvlq0mGfsXU=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 367 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (2.9%), b_tie_ro: 9 (2.4%), parse: 0.79 (0.2%),
+         extract_message_metadata: 3.1 (0.8%), get_uri_detail_list: 1.01
+        (0.3%), tests_pri_-2000: 3.4 (0.9%), tests_pri_-1000: 2.5 (0.7%),
+        tests_pri_-950: 1.45 (0.4%), tests_pri_-900: 1.25 (0.3%),
+        tests_pri_-200: 1.02 (0.3%), tests_pri_-100: 3.5 (0.9%),
+        tests_pri_-90: 95 (25.9%), check_bayes: 92 (25.1%), b_tokenize: 6
+        (1.6%), b_tok_get_all: 7 (2.0%), b_comp_prob: 2.2 (0.6%),
+        b_tok_touch_all: 72 (19.6%), b_finish: 1.21 (0.3%), tests_pri_0: 226
+        (61.6%), check_dkim_signature: 0.54 (0.1%), check_dkim_adsp: 12 (3.2%),
+         poll_dns_idle: 9 (2.6%), tests_pri_10: 2.4 (0.7%), tests_pri_500: 8
+        (2.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 11:52 PM, Christoph Hellwig wrote:
-> On Tue, May 23, 2023 at 03:38:31PM -0600, Jens Axboe wrote:
->> Applied, thanks!
-> 
-> This ended up on the for-6.5/block branch, but I think it needs to be
-> on the splice one, as that is pre-requisite unless I'm missing
-> something.
+Oleg Nesterov <oleg@redhat.com> writes:
 
-Oops yes, that's my bad. I've reshuffled things now so that they should
-make more sense.
+> On 05/23, Eric W. Biederman wrote:
+>>
+>> I want to point out that we need to consider not just SIGKILL, but
+>> SIGABRT that causes a coredump, as well as the process peforming
+>> an ordinary exit(2).  All of which will cause get_signal to return
+>> SIGKILL in this context.
+>
+> Yes, but probably SIGABRT/exit doesn't really differ from SIGKILL wrt
+> vhost_worker().
 
--- 
-Jens Axboe
+Actually I think it reveals that exiting with SIGABRT will cause
+a deadlock.
+
+coredump_wait will wait for all of the threads to reach
+coredump_task_exit.  Meanwhile vhost_worker is waiting for
+all of the other threads to reach exit_files to close their
+file descriptors.
+
+
+So it looks like the final pieces of work will actually need to be moved
+into to vhost_xxx_flush or vhost_xxx_release to avoid the exiting
+threads from waiting on each other, instead of depending upon the
+vhost_worker to do the work.
+
+Which gets back to most of your other questions.
+
+>> It is probably not the worst thing in the world, but what this means
+>> is now if you pass a copy of the vhost file descriptor to another
+>> process the vhost_worker will persist, and thus the process will persist
+>> until that copy of the file descriptor is closed.
+>
+> Hadn't thought about it.
+>
+> I am fighting with internal bugzillas today, will try to write another
+> email tomorrow.
+>
+> But before that, I would like to have an answer to my "main" question in
+> my previois email. Otherwise I am still not sure I understand what exactly
+> we need to fix.
+
+Let me repeat your "main" question just for clarity here.
+
+If a signal comes in after the signal_pending check but before the
+"work->fn(work)" call is "work->fn(work)" expected to run correctly
+with signal_pending() or fatal_signal_pending returning true?
+
+
+Eric
+
+
+
 
 
