@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4970B70FA19
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6674470FA1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbjEXP2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
+        id S235495AbjEXP3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjEXP2i (ORCPT
+        with ESMTP id S235199AbjEXP3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:28:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AF7189
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684942064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pRD5Edte+ebDzPioS2wNC3VCfpjAvpMy1rZvcq/7BjA=;
-        b=GWIvnoiBmUBxy/erVSEUOtBWkIv0Bj68ZEKMiJp+9ekwG3KLJ1/umPt4OWHSGGpLUp6dzs
-        6T5XpBy/EDD8O2tPwU6FNzup8gimLefOERMPEaEY/3jWxiRAVplJ+HWbyNvba3zznZMT03
-        l55B7+8sz0/d8YnXPOwFukeqq6lprcs=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-608-DgwghV4IOtWWNHeN5q60PA-1; Wed, 24 May 2023 11:27:42 -0400
-X-MC-Unique: DgwghV4IOtWWNHeN5q60PA-1
-Received: by mail-yb1-f199.google.com with SMTP id 3f1490d57ef6-ba8337ade1cso2386389276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:27:42 -0700 (PDT)
+        Wed, 24 May 2023 11:29:00 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2389DF5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:28:57 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-396140d25e0so271143b6e.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 08:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684942136; x=1687534136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j5MQz4tRtkG+kSAOx+7cDjXH3GlxLpEVvkOR0cGeMbw=;
+        b=CKW2NTF6Voh4yCMud+Z9KU6wa2a3nyRCotPLtem283S8sHvDjQcHT8DaACbLBM34AB
+         u3Do1boA3IpAoWMFpuzvdgS406jmI7Gej8+CnrWPYcBCurgHrRJzkx7sqncgq9bHmKB9
+         o6vbxenD89yepUE3ZFj4jVSPRzcQ183xWtQoK5l2JX/0MmGB1JprLbMteiV8n5yVmooc
+         rZsLu83MzpBxB77Y541sBwI/27VJtN3TROQZU4bnllY/D4n61J8+2IgSI3VbL2hwizf/
+         +ddvxDb9hMA9t8K8n+rs5514YlPd+9kHqjfrraBu8Gjs+R824mt/1Zy5b9btLL5Q/3jN
+         k9Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684942062; x=1687534062;
+        d=1e100.net; s=20221208; t=1684942136; x=1687534136;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pRD5Edte+ebDzPioS2wNC3VCfpjAvpMy1rZvcq/7BjA=;
-        b=cB7UdtiRqP/KiCqHGvoToJxQQq67ncwO4LZft5dLjDUT7+ubefjsI8gqTw66ded4rM
-         RrKwqNcDorv8Zl9r+obovhF9QugoqU5fyr22FOoYH6SZUriPp0LGCBMJTRgeAz7zhxnP
-         ETKTfrSBoYs5GlW8oUxTwCq3QkszSrKOPVRX+ZjmQ82dM8x/S6EFKvIbqmyqpbvrNwlH
-         56G5NhYqWXo/GAbIU81d2wgrslZvlQY5+prBlCsFAapPozVZyJMFeJLQ2GTHlwsziqUi
-         4jn3DJz1x6OpvJouYJv9EJbd0cJh4Uz4GKcknmrouVw7qA2Kviak14U6CvFSGNmibj4y
-         Elyg==
-X-Gm-Message-State: AC+VfDzGWf1pSSqvEnNRSKimiSaati/ve87LBgvK2d0qW54Pludg2EbX
-        l9PaO/zi5nMDamzC4aZxPY/iaPb3zJhXBZxSP1IqMKNeO0Ee+n/7DGKzenX5W3sDa7InqEm86LI
-        bNmoyDc478HdFS6a4Oe2ibXKF2ARcfdAS0cRH45XQyUNGb5UH
-X-Received: by 2002:a25:541:0:b0:ba8:bb80:87 with SMTP id 62-20020a250541000000b00ba8bb800087mr136312ybf.59.1684942061865;
-        Wed, 24 May 2023 08:27:41 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5zOnfgYOls8GO46XNLGEjZ6QHYpl0/ZnDtlEknirvfa2o52TirkADmMFJbv94kbs8hSVE/fMRGbncqq5X8iqQ=
-X-Received: by 2002:a25:541:0:b0:ba8:bb80:87 with SMTP id 62-20020a250541000000b00ba8bb800087mr136289ybf.59.1684942061594;
- Wed, 24 May 2023 08:27:41 -0700 (PDT)
+        bh=j5MQz4tRtkG+kSAOx+7cDjXH3GlxLpEVvkOR0cGeMbw=;
+        b=N9SROZa1opAgDLhPmq7t+HQqAwVyXXuroYl2NHb4rtACE0wtuZC8WaI+woxIocQrIz
+         1WaIh5VlvdlEDXseWykK+r6bHSiaNRdXQEfz+IukKMhTgjajHeJCJO69pbUIxvPs03Pw
+         O+ZU2MZMF+DhMj3S9f0Lui8UiVgam/uu6MVNZlM0v//WDGiemAbZP0kywul2t6eKrF+Q
+         sNnzchJZvjtcKxtkoGNyYzcHdrzFcjvVq6JwGpX6BOzi1t2ipWx/AfYNL/6TslL4fcVk
+         DHRn7y6GtgotNgnESVcN4zpcOKdqS5DjDNTDo1rXK4sE0wSQi5YBbuupMZyIKTDJmR65
+         sGEg==
+X-Gm-Message-State: AC+VfDzB4nS2z5cow5fpf+m4e5XGU56vXWjkOVX/Mp37Ure7g57r0dKP
+        15oZFQdx/jDQjihOS6i8J2++MCjUii5jRibye8Ef8bki
+X-Google-Smtp-Source: ACHHUZ7uw0PRxGdf3aDPz7JxHgbvzaWS6kWcooJnGWj444daIvvFiBZAFV48kI0dDl2rfNgYCiGCMryqK5Uhs2taraU=
+X-Received: by 2002:aca:3cd6:0:b0:392:31fe:cd19 with SMTP id
+ j205-20020aca3cd6000000b0039231fecd19mr10464992oia.0.1684942136452; Wed, 24
+ May 2023 08:28:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info>
- <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info> <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com>
- <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
- <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info> <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
- <nycvar.YFH.7.76.2305231422180.29760@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2305231422180.29760@cbobk.fhfr.pm>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 24 May 2023 17:27:30 +0200
-Message-ID: <CAO-hwJ+MTRu9KxqwQc7UYFBsa0kkrnYfwVB30KsLZnw=wfcOMg@mail.gmail.com>
-Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
- working properly
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
+References: <646e2c58.170a0220.4f979.2ba7@mx.google.com>
+In-Reply-To: <646e2c58.170a0220.4f979.2ba7@mx.google.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 24 May 2023 11:28:45 -0400
+Message-ID: <CADnq5_N7W8_c6tcFDkEEM_shXr0GJV+YJfJ8y4YC=2ufRHRX5g@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Enable GCVM_CONTEXT1_CNTL after page table
+ addr is set.
+To:     ghostfly233 <ghostfly23333@gmail.com>
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, daniel@ffwll.ch, airlied@gmail.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,103 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 2:31=E2=80=AFPM Jiri Kosina <jikos@kernel.org> wrot=
-e:
+On Wed, May 24, 2023 at 11:25=E2=80=AFAM ghostfly233 <ghostfly23333@gmail.c=
+om> wrote:
 >
-> On Mon, 22 May 2023, Linus Torvalds wrote:
+> In gfxhub_v2_1_setup_vmid_config(), the GCVM_CONTEXT1_CNTL reg is
+> enabled before related GCVM_CONTEXT1_PAGE_TABLE_START_ADDR and
+> GCVM_CONTEXT1_PAGE_TABLE_END_ADDR regs are written, which may
+> cause undefined behavior.
 >
-> > > FWIW, in case anybody is interested in a status update: one reporter
-> > > bisected the problem down to 586e8fede79 ("HID: logitech-hidpp: Retry
-> > > commands when device is busy"); reverting that commit on-top of 6.3
-> > > fixes the problem for that reporter. For that reporter things also wo=
-rk
-> > > on 6.4-rc; but for someone else that is affected that's not the case.
->
-> FWIW, I was pretty much away for past few weeks as well, same as Benjamin
-> as Bastien. Which is unfortunate timing, but that's how things pan out
-> sometimes.
->
-> > Hmm. It's likely timing-dependent.
-> >
-> > But that code is clearly buggy.
-> >
-> > If the wait_event_timeout() returns early, the device hasn't replied,
-> > but the code does
-> >
-> >                 if (!wait_event_timeout(hidpp->wait, hidpp->answer_avai=
-lable,
-> >                                         5*HZ)) {
-> >                         dbg_hid("%s:timeout waiting for response\n", __=
-func__);
-> >                         memset(response, 0, sizeof(struct hidpp_report)=
-);
-> >                         ret =3D -ETIMEDOUT;
-> >                 }
-> >
-> > and then continues to look at the response _anyway_.
->
-> Yeah; we are zeroing it out, but that doesn't really make things any
-> better in principle, given all the dereferences later.
->
-> The issue seems to be existing ever since 2f31c52529 ("HID: Introduce
-> hidpp, a module to handle Logitech hid++ devices") when this whole driver
-> was introduced, as far as I can tell.
+> This patch enable GCVM_CONNTEXT1_CNTL after page table addresses are set,
+> so that it can ensure no undefined behavior will happen.
 
-Yep, that was on me. But the weird part is that I should be able to
-reproduce this locally then, but I don't.
+Please update all of the gfxhub and mmhub files with this change.
+
+Alex
 
 >
-> > Now, depending on out hardening options, that response may have been
-> > initialized by the compiler, or may just be random stack contents.
+> Signed-off-by: Zibin Liu <ghostfly23333@gmail.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 >
-> Again, as in case of timeout the buffer is just zeroed out, I'd just much
-> more expect NULL pointer dereference in such case. Which is not what we
-> are seeing here.
-
-Returning -ETIMEDOUT seems good to me FWIW.
-
+> diff --git a/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c b/drivers/gpu/drm/a=
+md/amdgpu/gfxhub_v2_1.c
+> index 4aacbbec31e2..791afc8e9e85 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c
+> @@ -297,7 +297,7 @@ static void gfxhub_v2_1_setup_vmid_config(struct amdg=
+pu_device *adev)
 >
-> > That bug is pre-existing (ie the problem was not introduced by that
-> > commit), but who knows if the retry makes things worse (ie if it then
-> > triggers on a retry, the response data will be the *previous* response)=
-.
-> >
-> > The whole "goto exit" games should be removed too, because we're in a
-> > for-loop, and instead of "goto exit" it should just do "break".
-> >
-> > IOW, something like this might be worth testing.
-> >
-> > That said, while I think the code is buggy, I doubt this is the actual
-> > cause of the problem people are reporting. But it would be lovely to
-> > hear if the attached patch makes any difference, and I think this is
-> > fixing a real - but unlikely - problem anyway.
-
-FWIW, Linus, your patch is
-Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
-Feel free to submit it to us or to apply it directly if you prefer as
-this is clearly a fix for a code path issue.
-
-I am barely struggling with everything now that I am back from last
-week, being sick at the beginning of the week and still not feeling
-completely well doesn't help.
-
-Cheers,
-Benjamin
-
-> >
-> > And obviously it might be helpful to actually enable those dbg_hid()
-> > messages, but I didn't look at what the magic config option to do so
-> > was.
+>         for (i =3D 0; i <=3D 14; i++) {
+>                 tmp =3D RREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_CNTL, =
+i);
+> -               tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, ENABLE_CON=
+TEXT, 1);
+> +               tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, ENABLE_CON=
+TEXT, 0);
+>                 tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, PAGE_TABLE=
+_DEPTH,
+>                                     adev->vm_manager.num_level);
+>                 tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL,
+> @@ -333,6 +333,9 @@ static void gfxhub_v2_1_setup_vmid_config(struct amdg=
+pu_device *adev)
+>                 WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_PAGE_TABLE_END=
+_ADDR_HI32,
+>                                     i * hub->ctx_addr_distance,
+>                                     upper_32_bits(adev->vm_manager.max_pf=
+n - 1));
+> +               tmp =3D REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL, ENABLE_CON=
+TEXT, 1);
+> +               WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_CNTL,
+> +                                   i * hub->ctx_distance, tmp);
+>         }
 >
-> dbg_hid() is just pr_debug(), which means that on kernels with
-> CONFIG_DYNAMIC_DEBUG, this makes use of the dynamic debug facility;
-> otherwsie it just becomes printk(KERN_DEBUG...).
->
-> Thanks,
->
+>         hub->vm_cntx_cntl =3D tmp;
 > --
-> Jiri Kosina
-> SUSE Labs
+> 2.34.1
 >
-
