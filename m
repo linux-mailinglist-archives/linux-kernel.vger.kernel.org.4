@@ -2,125 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE33B70FDC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54F270FDCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236738AbjEXSW1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 14:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
+        id S236689AbjEXSXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236412AbjEXSWZ (ORCPT
+        with ESMTP id S233242AbjEXSXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:22:25 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E8E119;
-        Wed, 24 May 2023 11:22:24 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso30969566b.0;
-        Wed, 24 May 2023 11:22:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684952543; x=1687544543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n4Pq8c6/Mm0bTSYRc0nbUAYoxH/lC7NnfksnqYojmek=;
-        b=Dk/RvGMmkkeFYu/TYhV+0L1eUQHFELoBUXmmp5Gz00N9QF+UHaMoXztA3XIDaFtcYJ
-         QTXHdNc0pXXoUP1ZKQlb4/34gVrTeO7KZffedpyLjZ3ysaDYR+plG1qmblWgU2SpiA8O
-         02s5I2vqRPWMGPxishAx8MZJOPpBOOXb5I9gZz7ZibfdTulmr/D6HYGnR8bQDMGhd5KR
-         Vd1t8KQgTBLe3+3Rxi9Cfzojo02ddwpsJELRAR1SO+HD6/vEAkcapF6Tdq1Kjhwce0eM
-         Z6TxzogmHoQHJ7aNVyzHfRLrhex9/FF69L461p+yit6F8cQj30ArxY6aHUxYS+foWS4o
-         qr+A==
-X-Gm-Message-State: AC+VfDyKWNCMiqlV0aqQRMlw8qH9lsldH+B9lKTT45q5s5ZPMJcfmdzC
-        7UEJbogXNZi5BeUrMezD0XPL2xvps1QGfrLVzWo=
-X-Google-Smtp-Source: ACHHUZ6JK09ysT7P+S7ivY0fKx/cBz2plGL4iP23ASoPbLZXi8ad/mXO0yWabZ9nLQuzu3MmY7E9fgnSN5hNUqXUO6A=
-X-Received: by 2002:a17:906:5189:b0:96f:469d:19ba with SMTP id
- y9-20020a170906518900b0096f469d19bamr17370163ejk.2.1684952542768; Wed, 24 May
- 2023 11:22:22 -0700 (PDT)
+        Wed, 24 May 2023 14:23:19 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD2398;
+        Wed, 24 May 2023 11:23:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684952583; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=ob3b5pyUB/sVCDpeDAp5fvv4InkL31L0mFUlY+biIdMdNe/hZu6/GfaOdDLLVqoroU
+    lAJLMzRoJqewgsfzX6YKxLfdefTALphvGBDFHPwPwqgisxqe7AL8QmOguhSO7Gc323UE
+    A08eXy5pH6aQke93MPHWKVpyAzXRz+wjKsG//4yxWLUwiy/jAdlHyotf3S+CjvH+v4Ys
+    5x3A7yrn4N3Wfgsjpz2Ns1T4jQw87Wekuj6UjTy78PGPq/60pBNVv7qfNhfoh9OXOutK
+    J9+/+2DiSvGenSFRmyte7wWhigq6KeoaWPyM9GxVjpgriSE3GxPQYjW5yqME9zzERlZ8
+    tuBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684952583;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=nzYxZfqmHZu3SMkFeRkte0uFwcfOH5DKN0TXvCovBVQ=;
+    b=FXHitUZG1ABgi+2GACyDpZgZ4Yd/mJEkMnRIlpfM28+uju14ghUutapCxbOcKFdzSB
+    Ct235Pq+9X9A9/ysCAF/+hEHpeUsID+JMu6+/ji1RVkp2/XBVZUAdfZmPpIMhLOcD2PM
+    I5KbGMmBXceQ1CDgDqe7KphO5aCWRJBgYfl2bJXVQrQy9jlkIa4JxfPg39NgV79+xshT
+    Hah9sXemZ354/68TI27OmzHOYxMoVhpiUSgMO9h95x6eON2Dk+ZxtzHCuw6MTZC0q6q1
+    1WBNM29y+vZEBRrD37zTARCG00j6pLwxEz35tLwer0liHbOxvQU+4kny0WBBsHla18hE
+    83Qw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684952583;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=nzYxZfqmHZu3SMkFeRkte0uFwcfOH5DKN0TXvCovBVQ=;
+    b=FAxfvv/TeGW16P5eCa74Wz6dDYpPUw/xRuU4ENBPNM5ksHknmgcFWFcNHoHW/004j0
+    pJ25qXSumLLmnl9VWKhnDVbjkVAy+1epic8EU+gxZYJFOmlPIivw/gHxT0zgV5+AJMGa
+    tyAceX5/4t98HYoEcWGQMqC8ks14BGmlDxO47Qu1fycOgmO9yDYFIh0x9CwKhrwzWt/T
+    1jH2CWZgqhA46nVvioNZNJORhk9XuDod8cXqqExwhZ3L3tKkO30s/Z1ekRODNB1kMTLu
+    ix2iyuYGzWpuQq41rznrpbWuE5p4vNtCGr/GZ518gWxB8V0+KEkcDv/yD/V3TlpVXNXx
+    OMww==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684952583;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=nzYxZfqmHZu3SMkFeRkte0uFwcfOH5DKN0TXvCovBVQ=;
+    b=cUG5TmSrmsgFIBqfSlw5if33jRV9c1CyOKl2GVK6PuOG77KDiLSyWWP7sCUll8BB1D
+    hzTpKoki8Q5iuz6zG9Aw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8Z+J1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4OIN3UKQ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 24 May 2023 20:23:03 +0200 (CEST)
+Date:   Wed, 24 May 2023 20:23:02 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org,
+        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
+        neil.armstrong@linaro.org, djakov@kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: Re: [PATCH v7 07/11] arm64: dts: qcom: sm6115: Add Crypto Engine
+ support
+Message-ID: <ZG5WBr4gz2mzPoT-@gerhold.net>
+References: <20230519214813.2593271-1-bhupesh.sharma@linaro.org>
+ <20230519214813.2593271-8-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-References: <20230519032719.2581689-1-evalenti@kernel.org>
-In-Reply-To: <20230519032719.2581689-1-evalenti@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 20:22:11 +0200
-Message-ID: <CAJZ5v0i1bYu0aPWc-xTG9HxOm_Ysczfo_cJPPV40MCG7qOGRTQ@mail.gmail.com>
-Subject: Re: [PATCH 0/7] thermal: enhancements on thermal stats
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519214813.2593271-8-bhupesh.sharma@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eduardo,
+On Sat, May 20, 2023 at 03:18:09AM +0530, Bhupesh Sharma wrote:
+> Add crypto engine (CE) and CE BAM related nodes and definitions to
+> 'sm6115.dtsi'.
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index 631ca327e064..27ff42cf6066 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -661,6 +661,31 @@ usb_hsphy: phy@1613000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		cryptobam: dma-controller@1b04000 {
+> +			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
+> +			reg = <0x0 0x01b04000 0x0 0x24000>;
+> +			interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
+> +			#dma-cells = <1>;
+> +			qcom,ee = <0>;
+> +			qcom,controlled-remotely;
+> +			num-channels = <8>;
+> +			qcom,num-ees = <2>;
 
-On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> Hello Rafael and Daniel
->
-> After a long hiatus, I am returning to more frequent contributions
-> to the thermal subsystems, as least until I drain some of the
-> commits I have in my trees.
->
-> This is a first series of several that will come as improvements
-> on the thermal subsystem that will enable using this subsystem
-> in the Baseboard Management Controller (BMC) space, as part
-> of the Nitro BMC project. To do so, there were a few improvements
-> and new features wrote.
->
-> In this series in particular, I present a set of enhancements
-> on how we are handling statistics. The cooling device stats
-> are awesome, but I added a few new entries there. I also
-> introduce stats per thermal zone here too.
->
-> I tried to keep documentation as current as possible.
-> I may have missed a thing or two, so please help me out here.
-> Testing/Examples are in each code.
->
-> Let me know any feeback,
->
-> BR,
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> Cc: linux-kernel@vger.kernel.org (open list)
->
-> Eduardo Valentin (7):
->   thermal: stats: track time each dev changes due to tz
->   thermal: stats: track number of change requests due to tz
->   thermal: stats: introduce thermal zone stats/ directory
->   thermal: stats: introduce thermal zone stats/min_gradient
->   thermal: stats: introduce tz time in trip
->   ythermal: core: report errors to governors
->   thermal: stats: add error accounting to thermal zone
->
->  .../driver-api/thermal/sysfs-api.rst          |  10 +
->  drivers/thermal/thermal_core.c                |  15 +-
->  drivers/thermal/thermal_core.h                |  16 +
->  drivers/thermal/thermal_helpers.c             |  11 +-
->  drivers/thermal/thermal_sysfs.c               | 495 +++++++++++++++++-
->  include/linux/thermal.h                       |   5 +
->  6 files changed, 539 insertions(+), 13 deletions(-)
->
-> --
+I would also add the RPM_SMD_CE1_CLK clock here and then omit
+"num-channels" and "qcom,num-ees" (with [1]). It's not strictly
+necessary but will guarantee that the clock is running whenever the BAM
+is accessed (potentially avoiding crashes). And it seems to be the
+typical approach so far, see e.g. sdm845. RPMH_CE_CLK is used on both
+&cryptobam and &crypto there.
 
-There are still some other things I need to take care of before I can
-get to this series, but I will get to it.
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/commit/?id=8975dd41a9dbca3b47f7b8dac5bc4dfb23011000
 
-Thanks!
+Thanks,
+Stephan
