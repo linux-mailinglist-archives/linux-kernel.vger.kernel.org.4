@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E48E70F2C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAB570F2FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240257AbjEXJ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S229934AbjEXJg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjEXJ3M (ORCPT
+        with ESMTP id S229897AbjEXJgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:29:12 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B6090;
-        Wed, 24 May 2023 02:29:11 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O5Jpuf031611;
-        Wed, 24 May 2023 09:29:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8wt6AN6pl6ghSok1hDDHJ3uMHeMEuXrVVpwKZb4ImaA=;
- b=UU9aHMhhqUWGQCCBxaNAJWeh5sY9aguwPdJseMPAVArbkX2nPuXqKqEig9Rb4p4PZ6Gb
- nz+iEjOglOnawlCEEa0fj11NC0c/4avjz/OXJqB8lWBcyO2HrdnR0Zqn5O4Ka9NOYXgt
- 3Ox0EuTwQTj8LVXcLlNPJvQzVGUmZIGmyo1V0gRwVs3tGCtQajtSOzcfiekGOxEPOv+M
- ArnKXDkb7iZihguL12hVooZM0WXLqPu58SQYPdYWqBJnYI1RzSae973N5QmdlDq9VDsd
- QLuMAcnCHHkEHqB6kHaDP+1C00pA2oj2BEeic/3DyDUtgLhokH/zFOp8WrzoqEqV56u9 uw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qscaurj71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:29:02 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O9T1NI017392
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:29:01 GMT
-Received: from [10.201.3.104] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 24 May
- 2023 02:28:58 -0700
-Message-ID: <69bde397-9d6a-d6b2-846c-310fbbbaba98@quicinc.com>
-Date:   Wed, 24 May 2023 14:58:55 +0530
+        Wed, 24 May 2023 05:36:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD09E132;
+        Wed, 24 May 2023 02:35:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 967E32230F;
+        Wed, 24 May 2023 09:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684920945;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dBokvZ4uBRf9SH3xd05HtkNME4Wm2uOCjeDrViHkq4Q=;
+        b=F+Oi7VSVsWM+LmLagHhHk31GF2Curi0iuRUhgfLWWsYc+9fItMv2lplKHGW3jSoUwQnq98
+        bHtc6ElOzQuCAvkR/e04bwOGgVKGjOl3WCX8JsdvI9cVAekZRC6HUfGCDYXorgdrQPpfcT
+        LJJGV2BDomDrb3bCIUYbxYtVQt5ACuI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684920945;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dBokvZ4uBRf9SH3xd05HtkNME4Wm2uOCjeDrViHkq4Q=;
+        b=1RUsH3uIW05Ybh3oScFnHSJPTRWDfkYX0Lqd8qZubCePJXoUVFpKr1RMNfDg2xxvyqUvSB
+        9RFfc2XtXBSEzjBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 592DE13425;
+        Wed, 24 May 2023 09:35:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JNMWFXHabWTXBAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Wed, 24 May 2023 09:35:45 +0000
+Date:   Wed, 24 May 2023 11:29:38 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     pengfuyuan <pengfuyuan@kylinos.cn>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] btrfs: Fix csum_tree_block to avoid tripping on
+ -Werror=array-bounds
+Message-ID: <20230524092938.GJ32559@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20230523070956.674019-1-pengfuyuan@kylinos.cn>
+ <a79a7e9d-f6b5-00c8-65c8-f914cf0be0b2@gmx.com>
+ <20230523193212.GA32559@twin.jikos.cz>
+ <bad56f93-6ffb-9505-92ce-67ab9e006e9c@gmx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 3/5] mtd: rawnand: qcom: Add support for param_page
- read exec_ops
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     <mani@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_srichara@quicinc.com>
-References: <20230511133017.6307-1-quic_mdalam@quicinc.com>
- <20230511133017.6307-4-quic_mdalam@quicinc.com>
- <20230522154916.3bb7be4e@xps-13>
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20230522154916.3bb7be4e@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: iltTnx8JJHJ3PpptWLFUC1OqnB6XTwH_
-X-Proofpoint-GUID: iltTnx8JJHJ3PpptWLFUC1OqnB6XTwH_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_05,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- impostorscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 suspectscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305240079
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <bad56f93-6ffb-9505-92ce-67ab9e006e9c@gmx.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,144 +81,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 24, 2023 at 07:46:42AM +0800, Qu Wenruo wrote:
+> 
+> 
+> On 2023/5/24 03:32, David Sterba wrote:
+> > On Tue, May 23, 2023 at 03:33:22PM +0800, Qu Wenruo wrote:
+> >>
+> >>
+> >> On 2023/5/23 15:09, pengfuyuan wrote:
+> >>>
+> >>> When compiling on a mips 64-bit machine we get these warnings:
+> >>>
+> >>>       In file included from ./arch/mips/include/asm/cacheflush.h:13,
+> >>> 	             from ./include/linux/cacheflush.h:5,
+> >>> 	             from ./include/linux/highmem.h:8,
+> >>> 		     from ./include/linux/bvec.h:10,
+> >>> 		     from ./include/linux/blk_types.h:10,
+> >>>                        from ./include/linux/blkdev.h:9,
+> >>> 	             from fs/btrfs/disk-io.c:7:
+> >>>       fs/btrfs/disk-io.c: In function ‘csum_tree_block’:
+> >>>       fs/btrfs/disk-io.c:100:34: error: array subscript 1 is above array bounds of ‘struct page *[1]’ [-Werror=array-bounds]
+> >>>         100 |   kaddr = page_address(buf->pages[i]);
+> >>>             |                        ~~~~~~~~~~^~~
+> >>>       ./include/linux/mm.h:2135:48: note: in definition of macro ‘page_address’
+> >>>        2135 | #define page_address(page) lowmem_page_address(page)
+> >>>             |                                                ^~~~
+> >>>       cc1: all warnings being treated as errors
+> >>>
+> >>> We can check if i overflows to solve the problem. However, this doesn't make
+> >>> much sense, since i == 1 and num_pages == 1 doesn't execute the body of the loop.
+> >>> In addition, i < num_pages can also ensure that buf->pages[i] will not cross
+> >>> the boundary. Unfortunately, this doesn't help with the problem observed here:
+> >>> gcc still complains.
+> >>
+> >> So still false alerts, thus this bug should mostly be reported to GCC.
+> >>
+> >>>
+> >>> To fix this, start the loop at index 0 instead of 1. Also, a conditional was
+> >>> added to skip the case where the index is 0, so that the loop iterations follow
+> >>> the desired logic, and it makes all versions of gcc happy.
+> >>>
+> >>> Signed-off-by: pengfuyuan <pengfuyuan@kylinos.cn>
+> >>> ---
+> >>>    fs/btrfs/disk-io.c | 10 +++++++---
+> >>>    1 file changed, 7 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+> >>> index fbf9006c6234..8b05d556d747 100644
+> >>> --- a/fs/btrfs/disk-io.c
+> >>> +++ b/fs/btrfs/disk-io.c
+> >>> @@ -96,9 +96,13 @@ static void csum_tree_block(struct extent_buffer *buf, u8 *result)
+> >>>    	crypto_shash_update(shash, kaddr + BTRFS_CSUM_SIZE,
+> >>>    			    first_page_part - BTRFS_CSUM_SIZE);
+> >>>
+> >>> -	for (i = 1; i < num_pages; i++) {
+> >>> -		kaddr = page_address(buf->pages[i]);
+> >>> -		crypto_shash_update(shash, kaddr, PAGE_SIZE);
+> >>> +	for (i = 0; i < num_pages; i++) {
+> >>> +		struct page *p = buf->pages[i];
+> >>> +
+> >>> +		if (i != 0) {
+> >>> +			kaddr = page_address(p);
+> >>> +			crypto_shash_update(shash, kaddr, PAGE_SIZE);
+> >>
+> >> Unfortunately this damages the readability.
+> >>
+> >> If you really want to starts from page index 0, I don't think doing this
+> >> is the correct way.
+> >>
+> >> Instead, you may take the chance to merge the first
+> >> crypto_shahs_update() call, so the overall procedure looks like this:
+> >>
+> >> static void csum_tree_block()
+> >> {
+> >> 	for (int i = 0; i < num_pages; i++) {
+> >> 		int page_off = whatever_to_calculate_the_offset;
+> >> 		int page_len = whatever_to_calculate_the_lengh;
+> >> 		char *kaddr = page_address(buf->pages[i]) + page_off;
+> >>
+> >> 		crypto_shash_update(shash, kaddr, page_len);
+> >> 	}
+> >> 	memset();
+> >> 	crypto_shash_final();
+> >> }
+> >>
+> >> Although even with such change, I'm still not sure if it's any better or
+> >> worse, as most of the calculation can still be bulky.
+> >
+> > Yeah I think the calculations would have to be conditional or keeping
+> > some state. I'd like to keep the structure of the first page and the
+> > rest.
+> 
+> Yeah, there would be conditional checks, but it turns out to be simpler
+> like the following:
+> 
+> 	int cur = BTRFS_CSUM_SIZE;
+> 
+> 	for (int i = 0; i < num_pages; i++) {
+> 		int range_end = min(eb->len, (i + 1) << PAGE_SHIFT);
+> 		int page_len = range_end - cur;
+> 		int page_off = offset_in_page(cur);
+> 
+> 		cypto_shash_update();
+> 		cur = range_end;
+> 	}
+> 
+> The only conditional thing is the min() call, but I'm not sure if this
+> is any more readable though...
 
+And then comes some joker and says "why don't you just handle the
+first page separately and then loop over full pages" :)
 
-On 5/22/2023 7:19 PM, Miquel Raynal wrote:
-> Hi Md,
-> 
-> quic_mdalam@quicinc.com wrote on Thu, 11 May 2023 19:00:15 +0530:
-> 
->> This change will add exec_ops for PARAM_PAGE_READ command.
->>
->> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
->> ---
->> Change in [v2]
->>
->> * Missed to post Cover-letter, so posting v2 patch with cover-letter
->>
->>   drivers/mtd/nand/raw/qcom_nandc.c | 91 ++++++++++++++++++++++++++++++-
->>   1 file changed, 90 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
->> index d2f2a8971907..8717d5086f80 100644
->> --- a/drivers/mtd/nand/raw/qcom_nandc.c
->> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
->> @@ -3086,7 +3086,96 @@ static int qcom_erase_cmd_type_exec(struct nand_chip *chip, const struct nand_su
->>   
->>   static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_subop *subop)
->>   {
->> -	return 0;
->> +	struct qcom_nand_host *host = to_qcom_nand_host(chip);
->> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
->> +	struct qcom_op q_op;
->> +	const struct nand_op_instr *instr = NULL;
->> +	unsigned int op_id = 0;
->> +	unsigned int len = 0;
->> +	int ret = 0;
->> +
->> +	qcom_parse_instructions(chip, subop, &q_op);
->> +
->> +	q_op.cmd_reg |= PAGE_ACC | LAST_PAGE;
->> +
->> +	pre_command(host, NAND_CMD_PARAM);
->> +	/*
->> +	 * NAND_CMD_PARAM is called before we know much about the FLASH chip
->> +	 * in use. we configure the controller to perform a raw read of 512
->> +	 * bytes to read onfi params
-> 
-> There is no guess to do, just follow what the core asks.
-
-   Sure, will fix this in next patch V3.
-> 
->> +	 */
->> +	if (nandc->props->qpic_v2)
->> +		nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
->> +	else
->> +		nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
-> 
-> There is something wrong here.
-> 
-   Will fix this in next patch V3.
-
->> +
->> +	nandc_set_reg(chip, NAND_ADDR0, 0);
->> +	nandc_set_reg(chip, NAND_ADDR1, 0);
->> +	nandc_set_reg(chip, NAND_DEV0_CFG0, 0 << CW_PER_PAGE
->> +					| 512 << UD_SIZE_BYTES
->> +					| 5 << NUM_ADDR_CYCLES
->> +					| 0 << SPARE_SIZE_BYTES);
->> +	nandc_set_reg(chip, NAND_DEV0_CFG1, 7 << NAND_RECOVERY_CYCLES
->> +					| 0 << CS_ACTIVE_BSY
->> +					| 17 << BAD_BLOCK_BYTE_NUM
->> +					| 1 << BAD_BLOCK_IN_SPARE_AREA
->> +					| 2 << WR_RD_BSY_GAP
->> +					| 0 << WIDE_FLASH
->> +					| 1 << DEV0_CFG1_ECC_DISABLE);
->> +	if (!nandc->props->qpic_v2)
->> +		nandc_set_reg(chip, NAND_EBI2_ECC_BUF_CFG, 1 << ECC_CFG_ECC_DISABLE);
->> +
->> +	/* configure CMD1 and VLD for ONFI param probing in QPIC v1 */
->> +	if (!nandc->props->qpic_v2) {
->> +		nandc_set_reg(chip, NAND_DEV_CMD_VLD,
->> +			      (nandc->vld & ~READ_START_VLD));
->> +		nandc_set_reg(chip, NAND_DEV_CMD1,
->> +			      (nandc->cmd1 & ~(0xFF << READ_ADDR))
->> +			      | NAND_CMD_PARAM << READ_ADDR);
->> +	}
->> +
->> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
->> +
->> +	if (!nandc->props->qpic_v2) {
->> +		nandc_set_reg(chip, NAND_DEV_CMD1_RESTORE, nandc->cmd1);
->> +		nandc_set_reg(chip, NAND_DEV_CMD_VLD_RESTORE, nandc->vld);
->> +	}
->> +
->> +	nandc_set_read_loc(chip, 0, 0, 0, 512, 1);
->> +
->> +	if (!nandc->props->qpic_v2) {
->> +		write_reg_dma(nandc, NAND_DEV_CMD_VLD, 1, 0);
->> +		write_reg_dma(nandc, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
->> +	}
->> +
->> +	nandc->buf_count = 512;
-> 
-> The length is provided by the instruction.
-
-    Will fix this in next patch V3.
-> 
->> +	memset(nandc->data_buffer, 0xff, nandc->buf_count);
->> +
->> +	config_nand_single_cw_page_read(chip, false, 0);
->> +
->> +	read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer,
->> +		      nandc->buf_count, 0);
->> +
->> +	/* restore CMD1 and VLD regs */
->> +	if (!nandc->props->qpic_v2) {
->> +		write_reg_dma(nandc, NAND_DEV_CMD1_RESTORE, 1, 0);
->> +		write_reg_dma(nandc, NAND_DEV_CMD_VLD_RESTORE, 1, NAND_BAM_NEXT_SGL);
->> +	}
->> +
->> +	ret = submit_descs(nandc);
->> +	if (ret)
->> +		dev_err(nandc->dev, "failure in sbumitting param page descriptor\n");
->> +
->> +	free_descs(nandc);
->> +
->> +	ret = qcom_wait_rdy_poll(chip, q_op.rdy_timeout_ms);
->> +
->> +	instr = q_op.data_instr;
->> +	op_id = q_op.data_instr_idx;
->> +	len = nand_subop_get_data_len(subop, op_id);
->> +	memcpy(instr->ctx.data.buf.in, nandc->data_buffer, len);
->> +
->> +	return ret;
->>   }
->>   
->>   static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
-> 
-> 
-> Thanks,
-> Miquèl
+We could also put the whole loop under #if INLINE_EB_PAGES > 1. I've
+checked that this type of iteration over the pages is only present in
+this function so this should not become a pattern that would spread
+elsewhere.
