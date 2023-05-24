@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A9E70F69D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAC370F69A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbjEXMgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S234027AbjEXMf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233733AbjEXMfv (ORCPT
+        with ESMTP id S229611AbjEXMfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:35:51 -0400
+        Wed, 24 May 2023 08:35:54 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B969F18E;
-        Wed, 24 May 2023 05:35:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7471F1A1;
+        Wed, 24 May 2023 05:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684931748; x=1716467748;
+  t=1684931752; x=1716467752;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rzvM3w32MNnwDMNv8p3zZFL6PqL0xHiHXktmkOvqkEc=;
-  b=C0ohN2kr76G4UYIFeEFHpEUK1HTrNCFr8f++2L+WFZN567ua8mfCWTYR
-   HMGjM8c8fyBWYfCc8M0tMZ+ezYl4UaMV4p62ZAHw+1647nqiw+7Xa/JQ5
-   NGH9LD44DQJo0s0q1tz7CKIk3oUg0hrmgU+OZDmxk6fkgobiYKg5jHCbP
-   hW02cm6Z/QfGTYLEmrqCLSoeOh5lpE42f8uqZkmeaz8fB3uZma8XZAUKl
-   CH6RWyqTdd9E6H4HevdFmUI/NIgiT/gln41NMwnkeMcQQpcBiAO/17id+
-   yMGO00ullVwGhdPhFFE8xh6d14AEoR/ZINMDTG4Nu3xzQWX4MXs5B0Zef
-   A==;
+  bh=svc+MUbCNh1HWMRjrkRtGTVh6jhiE35L5mkZPeE4ezc=;
+  b=2NTlpjO5jcKVSP++iKsqD6s6EawOZp3tVPj8Xy8HDVAqYfZ7HSLQXC6a
+   VcVDdaYooewHTBKSyy/cV89WaZJixnB9G5EcyCzwoSpoCSyg0mkmHG0h8
+   hXWA4zszsyAFNis2rGmroxN1tymkzjC5OIkWyO1aaPovELVIl7adPp8G5
+   MWok+pF9FRQ3bV+IiGFbF+fiCRo31f9o1ywnvC25MMezdkEsnQC2uL1u3
+   lC41UJHPR8x3SO4l9/231IRAV6Hi0LACTu3E1XfgXfBoNmG2ICv5Dplxs
+   zNHNVyNZJUpqNn685kJtFbI0cmolbfnwhMUY2k3Hg5gpBtE3zJWfI84LW
+   w==;
 X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="214683021"
+   d="scan'208";a="214683067"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 May 2023 05:35:48 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 May 2023 05:35:51 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 24 May 2023 05:35:47 -0700
+ 15.1.2507.21; Wed, 24 May 2023 05:35:51 -0700
 Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Wed, 24 May 2023 05:35:44 -0700
+ 15.1.2507.21 via Frontend Transport; Wed, 24 May 2023 05:35:48 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -48,9 +48,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 2/4] dt-bindings: power: reset: atmel,at91sam9260-shdwc: convert to yaml
-Date:   Wed, 24 May 2023 15:35:26 +0300
-Message-ID: <20230524123528.439082-3-claudiu.beznea@microchip.com>
+Subject: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc: convert to yaml
+Date:   Wed, 24 May 2023 15:35:27 +0300
+Message-ID: <20230524123528.439082-4-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230524123528.439082-1-claudiu.beznea@microchip.com>
 References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
@@ -67,70 +67,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Atmel shutdown controller to YAML.
+Convert Atmel SAMA5D2 shutdown controller to YAML. SAMA7G5 SHDWC DT node
+(available in arch/arm/boot/dts/sama7g5.dtsi) has syscon along with its
+compatible. There is no usage of this syscon in the current code but it
+may be necessary in future as some registers of SHDWC are accessed in
+different drivers (at91-sama5d2_shdwc.c and arch/arm/mach-at91/pm.c).
+Thus update the YAML with it to make DT checkers happy.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- .../devicetree/bindings/arm/atmel-sysregs.txt | 31 -------
- .../power/reset/atmel,at91sam9260-shdwc.yaml  | 82 +++++++++++++++++++
- 2 files changed, 82 insertions(+), 31 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml
+ .../devicetree/bindings/arm/atmel-sysregs.txt |  63 ----------
+ .../power/reset/atmel,sama5d2-shdwc.yaml      | 115 ++++++++++++++++++
+ 2 files changed, 115 insertions(+), 63 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
 
 diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-index ab1b352344ae..e6b2fb291b45 100644
+index e6b2fb291b45..67a66bf74895 100644
 --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
 +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-@@ -52,37 +52,6 @@ Example:
+@@ -52,69 +52,6 @@ Example:
  		reg = <0xe3804000 0x1000>;
  };
  
--SHDWC Shutdown Controller
+-SHDWC SAMA5D2-Compatible Shutdown Controller
+-
+-1) shdwc node
 -
 -required properties:
--- compatible: Should be "atmel,<chip>-shdwc".
--  <chip> can be "at91sam9260", "at91sam9rl" or "at91sam9x5".
--- reg: Should contain registers location and length
+-- compatible: should be "atmel,sama5d2-shdwc", "microchip,sam9x60-shdwc" or
+-  "microchip,sama7g5-shdwc"
+-- reg: should contain registers location and length
 -- clocks: phandle to input clock.
+-- #address-cells: should be one. The cell is the wake-up input index.
+-- #size-cells: should be zero.
 -
 -optional properties:
--- atmel,wakeup-mode: String, operation mode of the wakeup mode.
--  Supported values are: "none", "high", "low", "any".
--- atmel,wakeup-counter: Counter on Wake-up 0 (between 0x0 and 0xf).
 -
--optional at91sam9260 properties:
+-- debounce-delay-us: minimum wake-up inputs debouncer period in
+-  microseconds. It's usually a board-related property.
+-- atmel,wakeup-rtc-timer: boolean to enable Real-Time Clock wake-up.
+-
+-optional microchip,sam9x60-shdwc or microchip,sama7g5-shdwc properties:
 -- atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
 -
--optional at91sam9rl properties:
--- atmel,wakeup-rtc-timer: boolean to enable Real-time Clock Wake-up.
--- atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
+-The node contains child nodes for each wake-up input that the platform uses.
 -
--optional at91sam9x5 properties:
--- atmel,wakeup-rtc-timer: boolean to enable Real-time Clock Wake-up.
+-2) input nodes
+-
+-Wake-up input nodes are usually described in the "board" part of the Device
+-Tree. Note also that input 0 is linked to the wake-up pin and is frequently
+-used.
+-
+-Required properties:
+-- reg: should contain the wake-up input index [0 - 15].
+-
+-Optional properties:
+-- atmel,wakeup-active-high: boolean, the corresponding wake-up input described
+-  by the child, forces the wake-up of the core power supply on a high level.
+-  The default is to be active low.
 -
 -Example:
 -
--	shdwc@fffffd10 {
--		compatible = "atmel,at91sam9260-shdwc";
--		reg = <0xfffffd10 0x10>;
+-On the SoC side:
+-	shdwc@f8048010 {
+-		compatible = "atmel,sama5d2-shdwc";
+-		reg = <0xf8048010 0x10>;
 -		clocks = <&clk32k>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		atmel,wakeup-rtc-timer;
 -	};
 -
- SHDWC SAMA5D2-Compatible Shutdown Controller
+-On the board side:
+-	shdwc@f8048010 {
+-		debounce-delay-us = <976>;
+-
+-		input@0 {
+-			reg = <0>;
+-		};
+-
+-		input@1 {
+-			reg = <1>;
+-			atmel,wakeup-active-high;
+-		};
+-	};
+-
+ Special Function Registers (SFR)
  
- 1) shdwc node
-diff --git a/Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml
+ Special Function Registers (SFR) manage specific aspects of the integrated
+diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
 new file mode 100644
-index 000000000000..af7b76fe9648
+index 000000000000..31a16a354a3a
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml
-@@ -0,0 +1,82 @@
++++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
+@@ -0,0 +1,115 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/power/reset/atmel,at91sam9260-shdwc.yaml#
++$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Atmel SHDWC Shutdown Controller
++title: Atmel SAMA5D2 SHDWC Shutdown Controller
 +
 +maintainers:
 +  - Claudiu Beznea <claudiu.beznea@microchip.com>
@@ -141,10 +178,14 @@ index 000000000000..af7b76fe9648
 +
 +properties:
 +  compatible:
-+    enum:
-+      - atmel,at91sam9260-shdwc
-+      - atmel,at91sam9rl-shdwc
-+      - atmel,at91sam9x5-shdwc
++    oneOf:
++      - items:
++          - const: microchip,sama7g5-shdwc
++          - const: syscon
++      - items:
++          enum:
++            - atmel,sama5d2-shdwc
++            - microchip,sam9x60-shdwc
 +
 +  reg:
 +    maxItems: 1
@@ -152,16 +193,45 @@ index 000000000000..af7b76fe9648
 +  clocks:
 +    maxItems: 1
 +
-+  atmel,wakeup-mode:
-+    description: operation mode of the wakeup mode
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [ none, high, low, any ]
++  "#address-cells":
++    const: 1
 +
-+  atmel,wakeup-counter:
-+    description: counter on wake-up 0
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 15
++  "#size-cells":
++    const: 0
++
++  debounce-delay-us:
++    description:
++      Minimum wake-up inputs debouncer period in microseconds. It is usually a
++      board-related property.
++
++  atmel,wakeup-rtc-timer:
++    description: enable real-time clock wake-up
++    type: boolean
++
++patternProperties:
++  "^input@[0-15]$":
++    description:
++      Wake-up input nodes. These are usually described in the "board" part of
++      the Device Tree. Note also that input 0 is linked to the wake-up pin and
++      is frequently used.
++    type: object
++    properties:
++      reg:
++        description: contains the wake-up input index
++        minimum: 0
++        maximum: 15
++
++      atmel,wakeup-active-high:
++        description:
++          The corresponding wake-up input described by the child forces the
++          wake-up of the core power supply on a high level. The default is to
++          be active low.
++        type: boolean
++
++    required:
++      - reg
++
++    additionalProperties: false
 +
 +required:
 +  - compatible
@@ -174,35 +244,35 @@ index 000000000000..af7b76fe9648
 +        compatible:
 +          contains:
 +            enum:
-+              - atmel,at91sam9260-shdwc
-+              - atmel,at91sam9rl-shdwc
++              - microchip,sam9x60-shdwc
++              - microchip,sama7g5-shdwc
 +    then:
 +      properties:
 +        atmel,wakeup-rtt-timer:
 +          description: enable real-time timer wake-up
 +          type: boolean
 +
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - atmel,at91sam9rl-shdwc
-+              - atmel,at91sam9x5-shdwc
-+    then:
-+      properties:
-+        atmel,wakeup-rtc-timer:
-+          description: enable real-time clock wake-up
-+          type: boolean
-+
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    shdwc: poweroff@fffffd10 {
-+        compatible = "atmel,at91sam9260-shdwc";
-+        reg = <0xfffffd10 0x10>;
++    shdwc: poweroff@f8048010 {
++        compatible = "atmel,sama5d2-shdwc";
++        reg = <0xf8048010 0x10>;
 +        clocks = <&clk32k>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++        atmel,wakeup-rtc-timer;
++        debounce-delay-us = <976>;
++
++        input@0 {
++            reg = <0>;
++        };
++
++        input@1 {
++            reg = <1>;
++            atmel,wakeup-active-high;
++        };
 +    };
 +
 +...
