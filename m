@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D4D70FC18
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5F370FC1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234637AbjEXRA1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 13:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S231284AbjEXRCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbjEXRAY (ORCPT
+        with ESMTP id S229622AbjEXRCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:00:24 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7F0BB;
-        Wed, 24 May 2023 10:00:23 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-513debc49e8so351795a12.0;
-        Wed, 24 May 2023 10:00:23 -0700 (PDT)
+        Wed, 24 May 2023 13:02:49 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEFDBB;
+        Wed, 24 May 2023 10:02:48 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-75b0df7b225so92906085a.1;
+        Wed, 24 May 2023 10:02:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684947768; x=1687539768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c52Wx5gVDucU8yW4B1ni7YIFK5C1wFPEKZmBqYnCprk=;
+        b=D56ZvRFwklB5J3kFeIVqKOeeLB0IQH7EItC8K4tS4thFpG5MqlWh9+yo4GCNvjEoa9
+         TFyvLLitG7b27mz0/nitnSnD81oeGspf0vhmtkMY0bhZDUPOQd0YF8c+z6TN10mpakRD
+         DK73pL+IotjPWSEjYty+6yfrQsuUDSpwL3HO1MD+z9fMZANo9vl83W32Qar2VRFMIGDk
+         u072R/HZeNWeC4S9BwzpL3mKUB1IJFOqApANvCvV3i7H5+aBF2GwoZfIMJ4+2eecqeQO
+         chfjvGN5dqb11k0khY2jf/eRj3hGnZHJzYxers5Qxnvw515Gz7VzNH1jYI9qqLYipO5y
+         opfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684947621; x=1687539621;
+        d=1e100.net; s=20221208; t=1684947768; x=1687539768;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0bnQ7iWZQ9Jgvf512BdDOCo0y+67JuQ0Mc0pXfe99S4=;
-        b=bkb+29sADvojIJnB36/puHOiamt4HEBAzQdtaKdeD2frt8wl5eG44/Ih2Sey3afQnR
-         5IDNFAmbMFs1HHi5joiwA8MR0xaAxAUeA4VpCOGiTa0JgSw3dygSNWb/ihjF/hl+DEDa
-         YDY0D0DxesRxBbIixbEdNqrOVUM3Qx+aIuISxi6NF+jvhdeteEzja4rj4Vs8n6uixDxU
-         oZmSwcOL5t44Zs+sWe0g1SXQQyBSSbeXQ6Oeu5wVJl159J2isQL7anb6t4fxzo2MqF5L
-         9o2iow6XVi9WLQ4hixZa48eowDoyej8096ARg0gxEgZgJsDvvklyNifBujBpZ68chqyJ
-         WnSQ==
-X-Gm-Message-State: AC+VfDyCITap/7BBWNOBalwF7hkvbeK8LstywVFdeZyKBRz5XNR3vCi8
-        sYRaQuTLslQZYxm8gkQf3HOCiHb33kAghV7t4UW91X7m
-X-Google-Smtp-Source: ACHHUZ4zkXKoUIMbblySJMWLINU/pl5/h3yyKDdTQWWlkhCs93xq4sjxh/rMtUgwAzPHZ7HQS3AENyEL3Bjc8E9o9Tw=
-X-Received: by 2002:a17:906:72d4:b0:96f:da08:d451 with SMTP id
- m20-20020a17090672d400b0096fda08d451mr9559930ejl.6.1684947621587; Wed, 24 May
- 2023 10:00:21 -0700 (PDT)
+        bh=c52Wx5gVDucU8yW4B1ni7YIFK5C1wFPEKZmBqYnCprk=;
+        b=baD5SrRU8diEZgzfDbAxSeMUIJCWBntCANWu9wmlAutDsnzsFMcMYfd7KJv6NUlApQ
+         hWGNfa5odwrYoAbRxG1Metb74dkwSVjjxRL0ROPYdyGUay41i41bj76szz5yW6B1KXfV
+         dB3HqQiLoBHnV7qDfzLFxdVWpCc1RBAC3tTrbdn/Ipd63TU8rHzzTMZeJczDMfvmXYLp
+         XV8/OmE6/1xI/xBkpEgy1Wbdf9wW10xPyA+7K5pUm90322tBwbqF5vEHjxuIvSP7eSom
+         Tyk3zOE6l/3sElb8DTPCIxDijT/M/km7ReCHJkzirp+vuk99TAPzot8xWS9DsXi3Ezzp
+         dqAA==
+X-Gm-Message-State: AC+VfDwykreadVvBXwhSO7JcsoSqVBTxQrCZaw+F7SKU/tnX4ghoom1p
+        aMJYXbl/HwZdUhe208KEYMG/TYp1Liql5gHwXywTKgAr
+X-Google-Smtp-Source: ACHHUZ5XBYR1T0PHseLO3zU05/JyEAe8A+LbxvBmC+7mcUaj56Af9QuajP3SmdP8Nx5M23t+mxKV7czbCI5U7nfZVfE=
+X-Received: by 2002:a37:492:0:b0:75b:23a0:d9f4 with SMTP id
+ 140-20020a370492000000b0075b23a0d9f4mr8426925qke.74.1684947767725; Wed, 24
+ May 2023 10:02:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <A393097506CB918E+ZFN4YOkubdwQvONz@TP-P15V>
-In-Reply-To: <A393097506CB918E+ZFN4YOkubdwQvONz@TP-P15V>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:00:10 +0200
-Message-ID: <CAJZ5v0ja0FBakV7ERdVdB0bckaG9t+K6rz8qgPJDGG7bMNvaSQ@mail.gmail.com>
-Subject: Re: [PATCH] strcut: Correct spelling mistakes in comments
-To:     Wang Honghui <honghui.wang@ucas.com.cn>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230523223944.691076-1-Kenny.Ho@amd.com> <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
+ <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com> <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch>
+In-Reply-To: <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch>
+From:   Kenny Ho <y2kenny@gmail.com>
+Date:   Wed, 24 May 2023 13:02:36 -0400
+Message-ID: <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
+Subject: Re: [PATCH] Remove hardcoded static string length
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        Kenny Ho <Kenny.Ho@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 11:19 AM Wang Honghui <honghui.wang@ucas.com.cn> wrote:
->
-> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
->
-> strcut: Correct spelling mistakes in comments.
->
-> ---
->  kernel/power/snapshot.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index cd8b7b35f1e8..b27affb7503f 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -398,7 +398,7 @@ struct mem_zone_bm_rtree {
->         unsigned int blocks;            /* Number of Bitmap Blocks     */
->  };
->
-> -/* strcut bm_position is used for browsing memory bitmaps */
-> +/* struct bm_position is used for browsing memory bitmaps */
->
->  struct bm_position {
->         struct mem_zone_bm_rtree *zone;
-> --
+On Wed, May 24, 2023 at 12:02=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote=
+:
+> So the compiler warning/error needs to be fixed a different want.
 
-Applied as 6.5 material under an edited subject and with a new
-changelog, thanks!
+Understood.  Would caping the length at iov_len with a ternary be sufficien=
+t?
+
+Regards,
+Kenny
