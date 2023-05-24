@@ -2,40 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D6D70FAEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4155B70FAAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 17:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237757AbjEXPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 11:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S235471AbjEXPqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 11:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237758AbjEXPz3 (ORCPT
+        with ESMTP id S235414AbjEXPqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 11:55:29 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F6A1BB;
-        Wed, 24 May 2023 08:55:10 -0700 (PDT)
-Received: from van1shing-pc.localdomain ([10.12.182.0])
-        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 34OFhl0k029330-34OFhl0l029330
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 24 May 2023 23:43:50 +0800
-From:   Wang Zhang <silver_code@hust.edu.cn>
-To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Wang Zhang <silver_code@hust.edu.cn>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] i2c: ocores: use devm_ managed clks
-Date:   Wed, 24 May 2023 23:43:18 +0800
-Message-Id: <20230524154318.2259-1-silver_code@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
-References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
+        Wed, 24 May 2023 11:46:34 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B06197;
+        Wed, 24 May 2023 08:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1684943166; x=1716479166;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=9/BFiR9WjSZPq/EuaxN0jvRDDD5ugdAe5QjD82M1rfs=;
+  b=O60Pvw1Ek6Uc10Ipb9KQ79aWuq4fhWNZnxvG/TA6keMjY6rZEKG58zin
+   jhZNVQ3WD3ZuP5m5nMZyOEuXl2cUjx+7WFm6en8ds/al8JxM/90CstFEg
+   Xtyugw71+2TUoh5Bv0al6L3T4W184TVCJ7BZFLpavhmRcKZ3qRIH1G3Jf
+   Q=;
+X-IronPort-AV: E=Sophos;i="6.00,189,1681171200"; 
+   d="scan'208";a="335305194"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 15:43:32 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com (Postfix) with ESMTPS id C180AE4889;
+        Wed, 24 May 2023 15:43:31 +0000 (UTC)
+Received: from EX19MTAUWA001.ant.amazon.com (10.250.64.204) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 24 May 2023 15:43:31 +0000
+Received: from dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com (10.15.57.183)
+ by mail-relay.amazon.com (10.250.64.204) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 24 May 2023 15:43:31 +0000
+Received: by dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com (Postfix, from userid 5466572)
+        id C18DD964; Wed, 24 May 2023 15:43:30 +0000 (UTC)
+Date:   Wed, 24 May 2023 15:43:30 +0000
+From:   Maximilian Heyne <mheyne@amazon.de>
+To:     Juergen Gross <jgross@suse.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Ashok Raj <ashok.raj@intel.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <xen-devel@lists.xenproject.org>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86/pci/xen: populate MSI sysfs entries
+Message-ID: <20230524154330.GA52988@dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com>
+References: <20230503131656.15928-1-mheyne@amazon.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: silver_code@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230503131656.15928-1-mheyne@amazon.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,158 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While it is not entirely clear why the original author implemented this
-behavior, there may have been certain circumstances or issues that were not
-apparent to us. It's possible that they were trying to work around a bug by
-employing an unconventional solution.Using `devm_clk_get_enabled()` rather
-than devm_clk_get() can automatically track the usage of clocks and free
-them when they are no longer needed or an error occurs.
+On Wed, May 03, 2023 at 01:16:53PM +0000, Maximilian Heyne wrote:
+> Commit bf5e758f02fc ("genirq/msi: Simplify sysfs handling") reworked the
+> creation of sysfs entries for MSI IRQs. The creation used to be in
+> msi_domain_alloc_irqs_descs_locked after calling ops->domain_alloc_irqs.
+> Then it moved into __msi_domain_alloc_irqs which is an implementation of
+> domain_alloc_irqs. However, Xen comes with the only other implementation
+> of domain_alloc_irqs and hence doesn't run the sysfs population code
+> anymore.
+> 
+> Commit 6c796996ee70 ("x86/pci/xen: Fixup fallout from the PCI/MSI
+> overhaul") set the flag MSI_FLAG_DEV_SYSFS for the xen msi_domain_info
+> but that doesn't actually have an effect because Xen uses it's own
+> domain_alloc_irqs implementation.
+> 
+> Fix this by making use of the fallback functions for sysfs population.
+> 
+> Fixes: bf5e758f02fc ("genirq/msi: Simplify sysfs handling")
+> Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
 
-fixing it by changing `ocores_i2c_of_probe` to use
-`devm_clk_get_optional_enabled()` rather than `devm_clk_get()`, changing
-`goto err_clk' to direct return and removing `err_clk`.
 
-Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
-v2->v3: use `devm_clk_get_optional_enabled()` to manage clks
-v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
----
- drivers/i2c/busses/i2c-ocores.c | 57 +++++++++++++--------------------
- 1 file changed, 22 insertions(+), 35 deletions(-)
+Any other feedback on this one? This is definitely a bug but I understand that
+there might be different ways to fix it.
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index 2e575856c5cd..316d72cde3b9 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -552,16 +552,14 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 							&clock_frequency);
- 	i2c->bus_clock_khz = 100;
- 
--	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
- 
--	if (!IS_ERR(i2c->clk)) {
--		int ret = clk_prepare_enable(i2c->clk);
--
--		if (ret) {
--			dev_err(&pdev->dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
-+	if (IS_ERR(i2c->clk)) {
-+		dev_err(&pdev->dev,
-+			"devm_clk_get_optional_enabled failed\n");
-+		return PTR_ERR(i2c->clk);
-+	}
-+	if (i2c->clk) {
- 		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
- 		if (clock_frequency_present)
- 			i2c->bus_clock_khz = clock_frequency / 1000;
-@@ -573,7 +571,6 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 			if (!clock_frequency_present) {
- 				dev_err(&pdev->dev,
- 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
--				clk_disable_unprepare(i2c->clk);
- 				return -ENODEV;
- 			}
- 			i2c->ip_clock_khz = clock_frequency / 1000;
-@@ -678,8 +675,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 		default:
- 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
- 				i2c->reg_io_width);
--			ret = -EINVAL;
--			goto err_clk;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -710,13 +706,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 						   pdev->name, i2c);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
--			goto err_clk;
-+			return ret;
- 		}
- 	}
- 
- 	ret = ocores_init(&pdev->dev, i2c);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* hook up driver to tree */
- 	platform_set_drvdata(pdev, i2c);
-@@ -728,7 +724,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	/* add i2c adapter to i2c tree */
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* add in known devices to the bus */
- 	if (pdata) {
-@@ -737,10 +733,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
--
--err_clk:
--	clk_disable_unprepare(i2c->clk);
--	return ret;
- }
- 
- static int ocores_i2c_remove(struct platform_device *pdev)
-@@ -755,9 +747,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
- 	/* remove adapter & data */
- 	i2c_del_adapter(&i2c->adap);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
--
- 	return 0;
- }
- 
-@@ -771,8 +760,7 @@ static int ocores_i2c_suspend(struct device *dev)
- 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
- 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
-+	clk_disable_unprepare(i2c->clk);
- 	return 0;
- }
- 
-@@ -780,19 +768,18 @@ static int ocores_i2c_resume(struct device *dev)
- {
- 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(i2c->clk)) {
--		unsigned long rate;
--		int ret = clk_prepare_enable(i2c->clk);
-+	unsigned long rate;
-+	int ret = clk_prepare_enable(i2c->clk);
- 
--		if (ret) {
--			dev_err(dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
--		rate = clk_get_rate(i2c->clk) / 1000;
--		if (rate)
--			i2c->ip_clock_khz = rate;
-+	if (ret) {
-+		dev_err(dev,
-+			"clk_prepare_enable failed: %d\n", ret);
-+		return ret;
- 	}
-+	rate = clk_get_rate(i2c->clk) / 1000;
-+	if (rate)
-+		i2c->ip_clock_khz = rate;
-+
- 	return ocores_init(dev, i2c);
- }
- 
--- 
-2.34.1
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
 
