@@ -2,108 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EE170F5AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BDA70F5CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjEXLwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S232377AbjEXMBF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 08:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjEXLwP (ORCPT
+        with ESMTP id S229531AbjEXMBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:52:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB58D9D;
-        Wed, 24 May 2023 04:52:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684929134; x=1716465134;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iaaZ5qDY8muwIMDjegGgpI3MOfMGeNUOA3jUMSF2XYk=;
-  b=POu7T7tz9LHzOWA/87Jk2nREBaDfwQRru/ZR7CB+eNJJ03ajbYmyK9Ui
-   U2v+r5z0/Tyv7qkm945tZGiJ3EveQxnrhwJ39YHAePbk9/SVjXQTYW357
-   NHal8FoiCpSz4Rj8sqRLmii381gixLw3l/S/teH/WasoyO15SPiWCcf/o
-   +7I8rwItI8lfKZr4xIG3gZyvMN8lA7hMWFVzipp8yZjxIeAwM7taKU6T7
-   DJAaf265jI/A8v/32DGOMPY8++2n5Y8yAwhiSzPGcwCqdZr+EfBFAQYpU
-   UZk7JX0Su7r4ou7Qq6LfPMT9b/VGt8pfWFArgJBLFIstt1gUOk9ixSZvy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="419252193"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="419252193"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 04:52:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="704316051"
-X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
-   d="scan'208";a="704316051"
-Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.249.175.64]) ([10.249.175.64])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 04:52:13 -0700
-Message-ID: <aee8ff85-5716-424e-3773-33700fd90dc2@linux.intel.com>
-Date:   Wed, 24 May 2023 19:52:00 +0800
+        Wed, 24 May 2023 08:01:03 -0400
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DC99D;
+        Wed, 24 May 2023 05:01:02 -0700 (PDT)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-45702d3d92cso590501e0c.1;
+        Wed, 24 May 2023 05:01:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684929661; x=1687521661;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SagXwz3fZXKRM1LQINgV90wdhBsSA1/HwNIZxym3pck=;
+        b=VAd7X6kuXpEY6NtOSBEE00h5lJyxZmHNEe+0Dfj98E4o92bRmKFHz019zwPm+BwTSU
+         KcEQ8cQ93Ogg8qzwyU0vkA6KmkY1fu8ne307lc68InnvCFVawKh4YNea/AEAgjVfA0RA
+         xIZe+1niv1dXEtIEFZzrAVhhyymwlHJ21L8650NLWBbT471WSGtrzs+0GO6yoEOkhMpa
+         MduY10/aCDtL+1sOIkHlULQ0q/Rimr3PpON03uyvh4O05JnzF1+WZDMFFWBv7TbbStfU
+         pETfcv6p8ik0+E+sBGB7GjRZhV2Hcqp3WRT6uNloDF/AF0p33desQLnb0exlqd/Ny49x
+         FHtA==
+X-Gm-Message-State: AC+VfDzSv5i/86notKMcVKkiA6nWvt+KXQ56Pa4hCZjqT0bFpqmWiuP9
+        wMEjBc24gGET8PbY5Nv8u2w1n82HNiSc6w==
+X-Google-Smtp-Source: ACHHUZ5qeWSykQja7Xbx8k/tBMIJOLnAEjDaw8VeRMa1eEelBRBsMgz5dns6gT3YYYFRlWo5qMifMQ==
+X-Received: by 2002:a1f:df42:0:b0:44f:d211:2df3 with SMTP id w63-20020a1fdf42000000b0044fd2112df3mr6714924vkg.13.1684929661154;
+        Wed, 24 May 2023 05:01:01 -0700 (PDT)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id 9-20020a1f1809000000b0045350f4ca42sm1891730vky.1.2023.05.24.05.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 05:01:00 -0700 (PDT)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4571d25d288so579091e0c.3;
+        Wed, 24 May 2023 05:01:00 -0700 (PDT)
+X-Received: by 2002:a81:7d87:0:b0:561:7cb7:6fb4 with SMTP id
+ y129-20020a817d87000000b005617cb76fb4mr19705995ywc.7.1684929172360; Wed, 24
+ May 2023 04:52:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] serial: 8250_pci: remove unreachable code for ASIX
- devices
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230510142855.256658-1-jiaqing.zhao@linux.intel.com>
- <2023051343-cringing-junction-54f7@gregkh>
- <188db6e4-d1de-6643-f6e1-5cb3807b28ee@linux.intel.com>
- <2023051533-harmonize-ozone-bc72@gregkh>
-Content-Language: en-US
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-In-Reply-To: <2023051533-harmonize-ozone-bc72@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <e4227418-151d-7222-b439-4ce53bf0fb81@amd.com> <20230523192858.31924-1-blarson@amd.com>
+In-Reply-To: <20230523192858.31924-1-blarson@amd.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 24 May 2023 13:52:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
+Message-ID: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
+Subject: Re: [PATCH v14 6/8] arm64: dts: Add AMD Pensando Elba SoC support
+To:     Brad Larson <blarson@amd.com>
+Cc:     michal.simek@amd.com, adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        broonie@kernel.org, catalin.marinas@arm.com, conor+dt@kernel.org,
+        davidgow@google.com, devicetree@vger.kernel.org,
+        fancer.lancer@gmail.com, gerg@linux-m68k.org, gsomlo@gmail.com,
+        hal.feng@starfivetech.com, hasegawa-hitomi@fujitsu.com,
+        j.neuschaefer@gmx.net, joel@jms.id.au, kernel@esmil.dk,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, lee@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        p.zabel@pengutronix.de, rdunlap@infradead.org, robh+dt@kernel.org,
+        samuel@sholland.org, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, walker.chen@starfivetech.com, will@kernel.org,
+        zhuyinbo@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Brad,
 
+On Tue, May 23, 2023 at 9:30 PM Brad Larson <blarson@amd.com> wrote:
+> On 5/16/23 09:54, Michal Simek wrote:
+> > On 5/15/23 20:16, Brad Larson wrote:
+> >> --- /dev/null
+> >> +++ b/arch/arm64/boot/dts/amd/elba-16core.dtsi
+> >> @@ -0,0 +1,197 @@
+> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> >> +/*
+> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
+> >
+> > 2023 and the same below.
+>
+> I'll update the copyright in the next submit
 
-On 2023-05-15 11:49, Greg Kroah-Hartman wrote:
-> On Mon, May 15, 2023 at 10:36:30AM +0800, Jiaqing Zhao wrote:
->>
->>
->> On 2023-05-13 18:28, Greg Kroah-Hartman wrote:
->>> On Wed, May 10, 2023 at 02:28:56PM +0000, Jiaqing Zhao wrote:
->>>> PCI_VENDOR_ID_ASIX (0x9710) is the same as PCI_VENDOR_ID_NETMOS. In
->>>> pci_serial_quirks array, the NetMos entry always takes precedence over
->>>> the ASIX entry. So the code for ASIX devices is always unreachable,
->>>> even when it was initially merged. Since the NetMos vendor driver
->>>> doesn't mention such FIFO bug, it's safe to remove the code.
->>>>
->>>> This reverts commit eb26dfe8aa7e ("8250: add support for ASIX devices
->>>> with a FIFO bug").
->>>>
->>>> Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
->>>
->>> Please follow the documented Intel kernel developer requirements before
->>> you submit this again, based on the changes that process will require.
->>>
->>> thanks,
->>>
->>> greg k-h
->>
->> Sorry I am unable to find this "Intel kernel developer requirements". Is
->> there any link or contact where I can find this information? Thank you.
-> 
-> Contact the Intel Linux developer team and they will point you at them.
-> This is a company-wide requirement, it is odd that your normal "Here is
-> how you can contribute to Linux!" training at Intel did not cover it?
-> 
-> thanks,
-> 
-> greg k-h
+Did you make any substantial changes in 2023?
 
-I contacted them and there is no reply so far. Could you please tell me if
-there is any general available docs about this or point out what I'm doing
-wrong in this patch? Thank you very much.
+> >> + */
+> >> +
+> >> +/ {
+> >> +    cpus {
+> >> +            #address-cells = <2>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            cpu-map {
+> >> +                    cluster0 {
+> >> +                            core0 { cpu = <&cpu0>; };
+> >> +                            core1 { cpu = <&cpu1>; };
+> >> +                            core2 { cpu = <&cpu2>; };
+> >> +                            core3 { cpu = <&cpu3>; };
+> >> +                    };
+> >> +
+> >> +                    cluster1 {
+> >> +                            core0 { cpu = <&cpu4>; };
+> >> +                            core1 { cpu = <&cpu5>; };
+> >> +                            core2 { cpu = <&cpu6>; };
+> >> +                            core3 { cpu = <&cpu7>; };
+> >> +                    };
+> >> +
+> >> +                    cluster2 {
+> >> +                            core0 { cpu = <&cpu8>; };
+> >> +                            core1 { cpu = <&cpu9>; };
+> >> +                            core2 { cpu = <&cpu10>; };
+> >> +                            core3 { cpu = <&cpu11>; };
+> >> +                    };
+> >> +
+> >> +                    cluster3 {
+> >> +                            core0 { cpu = <&cpu12>; };
+> >> +                            core1 { cpu = <&cpu13>; };
+> >> +                            core2 { cpu = <&cpu14>; };
+> >> +                            core3 { cpu = <&cpu15>; };
+> >> +                    };
+> >> +            };
+> >> +
+> >> +            /* CLUSTER 0 */
+> >> +            cpu0: cpu@0 {
+> >> +                    device_type = "cpu";
+> >> +                    compatible = "arm,cortex-a72";
+> >> +                    reg = <0 0x0>;
+> >
+> > Do you really need 2/0 split here. The first cell is 0 anyway.
+>
+> Yes following 64-bit system definition
+
+You mean for the 64-bit main address space?
+The CPU address space under /cpus is unrelated.
+
+> >> +++ b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
+> >> @@ -0,0 +1,106 @@
+> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> >> +/*
+> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
+> >> + */
+> >> +
+> >> +&flash0 {
+> 0xf0000>> +     partitions {
+> >> +            compatible = "fixed-partitions";
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <1>;
+> >> +            partition@0 {
+> >> +                    label = "flash";
+> >> +                    reg = <0x10000 0xfff0000>;
+> >
+> > This doesn't fit with partition@0 above.
+> > Also size is weird.
+>
+> This is intended to not expose sector 0.
+
+The unit address should still match the first reg entry
+=> partition@10000.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
