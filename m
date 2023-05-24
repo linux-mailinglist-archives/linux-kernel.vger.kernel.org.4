@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB9670FCF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B31F70FD0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236043AbjEXRpr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 May 2023 13:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S236230AbjEXRqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235952AbjEXRpo (ORCPT
+        with ESMTP id S236224AbjEXRqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:45:44 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CBDE5F;
-        Wed, 24 May 2023 10:45:06 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-94ea38c90ccso31055566b.1;
-        Wed, 24 May 2023 10:45:06 -0700 (PDT)
+        Wed, 24 May 2023 13:46:11 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5D01A8;
+        Wed, 24 May 2023 10:45:39 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso2451961a12.2;
+        Wed, 24 May 2023 10:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684950338; x=1687542338;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nWBdICZs1ylHFsz8zslSqh0ccqIAuQOZUPv8JnOg1n4=;
+        b=Ph7hH4NN5Xzd3WzBdsSVQS8+U87aBSWIrpyy7+WW0QkU1h5rnmAglEqXX+qT8idyBn
+         tuGBsqy4bNR0P53kYTfSXcv1RVx8P56JrjDguFJ2xDB2Jik1T7xuU68m7BLTI6vydpBx
+         4/vYBbe6gwOchR/v4SnWspk2/qa+klTSroJ/HZE9nio1csB5CsvtuWQBAw3X2wM5N72V
+         RWOe1yPtyX+SB1o+4y7Vfl1FqeSZah/FtQcfO7aAisxjzo96nvUquvYRLFzTHHRJYfMB
+         we7KhGHMmZmN1xxtrD17MLFmjbw8pI8ji/9G6fRM7laNyrmArTJCgVKO4wfxQTUk5mg6
+         DTXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950305; x=1687542305;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=snWan0OEQt+zA5xYjeMRb7pV8yuQ1oJNvMel69SqIZw=;
-        b=OetKplGA0YMKgE9oCUQkNTOmgjk/LCK0fL8q5X+CqDKckuZUh2yzpazNWWpIKhH+wj
-         qsBg/Exo0IBP7IgTDbCSKo6dEMQ7I9hSl034LaHBmTM8OydT2DuSO5QRwubaLVQBs1kB
-         B6zlILE2Xo4e5ng4njYS2yLochJ38gf+16bB6hVuJfCkLA5fBTf7jNIf/tjYaYXMQWCh
-         eA/lsMmDe8794qHP1pbZQycGcUDk4PRMYe8qepVYX0ojqRRTni4gx6WeDEKt//HsAaaZ
-         UgvOWJjLF4iqUZ8/aT1Xm2gWlUz0oEEEyTi7BTIaExRNdcfoeG+dPmQbpCWAKLon7HAI
-         GBYQ==
-X-Gm-Message-State: AC+VfDxrLlv1HRXVgCZMZpZlclq+2+35dDfPMlKAfAiR40UdTUJTCOee
-        NryDxyZ4BxuEeDpDaRoolCNeGKuimSFynSaRQIADdB7lgVM=
-X-Google-Smtp-Source: ACHHUZ70tUjBY1nqtSU6XcGiPqwWef0icBJnZ5b8IrhwvOw/C9DirxgMBQ/VxL5fYMvzCwPqmPk1nj3ILqQn/MeuWRw=
-X-Received: by 2002:a17:906:6495:b0:8d2:78c5:1d4e with SMTP id
- e21-20020a170906649500b008d278c51d4emr18279435ejm.5.1684950304470; Wed, 24
- May 2023 10:45:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684950338; x=1687542338;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nWBdICZs1ylHFsz8zslSqh0ccqIAuQOZUPv8JnOg1n4=;
+        b=aHYMhV6KrwbFanPLkA1Fb+EeyhXNrNwpq+xnD1VAJG2fvV3hLnmDNHHwBVS1XWLjqE
+         RBu74f7+nLJL1pBKrigxM0OSE/k9lHeE95pn/T9SzvW5nSOroQMYCipXxFTZNAo7DZII
+         xdCYe7OsWpKZDMq3o65vBAV5aZAXFgfNwSghQol8Q/jtVQB0SCDAUWiDuBmZclXYlpnn
+         ot4jmPoj0BOUf5v4WHtH1H+J2LQ3BtQjrJfSe953GoXQ/8/WWMxyh5O/NbR16CMimAwt
+         Ecoe2FuGoqNJES/9OPBFyZk6FIXboUBcDCUs14HpZyZXeYBSUel4ZaYdfDLoqdUGTC9m
+         IWXQ==
+X-Gm-Message-State: AC+VfDxouFjzlxxp1QMP6RU0E5KfFpP+Lr3VXDdMzQW5eu2PXqPCHHrg
+        JV9+K4n824n+KBmI3xrr2Ps=
+X-Google-Smtp-Source: ACHHUZ5kNjjMXypD+xFlWxn/uIyXBW8jfQ4bsLcwCAUAU/F/MLjAg+8IbDjx5a+657iaeX5f2L+AEg==
+X-Received: by 2002:a17:907:9809:b0:966:23e5:c8f7 with SMTP id ji9-20020a170907980900b0096623e5c8f7mr17741535ejc.62.1684950338056;
+        Wed, 24 May 2023 10:45:38 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id ja26-20020a170907989a00b0096b55be592asm6025738ejc.92.2023.05.24.10.45.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 10:45:37 -0700 (PDT)
+Date:   Wed, 24 May 2023 20:45:34 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 07/30] net: dsa: mt7530: do not run
+ mt7530_setup_port5() if port 5 is disabled
+Message-ID: <20230524174534.hcxn6tjhjmho6io7@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-8-arinc.unal@arinc9.com>
+ <20230522121532.86610-8-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-References: <20230517162817.8538-1-wyes.karny@amd.com> <20230517162817.8538-4-wyes.karny@amd.com>
-In-Reply-To: <20230517162817.8538-4-wyes.karny@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:44:53 +0200
-Message-ID: <CAJZ5v0gte_QAt1MXXXhpGUTEAC3Eo8LCY6N+=uSFi0NRBG-Omw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] cpufreq: Return failure if fast_switch is not set
- and fast_switch_possible is set
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gautham.shenoy@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230522121532.86610-8-arinc.unal@arinc9.com>
+ <20230522121532.86610-8-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 6:30 PM Wyes Karny <wyes.karny@amd.com> wrote:
->
-> If fast_switch_possible flag is set by the scaling driver, the governor
-> is free to select fast_switch function even if adjust_perf is set.  Some
-> scaling drivers which use adjust_perf don't set fast_switch thinking
-> that the governor would never fall back to fast_switch. But the governor
-> can fall back to fast_switch even in runtime if frequency invariance is
-> disabled due to some reason. This could crash the kernel if the driver
-> didn't set the fast_switch function pointer.
->
-> Therefore, return failure in cpufreq_online function if fast_switch is
-> not set and fast_switch_possible is set.
->
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+On Mon, May 22, 2023 at 03:15:09PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> There's no need to run all the code on mt7530_setup_port5() if port 5 is
+> disabled. The only case for calling mt7530_setup_port5() from
+> mt7530_setup() is when PHY muxing is enabled. That is because port 5 is not
+> defined as a port on the devicetree, therefore, it cannot be controlled by
+> phylink.
+> 
+> Because of this, run mt7530_setup_port5() if priv->p5_intf_sel is
+> P5_INTF_SEL_PHY_P0 or P5_INTF_SEL_PHY_P4. Remove the P5_DISABLED case from
+> mt7530_setup_port5().
+> 
+> Stop initialising the interface variable as the remaining cases will always
+> call mt7530_setup_port5() with it initialised.
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 5 +++++
->  include/linux/cpufreq.h   | 4 +++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6b52ebe5a890..7835ba4fa34c 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1376,6 +1376,11 @@ static int cpufreq_online(unsigned int cpu)
->                         goto out_free_policy;
->                 }
->
-> +               if (policy->fast_switch_possible && !cpufreq_driver->fast_switch) {
-> +                       pr_err("fast_switch_possible is enabled but fast_switch callback is not set\n");
-> +                       ret = -EINVAL;
-> +                       goto out_destroy_policy;
-> +               }
 
-The driver registration can fail if the driver has ->adjust_perf
-without ->fast_switch.  Then the check above would not be necessary
-any more.
-
->                 /*
->                  * The initialization has succeeded and the policy is online.
->                  * If there is a problem with its frequency table, take it
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 26e2eb399484..8cdf77bb3bc1 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -340,7 +340,9 @@ struct cpufreq_driver {
->         /*
->          * ->fast_switch() replacement for drivers that use an internal
->          * representation of performance levels and can pass hints other than
-> -        * the target performance level to the hardware.
-> +        * the target performance level to the hardware. If driver is setting this,
-> +        * then it needs to set fast_switch also. Because in certain scenario scale
-> +        * invariance could be disabled and governor can switch back to fast_switch.
-
-I would say something like "This can only be set if ->fast_switch is
-set too, because in those cases (under specific conditions) scale
-invariance can be disabled, which causes the schedutil governor to
-fall back to the latter."
-
->          */
->         void            (*adjust_perf)(unsigned int cpu,
->                                        unsigned long min_perf,
-> --
-> 2.34.1
->
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
