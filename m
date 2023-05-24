@@ -2,85 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF5470F337
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216F070F332
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 11:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjEXJlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 05:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S230407AbjEXJkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 05:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjEXJkp (ORCPT
+        with ESMTP id S229968AbjEXJkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 05:40:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42957E4B;
-        Wed, 24 May 2023 02:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+7rsgv7m8GCnzFvm19d5DgMqjyzShFESP6prEZ6wJl0=; b=KHb/vRVq9nPWkyfrDVNCJCbRnU
-        r02TvBlK6AG32SCrGO3KSNfCQvZa6N5eizVD6/ZBLpDNCLMKfuMfrS4hduHPYAbyOmmbEzebI/piP
-        ICAizbPhwdM/CwYkH1nxdI5vtyJFFJAFJRvdE4VUHuj9KnBcC1pt4YWa9bkYDrt6ffrCo7dZPG5fd
-        n4XHfnYBqz1dbZcOQ2RKg9i1j8/RoKwozKZOPL2GaDvLeog3nVR8gjCA49TA9Zs81ZN3qdHSggcl/
-        mOgvg9GjEuf3ThX5Adu5GGG/Vg2xvMQR9OkTo2+c422YYvnUI+qRsLMg6rxL9hiD+0gC7iLGyo4xD
-        QiQO7D7A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q1kyC-00B4OS-Rp; Wed, 24 May 2023 09:39:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7126D3002C5;
-        Wed, 24 May 2023 11:39:47 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4112D241F8382; Wed, 24 May 2023 11:39:47 +0200 (CEST)
-Date:   Wed, 24 May 2023 11:39:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org, mpe@ellerman.id.au
-Subject: Re: [PATCH v3 00/11] Introduce cmpxchg128() -- aka. the demise of
- cmpxchg_double()
-Message-ID: <20230524093947.GQ83892@hirez.programming.kicks-ass.net>
-References: <20230515075659.118447996@infradead.org>
- <4975b92f-92f6-4d50-8386-9add12ddfd61@app.fastmail.com>
+        Wed, 24 May 2023 05:40:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7AFA7;
+        Wed, 24 May 2023 02:40:19 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F1116602B7B;
+        Wed, 24 May 2023 10:40:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684921218;
+        bh=lTT1BvxYVvnMQy5ylxlxFNGt4Z3KFLQE348e4gdRdEc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PRBBGLXq46hXr0PXg26mlxLIk3P8lO8h8yoTGLAeIb0t+pPu7Xd5uoDMh29A6UeHv
+         xTF8BpbJUfP2eu438ApWAx15Dj9YZ8lUFlDAV8LZGjX8lan3Msf4rnH79gXbzSjdp7
+         4G0bs3lMSyVXMU57chcebAaCRU+Cw9uu6kwPbIpd889JYVdmReXu+0airjhRLHsRox
+         PJKFtTWxfVbRJEZz/b4OtIF1hVIKoeNl/exRU6fBPQZTdpZny1Vrviq9a2bezzOOHt
+         p7nWCq5wjuTBIBKZtuIMVg0IV6QIHDfJ+3iuB1yBayF58T+mmmODtjWGx2FLSA++T2
+         qhhGF9Awo9d9Q==
+Message-ID: <ebbbee51-8792-6c35-c29b-adb7f83dda23@collabora.com>
+Date:   Wed, 24 May 2023 11:40:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4975b92f-92f6-4d50-8386-9add12ddfd61@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     Prashanth K <quic_prashk@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1684918441-14794-1-git-send-email-quic_prashk@quicinc.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1684918441-14794-1-git-send-email-quic_prashk@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,13 +60,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 11:42:23AM +0200, Arnd Bergmann wrote:
+Il 24/05/23 10:54, Prashanth K ha scritto:
+> Currently if we bootup a device without cable connected, then
+> usb-conn-gpio won't call set_role() since last_role is same as
+> current role. This happens because during probe last_role gets
+> initialised to zero.
+> 
+> To avoid this, last_role is set to USB_ROLE_UNKNOWN before
+> performing the initial detection.
+> 
+> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> ---
+>   drivers/usb/common/usb-conn-gpio.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+> index e20874c..00af735 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -27,6 +27,8 @@
+>   #define USB_CONN_IRQF	\
+>   	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
+>   
+> +#define USB_ROLE_UNKNOWN	-1
 
-> The need for runtime feature checking in the callers on x86-64 is still
-> a bit awkward, but this is no worse than before. I understand that
-> turning this into a compile-time choice would require first settling
-> a larger debate about raising the default target for distros beyond
-> the current CONFIG_GENERIC_CPU.
+I would add USB_ROLE_UNKNOWN to `enum usb_role` instead.
 
-Looks like Power is going to be in the same boat, they can do
-cmpxchg128, but only for Power8+.
+enum usb_role {
+	USB_ROLE_UNKNOWN = -1,
+	USB_ROLE_NONE,
+	....
+};
+
+Regards,
+Angelo
+
+> +
+>   struct usb_conn_info {
+>   	struct device *dev;
+>   	struct usb_role_switch *role_sw;
+> @@ -257,6 +259,9 @@ static int usb_conn_probe(struct platform_device *pdev)
+>   	platform_set_drvdata(pdev, info);
+>   	device_set_wakeup_capable(&pdev->dev, true);
+>   
+> +	/* Set last role to unknown before performing the initial detection */
+> +	info->last_role = USB_ROLE_UNKNOWN;
+> +
+>   	/* Perform initial detection */
+>   	usb_conn_queue_dwork(info, 0);
+>   
+
+
