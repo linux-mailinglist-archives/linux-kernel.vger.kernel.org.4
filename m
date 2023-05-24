@@ -2,157 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD97170EDC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A7970EDC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239700AbjEXGRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S239326AbjEXGSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239584AbjEXGRN (ORCPT
+        with ESMTP id S236497AbjEXGSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:17:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC1B18B;
-        Tue, 23 May 2023 23:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684909027; x=1716445027;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NIz83zwBrx9rPoQnot0IXhX1IJvrd8Dsfj/8OSzuMes=;
-  b=mWY+6Sbd4wV6GW2VUoMFH482Tw8hYRSYqynGjx48Rd3Lmz75Yq3Xtyuz
-   k7UV9mcGux5A0CY+WtW7AZUUK96xztQStS1jpJNvN8E0gUvUXa7HiMiWP
-   wAOcxnqZkNnEf62DhiVpuIoRjMP2KsXdPihm2WZa9rh4lvUSTxKiJhodA
-   GiWfpF+KcMjVfFXa325uvNA/UGPpoDSEKr67YfCo/stVEafsBTJUtTAaG
-   dYhIEN86XjekIUGDZMYpUiVWbv8u2mqDBXTkGy/K+MptRi6j6V7uEvl9g
-   jgLyFg/eG/VVvo0dtipyY0e1DpU9cBtKlWsQPjgm3LhpBqK2A4pEsV9hN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="356695105"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="356695105"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 23:17:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="704212453"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="704212453"
-Received: from spr.sh.intel.com ([10.239.53.106])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 23:17:01 -0700
-From:   Chao Gao <chao.gao@intel.com>
-To:     kvm@vger.kernel.org, x86@kernel.org
-Cc:     xiaoyao.li@intel.com, Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Juergen Gross <jgross@suse.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] x86/cpu, KVM: Use helper function to read MSR_IA32_ARCH_CAPABILITIES
-Date:   Wed, 24 May 2023 14:16:33 +0800
-Message-Id: <20230524061634.54141-4-chao.gao@intel.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230524061634.54141-1-chao.gao@intel.com>
-References: <20230524061634.54141-1-chao.gao@intel.com>
+        Wed, 24 May 2023 02:18:10 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1BE1BC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:17:41 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VjMtVRI_1684909055;
+Received: from 30.97.48.247(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjMtVRI_1684909055)
+          by smtp.aliyun-inc.com;
+          Wed, 24 May 2023 14:17:36 +0800
+Message-ID: <058b354f-3543-bf60-4a1c-8e4bcefcd49a@linux.alibaba.com>
+Date:   Wed, 24 May 2023 14:17:34 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] erofs: remove the member readahead from struct
+ z_erofs_decompress_frontend
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
+        jefflexu@linux.alibaba.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+References: <20230524061152.30155-1-zbestahu@gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230524061152.30155-1-zbestahu@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM open-codes x86_read_arch_cap_msr() in a few places. Eliminate them
-by exposing the helper function and using it directly.
 
-No functional change intended.
 
-Signed-off-by: Chao Gao <chao.gao@intel.com>
----
- arch/x86/kernel/cpu/common.c |  1 +
- arch/x86/kvm/vmx/vmx.c       | 19 +++++--------------
- arch/x86/kvm/x86.c           |  7 +------
- 3 files changed, 7 insertions(+), 20 deletions(-)
+On 2023/5/24 23:11, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
+> 
+> The struct member is only used to add REQ_RAHEAD during I/O submission.
+> So it is cleaner to pass it as a parameter than keep it in the struct.
+> 
+> Also, rename function z_erofs_get_sync_decompress_policy() to
+> z_erofs_is_sync_decompress() for better clarity and conciseness.
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> ---
+>   fs/erofs/zdata.c | 19 +++++++++----------
+>   1 file changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index 45f21db2303a..4522a3be2ce9 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -550,7 +550,6 @@ struct z_erofs_decompress_frontend {
+>   	z_erofs_next_pcluster_t owned_head;
+>   	enum z_erofs_pclustermode mode;
+>   
+> -	bool readahead;
+>   	/* used for applying cache strategy on the fly */
+>   	bool backmost;
+>   	erofs_off_t headoffset;
+> @@ -1106,7 +1105,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+>   	return err;
+>   }
+>   
+> -static bool z_erofs_get_sync_decompress_policy(struct erofs_sb_info *sbi,
+> +static bool z_erofs_is_sync_decompress(struct erofs_sb_info *sbi,
+>   				       unsigned int readahead_pages)
+>   {
+>   	/* auto: enable for read_folio, disable for readahead */
+> @@ -1672,7 +1671,7 @@ static void z_erofs_decompressqueue_endio(struct bio *bio)
+>   static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+>   				 struct page **pagepool,
+>   				 struct z_erofs_decompressqueue *fgq,
+> -				 bool *force_fg)
+> +				 bool *force_fg, bool readahead)
+>   {
+>   	struct super_block *sb = f->inode->i_sb;
+>   	struct address_space *mc = MNGD_MAPPING(EROFS_SB(sb));
+> @@ -1763,7 +1762,7 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+>   				bio->bi_iter.bi_sector = (sector_t)cur <<
+>   					(sb->s_blocksize_bits - 9);
+>   				bio->bi_private = q[JQ_SUBMIT];
+> -				if (f->readahead)
+> +				if (readahead)
+>   					bio->bi_opf |= REQ_RAHEAD;
+>   				++nr_bios;
+>   			}
+> @@ -1799,13 +1798,14 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+>   }
+>   
+>   static void z_erofs_runqueue(struct z_erofs_decompress_frontend *f,
+> -			     struct page **pagepool, bool force_fg)
+> +			     struct page **pagepool, bool force_fg,
+> +			     bool readahead)
 
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 80710a68ef7d..b34dd3f3e6c4 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1315,6 +1315,7 @@ u64 x86_read_arch_cap_msr(void)
- 
- 	return ia32_cap;
- }
-+EXPORT_SYMBOL_GPL(x86_read_arch_cap_msr);
- 
- static bool arch_cap_mmio_immune(u64 ia32_cap)
- {
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 8274ef5e89e5..3dec4a4f637e 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -255,14 +255,9 @@ static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
- 		return 0;
- 	}
- 
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES)) {
--		u64 msr;
--
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
--		if (msr & ARCH_CAP_SKIP_VMENTRY_L1DFLUSH) {
--			l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_NOT_REQUIRED;
--			return 0;
--		}
-+	if (x86_read_arch_cap_msr() & ARCH_CAP_SKIP_VMENTRY_L1DFLUSH) {
-+		l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_NOT_REQUIRED;
-+		return 0;
- 	}
- 
- 	/* If set to auto use the default l1tf mitigation method */
-@@ -394,13 +389,9 @@ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
- 
- static void vmx_setup_fb_clear_ctrl(void)
- {
--	u64 msr;
--
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES) &&
--	    !boot_cpu_has_bug(X86_BUG_MDS) &&
-+	if (!boot_cpu_has_bug(X86_BUG_MDS) &&
- 	    !boot_cpu_has_bug(X86_BUG_TAA)) {
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
--		if (msr & ARCH_CAP_FB_CLEAR_CTRL)
-+		if (x86_read_arch_cap_msr() & ARCH_CAP_FB_CLEAR_CTRL)
- 			vmx_fb_clear_ctrl_available = true;
- 	}
- }
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index f7838260c183..b1bdb84ac10f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1612,12 +1612,7 @@ static bool kvm_is_immutable_feature_msr(u32 msr)
- 
- static u64 kvm_get_arch_capabilities(void)
- {
--	u64 data = 0;
--
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES)) {
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, data);
--		data &= KVM_SUPPORTED_ARCH_CAP;
--	}
-+	u64 data = x86_read_arch_cap_msr() & KVM_SUPPORTED_ARCH_CAP;
- 
- 	/*
- 	 * If nx_huge_pages is enabled, KVM's shadow paging will ensure that
--- 
-2.40.0
+			     struct page **pagepool, bool force_fg, bool ra)
 
+
+>   {
+>   	struct z_erofs_decompressqueue io[NR_JOBQUEUES];
+>   
+>   	if (f->owned_head == Z_EROFS_PCLUSTER_TAIL)
+>   		return;
+> -	z_erofs_submit_queue(f, pagepool, io, &force_fg);
+> +	z_erofs_submit_queue(f, pagepool, io, &force_fg, readahead);
+
+	z_erofs_submit_queue(f, pagepool, io, &force_fg, ra);
+
+
+Otherwise it seems ok to me,
+
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
