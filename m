@@ -2,109 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A6670F54D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A9F70F55E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjEXLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S232272AbjEXLec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjEXLbk (ORCPT
+        with ESMTP id S231921AbjEXLeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:31:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CF1135;
-        Wed, 24 May 2023 04:31:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A06FA222BF;
-        Wed, 24 May 2023 11:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684927897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WhtheA/Gzw9ZBNNVZW5R7hvu64pufOsIiq+9Wxeew6w=;
-        b=yaEmWV91uf9kFNZVSdwCR4ztkwEzW569EA78TK2s1YpmSCk2G/OcFo4QTL+cl4r99DaM9D
-        GUUAJMXFpG52ncpystMX4EUZixq4KVqQcHdQ9tH9PUPiiJtoSV5nQL9hHWhyZgBVeOXnVF
-        3C8piEzc8ZspkJSibAR5EWqKQmzCmhw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684927897;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WhtheA/Gzw9ZBNNVZW5R7hvu64pufOsIiq+9Wxeew6w=;
-        b=IWt0IOG3fSUbfiZwva2e35cH8bCx65a6TP4dEfu5vqXHyWpU94jKn5TXlqBtiPMBWZ6Wqo
-        bHlt31ywkP0EXEBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 818D7133E6;
-        Wed, 24 May 2023 11:31:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nmgMHpn1bWQDRwAAMHmgww
-        (envelope-from <chrubis@suse.cz>); Wed, 24 May 2023 11:31:37 +0000
-Date:   Wed, 24 May 2023 13:32:47 +0200
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        LTP List <ltp@lists.linux.it>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org,
-        Jeff Layton <jlayton@kernel.org>, Petr Vorel <pvorel@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: LTP: syscalls: statx06.c:138: TFAIL: Modified time > after_time
-Message-ID: <ZG3130X0GO9eNJfc@yuki>
-References: <CA+G9fYvGM6a3wct+_o0z-B=k1ZBg1FuBBpfLH71ULihnTo5RrQ@mail.gmail.com>
- <dca09245-5b59-438b-b7d6-c65db7a84a85@app.fastmail.com>
+        Wed, 24 May 2023 07:34:31 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EE812E;
+        Wed, 24 May 2023 04:34:29 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q1ml8-0000gO-RQ; Wed, 24 May 2023 13:34:26 +0200
+Message-ID: <175578ec-9dec-7a9c-8d3a-43f24ff86b92@leemhuis.info>
+Date:   Wed, 24 May 2023 13:34:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dca09245-5b59-438b-b7d6-c65db7a84a85@app.fastmail.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: build error while building arch/x86/purgatory/sha256.o: invalid
+ 'asm': operand is not a condition code [...]
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1684928069;8444b3c6;
+X-HE-SMSGID: 1q1ml8-0000gO-RQ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-> > [ 1192.088987] loop0: detected capacity change from 0 to 614400
-> > tst_device.c:93: TINFO: Found free device 0 '/dev/loop0'
-> > tst_test.c:1093: TINFO: Formatting /dev/loop0 with ext4 opts='-I 256'
-> > extra opts=''
-> > mke2fs 1.46.5 (30-Dec-2021)
-> > [ 1192.337350] EXT4-fs (loop0): mounted filesystem
-> > dfe9283c-5d2f-43f8-840e-a2bbbff5b202 r/w with ordered data mode. Quota
-> > mode: none.
-> > tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
-> >
-> > statx06.c:140: TPASS: Birth time Passed
-> > statx06.c:138: TFAIL: Modified time > after_time
-> > statx06.c:140: TPASS: Access time Passed
-> > statx06.c:140: TPASS: Change time Passed
-> 
-> I found a description in
-> 
-> https://lwn.net/ml/linux-kernel/20230503142037.153531-1-jlayton@kernel.org/
-> 
-> which indicates that this is expected. Added Jeff to Cc in case
-> I'm misreading his explanation.
+Hi! My linux-next builds for Fedora[1] since yesterday fail with the
+following error:
 
-We even have in-flight patch from Jeff to fix the test with fine-grained
-timestamps in LTP:
+> In file included from <command-line>:
+> ./include/crypto/sha256_base.h: In function ‘lib_sha256_base_do_update.constprop.isra’:
+> ././include/linux/compiler_types.h:332:20: error: invalid 'asm': operand is not a condition code, invalid operand code 'c'
+>   332 | #define asm_inline asm __inline
+>       |                    ^~~
 
-http://patchwork.ozlabs.org/project/ltp/patch/20230518113216.126233-1-jlayton@kernel.org/
+See below for the full error message[2]. This happens on Fedora rawhide
+and 38 (both use gcc13), but not on Fedora 37 (which uses gcc12).
 
--- 
-Cyril Hrubis
-chrubis@suse.cz
+Is this known already or do I have to bisect this?
+
+Ciao, Thorsten
+
+[1] https://copr.fedorainfracloud.org/coprs/g/kernel-vanilla/next/
+
+[2]
+> # CC      arch/x86/purgatory/sha256.o
+>  
+> gcc -Wp,-MMD,arch/x86/purgatory/.sha256.o.d -nostdinc
+> -I./arch/x86/include -I./arch/x86/include/generated  -I./include
+> -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi
+> -I./include/uapi -I./include/generated/uapi -include
+> ./include/linux/compiler-version.h -include ./include/linux/kconfig.h
+> -include ./include/linux/compiler_types.h -D__KERNEL__
+> -fmacro-prefix-map=./= -Wall -Wundef -Werror=strict-prototypes
+> -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE
+> -Werror=implicit-function-declaration -Werror=implicit-int
+> -Werror=return-type -Wno-format-security -funsigned-char -std=gnu11
+> -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -fcf-protection=branch
+> -fno-jump-tables -m64 -falign-jumps=1 -falign-loops=1 -mno-80387
+> -mno-fp-ret-in-387 -mpreferred-stack-boundary=3 -mskip-rax-setup
+> -mtune=generic -mno-red-zone -Wno-sign-compare
+> -fno-asynchronous-unwind-tables -fno-jump-tables -mharden-sls=all
+> -fpatchable-function-entry=16,16 -fno-delete-null-pointer-checks
+> -Wno-frame-address -Wno-format-truncation -Wno-format-overflow
+> -Wno-address-of-packed-member -O2 -fno-allow-store-data-races
+> -Wframe-larger-than=2048 -Wno-main -Wno-unused-but-set-variable
+> -Wno-unused-const-variable -Wno-dangling-pointer
+> -ftrivial-auto-var-init=zero -fno-stack-clash-protection
+> -DCC_USING_FENTRY -falign-functions=16 -Wdeclaration-after-statement
+> -Wvla -Wno-pointer-sign -Wcast-function-type -fstrict-flex-arrays=3
+> -Wno-stringop-truncation -Wno-stringop-overflow -Wno-restrict
+> -Wno-maybe-uninitialized -Wno-array-bounds -Wno-alloc-size-larger-than
+> -Wimplicit-fallthrough=5 -fno-strict-overflow -fno-stack-check
+> -fconserve-stack -Werror=date-time -Werror=incompatible-pointer-types
+> -Werror=designated-init -Wno-packed-not-aligned -g -D__DISABLE_EXPORTS
+> -mcmodel=large -ffreestanding -fno-zero-initialized-in-bss -g0
+> -DDISABLE_BRANCH_PROFILING -fno-stack-protector
+> -DKBUILD_MODFILE='"arch/x86/purgatory/sha256"'
+> -DKBUILD_BASENAME='"sha256"' -DKBUILD_MODNAME='"sha256"'
+> -D__KBUILD_MODNAME=kmod_sha256 -c -o arch/x86/purgatory/sha256.o
+> lib/crypto/sha256.c
+>
+> In file included from <command-line>:
+> ./include/crypto/sha256_base.h: In function ‘lib_sha256_base_do_update.constprop.isra’:
+> ././include/linux/compiler_types.h:332:20: error: invalid 'asm': operand is not a condition code, invalid operand code 'c'
+>   332 | #define asm_inline asm __inline
+>       |                    ^~~
+> ./arch/x86/include/asm/bug.h:28:9: note: in expansion of macro ‘asm_inline’
+>    28 |         asm_inline volatile("1:\t" ins "\n"                             \
+>       |         ^~~~~~~~~~
+> ./arch/x86/include/asm/bug.h:83:9: note: in expansion of macro ‘_BUG_FLAGS’
+>    83 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
+>       |         ^~~~~~~~~~
+> ./include/asm-generic/bug.h:107:17: note: in expansion of macro ‘__WARN_FLAGS’
+>   107 |                 __WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+>       |                 ^~~~~~~~~~~~
+> ./include/asm-generic/bug.h:134:17: note: in expansion of macro ‘__WARN_printf’
+>   134 |                 __WARN_printf(TAINT_WARN, format);                      \
+>       |                 ^~~~~~~~~~~~~
+> ./include/linux/once_lite.h:31:25: note: in expansion of macro ‘WARN’
+>    31 |                         func(__VA_ARGS__);                              \
+>       |                         ^~~~
+> ./include/asm-generic/bug.h:152:9: note: in expansion of macro ‘DO_ONCE_LITE_IF’
+>   152 |         DO_ONCE_LITE_IF(condition, WARN, 1, format)
+>       |         ^~~~~~~~~~~~~~~
+> ./include/linux/fortify-string.h:641:9: note: in expansion of macro ‘WARN_ONCE’
+>   641 |         WARN_ONCE(fortify_memcpy_chk(__fortify_size, __p_size,          \
+>       |         ^~~~~~~~~
+> ./include/linux/fortify-string.h:693:26: note: in expansion of macro ‘__fortify_memcpy_chk’
+>   693 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+>       |                          ^~~~~~~~~~~~~~~~~~~~
+> ./include/crypto/sha256_base.h:69:17: note: in expansion of macro ‘memcpy’
+>    69 |                 memcpy(sctx->buf + partial, data, len);
+>       |                 ^~~~~~
+> make[3]: *** [arch/x86/purgatory/Makefile:13: arch/x86/purgatory/sha256.o] Error 1
+> make[2]: *** [scripts/Makefile.build:494: arch/x86/purgatory] Error 2
+> make[1]: *** [scripts/Makefile.build:494: arch/x86] Error 2
+> make: *** [Makefile:2032: .] Error 2
