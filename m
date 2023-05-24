@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF1E70F60D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75CD70F611
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbjEXMRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 08:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S232729AbjEXMR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjEXMRQ (ORCPT
+        with ESMTP id S229521AbjEXMRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 08:17:16 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586429E;
-        Wed, 24 May 2023 05:17:15 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id B814360171;
-        Wed, 24 May 2023 14:17:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684930632; bh=7oaHgsYtGJMz7ohGu+nRJErGUb5J0i5cHkLkmjiGsqE=;
-        h=Date:From:Subject:To:Cc:From;
-        b=gDdy0PmrUhfA8awUg01ac5maTXvy/enMvSPmzLB6HNBXtfjkDT6dJP0mBeq4F+Ve8
-         1KRKVaUk5BcAz7dfo8VPuD9C0aNb24/AQu6sNzLEQxh7dkYwiesJeUvRTuurhwxbnF
-         Z49M0ygHp+wciR92alsYw9q+/WLXSnhvzZcFTmojl8iLoCRt8N1gIW6ppg1Dle/6xk
-         W4rszBHGzYquAgXsrZ/W5nKtS3ho4jVrmWOB1wdVP2oHm0/ba6r8LY5vcujpUBRPZh
-         QBU1eEvAXGE84OZqWm0evlTCE5LWdHTqaVVPURlS+N+wU9xgN3vjrHD0OUSzIT0ExX
-         VGybdFkWpegRw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1gKch49mTtPy; Wed, 24 May 2023 14:17:10 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id D1A0F6016E;
-        Wed, 24 May 2023 14:17:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684930630; bh=7oaHgsYtGJMz7ohGu+nRJErGUb5J0i5cHkLkmjiGsqE=;
-        h=Date:From:Subject:To:Cc:From;
-        b=kAARxCy4DpHwrwqLgbkQcCFSYZ8BUmT2gtK70wCHT8fOKyfvApClcRkl+tlDiOsgl
-         revW1jwANOS/d32z3UUr+ZHyYneFumPFWTNzVDcDvYM30h/ABAlzdgczUESxdzqDFc
-         3qGhvZoNzjK+FkcBPA3WEMjyLgolJ1vHEeOotfP7OUWNHQWmKcZSYkVVgTtQ6vR4gZ
-         89CQfrMJ7mAJ76Qd9dkCLTSZD35AamRNjmqc3meQkHWnnbGDxam/aWiiKCVJRNezc9
-         yo6PHklYMVm+jh0CrYvAcojQNhkQhd+xKOIkFtxLV9hgDc82/jBWPKTZzo+502UPl2
-         5QfgyMlBZRrNQ==
-Message-ID: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
-Date:   Wed, 24 May 2023 14:17:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, hr
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind - ns-B
- IPv6 LLA" test
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
+        Wed, 24 May 2023 08:17:54 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E551135;
+        Wed, 24 May 2023 05:17:53 -0700 (PDT)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id E72F5820F2;
+        Wed, 24 May 2023 14:17:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1684930671;
+        bh=LkM/bZ9fUL4pshbM4qtC4eGKFgQaRWUq/wKzWk4QxFQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EO26svgA/TNan6SW6K/zaPBN71CX/OiBtClp1OaWhxTyddi86uSEAN0wEx81J93lR
+         tqxBe+7Kwwf8QFwbSvJBLNwbSVdgCojMGDmf0AJL9t8QSmHu6Wk+sncvfDwmZ+GXnE
+         NV+L9pp9cA+YnkTUUGf/3ROCJiHx2bzSUfmtxiSmlQ9MASE4dizH/OBqG/0wwKtX3U
+         PWrFwR+Ao3OqUOIlh5c80kumaVWuznGRPiRVL0g4IxDukfP5NdpnNn/K2flks10+Xn
+         ty9UV+NjtwvE5nN/XfwFNpJEDXxIWD1mGP5hNURQDC1kzSACVIHfPHul6Q7J2BKlCd
+         ayoNiCJUk5vlw==
+Date:   Wed, 24 May 2023 14:17:43 +0200
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Guillaume Nault <gnault@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/3] dsa: marvell: Add support for mv88e6071 and 6020
+  switches
+Message-ID: <20230524141743.1322c051@wsk>
+In-Reply-To: <89fd3a8d-c262-46d8-98ad-c8dc04fe9d9c@lunn.ch>
+References: <20230523142912.2086985-1-lukma@denx.de>
+        <89fd3a8d-c262-46d8-98ad-c8dc04fe9d9c@lunn.ch>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/hxSIXto_jl.E+eAfLXTCiOR";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/hxSIXto_jl.E+eAfLXTCiOR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The very recent 6.4-rc3 kernel build with AlmaLinux 8.7 on LENOVO 10TX000VCR
-desktop box fails one test:
+Hi Andrew,
 
-[root@host net]# ./fcnal-test.sh
-[...]
-TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
-TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [FAIL]
-TEST: ping in - ns-A IPv6                                                     [ OK ]
-[...]
-Tests passed: 887
-Tests failed:   1
-[root@host net]#
+> On Tue, May 23, 2023 at 04:29:09PM +0200, Lukasz Majewski wrote:
+> > After the commit (SHA1: 7e9517375a14f44ee830ca1c3278076dd65fcc8f);
+> > "net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220,
+> > 6250, 6290" the error when mv88e6020 or mv88e6071 is used is not
+> > present anymore. =20
+>=20
+> >   dsa: marvell: Define .set_max_frame_size() function for mv88e6250
+> > SoC family =20
+>=20
+> Hi Lukasz
+>=20
+> commit 7e9517375a14f44ee830ca1c3278076dd65fcc8f
+> Author: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Date:   Tue Mar 14 20:24:05 2023 +0200
+>=20
+>     net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220,
+> 6250, 6290=20
+>     There are 3 classes of switch families that the driver is aware
+> of, as far as mv88e6xxx_change_mtu() is concerned:
+>    =20
+>     - MTU configuration is available per port. Here, the
+>       chip->info->ops->port_set_jumbo_size() method will be present.
+>    =20
+>     - MTU configuration is global to the switch. Here, the
+>       chip->info->ops->set_max_frame_size() method will be present.
+>    =20
+>     - We don't know how to change the MTU. Here, none of the above
+> methods will be present.
+>    =20
+>     Switch families MV88E6165, MV88E6191, MV88E6220, MV88E6250 and
+> MV88E6290 fall in category 3.
+>=20
+>=20
+> Vladimir indicates here that it is not known how to change the max MTU
+> for the MV88E6250. Where did you get the information from to implement
+> it?
 
-Please find the config, + dmesg and lshw output here:
+Please refer to [1].
 
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-fcnal-test/config-6.4-rc3
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-fcnal-test/dmesg.log
-https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-fcnal-test/lshw.txt
+The mv88e6185_g1_set_max_frame_size() function can be reused (as
+registers' offsets and bits are the same for mv88e60{71|20}).
 
-I believe that I have all required configs merged for the selftest/net tests.
+After using Vladimir's patch there is no need to add max_frame size
+field and related patches from v6 can be dropped.
 
-Maybe we have a regression?
+>=20
+> 	Andrew
 
-My knowledge of fcnal-test.sh isn't sufficient to build a smaller reproducer.
 
-Guillaume said in January he could help with the net/fcnal-test.sh, but I was doing
-the other things in the meantime. Tempus fugit :-/
+Links:
+
+[1] - https://www.spinics.net/lists/kernel/msg4798861.html
 
 Best regards,
-Mirsad
 
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+Lukasz Majewski
 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+--
 
-"What’s this thing suddenly coming towards me very fast? Very very fast.
-... I wonder if it will be friends with me?"
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/hxSIXto_jl.E+eAfLXTCiOR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmRuAGcACgkQAR8vZIA0
+zr0mwwgAlLajNzPWKh8DfgQzUDlUa6AdtQ8/xbBwHVh2YdV34VJUPZGghWjSG3NJ
+4YfP+YnsUdo7FnYRXHyqYel2X6fOR0wWo+VAlEDRk0VbIZyTmRh21eRm71zhz++1
+IrgemMToB3XOsrvkHyicfQxGynRzvcsENoDW4aFDO/eFdDcFmtRf6Dw/AvMHmQIP
+sUXPTxxZR8pGQpFnZZXslYs8P+0GJ/vAb8Ak61inDVMfZziphHUNlQYMuudKzkp7
+EBf7KNWAN1jRGlXTMJqqYfuuvKM3sfRElfh75PjyPkFh61BvifuZ98QBkxkOdGXo
+7ughGBgzF2phWJj1yZV/qjCDwis7nw==
+=BRNr
+-----END PGP SIGNATURE-----
+
+--Sig_/hxSIXto_jl.E+eAfLXTCiOR--
