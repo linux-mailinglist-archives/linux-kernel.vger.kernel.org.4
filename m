@@ -2,129 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0482D70EEAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D2F70EEA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239664AbjEXGzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
+        id S239591AbjEXGzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjEXGzM (ORCPT
+        with ESMTP id S239887AbjEXGy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:55:12 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17364E71
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:54:20 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64f47448aeaso409201b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 23:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684911260; x=1687503260;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UAefNZG4LZt3cqRcnMIDIEa1kLQTnHp5yWi9GEafibo=;
-        b=VwbzWvjELIc1qjtZStMTGBOTUduER8iG58DJEbYd/ddVTi2TfixOAtyoDTqt2ldy1G
-         rZUgroqQKWoUlSpGOFCuPB0gGBVHAdU7VZaRr5R9xZ4B5pFdsk7GquXQywDcJi4Gb+YC
-         Wj+/HMOO86aH7ngxWmsyFbdnO8XVec2hMx8RKzrCbPk1JOCKsxar3EbCpYGFWGRp6Pa5
-         sz3ISMMJqpsw/PUsJgttzpXzHeVNDWp0i4fA9HJtJyI14tucKyu57jvOioltpBmizHGY
-         ZgAnjHtserzDng6cH5dxyXVgY8I6/vviqHVllEoaC4o9ALiNhroPlnnga0MxW8ZaZqvt
-         QqQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684911260; x=1687503260;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UAefNZG4LZt3cqRcnMIDIEa1kLQTnHp5yWi9GEafibo=;
-        b=Jni7vAgo42OVMnnBxUAzP1rK2og+7OQMHOGzN1EFTKYnmXqbFoWIVPjwSv7kib9Rco
-         +qAUbghAvfAq9BDEFT4Db5TaolrFN2h4fjKY8PZ3tHFGMFFYaRprlHZzHM+eoXYp+uF2
-         r+LNrrhR0AKLNigExmCMlKoR2YcE8HO1t5okGsjY3TgNMbxdOXV0mtRq1PlJVoTQzXW9
-         jqUXgC6MbDl/xQLqHMuXc41E53iHtPM3BjTejFPa+aH9lvrCqw/2MHJw2/qJfxshkcP3
-         m7YuPqlaCIBPqOduRx+6suwMRni3cCs6a6mm09Wu+YX6/y4CLg1eAHPbPdVMwK+ON8kF
-         UGRw==
-X-Gm-Message-State: AC+VfDzbkWjXJSAZZ4spMew9TAZ3pLRjlmYcqFyILJ9XVylPw+qWEQ+q
-        DYphRUvUyqSTcFYtDklywMxD4actUd5ReClIOcc=
-X-Google-Smtp-Source: ACHHUZ46b/+/pmjB2wPYWnYKyYg7Mp1usod75cx5YIoqK1LZ6TviuKm/20MwM/FVmyRsqozYxXzSIA==
-X-Received: by 2002:a05:6a00:b50:b0:640:defd:a6d5 with SMTP id p16-20020a056a000b5000b00640defda6d5mr2173814pfo.12.1684911260295;
-        Tue, 23 May 2023 23:54:20 -0700 (PDT)
-Received: from [10.85.115.102] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id c21-20020aa78c15000000b0064cb6206463sm5599002pfd.85.2023.05.23.23.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 23:54:19 -0700 (PDT)
-Message-ID: <4d49f7e7-2488-9690-258e-34e617cfef6f@bytedance.com>
-Date:   Wed, 24 May 2023 14:54:10 +0800
+        Wed, 24 May 2023 02:54:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250DDE5B;
+        Tue, 23 May 2023 23:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8KBb13+iW5lHgISWlXzZrWpkxVTAvgdhmLhAgfS1JSE=; b=qNHrpBwvv/VP2p/XkyGUb2/5Hv
+        go0ooqBYhQhfBNfGjsZXwBrFRYAJgTsUxldrXbKszvEoWKSj6T5y+RxFRNR7F3eyX7RPhulT1tIXE
+        WlLvVgANXsbkGXACNMsQi9fG/rXawxmPc6n4mUMDr+FUGw+J8+tJsqgVNhGerf8BJZVy1OeFa0FfK
+        9AapODxcZR/zp+P14eRsp6Yw6PAMmqYznKEzyc/U6ayZQgr0V8HFoBLE7NjrSfuqVXz84/6643zhO
+        pGstaiKSy2Utlu2tW9o9ITjl3B855xR9FseGTnPcT5ZJvbtgRjacMdO13KIXLVHOlKGeiDnoPIdnx
+        cMjTt6Zw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1iNv-00CXY0-1w;
+        Wed, 24 May 2023 06:54:11 +0000
+Date:   Tue, 23 May 2023 23:54:11 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+        nick.alcock@oracle.com
+Subject: Re: [PATCH v10 06/11] modpost: Add -b option for emitting built-in
+ aliases
+Message-ID: <ZG20k5ZtAnlYQiQ2@bombadil.infradead.org>
+References: <20221219204619.2205248-1-allenwebb@google.com>
+ <20230406190030.968972-1-allenwebb@google.com>
+ <20230406190030.968972-7-allenwebb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [External] Re: [PATCH] cgroup: rstat: Simplified
- cgroup_base_stat_flush() update last_bstat logic
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230518124142.57644-1-jiahao.os@bytedance.com>
- <f39b9229-e59c-2b1c-7f3f-1aeedfad44dc@bytedance.com>
- <5g73i4yvi4ub4dqrf4dnq5qghkyckoygmgd2st6be3gg7twww2@w6zim6nxpt3b>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <5g73i4yvi4ub4dqrf4dnq5qghkyckoygmgd2st6be3gg7twww2@w6zim6nxpt3b>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406190030.968972-7-allenwebb@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 06, 2023 at 02:00:25PM -0500, Allen Webb wrote:
+> This adds a command line option for writing the match-id based 
 
+Can you explain in your commit log and in code what is "match-id" ?
+Do we not have this documeted anywhere perhaps where we can point to
+what it is?
 
-On 2023/5/23 Michal Koutný wrote:
-> Hello Jia.
+> built-in
+> aliases to a file. A future patch extends file2alias.c to support this
+> command.
 > 
-> On Fri, May 19, 2023 at 12:15:57PM +0800, Hao Jia <jiahao.os@bytedance.com> wrote:
->> Maybe something like this?
+> The -b option accepts the output path as a parameter and requires
+> vmlinuz.o to be one of the input files for the aliases to be found.
 > 
-> (Next time please send with a version bump in subject.)
-
-Thanks for your review, I will do it in the next version.
-
+> Signed-off-by: Allen Webb <allenwebb@google.com>
+> ---
+>  scripts/mod/modpost.c | 30 ++++++++++++++++++++++++++++--
+>  scripts/mod/modpost.h |  1 +
+>  2 files changed, 29 insertions(+), 2 deletions(-)
 > 
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index efff8078e395..2e452aec0fc6 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -2173,6 +2173,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
+>  	write_buf(b, fname);
+>  }
+>  
+> +/* Write the builtin aliases to the specified file. */
+> +static void write_builtin(const char *fname)
+> +{
+> +	struct buffer buf = { };
+> +	struct module *mod;
+> +
+> +	list_for_each_entry(mod, &modules, list)
+> +		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
+> +
+> +	write_if_changed(&buf, fname);
+> +	free(buf.p);
+> +}
+> +
+>  static void write_vmlinux_export_c_file(struct module *mod)
+>  {
+>  	struct buffer buf = { };
+> @@ -2329,13 +2342,23 @@ int main(int argc, char **argv)
+>  {
+>  	struct module *mod;
+>  	char *missing_namespace_deps = NULL;
+> -	char *dump_write = NULL, *files_source = NULL;
+> +	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
+>  	int opt;
+>  	LIST_HEAD(dump_lists);
+>  	struct dump_list *dl, *dl2;
+>  
+> -	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
+> +	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
+>  		switch (opt) {
+> +		case 'b':
+> +			/*
+> +			 * Writes the match-id based built-in module aliases to
+> +			 * the specified path.
+> +			 *
+> +			 * vmlinuz.o needs to be one of the input files for the
+> +			 * aliases to be found.
+> +			 */
+> +			builtin_write = optarg;
+> +			break;
+>  		case 'e':
+>  			external_module = true;
+>  			break;
+> @@ -2398,6 +2421,9 @@ int main(int argc, char **argv)
+>  			write_mod_c_file(mod);
+>  	}
+>  
+> +	if (builtin_write)
+> +		write_builtin(builtin_write);
+> +
+>  	if (missing_namespace_deps)
+>  		write_namespace_deps_files(missing_namespace_deps);
+>  
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 34fe5fc0b02c..c55a6aeb46bf 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -123,6 +123,7 @@ struct module {
+>  	bool has_init;
+>  	bool has_cleanup;
+>  	struct buffer dev_table_buf;
+> +	struct buffer modalias_buf;
+>  	char	     srcversion[25];
+>  	// Missing namespace dependencies
+>  	struct list_head missing_namespaces;
+> -- 
+> 2.39.2
 > 
->> In cgroup_base_stat_flush() function, {rstatc, cgrp}->last_bstat
->> needs to be updated to the current {rstatc, cgrp}->bstat after the
->> calculation.
->>
->> For the rstatc->last_bstat case, rstatc->bstat may be updated on other
->> cpus during our calculation, resulting in inconsistent rstatc->bstat
->> statistics for the two reads. So we use the temporary variable @cur to
->> record the read statc->bstat statistics, and use @cur to update
->> rstatc->last_bstat.
-> 
-> If a concurrent update happens after sample of bstat was taken for
-> calculation, it won't be reflected in the flushed result.
-> But subsequent flush will use the updated bstat and the difference from
-> last_bstat would account for that concurrent change (and any other
-> changes between the flushes).
-> 
-> IOW flushing cannot prevent concurrent updates but it will give
-> eventually consistent (repeated without more updates) results.
-> 
-
-Yes, so we need @curr to record the bstat value after the sequence fetch 
-is completed.
-
-
->> It is better for us to assign directly instead of using
->> cgroup_base_stat_add() to update {rstatc, cgrp}->last_bstat.
-> 
-> Or do you mean the copying is faster then arithmetics?
-> 
-
-Yes, but it may not be obvious.
-Another reason is that when we complete an update, we snapshot 
-last_bstat as the current bstat, which is better for readers to 
-understand. Arithmetics is somewhat obscure.
-
-Thanks,
-Hao
