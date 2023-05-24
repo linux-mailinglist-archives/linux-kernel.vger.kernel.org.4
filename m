@@ -2,76 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907C170EB7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F82370EB7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjEXCpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 22:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S239152AbjEXCor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 22:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbjEXCou (ORCPT
+        with ESMTP id S229698AbjEXCoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 22:44:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDC4E6
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684896243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ABJg3jXu2G9EQCuzxA7yWSMvgcd+rU/FTHUIfoh9wHQ=;
-        b=dg1U3AcHoU9DDWNZcMuD2W12ejy5A4/9FVCBB8SSj+MSJ+UalDDqIr6zzjBslX15MLFLrR
-        /9ZGqPwaX2ckWjNW//g/qXMJnTK5ksUO3Sg4ucUOxaQV6KxDYErKSbSOpkgd8no5SqvC9l
-        Lart88Q77CjjG2cl3LQ6lZuYgYqvzxg=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-473-3U3CHplsNiWH4pkvpHFqeA-1; Tue, 23 May 2023 22:44:01 -0400
-X-MC-Unique: 3U3CHplsNiWH4pkvpHFqeA-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4f26157450aso144687e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:44:01 -0700 (PDT)
+        Tue, 23 May 2023 22:44:46 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A7E189
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:44:45 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-ba81f71dfefso707740276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684896284; x=1687488284;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3If+wNKDpztgamuvwXQbsQHi3AsIclBz5NcCQV3CYi4=;
+        b=hrm8eV4Fq6VAAV1GxKh0FyrU8o4JWflrPTKLcjcBt6GHqGBUZgjEwPtBTGs49KMeO7
+         E+1IyOO5I/1GKz9vC5+8+/f6AbZqhYPgs9grMTqpvaYG3v2VhmjovMDDpy/iU5jey7V0
+         6oqVRDxrV0HyWz3HBkEmkWT0oxlkZBfQw6wiT67vFipyzTrQQplQiiQhCCEVWvbnA0WT
+         76rmKqPHPE7ZcxwcwitoT7UUmP8wyfixdR3hH2X0VofCs+JWLmDuCl39lEWw2LrImLFh
+         Dfg/3CV6de1VFP0QOdKlPEDMpdJm/yt2YKlA6wqgdE9udjCSyapNT4/WHex1qDf4EiQi
+         brpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684896240; x=1687488240;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ABJg3jXu2G9EQCuzxA7yWSMvgcd+rU/FTHUIfoh9wHQ=;
-        b=HP6j1biKqboDVhUvt3ktnz1s72C22OJZEgNhGCxkqBbX2fEbFaMtd0AekBcguL64tU
-         YJnesT6kLJz/IiUu0HSlHe9SzyJyiWW76b8SvW5qJLxcYXWdZxeuQ3BIsDSk+8viSTo0
-         menR45tO4f09S2zkkLhGEOPiwSwuLoi3ldB9BX/dGWxr0o9hDshheNU4E/uWpMtrVRpT
-         qX9+sPsdoXvlC5Hcflufhq7T7eURaQGAbXFtYeTo46zr6Di/LGEAwueeVJKVShBgLMoy
-         NNZWg3oYZ8OeOYfXwLwoECvja1hACtvXr9hIj9q71SH334D8j+yKO2J6sK+3Z7qpOdeC
-         EVKw==
-X-Gm-Message-State: AC+VfDzt9ZqDEMhqBaeiOZk5nIp/4W67QLDnxNWLBfvpo19Fx8mMzGPM
-        TxcGtgPUAr7dJc/AAWxLmyyG+6H1I2+We8ztTsyQ1yP9iQSwf+/MjPNiK6NxdhhfHqnPR00VuvE
-        1RYAfuXdPtde2s1iQ6vUK0z/ttY/9JQzo79gBtSM0
-X-Received: by 2002:ac2:5dfc:0:b0:4f1:3b3e:2143 with SMTP id z28-20020ac25dfc000000b004f13b3e2143mr4910279lfq.38.1684896239975;
-        Tue, 23 May 2023 19:43:59 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5G+I8tBySU/AhzxAjYKI/Ryl/z4NNqsbpYzaziVVpOFOgwre9Dlnx8lDNex0PB1WTEz1hSem7hlZhQkbD9Jqo=
-X-Received: by 2002:ac2:5dfc:0:b0:4f1:3b3e:2143 with SMTP id
- z28-20020ac25dfc000000b004f13b3e2143mr4910273lfq.38.1684896239605; Tue, 23
- May 2023 19:43:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684896284; x=1687488284;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3If+wNKDpztgamuvwXQbsQHi3AsIclBz5NcCQV3CYi4=;
+        b=EubRPJmf6TCQCdJUyI14B+KqsxszJsBpCpTqIf3gl4AUHlg5pctWH97/FGuxKwk73k
+         jtXn6HWiUTNjlH1Ui0HnwCv+tFk4+hp8gUZCiL5scZMSzfMyTw0tcZwz7tcsMB25+JHA
+         TOEo+ifzBde5CGH8aNcwTGMZSX72ircPrBWTV0vrP1DlIPtBIG74klmUtg2w726Qc4at
+         s/ekF5UpfIuWSFHv5UVPG7X3Bny663wlOOAbQ04tHZAKv26AaMzZbik3Omm1ey0VzUVR
+         P/kHAeYDtzztABFNp/TjEx8cbEkCDHwulKKjfIh0HS6uW387z8lNEXotjKtPb5QnCrSr
+         MTqQ==
+X-Gm-Message-State: AC+VfDxPhsP50wqRQ8PbHVqh4CVi0hl6NOrz4mz9mp/bzH1DgYzan2zU
+        6b382sIQjW0nvVWVDbUaf0wz0A==
+X-Google-Smtp-Source: ACHHUZ6gIKhhAwV7VzJZ+VjYAmN1m1JqAsACzn5Xl0TpbWituX+QnPRD/b4+0EBRgkw7jWvonN7X7w==
+X-Received: by 2002:a81:d548:0:b0:561:949d:f9a7 with SMTP id l8-20020a81d548000000b00561949df9a7mr20238915ywj.20.1684896284333;
+        Tue, 23 May 2023 19:44:44 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id i16-20020a0ddf10000000b0054f80928ea4sm3324271ywe.140.2023.05.23.19.44.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 19:44:43 -0700 (PDT)
+Date:   Tue, 23 May 2023 19:44:40 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Qi Zheng <qi.zheng@linux.dev>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 08/31] mm/page_vma_mapped: pte_offset_map_nolock() not
+ pte_lockptr()
+In-Reply-To: <10e58e7e-a52e-751d-f693-cd4e05ac10ca@linux.dev>
+Message-ID: <83ec98e0-d17-6d59-e276-557c13ac58ea@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <8fa3fb6e-2e39-cbea-c529-ee9e64c7d2d0@google.com> <10e58e7e-a52e-751d-f693-cd4e05ac10ca@linux.dev>
 MIME-Version: 1.0
-References: <cover.1683740667.git.reinette.chatre@intel.com> <20230523164301.14620a69.alex.williamson@redhat.com>
-In-Reply-To: <20230523164301.14620a69.alex.williamson@redhat.com>
-From:   YangHang Liu <yanghliu@redhat.com>
-Date:   Wed, 24 May 2023 10:43:48 +0800
-Message-ID: <CAGYh1E8Yk-eVNOMQrx6SUgNou5fY6=jFzHR=rQ9diwXbJAaKVg@mail.gmail.com>
-Subject: Re: [PATCH V5 00/11] vfio/pci: Support dynamic allocation of MSI-X interrupts
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>, jgg@nvidia.com,
-        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
-        kevin.tian@intel.com, tglx@linutronix.de, darwi@linutronix.de,
-        kvm@vger.kernel.org, dave.jiang@intel.com, jing2.liu@intel.com,
-        ashok.raj@intel.com, fenghua.yu@intel.com,
-        tom.zanussi@linux.intel.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,168 +101,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Running regression tests in the following test matrix:
+On Mon, 22 May 2023, Qi Zheng wrote:
+> On 2023/5/22 12:58, Hugh Dickins wrote:
+> > map_pte() use pte_offset_map_nolock(), to make sure of the ptl belonging
+> > to pte, even if pmd entry is then changed racily: page_vma_mapped_walk()
+> > use that instead of getting pte_lockptr() later, or restart if map_pte()
+> > found no page table.
+> > 
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >   mm/page_vma_mapped.c | 28 ++++++++++++++++++++++------
+> >   1 file changed, 22 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+> > index 947dc7491815..2af734274073 100644
+> > --- a/mm/page_vma_mapped.c
+> > +++ b/mm/page_vma_mapped.c
+> > @@ -156,6 +168,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk
+> > *pvmw)
+> >    struct vm_area_struct *vma = pvmw->vma;
+> >    struct mm_struct *mm = vma->vm_mm;
+> >    unsigned long end;
+> > +	spinlock_t *ptl;
+> >    pgd_t *pgd;
+> >    p4d_t *p4d;
+> >    pud_t *pud;
+> > @@ -257,8 +270,11 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk
+> > *pvmw)
+> >      step_forward(pvmw, PMD_SIZE);
+> >      continue;
+> >   		}
+> > -		if (!map_pte(pvmw))
+> > +		if (!map_pte(pvmw, &ptl)) {
+> > +			if (!pvmw->pte)
+> > +				goto restart;
+> 
+> Could pvmw->pmd be changed? Otherwise, how about just jumping to the
+> retry label below?
+> 
+> @@ -205,6 +205,8 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk
+> *pvmw)
+>                 }
+> 
+>                 pvmw->pmd = pmd_offset(pud, pvmw->address);
+> +
+> +retry:
+>                 /*
+>                  * Make sure the pmd value isn't cached in a register by the
+>                  * compiler and used as a stale value after we've observed a
 
-    i40e PF + INTx interrupt + RHEL9 guest -- PASS
-    bnx2x PF + MSI-X + RHEL9 guest -- PASS
-    iavf VF + MSI-X + Win2019 guest  -- PASS
-    mlx5_core VF + MSI-X  + Win2022 guest -- PASS
-    ixgbe PF + INTx + RHEL9 guest -- PASS
-    i40e PF + MSIX + Win2019 guest -- PASS
-    qede VF + MSIX + RHEL9 guest -- PASS
+You're right, that could be done, and that's where I'd have inserted
+the label if there were none already.  I just thought the fewer goto
+labels the better, so reused the restart already there.  If you feel
+strongly that it's actively misleading, I can certainly make that
+change; but it's too rare an occurrence to be worth optimizing for.
 
-Tested-by: YangHang Liu <yanghliu@redhat.com>
-
-
-
-On Wed, May 24, 2023 at 6:46=E2=80=AFAM Alex Williamson
-<alex.williamson@redhat.com> wrote:
->
-> On Thu, 11 May 2023 08:44:27 -0700
-> Reinette Chatre <reinette.chatre@intel.com> wrote:
->
-> > Changes since V4:
-> > - V4: https://lore.kernel.org/lkml/cover.1682615447.git.reinette.chatre=
-@intel.com/
-> > - Add Kevin's Reviewed-by tag as applicable.
-> > - Treat non-existing INTx interrupt context as kernel bug with WARN. Th=
-is
-> >   exposed an issue in the scenario where INTx mask/unmask may occur wit=
-hout
-> >   INTx enabled. This is fixed by obtaining the interrupt context later
-> >   (right before use) within impacted functions: vfio_pci_intx_mask() an=
-d
-> >   vfio_pci_intx_unmask_handler(). (Kevin)
-> > - Treat pci_irq_vector() returning '0' for a MSI/MSI-X interrupt as a k=
-ernel
-> >   bug via a WARN instead of ignoring this value. (Kevin)
-> > - Improve accuracy of comments. (Kevin)
-> > - Please refer to individual patches for local changes.
-> >
-> > Changes since V3:
-> > - V3: https://lore.kernel.org/lkml/cover.1681837892.git.reinette.chatre=
-@intel.com/
-> > - Be considerate about layout and size with changes to
-> >   struct vfio_pci_core_device. Keep flags together and transition all t=
-o
-> >   use bitfields. (Alex and Jason)
-> > - Do not free dynamically allocated interrupts on error path. (Alex)
-> > - Please refer to individual patches for localized changes.
-> >
-> > Changes since V2:
-> > - V2: https://lore.kernel.org/lkml/cover.1680038771.git.reinette.chatre=
-@intel.com/
-> > - During testing of V2 "kernel test robot" reported issues resulting fr=
-om
-> >   include/linux/pci.h missing a stub for pci_msix_can_alloc_dyn() when
-> >   CONFIG_PCI_MSI=3Dn. A separate fix was sent to address this. The fix =
-can
-> >   be found in the kernel (since v6.3-rc7) as
-> >   commit 195d8e5da3ac ("PCI/MSI: Provide missing stub for pci_msix_can_=
-alloc_dyn()")
-> > - Biggest change is the transition to "active contexts" for both MSI an=
-d MSI-X.
-> >   Interrupt contexts have always been allocated when the interrupts are
-> >   allocated while they are only used while interrupts are
-> >   enabled. In this series interrupt contexts are made dynamic, while do=
-ing
-> >   so their allocation is moved to match how they are used: allocated wh=
-en
-> >   interrupts are enabled. Whether a Linux interrupt number exists deter=
-mines
-> >   whether an interrupt can be enabled.
-> >   Previous policy (up to V2) that an allocated interrupt has an interru=
-pt
-> >   context no longer applies. Instead, an interrupt context has a
-> >   handler/trigger, aka "active contexts". (Alex)
-> > - Re-ordered patches in support of "active contexts".
-> > - Only free interrupts on MSI-X teardown and otherwise use the
-> >   allocated interrupts as a cache. (Alex)
-> > - Using unsigned int for the vector broke the unwind loop within
-> >   vfio_msi_set_block(). (Alex)
-> > - Introduce new "has_dyn_msix" property of virtual device instead of
-> >   querying support every time. (Alex)
-> > - Some smaller changes, please refer to individual patches.
-> >
-> > Changes since RFC V1:
-> > - RFC V1: https://lore.kernel.org/lkml/cover.1678911529.git.reinette.ch=
-atre@intel.com/
-> > - Improved changelogs.
-> > - Simplify interface so that vfio_irq_ctx_alloc_single() returns pointe=
-r to
-> >   allocated context. (Alex)
-> > - Remove vfio_irq_ctx_range_allocated() and associated attempts to main=
-tain
-> >   invalid error path behavior. (Alex and Kevin)
-> > - Add pointer to interrupt context as function parameter to
-> >   vfio_irq_ctx_free(). (Alex)
-> > - Ensure variables are initialized. (Dan Carpenter)
-> > - Only support dynamic allocation if device supports it. (Alex)
-> >
-> > Qemu allocates interrupts incrementally at the time the guest unmasks a=
-n
-> > interrupt, for example each time a Linux guest runs request_irq().
-> >
-> > Dynamic allocation of MSI-X interrupts was not possible until v6.2 [1].
-> > This prompted Qemu to, when allocating a new interrupt, first release a=
-ll
-> > previously allocated interrupts (including disable of MSI-X) followed
-> > by re-allocation of all interrupts that includes the new interrupt.
-> > Please see [2] for a detailed discussion about this issue.
-> >
-> > Releasing and re-allocating interrupts may be acceptable if all
-> > interrupts are unmasked during device initialization. If unmasking of
-> > interrupts occur during runtime this may result in lost interrupts.
-> > For example, consider an accelerator device with multiple work queues,
-> > each work queue having a dedicated interrupt. A work queue can be
-> > enabled at any time with its associated interrupt unmasked while other
-> > work queues are already active. Having all interrupts released and MSI-=
-X
-> > disabled to enable the new work queue will impact active work queues.
-> >
-> > This series builds on the recent interrupt sub-system core changes
-> > that added support for dynamic MSI-X allocation after initial MSI-X
-> > enabling.
-> >
-> > Add support for dynamic MSI-X allocation to vfio-pci. A flag
-> > indicating lack of support for dynamic allocation already exist:
-> > VFIO_IRQ_INFO_NORESIZE and has always been set for MSI and MSI-X. With
-> > support for dynamic MSI-X the flag is cleared for MSI-X when supported,
-> > enabling Qemu to modify its behavior.
-> >
-> > Any feedback is appreciated
-> >
-> > Reinette
-> >
-> > [1] commit 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocati=
-on interfaces for MSI-X")
-> > [2] https://lore.kernel.org/kvm/MWHPR11MB188603D0D809C1079F5817DC8C099@=
-MWHPR11MB1886.namprd11.prod.outlook.com/#t
-> >
-> > Reinette Chatre (11):
-> >   vfio/pci: Consolidate irq cleanup on MSI/MSI-X disable
-> >   vfio/pci: Remove negative check on unsigned vector
-> >   vfio/pci: Prepare for dynamic interrupt context storage
-> >   vfio/pci: Move to single error path
-> >   vfio/pci: Use xarray for interrupt context storage
-> >   vfio/pci: Remove interrupt context counter
-> >   vfio/pci: Update stale comment
-> >   vfio/pci: Use bitfield for struct vfio_pci_core_device flags
-> >   vfio/pci: Probe and store ability to support dynamic MSI-X
-> >   vfio/pci: Support dynamic MSI-X
-> >   vfio/pci: Clear VFIO_IRQ_INFO_NORESIZE for MSI-X
-> >
-> >  drivers/vfio/pci/vfio_pci_core.c  |   8 +-
-> >  drivers/vfio/pci/vfio_pci_intrs.c | 305 ++++++++++++++++++++----------
-> >  include/linux/vfio_pci_core.h     |  26 +--
-> >  include/uapi/linux/vfio.h         |   3 +
-> >  4 files changed, 229 insertions(+), 113 deletions(-)
-> >
-> >
-> > base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
->
-> Applied to vfio next branch for v6.5.  Thanks!
->
-> Alex
->
-
+Hugh
