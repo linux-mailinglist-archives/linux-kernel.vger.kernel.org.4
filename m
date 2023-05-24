@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A6E70F58C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3EF70F590
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjEXLpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
+        id S229660AbjEXLqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjEXLpm (ORCPT
+        with ESMTP id S229588AbjEXLq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:45:42 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E31139;
-        Wed, 24 May 2023 04:45:40 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 68b5a971a014d278; Wed, 24 May 2023 13:45:39 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id BA88B69D7E2;
-        Wed, 24 May 2023 13:45:38 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 4/6] device property: Add SOFTWARE_NODE() macro for defining software nodes
-Date:   Wed, 24 May 2023 13:45:38 +0200
-Message-ID: <3170440.5fSG56mABF@kreacher>
-In-Reply-To: <13276375.uLZWGnKmhe@kreacher>
-References: <13276375.uLZWGnKmhe@kreacher>
+        Wed, 24 May 2023 07:46:28 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FBE13E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:46:23 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af2db78b38so11261291fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684928781; x=1687520781;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PlIvlh/Wu/Gdl3bc/cwkv0nvaIs0VGs7tRG/WiHzhks=;
+        b=gONwD/1DyEEl84bjbyW6hkwGonZs3RmtQn+9j8r/qZuO1brd0cBDaW3zzOwqNPl1jd
+         FXewDz4jcUdKK3hOV0KKWXyI3cHWdAHcIJ0YO2abpiIxhvzFkEs86ATSqdDAs7x2LDCt
+         71kYE+LmTlfvujzroBe2Ms4seRjadOTVHIi1rBQRTb5ACOvA6BIvHl3sLU4OiHMbUn7j
+         SlxxC2DN/NHYt08DyO2aOjqROyR4p/GYFeKjOXaOzLCqofLasvY/eGgTV92WsiVMmw/X
+         NwJ/FNo0Qsc/NOUlVxwnSIr55LPfMAeOg3uodlSZy1yXthT/zT6fU98lHvrWWkgSQfqy
+         X5IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684928781; x=1687520781;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PlIvlh/Wu/Gdl3bc/cwkv0nvaIs0VGs7tRG/WiHzhks=;
+        b=a83SoCwN1/0dwbn4jlgLXEDADiuMgDUnbrqPzeK2pL7yh8a7Q0Y0ZkFMhVFLHz7HZW
+         /NA7TbrtspY7Bb/RRDt+pP3cKq3Loo5QV63+UKbKz0dkTt95f66D9KWJzE96vDjVQonI
+         iBzw4Q9mZKPXAmtc1lYDvJBUizT6LvhYPN8ioIxc0W3seFoKW5qVu2Wr7G6YWq+1+Ew2
+         2UXaMRA2vKk5yFXuLEOT7IxOGbfgmw80ME5rl7l31KIe2705ZASP8YoWPrUXkrkUv2TE
+         b1CqIkdUqF7PvuFaU9hw4x9vGZtO6aAh90KpSyp/alrFcVRc9CH2sDbNV4LsWp7SkcaD
+         ddhg==
+X-Gm-Message-State: AC+VfDz01858hAZmAz5jceBWqJh6Li7qXhuXCZO7E5gEXqciVIGqShsH
+        0A9AbWWfSa8YtliwsxnDm5fsDbdsK72khy23ZtE=
+X-Google-Smtp-Source: ACHHUZ7PiqkEhrB9yPq5e+rs4Oi8EaXqIseWEM2LB42j7UALs4PDsHWJJ3x+dMtQQGshX4V1HB+B5PpF0jkXTS/sGP0=
+X-Received: by 2002:a2e:8601:0:b0:2a8:c858:fb9 with SMTP id
+ a1-20020a2e8601000000b002a8c8580fb9mr6355970lji.29.1684928781297; Wed, 24 May
+ 2023 04:46:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Received: by 2002:a05:6520:3426:b0:263:eea5:5111 with HTTP; Wed, 24 May 2023
+ 04:46:20 -0700 (PDT)
+Reply-To: wormer.amos@aol.com
+From:   wormer Amos <rolsbaraye@gmail.com>
+Date:   Wed, 24 May 2023 12:46:20 +0100
+Message-ID: <CAGkCXQibP29iMue_tpjESM4v0_dfLORr3r+gF6tV_JTnSs1ECw@mail.gmail.com>
+Subject: GOOD MORNING.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedggedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhguvghgohgv
- uggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:232 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [rolsbaraye[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+My Dear. i just wanted to know if you're capable for handling investment
+project in
+your country because i
+need a serious business partnership with good background, kindly reply
+me to discuss details immediately. i will appreciate you to contact me
+on this same email?
 
-Add SOFTWARE_NODE() macro in order to make defining software nodes look
-nicer. This is analogous to different PROPERTY_ENTRY_*() macros for
-defining properties.
+Thanks and awaiting for your quick response,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-
-Same as https://patchwork.kernel.org/project/linux-acpi/patch/20230329100951.1522322-5-sakari.ailus@linux.intel.com/
-
----
- include/linux/property.h |    7 +++++++
- 1 file changed, 7 insertions(+)
-
-Index: linux-pm/include/linux/property.h
-===================================================================
---- linux-pm.orig/include/linux/property.h
-+++ linux-pm/include/linux/property.h
-@@ -476,6 +476,13 @@ struct software_node {
- 	const struct property_entry *properties;
- };
- 
-+#define SOFTWARE_NODE(_name_, _properties_, _parent_)	\
-+	(struct software_node) {			\
-+		.name = _name_,				\
-+		.properties = _properties_,		\
-+		.parent = _parent_,			\
-+	}
-+
- bool is_software_node(const struct fwnode_handle *fwnode);
- const struct software_node *
- to_software_node(const struct fwnode_handle *fwnode);
-
-
-
+Wormer?
