@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA9170F5C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9287170F5D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 14:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbjEXL6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S231848AbjEXMDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 08:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjEXL6q (ORCPT
+        with ESMTP id S229531AbjEXMDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:58:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476E019D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:58:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 24 May 2023 08:03:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40207130;
+        Wed, 24 May 2023 05:03:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFD3663C67
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 11:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6BEC4339C;
-        Wed, 24 May 2023 11:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684929522;
-        bh=UMiHL7ethwa+018lGBl2r8MGW4Lj2YlyfJiTZIjuQVk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=O5mHpTzthzLsO1nX1RVg8URiT3Q4rvVlypW+BB2EbR+YMZZb21twVFEs3RLysTiXg
-         C/Tjba7bl/AohPlk2PYE16mrg8HTXO/fvOHXEnDIZmy4JUPlCHJykZSlu4gG/qdFK/
-         Xbf1RXA+0D8xmiRYDDSAL2Qm9rvvKpMw0Firp3WBFRll1YGDDWj4TvqHL1gNDrRU5W
-         NSU+2xfupwMNlruwnXdsWRU5q1ceHdr5uO1uaWKQ+Q/nxU2dMryLUkGjxEbRhvFpUO
-         2SjD04QvlDT7h/AMm5iS9tWNSs2Up6WvwxV143q6CXAkFTMv5/mCay90lJ8oXAl/CP
-         HaSoaj8zGt2xA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        ckeepax@opensource.cirrus.com, tanureal@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20230523154747.5429-1-srinivas.kandagatla@linaro.org>
-References: <20230523154747.5429-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] regmap: sdw: check for invalid multi-register writes
- config
-Message-Id: <168492952043.55912.13195955442624432460.b4-ty@kernel.org>
-Date:   Wed, 24 May 2023 12:58:40 +0100
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DDE172214D;
+        Wed, 24 May 2023 12:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684929779; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a5xYZJ0VdlqE3V6heUq7XBrAWSEtAc4ezP/9YYY5cYs=;
+        b=1QK0bFGIceIfQpuPdKPKuSsPxT9Rny41ebYp5RpcmAx1JMHsOniEOLNDBasQESs/UQTYHA
+        YWl9h6yIpNKTjOo4Yw7kOlaVv9hxtBAID2odf2XvmStpakGDu99eWY+lyIeDTBxyqCS+qP
+        75WnDvcF18Hr8dWc+milZsSnk80OKkE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684929779;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a5xYZJ0VdlqE3V6heUq7XBrAWSEtAc4ezP/9YYY5cYs=;
+        b=5/87DbykeY08SalUEIlDgeTsq15ohzj0Zvuh2kUddnAb0qKrnIG9cji8yCf0r4noaezyDy
+        /do2Ekj6SXErbDAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA56113425;
+        Wed, 24 May 2023 12:02:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SNC2LPP8bWQkWQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 24 May 2023 12:02:59 +0000
+Message-ID: <35df2c16-6e5b-bc8a-e65c-9244a815dcbd@suse.de>
+Date:   Wed, 24 May 2023 14:02:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/5] drm: shmobile: Fixes and enhancements
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <cover.1684854992.git.geert+renesas@glider.be>
+ <d800a238-83e0-0ec2-cf3a-67d07d749b5b@suse.de>
+ <CAMuHMdXPJ02UWuH1v_ZaoWmbHALu0Qe2K27nhuvwKBmjno+YMw@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdXPJ02UWuH1v_ZaoWmbHALu0Qe2K27nhuvwKBmjno+YMw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------lXvjdDXFSdYAgrnKqVpjeokC"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,42 +77,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 16:47:47 +0100, Srinivas Kandagatla wrote:
-> SoundWire code as it is only supports Bulk register writes and
-> it does not support multi-register writes.
-> 
-> Any drivers that set can_multi_write and use regmap_multi_reg_write() will
-> easily endup with programming the hardware incorrectly without any errors.
-> 
-> So, add this check in bus code to be able to validate the drivers config.
-> 
-> [...]
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------lXvjdDXFSdYAgrnKqVpjeokC
+Content-Type: multipart/mixed; boundary="------------rYFRJinNdx4AkL6RbYDYq5yv";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org,
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Message-ID: <35df2c16-6e5b-bc8a-e65c-9244a815dcbd@suse.de>
+Subject: Re: [PATCH v3 0/5] drm: shmobile: Fixes and enhancements
+References: <cover.1684854992.git.geert+renesas@glider.be>
+ <d800a238-83e0-0ec2-cf3a-67d07d749b5b@suse.de>
+ <CAMuHMdXPJ02UWuH1v_ZaoWmbHALu0Qe2K27nhuvwKBmjno+YMw@mail.gmail.com>
+In-Reply-To: <CAMuHMdXPJ02UWuH1v_ZaoWmbHALu0Qe2K27nhuvwKBmjno+YMw@mail.gmail.com>
 
-Applied to
+--------------rYFRJinNdx4AkL6RbYDYq5yv
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+DQoNCkFtIDI0LjA1LjIzIHVtIDEzOjU0IHNjaHJpZWIgR2VlcnQgVXl0dGVyaG9ldmVuOg0K
+PiBIaSBUaG9tYXMsDQo+IA0KPiBPbiBXZWQsIE1heSAyNCwgMjAyMyBhdCAxOjQy4oCvUE0g
+VGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+IHdyb3RlOg0KPj4gQW0g
+MjMuMDUuMjMgdW0gMTc6MzEgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46DQo+Pj4gQ3Vy
+cmVudGx5LCB0aGVyZSBhcmUgdHdvIGRyaXZlcnMgZm9yIHRoZSBMQ0QgY29udHJvbGxlciBv
+biBSZW5lc2FzDQo+Pj4gU3VwZXJILWJhc2VkIGFuZCBBUk0tYmFzZWQgU0gtTW9iaWxlIGFu
+ZCBSLU1vYmlsZSBTb0NzOg0KPj4+ICAgICAxLiBzaF9tb2JpbGVfbGNkY2ZiLCB1c2luZyB0
+aGUgZmJkZXYgZnJhbWV3b3JrLA0KPj4+ICAgICAyLiBzaG1vYl9kcm0sIHVzaW5nIHRoZSBE
+Uk0gZnJhbWV3b3JrLg0KPj4+IEhvd2V2ZXIsIG9ubHkgdGhlIGZvcm1lciBkcml2ZXIgY2Fu
+IGJlIHVzZWQsIGFzIGFsbCBwbGF0Zm9ybSBzdXBwb3J0DQo+Pj4gaW50ZWdyYXRlcyB0aGUg
+Zm9ybWVyLiAgTm9uZSBvZiB0aGVzZSBkcml2ZXJzIHN1cHBvcnQgRFQtYmFzZWQgc3lzdGVt
+cy4NCj4+Pg0KPj4+IFRoaXMgcGF0Y2ggc2VyaWVzIGlzIGEgZmlyc3Qgc3RlcCB0byBlbmFi
+bGUgdGhlIFNILU1vYmlsZSBEUk0gZHJpdmVyIGZvcg0KPj4+IFJlbmVzYXMgQVJNLWJhc2Vk
+IFNILU1vYmlsZSBhbmQgUi1Nb2JpbGUgU29Dcy4gIFRoZSBuZXh0IHN0ZXBzIHBsYW5uZWQg
+YXJlDQo+Pj4gdG8gKDEpIGFkZCBEVCBzdXBwb3J0ICh3b3JrcywgYnV0IG5lZWRzIGEgaGFj
+ayBkdWUgdG8gbGFjayBvZiAoMikpLCBhbmQgKDIpDQo+Pj4gY29udmVydCB0aGUgZHJpdmVy
+IHRvIGF0b21pYyBtb2Rlc2V0dGluZy4NCj4+Pg0KPj4+IENoYW5nZXMgY29tcGFyZWQgdG8g
+djJbMV06DQo+Pj4gICAgIC0gQWRkIFJldmlld2VkLWJ5Lg0KPj4+DQo+Pj4gQ2hhbmdlcyBj
+b21wYXJlZCB0byB2MVsyXToNCj4+PiAgICAgLSBBZGQgUmV2aWV3ZWQtYnksDQo+Pj4gICAg
+IC0gRHJvcCBkZXBlbmRlbmN5IG9uIEFSTS4NCj4+Pg0KPj4+IFRoaXMgaGFzIGJlZW4gdGVz
+dGVkIG9uIHRoZSBSLU1vYmlsZSBBMS1iYXNlZCBBdG1hcmsgVGVjaG5vDQo+Pj4gQXJtYWRp
+bGxvLTgwMC1FVkEgZGV2ZWxvcG1lbnQgYm9hcmQsIHVzaW5nIGEgdGVtcG9yYXJ5DQo+Pj4g
+cGxhdGZvcm0tZW5hYmxlbWVudCBwYXRjaFszXS4NCj4+Pg0KPj4+IFRoYW5rcyBmb3IgYXBw
+bHlpbmcgdG8gZHJtLW1pc2MhDQo+Pg0KPj4gSXQncyBhbGwgYmVlbiByZXZpZXdlZC4gRG8g
+eW91IHdhbnQgbWUgdG8gbWVyZ2UgdGhlIHBhdGNoc2V0Pw0KPiANCj4gVGhhdCB3b3VsZCBi
+ZSBncmVhdCEgVGhhbmtzIQ0KDQpEb25lLiBUaGFua3MgZm9yIHRoZSBwYXRjaGVzLg0KDQo+
+IA0KPiBHcntvZXRqZSxlZXRpbmd9cywNCj4gDQo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ICBHZWVydA0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVy
+IERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFu
+a2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3Rl
+diwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJC
+IDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
 
-Thanks!
+--------------rYFRJinNdx4AkL6RbYDYq5yv--
 
-[1/1] regmap: sdw: check for invalid multi-register writes config
-      commit: 95856d1f3c223c015780fffb8373a827fc4efd2e
+--------------lXvjdDXFSdYAgrnKqVpjeokC
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-----BEGIN PGP SIGNATURE-----
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRt/PMFAwAAAAAACgkQlh/E3EQov+AV
++xAAvgVs+mqCTd9xD8v9SpRrPCRJVbevcqghZYd1/s6HOcnNGtyU6kMB2t663z4adoVPSFLqN+cP
+oEKoVJ9J6IR573tm2PBKqZIP6Y+0pV03XGGFG09V54NhGO+8qW8UsQqz4jqfHWKc7dJG2ISh9YTL
+2c+v3iWj4QTB5k87ytg1sDOapzmrnBqCDaVhKeNy73ep25FZEkqKhpA69xpZSqGoa0IXpBQulSBI
+6nt+CkuFZDH+/AkRAsXYJp7DdjJYFdKP7GgYNj4xH1B7Q6TfYFBCyfiJkUEVgAG1k0i6RJGcFpXs
+qJ6g0v6eAGTiNMYblzFTCaRBD2Aa7yONL1kVNpDPo9RRVoIC/p2tkvLH1/0txNl9kKOPlOky8cnE
+UoLQZW42EjWUac6B7xv/aixp4Cgd9Iz69L3kKAOyTydJgzwMPcXLVGWuvTgSwz8v5Oc1xsFXy4DJ
+LO7e/kwGGmrmtZLzadPh6ZdVrYnXceN0DeoxbvKRhOxy/5Nl1YR31gSHzOlFT4yOvV0WT0LDMvoE
+a1q+VwNSQzpsFAJ5nZDpIw6fQsKy+Cv8WhFCfRTrtiOVWYdjY5miRlwtKUG/B/9bBRGMd6mAFfxE
+fKlPhy9/o4X3Joucz3N365EZ9tL8IgE5AVH6TtzMMzW7ImLo8TBOX7NrLXqJNEP8x/iyiIlPzUJo
+4FA=
+=gfft
+-----END PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+--------------lXvjdDXFSdYAgrnKqVpjeokC--
