@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7EC70EE8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EDF70EE92
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 08:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbjEXGxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 02:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S239310AbjEXGxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 02:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239799AbjEXGwV (ORCPT
+        with ESMTP id S239819AbjEXGwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 02:52:21 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF1DE46;
-        Tue, 23 May 2023 23:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684911094; x=1716447094;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=shsR1rGUNM1EmQeYgf3G+zkshdxAvDAMpbx1W7WU4Gc=;
-  b=qImG/ic6v1owcJ3x2+ZCK460qsnKw8F+OYkAPisrWR4gRoIvmdc09kuJ
-   zsxE9B7ma5/58WH53nZLFpEwu/TGcoXZeukyg+f30XSK6Xg4t0ajBfGcf
-   vbPPL+2Y8dtKIKdQcKGFmT1glnnRoAqIEQP7zh4hgZKE4c//LZ8Bsik43
-   OVDHrTck6hvDtwZwVea578Ibuxf+XPNwWu8ocfaDjfkh/jEv87Hlf2Yc0
-   cOzWlTSnFyDGt8rVQVlK/4S9958AGxQx8lO7AFMcTvDxYvhcB1lb2tQ8R
-   xJ6fgdH/z6PT+YyHLMPUJ42LfJgmVUnKnj/k6NFIIzsKhwIxQTWwN6jhb
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="217000363"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 May 2023 23:51:33 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 23 May 2023 23:51:33 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 23 May 2023 23:51:29 -0700
-Date:   Wed, 24 May 2023 07:51:07 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Justin Chen <justin.chen@broadcom.com>
-CC:     Conor Dooley <conor@kernel.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <bcm-kernel-feedback-list@broadcom.com>, <justinpopo6@gmail.com>,
-        <f.fainelli@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <opendmb@gmail.com>, <andrew@lunn.ch>, <hkallweit1@gmail.com>,
-        <linux@armlinux.org.uk>, <richardcochran@gmail.com>,
-        <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
-        <simon.horman@corigine.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: Re: [PATCH net-next v4 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
- controller
-Message-ID: <20230524-scientist-enviable-7bfff99431cc@wendy>
-References: <1684878827-40672-1-git-send-email-justin.chen@broadcom.com>
- <1684878827-40672-3-git-send-email-justin.chen@broadcom.com>
- <20230523-unfailing-twisting-9cb092b14f6f@spud>
- <CALSSxFYMm5NYw41ERr1Ah-bejDgf9EdJd1dGNL9_sKVVmrpg3g@mail.gmail.com>
+        Wed, 24 May 2023 02:52:25 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4484818C;
+        Tue, 23 May 2023 23:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GuzHvAUZfPGn+qg3FBQx9CA7o9FB1B0ZlZ+LFZFZkEI=; b=3SsvELNVjt+WJEb5AwPnwm+hni
+        n5AakEZ2NmMD4FaTgPYQozEBcH5rhZaA+evYq3I4s5NZOgo3ApgWK5JJJT3zz6ymesofysrQqwCjv
+        iTgiHwdQlPsy+Q8mGwNmOpFavnfWi9MCV+KbB4Mw57tcPHH+wkXc1FMjZ/Nz3FXNa6oZCKZc9khCf
+        xpVdEVUoQ5qCrqkbhaCdITCFQKKdP3Fr4k/jpgHxjMbBSAKHB2LAvRJkzuCBysFYHLZLTW5FUiT4P
+        OAMfZ4JDMnRFvRr48S8ojjk2dg6ooby9F1PnU/CagsBUNOjHXNeWlWWU/I3ktlAOX1r7qRroByPPQ
+        xlktuibQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1iLp-00CXLD-1r;
+        Wed, 24 May 2023 06:52:01 +0000
+Date:   Tue, 23 May 2023 23:52:01 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+        nick.alcock@oracle.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v10 03/11] stmpe-spi: Fix MODULE_DEVICE_TABLE entries
+Message-ID: <ZG20ESArR8H0LcHj@bombadil.infradead.org>
+References: <20221219204619.2205248-1-allenwebb@google.com>
+ <20230406190030.968972-1-allenwebb@google.com>
+ <20230406190030.968972-4-allenwebb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CALSSxFYMm5NYw41ERr1Ah-bejDgf9EdJd1dGNL9_sKVVmrpg3g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230406190030.968972-4-allenwebb@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,64 +56,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Justin,
-On Tue, May 23, 2023 at 04:27:12PM -0700, Justin Chen wrote:
-> On Tue, May 23, 2023 at 3:55=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> > On Tue, May 23, 2023 at 02:53:43PM -0700, Justin Chen wrote:
-> >
-> > > +  compatible:
-> > > +    enum:
-> > > +      - brcm,asp-v2.0
-> > > +      - brcm,bcm72165-asp
-> > > +      - brcm,asp-v2.1
-> > > +      - brcm,bcm74165-asp
-> >
-> > > +        compatible =3D "brcm,bcm72165-asp", "brcm,asp-v2.0";
-> >
-> > You can't do this, as Rob's bot has pointed out. Please test the
-> > bindings :( You need one of these type of constructs:
-> >
-> > compatible:
-> >   oneOf:
-> >     - items:
-> >         - const: brcm,bcm72165-asp
-> >         - const: brcm,asp-v2.0
-> >     - items:
-> >         - const: brcm,bcm74165-asp
-> >         - const: brcm,asp-v2.1
-> >
-> > Although, given either you or Florian said there are likely to be
-> > multiple parts, going for an enum, rather than const for the brcm,bcm..
-> > entry will prevent some churn. Up to you.
-> >
-> Urg so close. Thought it was a trivial change, so didn't bother
-> retesting the binding. I think I have it right now...
->=20
->   compatible:
->     oneOf:
->       - items:
->           - enum:
->               - brcm,bcm72165-asp
->               - brcm,bcm74165-asp
->           - enum:
->               - brcm,asp-v2.0
->               - brcm,asp-v2.1
->=20
-> Something like this look good?
+On Thu, Apr 06, 2023 at 02:00:22PM -0500, Allen Webb wrote:
+> A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> breaks compilation for STMPE_SPI after built-in modules can generate
+> match-id based module aliases. Since this wasn't being used before and
+> builtin aliases aren't needed in this case, remove it.
+> 
+> This was not caught earlier because STMPE_SPI can not be built as a
+> module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
+> 
+> Fixes: e789995d5c61 ("mfd: Add support for STMPE SPI interface")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/lkml/202212171140.NB93eVvI-lkp@intel.com/
+> Signed-off-by: Allen Webb <allenwebb@google.com>
+> ---
 
-I am still caffeine-less, but this implies that both of
-"brcm,bcm72165-asp", "brcm,asp-v2.0"
-_and_
-"brcm,bcm72165-asp", "brcm,asp-v2.1"
-are. I suspect that that is not the case, unless "brcm,asp-v2.0" is a
-valid fallback for "brcm,asp-v2.1"?
-The oneOf: also becomes redundant since you only have one items:.
+I'm happy to take patches 1-3 thorugh modules-next, but please try to
+Cc the driver maintainers on the next iteration of this patch series
+and let them know these are related to this work and see if you can
+get their ACKs to go through another tree for this purpose.
 
-> Will submit a v5 tomorrow.
-
-BTW, when you do, could you use the address listed in MAINTAINERS rather
-than the one you used for this version?
-
-Cheers,
-Conor.
+  Luis
