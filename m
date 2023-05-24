@@ -2,146 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D83670FEAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C56470FEB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 21:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbjEXToY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 15:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S235170AbjEXTqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 15:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjEXToW (ORCPT
+        with ESMTP id S229551AbjEXTqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 15:44:22 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD79D132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:44:20 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-76c5c78bc24so214526139f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:44:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684957460; x=1687549460;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GXM0OJBa2Xe7YCAQJqSdK/TYdEJX3LTPFYVv2SjRziU=;
-        b=anSTPdCE8m/enu7Mp3k/FOXQyA47XhR61q23CDwkVMUvtrrsV6jlSJdzKBXBfrKxU+
-         BqyjdL6uHOOPcs+jY4WC4mBDcWFeT+u21+A5pMszQ4FNEKV4eMrPWPzB2zrtvpXy7JsM
-         1Vl3vs9b4V3nLPpFXDfry8OGgNVJkNiJPHvLauPN6Zz5MPnG2r0IBGNnmOgsVghacvRl
-         FgeyvafXoUY+lP6sfN+vqH/YJWvFFv6guXf0vvoM0iOcPSzK2n1XOLIXsW54a1tvKG9l
-         RxDYaDuJjIFFPYs087RFv5pgfkcxhhUj0L+x2qmR9SdnkBJhP1WC6j0z9AJMbvZJ+diT
-         qW9g==
-X-Gm-Message-State: AC+VfDwR6tH4UnyKtjoLu36gz2FeB77EnyphHPqoWMHSo8VaInxd/B38
-        vejNrfitlx69xwsbd1SZK24YKYoWnwmJqHmLSioV7nRKCxar
-X-Google-Smtp-Source: ACHHUZ5AaKXnI1J1H+PH8SthQs4AC6Rc+pFC3KEwRguEG7pGu6xa0diRM/rUzLHYh0RRXdQtOAuql2wUl2OfGeX36t/Idoyzq9Ny
+        Wed, 24 May 2023 15:46:04 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2061.outbound.protection.outlook.com [40.107.244.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFB7132
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 12:46:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h+jt2RSEfqhwxDyOrc+gwcLi0+OcYVyaQ+UPmYeN7aioJzPUsSUdhraTdlFkRnBnjxmKwCV3NbDpNdywLYGoCcIj4N/jnh9nYmMerPTBbA8cxpzuYYNp8eEooS4Wsu2XxVDjfjD/fYlNmsfdbs5O6mVDg6/2VevueNaKbhpertWX554brPGUjZ2IbJCMn0oLiXUcHcwP/U7r66a05G4mln35PVNaB4f1Ul9wxF9h289kwhkL3r9GnUHogKEQP+Z1P7tCxC5/jsJ65xnN+8vbF6cpS3pjI/0wbA2sW460V8Yebu9c2R4xjcny79mMOHFI83uBkXeDVeXh3Hcz+XmzmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YBHu2+/UCu0R+hD5vM2KcrzIMRBakf5fJBR+TB3HPXg=;
+ b=C8LjsS6GQWQ8RuF9ej7asArFn69z2MKXZ06BlXssHBUA+WcdRXeSozXhNqp5RYw7WPlAzN6b350tSti0cMtLCGse6z7Tb3pp9jlhNu1S/kpjTgfaVpNk3A/5XuB4pEemA7fXTN6xr4fdKPHNhZplCIjYGXZFIay9BefraiOcSkQi3mGzxdddw/KnkWT03jiij+oTjF8uQS8FxStGERi/UHp6ZfZtFL2D6249zIJOGSyeZ0nnLIC0miwcAJsQKDTJotw5vFk/KubT6GW1GXSqldBOtNUC+tjapB3Oh9cI7cqoZ9RPNJxZTBFefKwSagnoCHE7pwwASlqhzzridAZaOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YBHu2+/UCu0R+hD5vM2KcrzIMRBakf5fJBR+TB3HPXg=;
+ b=sOCM/MeVCtUgX//78ybBGozFkkF1+H4n8ehFcpd2LmYnm3ebeJIXs8Lb1XXMe7aSZS8gtPUn71gMJ36tx2efqtUO9tTMDgC8zwT38BicdQ5Gu6dM7Dg/z+qJctggIlw3VQyzyhUef3i0tRm5o6PED2Z6XP/uMiw/zn4S7AvfVNA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by DM6PR12MB4500.namprd12.prod.outlook.com (2603:10b6:5:28f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Wed, 24 May
+ 2023 19:46:00 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::f170:8d72:ca64:bb26]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::f170:8d72:ca64:bb26%7]) with mapi id 15.20.6411.028; Wed, 24 May 2023
+ 19:46:00 +0000
+Message-ID: <3fefc712-913a-a391-bc7b-c0c75eff1c3d@amd.com>
+Date:   Wed, 24 May 2023 15:45:57 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] drm/amd/display: enable more strict compile checks
+Content-Language: en-US
+To:     "Russell, Kent" <Kent.Russell@amd.com>,
+        "Ho, Kenny" <Kenny.Ho@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>
+Cc:     "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+References: <20230524191955.252212-1-hamza.mahfooz@amd.com>
+ <CADnq5_Mz6aPFYGnr8J8C8UeTpbo7JDg+uvjqAxo7o4vmTGej2A@mail.gmail.com>
+ <DM6PR12MB3996C4248CBC968A7B08341583419@DM6PR12MB3996.namprd12.prod.outlook.com>
+ <BL1PR12MB589849F37FBE98A3A06A316185419@BL1PR12MB5898.namprd12.prod.outlook.com>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+Organization: AMD Inc.
+In-Reply-To: <BL1PR12MB589849F37FBE98A3A06A316185419@BL1PR12MB5898.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQBPR01CA0024.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01::32)
+ To BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
 MIME-Version: 1.0
-X-Received: by 2002:a02:9625:0:b0:416:5075:372f with SMTP id
- c34-20020a029625000000b004165075372fmr9389784jai.3.1684957460223; Wed, 24 May
- 2023 12:44:20 -0700 (PDT)
-Date:   Wed, 24 May 2023 12:44:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e0df8d05fc75ba86@google.com>
-Subject: [syzbot] [bpf?] WARNING in btf_type_id_size (2)
-From:   syzbot <syzbot+958967f249155967d42a@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
-        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com,
-        song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|DM6PR12MB4500:EE_
+X-MS-Office365-Filtering-Correlation-Id: e241a2a0-bc06-4910-4574-08db5c8f7fdd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eisKqwy98aMzpjKGKb2T7eZ7N0zQEeDA0tDwUN7kSJVIBqwViggXks8Ad0itPQMYd+TflpHP5li7Jua22/uNGiaiftfVULjSsiFpATCODue+ScTSZH4eWXq6ADx/wd+At8wo/7O+I/IogPK5Ioqn66sx2mlRyOce1xy79gmcwXBYkgpdAcauM9+sAASIZhNqcbHpg/BAN8eMxhpgOQPrkmK8NjKUCHjigunJsIgJo5XCox5mTvnHiP+YtoUgKQOc6rQqB8ypnCWtpZblmu0aW4LYcZfQF+dFZpnZlgOjngfelrXc2Bi8R6CQ9D/B6oijhjLsIzU+WsiQAm4+aazwvK7+Za4ORuv0jJouzB5pJV5zdRpS7Z3q+8KC9bg6KtrkfIi29xwFofIa0BIU4ucGiR8t7NT7IqEggbZOorGG8/VxfwC1MIUmLd8qK/HQ0TidOB9poQjTeDJyyEXC+WGRCIV2rWI4NP8HjkwTX+KlU0Lvt7VWm8mffbvo62f9DvmJBitJ2j/+WjPCBB6o6rikdt9vm4CTkTvHeagXKvBzHQrGGEuUag0v4Lta/xvXzrrnx+vAR0iSp3SSEVBKq/PegWs82RURNmfxzaBS+Uph234YA8eagUq3DcS8GTdW2+fiEyL0p4zkHScuv748EwcBeQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199021)(26005)(6506007)(6512007)(53546011)(2906002)(44832011)(186003)(2616005)(36756003)(83380400001)(38100700002)(316002)(6666004)(66946007)(66476007)(66556008)(4326008)(6636002)(86362001)(36916002)(41300700001)(6486002)(54906003)(478600001)(110136005)(31686004)(31696002)(8936002)(8676002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVdIYjZ3MWthT3FYUkVKZTR2YTRYalhkbVNFeklObjJhSTNuTHJMSVZRSHVS?=
+ =?utf-8?B?cE5nSmNRQ2dWQU1nSXZmNXVPaGphNjBPMXZUMDFycVkyVUJuL0dhdWpmRDZK?=
+ =?utf-8?B?N2pSMjhyRWFNSCtTeWoxdDFhNEVPRFR4eG1YZXA4N0dhZW5TZnVoMUJtM0Jy?=
+ =?utf-8?B?dTQ5QndIZ1Y1ZzRrcE1qUnh0cXlsU2daQzFacVcrVDEzOXhaemxBbDlPUUt1?=
+ =?utf-8?B?ZTZMaXhPdlZzRHFwU011RGRCS3EwYmFjVjF4T3dCZ1g3Tmk1eWMyWUVVK3lI?=
+ =?utf-8?B?djZ0K1ZLTVFUb2hqOXFUaGVMSFh0djBnb09EOU9OTG9qbHZ1SmlDcmd4Mjh6?=
+ =?utf-8?B?aU1LRHJ4Y01XR1ZPTXYrMTc0Tk4wRURJMkVXQjRFTnFxSjk5WFFwV0xpOU1w?=
+ =?utf-8?B?bUM5QUNxZ1EwVll5V0JFTGJUQ3dIbUgrOWNiblRCSmZLSmpIL2RNeEs3aHk1?=
+ =?utf-8?B?V2piQ3ZudTVoQUg3ODNlOE9Sc2w1M3FUZit0bVhXQ3ZwUDVWbFVwUmtTTXI1?=
+ =?utf-8?B?aCswUWltanNCYStpcTFwa0FtSnk2a1A5bll6ejQrSDRRMmljZzhaeGpQMndn?=
+ =?utf-8?B?WjQ1emtWWXZEL0JySWJ6SWNTdGRzUGZYYUpZNjd0Rzl5c2ozdUR5dWtjeGgw?=
+ =?utf-8?B?RUxOVEo0K0NWZWlGOG5PNTg1T1MrK0ZmTHFLMnlpTktlejNSbDVCaW80MTZm?=
+ =?utf-8?B?RlNpR21XRmxEdHRjckVhcytOQm9wY1BqdjQrYkJkRFM0ZjY2L0pNZzFNWExV?=
+ =?utf-8?B?YTdiWFlxZHNzOTZFWHlJamJSUXhoSFdDakhRZTFXaWtTcXlkK1cxcUNVTEIr?=
+ =?utf-8?B?OExabEdoVkFjUkNwYXdnU2lJWnlHNUxxcFJBai8zYXkrOUJyaFVEMVBxT3A3?=
+ =?utf-8?B?YmlURDdwZlBBS1E3SUZoVkR1Y0dEeG1abUR1aDF2LzlrTjJ5enZ5TFlma3FK?=
+ =?utf-8?B?clY2dVZHT2dtZkIxaHFaZFlQTE16K01XMFIzY2QyL2xXWElEWm03eWdjNzdS?=
+ =?utf-8?B?b0hxWDMyQ1dqQ3VoVjVZS3pUNk0zR0xDZlVMb2NjTEtaOEtudWJ1dnFOU3k1?=
+ =?utf-8?B?NUY2cDIzL2RGN2srcjRWclp5eDZhSmlIL3ZjV3loTnBaQ1RMbkdaV2g2cnZy?=
+ =?utf-8?B?eFViQUlmUVc4L2VrdWNybk5oWXl4Tzh4Qm5NdnZqRWs3YjRwT1h4SGhYbDlj?=
+ =?utf-8?B?SzNOYk5aVTdHZUhNZ1k3ZzZodi9EUEFBWDRtS0Yyc3FPNVlVa0JxOUlTdVQr?=
+ =?utf-8?B?Mi92bjByczR0TlYrclNudUVObWc0MzFkMUdHaFdCaXlYSERYOG5Jazh3b05D?=
+ =?utf-8?B?eGJia09SVVlKcjlORERPci9PU01yMlNVVk9oejFQbCt6WjZwekxMRE1qSnM3?=
+ =?utf-8?B?MkF1OXFmK3d1aUV2Q2hJY3k0QmxLV3ZHbE5JREVsT1dQalo1V2hVUEdMNkdh?=
+ =?utf-8?B?K2xtNDBXR1krQ2NEYS84ektQU2lNYVprSEhvNFlRL2ZOR1F6Y2l0a1pGRWR6?=
+ =?utf-8?B?Z28wc2cyN2lYUnc4VnU4OU9RNC9nOG5MOW5mdUJoZ2NuV1ZYZE9PU1JqTHJT?=
+ =?utf-8?B?SlF3T2hoUExHYzFaa0JGeEF3YWcxQ3N2c3lnV1ZNUUMvV1JPaExET2ZlblZq?=
+ =?utf-8?B?alNJVitNZE1HM01hMDUzMzkrTVFGeWtzcGlMODloL281Q3BncG1OVVBOYmwr?=
+ =?utf-8?B?WlFLWkJCN01rL2o3VzVobjNtVTBzaHk0MFJFSjV3SU55ZmgzaDdGU3ZGeDZO?=
+ =?utf-8?B?d2xQc1pCZjFHODdmNE9mVEpJL3dsOWV6ZkY0ZTNid0JhWXNwckF2Q3dHSFRJ?=
+ =?utf-8?B?UHVMbWJpWnM2ZVk2TUtKdnBycTMzdm5LR2FycFRLSnFsUW1CNVlKV0M4UVJO?=
+ =?utf-8?B?UXFTelp0VXNOSHJlSGE4REladGZodDRCTU1TajFQT1QvL084Q0RSeENUVmE3?=
+ =?utf-8?B?cmZwbG9YVHM1MjdxUmtGTFBKMERHL0RycFlabHp6RThuRit3N3ZjbXhkRTVU?=
+ =?utf-8?B?OVB5YU5NcWo3eGtINER1OUVqZUxHYzc4dVFCbi9sdFVtd2lNdzN0Y2FkYzI1?=
+ =?utf-8?B?N245anlhODNjenlXVkdVaXNnYVl3d3hjT3JjcTZ2d2ZIRGpIN0h0ZVdXd1ZU?=
+ =?utf-8?Q?MI+hzZieprPLSnd8kgr6H9TIg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e241a2a0-bc06-4910-4574-08db5c8f7fdd
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 19:46:00.0126
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vcic4RCRu2cEtTx7SV0nDIVODwVk1xC/fPcdoUqyyehaca3bY+BTpSArPJpSNu17V8nzJ0mi2ALQ8Djr2qAWsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Sure, I think we tried enabling warnings as errors before and had to 
+revert it because of weird compiler quirks or the variety of compiler 
+versions that need to be supported.
 
-syzbot found the following issue on:
+Alex, are you planning to upstream this, or is this only to enforce more 
+internal discipline about not ignoring warnings?
 
-HEAD commit:    0613d8ca9ab3 bpf: Fix mask generation for 32-bit narrow lo..
-git tree:       bpf
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12d7f219280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
-dashboard link: https://syzkaller.appspot.com/bug?extid=958967f249155967d42a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162a2555280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=129ce341280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d08fd262c806/disk-0613d8ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/43cddf0d3788/vmlinux-0613d8ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e2583f3d15eb/bzImage-0613d8ca.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+958967f249155967d42a@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5005 at kernel/bpf/btf.c:1988 btf_type_id_size+0x2d9/0x9d0 kernel/bpf/btf.c:1988
-Modules linked in:
-CPU: 0 PID: 5005 Comm: syz-executor387 Not tainted 6.4.0-rc1-syzkaller-00096-g0613d8ca9ab3 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-RIP: 0010:btf_type_id_size+0x2d9/0x9d0 kernel/bpf/btf.c:1988
-Code: ef e8 6b 58 e2 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 f9 5b e2 ff 44 89 fe bf 0e 00 00 00 e8 0c 58 e2 ff e8 e7 5b e2 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 d2 5b e2 ff 44
-RSP: 0018:ffffc90003a9fb68 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88801f7ebb80 RSI: ffffffff81a1e8f9 RDI: 0000000000000005
-RBP: ffff888020813400 R08: 0000000000000005 R09: 000000000000000e
-R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000011 R14: ffff88802101f418 R15: 0000000000000011
-FS:  00005555567b2300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000001a4b398 CR3: 000000002c9c3000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- map_check_btf kernel/bpf/syscall.c:1024 [inline]
- map_create+0x1157/0x1860 kernel/bpf/syscall.c:1198
- __sys_bpf+0x127f/0x5420 kernel/bpf/syscall.c:5040
- __do_sys_bpf kernel/bpf/syscall.c:5162 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5160 [inline]
- __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5160
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f379d511d09
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffea061b348 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f379d511d09
-RDX: 0000000000000048 RSI: 0000000020000180 RDI: 0000000000000000
-RBP: 00007f379d4d5eb0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f379d4d5f40
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+Regards,
+   Felix
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+On 2023-05-24 15:41, Russell, Kent wrote:
+>
+> [AMD Official Use Only - General]
+>
+>
+> (Adding Felix in CC)
+>
+> I’m a fan of adding it to KFD as well. Felix, can you foresee any 
+> issues here?
+>
+> Kent
+>
+> *From:* amd-gfx <amd-gfx-bounces@lists.freedesktop.org> *On Behalf Of 
+> *Ho, Kenny
+> *Sent:* Wednesday, May 24, 2023 3:23 PM
+> *To:* Alex Deucher <alexdeucher@gmail.com>; Mahfooz, Hamza 
+> <Hamza.Mahfooz@amd.com>
+> *Cc:* Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Wentland, Harry 
+> <Harry.Wentland@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; Siqueira, 
+> Rodrigo <Rodrigo.Siqueira@amd.com>; linux-kernel@vger.kernel.org; 
+> dri-devel@lists.freedesktop.org; amd-gfx@lists.freedesktop.org; Daniel 
+> Vetter <daniel@ffwll.ch>; Deucher, Alexander 
+> <Alexander.Deucher@amd.com>; David Airlie <airlied@gmail.com>; Koenig, 
+> Christian <Christian.Koenig@amd.com>
+> *Subject:* Re: [PATCH v2] drm/amd/display: enable more strict compile 
+> checks
+>
+> [AMD Official Use Only - General]
+>
+> [AMD Official Use Only - General]
+>
+> (+ Felix)
+>
+> Should we do the same for other modules under amd (amdkfd)?  I was 
+> going to enable full kernel werror in the kconfig used by my CI but 
+> this is probably better.
+>
+> Kenny
+>
+> ------------------------------------------------------------------------
+>
+> *From:*Alex Deucher <alexdeucher@gmail.com>
+> *Sent:* Wednesday, May 24, 2023 3:22 PM
+> *To:* Mahfooz, Hamza <Hamza.Mahfooz@amd.com>
+> *Cc:* amd-gfx@lists.freedesktop.org <amd-gfx@lists.freedesktop.org>; 
+> Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Ho, Kenny <Kenny.Ho@amd.com>; 
+> Pan, Xinhui <Xinhui.Pan@amd.com>; Siqueira, Rodrigo 
+> <Rodrigo.Siqueira@amd.com>; linux-kernel@vger.kernel.org 
+> <linux-kernel@vger.kernel.org>; dri-devel@lists.freedesktop.org 
+> <dri-devel@lists.freedesktop.org>; Daniel Vetter <daniel@ffwll.ch>; 
+> Deucher, Alexander <Alexander.Deucher@amd.com>; David Airlie 
+> <airlied@gmail.com>; Wentland, Harry <Harry.Wentland@amd.com>; Koenig, 
+> Christian <Christian.Koenig@amd.com>
+> *Subject:* Re: [PATCH v2] drm/amd/display: enable more strict compile 
+> checks
+>
+> On Wed, May 24, 2023 at 3:20 PM Hamza Mahfooz <hamza.mahfooz@amd.com> 
+> wrote:
+> >
+> > Currently, there are quite a number of issues that are quite easy for
+> > the CI to catch, that slip through the cracks. Among them, there are
+> > unused variable and indentation issues. Also, we should consider all
+> > warnings to be compile errors, since the community will eventually end
+> > up complaining about them. So, enable -Werror, -Wunused and
+> > -Wmisleading-indentation for all kernel builds.
+> >
+> > Cc: Alex Deucher <alexander.deucher@amd.com>
+> > Cc: Harry Wentland <harry.wentland@amd.com>
+> > Cc: Kenny Ho <kenny.ho@amd.com>
+> > Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> > ---
+> > v2: fix grammatical error
+> > ---
+> >  drivers/gpu/drm/amd/display/Makefile | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/Makefile 
+> b/drivers/gpu/drm/amd/display/Makefile
+> > index 0d610cb376bb..3c44162ebe21 100644
+> > --- a/drivers/gpu/drm/amd/display/Makefile
+> > +++ b/drivers/gpu/drm/amd/display/Makefile
+> > @@ -26,6 +26,8 @@
+> >
+> >  AMDDALPATH = $(RELATIVE_AMD_DISPLAY_PATH)
+> >
+> > +subdir-ccflags-y += -Werror -Wunused -Wmisleading-indentation
+> > +
+>
+> Care to enable this for the rest of amdgpu as well?  Or send out an
+> additional patch to do that?  Either way:
+> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+>
+> Alex
+>
+> >  subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/
+> >  subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/inc/hw
+> >  subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/clk_mgr
+> > --
+> > 2.40.1
+> >
+>
