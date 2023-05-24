@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D7570FCE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9435D70FCED
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 19:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235819AbjEXRo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 13:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S235966AbjEXRp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 13:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbjEXRoy (ORCPT
+        with ESMTP id S235823AbjEXRpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 13:44:54 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C84E72;
-        Wed, 24 May 2023 10:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=WUCMd7nAkdTG9RTCxIujSC2FhmjjnNJeOfZn/CMRpwQ=; b=hu
-        mYlhGm6fmZKdKqUq3Bi1K4cY2SDCzaQ1PpXviPNN1fsQYuGbX4YgxnwoxPSQLNWDY7XWGKBjwTv2J
-        oxX+URnxMXC3wpyePSX8hTWwNgsxYjDN/e+ZpIQsC9HDzm4LPlFmiYYapX3DyPlHRr9s1H3hvB3HS
-        NUgGHTtmFKjl840=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q1sVz-00Dosl-9s; Wed, 24 May 2023 19:43:11 +0200
-Date:   Wed, 24 May 2023 19:43:11 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kenny Ho <y2kenny@gmail.com>
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Kenny Ho <Kenny.Ho@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Remove hardcoded static string length
-Message-ID: <5b1355b8-17f7-49c8-b7b5-3d9ecdb146ce@lunn.ch>
-References: <20230523223944.691076-1-Kenny.Ho@amd.com>
- <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
- <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
- <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch>
- <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
+        Wed, 24 May 2023 13:45:24 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379E6199;
+        Wed, 24 May 2023 10:44:46 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1684950270tlg7ezy2
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 May 2023 01:44:28 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: YHTLUubWl265u2CW07wSJel+EACR98RM0Pu/0O4blCZfhRit2TQxF4jHhzYnx
+        v61kmJUoir0VmxZ6Toueb+Uoxb0G4MLbtFWhJscPkTd/ViqkMef29uaIfE/g6WP5lJ7rRfk
+        McLHsbRwJ5BwzlNH57jJvOe1CV0krfEglM2yPp/8wcmTYbTxq18j59iXQz8qGIeq5yL1T9Q
+        WW0bT85CJqGkxxUwa4LGIfeepiP39SXOprgJaMT/eYzjNCEQkkbTaPO0NZjZTBt1uCJ6Pld
+        C7jxnIh/s3fTQ892Zm9i+o1dPxTd1O4JTij6hXUHEo6n1/sQgKv47QbSpZtAWLH9sPJAdit
+        39unhhO/LTzsyLAyvK1Qhpo9SxeshLvC4yl9NKX9i1jmGuHseYSU9G2YL1wCg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16112400908867292209
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
+Subject: [PATCH 02/13] Revert "selftests/nolibc: Fix up compile error for rv32"
+Date:   Thu, 25 May 2023 01:44:26 +0800
+Message-Id: <9cf5f91b2bc3d387231768349ea60f1091db4654.1684949267.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
+References: <cover.1684949267.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 01:02:36PM -0400, Kenny Ho wrote:
-> On Wed, May 24, 2023 at 12:02 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> > So the compiler warning/error needs to be fixed a different want.
-> 
-> Understood.  Would caping the length at iov_len with a ternary be sufficient?
+This reverts commit 606343b7478 to prepare for a whole new patch later.
 
-The quoted text said 'string'. It is not clear if that means c-string,
-with a trailing \0. If you just cap iov_len you could end up with a
-string which is not terminated.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The other end of the socket should not blow up, because that would be
-an obvious DOS or buffer overwrite attack vector. So you need to
-decide, do you want to expose such issues and see if anything does
-actually blow up, or do you want to do a bit more work and correctly
-terminate the string when capped?
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 6e0a4dbe321e..c570bb848c1a 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -596,7 +596,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+ 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+-		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_read, -1, &tmp, 1), -1, EBADF); break;
++		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
+-- 
+2.25.1
 
-	Andrew
