@@ -2,176 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DB970FDBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFF970FDC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 20:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbjEXSU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 14:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S235553AbjEXSVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 14:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjEXSU2 (ORCPT
+        with ESMTP id S236738AbjEXSVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 14:20:28 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92DE7;
-        Wed, 24 May 2023 11:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684952412; i=deller@gmx.de;
-        bh=WG+hAFG6SEqXxehKbXada6K5tJh0Wir0acFKWq+QDkw=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=c8kE61iUyxR982QVAOXYSZ1lUUPesqKNJ9fBPljDhDpd/P8qCc/m1jJfP5dBqt56l
-         pvd2dkey9aAmeTeihGFkzp1JwmuG49t/Otd6hc3ALQWni0f/kHHSmwyES6n+74UkEz
-         EcPaiBg6xYgr+Smti1OVgceXGk0XtegRcvIhf8JglUyI4Fq6aJxvhWFyNe+xnP7679
-         KRYkV0bE6AW/zr4mYK7oKh9ak0X/P9RDxpiXOBp4EnLaAZo5k+tQv04LSAAMLoxQmE
-         N2htGNHM3BFJL8MOIN4XMmTdcSxCjXP4lUANhQ4vCMgtaJCKZ7RnpzJ5cMdeYfINbV
-         g1fQljGwM0vGg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.145.4]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M9Wuk-1q5ALI2lQS-005akz; Wed, 24
- May 2023 20:20:12 +0200
-Message-ID: <7e5643de-5d64-272e-cb36-bbe1e5c187ec@gmx.de>
-Date:   Wed, 24 May 2023 20:20:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/4] fbdev: imsttfb: Fix error handling in init_imstt()
-Content-Language: en-US
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        kernel-janitors@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Zheng Wang <zyytlz.wz@163.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        hackerzheng666@gmail.com
-References: <069f2f78-01f3-9476-d860-2b695c122649@gmx.de>
- <97807a2d-ccf2-1fbf-06f7-085bb1bdf451@web.de>
- <c551c670-7458-ed50-eb2f-5a2b7ba421a8@web.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <c551c670-7458-ed50-eb2f-5a2b7ba421a8@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:25L6+tdLvR4JdvEn3uP+W2huNpRBdOtgMf3hNVOXNlS8iHzDWLl
- dwlVc8x1mOgG/YP+IbLRva/kxwk8YRsFr0g+oGyEbvW/2mlu/c7HFLAb+YCEwYNhqWkRJOf
- A+aOPeqcWy613Hk2U4Ophw9PQAQJgIzfv2cVEE3YteWoKLY2MUhamhxzmaIMmrizmCZ/8uw
- KX121419r/X+/eMQ/L9+g==
-UI-OutboundReport: notjunk:1;M01:P0:LIBBXwL4Mpc=;wGLcB2nki+J2zLaqM56D3MfI3ik
- 4WuVQeBGN+TpSXMsre4dHsLrKrQj3c0wtcHsO8e2jA1Sl7lOv5kdctLwlM15e4r6dhGmxr4dM
- VgrjoUiMwNFwEbEo2fEXVyxo5NPgNfO9W7momdfWv28jZ3DLTTJQ2XKqiXvEKrmAM5xRRHxLC
- Pe0vFK1fa994OKWM2Y7HP+kOJb65040qmo1kYxatIaVOA2RoE5+JYGKIt7Ehgf/2sbGKIUpfl
- DadgCyqv7R9ic1xHp604qKx0m2e3In6FGGtPpGoYRZjGWN+CKSgFlGjECBqlbUnurbAy10jVs
- mmG4jJ6L0Eaz91eeSW1HhankzDQNzj6/Dvl1reneMGBcs9Eg9uBUlOcT6O5p1LHKmJCL3Sbwt
- tjfOvWfGqrnm58+bKVk/amzeqoDpwawoAulJ6UAfJyEefuJSWXjlPJVoNsPyNl3OPFighbewL
- JY3pirmnAQV99MDTIhmHmIiQsMgEZcIxVtD5iP4DKCYItaGans6gkTsU0pRVobODzgCxmVB1K
- eKxqeBXdaMPLipOvx42QgrWmeGupp72V+nouU7lQaGcdto9CQHM8TKuGNpPvvLCdKkwteSDzd
- ey+kI6Fm1r3TixAJ5eSg37GmwZ3P6YhEstrCGNTGlu/IJwxqZAiG9nlCKCbtYe2MChdyGeBaG
- GaEwDtyLRdP4pB0iMN49gbaHmnvBc0CTkp2Nz96Fx9ML63IVrTYIXR2aBqBxd9trjTKsV7Z+n
- EVFPmLlglWuztNxm2s1E64Ao8dBPxupQ8mtoNLLgmJZXdkNgzaqYrPsCtsacqGR0sx2TFAIaR
- KlPkK0VeQpFM8RSxDZj/WMW41rSPjzXQV+6VR9+/X4Z5NSRX/+VDhqIPyWCVi7d0NJ/dthRGH
- 4LcXZGZJ8nNW/qMI6c9X7Kkq/6m2KD2U2ms1R8/T7AR1CyclMmOh289BKOciFPsZe7kqT+KAk
- 6HvK+SuJCIH9ofv+JVrv7wlwE+Y=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 14:21:34 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9639197;
+        Wed, 24 May 2023 11:21:24 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 10A713200900;
+        Wed, 24 May 2023 14:21:20 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute5.internal (MEProxy); Wed, 24 May 2023 14:21:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1684952480; x=1685038880; bh=8n
+        +IaACCh27iHdXNW61G4VevMtyUcvcfnjZ1YrA0koc=; b=KqOCSdZ5YUv4mmgOHf
+        kYbggNn3wN+1mm4PTofyVOyKgUuvCo7vxLQuTcAY70f8cgoKrgZgvH/PbhL953zQ
+        vOUUWGNVJo6VYxQWH38I377Ftb8N/P97u1Z9CFj+UT03Sk9+kVhNsoK8TZ6agGGn
+        24X+kUwBM2aFWK/hTZ1SUa9HNm73HXG5nSANAoqR6IBXfoKuujb2/Q/uE2317MzI
+        s6oh/QHyfoLLbqK2GBPQBdQXDC4NoNqpJIobsRndCFFfg/pYfYolW23xpe2Lsizd
+        qqQ2Y067azKCmd0aDUZjhrCMOjLKtKAEjHOnm0pMuxVyrM6EkHFOG+IsmE6VilZa
+        9QFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684952480; x=1685038880; bh=8n+IaACCh27iH
+        dXNW61G4VevMtyUcvcfnjZ1YrA0koc=; b=MldM9qZm6OhWPsXGkL0VBnaZuYGZP
+        gf99J8vJoDBcgoxpGvjKLjuFdBOXJ/XRm6Qpy7/Ggm/X2uG9LNsUWwV5gy8CSnai
+        kXNuuSO1diQDsemCLIT0l6Q9lnrGVO1CZhEMXSct0R6BeecWEPKqcxLyrxfCbrmn
+        k09kHxNwIrMuwVIQ4uuW45r4/T/gSXnTP/n7R4aj353nrN4IovAYrZV6EMrLGBXS
+        sESRl4NjmIlBBBwZbTqFpaB5L2BCFTh/drdkCrkxJ5W6T3jLwn0WtSsHJp5X4MeV
+        QfBIWRRv+90KSPjLjnactkU+zGpm9t92ke1niluTifZLBhmBScSNSCj8g==
+X-ME-Sender: <xms:oFVuZCjNka_Imn4qup0lSC_qfuLzv1zQqzTOZ9V9wzBrzFqNqVcP0w>
+    <xme:oFVuZDBmPNgQOglVVNfv9GeJoJlgQf959kzz2fzBMbomlvo3Uo3ZRSBo6xshVhBV1
+    auN7MlhhSh-a51Bfoc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfo
+    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
+    gsrdgtrgeqnecuggftrfgrthhtvghrnhepteehgfeftdevgfehleejgedujeetkeevuefh
+    hfejteeuueeuiedvgfeihefghfehnecuffhomhgrihhnpehlvghnohhvohgtughrthdrtg
+    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehm
+    phgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
+X-ME-Proxy: <xmx:oFVuZKH6JiF4HZqekEpONS8HypflHSZd8ou1wzg3sXYTlY8eCmedvg>
+    <xmx:oFVuZLTIFBJUWrp67EQE_XKNeWd-8h9CSEqZlrpC5qzGCxFjx7f0Bw>
+    <xmx:oFVuZPzwXrlA1dj51AidMUNuRnvXHhQKzds-0zVJkf3yp3fa6oVkTg>
+    <xmx:oFVuZIq2sCaw-i6IF_4wurXHqAJDdC291HbRVKhRL7jDZJbj6OsR8w>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 56CC0C60091; Wed, 24 May 2023 14:21:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <71d0ddfa-ccca-43ee-aaac-6daf6b876824@app.fastmail.com>
+In-Reply-To: <04415f83-64fa-4d70-91fa-4425e163b350@app.fastmail.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20230517181945.3725-1-mpearson-lenovo@squebb.ca>
+ <b79fa66c-b8bc-125c-ccfa-9dae727022e9@redhat.com>
+ <04415f83-64fa-4d70-91fa-4425e163b350@app.fastmail.com>
+Date:   Wed, 24 May 2023 14:20:59 -0400
+From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To:     "Hans de Goede" <hdegoede@redhat.com>
+Cc:     "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] platform/x86: think-lmi: Enable opcode support on BIOS
+ settings
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 19:38, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Tue, 23 May 2023 14:32:39 +0200
->
-> The return value was overlooked from a call of
-> the function =E2=80=9Cfb_alloc_cmap=E2=80=9D.
->
-> * Thus use a corresponding error check.
->
-> * Add two jump targets so that a bit of exception handling
->    can be better reused at the end of this function.
->
->
-> Reported-by: Helge Deller <deller@gmx.de>
-> Link: https://lore.kernel.org/dri-devel/069f2f78-01f3-9476-d860-2b695c12=
-2649@gmx.de/
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Fixes: c75f5a550610 ("fbdev: imsttfb: Fix use after free bug in imsttfb_=
-probe")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->   drivers/video/fbdev/imsttfb.c | 18 +++++++++++++-----
->   1 file changed, 13 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/video/fbdev/imsttfb.c b/drivers/video/fbdev/imsttfb=
-.c
-> index 975dd682fae4..d3532def4707 100644
-> --- a/drivers/video/fbdev/imsttfb.c
-> +++ b/drivers/video/fbdev/imsttfb.c
-> @@ -1351,6 +1351,7 @@ static int init_imstt(struct fb_info *info)
->   {
->   	struct imstt_par *par =3D info->par;
->   	__u32 i, tmp, *ip, *end;
-> +	int ret;
->
->   	tmp =3D read_reg_le32(par->dc_regs, PRC);
->   	if (par->ramdac =3D=3D IBM)
-> @@ -1419,8 +1420,7 @@ static int init_imstt(struct fb_info *info)
->   	if ((info->var.xres * info->var.yres) * (info->var.bits_per_pixel >> =
-3) > info->fix.smem_len
->   	    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres)))=
- {
->   		printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->va=
-r.yres, info->var.bits_per_pixel);
-> -		framebuffer_release(info);
-> -		return -ENODEV;
-> +		goto e_nodev;
->   	}
->
->   	sprintf(info->fix.id, "IMS TT (%s)", par->ramdac =3D=3D IBM ? "IBM" :=
- "TVP");
-> @@ -1452,17 +1452,25 @@ static int init_imstt(struct fb_info *info)
->   	              FBINFO_HWACCEL_FILLRECT |
->   	              FBINFO_HWACCEL_YPAN;
->
-> -	fb_alloc_cmap(&info->cmap, 0, 0);
-> +	ret =3D fb_alloc_cmap(&info->cmap, 0, 0);
-> +	if (ret)
-> +		goto release_framebuffer;
->
->   	if (register_framebuffer(info) < 0) {
-> -		framebuffer_release(info);
-> -		return -ENODEV;
-> +		fb_dealloc_cmap(&info->cmap);
-> +		goto e_nodev;
->   	}
->
->   	tmp =3D (read_reg_le32(par->dc_regs, SSTATUS) & 0x0f00) >> 8;
->   	fb_info(info, "%s frame buffer; %uMB vram; chip version %u\n",
->   		info->fix.id, info->fix.smem_len >> 20, tmp);
->   	return 0;
-> +
-> +e_nodev:
-> +	ret =3D -ENODEV;
+Hi Hans,
 
-I think the return value isn't checked at all, so you could
-simply return below "-ENODEV" for all cases (instead of "return ret").
-Then you don't need the e_nodev label and can simplify the flow.
-
-Helge
-
-
-> +release_framebuffer:
-> +	framebuffer_release(info);
-> +	return ret;
->   }
+On Tue, May 23, 2023, at 8:36 AM, Mark Pearson wrote:
+> Thanks Hans,
 >
->   static int imsttfb_probe(struct pci_dev *pdev, const struct pci_device=
-_id *ent)
-> --
-> 2.40.1
+> On Tue, May 23, 2023, at 6:46 AM, Hans de Goede wrote:
+>> Hi Mark,
+>>
+>> On 5/17/23 20:19, Mark Pearson wrote:
+>>> Whilst reviewing some documentation from the FW team on using WMI on
+>>> Lenovo system I noticed that we weren't using Opcode support when
+>>> changing BIOS settings in the thinkLMI driver.
+>>> 
+>>> We should be doing this to ensure we're future proof as the old
+>>> non-opcode mechanism has been deprecated.
+>>> 
+>>> Tested on X1 Carbon G10 and G11.
+>>> 
+>>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>>> ---
+>>>  drivers/platform/x86/think-lmi.c | 23 ++++++++++++++++++++++-
+>>>  1 file changed, 22 insertions(+), 1 deletion(-)
+>>> 
+>>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+>>> index 1138f770149d..d9341305eba9 100644
+>>> --- a/drivers/platform/x86/think-lmi.c
+>>> +++ b/drivers/platform/x86/think-lmi.c
+>>> @@ -1001,7 +1001,28 @@ static ssize_t current_value_store(struct kobject *kobj,
+>>>  				tlmi_priv.pwd_admin->save_signature);
+>>>  		if (ret)
+>>>  			goto out;
+>>
+>>> -	} else { /* Non certiifcate based authentication */
+>>> +	} else if (tlmi_priv.opcode_support) {
+>>> +		/* If opcode support is present use that interface */
+>>> +		set_str = kasprintf(GFP_KERNEL, "%s,%s;", setting->display_name,
+>>> +					new_setting);
+>>> +		if (!set_str) {
+>>> +			ret = -ENOMEM;
+>>> +			goto out;
+>>> +		}
+>>> +
+>>> +		ret = tlmi_simple_call(LENOVO_SET_BIOS_SETTINGS_GUID, set_str);
+>>> +		if (ret)
+>>> +			goto out;
+>>> +
+>>> +		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
+>>> +			ret = tlmi_opcode_setting("WmiOpcodePasswordAdmin",
+>>> +					tlmi_priv.pwd_admin->password);
+>>> +			if (ret)
+>>> +				goto out;
+>>> +		}
+>>> +
+>>> +		ret = tlmi_save_bios_settings("");
+>>
+>> I'm a bit confused about how this works. You are calling the same
+>> LENOVO_SET_BIOS_SETTINGS_GUID as the old non opcode based authentication method
+>> without any auth string.
+>>
+>> And then afterwards you are calling LENOVO_OPCODE_IF_GUID with
+>> "WmiOpcodePasswordAdmin:<passwd>"
+>>
+>> Won't the initial LENOVO_SET_BIOS_SETTINGS_GUID get rejected since
+>> it does not include an auth-string and you have not authenticated
+>> yet using the opcode mechanism either. IOW shouldn't the opcode
+>> auth call go first ?
+>>
+>> And how does this work timing wise, vs races with userspace doing
+>> multiple sysfs writes at once.
+>>
+>> If the authentication done afterwards really acks the last
+>> LENOVO_SET_BIOS_SETTINGS_GUID call then a userspace based
+>> attacker could try to race and overwrite the last
+>> LENOVO_SET_BIOS_SETTINGS_GUID call before the ack happens... ?
+>>
+>> If this code really is correct I think we need to introduce
+>> a mutex to avoid this race.
+>>
+>> And this also needs some comments to explain what is going on.
+>
+> Agreed - and looking at it now....I'm questioning it myself. This was 
+> tested so it works...but I wonder if that was more luck than judgement.
+> Let me do some checking - I think I may have messed up here.
 >
 
+Looked at this and the code is correct - even if it is a bit weird :)
+https://docs.lenovocdrt.com/#/bios/wmi/wmi_guide?id=set-and-save-a-bios-setting-on-newer-models
+
+The save_bios_settings would fail if a password was not set (if it's required).
+
+With regards to race conditions - that does seem somewhat unlikely in real life but I can add a mutex around this to catch that condition. I think I should probably do the same in a couple of other places (e.g. certificate_store and new_password_store) where multiple WMI calls are needed to complete an operation. 
+
+Is it OK if I do that as a separate commit on the end of the series or would you rather it was included in this commit? As the scope is, I think, more than just this function I'm leaning towards a separate commit but let me know what best practice is.
+
+Thanks
+Mark
