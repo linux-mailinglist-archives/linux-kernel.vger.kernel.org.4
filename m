@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3055C70F4D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA4B70F4EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 13:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbjEXLH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 07:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S230227AbjEXLRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 07:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbjEXLHw (ORCPT
+        with ESMTP id S229540AbjEXLRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 07:07:52 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F1E12F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:07:51 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-25394160fd3so73265a91.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 04:07:51 -0700 (PDT)
+        Wed, 24 May 2023 07:17:51 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3707C5;
+        Wed, 24 May 2023 04:17:49 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51190fd46c3so1615761a12.1;
+        Wed, 24 May 2023 04:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684926471; x=1687518471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1kwUoFw1i63AKV85YeOpM79iAnzRIac8pe/CUur9ToI=;
-        b=rJZD6KdGxtxMGfMZ65tuF/XHKRwmqFYXEdAU9SzIfkvD4hvAR7Eq/aezT5WYq1LQKd
-         0GmAU+PxpEssPxphag5NHcsUvbLpqvVpHgI9qoNlgQNefbTFHuTIlEy7d414wxGhb3KL
-         dTTU2TBiTjhjRLmzgDUuWJ9YFP+YaseUAe9f8fNKlOC2v9AhuDtjDO1ggB7CDvwWiK7i
-         94dWLSt7rRxbL24rzkad0oWpL3vbr9wfnU+7obqX39AvNVeMWh7ZG4+63os7zkmMES/D
-         7BdLblh8y9WgbUn+XWvrvx5vAtrZrTjDVa7MsZz7yzW1KYGRGWHNFSGVaIQ3Uw6mGPLC
-         TlZQ==
+        d=gmail.com; s=20221208; t=1684927068; x=1687519068;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R1aqK7Ud0k9NZcXoizSkxgHpUDinNYt7aEGaaazv/Z8=;
+        b=M64Z8XD90NwQvjtSENRZLkYlvy3y0h4xXTeCMpaFe3Nvg7W+2i+x6uzNnrOxOpT9cC
+         I4FuijR/msNkzgjIh4JqMRWmxNvfjp0e1cErAl9eIax4U0pSa+jlozPO9dV9JJ5pH5lZ
+         a63cl6WnjP4k7MZKymPo9p73MP19YPZmy1WXkguGx3M9dB5mTp9Mdtw9DOtHVwkVtEdl
+         cRuRCw8aToFYwPEYJu318peRGvyzNY4jPQ7l2ZByZgm/catuEzNKFu5rAv/6hbrxVviK
+         8z9mAQ+zKhyYqHdihcWlxRuSz7Vq+77BbVCK7K1TjZbNpcrBVOLgOITiDVX3hshc++eG
+         r85w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684926471; x=1687518471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1kwUoFw1i63AKV85YeOpM79iAnzRIac8pe/CUur9ToI=;
-        b=IdPXeF5oKUBK+0aSxkMGbdNBTThWXDk5Jj3C5pJHfFFOJrtsglMPkUEuTStNL5m7Ya
-         kkxyUtB9O7ACV4y7FacAEhoZxnB5iHjQobCLESS3jfz6Rr3L8iG7zQc7iVy0aGXDLB1B
-         Au0lKMLvUQdtK2WCYOT82DWPASA2rJMYA9N15VLcxleAzwcRDt3bnikbB0RraISdHtYk
-         NAUTQInCMm3ruZTnSOJPutjJX+m6ye0A1qResWMd9QsmxPxhKJlgm/iIGRTwbmP3ljzT
-         Lg8uxE7Cnvzk4KoSsqNeywu1zQZaRtJhmOnIW8qScR5IACUDK2pwdy3hmAoJfUgT7dgM
-         7p4g==
-X-Gm-Message-State: AC+VfDwT0nLj/62chzjbpXgiLMVIaiwV/jSkWZwR6sCkd/4OnO1Khkoe
-        3peom2cRVPaj3I34yo6YQhI4gcnXaNg=
-X-Google-Smtp-Source: ACHHUZ5b8yTYf2SfFtwVp6myUaHhmww9y384rCnWI3pX3y4OW8Ohd+vPCKGtSHjAdu2MMDLr9Lg6vw==
-X-Received: by 2002:a17:90b:4d91:b0:255:7d50:c1aa with SMTP id oj17-20020a17090b4d9100b002557d50c1aamr8356264pjb.44.1684926470481;
-        Wed, 24 May 2023 04:07:50 -0700 (PDT)
-Received: from localhost ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id q89-20020a17090a756200b002508f0ac3edsm1163040pjk.53.2023.05.24.04.07.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 24 May 2023 04:07:50 -0700 (PDT)
-Date:   Wed, 24 May 2023 19:15:49 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     xiang@kernel.org, chao@kernel.org, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        huyue2@coolpad.com, zhangwen@coolpad.com
-Subject: Re: [PATCH] erofs: remove end parameter from
- z_erofs_pcluster_readmore()
-Message-ID: <20230524191549.000037d6.zbestahu@gmail.com>
-In-Reply-To: <4056d17c-6cdf-0248-b36f-1fbb7a3685e8@linux.alibaba.com>
-References: <20230524101305.22105-1-zbestahu@gmail.com>
-        <4056d17c-6cdf-0248-b36f-1fbb7a3685e8@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        d=1e100.net; s=20221208; t=1684927068; x=1687519068;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R1aqK7Ud0k9NZcXoizSkxgHpUDinNYt7aEGaaazv/Z8=;
+        b=ViaQ0jABN9h0Ui+ZI4M83FCkeDCdba4VvTxGaQyLoZOlE+kLlca2tZ2OVXhMy2yRsD
+         Jn0AFDiKOcyNibxvcB37yPXdZEf0mN651sZFJmRG8O9xcKpPKOLSq5xtTC5ClYymF51S
+         FVKGTAfD8K67mqdaJ1zK94izkn0M5KB004APolnbju5kyFomQkqSzgiZ6zIK6mF1UeoI
+         VX7h3s/SyN18iW0WH/Ppb/ytUMKZ2xGRDH/ED6gBzV0zNeVupctRliW1yPmlFeR+Xrzj
+         AItoeM+IwTRgAONhf8qlBUyz/kWyyOuvfAXEXgPqJGuTjTnyFm5wvjkCEVhXEIOdc3Gt
+         qTdg==
+X-Gm-Message-State: AC+VfDwt0z6vr4is93bl9KL8fFzhwoVEr3YHAHgrfm6Lyu1JtXEzP1wo
+        MTM3s10PUjFMdvKdp4PO2YQ=
+X-Google-Smtp-Source: ACHHUZ5E+uzRTP/jxOVJKqtttOPDyek7yNaAEC3dr/1xLcSEeoVvv4hI6zSfl4xIC+s8uMB4UwtZXg==
+X-Received: by 2002:a17:907:3f27:b0:96f:bf78:c380 with SMTP id hq39-20020a1709073f2700b0096fbf78c380mr12197141ejc.55.1684927068200;
+        Wed, 24 May 2023 04:17:48 -0700 (PDT)
+Received: from [192.168.3.32] ([213.149.38.146])
+        by smtp.gmail.com with ESMTPSA id kg1-20020a17090776e100b009664e25c425sm5637404ejc.95.2023.05.24.04.17.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 04:17:47 -0700 (PDT)
+Message-ID: <248ebc1b-d077-e424-8f36-6c143b0ed697@gmail.com>
+Date:   Wed, 24 May 2023 13:17:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 01/13] firmware: qcom: scm: Introduce pas_metadata context
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+References: <20220128025513.97188-1-bjorn.andersson@linaro.org>
+ <20220128025513.97188-2-bjorn.andersson@linaro.org>
+Content-Language: en-US
+From:   Robert Marko <robimarko@gmail.com>
+In-Reply-To: <20220128025513.97188-2-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,61 +79,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 18:45:48 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-> On 2023/5/24 03:13, Yue Hu wrote:
-> > From: Yue Hu <huyue2@coolpad.com>
-> > 
-> > The `end` argument is pointless if it's not backmost.  And we already
-> > have `headoffset` in struct `*f`, so let's use this offset to get the
-> > `end` for backmost only instead in this function.
-> > 
-> > Also, remove linux/prefetch.h since it's not used anymore after commit
-> > 386292919c25 ("erofs: introduce readmore decompression strategy").
-> > 
-> > Signed-off-by: Yue Hu <huyue2@coolpad.com>  
-> > --->   fs/erofs/zdata.c | 19 ++++++++-----------  
-> >   1 file changed, 8 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-> > index 5cd971bcf95e..b7ebdc8f2135 100644
-> > --- a/fs/erofs/zdata.c
-> > +++ b/fs/erofs/zdata.c
-> > @@ -5,7 +5,6 @@
-> >    * Copyright (C) 2022 Alibaba Cloud
-> >    */
-> >   #include "compress.h"
-> > -#include <linux/prefetch.h>
-> >   #include <linux/psi.h>
-> >   #include <linux/cpuhotplug.h>
-> >   #include <trace/events/erofs.h>
-> > @@ -1825,16 +1824,16 @@ static void z_erofs_runqueue(struct z_erofs_decompress_frontend *f,
-> >    */
-> >   static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
-> >   				      struct readahead_control *rac,
-> > -				      erofs_off_t end,
-> > -				      struct page **pagepool,
-> > -				      bool backmost)
-> > +				      struct page **pagepool, bool backmost)
-> >   {
-> >   	struct inode *inode = f->inode;
-> >   	struct erofs_map_blocks *map = &f->map;
-> > -	erofs_off_t cur;
-> > +	erofs_off_t cur, end;
-> >   	int err;
-> >   
-> >   	if (backmost) {
-> > +		end = f->headoffset +
-> > +		      rac ? readahead_length(rac) : PAGE_SIZE - 1;  
-> 
-> 		could we avoid "?:" here for readability?
+On 28. 01. 2022. 03:55, Bjorn Andersson wrote:
+> Starting with Qualcomm SM8450, some new security enhancements has been
+> done in the secure world, which results in the requirement to keep the
+> metadata segment accessible by the secure world from init_image() until
+> auth_and_reset().
+>
+> Introduce a "PAS metadata context" object that can be passed to
+> init_image() for tracking the mapped memory and a related release
+> function for client drivers to release the mapping once either
+> auth_and_reset() has been invoked or in error handling paths on the way
+> there.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Ok, let me change to use if-else branch.
-And seems 'newstart' should be just `f->headoffset`.
-I will send v2 later.
+Hi Bjorn,
+I know a lot of time has passed since this patch, but this patch breaks 
+qcom_scm_pas_auth_and_reset SCM call.
+I have had MDT loader and SCM changes from this series reverted for a 
+long time but was unable to
+find the exact culprit nor how to fix it.
+I even ported the TZ log driver to see if anything is obvious there but 
+nope, calling qcom_scm_pas_auth_and_reset
+after this patch is just failling which is then causing Q6 WCSS on 
+IPQ8074 to fail probing so WLAN doesnt work.
 
-> 
-> Thanks,
-> Gao Xiang
+Since I am out of ideas, I was hoping that you maybe have an idea what 
+could be the issue, I can provide the TZ log
+with all of the SCM calls when it works and when not if required.
 
+Regards,
+Robert
+
+> ---
+>   drivers/firmware/qcom_scm.c   | 39 ++++++++++++++++++++++++++++++-----
+>   drivers/soc/qcom/mdt_loader.c |  2 +-
+>   include/linux/qcom_scm.h      | 10 ++++++++-
+>   3 files changed, 44 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 7db8066b19fd..3218d13cbf83 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -435,10 +435,16 @@ static void qcom_scm_set_download_mode(bool enable)
+>    *		and optional blob of data used for authenticating the metadata
+>    *		and the rest of the firmware
+>    * @size:	size of the metadata
+> + * @ctx:	optional metadata context
+>    *
+> - * Returns 0 on success.
+> + * Return: 0 on success.
+> + *
+> + * Upon successful return, the PAS metadata context (@ctx) will be used to
+> + * track the metadata allocation, this needs to be released by invoking
+> + * qcom_scm_pas_metadata_release() by the caller.
+>    */
+> -int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size)
+> +int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size,
+> +			    struct qcom_scm_pas_metadata *ctx)
+>   {
+>   	dma_addr_t mdata_phys;
+>   	void *mdata_buf;
+> @@ -467,7 +473,7 @@ int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size)
+>   
+>   	ret = qcom_scm_clk_enable();
+>   	if (ret)
+> -		goto free_metadata;
+> +		goto out;
+>   
+>   	desc.args[1] = mdata_phys;
+>   
+> @@ -475,13 +481,36 @@ int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size)
+>   
+>   	qcom_scm_clk_disable();
+>   
+> -free_metadata:
+> -	dma_free_coherent(__scm->dev, size, mdata_buf, mdata_phys);
+> +out:
+> +	if (ret < 0 || !ctx) {
+> +		dma_free_coherent(__scm->dev, size, mdata_buf, mdata_phys);
+> +	} else if (ctx) {
+> +		ctx->ptr = mdata_buf;
+> +		ctx->phys = mdata_phys;
+> +		ctx->size = size;
+> +	}
+>   
+>   	return ret ? : res.result[0];
+>   }
+>   EXPORT_SYMBOL(qcom_scm_pas_init_image);
+>   
+> +/**
+> + * qcom_scm_pas_metadata_release() - release metadata context
+> + * @ctx:	metadata context
+> + */
+> +void qcom_scm_pas_metadata_release(struct qcom_scm_pas_metadata *ctx)
+> +{
+> +	if (!ctx->ptr)
+> +		return;
+> +
+> +	dma_free_coherent(__scm->dev, ctx->size, ctx->ptr, ctx->phys);
+> +
+> +	ctx->ptr = NULL;
+> +	ctx->phys = 0;
+> +	ctx->size = 0;
+> +}
+> +EXPORT_SYMBOL(qcom_scm_pas_metadata_release);
+> +
+>   /**
+>    * qcom_scm_pas_mem_setup() - Prepare the memory related to a given peripheral
+>    *			      for firmware loading
+> diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
+> index 72fc2b539213..b00586db5391 100644
+> --- a/drivers/soc/qcom/mdt_loader.c
+> +++ b/drivers/soc/qcom/mdt_loader.c
+> @@ -171,7 +171,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+>   			goto out;
+>   		}
+>   
+> -		ret = qcom_scm_pas_init_image(pas_id, metadata, metadata_len);
+> +		ret = qcom_scm_pas_init_image(pas_id, metadata, metadata_len, NULL);
+>   
+>   		kfree(metadata);
+>   		if (ret) {
+> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+> index 81cad9e1e412..4d8371410b05 100644
+> --- a/include/linux/qcom_scm.h
+> +++ b/include/linux/qcom_scm.h
+> @@ -68,8 +68,16 @@ extern int qcom_scm_set_warm_boot_addr(void *entry, const cpumask_t *cpus);
+>   extern void qcom_scm_cpu_power_down(u32 flags);
+>   extern int qcom_scm_set_remote_state(u32 state, u32 id);
+>   
+> +struct qcom_scm_pas_metadata {
+> +	void *ptr;
+> +	dma_addr_t phys;
+> +	ssize_t size;
+> +};
+> +
+>   extern int qcom_scm_pas_init_image(u32 peripheral, const void *metadata,
+> -				   size_t size);
+> +				   size_t size,
+> +				   struct qcom_scm_pas_metadata *ctx);
+> +void qcom_scm_pas_metadata_release(struct qcom_scm_pas_metadata *ctx);
+>   extern int qcom_scm_pas_mem_setup(u32 peripheral, phys_addr_t addr,
+>   				  phys_addr_t size);
+>   extern int qcom_scm_pas_auth_and_reset(u32 peripheral);
