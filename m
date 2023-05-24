@@ -2,421 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0984670F91E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAED170F925
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 16:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235961AbjEXOud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 10:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S236152AbjEXOuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 10:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbjEXOuU (ORCPT
+        with ESMTP id S236010AbjEXOua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 10:50:20 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3327E18E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:50:14 -0700 (PDT)
-Date:   Wed, 24 May 2023 14:50:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1684939812; x=1685199012;
-        bh=Uvc2bcYwiMlahenIY7l4o0VGT4i24GCjMIrVGHDELeY=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=Bk5EjfvOu0pT3HtUjfr1Ug63XLOZwdQKBlT0Yn6DltxYf86NZv9+jAJAYyeI+vr2i
-         UOmChowcpv8JxFms1zj97zbKYTZZXcRYeJVY50yvw5qVTfPXoM3BcYd+Q4Xj+xhSVS
-         FHPnSlyNM4JDnhcod5+OWxT2Re6VouYC86+4uBvbW0l5lNZPhA57QNuylCp9HDCXv/
-         Qc8GVpoCuKRw7BWbD11s6sN0hJAIsIdjS3LwJTX2aTNwWVVC8GYc4q1LueMJYsS/af
-         0tKSZz/s2wPebL1xRI7N+NASFE6SSleRPCJDeUe2ddx7lY/fED3Qf0DTXWYE5XsQ0H
-         eaaBTCVSAzT+Q==
-To:     Alice Ryhl <aliceryhl@google.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v1 5/7] rust: workqueue: add helper for defining work_struct fields
-Message-ID: <XCPRRkwd2lV43Whaash8aIbntiiHuWHtbQgqd11Z6RClSnZnSCHu3-76r1a7bNoM4MWjofINiyH2SSf6v06e1O3GMyeIF43X33OXLX5ltec=@proton.me>
-In-Reply-To: <20230517203119.3160435-6-aliceryhl@google.com>
-References: <20230517203119.3160435-1-aliceryhl@google.com> <20230517203119.3160435-6-aliceryhl@google.com>
-Feedback-ID: 71780778:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 10:50:30 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D3D1A6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:50:27 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba82ed6e450so1813690276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 07:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684939826; x=1687531826;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=40yUgUlbwc4RhRssiuflAXOTLpAUgoytovGBs7C23Yg=;
+        b=Q6uwRySXlrlY7Xnv4ZpaEU7ROSnEmnn1fCPx5rO66aEKoR84OF1iZZyvsVNTPPJS6q
+         utSaz7LwTHMgp6YSgfWP4rcip0TbIVxVYYhVa6IYNrSIzm+kpmFHuGQrN8bJiPHLpy9b
+         BAK7elqPCSMVy0IJCz02AiaEYyAlVLV5/qOLoLICOjDtVWXrknLekEXkeLqu+Mdlxqx+
+         O5UnZdN/5g3dSVvkgurIs2JPQtZA8riS1D/6AZVVYTtefd9cvOS0hd9ADZN5ML/n1/FP
+         4sBqPKbTckbH5mRRQ4V2bafMpIQn0buYM5x5HLEyas2DdFuT6kG21YDkwXbOalpNwehJ
+         1drw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684939826; x=1687531826;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=40yUgUlbwc4RhRssiuflAXOTLpAUgoytovGBs7C23Yg=;
+        b=HoEpuG5IOWPh3UW06sZbt2F6IgWAaoDaWysJUU6oRmfLtpK2Ule00EfZG8TVmP40YU
+         ByA/llsoZ1OeqZl4vYt+Gc0kPzZVKYe1bcPFj9d7ifeJZpagkLtxaJdQmxUIqCeeMYMV
+         S+pnL/7eGNTmvKL+MU6lkKiGLTWyzIl44k20a4g9X6bq4qpsTRky1L6O+0tvUWoSwfcq
+         jxPF8mGtKlk0c9EaZaeWMYlJBpBCFLrrVmqwmobrrryIHO0N/TPunhxe+Ixy/yJYwxWv
+         YdgdK0Uw8XnOP3Zc6r89TkquzgMWign9FsstET9EUpjqxLUcKuxwARtXsP766dS+JdCf
+         hfCQ==
+X-Gm-Message-State: AC+VfDwRoiT2j7uLEq2mzTCcqOoZsjkVrIHdnPJ0ioD3txOX27BatDuB
+        yPqmMEkj0gHffEnUr1hus1Y+4QY4+94=
+X-Google-Smtp-Source: ACHHUZ5S1CBSAogC6RsT9oNlIpsGijINHHJFq/4RV8oYeheVtgb5WnH4kNb50wcO98X2wOYk3vCUhWmPJ44=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1813:b0:ba8:4000:d7e1 with SMTP id
+ cf19-20020a056902181300b00ba84000d7e1mr28841ybb.2.1684939826666; Wed, 24 May
+ 2023 07:50:26 -0700 (PDT)
+Date:   Wed, 24 May 2023 07:50:24 -0700
+In-Reply-To: <ZG10zi6YtqGeik7u@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230509134825.1523-1-yan.y.zhao@intel.com> <20230509135006.1604-1-yan.y.zhao@intel.com>
+ <ZFsr9TynkA/CyPgg@chao-email> <ZFtQeLNuXP6tDMne@yzhao56-desk.sh.intel.com>
+ <ZG1DhSdhpTkxrfCq@google.com> <ZG10zi6YtqGeik7u@yzhao56-desk.sh.intel.com>
+Message-ID: <ZG4kMKXKnQuQOTa7@google.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: add a new mmu zap helper to indicate
+ memtype changes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, May 17th, 2023 at 22:31, Alice Ryhl <aliceryhl@google.com> wr=
-ote:
-> The main challenge with defining `work_struct` fields is making sure
-> that the function pointer stored in the `work_struct` is appropriate for
-> the work item type it is embedded in. It needs to know the offset of the
-> `work_struct` field being used (even if there are several!) so that it
-> can do a `container_of`, and it needs to know the type of the work item
-> so that it can call into the right user-provided code. All of this needs
-> to happen in a way that provides a safe API to the user, so that users
-> of the workqueue cannot mix up the function pointers.
->=20
-> There are three important pieces that are relevant when doing this. This
-> commit will use traits so that they know about each other according to
-> the following cycle:
->=20
->  * The pointer type. It knows the type of the work item struct.
->  * The work item struct. It knows the offset of its `work_struct` field.
->  * The `work_struct` field. It knows the pointer type.
->=20
-> There's nothing special about making the pointer type know the type of
-> the struct it points at. Pointers generally always know that
-> information.
->=20
-> However, making the `work_struct` field know about the pointer type is
-> less commonly seen. This is done by using a generic parameter: the
-> `work_struct` field will have the type `Work<T>`, where T will be the
-> pointer type in use. The pointer type is required to implement the
-> `WorkItemAdapter` trait, which defines the function pointer to store in
-> the `work_struct` field. The `Work<T>` type guarantees that the
-> `work_struct` inside it uses `<T as WorkItemAdapter>::run` as its
-> function pointer.
->=20
-> Finally, to make the work item struct know the offset of its
-> `work_struct` field, we use a trait called `HasWork<T>`. If a type
-> implements this trait, then the type declares that, at the given offset,
-> there is a field of type `Work<T>`. The trait is marked unsafe because
-> the OFFSET constant must be correct, but we provide an `impl_has_work!`
-> macro that can safely implement `HasWork<T>` on a type. The macro
-> expands to something that only compiles if the specified field really
-> has the type `Work<T>`. It is used like this:
->=20
-> ```
-> struct MyWorkItem {
->     work_field: Work<Arc<MyWorkItem>>,
-> }
->=20
-> impl_has_work! {
->     impl HasWork<Arc<MyWorkItem>> for MyWorkItem { self.work_field }
-> }
-> ```
->=20
-> So to summarize, given a pointer to an allocation containing a work
-> item, you can use the `HasWork<T>` trait to offset the pointer to the
-> `work_struct` field. The function pointer in the `work_struct` field is
-> guaranteed to be a function that knows what the original pointer type
-> was, and using that information, it can undo the offset operation by
-> looking up what the offset was via the `HasWork<T>` trait.
->=20
-> This design supports work items with multiple `work_struct` fields by
-> using different pointer types. For example, you might define structs
-> like these:
->=20
-> ```
-> struct MyPointer1(Arc<MyWorkItem>);
-> struct MyPointer2(Arc<MyWorkItem>);
->=20
-> struct MyWorkItem {
->     work1: Work<MyPointer1>,
->     work2: Work<MyPointer2>,
-> }
-> ```
->=20
-> Then, the wrapper structs `MyPointer1` and `MyPointer2` will take the
-> role as the pointer type. By using one or the other, you tell the
-> workqueue which `work_struct` field to use. This pattern is called the
-> "newtype" pattern.
->=20
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  rust/helpers.c           |   8 ++
->  rust/kernel/workqueue.rs | 183 ++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 190 insertions(+), 1 deletion(-)
->=20
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 81e80261d597..7f0c2fe2fbeb 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -26,6 +26,7 @@
->  #include <linux/spinlock.h>
->  #include <linux/sched/signal.h>
->  #include <linux/wait.h>
-> +#include <linux/workqueue.h>
->=20
->  __noreturn void rust_helper_BUG(void)
->  {
-> @@ -128,6 +129,13 @@ void rust_helper_put_task_struct(struct task_struct =
-*t)
->  }
->  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
->=20
-> +void rust_helper___INIT_WORK(struct work_struct *work, work_func_t func,
-> +=09=09=09     bool on_stack)
+On Wed, May 24, 2023, Yan Zhao wrote:
+> On Tue, May 23, 2023 at 03:51:49PM -0700, Sean Christopherson wrote:
+> > diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+> > index 3eb6e7f47e96..a67c28a56417 100644
+> > --- a/arch/x86/kvm/mtrr.c
+> > +++ b/arch/x86/kvm/mtrr.c
+> > @@ -320,7 +320,7 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+> >  	struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
+> >  	gfn_t start, end;
+> >  
+> > -	if (!tdp_enabled || !kvm_arch_has_noncoherent_dma(vcpu->kvm))
+> > +	if (!kvm_mmu_honors_guest_mtrrs(vcpu->kvm))
+> Could we also add another helper kvm_mmu_cap_honors_guest_mtrrs(), which
+> does not check kvm_arch_has_noncoherent_dma()?
+> 
+> +static inline bool kvm_mmu_cap_honors_guest_mtrrs(struct kvm *kvm)
 > +{
-> +=09__INIT_WORK(work, func, on_stack);
+> +       return !!shadow_memtype_mask;
 > +}
-> +EXPORT_SYMBOL_GPL(rust_helper___INIT_WORK);
-> +
->  /*
->   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` =
-type
->   * as the Rust `usize` type, so we can use it in contexts where Rust
-> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-> index 22205d3bda72..7509618af252 100644
-> --- a/rust/kernel/workqueue.rs
-> +++ b/rust/kernel/workqueue.rs
-> @@ -4,7 +4,8 @@
->  //!
->  //! C header: [`include/linux/workqueue.h`](../../../../include/linux/wo=
-rkqueue.h)
->=20
-> -use crate::{bindings, types::Opaque};
-> +use crate::{bindings, prelude::*, types::Opaque};
-> +use core::marker::{PhantomData, PhantomPinned};
->=20
->  /// A kernel work queue.
->  ///
-> @@ -98,6 +99,186 @@ pub unsafe trait WorkItem {
->          F: FnOnce(*mut bindings::work_struct) -> bool;
->  }
->=20
-> +/// Defines the method that should be called when a work item is execute=
-d.
-> +///
-> +/// This trait is used when the `work_struct` field is defined using the=
- [`Work`] helper.
-> +///
-> +/// # Safety
-> +///
-> +/// Implementers must ensure that [`__enqueue`] uses a `work_struct` ini=
-tialized with the [`run`]
-> +/// method of this trait as the function pointer.
-> +///
-> +/// [`__enqueue`]: WorkItem::__enqueue
-> +/// [`run`]: WorkItemAdapter::run
-> +pub unsafe trait WorkItemAdapter: WorkItem {
-> +    /// Run this work item.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// Must only be called via the function pointer that [`__enqueue`] =
-provides to the
-> +    /// `queue_work_on` closure, and only as described in the documentat=
-ion of `queue_work_on`.
-> +    ///
-> +    /// [`__enqueue`]: WorkItem::__enqueue
-> +    unsafe extern "C" fn run(ptr: *mut bindings::work_struct);
-> +}
-> +
-> +/// Links for a work item.
-> +///
-> +/// This struct contains a function pointer to the `T::run` function fro=
-m the [`WorkItemAdapter`]
-> +/// trait, and defines the linked list pointers necessary to enqueue a w=
-ork item in a workqueue.
-> +///
-> +/// Wraps the kernel's C `struct work_struct`.
-> +///
-> +/// This is a helper type used to associate a `work_struct` with the [`W=
-orkItemAdapter`] that uses
-> +/// it.
-> +#[repr(transparent)]
-> +pub struct Work<T: ?Sized> {
-> +    work: Opaque<bindings::work_struct>,
-> +    _pin: PhantomPinned,
-> +    _adapter: PhantomData<T>,
-> +}
-> +
-> +// SAFETY: Kernel work items are usable from any thread.
-> +//
-> +// We do not need to constrain `T` since the work item does not actually=
- contain a `T`.
-> +unsafe impl<T: ?Sized> Send for Work<T> {}
-> +// SAFETY: Kernel work items are usable from any thread.
-> +//
-> +// We do not need to constrain `T` since the work item does not actually=
- contain a `T`.
-> +unsafe impl<T: ?Sized> Sync for Work<T> {}
-> +
-> +impl<T: ?Sized> Work<T> {
-> +    /// Creates a new instance of [`Work`].
-> +    #[inline]
-> +    #[allow(clippy::new_ret_no_self)]
-> +    pub fn new() -> impl PinInit<Self>
-> +    where
-> +        T: WorkItemAdapter,
-> +    {
-> +        // SAFETY: The `WorkItemAdapter` implementation promises that `T=
-::run` can be used as the
-> +        // work item function.
-> +        unsafe {
-> +            kernel::init::pin_init_from_closure(move |slot| {
-> +                bindings::__INIT_WORK(Self::raw_get(slot), Some(T::run),=
- false);
-> +                Ok(())
-> +            })
-> +        }
-> +    }
-> +
-> +    /// Get a pointer to the inner `work_struct`.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// The provided pointer must not be dangling. (But it need not be i=
-nitialized.)
-> +    #[inline]
-> +    pub unsafe fn raw_get(ptr: *const Self) -> *mut bindings::work_struc=
-t {
-> +        // SAFETY: The caller promises that the pointer is valid.
-> +        //
-> +        // A pointer cast would also be ok due to `#[repr(transparent)]`=
-. We use `addr_of!` so that
-> +        // the compiler does not complain that `work` is unused.
-> +        unsafe { Opaque::raw_get(core::ptr::addr_of!((*ptr).work)) }
-> +    }
-> +}
-> +
-> +/// Declares that a type has a [`Work<T>`] field.
-> +///
-> +/// # Safety
-> +///
-> +/// The [`OFFSET`] constant must be the offset of a field in Self of typ=
-e [`Work<T>`]. The methods on
-> +/// this trait must have exactly the behavior that the definitions given=
- below have.
-> +///
+> 
+> This is because in patch 4 I plan to do the EPT zap when
+> noncoherent_dma_count goes from 1 to 0.
 
-I don't like this safety section, since the discharging safety comment
-will just be "I implemented everything correctly" which for me is the same
-as just writing no safety comment at all.
+Hrm, the 1->0 transition is annoying.  Rather than trying to capture the "everything
+except non-coherent DMA" aspect, what about this?
 
-I am working on improving safety comments in general, so we can defer
-improving this until I have come up with a good plan. (If you still want
-to improve it, feel free to do so)
+mmu.c:
 
-> +/// [`Work<T>`]: Work
-> +/// [`OFFSET`]: HasWork::OFFSET
-> +pub unsafe trait HasWork<T> {
-> +    /// The offset of the [`Work<T>`] field.
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    const OFFSET: usize;
-> +
-> +    /// Returns the offset of the [`Work<T>`] field.
-> +    ///
-> +    /// This method exists because the [`OFFSET`] constant cannot be acc=
-essed if the type is not Sized.
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    /// [`OFFSET`]: HasWork::OFFSET
-> +    #[inline]
-> +    fn get_work_offset(&self) -> usize {
-> +        Self::OFFSET
-> +    }
-> +
-> +    /// Returns a pointer to the [`Work<T>`] field.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// The pointer must not be dangling. (But the memory need not be in=
-itialized.)
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    #[inline]
-> +    unsafe fn raw_get_work(ptr: *mut Self) -> *mut Work<T>
-> +    where
-> +        Self: Sized,
-> +    {
-> +        // SAFETY: The caller promises that the pointer is not dangling.
-> +        unsafe { (ptr as *mut u8).add(Self::OFFSET) as *mut Work<T> }
-> +    }
-> +
-> +    /// Returns a pointer to the struct containing the [`Work<T>`] field=
-.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// The pointer must not be dangling. (But the memory need not be in=
-itialized.)
+bool __kvm_mmu_honors_guest_mtrrs(struct kvm *kvm, bool vm_has_noncoherent_dma)
+{
+	/*
+	 * If the TDP is enabled, the host MTRRs are ignored by TDP
+	 * (shadow_memtype_mask is non-zero), and the VM has non-coherent DMA
+	 * (DMA doesn't snoop CPU caches), KVM's ABI is to honor the memtype
+	 * from the guest's MTRRs so that guest accesses to memory that is
+	 * DMA'd aren't cached against the guest's wishes.
+	 *
+	 * Note, KVM may still ultimately ignore guest MTRRs for certain PFNs,
+	 * e.g. KVM will force UC memtype for host MMIO.
+	 */
+	return vm_has_noncoherent_dma && tdp_enabled && shadow_memtype_mask;
+}
 
-The pointer also must point to a `Work<T>` that is embedded at `OFFSET`
-inside of `Self`.
+mmu.h:
 
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    #[inline]
-> +    unsafe fn work_container_of(ptr: *mut Work<T>) -> *mut Self
-> +    where
-> +        Self: Sized,
-> +    {
-> +        // SAFETY: The caller promises that the pointer is not dangling.
-> +        unsafe { (ptr as *mut u8).sub(Self::OFFSET) as *mut Self }
-> +    }
-> +}
-> +
-> +/// Used to safely implement the [`HasWork<T>`] trait.
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// use kernel::sync::Arc;
-> +///
-> +/// struct MyStruct {
-> +///     work_field: Work<Arc<MyStruct>>,
-> +/// }
-> +///
-> +/// impl_has_work! {
-> +///     impl HasWork<Arc<MyStruct>> for MyStruct { self.work_field }
-> +/// }
-> +/// ```
-> +///
-> +/// [`HasWork<T>`]: HasWork
-> +#[macro_export]
-> +macro_rules! impl_has_work {
-> +    ($(impl$(<$($implarg:ident),*>)?
-> +       HasWork<$work_type:ty>
-> +       for $self:ident $(<$($selfarg:ident),*>)?
-> +       { self.$field:ident }
-> +    )*) =3D> {$(
-> +        // SAFETY: The implementation of `raw_get_work` only compiles if=
- the field has the right
-> +        // type.
-> +        unsafe impl$(<$($implarg),*>)? $crate::workqueue::HasWork<$work_=
-type> for $self $(<$($selfarg),*>)? {
-> +            const OFFSET: usize =3D $crate::offset_of!(Self, $field) as =
-usize;
-> +
-> +            #[inline]
-> +            unsafe fn raw_get_work(ptr: *mut Self) -> *mut $crate::workq=
-ueue::Work<$work_type> {
-> +                // SAFETY: The caller promises that the pointer is not d=
-angling.
-> +                unsafe {
-> +                    ::core::ptr::addr_of_mut!((*ptr).$field)
-> +                }
-> +            }
-> +        }
-> +    )*};
-> +}
+bool __kvm_mmu_honors_guest_mtrrs(struct kvm *kvm, bool vm_has_noncoherent_dma);
 
-I don't really like the verbosity that this creates, but for the moment it
-should be fine. When/if we get field projections, we can build a much
-better proc-macro, so I think we can defer improving this until then.
+static inline bool kvm_mmu_honors_guest_mtrrs(struct kvm *kvm)
+{
+	
+	return __kvm_mmu_honors_guest_mtrrs(kvm, kvm_arch_has_noncoherent_dma(kvm));
+}
 
-> +
->  /// Returns the system work queue (`system_wq`).
->  ///
->  /// It is the one used by `schedule[_delayed]_work[_on]()`. Multi-CPU mu=
-lti-threaded. There are
-> --
-> 2.40.1.606.ga4b1b128d6-goog
->
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 41d7bb51a297..ad0c43d7f532 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -13146,13 +13146,19 @@ EXPORT_SYMBOL_GPL(kvm_arch_has_assigned_device);
+> 
+>  void kvm_arch_register_noncoherent_dma(struct kvm *kvm)
+>  {
+> -       atomic_inc(&kvm->arch.noncoherent_dma_count);
+> +       if (atomic_inc_return(&kvm->arch.noncoherent_dma_count) == 1) {
+> +               if (kvm_mmu_cap_honors_guest_mtrrs(kvm))
+> +                       kvm_zap_gfn_range(kvm, 0, ~0ULL);
 
---
-Cheers,
-Benno
+No need for multiple if statements.  Though rather than have identical code in
+both the start/end paths, how about this?  That provides a single location for a
+comment.  Or maybe first/last instead of start/end?
+
+static void kvm_noncoherent_dma_start_or_end(struct kvm *kvm)
+{
+	/* comment goes here. */
+	if (__kvm_mmu_honors_guest_mtrrs(kvm, true))
+		kvm_zap_gfn_range(kvm, 0, ~0ULL);
+}
+
+void kvm_arch_register_noncoherent_dma(struct kvm *kvm)
+{
+	if (atomic_inc_return(&kvm->arch.noncoherent_dma_count) == 1)
+		kvm_noncoherent_dma_start_or_end(kvm);
+}
+EXPORT_SYMBOL_GPL(kvm_arch_register_noncoherent_dma);
+
+void kvm_arch_unregister_noncoherent_dma(struct kvm *kvm)
+{
+	if (!atomic_dec_return(&kvm->arch.noncoherent_dma_count))
+		kvm_noncoherent_dma_start_or_end(kvm);
+}
+EXPORT_SYMBOL_GPL(kvm_arch_unregister_noncoherent_dma);
+
