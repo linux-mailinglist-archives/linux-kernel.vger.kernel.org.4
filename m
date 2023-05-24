@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8332870F3B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 12:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB7A70F150
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 10:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbjEXKEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 06:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S240191AbjEXIpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 04:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjEXKEk (ORCPT
+        with ESMTP id S240319AbjEXIot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 06:04:40 -0400
+        Wed, 24 May 2023 04:44:49 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49DF93
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 03:04:34 -0700 (PDT)
-X-UUID: 6015aaccfa1a11edb20a276fd37b9834-20230524
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A8E135
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 01:44:46 -0700 (PDT)
+X-UUID: 387406e0fa0f11edb20a276fd37b9834-20230524
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
         h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=R4LxsoPxauq3iIPc1jGC11LoRDJXn5Om0AS/acI6g6Q=;
         b=LfKSSO6nEbXgHoHRGWWBCCsZt/P3otXnHNpb9553Tb5A1l7uTEPW+A5KTrzk/EH+l4YCGK1hV2tCXsM5KWYCK5g4YtjZ6xBC/JBw/UMkPYPSwIYpy2a1C1DAXg40HwAD946R18NT/z9Oe7GlHWSEcZFVUbGWgDLVYVj+lfk2ewY=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:d3bcdd15-cc95-4525-a125-aa865532fbbe,IP:0,U
+X-CID-O-INFO: VERSION:1.1.25,REQID:b752ceca-a541-4666-b70f-d7e2eba36e4f,IP:0,U
         RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
         N:release,TS:23
-X-CID-INFO: VERSION:1.1.25,REQID:d3bcdd15-cc95-4525-a125-aa865532fbbe,IP:0,URL
+X-CID-INFO: VERSION:1.1.25,REQID:b752ceca-a541-4666-b70f-d7e2eba36e4f,IP:0,URL
         :0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTION:
         release,TS:23
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:b00de3c1-e32c-4c97-918d-fbb3fc224d4e,B
-        ulkID:230523020317SV4SAQJT,BulkQuantity:33,Recheck:0,SF:38|17|19|102,TC:ni
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:f9ed333c-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:230523020317SV4SAQJT,BulkQuantity:26,Recheck:0,SF:38|17|19|102,TC:ni
         l,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40|20,QS:nil,BEC:nil,COL:0,O
         SI:0,OSA:0,AV:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-UUID: 6015aaccfa1a11edb20a276fd37b9834-20230524
+X-UUID: 387406e0fa0f11edb20a276fd37b9834-20230524
 Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
         (envelope-from <jia-wei.chang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1858415191; Wed, 24 May 2023 18:04:30 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id
- 15.2.1118.7; Wed, 24 May 2023 10:04:27 +0000
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+        with ESMTP id 262056934; Wed, 24 May 2023 16:44:39 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1118.26; Wed, 24 May 2023 16:44:34 +0800
 Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
@@ -173,8 +170,8 @@ X-MS-Exchange-CrossTenant-userprincipalname: 8msPfII7z7x6XeE6b+3NskII56f9NfzrH6C
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB7317
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
