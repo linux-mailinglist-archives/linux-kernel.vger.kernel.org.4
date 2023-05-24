@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9DA70F7D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C13070F7D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 15:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235407AbjEXNk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 09:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S235251AbjEXNkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 09:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbjEXNkP (ORCPT
+        with ESMTP id S234203AbjEXNkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 09:40:15 -0400
+        Wed, 24 May 2023 09:40:14 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804D3B3;
-        Wed, 24 May 2023 06:40:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BAEA7;
+        Wed, 24 May 2023 06:40:13 -0700 (PDT)
 Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OCgXXO015679;
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OCgVK1015625;
         Wed, 24 May 2023 15:39:51 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=7VfyEEAa30A1jqe6julvnk2zzbBmOw5sbxPXbLc2amo=;
- b=diyWMK1Ah/qKQOCijwPMHzdUqVrX+QshNbb8cOoc8I3uhuw52iN4MCZj6lWmtIiJZIcw
- Wqh0/2hFts2aNtCv4Ue2yQEoGlp0wbrdFjVtJR9P7Dg3H7uQDUEZUFEitGbW2O+/SCST
- qNSNO4ZK4/uZeN6tLOdWq5uinHZow0BkrpnE/sqX29iaw6Ava3hfZoQtsA9VzACSTHs8
- B2Get2qRV/gFITNqDQH7mX0fN766B0m8NIE1KjkjNToD6nmR24EEVFW1EAglxGHpHNlH
- pnXUvuweb1Au6fI70uF5TNXwc3ZuHetgJx5UlchGmD8reBbuX1mmmkW5S7hjFhCCkeL3 CQ== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=G9vvnWSLJsuNooiWQS7kP00jY9mJ1HLWlugGthqt8l8=;
+ b=kw38mBeXe5RHnnD2GdW+CYW/6+IGkURLioYttckPR+MDBW3baW8s3rkZXsoFR8UxVMKe
+ bVhZVgDacecLIR1WAHvz22378NEpOLJKkSRIz46JHkhpgVCMnYpYW4cpfxVdgOtIdb4l
+ fZy+Qh/MRx7705ZBhsAzXHsg13WAcJNUaNIbPMh7yjxFtHXh0PnuE92PoJ2ljyBXnJRM
+ J8kz2T9/XI6OL5aPlrvRFU1SW+4FQFxdXlSiArbdQhtzXdyiMqZ1DeWPkDMWyeAVmhC/
+ fmdnjVjuIXFnlkI97++n7159L5+eHXV/II6JjECwjvOqwS77RzWpYJjtDNM141rLXJ8N sw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qrthk930h-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qrthk930g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 24 May 2023 15:39:51 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6CD4C10002A;
-        Wed, 24 May 2023 15:39:48 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7B539100034;
+        Wed, 24 May 2023 15:39:49 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8F1A3229A88;
-        Wed, 24 May 2023 15:39:48 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 759CE229A97;
+        Wed, 24 May 2023 15:39:49 +0200 (CEST)
 Received: from localhost (10.252.20.36) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 24 May
- 2023 15:39:48 +0200
+ 2023 15:39:49 +0200
 From:   Olivier Moysan <olivier.moysan@foss.st.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marek Vasut <marex@denx.de>
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
 CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
         <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
-Subject: [PATCH 0/8] ARM: dts: stm32: add adc internal channels on stm32mp15
-Date:   Wed, 24 May 2023 15:39:09 +0200
-Message-ID: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/8] ARM: dts: stm32: add adc internal channels to stm32mp15
+Date:   Wed, 24 May 2023 15:39:10 +0200
+Message-ID: <20230524133918.1439516-2-olivier.moysan@foss.st.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
+References: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -77,45 +78,58 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Add STM32 ADC2 internal channels VREFINT and VDDCORE to STM32MP15x SoCs.
+VBAT internal channel is not defined by default in SoC DT, and
+has be defined in board DT when needed, instead. This avoids unwanted
+current consumption on battery, when ADC conversions are performed
+on any other channels.
 
-Add support of vrefint channel by adding access to vrefint calibration
-data in OTP.
+The internal channels are defined in STM32MP15 SoC DT according to the
+generic IIO channel bindings. The STM32 driver does not support a mixed
+use of legacy and generic channels. When generic channels are defined,
+legacy channels are ignored. This involves that the board device trees
+using legacy bindings for ADC2, have to be reworked.
 
-The internal channels are defined in STM32MP15 SoC DT according to
-generic channel bindings. The STM32 driver does not support a mixed use
-of legacy and generic channels. When generic channels are defined,
-legacy channel are ignored. This involves that the board device trees
-using legacy bindings have to be changed to generic bindings.
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp151.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Adopt generic iio bindings on all STM32 boards implementing the ADC.
-
-This serie does not update stm32mp15xx-dhcom-som and
-stm32mp15xx-dhcor-avenger96 DTs. These DTs have to be updated also, but
-this change is already handled through the following patch:
-https://lore.kernel.org/linux-arm-kernel/20230518020547.487670-1-marex@denx.de/T/
-
-Olivier Moysan (8):
-  ARM: dts: stm32: add adc internal channels to stm32mp15
-  ARM: dts: stm32: add vrefint calibration on stm32mp15
-  ARM: dts: stm32: add vrefint support to adc2 on stm32mp15
-  ARM: dts: stm32: enable adc on stm32mp15xx-dkx boards
-  ARM: dts: stm32: adopt generic iio bindings for adc channels on
-    stm32mp157c-ed1
-  ARM: dts: stm32: adopt generic iio bindings for adc channels on
-    emstamp-argon
-  ARM: dts: stm32: adopt generic iio bindings for adc channels on
-    dhcor-drc
-  ARM: dts: stm32: adopt generic iio bindings for adc channels on
-    dhcor-testbench
-
- arch/arm/boot/dts/stm32mp151.dtsi             | 17 +++++++++++
- arch/arm/boot/dts/stm32mp157c-ed1.dts         | 16 ++++++++--
- .../boot/dts/stm32mp157c-emstamp-argon.dtsi   |  6 ++--
- .../dts/stm32mp15xx-dhcor-drc-compact.dtsi    | 28 +++++++++++++++---
- .../boot/dts/stm32mp15xx-dhcor-testbench.dtsi | 28 +++++++++++++++---
- arch/arm/boot/dts/stm32mp15xx-dkx.dtsi        | 29 +++++++++++++------
- 6 files changed, 102 insertions(+), 22 deletions(-)
-
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index a98ae58e2c1c..9c40b5e679f8 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1093,6 +1093,8 @@ adc: adc@48003000 {
+ 			adc1: adc@0 {
+ 				compatible = "st,stm32mp1-adc";
+ 				#io-channel-cells = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
+ 				reg = <0x0>;
+ 				interrupt-parent = <&adc>;
+ 				interrupts = <0>;
+@@ -1104,12 +1106,22 @@ adc1: adc@0 {
+ 			adc2: adc@100 {
+ 				compatible = "st,stm32mp1-adc";
+ 				#io-channel-cells = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
+ 				reg = <0x100>;
+ 				interrupt-parent = <&adc>;
+ 				interrupts = <1>;
+ 				dmas = <&dmamux1 10 0x400 0x01>;
+ 				dma-names = "rx";
+ 				status = "disabled";
++				channel@13 {
++					reg = <13>;
++					label = "vrefint";
++				};
++				channel@14 {
++					reg = <14>;
++					label = "vddcore";
++				};
+ 			};
+ 		};
+ 
 -- 
 2.25.1
 
