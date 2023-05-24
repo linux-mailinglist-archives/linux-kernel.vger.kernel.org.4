@@ -2,93 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9CA710096
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391E671009C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 00:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236358AbjEXWDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 18:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S236376AbjEXWGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 18:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjEXWDc (ORCPT
+        with ESMTP id S233881AbjEXWGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 18:03:32 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BF210B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:03:31 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d2e8a842cso1138246b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684965811; x=1687557811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JZ5PDW7meFLPxJz6yk7BxpA6R+nIgkvFNvqiUV7WSgc=;
-        b=Ayznotjh2PSxFB94LzDpF4LwhkttUa6Fw0rGnuKWalMVacOTK7mV4CL0xBF1LKo1ml
-         8F9adX46inH2F4zNJq0jstItuu8nRm0U+Duu/2IoiUC7lDVQUy7ShxgNrnKcLAlFXFxm
-         2S2KchlyJGh9sf/KftGjh4MBYGE20QWUh+Ke+AqYZMipx5+PvGbpNAlWuEO2RxATkKLZ
-         w5DUiOJTClo0Ug7sbG2GdQC1F2ZRPDgmmi9Fjtrni/cJTqtSIW8YXDBRO1cdytCaotLo
-         Up5sehrer4IUUfIPZQmj06mLUB01EYvtDvdjYGulrgJh+XXbKrA1qt3e2khdwgD1VEgi
-         P8pA==
+        Wed, 24 May 2023 18:06:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8B8119
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684965929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DeqRFv3pTnY1SPjH830J9mOrh/zgCZIygtuFaXvfopU=;
+        b=BSDmcleWETqPEr52qJvDD5WmDcpvnq4QqyVS7QeU84R9I8KExb0PIYdGyZFCSF0+XC2BTf
+        eF25f79kaHWAmr0AxFfpQ7EZFw8zQVSCIXab7J8po+cvCdUrTLPxBwxaEBg0qVmXL22PbP
+        K8sREbGxfEm1L0D09U/mq84fnAYIMV4=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-151-x0ZAAICEOHainugBMW7xGg-1; Wed, 24 May 2023 18:05:27 -0400
+X-MC-Unique: x0ZAAICEOHainugBMW7xGg-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75b072bf1d3so37793185a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 15:05:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684965811; x=1687557811;
+        d=1e100.net; s=20221208; t=1684965927; x=1687557927;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JZ5PDW7meFLPxJz6yk7BxpA6R+nIgkvFNvqiUV7WSgc=;
-        b=XHIPlwNRgfqZN4a3xyeqGHX4TUJ9b/N0QRnkDdWsBspNI6SrB7T5319lml7Yj9RrVF
-         SJAsdU5Nf5yKHwHUx9Buw5Z/YNNXRxn9F+EJ1YmATDAIx3+a91X1Oyh0IhDbiY0FkKI+
-         igPcQPzneqbJWJbm/lrzTyOXVTsk2X0BLtmK454RQv7me1l5ayccnrPD1QTZtfseYwoo
-         9rbjUHnCVf6f9c1Mffy+//bJyvQVkRlhJs0PTC1ZhQhqa0r1qBIAbrPHpkcvLKsBa7Nc
-         tEmpCGo4xqLD2Nw5P0BCK1A2CelzJWD11ljECE1orjXXWRv+6WKpTo6h4nlXiIypPiWK
-         0KHg==
-X-Gm-Message-State: AC+VfDzZeipSxx6FpZHGTxQi9MiNUruFkwZBPILGa0RAboOMo3jLmcHT
-        bpdPrfb9q393Wrz/pG1bTco=
-X-Google-Smtp-Source: ACHHUZ6NAjayIhqnURTW454ydwuEShK8anCKtU3THGGPIXmBPlPIkL3oyYf8zNJ7j4GkKAkqxncbHQ==
-X-Received: by 2002:a05:6a00:1248:b0:643:96bc:b292 with SMTP id u8-20020a056a00124800b0064396bcb292mr5226948pfi.5.1684965810460;
-        Wed, 24 May 2023 15:03:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:be57])
-        by smtp.gmail.com with ESMTPSA id y21-20020aa78555000000b00642c5ef6050sm8125987pfn.173.2023.05.24.15.03.29
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DeqRFv3pTnY1SPjH830J9mOrh/zgCZIygtuFaXvfopU=;
+        b=Sl1HCRGB/nLr1RE1Pij0rBXwgK+dLERTwslPmgynFTh6ZhYX7/DK2/IdYwZQc9eK2t
+         G7WP2K93P6rY/KU67SjzRFqGJHBT6mlli8yVQOX3ByKdHoFM6dyQHo4YZpuicg9Xojx+
+         ggM14X2v9Xtavi4mDz70oq/hJ2YI5jjgMt1zlSa/aUbG9gZpwocWJ0gRIaD6sDmHkPSR
+         VuOKZcTi/ql5e9nDFnHZEi9Q/lwm0I7FCwh4AneGSGAorvUAN739l0t64iE+bTVaLERM
+         dmAD18RWSEBnBZEb07H6/Myi+krKVkykX4YPEGn5+a+HmZpxh099fxZfQ6bPzbzXC+vN
+         bgwg==
+X-Gm-Message-State: AC+VfDyYsy3GW7pAGZEcq58wb/MAriS3XEdPyAdBQfywMcpJEXXYDOoe
+        eFiWH/XO0K+psNST7NGbXJNgsDeujnU+a1bjibvsaQn75BdoYJhjNFHJ97UsclAOcDAdr472tch
+        1JiOke+G9TPaxDiWHchcz/Ttt
+X-Received: by 2002:a05:620a:6285:b0:75b:23a1:3676 with SMTP id ov5-20020a05620a628500b0075b23a13676mr8791492qkn.55.1684965927119;
+        Wed, 24 May 2023 15:05:27 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Zr3nHvlIp9QTEWoxtw36XRe1bUW59x6AVZeeOEY/5LF+P/SdaQ9JPkSKVtKUPPQONu3BkYA==
+X-Received: by 2002:a05:620a:6285:b0:75b:23a1:3676 with SMTP id ov5-20020a05620a628500b0075b23a13676mr8791475qkn.55.1684965926903;
+        Wed, 24 May 2023 15:05:26 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id f25-20020a05620a15b900b0075b196ae392sm2250959qkk.104.2023.05.24.15.05.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 15:03:30 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 24 May 2023 12:03:28 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Zqiang <qiang.zhang1211@gmail.com>, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        lkft-triage@lists.linaro.org
-Subject: Re: [PATCH v3] workqueue: Fix WARN_ON_ONCE() triggers in
- worker_enter_idle()
-Message-ID: <ZG6JsJvWRWu8kZYC@slm.duckdns.org>
-References: <20230524035339.25185-1-qiang.zhang1211@gmail.com>
- <CA+G9fYtXCMWObuaS64qb3FofiokK_nrq2tm8b8g2xDd8tyKTxw@mail.gmail.com>
+        Wed, 24 May 2023 15:05:26 -0700 (PDT)
+Date:   Wed, 24 May 2023 15:05:24 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Michael Haener <michael.haener@siemens.com>
+Subject: Re: [PATCH 2/2] tpm: tis_i2c: Limit write bursts to
+ I2C_SMBUS_BLOCK_MAX (32) bytes
+Message-ID: <esbihoqenwhejhpzq7tlk3uim22glv76h5742cvinbmb6sswqc@4luuvm5ebwwh>
+References: <20230524154040.1204030-1-alexander.sverdlin@siemens.com>
+ <20230524154040.1204030-2-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYtXCMWObuaS64qb3FofiokK_nrq2tm8b8g2xDd8tyKTxw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230524154040.1204030-2-alexander.sverdlin@siemens.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 07:23:16PM +0530, Naresh Kamboju wrote:
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+On Wed, May 24, 2023 at 05:40:40PM +0200, A. Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 > 
-> Since the probability of occurrence of this problem is only 3%,
-> Anders took this up and applied this on top of Linux next and
-> tested for 500 boot tests and all looked good.
-> Thanks, Anders.
+> Underlying I2C bus drivers not always support longer transfers and
+> imx-lpi2c for instance doesn't. The fix is symmetric to previous patch
+> which fixed the read direction.
+> 
+> Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
+> Tested-by: Michael Haener <michael.haener@siemens.com>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-This was a tricky bug and I really appreciate the bug report and testing.
-Thank you so much.
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
--- 
-tejun
+> ---
+>  drivers/char/tpm/tpm_tis_i2c.c | 22 +++++++++++++++-------
+>  1 file changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> index 106fd20d94e4..82fda488e98b 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -230,19 +230,27 @@ static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+>  	struct i2c_msg msg = { .addr = phy->i2c_client->addr };
+>  	u8 reg = tpm_tis_i2c_address_to_register(addr);
+>  	int ret;
+> +	u16 wrote = 0;
+>  
+>  	if (len > TPM_BUFSIZE - 1)
+>  		return -EIO;
+>  
+> -	/* write register and data in one go */
+>  	phy->io_buf[0] = reg;
+> -	memcpy(phy->io_buf + sizeof(reg), value, len);
+> -
+> -	msg.len = sizeof(reg) + len;
+>  	msg.buf = phy->io_buf;
+> -	ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+> -	if (ret < 0)
+> -		return ret;
+> +	while (wrote < len) {
+> +		/* write register and data in one go */
+> +		msg.len = sizeof(reg) + len - wrote;
+> +		if (msg.len > I2C_SMBUS_BLOCK_MAX)
+> +			msg.len = I2C_SMBUS_BLOCK_MAX;
+> +
+> +		memcpy(phy->io_buf + sizeof(reg), value + wrote,
+> +		       msg.len - sizeof(reg));
+> +
+> +		ret = tpm_tis_i2c_retry_transfer_until_ack(data, &msg);
+> +		if (ret < 0)
+> +			return ret;
+> +		wrote += msg.len - sizeof(reg);
+> +	}
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.40.1
+> 
+
