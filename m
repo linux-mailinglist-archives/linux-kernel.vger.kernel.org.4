@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C172C70FF02
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1846970FF06
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbjEXUNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S236312AbjEXUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjEXUNo (ORCPT
+        with ESMTP id S230222AbjEXUQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:13:44 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541B3113;
-        Wed, 24 May 2023 13:13:38 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.48.113]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MacWq-1qYUSV2cSw-00c7GA; Wed, 24 May 2023 22:13:25 +0200
-Received: from localhost.fjasle.eu (kirkenes.fjasle.eu [10.10.0.5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id BA7753E718;
-        Wed, 24 May 2023 22:13:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1684959199; bh=/MFr3bImtpK5ZWvW7aTLdtc20FkkQYF+XKdCkR9NU0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fFnO8BjHMEJcx+fc1bAufl3sz10WgZ9OreXDLscGsXAh6r7VL4SrtfdSdnifcG/H/
-         S3va77G7m6seO9HTp5IrJXAYFOBkMs/T8XcH3WR80SS1dccNsC2cmBDVNQvwXyVb7o
-         9DKeO0TWbyA9PNtR0+LsbXFLTlou5wUxjlP0YOhA=
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 0D8A7F85; Wed, 24 May 2023 22:12:46 +0200 (CEST)
-Date:   Wed, 24 May 2023 22:12:45 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/2] doc: Add tar requirement to changes.rst
-Message-ID: <ZG5vvdlO8sTbqP4U@bergen.fjasle.eu>
-References: <20230521132336.1279523-1-masahiroy@kernel.org>
- <20230521132336.1279523-2-masahiroy@kernel.org>
+        Wed, 24 May 2023 16:16:06 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9253110B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:16:01 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-394c7ba4cb5so309155b6e.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:16:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684959361; x=1687551361;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=esoimroWkrL9UG9uMCk43F+mfgKePk35ZCciJnQDAkc=;
+        b=jR0U4eVs+HCQeyO0rmH9Zxj+N0VyaYsQvTzC7psBsfJbGQ6nS5u9eJT0i0j85cIHvk
+         czRu1HV2uwA/KDRFg1j5fn/Dd4R9z5b6aw90ZBdWflA6NG0Z5ske/4njAKixpkB17Kox
+         /Eugws1hC6JcHmeJ6WEozM+6Sl2LdLs6LJ2ns=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684959361; x=1687551361;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=esoimroWkrL9UG9uMCk43F+mfgKePk35ZCciJnQDAkc=;
+        b=Yne4wiTu1vgEQVxkkw/18j0fDp5ynryP7nUhxsaYWs7am4xsqofgq0ijwR3NLldPqc
+         +ZWqSjBNhakkiThMLSicL8PNPhOb9biMYSH1hrzx4XSJpAQ/51K8QQAh0LHnWdxYrQWO
+         IHoVsy142O0Y39LsF4avoQUO2/6U3kCwzOJT+ajkGhbsk2qVRsronTEgQFv9GPWfAaaY
+         b18rWMmCk097YePkEeiSQe7TO+x8hF/FtQOAisr78Igo7KU8TPSN8nr7rLhp13fGk4TE
+         bTA7Yx23UBOI9a9CjvjRl1yNskaB0WwCOZwTRf7TM+Q8mjizMGMRIEmm1R87ozvoOlIS
+         u1cA==
+X-Gm-Message-State: AC+VfDy9vfDCcGaKGsrQJzR4rmi5WXo6/OPuZM/JrCpI8RbSGynnsTaf
+        QpnfDQe9LKNAFbdYUr5RSM4gEIvMDKRp6dP0BP2+Xw==
+X-Google-Smtp-Source: ACHHUZ4vEvWyW3CX9DBeFwy4Iuv22tTqCB/I2KaWZyvUNUxdCQPP/KLsw7NzO3Qpm9DIvGHyd/tz++Pg5pVjG53Rskk=
+X-Received: by 2002:a54:480b:0:b0:398:105b:530b with SMTP id
+ j11-20020a54480b000000b00398105b530bmr5216910oij.33.1684959360986; Wed, 24
+ May 2023 13:16:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="sVIsU6HI+ukWJun4"
-Content-Disposition: inline
-In-Reply-To: <20230521132336.1279523-2-masahiroy@kernel.org>
-X-Operating-System: Debian GNU/Linux 12.0
-Jabber-ID: nicolas@jabber.no
-X-Provags-ID: V03:K1:7bK9ot6Szyc4kejDoWezEWAINlVGEUK4MlmwscefbR0JH8RQaI9
- z1LadGpJr7MWuuJh6sQcQ/HElY42wQHdViYcvwhv5PTZXmphpoXGf9Fbkdl+X3UrI/1tFlu
- CX388bj9douYKJeGVGKXrZSNGicJz1jwX133wi4EQj+RiWhHBdJvo6viUclOIo0HnwvnOK6
- yHbLbyLMW0gjIzc+w9pJg==
-UI-OutboundReport: notjunk:1;M01:P0:2Zjj4yuuM3M=;hL7UkHIZJqH40sXgJ1aMC+uloB8
- VjiJrDlv635s9xDBNHol10zoin8bVpBIt+gqMqD+BHUPX41mYLFq24VBJGUm1Iv9ET8MZ+kJf
- ng8lnzYPJ3ZcYIJ3XEEtiSLoMU1+BU6WWCQiPXctTYOzqnDAVIoOwDmrNIWQtJAH+/ztRUfyH
- jRvqx7D8Pz/VHOhH8a1a9LLGw48UaQb+Aa1FGZ5X/rpeT6UChJ2kXPsA24qG6nzNSqmAz7Sgx
- NSf0nQNEgttj0j+lcDW95nDuu4RCPBXkEuAk50tAGQmts6Yjr1siMXkJvgKbNmI3V3ZIhRCwR
- gyIvatrEpNh4RQ08CRt955aw2VvIbUmqWNdoOR4/2B9XEO/C/K5SE1E18M3S7/iARTPkYHcuI
- Oi58ubveCQOLKbsLI+tkk7i08gNQWWxnzT4DASPRa2ktQT2Cynvh3vEhSJcsIH1O3M4F9a05m
- d3/GGCluhm7OiVRoAitlOHdVS7ztz/jtGfic0KO2KdEAMAvEcPk5ThnRVsas81owE2bDxedI2
- hewmpZh8DmgysZIKQGHSNpLOupjT8geNXRBq3rP/+svtx+vZHAdyElQS7p8GR61ZkU5j0/vnI
- 7qT5pUC/AF/69lxRocLj9xZIV8ml/QwY9CO/S1XYVq5xSbSqr6z928vOwvcgVTUxrhRPNMQQk
- sxohGr5ZHVicvgwtp13RhVCeiQUvOvWty4+ndo0/VQ==
+References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+ <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+ <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com> <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
+ <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com> <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
+ <b69f6809-b483-158f-8be9-4976fad918d8@intel.com> <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
+ <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com> <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
+ <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
+In-Reply-To: <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
+From:   Jeff Xu <jeffxu@chromium.org>
+Date:   Wed, 24 May 2023 13:15:50 -0700
+Message-ID: <CABi2SkUzwdBGyjHjXtyFK5dtLVB2keKCpZpkpiuaStd6b2cEWA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Jeff Xu <jeffxu@google.com>,
+        =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
+        luto@kernel.org, jorgelo@chromium.org, keescook@chromium.org,
+        groeck@chromium.org, jannh@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,90 +74,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks for bringing this to my attention. Regarding io_uring:
+>
+> io_uring fundamentally doesn't have the same checks.  The kernel side
+> work can be done from an asynchronous kernel thread.  That kernel thread
+> doesn't have a meaningful PKRU value.  The register has a value, but
+> it's not really related to the userspace threads that are sending it
+> requests.
+>
 
---sVIsU6HI+ukWJun4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I asked the question to the io_uring list [1].  io_uring thread will
+respect PKRU of the user thread, async or not,  the behavior is the
+same as regular syscall. There will be no issue for io_uring, i.e if
+it decides to add more memory mapping syscalls to supported cmd in
+future.
 
-On Sun 21 May 2023 22:23:36 GMT, Masahiro Yamada wrote:
-> tar is used to build the kernel with CONFIG_IKHEADERS.
->=20
-> GNU tar 1.28 or later is required.
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
->  Documentation/process/changes.rst | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/Documentation/process/changes.rst b/Documentation/process/ch=
-anges.rst
-> index a9ef00509c9b..3c0074214d75 100644
-> --- a/Documentation/process/changes.rst
-> +++ b/Documentation/process/changes.rst
-> @@ -60,6 +60,7 @@ openssl & libcrypto    1.0.0            openssl version
->  bc                     1.06.95          bc --version
->  Sphinx\ [#f1]_         1.7              sphinx-build --version
->  cpio                   any              cpio --version
-> +GNU tar                1.28             tar --version
->  gtags (optional)       6.6.5            gtags --version
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> =20
-> @@ -175,6 +176,12 @@ You will need openssl to build kernels 3.7 and highe=
-r if module signing is
->  enabled.  You will also need openssl development packages to build kerne=
-ls 4.3
->  and higher.
-> =20
-> +Tar
-> +---
-> +
-> +GNU tar is needed if you want to enable access to the kernel headers via=
- sysfs
-> +(CONFIG_IKHEADERS).
+[1] https://lore.kernel.org/io-uring/CABi2SkUp45HEt7eQ6a47Z7b3LzW=4m3xAakG35os7puCO2dkng@mail.gmail.com/
 
-CONFIG_IKHEADERS does also require 'xz' (cp. kernel/gen_kheaders.sh),=20
-should it be mentioned in changes.rst as well?
-
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
-
-> +
->  gtags / GNU GLOBAL (optional)
->  -----------------------------
-> =20
-> --=20
-> 2.39.2
-
---=20
-Nicolas Schier
-=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
-
---sVIsU6HI+ukWJun4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmRub70ACgkQB1IKcBYm
-EmkKthAAzwOVNbOhXlGRoY0fa6DrBiLINTlnHzIIudXULP/e10UMlobTee+VIiJ9
-D+ECN0pnKWXD77Vs/kmMCu++ncoULNkOkRdIgcyqgyrSSqsHpjCvWnrGW2j9f5Vl
-hoEHS3KHm8/l64eh97Lg0+n4qc8rMG6jdASNc3mB1+yTmuAumWrJipJ6BXIWCyPo
-WaDUr+2PRlslE3SkHDllXJ8e2uAJjoYdqt7fZOfYuBrlK9sR4BYJ0hCBzTe4clWk
-owU/tYPRiuT8ZXBFyPliRuGSYc9y2q7nAoLI4S8Ns9JFKKG9MfPnstAt/CQF0Uf0
-WHC6e2sL9IKgT5HCIMF+rzEze+Oc7cfHYlH8hfSZD5gDingzkVaYImbHW7kFC3LI
-4pjhSLjc6RMfD+8XtHVVxyOWa0uleIP4NbrA6eklgU9x/LyXJgeN5z75P4lCaB/8
-rX7tYWUaYxJqpCK/wcvpRqN1Ngu7Ku/cnTAH3W3s2u6t5G0jJB5qiCxWdpo0/hmq
-vAKA7nEvwGxYZiv/D+Lt5RiYB35Kb2VftIDR5nl9iqEzpTv3S53LdxycaNQ25fv1
-v3XfislZMS5bIk2rBFoI2O18QSHThOncwgt9ZCq+C5KJ+bvHJirReNypPE60cUuY
-yr0qkMjW4gG+8IgfCS8VPhs7/Y7PS6uRVe0xn8BoJmUi4ldcXmc=
-=yCBT
------END PGP SIGNATURE-----
-
---sVIsU6HI+ukWJun4--
+Thanks.
+-Jeff
