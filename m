@@ -2,80 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7C070FF74
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F364370FF76
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 22:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjEXUty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 16:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S232179AbjEXUvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 16:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjEXUtx (ORCPT
+        with ESMTP id S229542AbjEXUu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 16:49:53 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D8110B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:49:52 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso1444379e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 13:49:51 -0700 (PDT)
+        Wed, 24 May 2023 16:50:59 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF67E12B;
+        Wed, 24 May 2023 13:50:58 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae454844edso5430625ad.1;
+        Wed, 24 May 2023 13:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684961390; x=1687553390;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MhCcbiMDeimZgRsX8GeS67PO3y/8MJ5nVThqdM2u2S8=;
-        b=a6183VQoSnm61M8xRWx9/75KYWUsFX46HC+7vufK9YfLfomSLuEY2LDasUTwVv6wBI
-         mYNg6RruGwEPtNteV/tYs28bn+oySMN9zUeLT5hFZDj0YqYxfX+SLj6Tig3o41tS3vse
-         7Lsv1EED+ki0LYidxA+7QAiVpjJzK32Y8oPf1IHw80WuTVwRiqu7xfgqu/mU/f/aBcSk
-         1J0XuRPqP2wSZ6ylTcSWkvRjEYRi4XiC5yevJieVN/fUz06IaqNSAxy+Ay6jTBGMkJOU
-         YYTJakJo+TQJBPbjWRHNCVOkCCp36U7RKckRZFXj1GIX7k1OaiIYXLioPZ9v7CZIWYjh
-         9jew==
+        d=gmail.com; s=20221208; t=1684961458; x=1687553458;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+kCS8NmWh8J3rptO4tJyXuUGglRPpK4fkLORybVjSro=;
+        b=TH8yxjEGgCPqsHlvuDYZXFS1SUUnpo3HgCA7hD10gV3eVWv+XCC4O8Gjl3Th9GGBIz
+         FBEPj/rKHB9yXKMSpf+JiXA1lbbhT2SpxSouY9dVFzS3te99iNEeEx1pPczgdCOdoxbF
+         o28mDQkkS53f88pnp956dWOrVAlzBfZMavlaEsmDHAn4pcqih1soB63MrDzIt7QCY33E
+         WFp4aTdT9T7cV3Vd71rrBbboX+YkGwgskQXyRkI6gWfHf5Z4s5jbUW6rIPyHlGRN3JzS
+         h5HOkJzAqF1P5imbKnyTKS55BWu0Yl510RmsVCTFzsVipY8BTnC1W3elNDYd3Ay7GZ7n
+         Lcqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684961390; x=1687553390;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MhCcbiMDeimZgRsX8GeS67PO3y/8MJ5nVThqdM2u2S8=;
-        b=Eb9o6kRWDZaQTZxaz304Ka+I3FC5kAGdu5PUt70RXRALMelsjTNAJZ9fW6tQlLH3pJ
-         Nu8clGIZnIeocCskssP6o2K2J0VAzkxJhhD99A7NNXFKAKBz1dwtqjFKuEgM3V9crEWi
-         lrV9O1pzURXXSrzFOWiVCpoiX+vjDXDKT2LS1hLG1bbqfkCGuIz2tUkHi8lfUGSfKUQ6
-         1P9ofF+ZqBADg9CGg2kKhXz6AKjLD7hKoKU5bWkqUmrM2gXIpprFVcauYUKoVDvJtOpq
-         RrVzf+8ShAOpAM9hS8GgjKYRcN/CLoHAzA9SlrS7VJBXxgZDQMyaxozfvG6BQbm+ZqY/
-         y8vw==
-X-Gm-Message-State: AC+VfDxXXzK3C4k6g2i7kRlWjPk63NbdMk7jPqVeUYFAqIbn5BD/3/bt
-        tSK8LAjKvBCPG4j3Cn7H5bn32qeT+80kGA9bk6M=
-X-Google-Smtp-Source: ACHHUZ7DU/8bhXhtrcw7t5vMw2s4J8znp+eYxzusiHyLIP7/3/tMmWgVtCv0tT64e96JtJNp9LjKMLUHclLR0JvLPX8=
-X-Received: by 2002:ac2:47fc:0:b0:4f4:b47d:5c07 with SMTP id
- b28-20020ac247fc000000b004f4b47d5c07mr2629800lfp.46.1684961390122; Wed, 24
- May 2023 13:49:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684961458; x=1687553458;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+kCS8NmWh8J3rptO4tJyXuUGglRPpK4fkLORybVjSro=;
+        b=OIKuHdT9igXM2wdzkKZGI+f8ByHUPv6c9iO0mUYsslt4ImUCFNxjJRsOrhdumwF8Dr
+         gmUC14WrqhbfFyBdbQzE18hPnp0EQ9PqA3G5qCzhItAp7ofScpsKCOwww8yze4zgC1y6
+         UP7eE8U5qtu5X0hI0oSy98/IIWCUk+w5y5mAKUUT83m1evpsEFmRncZNeSjqHJ2ALCft
+         I4NG4XdiD9czEr5ZIfEUNPqeyw3lTEpDw+GyIx8/zd4tICfJqOfKMPxdbD4OvHkAIZPE
+         Iu32kpaYaIWi0Ejkw5Lt3GgF+YROVDxuaG2v6S7ag+ew2tLqlftMKacIM1bKaKbpEiaI
+         8qUQ==
+X-Gm-Message-State: AC+VfDw9MCqsMKOYAazqwULvmcslyxPcJigN1mBkOSkgjw/h9XHTPfEV
+        AIC4ldn2lMZEB9ZcInt+bOU=
+X-Google-Smtp-Source: ACHHUZ57bKxvD7dBDENTyhr/3CDKkVM6zBTDEgKVPSWGx0QMm82m0EzGfFv19YSFanzkapXbzk/7lw==
+X-Received: by 2002:a17:902:c20c:b0:1aa:ef83:34be with SMTP id 12-20020a170902c20c00b001aaef8334bemr18075841pll.47.1684961457892;
+        Wed, 24 May 2023 13:50:57 -0700 (PDT)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:121:f908:b42d:c399])
+        by smtp.gmail.com with ESMTPSA id 31-20020a63185f000000b00513973a7014sm5215340pgy.12.2023.05.24.13.50.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 13:50:57 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH v2 1/2] perf annotate: Handle x86 instruction suffix generally
+Date:   Wed, 24 May 2023 13:50:53 -0700
+Message-ID: <20230524205054.3087004-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-Received: by 2002:a05:6520:4254:b0:258:f5f3:a127 with HTTP; Wed, 24 May 2023
- 13:49:49 -0700 (PDT)
-Reply-To: samuelkelliner@gmail.com
-From:   Sam <gerrypricebigbustours@gmail.com>
-Date:   Wed, 24 May 2023 21:49:49 +0100
-Message-ID: <CALN4VLGcCcwoOhqTNH8=Jmkp-+PjN91-nMEH7HOgqrCAxGP0-A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,BODY_SINGLE_WORD,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, I am aware that the Internet has become very unsafe, but
-considering the situation I have no option than to seek for foreign
-partnership through this medium.I will not disclose my Identity until
-I am fully convinced you are the right person for this business deal.
-I have access to very vital information that can be used to move a
-huge amount of money to a secured account outside United Kingdom. Full
-details/modalities will be disclosed on your expression of Interest to
-partner with me. I am open for negotiation importantly the funds to be
-transferred have nothing to do with drugs, terrorism or Money
-laundering.
+In AT&T asm syntax, most of x86 instructions can have size suffix like
+b, w, l or q.  Instead of adding all these instructions in the table,
+we can handle them in a general way.
 
-Regards,
+For example, it can try to find an instruction as is.  If not found,
+assuming it has a suffix and it'd try again without the suffix if it's
+one of the allowed suffixes.  This way, we can reduce the instruction
+table size for duplicated entries of the same instructions with a
+different suffix.
+
+If an instruction xyz and others like xyz<suffix> are completely
+different ones, then they both need to be listed in the table so that
+they can be found before the second attempt (without the suffix).
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/annotate.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index b708bbc49c9e..7f05f2a2aa83 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -70,6 +70,7 @@ struct arch {
+ 	struct ins_ops  *(*associate_instruction_ops)(struct arch *arch, const char *name);
+ 	bool		sorted_instructions;
+ 	bool		initialized;
++	const char	*insn_suffix;
+ 	void		*priv;
+ 	unsigned int	model;
+ 	unsigned int	family;
+@@ -179,6 +180,7 @@ static struct arch architectures[] = {
+ 		.init = x86__annotate_init,
+ 		.instructions = x86__instructions,
+ 		.nr_instructions = ARRAY_SIZE(x86__instructions),
++		.insn_suffix = "bwlq",
+ 		.objdump =  {
+ 			.comment_char = '#',
+ 		},
+@@ -720,6 +722,26 @@ static struct ins_ops *__ins__find(struct arch *arch, const char *name)
+ 	}
+ 
+ 	ins = bsearch(name, arch->instructions, nmemb, sizeof(struct ins), ins__key_cmp);
++	if (ins)
++		return ins->ops;
++
++	if (arch->insn_suffix) {
++		char tmp[32];
++		char suffix;
++		size_t len = strlen(name);
++
++		if (len == 0 || len >= sizeof(tmp))
++			return NULL;
++
++		suffix = name[len - 1];
++		if (strchr(arch->insn_suffix, suffix) == NULL)
++			return NULL;
++
++		strcpy(tmp, name);
++		tmp[len - 1] = '\0'; /* remove the suffix and check again */
++
++		ins = bsearch(tmp, arch->instructions, nmemb, sizeof(struct ins), ins__key_cmp);
++	}
+ 	return ins ? ins->ops : NULL;
+ }
+ 
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
+
