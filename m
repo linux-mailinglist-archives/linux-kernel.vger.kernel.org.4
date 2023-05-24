@@ -2,209 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338F770EB5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7400870EB5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 May 2023 04:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbjEXCeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 22:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S239009AbjEXCft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 May 2023 22:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjEXCeP (ORCPT
+        with ESMTP id S233493AbjEXCfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 22:34:15 -0400
-Received: from mail.aspeedtech.com (mail.aspeedtech.com [211.20.114.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809A6196
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:34:11 -0700 (PDT)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 24 May
- 2023 10:34:10 +0800
-Message-ID: <9d98962c-a508-e6ff-00cf-7c1927cce1da@aspeedtech.com>
-Date:   Wed, 24 May 2023 10:34:11 +0800
+        Tue, 23 May 2023 22:35:47 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52BCE0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:35:46 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-ba86ea269e0so946556276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 19:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684895746; x=1687487746;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wlph9cB1dhCI97ix8lDyBIocNZ3f9lb+2PkhBnFZ2ZY=;
+        b=ItVpWLlriECpQhEznbXeBfDnLY+lB7sBi4HZnDHLCrhniPGxw5w7ZX+8zHEXVkGF7c
+         TQ27yGTrm9s2eNnIrbpYXVUJ3sW7diNccw+n/qJQSu1/6oai6fj6I96DFMiuDFNPoxdU
+         pGYRnwgUgzLW3Lsebos3GB4nKb02CNMXgI5T8FJUS8BKyuJpgguUWxX5mzap70W2YjpN
+         WOyLPl95+nrQGmVYVgww4GL1WjCGtAcrGJ9iXIYo4Ed7/IeTpAKvUiit4Beujrpay+bH
+         B5Mju7yr9I5ZMS7yB9xRmsUpCdLsKmivYHFuC/1wGqWF27zqNZPGVZL1V0luIVm6GaY0
+         opsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684895746; x=1687487746;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wlph9cB1dhCI97ix8lDyBIocNZ3f9lb+2PkhBnFZ2ZY=;
+        b=blKNVydEOIJD184laEVA8Ey2AsXESlBMhIxfiNKxS7xCooyH66rADu4IVtLd3KA3l4
+         4vmC6UCgKYRPCifYtmplWeb7Epr/v9lUq2hXyOf4Kfqz/XUgmLg8pWwYZG2XQ/9IzDEi
+         +K0o2beFT5H8tJqehy9ikcpWbhoesGnZQtvOe65HWvxJ7+abeKVB8MNdLajWFSKLZs2+
+         pIaOT3+o3RLC6exEfXo9+o+wABakGOGekLELihVoh7ksM+aqPVRrSJvplShauijfR8B8
+         801QBZgTKpqNCyP6nqxHsVaayd4BIajUm4pWuuKRHRPUWTWmi1CHfhQfYAjnvRLxwVda
+         zR2g==
+X-Gm-Message-State: AC+VfDzjBcmBwuQiWW2cI408dWUnrEH+p49FDSwfaAtQfvlMi/yxHKUf
+        J+foe2j7f+rkrpfIL68p/vfPDQ==
+X-Google-Smtp-Source: ACHHUZ7FnGuO/Ia+ZwDLX+K2zSqJ/N35GxIm92w74a3HDYlMDZLC9ZLooXO4bDNAvIn/saKdy0O9Hw==
+X-Received: by 2002:a0d:d107:0:b0:561:b4e3:5fc8 with SMTP id t7-20020a0dd107000000b00561b4e35fc8mr16207052ywd.37.1684895745785;
+        Tue, 23 May 2023 19:35:45 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id k131-20020a816f89000000b0055a416529bbsm3357518ywc.24.2023.05.23.19.35.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 19:35:45 -0700 (PDT)
+Date:   Tue, 23 May 2023 19:35:42 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Qi Zheng <qi.zheng@linux.dev>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 05/31] mm/filemap: allow pte_offset_map_lock() to fail
+In-Reply-To: <8f6057b5-362b-a0f6-2f2f-579debe48fce@linux.dev>
+Message-ID: <fb9a9d57-dbd7-6a6e-d1cb-8dcd64c829a6@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <3e6d4f8-9f4d-fa7e-304e-1494dddd45b@google.com> <8f6057b5-362b-a0f6-2f2f-579debe48fce@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drm/ast: Fix long time waiting on s3/s4 resume
-Content-Language: en-US
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <airlied@redhat.com>, <tzimmermann@suse.de>
-CC:     <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230414074204.5787-1-jammy_huang@aspeedtech.com>
-In-Reply-To: <20230414074204.5787-1-jammy_huang@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Mon, 22 May 2023, Qi Zheng wrote:
+> On 2023/5/22 12:54, Hugh Dickins wrote:
+> > filemap_map_pages() allow pte_offset_map_lock() to fail; and remove the
+> > pmd_devmap_trans_unstable() check from filemap_map_pmd(), which can safely
+> > return to filemap_map_pages() and let pte_offset_map_lock() discover that.
+> > 
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >   mm/filemap.c | 12 +++++-------
+> >   1 file changed, 5 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/mm/filemap.c b/mm/filemap.c
+> > index 28b42ee848a4..9e129ad43e0d 100644
+> > --- a/mm/filemap.c
+> > +++ b/mm/filemap.c
+> > @@ -3408,13 +3408,6 @@ static bool filemap_map_pmd(struct vm_fault *vmf,
+> > struct folio *folio,
+> >    if (pmd_none(*vmf->pmd))
+> >     pmd_install(mm, vmf->pmd, &vmf->prealloc_pte);
+> >   -	/* See comment in handle_pte_fault() */
+> > -	if (pmd_devmap_trans_unstable(vmf->pmd)) {
+> > -		folio_unlock(folio);
+> > -		folio_put(folio);
+> > -		return true;
+> > -	}
+> > -
+> >   	return false;
+> >   }
+> >   
+> > @@ -3501,6 +3494,11 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+> >   
+> >    addr = vma->vm_start + ((start_pgoff - vma->vm_pgoff) << PAGE_SHIFT);
+> >    vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
+> > +	if (!vmf->pte) {
+> > +		folio_unlock(folio);
+> > +		folio_put(folio);
+> 
+> Missing:
+> 		ret = VM_FAULT_NOPAGE;
+> ?
 
-Could you help review this patch?
+No, not missed.  Here ret is 0, which leads do_read_fault() to try
+__do_fault() afterwards.  Whereas VM_FAULT_NOPAGE would send it back
+to userspace to retry the whole fault.  Either will work, but I think
+the intention of VM_FAULT_NOPAGE here in filemap_map_pages() is to say
+"the page you want is now inserted", which is probably not the case.
 
-This is an issue leading to kernel panic found by Intel. Wendy has 
-confirmed issue resolved by this patch.
-
-On 2023/4/14 下午 03:42, Jammy Huang wrote:
-> In resume, DP's launch function, ast_dp_launch, could wait at most 30
-> seconds before timeout to check if DP is enabled.
->
-> To avoid this problem, we only check if DP enable or not at driver probe.
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217278
-> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-> ---
->   v2 changes:
->    - Fix build error.
-> ---
->   drivers/gpu/drm/ast/ast_dp.c   | 55 +++++++++++-----------------------
->   drivers/gpu/drm/ast/ast_drv.h  |  2 +-
->   drivers/gpu/drm/ast/ast_main.c | 11 +++++--
->   drivers/gpu/drm/ast/ast_post.c |  3 +-
->   4 files changed, 29 insertions(+), 42 deletions(-)
->
-> diff --git a/drivers/gpu/drm/ast/ast_dp.c b/drivers/gpu/drm/ast/ast_dp.c
-> index 56483860306b..eee2f264c880 100644
-> --- a/drivers/gpu/drm/ast/ast_dp.c
-> +++ b/drivers/gpu/drm/ast/ast_dp.c
-> @@ -119,53 +119,32 @@ int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata)
->   /*
->    * Launch Aspeed DP
->    */
-> -void ast_dp_launch(struct drm_device *dev, u8 bPower)
-> +void ast_dp_launch(struct drm_device *dev)
->   {
-> -	u32 i = 0, j = 0, WaitCount = 1;
-> -	u8 bDPTX = 0;
-> +	u32 i = 0;
->   	u8 bDPExecute = 1;
-> -
->   	struct ast_private *ast = to_ast_private(dev);
-> -	// S3 come back, need more time to wait BMC ready.
-> -	if (bPower)
-> -		WaitCount = 300;
-> -
-> -
-> -	// Wait total count by different condition.
-> -	for (j = 0; j < WaitCount; j++) {
-> -		bDPTX = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK);
-> -
-> -		if (bDPTX)
-> -			break;
->   
-> +	// Wait one second then timeout.
-> +	while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
-> +		COPROCESSOR_LAUNCH) {
-> +		i++;
-> +		// wait 100 ms
->   		msleep(100);
-> -	}
->   
-> -	// 0xE : ASTDP with DPMCU FW handling
-> -	if (bDPTX == ASTDP_DPMCU_TX) {
-> -		// Wait one second then timeout.
-> -		i = 0;
-> -
-> -		while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
-> -			COPROCESSOR_LAUNCH) {
-> -			i++;
-> -			// wait 100 ms
-> -			msleep(100);
-> -
-> -			if (i >= 10) {
-> -				// DP would not be ready.
-> -				bDPExecute = 0;
-> -				break;
-> -			}
-> +		if (i >= 10) {
-> +			// DP would not be ready.
-> +			bDPExecute = 0;
-> +			break;
->   		}
-> +	}
->   
-> -		if (bDPExecute)
-> -			ast->tx_chip_types |= BIT(AST_TX_ASTDP);
-> +	if (!bDPExecute)
-> +		drm_err(dev, "Wait DPMCU executing timeout\n");
->   
-> -		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-> -							(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-> -							ASTDP_HOST_EDID_READ_DONE);
-> -	}
-> +	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-> +			       (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-> +			       ASTDP_HOST_EDID_READ_DONE);
->   }
->   
->   
-> diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
-> index d51b81fea9c8..15e86394be4f 100644
-> --- a/drivers/gpu/drm/ast/ast_drv.h
-> +++ b/drivers/gpu/drm/ast/ast_drv.h
-> @@ -498,7 +498,7 @@ struct ast_i2c_chan *ast_i2c_create(struct drm_device *dev);
->   
->   /* aspeed DP */
->   int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata);
-> -void ast_dp_launch(struct drm_device *dev, u8 bPower);
-> +void ast_dp_launch(struct drm_device *dev);
->   void ast_dp_power_on_off(struct drm_device *dev, bool no);
->   void ast_dp_set_on_off(struct drm_device *dev, bool no);
->   void ast_dp_set_mode(struct drm_crtc *crtc, struct ast_vbios_mode_info *vbios_mode);
-> diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
-> index f83ce77127cb..8ecddf20113f 100644
-> --- a/drivers/gpu/drm/ast/ast_main.c
-> +++ b/drivers/gpu/drm/ast/ast_main.c
-> @@ -254,8 +254,13 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
->   		case 0x0c:
->   			ast->tx_chip_types = AST_TX_DP501_BIT;
->   		}
-> -	} else if (ast->chip == AST2600)
-> -		ast_dp_launch(&ast->base, 0);
-> +	} else if (ast->chip == AST2600) {
-> +		if (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK) ==
-> +		    ASTDP_DPMCU_TX) {
-> +			ast->tx_chip_types = AST_TX_ASTDP_BIT;
-> +			ast_dp_launch(&ast->base);
-> +		}
-> +	}
->   
->   	/* Print stuff for diagnostic purposes */
->   	if (ast->tx_chip_types & AST_TX_NONE_BIT)
-> @@ -264,6 +269,8 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
->   		drm_info(dev, "Using Sil164 TMDS transmitter\n");
->   	if (ast->tx_chip_types & AST_TX_DP501_BIT)
->   		drm_info(dev, "Using DP501 DisplayPort transmitter\n");
-> +	if (ast->tx_chip_types & AST_TX_ASTDP_BIT)
-> +		drm_info(dev, "Using ASPEED DisplayPort transmitter\n");
->   
->   	return 0;
->   }
-> diff --git a/drivers/gpu/drm/ast/ast_post.c b/drivers/gpu/drm/ast/ast_post.c
-> index 82fd3c8adee1..90e40f59aff7 100644
-> --- a/drivers/gpu/drm/ast/ast_post.c
-> +++ b/drivers/gpu/drm/ast/ast_post.c
-> @@ -380,7 +380,8 @@ void ast_post_gpu(struct drm_device *dev)
->   	ast_set_def_ext_reg(dev);
->   
->   	if (ast->chip == AST2600) {
-> -		ast_dp_launch(dev, 1);
-> +		if (ast->tx_chip_types & AST_TX_ASTDP_BIT)
-> +			ast_dp_launch(dev);
->   	} else if (ast->config_mode == ast_use_p2a) {
->   		if (ast->chip == AST2500)
->   			ast_post_chip_2500(dev);
->
-> base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
-
--- 
-Best Regards
-Jammy
-
+Hugh
