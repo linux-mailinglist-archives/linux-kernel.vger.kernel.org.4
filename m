@@ -2,134 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA307114DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C50C71148B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242204AbjEYSlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S242066AbjEYSib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242336AbjEYSkU (ORCPT
+        with ESMTP id S241969AbjEYSiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A688269D;
-        Thu, 25 May 2023 11:37:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAA69648F1;
-        Thu, 25 May 2023 18:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C93EC433AA;
-        Thu, 25 May 2023 18:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039772;
-        bh=8nxvFTp3cGhgeVG2TmNxqhpxt387C2Ix/5fV54bK9zk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZHTIvIyoPL0O2FVKE0Qun20iolp1nEfZlH4Bzv8q5cYbrRmepfCugC9F4oyQKSko7
-         vE3ZeW0RFtN5sXzTj60Mdf5qrqEplyacEDEa5kih0CbTP84g4s9Da+ojCpQ1RMhrVR
-         apI79vMUofWkLWDoAXCMjGOEgZj0W3GozrbHe0YSR9eTxCPAiOJYUkiScIIm8NK4Yh
-         3xXLIYjn1u3y1LA7aCFia2KkarJ9KuYxnfB7ZdGa3IJGy1TEp25pumCzyxjqlaVG12
-         AEJluITHMeLAmTfShoYPcTWzNu66W1Iphzc3WJKGXAgIwjq3HGJ0OhZv8WvBtJN7Bu
-         Afm87FtyUCsIQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hristo Venev <hristo@venev.name>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christoph Hellwig <hch@lst.de>,
-        Sasha Levin <sashal@kernel.org>, kbusch@kernel.org,
-        sagi@grimberg.me, linux-nvme@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 02/57] nvme-pci: add quirk for missing secondary temperature thresholds
-Date:   Thu, 25 May 2023 14:35:12 -0400
-Message-Id: <20230525183607.1793983-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
-References: <20230525183607.1793983-1-sashal@kernel.org>
+        Thu, 25 May 2023 14:38:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A451703;
+        Thu, 25 May 2023 11:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3UfPchLUYdWy9KCje7JNWMJZu0GBbqs1XHhZyb9Elpg=; b=dREWFlMgPsOScdh4mHYj5vpNlw
+        HeeuA9W7TI40gjiRe+mbNwDH9vWaRtED9kNXnJ7Eusr53g6BtLAuotQypKw9DJH2uep7C9CpsQ1TQ
+        bllam3AtdkUmxLMZlhm16mC05+GB2+Gk4N6vp43KXCjFQaya1hE5GmKX/HKra0P2wBWWcjHIEo1V2
+        3QPjca4/AhFY57yNLeouXSnrY3JLPy6ofCSM2oqccSgpfEqxBRP9wS2qzKiS/7ETGDwKvXWJBCVSf
+        eqlNosa0U3phxMepSLIM4URGOCcoENiqxjZrTOQyp1azZhXnTh3gdW9Ek2FpB4L2sCBWcXpjL3ZiV
+        CQJ4yMnw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2Fnt-00HPwi-2H;
+        Thu, 25 May 2023 18:35:13 +0000
+Date:   Thu, 25 May 2023 11:35:13 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>, hch@lst.de,
+        brauner@kernel.org, david@redhat.com
+Cc:     tglx@linutronix.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
+        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
+        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com
+Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate
+ detection
+Message-ID: <ZG+qYdGsbE7mOn6M@bombadil.infradead.org>
+References: <20230524213620.3509138-1-mcgrof@kernel.org>
+ <20230524213620.3509138-2-mcgrof@kernel.org>
+ <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
+ <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com>
+ <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hristo Venev <hristo@venev.name>
+On Thu, May 25, 2023 at 11:08:13AM -0700, Luis Chamberlain wrote:
+> + fsdevel please review,
 
-[ Upstream commit bd375feeaf3408ed00e08c3bc918d6be15f691ad ]
+> So with two other hunks added (2nd and 4th), this now matches parity with
+> my patch, not suggesting this is right, just demonstrating how this
+> could be resolved with this. We could also just have a helper which lets
+> the module code allow_write_access() at the end of its use of the fd
+> (failure to load or module is removed).
 
-On Kingston KC3000 and Kingston FURY Renegade (both have the same PCI
-IDs) accessing temp3_{min,max} fails with an invalid field error (note
-that there is no problem setting the thresholds for temp1).
+This even fixes the pathological case with stress-ng for finit_module:
 
-This contradicts the NVM Express Base Specification 2.0b, page 292:
+./stress-ng --module 8192 --module-name xfs
 
-  The over temperature threshold and under temperature threshold
-  features shall be implemented for all implemented temperature sensors
-  (i.e., all Temperature Sensor fields that report a non-zero value).
+(stress-ng assumes you have all dependencies already loaded and
+ the module is not loaded, it uses finit_module() directly)
 
-Define NVME_QUIRK_NO_SECONDARY_TEMP_THRESH that disables the thresholds
-for all but the composite temperature and set it for this device.
-
-Signed-off-by: Hristo Venev <hristo@venev.name>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/nvme/host/hwmon.c | 4 +++-
- drivers/nvme/host/nvme.h  | 5 +++++
- drivers/nvme/host/pci.c   | 2 ++
- 3 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/nvme/host/hwmon.c b/drivers/nvme/host/hwmon.c
-index 9e6e56c20ec99..316f3e4ca7cc6 100644
---- a/drivers/nvme/host/hwmon.c
-+++ b/drivers/nvme/host/hwmon.c
-@@ -163,7 +163,9 @@ static umode_t nvme_hwmon_is_visible(const void *_data,
- 	case hwmon_temp_max:
- 	case hwmon_temp_min:
- 		if ((!channel && data->ctrl->wctemp) ||
--		    (channel && data->log->temp_sensor[channel - 1])) {
-+		    (channel && data->log->temp_sensor[channel - 1] &&
-+		     !(data->ctrl->quirks &
-+		       NVME_QUIRK_NO_SECONDARY_TEMP_THRESH))) {
- 			if (data->ctrl->quirks &
- 			    NVME_QUIRK_NO_TEMP_THRESH_CHANGE)
- 				return 0444;
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index 01d90424af534..3f82de6060ef7 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -149,6 +149,11 @@ enum nvme_quirks {
- 	 * Reports garbage in the namespace identifiers (eui64, nguid, uuid).
- 	 */
- 	NVME_QUIRK_BOGUS_NID			= (1 << 18),
-+
-+	/*
-+	 * No temperature thresholds for channels other than 0 (Composite).
-+	 */
-+	NVME_QUIRK_NO_SECONDARY_TEMP_THRESH	= (1 << 19),
- };
- 
- /*
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 3347e86b3c55f..1ec0ca40604aa 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3515,6 +3515,8 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
- 	{ PCI_DEVICE(0x2646, 0x2263),   /* KINGSTON A2000 NVMe SSD  */
- 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
-+	{ PCI_DEVICE(0x2646, 0x5013),   /* Kingston KC3000, Kingston FURY Renegade */
-+		.driver_data = NVME_QUIRK_NO_SECONDARY_TEMP_THRESH, },
- 	{ PCI_DEVICE(0x2646, 0x5018),   /* KINGSTON OM8SFP4xxxxP OS21012 NVMe SSD */
- 		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
- 	{ PCI_DEVICE(0x2646, 0x5016),   /* KINGSTON OM3PGP4xxxxP OS21011 NVMe SSD */
--- 
-2.39.2
-
+  Luis
