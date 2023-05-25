@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFBA711659
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAFD7116E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243437AbjEYS6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
+        id S243547AbjEYS6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243450AbjEYSzS (ORCPT
+        with ESMTP id S243465AbjEYSzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:55:18 -0400
+        Thu, 25 May 2023 14:55:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B702D54;
-        Thu, 25 May 2023 11:47:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6E44205;
+        Thu, 25 May 2023 11:47:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FF4F60BEC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9A1461A0A;
+        Thu, 25 May 2023 18:44:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 733EAC433D2;
         Thu, 25 May 2023 18:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D39AC433EF;
-        Thu, 25 May 2023 18:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040298;
-        bh=hD6JmmcmGt9F6GGzY+6zbtcZ7G84QuEkFFvP7ojVP8w=;
+        s=k20201202; t=1685040299;
+        bh=JZCit1xpHd8E5VM4UE6ZB2UjCs13e8xrKdywqYVZ8t0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rmQCuTwdUboYKozoY3PGW5prTpdezbZkw0yONvlV4ZgAQlJRIKo4Zk3eN11vAWp3/
-         hmKimu27l0HmnKpBthNEk+6chXF1YRkTV/4NaEXBHQEgaW4cY1an4eUf5DYamAKedk
-         lDYzWA1LH5pbWFH2wUQczJAF1Y9wAgfiZDwIQ7MX74w/HT0i6qWPk1/iLBjzSVGLrN
-         MC85Y3/g+XVUCr5YWBQLMmvu5Kd632M807hjnu7ixp7hzOlvJop2gk2p5pH+yTQaEq
-         BvOIOmKSd5WTpeRXdtkQV3WSaizsEdb+vrTxWBRjyHjwGdXdh0ZJ0RFR18SAL+mxCA
-         ei3K2IyWWp5Bg==
+        b=n09/27GU3MLqNLGiG23SfGdoyxao6vOKDkSETu8QepQ8Qud7rowm+bqdIZH5W63rP
+         jq34RcftSHVPvLNwtUrmWWGIjOAf3J3WKxr2nDXg7U1fzSGtW4NuE/ilSTWqnoBNXO
+         occUKqx156ULk8SBOVSFtwL0l7q7fBzefnZEDhjn1kGYH2w41pS/8qgYbWG2Bjebud
+         jJ0U8jwWIH5gI0Hq2xneavWfeb7hU1uwnNza9eAqtJI/NsNGqowKBizgJJDJrvlaN8
+         YL68uOBmwSVG15m8ku7VBjVWSJzSx3UygyoFQ92fW5q4ida4jEuNeFq2VtDwQHYKIJ
+         eX3LcP/eLB9VA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        catalin.marinas@arm.com, ardb@kernel.org,
-        akpm@linux-foundation.org, pcc@google.com, mark.rutland@arm.com,
-        surenb@google.com, willy@infradead.org, peterx@redhat.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 21/27] arm64/mm: mark private VM_FAULT_X defines as vm_fault_t
-Date:   Thu, 25 May 2023 14:43:47 -0400
-Message-Id: <20230525184356.1974216-21-sashal@kernel.org>
+Cc:     Wenchao Hao <haowenchao2@huawei.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 22/27] scsi: core: Decrease scsi_device's iorequest_cnt if dispatch failed
+Date:   Thu, 25 May 2023 14:43:48 -0400
+Message-Id: <20230525184356.1974216-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184356.1974216-1-sashal@kernel.org>
 References: <20230525184356.1974216-1-sashal@kernel.org>
@@ -61,52 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Min-Hua Chen <minhuadotchen@gmail.com>
+From: Wenchao Hao <haowenchao2@huawei.com>
 
-[ Upstream commit d91d580878064b880f3574ac35b98d8b70ee8620 ]
+[ Upstream commit 09e797c8641f6ad435c33ae24c223351197ea29a ]
 
-This patch fixes several sparse warnings for fault.c:
+If scsi_dispatch_cmd() failed, the SCSI command was not sent to the target,
+scsi_queue_rq() would return BLK_STS_RESOURCE and the related request would
+be requeued. The timeout of this request would not fire, no one would
+increase iodone_cnt.
 
-arch/arm64/mm/fault.c:493:24: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:493:24: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:493:24: sparse:    got int
-arch/arm64/mm/fault.c:501:32: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:501:32: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:501:32: sparse:    got int
-arch/arm64/mm/fault.c:503:32: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:503:32: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:503:32: sparse:    got int
-arch/arm64/mm/fault.c:511:24: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:511:24: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:511:24: sparse:    got int
-arch/arm64/mm/fault.c:670:13: sparse: warning: restricted vm_fault_t degrades to integer
-arch/arm64/mm/fault.c:670:13: sparse: warning: restricted vm_fault_t degrades to integer
-arch/arm64/mm/fault.c:713:39: sparse: warning: restricted vm_fault_t degrades to integer
+The above flow would result the iodone_cnt smaller than iorequest_cnt.  So
+decrease the iorequest_cnt if dispatch failed to workaround the issue.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
-Link: https://lore.kernel.org/r/20230502151909.128810-1-minhuadotchen@gmail.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
+Reported-by: Ming Lei <ming.lei@redhat.com>
+Closes: https://lore.kernel.org/r/ZF+zB+bB7iqe0wGd@ovpn-8-17.pek2.redhat.com
+Link: https://lore.kernel.org/r/20230515070156.1790181-3-haowenchao2@huawei.com
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/mm/fault.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/scsi_lib.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 0d2be8eb87ec8..c9faa5570d245 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -376,8 +376,8 @@ static void do_bad_area(unsigned long addr, unsigned int esr, struct pt_regs *re
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index ace4a7230bcf2..c8a8c6c62c9c2 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1804,6 +1804,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
+ 		 */
+ 		SCSI_LOG_MLQUEUE(3, scmd_printk(KERN_INFO, cmd,
+ 			"queuecommand : device blocked\n"));
++		atomic_dec(&cmd->device->iorequest_cnt);
+ 		return SCSI_MLQUEUE_DEVICE_BUSY;
  	}
- }
  
--#define VM_FAULT_BADMAP		0x010000
--#define VM_FAULT_BADACCESS	0x020000
-+#define VM_FAULT_BADMAP		((__force vm_fault_t)0x010000)
-+#define VM_FAULT_BADACCESS	((__force vm_fault_t)0x020000)
- 
- static vm_fault_t __do_page_fault(struct mm_struct *mm, unsigned long addr,
- 			   unsigned int mm_flags, unsigned long vm_flags,
+@@ -1836,6 +1837,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
+ 	trace_scsi_dispatch_cmd_start(cmd);
+ 	rtn = host->hostt->queuecommand(host, cmd);
+ 	if (rtn) {
++		atomic_dec(&cmd->device->iorequest_cnt);
+ 		trace_scsi_dispatch_cmd_error(cmd, rtn);
+ 		if (rtn != SCSI_MLQUEUE_DEVICE_BUSY &&
+ 		    rtn != SCSI_MLQUEUE_TARGET_BUSY)
 -- 
 2.39.2
 
