@@ -2,197 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832F0710EFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3498C710EFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241401AbjEYPDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S241342AbjEYPDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241195AbjEYPDH (ORCPT
+        with ESMTP id S234964AbjEYPDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:03:07 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA1F18D;
+        Thu, 25 May 2023 11:03:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D6189;
         Thu, 25 May 2023 08:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3aiLXOZs4J8vLwjD9tm8yL///nMM3TFDYH2UjhnUtjA=; b=yeV6kVRGXgdBBkEgy9EOOpxSPe
-        U+QULcnfTnUjO3ghZ8C1PF3MJEiRYw5xoR6uAGepJbiMXyepzp3VmSQ1+yf8OaWb1D1a6PgUQ5mpf
-        /5yqRdQm0EjfJxAneB/r2NOmoT8qBmUbFNcT3d757NHI6MdUUeZW57U409ER6ThVHIv4=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:52768 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q2CUR-0000BG-UZ; Thu, 25 May 2023 11:02:56 -0400
-Date:   Thu, 25 May 2023 11:02:55 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     andy.shevchenko@gmail.com
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230525110255.6ffe0a0c3f88ae03c3fc5f25@hugovil.com>
-In-Reply-To: <ZG9EWEwb077qyBIi@surfacebook>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
-        <20230525040324.3773741-9-hugo@hugovil.com>
-        <ZG9EWEwb077qyBIi@surfacebook>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8BB264679;
+        Thu, 25 May 2023 15:03:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4465BC433D2;
+        Thu, 25 May 2023 15:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685026984;
+        bh=v5l1gvHWvPer9BfVYzVxNGNE0+xUGwapBdck9MVDveI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZmZmCUKd7mJfuzmwGQ60FzlZnwYhoLCVQrb5gzf30/fJ0TEV+3DxP/a86j64IoMXT
+         CkFldmgrDgfgEda+EtNTp9E0bdHua+Vazuuhele39hrAuF39uH3mTwrFyeb9tRA8rG
+         Bu5WIV7BrRPn+NUOkk5znwpflsqnivDbrBaycVYp79EUNflhOohqOEFjyolNUB4kng
+         ZAk4fkm0CtB5EYVqu7KKenphkuqu4n0Py5TSkI9qfncI/6pP3EtzHknCY+YtlKqbjo
+         69E/md3sUuVp9GWPiqUFUeDbsYoouXQyhEe97FtNyPnqR8fURlxUDOaQnjxpbquGQW
+         03QUMxOYtWHbA==
+Message-ID: <83d90ef3-67ba-737e-02fb-dbfb7cc8d2de@kernel.org>
+Date:   Thu, 25 May 2023 09:03:02 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     Breno Leitao <leitao@debian.org>, willemdebruijn.kernel@gmail.com,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, leit@fb.com, axboe@kernel.dk,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+References: <20230525125503.400797-1-leitao@debian.org>
+ <CANn89i+neca0ApNxRdZCiTMkwy-5=0mnOMM=9Z3u78VPNw4_fg@mail.gmail.com>
+ <ZG92ox2BWE3rS1xR@corigine.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <ZG92ox2BWE3rS1xR@corigine.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 08/11] serial: sc16is7xx: fix regression with GPIO
- configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 14:19:52 +0300
-andy.shevchenko@gmail.com wrote:
-
-> Thu, May 25, 2023 at 12:03:22AM -0400, Hugo Villeneuve kirjoitti:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
-> > and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-> > changed the function of the GPIOs pins to act as modem control
-> > lines without any possibility of selecting GPIO function.
-> > 
-> > As a consequence, applications that depends on GPIO lines configured
-> > by default as GPIO pins no longer work as expected.
-> > 
-> > Also, the change to select modem control lines function was done only
-> > for channel A of dual UART variants (752/762). This was not documented
-> > in the log message.
+On 5/25/23 8:54 AM, Simon Horman wrote:
+> On Thu, May 25, 2023 at 04:19:32PM +0200, Eric Dumazet wrote:
+>> On Thu, May 25, 2023 at 2:55 PM Breno Leitao <leitao@debian.org> wrote:
+>>>
+>>> Most of the ioctls to net protocols operates directly on userspace
+>>> argument (arg). Usually doing get_user()/put_user() directly in the
+>>> ioctl callback.  This is not flexible, because it is hard to reuse these
+>>> functions without passing userspace buffers.
+>>>
+>>> Change the "struct proto" ioctls to avoid touching userspace memory and
+>>> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+>>> adapted to operate on a kernel memory other than on userspace (so, no
+>>> more {put,get}_user() and friends being called in the ioctl callback).
+>>>
+>>
+>>  diff --git a/include/net/phonet/phonet.h b/include/net/phonet/phonet.h
+>>> index 862f1719b523..93705d99f862 100644
+>>> --- a/include/net/phonet/phonet.h
+>>> +++ b/include/net/phonet/phonet.h
+>>> @@ -109,4 +109,23 @@ void phonet_sysctl_exit(void);
+>>>  int isi_register(void);
+>>>  void isi_unregister(void);
+>>>
+>>> +#ifdef CONFIG_PHONET
+>>> +int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg);
+>>> +
+>>> +static inline bool phonet_is_sk(struct sock *sk)
+>>> +{
+>>> +       return sk->sk_family == PF_PHONET && sk->sk_protocol == PN_PROTO_PHONET;
+>>> +}
+>>> +#else
+>>> +static inline bool phonet_is_sk(struct sock *sk)
+>>> +{
+>>> +       return 0;
+>>> +}
+>>> +
+>>> +static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+>>> +{
+>>> +       return 1;
+>>> +}
+>>> +#endif
+>>> +
+>>>
+>>
+>> PHONET can be built as a module, so I guess the compiler would
+>> complain if "CONFIG_PHONET=m" ???
 > 
-> > This new patch allows to specify GPIO or modem control line function
-> > in the device tree, and for each of the ports (A or B).
+> Yes, indeed it does.
 > 
-> Imperative mood as stated in documentation, please.
-> Like "Allow to specify...".
-> 
-> > This is done by using the new device-tree property named
-> > "modem-control-line-ports" (property added in separate patch).
-> > 
-> > We also now reduce the number of exported GPIOs according to the
-> > modem-status-line-port DT property.
 
-Just noticed a mistake:
-s/modem-status-line-port/modem-control-line-ports
-
-> > 
-> > Boards that need to have GPIOS configured as modem control lines
-> > should add that property to their device tree. Here is a list of
-> > boards using the sc16is7xx driver in their device tree and that may
-> > need to be modified:
-> >     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
-> >     mips/boot/dts/ingenic/cu1830-neo.dts
-> >     mips/boot/dts/ingenic/cu1000-neo.dts
-> 
-> ...
-> 
-> > +#ifdef CONFIG_GPIOLIB
-> 
-> I'm wondering if we can avoid adding new ifdefferies...
-
-I am simply following waht was already done in the existing driver.
-
-Are you suggesting that we need to remove all these #defines? If not, what exactly do you suggest?
-
-
-> > +	s->gpio_configured = devtype->nr_gpio;
-> 
-> The name of the variable is a bit vague WRT its content.
-> Shouldn't be as simple as the rvalue, i.e. s->nr_gpio?
-
-Maybe the name could be improved (and/or comments).
-
-devtype->nr_gpio is the maximum "theoretical" number of GPIOs supported by the chip.
-
-s->gpio_configured is the number of GPIOs that are configured or requested according to the presence (or not) of the modem-control-line-ports property.
-
-I wanted to avoid using the same name to avoid potential confusion.
-
-Maybe devtype->nr_gpio could be renamed to devtype->nr_gpio_max and s->gpio_configured to s->nr_gpio_requested or s->nr_gpio_configured?
-
-
-> > +#endif /* CONFIG_GPIOLIB */
-> 
-> ...
-> 
-> > +		of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
-> > +					 prop, p, u)
-> 
-> The driver so far is agnostic to property provider. Please keep it that way,
-> i.e. no of_ APIs.
-
-The driver, before my patches, was already using the exact same function of_property_for_each_u32() to process the irda-mode-ports property, so I don't understand your comment.
-
-But what do you suggest instead of of_property_for_each_u32()? And do we need to change it also for processing the irda-mode-ports property?
-
-
-> > +			if (u < devtype->nr_uart) {
-> 
-> Hmm... What other can it be?
-
-Again, this is similar to the handling of the irda-mode-ports property.
-
-But I am not sure I understand your question/concern?
-
-I think this check is important, because if someone puts the following property in a DT:
-
-    nxp,modem-control-line-ports = <0 1>;
-
-but the variant only supports 1 port, then the check is usefull, no?
-
-
-> 
-> > +				/* Use GPIO lines as modem control lines */
-> > +				if (u == 0)
-> > +					val |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
-> > +				else if (u == 1)
-> > +					val |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
-> > +
-> > +#ifdef CONFIG_GPIOLIB
-> > +				if (s->gpio_configured >=
-> > +				    SC16IS7XX_GPIOS_PER_BANK)
-> 
-> On one line it will be better to read. Esp. taking into account the above remark.
-
-Fixed.
-
- 
-> > +					s->gpio_configured -=
-> > +						SC16IS7XX_GPIOS_PER_BANK;
-> 
-> Ditto.
-
-Fixed.
-
-> 
-> > +#endif /* CONFIG_GPIOLIB */
-> > +			}
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-> 
+phonet_sk_ioctl is simple enough to make an inline in which case this
+should go in include//linux/phonet.h.
