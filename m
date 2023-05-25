@@ -2,154 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A59710BB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B1E710BDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241118AbjEYMHE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 08:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S240843AbjEYMPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbjEYMHC (ORCPT
+        with ESMTP id S229603AbjEYMPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:07:02 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4720E7;
-        Thu, 25 May 2023 05:07:00 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-9739440b60bso29999766b.0;
-        Thu, 25 May 2023 05:07:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685016419; x=1687608419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hKW6nh3Stu7+N3Kp7mLlmvutOp3dc9cSfF1cRxfu1tI=;
-        b=dbJi4YeDCBVWMp0fZp5TjHNoAK96oqYvbW5U7hLpWC7p/7P5IfxcUlOjRK6/W7uP2G
-         +gWBDfIFoGN5KaxM4+UyaI92yaPUOztuXwuU0xAhZZP/49ttsRebSZ91LObmCb+HKwjO
-         VehSSQVJl/MeL4uLx2K97h/CF4TUvSUT5/kbLX02bbAzAOkyCxWD8SGblLquIVdY4Vah
-         oejrCvIyAvvs0ehjSYJlICjQVIKNzbLsam0I2VYiU+MQtZf2TjDunAOKSBYm4OSpldyv
-         JStpHhZc4u3vbsyahLJQh5lW+0lHCD5lPY48/KQZDfQcaNw+2B+EAajhiZ+Y4i8Ns6hw
-         7Xyw==
-X-Gm-Message-State: AC+VfDwvExtrFkiqSjXDU014hkUNscncI5UNDfkph3gPjltLHyagARm+
-        VyeAtclv7ljagQ+pHHw5X2YHPPP5Vi9NVwQlWFs=
-X-Google-Smtp-Source: ACHHUZ6IRQ/SnBgyfpCgayrSbirvIindZHWRMc+FngvXIzH25Iu+YuHgvlryIKQiaIxUsbTuhF1Hvdfb9QDAWtg1VY4=
-X-Received: by 2002:a17:906:72d4:b0:96f:da08:d451 with SMTP id
- m20-20020a17090672d400b0096fda08d451mr11519029ejl.6.1685016418720; Thu, 25
- May 2023 05:06:58 -0700 (PDT)
+        Thu, 25 May 2023 08:15:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD3CBB;
+        Thu, 25 May 2023 05:15:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 862161FE57;
+        Thu, 25 May 2023 12:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685016943;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/UQdvDq4//dZNHe4PM4r9XOD1HMKEFnVGMgfQGues28=;
+        b=AtCbTEOPM+2g/rs3dX9aJ7MYw2yQmJRsTeiY8QVxQC1/yIjjRru9NbNGwXsz97i1iLxwal
+        cHIE0s9iF+1d0dAA6mIPs0bBguH6jntoqif0n8u+MU9qtnuJe6R/3F8NP9AySqXrd4yh2A
+        ut5N0g5V0Tj8jIxIfvCYvXg2pNIrdKk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685016943;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/UQdvDq4//dZNHe4PM4r9XOD1HMKEFnVGMgfQGues28=;
+        b=3tdHkz3oyAfp97Jh6U99RsdBTiWbnda/+aVkteDiCneEdvddX+B8j2FqJ+LYWXGNA8s8MZ
+        rtK5ii2+0prk1OCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 592E6134B2;
+        Thu, 25 May 2023 12:15:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bimgFG9Rb2RiLwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 25 May 2023 12:15:43 +0000
+Date:   Thu, 25 May 2023 14:09:35 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     David Sterba <dsterba@suse.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH] fs: use UB-safe check for signed addition overflow in
+ remap_verify_area
+Message-ID: <20230525120935.GI30909@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20230523162628.17071-1-dsterba@suse.com>
+ <20230524-umfahren-stift-d1c34fd1d0fa@brauner>
 MIME-Version: 1.0
-References: <20230522200033.2605-1-mario.limonciello@amd.com>
- <20230522200033.2605-4-mario.limonciello@amd.com> <e9eb526d-84fe-b814-67a3-6f7977aa0078@redhat.com>
- <MN0PR12MB6101AF7606A3547EC5AA42A7E2409@MN0PR12MB6101.namprd12.prod.outlook.com>
- <dcdb3d12-e0af-5e4d-119e-d4fbe9a9495b@redhat.com>
-In-Reply-To: <dcdb3d12-e0af-5e4d-119e-d4fbe9a9495b@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 25 May 2023 14:06:46 +0200
-Message-ID: <CAJZ5v0h=tSKjZxQJECZCQqzWDMAwY8cKf7F_xyLQSBG8TPyzrg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for suspend
- related messages
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524-umfahren-stift-d1c34fd1d0fa@brauner>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:13 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Mario,
->
-> On 5/23/23 18:21, Limonciello, Mario wrote:
-> > [AMD Official Use Only - General]
-> >
-> >> -----Original Message-----
-> >> From: Hans de Goede <hdegoede@redhat.com>
-> >> Sent: Tuesday, May 23, 2023 6:08 AM
-> >> To: Limonciello, Mario <Mario.Limonciello@amd.com>; rafael@kernel.org;
-> >> linus.walleij@linaro.org
-> >> Cc: linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> >> gpio@vger.kernel.org; platform-driver-x86@vger.kernel.org; linux-
-> >> pm@vger.kernel.org; S-k, Shyam-sundar <Shyam-sundar.S-k@amd.com>;
-> >> Natikar, Basavaraj <Basavaraj.Natikar@amd.com>
-> >> Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for
-> >> suspend related messages
-> >>
-> >> Hi Mario,
-> >>
-> >> On 5/22/23 22:00, Mario Limonciello wrote:
-> >>> Using pm_pr_dbg() allows users to toggle
-> >> `/sys/power/pm_debug_messages`
-> >>> as a single knob to turn on messages that amd-pmc can emit to aid in
-> >>> any s2idle debugging.
-> >>>
-> >>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >>> ---
-> >>>  drivers/platform/x86/amd/pmc.c | 4 ++--
-> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/platform/x86/amd/pmc.c
-> >> b/drivers/platform/x86/amd/pmc.c
-> >>> index 427905714f79..1304cd6f13f6 100644
-> >>> --- a/drivers/platform/x86/amd/pmc.c
-> >>> +++ b/drivers/platform/x86/amd/pmc.c
-> >>> @@ -543,7 +543,7 @@ static int amd_pmc_idlemask_read(struct
-> >> amd_pmc_dev *pdev, struct device *dev,
-> >>>     }
-> >>>
-> >>>     if (dev)
-> >>> -           dev_dbg(pdev->dev, "SMU idlemask s0i3: 0x%x\n", val);
-> >>> +           pm_pr_dbg("SMU idlemask s0i3: 0x%x\n", val);
-> >>>
-> >>>     if (s)
-> >>>             seq_printf(s, "SMU idlemask : 0x%x\n", val);
-> >>
-> >> This does not compile, amd/pmc.c may be build as an amd-pmc.ko module
-> >> and currently the pm_debug_messages_on flag used by pm_pr_dbg()
-> >> is not exported to modules:
-> >>
-> >>   CC [M]  drivers/platform/x86/amd/pmc.o
-> >>   LD [M]  drivers/platform/x86/amd/amd-pmc.o
-> >>   MODPOST Module.symvers
-> >> ERROR: modpost: "pm_debug_messages_on"
-> >> [drivers/platform/x86/amd/amd-pmc.ko] undefined!
-> >> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
-> >> make: *** [Makefile:1978: modpost] Error 2
-> >>
-> >> Regards,
-> >>
-> >> Hans
-> >>
-> >
-> > My apologies, yes I was compiling in when testing.  Let me ask if this
-> > series makes sense and is "generally" agreeable though.
->
-> I have no objections against this series, otherwise I don't really
-> have a strong opinion on this series.
->
-> If this makes sense and if exporting pm_debug_messages_on is ok
-> is Rafael's call to make IMHO.
->
-> Rafael ?
+On Wed, May 24, 2023 at 04:16:17PM +0200, Christian Brauner wrote:
+> On Tue, 23 May 2023 18:26:28 +0200, David Sterba wrote:
+> > The following warning pops up with enabled UBSAN in tests fstests/generic/303:
+> > 
+> >   [23127.529395] UBSAN: Undefined behaviour in fs/read_write.c:1725:7
+> >   [23127.529400] signed integer overflow:
+> >   [23127.529403] 4611686018427322368 + 9223372036854775807 cannot be represented in type 'long long int'
+> >   [23127.529412] CPU: 4 PID: 26180 Comm: xfs_io Not tainted 5.2.0-rc2-1.ge195904-vanilla+ #450
+> >   [23127.556999] Hardware name: empty empty/S3993, BIOS PAQEX0-3 02/24/2008
+> >   [23127.557001] Call Trace:
+> >   [23127.557060]  dump_stack+0x67/0x9b
+> >   [23127.557070]  ubsan_epilogue+0x9/0x40
+> >   [23127.573496]  handle_overflow+0xb3/0xc0
+> >   [23127.573514]  do_clone_file_range+0x28f/0x2a0
+> >   [23127.573547]  vfs_clone_file_range+0x35/0xb0
+> >   [23127.573564]  ioctl_file_clone+0x8d/0xc0
+> >   [23127.590144]  do_vfs_ioctl+0x300/0x700
+> >   [23127.590160]  ksys_ioctl+0x70/0x80
+> >   [23127.590203]  ? trace_hardirqs_off_thunk+0x1a/0x1c
+> >   [23127.590210]  __x64_sys_ioctl+0x16/0x20
+> >   [23127.590215]  do_syscall_64+0x5c/0x1d0
+> >   [23127.590224]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> >   [23127.590231] RIP: 0033:0x7ff6d7250327
+> >   [23127.590241] RSP: 002b:00007ffe3a38f1d8 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
+> >   [23127.590246] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007ff6d7250327
+> >   [23127.590249] RDX: 00007ffe3a38f220 RSI: 000000004020940d RDI: 0000000000000003
+> >   [23127.590252] RBP: 0000000000000000 R08: 00007ffe3a3c80a0 R09: 00007ffe3a3c8080
+> >   [23127.590255] R10: 000000000fa99fa0 R11: 0000000000000206 R12: 0000000000000000
+> >   [23127.590260] R13: 0000000000000000 R14: 3fffffffffff0000 R15: 00007ff6d750a20c
+> > 
+> > [...]
+> 
+> Independent of this fix it is a bit strange that we have this
+> discrepancy between struct file_clone_range using u64s and the internal
+> apis using loff_t. It's not a big deal but it's a bit ugly.
 
-I have no strong opinion.
+The file_clone_range used to be a private btrfs ioctl with u64 types
+that got lifted to VFS, inheriting the types.
 
-I would do it slightly differently as mentioned in my reply to patch
-[1/4] (and then the new function could be used in patch [2/4] I
-think).
-
-Otherwise this is fine with me if it helps to debug failures in the field.
+04b38d601239 ("vfs: pull btrfs clone API to vfs layer")
