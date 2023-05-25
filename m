@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EE9710C72
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB2E710C75
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240379AbjEYMyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
+        id S240962AbjEYMy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbjEYMyS (ORCPT
+        with ESMTP id S236065AbjEYMyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:54:18 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D241187
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 05:54:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VjSJ3fp_1685019252;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VjSJ3fp_1685019252)
+        Thu, 25 May 2023 08:54:19 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B46D183
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 05:54:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VjSJ3gf_1685019253;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VjSJ3gf_1685019253)
           by smtp.aliyun-inc.com;
-          Thu, 25 May 2023 20:54:13 +0800
+          Thu, 25 May 2023 20:54:14 +0800
 From:   Baolin Wang <baolin.wang@linux.alibaba.com>
 To:     akpm@linux-foundation.org
 Cc:     mgorman@techsingularity.net, vbabka@suse.cz,
         baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] mm: compaction: change fast_isolate_freepages() to void type
-Date:   Thu, 25 May 2023 20:53:57 +0800
-Message-Id: <759fca20b22ebf4c81afa30496837b9e0fb2e53b.1685018752.git.baolin.wang@linux.alibaba.com>
+Subject: [PATCH 3/6] mm: compaction: skip more fully scanned pageblock
+Date:   Thu, 25 May 2023 20:53:58 +0800
+Message-Id: <f4efd2fa08735794a6d809da3249b6715ba6ad38.1685018752.git.baolin.wang@linux.alibaba.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1685018752.git.baolin.wang@linux.alibaba.com>
 References: <cover.1685018752.git.baolin.wang@linux.alibaba.com>
@@ -42,50 +42,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No caller cares about the return value of fast_isolate_freepages(),
-void it.
+In fast_isolate_around(), it assumes the pageblock is fully scanned if
+cc->nr_freepages < cc->nr_migratepages after trying to isolate some free
+pages, and will set skip flag to avoid scanning in future. However this
+can miss setting the skip flag for a fully scanned pageblock (returned
+'start_pfn' is equal to 'end_pfn') in the case where cc->nr_freepages
+is larger than cc->nr_migratepages.
+
+So using the returned 'start_pfn' from isolate_freepages_block() and
+'end_pfn' to decide if a pageblock is fully scanned makes more sense.
+It can also cover the case where cc->nr_freepages < cc->nr_migratepages,
+which means the 'start_pfn' is usually equal to 'end_pfn' except some
+uncommon fatal error occurs after non-strict mode isolation.
 
 Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- mm/compaction.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ mm/compaction.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/compaction.c b/mm/compaction.c
-index 426bb6ce070b..3737c6591bfb 100644
+index 3737c6591bfb..1e5183f39ca9 100644
 --- a/mm/compaction.c
 +++ b/mm/compaction.c
-@@ -1435,8 +1435,7 @@ static int next_search_order(struct compact_control *cc, int order)
- 	return order;
- }
+@@ -1411,7 +1411,7 @@ fast_isolate_around(struct compact_control *cc, unsigned long pfn)
+ 	isolate_freepages_block(cc, &start_pfn, end_pfn, &cc->freepages, 1, false);
  
--static unsigned long
--fast_isolate_freepages(struct compact_control *cc)
-+static void fast_isolate_freepages(struct compact_control *cc)
- {
- 	unsigned int limit = max(1U, freelist_scan_limit(cc) >> 1);
- 	unsigned int nr_scanned = 0;
-@@ -1449,7 +1448,7 @@ fast_isolate_freepages(struct compact_control *cc)
+ 	/* Skip this pageblock in the future as it's full or nearly full */
+-	if (cc->nr_freepages < cc->nr_migratepages)
++	if (start_pfn == end_pfn)
+ 		set_pageblock_skip(page);
  
- 	/* Full compaction passes in a negative order */
- 	if (cc->order <= 0)
--		return cc->free_pfn;
-+		return;
- 
- 	/*
- 	 * If starting the scan, use a deeper search and use the highest
-@@ -1588,11 +1587,10 @@ fast_isolate_freepages(struct compact_control *cc)
- 
- 	cc->total_free_scanned += nr_scanned;
- 	if (!page)
--		return cc->free_pfn;
-+		return;
- 
- 	low_pfn = page_to_pfn(page);
- 	fast_isolate_around(cc, low_pfn);
--	return low_pfn;
- }
- 
- /*
+ 	return;
 -- 
 2.27.0
 
