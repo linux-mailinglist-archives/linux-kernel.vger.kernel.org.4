@@ -2,124 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E5B711168
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E5A71116C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbjEYQx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
+        id S238279AbjEYQyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234600AbjEYQxi (ORCPT
+        with ESMTP id S229680AbjEYQyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:53:38 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F07319C;
-        Thu, 25 May 2023 09:53:36 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9CF0E20FBE85;
-        Thu, 25 May 2023 09:53:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9CF0E20FBE85
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1685033615;
-        bh=ZZ+c+EEe8Ld032DoWLP+pWoIJX6IUdfMjVhJYrHMqQ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k6mxVBNgJk158KdcKYkckUhLj1Rn92c0CHEICBei2hRQOczKDCiLwskL6Rb4mmsj0
-         Brjhr3ceAqkfFG2IniwTfUbBrOV78SOulQTJpwVIz1lHy0Q8lR/lR+mdW7mGVcuMtm
-         xjCpW8r2gd0OgVp7Wk1MjUCXMoKoET4XcIC/gys8=
-Date:   Thu, 25 May 2023 09:53:29 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kelulanainsley@gmail.com
-Subject: Re: [PATCH] tracing/user_events: Fix the order of the fields in the
- trace output
-Message-ID: <20230525165329.GA82@W11-BEAU-MD.localdomain>
-References: <20230525054032.29392-1-sunliming@kylinos.cn>
+        Thu, 25 May 2023 12:54:32 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58D7135;
+        Thu, 25 May 2023 09:54:31 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFAT3o023579;
+        Thu, 25 May 2023 16:54:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jtDv3CvUJhE8vrT6Tm8i2pdWlMfRsdbR8y2tX7keamM=;
+ b=WfUJAMVbaSbLrfsSuVzocmqBBj8Af8tHP8cJPNTfXMk9nIMm0juJxIK6Zn0wut4w8OaC
+ tUfPuU7jWVr9C5LP1kr+pInScmqmFZIHG/HWgWUyHI7oOYMKTMNJ4u40ebGtler5Pi7r
+ 054+lbL2daNCrEO5p3a1gYTJ1nFhBaGQLr24xB8Lte/p2nIzl9HKNys3NscDf4yx7Z68
+ NUVgFCL3ooiDNZkVR9GKVjGI8ttLrRgpqyS9hJL/uaWYBuuwUpAPHUvVI6EJeso1K/BZ
+ 8+YnCsMVNrKQp5z7dhL+fH8hEO8OtwJoGbmws3WiFl/2h08a6JlFPqD95TM46FrpHLwY rw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qstg3t716-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 16:54:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PGsQ7A021467
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 16:54:26 GMT
+Received: from [10.216.52.104] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 09:54:20 -0700
+Message-ID: <1900ebf0-f4c8-b2d8-429b-b53d455b3896@quicinc.com>
+Date:   Thu, 25 May 2023 22:24:16 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525054032.29392-1-sunliming@kylinos.cn>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 0/4] Add camera clock controller support for SM8550
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
+        <quic_imrashai@quicinc.com>, <quic_ajipan@quicinc.com>
+References: <20230519155602.6642-1-quic_jkona@quicinc.com>
+ <79f8537b-e396-7258-1df0-9792114d544a@linaro.org>
+From:   Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <79f8537b-e396-7258-1df0-9792114d544a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _xKTcCUJoKBjyrFmWttYX1Y-tgYqAgyO
+X-Proofpoint-ORIG-GUID: _xKTcCUJoKBjyrFmWttYX1Y-tgYqAgyO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_09,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 spamscore=0 clxscore=1015 mlxlogscore=999 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250140
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 01:40:32PM +0800, sunliming wrote:
-> Commit 4bec284cc0b9 ("tracing/user_events: Use print_format_fields() for
-> trace output") use print_event_fields() as safe and gives user readable
-> output. However, due to the insertion of the struct ftrace_event_field
-> structure into the field linked list from the header, the trace output
-> oder of fields of user events is reversed. Fix the problem by insertint
-> to the tail of field linked list.
+Hi Dmitry,
+
+Thanks for your review!
+
+On 5/20/2023 12:59 AM, Dmitry Baryshkov wrote:
+> On 19/05/2023 18:55, Jagadeesh Kona wrote:
+>> Add bindings, driver and devicetree node for camera clock controller
+>> on SM8550.
+>>
+>> Depends on [1] for lucid ole pll ops definition
+>> [1] 
+>> https://patchwork.kernel.org/project/linux-clk/list/?series=746186&state=%2A&archive=both
+>>
+>> Jagadeesh Kona (4):
+>>    clk: qcom: clk-alpha-pll: Add support for rivian ole pll ops
+>>    dt-bindings: clock: qcom: Add SM8550 camera clock controller
+>>    clk: qcom: camcc-sm8550: Add camera clock controller driver for SM8550
 > 
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
-> ---
->  kernel/trace/trace_events_user.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This patch didn't make it to the list. Please consider splitting it 
+> somehow.
 > 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index aacd22c1e9f8..e9e2ec3c7613 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -972,7 +972,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
->  	if (filter_type == FILTER_OTHER)
->  		field->filter_type = filter_assign_type(type);
->  
-> -	list_add(&field->link, &user->fields);
-> +	list_add_tail(&field->link, &user->fields);
->  
->  	/*
->  	 * Min size from user writes that are required, this does not include
-> -- 
-> 2.25.1
+Yes, will split it in next series.
 
-Thanks for the patch, however, this breaks the tracefs format file. The
-fields are required to be put in backwards since it walks them
-backwards.
+>>    arm64: dts: qcom: sm8550: Add camera clock controller
+>>
+>>   .../bindings/clock/qcom,sm8550-camcc.yaml     |   82 +
+>>   arch/arm64/boot/dts/qcom/sm8550.dtsi          |   15 +
+>>   drivers/clk/qcom/Kconfig                      |    7 +
+>>   drivers/clk/qcom/Makefile                     |    1 +
+>>   drivers/clk/qcom/camcc-sm8550.c               | 3572 +++++++++++++++++
+>>   drivers/clk/qcom/clk-alpha-pll.h              |    4 +
+>>   include/dt-bindings/clock/qcom,sm8550-camcc.h |  187 +
+>>   7 files changed, 3868 insertions(+)
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/clock/qcom,sm8550-camcc.yaml
+>>   create mode 100644 drivers/clk/qcom/camcc-sm8550.c
+>>   create mode 100644 include/dt-bindings/clock/qcom,sm8550-camcc.h
+>>
+> 
 
-Example using this:
-echo 'u:test u32 a; u32 b;' > dynamic_events
-cat /sys/kernel/tracing/events/user_events/test/format
-
-Before this change:
-name: test
-...
-format:
-        field:unsigned short common_type;       offset:0;       size:2; signed:0;
-        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
-
-        field:u32 a;    offset:8;       size:4; signed:0;
-        field:u32 b;    offset:12;      size:4; signed:0;
-
-print fmt: "a=%u b=%u", REC->a, REC->b
-
-After this change:
-name: test
-...
-format:
-        field:unsigned short common_type;       offset:0;       size:2; signed:0;
-        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
-
-        field:u32 b;    offset:12;      size:4; signed:0;
-        field:u32 a;    offset:8;       size:4; signed:0;
-
-print fmt: "b=%u a=%u", REC->b, REC->a
-
-I do agree though, that print_fields() is doing it backwards. Can you
-please fix the print_fields() function instead? (It should walk the list
-of fields backwards like tracefs format file does).
-
-Steven can then Ack that work, since it's isolated there.
-
-Thanks,
--Beau
+Thanks & Regards,
+Jagadeesh
