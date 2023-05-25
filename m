@@ -2,179 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F1771084E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EFB710851
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239735AbjEYJIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S240543AbjEYJIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjEYJIV (ORCPT
+        with ESMTP id S229912AbjEYJIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:08:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41F7E19D;
-        Thu, 25 May 2023 02:08:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0382F1FB;
-        Thu, 25 May 2023 02:09:05 -0700 (PDT)
-Received: from [10.57.70.156] (unknown [10.57.70.156])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DBA83F67D;
-        Thu, 25 May 2023 02:08:17 -0700 (PDT)
-Message-ID: <9f414290-0219-302f-ca8b-231217e68efb@arm.com>
-Date:   Thu, 25 May 2023 10:08:15 +0100
+        Thu, 25 May 2023 05:08:37 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5F11A2;
+        Thu, 25 May 2023 02:08:33 -0700 (PDT)
+Received: (Authenticated sender: alexis.lothore@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 22A442000F;
+        Thu, 25 May 2023 09:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685005711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eaf0f8on8F0v4A7b8O5FkakZD4TKew8S3VzKcKXRadk=;
+        b=pVnJ1YtyiSFpg6kxr4CkL4foygOhrmaV6OYJpNSfsWd3UTVsQom+k9LVU7Se4IyoPQ+pL7
+        bYbWl2KDjhFbQm6UuFxui6JQBiGqoxCzQ11cdWVjFwBH2kci+uv62Yqr8FNklzt/y2ePdL
+        jwT+VkqeU1AXZaF9H1kU+eOu6CQvd9uTnOi2x6rTaDjlrJ3yKIixhmo4gCKFiz6uMDGRnK
+        rdzIvWdO8BAnuBnMg9xamY8Nx6tpfIHjxFsaItQehmpWjAME1osCqW1lQ9A5eB3BAO95LD
+        bfQ2xQWochtkznHYzo3LG254v7s7jTl0pOv33vluWdinQTU8EhsjK3f12kz44w==
+Message-ID: <7126e538-0cac-fe1b-fc89-0a4c9e2afcde@bootlin.com>
+Date:   Thu, 25 May 2023 11:08:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v4 02/11] coresight-tpda: Add DSB dataset support
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH net-next v3 2/7] net: dsa: mv88e6xxx: pass directly chip
+ structure to mv88e6xxx_phy_is_internal
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-3-git-send-email-quic_taozha@quicinc.com>
- <444bc278-a3e3-7d99-6020-7c3337371f66@arm.com>
- <9c4c4ea0-b5dd-d18a-fadf-cd3a65c2cf5a@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <9c4c4ea0-b5dd-d18a-fadf-cd3a65c2cf5a@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        paul.arola@telus.com, scott.roberts@telus.com,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
+References: <20230524130127.268201-1-alexis.lothore@bootlin.com>
+ <20230524130127.268201-3-alexis.lothore@bootlin.com>
+ <ZG4OuWllZp3MZxO8@shell.armlinux.org.uk>
+ <9a7fac7b-e04b-27e2-8679-ffbbb23c248e@bootlin.com>
+ <325a6737-21b9-4b78-b022-9a540c3c0f33@lunn.ch>
+From:   =?UTF-8?Q?Alexis_Lothor=c3=a9?= <alexis.lothore@bootlin.com>
+In-Reply-To: <325a6737-21b9-4b78-b022-9a540c3c0f33@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2023 08:16, Tao Zhang wrote:
-> 
-> On 5/23/2023 6:07 PM, Suzuki K Poulose wrote:
->> On 27/04/2023 10:00, Tao Zhang wrote:
->>> Read the DSB element size from the device tree. Set the register
->>> bit that controls the DSB element size of the corresponding port.
+On 5/24/23 19:08, Andrew Lunn wrote:
+> On Wed, May 24, 2023 at 04:46:35PM +0200, Alexis Lothoré wrote:
+>> Hello Russell,
+>>
+>> On 5/24/23 15:18, Russell King (Oracle) wrote:
+>>> On Wed, May 24, 2023 at 03:01:22PM +0200, Alexis Lothoré wrote:
+>>>> Since this function is a simple helper, we do not need to pass a full
+>>>> dsa_switch structure, we can directly pass the mv88e6xxx_chip structure.
+>>>> Doing so will allow to share this function with any other function
+>>>> not manipulating dsa_switch structure but needing info about number of
+>>>> internal phys
+>>>>
+>>>> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>>>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>>
+>>>> ---
+>>>> Changes since v2:
+>>>> - add reviewed-by tags
+>>>>
+>>>> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+>>>> ---
 >>>
->>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>> ---
->>>   drivers/hwtracing/coresight/coresight-core.c |  1 +
->>>   drivers/hwtracing/coresight/coresight-tpda.c | 92 
->>> +++++++++++++++++++++++++---
->>>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
->>>   drivers/hwtracing/coresight/coresight-tpdm.c |  2 +-
->>>   include/linux/coresight.h                    |  1 +
->>>   5 files changed, 90 insertions(+), 10 deletions(-)
+>>> It never ceases to amaze me the way human beings can find creative ways
+>>> to mess things up, no matter how well things are documented. The above
+>>> commit message (and the others that I've looked at) are all broken
+>>> because of this creativity.
 >>>
->>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
->>> b/drivers/hwtracing/coresight/coresight-core.c
->>> index 2af416b..f1eacbb 100644
->>> --- a/drivers/hwtracing/coresight/coresight-core.c
->>> +++ b/drivers/hwtracing/coresight/coresight-core.c
->>> @@ -1092,6 +1092,7 @@ static int coresight_validate_source(struct 
->>> coresight_device *csdev,
->>>         if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
->>>           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
->>> +        subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_TPDM &&
->>>           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS) {
->>>           dev_err(&csdev->dev, "wrong device subtype in %s\n", 
->>> function);
->>>           return -EINVAL;
+>>> In effect, because of the really weird format you've come up with here,
+>>> your patches are in effect *not* signed off by you.
 >>
->> Please see the comment at the bottom.
->>
->>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
->>> b/drivers/hwtracing/coresight/coresight-tpda.c
->>> index 8d2b9d2..af9c72f 100644
->>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
->>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
->>> @@ -21,6 +21,56 @@
->>>     DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
->>>   +/* Search and read element data size from the TPDM node in
->>> + * the devicetree. Each input port of TPDA is connected to
->>> + * a TPDM. Different TPDM supports different types of dataset,
->>> + * and some may support more than one type of dataset.
->>> + * Parameter "inport" is used to pass in the input port number
->>> + * of TPDA, and it is set to 0 in the recursize call.
->>> + * Parameter "parent" is used to pass in the original call.
->>> + */
->>> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
->>> +               struct coresight_device *csdev, int inport, bool parent)
->>> +{
->>> +    static int nr_inport;
->>> +    int i;
->>> +    static bool tpdm_found;
->>> +    struct coresight_device *in_csdev;
->>> +
->>> +    if (inport > (TPDA_MAX_INPORTS - 1))
->>> +        return -EINVAL;
->>> +
->>> +    if (parent) {
->>> +        nr_inport = inport;
->>> +        tpdm_found = false;
->>> +    }
->>> +
->>> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
->>> +        in_csdev = csdev->pdata->in_conns[i]->src_dev;
->>> +        if (!in_csdev)
->>> +            break;
->>> +
->>> +        if (parent)
->>> +            if (csdev->pdata->in_conns[i]->dest_port != inport)
->>> +                continue;
->>> +
->>> +        if (in_csdev->subtype.source_subtype
->>
->> We must match the in_csdev->type to be SOURCE && the subtype.
-> Sure, I will update it in the next patch series.
->>
->>> +                   == CORESIGHT_DEV_SUBTYPE_SOURCE_TPDM) {
->>> + of_property_read_u8(in_csdev->dev.parent->of_node,
->>> +                    "qcom,dsb-element-size", 
->>> &drvdata->dsb_esize[nr_inport]);
->>> +            if (!tpdm_found)
->>> +                tpdm_found = true;
->>> +            else
->>> +                dev_warn(drvdata->dev,
->>> +                    "More than one TPDM is mapped to the TPDA input 
->>> port %d.\n",
->>> +                    nr_inport);
->>
->> When we know, we have found a source device, we don't need to recurse
->> down and could simply 'continue' to the next one in the list and skip
->> the call below.
+>> Sorry for that. This was an attempt to provide relevant changelog for each
+>> patch, but obviously the way I stored those changelogs was wrong, and I did not
+>> catch the consequent broken Signed-off-by lines after re-generating the series.
+>> I'll do as suggested and hold off a bit before fixing/re-sending.
 > 
-> Actually, one input port on TPDA only can connect to one TPDM. In the 
-> current design, it will
+> You can put the changelog in the commit message in git commit, you
+> just need to add the correct --- separate after the tags. The patch
+> created with git format-patch will then have two ---, but that is not
+> a problem.
+
+Yes, that is exactly what I intended to do, but digging a bit, I guess the issue
+has been that my current configuration relies on git format-patch to insert my
+SoB, and it seems to not identify the marker so it inserts the SoB after it
+instead of before. Looks like it was broken in the series v2 too.
+Fixed my configuration to sign-off right at commit time.
+
+Thanks
+
 > 
-> find out all the TPDMs on one input port and warn the users all the 
-> TPDMs it found. If we
+>     Andrew
 > 
-> replace 'recurse down' as 'continue' here, it may not find some TPDMs 
-> that might be connected
-> 
-> incorrectly.
+> ---
+> pw-bot: cr
 
-
-What do you mean ? When you enter the if () above, the in_csdev is a
-source and it is TPDM. There must be no input connections TPDM, i.e.
-in_csdev, so no need to go further up the connection chain looking at
-the in_csdev. The loop will continue to analyse this device (where we
-found one TPDM already) and detect any further duplicate TPDMs
-connected.
-
-Suzuki
-
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
