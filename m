@@ -2,415 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B66E71090C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB70A7108FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240748AbjEYJfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S234279AbjEYJe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240660AbjEYJem (ORCPT
+        with ESMTP id S240444AbjEYJeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:34:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529FEE42;
-        Thu, 25 May 2023 02:34:37 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685007271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vZVepLjGQmA8Sd7Dsoz91hGyNnRRVtsxo9tL/VycGyM=;
-        b=uZ3fJDvn3TkdggxynrSMSfRfldyWS4BjQknTKnFLPsovz8j7ATjj9wKY0YrNVgjmstnPDp
-        RpaZS25BsNwZGpaoJ/p7EJJ0uIbBlS2FUZb7JOxDaj01/dymaraJMQq3HMBNo8AdoDtjj9
-        zicPN9Y+n59Eio5tvFDuMNg3FqCmngFYk44jhQfhJmmgYQqabA/sWVdNy5FxqS89PuRfOd
-        aIlGwXIVvB3HqG5QjnSzYqSFoy17PnFrpG0S42MoYhVVriluyO/v7qDu49txvu1bQtu0UR
-        T/hMyr5UmoePZahxw43d/YnRICYxjiOuqkO5KdkecSSs27EigiIE7kgVE4e+xA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685007271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vZVepLjGQmA8Sd7Dsoz91hGyNnRRVtsxo9tL/VycGyM=;
-        b=sSWawuGzshyC+A1UZwduoT3u0VBy5TcXDOddQy8qoXvVAcuzGJyKZcT9rD6R+qnYz6FWGe
-        gQLD6b6k+lHbNkAw==
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH tty v1 8/8] serial: 8250: synchronize and annotate UART_IER access
-Date:   Thu, 25 May 2023 11:37:59 +0206
-Message-Id: <20230525093159.223817-9-john.ogness@linutronix.de>
-In-Reply-To: <20230525093159.223817-1-john.ogness@linutronix.de>
-References: <20230525093159.223817-1-john.ogness@linutronix.de>
+        Thu, 25 May 2023 05:34:13 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D38E4B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:34:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1685007193; i=efault@gmx.de;
+        bh=dzmGJbT9vNfENkU55MdWdhIPKYqJfzUidx6T+yitQTY=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=OnhzaCti1/1qeJlfMnlCSjhSQuY9sNonlb95Lz9rsax6aRKJLQdG7VxYEgtGp5r2J
+         mYkw1wB4zxptB+HK7Q4qP1yOEZO2ZDIlBgcWLcjkKbstTi3VI0+W7R98jWn5rUG/Du
+         494NvUQSqGOhnp7nDo7/6b7yyc5iwEUlnyYcKStfbyStVXsnbkhWR1tDrspYK2EZTD
+         WWIekZTx7Kvjf2FxU6Z0aaP7lmRoMpA6LFYRo1ldXGJR/R0EsPe4w5O9I4yLtDbxzh
+         s6Ckn/n9LOrxAXcuvqnbhVdt+2yAZhxtx9wrAa/5qsdL/eXdwny19t7psfyd8Nvmnb
+         rCfSWwgvUcgPw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.221.150.37]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5wLZ-1q3Uup3dhj-007XXu; Thu, 25
+ May 2023 11:33:12 +0200
+Message-ID: <372fcc546474ed280d1e200fc83deded3759da52.camel@gmx.de>
+Subject: Re: [RFC PATCH] sched/fair: Introduce SIS_PAIR to wakeup task on
+ local idle core first
+From:   Mike Galbraith <efault@gmx.de>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, Barry Song <baohua@kernel.org>,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 25 May 2023 11:33:09 +0200
+In-Reply-To: <ZG8SmByO0g5fjOc7@chenyu5-mobl1>
+References: <20230516011159.4552-1-yu.c.chen@intel.com>
+         <19664c68f77f5b23a86e5636a17ad2cbfa073f78.camel@gmx.de>
+         <ZGNBt7vWJ3fDs5Sc@chenyu5-mobl1>
+         <795a6d9475ecb444d219a9d36dc93b48a69e960e.camel@gmx.de>
+         <ZGUHa+Si4dJbdsZN@chenyu5-mobl1>
+         <0ac968e3-cd80-6339-970d-37005876b145@amd.com>
+         <ZGWmveL2YTiXp2XR@chenyu5-mobl1>
+         <12061140-4f09-b83f-843c-2fb8ff9f6e81@amd.com>
+         <ZGrrUVZBY6qqeS0K@chenyu5-mobl1>
+         <5ffb7ebcc75c106d791d4b5c4dece4b74c551245.camel@gmx.de>
+         <ZG8SmByO0g5fjOc7@chenyu5-mobl1>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bXu3eUWOX28a31ftyMMXf4cKy0h12gX9iO1Tzxond1i2ZKtjkUL
+ fHfap1obrjqu5+Trv9il2smV+On34ZaVxV+pumnitFn/FUcgqbDf6c1E2AGRi0qgTjzdop4
+ vZ23y58FVKnHBL8RlsvXeN2voaIhIGFNaW68+wgQRpvDoisuZaJPA9nusZSA9L7TIiJHgcB
+ nGsSaSa7Ak6uyG7U7WqkA==
+UI-OutboundReport: notjunk:1;M01:P0:+9o+2iJ57fk=;lZTfHIMPq8rDV/OGmwxFQcr61J8
+ 6sv+q3RNR79SjJvd+SiES3EW8UVfe+ocFggYpACDBzAqZ9uJHwBeOEL2rSsLd6G2Ik49qS46S
+ gjj/fnhPJwWhoCQvtl2oAKLkrOzDPp6pGRoFO5Y2OBqAMQw9lKA6WBEp+06i1+qiGE/0Eo4ex
+ RFoWpbNFqCfhFjVCOyGg1bI6hmhVsSE0vXEQu2LnQpmJC4tnCUwmM7EJyui4eG529jiq6K8JK
+ UdWhCEsE7jvIB6MBsGy+O40MA5gf3Dy7XixhZyOPLPDn6rp5fYvjUam8crRRUtEQfs7ulQNFX
+ 8B64fW3ik0TqBzEX+iLSMagtL/46OXbx8uQYSbvCqNVhRwcprmII52Rid12xnlIco4j7+aYEu
+ JZKpwEJ37qAqqThUNycL/49WxJZCpKvJ4A56YgW+Jw1GiPUWbTHT844E6PxVmTgeZ2IC1jZ9r
+ On07/0mCkgKMCD1QRdA7PuseeiAf1sbzYLQC6IJvUpUvUbg3RXvle+Rl7jMBTm3CqTrBcK3fI
+ DHNOFNMtQDY183cpQ6DL1hfyKcImQ1lfeweqjedtwN0MyB0qBBSL99O3d2cEHb2GaMC6/nU/b
+ AAOyiUNNf/84lq1LoT/3Ol5KLefRaWvoDhyEAvZ7c6+aLBh8i9lqVPdExAuINyurxN1aMaLOw
+ ONLJcR76msxbS5SgWmg0u+Y26B2ClVeo3oLdiDhgRTyJGezPWcLXMVOGBSn+N3ZbC13umom2b
+ UWZD/8UGqCiL6DJRscR/m8kZtxKjKhgENpSS7Zxd3Vby081Ik3q518SFfs3OS9FeusqjuB0rC
+ M97pvkBHtY/rAikeoqZDubXGP1fQ2zvxW6b+cRHMlghMMzWYaH89uNwK7EjMLoKUAlbhZzr67
+ ObnL2NtCYObTBGhWCaT3+uirTueNbRbnCV5r0IJu3xv5sgiNId1n4TjPUNnVbRCZLgrSWLgB/
+ q5uXHQC+LoVI5NEhjof7XsV3sQA=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The UART_IER register is modified twice by each console write
-(serial8250_console_write()) under the port lock. Any driver code that
-accesses UART_IER must do so with the port locked in order to ensure
-consistent values, even when for read accesses.
+On Thu, 2023-05-25 at 15:47 +0800, Chen Yu wrote:
+> On 2023-05-22 at 09:10:33 +0200, Mike Galbraith wrote:
+> >
+> > At one extreme of the huge spectrum of possibilities, a couple less
+> > than brilliant tasks playing high speed ping-pong can bounce all over =
+a
+> > box with zero consequences, but for a pair more akin to say Einstein
+> > and Bohr pondering chalkboards full of mind bending math and meeting
+> > occasionally at the water cooler to exchange snarky remarks, needlessl=
+y
+> > bouncing them about forces them to repopulate chalkboards, and C2C
+> > traffic you try to avoid via bounce you generate via bounce.
+> >
+> I guess what you mean is that, for a wakee has large local data cache
+> footprint, it is not a good idea to wakeup the wakee on a remote core.
+> Because in that way the wakee has to repopulate the cache from scratch.
 
-Add locking, lockdep notation, and/or comments everywhere UART_IER is
-accessed. The added locking is not fixing a real problem because it
-occurs where the console is not active. However, adding the locking
-to these non-critical paths greatly simplifies UART_IER access
-tracking by establishing a general policy that all UART_IER access
-is performed with the port locked.
+Yeah, and all variations in between.
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- drivers/tty/serial/8250/8250.h              |  6 +++
- drivers/tty/serial/8250/8250_aspeed_vuart.c |  3 ++
- drivers/tty/serial/8250/8250_mtk.c          |  9 ++++
- drivers/tty/serial/8250/8250_omap.c         | 14 ++++++
- drivers/tty/serial/8250/8250_port.c         | 53 +++++++++++++++++++++
- 5 files changed, 85 insertions(+)
+> Yes, the problem is that currently the scheduler is lacking of metric
+> to indicate the task's working set, or per-task-cache-footprint-track
+> (although we have numa balancing to calculate per-task-node-statistics).
+> If provided with this cache-aware metric, the wakee can be put to a cand=
+idate
+> CPU where the cache locallity(either LLC or L2) is friendly to the wakee=
+.
+> Because there is no such accurate metric, the heuristic seems to be an c=
+ompromised
+> way to predict the task placement.
 
-diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-index 5418708f4631..471c6bc5f78f 100644
---- a/drivers/tty/serial/8250/8250.h
-+++ b/drivers/tty/serial/8250/8250.h
-@@ -179,6 +179,9 @@ static inline void serial_dl_write(struct uart_8250_port *up, u32 value)
- 
- static inline bool serial8250_set_THRI(struct uart_8250_port *up)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	if (up->ier & UART_IER_THRI)
- 		return false;
- 	up->ier |= UART_IER_THRI;
-@@ -188,6 +191,9 @@ static inline bool serial8250_set_THRI(struct uart_8250_port *up)
- 
- static inline bool serial8250_clear_THRI(struct uart_8250_port *up)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	if (!(up->ier & UART_IER_THRI))
- 		return false;
- 	up->ier &= ~UART_IER_THRI;
-diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-index 9d2a7856784f..4a9e71b2dbbc 100644
---- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
-+++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-@@ -275,6 +275,9 @@ static void __aspeed_vuart_set_throttle(struct uart_8250_port *up,
- {
- 	unsigned char irqs = UART_IER_RLSI | UART_IER_RDI;
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	up->ier &= ~irqs;
- 	if (!throttle)
- 		up->ier |= irqs;
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index fb1d5ec0940e..aa8e98164d68 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -222,11 +222,17 @@ static void mtk8250_shutdown(struct uart_port *port)
- 
- static void mtk8250_disable_intrs(struct uart_8250_port *up, int mask)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	serial_out(up, UART_IER, serial_in(up, UART_IER) & (~mask));
- }
- 
- static void mtk8250_enable_intrs(struct uart_8250_port *up, int mask)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	serial_out(up, UART_IER, serial_in(up, UART_IER) | mask);
- }
- 
-@@ -235,6 +241,9 @@ static void mtk8250_set_flow_ctrl(struct uart_8250_port *up, int mode)
- 	struct uart_port *port = &up->port;
- 	int lcr = serial_in(up, UART_LCR);
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&port->lock);
-+
- 	serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
- 	serial_out(up, MTK_UART_EFR, UART_EFR_ECB);
- 	serial_out(up, UART_LCR, lcr);
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 3225c95fde1d..0498b9b0e4e9 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -533,6 +533,10 @@ static void omap_8250_pm(struct uart_port *port, unsigned int state,
- 	u8 efr;
- 
- 	pm_runtime_get_sync(port->dev);
-+
-+	/* Synchronize UART_IER access against the console. */
-+	spin_lock_irq(&port->lock);
-+
- 	serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
- 	efr = serial_in(up, UART_EFR);
- 	serial_out(up, UART_EFR, efr | UART_EFR_ECB);
-@@ -543,6 +547,8 @@ static void omap_8250_pm(struct uart_port *port, unsigned int state,
- 	serial_out(up, UART_EFR, efr);
- 	serial_out(up, UART_LCR, 0);
- 
-+	spin_unlock_irq(&port->lock);
-+
- 	pm_runtime_mark_last_busy(port->dev);
- 	pm_runtime_put_autosuspend(port->dev);
- }
-@@ -760,8 +766,11 @@ static void omap_8250_shutdown(struct uart_port *port)
- 	if (priv->habit & UART_HAS_EFR2)
- 		serial_out(up, UART_OMAP_EFR2, 0x0);
- 
-+	/* Synchronize UART_IER access against the console. */
-+	spin_lock_irq(&port->lock);
- 	up->ier = 0;
- 	serial_out(up, UART_IER, 0);
-+	spin_unlock_irq(&port->lock);
- 	disable_irq_nosync(up->port.irq);
- 	dev_pm_clear_wake_irq(port->dev);
- 
-@@ -803,6 +812,7 @@ static void omap_8250_unthrottle(struct uart_port *port)
- 
- 	pm_runtime_get_sync(port->dev);
- 
-+	/* Synchronize UART_IER access against the console. */
- 	spin_lock_irqsave(&port->lock, flags);
- 	priv->throttled = false;
- 	if (up->dma)
-@@ -953,6 +963,7 @@ static void __dma_rx_complete(void *param)
- 	struct dma_tx_state     state;
- 	unsigned long flags;
- 
-+	/* Synchronize UART_IER access against the console. */
- 	spin_lock_irqsave(&p->port.lock, flags);
- 
- 	/*
-@@ -1227,6 +1238,9 @@ static u16 omap_8250_handle_rx_dma(struct uart_8250_port *up, u8 iir, u16 status
- static void am654_8250_handle_rx_dma(struct uart_8250_port *up, u8 iir,
- 				     u16 status)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	/*
- 	 * Queue a new transfer if FIFO has data.
- 	 */
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index b3971302d8e5..4b7bbd8b3305 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -539,6 +539,9 @@ EXPORT_SYMBOL_GPL(serial8250_rpm_put);
-  */
- static int serial8250_em485_init(struct uart_8250_port *p)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&p->port.lock);
-+
- 	if (p->em485)
- 		goto deassert_rts;
- 
-@@ -676,6 +679,8 @@ static void serial8250_set_sleep(struct uart_8250_port *p, int sleep)
- 	serial8250_rpm_get(p);
- 
- 	if (p->capabilities & UART_CAP_SLEEP) {
-+		/* Synchronize UART_IER access against the console. */
-+		spin_lock_irq(&p->port.lock);
- 		if (p->capabilities & UART_CAP_EFR) {
- 			lcr = serial_in(p, UART_LCR);
- 			efr = serial_in(p, UART_EFR);
-@@ -689,6 +694,7 @@ static void serial8250_set_sleep(struct uart_8250_port *p, int sleep)
- 			serial_out(p, UART_EFR, efr);
- 			serial_out(p, UART_LCR, lcr);
- 		}
-+		spin_unlock_irq(&p->port.lock);
- 	}
- 
- 	serial8250_rpm_put(p);
-@@ -696,6 +702,9 @@ static void serial8250_set_sleep(struct uart_8250_port *p, int sleep)
- 
- static void serial8250_clear_IER(struct uart_8250_port *up)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	if (up->capabilities & UART_CAP_UUE)
- 		serial_out(up, UART_IER, UART_IER_UUE);
- 	else
-@@ -968,6 +977,9 @@ static void autoconfig_16550a(struct uart_8250_port *up)
- 	unsigned char status1, status2;
- 	unsigned int iersave;
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	up->port.type = PORT_16550A;
- 	up->capabilities |= UART_CAP_FIFO;
- 
-@@ -1151,6 +1163,8 @@ static void autoconfig(struct uart_8250_port *up)
- 	/*
- 	 * We really do need global IRQs disabled here - we're going to
- 	 * be frobbing the chips IRQ enable register to see if it exists.
-+	 *
-+	 * Synchronize UART_IER access against the console.
- 	 */
- 	spin_lock_irqsave(&port->lock, flags);
- 
-@@ -1323,7 +1337,10 @@ static void autoconfig_irq(struct uart_8250_port *up)
- 	/* forget possible initially masked and pending IRQ */
- 	probe_irq_off(probe_irq_on());
- 	save_mcr = serial8250_in_MCR(up);
-+	/* Synchronize UART_IER access against the console. */
-+	spin_lock_irq(&port->lock);
- 	save_ier = serial_in(up, UART_IER);
-+	spin_unlock_irq(&port->lock);
- 	serial8250_out_MCR(up, UART_MCR_OUT1 | UART_MCR_OUT2);
- 
- 	irqs = probe_irq_on();
-@@ -1335,7 +1352,10 @@ static void autoconfig_irq(struct uart_8250_port *up)
- 		serial8250_out_MCR(up,
- 			UART_MCR_DTR | UART_MCR_RTS | UART_MCR_OUT2);
- 	}
-+	/* Synchronize UART_IER access against the console. */
-+	spin_lock_irq(&port->lock);
- 	serial_out(up, UART_IER, UART_IER_ALL_INTR);
-+	spin_unlock_irq(&port->lock);
- 	serial_in(up, UART_LSR);
- 	serial_in(up, UART_RX);
- 	serial_in(up, UART_IIR);
-@@ -1345,7 +1365,10 @@ static void autoconfig_irq(struct uart_8250_port *up)
- 	irq = probe_irq_off(irqs);
- 
- 	serial8250_out_MCR(up, save_mcr);
-+	/* Synchronize UART_IER access against the console. */
-+	spin_lock_irq(&port->lock);
- 	serial_out(up, UART_IER, save_ier);
-+	spin_unlock_irq(&port->lock);
- 
- 	if (port->flags & UPF_FOURPORT)
- 		outb_p(save_ICP, ICP);
-@@ -1360,6 +1383,9 @@ static void serial8250_stop_rx(struct uart_port *port)
- {
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&port->lock);
-+
- 	serial8250_rpm_get(up);
- 
- 	up->ier &= ~(UART_IER_RLSI | UART_IER_RDI);
-@@ -1379,6 +1405,9 @@ void serial8250_em485_stop_tx(struct uart_8250_port *p)
- {
- 	unsigned char mcr = serial8250_in_MCR(p);
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&p->port.lock);
-+
- 	if (p->port.rs485.flags & SER_RS485_RTS_AFTER_SEND)
- 		mcr |= UART_MCR_RTS;
- 	else
-@@ -1428,6 +1457,9 @@ static void __stop_tx_rs485(struct uart_8250_port *p, u64 stop_delay)
- {
- 	struct uart_8250_em485 *em485 = p->em485;
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&p->port.lock);
-+
- 	stop_delay += (u64)p->port.rs485.delay_rts_after_send * NSEC_PER_MSEC;
- 
- 	/*
-@@ -1607,6 +1639,9 @@ static void serial8250_start_tx(struct uart_port *port)
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 	struct uart_8250_em485 *em485 = up->em485;
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&port->lock);
-+
- 	if (!port->x_char && uart_circ_empty(&port->state->xmit))
- 		return;
- 
-@@ -1634,6 +1669,9 @@ static void serial8250_disable_ms(struct uart_port *port)
- {
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&port->lock);
-+
- 	/* no MSR capabilities */
- 	if (up->bugs & UART_BUG_NOMSR)
- 		return;
-@@ -1648,6 +1686,9 @@ static void serial8250_enable_ms(struct uart_port *port)
- {
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&port->lock);
-+
- 	/* no MSR capabilities */
- 	if (up->bugs & UART_BUG_NOMSR)
- 		return;
-@@ -2104,6 +2145,14 @@ static void serial8250_put_poll_char(struct uart_port *port,
- 	unsigned int ier;
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 
-+	/*
-+	 * Normally the port is locked to synchronize UART_IER access
-+	 * against the console. However, this function is only used by
-+	 * KDB/KGDB, where it may not be possible to acquire the port
-+	 * lock because all other CPUs are quiesced. The quiescence
-+	 * should allow safe lockless usage here.
-+	 */
-+
- 	serial8250_rpm_get(up);
- 	/*
- 	 *	First save the IER then disable the interrupts
-@@ -2439,6 +2488,8 @@ void serial8250_do_shutdown(struct uart_port *port)
- 	serial8250_rpm_get(up);
- 	/*
- 	 * Disable interrupts from this port
-+	 *
-+	 * Synchronize UART_IER access against the console.
- 	 */
- 	spin_lock_irqsave(&port->lock, flags);
- 	up->ier = 0;
-@@ -2738,6 +2789,8 @@ serial8250_do_set_termios(struct uart_port *port, struct ktermios *termios,
- 	/*
- 	 * Ok, we're now changing the port state.  Do it with
- 	 * interrupts disabled.
-+	 *
-+	 * Synchronize UART_IER access against the console.
- 	 */
- 	serial8250_rpm_get(up);
- 	spin_lock_irqsave(&port->lock, flags);
--- 
-2.30.2
+Nah, it's a dart toss.  With a box full of net blaster tools, the odds
+may even be favorable, but who knows what the wild will do.
 
+> The C2C was mainly caused by accessing global tg->load, so besides
+> wakeup placement, there should also be other way to mitigate C2C,
+> such as reducing the frequency of accessing tg->load.
+
+Attacking that is the only thing that makes any sense to me.
+
+> Besides that, while studying the history of wake_wide(), I suddenly
+> found that 10 years ago Michael has proposed exactly the same strategy t=
+o
+> check if task A and B are waking up each other, if they are, put them
+> together, otherwise, spread them to different LLC:
+> https://lkml.org/lkml/2013/3/6/73
+> And this version has finnaly evolved to what wake_wide() looks like toda=
+y
+> in your patch:
+
+Yeah, I've touched that, but it's still busted.  I watched firefox
+burst wake a way too big thread pool, but since worker-bees collected
+zero flips, the heuristic says all is well, move along ginormous swarm.
+
+	-Mike
