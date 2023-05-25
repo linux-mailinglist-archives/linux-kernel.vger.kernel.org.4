@@ -2,43 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9A37102FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCB77102F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237688AbjEYCnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 22:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S237550AbjEYCmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237596AbjEYCnV (ORCPT
+        with ESMTP id S237470AbjEYCl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 22:43:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C640C122;
-        Wed, 24 May 2023 19:43:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A0E9D75;
-        Wed, 24 May 2023 19:44:02 -0700 (PDT)
-Received: from [10.162.43.6] (unknown [10.162.43.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0718E3F762;
-        Wed, 24 May 2023 19:43:15 -0700 (PDT)
-Message-ID: <b300037e-0d9d-db60-49dd-858d8a872355@arm.com>
-Date:   Thu, 25 May 2023 08:13:12 +0530
+        Wed, 24 May 2023 22:41:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D18E6;
+        Wed, 24 May 2023 19:41:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5778E641C7;
+        Thu, 25 May 2023 02:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F8BC433EF;
+        Thu, 25 May 2023 02:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684982515;
+        bh=Lo0WBDv5SBGCOSEzfMDGCJroIZ+pRlkVidFrQmSKfLY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=apyuiFwb+iBikMNct1s2IUQYAidJ06qwTnOBbhz5ll9rRVcRVY6QdNFrncPi2HPYv
+         rxp/i9IrQkvbGEnoBQNHo5LJHVODPPXhn+E+4FXKOxY0umIiihutLlQnLbG/9UOyT0
+         wqeX/U9ridLMYk3uo2WLx6UOq3+1Rh98e9Qtj3VdTVl5wKNt9hTK38wT4pecIs0s3a
+         dIO3QYpjhD5EgI7ww1j+sSAatzdHPDS2/shSkf6ctRFjftx26CiUO+O4cTAowrZ4PL
+         h1LQQlCOqsl38jf9F+7cTsQ2GAWRD9iEYe4MF1ymL35qCdxtPhfmN3jjcGsMu0xpvM
+         IfmdcEN4ItuuA==
+Date:   Wed, 24 May 2023 19:45:46 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>, dianders@chromium.org,
+        swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
+Message-ID: <20230525024546.ug6nbrmkgx2alerc@ripper>
+References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
+ <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 04/36] mm: Remove ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-5-willy@infradead.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230315051444.3229621-5-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,138 +59,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
-> Current best practice is to reuse the name of the function as a define
-> to indicate that the function is implemented by the architecture.
+On Wed, May 24, 2023 at 11:56:28AM +0200, Ulf Hansson wrote:
+> On Mon, 24 Apr 2023 at 13:09, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+> >
+> > Changes in v4:
+> > - Add missing s-o-b line and reviewed by in patch 1
+> > - Address ulf's comments for error handling in patch 2
+> >
+> > Changes in v3:
+> > - Add new change to provide helper function dt_idle_pd_remove_topology()
+> > - Address ulf's comments for error handling
+> > - Add reviewed by ulf for devicetree change
+> >
+> > Changes in v2:
+> > - Add new change to Move enabling OSI mode after power domains creation
+> > - Fix compatible string to domains-idle-states for cluster idle state.
+> > - Update cover letter with some more details on OSI and PC mode
+> >   comparision
+> >
+> > The dependency [2] is now merged in trustedfirmware project.
+> >
+> > Stats comparision between OSI and PC mode are captured at [3] with
+> > usecase
+> > details, where during multiple CPUs online the residency in cluster idle
+> > state is better with OSI and also inline with single CPU mode. In PC
+> > mode
+> > with multiple CPUs cluster idle state residency is dropping compare to
+> > single CPU mode.
+> >
+> > Recording of this meeting is also available at [4].
+> >
+> > This change adds power-domains for cpuidle states to use PSCI OS
+> > initiated mode for sc7280.
+> >
+> > This change depends on external project changes [1] & [2] which are
+> > under review/discussion to add PSCI os-initiated support in Arm Trusted
+> > Firmware.
+> >
+> > I can update here once the dependency are in and change is ready to
+> > merge.
+> >
+> > [1] https://review.trustedfirmware.org/q/topic:psci-osi
+> > [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
+> > [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
+> > [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+> >
+> > Maulik Shah (3):
+> >   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
+> >   cpuidle: psci: Move enabling OSI mode after power domains creation
+> >   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
+> >
+> >  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
+> >  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
+> >  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
+> >  4 files changed, 117 insertions(+), 51 deletions(-)
+> >
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
-> ---
->  Documentation/core-api/cachetlb.rst | 24 +++++++++---------------
->  include/linux/cacheflush.h          |  4 ++--
->  mm/util.c                           |  2 +-
->  3 files changed, 12 insertions(+), 18 deletions(-)
+> Looks like this series has not been queued up yet. Note that patch1
+> and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
+> DTS change) is dependent on patch 1 and patch2.
 > 
-> diff --git a/Documentation/core-api/cachetlb.rst b/Documentation/core-api/cachetlb.rst
-> index d4c9e2a28d36..770008afd409 100644
-> --- a/Documentation/core-api/cachetlb.rst
-> +++ b/Documentation/core-api/cachetlb.rst
-> @@ -269,7 +269,7 @@ maps this page at its virtual address.
->  	If D-cache aliasing is not an issue, these two routines may
->  	simply call memcpy/memset directly and do nothing more.
->  
-> -  ``void flush_dcache_page(struct page *page)``
-> +  ``void flush_dcache_folio(struct folio *folio)``
->  
->          This routines must be called when:
->  
-> @@ -277,7 +277,7 @@ maps this page at its virtual address.
->  	     and / or in high memory
->  	  b) the kernel is about to read from a page cache page and user space
->  	     shared/writable mappings of this page potentially exist.  Note
-> -	     that {get,pin}_user_pages{_fast} already call flush_dcache_page
-> +	     that {get,pin}_user_pages{_fast} already call flush_dcache_folio
->  	     on any page found in the user address space and thus driver
->  	     code rarely needs to take this into account.
->  
-> @@ -291,7 +291,7 @@ maps this page at its virtual address.
->  
->  	The phrase "kernel writes to a page cache page" means, specifically,
->  	that the kernel executes store instructions that dirty data in that
-> -	page at the page->virtual mapping of that page.  It is important to
-> +	page at the kernel virtual mapping of that page.  It is important to
->  	flush here to handle D-cache aliasing, to make sure these kernel stores
->  	are visible to user space mappings of that page.
->  
-> @@ -302,18 +302,18 @@ maps this page at its virtual address.
->  	If D-cache aliasing is not an issue, this routine may simply be defined
->  	as a nop on that architecture.
->  
-> -        There is a bit set aside in page->flags (PG_arch_1) as "architecture
-> +        There is a bit set aside in folio->flags (PG_arch_1) as "architecture
->  	private".  The kernel guarantees that, for pagecache pages, it will
->  	clear this bit when such a page first enters the pagecache.
->  
->  	This allows these interfaces to be implemented much more
->  	efficiently.  It allows one to "defer" (perhaps indefinitely) the
->  	actual flush if there are currently no user processes mapping this
-> -	page.  See sparc64's flush_dcache_page and update_mmu_cache_range
-> +	page.  See sparc64's flush_dcache_folio and update_mmu_cache_range
->  	implementations for an example of how to go about doing this.
->  
-> -	The idea is, first at flush_dcache_page() time, if
-> -	page_file_mapping() returns a mapping, and mapping_mapped on that
-> +	The idea is, first at flush_dcache_folio() time, if
-> +	folio_flush_mapping() returns a mapping, and mapping_mapped() on that
->  	mapping returns %false, just mark the architecture private page
->  	flag bit.  Later, in update_mmu_cache_range(), a check is made
->  	of this flag bit, and if set the flush is done and the flag bit
-> @@ -327,12 +327,6 @@ maps this page at its virtual address.
->  			dirty.  Again, see sparc64 for examples of how
->  			to deal with this.
->  
-> -  ``void flush_dcache_folio(struct folio *folio)``
-> -	This function is called under the same circumstances as
-> -	flush_dcache_page().  It allows the architecture to
-> -	optimise for flushing the entire folio of pages instead
-> -	of flushing one page at a time.
-> -
->    ``void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
->    unsigned long user_vaddr, void *dst, void *src, int len)``
->    ``void copy_from_user_page(struct vm_area_struct *vma, struct page *page,
-> @@ -353,7 +347,7 @@ maps this page at its virtual address.
->  
->    	When the kernel needs to access the contents of an anonymous
->  	page, it calls this function (currently only
-> -	get_user_pages()).  Note: flush_dcache_page() deliberately
-> +	get_user_pages()).  Note: flush_dcache_folio() deliberately
->  	doesn't work for an anonymous page.  The default
->  	implementation is a nop (and should remain so for all coherent
->  	architectures).  For incoherent architectures, it should flush
-> @@ -370,7 +364,7 @@ maps this page at its virtual address.
->    ``void flush_icache_page(struct vm_area_struct *vma, struct page *page)``
->  
->  	All the functionality of flush_icache_page can be implemented in
-> -	flush_dcache_page and update_mmu_cache_range. In the future, the hope
-> +	flush_dcache_folio and update_mmu_cache_range. In the future, the hope
->  	is to remove this interface completely.
->  
->  The final category of APIs is for I/O to deliberately aliased address
-> diff --git a/include/linux/cacheflush.h b/include/linux/cacheflush.h
-> index a6189d21f2ba..82136f3fcf54 100644
-> --- a/include/linux/cacheflush.h
-> +++ b/include/linux/cacheflush.h
-> @@ -7,14 +7,14 @@
->  struct folio;
->  
->  #if ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE
-> -#ifndef ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
-> +#ifndef flush_dcache_folio
->  void flush_dcache_folio(struct folio *folio);
->  #endif
->  #else
->  static inline void flush_dcache_folio(struct folio *folio)
->  {
->  }
-> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO 0
-> +#define flush_dcache_folio flush_dcache_folio
->  #endif /* ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE */
->  
->  #endif /* _LINUX_CACHEFLUSH_H */
-> diff --git a/mm/util.c b/mm/util.c
-> index dd12b9531ac4..98ce51b01627 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -1125,7 +1125,7 @@ void page_offline_end(void)
->  }
->  EXPORT_SYMBOL(page_offline_end);
->  
-> -#ifndef ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
-> +#ifndef flush_dcache_folio
->  void flush_dcache_folio(struct folio *folio)
->  {
->  	long i, nr = folio_nr_pages(folio);
+> Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
+> Bjorn, is that okay for you?
+> 
+
+Sorry, this fell between the chairs after you pointed me to it...
+
+I can certainly pick the 3 patches through my tree, but are they fixing
+any current regressions, or is it just that we need the first two
+patches to land before the 3rd patch?
+
+I also presume the 3rd patch is only needed when paired with the new
+ATF?
+
+Regards,
+Bjorn
