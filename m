@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ED771149C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0C07114BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242095AbjEYSjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
+        id S242024AbjEYSjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242052AbjEYSiZ (ORCPT
+        with ESMTP id S241919AbjEYSic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:38:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EDB1710;
-        Thu, 25 May 2023 11:36:42 -0700 (PDT)
+        Thu, 25 May 2023 14:38:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B905F2122;
+        Thu, 25 May 2023 11:36:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E68164902;
-        Thu, 25 May 2023 18:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E426BC4339B;
-        Thu, 25 May 2023 18:36:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CE3B6490F;
+        Thu, 25 May 2023 18:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1220DC433EF;
+        Thu, 25 May 2023 18:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039784;
-        bh=HFdrnqkcnUQg9uWpFJ+udX6fWvMx3SLmIe6cCrti5OM=;
+        s=k20201202; t=1685039802;
+        bh=k4xLpc2kDfrZGIzuPUhhZcsIyB570BeLmlOecqYVjjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ua0orkMb+A6loFmafINe2xUw9TbIQ+KxTZFY+GZSGXzUvrZRlFflp8a1+/4I3yfgt
-         gbb2mwDorVd7vcClqp8NkBfN+iZk6S/buc1DE+INeqG1E4VkLQOgn7tm5ZOTw/KyTe
-         eeRZPd1QB4ySWhR6ExGt9BzPvgk5/WT1/iodkZDdFFzX9yFwbpRSHmi9OB25NhkAxu
-         bMXC2XLQWj9nXi1Zhz6P9GC1NM8KJBODFQHNTc2TIAImOVOUXXDn1HV49nmlMTQ3SK
-         B6CDcMqTPrVDZfYJmFkm0oVEDz5odLUWuyEH9yFpCzKgJBzfSLeZUPzCKO1nqYdZVq
-         LKtWT8qBNrtsg==
+        b=GlD5ngPP8Jcu4BRFJKag4ChNIRsGBzk0QeNXBrpV5ZjxIXvCT3TqiU+tOZ3LOAd9u
+         +UA3mJ1Or/WgsB5hpiAZoXo1E6NSXM9eIsjayHPs4oZ4qP0cyHTLBqSO6pobyNlxxn
+         aJn6+3776OphXtpebLv7dAouWM9778cTbVr9zl6fWlcwoRPxCYfWH3+6XgaBuIo1TK
+         TF4V+aIJCrgTnAH7HQBByFsGorTGYjnimIfSwDpEcrG5fVkKkTxSZ6jvBCF8XQwW2t
+         UHPXF8aJFxGNu36/ETLyG3IjaY3hSXZ+wK+rCIdljAta7eXtcz6MjSqTkvAQ35eYqs
+         zwUkh/iQ1OTDw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/57] selftests/ftrace: Improve integration with kselftest runner
-Date:   Thu, 25 May 2023 14:35:15 -0400
-Message-Id: <20230525183607.1793983-5-sashal@kernel.org>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sasha Levin <sashal@kernel.org>,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        masahiroy@kernel.org, linux-um@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.1 06/57] um: harddog: fix modular build
+Date:   Thu, 25 May 2023 14:35:16 -0400
+Message-Id: <20230525183607.1793983-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
 References: <20230525183607.1793983-1-sashal@kernel.org>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,237 +60,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit dbcf76390eb9a65d5d0c37b0cd57335218564e37 ]
+[ Upstream commit 73a23d7710331a530e972903318528b75e5a5f58 ]
 
-The ftrace selftests do not currently produce KTAP output, they produce a
-custom format much nicer for human consumption. This means that when run in
-automated test systems we just get a single result for the suite as a whole
-rather than recording results for individual test cases, making it harder
-to look at the test data and masking things like inappropriate skips.
+Since we no longer (want to) export any libc symbols the
+_user portions of any drivers need to be built into image
+rather than the module. I missed this for the watchdog.
+Fix the watchdog accordingly.
 
-Address this by adding support for KTAP output to the ftracetest script and
-providing a trivial wrapper which will be invoked by the kselftest runner
-to generate output in this format by default, users using ftracetest
-directly will continue to get the existing output.
-
-This is not the most elegant solution but it is simple and effective. I
-did consider implementing this by post processing the existing output
-format but that felt more complex and likely to result in all output being
-lost if something goes seriously wrong during the run which would not be
-helpful. I did also consider just writing a separate runner script but
-there's enough going on with things like the signal handling for that to
-seem like it would be duplicating too much.
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/ftrace/Makefile       |  3 +-
- tools/testing/selftests/ftrace/ftracetest     | 63 ++++++++++++++++++-
- .../testing/selftests/ftrace/ftracetest-ktap  |  8 +++
- 3 files changed, 70 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/ftrace/ftracetest-ktap
+ arch/um/drivers/Makefile           | 4 +++-
+ arch/um/drivers/harddog.h          | 9 +++++++++
+ arch/um/drivers/harddog_kern.c     | 7 +------
+ arch/um/drivers/harddog_user.c     | 1 +
+ arch/um/drivers/harddog_user_exp.c | 9 +++++++++
+ 5 files changed, 23 insertions(+), 7 deletions(-)
+ create mode 100644 arch/um/drivers/harddog.h
+ create mode 100644 arch/um/drivers/harddog_user_exp.c
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index d6e106fbce11c..a1e955d2de4cc 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
+diff --git a/arch/um/drivers/Makefile b/arch/um/drivers/Makefile
+index e1dc4292bd22e..65b449c992d2c 100644
+--- a/arch/um/drivers/Makefile
++++ b/arch/um/drivers/Makefile
+@@ -16,7 +16,8 @@ mconsole-objs := mconsole_kern.o mconsole_user.o
+ hostaudio-objs := hostaudio_kern.o
+ ubd-objs := ubd_kern.o ubd_user.o
+ port-objs := port_kern.o port_user.o
+-harddog-objs := harddog_kern.o harddog_user.o
++harddog-objs := harddog_kern.o
++harddog-builtin-$(CONFIG_UML_WATCHDOG) := harddog_user.o harddog_user_exp.o
+ rtc-objs := rtc_kern.o rtc_user.o
  
--TEST_PROGS := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS := ftracetest-ktap
- TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index c3311c8c40890..2506621e75dfb 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
- echo " Options:"
- echo "		-h|--help  Show help message"
- echo "		-k|--keep  Keep passed test logs"
-+echo "		-K|--ktap  Output in KTAP format"
- echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-@@ -85,6 +86,10 @@ parse_opts() { # opts
-       KEEP_LOG=1
-       shift 1
-     ;;
-+    --ktap|-K)
-+      KTAP=1
-+      shift 1
-+    ;;
-     --verbose|-v|-vv|-vvv)
-       if [ $VERBOSE -eq -1 ]; then
- 	usage "--console can not use with --verbose"
-@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
- TEST_CASES=`find_testcases $TEST_DIR`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
- KEEP_LOG=0
-+KTAP=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-@@ -229,7 +235,7 @@ prlog() { # messages
-     newline=
-     shift
-   fi
--  printf "$*$newline"
-+  [ "$KTAP" != "1" ] && printf "$*$newline"
-   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
- }
- catlog() { #file
-@@ -260,11 +266,11 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+CASENAME=
- 
- testcase() { # testfile
-   CASENO=$((CASENO+1))
--  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
--  prlog -n "[$CASENO]$INSTANCE$desc"
-+  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
- }
- 
- checkreq() { # testfile
-@@ -277,40 +283,68 @@ test_on_instance() { # testfile
-   grep -q "^#[ \t]*flags:.*instance" $1
- }
- 
-+ktaptest() { # result comment
-+  if [ "$KTAP" != "1" ]; then
-+    return
-+  fi
-+
-+  local result=
-+  if [ "$1" = "1" ]; then
-+    result="ok"
-+  else
-+    result="not ok"
-+  fi
-+  shift
-+
-+  local comment=$*
-+  if [ "$comment" != "" ]; then
-+    comment="# $comment"
-+  fi
-+
-+  echo $CASENO $result $INSTANCE$CASENAME $comment
-+}
-+
- eval_result() { # sigval
-   case $1 in
-     $PASS)
-       prlog "	[${color_green}PASS${color_reset}]"
-+      ktaptest 1
-       PASSED_CASES="$PASSED_CASES $CASENO"
-       return 0
-     ;;
-     $FAIL)
-       prlog "	[${color_red}FAIL${color_reset}]"
-+      ktaptest 0
-       FAILED_CASES="$FAILED_CASES $CASENO"
-       return 1 # this is a bug.
-     ;;
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-+      ktaptest 0 UNRESOLVED
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-       return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
-       return 0
-     ;;
-     $UNSUPPORTED)
-       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
-       return $UNSUPPORTED_RESULT # depends on use case
-     ;;
-     $XFAIL)
-       prlog "	[${color_green}XFAIL${color_reset}]"
-+      ktaptest 1 XFAIL
-       XFAILED_CASES="$XFAILED_CASES $CASENO"
-       return 0
-     ;;
-     *)
-       prlog "	[${color_blue}UNDEFINED${color_reset}]"
-+      ktaptest 0 error
-       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
-       return 1 # this must be a test bug
-     ;;
-@@ -371,6 +405,7 @@ __run_test() { # testfile
- run_test() { # testfile
-   local testname=`basename $1`
-   testcase $1
-+  prlog -n "[$CASENO]$INSTANCE$CASENAME"
-   if [ ! -z "$LOG_FILE" ] ; then
-     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
-   else
-@@ -405,6 +440,17 @@ run_test() { # testfile
- # load in the helper functions
- . $TEST_DIR/functions
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo "TAP version 13"
-+
-+  casecount=`echo $TEST_CASES | wc -w`
-+  for t in $TEST_CASES; do
-+    test_on_instance $t || continue
-+    casecount=$((casecount+1))
-+  done
-+  echo "1..${casecount}"
-+fi
-+
- # Main loop
- for t in $TEST_CASES; do
-   run_test $t
-@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo -n "# Totals:"
-+  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-+  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-+  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-+  echo -n " xpass:0"
-+  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-+  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-+  echo
-+fi
-+
- cleanup
- 
- # if no error, return 0
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-new file mode 100755
-index 0000000000000..b3284679ef3af
+ LDFLAGS_pcap.o = $(shell $(CC) $(KBUILD_CFLAGS) -print-file-name=libpcap.a)
+@@ -60,6 +61,7 @@ obj-$(CONFIG_PTY_CHAN) += pty.o
+ obj-$(CONFIG_TTY_CHAN) += tty.o 
+ obj-$(CONFIG_XTERM_CHAN) += xterm.o xterm_kern.o
+ obj-$(CONFIG_UML_WATCHDOG) += harddog.o
++obj-y += $(harddog-builtin-y) $(harddog-builtin-m)
+ obj-$(CONFIG_BLK_DEV_COW_COMMON) += cow_user.o
+ obj-$(CONFIG_UML_RANDOM) += random.o
+ obj-$(CONFIG_VIRTIO_UML) += virtio_uml.o
+diff --git a/arch/um/drivers/harddog.h b/arch/um/drivers/harddog.h
+new file mode 100644
+index 0000000000000..6d9ea60e7133e
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -0,0 +1,8 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-+#
-+# Copyright (C) Arm Ltd., 2023
++++ b/arch/um/drivers/harddog.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef UM_WATCHDOG_H
++#define UM_WATCHDOG_H
 +
-+./ftracetest -K
++int start_watchdog(int *in_fd_ret, int *out_fd_ret, char *sock);
++void stop_watchdog(int in_fd, int out_fd);
++int ping_watchdog(int fd);
++
++#endif /* UM_WATCHDOG_H */
+diff --git a/arch/um/drivers/harddog_kern.c b/arch/um/drivers/harddog_kern.c
+index e6d4f43deba82..60d1c6cab8a95 100644
+--- a/arch/um/drivers/harddog_kern.c
++++ b/arch/um/drivers/harddog_kern.c
+@@ -47,6 +47,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/uaccess.h>
+ #include "mconsole.h"
++#include "harddog.h"
+ 
+ MODULE_LICENSE("GPL");
+ 
+@@ -60,8 +61,6 @@ static int harddog_out_fd = -1;
+  *	Allow only one person to hold it open
+  */
+ 
+-extern int start_watchdog(int *in_fd_ret, int *out_fd_ret, char *sock);
+-
+ static int harddog_open(struct inode *inode, struct file *file)
+ {
+ 	int err = -EBUSY;
+@@ -92,8 +91,6 @@ static int harddog_open(struct inode *inode, struct file *file)
+ 	return err;
+ }
+ 
+-extern void stop_watchdog(int in_fd, int out_fd);
+-
+ static int harddog_release(struct inode *inode, struct file *file)
+ {
+ 	/*
+@@ -112,8 +109,6 @@ static int harddog_release(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
+-extern int ping_watchdog(int fd);
+-
+ static ssize_t harddog_write(struct file *file, const char __user *data, size_t len,
+ 			     loff_t *ppos)
+ {
+diff --git a/arch/um/drivers/harddog_user.c b/arch/um/drivers/harddog_user.c
+index 070468d22e394..9ed89304975ed 100644
+--- a/arch/um/drivers/harddog_user.c
++++ b/arch/um/drivers/harddog_user.c
+@@ -7,6 +7,7 @@
+ #include <unistd.h>
+ #include <errno.h>
+ #include <os.h>
++#include "harddog.h"
+ 
+ struct dog_data {
+ 	int stdin_fd;
+diff --git a/arch/um/drivers/harddog_user_exp.c b/arch/um/drivers/harddog_user_exp.c
+new file mode 100644
+index 0000000000000..c74d4b815d143
+--- /dev/null
++++ b/arch/um/drivers/harddog_user_exp.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/export.h>
++#include "harddog.h"
++
++#if IS_MODULE(CONFIG_UML_WATCHDOG)
++EXPORT_SYMBOL(start_watchdog);
++EXPORT_SYMBOL(stop_watchdog);
++EXPORT_SYMBOL(ping_watchdog);
++#endif
 -- 
 2.39.2
 
