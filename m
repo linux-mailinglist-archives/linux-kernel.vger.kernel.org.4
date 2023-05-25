@@ -2,215 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E10271139B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7D071139D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjEYSWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
+        id S233825AbjEYSWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjEYSWX (ORCPT
+        with ESMTP id S231397AbjEYSWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:22:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEAEBB
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:22:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA3C63CC4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:22:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83883C433D2;
-        Thu, 25 May 2023 18:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685038940;
-        bh=loWNWycyYK+0wW4ntNW0qoiBqz8/awi8rASYBr/SyRg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CWzOvvXkz4eevP2GS6C4ohntbQIDR5A936MQqHNqnX0p5sKdrvdG/02dmD1blrUu+
-         fmNE1iireJ1VVKxys3crHnjh2hk6dOQ7Y0PjHZXfHSlIIBau/8gCIIEKbHw1AS4wAm
-         wJiWFONlvmiu2krivHTiB102vMzLsbm/Q03Nl8VvqYTTxMloEJRieGDf0PKtk+6M9W
-         D4aSSdJmh0evgVpliXsbn5XWheg0/Gw+mqLzO7pJTKkXVJruJZhLS0QtFkV35hlaGW
-         XwtKR3PgiNdZe1LVHVCcaGjys1ZKgT7Khk3+K3Fr1zDXcBb7pLL0Gn2/Yd1uQ+V4g/
-         e06rG63rzGY9Q==
-Date:   Thu, 25 May 2023 19:22:15 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Alexandre Ghiti <alex@ghiti.fr>, robh@kernel.org,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
-        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Song Shuai <suagrfillet@gmail.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-Message-ID: <20230525-flaring-trading-f2bf0713ae26@spud>
-References: <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
- <CAOnJCULpa-TJuG=TtCDOxOdUviZzWheLE-GMiU1r7GWaKn0nuQ@mail.gmail.com>
- <20230525-guacamole-swimmer-68048a73baac@wendy>
- <CAK9=C2WUyLxZwQO37cN-i+V+A3yxmEoaj=uE8yR8nseYTDW7oQ@mail.gmail.com>
- <20230525-postnasal-monopoly-98adb96ffaa1@wendy>
- <CAAhSdy06nQh4H1FP_K_-VF462mhj+F2M=4AV4QSCUGe5XVqX0g@mail.gmail.com>
- <20230525-shrapnel-precut-26500fca4a48@wendy>
- <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
- <20230525-citric-waged-a2f78d27eb0c@wendy>
- <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
+        Thu, 25 May 2023 14:22:47 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C58E2;
+        Thu, 25 May 2023 11:22:46 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6238b15d298so608836d6.0;
+        Thu, 25 May 2023 11:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685038965; x=1687630965;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LCYamoQ/cXfRxWQHGyTpAloY70tX3p/WOFuPH93ZdDs=;
+        b=XlNv5bmBO2/P2UMavmyGO/KB0uJyMnUJVb3bQRFl0h5XQjwYkdvlKy2pdjBhYxFubn
+         TAn9OranLZ0ZLYYP3fzBuU2gc2K36TiK8fUW/x/XbevnIFxdpGXNjrO4PqKBVbNiJPaB
+         LyFzGKg9kYFTq3t/FYxJHm2AE8/kwn5DKWP0fUErSMRWsgLjAaYKseWUvc2gAb6Zt86P
+         0LVZbkO3/W/VB6E/ig5rpop9QCbTnie0OIgY0tB4mUCO+HlpkSru/1GJ7CAR54qnN9SI
+         C2SKAnM+Z1WJtCPlJnKXVTu/eJDwNPuebq54wh5SAj6VipGTT8iUkboeydLfPIiDncO4
+         owVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685038965; x=1687630965;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LCYamoQ/cXfRxWQHGyTpAloY70tX3p/WOFuPH93ZdDs=;
+        b=mE3yYcBSC0kXbBUbT4jfVqB4eHC9msHaDBtvx7cr4sBW3CAe10cCPOaplVfIQZ1VO/
+         5yU5YZmAyZwJUaC3dx0FkLig3oSwHje885zSJ2dimufiN0eLqkdxSDtG7Lkad5eMSTWk
+         cyXxrEu5HLRJ19hDZ8uEz97w8vMksqYFBE2dIcY2ILdHhyNVQKKO/Qnp8EbqdYc8+XCK
+         YMrXQZtlWy2Pdf7lYWZ+ZpRympNEL5Uifwscp+EINF5NBX5IFUaUDcsYbBiGiB8j8yRq
+         /SlYEiHWeTyapCNGPbWsGsLO7wErZ791GF85WMQ0HocGJP8jgqUMd8uBg0tTJx5fkZ2y
+         iiVw==
+X-Gm-Message-State: AC+VfDxsPrxZBA3XuZImTn+rYbEPfZfKPeE0rIM20D20gc20igntG403
+        GbvIF6NQ4LtTWzneL8bhsk2KoNY9tINCwk7wl0qR2mIkQwA=
+X-Google-Smtp-Source: ACHHUZ6EJqO8TVHnz2hJCncpsFXCQc+8nMEQG9UNvnORiP4h3NLCPKj2bidP8fho0TkzAcKX96mzg0Kl8gVOeQhsJng=
+X-Received: by 2002:ad4:5cce:0:b0:625:aa49:ceb0 with SMTP id
+ iu14-20020ad45cce000000b00625aa49ceb0mr2750957qvb.57.1685038964984; Thu, 25
+ May 2023 11:22:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7vr/djQpNP/RG/o+"
-Content-Disposition: inline
-In-Reply-To: <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230525160827.15285-1-osmtendev@gmail.com> <5b8700fb-d455-469e-a34d-62cb6f68d324@roeck-us.net>
+In-Reply-To: <5b8700fb-d455-469e-a34d-62cb6f68d324@roeck-us.net>
+From:   Osama Muhammad <osmtendev@gmail.com>
+Date:   Thu, 25 May 2023 23:22:33 +0500
+Message-ID: <CAK6rUANVnXctUoxPdqefRjEe1BQ_AkDrksJN9bpuE6KkOXBTjA@mail.gmail.com>
+Subject: Re: [PATCH] adm1266.c: Drop error checking for debugfs_create_dir
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is the new patch not v3. The patch I sent as v2 was a mistake.
+Please discard the patch I sent earlier as v2 .
+Apologies for the confusion.Hope it clarifies.
 
---7vr/djQpNP/RG/o+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Regards,
+Osmten
 
-Hey Atish,
 
-On Thu, May 25, 2023 at 10:39:44AM -0700, Atish Patra wrote:
-> > How about the below?
 
-> Instead of disabling hibernate support why not revert the patch
-> 3335068 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-> which doesn't add any "measured" value at this point.
-> However, keeping the hibernation feature on and disabling linear
-> mapping will get more testing on hibernation.
-> While disabling hibernation and keeping the above patch which
-> doesn't have any value at all.
->=20
-> We don't have a regression at this point. So either approach will work th=
-ough.
-
-I favoured this approach so that we do not release a kernel in which
-hibernate works for these versions of OpenSBI and then stops working in
-the future when we shore up how communicating this is supposed to work.
-It allows us to fix the problem "properly" in slow-time, instead of
-racing against v6.4's release.
-
-I happened to be talking to Palmer and he suggested making it depend on
-NONPORTABLE:
-|> config NONPORTABLE
-|> 	bool "Allow configurations that result in non-portable kernels"
-|> 	help
-|> 	  RISC-V kernel binaries are compatible between all known systems
-|> 	  whenever possible, but there are some use cases that can only be
-|> 	  satisfied by configurations that result in kernel binaries that are
-|> 	  not portable between systems.
-|>=20
-|> 	  Selecting N does not guarantee kernels will be portable to all known
-|> 	  systems.  Selecting any of the options guarded by NONPORTABLE will
-|> 	  result in kernel binaries that are unlikely to be portable between
-|> 	  systems.
-|>=20
-|> 	  If unsure, say N.
-
-I actually think that that makes more sense, as it may actually be fine
-to use hibernation depending on what your SBI implementation does.
-
-> If we choose to go this route, some thoughts about the commit message.
-> > -- >8 --
-> > From 1d4381290a1600eff9b29b8ace6be73955d9726c Mon Sep 17 00:00:00 2001
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> > Date: Thu, 25 May 2023 15:09:08 +0100
-> > Subject: [PATCH] RISC-V: mark hibernation as broken
+On Thu, 25 May 2023 at 23:17, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Thu, May 25, 2023 at 09:08:27PM +0500, Osama Muhammad wrote:
+> > This patch fixes the error checking in adm1266.c.
+> > The DebugFS kernel API is developed in
+> > a way that the caller can safely ignore the errors that
+> > occur during the creation of DebugFS nodes.
 > >
-> > Hibernation support depends on firmware marking its reserved
-> > regions as not mappable by Linux. As things stand, the de-facto SBI
->=20
-> either not mappable or no save/restore capable (as We still have not
-> concluded which way we want to go in)
-
-s/mappable/accessible/? Sounds like a good catch all?
-
->=20
-> > implementation (OpenSBI) does not do this, and other implementations may
-> > not do so either, resulting in kernel panics during hibernation ([1],
-> > [2]).
-> >
->=20
-> we should probably add more context in the commit message.
-> How about adding something along these lines:
->=20
-> As things stand, the latest version of de-facto SBI
-> implementation(OpenSBI) doesn't
-> do this any more to allow 1G huge page mappings by kernel. Other SBI
-> implementations are probably
-> doing the same. Until the commit 3335068 ("riscv: Use PUD/P4D/PGD
-> pages for the linear mapping"),
-> the first 2MB region of DRAM (where the typically firmware resides)
-> was not mappable by kernel. However,
-> enabling that mapping resulted in the kernel panics during hibernation
-> ([1], [2]) as the hibernation process
-> tries to save/restore any mapped region even though it is marked as reser=
-ved.
-
-SGTM, I could go with that.
-
-> > Disable support for hibernation until such time that an SBI
-> > implementation independent way to communicate what regions are reserved
-> > has been agreed upon.
-> >
->=20
-> Anybody who wants to test the hibernation feature must revert the
-> above mentioned patch along with turning on
-> the config.
-
-This goes away with the use of non-portable, although I would work
-mention of the config option into the commit message.
-
-Thanks,
-Conor.
-
-> > Reported-by: Song Shuai <suagrfillet@gmail.com>
-> > Link: https://lore.kernel.org/all/CAAYs2=3DgQvkhTeioMmqRDVGjdtNF_vhB+vm=
-_1dHJxPNi75YDQ_Q@mail.gmail.com/ [1]
-> > Reported-by: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/ITXwaKfA6=
-z8
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+>
+> Confusing. Is this v3 of the patch ?
+>
+> Guenter
+>
 > > ---
-> >  arch/riscv/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  drivers/hwmon/pmbus/adm1266.c | 2 --
+> >  1 file changed, 2 deletions(-)
 > >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 13f058490608..b2495192f35a 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -801,7 +801,7 @@ menu "Power management options"
-> >  source "kernel/power/Kconfig"
+> > diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> > index 1ac2b2f4c570..184d75269d2b 100644
+> > --- a/drivers/hwmon/pmbus/adm1266.c
+> > +++ b/drivers/hwmon/pmbus/adm1266.c
+> > @@ -340,8 +340,6 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
+> >               return;
 > >
-> >  config ARCH_HIBERNATION_POSSIBLE
-> > -       def_bool y
-> > +       def_bool n
+> >       data->debugfs_dir = debugfs_create_dir(data->client->name, root);
+> > -     if (!data->debugfs_dir)
+> > -             return;
 > >
-> >  config ARCH_HIBERNATION_HEADER
-> >         def_bool HIBERNATION
-
-
---7vr/djQpNP/RG/o+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+nVgAKCRB4tDGHoIJi
-0vZ3AQCt83AEx+FXUff3m49musNTrQ4uxugH9QeO7i8ot2t0oAD9GOY4lL+OQZFV
-flHzYz1g4OSLg6gvr6j2j8AB4kn6Uwg=
-=8S63
------END PGP SIGNATURE-----
-
---7vr/djQpNP/RG/o+--
+> >       debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
+> >                                   adm1266_state_read);
+> > --
+> > 2.34.1
+> >
