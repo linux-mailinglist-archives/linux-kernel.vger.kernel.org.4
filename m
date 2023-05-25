@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0FB711316
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4747711313
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240810AbjEYSDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
+        id S241195AbjEYSDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241016AbjEYSDV (ORCPT
+        with ESMTP id S241046AbjEYSD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:03:21 -0400
+        Thu, 25 May 2023 14:03:26 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FFED10D0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:03:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B2F619D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:03:06 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 432BE1650;
-        Thu, 25 May 2023 11:03:48 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 316781655;
+        Thu, 25 May 2023 11:03:51 -0700 (PDT)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7813C3F6C4;
-        Thu, 25 May 2023 11:03:00 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65FF83F6C4;
+        Thu, 25 May 2023 11:03:03 -0700 (PDT)
 From:   James Morse <james.morse@arm.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
 Cc:     Fenghua Yu <fenghua.yu@intel.com>,
@@ -38,9 +38,9 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com,
         dfustini@baylibre.com
-Subject: [PATCH v4 11/24] x86/resctrl: Add cpumask_any_housekeeping() for limbo/overflow
-Date:   Thu, 25 May 2023 18:01:56 +0000
-Message-Id: <20230525180209.19497-12-james.morse@arm.com>
+Subject: [PATCH v4 12/24] x86/resctrl: Make resctrl_arch_rmid_read() retry when it is interrupted
+Date:   Thu, 25 May 2023 18:01:57 +0000
+Message-Id: <20230525180209.19497-13-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230525180209.19497-1-james.morse@arm.com>
 References: <20230525180209.19497-1-james.morse@arm.com>
@@ -55,142 +55,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The limbo and overflow code picks a CPU to use from the domain's list
-of online CPUs. Work is then scheduled on these CPUs to maintain
-the limbo list and any counters that may overflow.
+resctrl_arch_rmid_read() could be called by resctrl in process context,
+and then called by the PMU driver from irq context on the same CPU.
+This could cause struct arch_mbm_state's prev_msr value to go backwards,
+leading to the chunks value being incremented multiple times.
 
-cpumask_any() may pick a CPU that is marked nohz_full, which will
-either penalise the work that CPU was dedicated to, or delay the
-processing of limbo list or counters that may overflow. Perhaps
-indefinitely. Delaying the overflow handling will skew the bandwidth
-values calculated by mba_sc, which expects to be called once a second.
+The struct arch_mbm_state holds both the previous msr value, and a count
+of the number of chunks. These two fields need to be updated atomically.
 
-Add cpumask_any_housekeeping() as a replacement for cpumask_any()
-that prefers housekeeping CPUs. This helper will still return
-a nohz_full CPU if that is the only option. The CPU to use is
-re-evaluated each time the limbo/overflow work runs. This ensures
-the work will move off a nohz_full CPU once a housekeeping CPU is
-available.
+Read the prev_msr before accessing the hardware, and cmpxchg() the value
+back. If the value has changed, the whole thing is re-attempted.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
-Changes since v3:
- * typos fixed
----
- arch/x86/kernel/cpu/resctrl/internal.h | 23 +++++++++++++++++++++++
- arch/x86/kernel/cpu/resctrl/monitor.c  | 17 ++++++++++++-----
- 2 files changed, 35 insertions(+), 5 deletions(-)
+ arch/x86/kernel/cpu/resctrl/internal.h |  5 +++--
+ arch/x86/kernel/cpu/resctrl/monitor.c  | 28 +++++++++++++++++++-------
+ 2 files changed, 24 insertions(+), 9 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 96fb7658ff74..6f18cf26988c 100644
+index 6f18cf26988c..7960366b9434 100644
 --- a/arch/x86/kernel/cpu/resctrl/internal.h
 +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -7,6 +7,7 @@
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_X86_RESCTRL_INTERNAL_H
+ #define _ASM_X86_RESCTRL_INTERNAL_H
+ 
++#include <linux/atomic.h>
+ #include <linux/resctrl.h>
+ #include <linux/sched.h>
  #include <linux/kernfs.h>
- #include <linux/fs_context.h>
- #include <linux/jump_label.h>
-+#include <linux/tick.h>
- #include <asm/resctrl.h>
+@@ -338,8 +339,8 @@ struct mbm_state {
+  *		find this struct.
+  */
+ struct arch_mbm_state {
+-	u64	chunks;
+-	u64	prev_msr;
++	atomic64_t	chunks;
++	atomic64_t	prev_msr;
+ };
  
- #define L3_QOS_CDP_ENABLE		0x01ULL
-@@ -55,6 +56,28 @@
- /* Max event bits supported */
- #define MAX_EVT_CONFIG_BITS		GENMASK(6, 0)
- 
-+/**
-+ * cpumask_any_housekeeping() - Choose any CPU in @mask, preferring those that
-+ *			        aren't marked nohz_full
-+ * @mask:	The mask to pick a CPU from.
-+ *
-+ * Returns a CPU in @mask. If there are housekeeping CPUs that don't use
-+ * nohz_full, these are preferred.
-+ */
-+static inline unsigned int cpumask_any_housekeeping(const struct cpumask *mask)
-+{
-+	int cpu, hk_cpu;
-+
-+	cpu = cpumask_any(mask);
-+	if (tick_nohz_full_cpu(cpu)) {
-+		hk_cpu = cpumask_nth_andnot(0, mask, tick_nohz_full_mask);
-+		if (hk_cpu < nr_cpu_ids)
-+			cpu = hk_cpu;
-+	}
-+
-+	return cpu;
-+}
-+
- struct rdt_fs_context {
- 	struct kernfs_fs_context	kfc;
- 	bool				enable_cdpl2;
+ /**
 diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 128d4c7206e4..e267869d60d5 100644
+index e267869d60d5..1f470e55d555 100644
 --- a/arch/x86/kernel/cpu/resctrl/monitor.c
 +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -770,9 +770,9 @@ static void mbm_update(struct rdt_resource *r, struct rdt_domain *d,
- void cqm_handle_limbo(struct work_struct *work)
+@@ -225,13 +225,15 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
  {
- 	unsigned long delay = msecs_to_jiffies(CQM_LIMBOCHECK_INTERVAL);
--	int cpu = smp_processor_id();
- 	struct rdt_resource *r;
- 	struct rdt_domain *d;
-+	int cpu;
+ 	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
+ 	struct arch_mbm_state *am;
++	u64 msr_val;
  
- 	mutex_lock(&rdtgroup_mutex);
+ 	am = get_arch_mbm_state(hw_dom, rmid, eventid);
+ 	if (am) {
+ 		memset(am, 0, sizeof(*am));
  
-@@ -781,8 +781,10 @@ void cqm_handle_limbo(struct work_struct *work)
- 
- 	__check_limbo(d, false);
- 
--	if (has_busy_rmid(r, d))
-+	if (has_busy_rmid(r, d)) {
-+		cpu = cpumask_any_housekeeping(&d->cpu_mask);
- 		schedule_delayed_work_on(cpu, &d->cqm_limbo, delay);
-+	}
- 
- 	mutex_unlock(&rdtgroup_mutex);
- }
-@@ -792,7 +794,7 @@ void cqm_setup_limbo_handler(struct rdt_domain *dom, unsigned long delay_ms)
- 	unsigned long delay = msecs_to_jiffies(delay_ms);
- 	int cpu;
- 
--	cpu = cpumask_any(&dom->cpu_mask);
-+	cpu = cpumask_any_housekeeping(&dom->cpu_mask);
- 	dom->cqm_work_cpu = cpu;
- 
- 	schedule_delayed_work_on(cpu, &dom->cqm_limbo, delay);
-@@ -802,10 +804,10 @@ void mbm_handle_overflow(struct work_struct *work)
- {
- 	unsigned long delay = msecs_to_jiffies(MBM_OVERFLOW_INTERVAL);
- 	struct rdtgroup *prgrp, *crgrp;
--	int cpu = smp_processor_id();
- 	struct list_head *head;
- 	struct rdt_resource *r;
- 	struct rdt_domain *d;
-+	int cpu;
- 
- 	mutex_lock(&rdtgroup_mutex);
- 
-@@ -826,6 +828,11 @@ void mbm_handle_overflow(struct work_struct *work)
- 			update_mba_bw(prgrp, d);
+ 		/* Record any initial, non-zero count value. */
+-		__rmid_read(rmid, eventid, &am->prev_msr);
++		__rmid_read(rmid, eventid, &msr_val);
++		atomic64_set(&am->prev_msr, msr_val);
  	}
- 
-+	/*
-+	 * Re-check for housekeeping CPUs. This allows the overflow handler to
-+	 * move off a nohz_full CPU quickly.
-+	 */
-+	cpu = cpumask_any_housekeeping(&d->cpu_mask);
- 	schedule_delayed_work_on(cpu, &d->mbm_over, delay);
- 
- out_unlock:
-@@ -839,7 +846,7 @@ void mbm_setup_overflow_handler(struct rdt_domain *dom, unsigned long delay_ms)
- 
- 	if (!static_branch_likely(&rdt_mon_enable_key))
- 		return;
--	cpu = cpumask_any(&dom->cpu_mask);
-+	cpu = cpumask_any_housekeeping(&dom->cpu_mask);
- 	dom->mbm_work_cpu = cpu;
- 	schedule_delayed_work_on(cpu, &dom->mbm_over, delay);
  }
+ 
+@@ -266,23 +268,35 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
+ {
+ 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+ 	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
++	u64 start_msr_val, old_msr_val, msr_val, chunks;
+ 	struct arch_mbm_state *am;
+-	u64 msr_val, chunks;
+-	int ret;
++	int ret = 0;
+ 
+ 	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
+ 		return -EINVAL;
+ 
++interrupted:
++	am = get_arch_mbm_state(hw_dom, rmid, eventid);
++	if (am)
++		start_msr_val = atomic64_read(&am->prev_msr);
++
+ 	ret = __rmid_read(rmid, eventid, &msr_val);
+ 	if (ret)
+ 		return ret;
+ 
+ 	am = get_arch_mbm_state(hw_dom, rmid, eventid);
+ 	if (am) {
+-		am->chunks += mbm_overflow_count(am->prev_msr, msr_val,
+-						 hw_res->mbm_width);
+-		chunks = get_corrected_mbm_count(rmid, am->chunks);
+-		am->prev_msr = msr_val;
++		old_msr_val = atomic64_cmpxchg(&am->prev_msr, start_msr_val,
++					       msr_val);
++		if (old_msr_val != start_msr_val)
++			goto interrupted;
++
++		chunks = mbm_overflow_count(start_msr_val, msr_val,
++					    hw_res->mbm_width);
++		atomic64_add(chunks, &am->chunks);
++
++		chunks = get_corrected_mbm_count(rmid,
++						 atomic64_read(&am->chunks));
+ 	} else {
+ 		chunks = msr_val;
+ 	}
 -- 
 2.39.2
 
