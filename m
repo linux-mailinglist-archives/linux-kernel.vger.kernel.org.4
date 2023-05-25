@@ -2,136 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F31711028
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D377571102A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241728AbjEYP56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S241814AbjEYP6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjEYP55 (ORCPT
+        with ESMTP id S231635AbjEYP6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:57:57 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D56DCC
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:57:56 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso2623363b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:57:56 -0700 (PDT)
+        Thu, 25 May 2023 11:58:31 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E704BB;
+        Thu, 25 May 2023 08:58:30 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9707313e32eso153267466b.2;
+        Thu, 25 May 2023 08:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685030276; x=1687622276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NRjbJCM4Bj74nexhlReHUV30/iPPE3wUZ1F4retby8I=;
-        b=gA4nf4yE2oHcpLPG55DTtVk+Y/9CF0daz/KwHlax1WiOIRzWOkUfQe7Ma7FQsqQ7Iy
-         vYsMo0UBYGTfuGq291YU/rgalQ7J8Mf2Ke45yLjRHiexvqzG5+3HoWJFAH7C0+0E8Cfl
-         apoVH6RIsz2gT6XTIPaHv86tJlO62bkMIhzBI/XqK370wWDTpagGejMptXIBXv6jSuMR
-         frs34sVL9FYOpfNVhomgOS05pAnmAUqyZp7bZUUQAsjCSePdw0Ur98DQJAvpTX9aZaT9
-         s7lRCaYjbayOxWrgu4ULz6Ub3DFmHXmu9/BjBhwaB3Wd8NSuh4j5jnZg/KAXF3K1oPi1
-         SiAw==
+        d=gmail.com; s=20221208; t=1685030308; x=1687622308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p0SyaWafeaO92rAJilaK8J8zpaESqC5U4EG8uSUxpmE=;
+        b=NJaGmSfFDQfEvhGlHs4jc0o9BsWZfCx9O6WOoxFPc7jW9izgi0u3wCS/ILu5/qyQOs
+         R1dOXTI+YdGf9et+0qhFiIzD70MDvP5GAd6JRYwWGfMwRStrVZ/Bh6ZjmEho4UCbRGO2
+         wpLSNUZ5+rFvXc8quaboZP0hok6MWitQ+Hl+DeGSC0HvBPAAZi67sPhTc8j81IlhMOL/
+         nBxk1aWDhIcdHFOuoRgKheL7p3+anq1qst4ZnWWg+0kglOSpZ/AZBeHTatQSzEFsTntw
+         BfvF+qNPYR4TT7YD37sWQz/tXSqLYMl/m1Iq70maXtcXyK/juMpbMeK59bhtu0GYuuY4
+         1W3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685030276; x=1687622276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NRjbJCM4Bj74nexhlReHUV30/iPPE3wUZ1F4retby8I=;
-        b=cDaJZr3M8HV9J7SY1ypHJVcnLI4x2YQzCM7NtouNCQp1PDyg4zLog7NEcmj5v5aPDk
-         p6Nyvtab5gDfMUAjIseSvWzzRZEBgPkOzkEPqq85doPQo8dQjiko4ygdC6r9FBJMm2D5
-         vGe8Sp7N7rOFO/8ZP4t++Y8QsK5TyJG+emmz3mviJHTIaY2mLMXz6Al33CvfB/GTLYoy
-         TUtUQnCe7d2wDUIl2BdCYpVFatOyqbblA9u2p/5Ihr3oh6vqOVoGTWETL8lkSYE54vSF
-         F5Ks1UclxggepfAEpFGj2DsWesNV8KJ+eyT7wDSFUt3j4qVyPFHpKGBoNKVO0hP15ERJ
-         Gj0Q==
-X-Gm-Message-State: AC+VfDyEDWeott7lYLM4uoW7Bei1TVoY1/mEsiUCMIbxiFABYGk7c4nH
-        u2dxf7VpscuMdVX/QEHT+1w4c87pVr9iLdUn4w0=
-X-Google-Smtp-Source: ACHHUZ5w5Mg4M6wIDvC98hKt+3Drl/mfQnNGc32bmmOnnc9YXW/slwv2zt0FgYB659YyDJIKT4oy2vmbx6km3wv3Q5A=
-X-Received: by 2002:a05:6a20:4289:b0:10d:d0cd:c1c7 with SMTP id
- o9-20020a056a20428900b0010dd0cdc1c7mr6832286pzj.15.1685030275580; Thu, 25 May
- 2023 08:57:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685030308; x=1687622308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p0SyaWafeaO92rAJilaK8J8zpaESqC5U4EG8uSUxpmE=;
+        b=OGnlkL3V+HlIdWfrwF5OlBsHbTaC9lfCoAtEgAckf2gzCdSijApyeDbinZYTjN8Bp2
+         FOjv8Fk8wE8iSP4/ZfqCLidTCI0+r/rndsA3cItp203f3G/JXQ3KK3Xd9tVCLNr4WGi3
+         7w5i5DRgA/Cvql6vwFSiNABXEPKaPfiV/4BMjrrVO8IcDFXkeBEijD2p5NQHjFveIGUb
+         FXr/eVFZCG2MBNbk0EIF20Q21wtSYFYgLouHT7BnPpDVUEubjmSYV+tvS25eLv1rolYb
+         CmOJVLdjgfnvLKg9d5V1HKb3m7xvgyzdKAAsVoFJFZLDiw8Y7FEfncZ3iaVv62EJMKl6
+         3EFA==
+X-Gm-Message-State: AC+VfDzSzXNJoVOp3pZAgET0aG6qBg0r3Jc+vswEb+8lYcXmP+xHTm7e
+        C2MdXToKjLG9kFbeidy8YxFcH89ZHhLuCA==
+X-Google-Smtp-Source: ACHHUZ5xX5DhzOFm4j2x2B8WyfZhd/gc356MLb/fIhdzi9MxVsr97MyzrPSMzxibR4ayP/D+o0p2fw==
+X-Received: by 2002:a17:907:86a0:b0:96f:98f1:6512 with SMTP id qa32-20020a17090786a000b0096f98f16512mr1960294ejc.41.1685030308025;
+        Thu, 25 May 2023 08:58:28 -0700 (PDT)
+Received: from Osmten.. ([103.84.150.78])
+        by smtp.gmail.com with ESMTPSA id x23-20020a170906149700b00969dc13d0b1sm999164ejc.43.2023.05.25.08.58.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 08:58:27 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH v2] adm1266.c: Fix error checking for debugfs_create_dir
+Date:   Thu, 25 May 2023 20:58:06 +0500
+Message-Id: <20230525155806.14690-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230518230626.404068-1-aford173@gmail.com> <CAOMZO5DBefFuLWi39txu2RiU5vdHVx-0T48Fua6M5Y6Fr9PGNg@mail.gmail.com>
- <CAHCN7xLqmMPtnHTVbApyYxY2tx97oRjsk_51abdDcZkOJmA=Tw@mail.gmail.com>
- <CAHCN7xJTWqf_qfaZge4GpKuuzPE_OC-Kx7hBd_hFLOchH=Ef0g@mail.gmail.com>
- <CAOMZO5Csjx17kfkxN1xMLuCg+-J0v6rjiuvaK-ZktXO50ZTuSw@mail.gmail.com>
- <CAHCN7xL2GWLTwMttCha=b9_W0nE5aimCQ08YJFrCF5vNZUOL7Q@mail.gmail.com> <8c65c5c3-0415-78c0-4585-df94a532a04e@linaro.org>
-In-Reply-To: <8c65c5c3-0415-78c0-4585-df94a532a04e@linaro.org>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Thu, 25 May 2023 10:57:44 -0500
-Message-ID: <CAHCN7xJBf+8KyXbqxVSUUXbKqomX+i-13Ed23QFeF0SM8nQpzw@mail.gmail.com>
-Subject: Re: [PATCH V7 0/6] drm: bridge: samsung-dsim: Support variable clocking
-To:     neil.armstrong@linaro.org
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        dri-devel@lists.freedesktop.org, Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Inki Dae <inki.dae@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 10:39=E2=80=AFAM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
->
-> On 24/05/2023 14:49, Adam Ford wrote:
-> > On Wed, May 24, 2023 at 7:45=E2=80=AFAM Fabio Estevam <festevam@gmail.c=
-om> wrote:
-> >>
-> >> Hi Adam,
-> >>
-> >> On Tue, May 23, 2023 at 8:49=E2=80=AFPM Adam Ford <aford173@gmail.com>=
- wrote:
-> >>
-> >>> Inki,
-> >>>
-> >>> I haven't heard back from you on whether or not you want the bindings
-> >>> patch to be included with me resending the series as V7 or if you're
-> >>> OK with a single, stand-alone patch.
-> >>> Will you let me know?  I have the patch standing by waiting for
-> >>> instructions.  If you're not the right person to ask, please let me
-> >>> know who the right person is.
-> >>
-> >> Neil has also been collecting samsung-dsim patches. Maybe he can clari=
-fy.
-> >
-> > If it matters, my preference all along was to do the bindings as a
-> > separate thing once the driver updates were merged into the tree.
-> > Since the bindings can be done in different ways, I was hoping to have
-> > a separate discussion on the right way to do the bindings. If they
-> > need to be part of the series, I can do that.
->
-> If you don't introduce compatibles, no need to send bindings, it can
-> be send separately.
+This patch fixes the error checking in adm1266.
+The DebugFS kernel API is developed in
+a way that the caller can safely ignore the errors that
+occur during the creation of DebugFS nodes.
 
-This series doesn't change any compatibility.
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
 
->
-> Can I apply this serie and 20230503163313.2640898-2-frieder@fris.de ? see=
-ms all has been reviewed.
+---
 
-Looking at the driver, it looks like linux-next has some newer
-features added into the driver since I started, so this series might
-need a re-base.  If that's the case, let me know, and I'll do the
-re-base.
+changes since v1:
+	-Dropped the error checking for debugfs_create_dir
+---
+ drivers/hwmon/pmbus/adm1266.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-adam
+diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+index d88b6115b42e..184d75269d2b 100644
+--- a/drivers/hwmon/pmbus/adm1266.c
++++ b/drivers/hwmon/pmbus/adm1266.c
+@@ -340,8 +340,6 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
+ 		return;
+ 
+ 	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
+-	if (IS_ERR(data->debugfs_dir))
+-		return;
+ 
+ 	debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
+ 				    adm1266_state_read);
+-- 
+2.34.1
 
->
-> Neil
->
-> >
-> > adam
->
