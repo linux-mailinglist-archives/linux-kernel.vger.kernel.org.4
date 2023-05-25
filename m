@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624DC71060C
+	by mail.lfdr.de (Postfix) with ESMTP id AC9D971060D
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjEYHMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S239113AbjEYHM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238954AbjEYHMR (ORCPT
+        with ESMTP id S238973AbjEYHMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 May 2023 03:12:17 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E86DE74
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:12:10 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba82ed6e450so538142276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:12:10 -0700 (PDT)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81003E78
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:12:12 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8cf175f5bso641718276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684998730; x=1687590730;
+        d=google.com; s=20221208; t=1684998732; x=1687590732;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SUCIph9jK5qjiaVbzBCW9jd0y4OBlbaAbGAhyKWQXwI=;
-        b=Ud1pJbb8PouEaxMx39Qsb0pgXQhuacyg9dE15yBm5r7rhKMfmT/wtYE2bXvB9haeyo
-         BUBUKC8ETaG4qAGi43orR7MBCDD3xmJ0ggNCx/vfVb0gwfAPQnuhooRT2CMQb9SDBlej
-         aeuAnMX/JNhCmbxg7K4mABEvgSx55qB0QBWlNojB1OzD6HniNhvVSXqsOrZTo2JeLiQ2
-         AqnarGa9CWEnF2Ot0/Ipz5Slnp3JLrSRn6xuYI+mxDu6NEXLWJOn+9Ql5p4km3xx2FO7
-         eeZs0v7UgYnrvrpw64ig+vyli3RyuBx44SDd8pzAjOE244wfPz1Sld6TGQMAJGA8zoNr
-         W88g==
+        bh=TpVpkWx/imTLr00+GTEXOikPom8bv+ZS7bO2wV57MhQ=;
+        b=ZI9YPnE7qzrf4v6f+4zTWZMVj+saUiQ+EL1pEZ5JGh+ACoc3fTXdI063HcauKL4I87
+         52sOiKV576htS4W7uIXo/K6XtSaFRi5eDFgjw+UW384XvR5VObuags4MY+lrz3CTau7g
+         hqQ8MZ6CbG/dQPdneqTkyRVZoEeCZV5DjuvN8WTK0/z+HAKlTJoFZDQAfHixW8MvWCe4
+         8ETSjjIayFzNYxcThELrlwF2P7b0HluQnQQgKT9Sd2jc2C8Vf31w4wt5X0B/CLGA5X2x
+         UeM6q/Goi6F6rPIO8oHJ1BwjHi3nS8Q3JhKIfSUOnDZFywFMYER1RFETapM17azFgky4
+         FWTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684998730; x=1687590730;
+        d=1e100.net; s=20221208; t=1684998732; x=1687590732;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUCIph9jK5qjiaVbzBCW9jd0y4OBlbaAbGAhyKWQXwI=;
-        b=EaDWpTbUH/z/215+Tk7EyZmxchr38CPBkRIEDwwnTp7wHFnq/gDgktHnQJtadZT5Ws
-         sRL5YnIFWAqH4N98l41udu758+JoBGD7LkKkoNXjJq1isRHbOyyNCkdTioEpEx2rKCPU
-         mbxbQPDJw3RnJXl9u0do+yMtY+fqr63Wxfr2a7IsVoBDtHKjXuPHwmftbq+sipUONaSZ
-         dciRrI+yyGr3MTg3jUTYgnDYAHfUOMLx0dJmgmMN5SB59QaZWezXJGI6Rb4eIohR4c8g
-         H+Ok6WNelBRf7c1F+q1Ofl0O0GR4ABsPxe1K28DSi3nQGl2HtxB9nIaRO4BVNje6flyd
-         YAtw==
-X-Gm-Message-State: AC+VfDxnkioxirxW7UqDvBJO9pfOZ0ep5dA6rqhuakBYGcUBqB4lA5U8
-        S1LZ8vqnYrs9EBqMF67k+RLN84jlFatd
-X-Google-Smtp-Source: ACHHUZ68HRyMlyMUL7VBgU/YBf0IxbbVeqtg8y5j3FkwNP9nVcYZcks0CIY+Vf/g6P81tElQnzKI+NlxoEYW
+        bh=TpVpkWx/imTLr00+GTEXOikPom8bv+ZS7bO2wV57MhQ=;
+        b=E9SXuF3YiuBwt8DjR05YlcHZlPdiOo+uKqp5vTfnPSbAHKJaaIGLrCSBaolKkp9IBK
+         MVI685pdY4tRABfp5tbKBFcLdo7nTY1qI58/eBTLF4vjHmGZG2hG+7M+5uBFuJjEcfC9
+         a6pFVmIeJsGqHuH1X4WZLzai2hBu2gUpSvssTFLsz0Lex4T3CN4wDl+ya8t1kND0lE+N
+         G7056+IaqXKHBHNkbuwOI6EsSx4D5kC1D8QRy1/DTBTkoBUlgwHMtyAqg2+PTUITyvJV
+         WCOatsLUnCS6J4nPTI7/G79CoApDIeokjJvmlch1RIGYJ4JBSs+t+ks7OsKsEjGJwsIq
+         +DDw==
+X-Gm-Message-State: AC+VfDyP+c6nnvNYugLdf8FXbOVzc370CJMvY48V43i93SQgBcWii/pt
+        Ity0PnzoX1u8AqelJRjP/yOmuU77FSiq
+X-Google-Smtp-Source: ACHHUZ4FhRQ9GF1LL7ag+4vEDk4EggmhjC5bOe2EKtfFPgW4t1biKjtiQOAoMMTb5I/RPH0pA4bjTNsi+zo6
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7aa7:3d2d:76ae:8e96])
- (user=irogers job=sendgmr) by 2002:a05:6902:118e:b0:ba7:5bec:7772 with SMTP
- id m14-20020a056902118e00b00ba75bec7772mr1217518ybu.5.1684998729741; Thu, 25
- May 2023 00:12:09 -0700 (PDT)
-Date:   Thu, 25 May 2023 00:11:22 -0700
+ (user=irogers job=sendgmr) by 2002:a25:d68d:0:b0:ba7:8628:93e2 with SMTP id
+ n135-20020a25d68d000000b00ba7862893e2mr1543082ybg.4.1684998732197; Thu, 25
+ May 2023 00:12:12 -0700 (PDT)
+Date:   Thu, 25 May 2023 00:11:23 -0700
 In-Reply-To: <20230525071133.2066610-1-irogers@google.com>
-Message-Id: <20230525071133.2066610-6-irogers@google.com>
+Message-Id: <20230525071133.2066610-7-irogers@google.com>
 Mime-Version: 1.0
 References: <20230525071133.2066610-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Subject: [PATCH v1 05/16] perf trace beauty: Make MSR arrays const
+Subject: [PATCH v1 06/16] tools api fs: Avoid large static PATH_MAX arrays
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -87,58 +87,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allows the movement of 46,072 bytes from .data to .data.rel.ro.
+Change struct fs to have a pointer to a dynamically allocated array
+rather than an array. This reduces the size of fs__entries from 24,768
+bytes to 240 bytes. Read paths into a stack allocated array and
+strdup. Fix off-by-1 fscanf %<num>s in fs__read_mounts caught by
+address sanitizer.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/trace/beauty/beauty.h               | 2 +-
- tools/perf/trace/beauty/tracepoints/x86_msr.sh | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ tools/lib/api/fs/fs.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
-diff --git a/tools/perf/trace/beauty/beauty.h b/tools/perf/trace/beauty/beauty.h
-index 4c59edddd6a8..3d12bf0f6d07 100644
---- a/tools/perf/trace/beauty/beauty.h
-+++ b/tools/perf/trace/beauty/beauty.h
-@@ -11,7 +11,7 @@ struct strarray {
- 	u64	    offset;
- 	int	    nr_entries;
- 	const char *prefix;
--	const char **entries;
-+	const char * const *entries;
- };
+diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
+index 82f53d81a7a7..22d34a0be8b4 100644
+--- a/tools/lib/api/fs/fs.c
++++ b/tools/lib/api/fs/fs.c
+@@ -88,7 +88,7 @@ static const char * const bpf_fs__known_mountpoints[] = {
+ struct fs {
+ 	const char		*name;
+ 	const char * const	*mounts;
+-	char			 path[PATH_MAX];
++	char			*path;
+ 	bool			 found;
+ 	bool			 checked;
+ 	long			 magic;
+@@ -151,17 +151,23 @@ static bool fs__read_mounts(struct fs *fs)
+ 	bool found = false;
+ 	char type[100];
+ 	FILE *fp;
++	char path[PATH_MAX + 1];
  
- #define DEFINE_STRARRAY(array, _prefix) struct strarray strarray__##array = { \
-diff --git a/tools/perf/trace/beauty/tracepoints/x86_msr.sh b/tools/perf/trace/beauty/tracepoints/x86_msr.sh
-index 0078689963e0..fa3c4418e856 100755
---- a/tools/perf/trace/beauty/tracepoints/x86_msr.sh
-+++ b/tools/perf/trace/beauty/tracepoints/x86_msr.sh
-@@ -13,7 +13,7 @@ x86_msr_index=${arch_x86_header_dir}/msr-index.h
- # Just the ones starting with 0x00000 so as to have a simple
- # array.
+ 	fp = fopen("/proc/mounts", "r");
+ 	if (fp == NULL)
+-		return NULL;
++		return false;
  
--printf "static const char *x86_MSRs[] = {\n"
-+printf "static const char * const x86_MSRs[] = {\n"
- regex='^[[:space:]]*#[[:space:]]*define[[:space:]]+MSR_([[:alnum:]][[:alnum:]_]+)[[:space:]]+(0x00000[[:xdigit:]]+)[[:space:]]*.*'
- grep -E $regex ${x86_msr_index} | grep -E -v 'MSR_(ATOM|P[46]|IA32_(TSC_DEADLINE|UCODE_REV)|IDT_FCR4)' | \
- 	sed -r "s/$regex/\2 \1/g" | sort -n | \
-@@ -24,7 +24,7 @@ printf "};\n\n"
- regex='^[[:space:]]*#[[:space:]]*define[[:space:]]+MSR_([[:alnum:]][[:alnum:]_]+)[[:space:]]+(0xc0000[[:xdigit:]]+)[[:space:]]*.*'
- printf "#define x86_64_specific_MSRs_offset "
- grep -E $regex ${x86_msr_index} | sed -r "s/$regex/\2/g" | sort -n | head -1
--printf "static const char *x86_64_specific_MSRs[] = {\n"
-+printf "static const char * const x86_64_specific_MSRs[] = {\n"
- grep -E $regex ${x86_msr_index} | \
- 	sed -r "s/$regex/\2 \1/g" | grep -E -vw 'K6_WHCR' | sort -n | \
- 	xargs printf "\t[%s - x86_64_specific_MSRs_offset] = \"%s\",\n"
-@@ -33,7 +33,7 @@ printf "};\n\n"
- regex='^[[:space:]]*#[[:space:]]*define[[:space:]]+MSR_([[:alnum:]][[:alnum:]_]+)[[:space:]]+(0xc0010[[:xdigit:]]+)[[:space:]]*.*'
- printf "#define x86_AMD_V_KVM_MSRs_offset "
- grep -E $regex ${x86_msr_index} | sed -r "s/$regex/\2/g" | sort -n | head -1
--printf "static const char *x86_AMD_V_KVM_MSRs[] = {\n"
-+printf "static const char * const x86_AMD_V_KVM_MSRs[] = {\n"
- grep -E $regex ${x86_msr_index} | \
- 	sed -r "s/$regex/\2 \1/g" | sort -n | \
- 	xargs printf "\t[%s - x86_AMD_V_KVM_MSRs_offset] = \"%s\",\n"
+ 	while (!found &&
+ 	       fscanf(fp, "%*s %" STR(PATH_MAX) "s %99s %*s %*d %*d\n",
+-		      fs->path, type) == 2) {
++		      path, type) == 2) {
+ 
+-		if (strcmp(type, fs->name) == 0)
++		if (strcmp(type, fs->name) == 0) {
++			free(fs->path);
++			fs->path = strdup(path);
++			if (!fs->path)
++				return false;
+ 			found = true;
++		}
+ 	}
+ 
+ 	fclose(fp);
+@@ -188,8 +194,11 @@ static bool fs__check_mounts(struct fs *fs)
+ 	ptr = fs->mounts;
+ 	while (*ptr) {
+ 		if (fs__valid_mount(*ptr, fs->magic) == 0) {
++			free(fs->path);
++			fs->path = strdup(*ptr);
++			if (!fs->path)
++				return false;
+ 			fs->found = true;
+-			strcpy(fs->path, *ptr);
+ 			return true;
+ 		}
+ 		ptr++;
+@@ -227,10 +236,12 @@ static bool fs__env_override(struct fs *fs)
+ 	if (!override_path)
+ 		return false;
+ 
++	free(fs->path);
++	fs->path = strdup(override_path);
++	if (!fs->path)
++		return false;
+ 	fs->found = true;
+ 	fs->checked = true;
+-	strncpy(fs->path, override_path, sizeof(fs->path) - 1);
+-	fs->path[sizeof(fs->path) - 1] = '\0';
+ 	return true;
+ }
+ 
 -- 
 2.40.1.698.g37aff9b760-goog
 
