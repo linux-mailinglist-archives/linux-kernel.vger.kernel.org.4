@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C844711543
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F62F7115E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242850AbjEYSrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S242858AbjEYSrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242690AbjEYSpD (ORCPT
+        with ESMTP id S242707AbjEYSpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:45:03 -0400
+        Thu, 25 May 2023 14:45:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBFB3AA5;
-        Thu, 25 May 2023 11:41:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23DE3AAE;
+        Thu, 25 May 2023 11:41:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A10DF60BEA;
-        Thu, 25 May 2023 18:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A13C433EF;
-        Thu, 25 May 2023 18:40:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CEA560C57;
+        Thu, 25 May 2023 18:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CAEAC433EF;
+        Thu, 25 May 2023 18:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040031;
-        bh=SYPmn1DTDIGCLNn72op6cfrwgM0TCLAmTeHg70poU5U=;
+        s=k20201202; t=1685040035;
+        bh=gXwRhtRsYouFNBMlk7S8phDmvO3mR2uoyaYBy8rdqV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r89scXh7DloLn2RcpS5O3X9lHx1RIDy48mjbiNOC5GPW9Bsgmv8bS028qTtgBe0Tk
-         1uUIaP83zBJpYBp8mjP3P5GnE5FReORx9u9Dp9PNewM0DyVVSbmP9aRXHsD4ZdM9EG
-         5HQsTlNHpxeNdBxOTwGiTPr/XOiW6/dvBofZ4gVT04NS4yEra+ouxcb54EtIWBbtkb
-         pO4SavL0UvKFjSXks6kVha8CWFRwtVFze2BJXNZnSBavmVNGDWMrSoEFIlH+3pM8FL
-         F21Ev3nfa/sxa7uHYkfwWZyq4gS4ddpSonla4TDK+HBRDpPq6jH9fyKda8ccRC3lA9
-         rBmGVx0ahmJLg==
+        b=PIW1y+grPdpJGoU49IfAjCLPDxGIW82VdRQoatHG0j8kTuqXM7G19iDQ+XscQ+Aug
+         Fz4ScrqLa+2M+SshqZn2BpEHTl9yRgU8T9mk7bpo/UyI82fIq/Zq1p/i1BRjAJAcL3
+         08XtsAi4aY8kfDJmXqTgijR+GBv6HOTJEsdj1T3zU0aTZxDJLJgMwTjmBObAwyMZ95
+         tCCjPnAm3vpXQcTPGwdw2PhcfIsg7sCGggbZ7LvgWwgj5mKFNwcSJngHVb3DRrOxrb
+         VssNpU1cACi/paqfJ+cByWNpXNEKCPkZfYwTV/wk2wa+qN5EOSWPFShUC4T+Z91oOf
+         B4XFJy/J2ty2g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        kernel test robot <lkp@intel.com>,
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        catalin.marinas@arm.com, ardb@kernel.org,
-        akpm@linux-foundation.org, cohuck@redhat.com, peterx@redhat.com,
-        surenb@google.com, mark.rutland@arm.com, willy@infradead.org,
+        catalin.marinas@arm.com, akpm@linux-foundation.org,
+        peterx@redhat.com, hca@linux.ibm.com, dave@stgolabs.net,
+        vbabka@suse.cz, mike.kravetz@oracle.com, willy@infradead.org,
+        joey.gouly@arm.com, jannh@google.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 31/43] arm64/mm: mark private VM_FAULT_X defines as vm_fault_t
-Date:   Thu, 25 May 2023 14:38:42 -0400
-Message-Id: <20230525183854.1855431-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 32/43] arm64: vdso: Pass (void *) to virt_to_page()
+Date:   Thu, 25 May 2023 14:38:43 -0400
+Message-Id: <20230525183854.1855431-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
 References: <20230525183854.1855431-1-sashal@kernel.org>
@@ -53,60 +53,48 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Min-Hua Chen <minhuadotchen@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit d91d580878064b880f3574ac35b98d8b70ee8620 ]
+[ Upstream commit b0abde80620f42d1ceb3de5e4c1a49cdd5628229 ]
 
-This patch fixes several sparse warnings for fault.c:
+Like the other calls in this function virt_to_page() expects
+a pointer, not an integer.
 
-arch/arm64/mm/fault.c:493:24: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:493:24: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:493:24: sparse:    got int
-arch/arm64/mm/fault.c:501:32: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:501:32: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:501:32: sparse:    got int
-arch/arm64/mm/fault.c:503:32: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:503:32: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:503:32: sparse:    got int
-arch/arm64/mm/fault.c:511:24: sparse: warning: incorrect type in return expression (different base types)
-arch/arm64/mm/fault.c:511:24: sparse:    expected restricted vm_fault_t
-arch/arm64/mm/fault.c:511:24: sparse:    got int
-arch/arm64/mm/fault.c:670:13: sparse: warning: restricted vm_fault_t degrades to integer
-arch/arm64/mm/fault.c:670:13: sparse: warning: restricted vm_fault_t degrades to integer
-arch/arm64/mm/fault.c:713:39: sparse: warning: restricted vm_fault_t degrades to integer
+However since many architectures implement virt_to_pfn() as
+a macro, this function becomes polymorphic and accepts both a
+(unsigned long) and a (void *).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
-Link: https://lore.kernel.org/r/20230502151909.128810-1-minhuadotchen@gmail.com
+Fix this up with an explicit cast.
+
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: http://lists.infradead.org/pipermail/linux-arm-kernel/2023-May/832583.html
 Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/mm/fault.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/kernel/vdso.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 97a93ee756a2e..6327620397142 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -473,8 +473,8 @@ static void do_bad_area(unsigned long far, unsigned long esr,
- 	}
+diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
+index a61fc4f989b37..55dd15c9745da 100644
+--- a/arch/arm64/kernel/vdso.c
++++ b/arch/arm64/kernel/vdso.c
+@@ -314,7 +314,7 @@ static int aarch32_alloc_kuser_vdso_page(void)
+ 
+ 	memcpy((void *)(vdso_page + 0x1000 - kuser_sz), __kuser_helper_start,
+ 	       kuser_sz);
+-	aarch32_vectors_page = virt_to_page(vdso_page);
++	aarch32_vectors_page = virt_to_page((void *)vdso_page);
+ 	return 0;
  }
  
--#define VM_FAULT_BADMAP		0x010000
--#define VM_FAULT_BADACCESS	0x020000
-+#define VM_FAULT_BADMAP		((__force vm_fault_t)0x010000)
-+#define VM_FAULT_BADACCESS	((__force vm_fault_t)0x020000)
- 
- static vm_fault_t __do_page_fault(struct mm_struct *mm, unsigned long addr,
- 				  unsigned int mm_flags, unsigned long vm_flags,
 -- 
 2.39.2
 
