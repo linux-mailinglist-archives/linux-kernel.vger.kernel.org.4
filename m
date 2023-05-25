@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D647D710E05
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DA5710E0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241557AbjEYOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S241564AbjEYOMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241531AbjEYOIG (ORCPT
+        with ESMTP id S234918AbjEYOMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:08:06 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7FC1A6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:07:45 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ae4e49727eso14437505ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1685023664; x=1687615664;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c33tBT8cy9JPPgdRV9qNDNmoB5Xhj3TMTGSWoBJRi6Y=;
-        b=FYZ4Qv3lhHI2M6JlMLNPzk+I50IUxOLOyogHAdzY/9dAsG8hcofW6kRBUtQtqme6eF
-         El9ACrF9m6b/U1v8bIU9e6ogQnPYpCAlIPROFX03fQH6TtFmc+NpjRypzzUfvLQcCPgA
-         IMmLH6zkb8bityx6mv4Sc2Ngs1jHgYVESI6kU386dGSu1gtYkoe5zYsIezw/Lbapda2D
-         nzPd62vGlE4aAG9wK8L5blxg5ilcUkQLkzhsgEsNhgv0XLZ251TEbnLh/AN6hpKUPdj/
-         oCrWYI+n54m3SyBU4d/ncPb8TQUouvgBEbP8YkzUCmoCXR0LG38N128QLQtSZRlCobg6
-         IAWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023664; x=1687615664;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=c33tBT8cy9JPPgdRV9qNDNmoB5Xhj3TMTGSWoBJRi6Y=;
-        b=FOE+4D5dtTvx3tD9LgCo/psW0TL6FrN4yLOk8GRoK1bzZxwVEA16pgeFuqnOEFsL9O
-         go06k0juE9AMuNRZsz9Jo7rHZTr2ig+JDcyw5LKoHYnP1eEiN7KGSwi1n8bCWYUijpvl
-         hoVXHFjwnI+2pTf33NGQbO8HYkgM0axiK8LMsbZyFO/bgB0duGG+rHKn4X4gMbfOUf4i
-         eSbUylxaUEWnALZGV89nR/vOooPDUMqSTVcaF0S833Syg41EuH7VxUmiiG90zzzR8PII
-         +50I+a1pH1PNulUln6+GoWt8wuzIgHBNeBKv7lGl9jVFkSrklybkEDkgciMDZgVP//sH
-         FyQA==
-X-Gm-Message-State: AC+VfDybCliUvOf9feILDbujsblLm1TDgj9hc1AQQM3mKo71gNDmzE1j
-        ZsS/hKdylNWUf89MbYY4JenJ8w==
-X-Google-Smtp-Source: ACHHUZ45yFuJ/9A4MCbSl44XKJvuN/lObdaSmxg20qFmfGTxUn37ZhJoyCioHCu8T2L7XphJ/xFaww==
-X-Received: by 2002:a17:902:e88b:b0:1b0:f8:9b2d with SMTP id w11-20020a170902e88b00b001b000f89b2dmr856962plg.29.1685023664547;
-        Thu, 25 May 2023 07:07:44 -0700 (PDT)
-Received: from [10.12.184.48] ([143.92.127.226])
-        by smtp.gmail.com with ESMTPSA id v11-20020a1709029a0b00b001ac5b0a959bsm1478099plp.24.2023.05.25.07.07.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 07:07:44 -0700 (PDT)
-Message-ID: <5453d94d-c231-6d50-02bd-a510109bb306@shopee.com>
-Date:   Thu, 25 May 2023 22:07:39 +0800
+        Thu, 25 May 2023 10:12:31 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCFF191;
+        Thu, 25 May 2023 07:12:26 -0700 (PDT)
+Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QRqh75P1XzYsmC;
+        Thu, 25 May 2023 22:10:15 +0800 (CST)
+Received: from [10.174.178.159] (10.174.178.159) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 25 May 2023 22:12:23 +0800
+Message-ID: <5ec837a5-4e54-b5a2-fd53-a6d7845fb5d7@huawei.com>
+Date:   Thu, 25 May 2023 22:12:11 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] mm/mm_init.c: remove comments in
- zone_spanned_pages_in_node() and zone_absent_pages_in_node()
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     akpm@linux-foundation.org, mhocko@suse.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230525040150.1588-1-haifeng.xu@shopee.com>
- <20230525082444.GT4967@kernel.org>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <20230525082444.GT4967@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH -next] block: Fix the partition start may overflow in
+ add_partition()
+To:     Christoph Hellwig <hch@infradead.org>,
+        Zhong Jinghua <zhongjinghua@huaweicloud.com>
+CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yukuai3@huawei.com>, <chengzhihao1@huawei.com>,
+        <yangerkun@huawei.com>
+References: <20230522070615.1485014-1-zhongjinghua@huaweicloud.com>
+ <ZG8igEyXrFa4j/gf@infradead.org>
+From:   zhongjinghua <zhongjinghua@huawei.com>
+In-Reply-To: <ZG8igEyXrFa4j/gf@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.159]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,60 +55,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 2023/5/25 16:24, Mike Rapoport wrote:
-> On Thu, May 25, 2023 at 04:01:48AM +0000, Haifeng Xu wrote:
->> Since commit 03e85f9d5f1f ("mm/page_alloc: Introduce free_area_init_core_hotplug"),
->> free_area_init_node() doesn't get called in hotplug path anymore, so
->> remove the comments related to it.
->>
->> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
->> ---
->>  mm/mm_init.c | 3 +--
->>  1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/mm/mm_init.c b/mm/mm_init.c
->> index 7f7f9c677854..cf55bba04b23 100644
->> --- a/mm/mm_init.c
->> +++ b/mm/mm_init.c
->> @@ -1174,7 +1174,6 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
->>  	unsigned long zone_start_pfn, zone_end_pfn;
->>  	unsigned long nr_absent;
->>  
->> -	/* When hotadd a new node from cpu_up(), the node should be empty */
->>  	if (!node_start_pfn && !node_end_pfn)
->>  		return 0;
-> 
-> I think it's better to call calculate_node_totalpages only if node actually has 
-> memory and for node with no memory we just need to make sure all the node
-> and zone page counts are indeed set to 0.
-
-Yes, it's good advice.
-
-> 
-> Then the condition here and in zone_spanned_pages_in_node() can be removed
-> along with the comment and patch 2 won't be required at all.
-
-Regarding to patch 2, if the node has mmeory but contains zone with no memory,
-it can avoid the calculation of absent pages.
-
-I thik we can add a check that whether zone_end_pfn is equal to zone_start_pfn
-in patch 3. If it's true, return 0 directly. So patch 2 can be dropped.
-
-Thanks!
-
->   
->> @@ -1227,7 +1226,7 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
->>  {
->>  	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
->>  	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
->> -	/* When hotadd a new node from cpu_up(), the node should be empty */
+在 2023/5/25 16:55, Christoph Hellwig 写道:
+> On Mon, May 22, 2023 at 03:06:15PM +0800, Zhong Jinghua wrote:
+>> +	if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
+>> +		return -EINVAL;
 >> +
->>  	if (!node_start_pfn && !node_end_pfn)
->>  		return 0;
->>  
->> -- 
->> 2.25.1
->>
->>
-> 
+>>   	start = p.start >> SECTOR_SHIFT;
+>>   	length = p.length >> SECTOR_SHIFT;
+>>   
+>> +	/* length may be equal to 0 after right shift */
+>> +	if (!length || start + length > get_capacity(bdev->bd_disk))
+>> +		return -EINVAL;
+> While we're at it, shouldn't these be switched to use
+> check_add_overflow?
+
+However, using check_add_overflow requires the introduction of an 
+additional local variable for the third parameter, which does not make 
+much difference to the current check. Is it worth it?
+
+e.g:
+
+diff --git a/block/ioctl.c b/block/ioctl.c
+index 3223ea862523..9a40e8f864cb 100644
+--- a/block/ioctl.c
++++ b/block/ioctl.c
+@@ -18,7 +18,7 @@ static int blkpg_do_ioctl(struct block_device *bdev,
+  {
+         struct gendisk *disk = bdev->bd_disk;
+         struct blkpg_partition p;
+-       long long start, length;
++       long long start, length, tmp_check;
+
+         if (!capable(CAP_SYS_ADMIN))
+                 return -EACCES;
+@@ -33,7 +33,7 @@ static int blkpg_do_ioctl(struct block_device *bdev,
+         if (op == BLKPG_DEL_PARTITION)
+                 return bdev_del_partition(disk, p.pno);
+
+-       if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
++       if (p.start < 0 || p.length <= 0 || check_add_overflow(p.start, 
+p.length, &tmp_check))
+                 return -EINVAL;
+
+         start = p.start >> SECTOR_SHIFT;
+
+Or do you have a better idea?
+
