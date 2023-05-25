@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C587710E46
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11B2710E4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241286AbjEYOYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        id S241618AbjEYO0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233993AbjEYOYi (ORCPT
+        with ESMTP id S241615AbjEYO0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:24:38 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BAD187;
-        Thu, 25 May 2023 07:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=4EiB2AlR+/z+R1o2De2Qde2ZQ5SW+JoatwDRo240840=; b=vR44fhXQDG6zkr11gJByncTwgc
-        EXPH+B7r/wny2rnUTeVD0cXBofM0ZIeXSjE8ljsYR5A+9k53BZsX+PzzgqTZJoax+5R0EsrX4pfBv
-        YM1BteQXhJQQFCHxPdKg8+t+abRoy0T1Izlrk4cXyk251v09n75RRJegqA3IPUyi0lxw=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:53208 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q2BtE-0008F5-8X; Thu, 25 May 2023 10:24:28 -0400
-Date:   Thu, 25 May 2023 10:24:27 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     andy.shevchenko@gmail.com
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230525102427.dfd362c6a0c68a2f8e99accf@hugovil.com>
-In-Reply-To: <ZG9CIww5WbgJ3TUf@surfacebook>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
-        <20230525040324.3773741-7-hugo@hugovil.com>
-        <ZG9CIww5WbgJ3TUf@surfacebook>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 25 May 2023 10:26:05 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAFE197
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:26:02 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-3382dc7d50bso15982845ab.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685024760; x=1687616760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EIaS1CiG05qxEN3YCh4DxBPvMLd9g2DK0yZG+wFH+TY=;
+        b=IN0wY865EbbIPUruRi6288djM97EtP5u2NrpWFhByue42IAazbNlheK7uYApq3NYam
+         JVUZTt1EOLzmNLYcGeVCDVbyhK8eBovyjjVTWcDWP6Yx5HEUyLgkXxF96X03T1ovP00T
+         m5VRpB50OBPcOjjgZL8ADOX1ay/TyuLYfmS6s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685024760; x=1687616760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EIaS1CiG05qxEN3YCh4DxBPvMLd9g2DK0yZG+wFH+TY=;
+        b=aVjAhauWpku/y96RQTxCj1Hg4+m/kWIFAKFTyuv5oyVwvw3QtR4ED/jGvCNxE/UzA5
+         h12lDSj7b+UDSmExtMeUd82IJ3EjKQwX/A3piU8dNUNJGHUGGl2aBjJWrKl7JBCi1yRm
+         2OU2YwnyOlHYzVfDngIMIQPjCMzft3ukuuD6rRkAxDcqCdsPS/aVeipEDJj7LVhl7zm+
+         7c/+qKeF7BgayuCq9e/ydufzYESRbKvNidZVCH5MlPSYfWLuB6nna+8Pn31fgQKI9wWD
+         U09VUcK3fkhFEK1XcTlInNU0KBwib9yoNYDUd/Qo+rwutR/LWkFccxe7e2e8sjAX0qR0
+         5Byg==
+X-Gm-Message-State: AC+VfDw6C4LnFjbcmiwcy25b6xUgdAj2d1l0t+mvC6Ry2q5h/JBmpOpS
+        whFSHgvehDo2Rk65Cd6keobUCxINIIHnoFwADcU=
+X-Google-Smtp-Source: ACHHUZ6YtYPvPDGYnSzu1+tgtWKupcZ7rcyaI/iypzYvK19dAsCuRFfnQSj1n66yg8t10R8xYxeDSA==
+X-Received: by 2002:a92:d1c7:0:b0:335:25e7:1897 with SMTP id u7-20020a92d1c7000000b0033525e71897mr12948940ilg.32.1685024760089;
+        Thu, 25 May 2023 07:26:00 -0700 (PDT)
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com. [209.85.166.175])
+        by smtp.gmail.com with ESMTPSA id w24-20020a029698000000b0041844cb2c2dsm442040jai.115.2023.05.25.07.25.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 07:25:57 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-33164ec77ccso175155ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:25:57 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1d12:b0:331:aabc:c8b7 with SMTP id
+ i18-20020a056e021d1200b00331aabcc8b7mr224459ila.10.1685024756622; Thu, 25 May
+ 2023 07:25:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <1682328761-17517-1-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1682328761-17517-1-git-send-email-quic_vnivarth@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 25 May 2023 07:25:45 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WdTS6UA9oSahdn8k2hKRLZo974A4b8nrDYSiTggKAv+g@mail.gmail.com>
+Message-ID: <CAD=FV=WdTS6UA9oSahdn8k2hKRLZo974A4b8nrDYSiTggKAv+g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/5] spi: Add DMA mode support to spi-qcom-qspi
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        andersson@kernel.org
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
+        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 06/11] serial: sc16is7xx: fix bug when first setting
- GPIO direction
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 14:10:27 +0300
-andy.shevchenko@gmail.com wrote:
+Hi Bjorn,
 
-> Thu, May 25, 2023 at 12:03:20AM -0400, Hugo Villeneuve kirjoitti:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > When we want to configure a pin as an output pin with a value of logic
-> > 0, we end up as having a value of logic 1 on the output pin. Setting a
-> > logic 0 a second time (or more) after that will correctly output a
-> > logic 0 on the output pin.
-> > 
-> > By default, all GPIO pins are configured as inputs. When we enter
-> > c16is7xx_gpio_direction_output() for the first time, we first set the
-> 
-> Missing 's'.
+On Mon, Apr 24, 2023 at 2:32=E2=80=AFAM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
+>
+> There are large number of QSPI irqs that fire during boot/init and later
+> on every suspend/resume.
+> This could be made faster by doing DMA instead of PIO.
+> Below is comparison for number of interrupts raised in 2 scenarios...
+> Boot up and stabilise
+> Suspend/Resume
+>
+> Sequence   PIO    DMA
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> Boot-up    69088  19284
+> S/R        5066   3430
+>
+> Speed test results...
+> spi-nor read times in sec after 2 min uptime
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> PIO - Iterations-1000, min=3D3.18, max=3D3.74, avg=3D3.53
+> DMA - Iterations-1000, min=3D1.21, max=3D2.28, avg=3D1.79
+>
+> spi-nor write times in sec after 2 min uptime
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> PIO - Iterations-1000, min=3D3.20, max=3D8.24, avg=3D3.58
+> DMA - Iterations-1000, min=3D1.25, max=3D5.13, avg=3D1.82
+>
+> Further testing performed...
+> a) multiple entries in sgt (simulated by max_dma_len =3D 1024)
+> b) fallback to pio (simulated by dma setup failure)
+>
+> Vijaya Krishna Nivarthi (5):
+>   spi: dt-bindings: qcom,spi-qcom-qspi: Add iommus
+>   arm64: dts: qcom: sc7180: Add stream-id of qspi to iommus
+>   arm64: dts: qcom: sc7280: Add stream-id of qspi to iommus
+>   arm64: dts: qcom: sdm845: Add stream-id of qspi to iommus
+>   spi: spi-qcom-qspi: Add DMA mode support
 
-Fixed.
+Mark has landed the bindings / code changes:
 
-> > desired value in IOSTATE, and then we configure the pin as an output.
-> > The datasheet states that writing to IOSTATE register will trigger a
-> > transfer of the value to the I/O pin configured as output, so if the
-> > pin is configured as an input, nothing will be transferred.
-> > 
-> > Therefore, set the direction first in IODIR, and then set the desired
-> > value in IOSTATE.
-> > 
-> > This is what is done in NXP application note AN10587.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-> 
+b5762d95607e spi: spi-qcom-qspi: Add DMA mode support
+64c05eb3a0f4 spi: dt-bindings: qcom,spi-qcom-qspi: Add iommus
+
+...so I think the dts changes here are ready for you to land. There
+are no hard dependencies here so you can land the dts without needing
+the code changes.
+
+Thanks!
+
+-Doug
