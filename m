@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504BE7104D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF267104D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239653AbjEYE43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S239530AbjEYE4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239589AbjEYEys (ORCPT
+        with ESMTP id S239687AbjEYEy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:54:48 -0400
+        Thu, 25 May 2023 00:54:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2AF1981;
-        Wed, 24 May 2023 21:52:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B891991;
+        Wed, 24 May 2023 21:52:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C76DB63BA0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 784C2641A7;
+        Thu, 25 May 2023 04:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE0CC433A1;
         Thu, 25 May 2023 04:51:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13057C4339B;
-        Thu, 25 May 2023 04:51:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684990311;
-        bh=V0AR9VB0Abuf/boWapRE1QYU924C/0nH8pQepDItrIA=;
+        bh=apMkKvYFN8ljtEvzQD2/s1gcQz71bSZdKPxky0bwPP4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UWJDMpUtGLAut5O1NSPjjzVnhfXNvVBBZn0Hqk45UMwXA92bUeJ+HVoLQPwfyHZ1g
-         c5cQc7yr4nzef+VkRNhEOB+MwOPYe+Aemntjl9BzaKqH/aNxSItH1+2IIrVmg7ZfyO
-         GQBr8EPVdkfXVL533eK++sugk7iNZWP1a2znkZedJoWTLGHQaxylNWq92jn4dLax8D
-         oaRJEBNN131HhrQK8wN1/zr5T7nP523j8dWam+m1Qjd4sSxNxHIfp5DIx8lDqEPFwF
-         zMLBjZyQi4dy309rbY1DUZ8Ew2fvmkzRaWZL7xsZs0/CLrwH3wJhsqwq/Rb2JMWso2
-         svRAmSE3nUuVA==
+        b=Ix3bvv/hWQ+OyvUIDqWxCGfNVMPkBlyrzZBDPIyQMio8Xb536bAy8+2XwqHAubPXl
+         oOy7vhVFjJGhrija84wL0xAU3S8fxPDeuohyfbCeJ56d2TK03K1twI/5WmGE/tfFcx
+         8dLHkChi1UvgpXu2h3QWZUBYBjL2qiVYvu/9u8YTiTfSle4hgzGVX8OEDHrMJq6VOi
+         2/z5CKD4ckM+f/rN6hOnE+FW7Hz6YXHRJ1HJ0LZVYUki9QkMyC80ROj9FA7d7MfHD5
+         Qo3GyAFNV3ApbCnN6sQFeJlo9bo7QLtmnpVg665M6EIY0m0tOxg4tAsm08Qjl3WC7K
+         AeTU87GEnmVDQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, quic_fenglinw@quicinc.com,
-        konrad.dybcio@linaro.org, Dylan Van Assche <me@dylanvanassche.be>,
-        conor+dt@kernel.org, robh+dt@kernel.org, pavel@ucw.cz,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        amartinz@shiftphones.com, devicetree@vger.kernel.org,
-        linux-leds@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 0/3] arm64: dts: qcom: pmi8998: add and enable flash LED controller
-Date:   Wed, 24 May 2023 21:54:29 -0700
-Message-Id: <168499048186.3998961.14574911875082597467.b4-ty@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Min-Hua Chen <minhuadotchen@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] soc: qcom: rpmpd: use correct __le32 type
+Date:   Wed, 24 May 2023 21:54:30 -0700
+Message-Id: <168499048181.3998961.5413274863907546712.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230518133113.273880-1-me@dylanvanassche.be>
-References: <20230518133113.273880-1-me@dylanvanassche.be>
+In-Reply-To: <20230522160757.284165-1-minhuadotchen@gmail.com>
+References: <20230522160757.284165-1-minhuadotchen@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,25 +56,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 15:31:10 +0200, Dylan Van Assche wrote:
-> Qualcomm PMI8998 has support for 3 flash LEDs which got support in [1].
-> Add this driver to the PMI8998 DTS and enable 2 flash LEDs in the SHIFTPHONES SHIFT6mq
-> smartphone. This smartphone has a white and yellow flash LED.
+On Tue, 23 May 2023 00:07:56 +0800, Min-Hua Chen wrote:
+> Use cpu_to_le32 to cast constants to __le32 before comparing
+> them with __le32 type pd->key. This fixes the following sparse
+> warnings:
 > 
-> * Changelog *
-> 
-> Changes in v2:
-> - Document compatible for PMI8998 to fix missing compatible in DTS.
-> - Improved commit messages, following [2]
+> drivers/soc/qcom/rpmpd.c:895:31: sparse: warning: restricted __le32 degrades to integer
+> drivers/soc/qcom/rpmpd.c:896:15: sparse: warning: restricted __le32 degrades to integer
 > 
 > [...]
 
 Applied, thanks!
 
-[2/3] arm64: dts: qcom: pmi8998: add flash LED controller
-      commit: 9139bb56734a14c156d3ef736c22a06bd1a9d22c
-[3/3] arm64: dts: qcom: sdm845-shift-axolotl: enable flash LEDs
-      commit: 8587d217ec3c09268d2023758e5fd6dbc3529c2b
+[1/1] soc: qcom: rpmpd: use correct __le32 type
+      commit: 4b819e7e89fedc90150a78152bfa6e6e3534e64b
 
 Best regards,
 -- 
