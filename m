@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F12B71126C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435E871126D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240638AbjEYRcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S240848AbjEYRcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240328AbjEYRcF (ORCPT
+        with ESMTP id S229754AbjEYRcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:32:05 -0400
+        Thu, 25 May 2023 13:32:07 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78A5EB6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:32:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE6BD189
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:32:05 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 607381650;
-        Thu, 25 May 2023 10:32:49 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9957D1655;
+        Thu, 25 May 2023 10:32:50 -0700 (PDT)
 Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 035243F6C4;
-        Thu, 25 May 2023 10:32:00 -0700 (PDT)
-Message-ID: <329e0e44-c7f0-a602-640c-585530e9c665@arm.com>
-Date:   Thu, 25 May 2023 18:31:59 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B79013F840;
+        Thu, 25 May 2023 10:32:02 -0700 (PDT)
+Message-ID: <c6038e0e-68c2-f637-5b1f-7fba8cad6222@arm.com>
+Date:   Thu, 25 May 2023 18:32:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v3 11/19] x86/resctrl: Allow arch to allocate memory
- needed in resctrl_arch_rmid_read()
+Subject: Re: [PATCH v3 08/19] x86/resctrl: Add cpumask_any_housekeeping() for
+ limbo/overflow
 Content-Language: en-GB
 To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
@@ -44,12 +44,12 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
 References: <20230320172620.18254-1-james.morse@arm.com>
- <20230320172620.18254-12-james.morse@arm.com>
- <36af82d5-0d48-f899-9e95-1ec89be20581@intel.com>
- <24d3616a-7800-ba91-deed-8bcc639ce6ba@arm.com>
- <28845d8b-cf7a-b5b7-d5ae-1284e33d063c@intel.com>
+ <20230320172620.18254-9-james.morse@arm.com>
+ <3145caff-4e73-0ef2-5bc2-70cdfe7953e9@intel.com>
+ <78256a0f-d6e2-9c65-610d-ff962fdfed5b@arm.com>
+ <c099e82e-540a-c4e4-2efb-3db24481a64c@intel.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <28845d8b-cf7a-b5b7-d5ae-1284e33d063c@intel.com>
+In-Reply-To: <c099e82e-540a-c4e4-2efb-3db24481a64c@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -63,47 +63,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Reinette,
 
-On 28/04/2023 00:40, Reinette Chatre wrote:
-> On 4/27/2023 7:19 AM, James Morse wrote:
->> On 01/04/2023 00:27, Reinette Chatre wrote:
+On 28/04/2023 00:36, Reinette Chatre wrote:
+> On 4/27/2023 7:10 AM, James Morse wrote:
+>> On 01/04/2023 00:24, Reinette Chatre wrote:
 >>> On 3/20/2023 10:26 AM, James Morse wrote:
 
->>>> @@ -317,9 +318,14 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
->>>>  	u32 idx_limit = resctrl_arch_system_num_rmid_idx();
->>>>  	struct rmid_entry *entry;
->>>>  	u32 idx, cur_idx = 1;
->>>> +	int arch_mon_ctx;
->>>>  	bool rmid_dirty;
->>>>  	u64 val = 0;
+>>>> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+>>>> index 87545e4beb70..0b5fd5a0cda2 100644
+>>>> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+>>>> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+>>>> @@ -55,6 +56,28 @@
+>>>>  /* Max event bits supported */
+>>>>  #define MAX_EVT_CONFIG_BITS		GENMASK(6, 0)
 >>>>  
->>>> +	arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, QOS_L3_OCCUP_EVENT_ID);
->>>> +	if (arch_mon_ctx < 0)
->>>> +		return;
+>>>> +/**
+>>>> + * cpumask_any_housekeeping() - Chose any cpu in @mask, preferring those that
+>>>> + *			        aren't marked nohz_full
+>>>> + * @mask:	The mask to pick a CPU from.
+>>>> + *
+>>>> + * Returns a CPU in @mask. If there are houskeeping CPUs that don't use
+>>>> + * nohz_full, these are preferred.
+>>>> + */
+>>>> +static inline unsigned int cpumask_any_housekeeping(const struct cpumask *mask)
+>>>> +{
+>>>> +	int cpu, hk_cpu;
+>>>> +
+>>>> +	cpu = cpumask_any(mask);
+>>>> +	if (tick_nohz_full_cpu(cpu)) {
+>>>> +		hk_cpu = cpumask_nth_andnot(0, mask, tick_nohz_full_mask);
+>>>> +		if (hk_cpu < nr_cpu_ids)
+>>>> +			cpu = hk_cpu;
+>>>> +	}
+>>>> +
 >>
->>> The vision for this is not clear to me. When I read that context needs to be allocated
->>> I expect it to return a pointer to some new context, not an int. What would the
->>> "context" consist of?
+>>> I think as a start this could perhaps be a #if defined(CONFIG_NO_HZ_FULL). There
+>>> appears to be a precedent for this in kernel/rcu/tree_nocb.h.
 >>
->> It might just need a different name.
+>> This harms readability, and prevents the compiler from testing that this is valid C code
+>> for any compile of this code.
 >>
->> For MPAM, this is allocating a monitor, which is the hardware that does the counting in
->> the cache or the memory controller. The number of monitors is an implementation choice,
->> and may not match the number of CLOSID/RMID that are in use. There aren't guaranteed to be
->> enough to allocate one for every control or monitor group up front.
+>> With if-def's here you'd be reliant on come CI system to build with the required
+>> combination of Kconfig symbols to expose any warnings.
 >>
->> The int being returned is the allocated monitor's index. It identifies which monitor needs
->> programming to read the provided CLOSID/RMID, and the counter register to read with the value.
+>> It's much better to use IS_ENABLED() in the helpers and rely on the compiler's
+>> dead-code-elimination to remove paths that have been configured out.
+>>
+>> (See the section on Conditional Compilation in coding-style for a much better summary!)
 > 
-> I see.
+> My assumption was that you intended to implement what is described first in
+> the document you point to. That is, providing no-stub versions for all
+> and then calling everything unconditionally. Since I did not see universal stubs
+> for the code you are using I was looking at how other areas in the kernel handled
+> the same. 
 > 
+> Reading your response to Ilpo and what you write later I now see that you are using
+> a combination of no-op stubs and conditional compilation. That is, you use a no-op stub,
+> instead of "IS_ENABLED()" or "#if" to conditionally compile some code. I am not familiar
+> with how compilers handle these scenarios.
+> 
+
+>>>> diff --git a/include/linux/tick.h b/include/linux/tick.h
+>>>> index bfd571f18cfd..ae2e9019fc18 100644
+>>>> --- a/include/linux/tick.h
+>>>> +++ b/include/linux/tick.h
+>>>> @@ -174,9 +174,10 @@ static inline u64 get_cpu_iowait_time_us(int cpu, u64 *unused) { return -1; }
+>>>>  static inline void tick_nohz_idle_stop_tick_protected(void) { }
+>>>>  #endif /* !CONFIG_NO_HZ_COMMON */
+>>>>  
+>>>> +extern cpumask_var_t tick_nohz_full_mask;
+>>>> +
+>>>>  #ifdef CONFIG_NO_HZ_FULL
+>>>>  extern bool tick_nohz_full_running;
+>>>> -extern cpumask_var_t tick_nohz_full_mask;
+>>>>  
+>>>>  static inline bool tick_nohz_full_enabled(void)
+>>>>  {
+>>>
+>>> In addition to what Ilpo pointed out, be careful here.
+>>> cpumask_var_t is a pointer (or array) and needs to be
+>>> allocated before use. Moving its declaration but not the
+>>> allocation code seems risky.
 >>
->> I can allocate memory for an int if you think that is clearer.
->> (I was hoping to leave that for whoever needs something bigger than a pointer)
+>> Risky how? Any use of tick_nohz_full_mask that isn't guarded by something like
+>> tick_nohz_full_cpu() will lead to a link error regardless of the type.
+> 
+> I assumed that the intention was to create an actual "no-op" stub for this
+> mask, enabling it to be used unconditionally. That the intention is for it
+> to be guarded and how the compiler deals with this was not obvious to me. I think
+> it would be good to call out this usage when submitting this to the appropriate
+> maintainers. A comment near the declaration may help users to know how it is
+> intended to be used.
 
-> I'd rather not complicate it in this way.
+Right, I'll add a comment:
+/*
+ * Mask of CPUs that are nohz_full.
+ *
+ * Users should be guarded by CONFIG_NO_HZ_FULL or a tick_nohz_full_cpu()
+ * check.
+ */
 
-It's a no-op for x86 as these calls get optimised out, but more annoying for MPAM (I've
-done it now). I think the result is more intuitive, but see what you think.
+
 
 
 Thanks,
