@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991E6711AAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232AC711AB0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbjEYX3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 19:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S235946AbjEYXbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 19:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjEYX3n (ORCPT
+        with ESMTP id S229689AbjEYXbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 19:29:43 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D55E7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:29:41 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso218957a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:29:41 -0700 (PDT)
+        Thu, 25 May 2023 19:31:43 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE13E7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:31:42 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-7749357e71cso7626739f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685057381; x=1687649381;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qMNG40o2Yy1n8pxFY4abVPnOji+eS2T0lr/rCDAwCsM=;
-        b=CkbRAF25xVCJP5p1u3ZVs4erwAQ6+0fCM8G7ivdQEXVSLxuGOuwjNxPev1D/HT+je5
-         HPJtplXtVikWnFvmzn7FGfuMWThb0vdAR3YZiYUz87yk7TE3f5D8imiV2cG/oK79Vs1R
-         yAnorydP22MRXZbafW49ZO4P8gyO5t0lckC44=
+        d=chromium.org; s=google; t=1685057499; x=1687649499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=933jogByZjFXfrSwxO0fL0eFHLLZdKhikZdYJRLBaaU=;
+        b=m0HAFNNwZ7r7aFlnWXkhEBfDHpXn7AFaFX80ZQHiQnyOD0C2sbVxD4bk1sfLY5aqyH
+         zhpV/iwMLS1hrc5/YXdyIGAgsjGPXr/R7/Thh6Rrw1ILzNKciGHlHgDcQovN3U6nMThn
+         60ME40ZchrFQ6aNn+T2PfQw/suebMckBSTo+4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685057381; x=1687649381;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qMNG40o2Yy1n8pxFY4abVPnOji+eS2T0lr/rCDAwCsM=;
-        b=ZUwaGAXonJcjZyqJg/V8ApHgKcQltUCWGBGNcKb8WWMsqJaLsfgL4DCgJuK6KMM3g1
-         AWnxQqbPfCdCi8lpza2NR+NuNRCGoMtvKJuAd/kqCkMsyeHHysATPfP9IUkoVe2CIpAt
-         /FHEt0lMIKINF/z3c/9Hs0OuAEiwjuRN0JTokNjENXqCO0NpPaILMx93D0F9lAo1yEEa
-         NEfL1FPVAKZSwmUJIqtwexPnW79LR5EcFA82sS/eUmd+x3j3puWAoEf3WV5eSbw1Vz2U
-         DapDvzLIDDWG0nmi09ncysTfqLihM+8TkV3YKnE2sWZ5IBd0FNlj/eYao60vucsex7ak
-         5a2Q==
-X-Gm-Message-State: AC+VfDzN7EQL7YeGK1pRGjxf2TP4Ig2V71pcEHssia2EsXCwSSCQHlFH
-        0UP+I37vet4xSUIaEz0gTmqNmg==
-X-Google-Smtp-Source: ACHHUZ7E7gvQO8/T7dOZsj2pO3ari1eRKRZxK5OV+NNNLptVMrehMhR/BIEKHCoUQFT9qWwAXCdU+A==
-X-Received: by 2002:a17:902:8483:b0:1aa:feca:b616 with SMTP id c3-20020a170902848300b001aafecab616mr325594plo.65.1685057380875;
-        Thu, 25 May 2023 16:29:40 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:193f:721d:e41f:9c62])
-        by smtp.gmail.com with ESMTPSA id t16-20020a170902e85000b001ac912cac1asm1920225plg.175.2023.05.25.16.29.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 16:29:40 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Tom Rix <trix@redhat.com>, Petr Mladek <pmladek@suse.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: delete old declarations for watchdog_soft,hardlockup_user_enabled + make static
-Date:   Thu, 25 May 2023 16:28:32 -0700
-Message-ID: <20230525162822.1.I0fb41d138d158c9230573eaa37dc56afa2fb14ee@changeid>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        d=1e100.net; s=20221208; t=1685057499; x=1687649499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=933jogByZjFXfrSwxO0fL0eFHLLZdKhikZdYJRLBaaU=;
+        b=hqZ1hxsCWc62es0w5u/OxkIeA+JmODX1KEqsw5QLhUDhn3AA8cbfD3Wtr0tkKVHkPu
+         0khTr/4M7/dE6cP0dGJZBkWYJFYZQyPTPBTvakN9HfQrTzYrCNwGN+oeY08f2wHt58l1
+         H+NS3Y+8HKkxtHRnSP5aYUnCzdOJrb//0lk/zbetIPxrMvqYeDcZCbXkKA6UdUKyI3kb
+         XIvS+UK75YgXDoNUzne6UyrenRDRU7N7k5xYmx374UUqCd/q09R746oR+2mXKoDSr3DZ
+         2EP1Vz7vlyI8IXmeUwEAuyI+BzF5Sp4UxgBARN42EP7s1RMei4v/D9QQYNxsVM4B0zbI
+         ZN2w==
+X-Gm-Message-State: AC+VfDxJlwOBeaU1g1uGi/+Me2sPfJ5EyNGGsh59+Tg262RMCmJQg873
+        IO6FAbCRhb6wfsDbgh1zxGBsSr5SV9w0oSLo9fk=
+X-Google-Smtp-Source: ACHHUZ7gih4DZjJtgfzzl1adoytlYtiofll3jpDjyNQraL1uJapWeNqysiIb3MfhoQ7tlisVKx6l2g==
+X-Received: by 2002:a5d:9913:0:b0:76c:6c78:5144 with SMTP id x19-20020a5d9913000000b0076c6c785144mr848311iol.17.1685057499280;
+        Thu, 25 May 2023 16:31:39 -0700 (PDT)
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
+        by smtp.gmail.com with ESMTPSA id j4-20020a02cb04000000b0040fc9317650sm759969jap.62.2023.05.25.16.31.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 16:31:38 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-33164ec77ccso58825ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:31:38 -0700 (PDT)
+X-Received: by 2002:a92:c56f:0:b0:338:3b6a:4719 with SMTP id
+ b15-20020a92c56f000000b003383b6a4719mr1722ilj.17.1685057497786; Thu, 25 May
+ 2023 16:31:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230523122324.1668396-1-trix@redhat.com> <CAD=FV=W5HrBFakvoX-cQ5G=4xV1upkFPZ6aSR8me+d+aCpirgg@mail.gmail.com>
+ <CAD=FV=V_i5wR4oNy+xarA9e=VcgpH6i3U1uxFKtsaOe5AQX=Zw@mail.gmail.com>
+In-Reply-To: <CAD=FV=V_i5wR4oNy+xarA9e=VcgpH6i3U1uxFKtsaOe5AQX=Zw@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 25 May 2023 16:31:25 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Xo4tXtT5jJtEX2tvTZBhnnrYOurNz8Uio6_1YOkLUNEQ@mail.gmail.com>
+Message-ID: <CAD=FV=Xo4tXtT5jJtEX2tvTZBhnnrYOurNz8Uio6_1YOkLUNEQ@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: set variables watchdog_soft,hardlockup_user_enabled
+ storage-class-specifier to static
+To:     Tom Rix <trix@redhat.com>
+Cc:     akpm@linux-foundation.org, pmladek@suse.com, kernelfans@gmail.com,
+        lecopzer.chen@mediatek.com, ldufour@linux.ibm.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -72,98 +79,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hi,
 
-smatch reports
-kernel/watchdog.c:40:19: warning: symbol
-  'watchdog_hardlockup_user_enabled' was not declared. Should it be static?
-kernel/watchdog.c:41:19: warning: symbol
-  'watchdog_softlockup_user_enabled' was not declared. Should it be static?
+On Wed, May 24, 2023 at 11:05=E2=80=AFAM Doug Anderson <dianders@chromium.o=
+rg> wrote:
+>
+> Hi,
+>
+> On Tue, May 23, 2023 at 7:12=E2=80=AFAM Doug Anderson <dianders@chromium.=
+org> wrote:
+> >
+> > Hi,
+> >
+> > On Tue, May 23, 2023 at 5:23=E2=80=AFAM Tom Rix <trix@redhat.com> wrote=
+:
+> > >
+> > > smatch reports
+> > > kernel/watchdog.c:40:19: warning: symbol
+> > >   'watchdog_hardlockup_user_enabled' was not declared. Should it be s=
+tatic?
+> > > kernel/watchdog.c:41:19: warning: symbol
+> > >   'watchdog_softlockup_user_enabled' was not declared. Should it be s=
+tatic?
+> > >
+> > > These variabled are only used in their defining file, so it should be=
+ static.
+> >
+> > s/variabled/variables
+> >
+> > >
+> > > Signed-off-by: Tom Rix <trix@redhat.com>
+> > > ---
+> > >  kernel/watchdog.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > While your fix is valid (thanks!), it's only half the fix.
+> >
+> > I wondered why smatch would have suddenly noticed this since the
+> > change that touched this variable recently was only a rename. When I
+> > dug deeper, I realized that the old names actually _were_ referenced
+> > outside this file and my rename missed them. The reason I missed them
+> > is that the only reference is an "extern" reference in
+> > `include/linux/nmi.h`. The references in `include/linux/nmi.h`
+> > probably should have been removed in commit dd0693fdf054 ("watchdog:
+> > move watchdog sysctl interface to watchdog.c")
+> >
+> > ...so a more complete fix would also remove references to the old
+> > names (nmi_watchdog_user_enabled and soft_watchdog_user_enabled) in
+> > `include/linux/nmi.h`.
+>
+> FWIW, Petr has the other half of the fix at:
+>
+> https://lore.kernel.org/r/ZG4TW--j-DdSsUO6@alley
+>
+> Any chance you could send out a v2 and include that? If I don't see
+> something by tomorrow morning I'll try to send out a v2 for you that
+> squashes your and his changes.
 
-These variables are only used in their defining file, so they should
-be static.
+Maybe it's still morning somewhere. In any case, I squashed and posted:
 
-This problem showed up after the patch ("watchdog/hardlockup: rename
-some "NMI watchdog" constants/function") because that rename missed
-the header file. That didn't cause any compile-time errors because,
-since commit dd0693fdf054 ("watchdog: move watchdog sysctl interface
-to watchdog.c"), nobody outside of "watchdog.c" was actually referring
-to them. Thus, not only should we make these variables static but we
-should remove the old declarations in the header file that we missed
-renaming.
+https://lore.kernel.org/r/20230525162822.1.I0fb41d138d158c9230573eaa37dc56a=
+fa2fb14ee@changeid
 
-Fixes: 4b95b620dcd5 ("watchdog/hardlockup: rename some "NMI watchdog" constants/function")
-Signed-off-by: Tom Rix <trix@redhat.com>
-[dianders: updated subject + commit message; squashed in Petr's suggestion]
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-This is a squash of two patches that were posted to mailing lists, one
-official patch posted by Tom [1] and one that was posted in reply to
-my previous patch by Petr [2].
-
-IMO it makes sense to put these two things into one patch since
-they're basically dealing with the same issue. As promised [3] I'm
-posting the squash of the two patches.
-
-I have no idea how to really tag this and set authorship. I've chosen
-to leave author/Signed-off-by from Tom. Peter didn't officially
-include his Singed-off-by on his patch (as is common when posting
-suggestions in reply to another patch), so I didn't add it but added a
-Suggested-by from him. Hopefully this is OK. I dropped Mukesh's
-Reviewed-by just because it felt like things changed enough with the
-addition of Petr's stuff that it should be re-added.
-
-I've tagged this as "Fixes" based on the git hash in the current
-linuxnext.
-
-[1] https://lore.kernel.org/r/20230523122324.1668396-1-trix@redhat.com
-[2] https://lore.kernel.org/r/ZG4TW--j-DdSsUO6@alley/
-[3] https://lore.kernel.org/all/CAD=FV=V_i5wR4oNy+xarA9e=VcgpH6i3U1uxFKtsaOe5AQX=Zw@mail.gmail.com/
-
- include/linux/nmi.h | 6 ++----
- kernel/watchdog.c   | 4 ++--
- 2 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index d23902a2fd49..333465e235e1 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -18,8 +18,6 @@ void lockup_detector_soft_poweroff(void);
- void lockup_detector_cleanup(void);
- 
- extern int watchdog_user_enabled;
--extern int nmi_watchdog_user_enabled;
--extern int soft_watchdog_user_enabled;
- extern int watchdog_thresh;
- extern unsigned long watchdog_enabled;
- 
-@@ -70,8 +68,8 @@ static inline void reset_hung_task_detector(void) { }
-  * 'watchdog_enabled' variable. Each lockup detector has its dedicated bit -
-  * bit 0 for the hard lockup detector and bit 1 for the soft lockup detector.
-  *
-- * 'watchdog_user_enabled', 'nmi_watchdog_user_enabled' and
-- * 'soft_watchdog_user_enabled' are variables that are only used as an
-+ * 'watchdog_user_enabled', 'watchdog_hardlockup_user_enabled' and
-+ * 'watchdog_softlockup_user_enabled' are variables that are only used as an
-  * 'interface' between the parameters in /proc/sys/kernel and the internal
-  * state bits in 'watchdog_enabled'. The 'watchdog_thresh' variable is
-  * handled differently because its value is not boolean, and the lockup
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 877d8670f26e..237990e8d345 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -37,8 +37,8 @@ static DEFINE_MUTEX(watchdog_mutex);
- 
- unsigned long __read_mostly watchdog_enabled;
- int __read_mostly watchdog_user_enabled = 1;
--int __read_mostly watchdog_hardlockup_user_enabled = WATCHDOG_HARDLOCKUP_DEFAULT;
--int __read_mostly watchdog_softlockup_user_enabled = 1;
-+static int __read_mostly watchdog_hardlockup_user_enabled = WATCHDOG_HARDLOCKUP_DEFAULT;
-+static int __read_mostly watchdog_softlockup_user_enabled = 1;
- int __read_mostly watchdog_thresh = 10;
- static int __read_mostly watchdog_hardlockup_available;
- 
--- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+Assuming that looks OK it should be considered as superseding $SUBJECT patc=
+h.
