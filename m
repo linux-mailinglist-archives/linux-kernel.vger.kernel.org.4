@@ -2,418 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ED2711ABB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63230711ABF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241125AbjEYXi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 19:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S241149AbjEYXjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 19:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbjEYXi2 (ORCPT
+        with ESMTP id S241589AbjEYXju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 19:38:28 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C250A3;
-        Thu, 25 May 2023 16:38:25 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so58979e87.3;
-        Thu, 25 May 2023 16:38:25 -0700 (PDT)
+        Thu, 25 May 2023 19:39:50 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356DAA3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:39:49 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2e1725bdso3575621fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685057903; x=1687649903;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CRzA4TSuNbRkvjf9wpxiaSWiXpR8KS7NFNcbPrnX1fM=;
-        b=JB7LEsBbwGJoTtw+4gPJ0wdvGW3V0/naNYN3touihHC6spNUNJiPJ2qHzWOBLXum3O
-         TqrQhjObO2mWpvsmh/rT27jUOhnKc4bPXEKVyRpypRcZ2K8G5iqOTIGRsDYum7xde4Mf
-         e2D/aBbK/kzqEU5VmVFECi/3m4+ADpf+Dew10oSTkUJOOJrYKdOaC7c46BSqixIadjA6
-         6cc7q5kABqBhSSqz+jvfZJdtqq21s7LfpPrx4hKObCwt4qwaSynVjlSPuuLE6Wulj/nr
-         fg49Y4JTq4X1muuvn0oS41NdRwUgOQfQHxbs0MyTeYtCFeGsAcKRS8Dp9pAbrRm8/ZkC
-         jncA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685057903; x=1687649903;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        d=linaro.org; s=google; t=1685057987; x=1687649987;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CRzA4TSuNbRkvjf9wpxiaSWiXpR8KS7NFNcbPrnX1fM=;
-        b=AAjfnRZhGfXTHj9tPJZ/eb7Rs5BIU3YtjetHEETjoZc+7MyAO+oSkEQXGO97jhBitH
-         irQcqvHdS9vMHl/bWnfZHhKwTnsdTZnel1ZXkoomcuKTG0ZWBxKL9TNz9wFdRp94CIWT
-         IRKRQi8Dtn4k8pCmxDxvLO4phNfmSHhAncLTPGtKYXR1l+vFjD1YXl+QGKBM+yKyvc1B
-         F4GTShpKPx1Zh0hFmuotEpkwfw21I9qSsO3EmWRj7T3g7CIEMy4KWDaBCfV9iQ3+yHjR
-         39bL/YHjBjhC712vBwe0vexaPPSPGonjDqD6bEEuC4or1d/403SYBf8EQ9HlMK6TO0LP
-         APVQ==
-X-Gm-Message-State: AC+VfDypFUZVa80LkuFEq1MX5hKBQwQJc0q9mvVLNQYHDH6512woChe8
-        AbEFQGNB1HCYovOsRwS86Sb/eSLiovIcsl9ZfLBQ2OvtW5wB1snA
-X-Google-Smtp-Source: ACHHUZ5NMCdPUVjM5R5bbPJt5lHPlFhkOwBTYUBVbDDnIoj1Ja5KuF2jxBA6+ywTZmp7DqG4ZHKTgc3uLdA8fqrIpWA=
-X-Received: by 2002:ac2:44ae:0:b0:4ed:c61d:c8e8 with SMTP id
- c14-20020ac244ae000000b004edc61dc8e8mr8272273lfm.29.1685057903022; Thu, 25
- May 2023 16:38:23 -0700 (PDT)
+        bh=J3ShwMSx7Uo4NT4nhrrIA5wjOwvMR7I73Ygk+ShVDI8=;
+        b=g/i9fav5m2QDxpBgCAs52QBCggiW5t0N9Dl9y/a81ODrgx+XfMQvxqdKQdFJaQu0Rg
+         f+ZAqBVd3HsY4l2IPebxNmeh04i5EEUQkkimcZH3uSLbw9nZ1V5AS+rItivqKzsZzCNc
+         g50hOyRJ5xlXA6uBhLhJe+Mc3DIqveib01Z2dxHFC17Xa5rnQvN9zdYyNeQHd0CQgBvq
+         2RYxtBtIxDEOUXwmGhIh+46FYhnHvJLa13uyaBTylvDK3x4B+6y+sxxSo6A+ZiQgsn6K
+         ht4UeTu68dge2pqM03orfXkr5C8tC13NVRqzS4ZmvkO5Wf0AnaMZ27eysq92e7cAEeYo
+         YqOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685057987; x=1687649987;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J3ShwMSx7Uo4NT4nhrrIA5wjOwvMR7I73Ygk+ShVDI8=;
+        b=TEPsAbY5E6Q/grkWuzKKhtsGDMnAxb+fxwazv8Vk0XS5OTzJLi+WD/0D+ur15pYZcw
+         8aXpTmsyDJxm+K5PbssyJdN3q2jCaL+Xvrfl+1x2c23Leq6skKIpbwDA4NKkw4GdoIl0
+         4Ud3nWbYYUKeOCDMNdxGibWhMa8kXuwNkXN13q1asVYI/OMl64mstRszz/BvuldqO1fg
+         sM2ssjAXIdvNBWoRsaCDb3BCHPjK3Z0pDOAEOXc85LUTydOM+gwqoJP542Y+r9XLHimL
+         2XmoeXsm6vmbn9otX1Rh7cMjz3uDfAY6CxsA92bQ/oGvlatsR8BUHopRF86qKptwpLjO
+         O51Q==
+X-Gm-Message-State: AC+VfDwlkVG1GynVQXOLfmIXLY7DIygafogZQlF9KDPHg/+Xtnspq9h6
+        z2DhDft5rAKCmqEU9PK1ngRTGA==
+X-Google-Smtp-Source: ACHHUZ4dG/us25PBxwby+47FvpimKaqgiXwMzX9fQaa/ANCtEgtlZuH7c4RAlNOPbmyNzbTmM6As/Q==
+X-Received: by 2002:a2e:b625:0:b0:2ad:9edd:4e2 with SMTP id s5-20020a2eb625000000b002ad9edd04e2mr1273646ljn.20.1685057987456;
+        Thu, 25 May 2023 16:39:47 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id s24-20020a2e9c18000000b002a8ae16ac8csm437988lji.18.2023.05.25.16.39.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 16:39:47 -0700 (PDT)
+Message-ID: <ea53525b-749b-25e2-6dde-662a8e273597@linaro.org>
+Date:   Fri, 26 May 2023 01:39:45 +0200
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 25 May 2023 18:38:11 -0500
-Message-ID: <CAH2r5muUoXaeFdq=HUnEvjrppaD2e0_HUZOkgcHDSk_MmZOUag@mail.gmail.com>
-Subject: [GIT PULL] SMB3 client fixes and move of cifs and ksmbd to under
- "smb" directory
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 8/8] arm64: dts: qcom: msm8916-pm8916: Mark always-on
+ regulators
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
+ <20230510-msm8916-regulators-v1-8-54d4960a05fc@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230510-msm8916-regulators-v1-8-54d4960a05fc@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-44c026a73be8038f03dbdeef028b642880cf1511:
-
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
-
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.4-rc3-smb3-client-fixes
-
-for you to fetch changes up to ab6cacf833ba337b41700ee193d2c8936f1d049e:
-
-  smb3: move Documentation/filesystems/cifs to
-Documentation/filesystems/smb (2023-05-24 16:29:21 -0500)
-
-----------------------------------------------------------------
-Four smb3 client server fixes (3 also for stable) and three patches to
-move of fs/cifs and fs/ksmbd to a new common "fs/smb" parent directory
-- Move the client and server source directories to a common parent
-directory: e.g. fs/cifs --> fs/smb/client and fs/ksmbd -->
-fs/smb/server and fs/smbfs_common --> fs/smb/common
-- important readahead fix
-- important fix for SMB1 regression
-- fix for missing mount option ("mapchars") in mount API conversion
-- minor debugging improvement
-
-----------------------------------------------------------------
-David Howells (1):
-      cifs: Fix cifs_limit_bvec_subset() to correctly check the maxmimum size
-
-Paulo Alcantara (1):
-      cifs: fix smb1 mount regression
-
-Steve French (5):
-      smb3: display debug information better for encryption
-      cifs: mapchars mount option ignored
-      smb: move client and server files to common directory fs/smb
-      cifs: correct references in Documentation to old fs/cifs path
-      smb3: move Documentation/filesystems/cifs to Documentation/filesystems/smb
-
- Documentation/admin-guide/cifs/changes.rst              |  4 ++--
- Documentation/admin-guide/cifs/usage.rst                |  8 ++++----
- Documentation/filesystems/index.rst                     |  2 +-
- Documentation/filesystems/{cifs => smb}/cifsroot.rst    |  2 +-
- Documentation/filesystems/{cifs => smb}/index.rst       |  0
- Documentation/filesystems/{cifs => smb}/ksmbd.rst       |  0
- Documentation/userspace-api/ioctl/ioctl-number.rst      |  2 +-
- MAINTAINERS                                             | 10 +++++-----
- fs/Kconfig                                              |  9 +--------
- fs/Makefile                                             |  4 +---
- fs/smb/Kconfig                                          | 11 +++++++++++
- fs/smb/Makefile                                         |  5 +++++
- fs/{cifs => smb/client}/Kconfig                         |  0
- fs/{cifs => smb/client}/Makefile                        |  0
- fs/{cifs => smb/client}/asn1.c                          |  0
- fs/{cifs => smb/client}/cached_dir.c                    |  0
- fs/{cifs => smb/client}/cached_dir.h                    |  0
- fs/{cifs => smb/client}/cifs_debug.c                    |  8 ++++++--
- fs/{cifs => smb/client}/cifs_debug.h                    |  0
- fs/{cifs => smb/client}/cifs_dfs_ref.c                  |  0
- fs/{cifs => smb/client}/cifs_fs_sb.h                    |  0
- fs/{cifs => smb/client}/cifs_ioctl.h                    |  0
- fs/{cifs => smb/client}/cifs_spnego.c                   |  0
- fs/{cifs => smb/client}/cifs_spnego.h                   |  0
- fs/{cifs => smb/client}/cifs_spnego_negtokeninit.asn1   |  0
- fs/{cifs => smb/client}/cifs_swn.c                      |  0
- fs/{cifs => smb/client}/cifs_swn.h                      |  0
- fs/{cifs => smb/client}/cifs_unicode.c                  |  0
- fs/{cifs => smb/client}/cifs_unicode.h                  |  0
- fs/{cifs => smb/client}/cifs_uniupr.h                   |  0
- fs/{cifs => smb/client}/cifsacl.c                       |  0
- fs/{cifs => smb/client}/cifsacl.h                       |  0
- fs/{cifs => smb/client}/cifsencrypt.c                   |  2 +-
- fs/{cifs => smb/client}/cifsfs.c                        |  0
- fs/{cifs => smb/client}/cifsfs.h                        |  0
- fs/{cifs => smb/client}/cifsglob.h                      |  2 +-
- fs/{cifs => smb/client}/cifspdu.h                       |  2 +-
- fs/{cifs => smb/client}/cifsproto.h                     |  0
- fs/{cifs => smb/client}/cifsroot.c                      |  0
- fs/{cifs => smb/client}/cifssmb.c                       |  0
- fs/{cifs => smb/client}/connect.c                       |  0
- fs/{cifs => smb/client}/dfs.c                           |  2 +-
- fs/{cifs => smb/client}/dfs.h                           |  0
- fs/{cifs => smb/client}/dfs_cache.c                     |  0
- fs/{cifs => smb/client}/dfs_cache.h                     |  0
- fs/{cifs => smb/client}/dir.c                           |  0
- fs/{cifs => smb/client}/dns_resolve.c                   |  0
- fs/{cifs => smb/client}/dns_resolve.h                   |  0
- fs/{cifs => smb/client}/export.c                        |  0
- fs/{cifs => smb/client}/file.c                          |  3 ++-
- fs/{cifs => smb/client}/fs_context.c                    |  8 ++++++++
- fs/{cifs => smb/client}/fs_context.h                    |  0
- fs/{cifs => smb/client}/fscache.c                       |  0
- fs/{cifs => smb/client}/fscache.h                       |  0
- fs/{cifs => smb/client}/inode.c                         |  0
- fs/{cifs => smb/client}/ioctl.c                         |  0
- fs/{cifs => smb/client}/link.c                          |  0
- fs/{cifs => smb/client}/misc.c                          |  0
- fs/{cifs => smb/client}/netlink.c                       |  0
- fs/{cifs => smb/client}/netlink.h                       |  0
- fs/{cifs => smb/client}/netmisc.c                       |  0
- fs/{cifs => smb/client}/nterr.c                         |  0
- fs/{cifs => smb/client}/nterr.h                         |  0
- fs/{cifs => smb/client}/ntlmssp.h                       |  0
- fs/{cifs => smb/client}/readdir.c                       |  0
- fs/{cifs => smb/client}/rfc1002pdu.h                    |  0
- fs/{cifs => smb/client}/sess.c                          |  0
- fs/{cifs => smb/client}/smb1ops.c                       |  0
- fs/{cifs => smb/client}/smb2file.c                      |  0
- fs/{cifs => smb/client}/smb2glob.h                      |  0
- fs/{cifs => smb/client}/smb2inode.c                     |  0
- fs/{cifs => smb/client}/smb2maperror.c                  |  0
- fs/{cifs => smb/client}/smb2misc.c                      |  0
- fs/{cifs => smb/client}/smb2ops.c                       |  0
- fs/{cifs => smb/client}/smb2pdu.c                       |  0
- fs/{cifs => smb/client}/smb2pdu.h                       |  0
- fs/{cifs => smb/client}/smb2proto.h                     |  0
- fs/{cifs => smb/client}/smb2status.h                    |  0
- fs/{cifs => smb/client}/smb2transport.c                 |  0
- fs/{cifs => smb/client}/smbdirect.c                     |  0
- fs/{cifs => smb/client}/smbdirect.h                     |  0
- fs/{cifs => smb/client}/smbencrypt.c                    |  2 +-
- fs/{cifs => smb/client}/smberr.h                        |  0
- fs/{cifs => smb/client}/trace.c                         |  0
- fs/{cifs => smb/client}/trace.h                         |  0
- fs/{cifs => smb/client}/transport.c                     |  0
- fs/{cifs => smb/client}/unc.c                           |  0
- fs/{cifs => smb/client}/winucase.c                      |  0
- fs/{cifs => smb/client}/xattr.c                         |  0
- fs/{smbfs_common => smb/common}/Makefile                |  4 ++--
- fs/{smbfs_common => smb/common}/arc4.h                  |  0
- fs/{smbfs_common => smb/common}/cifs_arc4.c             |  0
- fs/{smbfs_common => smb/common}/cifs_md4.c              |  0
- fs/{smbfs_common => smb/common}/md4.h                   |  0
- fs/{smbfs_common => smb/common}/smb2pdu.h               |  0
- fs/{smbfs_common => smb/common}/smbfsctl.h              |  0
- fs/{ksmbd => smb/server}/Kconfig                        |  0
- fs/{ksmbd => smb/server}/Makefile                       |  0
- fs/{ksmbd => smb/server}/asn1.c                         |  0
- fs/{ksmbd => smb/server}/asn1.h                         |  0
- fs/{ksmbd => smb/server}/auth.c                         |  2 +-
- fs/{ksmbd => smb/server}/auth.h                         |  0
- fs/{ksmbd => smb/server}/connection.c                   |  0
- fs/{ksmbd => smb/server}/connection.h                   |  0
- fs/{ksmbd => smb/server}/crypto_ctx.c                   |  0
- fs/{ksmbd => smb/server}/crypto_ctx.h                   |  0
- fs/{ksmbd => smb/server}/glob.h                         |  0
- fs/{ksmbd => smb/server}/ksmbd_netlink.h                |  0
- fs/{ksmbd => smb/server}/ksmbd_spnego_negtokeninit.asn1 |  0
- fs/{ksmbd => smb/server}/ksmbd_spnego_negtokentarg.asn1 |  0
- fs/{ksmbd => smb/server}/ksmbd_work.c                   |  0
- fs/{ksmbd => smb/server}/ksmbd_work.h                   |  0
- fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.c               |  0
- fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.h               |  0
- fs/{ksmbd => smb/server}/mgmt/share_config.c            |  0
- fs/{ksmbd => smb/server}/mgmt/share_config.h            |  0
- fs/{ksmbd => smb/server}/mgmt/tree_connect.c            |  0
- fs/{ksmbd => smb/server}/mgmt/tree_connect.h            |  0
- fs/{ksmbd => smb/server}/mgmt/user_config.c             |  0
- fs/{ksmbd => smb/server}/mgmt/user_config.h             |  0
- fs/{ksmbd => smb/server}/mgmt/user_session.c            |  0
- fs/{ksmbd => smb/server}/mgmt/user_session.h            |  0
- fs/{ksmbd => smb/server}/misc.c                         |  0
- fs/{ksmbd => smb/server}/misc.h                         |  0
- fs/{ksmbd => smb/server}/ndr.c                          |  0
- fs/{ksmbd => smb/server}/ndr.h                          |  0
- fs/{ksmbd => smb/server}/nterr.h                        |  0
- fs/{ksmbd => smb/server}/ntlmssp.h                      |  0
- fs/{ksmbd => smb/server}/oplock.c                       |  0
- fs/{ksmbd => smb/server}/oplock.h                       |  0
- fs/{ksmbd => smb/server}/server.c                       |  0
- fs/{ksmbd => smb/server}/server.h                       |  0
- fs/{ksmbd => smb/server}/smb2misc.c                     |  0
- fs/{ksmbd => smb/server}/smb2ops.c                      |  0
- fs/{ksmbd => smb/server}/smb2pdu.c                      |  0
- fs/{ksmbd => smb/server}/smb2pdu.h                      |  0
- fs/{ksmbd => smb/server}/smb_common.c                   |  0
- fs/{ksmbd => smb/server}/smb_common.h                   |  2 +-
- fs/{ksmbd => smb/server}/smbacl.c                       |  0
- fs/{ksmbd => smb/server}/smbacl.h                       |  0
- fs/{ksmbd => smb/server}/smbfsctl.h                     |  2 +-
- fs/{ksmbd => smb/server}/smbstatus.h                    |  2 +-
- fs/{ksmbd => smb/server}/transport_ipc.c                |  0
- fs/{ksmbd => smb/server}/transport_ipc.h                |  0
- fs/{ksmbd => smb/server}/transport_rdma.c               |  0
- fs/{ksmbd => smb/server}/transport_rdma.h               |  0
- fs/{ksmbd => smb/server}/transport_tcp.c                |  0
- fs/{ksmbd => smb/server}/transport_tcp.h                |  0
- fs/{ksmbd => smb/server}/unicode.c                      |  0
- fs/{ksmbd => smb/server}/unicode.h                      |  0
- fs/{ksmbd => smb/server}/uniupr.h                       |  0
- fs/{ksmbd => smb/server}/vfs.c                          |  0
- fs/{ksmbd => smb/server}/vfs.h                          |  0
- fs/{ksmbd => smb/server}/vfs_cache.c                    |  0
- fs/{ksmbd => smb/server}/vfs_cache.h                    |  0
- fs/{ksmbd => smb/server}/xattr.h                        |  0
- 156 files changed, 59 insertions(+), 39 deletions(-)
- rename Documentation/filesystems/{cifs => smb}/cifsroot.rst (97%)
- rename Documentation/filesystems/{cifs => smb}/index.rst (100%)
- rename Documentation/filesystems/{cifs => smb}/ksmbd.rst (100%)
- create mode 100644 fs/smb/Kconfig
- create mode 100644 fs/smb/Makefile
- rename fs/{cifs => smb/client}/Kconfig (100%)
- rename fs/{cifs => smb/client}/Makefile (100%)
- rename fs/{cifs => smb/client}/asn1.c (100%)
- rename fs/{cifs => smb/client}/cached_dir.c (100%)
- rename fs/{cifs => smb/client}/cached_dir.h (100%)
- rename fs/{cifs => smb/client}/cifs_debug.c (99%)
- rename fs/{cifs => smb/client}/cifs_debug.h (100%)
- rename fs/{cifs => smb/client}/cifs_dfs_ref.c (100%)
- rename fs/{cifs => smb/client}/cifs_fs_sb.h (100%)
- rename fs/{cifs => smb/client}/cifs_ioctl.h (100%)
- rename fs/{cifs => smb/client}/cifs_spnego.c (100%)
- rename fs/{cifs => smb/client}/cifs_spnego.h (100%)
- rename fs/{cifs => smb/client}/cifs_spnego_negtokeninit.asn1 (100%)
- rename fs/{cifs => smb/client}/cifs_swn.c (100%)
- rename fs/{cifs => smb/client}/cifs_swn.h (100%)
- rename fs/{cifs => smb/client}/cifs_unicode.c (100%)
- rename fs/{cifs => smb/client}/cifs_unicode.h (100%)
- rename fs/{cifs => smb/client}/cifs_uniupr.h (100%)
- rename fs/{cifs => smb/client}/cifsacl.c (100%)
- rename fs/{cifs => smb/client}/cifsacl.h (100%)
- rename fs/{cifs => smb/client}/cifsencrypt.c (99%)
- rename fs/{cifs => smb/client}/cifsfs.c (100%)
- rename fs/{cifs => smb/client}/cifsfs.h (100%)
- rename fs/{cifs => smb/client}/cifsglob.h (99%)
- rename fs/{cifs => smb/client}/cifspdu.h (99%)
- rename fs/{cifs => smb/client}/cifsproto.h (100%)
- rename fs/{cifs => smb/client}/cifsroot.c (100%)
- rename fs/{cifs => smb/client}/cifssmb.c (100%)
- rename fs/{cifs => smb/client}/connect.c (100%)
- rename fs/{cifs => smb/client}/dfs.c (99%)
- rename fs/{cifs => smb/client}/dfs.h (100%)
- rename fs/{cifs => smb/client}/dfs_cache.c (100%)
- rename fs/{cifs => smb/client}/dfs_cache.h (100%)
- rename fs/{cifs => smb/client}/dir.c (100%)
- rename fs/{cifs => smb/client}/dns_resolve.c (100%)
- rename fs/{cifs => smb/client}/dns_resolve.h (100%)
- rename fs/{cifs => smb/client}/export.c (100%)
- rename fs/{cifs => smb/client}/file.c (99%)
- rename fs/{cifs => smb/client}/fs_context.c (99%)
- rename fs/{cifs => smb/client}/fs_context.h (100%)
- rename fs/{cifs => smb/client}/fscache.c (100%)
- rename fs/{cifs => smb/client}/fscache.h (100%)
- rename fs/{cifs => smb/client}/inode.c (100%)
- rename fs/{cifs => smb/client}/ioctl.c (100%)
- rename fs/{cifs => smb/client}/link.c (100%)
- rename fs/{cifs => smb/client}/misc.c (100%)
- rename fs/{cifs => smb/client}/netlink.c (100%)
- rename fs/{cifs => smb/client}/netlink.h (100%)
- rename fs/{cifs => smb/client}/netmisc.c (100%)
- rename fs/{cifs => smb/client}/nterr.c (100%)
- rename fs/{cifs => smb/client}/nterr.h (100%)
- rename fs/{cifs => smb/client}/ntlmssp.h (100%)
- rename fs/{cifs => smb/client}/readdir.c (100%)
- rename fs/{cifs => smb/client}/rfc1002pdu.h (100%)
- rename fs/{cifs => smb/client}/sess.c (100%)
- rename fs/{cifs => smb/client}/smb1ops.c (100%)
- rename fs/{cifs => smb/client}/smb2file.c (100%)
- rename fs/{cifs => smb/client}/smb2glob.h (100%)
- rename fs/{cifs => smb/client}/smb2inode.c (100%)
- rename fs/{cifs => smb/client}/smb2maperror.c (100%)
- rename fs/{cifs => smb/client}/smb2misc.c (100%)
- rename fs/{cifs => smb/client}/smb2ops.c (100%)
- rename fs/{cifs => smb/client}/smb2pdu.c (100%)
- rename fs/{cifs => smb/client}/smb2pdu.h (100%)
- rename fs/{cifs => smb/client}/smb2proto.h (100%)
- rename fs/{cifs => smb/client}/smb2status.h (100%)
- rename fs/{cifs => smb/client}/smb2transport.c (100%)
- rename fs/{cifs => smb/client}/smbdirect.c (100%)
- rename fs/{cifs => smb/client}/smbdirect.h (100%)
- rename fs/{cifs => smb/client}/smbencrypt.c (98%)
- rename fs/{cifs => smb/client}/smberr.h (100%)
- rename fs/{cifs => smb/client}/trace.c (100%)
- rename fs/{cifs => smb/client}/trace.h (100%)
- rename fs/{cifs => smb/client}/transport.c (100%)
- rename fs/{cifs => smb/client}/unc.c (100%)
- rename fs/{cifs => smb/client}/winucase.c (100%)
- rename fs/{cifs => smb/client}/xattr.c (100%)
- rename fs/{smbfs_common => smb/common}/Makefile (59%)
- rename fs/{smbfs_common => smb/common}/arc4.h (100%)
- rename fs/{smbfs_common => smb/common}/cifs_arc4.c (100%)
- rename fs/{smbfs_common => smb/common}/cifs_md4.c (100%)
- rename fs/{smbfs_common => smb/common}/md4.h (100%)
- rename fs/{smbfs_common => smb/common}/smb2pdu.h (100%)
- rename fs/{smbfs_common => smb/common}/smbfsctl.h (100%)
- rename fs/{ksmbd => smb/server}/Kconfig (100%)
- rename fs/{ksmbd => smb/server}/Makefile (100%)
- rename fs/{ksmbd => smb/server}/asn1.c (100%)
- rename fs/{ksmbd => smb/server}/asn1.h (100%)
- rename fs/{ksmbd => smb/server}/auth.c (99%)
- rename fs/{ksmbd => smb/server}/auth.h (100%)
- rename fs/{ksmbd => smb/server}/connection.c (100%)
- rename fs/{ksmbd => smb/server}/connection.h (100%)
- rename fs/{ksmbd => smb/server}/crypto_ctx.c (100%)
- rename fs/{ksmbd => smb/server}/crypto_ctx.h (100%)
- rename fs/{ksmbd => smb/server}/glob.h (100%)
- rename fs/{ksmbd => smb/server}/ksmbd_netlink.h (100%)
- rename fs/{ksmbd => smb/server}/ksmbd_spnego_negtokeninit.asn1 (100%)
- rename fs/{ksmbd => smb/server}/ksmbd_spnego_negtokentarg.asn1 (100%)
- rename fs/{ksmbd => smb/server}/ksmbd_work.c (100%)
- rename fs/{ksmbd => smb/server}/ksmbd_work.h (100%)
- rename fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.c (100%)
- rename fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.h (100%)
- rename fs/{ksmbd => smb/server}/mgmt/share_config.c (100%)
- rename fs/{ksmbd => smb/server}/mgmt/share_config.h (100%)
- rename fs/{ksmbd => smb/server}/mgmt/tree_connect.c (100%)
- rename fs/{ksmbd => smb/server}/mgmt/tree_connect.h (100%)
- rename fs/{ksmbd => smb/server}/mgmt/user_config.c (100%)
- rename fs/{ksmbd => smb/server}/mgmt/user_config.h (100%)
- rename fs/{ksmbd => smb/server}/mgmt/user_session.c (100%)
- rename fs/{ksmbd => smb/server}/mgmt/user_session.h (100%)
- rename fs/{ksmbd => smb/server}/misc.c (100%)
- rename fs/{ksmbd => smb/server}/misc.h (100%)
- rename fs/{ksmbd => smb/server}/ndr.c (100%)
- rename fs/{ksmbd => smb/server}/ndr.h (100%)
- rename fs/{ksmbd => smb/server}/nterr.h (100%)
- rename fs/{ksmbd => smb/server}/ntlmssp.h (100%)
- rename fs/{ksmbd => smb/server}/oplock.c (100%)
- rename fs/{ksmbd => smb/server}/oplock.h (100%)
- rename fs/{ksmbd => smb/server}/server.c (100%)
- rename fs/{ksmbd => smb/server}/server.h (100%)
- rename fs/{ksmbd => smb/server}/smb2misc.c (100%)
- rename fs/{ksmbd => smb/server}/smb2ops.c (100%)
- rename fs/{ksmbd => smb/server}/smb2pdu.c (100%)
- rename fs/{ksmbd => smb/server}/smb2pdu.h (100%)
- rename fs/{ksmbd => smb/server}/smb_common.c (100%)
- rename fs/{ksmbd => smb/server}/smb_common.h (99%)
- rename fs/{ksmbd => smb/server}/smbacl.c (100%)
- rename fs/{ksmbd => smb/server}/smbacl.h (100%)
- rename fs/{ksmbd => smb/server}/smbfsctl.h (98%)
- rename fs/{ksmbd => smb/server}/smbstatus.h (99%)
- rename fs/{ksmbd => smb/server}/transport_ipc.c (100%)
- rename fs/{ksmbd => smb/server}/transport_ipc.h (100%)
- rename fs/{ksmbd => smb/server}/transport_rdma.c (100%)
- rename fs/{ksmbd => smb/server}/transport_rdma.h (100%)
- rename fs/{ksmbd => smb/server}/transport_tcp.c (100%)
- rename fs/{ksmbd => smb/server}/transport_tcp.h (100%)
- rename fs/{ksmbd => smb/server}/unicode.c (100%)
- rename fs/{ksmbd => smb/server}/unicode.h (100%)
- rename fs/{ksmbd => smb/server}/uniupr.h (100%)
- rename fs/{ksmbd => smb/server}/vfs.c (100%)
- rename fs/{ksmbd => smb/server}/vfs.h (100%)
- rename fs/{ksmbd => smb/server}/vfs_cache.c (100%)
- rename fs/{ksmbd => smb/server}/vfs_cache.h (100%)
- rename fs/{ksmbd => smb/server}/xattr.h (100%)
 
 
--- 
-Thanks,
+On 17.05.2023 20:48, Stephan Gerhold wrote:
+> Some of the regulators must be always-on to ensure correct operation of
+> the system, e.g. PM8916 L2 for the LPDDR RAM, L5 for most digital I/O
+> and L7 for the CPU PLL (strictly speaking the CPU PLL might only need
+> an active-only vote but this is not supported for regulators in
+> mainline currently).
+Would you be interested in implementing this?
 
-Steve
+Ancient downstream defines a second device (vregname_ao) and basically
+seems to select QCOM_SMD_(ACTIVE/SLEEP)_STATE based on that..
+
+Looks like `struct regulator` stores voltage in an array that wouldn't
+you know it, depends on the PM state. Perhaps that could be something
+to explore!
+
+Konrad
+
+> 
+> The RPM firmware seems to enforce that internally, these supplies stay
+> on even if we vote for them to power off (and there is no other
+> processor running). This means it's pointless to keep sending
+> enable/disable requests because they will just be ignored.
+> Also, drivers are much more likely to get a wrong impression of the
+> regulator status, because regulator_is_enabled() will return false when
+> there are no users, even though the regulator is always on.
+> 
+> Describe this properly by marking the regulators as always-on.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
+>  arch/arm64/boot/dts/qcom/apq8016-sbc.dts     | 5 -----
+>  arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi | 5 +++++
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+> index ab8dfd858025..1c5d55854893 100644
+> --- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+> +++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+> @@ -358,11 +358,6 @@ pm8916_l17: l17 {
+>  	};
+>  };
+>  
+> -&pm8916_s4 {
+> -	regulator-always-on;
+> -	regulator-boot-on;
+> -};
+> -
+>  &sdhc_1 {
+>  	status = "okay";
+>  
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+> index b38eecbd6253..64d7228bee07 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+> @@ -72,11 +72,13 @@ pm8916_rpm_regulators: regulators {
+>  		pm8916_s3: s3 {
+>  			regulator-min-microvolt = <1250000>;
+>  			regulator-max-microvolt = <1350000>;
+> +			regulator-always-on; /* Needed for L2 */
+>  		};
+>  
+>  		pm8916_s4: s4 {
+>  			regulator-min-microvolt = <1850000>;
+>  			regulator-max-microvolt = <2150000>;
+> +			regulator-always-on; /* Needed for L5/L7 */
+>  		};
+>  
+>  		/*
+> @@ -93,6 +95,7 @@ pm8916_s4: s4 {
+>  		pm8916_l2: l2 {
+>  			regulator-min-microvolt = <1200000>;
+>  			regulator-max-microvolt = <1200000>;
+> +			regulator-always-on; /* Needed for LPDDR RAM */
+>  		};
+>  
+>  		/* pm8916_l3 is managed by rpmpd (MSM8916_VDDMX) */
+> @@ -102,6 +105,7 @@ pm8916_l2: l2 {
+>  		pm8916_l5: l5 {
+>  			regulator-min-microvolt = <1800000>;
+>  			regulator-max-microvolt = <1800000>;
+> +			regulator-always-on; /* Needed for most digital I/O */
+>  		};
+>  
+>  		pm8916_l6: l6 {
+> @@ -112,6 +116,7 @@ pm8916_l6: l6 {
+>  		pm8916_l7: l7 {
+>  			regulator-min-microvolt = <1800000>;
+>  			regulator-max-microvolt = <1800000>;
+> +			regulator-always-on; /* Needed for CPU PLL */
+>  		};
+>  
+>  		pm8916_l8: l8 {
+> 
