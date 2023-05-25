@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B627104F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E01E7104FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240176AbjEYE52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S240197AbjEYE5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239747AbjEYEze (ORCPT
+        with ESMTP id S239758AbjEYEzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:55:34 -0400
+        Thu, 25 May 2023 00:55:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BF719B3;
-        Wed, 24 May 2023 21:52:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E85DE48;
+        Wed, 24 May 2023 21:52:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64F76642CC;
-        Thu, 25 May 2023 04:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA26C433A0;
-        Thu, 25 May 2023 04:51:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFD78642B3;
+        Thu, 25 May 2023 04:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08192C433A4;
+        Thu, 25 May 2023 04:52:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684990320;
-        bh=xA0iI93qR4zd9WU10Eh3RVb56HUPrQJZ8kFn4LxiFFk=;
+        s=k20201202; t=1684990322;
+        bh=wbuqSr/dpQZAWNfRhRWhjk92q+VPd7IY9nI6I0haJc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fe4ez2y9jYmnTTmOZ0q5TGbkShbQ7k56v8BciDQdiSxSkCJv1KYwE1kko1iITBZ5r
-         8j6zkCoC60CqxtIvaoM1D/HESQyDiGgggro9+CTXOq2oJY84tDuI3aBazwwC1QXDdP
-         0t7zGoOud8omhaP+jgeKRpEZXVQX9Qtm7ibKs3sfBmVYSxSDk57HZrNNcDVvdA+Va/
-         pTvoTMoTRso0ZCGGJA1hVmi/PC4WOgdClgsuC9sef0rIorqA8Eze8WqtT/MYGAn6hr
-         3ix5jGfGp4VuKG5J9Ipwr6uXcRnx1CjqnZxm5q3J6b8Be8XRdkE64ztBDT0qbbs8Ah
-         fu1qiHaIqWQ+w==
+        b=hiuDBew7VBo2HHdEmQ55CNhozIfR4j7iDQjfwkU4miS1db86JvKZ+VNXb/3xz0K8m
+         E08J7bukhI8hTtLI65/NR3Y9uKdkxvDIvWuTbpF3/pzsWMq7XJX0/SkFScxSS0yy2v
+         mckEp+vuLMm5t2VWiq8Bb7xe4+IR8ms+rIyQNxJSSxe3bJhI2rILwtXLKXdh8PuFFF
+         QwRMr4TpsUNf7BLCgHk8CfrhdKiRfHIQSEUNjasKqgi8L49G7Y+Ik+8TE9Ozj2PvU5
+         AGykGkUhCw38vB1iU9L5T0/boiWgfaIvVctEUvrPwz6OTfOoMEaqSKCrGIq9LICtnz
+         TDjmgCs1L1Q/A==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, Rohit Agarwal <quic_rohiagar@quicinc.com>,
-        robh@kernel.org, bhelgaas@google.com, lpieralisi@kernel.org,
-        conor+dt@kernel.org, kw@linux.com,
-        manivannan.sadhasivam@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
-        konrad.dybcio@linaro.org
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] Add PCIe EP support for SDX65
-Date:   Wed, 24 May 2023 21:54:38 -0700
-Message-Id: <168499048186.3998961.9705003317556607760.b4-ty@kernel.org>
+        jkona@quicinc.com, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        linux-clk@vger.kernel.org, quic_rohiagar@quicinc.com,
+        netdev@vger.kernel.org
+Subject: Re: (subset) [PATCH V2 0/5] Add GCC and RPMHCC support for sdx75
+Date:   Wed, 24 May 2023 21:54:39 -0700
+Message-Id: <168499048185.3998961.8118041081683162755.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1684432073-28490-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1684432073-28490-1-git-send-email-quic_rohiagar@quicinc.com>
+In-Reply-To: <20230512122347.1219-1-quic_tdas@quicinc.com>
+References: <20230512122347.1219-1-quic_tdas@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,28 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 23:17:48 +0530, Rohit Agarwal wrote:
-> Changes in v6:
->  - Rebased on top of 6.4-rc2.
+On Fri, 12 May 2023 17:53:42 +0530, Taniya Das wrote:
+> This series of patches extends the invert logic for branch2 clocks and adds
+> GCC, RPMH clocks devicetree bindings and driver support for SDX75 platform.
 > 
-> Changes in v5:
->  - Addressed some minor comments from Konrad
->  - Rebased on top of 6.3-rc5.
+> Imran Shaik (5):
+>   clk: qcom: branch: Extend the invert logic for branch2 clocks
+>   dt-bindings: clock: qcom: Add GCC clocks for SDX75
+>   dt-bindings: clock: qcom: Add RPMHCC for SDX75
+>   clk: qcom: rpmh: Add RPMH clocks support for SDX75
+>   clk: qcom: Add GCC driver support for SDX75
 > 
 > [...]
 
 Applied, thanks!
 
-[1/5] dt-bindings: PCI: qcom: Add SDX65 SoC
-      (no commit info)
-[2/5] ARM: dts: qcom: sdx65: Add support for PCIe PHY
-      commit: 92543a1ef22d0270425a4dfe8efe4ab30c4a8a5e
-[3/5] ARM: dts: qcom: sdx65: Add support for PCIe EP
-      commit: 91dfb64ba70bab4d3517f4e7cb2e4cc8f5a8f81a
-[4/5] ARM: dts: qcom: sdx65-mtp: Enable PCIe PHY
-      commit: 07bb20f207cb5868a47217681e4843f566843d29
-[5/5] ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
-      commit: e110dea61ff3f35e6d15e8c5009fb0e876a7d8ae
+[1/5] clk: qcom: branch: Extend the invert logic for branch2 clocks
+      commit: 9092d1083a6253757c7f9449340173443c81768c
+[3/5] dt-bindings: clock: qcom: Add RPMHCC for SDX75
+      commit: 379d72721bc4308fbc038e9858b7d2e9191725b5
+[4/5] clk: qcom: rpmh: Add RPMH clocks support for SDX75
+      commit: 1c2360ff58162ab3a91c619ab8172c0061174151
+[5/5] clk: qcom: Add GCC driver support for SDX75
+      commit: 108cdc09b2dea5110533bba495b6953ca9c7c2a9
 
 Best regards,
 -- 
