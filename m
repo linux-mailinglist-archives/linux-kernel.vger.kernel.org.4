@@ -2,168 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B5B711A9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991E6711AAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbjEYX2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 19:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S234810AbjEYX3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 19:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjEYX2M (ORCPT
+        with ESMTP id S229646AbjEYX3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 19:28:12 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09574E7;
-        Thu, 25 May 2023 16:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685057291; x=1716593291;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wzVUQ0ik7P4MU6YX6IWh+1L6CekJa/ZiJxdTIjh1KYw=;
-  b=H1Kg6ReeTrNe8/pkGPmdV1BDwTTs7m9SjCHvT2sFHrFyzRicTiscTa/N
-   g6IJTRT/E8XnsKRYnyT7HOUl0dDmyT+Oa9Mbj4RJEuvTE9T9i0wJhNeAp
-   17W0FoNeot52XpD23pUZvvRvXWGtHn615ZjhzuC5EIa+vq5/n13knKBN7
-   ycvLTnHIs7AoDE/lsTN5omahgPQKcpBCIWhNp25SmdJ6DhnyZM4oLpp+V
-   cOvVe+mecl445sKbcBn7aPHo4gJsZEjs0cgkkMDZK8VRy20E9AkYca784
-   17WKQHKtSiSCtPyVdgLOejF6LzybwyPK+NWpQ2JIKLeCOFcFaLnw35kuG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="338653419"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="338653419"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 16:28:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="829288774"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="829288774"
-Received: from mseamste-mobl1.amr.corp.intel.com (HELO [10.209.120.148]) ([10.209.120.148])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 16:28:08 -0700
-Message-ID: <8a9ca63b-60d8-050c-30b5-a9bdc7a26940@linux.intel.com>
-Date:   Thu, 25 May 2023 16:28:08 -0700
+        Thu, 25 May 2023 19:29:43 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D55E7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:29:41 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso218957a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685057381; x=1687649381;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qMNG40o2Yy1n8pxFY4abVPnOji+eS2T0lr/rCDAwCsM=;
+        b=CkbRAF25xVCJP5p1u3ZVs4erwAQ6+0fCM8G7ivdQEXVSLxuGOuwjNxPev1D/HT+je5
+         HPJtplXtVikWnFvmzn7FGfuMWThb0vdAR3YZiYUz87yk7TE3f5D8imiV2cG/oK79Vs1R
+         yAnorydP22MRXZbafW49ZO4P8gyO5t0lckC44=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685057381; x=1687649381;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qMNG40o2Yy1n8pxFY4abVPnOji+eS2T0lr/rCDAwCsM=;
+        b=ZUwaGAXonJcjZyqJg/V8ApHgKcQltUCWGBGNcKb8WWMsqJaLsfgL4DCgJuK6KMM3g1
+         AWnxQqbPfCdCi8lpza2NR+NuNRCGoMtvKJuAd/kqCkMsyeHHysATPfP9IUkoVe2CIpAt
+         /FHEt0lMIKINF/z3c/9Hs0OuAEiwjuRN0JTokNjENXqCO0NpPaILMx93D0F9lAo1yEEa
+         NEfL1FPVAKZSwmUJIqtwexPnW79LR5EcFA82sS/eUmd+x3j3puWAoEf3WV5eSbw1Vz2U
+         DapDvzLIDDWG0nmi09ncysTfqLihM+8TkV3YKnE2sWZ5IBd0FNlj/eYao60vucsex7ak
+         5a2Q==
+X-Gm-Message-State: AC+VfDzN7EQL7YeGK1pRGjxf2TP4Ig2V71pcEHssia2EsXCwSSCQHlFH
+        0UP+I37vet4xSUIaEz0gTmqNmg==
+X-Google-Smtp-Source: ACHHUZ7E7gvQO8/T7dOZsj2pO3ari1eRKRZxK5OV+NNNLptVMrehMhR/BIEKHCoUQFT9qWwAXCdU+A==
+X-Received: by 2002:a17:902:8483:b0:1aa:feca:b616 with SMTP id c3-20020a170902848300b001aafecab616mr325594plo.65.1685057380875;
+        Thu, 25 May 2023 16:29:40 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:193f:721d:e41f:9c62])
+        by smtp.gmail.com with ESMTPSA id t16-20020a170902e85000b001ac912cac1asm1920225plg.175.2023.05.25.16.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 16:29:40 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Tom Rix <trix@redhat.com>, Petr Mladek <pmladek@suse.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: delete old declarations for watchdog_soft,hardlockup_user_enabled + make static
+Date:   Thu, 25 May 2023 16:28:32 -0700
+Message-ID: <20230525162822.1.I0fb41d138d158c9230573eaa37dc56afa2fb14ee@changeid>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] x86/mm: Allow guest.enc_status_change_prepare() to
- fail
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        dave.hansen@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de
-Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com, seanjc@google.com,
-        thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230525225847.28592-1-kirill.shutemov@linux.intel.com>
- <20230525225847.28592-2-kirill.shutemov@linux.intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230525225847.28592-2-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Tom Rix <trix@redhat.com>
 
-On 5/25/23 3:58 PM, Kirill A. Shutemov wrote:
-> TDX code is going to provide guest.enc_status_change_prepare() that is
-> able to fail.
+smatch reports
+kernel/watchdog.c:40:19: warning: symbol
+  'watchdog_hardlockup_user_enabled' was not declared. Should it be static?
+kernel/watchdog.c:41:19: warning: symbol
+  'watchdog_softlockup_user_enabled' was not declared. Should it be static?
 
-You can add some info about why you need this?
+These variables are only used in their defining file, so they should
+be static.
 
-> 
-> Add a way to return an error from the callback.
-> 
-> While there, fix enc_status_change_finish_noop(). It is defined as
-> always-fail now which doesn't make sense for noop.
+This problem showed up after the patch ("watchdog/hardlockup: rename
+some "NMI watchdog" constants/function") because that rename missed
+the header file. That didn't cause any compile-time errors because,
+since commit dd0693fdf054 ("watchdog: move watchdog sysctl interface
+to watchdog.c"), nobody outside of "watchdog.c" was actually referring
+to them. Thus, not only should we make these variables static but we
+should remove the old declarations in the header file that we missed
+renaming.
 
-IMO, since the above change is an independent fix, I think it is better to
-split this into a separate patch.
+Fixes: 4b95b620dcd5 ("watchdog/hardlockup: rename some "NMI watchdog" constants/function")
+Signed-off-by: Tom Rix <trix@redhat.com>
+[dianders: updated subject + commit message; squashed in Petr's suggestion]
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+This is a squash of two patches that were posted to mailing lists, one
+official patch posted by Tom [1] and one that was posted in reply to
+my previous patch by Petr [2].
 
-Other than above suggestions, the rest of the changes looks fine.
+IMO it makes sense to put these two things into one patch since
+they're basically dealing with the same issue. As promised [3] I'm
+posting the squash of the two patches.
 
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: stable@vger.kernel.org
-> ---
->  arch/x86/include/asm/x86_init.h | 2 +-
->  arch/x86/kernel/x86_init.c      | 4 ++--
->  arch/x86/mm/mem_encrypt_amd.c   | 4 +++-
->  arch/x86/mm/pat/set_memory.c    | 3 ++-
->  4 files changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-> index 88085f369ff6..1ca9701917c5 100644
-> --- a/arch/x86/include/asm/x86_init.h
-> +++ b/arch/x86/include/asm/x86_init.h
-> @@ -150,7 +150,7 @@ struct x86_init_acpi {
->   * @enc_cache_flush_required	Returns true if a cache flush is needed before changing page encryption status
->   */
->  struct x86_guest {
-> -	void (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
-> +	bool (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
->  	bool (*enc_status_change_finish)(unsigned long vaddr, int npages, bool enc);
->  	bool (*enc_tlb_flush_required)(bool enc);
->  	bool (*enc_cache_flush_required)(void);
-> diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-> index d82f4fa2f1bf..64664311ac2b 100644
-> --- a/arch/x86/kernel/x86_init.c
-> +++ b/arch/x86/kernel/x86_init.c
-> @@ -130,8 +130,8 @@ struct x86_cpuinit_ops x86_cpuinit = {
->  
->  static void default_nmi_init(void) { };
->  
-> -static void enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { }
-> -static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return false; }
-> +static bool enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { return true; }
-> +static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return true; }
->  static bool enc_tlb_flush_required_noop(bool enc) { return false; }
->  static bool enc_cache_flush_required_noop(void) { return false; }
->  static bool is_private_mmio_noop(u64 addr) {return false; }
-> diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-> index e0b51c09109f..4f95c449a406 100644
-> --- a/arch/x86/mm/mem_encrypt_amd.c
-> +++ b/arch/x86/mm/mem_encrypt_amd.c
-> @@ -319,7 +319,7 @@ static void enc_dec_hypercall(unsigned long vaddr, int npages, bool enc)
->  #endif
->  }
->  
-> -static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
-> +static bool amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
->  {
->  	/*
->  	 * To maintain the security guarantees of SEV-SNP guests, make sure
-> @@ -327,6 +327,8 @@ static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool
->  	 */
->  	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP) && !enc)
->  		snp_set_memory_shared(vaddr, npages);
-> +
-> +	return true;
->  }
->  
->  /* Return true unconditionally: return value doesn't matter for the SEV side */
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 7159cf787613..b8f48ebe753c 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -2151,7 +2151,8 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
->  		cpa_flush(&cpa, x86_platform.guest.enc_cache_flush_required());
->  
->  	/* Notify hypervisor that we are about to set/clr encryption attribute. */
-> -	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
-> +	if (!x86_platform.guest.enc_status_change_prepare(addr, numpages, enc))
-> +		return -EIO;
->  
->  	ret = __change_page_attr_set_clr(&cpa, 1);
->  
+I have no idea how to really tag this and set authorship. I've chosen
+to leave author/Signed-off-by from Tom. Peter didn't officially
+include his Singed-off-by on his patch (as is common when posting
+suggestions in reply to another patch), so I didn't add it but added a
+Suggested-by from him. Hopefully this is OK. I dropped Mukesh's
+Reviewed-by just because it felt like things changed enough with the
+addition of Petr's stuff that it should be re-added.
 
+I've tagged this as "Fixes" based on the git hash in the current
+linuxnext.
+
+[1] https://lore.kernel.org/r/20230523122324.1668396-1-trix@redhat.com
+[2] https://lore.kernel.org/r/ZG4TW--j-DdSsUO6@alley/
+[3] https://lore.kernel.org/all/CAD=FV=V_i5wR4oNy+xarA9e=VcgpH6i3U1uxFKtsaOe5AQX=Zw@mail.gmail.com/
+
+ include/linux/nmi.h | 6 ++----
+ kernel/watchdog.c   | 4 ++--
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/nmi.h b/include/linux/nmi.h
+index d23902a2fd49..333465e235e1 100644
+--- a/include/linux/nmi.h
++++ b/include/linux/nmi.h
+@@ -18,8 +18,6 @@ void lockup_detector_soft_poweroff(void);
+ void lockup_detector_cleanup(void);
+ 
+ extern int watchdog_user_enabled;
+-extern int nmi_watchdog_user_enabled;
+-extern int soft_watchdog_user_enabled;
+ extern int watchdog_thresh;
+ extern unsigned long watchdog_enabled;
+ 
+@@ -70,8 +68,8 @@ static inline void reset_hung_task_detector(void) { }
+  * 'watchdog_enabled' variable. Each lockup detector has its dedicated bit -
+  * bit 0 for the hard lockup detector and bit 1 for the soft lockup detector.
+  *
+- * 'watchdog_user_enabled', 'nmi_watchdog_user_enabled' and
+- * 'soft_watchdog_user_enabled' are variables that are only used as an
++ * 'watchdog_user_enabled', 'watchdog_hardlockup_user_enabled' and
++ * 'watchdog_softlockup_user_enabled' are variables that are only used as an
+  * 'interface' between the parameters in /proc/sys/kernel and the internal
+  * state bits in 'watchdog_enabled'. The 'watchdog_thresh' variable is
+  * handled differently because its value is not boolean, and the lockup
+diff --git a/kernel/watchdog.c b/kernel/watchdog.c
+index 877d8670f26e..237990e8d345 100644
+--- a/kernel/watchdog.c
++++ b/kernel/watchdog.c
+@@ -37,8 +37,8 @@ static DEFINE_MUTEX(watchdog_mutex);
+ 
+ unsigned long __read_mostly watchdog_enabled;
+ int __read_mostly watchdog_user_enabled = 1;
+-int __read_mostly watchdog_hardlockup_user_enabled = WATCHDOG_HARDLOCKUP_DEFAULT;
+-int __read_mostly watchdog_softlockup_user_enabled = 1;
++static int __read_mostly watchdog_hardlockup_user_enabled = WATCHDOG_HARDLOCKUP_DEFAULT;
++static int __read_mostly watchdog_softlockup_user_enabled = 1;
+ int __read_mostly watchdog_thresh = 10;
+ static int __read_mostly watchdog_hardlockup_available;
+ 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.41.0.rc0.172.g3f132b7071-goog
+
