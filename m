@@ -2,160 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6C5711079
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E658F711072
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjEYQIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S238936AbjEYQH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbjEYQIg (ORCPT
+        with ESMTP id S234289AbjEYQHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:08:36 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E18E47
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:08:04 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-514454733b8so1155746a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685030882; x=1687622882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8qTlSjkBOvu6ts2EQmZGpeTeiOlCCdoojabISpYKz8Q=;
-        b=eowNGDWi2BVdbUdBijqcCx1CMmOQwJAO3BK6dcQLs37EYV4CtfTJXRMHsxXVMPrzaR
-         ZzyBRO7KKsprp3vWCLmomoACs9fNjSXqWYWpVys0jAA51wvTkyv56Zh2IBgVOagw3QBQ
-         oeEL9Zs9GaVJCV0ticOBEFjE5MKxfGYYG1hYg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685030882; x=1687622882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8qTlSjkBOvu6ts2EQmZGpeTeiOlCCdoojabISpYKz8Q=;
-        b=YZsm9Fjo5kxHSt/It1NL2cB1YpYguo3Kepw5+UQEkDb9RS7PZPsAW3IknpM8TJ+osS
-         7qKsPORY5Hpe3hjiDNquFr0cQpZUQga5Nn4WNOopQaYMkOBq57Rie6SoUQWi90tP9a36
-         KCdLetjgOn1z5gfqUfJR0NrRWIEYX379+eARhmBILJMe+Z+xNaXi6JrPQzKxTR/Hq3uX
-         aBfe7otCBPA1oQCPm01T3dbTu8/eeI5oiOLP3UCHWx3MKjZ/mLiv/2UbOS0/eBN0/5td
-         yuhLuvauLvypOQYg5pi7RegDmKUh6yxI/X1S02tQrIL9wC/2QS50dGPc9efVatAb2chc
-         5lsQ==
-X-Gm-Message-State: AC+VfDxYiHuv8vxqZ06CcQWIIfJpK1bfPKwYdpL5yQ9QKXL608EmQl/J
-        gAfXsR/b59m1dwQn7Ry/kXxwnV88Dh4PD12Geuz6R/vH
-X-Google-Smtp-Source: ACHHUZ6QBam8QfoGOXckKpuJEVrdNRWwYdfJYqk1szHgnYJkBhokuCG1bH7jK75DrMGADOpWldINxA==
-X-Received: by 2002:a17:907:608c:b0:94f:61b2:c990 with SMTP id ht12-20020a170907608c00b0094f61b2c990mr2234962ejc.25.1685030882400;
-        Thu, 25 May 2023 09:08:02 -0700 (PDT)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id b24-20020aa7c6d8000000b0050673b13b58sm686377eds.56.2023.05.25.09.08.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 09:08:02 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-514454733b8so1155671a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:08:01 -0700 (PDT)
-X-Received: by 2002:a17:907:7faa:b0:96a:937c:5608 with SMTP id
- qk42-20020a1709077faa00b0096a937c5608mr2490223ejc.53.1685030860523; Thu, 25
- May 2023 09:07:40 -0700 (PDT)
+        Thu, 25 May 2023 12:07:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D037E61;
+        Thu, 25 May 2023 09:07:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C3C7A21BD3;
+        Thu, 25 May 2023 16:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685030845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6fUmMKEP0NVxF0dlYJ3RY0KP8iLVIJxr+Cik8LTdcs0=;
+        b=tVp0qzVwlCNA27cvyif8ZJzfdvr0nmHI96GB1JWTQpMQs4ZdakZMUZ2rGnFUCas5JfQBU2
+        UYxQ3x0JlGRia0jsPOsyC7qghzYza254c2wM2DvHqG00ztXcSeOBRjMroQJh2ZxjjMxtCc
+        5DSwnqxg/m9XWuORKLsTYCcK6UVLPno=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685030845;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6fUmMKEP0NVxF0dlYJ3RY0KP8iLVIJxr+Cik8LTdcs0=;
+        b=bkY2qer6sn5GnmrBSL9dYeISnx+U55IZWNeE5Ei3jBtweIcQgK7skYuDEVsB3lVqUStOUb
+        hAxH/SFvbCPPtQBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B172F13356;
+        Thu, 25 May 2023 16:07:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gX42K72Hb2ScGgAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 25 May 2023 16:07:25 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C3764A075C; Thu, 25 May 2023 18:07:24 +0200 (CEST)
+Date:   Thu, 25 May 2023 18:07:24 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     hch@infradead.org, djwong@kernel.org, sandeen@sandeen.net,
+        song@kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jikos@kernel.org,
+        bvanassche@acm.org, ebiederm@xmission.com, mchehab@kernel.org,
+        keescook@chromium.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        linux-fsdevel@vger.kernel.org, kernel@tuxforce.de,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ext4: replace kthread freezing with auto fs freezing
+Message-ID: <20230525160724.aqpwh5bapsw57uwm@quack3>
+References: <20230508011927.4036707-1-mcgrof@kernel.org>
+ <20230508011927.4036707-2-mcgrof@kernel.org>
 MIME-Version: 1.0
-References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-3-mcgrof@kernel.org>
- <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com>
-In-Reply-To: <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 25 May 2023 09:07:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
-Message-ID: <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        lucas.demarchi@intel.com, christophe.leroy@csgroup.eu,
-        peterz@infradead.org, rppt@kernel.org, dave@stgolabs.net,
-        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508011927.4036707-2-mcgrof@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 4:40=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> kmod normally uses finit_module() only if a module is not compressed,
-> otherwise it decompresses it first and then invokes init_module().
+On Sun 07-05-23 18:19:25, Luis Chamberlain wrote:
+> The kernel power management now supports allowing the VFS
+> to handle filesystem freezing freezes and thawing. Take advantage
+> of that and remove the kthread freezing. This is needed so that we
+> properly really stop IO in flight without races after userspace
+> has been frozen. Without this we rely on kthread freezing and
+> its semantics are loose and error prone.
+> 
+> The filesystem therefore is in charge of properly dealing with
+> quiescing of the filesystem through its callbacks if it thinks
+> it knows better than how the VFS handles it.
+> 
+> The following Coccinelle rule was used as to remove the now superfluous
+> freezer calls:
+> 
+> make coccicheck MODE=patch SPFLAGS="--in-place --no-show-diff" COCCI=./fs-freeze-cleanup.cocci M=fs/ext4
+> 
+> virtual patch
+> 
+> @ remove_set_freezable @
+> expression time;
+> statement S, S2;
+> expression task, current;
+> @@
+> 
+> (
+> -       set_freezable();
+> |
+> -       if (try_to_freeze())
+> -               continue;
+> |
+> -       try_to_freeze();
+> |
+> -       freezable_schedule();
+> +       schedule();
+> |
+> -       freezable_schedule_timeout(time);
+> +       schedule_timeout(time);
+> |
+> -       if (freezing(task)) { S }
+> |
+> -       if (freezing(task)) { S }
+> -       else
+> 	    { S2 }
+> |
+> -       freezing(current)
+> )
+> 
+> @ remove_wq_freezable @
+> expression WQ_E, WQ_ARG1, WQ_ARG2, WQ_ARG3, WQ_ARG4;
+> identifier fs_wq_fn;
+> @@
+> 
+> (
+>     WQ_E = alloc_workqueue(WQ_ARG1,
+> -                              WQ_ARG2 | WQ_FREEZABLE,
+> +                              WQ_ARG2,
+> 			   ...);
+> |
+>     WQ_E = alloc_workqueue(WQ_ARG1,
+> -                              WQ_ARG2 | WQ_FREEZABLE | WQ_ARG3,
+> +                              WQ_ARG2 | WQ_ARG3,
+> 			   ...);
+> |
+>     WQ_E = alloc_workqueue(WQ_ARG1,
+> -                              WQ_ARG2 | WQ_ARG3 | WQ_FREEZABLE,
+> +                              WQ_ARG2 | WQ_ARG3,
+> 			   ...);
+> |
+>     WQ_E = alloc_workqueue(WQ_ARG1,
+> -                              WQ_ARG2 | WQ_ARG3 | WQ_FREEZABLE | WQ_ARG4,
+> +                              WQ_ARG2 | WQ_ARG3 | WQ_ARG4,
+> 			   ...);
+> |
+> 	    WQ_E =
+> -               WQ_ARG1 | WQ_FREEZABLE
+> +               WQ_ARG1
+> |
+> 	    WQ_E =
+> -               WQ_ARG1 | WQ_FREEZABLE | WQ_ARG3
+> +               WQ_ARG1 | WQ_ARG3
+> |
+>     fs_wq_fn(
+> -               WQ_FREEZABLE | WQ_ARG2 | WQ_ARG3
+> +               WQ_ARG2 | WQ_ARG3
+>     )
+> |
+>     fs_wq_fn(
+> -               WQ_FREEZABLE | WQ_ARG2
+> +               WQ_ARG2
+>     )
+> |
+>     fs_wq_fn(
+> -               WQ_FREEZABLE
+> +               0
+>     )
+> )
+> 
+> @ add_auto_flag @
+> expression E1;
+> identifier fs_type;
+> @@
+> 
+> struct file_system_type fs_type = {
+> 	.fs_flags = E1
+> +                   | FS_AUTOFREEZE
+> 	,
+> };
+> 
+> Generated-by: Coccinelle SmPL
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Note that it would probably be good to teach Fedora and SuSE to use
-the kernel-side decompression, if only because we have it and would
-like to try to avoid using the old "load contents from user memory".
+I guess we can also usually remove the #include <linux/freezer.h> line? At
+least in ext4 it is the case I believe. Otherwise this looks good.
 
-Mainly because it allows security modules to actively check for
-tampering (ie things like verity etc). Long-term, it would be good to
-just deprecate the old init_module() entirely.
+								Honza
 
-But yes:
-
-> It means that these and similarly organized distributions end up using
-> init_module(), and adding complexity to optimize finit_module() wouldn't
-> actually help in their case.
-
-Yeah, I think the real bug is absolutely in udev, and trying to load
-the same module hundreds of times is very very wrong. So I think the
-"mitigate it in the kernel" is at most a quick hack to fix user-space
-brokenness.
-
-And I don't think 1/2 is acceptable as that "quick hack". Not at all.
-It also seems fundamentally buggy, as it uses purely the inode number
-as the file identity, which means that it does bad things across
-filesystem limits.
-
-That said, I posted an alternate patch that I think _is_ valid as that
-quick hack. I don't love it, but it sure is simpler (and avoids the
-i_ino bug):
-
-    https://lore.kernel.org/lkml/CAHk-=3DwgKu=3DtJf1bm_dtme4Hde4zTB=3D_7Edg=
-R8avsDRK4_jD+uA@mail.gmail.com/
-
-that patch hasn't seen any testing, and for all I know it won't even
-boot because of some thinko, but I think it would be acceptable as a
-workaround if it does work.
-
-But no, it's not some kind of "fix" for the bug, and yes, using
-init_module() rather than finit_module() will circumvent the quick
-hack. The true fix would be for udev to do proper handling of its data
-structures instead of randomly spraying duplicate module loading
-events.
-
-I don't know why udev does what it does. From what Luis told me,
-apparently it's just forking stuff and keeping all its data structures
-in memory, and has no actual consistency or locking or memory of what
-it has done. Luis pointed me at
-
-    https://lore.kernel.org/all/23bd0ce6-ef78-1cd8-1f21-0e706a00424a@suse.c=
-om/T/#u
-
-for some udev background.
-
-It's been about a decade since I looked at udev sources, and none of
-this encourages me to take a second look, so all of the above may be
-me misunderstanding just exactly what the udev problem is. But for
-that 'finit' case, we *could* try that simple hack of mine.
-
-I say "hack", but the patch really is pretty simple, and the concept
-of "exclusive special access" certainly is not some hack in itself.
-It's just not anything we've ever done before. So the hackishness from
-that exclusive_deny_write_access() thing in my patch is mainly that it
-shouldn't be needed at all (and that the exclusivity should probably
-be set some other way).
-
-Comments welcome.
-
-                  Linus
+> ---
+>  fs/ext4/super.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index d39f386e9baf..1f436938d8be 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -136,7 +136,7 @@ static struct file_system_type ext2_fs_type = {
+>  	.init_fs_context	= ext4_init_fs_context,
+>  	.parameters		= ext4_param_specs,
+>  	.kill_sb		= kill_block_super,
+> -	.fs_flags		= FS_REQUIRES_DEV,
+> +	.fs_flags		= FS_REQUIRES_DEV | FS_AUTOFREEZE,
+>  };
+>  MODULE_ALIAS_FS("ext2");
+>  MODULE_ALIAS("ext2");
+> @@ -152,7 +152,7 @@ static struct file_system_type ext3_fs_type = {
+>  	.init_fs_context	= ext4_init_fs_context,
+>  	.parameters		= ext4_param_specs,
+>  	.kill_sb		= kill_block_super,
+> -	.fs_flags		= FS_REQUIRES_DEV,
+> +	.fs_flags		= FS_REQUIRES_DEV | FS_AUTOFREEZE,
+>  };
+>  MODULE_ALIAS_FS("ext3");
+>  MODULE_ALIAS("ext3");
+> @@ -3790,7 +3790,6 @@ static int ext4_lazyinit_thread(void *arg)
+>  	unsigned long next_wakeup, cur;
+>  
+>  	BUG_ON(NULL == eli);
+> -	set_freezable();
+>  
+>  cont_thread:
+>  	while (true) {
+> @@ -3842,8 +3841,6 @@ static int ext4_lazyinit_thread(void *arg)
+>  		}
+>  		mutex_unlock(&eli->li_list_mtx);
+>  
+> -		try_to_freeze();
+> -
+>  		cur = jiffies;
+>  		if ((time_after_eq(cur, next_wakeup)) ||
+>  		    (MAX_JIFFY_OFFSET == next_wakeup)) {
+> @@ -7245,7 +7242,7 @@ static struct file_system_type ext4_fs_type = {
+>  	.init_fs_context	= ext4_init_fs_context,
+>  	.parameters		= ext4_param_specs,
+>  	.kill_sb		= kill_block_super,
+> -	.fs_flags		= FS_REQUIRES_DEV | FS_ALLOW_IDMAP,
+> +	.fs_flags		= FS_REQUIRES_DEV | FS_ALLOW_IDMAP | FS_AUTOFREEZE,
+>  };
+>  MODULE_ALIAS_FS("ext4");
+>  
+> -- 
+> 2.39.2
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
