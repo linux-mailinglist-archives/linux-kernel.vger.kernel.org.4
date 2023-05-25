@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBBE7102D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6677102D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236940AbjEYCWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 22:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S237112AbjEYCXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjEYCWr (ORCPT
+        with ESMTP id S233576AbjEYCXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 22:22:47 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9FE1D3;
-        Wed, 24 May 2023 19:22:44 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Dx+fFyxm5k0LYAAA--.1801S3;
-        Thu, 25 May 2023 10:22:42 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxddFwxm5kKg52AA--.63824S3;
-        Thu, 25 May 2023 10:22:41 +0800 (CST)
-Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        zhuyinbo@loongson.cn
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <20230522071030.5193-2-zhuyinbo@loongson.cn>
- <20230524-pouncing-variable-c520e85f8db8@wendy>
- <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
- <20230524-relative-trimmer-046fb26a7764@wendy>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <99b362c2-640c-9150-26ee-e9add4483886@loongson.cn>
-Date:   Thu, 25 May 2023 10:22:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 24 May 2023 22:23:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EE87D3;
+        Wed, 24 May 2023 19:23:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E95831042;
+        Wed, 24 May 2023 19:23:54 -0700 (PDT)
+Received: from [10.162.43.6] (unknown [10.162.43.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 314993F762;
+        Wed, 24 May 2023 19:23:07 -0700 (PDT)
+Message-ID: <44b2b627-7da1-19e8-2f58-0ad9003d5ded@arm.com>
+Date:   Thu, 25 May 2023 07:53:05 +0530
 MIME-Version: 1.0
-In-Reply-To: <20230524-relative-trimmer-046fb26a7764@wendy>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 02/36] mm: Add generic flush_icache_pages() and
+ documentation
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxddFwxm5kKg52AA--.63824S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAFW7AF4furyUtw13tFWDurg_yoW5WFyrpa
-        y7CF17GF4DtF12yrZ2qa48CrsIvr93JFyUJrsrKr1UZ3s0q3WaqF13KFs8u3Z3uF1xGFW7
-        ZFWFg3W2kF45AFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8sL05UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-arch@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-3-willy@infradead.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230315051444.3229621-3-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,79 +49,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/5/24 下午6:29, Conor Dooley 写道:
-> On Wed, May 24, 2023 at 05:44:38PM +0800, zhuyinbo wrote:
->>
->>
->> 在 2023/5/24 下午4:56, Conor Dooley 写道:
->>> On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
->>>> Add the Loongson platform spi binding with DT schema format using
->>>> json-schema.
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>    .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
->>>>    MAINTAINERS                                   |  6 +++
->>>>    2 files changed, 47 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>> new file mode 100644
->>>> index 000000000000..d0be6e5378d7
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>> @@ -0,0 +1,41 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Loongson SPI controller
->>>> +
->>>> +maintainers:
->>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> +
->>>> +allOf:
->>>> +  - $ref: /schemas/spi/spi-controller.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - loongson,ls2k-spi
->>>
->>> I am sorry to jump in here at such a late stage with a (potentially)
->>> trivial question. "ls2k" is the SoC family rather than a specific model
->>> as far as I understand.
->>> The answer is probably yes, but do all SoCs in the family have an
->>> identical version of the IP?
->>
->>
->> No, but the spi supported by this loongson spi driver are all the same
->> identical version, and other type or verion spi will be supported as
->> needed in the future.
+On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
+> flush_icache_page() is deprecated but not yet removed, so add
+> a range version of it.  Change the documentation to refer to
+> update_mmu_cache_range() instead of update_mmu_cache().
 > 
-> Does having a catch-all compatible make sense then when not all SoCs in
-> the ls2k family will actually be able to use this driver?
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Yes, it is make sense as it can reduce the workload of the community.
-For the Loongson platform, the versions of spi peripherals are almost
-the same, except for a few  or individual SoCs.  And we have also
-discussed compatible internally, and we tend to define it this way.
-
-> Or am I misunderstanding and all ls2k SoCs do work with this driver and
-> you were talking about other, future products?
-
-Actually, in 2k500 has one special type spi was only one cs and their's
-register definition was different from common type spi thus this driver
-doesn't support but this driver can support another common type spi in
-2k500.  for this special type spi I will add support as needed in the
-future.
-
-
-Thanks,
-Yinbo.
+> ---
+>  Documentation/core-api/cachetlb.rst | 35 +++++++++++++++--------------
+>  include/asm-generic/cacheflush.h    |  5 +++++
+>  2 files changed, 23 insertions(+), 17 deletions(-)
 > 
-
+> diff --git a/Documentation/core-api/cachetlb.rst b/Documentation/core-api/cachetlb.rst
+> index 5c0552e78c58..d4c9e2a28d36 100644
+> --- a/Documentation/core-api/cachetlb.rst
+> +++ b/Documentation/core-api/cachetlb.rst
+> @@ -88,13 +88,13 @@ changes occur:
+>  
+>  	This is used primarily during fault processing.
+>  
+> -5) ``void update_mmu_cache(struct vm_area_struct *vma,
+> -   unsigned long address, pte_t *ptep)``
+> +5) ``void update_mmu_cache_range(struct vm_area_struct *vma,
+> +   unsigned long address, pte_t *ptep, unsigned int nr)``
+>  
+> -	At the end of every page fault, this routine is invoked to
+> -	tell the architecture specific code that a translation
+> -	now exists at virtual address "address" for address space
+> -	"vma->vm_mm", in the software page tables.
+> +	At the end of every page fault, this routine is invoked to tell
+> +	the architecture specific code that translations now exists
+> +	in the software page tables for address space "vma->vm_mm"
+> +	at virtual address "address" for "nr" consecutive pages.
+>  
+>  	A port may use this information in any way it so chooses.
+>  	For example, it could use this event to pre-load TLB
+> @@ -306,17 +306,18 @@ maps this page at its virtual address.
+>  	private".  The kernel guarantees that, for pagecache pages, it will
+>  	clear this bit when such a page first enters the pagecache.
+>  
+> -	This allows these interfaces to be implemented much more efficiently.
+> -	It allows one to "defer" (perhaps indefinitely) the actual flush if
+> -	there are currently no user processes mapping this page.  See sparc64's
+> -	flush_dcache_page and update_mmu_cache implementations for an example
+> -	of how to go about doing this.
+> +	This allows these interfaces to be implemented much more
+> +	efficiently.  It allows one to "defer" (perhaps indefinitely) the
+> +	actual flush if there are currently no user processes mapping this
+> +	page.  See sparc64's flush_dcache_page and update_mmu_cache_range
+> +	implementations for an example of how to go about doing this.
+>  
+> -	The idea is, first at flush_dcache_page() time, if page_file_mapping()
+> -	returns a mapping, and mapping_mapped on that mapping returns %false,
+> -	just mark the architecture private page flag bit.  Later, in
+> -	update_mmu_cache(), a check is made of this flag bit, and if set the
+> -	flush is done and the flag bit is cleared.
+> +	The idea is, first at flush_dcache_page() time, if
+> +	page_file_mapping() returns a mapping, and mapping_mapped on that
+> +	mapping returns %false, just mark the architecture private page
+> +	flag bit.  Later, in update_mmu_cache_range(), a check is made
+> +	of this flag bit, and if set the flush is done and the flag bit
+> +	is cleared.
+>  
+>  	.. important::
+>  
+> @@ -369,7 +370,7 @@ maps this page at its virtual address.
+>    ``void flush_icache_page(struct vm_area_struct *vma, struct page *page)``
+>  
+>  	All the functionality of flush_icache_page can be implemented in
+> -	flush_dcache_page and update_mmu_cache. In the future, the hope
+> +	flush_dcache_page and update_mmu_cache_range. In the future, the hope
+>  	is to remove this interface completely.
+>  
+>  The final category of APIs is for I/O to deliberately aliased address
+> diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
+> index f46258d1a080..09d51a680765 100644
+> --- a/include/asm-generic/cacheflush.h
+> +++ b/include/asm-generic/cacheflush.h
+> @@ -78,6 +78,11 @@ static inline void flush_icache_range(unsigned long start, unsigned long end)
+>  #endif
+>  
+>  #ifndef flush_icache_page
+> +static inline void flush_icache_pages(struct vm_area_struct *vma,
+> +				     struct page *page, unsigned int nr)
+> +{
+> +}
+> +
+>  static inline void flush_icache_page(struct vm_area_struct *vma,
+>  				     struct page *page)
+>  {
