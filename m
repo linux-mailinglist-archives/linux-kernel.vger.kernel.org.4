@@ -2,118 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966D37107E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D31C7107E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240150AbjEYIuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        id S240446AbjEYIux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbjEYIus (ORCPT
+        with ESMTP id S240015AbjEYIuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:50:48 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7C0A3;
-        Thu, 25 May 2023 01:50:47 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P72FvX025896;
-        Thu, 25 May 2023 08:50:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Af1TxvjbZ8mo/wWa1yqPCR91AO3VbXIHIgj9vrTOVxU=;
- b=j/cY1KVAIcEMbpI4t3jA/Q21H7hK8IGpPOHjUokbv3SMsWOXCeXjYh1gAmQucIW72ppT
- fSB4XU1RXGbTQMDLAVKNIJYzRtL806oIuD29PsbyHk08SSCNYyEzQPENaAz9DzwqUK/f
- 8fghlI61RC+Ex4kzq5n6qO3IEOZ81G56anwrXgbphQMB8aeKz9/v7qkvYmeGNkj8/wSt
- FqMVY2dkZqXpCAwKSWx1NbXN6U43jz7CrmfK0dF42nBn7hDCCHjpvGRt4ZPAHQqrjCCS
- VoZDLbs3M44GDHWClKyUvV+Uyk66+ir/lSGFWY8WfI43QgXzz9ZcQ3borg1iTCB7pff2 9Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsywfrjx7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 08:50:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34P8ogkk014918
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 08:50:42 GMT
-Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 01:50:40 -0700
-Message-ID: <fbfc6917-d938-a055-2f58-e70a6d454ea2@quicinc.com>
-Date:   Thu, 25 May 2023 14:20:37 +0530
+        Thu, 25 May 2023 04:50:50 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917B9E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:50:50 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-561b7729a12so4318557b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685004649; x=1687596649;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+B4dgNIniQHEcCF576ZP77lV9Zwje+bwHibbyEl51SY=;
+        b=qLhUq4OI/JpvDdnoXWOyt5XZfbBbAM7J+LhAnN77B2UJ4ptjBGNOOIEOq/mGb1xCf3
+         0NI+dym2WQS513pA/m6Rry5RJ40H1RbSWjvYTOtHdJVf4/9xuixsbGTATE/hIcKJCSHz
+         HLb/h3Sp8w2h8wWB8NW0LJuhdvcw8y63r2zsQwxvTFAb049pQVze1dN30s2tq5noudWC
+         bithX5XKP9O4wXgM9yNw6zJ/G7rdq9zkMa+9QUcNPT/JGKI+309QbzwPekuChEFZuxCU
+         WgY+lsBS2of7l6YPwa4HmG8DcT5WF72A0Iw02AEE+alES1MugJ7/Y3YJyMED4Ptg6Q5t
+         01yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685004649; x=1687596649;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+B4dgNIniQHEcCF576ZP77lV9Zwje+bwHibbyEl51SY=;
+        b=KPaUpf3P6mVkqC7qPIEpiKcILWyC0drL+1SojR7zRjIwhgxLtfES0KFbjuRItpXrK0
+         z+0p8JTym+DyXRVqkAe4KdL0VP0ivfHtnZET5eHK9K3C+p1VKcdqF54MVvvJxgBNfKwO
+         GQppMPm9Oud5hHgJHySutos9L/eRl3ey6d1Xa9m9CfDpxz10Vg77DFGvCQYUD3cDjRbg
+         obgfmKkDKd7cGuph8pp0WEU7dj0MxtCKmvjAYnj0pFNBNOdOng7YdTu1vTlLNFHUxl6W
+         ieajj1DmTH+pmXfJB6U2AjdbAZxKLNNdTWKVyG/oqrF+svAuIK5xI2YGga1GGi/HdIC3
+         HArA==
+X-Gm-Message-State: AC+VfDxEAkw63mmKHuuzRdsbNs/d0USEFdbowwIGsBWkatdqcE74mgzC
+        wdORU5VUAtd550PnalLTKsVtEU9OvqqZMgSZn9Q=
+X-Google-Smtp-Source: ACHHUZ4ZyBodIUDDGW+Ey5mLR3tP/rBVo9xtVaXp3wSng1pZaVCQmkC5ryCypRN4o1VGICi8Fj+PlXnNi1Eb3e+cdQ0=
+X-Received: by 2002:a81:4d44:0:b0:552:ae41:50a2 with SMTP id
+ a65-20020a814d44000000b00552ae4150a2mr2009322ywb.21.1685004649118; Thu, 25
+ May 2023 01:50:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1685004036-17273-1-git-send-email-quic_prashk@quicinc.com>
- <2117b7c4-d164-de17-5a2d-ef3d51304983@collabora.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <2117b7c4-d164-de17-5a2d-ef3d51304983@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: w6MVAwqBWVkpKSBADPVNMnLINSVx3KdD
-X-Proofpoint-ORIG-GUID: w6MVAwqBWVkpKSBADPVNMnLINSVx3KdD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_04,2023-05-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- bulkscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
- malwarescore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250073
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: vandekujohmaria@outlook.com
+Sender: sw971116@gmail.com
+Received: by 2002:a05:7000:4744:b0:4a3:9f3f:5b59 with HTTP; Thu, 25 May 2023
+ 01:50:48 -0700 (PDT)
+From:   Gerhardus Maria <vandekujohmaria@gmail.com>
+Date:   Thu, 25 May 2023 08:50:48 +0000
+X-Google-Sender-Auth: JtDhxtcCy4e_7E8ZwMZde3ytDkg
+Message-ID: <CADWhY8HVSz9W-dKRoGmFe0SuM6ozL5gTuuBH7+W8JAS+oL2yDw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With all due respect
 
-
-On 25-05-23 02:15 pm, AngeloGioacchino Del Regno wrote:
-> Il 25/05/23 10:40, Prashanth K ha scritto:
->> Currently if we bootup a device without cable connected, then
->> usb-conn-gpio won't call set_role() since last_role is same as
->> current role. This happens because during probe last_role gets
->> initialised to zero.
->>
->> To avoid this, added a new constant in enum usb_role, last_role
->> is set to USB_ROLE_UNKNOWN before performing initial detection.
->>
->> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection 
->> detection driver")
->> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> 
-> I'm sorry to make a call for v4, but you have to mention that you're 
-> touching
-> the cdns3 driver in the commit description, if you want to keep the entire
-> change set in one commit... otherwise you'll have to split it in two, 
-> one adding
-> the new entry to the enum and fixing cdns3; the other setting the last 
-> role to
-> unknown in usb-conn-gpio.c.
-> 
-> I can suggest text for keeping that in one commit, but the choice is yours;
-> 
-> "While at it, also handle default case for the usb_role switch
-> in cdns3 to avoid build warnings."
-> 
-Yea that's right, will add it in next version. Thanks for the suggestion.
-
-Regards,
-Prashanth K
+I'm van der kuil Johannes gerhardus Maria. I am a lawyer  from the
+Netherlands who reside in Belgium and I am working on the donation
+file of my client, Mr. Bartos Pierre Nationality of Belgium. I would
+like to know if you will accept my client's donation Mr. Bartos
+Pierre? if yes get back to me
