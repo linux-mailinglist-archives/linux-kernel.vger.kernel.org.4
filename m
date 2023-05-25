@@ -2,207 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84F37103F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA16B7103FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239070AbjEYEQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        id S229870AbjEYES7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239027AbjEYEQC (ORCPT
+        with ESMTP id S234573AbjEYESb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:16:02 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8412E5F;
-        Wed, 24 May 2023 21:14:22 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:37610.1839801626
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id C626B10019D;
-        Thu, 25 May 2023 12:14:18 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id b8960a41a24a401fb7eef09e4362d536 for kernel@xen0n.name;
-        Thu, 25 May 2023 12:14:20 CST
-X-Transaction-ID: b8960a41a24a401fb7eef09e4362d536
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <5f70f46b-8c53-c55b-761a-6bb50c01b2b1@189.cn>
-Date:   Thu, 25 May 2023 12:14:17 +0800
+        Thu, 25 May 2023 00:18:31 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321E910D5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:17:13 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1abso3744486a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684988231; x=1687580231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w+04EpAmaPYUlluScEVT9VyZq4eY4+rPpOkbaWKqEJI=;
+        b=gIGtcI+IJtZFHHjG0HDdbS2a4uGc/jQ9c++puEfDR5mFq1ju2+l0JKO/lfAM5bO9Rb
+         mZ86JQgBOdGNxDSBuf7o44ur3nq47gN4RwtZazxhR9HqpbCwVv7cN8tnHZB8H8rWxQ97
+         jkzgWitDl1pUP7LInQeRzxWdGdXXWxJlcusyw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684988231; x=1687580231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w+04EpAmaPYUlluScEVT9VyZq4eY4+rPpOkbaWKqEJI=;
+        b=Ge8q5lU8HM+/WGNyUJsm2J7Qh13TcoKVSxzbcnPWCi1dpA0W44jMDUvoT7DymCNKLP
+         7OaTlfzw9d8Z6FNOFcsVRbn7EMeqirhkYDU8iDLyCNnbO7G7D9hEA7rmtn5cFJZvDA5m
+         H3FnJ22gi4LV4eqWA9exSf9cPO38AzWKmLBTCWtey1eZIAuFRG0ZnrLk5ap5a0n5TZ2x
+         6a1iTuqoXIZlny6A/OisdIVkIaAmgXxuZuVtkJzmchN5hrjbq7dAACXZOnm4qVo6u7I4
+         gBWeRZrVZamkreEO7RAW8Sp/kmXIJXFSWlu9PezT6RZIaG2MjZWOjgkOu5nzEwr4sSN1
+         6KSw==
+X-Gm-Message-State: AC+VfDzvJNUi3zs5lloN22lsPlaGPQx8ZJci09cGueU0OHc+i8vulV73
+        UsBF8z81+zdLiorRoIQWI1ManTRwedEE50D6mkMjYQ==
+X-Google-Smtp-Source: ACHHUZ6OVFX4L9Yo7wQXxDCYXRFsLZTNhjDP0+R+DyWC8IiqH1Ry0QQ5CiT6HW4ZSVMqwdxce8aVeQ==
+X-Received: by 2002:aa7:d1c6:0:b0:50b:c72a:2b1b with SMTP id g6-20020aa7d1c6000000b0050bc72a2b1bmr3845188edp.19.1684988231372;
+        Wed, 24 May 2023 21:17:11 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id bc16-20020a056402205000b0050bc37ff74asm123615edb.44.2023.05.24.21.17.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 21:17:09 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3f6094cb2ebso607405e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:17:09 -0700 (PDT)
+X-Received: by 2002:a7b:c84c:0:b0:3f6:a81:eb52 with SMTP id
+ c12-20020a7bc84c000000b003f60a81eb52mr1531455wml.21.1684988229048; Wed, 24
+ May 2023 21:17:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
- controller
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
-References: <20230520105718.325819-1-15330273260@189.cn>
- <20230520105718.325819-2-15330273260@189.cn>
- <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
- <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
- <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
- <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
- <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
- <5ae49b7a-b8d2-a822-65bc-6a894d2b1b4e@189.cn>
- <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
- <69edaf49-359a-229c-c8b4-8aa3af622008@189.cn>
- <ece7821e-c4bb-f2b7-3b1d-dacc04729530@xen0n.name>
- <04ede1b1-9757-5181-eec7-658c1df0480e@189.cn>
-Content-Language: en-US
-In-Reply-To: <04ede1b1-9757-5181-eec7-658c1df0480e@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230522234154.2924052-1-yinghsu@chromium.org>
+ <ZGyPt1GYGV2C2RQZ@corigine.com> <CABBYNZ+by-OQH2aPEMHpQ5cOLoKNpR7k111rJj6iOd2PGLx3gg@mail.gmail.com>
+ <CAAa9mD3A+3uJzFK0EbTrn5hX42EOgeixehmxgkwdhp1KetxjVQ@mail.gmail.com> <CABBYNZKPv_0AaJJm2_c0F+4qX_vKXQ9BnVgR-kPy40YsDDqSRQ@mail.gmail.com>
+In-Reply-To: <CABBYNZKPv_0AaJJm2_c0F+4qX_vKXQ9BnVgR-kPy40YsDDqSRQ@mail.gmail.com>
+From:   Ying Hsu <yinghsu@chromium.org>
+Date:   Thu, 25 May 2023 12:16:32 +0800
+X-Gmail-Original-Message-ID: <CAAa9mD2e-WkuHshXf7ifOHcGEsgHb68xkRdaq5MRMeY7_jzkMg@mail.gmail.com>
+Message-ID: <CAAa9mD2e-WkuHshXf7ifOHcGEsgHb68xkRdaq5MRMeY7_jzkMg@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: Fix l2cap_disconnect_req deadlock
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Luiz,
 
-On 2023/5/25 12:09, Sui Jingfeng wrote:
-> Hi,
->
-> On 2023/5/23 00:40, WANG Xuerui wrote:
->> On 5/22/23 21:13, Sui Jingfeng wrote:
->>> Hi,
->>>
->>> On 2023/5/22 18:25, WANG Xuerui wrote:
->>>> On 2023/5/22 18:17, Sui Jingfeng wrote:
->>>>> Hi,
->>>>>
->>>>> On 2023/5/22 18:05, WANG Xuerui wrote:
->>>>>> On 2023/5/22 17:49, Sui Jingfeng wrote:
->>>>>>> Hi,
->>>>>>>
->>>>>>> On 2023/5/22 17:28, WANG Xuerui wrote:
->>>>>>>> On 2023/5/22 17:25, Sui Jingfeng wrote:
->>>>>>>>> Hi,
->>>>>>>>>
->>>>>>>>> On 2023/5/21 20:21, WANG Xuerui wrote:
->>>>>>>>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with 
->>>>>>>>>>> on-board video RAM
->>>>>>>>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost 
->>>>>>>>>>> SoCs which share
->>>>>>>>>>> + * the system RAM as video RAM, they don't has a dediacated 
->>>>>>>>>>> VRAM.
->>>>>>>>>>
->>>>>>>>>> CPU models are not typically prefixed with "LS", so "Loongson 
->>>>>>>>>> 3A4000/3A5000/3A6000".
->>>>>>>>>>
->>>>>>>>> Here is because when you do programming, variable name should 
->>>>>>>>> prefix with letters.
->>>>>>>>
->>>>>>>> Commit messages, comments, and log messages etc. are natural 
->>>>>>>> language, so it's better to treat them differently. No problem 
->>>>>>>> to keep code as-is IMO.
->>>>>>>>
->>>>>>> Then you get two name for a single chip,  take LS7A1000 as an 
->>>>>>> example.
->>>>>>>
->>>>>>> You name it as Loongson 7A1000 in commit message,  and then you 
->>>>>>> have to define another name in the code,  say LS7A1000.
->>>>>>>
->>>>>>> "Loongson 7A1000" is too long,  not as compact as LS7A1000.
->>>>>>>
->>>>>>> This also avoid bind the company name to a specific product, 
->>>>>>> because a company can produce many product.
->>>>>>
->>>>>> Nah, the existing convention is "LS7Xxxxx" for bridges and 
->>>>>> "Loongson 3Axxxx" for CPUs (SoCs like 2K fall under this category 
->>>>>> too). It's better to stick with existing practice so it would be 
->>>>>> familiar to long-time Loongson/LoongArch developers, but I 
->>>>>> personally don't think it will hamper understanding if you feel 
->>>>>> like doing otherwise.
->>>>>>
->>>>> Can you explain why it is better?
->>>>>
->>>>> is it that the already existing is better ?
->>>>
->>>> It's not about subjective perception of "better" or "worse", but 
->>>> about tree-wide consistency, and about reducing any potential 
->>>> confusion from newcomers. I remember Huacai once pointing out that 
->>>> outsiders usually have a hard time remembering "1, 2, and 3 are 
->>>> CPUs, some 2 are SoCs, 7 are bridge chips", and consistently 
->>>> referring to the bridge chips throughout the tree as "LS7A" helped.
->>>>
->>>> In any case, for the sake of consistency, you can definitely refer 
->>>> to the CPU models in natural language like "LS3Axxxx"; just make 
->>>> sure to refactor for example every occurrence in arch/loongarch and 
->>>> other parts of drivers/. That's a lot of churn, though, so I don't 
->>>> expect such changes to get accepted, and that's why the tree-wide 
->>>> consistency should be favored over the local one.
->>>>
->>> There are document[1] which named LS7A1000 bridge chip as Loongson 
->>> 7A1000 Bridge,
->>>
->>> which is opposed to what you have said "the existing convention is 
->>> LS7Xxxxx for bridges".
->>>
->>>
->>> there are also plenty projects[2] which encode ls2k1000 as project 
->>> name, which simply
->>>
->>> don't fall into the category as you have mentioned("Loongson 3Axxxx").
->>>
->>>
->>> See [1][2] for reference, how to explain this phenomenon then?
->>
->> Turn down the flames a little bit, okay? ;-)
->>
->>
-> There is no flames, its just that it need sufficient discussion when 
-> started to contribute to community.
->
-> We want more rigorous toward to our patch.
->
->
-> We can't adopt irresponsible ideas, especially from someone who is 
-> reluctant to give a
->
-> reasonable rationale and refused to discussion.
->
->
-> Such changes could probably made a damage to Loongson company.
->
-> As it tend to introduce self-contradictory between the code and comment.
->
-> Especially when we introduce DT support, there is no write space in 
-> the middle the string is allowed.
->
+The proposal solves the deadlock but might introduce other problems as
+it breaks the order of l2cap_chan_del.
+There are another way to resolve the deadlock:
+```
+@@ -4663,7 +4663,9 @@ static inline int l2cap_disconnect_req(struct
+l2cap_conn *conn,
 
-'write' -> 'white'
+        chan->ops->set_shutdown(chan);
 
++       l2cap_chan_unlock(chan);
+        mutex_lock(&conn->chan_lock);
++       l2cap_chan_lock(chan);
+        l2cap_chan_del(chan, ECONNRESET);
+        mutex_unlock(&conn->chan_lock);
+ ```
 
-> and encode model information to the compatible string is an common 
-> practice.
+If you're okay with it, I'll do some verification and post a full patch.
+
+Best regards,
+Ying
+
+On Thu, May 25, 2023 at 2:56=E2=80=AFAM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Ying,
+>
+> On Wed, May 24, 2023 at 3:54=E2=80=AFAM Ying Hsu <yinghsu@chromium.org> w=
+rote:
+> >
+> > Hi Simon,
+> >
+> > I understand your concern about the repeated code.
+> > However, simply hiding the locking logic in another function
+> > introduces hidden assumptions.
+> > For this patch, I would like to fix the deadlock in a simple and easy
+> > to understand way.
+> > We can always refactor the l2cap_chan utility functions later.
+> >
+> > Hi Luis,
+> >
+> > I'll add a fixes tag in the next version.
+>
+> And how about doing this:
+>
+> https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
+>
+> > Best regards,
+> > Ying
+> >
+> >
+> > On Wed, May 24, 2023 at 3:06=E2=80=AFAM Luiz Augusto von Dentz
+> > <luiz.dentz@gmail.com> wrote:
+> > >
+> > > Hi Simon, Ying,
+> > >
+> > > On Tue, May 23, 2023 at 3:04=E2=80=AFAM Simon Horman <simon.horman@co=
+rigine.com> wrote:
+> > > >
+> > > > On Mon, May 22, 2023 at 11:41:51PM +0000, Ying Hsu wrote:
+> > > > > L2CAP assumes that the locks conn->chan_lock and chan->lock are
+> > > > > acquired in the order conn->chan_lock, chan->lock to avoid
+> > > > > potential deadlock.
+> > > > > For example, l2sock_shutdown acquires these locks in the order:
+> > > > >   mutex_lock(&conn->chan_lock)
+> > > > >   l2cap_chan_lock(chan)
+> > > > >
+> > > > > However, l2cap_disconnect_req acquires chan->lock in
+> > > > > l2cap_get_chan_by_scid first and then acquires conn->chan_lock
+> > > > > before calling l2cap_chan_del. This means that these locks are
+> > > > > acquired in unexpected order, which leads to potential deadlock:
+> > > > >   l2cap_chan_lock(c)
+> > > > >   mutex_lock(&conn->chan_lock)
+> > > > >
+> > > > > This patch uses __l2cap_get_chan_by_scid to replace
+> > > > > l2cap_get_chan_by_scid and adjusts the locking order to avoid the
+> > > > > potential deadlock.
+> > >
+> > > This needs the fixes tag so we can backport it properly.
+> > >
+> > > > > Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+> > > > > ---
+> > > > > This commit has been tested on a Chromebook device.
+> > > > >
+> > > > > Changes in v2:
+> > > > > - Adding the prefix "Bluetooth:" to subject line.
+> > > > >
+> > > > >  net/bluetooth/l2cap_core.c | 26 ++++++++++++++++++++------
+> > > > >  1 file changed, 20 insertions(+), 6 deletions(-)
+> > > > >
+> > > > > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_cor=
+e.c
+> > > > > index 376b523c7b26..8f08192b8fb1 100644
+> > > > > --- a/net/bluetooth/l2cap_core.c
+> > > > > +++ b/net/bluetooth/l2cap_core.c
+> > > > > @@ -4651,8 +4651,16 @@ static inline int l2cap_disconnect_req(str=
+uct l2cap_conn *conn,
+> > > > >
+> > > > >       BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
+> > > > >
+> > > > > -     chan =3D l2cap_get_chan_by_scid(conn, dcid);
+> > > > > +     mutex_lock(&conn->chan_lock);
+> > > > > +     chan =3D __l2cap_get_chan_by_scid(conn, dcid);
+> > > > > +     if (chan) {
+> > > > > +             chan =3D l2cap_chan_hold_unless_zero(chan);
+> > > > > +             if (chan)
+> > > > > +                     l2cap_chan_lock(chan);
+> > > > > +     }
+> > > > > +
+> > > > >       if (!chan) {
+> > > > > +             mutex_unlock(&conn->chan_lock);
+> > > > >               cmd_reject_invalid_cid(conn, cmd->ident, dcid, scid=
+);
+> > > > >               return 0;
+> > > > >       }
+> > > >
+> > > > Hi Ying,
+> > > >
+> > > > The conditional setting of chan and calling l2cap_chan_lock()
+> > > > is both non-trivial and repeated. It seems that it ought to be
+> > > > in a helper.
+> > > >
+> > > > Something like this (I'm sure a better function name can be chosen)=
+:
+> > > >
+> > > >         chan =3D __l2cap_get_and_lock_chan_by_scid(conn, dcid);
+> > > >         if (!chan) {
+> > > >                 ...
+> > > >         }
+> > > >
+> > > >         ...
+> > >
+> > > Or perhaps we could do something like l2cap_del_chan_by_scid:
+> > >
+> > > https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
+> > >
+> > > --
+> > > Luiz Augusto von Dentz
 >
 >
-> While at it, I will take it into another consideration if there are 
-> more professional person who
 >
-> is supporting your ideas and could take the responsibility for it.
->
-> Beside this, other reviews are still acceptable, thanks for the 
-> reasonable part.
->
->
+> --
+> Luiz Augusto von Dentz
