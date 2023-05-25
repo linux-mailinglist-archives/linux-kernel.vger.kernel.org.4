@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9100F710433
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409F2710437
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237956AbjEYEvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
+        id S237602AbjEYEvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEYEu5 (ORCPT
+        with ESMTP id S229873AbjEYEu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:50:57 -0400
+        Thu, 25 May 2023 00:50:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204E0C0;
-        Wed, 24 May 2023 21:50:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A767B3;
+        Wed, 24 May 2023 21:50:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B902760E95;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B8C163798;
+        Thu, 25 May 2023 04:50:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F765C433A1;
         Thu, 25 May 2023 04:50:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E034C4339E;
-        Thu, 25 May 2023 04:50:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684990256;
-        bh=TdfLoBzX6T1ga4COI8Ol05eLHKYAwOAAF9TAth+8sxc=;
+        s=k20201202; t=1684990257;
+        bh=vLKoCdT5aSKffLJ8qjVP8oke7a+m02TATfV36+4JR5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TDbxXBfFLCALdBmLQPjuTQKThsINnX88PcJjd/6HhkGF/eXDoqWHngxdxAIhKaeaB
-         c3rspGIaJrNgpQpcnipB+LMkxc6lSpQdZ/2OfCO5V6uSY5qCHlo/zNVIbJZuKlAypb
-         8UtDBxK/yzX//K3vGkuYKs+l4c0V9KVn/+LgVqEJO0kP5ddXedNllUb30hL+020a+G
-         XLDS3notIhZUiNWSyj36oIUndX6/qSVQ+ckLeJurG0qSsbhM9j8CNnlId5z1Ww8bAa
-         DspiXTeqoZ23EsYIQ/O7ST4omgyPUcbUmbjx2wZOSMpaEuhebFxi/yZFBQYCVn62Lf
-         CFS/ayNAIjwTQ==
+        b=CbV61zaI00rLZr8r38LGhaOA5FTQWIf3pDRYdbhTZd8UlGZaivOhJi+a8lZErsw1j
+         gMPc0eBE1TBWWnkEynZmjRl3sBoSJcG/JV+UCaCf56GPBA/yLibl6eL7wAnze+GQZV
+         bSJ31su2wGz+lzcqfEt5iqmp6Q7y4A58dUOxo5TnMq952roKPfECXqyT1q6CAqwi9/
+         cmVgznlvsR2P/xsBeCc+yQAbl0bfg6q1wQ1xan/uXC0tZiZkx8x7oneR5lBP+gx0sU
+         KRblafM2RAA+DY4ZoK2CleKRWAkXmKmp8YbOwQ2eTL3DcH7x2YWFz5s32Hwh2uo+QW
+         vO5VkTN4OILUw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v3] soc: qcom: Rename ice to qcom_ice to avoid module name conflict
-Date:   Wed, 24 May 2023 21:53:35 -0700
-Message-Id: <168499048182.3998961.2686790605303889326.b4-ty@kernel.org>
+To:     linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org
+Subject: Re: (subset) [PATCH v3 1/4] arm64: dts: qcom: sa8155p-adp: Make compatible the first property
+Date:   Wed, 24 May 2023 21:53:36 -0700
+Message-Id: <168499048184.3998961.1091102608647335899.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516082856.150214-1-abel.vesa@linaro.org>
-References: <20230516082856.150214-1-abel.vesa@linaro.org>
+In-Reply-To: <20230421205512.339850-1-ahalaney@redhat.com>
+References: <20230421205512.339850-1-ahalaney@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,23 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 11:28:56 +0300, Abel Vesa wrote:
-> The following error was reported when building x86_64 allmodconfig:
+On Fri, 21 Apr 2023 15:55:09 -0500, Andrew Halaney wrote:
+> As stated at the below link in another review, compatible is always the
+> first property.
 > 
-> error: the following would cause module name conflict:
->   drivers/soc/qcom/ice.ko
->   drivers/net/ethernet/intel/ice/ice.ko
+> Follow suit here to avoid copying incorrectly in the future.
 > 
-> Seems the 'ice' module name is already used by some Intel ethernet
-> driver, so lets rename the Qualcomm Inline Crypto Engine (ICE) module
-> from 'ice' to 'qcom_ice' to avoid any kind of errors/confusions.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] soc: qcom: Rename ice to qcom_ice to avoid module name conflict
-      commit: 47820d3263a4a7ba258fe2efe26ae5afb5b83036
+[1/4] arm64: dts: qcom: sa8155p-adp: Make compatible the first property
+      commit: eee7369de0c3cca7aacab3874663d460fb7a5b06
+[3/4] arm64: dts: qcom: sa8155p-adp: Remove unneeded rgmii_phy information
+      commit: 0ff4f6a380214fcf85a5b5ad64ff481d9bd1dfc6
+[4/4] arm64: dts: qcom: sa8155p-adp: Move mtl nodes into ethernet node
+      commit: 93fe463652504bba298a68b56334729cdf92c0c3
 
 Best regards,
 -- 
