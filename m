@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0269710620
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B575E710622
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbjEYHUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S238998AbjEYHU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjEYHUP (ORCPT
+        with ESMTP id S230051AbjEYHU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:20:15 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E1AA9;
-        Thu, 25 May 2023 00:20:13 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1684999208te24henb
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 May 2023 15:20:06 +0800 (CST)
-X-QQ-SSF: 00200000000000D0V000000A0000000
-X-QQ-FEAT: Q40xx9djesR71y0DVBMSVqb0OB8JvjMOQvnH/KC7DVtwDqMquhU67lAmpEDDm
-        hbAf1eZ+0xinoQqUjGbKuiN2C8Df2P279pX7plJZfUj5i0uR3laz/qvsRZW49i1gTd823Qe
-        Pu+6f1es9OrUPzbE9i+0Ojj0Va73paf9p0Z9g2LnvRwwSXcN9RN1vHhfzLLZnc0c5KbGYlG
-        7OXDeJb1Nb3YVpQHlA2ImiJfRehTLMB6/KGxOPc0uHF5Q4RgFYIPEoYvtLaYpI42pzBeCTA
-        eV/51v6GyHOmnwef1j5VyqTWcrTSusTIOZWIbGTkRDLOpH3sriihuVhci9KjweWWG6SQ0ux
-        uZinBD86WNqojgeRc2Domv3Nq3Zj1mmhPxNRC1BKWVIKvu3fPpmJc1pq37FHgowjBIKREX0
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3158394778450214080
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, w@1wt.eu
-Subject: Re: [PATCH 04/13] selftests/nolibc: syscall_args: use __NR_statx for rv32
-Date:   Thu, 25 May 2023 15:20:01 +0800
-Message-Id: <20230525072001.77353-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <09d60dc2-e298-4c22-8e2f-8375861bd9be@t-8ch.de>
-References: <09d60dc2-e298-4c22-8e2f-8375861bd9be@t-8ch.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 25 May 2023 03:20:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCAAA9
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:20:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F99F21C9F;
+        Thu, 25 May 2023 07:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684999219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=J2NxCVb8P/1WY/SVv9IPgdA96OXe/o+RyqGMdIeWOZg=;
+        b=HmiKykDZ7BAm+aUIqq/gRgyqwNedNCxurSiA/T0/BsoccnbvQYywr9ua+sQqwMKod5rOPn
+        PXR0Ik/+voidE7EQUWVvBDhRtCn3pgHh5925abQ3GoAdUcn8E0ibVCn7mLzsKtXr7qVD/c
+        9sAZcK+9rch1ezTO1wWO/V6kazGqP8g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684999219;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=J2NxCVb8P/1WY/SVv9IPgdA96OXe/o+RyqGMdIeWOZg=;
+        b=CHUlE80QbzeoV3kWiZMrhey8uBQFwIFwtquzqS9yUjQTzlb/B8R+CXiqPy2d/wmh0lkHwY
+        zCsRLpFREF3klxDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 642A7134B2;
+        Thu, 25 May 2023 07:20:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VJSAFzMMb2S5FQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 25 May 2023 07:20:19 +0000
+Date:   Thu, 25 May 2023 09:20:18 +0200
+Message-ID: <87h6s0dgi5.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.4-rc4
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,63 +69,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
+Linus,
 
-> On 2023-05-25 01:48:11+0800, Zhangjin Wu wrote:
-> > When compile nolibc-test.c for rv32, we got such error:
-> > 
-> >     tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: â€˜__NR_fstatâ€™ undeclared (first use in this function)
-> >       599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
-> > 
-> > The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
-> > support __NR_fstat, use __NR_statx instead:
-> > 
-> >     Running test 'syscall'
-> >     69 syscall_noargs = 1                                            [OK]
-> >     70 syscall_args = -1 EFAULT                                      [OK]
-> > 
-> > As tools/include/nolibc/sys.h shows, __NR_statx is either not supported
-> > by all platforms, so, both __NR_fstat and __NR_statx are required.
-> > 
-> > Btw, the latest riscv libc6-dev package is required, otherwise, we would
-> > also get such error:
-> > 
-> >     In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
-> >                      from /usr/riscv64-linux-gnu/include/features.h:461,
-> >                      from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
-> >                      from /usr/riscv64-linux-gnu/include/limits.h:26,
-> >                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
-> >                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
-> >                      from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
-> >                      from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
-> >     /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
-> >        28 | # error "rv32i-based targets are not supported"
-> > 
-> > The glibc commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
-> > implementation") fixed up above error, so, glibc >= 2.33 (who includes
-> > this commit) is required.
-> 
-> It seems weird to require limits.h from the system libc at all.
->
-> The only thing used from there are INT_MAX and INT_MIN.
-> Instead we could define our own versions of INT_MAX and INT_MIN in
-> stdint.h.
-> 
-> #ifndef INT_MAX
-> #define INT_MAX __INT_MAX__
-> #endif
-> 
-> #ifndef INT_MIN
-> #define INT_MIN (- __INT_MAX__ - 1)
-> #endif
->
+please pull sound fixes for v6.4-rc4 from:
 
-Just verified and prepared a patch, it did work perfectly, thanks.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4-rc4
 
-The above commit message exactly the error info will be cleaned up in
-v2.
+The topmost commit is 4ca110cab46561cd74a2acd9b447435acb4bec5f
 
-Best regards,
-Zhangjin
+----------------------------------------------------------------
 
-> Thomas
+A collection of small fixes since the previous PR.
+
+- HD-audio runtime PM bug fix
+- A couple of HD-audio quirks
+- Fix series of ASoC Intel AVS drivers
+- ASoC DPCM fix for a bug found on new Intel systems
+- A few other ASoC device-specific small fixes
+
+----------------------------------------------------------------
+
+Adam Stylinski (1):
+      ALSA: hda/ca0132: add quirk for EVGA X299 DARK
+
+Amadeusz S³awiñski (4):
+      ASoC: Intel: avs: Fix module lookup
+      ASoC: Intel: avs: Access path components under lock
+      ASoC: Intel: avs: Fix avs_path_module::instance_id size
+      ASoC: Intel: avs: Add missing checks on FE startup
+
+Bin Li (1):
+      ALSA: hda/realtek: Enable headset onLenovo M70/M90
+
+Cezary Rojewski (3):
+      ASoC: Intel: Skylake: Fix declaration of enum skl_ch_cfg
+      ASoC: Intel: avs: Fix declaration of enum avs_channel_config
+      ASoC: Intel: avs: Account for UID of ACPI device
+
+David Epping (1):
+      ASoC: dt-bindings: tlv320aic32x4: Fix supply names
+
+Matthias Kaehlcke (1):
+      ASoC: rt5682: Disable jack detection interrupt during suspend
+
+Maxim Kochetkov (1):
+      ASoC: dwc: move DMA init to snd_soc_dai_driver probe()
+
+Ranjani Sridharan (1):
+      ASoC: soc-pcm: test if a BE can be prepared
+
+Ravulapati Vishnu Vardhan Rao (1):
+      ASoC: lpass: Fix for KASAN use_after_free out of bounds
+
+Stefan Binding (1):
+      ASoC: cs35l41: Fix default regmap values for some registers
+
+Takashi Iwai (1):
+      ALSA: hda: Fix unhandled register update during auto-suspend period
+
+---
+ .../devicetree/bindings/sound/tlv320aic32x4.txt    |  2 +-
+ include/sound/soc-acpi.h                           |  1 +
+ include/sound/soc-dpcm.h                           |  4 +++
+ include/uapi/sound/skl-tplg-interface.h            |  3 +-
+ sound/hda/hdac_device.c                            |  2 +-
+ sound/pci/hda/patch_ca0132.c                       |  1 +
+ sound/pci/hda/patch_realtek.c                      |  2 ++
+ sound/soc/codecs/cs35l41-lib.c                     |  6 ++--
+ sound/soc/codecs/lpass-tx-macro.c                  |  5 +++
+ sound/soc/codecs/rt5682-i2c.c                      |  4 ++-
+ sound/soc/codecs/rt5682.c                          |  6 ++++
+ sound/soc/codecs/rt5682.h                          |  1 +
+ sound/soc/dwc/dwc-i2s.c                            | 41 +++++-----------------
+ sound/soc/intel/avs/apl.c                          |  6 +++-
+ sound/soc/intel/avs/avs.h                          |  4 +--
+ sound/soc/intel/avs/board_selection.c              |  2 +-
+ sound/soc/intel/avs/control.c                      | 22 ++++++++----
+ sound/soc/intel/avs/dsp.c                          |  4 +--
+ sound/soc/intel/avs/messages.h                     |  2 +-
+ sound/soc/intel/avs/path.h                         |  2 +-
+ sound/soc/intel/avs/pcm.c                          | 23 +++++++++---
+ sound/soc/intel/avs/probes.c                       |  2 +-
+ sound/soc/soc-pcm.c                                | 20 +++++++++++
+ 23 files changed, 105 insertions(+), 60 deletions(-)
+
