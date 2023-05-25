@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F3B71115B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27CB711165
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjEYQwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S233816AbjEYQxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEYQwS (ORCPT
+        with ESMTP id S233020AbjEYQxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:52:18 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDB183;
-        Thu, 25 May 2023 09:52:16 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFADEJ023020;
-        Thu, 25 May 2023 16:52:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rEOZjTCbEveyPPxwTpzB7ykcc97gLlUlUbyicAo//Ww=;
- b=nvWSgQYEEGYsXvElhfFOHSru5QyRNGggToIrmaz5WWsyARt1HW/zxH5U3bICIuj1ySgr
- 3JqvRR0xjf1QeMtMUpqXRa4MZse7dZehYVohW/i0x2oEf9rQ6mTLAZpuQbfkz8B2VGrF
- MXHAJORDJA+T/V8CDeoet5NjMlBokvbq1AH6wiMeg/qD6kG5Rz1dFFww4eZxoYiJRqxf
- 2/4YEI374k2ipW7jPVBN1+AgOzQEw4kLSW3GEQjkk70oCL1cq9mMJc4wZzi4vkhjPg7G
- qkzkRDAAqTHVhjfYoJruI2AGzZDyIYmsiQ2gKfOAEL5uJ4xox4pNWQBtyxjCCdUpJAQu tw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt02a9kqg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 16:52:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PGqBbM019664
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 16:52:12 GMT
-Received: from [10.216.52.104] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 09:52:05 -0700
-Message-ID: <46b4a123-af3d-0605-f3ef-1fd6db1d5d1a@quicinc.com>
-Date:   Thu, 25 May 2023 22:22:02 +0530
+        Thu, 25 May 2023 12:53:01 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158D9194
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cfgTSMcxjwAGXAqRNOZFC56D/VdiYcVGEhQCRK6sn0Y=; b=mDe/26FnD6W+OGKvkXu8PLYy77
+        hr9jPTGJEbt/5j/0R4TNbVUZ+mooTo29WEyBUk8G+FbrKw+xQCPENoEmUUO/BXgUtCiVQE0gKV+cM
+        nl/T3f3k4fcF2lSkhBkrf5Cr0sPCkPoY28Cq0zG0LqpZRLb1oPUyt/cUG7jxqJEAvVjMUCztvlZv1
+        6v08UWtzYIHDBy0T03R5DeUIXLiVM0JqlmDRY/F9NbBdetf0L/Ktm6QWADs/Y5PzOsCAHHDlSxVxR
+        1+1OGzxvQ4eoUVP+3Wu9c1XRBa7Zx+lMj9xi+CUmldJVBe1Ur+d4ZkEgPtJRs4BVtSHuN+KmfpiN4
+        /uZ2L07w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2ECk-006bTt-1V;
+        Thu, 25 May 2023 16:52:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55B0C300338;
+        Thu, 25 May 2023 18:52:44 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2C10C24393D93; Thu, 25 May 2023 18:52:44 +0200 (CEST)
+Date:   Thu, 25 May 2023 18:52:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH] sched: Consider task_struct::saved_state in
+ wait_task_inactive().
+Message-ID: <20230525165244.GV83892@hirez.programming.kicks-ass.net>
+References: <Y++UzubyNavLKFDP@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8550: Add camera clock controller
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
-        <quic_imrashai@quicinc.com>, <quic_ajipan@quicinc.com>
-References: <20230519155602.6642-1-quic_jkona@quicinc.com>
- <20230519155602.6642-5-quic_jkona@quicinc.com>
- <634c80b4-5007-4f66-9114-1dedf3c95f1f@linaro.org>
-From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <634c80b4-5007-4f66-9114-1dedf3c95f1f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GFvbzxS7s2KFfo8YZUbiWUs_hrp24bIE
-X-Proofpoint-ORIG-GUID: GFvbzxS7s2KFfo8YZUbiWUs_hrp24bIE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_09,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 spamscore=0 malwarescore=0 suspectscore=0 clxscore=1015
- mlxscore=0 phishscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250140
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y++UzubyNavLKFDP@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,61 +68,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
+On Fri, Feb 17, 2023 at 03:53:02PM +0100, Sebastian Andrzej Siewior wrote:
 
-Thanks for your review!
+> +static __always_inline bool state_mismatch(struct task_struct *p, unsigned int match_state)
+> +{
+> +	unsigned long flags;
+> +	bool mismatch;
+> +
+> +	raw_spin_lock_irqsave(&p->pi_lock, flags);
+> +	if (READ_ONCE(p->__state) & match_state)
+> +		mismatch = false;
+> +	else if (READ_ONCE(p->saved_state) & match_state)
+> +		mismatch = false;
+> +	else
+> +		mismatch = true;
+> +
+> +	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+> +	return mismatch;
+> +}
+> +static __always_inline bool state_match(struct task_struct *p, unsigned int match_state,
+> +					bool *wait)
+> +{
+> +	if (READ_ONCE(p->__state) & match_state)
+> +		return true;
+> +	if (READ_ONCE(p->saved_state) & match_state) {
+> +		*wait = true;
+> +		return true;
+> +	}
+> +	return false;
+> +}
+> +#else
+> +static __always_inline bool state_mismatch(struct task_struct *p, unsigned int match_state)
+> +{
+> +	return !(READ_ONCE(p->__state) & match_state);
+> +}
+> +static __always_inline bool state_match(struct task_struct *p, unsigned int match_state,
+> +					bool *wait)
+> +{
+> +	return (READ_ONCE(p->__state) & match_state);
+> +}
+> +#endif
+> +
+>  /*
+>   * wait_task_inactive - wait for a thread to unschedule.
+>   *
 
-On 5/19/2023 10:22 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 19.05.2023 17:56, Jagadeesh Kona wrote:
->> Add device node for camera clock controller on Qualcomm
->> SM8550 platform.
->>
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->> index e67e7c69dae6..ac82d3774ed8 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->> @@ -4,6 +4,7 @@
->>    */
->>   
->>   #include <dt-bindings/clock/qcom,rpmh.h>
->> +#include <dt-bindings/clock/qcom,sm8550-camcc.h>
->>   #include <dt-bindings/clock/qcom,sm8550-gcc.h>
->>   #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
->>   #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
->> @@ -2397,6 +2398,20 @@ opp-202000000 {
->>   			};
->>   		};
->>   
->> +		camcc: clock-controller@ade0000 {
->> +			compatible = "qcom,sm8550-camcc";
->> +			reg = <0 0xade0000 0 0x20000>;
-> Please pad the non-zero address part to 8 hex digits
-> 
-Will take care of this in next series.
+Urgh...
 
-> Konrad
->> +			clocks = <&bi_tcxo_div2>,
->> +				 <&bi_tcxo_ao_div2>,
->> +				 <&sleep_clk>,
->> +				 <&gcc GCC_CAMERA_AHB_CLK>;
->> +			power-domains = <&rpmhpd SM8550_MMCX>;
->> +			required-opps = <&rpmhpd_opp_low_svs>;
->> +			#clock-cells = <1>;
->> +			#reset-cells = <1>;
->> +			#power-domain-cells = <1>;
->> +		};
->> +
->>   		mdss: display-subsystem@ae00000 {
->>   			compatible = "qcom,sm8550-mdss";
->>   			reg = <0 0x0ae00000 0 0x1000>;
+I've ended up with the below.. I've tried folding it with
+ttwu_state_match() but every attempt so far makes it an unholy mess.
 
-Thanks & Regards,
-Jagadeesh
+Now, if only we had proper lock guard then we could drop another few
+lines, but alas.
+
+---
+ kernel/sched/core.c | 35 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 33 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a68d1276bab0..5a106629a98d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3341,6 +3341,37 @@ int migrate_swap(struct task_struct *cur, struct task_struct *p,
+ }
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
++static __always_inline
++bool __wti_state_match(struct task_struct *p, unsigned int state, int *queued)
++{
++	if (READ_ONCE(p->__state) & state)
++		return true;
++
++#ifdef CONFIG_PREEMPT_RT
++	if (READ_ONCE(p->saved_state) & state) {
++		if (queued)
++			*queued = 1;
++		return true;
++	}
++#endif
++	return false;
++}
++
++static __always_inline bool wti_state_match(struct task_struct *p, unsigned int state)
++{
++#ifdef CONFIG_PREEMPT_RT
++	bool match;
++
++	raw_spin_lock_irq(&p->pi_lock);
++	match = __wti_state_match(p, state, NULL);
++	raw_spin_unlock_irq(&p->pi_lock);
++
++	return match;
++#else
++	return __wti_state_match(p, state, NULL);
++#endif
++}
++
+ /*
+  * wait_task_inactive - wait for a thread to unschedule.
+  *
+@@ -3385,7 +3416,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
+ 		 * is actually now running somewhere else!
+ 		 */
+ 		while (task_on_cpu(rq, p)) {
+-			if (!(READ_ONCE(p->__state) & match_state))
++			if (!wti_state_match(p, match_state))
+ 				return 0;
+ 			cpu_relax();
+ 		}
+@@ -3400,7 +3431,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
+ 		running = task_on_cpu(rq, p);
+ 		queued = task_on_rq_queued(p);
+ 		ncsw = 0;
+-		if (READ_ONCE(p->__state) & match_state)
++		if (__wti_state_match(p, match_state, &queued))
+ 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
+ 		task_rq_unlock(rq, p, &rf);
+ 
