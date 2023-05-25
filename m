@@ -2,69 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75764710352
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 05:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942F4710356
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 05:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjEYDeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 23:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S230011AbjEYDfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 23:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjEYDeM (ORCPT
+        with ESMTP id S229489AbjEYDfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 23:34:12 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16C9FE2;
-        Wed, 24 May 2023 20:34:09 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxiPEv125kUrwAAA--.1775S3;
-        Thu, 25 May 2023 11:34:07 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOQu125kVzh2AA--.64313S3;
-        Thu, 25 May 2023 11:34:06 +0800 (CST)
-Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <20230522071030.5193-3-zhuyinbo@loongson.cn> <ZGy3b7ZfNwWoGDTu@surfacebook>
- <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
- <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <2a72a2c2-6fda-1ea8-3b27-5623cc1132aa@loongson.cn>
-Date:   Thu, 25 May 2023 11:34:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 24 May 2023 23:35:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38453E2;
+        Wed, 24 May 2023 20:35:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EFBED1042;
+        Wed, 24 May 2023 20:36:25 -0700 (PDT)
+Received: from [10.162.43.6] (unknown [10.162.43.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0A8D3F762;
+        Wed, 24 May 2023 20:35:38 -0700 (PDT)
+Message-ID: <592942c0-00dc-0317-0411-f9e17870fb11@arm.com>
+Date:   Thu, 25 May 2023 09:05:35 +0530
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 09/36] arm64: Implement the new page table range API
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxoOQu125kVzh2AA--.64313S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGw17Cw48WFyktrW5tw1UZFb_yoW5Cw1xpF
-        WUJa1jyr4UJrWkCw1Iqwn5Xrn2yryfJF1UWwn8tFy8Gr1qvF13Xr1UKrWa9rZ3uFs5uF48
-        Za1UXFs3CF90y3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
-        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-arch@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-10-willy@infradead.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230315051444.3229621-10-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,133 +50,157 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/5/24 下午4:42, Andy Shevchenko 写道:
-> On Wed, May 24, 2023 at 10:52 AM zhuyinbo <zhuyinbo@loongson.cn> wrote:
->> 在 2023/5/23 下午8:54, andy.shevchenko@gmail.com 写道:
->>> Mon, May 22, 2023 at 03:10:30PM +0800, Yinbo Zhu kirjoitti:
+On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
+> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
+> Change the PG_dcache_clean flag from being per-page to per-folio.
 > 
-> ...
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  arch/arm64/include/asm/cacheflush.h |  4 +++-
+>  arch/arm64/include/asm/pgtable.h    | 25 ++++++++++++++------
+>  arch/arm64/mm/flush.c               | 36 +++++++++++------------------
+>  3 files changed, 35 insertions(+), 30 deletions(-)
 > 
->>>> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
->>>> +                            struct spi_device *spi, struct spi_transfer *t)
->>>> +{
->>>> +    unsigned int hz;
->>>> +
->>>> +    if (t)
->>>> +            hz = t->speed_hz;
->>>
->>> And if t is NULL? hz will be uninitialized. Don't you get a compiler warning?
->>> (Always test your code with `make W=1 ...`)
->>
->> I always use `make W=1` and I don't find any warning, but that what you
->> said was right and I will initial hz.
-> 
-> Note, if hz == 0 when t == NULL, you can unify that check with the below.
-> 
->>>> +    if (hz && loongson_spi->hz != hz)
-> 
-> Something like
-> 
->    if (t && _spi->hz != t->speed_hz)
->      ...(..., t->speed_hz);
-> 
-> In such a case you won't need a temporary variable.
+> diff --git a/arch/arm64/include/asm/cacheflush.h b/arch/arm64/include/asm/cacheflush.h
+> index 37185e978aeb..d115451ed263 100644
+> --- a/arch/arm64/include/asm/cacheflush.h
+> +++ b/arch/arm64/include/asm/cacheflush.h
+> @@ -114,7 +114,7 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
+>  #define copy_to_user_page copy_to_user_page
+>  
+>  /*
+> - * flush_dcache_page is used when the kernel has written to the page
+> + * flush_dcache_folio is used when the kernel has written to the page
+>   * cache page at virtual address page->virtual.
+>   *
+>   * If this page isn't mapped (ie, page_mapping == NULL), or it might
+> @@ -127,6 +127,8 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
+>   */
+>  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+>  extern void flush_dcache_page(struct page *);
+> +void flush_dcache_folio(struct folio *);
 
-okay, I got it.
+This is giving a checkpatch.pl warning
 
-> 
->>>> +            loongson_spi_set_clk(loongson_spi, hz);
->>>> +
->>>> +    if ((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK)
->>>> +            loongson_spi_set_mode(loongson_spi, spi);
->>>> +
->>>> +    return 0;
->>>> +}
-> 
-> ...
-> 
->>> Why do you use deprecated naming? Can you use spi_controller* instead of
->>> spi_master* in all cases?
->>
->> It seems was a personal code style issue and I don't find the
->> differences between spi_controller and spi_master, Using spi_controller*
->> is also acceptable to me and I will use spi_controller* instead of
->> spi_master* in all cases.
-> 
-> Read this section (#4) in full
-> https://kernel.org/doc/html/latest/process/coding-style.html#naming
+WARNING: function definition argument 'struct folio *' should also have an identifier name
+#36: FILE: arch/arm64/include/asm/cacheflush.h:130:
++void flush_dcache_folio(struct folio *);
 
-okay, I got it.
+total: 0 errors, 1 warnings, 111 lines checked
 
-> 
-> ...
-> 
->>>> +    clk = devm_clk_get_optional(dev, NULL);
->>>> +    if (!IS_ERR(clk))
->>>> +            spi->clk_rate = clk_get_rate(clk);
->>>
->>>> +    else
->>>
->>> Redundant. Just check for the error first as it's very usual pattern in the
->>> Linux kernel.
->>
->> Like below ?
->>
->>           clk = devm_clk_get_optional(dev, NULL);
->> -       if (!IS_ERR(clk))
->> -               spi->clk_rate = clk_get_rate(clk);
->> -       else
->> +       if (IS_ERR(clk))
->>                   return dev_err_probe(dev, PTR_ERR(clk), "unable to get
->> clock\n");
->>
->> +       spi->clk_rate = clk_get_rate(clk);
-> 
-> Yes.
+> +#define flush_dcache_folio flush_dcache_folio
+>  
+>  static __always_inline void icache_inval_all_pou(void)
+>  {
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 9428748f4691..6fd012663a01 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -355,12 +355,21 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  	set_pte(ptep, pte);
+>  }
+>  
+> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep, pte_t pte)
+> -{
+> -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+> -	return __set_pte_at(mm, addr, ptep, pte);
+> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> +			      pte_t *ptep, pte_t pte, unsigned int nr)
+> +{
+> +	page_table_check_ptes_set(mm, addr, ptep, pte, nr);
+> +
+> +	for (;;) {
+> +		__set_pte_at(mm, addr, ptep, pte);
+> +		if (--nr == 0)
+> +			break;
+> +		ptep++;
+> +		addr += PAGE_SIZE;
+> +		pte_val(pte) += PAGE_SIZE;
+> +	}
+>  }
+> +#define set_ptes set_ptes
+>  
+>  /*
+>   * Huge pte definitions.
+> @@ -1059,8 +1068,8 @@ static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
+>  /*
+>   * On AArch64, the cache coherency is handled via the set_pte_at() function.
+>   */
+> -static inline void update_mmu_cache(struct vm_area_struct *vma,
+> -				    unsigned long addr, pte_t *ptep)
+> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
+> +		unsigned long addr, pte_t *ptep, unsigned int nr)
+>  {
+>  	/*
+>  	 * We don't do anything here, so there's a very small chance of
+> @@ -1069,6 +1078,8 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+>  	 */
+>  }
+>  
+> +#define update_mmu_cache(vma, addr, ptep) \
+> +	update_mmu_cache_range(vma, addr, ptep, 1)
+>  #define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
+>  
+>  #ifdef CONFIG_ARM64_PA_BITS_52
+> diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
+> index 5f9379b3c8c8..deb781af0a3a 100644
+> --- a/arch/arm64/mm/flush.c
+> +++ b/arch/arm64/mm/flush.c
+> @@ -50,20 +50,13 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
+>  
+>  void __sync_icache_dcache(pte_t pte)
+>  {
+> -	struct page *page = pte_page(pte);
+> +	struct folio *folio = page_folio(pte_page(pte));
+>  
+> -	/*
+> -	 * HugeTLB pages are always fully mapped, so only setting head page's
+> -	 * PG_dcache_clean flag is enough.
+> -	 */
+> -	if (PageHuge(page))
+> -		page = compound_head(page);
+> -
+> -	if (!test_bit(PG_dcache_clean, &page->flags)) {
+> -		sync_icache_aliases((unsigned long)page_address(page),
+> -				    (unsigned long)page_address(page) +
+> -					    page_size(page));
+> -		set_bit(PG_dcache_clean, &page->flags);
+> +	if (!test_bit(PG_dcache_clean, &folio->flags)) {
+> +		sync_icache_aliases((unsigned long)folio_address(folio),
+> +				    (unsigned long)folio_address(folio) +
+> +					    folio_size(folio));
+> +		set_bit(PG_dcache_clean, &folio->flags);
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+> @@ -73,17 +66,16 @@ EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+>   * it as dirty for later flushing when mapped in user space (if executable,
+>   * see __sync_icache_dcache).
+>   */
+> -void flush_dcache_page(struct page *page)
+> +void flush_dcache_folio(struct folio *folio)
+>  {
+> -	/*
+> -	 * HugeTLB pages are always fully mapped and only head page will be
+> -	 * set PG_dcache_clean (see comments in __sync_icache_dcache()).
+> -	 */
+> -	if (PageHuge(page))
+> -		page = compound_head(page);
+> +	if (test_bit(PG_dcache_clean, &folio->flags))
+> +		clear_bit(PG_dcache_clean, &folio->flags);
+> +}
+> +EXPORT_SYMBOL(flush_dcache_folio);
+>  
+> -	if (test_bit(PG_dcache_clean, &page->flags))
+> -		clear_bit(PG_dcache_clean, &page->flags);
+> +void flush_dcache_page(struct page *page)
+> +{
+> +	flush_dcache_folio(page_folio(page));
+>  }
+>  EXPORT_SYMBOL(flush_dcache_page);
+>
 
-okay, I got it.
-> 
->>           loongson_spi_reginit(spi);
-> 
->>>> +            return dev_err_probe(dev, PTR_ERR(clk), "unable to get clock\n");
-> 
-> ...
-> 
->>>> +    ret = loongson_spi_init_master(dev, reg_base);
->>>> +    if (ret)
->>>> +            return dev_err_probe(dev, ret, "failed to initialize master\n");
->>>> +
->>>> +    return ret;
->>>
->>>        return 0;
->>
->> It seems was more appropriate that initialize ret then return ret.
->> Do you think so ?
-> 
-> What do you mean and how does it help here?
-
-I'm sorry, I was wrong before and the ret varible seems not to be
-initialized and it always record the return value for
-loongson_spi_init_master.
-
-It seems was appropriate that use "return ret" and I don't got your
-point that in probe for use "return 0"
-
-> 
-> 
-> ...
-> 
->>>> +#include <linux/spi/spi.h>
->>>
->>> This neither.
->>
->> That other .c file seems to need it and I will move it to other .c
->> code file.
-> 
-> Yes, please do.
-
-okay, I got it.
-
-Thanks,
-Yinbo
-
+Otherwise LGTM.
