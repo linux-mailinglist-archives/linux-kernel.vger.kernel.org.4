@@ -2,132 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AC6710C95
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7088710CBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241172AbjEYM5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S241005AbjEYM7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbjEYM4z (ORCPT
+        with ESMTP id S240727AbjEYM7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFAE183
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 05:56:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 562D564081
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAA9C4339E;
-        Thu, 25 May 2023 12:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685019409;
-        bh=i3jmjwyZnPca93skmInUGTJwx36Md+4xOabqF4P++OY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tRn4F7j1tJpKrKZOaStMoXT8YSXv13bpe0LG2jUZjUpXA7icJrWEDYyLHlnWnKFm6
-         VvB08fs/6eeFUt1hZRk7LnqJ4YlNpgjvT78EDBapulwnRMR0+wf3ubSoqVm9x5ucKM
-         eNkgfGIb0RhJAWWJJ2RsYT18Yq9nt7IC1R4ty7evr9HGjbhLISz06KtWnFse72glYY
-         a08FG2YBOq9M2I5NOHKqmW2tYlyDMtbAQEz1wic5RPcySFBN0H5VtlYIxN0nYnqguP
-         h+JYwhIlxJKQuj+7mKgYoNPobL4eQx1tVsVlUW9skxtXeRzoQ7SC0AHnu1B6UYPB4S
-         ZBL8KZi88zvvQ==
-Received: by mercury (Postfix, from userid 1000)
-        id A2D381060A3F; Thu, 25 May 2023 14:56:46 +0200 (CEST)
-Date:   Thu, 25 May 2023 14:56:46 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     jinpu.wang@ionos.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] omap_ssi_port.c: Fix error checking for
- debugfs_create_dir
-Message-ID: <20230525125646.f4rfjb2limbtuh2c@mercury.elektranox.org>
-References: <20230523172434.13477-1-osmtendev@gmail.com>
+        Thu, 25 May 2023 08:59:43 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625E6195;
+        Thu, 25 May 2023 05:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685019557; x=1716555557;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=f0lF9njkggtpBf9SpDur9tx299D0+TkDV/kEtNrSjqI=;
+  b=azvFNd0GhGCULkCjASrsxmOScchdduz3pzAiK1JijYWTdUDP7S29l0Aj
+   cxwXhw8AKZbrr2Ylpt6MvRw15I3O2vsBILED8wA1aXMmBL+AJQ/DSUgX6
+   Np6LYh1Qrt8lGzAnhSJyKOZoCCuynubEss86KR2+S7awZo8hL0xJntzwy
+   TPp2CIqfhBehvXN83Z7RzxKqTaB1y5uJbykM4PAAXxMpoDjXkvz5siCzr
+   3/W3u3KZb9Y6xhixauivrWvCgNynvT1XwERH8BKcT988y6xeY/RbFIk34
+   R35t46Wu/sCkTBHCxWpxzB8MPlxzhHc1DjyssWeIZjjslSki7dWh76G2Z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="351384299"
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="scan'208";a="351384299"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 05:58:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="817075070"
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="scan'208";a="817075070"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by fmsmga002.fm.intel.com with ESMTP; 25 May 2023 05:58:29 -0700
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 00/12] net: intel: start The Great Code Dedup + Page Pool for iavf
+Date:   Thu, 25 May 2023 14:57:34 +0200
+Message-Id: <20230525125746.553874-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="thqsfdjzhqzzc6kc"
-Content-Disposition: inline
-In-Reply-To: <20230523172434.13477-1-osmtendev@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Here's a two-shot: introduce Intel Ethernet common library (libie) and
+switch iavf to Page Pool. Details in the commit messages; here's
+summary:
 
---thqsfdjzhqzzc6kc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Not a secret there's a ton of code duplication between two and more Intel
+ethernet modules. Before introducing new changes, which would need to be
+copied over again, start decoupling the already existing duplicate
+functionality into a new module, which will be shared between several
+Intel Ethernet drivers.
+The first thing that came to my mind was "libie" -- "Intel Ethernet
+common library". Also this sounds like "lovelie" and can be expanded as
+"lib Internet Explorer" :P I'm open for anything else (but justified).
+The series is only the beginning. From now on, adding every new feature
+or doing any good driver refactoring will remove much more lines than add
+for quite some time. There's a basic roadmap with some deduplications
+planned already, not speaking of that touching every line now asks: "can
+I share this?".
+PP conversion for iavf lands within the same series as these two are tied
+closely. libie will support Page Pool model only, so a driver can't use
+much of the lib until it's converted. iavf is only the example, the rest
+will eventually be converted soon on a per-driver basis. That is when it
+gets really interesting. Stay tech.
 
-Hi,
+Alexander Lobakin (12):
+  net: intel: introduce Intel Ethernet common library
+  iavf: kill "legacy-rx" for good
+  iavf: optimize Rx buffer allocation a bunch
+  iavf: remove page splitting/recycling
+  iavf: always use a full order-0 page
+  net: skbuff: don't include <net/page_pool.h> into <linux/skbuff.h>
+  net: page_pool: avoid calling no-op externals when possible
+  net: page_pool: add DMA-sync-for-CPU inline helpers
+  iavf: switch to Page Pool
+  libie: add common queue stats
+  libie: add per-queue Page Pool stats
+  iavf: switch queue stats to libie
 
-On Tue, May 23, 2023 at 10:24:34PM +0500, Osama Muhammad wrote:
-> This patch fixes the error checking in omap_ssi_port.c in
-> debugfs_create_dir. The correct way to check if an error occurred
-> is 'IS_ERR' inline function.
->=20
-> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-> ---
+ MAINTAINERS                                   |   3 +-
+ drivers/net/ethernet/engleder/tsnep_main.c    |   1 +
+ drivers/net/ethernet/freescale/fec_main.c     |   1 +
+ drivers/net/ethernet/intel/Kconfig            |  12 +-
+ drivers/net/ethernet/intel/Makefile           |   1 +
+ drivers/net/ethernet/intel/i40e/i40e_common.c | 253 -------
+ drivers/net/ethernet/intel/i40e/i40e_main.c   |   1 +
+ .../net/ethernet/intel/i40e/i40e_prototype.h  |   7 -
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c   |  74 +-
+ drivers/net/ethernet/intel/i40e/i40e_type.h   |  88 ---
+ drivers/net/ethernet/intel/iavf/iavf.h        |   2 +-
+ drivers/net/ethernet/intel/iavf/iavf_common.c | 253 -------
+ .../net/ethernet/intel/iavf/iavf_ethtool.c    | 227 +-----
+ drivers/net/ethernet/intel/iavf/iavf_main.c   |  45 +-
+ .../net/ethernet/intel/iavf/iavf_prototype.h  |   7 -
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c   | 715 +++++-------------
+ drivers/net/ethernet/intel/iavf/iavf_txrx.h   | 185 +----
+ drivers/net/ethernet/intel/iavf/iavf_type.h   |  90 ---
+ .../net/ethernet/intel/iavf/iavf_virtchnl.c   |  16 +-
+ .../net/ethernet/intel/ice/ice_lan_tx_rx.h    | 316 --------
+ drivers/net/ethernet/intel/ice/ice_main.c     |   1 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c |  74 +-
+ drivers/net/ethernet/intel/libie/Makefile     |   7 +
+ drivers/net/ethernet/intel/libie/internal.h   |  23 +
+ drivers/net/ethernet/intel/libie/rx.c         | 158 ++++
+ drivers/net/ethernet/intel/libie/stats.c      | 190 +++++
+ .../ethernet/mellanox/mlx5/core/en/params.c   |   1 +
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |   1 +
+ drivers/net/wireless/mediatek/mt76/mt76.h     |   1 +
+ include/linux/net/intel/libie/rx.h            | 170 +++++
+ include/linux/net/intel/libie/stats.h         | 214 ++++++
+ include/linux/skbuff.h                        |   4 +-
+ include/net/page_pool.h                       |  69 +-
+ net/core/page_pool.c                          |  10 +
+ 34 files changed, 1139 insertions(+), 2081 deletions(-)
+ create mode 100644 drivers/net/ethernet/intel/libie/Makefile
+ create mode 100644 drivers/net/ethernet/intel/libie/internal.h
+ create mode 100644 drivers/net/ethernet/intel/libie/rx.c
+ create mode 100644 drivers/net/ethernet/intel/libie/stats.c
+ create mode 100644 include/linux/net/intel/libie/rx.h
+ create mode 100644 include/linux/net/intel/libie/stats.h
 
-This masks the error code. But the proper fix is to just ignore any
-errors as the help text for debugfs_create_dir() explains. Please send
-a new patch removing the 'if (!dir) return -ENOMEM;'. Also the
-function can be changed to be of type void afterwards.
+---
+Directly to net-next, has non-Intel code changes (0006-0008).
 
-Thanks,
+From v1[0]:
+* 0006: new (me, Jakub);
+* 0008: give the helpers more intuitive names (Jakub, Ilias);
+*  -^-: also expand their kdoc a bit for the same reason;
+*  -^-: fix kdoc copy-paste issue (Patchwork, Jakub);
+* 0011: drop `inline` from C file (Patchwork, Jakub).
 
--- Sebastian
+[0] https://lore.kernel.org/netdev/20230516161841.37138-1-aleksander.lobakin@intel.com
 
->  drivers/hsi/controllers/omap_ssi_port.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/hsi/controllers/omap_ssi_port.c b/drivers/hsi/contro=
-llers/omap_ssi_port.c
-> index b9495b720f1b..7ad41599baa5 100644
-> --- a/drivers/hsi/controllers/omap_ssi_port.c
-> +++ b/drivers/hsi/controllers/omap_ssi_port.c
-> @@ -157,12 +157,12 @@ static int ssi_debug_add_port(struct omap_ssi_port =
-*omap_port,
->  	struct hsi_port *port =3D to_hsi_port(omap_port->dev);
-> =20
->  	dir =3D debugfs_create_dir(dev_name(omap_port->dev), dir);
-> -	if (!dir)
-> +	if (IS_ERR(dir))
->  		return -ENOMEM;
->  	omap_port->dir =3D dir;
->  	debugfs_create_file("regs", S_IRUGO, dir, port, &ssi_port_regs_fops);
->  	dir =3D debugfs_create_dir("sst", dir);
-> -	if (!dir)
-> +	if (IS_ERR(dir))
->  		return -ENOMEM;
->  	debugfs_create_file_unsafe("divisor", 0644, dir, port,
->  				   &ssi_sst_div_fops);
-> --=20
-> 2.34.1
->=20
+-- 
+2.40.1
 
---thqsfdjzhqzzc6kc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRvWwEACgkQ2O7X88g7
-+ppt8hAAk2PTNjGFlYd6h3hSQhJ8lwjxNdtDToPXUdXukbpQw74/bSUFDGVjUEZf
-y/IzRmFtQFHYyd9ax+4FfHhFyw8Wnm9LXuVrO+ugrpNm8riqRmhC4tBEhDanyhI6
-B1opsYj+n8vt8gVphI87Nv6ZIkuYiRXzXmcm9vBxxYj9cOBqqBc3uWjZ3zmPnyMK
-+CJaoJgtz4HYEGMRBSte3iQQ3LXoVItnY6NkKPRdp4W6GQs8jcJDzsqQEbM+D5cm
-/3xd1gPDZ8OfR2DFyHJCMwC0GTuFMpsjbFaxkX70h5rkIHnXfKPwr84wMMM82dQA
-D8NoeRUTMWOvKNukiqONOT9zXdMYQCJ+CczM5+YAQYV/RDLGTM0LqBJQshjuWYXn
-qCAV2FD5GcRbVXDzxUgLnEtoW9EO+eYICjks5vQLAkhHMjc1DQdCGIPipgurzFi1
-1gVjn5F0PzoqXkE9dOjnM2k3zgFXjc8bsBl7pna8zpOeYC25AICvOrBhvf3AfaSL
-+1Tyy09RrPu+jo6f0EY53kJP1/nw0JwRXkKBcSYOzjCDEEWs37zZft5aFH2nCp2Q
-AiYsHTIAqat9ecTPAQRiDwB6f1ku5xLPkkj5VDRY6h5AMycn8G5xeJ9aYVUHqhPg
-k1UPP8gjhhZpuWT2EdTeZWovJYfiHIWLMcIUBhR0cRqRKpwDiQo=
-=rPGM
------END PGP SIGNATURE-----
-
---thqsfdjzhqzzc6kc--
