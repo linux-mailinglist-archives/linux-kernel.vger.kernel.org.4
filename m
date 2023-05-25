@@ -2,253 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E658F711072
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF9A71107A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbjEYQH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S230118AbjEYQIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234289AbjEYQHy (ORCPT
+        with ESMTP id S229754AbjEYQIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:07:54 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D037E61;
-        Thu, 25 May 2023 09:07:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C3C7A21BD3;
-        Thu, 25 May 2023 16:07:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685030845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6fUmMKEP0NVxF0dlYJ3RY0KP8iLVIJxr+Cik8LTdcs0=;
-        b=tVp0qzVwlCNA27cvyif8ZJzfdvr0nmHI96GB1JWTQpMQs4ZdakZMUZ2rGnFUCas5JfQBU2
-        UYxQ3x0JlGRia0jsPOsyC7qghzYza254c2wM2DvHqG00ztXcSeOBRjMroQJh2ZxjjMxtCc
-        5DSwnqxg/m9XWuORKLsTYCcK6UVLPno=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685030845;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6fUmMKEP0NVxF0dlYJ3RY0KP8iLVIJxr+Cik8LTdcs0=;
-        b=bkY2qer6sn5GnmrBSL9dYeISnx+U55IZWNeE5Ei3jBtweIcQgK7skYuDEVsB3lVqUStOUb
-        hAxH/SFvbCPPtQBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B172F13356;
-        Thu, 25 May 2023 16:07:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gX42K72Hb2ScGgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 25 May 2023 16:07:25 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C3764A075C; Thu, 25 May 2023 18:07:24 +0200 (CEST)
-Date:   Thu, 25 May 2023 18:07:24 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     hch@infradead.org, djwong@kernel.org, sandeen@sandeen.net,
-        song@kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jikos@kernel.org,
-        bvanassche@acm.org, ebiederm@xmission.com, mchehab@kernel.org,
-        keescook@chromium.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        linux-fsdevel@vger.kernel.org, kernel@tuxforce.de,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] ext4: replace kthread freezing with auto fs freezing
-Message-ID: <20230525160724.aqpwh5bapsw57uwm@quack3>
-References: <20230508011927.4036707-1-mcgrof@kernel.org>
- <20230508011927.4036707-2-mcgrof@kernel.org>
+        Thu, 25 May 2023 12:08:51 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2F610F5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:08:18 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-52c30fa5271so1051270a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685030898; x=1687622898;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEv45uJta0uzHG0bC+JhZzCb4VSE8MHC7EtFPn9iTPw=;
+        b=JDnDL2rZqzVJE3Vwd5HUCn5bmJ8Z24AepAKBASGbdeEPmPgG6N6Z4GbpoGieWvAFEx
+         Ldv/jYPJlzSBM4Q5ep/PAu3+ecTcs2puJhTAf8y8Fkr+RmZ5WSEoeYIr+EbSmnvT7q93
+         BGP/4kh1w5C0E/03ferCO1lZ7s4n3/bWcauRbtEeQJZbwl9NZcjQDckDPx1YYSOfXxNl
+         rQhHjFOzRVs1TdMPK1Wnl5ZQyM870UbePXlRMOpPJOTos6huq/DEdfvYv8uB9qgZWnwi
+         OUTLMindhK60AXQfc6uFTKYx0UPn9mEBAaLEFNjQvR1FNPJ2dO+GM8Xhfs4aQED492/k
+         XydA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685030898; x=1687622898;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xEv45uJta0uzHG0bC+JhZzCb4VSE8MHC7EtFPn9iTPw=;
+        b=ZZhdWGLeGVQz8uCV2rcMokDT9VFmLh8TDOccPoh0ZSeFAdCbkBeQ4nHXJWR2LTyrks
+         ZKiSBf/7Sc4OxKSOa1xIPX0COwHBpFAzAdklvTPYPxawl7Vmdfw/Dl4xnsL8XodPWSib
+         LwutnpwWjaSKZNRBE+UIfCiMRMQdOPVdW37rApg/28jBN/DHfa0xsEAtSvcOtqnN3WYY
+         jRNvCmcF5dCNd2hM/O7ca16gpQgaQ3N8LFnJO3qwf7xGvRlOIbLSKFDquuu+4x7ModQG
+         pb/CyPL3DPtx0lFmdJHVgDwlnB1rvkSvugfmjH6dTjkhDG+LWOcCniOs7cRfWBbv8p7r
+         wdyw==
+X-Gm-Message-State: AC+VfDzV/IqQxLqM8kJPSgkdN7AvP1ehZQ18hVDuQORVvB/cnZeKvwrG
+        5mvyL80tn+J6NXU7VO+B6Iw=
+X-Google-Smtp-Source: ACHHUZ6uW6fsUfZe/Jt0KEvH/QJobmdMYQHctdVJvfxIo/e7nZPdKSFfHXUir4tn20X6SvBwZ36eBQ==
+X-Received: by 2002:a17:902:b10d:b0:1ac:a28e:4b1d with SMTP id q13-20020a170902b10d00b001aca28e4b1dmr2237384plr.34.1685030897726;
+        Thu, 25 May 2023 09:08:17 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-81-153.dynamic-ip.hinet.net. [36.228.81.153])
+        by smtp.gmail.com with ESMTPSA id s3-20020a170902a50300b001ab12ccc2a7sm1611450plq.98.2023.05.25.09.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 09:08:17 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Min-Hua Chen <minhuadotchen@gmail.com>
+Subject: [RESEND PATCH 0/2] ARC: fix THREAD_SHIFT and rename 16KSTACKS
+Date:   Fri, 26 May 2023 00:08:10 +0800
+Message-Id: <20230525160813.39408-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508011927.4036707-2-mcgrof@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 07-05-23 18:19:25, Luis Chamberlain wrote:
-> The kernel power management now supports allowing the VFS
-> to handle filesystem freezing freezes and thawing. Take advantage
-> of that and remove the kthread freezing. This is needed so that we
-> properly really stop IO in flight without races after userspace
-> has been frozen. Without this we rely on kthread freezing and
-> its semantics are loose and error prone.
-> 
-> The filesystem therefore is in charge of properly dealing with
-> quiescing of the filesystem through its callbacks if it thinks
-> it knows better than how the VFS handles it.
-> 
-> The following Coccinelle rule was used as to remove the now superfluous
-> freezer calls:
-> 
-> make coccicheck MODE=patch SPFLAGS="--in-place --no-show-diff" COCCI=./fs-freeze-cleanup.cocci M=fs/ext4
-> 
-> virtual patch
-> 
-> @ remove_set_freezable @
-> expression time;
-> statement S, S2;
-> expression task, current;
-> @@
-> 
-> (
-> -       set_freezable();
-> |
-> -       if (try_to_freeze())
-> -               continue;
-> |
-> -       try_to_freeze();
-> |
-> -       freezable_schedule();
-> +       schedule();
-> |
-> -       freezable_schedule_timeout(time);
-> +       schedule_timeout(time);
-> |
-> -       if (freezing(task)) { S }
-> |
-> -       if (freezing(task)) { S }
-> -       else
-> 	    { S2 }
-> |
-> -       freezing(current)
-> )
-> 
-> @ remove_wq_freezable @
-> expression WQ_E, WQ_ARG1, WQ_ARG2, WQ_ARG3, WQ_ARG4;
-> identifier fs_wq_fn;
-> @@
-> 
-> (
->     WQ_E = alloc_workqueue(WQ_ARG1,
-> -                              WQ_ARG2 | WQ_FREEZABLE,
-> +                              WQ_ARG2,
-> 			   ...);
-> |
->     WQ_E = alloc_workqueue(WQ_ARG1,
-> -                              WQ_ARG2 | WQ_FREEZABLE | WQ_ARG3,
-> +                              WQ_ARG2 | WQ_ARG3,
-> 			   ...);
-> |
->     WQ_E = alloc_workqueue(WQ_ARG1,
-> -                              WQ_ARG2 | WQ_ARG3 | WQ_FREEZABLE,
-> +                              WQ_ARG2 | WQ_ARG3,
-> 			   ...);
-> |
->     WQ_E = alloc_workqueue(WQ_ARG1,
-> -                              WQ_ARG2 | WQ_ARG3 | WQ_FREEZABLE | WQ_ARG4,
-> +                              WQ_ARG2 | WQ_ARG3 | WQ_ARG4,
-> 			   ...);
-> |
-> 	    WQ_E =
-> -               WQ_ARG1 | WQ_FREEZABLE
-> +               WQ_ARG1
-> |
-> 	    WQ_E =
-> -               WQ_ARG1 | WQ_FREEZABLE | WQ_ARG3
-> +               WQ_ARG1 | WQ_ARG3
-> |
->     fs_wq_fn(
-> -               WQ_FREEZABLE | WQ_ARG2 | WQ_ARG3
-> +               WQ_ARG2 | WQ_ARG3
->     )
-> |
->     fs_wq_fn(
-> -               WQ_FREEZABLE | WQ_ARG2
-> +               WQ_ARG2
->     )
-> |
->     fs_wq_fn(
-> -               WQ_FREEZABLE
-> +               0
->     )
-> )
-> 
-> @ add_auto_flag @
-> expression E1;
-> identifier fs_type;
-> @@
-> 
-> struct file_system_type fs_type = {
-> 	.fs_flags = E1
-> +                   | FS_AUTOFREEZE
-> 	,
-> };
-> 
-> Generated-by: Coccinelle SmPL
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Hi,
 
-I guess we can also usually remove the #include <linux/freezer.h> line? At
-least in ext4 it is the case I believe. Otherwise this looks good.
+When I read the arch/arc code, I first noticed that the
+definition of THREAD_SHIFT looks incorrect and the
+description of 16KSTACKS looks confusing because there are
+multiple definitions of PAGE_SHIFT. So I submit
+these patches to address the issues I found.
 
-								Honza
 
-> ---
->  fs/ext4/super.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index d39f386e9baf..1f436938d8be 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -136,7 +136,7 @@ static struct file_system_type ext2_fs_type = {
->  	.init_fs_context	= ext4_init_fs_context,
->  	.parameters		= ext4_param_specs,
->  	.kill_sb		= kill_block_super,
-> -	.fs_flags		= FS_REQUIRES_DEV,
-> +	.fs_flags		= FS_REQUIRES_DEV | FS_AUTOFREEZE,
->  };
->  MODULE_ALIAS_FS("ext2");
->  MODULE_ALIAS("ext2");
-> @@ -152,7 +152,7 @@ static struct file_system_type ext3_fs_type = {
->  	.init_fs_context	= ext4_init_fs_context,
->  	.parameters		= ext4_param_specs,
->  	.kill_sb		= kill_block_super,
-> -	.fs_flags		= FS_REQUIRES_DEV,
-> +	.fs_flags		= FS_REQUIRES_DEV | FS_AUTOFREEZE,
->  };
->  MODULE_ALIAS_FS("ext3");
->  MODULE_ALIAS("ext3");
-> @@ -3790,7 +3790,6 @@ static int ext4_lazyinit_thread(void *arg)
->  	unsigned long next_wakeup, cur;
->  
->  	BUG_ON(NULL == eli);
-> -	set_freezable();
->  
->  cont_thread:
->  	while (true) {
-> @@ -3842,8 +3841,6 @@ static int ext4_lazyinit_thread(void *arg)
->  		}
->  		mutex_unlock(&eli->li_list_mtx);
->  
-> -		try_to_freeze();
-> -
->  		cur = jiffies;
->  		if ((time_after_eq(cur, next_wakeup)) ||
->  		    (MAX_JIFFY_OFFSET == next_wakeup)) {
-> @@ -7245,7 +7242,7 @@ static struct file_system_type ext4_fs_type = {
->  	.init_fs_context	= ext4_init_fs_context,
->  	.parameters		= ext4_param_specs,
->  	.kill_sb		= kill_block_super,
-> -	.fs_flags		= FS_REQUIRES_DEV | FS_ALLOW_IDMAP,
-> +	.fs_flags		= FS_REQUIRES_DEV | FS_ALLOW_IDMAP | FS_AUTOFREEZE,
->  };
->  MODULE_ALIAS_FS("ext4");
->  
-> -- 
-> 2.39.2
-> 
+Min-Hua Chen (2):
+  ARC: fix incorrect THREAD_SHIFT definition
+  ARC: rename 16KSTACKS to DEBUG_STACKS
+
+ arch/arc/Kconfig.debug             | 7 ++++---
+ arch/arc/include/asm/thread_info.h | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.34.1
+
