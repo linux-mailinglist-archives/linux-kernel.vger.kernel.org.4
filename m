@@ -2,218 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B52F710635
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3635D710638
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238870AbjEYHXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S238999AbjEYHX4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 03:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjEYHXR (ORCPT
+        with ESMTP id S232087AbjEYHXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:23:17 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2070e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eb2::70e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB939C;
-        Thu, 25 May 2023 00:23:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RgoKMsSmYqqD0dpQgIp6kz5726T3ZxQfkxcX5e3FG2j9BTbbFqhSesb85Fh7wosKPVsXN9kubfTL4G4khtZDUHXPYSutBsTKbman5LCbM7nTNaySnm2WJOmRFKyoThpK1bXnI60VVpL5ksmU5zbjAOAPUlQ9P0k5b5XJUK/ze06cappTpysqI3h8foyOvKcvPSVFrB2Aw5Z+hvopUsMFKvOMa3+KzJj6yyogyOY46aNl9e0ldAWMbku/qU8Htsgq6dZ14x5nsiGTsPky0LNyHx7EdtOkWHet7VDExwVnLEaAXw/cMkzMtCDePOWEze+ipFF63kSg7eIcgzcWGtm7Og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w/megE2YfryWlCKWpxNZuimecRZzVeiX6r0U2A2pSDQ=;
- b=VsGzrxPH98HrYBm6BCyhrznvus9e9AqOC7ecZXnYLjFHstTfw3fGKb8sKut0cJ2YVchdoetg6jGZwFLErBNlb5Sj/Gz1+XA4Ucbygyt7ocyHRRNvSFpT4+hetcPbAbVxPrk9GjJAWln4Z7ujYm/vatQAWo3h8i+fZEkxcLCSY6EttphGwPTOr+FPMcIXJOP4wfE9KXS7jTzLRpAd8R6FU50rn5wKjJK4cLE6PLcgXGkF2d3FefslOZHQHrhRPwbYjQLxBZ8Coh+b2fAWtFXflA1O+9pNl2wIxRWpyrYKqWi3CtaqujWxGa3lO2bAR99USFHtg8QsXQ/UF04e/OfM6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w/megE2YfryWlCKWpxNZuimecRZzVeiX6r0U2A2pSDQ=;
- b=jsuj5aqeOEAzSbyiczwSj7ZRuQU8NhUKfn+adeTOeWlPRRsBaIq33ahdn4dnpg4pv9mSOGovRuzZfWW2TIRSl7SRRLGStanJThYj4Uou+6mnbRnEr4hCD9zE1VG5c9Z5PGlKCjiFB2kvpQSQCOrQQdbEyPsJY4nEO0+7tPrHjO8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CO1PR13MB4949.namprd13.prod.outlook.com (2603:10b6:303:f9::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Thu, 25 May
- 2023 07:23:12 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Thu, 25 May 2023
- 07:23:12 +0000
-Date:   Thu, 25 May 2023 09:23:04 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Schuyler Patton <spatton@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Tony Lindgren <tony@atomide.com>
-Subject: Re: [PATCH v7 2/2] can: m_can: Add hrtimer to generate software
- interrupt
-Message-ID: <ZG8M2EDSG/NtiTwF@corigine.com>
-References: <20230523023749.4526-1-jm@ti.com>
- <20230523023749.4526-3-jm@ti.com>
- <ZGyfAhp8op4GMElN@corigine.com>
- <8985ea03-a7dc-a0bc-a238-3099caadf740@ti.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8985ea03-a7dc-a0bc-a238-3099caadf740@ti.com>
-X-ClientProxiedBy: AM3PR07CA0093.eurprd07.prod.outlook.com
- (2603:10a6:207:6::27) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 25 May 2023 03:23:53 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC766D3;
+        Thu, 25 May 2023 00:23:49 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-ba8a0500f4aso182452276.3;
+        Thu, 25 May 2023 00:23:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684999429; x=1687591429;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qwHaEVHj9rR3QnH3LqNeVcZHACKl1jAO9NgdI/o7VUY=;
+        b=HTI0Np4oLo8WUbJxOIHCs7pGc5dZaTlz1SrD2wAt6v98gBwBcpt+rasA5IT0UmHfXX
+         JqZ5USAhVWwL47gyaV6u1hd/HTrURU8tH7sIQgMITySEV/XO5rKE0fPbY7I32iybrr9Z
+         qDLAR4NhqHI25lZ5Oqvov1uDJyXt7Bv0d2jvT11ZHK8swH4DwT3/mYgXOROsk0Vq15UH
+         kUalDtzEJ2Kl4F+iSLkWyTZhGBRboPRyc4QD3kIVl8K15NrI4drEhV3c5j9RskgvR6Ie
+         UtooJvh33Nd55mNg9bCqKkK6Q0Cbcq0/XwHAwXQocMwKDsmQgqSkFzBJBeFNv37eNvfb
+         cGUQ==
+X-Gm-Message-State: AC+VfDykid+nEgQAzYzRZ8dJhZ5+rAe42YiC1xvQqICn90xED23XRmyR
+        nTYm/60ZV9Tz5MrIkOK/If3gyA6TDtrQmg==
+X-Google-Smtp-Source: ACHHUZ54iX6ByHspeRy4y89lehIiKcfj174gK6lAM3bvSLC0jQ0x94WGI/binv6kXIZRlnKTo3eZbA==
+X-Received: by 2002:a25:b08b:0:b0:ba8:1ef7:7175 with SMTP id f11-20020a25b08b000000b00ba81ef77175mr2559068ybj.54.1684999428682;
+        Thu, 25 May 2023 00:23:48 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id b124-20020a256782000000b00ba1a0346360sm149766ybc.13.2023.05.25.00.23.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 00:23:48 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-561e5014336so2004777b3.1;
+        Thu, 25 May 2023 00:23:47 -0700 (PDT)
+X-Received: by 2002:a81:a1ca:0:b0:561:d7d8:aa22 with SMTP id
+ y193-20020a81a1ca000000b00561d7d8aa22mr21197961ywg.36.1684999427385; Thu, 25
+ May 2023 00:23:47 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4949:EE_
-X-MS-Office365-Filtering-Correlation-Id: da8b8678-d339-4ac6-ea5e-08db5cf0e5b5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mLSTwQQW60J3+7Nf5Z+/zXPQbB5KqA9qpbUISDKK03ohY+naN95EAVhpAaF3tprO/k67N5HQQ3GGEcVWvjWBdBN0wKPJPXlfohViloQN+zLd9p05iimrACVZj99PLKWZ0kH5TfyZTuO2695MgglnlLONmRcNuIgshHfGzHxpZDUQrylRYjoXMT8PzVUtvwIa4CM59oJXeqamfwu2EU/GKR0TrNJShd5lfKI1JzwW/o3FKlL6xe1yhkeiqHOrgSovtvvx9Wp7q6By5NdEXd+6fHQhgONZxRuwNGf7GNNJcCx0Uukw5gYTGTnmLPJw9rlhxPcwgfvkMENKp8ziVgmhicLF736GXq5DdXRDnVv5fyeMQdUiMkBXNAB2PubfDWKqzrmltMM9AEKklUyGZypI4zWkLNnifKIWzRiVB78mLzEuI4yNO5usBo5Jkeur0mkenQPS+j7pHYPgLmlRTn/abFuo1KWXixEMQLkZQqBVhSM6RolKtQjP6yXpfBfuqmiwsRlBczxUsJniY7EOPZiLJ3WbtReB949f25RDsiQA8XE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(346002)(376002)(39840400004)(451199021)(66556008)(4326008)(66946007)(66476007)(6916009)(8936002)(7416002)(36756003)(8676002)(5660300002)(44832011)(316002)(54906003)(478600001)(41300700001)(6486002)(6666004)(966005)(38100700002)(186003)(6512007)(2906002)(53546011)(83380400001)(6506007)(2616005)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rFnSqE1yBiIyV89lxHWSoukKXT/Wc5U0ZYn7gCbYCNtIfY73vQ+4lwkL36we?=
- =?us-ascii?Q?Hn/JRltrhHWJdyVOfy02JfStNe3061eZpXKlBm1SddpztUBgYDPJUW5eObu/?=
- =?us-ascii?Q?OcxYwHtxdxxZjg6iRiO0sBShkM0VK0Qw2AxUl/tyy9mDQT0OBSIIL/Xv1e4p?=
- =?us-ascii?Q?bhaD0DNj5CyyE7s4c/5cphTwitHnl9z+UKudL4BOlkjI+rXpwt1lcm/Av3kQ?=
- =?us-ascii?Q?c5XO5YSoZWpATezTfsCvQTy4MWzgtmhVMnUmwQMIzf0bKSAouI6J+VBiWqQx?=
- =?us-ascii?Q?cakicJKtJtFQgSxbHgoby3p2MURfkeUiuXK5C+8XaurG6DinabGWviDFldJt?=
- =?us-ascii?Q?7foHlWZ/QCrM3WPfNI/e9BbCgLfMM6Zavgm1NJhBNhf9FCMa6FxQj/hAXBgT?=
- =?us-ascii?Q?iEkgziPvb+6qLtKYEZA40L9rae+slBPsjAJkgNgyE9tnJP1eWlrkyQgbnl5v?=
- =?us-ascii?Q?VqBCua38u7fA0jYkYxHMCCWQa88YWJw8vBMV6GOxKhBSN5Jzt/UV3woNk0c0?=
- =?us-ascii?Q?rsB1uiCg8LPzq51tV6JuhqUtYVEul7w7Za40l/B/0QfkhfUPPluPPApYEnMa?=
- =?us-ascii?Q?djzka9bsF5HsJ+30XuUHv9X5Lh9N2U23MDe92MabWHwqglW9F2MAZEBQyM3J?=
- =?us-ascii?Q?Ltv6OQp3moLpIug0x4LA+fYy3kssbVTxt28lwxsqoHfLyxyqCMf5nKIIvmCy?=
- =?us-ascii?Q?at8kxeVdKrjeana9BSIHTzUtNXddhjA3UgwCNgOS0wFB/iFzXZ81KMWMnaqy?=
- =?us-ascii?Q?PkaR1Le6tbTnyJhhKAQ59u8BW7+lRy6SB5igcphYggAkgjh0EzLDQG5p+PiC?=
- =?us-ascii?Q?7UnAXB+VYD6wlsBeTe6J8AW/b2LZO5/8fSNvRFpVmlUrFMzCQAYs/HE+8d2z?=
- =?us-ascii?Q?4r3jsfqk1+jRZTYhBBaoHyeeKZyf8L+/TTXn1D54qNY0N2PzObUIzvXjr9bb?=
- =?us-ascii?Q?NSary6pjU9qysvcDqS3f+auoryzCyTX84Oe+WhxnzVGMVWyh+UOrMShBgL59?=
- =?us-ascii?Q?70za5KOvqois6sZ6NgaJ8Nqb0cf9HzRQqIfOjs5RpjM/+iUtx9lZlu06ClRv?=
- =?us-ascii?Q?guqNAh3OeawZBd0UjOGpScNu0XueTWPWyhim/mUCYxVaaaIAZGiyWklKx28C?=
- =?us-ascii?Q?QHBPnkaLeU+5VG6YAz25KpoUDsqIXHZwDtyub3sR4cVSNEOFW6N1qnpKwb9r?=
- =?us-ascii?Q?5oTVNvqTjVtXnBBFuRBJ4wIy0Da3p5i6/fI7sOKuKO70+nrBVHN8CN9ru4I+?=
- =?us-ascii?Q?WJLeKHJJmBC+2HYi3zwkgYAoYt2svtyV/MbuVbVRolKYCy/KIzLns+alu1Tm?=
- =?us-ascii?Q?NacoRgxpmX7rpJXSyRNJInBPvV2XaOGw9bXSPK4kMI4HfKxPNM3t2TH1H4FF?=
- =?us-ascii?Q?cY7gUPlTEHBvuty+rwJJh2aKCgHUc0fifyE16wq/LUvkmnO5t/sjb0vm5vwU?=
- =?us-ascii?Q?QOKRZk+B5r+d3XAStbFcc3S9sAQoWNzT8ThgXYVcLNcRAz8ZUyC4IJH5cg/r?=
- =?us-ascii?Q?qa/Q2a8KzCr7E01jjVt2BTBrYxTDG9RsRjtMm+q7abOJdlCftwoiPu4cMdPC?=
- =?us-ascii?Q?qejgXVTLWlHXpT2UmP4ZKZexuiKrco3BGsXjVNzhwxUkj3lEOxVJ7mLBbms3?=
- =?us-ascii?Q?G61IpisRvbBF6yV5rllZsvnBYfYC9BcbOZJDxrGZNs/VPAbshtM3HRXQT5yX?=
- =?us-ascii?Q?NoNzQQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da8b8678-d339-4ac6-ea5e-08db5cf0e5b5
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 07:23:12.0376
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GWajdZrPI6M+6PPig4Ei/XgAq0n2RbpvNIys3IFYqNmTtEYwbfzMZvqMarDRGuy4vankqhhSk3LCFK59qBGsmnWtjAYCRxRsKQoX6cgWoOY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4949
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <ZFAF6pJxMu1z6k4w@makrotopia.org>
+In-Reply-To: <ZFAF6pJxMu1z6k4w@makrotopia.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 25 May 2023 09:23:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWnpu0TE465Ed=Z5iBw2w7pQwzd1ueDRuE5qXFJfztECQ@mail.gmail.com>
+Message-ID: <CAMuHMdWnpu0TE465Ed=Z5iBw2w7pQwzd1ueDRuE5qXFJfztECQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: mt65xx: make sure operations completed before unloading
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Leilk Liu <leilk.liu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 04:29:01PM -0500, Judith Mendez wrote:
-> Hello Simon,
-> 
-> On 5/23/23 6:09 AM, Simon Horman wrote:
-> > On Mon, May 22, 2023 at 09:37:49PM -0500, Judith Mendez wrote:
-> > > Add an hrtimer to MCAN class device. Each MCAN will have its own
-> > > hrtimer instantiated if there is no hardware interrupt found in
-> > > device tree M_CAN node.
-> > > 
-> > > The hrtimer will generate a software interrupt every 1 ms. In
-> > > hrtimer callback, we check if there is a transaction pending by
-> > > reading a register, then process by calling the isr if there is.
-> > > 
-> > > Signed-off-by: Judith Mendez <jm@ti.com>
-> > 
-> > ...
-> > 
-> > > diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-> > > index 94dc82644113..b639c9e645d3 100644
-> > > --- a/drivers/net/can/m_can/m_can_platform.c
-> > > +++ b/drivers/net/can/m_can/m_can_platform.c
-> > > @@ -5,6 +5,7 @@
-> > >   //
-> > >   // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
-> > > +#include <linux/hrtimer.h>
-> > >   #include <linux/phy/phy.h>
-> > >   #include <linux/platform_device.h>
-> > > @@ -96,12 +97,30 @@ static int m_can_plat_probe(struct platform_device *pdev)
-> > >   		goto probe_fail;
-> > >   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
-> > > -	irq = platform_get_irq_byname(pdev, "int0");
-> > > -	if (IS_ERR(addr) || irq < 0) {
-> > > -		ret = -EINVAL;
-> > > +	if (IS_ERR(addr)) {
-> > > +		ret = PTR_ERR(addr);
-> > >   		goto probe_fail;
-> > >   	}
-> > > +	if (device_property_present(mcan_class->dev, "interrupts") ||
-> > > +	    device_property_present(mcan_class->dev, "interrupt-names")) {
-> > > +		irq = platform_get_irq_byname(pdev, "int0");
-> > > +		mcan_class->polling = false;
-> > > +		if (irq == -EPROBE_DEFER) {
-> > > +			ret = -EPROBE_DEFER;
-> > > +			goto probe_fail;
-> > > +		}
-> > > +		if (irq < 0) {
-> > > +			ret = -ENXIO;
-> > > +			goto probe_fail;
-> > > +		}
-> > > +	} else {
-> > > +		mcan_class->polling = true;
-> > > +		dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
-> > > +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
-> > > +			     HRTIMER_MODE_REL_PINNED);
-> > > +	}
-> > 
-> > Hi Judith,
-> > 
-> > it seems that with this change irq is only set in the first arm of
-> > the above conditional. But later on it is used unconditionally.
-> > That is, it may be used uninitialised.
-> > 
-> > Reported by gcc-12 as:
-> > 
-> >   drivers/net/can/m_can/m_can_platform.c: In function 'm_can_plat_probe':
-> >   drivers/net/can/m_can/m_can_platform.c:150:30: warning: 'irq' may be used uninitialized [-Wmaybe-uninitialized]
-> >     150 |         mcan_class->net->irq = irq;
-> >         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~
-> >   drivers/net/can/m_can/m_can_platform.c:86:13: note: 'irq' was declared here
-> >      86 |         int irq, ret = 0;
-> >         |             ^~~
-> > 
-> 
-> Maybe a good solution is to initialize irq=0 here.
+Hi Daniel,
 
-If it is valid for mcan_class->net->irq to be 0 in this case,
-then, yes, I agree.
+On Mon, May 1, 2023 at 8:37 PM Daniel Golle <daniel@makrotopia.org> wrote:
+> When unloading the spi-mt65xx kernel module during an ongoing spi-mem
+> operation the kernel will Oops shortly after unloading the module.
+> This is because wait_for_completion_timeout was still running and
+> returning into the no longer loaded module:
+>
+> Internal error: Oops: 0000000096000005 [#1] SMP
+> Modules linked in: [many, but spi-mt65xx is no longer there]
+> CPU: 0 PID: 2578 Comm: block Tainted: G        W  O       6.3.0-next-20230428+ #0
+> Hardware name: Bananapi BPI-R3 (DT)
+> pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : __lock_acquire+0x18c/0x20e8
+> lr : __lock_acquire+0x9b8/0x20e8
+> sp : ffffffc009ec3400
+> x29: ffffffc009ec3400 x28: 0000000000000001 x27: 0000000000000004
+> x26: ffffff80082888c8 x25: 0000000000000000 x24: 0000000000000000
+> x23: ffffffc009609da8 x22: ffffff8008288000 x21: ffffff8008288968
+> x20: 00000000000003c2 x19: ffffff8008be7990 x18: 00000000000002af
+> x17: 0000000000000000 x16: 0000000000000000 x15: ffffffc008d78970
+> x14: 000000000000080d x13: 00000000000002af x12: 00000000ffffffea
+> x11: 00000000ffffefff x10: ffffffc008dd0970 x9 : ffffffc008d78918
+> x8 : 0000000000017fe8 x7 : 0000000000000001 x6 : 0000000000000000
+> x5 : ffffff807fb53910 x4 : 0000000000000000 x3 : 0000000000000027
+> x2 : 0000000000000027 x1 : 0000000000000000 x0 : 00000000000c03c2
+> Call trace:
+>  __lock_acquire+0x18c/0x20e8
+>  lock_acquire+0x100/0x2a4
+>  _raw_spin_lock_irq+0x58/0x74
+>  __wait_for_common+0xe0/0x1b4
+>  wait_for_completion_timeout+0x1c/0x24
+>  0xffffffc000acc8a4 <--- used to be mtk_spi_transfer_wait
+>  spi_mem_exec_op+0x390/0x3ec
+>  spi_mem_no_dirmap_read+0x6c/0x88
+>  spi_mem_dirmap_read+0xcc/0x12c
+>  spinand_read_page+0xf8/0x1dc
+>  spinand_mtd_read+0x1b4/0x2fc
+>  mtd_read_oob_std+0x58/0x7c
+>  mtd_read_oob+0x8c/0x148
+>  mtd_read+0x50/0x6c
+>  ...
+>
+> Prevent this by completing in mtk_spi_remove if needed.
+>
+> Fixes: 9f763fd20da7 ("spi: mediatek: add spi memory support for ipm design")
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
-> > > +
-> > >   	/* message ram could be shared */
-> > >   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
-> > >   	if (!res) {
-> > > -- 
-> > > 2.17.1
-> 
-> 
-> ~Judith
+Thanks for your patch, which is now commit 4be47a5d59cbc939 ("spi:
+mt65xx: make sure operations completed before unloading") in spi/for-next.
+
+> --- a/drivers/spi/spi-mt65xx.c
+> +++ b/drivers/spi/spi-mt65xx.c
+> @@ -1275,6 +1275,9 @@ static int mtk_spi_remove(struct platform_device *pdev)
+>         struct mtk_spi *mdata = spi_master_get_devdata(master);
+>         int ret;
+>
+> +       if (mdata->use_spimem && !completion_done(&mdata->spimem_done))
+> +               complete(&mdata->spimem_done);
+
+I'm afraid that is not sufficient, as the code that was waiting on the
+completion accesses hardware registers and driver-private data after
+that, and there is no guarantee all of that has completed by the time
+mtk_spi_remove() finishes.
+
+> +
+>         ret = pm_runtime_resume_and_get(&pdev->dev);
+>         if (ret < 0)
+>                 return ret;
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
