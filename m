@@ -2,108 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D805710D21
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1ED2710D24
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241226AbjEYNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S241249AbjEYNUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241223AbjEYNTu (ORCPT
+        with ESMTP id S241215AbjEYNT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:19:50 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828DD194
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:19:48 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-783f7e82f2aso304069241.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685020787; x=1687612787;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LxwYtGB9RBUo2ARBEDaRy/j62e5UsedQQydMRI+nQLA=;
-        b=MMcqVtbtrkBNeoUv3HforN2Tm6L6iCwCIBv793tAV7Ufz+ANrbu/ezmTA7UZp8mXC9
-         lH57eB6u4V4f3StbMW1WCizBsB+CJpTnCn7Yi/QsuWgeWKHxcF3/ELMDVukdHwpEu9qC
-         Fjprx7sB6aEz6BcNaTkAwUDS7PmPBpQBTlHhiM0SFDFb1R9HC3uTuG8HjVOF0XVF1EM0
-         BRUD0y7jNUgTE9+NGSGJ2FR9V/6ix5KcLWm8DH3hEN3Sjinzosx5kYKz9zIZ/cZemS+N
-         klVuoSk/wGC1vBt0es3psdtY+hJkt7sQUMg8CViSOYXwXEq4rWbCK4RfyntGFTHYg8O9
-         UHsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685020787; x=1687612787;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LxwYtGB9RBUo2ARBEDaRy/j62e5UsedQQydMRI+nQLA=;
-        b=LG+eiwZBPlU/gaNSbs3Lz0PxmuWEtNEBXjpWHlOe3VLXGbw6XYD3+Zm+Neuh2/+A5x
-         1DTkBWbEUXBp+iyyFxj6MNwYwKPoQ/r4S0dlNsM2PRQmMonG6gHAVnTBIrVqF8MAFbyw
-         5PFmGIPdGWNcFjGcEvFLELzR5fJwfrk+6ZdqNQXwQT2/6pFp4IWkLn1Vcz6470ibudgO
-         XuPNBSxi9eJGiweSAHZf9Gg1rA+fXtOoMmO4nhv3ri4dNwPWUUSgADqSqyJdfYTWhLjA
-         ut0Q2jU5IxuXL9lVypEOnPCyC1TRvgNyQeF0omp9lq8tcp+Gy4SzWO7+4/tJe1wk25Fi
-         UhRA==
-X-Gm-Message-State: AC+VfDy5MjGtWjrn5Y/fbltZiYarG1wk98jDjnKCrGM0VHyszJZLAF+m
-        DHNJQTZw3ePjK8ke5oEti4/r59Dnlgj9CPnWAQBGxg==
-X-Google-Smtp-Source: ACHHUZ42Drc7sO+IRPZGz/5d/uVry/K390ESSzAk3GBhH6r+qU6dbeXUk2WO+qVRetwGo9sXfBaagpUHwTE1H2R+ODo=
-X-Received: by 2002:a67:cd82:0:b0:430:2d04:4691 with SMTP id
- r2-20020a67cd82000000b004302d044691mr5130904vsl.23.1685020787396; Thu, 25 May
- 2023 06:19:47 -0700 (PDT)
+        Thu, 25 May 2023 09:19:59 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D5F18C;
+        Thu, 25 May 2023 06:19:58 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QRpZ35Pkxz49Q76;
+        Thu, 25 May 2023 16:19:55 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1685020795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0qetPBPgd9hVIq6M58pwalvrkrjuv/rSJBgHk7CnDNA=;
+        b=NQbDvhVxiaRGXJjuc+Jd2Ockby8SWIOEsMstnWOA5IhXCMoIrFElwCykOp3L+zm7yjC3cY
+        Zc/ZxrremUTWFoMLrTKD7ZtVZgYvUbqLwoWggnTZkRc9RgnD4stzgPLitp3bo4IrSytg5g
+        a6K1P/vufidWxIRLT29wj5/Gx/ixNpL1vO22RaXuvKEqSmOoda2hFwKK7DqnIqugOUvewa
+        KGh7/EDBCyK2Jumr6W/kxjajCjRj8PDbpdGKhUpEeWGw7PmDKcJys0ykJx2yRzTjROgJrv
+        pYmJMjlYdzQBker9uQbW2shaIQHjR+9a+POQ/RAu86zhGgIN1VNPFiGUTEaCHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1685020795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0qetPBPgd9hVIq6M58pwalvrkrjuv/rSJBgHk7CnDNA=;
+        b=aoVtERg41iMgL2DTOyJXSGRwV7K+2GDB2coIVsnzxBxCJM1T5qJPdgHEM8VXokKQP6AVac
+        FZHWPY703xIl5IgXgMhnltcE8WI+GvRc0PCmsu8cpGRlyFUTp8WAocpJ0rqLzlLSVLl8k+
+        /8N7oh0TZxl/PmajclTT8a6qEmyCdHobC0H0+TS8RAwLa78V2SxWqaoWGpvp2GyERE0owk
+        k11fbNm8pJaFsnfb7NkxIjgm8fR9g1UpNM/hvrMHTrL+rNazB+d3kBOtRQhiO2C/Q4BxcY
+        JXh2bG79SNOUuxfaX1Neb9TawjBjyDo1tH6RJJOunXGpLZZfvzgsBpTElMVsew==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1685020795; a=rsa-sha256;
+        cv=none;
+        b=efqD3vaGzuMwKAX5crbjHumwetM35Wf3CIlqu3vc9agehICnsodaIH9kn2um0WhroiJYQ5
+        usexy3uEPSzkIUoCyvfeed17Un/uE+WRdWg22XaC4z4N0iPZrLMQAaZrpr1qJ+ZF7c++cd
+        L5FKqTtMjiccuc8QZGghS0NBCxaoKB19NBpLs+IHCLr2tvwgy4ScjsvWI/9hcD3IkRgv38
+        zn+cGrxUXQu+uturY8ca20qAU1sc31M09LEnX8wZA3z+73efIXBYefQ1lwI/0kAviH4+YO
+        ZJFzLS+RxWaL4379SLh+isKa94hmQVjcNCslU4h/E4uUu8gOTrTLJkiXU+kCEg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 16BBE634C91;
+        Thu, 25 May 2023 16:19:55 +0300 (EEST)
+Date:   Thu, 25 May 2023 16:19:54 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joe Tessler <jrt@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
+Message-ID: <ZG9ger4WE2VWoVEF@valkosipuli.retiisi.eu>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <98a77653-ec58-56c4-9893-3b424f67c87e@linaro.org>
+ <5afcec8b-b8f6-35b0-278a-5de185e4a7a2@xs4all.nl>
+ <ZG9XJCD98VWjGjTN@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <20230516134447.GB30894@willie-the-truck>
-In-Reply-To: <20230516134447.GB30894@willie-the-truck>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 25 May 2023 18:49:36 +0530
-Message-ID: <CA+G9fYtZjGomLjDi+Vf-hdcLpKPKbPmn4nwoPXvn24SG2hEJMg@mail.gmail.com>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
-To:     Will Deacon <will@kernel.org>
-Cc:     broonie@kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZG9XJCD98VWjGjTN@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+Hi folks,
 
-On Tue, 16 May 2023 at 19:14, Will Deacon <will@kernel.org> wrote:
->
-> Hi Naresh,
->
-> On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
-> > Following kernel BUG noticed while running selftests arm64 fp-stress
-> > running stable rc kernel versions 6.1.29-rc1 and 6.3.3-rc1.
->
-> Is there a known-good build so that we could attempt a bisection?
+On Thu, May 25, 2023 at 03:40:04PM +0300, Sakari Ailus wrote:
+> Hi Hans,
+> 
+> On Sat, May 13, 2023 at 11:57:33AM +0200, Hans Verkuil wrote:
+> > On 12/05/2023 18:35, Krzysztof Kozlowski wrote:
+> > > On 12/03/2023 14:12, Krzysztof Kozlowski wrote:
+> > >> The driver can match only via the DT table so the table should be always
+> > >> used and the of_match_ptr does not have any sense (this also allows ACPI
+> > >> matching via PRP0001, even though it might not be relevant here).
+> > >>
+> > >>   drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
+> > >>
+> > >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > >> ---
+> > > 
+> > > Hans, Sakari,
+> > > 
+> > > Can you pick up the patchset? There was positive feedback:
+> > > https://patchwork.linuxtv.org/project/linux-media/patch/20230312131318.351173-1-krzysztof.kozlowski@linaro.org/
+> > > 
+> > > but it seems it was not applied.
+> > 
+> > I see it is delegated to Sakari in patchwork and marked Under Review, but I don't
+> > see a corresponding pull request for this series.
+> > 
+> > Sakari, did something go wrong?
+> 
+> I spotted this as Hans notified me in IRC, I wasn't cc'd. Apologies for
+> this --- I intended to take these but I think I must have missed something
+> important in the process. I'll take them now.
+> 
+> Thanks.
 
-[ Sorry for the delay ]
+This no longer applied cleanly. Mostly there was fuzz near .of_match_table
+changes as probe_new (and remove_new?) changes have been recently merged.
+There were other issues as well, I marked a few patches in the set "not
+applicable" as other patches had already done equivalent changes earlier.
 
-Since this problem is intermittent, It is not easy to bisect.
+There were substance-changing changes in the 20th patch, replied to the
+disuccsion there.
 
-On Linux next this fp-stress BUG: has been happening *intermittently* from
-next-20230314 dated March 14, 2023.
+I've pushed the result here and intend to send PR to Mauro soon if there
+are no issues:
 
-On Linux stable-rc it started happening on 6.3.2-rc1 and 6.1.28-rc2.
+<URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=of-match-ptr>
 
-Here is the proof showing the intermittent occurance on Linux next,
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230518/testrun/17066471/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/?page=3
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230518/testrun/17066471/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/?page=2
-  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230518/testrun/17066471/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/?page=1
+-- 
+Kind regards,
 
-Here is the proof showing the intermittent occurance on stable-rc 6.3 and 6.1.
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3-rc4-1628-g48aa7b4284af/testrun/16730800/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/
-  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.22-1202-g2b7e1f92aa55/testrun/16814751/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/
-
-- Naresh
+Sakari Ailus
