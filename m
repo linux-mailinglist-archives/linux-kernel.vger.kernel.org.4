@@ -2,240 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AF571054A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8EF710553
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjEYF0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 01:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S233606AbjEYFa5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 01:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjEYF0r (ORCPT
+        with ESMTP id S229885AbjEYFa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 01:26:47 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B1997;
-        Wed, 24 May 2023 22:26:46 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ONabua002556;
-        Wed, 24 May 2023 22:26:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=SZI2zY855EC3k4KM8ft0/FSmCJ/ACu6163H81bk5lLk=;
- b=W38qm2Dg1GX7L42adYd2WQtLHogvViCcirsLYMCqXa8Jd3h/jVC7i30lI8gK7ZM8TGhB
- 5Zt+wlt8PSboNCG0A0fnms88QYMADUZZvD2zw8vK8LoeEiotesW9j7jPAJaIZJvFYX6f
- 8h6UPAhn9zQKKTtVV77eGdq7odYlx+4K/cyevBYs7x+/Meh3yqq+h1T6KX7tUoCB0nkh
- kdk6P2sUwiCxUOAmV7VGJ2qdjh+v3uFtZNJFeIjTMahKBjYqhIFeJUeKl9A4dU1g/0WI
- 5Q25GGjtw6RFOuMBEthE6vlNemM0uf5km3Zw9NJL/gMcy68F72kYGYLU/W6Ub6JJmPaR Pg== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qscws01u9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 22:26:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DBnZGm92O7B7OPVHHzRzZ9qrFFfhxC1z8y0VQkAacaE3254EvHlDs5WS45ecKCdNNgSy3kvvYJQzTo+jyhmb2xj9Nj7AQHZbRV2rSW3FyOQnkhVwmfoGiaUqlGQH70ZdIxiQu1Gl4z2e2u5/9zO/4//ntutmP+1e1V98Ym8U0D8aFBoGEc2NvXBWqcb4ZnohjW2tHkPOTxJg44FlFS1tfDhekG7iSs9brbaErN9Yn8OMu5hBXi/YIpUHA9jGBXESHh+iQYG6McQXhBTciQlTbm1UGNXulOpEC1/sH/tvPGJDxRoQlNCLxr2qVrWwdCVzVhn3ohMTPZHUB6iNt/xV/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SZI2zY855EC3k4KM8ft0/FSmCJ/ACu6163H81bk5lLk=;
- b=H+Dnvkg5gtlsZo1JOc2cWVoL8puXQ/+ToQcYR1TNzxRsCwaieJWAkm4ZenRrCqJDHJ47qUPhT+BW9vM8KxsP2Vp/MisTwa3vtCFJrQONYBjSqMRrq4uCidYIMwijyidTlS9y0l6MtsgUIu0xZo6ewNxyt8ZUmQUM7BTCwDPy4O9EfsRJ1BfKDC2GnWZt4j8oZ5RcDdxtvScYnCfUnCLOAV0dNC2OJbd0Z9D9RsFPnp2M3ak1NnEZek/YqE1JMmnRK6Hxd3yx0ZC0QfKkwLpNYZM/f1Nabk+Kgy9+3PeyeLyIZrkiIzh1EWpb9s0N8haZEyygNstHmqwL/5eRnvgGUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA0PR15MB4030.namprd15.prod.outlook.com (2603:10b6:806:88::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Thu, 25 May
- 2023 05:26:35 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0%5]) with mapi id 15.20.6433.016; Thu, 25 May 2023
- 05:26:35 +0000
-Message-ID: <26c90595-f45e-a813-d538-0892c3ef2424@meta.com>
-Date:   Wed, 24 May 2023 22:26:32 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH bpf-next] bpf: Export rx queue info for reuseport ebpf
- prog
-Content-Language: en-US
-To:     Joe Damato <jdamato@fastly.com>, bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, edumazet@google.com, martin.lau@linux.dev,
-        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, jolsa@kernel.org, haoluo@google.com
-References: <20230525033757.47483-1-jdamato@fastly.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230525033757.47483-1-jdamato@fastly.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR01CA0071.prod.exchangelabs.com (2603:10b6:a03:94::48)
- To SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+        Thu, 25 May 2023 01:30:56 -0400
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E4C9C;
+        Wed, 24 May 2023 22:30:54 -0700 (PDT)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-456fe3597bdso113104e0c.0;
+        Wed, 24 May 2023 22:30:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684992653; x=1687584653;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Xh0Vn9KzZCtUCAw6GpkLdF92gEyREy+XoFZlbU+VHA=;
+        b=QVzLW81k2zEPME0SjSKY2AUhoNqcmqObC+MO/WJ/+4WlVoec+DJ9azEEpju6fJYdn5
+         Ny+VyUWNURdJ4ae1cz25aT/KojfTPNRKx2Y9i2YOVHIP/oLYbfB4gA4l/Bghj1/aRs1n
+         H39zjloyyLbF2rA0/oltUObhlvXFUpI6LNO650EtwxegyKYQHpPgpniaiDcEEPfMHACv
+         Jow8llcY/+Ox8LdL1MISGR3EDWyNfurNXQ3X/mWT8kxPdKsHRiG1N6JgBEGo5qxk2Y2Y
+         eNh9yVYvkos8PThV5xcFIIS7AumzHJ7NSBcJ59Lwhys02by4Oj7RhTQcLXAa13msy63F
+         eRZA==
+X-Gm-Message-State: AC+VfDx1vtfhSpmiSV9APNJqFqQRfKGcLxdWNdQedMTmJdIjCiKegxW2
+        iWS9nJLNQd7ThiW6tIq8uhJHvHi3g6aa/NCb3tU=
+X-Google-Smtp-Source: ACHHUZ4gM+e0+iu5fU2ScDoza6sA0PdTWhkDFpjCnW25ahJB3HG/1nvz/Gj7cba5CyoutlltqNRnrDprrap2m9xtw/w=
+X-Received: by 2002:a1f:45cf:0:b0:44f:c1a7:ceff with SMTP id
+ s198-20020a1f45cf000000b0044fc1a7ceffmr581404vka.6.1684992653502; Wed, 24 May
+ 2023 22:30:53 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SA0PR15MB4030:EE_
-X-MS-Office365-Filtering-Correlation-Id: 339db506-e3c5-4c16-ef29-08db5ce09b60
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0o9GY5XJRjRvHOseQgynJMcX4H0nhyzNdba/reiN8r4adSFZjqUuENexXpCbbh8repRQc075irDG1bV8QMYhgaBX7z2FG3kCFq/3TCEl+y/RORFDJT2ng1Wue+92udCmUMdpyXC9LN0igkSC0PJ2p+hToEDLXF7bBR/VPF4oP+k9c67/dvUf1dk59E+oT9mQhS1uEYDpNzmcJ6avQDlafSj3r6vl89ROogKhwXGFf2D9c7f8HP1Xu5qW5zvVYqaysN+f+yxCqwd80U4OB4y/Vrx7nRwl72Z+2GimOp4/eDcXLzKNLjfsSlyfZt6qfnV6c9qAaLVN0B3Q9s2tUxoElXSv82pc+R1TKMpJiguoOgbQ7DW4D6bUvCl3VKDLHHsEfPKXH0d565g83kowRsvJdPaazZCzTcT7oYekjzYEF2k4ePLWJDN3kLm8glyRcOlhWu2pffeZ5rEUPpBglHNshW8K9mecLcOlD5EZDryZUs3w7tzw13HzMMg7zrtSt9xHZssKCYJlGlPghMd9Eu3DKKu8zIGZE3srY+5ZaqmIeKJX4gUnE2aZ+YUhCsz00fAcv+7gC2buUGHvxHseqT9CHfKzm+2NFfqNViuZbP5vTGtaIxsghRTuAAwgezUlSY/XYlu1e7gdQt65jdUObT67mQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(376002)(396003)(39860400002)(451199021)(2906002)(2616005)(83380400001)(186003)(36756003)(31696002)(86362001)(38100700002)(6666004)(316002)(6486002)(41300700001)(8936002)(7416002)(8676002)(5660300002)(478600001)(31686004)(66556008)(66476007)(66946007)(4326008)(6512007)(53546011)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkNVSm9sWFdwcHBaYkRTdmVKRENvbnNBcW1URDRmU2hwNXFDRTFwVEdxU1Y3?=
- =?utf-8?B?Z3VRdDA1cWR4VXp2M3pDcC9PdVlPdlg4Z0NHN1U4TGpiMGh6NE1EdkwwSEpp?=
- =?utf-8?B?VWxvTy9PS2gzOC91S0ZFOG9oaDhlbmY4Nmp6cTI5cUdkYkMycGRTVWFIb3Jo?=
- =?utf-8?B?d2FKMUJNZFRNYm9uekcyUTRmS2NVRmpWb0hETWpBQm9HK3ZPVDRSRWN0WDFr?=
- =?utf-8?B?QlVHbzNjVjRBUlQ3SnNpcXpEK29JWUliQ1NFbDJpb2E5eGtscDlTWXl4Ni9I?=
- =?utf-8?B?TnlvQkxRK3Bna2RjdDdRb1FqVVFmOURMVUszYkphazYvNXdTcjZSN2dlVk1p?=
- =?utf-8?B?eUtwNDZhcVZYa2h3aGVUODhUa1BoZGsvOG5JV1drYjNHQitSdzZaSFRnVWtI?=
- =?utf-8?B?M2twYVVKWDYwMWo5OVYzbkdTem80U1h5TjJSZmVYaysvR0doYUFpeTdYRE9H?=
- =?utf-8?B?aDVrMi9xckJlQUxzSEU2aXV5SExMOXJHbTVEeWVXSmRPeUpDei9RcmwwQnhn?=
- =?utf-8?B?eDdTTTN5ZHRLd0svNVRYcFJmeHJBbUl5bElNOXBDOGVDNzhFbDlvaUFINXdi?=
- =?utf-8?B?ZjJzc0QxbzhvOGdQNm1nb0w3dWFKOFJZZXJabHNCNGRBdDJpUHNYc1lJZDA5?=
- =?utf-8?B?SzFacW9ONTlWb1FWdmE2V2xSRjdIWi9XK21nMEtDRHV4dlVsR0tSK1BBcHI4?=
- =?utf-8?B?bUdiaG9JejhOM3cvWVUyRXRIYmhZVjBiTVlwUzRMQ3dlOVV5NnhuM0RkbHM4?=
- =?utf-8?B?NEt2OGlpWGtQLzQ1V3d5S2hKK2RhTGtGTXVoN1FQZVRkdHE1T1YzQVd0UHZT?=
- =?utf-8?B?VXljRnZkT1hXb3F6bWgxTkhUVUYzbEpCNjRjL1JXUkE3RDI5ZnpyUUtpUzBI?=
- =?utf-8?B?blEzTjNPTGpwNmVENXM1bXB0NXR2K3lKWG82VzQ2S1Rmb3NsWWwvQ1NUSjJC?=
- =?utf-8?B?ZHVZc2pWU0dhTjdMblRzMmtWU1pMUnpoNkN6aWZoYjJQcjV4blRkZVQ4aVdF?=
- =?utf-8?B?TlFQb01ONUhlUllEZHNPdlE3NHJFTldYZHBDQkI4eGxraGpUTWp5QzduN3Ni?=
- =?utf-8?B?bk4rMmFwZnZYcGZ1N2hUTWtIeHEwTjBDSnVqUFJVanREYmhKMHFtYTArdy9p?=
- =?utf-8?B?Tkhiam0wKzlDYnBUM2VCcFBLL3hXSFhuS2p6UjlETCtSczdla1Z4ZnpuQjN4?=
- =?utf-8?B?Qkd5TSsxai96ckxzL3krOGc0Z3hOS1Vza0ZpRi9XcWhkRVZPT0c4SjNxeFhG?=
- =?utf-8?B?ZTVLVVRzUTV5K2JydGZTWERFL0hFUW55MnNxUGVmQmszVDh6NmxaL1h6aDkr?=
- =?utf-8?B?a2RnZzFjdVJ3dkxrSzdWL3ZJV0Zxc2ZBbXFWR2sxc2dIWmovVXNvRlVFamNh?=
- =?utf-8?B?cU1KOWtaSUtlRHJtTXJZSkVwQm5SSGtoMXBXNVV2dFJjQ29tUDRXUjNtUWhS?=
- =?utf-8?B?Q2FGamlTdVVXV3h4cnp4NjVQUVVkTzJweUMyN1FQU3ppWm1Pb2dYZG1UNFE0?=
- =?utf-8?B?MEJwNEw0YTF5UW4vVDBjaDFWeWxzL0VDaUdTRUxadldRY2dYOTZDZ1luQzB2?=
- =?utf-8?B?ZDFhRVR4Y0FNV0I0clNHSzd5NXBCMHBzdGFoa2NpcDVKUlI5dmVVQXFBSEIz?=
- =?utf-8?B?QXdJU2cwVWRueGYwMThQeFRoV0l4TmVPUFViSFF5V25GZmRHN1NCNjZtZWUy?=
- =?utf-8?B?OXJQVytLQWt2Q3JlQjJPVkFaL2lUQkhuU1RScVgvRVRtVWtYNXVnTEF2VEpR?=
- =?utf-8?B?Q0RRQ3Y2Y2kwRi81QVJrNlRiNnNWUmJubU9DV2Uvbnp6TVU1bUVhMFpPRlRs?=
- =?utf-8?B?bUkwNk0vWGZ0T3Z3ckd6dUVoOVozaWpPbjdkOU81aGdxMGFCenplVzVuKzhW?=
- =?utf-8?B?NE5oT2xiYkh6RjhMVnQyanV1Q25KeHdvcEYrajNabE1TcE5OTmR2WE5BT0FD?=
- =?utf-8?B?VzF2dkdwcFdrc2dkY0JlUlZyZnpCMmFFaGlScHhqYitoWGdjcEtHQnRkZUJR?=
- =?utf-8?B?R3NrbjM0MXB4MDVBNXlmb21vVzl6MnFYZ3ZheG11QXlURlBzVGhpSWVEYy9h?=
- =?utf-8?B?ZkhBUWR3ZTBBRzNEL0VRMVArbWhFSnErQTg4NUVkVkhEMjJiY1pxRGxHVkRs?=
- =?utf-8?B?eTRZQTlBSFRiNEpGZHRBZVBBRnpOMHRPY3ZhcWhoV21RQUNCNWF5cmJXMi94?=
- =?utf-8?B?R0E9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 339db506-e3c5-4c16-ef29-08db5ce09b60
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 05:26:35.3893
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 20ixFqtgCwynoN4a2VbznZc4nzrijoM0yaBNQ8xM29x29vW5bQ+BmwiUk6hWKetF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB4030
-X-Proofpoint-GUID: 75UubAPUV-fP-WX3uUPGDXUQ8s6jC3s5
-X-Proofpoint-ORIG-GUID: 75UubAPUV-fP-WX3uUPGDXUQ8s6jC3s5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_02,2023-05-24_01,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230524221831.1741381-1-irogers@google.com> <20230524221831.1741381-10-irogers@google.com>
+In-Reply-To: <20230524221831.1741381-10-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 24 May 2023 22:30:41 -0700
+Message-ID: <CAM9d7ci21E+BFHPtbx4iO=pcgs2Y7ZCCVsjD-b5OWMdPLb0-6A@mail.gmail.com>
+Subject: Re: [PATCH v3 09/35] perf evlist: Propagate user CPU maps
+ intersecting core PMU maps
+To:     Ian Rogers <irogers@google.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ming Wang <wangming01@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ian,
 
+On Wed, May 24, 2023 at 3:19 PM Ian Rogers <irogers@google.com> wrote:
+>
+> The CPU map for a non-core PMU gives a default CPU value for
+> perf_event_open. For core PMUs the CPU map lists all CPUs the evsel
+> may be opened on. If there are >1 core PMU, the CPU maps will list the
+> CPUs for that core PMU, but the user_requested_cpus may contain CPUs
+> that are invalid for the PMU and cause perf_event_open to fail. To
+> avoid this, when propagating the CPU map for core PMUs intersect it
+> with the CPU map of the PMU (the evsel's "own_cpus").
+>
+> Add comments to __perf_evlist__propagate_maps to explain its somewhat
+> complex behavior.
 
-On 5/24/23 8:37 PM, Joe Damato wrote:
-> BPF_PROG_TYPE_SK_REUSEPORT / sk_reuseport ebpf programs do not have
-> access to the queue_mapping or napi_id of the incoming skb. Having
-> this information can help ebpf progs determine which listen socket to
-> select.
-> 
-> This patch exposes both queue_mapping and napi_id so that
-> sk_reuseport ebpf programs can use this information to direct incoming
-> connections to the correct listen socket in the SOCKMAP.
-> 
-> For example:
-> 
-> A multi-threaded userland program with several threads accepting client
-> connections via a reuseport listen socket group might want to direct
-> incoming connections from specific receive queues (or NAPI IDs) to specific
-> listen sockets to maximize locality or for use with epoll busy-poll.
-> 
-> Signed-off-by: Joe Damato <jdamato@fastly.com>
+Thanks for tackling this.  There are many assumptions on this code
+which make this code hard to understand.  I think we need to list
+all possible cases and make the logic as simple as possible.
+
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->   include/uapi/linux/bpf.h |  2 ++
->   net/core/filter.c        | 10 ++++++++++
->   2 files changed, 12 insertions(+)
-> 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 9273c654743c..31560b506535 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -6286,6 +6286,8 @@ struct sk_reuseport_md {
->   	 */
->   	__u32 eth_protocol;
->   	__u32 ip_protocol;	/* IP protocol. e.g. IPPROTO_TCP, IPPROTO_UDP */
-> +	__u32 rx_queue_mapping; /* Rx queue associated with the skb */
-> +	__u32 napi_id;          /* napi id associated with the skb */
->   	__u32 bind_inany;	/* Is sock bound to an INANY address? */
->   	__u32 hash;		/* A hash of the packet 4 tuples */
+>  tools/lib/perf/evlist.c | 25 ++++++++++++++++++++-----
+>  1 file changed, 20 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+> index 81e8b5fcd8ba..b8b066d0dc5e 100644
+> --- a/tools/lib/perf/evlist.c
+> +++ b/tools/lib/perf/evlist.c
+> @@ -36,18 +36,33 @@ void perf_evlist__init(struct perf_evlist *evlist)
+>  static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
+>                                           struct perf_evsel *evsel)
+>  {
+> -       /*
+> -        * We already have cpus for evsel (via PMU sysfs) so
+> -        * keep it, if there's no target cpu list defined.
+> -        */
 
-This won't work. You will need to append to the end of data structure
-to keep it backward compatibility.
+So basically this code is only needed when the user specified a cpu list.
+Otherwise evsels can use their own cpus.  But it's a kind of sad that
+libperf does not have a notion of PMU (with a cpu map) yet.
 
-Also, recent kernel has a kfunc bpf_cast_to_kern_ctx() which converts
-a ctx to a kernel ctx and you can then use tracing-coding-style to
-access those fields. In this particular case, you can do
+I think we have the following cases.  Please tell me if I miss some.
 
-    struct sk_reuseport_kern *kctx = bpf_cast_to_kern_ctx(ctx);
+1. non-hybrid core PMU: It used to not have a cpu map, but you added it
+   in this patchset to cover all (online) CPUs.  So it'd be ok to treat them as
+   same as the hybrid PMUs.
 
-We have
+2. hybrid core PMU: It has a cpu map to cover possible CPUs and the
+   user requested cpu map should be intersected with its map.
 
-struct sk_reuseport_kern {
-         struct sk_buff *skb;
-         struct sock *sk;
-         struct sock *selected_sk;
-         struct sock *migrating_sk;
-         void *data_end;
-         u32 hash;
-         u32 reuseport_id;
-         bool bind_inany;
-};
+3. uncore PMU: It has a cpu map to indicate CPUs to handle event
+   settings but it's allowed to read the event from other CPUs (at least
+   for Intel CPUs).  That means it can just use the user request cpu map.
 
-through sk and skb pointer, you should be access the fields presented in
-this patch. You can access more fields too.
+4. dummy event: It can be marked as system-wide to get the sideband
+   events from all CPUs.  Then it should ignore the user requested cpu
+   map.  Otherwise it should be treated as other events.
 
-So using bpf_cast_to_kern_ctx(), there is no need for more uapi changes.
-Please give a try.
+5. tool event: It's used for perf stat and has a hardcoded cpu map for
+   CPU 0.  Not sure if it can accept other CPUs but it seems we can ignore
+   the user requested cpu map.
 
->   	/* When reuse->migrating_sk is NULL, it is selecting a sk for the
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 968139f4a1ac..71826e1ef7dc 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -11134,6 +11134,8 @@ sk_reuseport_is_valid_access(int off, int size,
->   	case bpf_ctx_range(struct sk_reuseport_md, ip_protocol):
->   	case bpf_ctx_range(struct sk_reuseport_md, bind_inany):
->   	case bpf_ctx_range(struct sk_reuseport_md, len):
-> +	case bpf_ctx_range(struct sk_reuseport_md, rx_queue_mapping):
-> +	case bpf_ctx_range(struct sk_reuseport_md, napi_id):
->   		bpf_ctx_record_field_size(info, size_default);
->   		return bpf_ctx_narrow_access_ok(off, size, size_default);
->   
-> @@ -11183,6 +11185,14 @@ static u32 sk_reuseport_convert_ctx_access(enum bpf_access_type type,
->   		SK_REUSEPORT_LOAD_SKB_FIELD(protocol);
->   		break;
->   
-> +	case offsetof(struct sk_reuseport_md, rx_queue_mapping):
-> +		SK_REUSEPORT_LOAD_SKB_FIELD(queue_mapping);
-> +		break;
-> +
-> +	case offsetof(struct sk_reuseport_md, napi_id):
-> +		SK_REUSEPORT_LOAD_SKB_FIELD(napi_id);
-> +		break;
-> +
->   	case offsetof(struct sk_reuseport_md, ip_protocol):
->   		SK_REUSEPORT_LOAD_SK_FIELD(sk_protocol);
->   		break;
+6. other event: No restrictions.  It can use the user requested cpu map.
+
+
+>         if (evsel->system_wide) {
+> +               /* System wide: set the cpu map of the evsel to all online CPUs. */
+>                 perf_cpu_map__put(evsel->cpus);
+>                 evsel->cpus = perf_cpu_map__new(NULL);
+> +       } else if (evlist->has_user_cpus && evsel->is_pmu_core) {
+> +               /*
+> +                * User requested CPUs on a core PMU, ensure the requested CPUs
+> +                * are valid by intersecting with those of the PMU.
+> +                */
+> +               perf_cpu_map__put(evsel->cpus);
+> +               evsel->cpus = perf_cpu_map__intersect(evlist->user_requested_cpus, evsel->own_cpus);
+>         } else if (!evsel->own_cpus || evlist->has_user_cpus ||
+> -                  (!evsel->requires_cpu && perf_cpu_map__empty(evlist->user_requested_cpus))) {
+> +               (!evsel->requires_cpu && perf_cpu_map__has_any_cpu(evlist->user_requested_cpus))) {
+> +               /*
+> +                * The PMU didn't specify a default cpu map, this isn't a core
+> +                * event and the user requested CPUs or the evlist user
+> +                * requested CPUs have the "any CPU" (aka dummy) CPU value. In
+> +                * which case use the user requested CPUs rather than the PMU
+> +                * ones.
+> +                */
+>                 perf_cpu_map__put(evsel->cpus);
+>                 evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+>         } else if (evsel->cpus != evsel->own_cpus) {
+> +               /*
+> +                * No user requested cpu map but the PMU cpu map doesn't match
+> +                * the evsel's. Reset it back to the PMU cpu map.
+> +                */
+
+Not sure if it actually happens.
+
+Thanks,
+Namhyung
+
+
+>                 perf_cpu_map__put(evsel->cpus);
+>                 evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
+>         }
+> --
+> 2.40.1.698.g37aff9b760-goog
+>
