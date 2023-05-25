@@ -2,80 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE1F710752
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D429B710754
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239780AbjEYI2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S239838AbjEYI3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235794AbjEYI2I (ORCPT
+        with ESMTP id S239793AbjEYI3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:28:08 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325101A6;
-        Thu, 25 May 2023 01:28:04 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P6ixq8022429;
-        Thu, 25 May 2023 08:27:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vy9UPl4NiNVH0AX5bBHsduqug1f+gXah2Heu93Csg7g=;
- b=Nriszx96ERuP/Wh8ZxRgE9KMzFjMlBUuvHVqXYUxMrlwoEQ+ot4Funm+wFwNF2QXaEPV
- +paGMvSmrUCnlCGU+GhhB/88mFoPA0p37gcqtjPOeQ6VId7RKNY3PTwUnic89fVcjzSY
- E0/+sO+araEfThuVU4H6r/tTOWivo60hoelMVz3lZ9sOQjKlQuvapjWLtoh+sIMvq2G+
- D9kYuBSj751Y9BEVijRari6pGzfXptsZioDIqDypNQYOeXyfv0CIux5AYV8o3GDMgT5R
- pd3JwF2pRItZR44+rFfTA8MAXsizFhWngmnjzJ5MLPhuhllJ3+ZCkYG8L+rKV1RmF/S4 /g== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsywfrhe7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 08:27:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34P8RspJ018244
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 08:27:54 GMT
-Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 01:27:52 -0700
-Message-ID: <05ff6015-aecf-8fb4-ee29-ea7b37060a13@quicinc.com>
-Date:   Thu, 25 May 2023 13:57:50 +0530
+        Thu, 25 May 2023 04:29:17 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4C3186;
+        Thu, 25 May 2023 01:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685003356; x=1716539356;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QHA0PUM2kozuFhevzuFcZbE8+0O6nv9jDPUSc6oHy+0=;
+  b=Oa/X3pAI5cc/rRPJSSM1MKyWZ2WWWogCuk8mwtwS6mHLGtfyfb2cqvUh
+   xOXZnEnjS/rx4AcOOD5yBnsSci8AWSHs7uHlyrgUrd9CweWYH8oc4zPjz
+   yc4eKOUeXiKtq6OLcIyhwHfPGzu5v4GUG0j/HIRcO8EVooQjXzEV4VY53
+   0AzQFZZMcGgm6P3fyqXITxCFLLeDky37/9v8bwmGhbt7E4q/lk1y16J6e
+   d/osCyYRcpaNVnSsM3YxyxJ/xqu1SAYJKGE/Kh2dFhS6EN3xaFruyIt1j
+   UBUQySyii+c8iQ0EXt35smTv/uVYN64+FmAulk3COfMFhL+Wr9YqOa71O
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338400398"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="338400398"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 01:29:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="707914632"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="707914632"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.251.208.63])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 01:29:12 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH V3 0/1] perf tools: Allow config terms with breakpoints
+Date:   Thu, 25 May 2023 11:29:01 +0300
+Message-Id: <20230525082902.25332-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1684936207-23529-1-git-send-email-quic_prashk@quicinc.com>
- <64825178-2310-8c8a-2ed9-4ae14a46915e@collabora.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <64825178-2310-8c8a-2ed9-4ae14a46915e@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hgcF2X_tk-HtLij60r3vRdzHCDARtF_o
-X-Proofpoint-ORIG-GUID: hgcF2X_tk-HtLij60r3vRdzHCDARtF_o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_03,2023-05-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- bulkscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
- malwarescore=0 mlxlogscore=658 impostorscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250069
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,35 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
+
+Here is a patch (V3) to the event parser for breakpoint events.
+I am not that familiar with flex / bison, but it seemed to
+need trailing context to stop the mem event colon and slash
+delimiters from getting mixed up with delimiters for config
+terms or event modifiers.  Please look closely at that.
 
 
-On 25-05-23 01:37 pm, AngeloGioacchino Del Regno wrote:
-> Il 24/05/23 15:50, Prashanth K ha scritto:
->> Currently if we bootup a device without cable connected, then
->> usb-conn-gpio won't call set_role() since last_role is same as
->> current role. This happens because during probe last_role gets
->> initialized to zero.
->>
->> To avoid this, added a new constant in enum usb_role, last_role
->> is set to USB_ROLE_UNKNOWN before performing initial detection.
->>
->> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection 
->> detection driver")
->> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> 
-> There's an issue with drivers/usb/cdns3/core.c as pointed out by the
-> test robot; the solution is to handle `default` in the switch, I'd say
-> that it would be safe to handle it as
-> 
->      default:
->          break;
-> 
-> after solving that:
-> 
-> Reviewed-by: AngeloGioacchino Del Regno 
-> <angelogioacchino.delregno@collabora.com>
+Changes in V3:
 
-Yea sure, thanks for the suggestion Agnelo
+      Add Ian's Reviewed-by
+      Re-base
 
-Regards,
-Prashanth K
+Changes in V2:
+
+      Add comments to tools/perf/util/parse-events.l
+      Add a test for 2 mem events back to back with config terms
+
+
+Adrian Hunter (1):
+      perf tools: Allow config terms with breakpoints
+
+ tools/perf/tests/parse-events.c | 157 ++++++++++++++++++++++++++++++++++++++++
+ tools/perf/util/parse-events.c  |  23 +++++-
+ tools/perf/util/parse-events.h  |   6 +-
+ tools/perf/util/parse-events.l  |  23 +++++-
+ tools/perf/util/parse-events.y  |  42 ++++++-----
+ 5 files changed, 224 insertions(+), 27 deletions(-)
+
+
+Regards
+Adrian
