@@ -2,106 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4286A7107AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC6B7107B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240411AbjEYIgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
+        id S239989AbjEYIhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240167AbjEYIgL (ORCPT
+        with ESMTP id S240053AbjEYIhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:36:11 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BFC171F;
-        Thu, 25 May 2023 01:35:40 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d604cc0aaso1512572b3a.2;
-        Thu, 25 May 2023 01:35:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685003722; x=1687595722;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XwxYuZAaDrbWvA6fNvvfa3UTwfQ09LwU2WlVlYLVfbE=;
-        b=OI4KQNs0Vu1mrj91oIqkWUzpeXRr0QJ9eEwkadPD2CL2y6GsKvDqvnbWBpG3CNT4Dn
-         r9iDQyKXs1IBFmRDsad/RRGqhQrI2g93M1m0fy/jEMKkJkxb2wHpzUHPaU2q+5RwsDni
-         F3arDPu3mhEBTz5Tfs6YjoPtW9TkCVF/CG0xnJh4P/5WEO0t1W4hlU0MNQLYbTjLhSgP
-         j9gOCSCRTaoXmOib23ugSq1IaY+NVgf8uZUPrSAcpNjz0dNouMuDyff1+Ty41IblF2sW
-         JwcqJvBsYOE3I9zHc2mmIl/MGAwFO/D4RdtL3rNrSLF+dqAqyvamQt4BEEhTJ21wLqfs
-         /J1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685003722; x=1687595722;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XwxYuZAaDrbWvA6fNvvfa3UTwfQ09LwU2WlVlYLVfbE=;
-        b=M0b4W+6HnhSf0etHKyD5B5xFZGgH3dduzkhmHY7akUw7utbnTkHtCgeeLfNxXAKJOn
-         gJtjs8nJWCBEXIwn3TM7JS5uOu0IHI2x/Q/e68C32B5tBI7mBk/O7vPFUy9bpq7MAI8c
-         T8EojQ7gXf/mXq3xvWwMyJcajpvj7UuUMbhfFfNCwyQg8AquS4vcfmSNnrF7sQWPnpRi
-         p+3ICwfDCt7nbIFNYpWfm/Bc9oZH9iyGf5XyZ/kAlJ1c4PGYNpgxjd+52hBrRf+EvTiW
-         6vdLkJ72FcjKrZpeWvQmjdDxEfLFENa1gYVlBlJnHlnZwG2m34lsMu/xIP8ot2zTQVR4
-         JYjw==
-X-Gm-Message-State: AC+VfDx/F2nmLnGZatmLxwc/RM+0+ZT+CuBVD7AzCLm6pHNSowNE+H5M
-        nDGRAYuYViz1xsFp+7oa1C5a02ewCt0=
-X-Google-Smtp-Source: ACHHUZ4+5SxtRm9CgY7J+ueqXlkL6tT7R6vQIICSqjLkt0XTKenkbef6qa/gd03b1V7gqjhSk0CDxA==
-X-Received: by 2002:a05:6a00:2d09:b0:64f:4019:ec5b with SMTP id fa9-20020a056a002d0900b0064f4019ec5bmr9014927pfb.7.1685003722494;
-        Thu, 25 May 2023 01:35:22 -0700 (PDT)
-Received: from localhost.localdomain (2001-b400-e2ae-cfb3-c8e7-b613-8fc3-c8f3.emome-ip6.hinet.net. [2001:b400:e2ae:cfb3:c8e7:b613:8fc3:c8f3])
-        by smtp.gmail.com with ESMTPSA id x7-20020a056a00270700b0062bc045bf4fsm747951pfv.19.2023.05.25.01.35.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 01:35:21 -0700 (PDT)
-From:   Owen Yang <ecs.taipeikernel@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bob Moragues <moragues@google.com>,
-        Abner Yen <abner.yen@ecs.com.tw>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@google.com>,
-        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
-        Gavin Lee <gavin.lee@ecs.com.tw>,
-        Owen Yang <ecs.taipeikernel@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: [PATCH v1] drivers: pci: quirks: Add suspend fixup for SSD on sc7280
-Date:   Thu, 25 May 2023 16:35:12 +0800
-Message-Id: <20230525163448.v1.1.Id388e4e2aa48fc56f9cd2d413aabd461ff81d615@changeid>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 04:37:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BE11B0;
+        Thu, 25 May 2023 01:36:47 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DAD166003B2;
+        Thu, 25 May 2023 09:35:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685003757;
+        bh=7pF03sbG1gQpLZsg2RNInxN2LKYtcdzK6QIsJAMXv/g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=or4b+YjlguD+Ok8qKhnFHdwGckQy6NcTWyl01QRaSVz0hqajX2Uei8j6Yns//ujKW
+         JtFxYL/WKar+cBspEuFGgzToY8YdeTujFWpiRseDSGoAmCHdYQHpu2W5CxXaiIvNyZ
+         7/YEFPtbco30/XIbLIZNJN9ZXfbThXZcbKFKgthwLK5Md6lvBN23wyN2LhJzwFv9YN
+         jSmN818wUcAIRwNi2cCtWwnvV7fc8EI3WwuyOj3b7gvcSEFLWheMaU3H6/N0VoEnYe
+         VOB1s7NJN4qQZ1y70xHK8a9ySGP2liHWCvMqvTUkzsQ2/WgrPFm8ZPUW+KZ5+M4Fx2
+         DSHa/Bugl1hvg==
+Message-ID: <b732cc5d-f982-dff9-db4c-70bd401d5796@collabora.com>
+Date:   Thu, 25 May 2023 10:35:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: reset: mt8188: add thermal reset
+ control bit
+Content-Language: en-US
+To:     Runyang Chen <runyang.chen@mediatek.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+References: <20230525075011.7032-1-runyang.chen@mediatek.com>
+ <20230525075011.7032-2-runyang.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230525075011.7032-2-runyang.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement this workaround until Qualcomm fixed the
- correct NVMe suspend process.
+Il 25/05/23 09:50, Runyang Chen ha scritto:
+> To support reset of infra_ao, add the index of infra_ao reset of thermal
+> for MT8188.
+> 
+> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
----
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
- drivers/pci/quirks.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index f4e2a88729fd..b57876dc2624 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5945,6 +5945,16 @@ static void nvidia_ion_ahci_fixup(struct pci_dev *pdev)
- }
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NVIDIA, 0x0ab8, nvidia_ion_ahci_fixup);
- 
-+/* In Qualcomm 7c gen 3 sc7280 platform. Some of the SSD won't enter
-+ * the correct ASPM state properly. Therefore. Implement this workaround
-+ * until Qualcomm fixed the correct NVMe suspend process*/
-+static void phison_suspend_fixup(struct pci_dev *pdev)
-+{
-+	msleep(30);
-+}
-+DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5013, phison_suspend_fixup);
-+DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5015, phison_suspend_fixup);
-+
- static void rom_bar_overlap_defect(struct pci_dev *dev)
- {
- 	pci_info(dev, "working around ROM BAR overlap defect\n");
--- 
-2.17.1
 
