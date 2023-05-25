@@ -2,159 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71FD711491
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612587114E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242217AbjEYSlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
+        id S242166AbjEYSlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242349AbjEYSkV (ORCPT
+        with ESMTP id S242590AbjEYSkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:40:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C799C26A6;
-        Thu, 25 May 2023 11:37:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BC89648FF;
-        Thu, 25 May 2023 18:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCDD7C433D2;
-        Thu, 25 May 2023 18:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039869;
-        bh=NybuOARIeQPHnMskvSwF0Aq/qo48rTF7fRrWfOjNa00=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hWzm8t3cN/XzzfMDry+M2tmuzgELV6fCHu5CX7X7WqK+6ZG/3oSeNb4VGXwQMJqIr
-         sc1KThWIP/4DT/GWFo+GWkMIsaf6qhb/MFqvMopRFcvPSlNVdcmzNEIhFXdiAVLQkS
-         Zpicdzy2OHg2BRqfH91C3VoBthSowcVS864Hb+EBaIkt9lcvADdy8Pc8gXHGI/9kZz
-         RFVk9Ezc8PGNFwd5mRgZzbNJXqlwyCpbEKVT3PRYYRDbmguYtbpQtZl+X7Bi9UwBgd
-         eeEhMOmJvgib9iDH5aODkxRlKwZsr/22jZTHXccruvhlYd2fEfx9Qe95NHhY8zRVqd
-         udQh5u2LTgDCA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, ying.xue@windriver.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net
-Subject: [PATCH AUTOSEL 6.1 30/57] tipc: add tipc_bearer_min_mtu to calculate min mtu
-Date:   Thu, 25 May 2023 14:35:40 -0400
-Message-Id: <20230525183607.1793983-30-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
-References: <20230525183607.1793983-1-sashal@kernel.org>
+        Thu, 25 May 2023 14:40:49 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9067210D2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:38:24 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1abso5362654a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685039753; x=1687631753;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7LfxAZR8t52u4AO1SI5kqvS9LLBpQSJuHQCFUX9OzGQ=;
+        b=g9JfbEY9bxh9EFIPrAmrY+rOfrj+WxxnuJ/cu8Dy8jgAuxdkF7fJ2GQ1kUODnVFDDz
+         +hBd/VU0QaeUH2K+JB3vk6q2kH+7eqi54cjsOTvNUgE5r+nXS3C6PV2JrI6tjglNMGAP
+         h/52M9XN3BDzkpN0nx83F6MNLOM075WaOwoUQGDGM7nsbMETbyvN+F9OJ45JlObjkAoB
+         VlsoaCqwUJr1ckApxtYKGoKag0/TgNw/iB25yH2nu1Y7nHljvljytaCKr5NSJ0pMBcGT
+         QlO0NXoj8ryYtS/Hk5r5LLvG0XWLQeHITLweEidUZmOz49K4Ax6Fy5RV+mBaYxZzNg7S
+         Y7mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685039753; x=1687631753;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7LfxAZR8t52u4AO1SI5kqvS9LLBpQSJuHQCFUX9OzGQ=;
+        b=ahMPVpA9DmNl377appzwywtLDhwbXsDxk2tcYosB/MgAYgWOBZr+UBdd/MiWOz1TWQ
+         8LWybNt0XKLP2eDuw5cUZ5Mo034eBesoePSHiWbKU5n9IBrt+L/oCyxURuqpavfjyirY
+         g9KmGu7xndoXTOp7zTF0uaOsGVl17UZwoP+ub/T3wzj+hMIkMbYxu1BRtIs5ZGdw05as
+         9AnuIvoH+/+l+Tvo9eZNfe+rw/zM5Gzdpu2eztlZhUjwA9EY+CfsuE3pfa1DOEXOwFTY
+         guhgTsSF5TLoGXw1ze/lEMxBoviA6uGRngYJZUPGkdh+7mJ7r66Ooo5agjzQEVv9y7p5
+         BRmw==
+X-Gm-Message-State: AC+VfDzlDMUEqeuQSvEGUO6KAf/P5QgGaYzryd9SvJfVEaTIYemJ+gZh
+        UD2qOsEAN3cW7VyUEkZJhKCiOt2UX0Gxv+h24ZM=
+X-Google-Smtp-Source: ACHHUZ6HhImvycIW5y9vQ9Fb6/lTe4cNBTqpqgaXHCHK9T60sVxAPi6KnVa8R196FbkpqvqTomfV6C0HgBOSM2p6AwU=
+X-Received: by 2002:a17:906:6a0c:b0:96f:3e35:748a with SMTP id
+ qw12-20020a1709066a0c00b0096f3e35748amr3072640ejc.6.1685039753202; Thu, 25
+ May 2023 11:35:53 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230525122837.649627-1-daniel.baluta@oss.nxp.com> <69c2b7cd-f211-47ef-b42a-609ee792de11@sirena.org.uk>
+In-Reply-To: <69c2b7cd-f211-47ef-b42a-609ee792de11@sirena.org.uk>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Thu, 25 May 2023 21:35:40 +0300
+Message-ID: <CAEnQRZAseAmOHLBsBQuW+SqEFbT-pbrjpUiPhSuv8Ww2VoJf_w@mail.gmail.com>
+Subject: Re: [PATCH v2] ASoC: SOF: imx: Add OF machine descriptors for i.MX platforms
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Daniel Baluta <daniel.baluta@oss.nxp.com>,
+        alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
+        lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+On Thu, May 25, 2023 at 8:07=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Thu, May 25, 2023 at 03:28:37PM +0300, Daniel Baluta wrote:
+>
+> > +static struct snd_sof_of_mach sof_imx8_machs[] =3D {
+> > +     {
+> > +             .compatible =3D "fsl,imx8qxp",
+> > +             .drv_name =3D "asoc-simple-card",
+> > +             .sof_tplg_filename =3D "sof-imx8.tplg",
+> > +     },
+> > +     {
+> > +             .compatible =3D "fsl,imx8qm",
+> > +             .drv_name =3D "asoc-simple-card",
+> > +             .sof_tplg_filename =3D "sof-imx8.tplg",
+> > +     },
+> > +     {}
+>
+> It seems a bit sad to be adding simple-card rather than audio-graph-card
+> at this point - is there some great reason for this?
 
-[ Upstream commit 3ae6d66b605be604644d4bb5708a7ffd9cf1abe8 ]
+This is what we used so far and it works pretty well for us.
 
-As different media may requires different min mtu, and even the
-same media with different net family requires different min mtu,
-add tipc_bearer_min_mtu() to calculate min mtu accordingly.
+Is there a plan to deprecate simple-card? And switch to audio-graph-card?
 
-This API will be used to check the new mtu when doing the link
-mtu negotiation in the next patch.
-
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/tipc/bearer.c    | 13 +++++++++++++
- net/tipc/bearer.h    |  3 +++
- net/tipc/udp_media.c |  5 +++--
- 3 files changed, 19 insertions(+), 2 deletions(-)
-
-diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
-index 35cac7733fd3a..0e9a29e1536b7 100644
---- a/net/tipc/bearer.c
-+++ b/net/tipc/bearer.c
-@@ -541,6 +541,19 @@ int tipc_bearer_mtu(struct net *net, u32 bearer_id)
- 	return mtu;
- }
- 
-+int tipc_bearer_min_mtu(struct net *net, u32 bearer_id)
-+{
-+	int mtu = TIPC_MIN_BEARER_MTU;
-+	struct tipc_bearer *b;
-+
-+	rcu_read_lock();
-+	b = bearer_get(net, bearer_id);
-+	if (b)
-+		mtu += b->encap_hlen;
-+	rcu_read_unlock();
-+	return mtu;
-+}
-+
- /* tipc_bearer_xmit_skb - sends buffer to destination over bearer
-  */
- void tipc_bearer_xmit_skb(struct net *net, u32 bearer_id,
-diff --git a/net/tipc/bearer.h b/net/tipc/bearer.h
-index 490ad6e5f7a3c..bd0cc5c287ef8 100644
---- a/net/tipc/bearer.h
-+++ b/net/tipc/bearer.h
-@@ -146,6 +146,7 @@ struct tipc_media {
-  * @identity: array index of this bearer within TIPC bearer array
-  * @disc: ptr to link setup request
-  * @net_plane: network plane ('A' through 'H') currently associated with bearer
-+ * @encap_hlen: encap headers length
-  * @up: bearer up flag (bit 0)
-  * @refcnt: tipc_bearer reference counter
-  *
-@@ -170,6 +171,7 @@ struct tipc_bearer {
- 	u32 identity;
- 	struct tipc_discoverer *disc;
- 	char net_plane;
-+	u16 encap_hlen;
- 	unsigned long up;
- 	refcount_t refcnt;
- };
-@@ -232,6 +234,7 @@ int tipc_bearer_setup(void);
- void tipc_bearer_cleanup(void);
- void tipc_bearer_stop(struct net *net);
- int tipc_bearer_mtu(struct net *net, u32 bearer_id);
-+int tipc_bearer_min_mtu(struct net *net, u32 bearer_id);
- bool tipc_bearer_bcast_support(struct net *net, u32 bearer_id);
- void tipc_bearer_xmit_skb(struct net *net, u32 bearer_id,
- 			  struct sk_buff *skb,
-diff --git a/net/tipc/udp_media.c b/net/tipc/udp_media.c
-index c2bb818704c8f..0a85244fd6188 100644
---- a/net/tipc/udp_media.c
-+++ b/net/tipc/udp_media.c
-@@ -738,8 +738,8 @@ static int tipc_udp_enable(struct net *net, struct tipc_bearer *b,
- 			udp_conf.local_ip.s_addr = local.ipv4.s_addr;
- 		udp_conf.use_udp_checksums = false;
- 		ub->ifindex = dev->ifindex;
--		if (tipc_mtu_bad(dev, sizeof(struct iphdr) +
--				      sizeof(struct udphdr))) {
-+		b->encap_hlen = sizeof(struct iphdr) + sizeof(struct udphdr);
-+		if (tipc_mtu_bad(dev, b->encap_hlen)) {
- 			err = -EINVAL;
- 			goto err;
- 		}
-@@ -760,6 +760,7 @@ static int tipc_udp_enable(struct net *net, struct tipc_bearer *b,
- 		else
- 			udp_conf.local_ip6 = local.ipv6;
- 		ub->ifindex = dev->ifindex;
-+		b->encap_hlen = sizeof(struct ipv6hdr) + sizeof(struct udphdr);
- 		b->mtu = 1280;
- #endif
- 	} else {
--- 
-2.39.2
-
+We could have a look at this if this is the correct direction.
