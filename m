@@ -2,334 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDDE711868
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F70711714
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241717AbjEYUrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
+        id S242658AbjEYTSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233284AbjEYUrI (ORCPT
+        with ESMTP id S242629AbjEYTRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:47:08 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BE23135
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:47:03 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 2GKMq0dJafPgg2GKMqWAgb; Thu, 25 May 2023 21:08:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685041734;
-        bh=3aimI6STBYAt/4Ogpc6VsM7BIeMI40FG7v2LxQxwQAI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=gX3SCaZQg5EPTYI31bq/oR3T1qvCOEQ0li4E60dFzmH/3gGs9KS/wCuubTKkk28mi
-         +hr2M7ZLBCNUu9J3bp9z/FG27zlp+xsEwdAwwb8aTlM96/1TEXvL5SJDpaitriHfGf
-         V4BbYzJpTkT8erO4pVjGlu6cWIxxp4G0/N44VXofnCiFV0kEDn7KTfqyZafiVw87m0
-         Xe/yN8xKuaAkqPfBh/3VpwaFfBXhuh6LuWGgteQAG0g+oTb+l2S2OtEjXMyr/FhT55
-         kdUbxnRt4qXZRpc8Ok8r5Dj8/PHEvvz9aqxis6Oa7gqEm6urhWXadRGZzOIN0J8y0L
-         PCYqOTJsnuFSA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 25 May 2023 21:08:54 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <99737c85-625f-9067-f72c-ddc6822866e2@wanadoo.fr>
-Date:   Thu, 25 May 2023 21:08:46 +0200
+        Thu, 25 May 2023 15:17:41 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8752B30C4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:11:31 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96fbe7fbdd4so183474066b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685041812; x=1687633812;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eh4cbfdCyhS0EN5hFpn5bb4za8o9aZRBv8OgBZOlJKw=;
+        b=YiIhmPvR71OHoZm2T+Llzt2x6VMELGcyPFT+GS293ncOmTm+J2wRnBdKlP4laOhsVv
+         76CjftqYgJ5vorAkp3iyoKmRGjUppfThMfAPq9axLLipOpgIWcP9rZaYsM+mXul4myYi
+         k8EUIp6ybIH3B8b4DnjHkZ7YA+xmbyASrjEza738YM8VErxnz/JEIvWp5soTdYvowrMr
+         oylFhiLu78RTMel556gDm0+9cu3Z3pVPvQHBMcqvNgrOpgEQHTfNwIreol5EsBC5s1bY
+         Sdl41MI96/3KZyaB4wOYKROr5eIU/id9Lhfkhn0xWK+SXE4t/a+1T/JMx0FuZiZLZLTt
+         PGTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685041812; x=1687633812;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eh4cbfdCyhS0EN5hFpn5bb4za8o9aZRBv8OgBZOlJKw=;
+        b=VHHVX4ylHzxiGkg0NvDjDNta5de3BgpxLpMFpHmGI1TUmid2Vwzl+5p3WKJCRRG1XQ
+         ss7HlSXwk9yjxo4HhtTDGAgYu9A0zS3ZDoEf8EPf3+ZqIZzuxVkhF+aC56Cf3nS99f4Y
+         3cminWgSIZom/3HOz1l9JJv/Wjlt2iC/uhJiE8VW0qYtb7bGBXk5oxLqUcwCNcid2Rba
+         yTUpHRowDWhiF7kKPvtTJO1SFy5hvOHk6xIsofWmkbhapz32Ujf3yQVL0IBOafsWfoey
+         /FFvPbZ9Wt9CHHicqf4dKEX1dYRLjR3VQ+FjU+m5PEIqB9qmMypZHNefsSwQ2Ef1l5X7
+         4QRA==
+X-Gm-Message-State: AC+VfDx91zTK0Xh1YS9MEI1cRdgY/fSpqU8zILbBHipL8z7JTU/pRm2p
+        DGI2VYDfbga/3q4YrQRYTN6h8kieCj6N4tUqC/gpmU49yvVU9XcqzXVbXg==
+X-Google-Smtp-Source: ACHHUZ6GSDoBrlec4aAFP7VLgCPJ0eAlQKhGzrak6mlBXvQQ6iTQhzkhTwXJWLIXjPsLC/zq78RScaV5Yi2no+HZqJA=
+X-Received: by 2002:a17:907:2d08:b0:96a:1ec1:2c9f with SMTP id
+ gs8-20020a1709072d0800b0096a1ec12c9fmr3149291ejc.12.1685041812071; Thu, 25
+ May 2023 12:10:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/4] usb: cdns2: Add main part of Cadence USBHS driver
-Content-Language: fr
-To:     pawell@cadence.com
-Cc:     Cliff.Holden@siriusxm.com, Daisy.Barrera@siriusxm.com,
-        biju.das.jz@bp.renesas.com, egtvedt@samfundet.no,
-        gregkh@linuxfoundation.org, herve.codina@bootlin.com,
-        jdelvare@suse.de, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        neal_liu@aspeedtech.com, tony@atomide.com
-References: <20230525054916.243330-1-pawell@cadence.com>
- <20230525054916.243330-3-pawell@cadence.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230525054916.243330-3-pawell@cadence.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
+ <CAJD7tkY0j4xzstf=OCX-k-mujzbXf_nt=H4F5JCZNZ8N1iEEcg@mail.gmail.com> <CA+CLi1gzVop3=kmARn09NKKh6yW=bt9KYrzc0AfXB64J0r-9Ew@mail.gmail.com>
+In-Reply-To: <CA+CLi1gzVop3=kmARn09NKKh6yW=bt9KYrzc0AfXB64J0r-9Ew@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 25 May 2023 12:09:35 -0700
+Message-ID: <CAJD7tkaJAPhHVwepUeiAmSwomNmUKiYUR2gixsvLwHxB6k7UZA@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: shrink until can accept
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        hannes@cmpxchg.org, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 25/05/2023 à 07:49, Pawel Laszczak a écrit :
-> This patch introduces the main part of Cadence USBHS driver
-> to Linux kernel.
-> To reduce the patch size a little bit, the header file gadget.h was
-> intentionally added as separate patch.
-> 
-> The Cadence USB 2.0 Controller is a highly configurable IP Core which
-> supports both full and high speed data transfer.
-> 
-> The current driver has been validated with FPGA platform. We have
-> support for PCIe bus, which is used on FPGA prototyping.
-> 
-> Signed-off-by: Pawel Laszczak <pawell-vna1KIf7WgpBDgjK7y7TUQ@public.gmane.org>
-> ---
->   drivers/usb/gadget/udc/Kconfig              |    2 +
->   drivers/usb/gadget/udc/Makefile             |    1 +
->   drivers/usb/gadget/udc/cdns2/Kconfig        |   11 +
->   drivers/usb/gadget/udc/cdns2/Makefile       |    5 +
->   drivers/usb/gadget/udc/cdns2/cdns2-ep0.c    |  638 +++++
->   drivers/usb/gadget/udc/cdns2/cdns2-gadget.c | 2426 +++++++++++++++++++
->   drivers/usb/gadget/udc/cdns2/cdns2-pci.c    |  149 ++
->   7 files changed, 3232 insertions(+)
->   create mode 100644 drivers/usb/gadget/udc/cdns2/Kconfig
->   create mode 100644 drivers/usb/gadget/udc/cdns2/Makefile
->   create mode 100644 drivers/usb/gadget/udc/cdns2/cdns2-ep0.c
->   create mode 100644 drivers/usb/gadget/udc/cdns2/cdns2-gadget.c
->   create mode 100644 drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-> 
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-> index 83cae6bb12eb..aae1787320d4 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -463,6 +463,8 @@ config USB_ASPEED_UDC
->   
->   source "drivers/usb/gadget/udc/aspeed-vhub/Kconfig"
->   
-> +source "drivers/usb/gadget/udc/cdns2/Kconfig"
-> +
->   #
->   # LAST -- dummy/emulated controller
->   #
-> diff --git a/drivers/usb/gadget/udc/Makefile b/drivers/usb/gadget/udc/Makefile
-> index ee569f63c74a..b52f93e9c61d 100644
-> --- a/drivers/usb/gadget/udc/Makefile
-> +++ b/drivers/usb/gadget/udc/Makefile
-> @@ -42,3 +42,4 @@ obj-$(CONFIG_USB_ASPEED_VHUB)	+= aspeed-vhub/
->   obj-$(CONFIG_USB_ASPEED_UDC)	+= aspeed_udc.o
->   obj-$(CONFIG_USB_BDC_UDC)	+= bdc/
->   obj-$(CONFIG_USB_MAX3420_UDC)	+= max3420_udc.o
-> +obj-$(CONFIG_USB_CDNS2_UDC)	+= cdns2/
-> diff --git a/drivers/usb/gadget/udc/cdns2/Kconfig b/drivers/usb/gadget/udc/cdns2/Kconfig
-> new file mode 100644
-> index 000000000000..310db4788353
-> --- /dev/null
-> +++ b/drivers/usb/gadget/udc/cdns2/Kconfig
-> @@ -0,0 +1,11 @@
-> +config USB_CDNS2_UDC
-> +	tristate "Cadence USBHS Device Controller"
-> +	depends on USB_PCI && ACPI && HAS_DMA
-> +	help
-> +	  Cadence USBHS Device controller is a PCI based USB peripheral
-> +	  controller which supports both full and high speed USB 2.0
-> +	  data transfers.
-> +
-> +	  Say "y" to link the driver statically, or "m" to build a
-> +	  dynamically linked module called "cdns2-pci.ko" and to
+On Thu, May 25, 2023 at 9:53=E2=80=AFAM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
+>
+> On Thu, May 25, 2023 at 2:59=E2=80=AFAM Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> >
+> > Hi Domenico,
+> >
+> > On Tue, May 23, 2023 at 11:50=E2=80=AFPM Domenico Cerasuolo
+> > <cerasuolodomenico@gmail.com> wrote:
+> > >
+> > > This update addresses an issue with the zswap reclaim mechanism, whic=
+h
+> > > hinders the efficient offloading of cold pages to disk, thereby
+> > > compromising the preservation of the LRU order and consequently
+> > > diminishing, if not inverting, its performance benefits.
+> > >
+> > > The functioning of the zswap shrink worker was found to be inadequate=
+,
+> > > as shown by basic benchmark test. For the test, a kernel build was
+> > > utilized as a reference, with its memory confined to 1G via a cgroup =
+and
+> > > a 5G swap file provided. The results are presented below, these are
+> > > averages of three runs without the use of zswap:
+> > >
+> > > real 46m26s
+> > > user 35m4s
+> > > sys 7m37s
+> > >
+> > > With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
+> > > system), the results changed to:
+> > >
+> > > real 56m4s
+> > > user 35m13s
+> > > sys 8m43s
+> > >
+> > > written_back_pages: 18
+> > > reject_reclaim_fail: 0
+> > > pool_limit_hit:1478
+> > >
+> > > Besides the evident regression, one thing to notice from this data is
+> > > the extremely low number of written_back_pages and pool_limit_hit.
+> > >
+> > > The pool_limit_hit counter, which is increased in zswap_frontswap_sto=
+re
+> > > when zswap is completely full, doesn't account for a particular
+> > > scenario: once zswap hits his limit, zswap_pool_reached_full is set t=
+o
+> > > true; with this flag on, zswap_frontswap_store rejects pages if zswap=
+ is
+> > > still above the acceptance threshold. Once we include the rejections =
+due
+> > > to zswap_pool_reached_full && !zswap_can_accept(), the number goes fr=
+om
+> > > 1478 to a significant 21578266.
+> > >
+> > > Zswap is stuck in an undesirable state where it rejects pages because
+> > > it's above the acceptance threshold, yet fails to attempt memory
+> > > reclaimation. This happens because the shrink work is only queued whe=
+n
+> > > zswap_frontswap_store detects that it's full and the work itself only
+> > > reclaims one page per run.
+> > >
+> > > This state results in hot pages getting written directly to disk,
+> > > while cold ones remain memory, waiting only to be invalidated. The LR=
+U
+> > > order is completely broken and zswap ends up being just an overhead
+> > > without providing any benefits.
+> > >
+> > > This commit applies 2 changes: a) the shrink worker is set to reclaim
+> > > pages until the acceptance threshold is met and b) the task is also
+> > > enqueued when zswap is not full but still above the threshold.
+> > >
+> > > Testing this suggested update showed much better numbers:
+> > >
+> > > real 36m37s
+> > > user 35m8s
+> > > sys 9m32s
+> > >
+> > > written_back_pages: 10459423
+> > > reject_reclaim_fail: 12896
+> > > pool_limit_hit: 75653
+> >
+> > Impressive numbers, and great find in general!
+> >
+> > I wonder how other workloads benefit/regress from this change.
+> > Anything else that you happened to run? :)
+> >
+> Hi Yosry,
+>
+> thanks for the quick feedback!
+>
+> Besides stressers, I haven't tested any other actual workload, we don't h=
+ave
+> writeback in production yet so I can't provide any data from there. I was
+> wondering what kind of actual workload I could use to test this on my des=
+ktop,
+> but I couldn't think of anything relevant, I'm open to suggestions though=
+ :)
 
-I'm not expert in module naming, but isn't it cdns2-udc-pci?
+Nothing in mind in particular as well. Perhaps others have ideas.
 
-> +	  force all gadget drivers to also be dynamically linked.
+> > >
+> > > Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool l=
+imit is hit")
+> > > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> > > ---
+> > >  mm/zswap.c | 10 +++++++---
+> > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/mm/zswap.c b/mm/zswap.c
+> > > index 59da2a415fbb..2ee0775d8213 100644
+> > > --- a/mm/zswap.c
+> > > +++ b/mm/zswap.c
+> > > @@ -587,9 +587,13 @@ static void shrink_worker(struct work_struct *w)
+> > >  {
+> > >         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> > >                                                 shrink_work);
+> > > +       int ret;
+> > >
+> > > -       if (zpool_shrink(pool->zpool, 1, NULL))
+> > > -               zswap_reject_reclaim_fail++;
+> > > +       do {
+> > > +               ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > > +               if (ret)
+> > > +                       zswap_reject_reclaim_fail++;
+> > > +       } while (!zswap_can_accept() && ret !=3D -EINVAL);
+> >
+> > One question/comment here about the retry logic.
+> >
+> > So I looked through the awfully convoluted writeback code, and there
+> > are multiple layers, and some of them tend to overwrite the return
+> > value of the layer underneath :(
+> >
+> > For zsmalloc (as an example):
+> > zpool_shrink()->zs_zpool_shrink()->zs_reclaim_page()->zpool_ops.evict()=
+->zswap_writeback_entry().
+> >
+> > First of all, that zpool_ops is an unnecessarily confusing
+> > indirection, but anyway.
+> >
+> > - zswap_writeback_entry() will either return -ENOMEM or -EEXIST on erro=
+r
+> > - zs_reclaim_page()/zbud_reclaim_page() will return -EINVAL if the lru
+> > is empty, and -EAGAIN on other errors.
+> > - zs_zpool_shrink()/zbud_zpool_shrink() will mostly propagate the
+> > return value of  zs_reclaim_page()/zbud_reclaim_page().
+> > - zpool_shrink() will return -EINVAL if the driver does not support
+> > shrinking, otherwise it will propagate the return value from the
+> > driver.
+> >
+> > So it looks like we will get -EINVAL only if the driver lru is empty
+> > or the driver does not support writeback, so rightfully we should not
+> > retry.
+> >
+> > If zswap_writeback_entry() returns -EEXIST, it probably means that we
+> > raced with another task decompressing the page, so rightfully we
+> > should retry to writeback another page instead.
+> >
+> > If zswap_writeback_entry() returns -ENOMEM, it doesn't necessarily
+> > mean that we couldn't allocate memory (unfortunately), it looks like
+> > we will return -ENOMEM in other cases as well. Arguably, we can retry
+> > in all cases, because even if we were actually out of memory, we are
+> > trying to make an allocation that will eventually free more memory.
+> >
+> > In all cases, I think it would be nicer if we retry if ret =3D=3D -EAGA=
+IN
+> > instead. It is semantically more sane. In this specific case it is
+> > functionally NOP as zs_reclaim_page()/zbud_reclaim_page() will mostly
+> > return -EAGAIN anyway, but in case someone tries to use saner errnos
+> > in the future, this will age better.
+> Retrying if ret =3D=3D -EAGAIN seems much nicer indeed, will change it.
+> >
+> > Also, do we intentionally want to keep retrying forever on failure? Do
+> > we want to add a max number of retries?
+> If the drivers guaranteed that zpool_shrink will remove at least an entry
+> from their LRU, the retry wouldn't be needed because the LRU will
+> eventually be emptied. But this is an assumption on the implementation of
 
-[...]
+I don't think any zpool driver can guarantee to writeback at least one
+page. It can fail for reasons beyond their control (e.g. cannot
+allocate a page to decompress to).
 
-> +static void cdns2_ep_tx_isoc(struct cdns2_endpoint *pep,
-> +			     struct cdns2_request *preq,
-> +			     int num_trbs)
-> +{
-> +	struct scatterlist *sg = NULL;
-> +	u32 remaining_packet_size = 0;
-> +	struct cdns2_trb *trb;
-> +	bool first_trb = true;
-> +	dma_addr_t trb_dma;
-> +	u32 trb_buff_len;
-> +	u32 block_length;
-> +	int sg_iter = 0;
+> the zpool, so yes, we could use a max retries. I think that being a sanit=
+y
+> check, it should overshoot the required number of iterations in order to
+> avoid a premature break, what about retrying a max of
+> zswap_stored_pages times?
 
-Not need to init.
+Why is it just a sanity check? Consider a case where the system is
+under extreme memory pressure that the drivers cannot allocate pages
+to decompress to. The drivers would be continuously competing with all
+other allocations on the machine. I think we should give up at some
+point. In any case, you changed the zswap_frontswap_store() to goto
+shrink if !zswap_can_accept(), so next time we try to compress a page
+to zswap we will invoke try again anyway -- perhaps under better
+circumstances.
 
-> +	int sent_len;
-> +	int td_idx = 0;
-> +	int split_size;
-> +	u32 control;
+I think zswap_stored_pages is too much, keep in mind that it also
+includes same-filled pages which are not even stored in the zpool
+drivers. Maybe we should allow a fixed number of failures. If
+zpool_shrink() is successful, keep going until zswap_can_accept().
+Otherwise allow a fixed number of failures before giving up.
 
-[...]
+Maybe we can improve the error codes propagated through the writeback
+code as well to improve the retry logic. For example, if
+zswap_writeback_entry() returns EEXIST then retrying should be
+harmless, but ENOMEM might be harmful. Both of which are propagated as
+EAGAIN from zs_zpool_shrink()/zbud_zpool_shrink().
 
-> +/* Prepare and start transfer for all not started requests. */
-> +static int cdns2_start_all_request(struct cdns2_device *pdev,
-> +				   struct cdns2_endpoint *pep)
-> +{
-> +	struct cdns2_request *preq;
-> +	int ret = 0;
-> +
-> +	while (!list_empty(&pep->deferred_list)) {
-> +		preq = cdns2_next_preq(&pep->deferred_list);
-> +
-> +		ret = cdns2_ep_run_transfer(pep, preq);
-> +		if (ret)
-> +			return ret;
-> +
-> +		list_move_tail(&preq->list, &pep->pending_list);
-> +	}
-> +
-> +	pep->ep_state &= ~EP_RING_FULL;
-> +
-> +	return ret;
-
-Maybe return 0; would be more explicit? (and would remove the "= 0" above)
-
-> +}
-
-[...]
-
-> diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-> new file mode 100644
-> index 000000000000..ab2891c79b5c
-> --- /dev/null
-> +++ b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-> @@ -0,0 +1,149 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Cadence USBHS-DEV controller - PCI Glue driver.
-> + *
-> + * Copyright (C) 2023 Cadence.
-> + *
-> + * Author: Pawel Laszczak <pawell-vna1KIf7WgpBDgjK7y7TUQ@public.gmane.org>
-> + *
-> + */
-> +
-> +#include <linux/pm_runtime.h>
-> +#include <linux/slab.h>
-> +#include <linux/pci.h>
-> +
-> +#include "cdns2-gadget.h"
-> +
-> +#define PCI_DRIVER_NAME		"cdns-pci-usbhs"
-> +#define CDNS_VENDOR_ID		0x17cd
-> +#define CDNS_DEVICE_ID		0x0120
-> +#define PCI_BAR_DEV		0
-> +#define PCI_DEV_FN_DEVICE	0
-> +
-> +static int cdns2_pci_probe(struct pci_dev *pdev,
-> +			   const struct pci_device_id *id)
-> +{
-> +	resource_size_t rsrc_start, rsrc_len;
-> +	struct device *dev = &pdev->dev;
-> +	struct cdns2_device *priv_dev;
-> +	struct resource *res;
-> +	int ret;
-> +
-> +	/* For GADGET PCI (devfn) function number is 0. */
-> +	if (!id || pdev->devfn != PCI_DEV_FN_DEVICE ||
-> +	    pdev->class != PCI_CLASS_SERIAL_USB_DEVICE)
-> +		return -EINVAL;
-> +
-> +	ret = pcim_enable_device(pdev);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "Enabling PCI device has failed %d\n", ret);
-
-Should we bail out in this case?
-
-> +
-> +	pci_set_master(pdev);
-> +
-> +	priv_dev = kzalloc(sizeof(*priv_dev), GFP_KERNEL);
-> +	if (!priv_dev) {
-> +		ret = -ENOMEM;
-> +		goto disable_pci;
-
-Any reason, not to use devm_kzalloc() and manually hanfle kfree() in the 
-error handling path and in the removbe function ?
-
-> +	}
-> +
-> +	dev_dbg(dev, "Initialize resources\n");
-> +	rsrc_start = pci_resource_start(pdev, PCI_BAR_DEV);
-> +	rsrc_len = pci_resource_len(pdev, PCI_BAR_DEV);
-> +
-> +	res = devm_request_mem_region(dev, rsrc_start, rsrc_len, "dev");
-> +	if (!res) {
-> +		dev_dbg(dev, "controller already in use\n");
-> +		ret = -EBUSY;
-> +		goto free_priv_dev;
-> +	}
-> +
-> +	priv_dev->regs = devm_ioremap(dev, rsrc_start, rsrc_len);
-> +	if (!priv_dev->regs) {
-> +		dev_dbg(dev, "error mapping memory\n");
-> +		ret = -EFAULT;
-> +		goto free_priv_dev;
-> +	}
-> +
-> +	priv_dev->irq = pdev->irq;
-> +	dev_dbg(dev, "USBSS-DEV physical base addr: %pa\n",
-> +		&rsrc_start);
-> +
-> +	priv_dev->dev = dev;
-> +
-> +	priv_dev->eps_supported = 0x000f000f;
-> +	priv_dev->onchip_tx_buf = 16;
-> +	priv_dev->onchip_rx_buf = 16;
-> +
-> +	ret = cdns2_gadget_init(priv_dev);
-> +	if (ret)
-> +		goto free_priv_dev;
-> +
-> +	pci_set_drvdata(pdev, priv_dev);
-> +
-> +	device_wakeup_enable(&pdev->dev);
-> +	if (pci_dev_run_wake(pdev))
-> +		pm_runtime_put_noidle(&pdev->dev);
-> +
-> +	return 0;
-> +
-> +free_priv_dev:
-> +	kfree(priv_dev);
-> +
-> +disable_pci:
-> +	pci_disable_device(pdev);
-> +
-> +	return ret;
-> +}
-> +
-> +static void cdns2_pci_remove(struct pci_dev *pdev)
-> +{
-> +	struct cdns2_device *priv_dev = pci_get_drvdata(pdev);
-> +
-> +	if (pci_dev_run_wake(pdev))
-> +		pm_runtime_get_noresume(&pdev->dev);
-> +
-> +	cdns2_gadget_remove(priv_dev);
-> +	kfree(priv_dev);
-
-There is a pci_disable_device() in the error handling path of the probe, 
-but not in the remove function.
-
-Is it on purpose?
-Since pcim_enable_device() is used, is it needed above?
-
-CJ
-
-[...]
-
-> +static struct pci_driver cdns2_pci_driver = {
-> +	.name = "cdns2-pci",
-> +	.id_table = &cdns2_pci_ids[0],
-> +	.probe = cdns2_pci_probe,
-> +	.remove = cdns2_pci_remove,
-> +	.driver = {
-> +		.pm = pm_ptr(&cdns2_pci_pm_ops),
-> +	}
-> +};
-> +
-> +module_pci_driver(cdns2_pci_driver);
-> +MODULE_DEVICE_TABLE(pci, cdns2_pci_ids);
-> +
-> +MODULE_ALIAS("pci:cdns2");
-> +MODULE_AUTHOR("Pawel Laszczak <pawell-vna1KIf7WgpBDgjK7y7TUQ@public.gmane.org>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Cadence CDNS2 PCI driver");
-
+> >
+> > >         zswap_pool_put(pool);
+> > >  }
+> > >
+> > > @@ -1188,7 +1192,7 @@ static int zswap_frontswap_store(unsigned type,=
+ pgoff_t offset,
+> > >         if (zswap_pool_reached_full) {
+> > >                if (!zswap_can_accept()) {
+> > >                         ret =3D -ENOMEM;
+> > > -                       goto reject;
+> > > +                       goto shrink;
+> > >                 } else
+> > >                         zswap_pool_reached_full =3D false;
+> > >         }
+> > > --
+> > > 2.34.1
+> > >
