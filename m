@@ -2,254 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE23F710B3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969A7710B3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240715AbjEYLkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S240901AbjEYLkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240814AbjEYLjt (ORCPT
+        with ESMTP id S241165AbjEYLkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:39:49 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE870E58
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:39:30 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so1316936a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:39:30 -0700 (PDT)
+        Thu, 25 May 2023 07:40:06 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F93DB2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:40:03 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25566708233so1264402a91.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685014770; x=1687606770;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PUDrtObFSBZgAV2FphIxE7ETarjCEzRZSp3iZ5qQ7xU=;
-        b=LW/h5mlzeb+iWkFocmKnDCuTMkpl3bHgnWK23XTWQ0ZyICI20itwciK8Y4Y0lwUQZ2
-         +68u3K/C1tGxAuOGzck/5y1xmFL8pXrvRV+nleeraz7ETUzPtZfDvVEX2g+fF6QjE0Lj
-         1bnv2CDbuJWtrDN58fqRbhuPcQKV1UlisVtd+YSKSZgzptDLBjHHnSl+I/Pc+SHLHwwx
-         NG4OkgNsw5GGMzJbhXDfiFQb2nhXKBUx0XgHtP18yVcntwa1dQBTBFEmWugZPbZebfhk
-         Wd8D50WpybzjWRfoQnbQiUtlIQFHeNTey/IM5F5lBZESIH5pveq6ETEOVvIDive3l/zJ
-         tCvQ==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685014803; x=1687606803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ByO40oJg6gb3zzbEXq+wYWD+I7DW+NPia1sYMNc7ASk=;
+        b=wzKTqdA8wmoYIgybXEBxOHXVk866Ay9b+TbJ5VKIyePUcunvl1IFA7ddr2N3UBDD2x
+         E2wSjwdtMPmpTg+ksEd4/gW6mFQl9XMyz5piZRkWmBXzDyzaaCAk/qIRHzW2xds+qGED
+         nSQn/O4pGHQshZqicaNtC1CCvup/C7c6dcF6lqF0+XVlM4U7zNXoaiBilltdDD7WP9qO
+         KdHlDV2TMEYOED/6cs/7ga0QvwPrh2U9+/88xBEv/tqJ/5nkzeUA70yAfUz3rBMVffrG
+         zI6QvxZU0U8Hvj8q2oldhSaAbzYozNlAEQD7bXMvt1f9u0HUu6Sn9RpuYLQCbBvVNsSb
+         2avA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685014770; x=1687606770;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PUDrtObFSBZgAV2FphIxE7ETarjCEzRZSp3iZ5qQ7xU=;
-        b=g6qepcLoEUjWfZ9SrFq38oMX+3g+NomEgCI+9rsm/LlYc9XB2ZSQcvWtIzAC3we+hq
-         8nVOeq/ydO9GbnYj5LaYz0OUVqI3LLMMfMRquqC3hB1xQgZDQijmy03mvYgy9OOAcKY5
-         LMOopN0BP9nCR6Zjew5yNrONxPIfGgaR7+m5NR5mGo1bG35ytrMBrRYFTLzIp7qXi3vI
-         +hQ9YgYSn0M4PJjbidwEtk1q0JFFa22r+3EFvjjlgcEB79T6cfgOEpHqvopMcEpXy2Z7
-         rEa+ebdJal0EHREU6BkNQIrZp6KTvmQi4QdNojqVze6HVRs0aw8K0GiN6uF3fJZZ4BAJ
-         5fAA==
-X-Gm-Message-State: AC+VfDx6ZvDkg+qqFU604ZjgegUuSxUUW2icHg3DW8LJ/geeP7OoHDE2
-        R3mPsBbMEUoqNU1t5Aysn2201kv+T1+EgJkYo/5J/A==
-X-Google-Smtp-Source: ACHHUZ4+JiqoNvQVvKNyZMGJ8vWo3Bi+H4/d5i2P/2lN35RD/4oagIbG1Q8InsP3EZCDIhydFPcwGbNiu63egbM2uhA=
-X-Received: by 2002:a17:90a:7047:b0:255:ee94:df7 with SMTP id
- f65-20020a17090a704700b00255ee940df7mr1434634pjk.16.1685014769951; Thu, 25
- May 2023 04:39:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685014803; x=1687606803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ByO40oJg6gb3zzbEXq+wYWD+I7DW+NPia1sYMNc7ASk=;
+        b=k9RDdSQX+MnsVmLy2eTSXHbqA9cGupL5mI4KaAe0L9hgzv6nelRqvuUM0TSVeLK+nl
+         2S+4W68GZxnKk/gwQ9BAkY069lkANXQtU90hwxyx3sNLhgs0htkqds5kFpSM/kF5CB1i
+         jVicwfOPqbbbd0N0MgpefUJaWm0Xe1gfrQBQ1AA8H/y23Pcd3UDFtjg0wAqTX2mnS720
+         zzCkibf3JAI6GVraRnHlzR1niZ3nwJmIqyStLnwogvLhasde/OQUimDatd3863HgSdnk
+         KEJfSZcamRQ0VdWvMRfyojbeVGrRuEnJT59SLHxMwEWw0RSEqWmpi4maUBkRVfcvLmpj
+         a9tQ==
+X-Gm-Message-State: AC+VfDwsIzk8vPwit+vWLcHCw/GD+37Ows5lcb+kwmxEcMAzVRYiCFoF
+        FN7OgE3e/jXSp2hQVnKTN+qp8g==
+X-Google-Smtp-Source: ACHHUZ5OdMp2D+FU9x9FyHSTtJJivoQSAPXf0t9QwJh6oGzaqp5K6xCLQk7awHgfJ2T3vEhSaxhMxw==
+X-Received: by 2002:a17:90a:4fa2:b0:255:929c:5166 with SMTP id q31-20020a17090a4fa200b00255929c5166mr1528186pjh.26.1685014802903;
+        Thu, 25 May 2023 04:40:02 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id e18-20020a17090ac21200b00250c1392ed3sm1075402pjt.55.2023.05.25.04.40.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 04:40:02 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q29K3-003iCB-15;
+        Thu, 25 May 2023 21:39:59 +1000
+Date:   Thu, 25 May 2023 21:39:59 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZG9JD+4Zu36lnm4F@dread.disaster.area>
+References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+ <ZGb2Xi6O3i2pLam8@infradead.org>
+ <ZGeKm+jcBxzkMXQs@redhat.com>
+ <ZGgBQhsbU9b0RiT1@dread.disaster.area>
+ <ZGu0LaQfREvOQO4h@redhat.com>
+ <ZGzIJlCE2pcqQRFJ@bfoster>
+ <ZGzbGg35SqMrWfpr@redhat.com>
+ <ZG1dAtHmbQ53aOhA@dread.disaster.area>
+ <ZG5taYoXDRymo/e9@redhat.com>
 MIME-Version: 1.0
-References: <20230524131958.2139331-1-james.clark@arm.com> <20230524131958.2139331-5-james.clark@arm.com>
-In-Reply-To: <20230524131958.2139331-5-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 25 May 2023 12:39:18 +0100
-Message-ID: <CAJ9a7VioqoCTLOKmPPbS9ogs9n+2sV3szn-ZSDE3+mZTEgP0UQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] perf cs-etm: Add exception level consistency check
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, denik@chromium.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG5taYoXDRymo/e9@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On Wed, May 24, 2023 at 04:02:49PM -0400, Mike Snitzer wrote:
+> On Tue, May 23 2023 at  8:40P -0400,
+> Dave Chinner <david@fromorbit.com> wrote:
+> 
+> > On Tue, May 23, 2023 at 11:26:18AM -0400, Mike Snitzer wrote:
+> > > On Tue, May 23 2023 at 10:05P -0400, Brian Foster <bfoster@redhat.com> wrote:
+> > > > On Mon, May 22, 2023 at 02:27:57PM -0400, Mike Snitzer wrote:
+> > > > ... since I also happen to think there is a potentially interesting
+> > > > development path to make this sort of reserve pool configurable in terms
+> > > > of size and active/inactive state, which would allow the fs to use an
+> > > > emergency pool scheme for managing metadata provisioning and not have to
+> > > > track and provision individual metadata buffers at all (dealing with
+> > > > user data is much easier to provision explicitly). So the space
+> > > > inefficiency thing is potentially just a tradeoff for simplicity, and
+> > > > filesystems that want more granularity for better behavior could achieve
+> > > > that with more work. Filesystems that don't would be free to rely on the
+> > > > simple/basic mechanism provided by dm-thin and still have basic -ENOSPC
+> > > > protection with very minimal changes.
+> > > > 
+> > > > That's getting too far into the weeds on the future bits, though. This
+> > > > is essentially 99% a dm-thin approach, so I'm mainly curious if there's
+> > > > sufficient interest in this sort of "reserve mode" approach to try and
+> > > > clean it up further and have dm guys look at it, or if you guys see any
+> > > > obvious issues in what it does that makes it potentially problematic, or
+> > > > if you would just prefer to go down the path described above...
+> > > 
+> > > The model that Dave detailed, which builds on REQ_PROVISION and is
+> > > sticky (by provisioning same blocks for snapshot) seems more useful to
+> > > me because it is quite precise.  That said, it doesn't account for
+> > > hard requirements that _all_ blocks will always succeed.
+> > 
+> > Hmmm. Maybe I'm misunderstanding the "reserve pool" context here,
+> > but I don't think we'd ever need a hard guarantee from the block
+> > device that every write bio issued from the filesystem will succeed
+> > without ENOSPC.
+> > 
+> > If the block device can provide a guarantee that a provisioned LBA
+> > range is always writable, then everything else is a filesystem level
+> > optimisation problem and we don't have to involve the block device
+> > in any way. All we need is a flag we can ready out of the bdev at
+> > mount time to determine if the filesystem should be operating with
+> > LBA provisioning enabled...
+> > 
+> > e.g. If we need to "pre-provision" a chunk of the LBA space for
+> > filesystem metadata, we can do that ahead of time and track the
+> > pre-provisioned range(s) in the filesystem itself.
+> > 
+> > In XFS, That could be as simple as having small chunks of each AG
+> > reserved to metadata (e.g. start with the first 100MB) and limiting
+> > all metadata allocation free space searches to that specific block
+> > range. When we run low on that space, we pre-provision another 100MB
+> > chunk and then allocate all metadata out of that new range. If we
+> > start getting ENOSPC to pre-provisioning, then we reduce the size of
+> > the regions and log low space warnings to userspace. If we can't
+> > pre-provision any space at all and we've completely run out, we
+> > simply declare ENOSPC for all incoming operations that require
+> > metadata allocation until pre-provisioning succeeds again.
+> 
+> This is basically saying the same thing but:
+> 
+> It could be that the LBA space is fragmented and so falling back to
+> the smallest region size (that matches the thinp block size) would be
+> the last resort?  Then if/when thinp cannot even service allocating a
+> new free thin block, dm-thinp will transition to out-of-data-space
+> mode.
 
-My concern here is that for etmv3 trace, OpenCSD will only provide
-memory spaces as either secure or non-secure, The ETMv3 does not
-trace, and hence OpenCSD cannot provide the different ELs.
-The memory callback will be either OCSD_MEM_SPACE_S or OCSD_MEM_SPACE_N.
+Yes, something of that sort, though we'd probably give up if we
+can't get at least megabyte scale reservations - a single
+modification in XFS can modify many structures and require
+allocation of a lot of new metadata, so the fileystem cut-off would
+for metadata provisioning failure would be much larger than the
+dm-thinp region size....
 
-Can this patch - and the set handle this. (assuming perf supports our
-ETMv3 coresight kernel driver)
+> > This is built entirely on the premise that once proactive backing
+> > device provisioning fails, the backing device is at ENOSPC and we
+> > have to wait for that situation to go away before allowing new data
+> > to be ingested. Hence the block device really doesn't need to know
+> > anything about what the filesystem is doing and vice versa - The
+> > block dev just says "yes" or "no" and the filesystem handles
+> > everything else.
+> 
+> Yes.
+> 
+> > It's worth noting that XFS already has a coarse-grained
+> > implementation of preferred regions for metadata storage. It will
+> > currently not use those metadata-preferred regions for user data
+> > unless all the remaining user data space is full.  Hence I'm pretty
+> > sure that a pre-provisioning enhancment like this can be done
+> > entirely in-memory without requiring any new on-disk state to be
+> > added.
+> > 
+> > Sure, if we crash and remount, then we might chose a different LBA
+> > region for pre-provisioning. But that's not really a huge deal as we
+> > could also run an internal background post-mount fstrim operation to
+> > remove any unused pre-provisioning that was left over from when the
+> > system went down.
+> 
+> This would be the FITRIM with extension you mention below? Which is a
+> filesystem interface detail?
 
-Regards
+No. We might reuse some of the internal infrastructure we use to
+implement FITRIM, but that's about it. It's just something kinda
+like FITRIM but with different constraints determined by the
+filesystem rather than the user...
 
-Mike
+As it is, I'm not sure we'd even need it - a preiodic userspace
+FITRIM would acheive the same result, so leaked provisioned spaces
+would get cleaned up eventually without the filesystem having to do
+anything specific...
 
-On Wed, 24 May 2023 at 14:20, James Clark <james.clark@arm.com> wrote:
->
-> Assert that our own tracking of the exception level matches what
-> OpenCSD provides. OpenCSD doesn't distinguish between EL0 and EL1 in the
-> memory access callback so the extra tracking was required. But a rough
-> assert can still be done.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  6 +--
->  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |  4 +-
->  tools/perf/util/cs-etm.c                      | 37 +++++++++++++------
->  3 files changed, 32 insertions(+), 15 deletions(-)
->
-> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> index ac227cd03eb0..50b3c248d1e5 100644
-> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> @@ -52,15 +52,15 @@ struct cs_etm_decoder {
->  static u32
->  cs_etm_decoder__mem_access(const void *context,
->                            const ocsd_vaddr_t address,
-> -                          const ocsd_mem_space_acc_t mem_space __maybe_unused,
-> +                          const ocsd_mem_space_acc_t mem_space,
->                            const u8 trace_chan_id,
->                            const u32 req_size,
->                            u8 *buffer)
->  {
->         struct cs_etm_decoder *decoder = (struct cs_etm_decoder *) context;
->
-> -       return decoder->mem_access(decoder->data, trace_chan_id,
-> -                                  address, req_size, buffer);
-> +       return decoder->mem_access(decoder->data, trace_chan_id, address,
-> +                                  req_size, buffer, mem_space);
->  }
->
->  int cs_etm_decoder__add_mem_access_cb(struct cs_etm_decoder *decoder,
-> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
-> index 21d403f55d96..272c2efe78ee 100644
-> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
-> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
-> @@ -11,6 +11,7 @@
->  #define INCLUDE__CS_ETM_DECODER_H__
->
->  #include <linux/types.h>
-> +#include <opencsd/ocsd_if_types.h>
->  #include <stdio.h>
->
->  struct cs_etm_decoder;
-> @@ -19,7 +20,8 @@ struct cs_etm_packet_queue;
->
->  struct cs_etm_queue;
->
-> -typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *);
-> +typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *,
-> +                                 const ocsd_mem_space_acc_t);
->
->  struct cs_etmv3_trace_params {
->         u32 reg_ctrl;
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index b9ba19327f26..ccf34ed8ddf2 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -931,7 +931,8 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
->  }
->
->  static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
-> -                             u64 address, size_t size, u8 *buffer)
-> +                             u64 address, size_t size, u8 *buffer,
-> +                             const ocsd_mem_space_acc_t mem_space)
->  {
->         u8  cpumode;
->         u64 offset;
-> @@ -947,6 +948,20 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->         if (!tidq)
->                 return 0;
->
-> +       /*
-> +        * We've already tracked EL along side the PID in cs_etm__set_thread()
-> +        * so double check that it matches what OpenCSD thinks as well. It
-> +        * doesn't distinguish between EL0 and EL1 for this mem access callback
-> +        * so we had to do the extra tracking.
-> +        */
-> +       if (mem_space & OCSD_MEM_SPACE_EL1N) {
-> +               /* Includes both non secure EL1 and EL0 */
-> +               assert(tidq->el == ocsd_EL1 || tidq->el == ocsd_EL0);
-> +       } else if (mem_space & OCSD_MEM_SPACE_EL2)
-> +               assert(tidq->el == ocsd_EL2);
-> +       else if (mem_space & OCSD_MEM_SPACE_EL3)
-> +               assert(tidq->el == ocsd_EL3);
-> +
->         cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
->
->         if (!thread__find_map(tidq->thread, cpumode, address, &al))
-> @@ -1195,8 +1210,8 @@ static inline int cs_etm__t32_instr_size(struct cs_etm_queue *etmq,
->  {
->         u8 instrBytes[2];
->
-> -       cs_etm__mem_access(etmq, trace_chan_id, addr,
-> -                          ARRAY_SIZE(instrBytes), instrBytes);
-> +       cs_etm__mem_access(etmq, trace_chan_id, addr, ARRAY_SIZE(instrBytes),
-> +                          instrBytes, 0);
->         /*
->          * T32 instruction size is indicated by bits[15:11] of the first
->          * 16-bit word of the instruction: 0b11101, 0b11110 and 0b11111
-> @@ -1387,8 +1402,8 @@ static void cs_etm__copy_insn(struct cs_etm_queue *etmq,
->         else
->                 sample->insn_len = 4;
->
-> -       cs_etm__mem_access(etmq, trace_chan_id, sample->ip,
-> -                          sample->insn_len, (void *)sample->insn);
-> +       cs_etm__mem_access(etmq, trace_chan_id, sample->ip, sample->insn_len,
-> +                          (void *)sample->insn, 0);
->  }
->
->  u64 cs_etm__convert_sample_time(struct cs_etm_queue *etmq, u64 cs_timestamp)
-> @@ -1940,8 +1955,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
->                  * so below only read 2 bytes as instruction size for T32.
->                  */
->                 addr = end_addr - 2;
-> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
-> -                                  sizeof(instr16), (u8 *)&instr16);
-> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr16),
-> +                                  (u8 *)&instr16, 0);
->                 if ((instr16 & 0xFF00) == 0xDF00)
->                         return true;
->
-> @@ -1956,8 +1971,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
->                  * +---------+---------+-------------------------+
->                  */
->                 addr = end_addr - 4;
-> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
-> -                                  sizeof(instr32), (u8 *)&instr32);
-> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
-> +                                  (u8 *)&instr32, 0);
->                 if ((instr32 & 0x0F000000) == 0x0F000000 &&
->                     (instr32 & 0xF0000000) != 0xF0000000)
->                         return true;
-> @@ -1973,8 +1988,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
->                  * +-----------------------+---------+-----------+
->                  */
->                 addr = end_addr - 4;
-> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
-> -                                  sizeof(instr32), (u8 *)&instr32);
-> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
-> +                                  (u8 *)&instr32, 0);
->                 if ((instr32 & 0xFFE0001F) == 0xd4000001)
->                         return true;
->
-> --
-> 2.34.1
->
+> So dm-thinp would _not_ need to have new
+> state that tracks "provisioned but unused" block?
 
+No idea - that's your domain. :)
 
+dm-snapshot, for certain, will need to track provisioned regions
+because it has to guarantee that overwrites to provisioned space in
+the origin device will always succeed. Hence it needs to know how
+much space breaking sharing in provisioned regions after a snapshot
+has been taken with be required...
+
+> Nor would the block
+> layer need an extra discard flag for a new class of "provisioned"
+> blocks.
+
+Right, I don't see that the discard operations need to care whether
+the underlying storage is provisioned. dm-thinp and dm-snapshot can
+treat REQ_OP_DISCARD as "this range is not longer in use" and do
+whatever they want with them. 
+
+> If XFS tracked this "provisioned but unused" state, dm-thinp could
+> just discard the block like its told.  Would be nice to avoid dm-thinp
+> needing to track "provisioned but unused".
+>
+> That said, dm-thinp does still need to know if a block was provisioned
+> (given our previous designed discussion, to allow proper guarantees
+> from this interface at snapshot time) so that XFS and other
+> filesystems don't need to re-provision areas they already
+> pre-provisioned.
+
+Right.
+
+I've simply assumed that dm-thinp would need to track entire
+provisioned regions - used or unused - so it knows which writes to
+empty or shared regions have a reservation to allow allocation to
+succeed when the backing pool is otherwise empty.....
+
+> However, it may be that if thinp did track "provisioned but unused"
+> it'd be useful to allow snapshots to share provisioned blocks that
+> were never used.  Meaning, we could then avoid "breaking sharing" at
+> snapshot-time for "provisioned but unused" blocks.  But allowing this
+> "optimization" undercuts the gaurantee that XFS needs for thinp
+> storage that allows snapshots... SO, I think I answered my own
+> question: thinp doesnt need to track "provisioned but unused" blocks
+> but we must always ensure snapshots inherit provisoned blocks ;)
+
+Sounds like a potential optimisation, but I haven't thought through
+a potential snapshot device implementation that far to comment
+sanely. I stopped once I got to the point where accounting tricks
+count be used to guarantee space is available for breaking sharing
+of used provisioned space after a snapshot was taken....
+
+> > Further, managing shared pool exhaustion doesn't require a
+> > reservation pool in the backing device and for the filesystems to
+> > request space from it. Filesystems already have their own reserve
+> > pools via pre-provisioning. If we want the filesystems to be able to
+> > release that space back to the shared pool (e.g. because the shared
+> > backing pool is critically short on space) then all we need is an
+> > extension to FITRIM to tell the filesystem to also release internal
+> > pre-provisioned reserves.
+> 
+> So by default FITRIM will _not_ discard provisioned blocks.  Only if
+> a flag is used will it result in discarding provisioned blocks.
+
+No. FITRIM results in discard of any unused free space in the
+filesystem that matches the criteria set by the user. We don't care
+if free space was once provisioned used space - we'll issue a
+discard for the range regardless. The "special" FITRIM extension I
+mentioned is to get filesystem metadata provisioning released;
+that's completely separate to user data provisioning through
+fallocate() which FITRIM will always discard if it has been freed...
+
+IOWs, normal behaviour will be that a FITRIM ends up discarding a
+mix of unprovisioned and provisioned space. Nobody will be able to
+predict what mix the device is going to get at any point in time.
+Also, if we turn on online discard, the block device is going to get
+a constant stream of discard operations that will also be a mix of
+provisioned and unprovisioned space that is not longer in use by the
+filesystem. 
+
+I suspect that you need to stop trying to double guess what
+operations the filesystem will use provisioning for, what it will
+send discards for and when it will send discards for them.. Just
+assume the device will receive a constant stream of both
+REQ_PROVISION and REQ_OP_DISCARD (for both provisioned and
+unprovisioned regions) operations whenver the filesystem is active
+on a thinp device.....
+
+Cheers,
+
+Dave.
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Dave Chinner
+david@fromorbit.com
