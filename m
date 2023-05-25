@@ -2,76 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACB1710AB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97498710AB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240856AbjEYLTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S240875AbjEYLUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbjEYLTo (ORCPT
+        with ESMTP id S240870AbjEYLUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:19:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAE910B;
-        Thu, 25 May 2023 04:19:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6809644DB;
-        Thu, 25 May 2023 11:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB594C433AC;
-        Thu, 25 May 2023 11:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685013581;
-        bh=v1ZTRGxVV2xlQBF1uYpuflSiapUKWdb/B+skdts2nlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUwroto6LuGog9Fmjhcy7XiDgknI09l7LNaYa6Yi0g0/yX5ZZ3SL6bEjuzfHrQcTr
-         JOWxFd831HlS7E2UDpb+Kqmqper3jKbDwNG3Kfw3P0xd1oq81+24MoC9ReC57TGOo7
-         La2g2q4HO1ztEtSo1azdL8etEp37ETqo3lqC71AGVvLWVcJvwxU0JJEedi73YhB77B
-         4lJzTifBubzNZ/uVKy5qS5+wOc8w50JAHijmb6Qo1/rnmbXOPlMHioOSf7dBlR9aUR
-         g1QxzAYSIEaDw6CTGcHuzXH8LR+UsS53ddKC31zlwJGZkn31fWcT9gTwNKdZK1yDv9
-         SDNFe8K6/ZsGQ==
-Date:   Thu, 25 May 2023 12:19:37 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 1/2] mfd: wcd934x: Fix an error handling path in
- wcd934x_slim_probe()
-Message-ID: <20230525111937.GC411262@google.com>
-References: <02d8447f6d1df52cc8357aae698152e9a9be67c6.1684565021.git.christophe.jaillet@wanadoo.fr>
+        Thu, 25 May 2023 07:20:00 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4D19D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:19:55 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 1186f88a-faee-11ed-abf4-005056bdd08f;
+        Thu, 25 May 2023 14:19:52 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Thu, 25 May 2023 14:19:52 +0300
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 08/11] serial: sc16is7xx: fix regression with GPIO
+ configuration
+Message-ID: <ZG9EWEwb077qyBIi@surfacebook>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+ <20230525040324.3773741-9-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <02d8447f6d1df52cc8357aae698152e9a9be67c6.1684565021.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230525040324.3773741-9-hugo@hugovil.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 May 2023, Christophe JAILLET wrote:
-
-> If devm_gpiod_get_optional() fails, some resources need to be released, as
-> already done in the .remove() function.
+Thu, May 25, 2023 at 12:03:22AM -0400, Hugo Villeneuve kirjoitti:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> While at it, remove the unneeded error code from a dev_err_probe() call.
-> It is already added in a human readable way by dev_err_probe() itself.
+> Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> changed the function of the GPIOs pins to act as modem control
+> lines without any possibility of selecting GPIO function.
 > 
-> Fixes: 6a0ee2a61a31 ("mfd: wcd934x: Replace legacy gpio interface for gpiod")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/mfd/wcd934x.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+> As a consequence, applications that depends on GPIO lines configured
+> by default as GPIO pins no longer work as expected.
+> 
+> Also, the change to select modem control lines function was done only
+> for channel A of dual UART variants (752/762). This was not documented
+> in the log message.
 
-Applied, thanks
+> This new patch allows to specify GPIO or modem control line function
+> in the device tree, and for each of the ports (A or B).
+
+Imperative mood as stated in documentation, please.
+Like "Allow to specify...".
+
+> This is done by using the new device-tree property named
+> "modem-control-line-ports" (property added in separate patch).
+> 
+> We also now reduce the number of exported GPIOs according to the
+> modem-status-line-port DT property.
+> 
+> Boards that need to have GPIOS configured as modem control lines
+> should add that property to their device tree. Here is a list of
+> boards using the sc16is7xx driver in their device tree and that may
+> need to be modified:
+>     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+>     mips/boot/dts/ingenic/cu1830-neo.dts
+>     mips/boot/dts/ingenic/cu1000-neo.dts
+
+...
+
+> +#ifdef CONFIG_GPIOLIB
+
+I'm wondering if we can avoid adding new ifdefferies...
+
+> +	s->gpio_configured = devtype->nr_gpio;
+
+The name of the variable is a bit vague WRT its content.
+Shouldn't be as simple as the rvalue, i.e. s->nr_gpio?
+
+> +#endif /* CONFIG_GPIOLIB */
+
+...
+
+> +		of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
+> +					 prop, p, u)
+
+The driver so far is agnostic to property provider. Please keep it that way,
+i.e. no of_ APIs.
+
+> +			if (u < devtype->nr_uart) {
+
+Hmm... What other can it be?
+
+> +				/* Use GPIO lines as modem control lines */
+> +				if (u == 0)
+> +					val |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
+> +				else if (u == 1)
+> +					val |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
+> +
+> +#ifdef CONFIG_GPIOLIB
+> +				if (s->gpio_configured >=
+> +				    SC16IS7XX_GPIOS_PER_BANK)
+
+On one line it will be better to read. Esp. taking into account the above remark.
+
+> +					s->gpio_configured -=
+> +						SC16IS7XX_GPIOS_PER_BANK;
+
+Ditto.
+
+> +#endif /* CONFIG_GPIOLIB */
+> +			}
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
