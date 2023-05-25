@@ -2,226 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9E7710F5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698ED710F66
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241749AbjEYPVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S241763AbjEYPW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241309AbjEYPVb (ORCPT
+        with ESMTP id S241762AbjEYPWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:21:31 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F9194
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:21:29 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba8cf3cb34fso997585276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1685028088; x=1687620088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QUuvOZp4ohZVs+06f+xW0E2DzMyZOkJ0sYTaDlgT1vs=;
-        b=f82LooSd7Z8HPJYxwPF9j5/XV5x/T1dTocoQbusc6c1IUKGSUAuk9Ir1SOkxO0WNbN
-         b2opwYAOqYOC4KkwzFjmYl168YBnmaOSz/DleuyrzHukBjDwPyLhgHqlAy/6nc9XqxKv
-         /gwu60eypgCA/tV78al/ca4tdpRg6RRfpASV0=
+        Thu, 25 May 2023 11:22:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3808918D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685028089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0V518OsqUrGCxG2mh1VgKtRufND8RHTunMvUY4Z4UHo=;
+        b=BBAKNuUPpEv2ECqiqtY49NhlgIKuCbuj9hRGw/OxTKJxNLvNPFBgYa4E9XIeLGmcQdqiKi
+        cW+OrarvwTFqU4nV8pf54iak+fEQyZcNYbpbf7sJy6vwV1fmdBn1VyYDEKXU9CfgltySKs
+        aUv3KTBncmtfU5n6RIVVwB6pAvz3xtY=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-580-SmlqZtjRPGSJqZE98RDf7w-1; Thu, 25 May 2023 11:21:27 -0400
+X-MC-Unique: SmlqZtjRPGSJqZE98RDf7w-1
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7748b05ab49so229356639f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:21:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685028088; x=1687620088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685028086; x=1687620086;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QUuvOZp4ohZVs+06f+xW0E2DzMyZOkJ0sYTaDlgT1vs=;
-        b=Zq3XFaFC2Omcg93KXB9E7lGmmIhT8WLRGAXpdlT7O6UCvEi2RkW60HFfHUq05kHeL9
-         HgOo31Zl2aQq71v39cPmZXt1mJibgqxnxpfbHGKwOnurJtZyzdN8LPyMfLe3lYsdhx36
-         z7/OZL8dEU5LaGZQ2+7EnUlmb+gXrK4UyTbyREbtdcEg49Qc2/BcfrcYyfC7nBddJctk
-         yhhEKzw79PX68t1wY3SflW7WTut+lumIA144vD6KjoawVq6aMH2/lA+LkYvR3tN/zVnP
-         0JpvR1D8f4HtnSHh61ZDV4wdd9BNNpEJ85Iskb1IcVp62hJQqj7zOCSf8CwiFwvUG0pY
-         ddlw==
-X-Gm-Message-State: AC+VfDyxrbguON6zE9QOl3o6wabnIO7ZC3MG2CwxMgI/qqaHgMdKRQML
-        cHMOd12tUCLmFRqLQ5bJ2iyfNp32KHyNZkbuPZwDHA==
-X-Google-Smtp-Source: ACHHUZ5klVKxazSQswoLgBHRkEqznQCwIYHY0bNpzGBBflEWsBmG5N8Vg50kHOHw7oPG/n7cky7LPcnxXNlxCIOmkok=
-X-Received: by 2002:a25:73cc:0:b0:ba7:46b3:5c91 with SMTP id
- o195-20020a2573cc000000b00ba746b35c91mr3107549ybc.2.1685028088239; Thu, 25
- May 2023 08:21:28 -0700 (PDT)
+        bh=0V518OsqUrGCxG2mh1VgKtRufND8RHTunMvUY4Z4UHo=;
+        b=d0EkUtIhmBBCfR8tlqadvMNbaoGDSVRxaftjdhggKrpobTuiNZgc2hO4S6CANueHzD
+         a/e60XHnKhlZ8ZmkBHBXJR88Fn/zp2exuqi+4nnU6/BVuJLYIP5gewFRs6+Tsfv543+p
+         sgkSE+NH7QfZIm5r1qCfzDvj4MKkaQFHsznuZTFHJ5yGU3osDnDF/0WtkeST0jK+BLMs
+         ZKJ+6qHI4L2G977nSr6KpeKzFXQTkDVBK9CYaHwwHIvcLo99TfBP3uorS2iaUlcfn1Qb
+         4DsvkVay75Kz+y4eb7f9HK68Hh3vQWykhtIuY1PmA8oXF+s0q4dotF9aaUzTn3FZ3cm1
+         8Bhw==
+X-Gm-Message-State: AC+VfDyeIaDVdNY25MeGiqWqDXtpydm2KSPmjiKGisuYlqZog84wrbVl
+        oMp+OED82u1Z/lCnvw0Sz3q149iRxkcD1Dv/F189rrLVZzVYIALU+EnsVTS1wikAGb6gwHjly2D
+        O9iOovvKB8ZCTAPCMJ0DCLOgQ
+X-Received: by 2002:a05:6602:195:b0:76c:8877:861f with SMTP id m21-20020a056602019500b0076c8877861fmr12238212ioo.1.1685028086169;
+        Thu, 25 May 2023 08:21:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5Dvwin5vA64+Lt/6YHmWpeTY/wo7iHQfofVJf9Xm4liofqM3m0CvvT/D9oG9z9hJVh0cakng==
+X-Received: by 2002:a05:6602:195:b0:76c:8877:861f with SMTP id m21-20020a056602019500b0076c8877861fmr12238202ioo.1.1685028085781;
+        Thu, 25 May 2023 08:21:25 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id cn15-20020a0566383a0f00b0041a9022c3dasm458603jab.118.2023.05.25.08.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 08:21:25 -0700 (PDT)
+Date:   Thu, 25 May 2023 09:21:23 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
+        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
+        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
+        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+        kevin.tian@intel.com
+Subject: Re: [PATCH v2 1/1] vfio/nvgpu: Add vfio pci variant module for
+ grace hopper
+Message-ID: <20230525092123.2a41c1e4.alex.williamson@redhat.com>
+In-Reply-To: <ZGQfszAGGKhCp20q@nvidia.com>
+References: <20230509040734.24392-1-ankita@nvidia.com>
+        <20230516150914.26ae99c3.alex.williamson@redhat.com>
+        <ZGQfszAGGKhCp20q@nvidia.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <CA+G9fYtCCTxT78c0T+5JFw+sN01ZnX_kvBBgDLoVLfPARc9ZuA@mail.gmail.com>
-In-Reply-To: <CA+G9fYtCCTxT78c0T+5JFw+sN01ZnX_kvBBgDLoVLfPARc9ZuA@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 25 May 2023 11:21:17 -0400
-Message-ID: <CAEXW_YQwBy9xNRV9Xrdti46cC8vNE8nOocoL9pRrhjNMGdEWeg@mail.gmail.com>
-Subject: Re: Perf: RIP: 0010:__schedule on qemu-x86_64
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Naresh,
+On Tue, 16 May 2023 21:28:35 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-On Wed, May 24, 2023 at 5:02=E2=80=AFAM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> Following kernel crash noticed while running perf testing on qemu-x86_64
-> with stable-rc 6.3.4-rc2 + kselftest merge configs.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> logs:
-> =3D=3D=3D=3D=3D
-> INFO: Performing perf record test...
->
-> Parse sched tracepoints fields: Ok
->  16: syscalls:sys_enter_openat event fields     :
-> --- start ---
-> test child forked, pid 255
-> <4>[  152.221288] int3: 0000 [#1] PREEMPT SMP PTI
-> <4>[  152.221564] CPU: 0 PID: 255 Comm: perf Not tainted 6.3.4-rc2 #1
-> <4>[  152.221607] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-> BIOS 1.14.0-2 04/01/2014
-> <4>[  152.221733] RIP: 0010:__schedule+0x29e/0xaa0
-> <4>[  152.222066] Code: 00 48 29 c1 49 01 8e 48 04 00 00 48 85 db 74
-> 0f 48 01 8b 90 0c 00 00 48 83 83 88 0c 00 00 01 0f 1f 44 00 00 0f 1f
-> 44 00 00 e9 <7a> 01 00 00 49 0f ba ac 24 18 0a 00 00 00 49 83 bc 24 08
-> 0a 00 00
-> <4>[  152.222122] RSP: 0018:ffff94aec0677bc0 EFLAGS: 00000046
-> <4>[  152.222170] RAX: ffffffffa2e10900 RBX: ffff8b517bc2b700 RCX:
-> 0000000000000004
-> <4>[  152.222184] RDX: 00000023711138c0 RSI: 0000000000000000 RDI:
-> ffff8b517bc2b700
-> <4>[  152.222197] RBP: ffff94aec0677c28 R08: ffff8b5102aa6a00 R09:
-> 000000000000004e
-> <4>[  152.222211] R10: 0000000000000001 R11: 0000000000000001 R12:
-> ffff8b51009e3c00
-> <4>[  152.222223] R13: ffffffffa2cf3f48 R14: ffffffffa2e10900 R15:
-> ffff8b51009e4248
-> <4>[  152.222275] FS:  00007f6b8ea81800(0000)
-> GS:ffff8b517bc00000(0000) knlGS:0000000000000000
-> <4>[  152.222294] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> <4>[  152.222308] CR2: 00007f6b8dd204e0 CR3: 0000000105a1c000 CR4:
-> 00000000000006f0
-> <4>[  152.222409] Call Trace:
-> <4>[  152.222500]  <TASK>
-> <4>[  152.222605]  schedule+0x6a/0xf0
-> <4>[  152.222664]  schedule_timeout+0x14f/0x160
-> <4>[  152.222680]  wait_for_completion+0x8c/0x140
-> <4>[  152.222696]  __wait_rcu_gp+0x13e/0x140
-> <4>[  152.222712]  synchronize_rcu+0x12f/0x140
-> <4>[  152.222731]  ? __pfx_call_rcu_hurry+0x10/0x10
-> <4>[  152.222748]  ? __pfx_wakeme_after_rcu+0x10/0x10
-> <4>[  152.222766]  perf_event_alloc+0xd53/0xdc0
-> <4>[  152.222783]  ? preempt_count_sub+0x50/0x80
-> <4>[  152.222795]  ? _raw_spin_unlock+0x1a/0x40
-> <4>[  152.222810]  __do_sys_perf_event_open+0x1df/0xd10
-> <4>[  152.222838]  __x64_sys_perf_event_open+0x26/0x30
-> <4>[  152.222849]  do_syscall_64+0x3e/0x90
-> <4>[  152.222863]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> <4>[  152.222920] RIP: 0033:0x7f6b8dd204f9
-> <4>[  152.223150] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00
-> 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c
-> 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d d7 08 0d 00 f7 d8 64
-> 89 01 48
-> <4>[  152.223158] RSP: 002b:00007ffd51880f68 EFLAGS: 00000202
-> ORIG_RAX: 000000000000012a
-> <4>[  152.223175] RAX: ffffffffffffffda RBX: 00000000ffffffff RCX:
-> 00007f6b8dd204f9
-> <4>[  152.223181] RDX: 0000000000000000 RSI: 00000000000000ff RDI:
-> 000055e658912b50
-> <4>[  152.223187] RBP: 00007ffd51881030 R08: 0000000000000008 R09:
-> 00007ffd51881090
-> <4>[  152.223192] R10: 00000000ffffffff R11: 0000000000000202 R12:
-> 0000000000000008
-> <4>[  152.223198] R13: 0000000000000000 R14: 0000000000000000 R15:
-> 000055e658912b40
-> <4>[  152.223246]  </TASK>
-> <4>[  152.223308] Modules linked in:
-> <4>[  152.247884] ---[ end trace 0000000000000000 ]---
-> <4>[  152.248004] RIP: 0010:__schedule+0x29e/0xaa0
-> <4>[  152.248051] Code: 00 48 29 c1 49 01 8e 48 04 00 00 48 85 db 74
-> 0f 48 01 8b 90 0c 00 00 48 83 83 88 0c 00 00 01 0f 1f 44 00 00 0f 1f
-> 44 00 00 e9 <7a> 01 00 00 49 0f ba ac 24 18 0a 00 00 00 49 83 bc 24 08
-> 0a 00 00
-> <4>[  152.248066] RSP: 0018:ffff94aec0677bc0 EFLAGS: 00000046
-> <4>[  152.248089] RAX: ffffffffa2e10900 RBX: ffff8b517bc2b700 RCX:
-> 0000000000000004
-> <4>[  152.248099] RDX: 00000023711138c0 RSI: 0000000000000000 RDI:
-> ffff8b517bc2b700
-> <4>[  152.248269] RBP: ffff94aec0677c28 R08: ffff8b5102aa6a00 R09:
-> 000000000000004e
-> <4>[  152.248282] R10: 0000000000000001 R11: 0000000000000001 R12:
-> ffff8b51009e3c00
-> <4>[  152.248294] R13: ffffffffa2cf3f48 R14: ffffffffa2e10900 R15:
-> ffff8b51009e4248
-> <4>[  152.248304] FS:  00007f6b8ea81800(0000)
-> GS:ffff8b517bc00000(0000) knlGS:0000000000000000
-> <4>[  152.248316] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> <4>[  152.248479] CR2: 00007f6b8dd204e0 CR3: 0000000105a1c000 CR4:
-> 00000000000006f0
-> <0>[  152.248663] Kernel panic - not syncing: Fatal exception in interrup=
-t
-> <4>[  152.248980] int3: 0000 [#2] PREEMPT SMP PTI
-> <4>[  152.249101] CPU: 1 PID: 32 Comm: kworker/u4:3 Tainted: G      D
->           6.3.4-rc2 #1
-> <4>[  152.249124] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-> BIOS 1.14.0-2 04/01/2014
-> <4>[  152.249292] Workqueue:  0x0 (events_unbound)
-> <4>[  152.249420] RIP: 0010:__schedule+0x29e/0xaa0
-> <4>[  152.249471] Code: 00 48 29 c1 49 01 8e 48 04 00 00 48 85 db 74
-> 0f 48 01 8b 90 0c 00 00 48 83 83 88 0c 00 00 01 0f 1f 44 00 00 0f 1f
-> 44 00 00 e9 <7a> 01 00 00 49 0f ba ac 24 18 0a 00 00 00 49 83 bc 24 08
-> 0a 00 00
-> <4>[  152.249486] RSP: 0018:ffff94aec0117e38 EFLAGS: 00000046
-> <4>[  152.249502] RAX: ffff8b51002d8000 RBX: ffff8b517bd2b700 RCX:
-> 0000000000000004
-> <4>[  152.249512] RDX: 0000002372bd853f RSI: ffffffffffa7caff RDI:
-> ffff8b517bd2b700
-> <4>[  152.249522] RBP: ffff94aec0117ea0 R08: 0000000000000400 R09:
-> 0000000000000361
-> <4>[  152.249532] R10: 0000000000000001 R11: 0000000000000000 R12:
-> ffff8b51008a0f00
-> <4>[  152.249542] R13: ffffffffa2cf3f48 R14: ffff8b51002d8000 R15:
-> ffff8b51008a1548
-> <4>[  152.249552] FS:  0000000000000000(0000)
-> GS:ffff8b517bd00000(0000) knlGS:0000000000000000
-> <4>[  152.249565] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> <4>[  152.249576] CR2: 00007ffd518816b8 CR3: 000000010591e000 CR4:
-> 00000000000006e0
-> <4>[  152.249588] Call Trace:
-> <4>[  152.249603]  <TASK>
-> <4>[  152.249636]  schedule+0x6a/0xf0
-> <4>[  152.249658]  worker_thread+0xc0/0x3e0
-> <4>[  152.249684]  ? __pfx_worker_thread+0x10/0x10
-> <4>[  152.249704]  kthread+0xfc/0x120
-> <4>[  152.249721]  ? __pfx_kthread+0x10/0x10
+> On Tue, May 16, 2023 at 03:09:14PM -0600, Alex Williamson wrote:
+> 
+> > > +# SPDX-License-Identifier: GPL-2.0-only
+> > > +config NVGPU_VFIO_PCI
+> > > +	tristate "VFIO support for the GPU in the NVIDIA Grace Hopper Superchip"
+> > > +	depends on ARM64 || (COMPILE_TEST && 64BIT)
+> > > +	select VFIO_PCI_CORE  
+> > 
+> > I think this should be a 'depends on' as well, that's what we have for
+> > the other vfio-pci variant drivers.  
+> 
+> It should be removed completely, AFAICT:
+> 
+> config VFIO_PCI
+>         tristate "Generic VFIO support for any PCI device"
+>         select VFIO_PCI_CORE
+> 
+> Ensures it is turned on
+> 
+> if VFIO_PCI
+> source "drivers/vfio/pci/mlx5/Kconfig"
+> endif
 
-I wonder if this is a deadlock related to runqueue lock since another
-CPU call stack are similarly in schedule.
+The source command actually comes after the VFIO_PCI endif, the mlx5
+Kconfig is sourced if PCI && MMU.
 
-I tried to run gdb on your vmlinux but it does not have symbols, would
-it be possible for you to provide a copy of vmlinux with symbols?
+> Autoamtically injects a 'depends on VFIO_PCI' to all the enclosed
+> kconfig statements (and puts them nicely in the menu)
+> 
+> So we have everything needed already
+> 
+> SELECT is the correct action since it doesn't have a config text.
 
-Were you able to narrow down the commit/release using git bisect to
-see when it started happening?
+In fact I think it's the current variant drivers that are incorrect to
+make use of 'depends on', this makes those variant drivers implicitly
+depend on VFIO_PCI, but it should instead be possible to build a kernel
+that doesn't include vfio-pci but does include mlx5-vfio-pci, or other
+vfio-pci variant drivers.  Currently if I disable VFIO_PCI I no longer
+have the option to select either the mlx5 or hisi_acc drivers, they
+actually depend only on VFIO_PCI_CORE, but currently only VFIO_PCI can
+select VFIO_PCI_CORE.
 
-Thank you,
+I withdraw my objection to using select, the other variant drivers
+should adopt select as well, imo.
+ 
+> > Is our test for vm_end < vm_start in vfio-pci-core just paranoia?  I
+> > don't see an equivalent here.  
+> 
+> Yes, mm core will not invoke the op with something incorrect.
+>  
+> > Can we also get a comment in the code outlining the various reasons
+> > that this "BAR" doesn't need the disabled access protections that
+> > vfio-pci-core implements?  For example outlining the behavior relative
+> > to BAR access while the memory enable bit is disabled, the bus being in
+> > reset, or the device being in a low-power state.  
+> 
+> The HW has some "isolation" feature that kicks in and safely
+> disconnects the GPU from the CPU.
+> 
+> A lot of work has been done to make things like VFIO and KVM safe
+> against machine checks/etc under basically all circumstances.
 
- - Joel
+So a comment in the code to reflect that the hardware takes this into
+account such that we don't need to worry about mmap access during bus
+reset or otherwise disabled MMIO access of the PCI device would not be
+unreasonable.  Thanks,
+
+Alex
+
