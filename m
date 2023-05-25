@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F7D711638
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862697116F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243062AbjEYSwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S242976AbjEYSw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243357AbjEYSug (ORCPT
+        with ESMTP id S243309AbjEYSua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:50:36 -0400
+        Thu, 25 May 2023 14:50:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8D62127;
-        Thu, 25 May 2023 11:44:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80931FE4;
+        Thu, 25 May 2023 11:43:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE893648EC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 461CF60BA8;
+        Thu, 25 May 2023 18:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17BEC4331D;
         Thu, 25 May 2023 18:35:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B27C433A8;
-        Thu, 25 May 2023 18:35:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039738;
-        bh=za1Tmlin7ec9Wzk2uT2sMjK5J9Q2GRwNx6NQXCndOoY=;
+        s=k20201202; t=1685039739;
+        bh=hALR7glcJ178nXk9fUj64vfY42R+x5At/pAp7tcrEQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D3HXNg1/6SpoKWgK/YsXkd6NXqd/WYena0R0PTtYyrIqtbgCM3tJUAWeaF0CFrAOO
-         de00E4KTLvq+kGdbe2vSXb+B2SkVRnaiBcRcbH7+04RacFUdNOyFejAQdr+edShGnE
-         JXIIT6qZ+HoAbEcr5oWwUqut9+qWkpnddZ5aeICwHNCSRfTZ833P5RErkHpjCcymnu
-         YDqMUXHK/QmsF8ER0evMIFKuY6s+Mh3EAITJqh59N6CsQCkoATqsYDNChXDaMy1h1j
-         Mn/+IVjBV6dRO+0ruOKrA6cglRUNB1GkoXawTJ1gpF1E2TeBtKh9C9pHMR2vJnVlsp
-         ygkuW4xYjZUMQ==
+        b=Jy6+3sLMQSzlWZL729+wAJ5O/A2qtuSJaeJa2VFwRm/JHafOUBJRvm80nOQ4Gkbub
+         SVTFWsas7bIgG8XRl1FnKMxP19Fz7E9fytQ7PPGVXjzzW36pbvp9OderfR6msxc3fQ
+         NGd1dyBNcYqLMO3kJoIYFItFebUANoVl/fBbfKQp1iDcWA/8p0NDUDmtYvRiMqL/Kn
+         z08QlBWa4w1CKb3q8ckbjDMKqaZ22umS5Z/CgbIudOzea4D8l3m+Lavsx0ByOOaQ4l
+         tyJ2j6bqvjQ5Og6Tb8j5ukfLy/yKOcTR4qgylUKaXBkFv+TQtWlRk49dHikFpN8oGe
+         eJ471DYOSZdpg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tom Rix <trix@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>, pablo@netfilter.org,
-        kadlec@netfilter.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 56/67] netfilter: conntrack: define variables exp_nat_nla_policy and any_addr with CONFIG_NF_NAT
-Date:   Thu, 25 May 2023 14:31:33 -0400
-Message-Id: <20230525183144.1717540-56-sashal@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+        Keith Busch <kbusch@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-nvme@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 57/67] nvme-multipath: don't call blk_mark_disk_dead in nvme_mpath_remove_disk
+Date:   Thu, 25 May 2023 14:31:34 -0400
+Message-Id: <20230525183144.1717540-57-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
 References: <20230525183144.1717540-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -63,57 +57,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 224a876e37543eee111bf9b6aa4935080e619335 ]
+[ Upstream commit 1743e5f6000901a11f4e1cd741bfa9136f3ec9b1 ]
 
-gcc with W=1 and ! CONFIG_NF_NAT
-net/netfilter/nf_conntrack_netlink.c:3463:32: error:
-  ‘exp_nat_nla_policy’ defined but not used [-Werror=unused-const-variable=]
- 3463 | static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
-      |                                ^~~~~~~~~~~~~~~~~~
-net/netfilter/nf_conntrack_netlink.c:2979:33: error:
-  ‘any_addr’ defined but not used [-Werror=unused-const-variable=]
- 2979 | static const union nf_inet_addr any_addr;
-      |                                 ^~~~~~~~
+nvme_mpath_remove_disk is called after del_gendisk, at which point a
+blk_mark_disk_dead call doesn't make any sense.
 
-These variables use is controlled by CONFIG_NF_NAT, so should their definitions.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_netlink.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/nvme/host/multipath.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index 6f3b23a6653cc..7217a89f067cb 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -2984,7 +2984,9 @@ static int ctnetlink_exp_dump_mask(struct sk_buff *skb,
- 	return -1;
- }
- 
-+#if IS_ENABLED(CONFIG_NF_NAT)
- static const union nf_inet_addr any_addr;
-+#endif
- 
- static __be32 nf_expect_get_id(const struct nf_conntrack_expect *exp)
+diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+index 9171452e2f6d4..2bc159a318ff0 100644
+--- a/drivers/nvme/host/multipath.c
++++ b/drivers/nvme/host/multipath.c
+@@ -884,7 +884,6 @@ void nvme_mpath_remove_disk(struct nvme_ns_head *head)
  {
-@@ -3468,10 +3470,12 @@ ctnetlink_change_expect(struct nf_conntrack_expect *x,
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_NF_NAT)
- static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
- 	[CTA_EXPECT_NAT_DIR]	= { .type = NLA_U32 },
- 	[CTA_EXPECT_NAT_TUPLE]	= { .type = NLA_NESTED },
- };
-+#endif
- 
- static int
- ctnetlink_parse_expect_nat(const struct nlattr *attr,
+ 	if (!head->disk)
+ 		return;
+-	blk_mark_disk_dead(head->disk);
+ 	/* make sure all pending bios are cleaned up */
+ 	kblockd_schedule_work(&head->requeue_work);
+ 	flush_work(&head->requeue_work);
 -- 
 2.39.2
 
