@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE88710A2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4270D7102FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240866AbjEYKeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S237571AbjEYCnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjEYKeU (ORCPT
+        with ESMTP id S234957AbjEYCnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:34:20 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5038210B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:34:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VjRzVu4_1685010854;
-Received: from 30.97.48.238(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjRzVu4_1685010854)
-          by smtp.aliyun-inc.com;
-          Thu, 25 May 2023 18:34:15 +0800
-Message-ID: <bb7cd2ae-b461-79bb-bdde-2b8c04bb475b@linux.alibaba.com>
-Date:   Thu, 25 May 2023 18:34:13 +0800
+        Wed, 24 May 2023 22:43:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3225DE6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 19:43:09 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QRXNq1byQzsRxN;
+        Thu, 25 May 2023 10:40:59 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 25 May
+ 2023 10:43:06 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <hannes@cmpxchg.org>, <surenb@google.com>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] sched/psi: make psi_cgroups_enabled static
+Date:   Thu, 25 May 2023 18:34:28 +0800
+Message-ID: <20230525103428.49712-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] erofs: clean up z_erofs_pcluster_readmore()
-To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
-        jefflexu@linux.alibaba.com, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
-        zhangwen@coolpad.com
-References: <20230525072605.17857-1-zbestahu@gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230525072605.17857-1-zbestahu@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The static key psi_cgroups_enabled is only used inside file psi.c.
+Make it static.
 
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ kernel/sched/psi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2023/5/25 00:26, Yue Hu wrote:
-> From: Yue Hu <huyue2@coolpad.com>
-> 
-> No need end parameter since it's pointless for !backmost, we can get it
-> for backmost internally.  And we only expand the trailing edge, so the
-> newstart can be replaced with ->headoffset.
-> 
-> Also, remove linux/prefetch.h that is not used anymore after commit
-> 386292919c25 ("erofs: introduce readmore decompression strategy").
-> 
-> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 81fca77397f6..2ccb0b2ebd78 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -140,7 +140,7 @@
+ static int psi_bug __read_mostly;
+ 
+ DEFINE_STATIC_KEY_FALSE(psi_disabled);
+-DEFINE_STATIC_KEY_TRUE(psi_cgroups_enabled);
++static DEFINE_STATIC_KEY_TRUE(psi_cgroups_enabled);
+ 
+ #ifdef CONFIG_PSI_DEFAULT_DISABLED
+ static bool psi_enable;
+-- 
+2.27.0
 
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-Will test it with the following bulk later.
-
-Thanks,
-Gao Xiang
