@@ -2,194 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42E3710EA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7899C710ED0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbjEYOys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S241619AbjEYOzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241670AbjEYOyn (ORCPT
+        with ESMTP id S235487AbjEYOzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:54:43 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2126.outbound.protection.outlook.com [40.107.95.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EA2187;
-        Thu, 25 May 2023 07:54:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i4JcEhlUacTAVWmRMzmm9QEPMma7Jvx1yQWbaLpqFugDvwSsQMfgBC/tPVXE6gh7E2mQE/DcfRHMqaS52oueGcF0cKO9rNQIN2ERpr8+rDniwLtFkzs0St1WqjJX/Sm38FcyYJsOrnnJXvOPZA9Om0XoER7pbDtKU/umE7UuYuMvuSDk0tZ/5QffyN26kWBDVwYYjHftndLAwvksrGZvT2FPzhiDRfo396XJizDXtJ9Hom+DuU4LrsAWkiEUWZd3deI09+BDNewJummLSA7woeMSytGb7RzEEhlnxdqeDyblND0Ko507Bca9BOHwebxdDMTWHRAa+mPn+XKdqaM9iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KYqW+Jey5AzNRVCqPA+x/LzFw4l+sFHJUjGVezQ6mII=;
- b=oUNl3N7fV+I/7r6XxXDhnxtyb9WOcKmu3PejxJSGhy3VURNLE2tOENbmeXDBp0dj/ndiwpfbfHKtWcI+ZkS+DcXZWn4Gd1j/KiazpReAak12lMmXYqIzDbNXhiZBgRJG4q+Vj577bBK4EXAUueM9uBfApvKKNH1vQ6m3fTE5/A+uOUgIaneB5CbHW8ev/MqBj9+0BiaTCWGXDqpEq88UAni4Sg2DFJAnihawvWCUQXJKxcXcsS/bnd+y36fh6LW/HF7wrhzkcog+qkJdqQ6tH+ulFjOhubaHp/e7tx6/8epym77ntQUEdtnrVlcxXE0MhXMn4pzaOIfpyZhoV9urwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 25 May 2023 10:55:22 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EAEE46;
+        Thu, 25 May 2023 07:55:04 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d41763796so1685581b3a.2;
+        Thu, 25 May 2023 07:55:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KYqW+Jey5AzNRVCqPA+x/LzFw4l+sFHJUjGVezQ6mII=;
- b=ZordmC6hLdRoGQY5xPFadV+OyZVQ70DxAqb3fTOCjou4pX6FfL70oSBNbkvSBPaMmFaoIYP79gz2jxUsL4HEbQ0i9LY7p/y6hFqrnx0ewEKuluTU2yxaH8dNmX0t7Qry5X2zFqVakrchMoFiXCdt7+XyPrFTxX8+wnMkzUOdV+w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BL0PR13MB4436.namprd13.prod.outlook.com (2603:10b6:208:1c5::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
- 2023 14:54:36 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Thu, 25 May 2023
- 14:54:36 +0000
-Date:   Thu, 25 May 2023 16:54:27 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
-        willemdebruijn.kernel@gmail.com,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, leit@fb.com, axboe@kernel.dk,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, dccp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <ZG92ox2BWE3rS1xR@corigine.com>
-References: <20230525125503.400797-1-leitao@debian.org>
- <CANn89i+neca0ApNxRdZCiTMkwy-5=0mnOMM=9Z3u78VPNw4_fg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+        d=gmail.com; s=20221208; t=1685026503; x=1687618503;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uCaM2JNFCtKG5zLxpZ+ZrdBUNdhIbQe9rDZZxWDTm0o=;
+        b=K8dzj/739d/ujSJP/A+QCCehRe8WMoGL6YZ/RFRApwU2njBswmdQ68GpsKiWFJlS4p
+         l4EuTJWzLb/ovPlhPsQOezkb9XBXaN+t+PTBPwtJRQMQAgttGbbCts9RP/JH1Q/R/H5c
+         yLJrNb96iF68KWRUO7WiIQx9mHOJPJEAYOBy03kDZgRKuLdJNHycfPSNUKRO4/iqjXsK
+         +jqeGqEAkUthC+4HIKOgA/5Zc8F4Nj+U1ZdvmUy0knc6RNmY7jjCq7ZlptD+4uEtPKOy
+         t1sMWOw/Xr3OchE3CnO0oWHyAmAZ6ZNjmogXhZc+b5srcQHBmT3dn+VKbrbONMNe94x4
+         kHXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685026503; x=1687618503;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uCaM2JNFCtKG5zLxpZ+ZrdBUNdhIbQe9rDZZxWDTm0o=;
+        b=Oy736iXCcYaG81N7Ime61FDkkyh/4q4EjuVBEuaQalkt5AM9O1pgeZeJ+3Ob99FrhQ
+         HHRTzFM+7Qm0UlT7u37hmGeKEWeczYB2aE/dacArLUz+Ht2xxjYo18sVVzSEnFv4X5L/
+         UskWxoAzkQsUeYLFm7zTpBYZz75+wIX/utPrC/Zrm1WjTD6SrryaekgXxp0HROSnv5Cf
+         rbwIN89fNLXij/71iFucIr6sXCAHNm/BeqGsffxZMgYHWDxiElVxBTUcUj9v3UsVAWkt
+         S14GKsoKnUw0VMmubEVIm7GuZQdU9ebHTkpMFuJzcLSkthmdLFJ9V3EpC+K1RDJMnstz
+         ZVhw==
+X-Gm-Message-State: AC+VfDwKX9FpEyU7YVdzNB5hrUqc/lbiPz529mYQAa5QiVrIRhgTfuEf
+        2fqsDdEENGQdoHgHV0LgNi1vJC6aPh4=
+X-Google-Smtp-Source: ACHHUZ4Ppg17A0pRt1jPFoMnXPU0an4fxQCgenC3vL/eYaL8Aq4EA3DSPGcBmSK8GSo2M0MG1C988w==
+X-Received: by 2002:a05:6a00:10c4:b0:63d:47ab:65ed with SMTP id d4-20020a056a0010c400b0063d47ab65edmr9759325pfu.7.1685026503471;
+        Thu, 25 May 2023 07:55:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z13-20020aa791cd000000b006413e6e7578sm1314061pfa.5.2023.05.25.07.55.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 07:55:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 25 May 2023 07:55:01 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Stop passing device structure
+Message-ID: <3ccbd2d9-42f1-4270-9835-29911855cc79@roeck-us.net>
+References: <20230525142652.41981-1-samsagax@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANn89i+neca0ApNxRdZCiTMkwy-5=0mnOMM=9Z3u78VPNw4_fg@mail.gmail.com>
-X-ClientProxiedBy: AM9P193CA0023.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:21e::28) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL0PR13MB4436:EE_
-X-MS-Office365-Filtering-Correlation-Id: e04d81c6-bdfe-4b97-b746-08db5d2ff54b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: alMePwIja8hbBCglsVVCb4LB5UVyhpZY/tvsaxUdSZzeQqWl9I6ChnzjU2rNBTEAD/txNNyVx6xtB/T6/PYsjWYWnzF/WL8OCNcmMIH3LTFbz2d4ft8BbrYBpf9Yu3mUJtPbiZBFslrzseaMcRFB7NWERU/MSrhstbhlFmyrOaV5rQF2pkb0YynjM+BiPzrFEWxbLKfdahqIU255YxXYQGjc230tefditX6Hi8gfhY/J6g7OFfiQ4fLSfuTDub2h8ZZY2f3wThEcewFsURSufRrcIkurpRozD7toGecBrAbMeWUUTlDnDu8rvozf63htjwvcAwsBJYUr5wdd3TMXeb3rtHIqTXbw6W9t9sYsecnz69xIASaH1J4NiZJlUmqgdd2jWTy9KCR6GfFgNk9iipm4s1sG6MnGSd7so1zY7zjctO6KcSWyqQR0uAQfog1+PLbAwurWPljGu7u+oxWG+6q3gKrZihsptWe1lJXt1WmpDYmqGNGJZ26OKKJt7r4kbaHw/stg5E1rUe7xSFib9ZQQKnwpcEMmCtDgpCVc4NvN/Qmap0uCknyfX/2llcl0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39830400003)(346002)(376002)(396003)(136003)(451199021)(36756003)(86362001)(54906003)(4326008)(316002)(6916009)(66556008)(66476007)(66946007)(478600001)(6486002)(6666004)(8936002)(8676002)(5660300002)(41300700001)(44832011)(2906002)(7416002)(38100700002)(2616005)(6506007)(6512007)(53546011)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmtWb093QzVEbGdaeEVzL1lDWitHai9SYXBXR0kxKzhMamh5V081eGtPRno1?=
- =?utf-8?B?U3RvTVZDaEJqVm9OaUJBajUrVlZnQUMvK0RDWVpaK0Zydk9zMElkSXM2dCs2?=
- =?utf-8?B?b3VVaDRYVUg3TzNvMFpGazJtRFZqZ1VyeU40YS9iWHNhd1ZPTk4wYzNNUFFy?=
- =?utf-8?B?d0RIM2hIb3NUQWVmM3JFTDBmbmRPaHBYdnlrc2h6ZCt4U0hkZzdNL0Vlb3l6?=
- =?utf-8?B?cUxnZTNXd1FubEl1bC9WTEx2Sm9jQktjOWNIdTE4d0U5OVdEaWZzVVVTcjEy?=
- =?utf-8?B?dWR3U2M0b0FCY3ZjYVJhanNaTmh1VXozcXRKRjBReTVUYXd6R2FQOGxKMXBj?=
- =?utf-8?B?bW9tdnVKUW4vUmJaeTVuWG1yWDlWUzUzU1FnNFhJNGYxVlo5dHUzTEUxN3pS?=
- =?utf-8?B?SkNaNlF6aHRlRVZsd0xZUVBMTmFvbk85cFIzUlhxN3pUWEw5YW1rRTRmRnRT?=
- =?utf-8?B?cFRGN3NEWEJzU1NOb05BeUpuYm0xYThic21Zd3pTUjErcWd1RnlyRXdBY2hr?=
- =?utf-8?B?ZThVUzg3Skowa2tOYzdDWjMvQ0I4NkVoTXJ2RWYrWFAvYXllQmljNkttT2Jj?=
- =?utf-8?B?S3ArUy9ZN285UEJRZDByR0hzK25LenRzaDVTalpNSTZGM0JrbEl5UU04cnVt?=
- =?utf-8?B?Q1d2UFEzTzJaSVJmclJxQXozMTNxb2I3UGVGZ1dhbWNXWUszUjdJbVJudStx?=
- =?utf-8?B?bGhxdGtTZkdSeEJhR2dTdTBGZGNaVDFBVVBOR25aQUFOa3R5eHFSN25JNXVa?=
- =?utf-8?B?YmRiM01CdGdJZ1BqSWJtdm1DMGU3N3pVVm8ya1Q2NDlkVjlZRU9OejB1UmVB?=
- =?utf-8?B?bTZiT1NraUsySzRXZWwrOXhMUHN4QXUya205REtOVUZIQjBFT0dJMW9uNmRu?=
- =?utf-8?B?MGt1cGlIUWtPaGhERm5IZzFjWDN6S0ozaGtpUm5ZMTlsUDhBYWFVNmVhVnlL?=
- =?utf-8?B?MURFME1uK0dZc1ZiVmhrK2h3cWVQRW9iT1FNQ24zM2RKMEorTzNzK0ZnYkFW?=
- =?utf-8?B?RmVQRERxbUNQZnZVNXhvOFNHNmZ2MC9xeGwxRVpMS3JJTlB1OVlWZG96S3Js?=
- =?utf-8?B?cjVlaFU3SDhqUEN0dHhidFN2SWhjdUtpbWZNcjBsWmRCYU5LRGZIMzVHSVRD?=
- =?utf-8?B?ZjRKQ3lIT3lDVWNNa05ZYkNLT3JaWXBENThWdktZU3gvQ1FPcm8rR0h2UE00?=
- =?utf-8?B?enR0Vlg2STVpVFVXeWZJTXdlK1dDNGpYeHJHZHBPYnE5aGlEWWRSdWdPdVR0?=
- =?utf-8?B?VkhJUmMxUHJZOVU0RXZUSXdCb1RmZWM2a0hhTTAvTGk3Qk9LZUNLaVl0bGFl?=
- =?utf-8?B?WHJFa1dEYnorWFVNYm5KeGEzazZRWFZEcWpEWW9hWUdQeVNadXZsdW1kZzZ2?=
- =?utf-8?B?ckZmaU9DWHJleHZBdmlYbDRoQ0lCQm81ZXA1MFRkRXBWTXBOOEpERmUzNTlF?=
- =?utf-8?B?NlNJRGNuZ3pWWnhpeFJoK0Q1NElzTWQ1cEVGR0EwR2xlR1NVN3grMWVPYVRo?=
- =?utf-8?B?ejZ6ZDQ5VXlGY1prQSszZU9TN21QV2IvcDhMYnIrU3ZqVnd0cUpxYTE1Ulc3?=
- =?utf-8?B?RkVJaHVleDRTaVYwWGVGaTVMVTk4MHBtaVJJSDhvOEJkelRCWTZRSHNnZnVr?=
- =?utf-8?B?cmlCUlAwbFNuRFFhN3JpVmN1ZlQ4OUNNTGkvU2hZTU9mY3dwY05UOTJjUHpk?=
- =?utf-8?B?MTladUpsSlBrbzRydzNVUlJLelBkNG16ZTNKNUdYc2NQcDJiV2xYcmRyUUZ6?=
- =?utf-8?B?KzdLZ1VtWDFoRnlKNHZORGtDaFA0RC9KNDdaN2p1MGdWd1NSam53NWlKQWU4?=
- =?utf-8?B?NzUwVnhkRjQ3MXNrRENOSGZIS1F5V25MKzd5NXlUL3NqT3hmcyt2Y0R2QTh2?=
- =?utf-8?B?d05KeThEaUdNRG50cW1hd0pURU0vM0NxU3ZmNVBqNXNja0FGdlZKYXEwRFVF?=
- =?utf-8?B?c2oxSmR5QU45eUJyOGRHQll1OXV5Si82di8vcHpHQnlOZjlaQU5URzRYMkRy?=
- =?utf-8?B?emd5RVhlVjZrSkR0L1NvNlZOQ3VsRFB3akU2eVhXcEMybUhBTWg5TVlyaVlj?=
- =?utf-8?B?WVBKR1RBbXRtSXB2OFYzQlppQ1MvOWdpRlFRN0JUM1ErR093alVHZDFzRllt?=
- =?utf-8?B?enBuNnNsMU1vQ3ZoRlJySmpJa25CUjNsZ29OMjY5RTFPY2o5RFFzdzlXZWlh?=
- =?utf-8?B?VlJ0ekZvWENWd29wOEpTcFhaVzRVc2hJaW5DMUhRakVxUFR5WmtsOEZZM0FW?=
- =?utf-8?B?TmhEWFIwdnR6dGE3ZkU5VnBCaFd3PT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e04d81c6-bdfe-4b97-b746-08db5d2ff54b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 14:54:36.4778
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E3aRhzc1YQ+k/Wb32uHFTNWHaxKwgmUsu9H6szYouBi5Hw6AmsF6bQnJefsf9c0nDjzHMIDzHdvUTY58f5hT56F7lJ0blTM+wvVIGRq+ph4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR13MB4436
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230525142652.41981-1-samsagax@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 04:19:32PM +0200, Eric Dumazet wrote:
-> On Thu, May 25, 2023 at 2:55â€¯PM Breno Leitao <leitao@debian.org> wrote:
-> >
-> > Most of the ioctls to net protocols operates directly on userspace
-> > argument (arg). Usually doing get_user()/put_user() directly in the
-> > ioctl callback.  This is not flexible, because it is hard to reuse these
-> > functions without passing userspace buffers.
-> >
-> > Change the "struct proto" ioctls to avoid touching userspace memory and
-> > operate on kernel buffers, i.e., all protocol's ioctl callbacks is
-> > adapted to operate on a kernel memory other than on userspace (so, no
-> > more {put,get}_user() and friends being called in the ioctl callback).
-> >
+On Thu, May 25, 2023 at 11:26:52AM -0300, Joaquín Ignacio Aramendía wrote:
+> We don't need to pass device structure to write_to_ec() so we remove
+> that from the function declaration.
+> The same is valid for pwm_enable() and pwm_disable() as we were passing
+> the pointer to hand it off to write_to_ec().
 > 
->  diff --git a/include/net/phonet/phonet.h b/include/net/phonet/phonet.h
-> > index 862f1719b523..93705d99f862 100644
-> > --- a/include/net/phonet/phonet.h
-> > +++ b/include/net/phonet/phonet.h
-> > @@ -109,4 +109,23 @@ void phonet_sysctl_exit(void);
-> >  int isi_register(void);
-> >  void isi_unregister(void);
-> >
-> > +#ifdef CONFIG_PHONET
-> > +int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg);
-> > +
-> > +static inline bool phonet_is_sk(struct sock *sk)
-> > +{
-> > +       return sk->sk_family == PF_PHONET && sk->sk_protocol == PN_PROTO_PHONET;
-> > +}
-> > +#else
-> > +static inline bool phonet_is_sk(struct sock *sk)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> > +{
-> > +       return 1;
-> > +}
-> > +#endif
-> > +
-> >
+> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+
+Applied.
+
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/oxp-sensors.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 > 
-> PHONET can be built as a module, so I guess the compiler would
-> complain if "CONFIG_PHONET=m" ???
-
-Yes, indeed it does.
-
--- 
-pw-bot: cr
-
+> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+> index a4ee757f879f..0ec7588610ad 100644
+> --- a/drivers/hwmon/oxp-sensors.c
+> +++ b/drivers/hwmon/oxp-sensors.c
+> @@ -141,7 +141,7 @@ static int read_from_ec(u8 reg, int size, long *val)
+>  	return 0;
+>  }
+>  
+> -static int write_to_ec(const struct device *dev, u8 reg, u8 value)
+> +static int write_to_ec(u8 reg, u8 value)
+>  {
+>  	int ret;
+>  
+> @@ -156,14 +156,14 @@ static int write_to_ec(const struct device *dev, u8 reg, u8 value)
+>  	return ret;
+>  }
+>  
+> -static int oxp_pwm_enable(const struct device *dev)
+> +static int oxp_pwm_enable(void)
+>  {
+> -	return write_to_ec(dev, OXP_SENSOR_PWM_ENABLE_REG, 0x01);
+> +	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x01);
+>  }
+>  
+> -static int oxp_pwm_disable(const struct device *dev)
+> +static int oxp_pwm_disable(void)
+>  {
+> -	return write_to_ec(dev, OXP_SENSOR_PWM_ENABLE_REG, 0x00);
+> +	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x00);
+>  }
+>  
+>  /* Callbacks for hwmon interface */
+> @@ -234,9 +234,9 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+>  		switch (attr) {
+>  		case hwmon_pwm_enable:
+>  			if (val == 1)
+> -				return oxp_pwm_enable(dev);
+> +				return oxp_pwm_enable();
+>  			else if (val == 0)
+> -				return oxp_pwm_disable(dev);
+> +				return oxp_pwm_disable();
+>  			return -EINVAL;
+>  		case hwmon_pwm_input:
+>  			if (val < 0 || val > 255)
+> @@ -254,7 +254,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+>  			default:
+>  				break;
+>  			}
+> -			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
+> +			return write_to_ec(OXP_SENSOR_PWM_REG, val);
+>  		default:
+>  			break;
+>  		}
