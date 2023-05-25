@@ -2,129 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C817103F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84F37103F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239045AbjEYEOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S239070AbjEYEQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbjEYEN6 (ORCPT
+        with ESMTP id S239027AbjEYEQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:13:58 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B8D1BD5;
-        Wed, 24 May 2023 21:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=R7BsKuXRvafTncknbatCeztkH8x+NR2fV4WpB9u/hV0=; b=G4JmrcqkeToYptfFrlwtEYjzCO
-        uqvltTFMWAeFa/yeNW2Wn/HlEPed/PTrM+6sORdVE2mPkJcOFy50QBVdnj6KKYqxTsijCY2LsoTT3
-        AxMQsXwxgRt1xv+HbDDq7su9RqX3jfKgbpMlfyJpo0VL57re1E1q7pUg0lXNY9+Lxgc0=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:57286 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q22I0-0001nr-Nw; Thu, 25 May 2023 00:09:25 -0400
-Date:   Thu, 25 May 2023 00:09:24 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <20230525000924.7946d5df5c163451cd8860f5@hugovil.com>
-In-Reply-To: <20230517194406.4125912-1-hugo@hugovil.com>
-References: <20230517194406.4125912-1-hugo@hugovil.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 25 May 2023 00:16:02 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8412E5F;
+        Wed, 24 May 2023 21:14:22 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:37610.1839801626
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id C626B10019D;
+        Thu, 25 May 2023 12:14:18 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id b8960a41a24a401fb7eef09e4362d536 for kernel@xen0n.name;
+        Thu, 25 May 2023 12:14:20 CST
+X-Transaction-ID: b8960a41a24a401fb7eef09e4362d536
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <5f70f46b-8c53-c55b-761a-6bb50c01b2b1@189.cn>
+Date:   Thu, 25 May 2023 12:14:17 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+ <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
+ <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
+ <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
+ <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
+ <5ae49b7a-b8d2-a822-65bc-6a894d2b1b4e@189.cn>
+ <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
+ <69edaf49-359a-229c-c8b4-8aa3af622008@189.cn>
+ <ece7821e-c4bb-f2b7-3b1d-dacc04729530@xen0n.name>
+ <04ede1b1-9757-5181-eec7-658c1df0480e@189.cn>
+Content-Language: en-US
+In-Reply-To: <04ede1b1-9757-5181-eec7-658c1df0480e@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [RFC PATCH] serial: sc16is7xx: fix broken port 0 uart init
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 15:44:07 -0400
-Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> While experimenting with rs485 configuration on a SC16IS752 dual UART,
-> I found that the sc16is7xx_config_rs485() function was called only for
-> the second port (index 1, channel B), causing initialization problems
-> for the first port.
-> 
-> For the sc16is7xx driver, port->membase and port->mapbase are not set,
-> and their default values are 0. And we set port->iobase to the device
-> index. This means that when the first device is registered using the
-> uart_add_one_port() function, the following values will be in the port
-> structure:
->     port->membase = 0
->     port->mapbase = 0
->     port->iobase  = 0
-> 
-> Therefore, the function uart_configure_port() in serial_core.c will
-> exit early because of the following check:
-> 	/*
-> 	 * If there isn't a port here, don't do anything further.
-> 	 */
-> 	if (!port->iobase && !port->mapbase && !port->membase)
-> 		return;
-> 
-> Typically, I2C and SPI drivers do not set port->membase and
-> port->mapbase. But I found that the max310x driver sets
-> port->membase to ~0 (all ones). By implementing the same change in our
-> driver, uart_configure_port() is now correctly executed.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
-> 
-> I am not sure if this change is the best long-term solution to this
-> problem, and maybe uart_configure_port() itself could be modified to
-> take into account the fact that some devices have all three *base
-> values set to zero?
-> 
-> Also, many drivers use port->iobase as an index, is it the correct way
-> to use it?
-> 
-> For example, for our driver, there was
-> commit 5da6b1c079e6 ("sc16is7xx: Set iobase to device index") with the
-> following explanation:
->     "Set the .iobase value to the relative index within the device to allow
->     infering the order through sysfs."
-> 
->  drivers/tty/serial/sc16is7xx.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-> index 1a3143331c1f..3e0e63498052 100644
-> --- a/drivers/tty/serial/sc16is7xx.c
-> +++ b/drivers/tty/serial/sc16is7xx.c
-> @@ -1432,6 +1432,7 @@ static int sc16is7xx_probe(struct device *dev,
->  		s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
->  		s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
->  		s->p[i].port.iobase	= i;
-> +		s->p[i].port.membase	= (void __iomem *)~0;
->  		s->p[i].port.iotype	= UPIO_PORT;
->  		s->p[i].port.uartclk	= freq;
->  		s->p[i].port.rs485_config = sc16is7xx_config_rs485;
-> -- 
-> 2.30.2
+On 2023/5/25 12:09, Sui Jingfeng wrote:
+> Hi,
+>
+> On 2023/5/23 00:40, WANG Xuerui wrote:
+>> On 5/22/23 21:13, Sui Jingfeng wrote:
+>>> Hi,
+>>>
+>>> On 2023/5/22 18:25, WANG Xuerui wrote:
+>>>> On 2023/5/22 18:17, Sui Jingfeng wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 2023/5/22 18:05, WANG Xuerui wrote:
+>>>>>> On 2023/5/22 17:49, Sui Jingfeng wrote:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On 2023/5/22 17:28, WANG Xuerui wrote:
+>>>>>>>> On 2023/5/22 17:25, Sui Jingfeng wrote:
+>>>>>>>>> Hi,
+>>>>>>>>>
+>>>>>>>>> On 2023/5/21 20:21, WANG Xuerui wrote:
+>>>>>>>>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with 
+>>>>>>>>>>> on-board video RAM
+>>>>>>>>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost 
+>>>>>>>>>>> SoCs which share
+>>>>>>>>>>> + * the system RAM as video RAM, they don't has a dediacated 
+>>>>>>>>>>> VRAM.
+>>>>>>>>>>
+>>>>>>>>>> CPU models are not typically prefixed with "LS", so "Loongson 
+>>>>>>>>>> 3A4000/3A5000/3A6000".
+>>>>>>>>>>
+>>>>>>>>> Here is because when you do programming, variable name should 
+>>>>>>>>> prefix with letters.
+>>>>>>>>
+>>>>>>>> Commit messages, comments, and log messages etc. are natural 
+>>>>>>>> language, so it's better to treat them differently. No problem 
+>>>>>>>> to keep code as-is IMO.
+>>>>>>>>
+>>>>>>> Then you get two name for a single chip,  take LS7A1000 as an 
+>>>>>>> example.
+>>>>>>>
+>>>>>>> You name it as Loongson 7A1000 in commit message,  and then you 
+>>>>>>> have to define another name in the code,  say LS7A1000.
+>>>>>>>
+>>>>>>> "Loongson 7A1000" is too long,  not as compact as LS7A1000.
+>>>>>>>
+>>>>>>> This also avoid bind the company name to a specific product, 
+>>>>>>> because a company can produce many product.
+>>>>>>
+>>>>>> Nah, the existing convention is "LS7Xxxxx" for bridges and 
+>>>>>> "Loongson 3Axxxx" for CPUs (SoCs like 2K fall under this category 
+>>>>>> too). It's better to stick with existing practice so it would be 
+>>>>>> familiar to long-time Loongson/LoongArch developers, but I 
+>>>>>> personally don't think it will hamper understanding if you feel 
+>>>>>> like doing otherwise.
+>>>>>>
+>>>>> Can you explain why it is better?
+>>>>>
+>>>>> is it that the already existing is better ?
+>>>>
+>>>> It's not about subjective perception of "better" or "worse", but 
+>>>> about tree-wide consistency, and about reducing any potential 
+>>>> confusion from newcomers. I remember Huacai once pointing out that 
+>>>> outsiders usually have a hard time remembering "1, 2, and 3 are 
+>>>> CPUs, some 2 are SoCs, 7 are bridge chips", and consistently 
+>>>> referring to the bridge chips throughout the tree as "LS7A" helped.
+>>>>
+>>>> In any case, for the sake of consistency, you can definitely refer 
+>>>> to the CPU models in natural language like "LS3Axxxx"; just make 
+>>>> sure to refactor for example every occurrence in arch/loongarch and 
+>>>> other parts of drivers/. That's a lot of churn, though, so I don't 
+>>>> expect such changes to get accepted, and that's why the tree-wide 
+>>>> consistency should be favored over the local one.
+>>>>
+>>> There are document[1] which named LS7A1000 bridge chip as Loongson 
+>>> 7A1000 Bridge,
+>>>
+>>> which is opposed to what you have said "the existing convention is 
+>>> LS7Xxxxx for bridges".
+>>>
+>>>
+>>> there are also plenty projects[2] which encode ls2k1000 as project 
+>>> name, which simply
+>>>
+>>> don't fall into the category as you have mentioned("Loongson 3Axxxx").
+>>>
+>>>
+>>> See [1][2] for reference, how to explain this phenomenon then?
+>>
+>> Turn down the flames a little bit, okay? ;-)
+>>
+>>
+> There is no flames, its just that it need sufficient discussion when 
+> started to contribute to community.
+>
+> We want more rigorous toward to our patch.
+>
+>
+> We can't adopt irresponsible ideas, especially from someone who is 
+> reluctant to give a
+>
+> reasonable rationale and refused to discussion.
+>
+>
+> Such changes could probably made a damage to Loongson company.
+>
+> As it tend to introduce self-contradictory between the code and comment.
+>
+> Especially when we introduce DT support, there is no write space in 
+> the middle the string is allowed.
+>
 
-This patch is now integrated in the following series:
-https://lkml.org/lkml/2023/5/25/7
- 
+'write' -> 'white'
+
+
+> and encode model information to the compatible string is an common 
+> practice.
+>
+>
+> While at it, I will take it into another consideration if there are 
+> more professional person who
+>
+> is supporting your ideas and could take the responsibility for it.
+>
+> Beside this, other reviews are still acceptable, thanks for the 
+> reasonable part.
+>
+>
