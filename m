@@ -2,73 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DE87107F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2BE7107F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240457AbjEYIyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
+        id S240403AbjEYIzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbjEYIx6 (ORCPT
+        with ESMTP id S230389AbjEYIzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:53:58 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3C998;
-        Thu, 25 May 2023 01:53:56 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P6F9Es026738;
-        Thu, 25 May 2023 08:53:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=BrchjuWV1wBbB58d8SD1J5iFGcwkOwCfC97vxqH3nWA=;
- b=ZMaIUNw7Zk2vlHQHN9VfLCCT5uNY3lNixmDXIsXgryjMOzBb+0RSsSQP0m4egU6n8OhX
- H2WTS13EelCfM1J0QwHDekx0sw07J7NXjwmnzHj3AL/3v62LdBGTEVdIntXgQ/HrmHHS
- V/A0u/pJvVCCNBeBpkydspMDWt+xnB2SY2LDUljEGn64bmCa1sZ1ovcXGRsY/eIITGgt
- HCBIMik+0seYlh8i1L7yfQEoR1ua0HQjlwlgzI/H9MZ+a/18/e9oHSb9lUvQ1fu/KN26
- wtNWpnRdpqIPPC+sR6Ei2X6EzNxY4LvVYPo2hIK+fjocyoGcEuOPhiDVSKxYQlKRAS71 sw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsp509s5y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 08:53:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34P8rqXq018921
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 08:53:52 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 25 May 2023 01:53:49 -0700
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH v5] usb: common: usb-conn-gpio: Set last role to unknown before initial detection
-Date:   Thu, 25 May 2023 14:23:45 +0530
-Message-ID: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 25 May 2023 04:55:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0505798;
+        Thu, 25 May 2023 01:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4b2eicAEuLtRWdZtNZ5cHEIkzBFWO5fbGUCIkmElStA=; b=awjODk2fwPYTgmCI5gJmw6l9OT
+        webj8qbFiwu2EL0MRewtFXEC24of9u7MvAW5satunvNuK0PfsEXnHCvwZdPeVlmrsw6YlUMgskELw
+        WNFvHhYGq2vX1/nA3+RnT7Ewviy63PEB/VQJlSpqkZNlmRE6hBD+qKC25FfdB8cV/yZPZ6qBNLpBo
+        en8dqOWQjXH3kLxP48mjho4LySuKy+LkE7/OcY26lmBWJY9wsywIRwmVJ4noS0NZY3hsyN8wzzxgY
+        eo9zRmZLXoe6kD+DKJ5sOgSpyhphRKbS6OSMZfY7OxgblBnBnlx+363WZE2cNfcb8tk/Pqg7uMSA3
+        iH5ae6cg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q26jT-00C1Be-HE; Thu, 25 May 2023 08:54:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA4AA3002F0;
+        Thu, 25 May 2023 10:54:00 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3566720A78733; Thu, 25 May 2023 10:54:00 +0200 (CEST)
+Date:   Thu, 25 May 2023 10:54:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
+Message-ID: <20230525085400.GP4253@hirez.programming.kicks-ass.net>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
+ <ZGxo9ylqYI8JXjGn@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <ZGzLf4zgxpBjghaF@google.com>
+ <ZG2qv9sWl2RUnGqd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <ZG5wg3VbG4rCYrfk@google.com>
+ <20230524203336.GC3447678@hirez.programming.kicks-ass.net>
+ <ZG6EJoXbduApRsgV@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4NtOc2YWR_OptvsDyryekIRvtP9xjCaF
-X-Proofpoint-ORIG-GUID: 4NtOc2YWR_OptvsDyryekIRvtP9xjCaF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_04,2023-05-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG6EJoXbduApRsgV@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,71 +95,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently if we bootup a device without cable connected, then
-usb-conn-gpio won't call set_role() since last_role is same as
-current role. This happens because during probe last_role gets
-initialised to zero.
+On Wed, May 24, 2023 at 02:39:50PM -0700, Sean Christopherson wrote:
+> On Wed, May 24, 2023, Peter Zijlstra wrote:
+> > On Wed, May 24, 2023 at 01:16:03PM -0700, Sean Christopherson wrote:
+> > > Of course, the only accesses outside of mmu_lock are reads, so on x86 that
+> > > "atomic" access is just a READ_ONCE() load, but that's not the case for all
+> > > architectures.
+> > 
+> > This is true on *all* archs. atomic_set() and atomic_read() are no more
+> > and no less than WRITE_ONCE() / READ_ONCE().
+> 
+> Ah, I take it s390's handcoded assembly routines are just a paranoid equivalents
+> and not truly special?  "l" and "st" do sound quite generic...
 
-To avoid this, added a new constant in enum usb_role, last_role
-is set to USB_ROLE_UNKNOWN before performing initial detection.
-
-While at it, also handle default case for the usb_role switch
-in cdns3 to avoid build warnings.
-
-Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-v5: Update commit text to mention the changes made in cdns3 driver.
-v4: Added Reviewed-by tag.
-v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
-    the test robot.
-v2: Added USB_ROLE_UNKNWON to enum usb_role.
-
- drivers/usb/cdns3/core.c           | 2 ++
- drivers/usb/common/usb-conn-gpio.c | 3 +++
- include/linux/usb/role.h           | 1 +
- 3 files changed, 6 insertions(+)
-
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index dbcdf3b..69d2921 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
- 		if (!vbus)
- 			role = USB_ROLE_NONE;
- 		break;
-+	default:
-+		break;
- 	}
- 
- 	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index e20874c..30bdb81 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, info);
- 	device_set_wakeup_capable(&pdev->dev, true);
- 
-+	/* Set last role to unknown before performing the initial detection */
-+	info->last_role = USB_ROLE_UNKNOWN;
-+
- 	/* Perform initial detection */
- 	usb_conn_queue_dwork(info, 0);
- 
-diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-index b5deafd..221d462 100644
---- a/include/linux/usb/role.h
-+++ b/include/linux/usb/role.h
-@@ -8,6 +8,7 @@
- struct usb_role_switch;
- 
- enum usb_role {
-+	USB_ROLE_UNKNOWN = -1,
- 	USB_ROLE_NONE,
- 	USB_ROLE_HOST,
- 	USB_ROLE_DEVICE,
--- 
-2.7.4
-
+Yep, compiler *should* generate the same with READ_ONCE/WRITE_ONCE.
