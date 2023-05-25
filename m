@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612587114E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960F671156F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242166AbjEYSlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S242144AbjEYSnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242590AbjEYSkt (ORCPT
+        with ESMTP id S242209AbjEYSmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:40:49 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9067210D2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:38:24 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1abso5362654a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685039753; x=1687631753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7LfxAZR8t52u4AO1SI5kqvS9LLBpQSJuHQCFUX9OzGQ=;
-        b=g9JfbEY9bxh9EFIPrAmrY+rOfrj+WxxnuJ/cu8Dy8jgAuxdkF7fJ2GQ1kUODnVFDDz
-         +hBd/VU0QaeUH2K+JB3vk6q2kH+7eqi54cjsOTvNUgE5r+nXS3C6PV2JrI6tjglNMGAP
-         h/52M9XN3BDzkpN0nx83F6MNLOM075WaOwoUQGDGM7nsbMETbyvN+F9OJ45JlObjkAoB
-         VlsoaCqwUJr1ckApxtYKGoKag0/TgNw/iB25yH2nu1Y7nHljvljytaCKr5NSJ0pMBcGT
-         QlO0NXoj8ryYtS/Hk5r5LLvG0XWLQeHITLweEidUZmOz49K4Ax6Fy5RV+mBaYxZzNg7S
-         Y7mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685039753; x=1687631753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7LfxAZR8t52u4AO1SI5kqvS9LLBpQSJuHQCFUX9OzGQ=;
-        b=ahMPVpA9DmNl377appzwywtLDhwbXsDxk2tcYosB/MgAYgWOBZr+UBdd/MiWOz1TWQ
-         8LWybNt0XKLP2eDuw5cUZ5Mo034eBesoePSHiWbKU5n9IBrt+L/oCyxURuqpavfjyirY
-         g9KmGu7xndoXTOp7zTF0uaOsGVl17UZwoP+ub/T3wzj+hMIkMbYxu1BRtIs5ZGdw05as
-         9AnuIvoH+/+l+Tvo9eZNfe+rw/zM5Gzdpu2eztlZhUjwA9EY+CfsuE3pfa1DOEXOwFTY
-         guhgTsSF5TLoGXw1ze/lEMxBoviA6uGRngYJZUPGkdh+7mJ7r66Ooo5agjzQEVv9y7p5
-         BRmw==
-X-Gm-Message-State: AC+VfDzlDMUEqeuQSvEGUO6KAf/P5QgGaYzryd9SvJfVEaTIYemJ+gZh
-        UD2qOsEAN3cW7VyUEkZJhKCiOt2UX0Gxv+h24ZM=
-X-Google-Smtp-Source: ACHHUZ6HhImvycIW5y9vQ9Fb6/lTe4cNBTqpqgaXHCHK9T60sVxAPi6KnVa8R196FbkpqvqTomfV6C0HgBOSM2p6AwU=
-X-Received: by 2002:a17:906:6a0c:b0:96f:3e35:748a with SMTP id
- qw12-20020a1709066a0c00b0096f3e35748amr3072640ejc.6.1685039753202; Thu, 25
- May 2023 11:35:53 -0700 (PDT)
+        Thu, 25 May 2023 14:42:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FAB10EA;
+        Thu, 25 May 2023 11:39:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E78BF6491B;
+        Thu, 25 May 2023 18:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CB17C4339E;
+        Thu, 25 May 2023 18:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685039870;
+        bh=JX+nrVURjyP+KRfBbp1VkQbPd7NZtc4TQcwVsolORiM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UM7cFyADxmikYR3Liwrup7buEGF5nrUfTEPVp5bI96IZrWeAn+xjdCugNgkqtkz+l
+         h+CxcvCyUW+8iG8nPtSbxI3ukzhYf7OtyWFI2GaVd1leWKgn8VQEvr6cpSX/v2Zsnl
+         dR+MISA9wIQjgfMzZSYokORQpYRFuaOmF23RzBNY2lhWpwx7NTsMNytXl2aPR4qZkG
+         OJJlbbqeG/Njgm7hknvJ7ELh5I6FHBkZwNf7MDSqIhMiGpAlTgs+NcDXFJA5hEptmn
+         DwePofU5oYomzR0hxQ8cI/ufQjyESSr4GaDTPQ9NdkJzSiutSewUTP8bHNboyEfeqv
+         hgGsBFVWZrshA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Holger Dengler <dengler@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>, hca@linux.ibm.com,
+        gor@linux.ibm.com, linux-s390@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 31/57] s390/pkey: zeroize key blobs
+Date:   Thu, 25 May 2023 14:35:41 -0400
+Message-Id: <20230525183607.1793983-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
+References: <20230525183607.1793983-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20230525122837.649627-1-daniel.baluta@oss.nxp.com> <69c2b7cd-f211-47ef-b42a-609ee792de11@sirena.org.uk>
-In-Reply-To: <69c2b7cd-f211-47ef-b42a-609ee792de11@sirena.org.uk>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Thu, 25 May 2023 21:35:40 +0300
-Message-ID: <CAEnQRZAseAmOHLBsBQuW+SqEFbT-pbrjpUiPhSuv8Ww2VoJf_w@mail.gmail.com>
-Subject: Re: [PATCH v2] ASoC: SOF: imx: Add OF machine descriptors for i.MX platforms
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Daniel Baluta <daniel.baluta@oss.nxp.com>,
-        alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
-        lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 8:07=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Thu, May 25, 2023 at 03:28:37PM +0300, Daniel Baluta wrote:
->
-> > +static struct snd_sof_of_mach sof_imx8_machs[] =3D {
-> > +     {
-> > +             .compatible =3D "fsl,imx8qxp",
-> > +             .drv_name =3D "asoc-simple-card",
-> > +             .sof_tplg_filename =3D "sof-imx8.tplg",
-> > +     },
-> > +     {
-> > +             .compatible =3D "fsl,imx8qm",
-> > +             .drv_name =3D "asoc-simple-card",
-> > +             .sof_tplg_filename =3D "sof-imx8.tplg",
-> > +     },
-> > +     {}
->
-> It seems a bit sad to be adding simple-card rather than audio-graph-card
-> at this point - is there some great reason for this?
+From: Holger Dengler <dengler@linux.ibm.com>
 
-This is what we used so far and it works pretty well for us.
+[ Upstream commit 844cf829e5f33e00b279230470c8c93b58b8c16f ]
 
-Is there a plan to deprecate simple-card? And switch to audio-graph-card?
+Key blobs for the IOCTLs PKEY_KBLOB2PROTK[23] may contain clear key
+material. Zeroize the copies of these keys in kernel memory after
+creating the protected key.
 
-We could have a look at this if this is the correct direction.
+Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+Signed-off-by: Holger Dengler <dengler@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/s390/crypto/pkey_api.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/s390/crypto/pkey_api.c b/drivers/s390/crypto/pkey_api.c
+index 5a05d1cdfec20..a8def50c149bd 100644
+--- a/drivers/s390/crypto/pkey_api.c
++++ b/drivers/s390/crypto/pkey_api.c
+@@ -1293,6 +1293,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
+ 			return PTR_ERR(kkey);
+ 		rc = pkey_keyblob2pkey(kkey, ktp.keylen, &ktp.protkey);
+ 		DEBUG_DBG("%s pkey_keyblob2pkey()=%d\n", __func__, rc);
++		memzero_explicit(kkey, ktp.keylen);
+ 		kfree(kkey);
+ 		if (rc)
+ 			break;
+@@ -1426,6 +1427,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
+ 					kkey, ktp.keylen, &ktp.protkey);
+ 		DEBUG_DBG("%s pkey_keyblob2pkey2()=%d\n", __func__, rc);
+ 		kfree(apqns);
++		memzero_explicit(kkey, ktp.keylen);
+ 		kfree(kkey);
+ 		if (rc)
+ 			break;
+@@ -1552,6 +1554,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
+ 					protkey, &protkeylen);
+ 		DEBUG_DBG("%s pkey_keyblob2pkey3()=%d\n", __func__, rc);
+ 		kfree(apqns);
++		memzero_explicit(kkey, ktp.keylen);
+ 		kfree(kkey);
+ 		if (rc) {
+ 			kfree(protkey);
+-- 
+2.39.2
+
