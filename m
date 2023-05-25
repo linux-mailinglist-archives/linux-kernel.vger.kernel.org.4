@@ -2,195 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8EF710553
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF1C710556
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbjEYFa5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 01:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S233247AbjEYFhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 01:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjEYFa4 (ORCPT
+        with ESMTP id S232941AbjEYFhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 01:30:56 -0400
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E4C9C;
-        Wed, 24 May 2023 22:30:54 -0700 (PDT)
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-456fe3597bdso113104e0c.0;
-        Wed, 24 May 2023 22:30:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684992653; x=1687584653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Xh0Vn9KzZCtUCAw6GpkLdF92gEyREy+XoFZlbU+VHA=;
-        b=QVzLW81k2zEPME0SjSKY2AUhoNqcmqObC+MO/WJ/+4WlVoec+DJ9azEEpju6fJYdn5
-         Ny+VyUWNURdJ4ae1cz25aT/KojfTPNRKx2Y9i2YOVHIP/oLYbfB4gA4l/Bghj1/aRs1n
-         H39zjloyyLbF2rA0/oltUObhlvXFUpI6LNO650EtwxegyKYQHpPgpniaiDcEEPfMHACv
-         Jow8llcY/+Ox8LdL1MISGR3EDWyNfurNXQ3X/mWT8kxPdKsHRiG1N6JgBEGo5qxk2Y2Y
-         eNh9yVYvkos8PThV5xcFIIS7AumzHJ7NSBcJ59Lwhys02by4Oj7RhTQcLXAa13msy63F
-         eRZA==
-X-Gm-Message-State: AC+VfDx1vtfhSpmiSV9APNJqFqQRfKGcLxdWNdQedMTmJdIjCiKegxW2
-        iWS9nJLNQd7ThiW6tIq8uhJHvHi3g6aa/NCb3tU=
-X-Google-Smtp-Source: ACHHUZ4gM+e0+iu5fU2ScDoza6sA0PdTWhkDFpjCnW25ahJB3HG/1nvz/Gj7cba5CyoutlltqNRnrDprrap2m9xtw/w=
-X-Received: by 2002:a1f:45cf:0:b0:44f:c1a7:ceff with SMTP id
- s198-20020a1f45cf000000b0044fc1a7ceffmr581404vka.6.1684992653502; Wed, 24 May
- 2023 22:30:53 -0700 (PDT)
+        Thu, 25 May 2023 01:37:01 -0400
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549F6A1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:36:54 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="96634625"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681138800"; 
+   d="scan'208";a="96634625"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 14:36:51 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id B2222D29E5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:36:49 +0900 (JST)
+Received: from aks-ab1.gw.nic.fujitsu.com (aks-ab1.gw.nic.fujitsu.com [192.51.207.11])
+        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id E0089BF4BA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:36:48 +0900 (JST)
+Received: from [192.168.122.212] (unknown [10.167.226.45])
+        by aks-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id 6CB792FC685A;
+        Thu, 25 May 2023 14:36:47 +0900 (JST)
+Subject: Re: [RFC PATCH v2 0/3] pmem memmap dump support
+From:   "Li, Zhijian" <lizhijian@fujitsu.com>
+To:     Dan Williams <dan.j.williams@intel.com>, bhe@redhat.com
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>,
+        "Xiao Yang (Fujitsu)" <yangx.jy@fujitsu.com>,
+        "Shiyang Ruan (Fujitsu)" <ruansy.fnst@fujitsu.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+References: <20230427101838.12267-1-lizhijian@fujitsu.com>
+ <644c17823cf83_13303129460@dwillia2-xfh.jf.intel.com.notmuch>
+ <774fd596-5481-aeff-aace-8785158728ea@fujitsu.com>
+ <0fe0d69e-e33b-cf45-c957-68a8159d29ab@fujitsu.com>
+Message-ID: <f8aff5b7-4892-9ccb-8079-abd87e9ab8b0@fujitsu.com>
+Date:   Thu, 25 May 2023 13:36:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.1.1
 MIME-Version: 1.0
-References: <20230524221831.1741381-1-irogers@google.com> <20230524221831.1741381-10-irogers@google.com>
-In-Reply-To: <20230524221831.1741381-10-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 24 May 2023 22:30:41 -0700
-Message-ID: <CAM9d7ci21E+BFHPtbx4iO=pcgs2Y7ZCCVsjD-b5OWMdPLb0-6A@mail.gmail.com>
-Subject: Re: [PATCH v3 09/35] perf evlist: Propagate user CPU maps
- intersecting core PMU maps
-To:     Ian Rogers <irogers@google.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ming Wang <wangming01@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <0fe0d69e-e33b-cf45-c957-68a8159d29ab@fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27648.005
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27648.005
+X-TMASE-Result: 10--36.427300-10.000000
+X-TMASE-MatchedRID: YmTIeYLGqWmPvrMjLFD6eCkMR2LAnMRpThn37FFP5A2Z6U7QhkqRnjig
+        xUJufWBq8GZ6UXtd/D8knOGoeIQzlrLPlm4wh/ZC71L6f9O5B+bHbztUafrIJrwxqSK0GSPRJf5
+        otvavOZdfShUER1/uQrIR2fkfALoSk3+L/4zTFEMF7cpFXK76Tb/I3arxTrviHpyu/FxYOKH6NX
+        Oh/Q26I55+Yz1Sdwy4b6fm/8CuE09LyNFBdZE0R6zGfgakLdjanY+2FiS7N53PWp1UK7zV94X8M
+        Gul6j45WeYbg0RZpl1DTrJAgvBeWaUEDxO9eWwq93bduyx/IZzEOsCKZvLZAdVtkV1dqmwpFTcl
+        NALNY0cWeucbks6Qtsano5bsVuqHb6wZx1ul0pwvz6alF1rVgye0Z6pse6+bhJsTo2dS2dm/BR6
+        8O365bn9eOltIlLtrdthZ52U1v6XwR+yx9wo5ahFbgtHjUWLyUrr7Qc5WhKgQRik6+J7XSf9hZe
+        ynbNVArY6OTSUV7oJEPm1gqq01NcZjWS+/cngMvR08UROkEAeok0CD5UnL64Ajsy+r+wvnLHCPR
+        rZVF/euMZ3gmgaUtf+d8LoybRqLv9CQXR/hM+TfSQNpZkETVEhdBJqHdZ1jF7XImrociEcEgwlH
+        ZNfFor3SKCxDfa5Nh/v5z8O9WopdfABN5LHDU7hXT+72mpTN1LV3ye5rrQEz91mDYZLM5XGk47q
+        JAyS/XICzc9HFHLudqC2fLtk9xE1+zyfzlN7ygxsfzkNRlfJoFT3KzpHqEw6wQI72z4YedB0ntd
+        9Tzp7iRhduhvElsvJT+hf62k2YIbZSWXZZ520=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Ping
 
-On Wed, May 24, 2023 at 3:19 PM Ian Rogers <irogers@google.com> wrote:
+Baoquan, Dan
+
+Sorry to bother you again.
+
+Could you further comment a word or two on this set?
+
+
+Thanks
+Zhijian
+
+
+on 5/10/2023 6:41 PM, Zhijian Li (Fujitsu) wrote:
+> Hi Dan
 >
-> The CPU map for a non-core PMU gives a default CPU value for
-> perf_event_open. For core PMUs the CPU map lists all CPUs the evsel
-> may be opened on. If there are >1 core PMU, the CPU maps will list the
-> CPUs for that core PMU, but the user_requested_cpus may contain CPUs
-> that are invalid for the PMU and cause perf_event_open to fail. To
-> avoid this, when propagating the CPU map for core PMUs intersect it
-> with the CPU map of the PMU (the evsel's "own_cpus").
 >
-> Add comments to __perf_evlist__propagate_maps to explain its somewhat
-> complex behavior.
-
-Thanks for tackling this.  There are many assumptions on this code
-which make this code hard to understand.  I think we need to list
-all possible cases and make the logic as simple as possible.
-
+> on 5/8/2023 5:45 PM, Zhijian Li (Fujitsu) wrote:
+>> Dan,
+>>
+>>
+>> On 29/04/2023 02:59, Dan Williams wrote:
+>>> Li Zhijian wrote:
+>>>> Hello folks,
+>>>>
+>>>> About 2 months ago, we posted our first RFC[3] and received your kindly feedback. Thank you :)
+>>>> Now, I'm back with the code.
+>>>>
+>>>> Currently, this RFC has already implemented to supported case D*. And the case A&B is disabled
+>>>> deliberately in makedumpfile. It includes changes in 3 source code as below:
+>>> I think the reason this patchkit is difficult to follow is that it
+>>> spends a lot of time describing a chosen solution, but not enough time
+>>> describing the problem and the tradeoffs.
+>>>
+>>> For example why is updating /proc/vmcore with pmem metadata the chosen
+>>> solution? Why not leave the kernel out of it and have makedumpfile
+>>> tooling aware of how to parse persistent memory namespace info-blocks
+>>> and retrieve that dump itself? This is what I proposed here:
+>>>
+>>> http://lore.kernel.org/r/641484f7ef780_a52e2940@dwillia2-mobl3.amr.corp.intel.com.notmuch
+>> Sorry for the late reply. I'm just back from the vacation.
+>> And sorry again for missing your previous *important* information in V1.
+>>
+>> Your proposal also sounds to me with less kernel changes, but more ndctl coupling with makedumpfile tools.
+>> In my current understanding, it will includes following source changes.
+> The kernel and makedumpfile has updated. It's still in a early stage, but in order to make sure I'm following your proposal.
+> i want to share the changes with you early. Alternatively, you are able to refer to my github for the full details.
+> https://github.com/zhijianli88/makedumpfile/commit/8ebfe38c015cfca0545cb3b1d7a6cc9a58fc9bb3
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/perf/evlist.c | 25 ++++++++++++++++++++-----
->  1 file changed, 20 insertions(+), 5 deletions(-)
+> If I'm going the wrong way, fee free to let me know :)
 >
-> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> index 81e8b5fcd8ba..b8b066d0dc5e 100644
-> --- a/tools/lib/perf/evlist.c
-> +++ b/tools/lib/perf/evlist.c
-> @@ -36,18 +36,33 @@ void perf_evlist__init(struct perf_evlist *evlist)
->  static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
->                                           struct perf_evsel *evsel)
->  {
-> -       /*
-> -        * We already have cpus for evsel (via PMU sysfs) so
-> -        * keep it, if there's no target cpu list defined.
-> -        */
-
-So basically this code is only needed when the user specified a cpu list.
-Otherwise evsels can use their own cpus.  But it's a kind of sad that
-libperf does not have a notion of PMU (with a cpu map) yet.
-
-I think we have the following cases.  Please tell me if I miss some.
-
-1. non-hybrid core PMU: It used to not have a cpu map, but you added it
-   in this patchset to cover all (online) CPUs.  So it'd be ok to treat them as
-   same as the hybrid PMUs.
-
-2. hybrid core PMU: It has a cpu map to cover possible CPUs and the
-   user requested cpu map should be intersected with its map.
-
-3. uncore PMU: It has a cpu map to indicate CPUs to handle event
-   settings but it's allowed to read the event from other CPUs (at least
-   for Intel CPUs).  That means it can just use the user request cpu map.
-
-4. dummy event: It can be marked as system-wide to get the sideband
-   events from all CPUs.  Then it should ignore the user requested cpu
-   map.  Otherwise it should be treated as other events.
-
-5. tool event: It's used for perf stat and has a hardcoded cpu map for
-   CPU 0.  Not sure if it can accept other CPUs but it seems we can ignore
-   the user requested cpu map.
-
-6. other event: No restrictions.  It can use the user requested cpu map.
-
-
->         if (evsel->system_wide) {
-> +               /* System wide: set the cpu map of the evsel to all online CPUs. */
->                 perf_cpu_map__put(evsel->cpus);
->                 evsel->cpus = perf_cpu_map__new(NULL);
-> +       } else if (evlist->has_user_cpus && evsel->is_pmu_core) {
-> +               /*
-> +                * User requested CPUs on a core PMU, ensure the requested CPUs
-> +                * are valid by intersecting with those of the PMU.
-> +                */
-> +               perf_cpu_map__put(evsel->cpus);
-> +               evsel->cpus = perf_cpu_map__intersect(evlist->user_requested_cpus, evsel->own_cpus);
->         } else if (!evsel->own_cpus || evlist->has_user_cpus ||
-> -                  (!evsel->requires_cpu && perf_cpu_map__empty(evlist->user_requested_cpus))) {
-> +               (!evsel->requires_cpu && perf_cpu_map__has_any_cpu(evlist->user_requested_cpus))) {
-> +               /*
-> +                * The PMU didn't specify a default cpu map, this isn't a core
-> +                * event and the user requested CPUs or the evlist user
-> +                * requested CPUs have the "any CPU" (aka dummy) CPU value. In
-> +                * which case use the user requested CPUs rather than the PMU
-> +                * ones.
-> +                */
->                 perf_cpu_map__put(evsel->cpus);
->                 evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
->         } else if (evsel->cpus != evsel->own_cpus) {
-> +               /*
-> +                * No user requested cpu map but the PMU cpu map doesn't match
-> +                * the evsel's. Reset it back to the PMU cpu map.
-> +                */
-
-Not sure if it actually happens.
-
-Thanks,
-Namhyung
-
-
->                 perf_cpu_map__put(evsel->cpus);
->                 evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
->         }
-> --
-> 2.40.1.698.g37aff9b760-goog
 >
+>> -----------+-------------------------------------------------------------------+
+>> Source     |                      changes                                      |
+>> -----------+-------------------------------------------------------------------+
+>> I.         | 1. enter force_raw in kdump kernel automatically(avoid metadata being updated again)|
+> kernel should adapt it so that the metadata of pmem will be updated again in the kdump kernel:
+>
+> diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+> index c60ec0b373c5..2e59be8b9c78 100644
+> --- a/drivers/nvdimm/namespace_devs.c
+> +++ b/drivers/nvdimm/namespace_devs.c
+> @@ -8,6 +8,7 @@
+>    #include <linux/slab.h>
+>    #include <linux/list.h>
+>    #include <linux/nd.h>
+> +#include <linux/crash_dump.h>
+>    #include "nd-core.h"
+>    #include "pmem.h"
+>    #include "pfn.h"
+> @@ -1504,6 +1505,8 @@ struct nd_namespace_common *nvdimm_namespace_common_probe(struct device *dev)
+>                           return ERR_PTR(-ENODEV);
+>           }
+>    
+> +       if (is_kdump_kernel())
+> +               ndns->force_raw = true;
+>           return ndns;
+>    }
+>    EXPORT_SYMBOL(nvdimm_namespace_common_probe);
+>
+>> kernel     |                                                                   |
+>>               | 2. mark the whole pmem's PT_LOAD for kexec_file_load(2) syscall   |
+>> -----------+-------------------------------------------------------------------+
+>> II. kexec- | 1. mark the whole pmem's PT_LOAD for kexe_load(2) syscall         |
+>> tool       |                                                                   |
+>> -----------+-------------------------------------------------------------------+
+>> III.       | 1. parse the infoblock and calculate the boundaries of userdata and metadata   |
+>> makedump-  | 2. skip pmem userdata region                                      |
+>> file       | 3. exclude pmem metadata region if needed                         |
+>> -----------+-------------------------------------------------------------------+
+>>
+>> I will try rewrite it with your proposal ASAP
+> inspect_pmem_namespace() will walk the namespaces and the read its resource.start and infoblock. With this
+> information, we can calculate the boundaries of userdata and metadata easily. But currently this changes are
+> strongly coupling with the ndctl/pmem which looks a bit messy and ugly.
+>
+> ============makedumpfile=======
+>
+> diff --git a/Makefile b/Makefile
+> index a289e41ef44d..4b4ded639cfd 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -50,7 +50,7 @@ OBJ_PART=$(patsubst %.c,%.o,$(SRC_PART))
+>    SRC_ARCH = arch/arm.c arch/arm64.c arch/x86.c arch/x86_64.c arch/ia64.c arch/ppc64.c arch/s390x.c arch/ppc.c arch/sparc64.c arch/mips64.c arch/loongarch64.c
+>    OBJ_ARCH=$(patsubst %.c,%.o,$(SRC_ARCH))
+>    
+> -LIBS = -ldw -lbz2 -ldl -lelf -lz
+> +LIBS = -ldw -lbz2 -ldl -lelf -lz -lndctl
+>    ifneq ($(LINKTYPE), dynamic)
+>    LIBS := -static $(LIBS) -llzma
+>    endif
+> diff --git a/makedumpfile.c b/makedumpfile.c
+> index 98c3b8c7ced9..db68d05a29f9 100644
+> --- a/makedumpfile.c
+> +++ b/makedumpfile.c
+> @@ -27,6 +27,8 @@
+>    #include <limits.h>
+>    #include <assert.h>
+>    #include <zlib.h>
+> +#include <sys/types.h>
+> +#include <ndctl/libndctl.h>
+>
+> +
+> +#define INFOBLOCK_SZ (8192)
+> +#define SZ_4K (4096)
+> +#define PFN_SIG_LEN 16
+> +
+> +typedef uint64_t u64;
+> +typedef int64_t s64;
+> +typedef uint32_t u32;
+> +typedef int32_t s32;
+> +typedef uint16_t u16;
+> +typedef int16_t s16;
+> +typedef uint8_t u8;
+> +typedef int8_t s8;
+> +
+> +typedef int64_t le64;
+> +typedef int32_t le32;
+> +typedef int16_t le16;
+> +
+> +struct pfn_sb {
+> +       u8 signature[PFN_SIG_LEN];
+> +       u8 uuid[16];
+> +       u8 parent_uuid[16];
+> +       le32 flags;
+> +       le16 version_major;
+> +       le16 version_minor;
+> +       le64 dataoff; /* relative to namespace_base + start_pad */
+> +       le64 npfns;
+> +       le32 mode;
+> +       /* minor-version-1 additions for section alignment */
+> +       le32 start_pad;
+> +       le32 end_trunc;
+> +       /* minor-version-2 record the base alignment of the mapping */
+> +       le32 align;
+> +       /* minor-version-3 guarantee the padding and flags are zero */
+> +       /* minor-version-4 record the page size and struct page size */
+> +       le32 page_size;
+> +       le16 page_struct_size;
+> +       u8 padding[3994];
+> +       le64 checksum;
+> +};
+> +
+> +static int nd_read_infoblock_dataoff(struct ndctl_namespace *ndns)
+> +{
+> +       int fd, rc;
+> +       char path[50];
+> +       char buf[INFOBLOCK_SZ + 1];
+> +       struct pfn_sb *pfn_sb = (struct pfn_sb *)(buf + SZ_4K);
+> +
+> +       sprintf(path, "/dev/%s", ndctl_namespace_get_block_device(ndns));
+> +
+> +       fd = open(path, O_RDONLY|O_EXCL);
+> +       if (fd < 0)
+> +               return -1;
+> +
+> +
+> +       rc = read(fd, buf, INFOBLOCK_SZ);
+> +       if (rc < INFOBLOCK_SZ) {
+> +               return -1;
+> +       }
+> +
+> +       return pfn_sb->dataoff;
+> +}
+> +
+> +int inspect_pmem_namespace(void)
+> +{
+> +       struct ndctl_ctx *ctx;
+> +       struct ndctl_bus *bus;
+> +       int rc = -1;
+> +
+> +       fprintf(stderr, "\n\ninspect_pmem_namespace!!\n\n");
+> +       rc = ndctl_new(&ctx);
+> +       if (rc)
+> +               return -1;
+> +
+> +       ndctl_bus_foreach(ctx, bus) {
+> +               struct ndctl_region *region;
+> +
+> +               ndctl_region_foreach(bus, region) {
+> +                       struct ndctl_namespace *ndns;
+> +
+> +                       ndctl_namespace_foreach(region, ndns) {
+> +                               enum ndctl_namespace_mode mode;
+> +                               long long start, end_metadata;
+> +
+> +                               mode = ndctl_namespace_get_mode(ndns);
+> +                               /* kdump kernel should set force_raw, mode become *safe* */
+> +                               if (mode == NDCTL_NS_MODE_SAFE) {
+> +                                       fprintf(stderr, "Only raw can be dumpable\n");
+> +                                       continue;
+> +                               }
+> +
+> +                               start = ndctl_namespace_get_resource(ndns);
+> +                               end_metadata = nd_read_infoblock_dataoff(ndns);
+> +
+> +                               /* metadata really starts from 2M alignment */
+> +                               if (start != ULLONG_MAX && end_metadata > 2 * 1024 * 1024) // 2M
+> +                                       pmem_add_next(start, end_metadata);
+> +                       }
+> +               }
+> +       }
+> +
+> +       ndctl_unref(ctx);
+> +       return 0;
+> +}
+> +
+>
+> Thanks
+> Zhijian
+>
+>
+>
+>> Thanks again
+>>
+>> Thanks
+>> Zhijian
+>>
+>>> ...but never got an answer, or I missed the answer.
+>> _______________________________________________
+>> kexec mailing list
+>> kexec@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/kexec
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+
