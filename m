@@ -2,198 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156C3710251
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 03:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C07E710255
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 03:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjEYBXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 21:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
+        id S233726AbjEYBYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 21:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjEYBXe (ORCPT
+        with ESMTP id S229630AbjEYBYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 21:23:34 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C67F5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 18:23:33 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so1706556e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 18:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684977811; x=1687569811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ImO6OtSkFfnvqFi/Tdj42NbWs/io79Pf0LI695zdQVY=;
-        b=cLEsJxGCeWR0JFmIcbzKPv46zp4Nl1rQF+aCeJitALaDzDdP0m0Dnl7gfz6vwlNqPj
-         xp2kGQXVGvaqzlpJIoxk6U6dLDDHWyQoD4snYzy+ZHTadjqyIrgwm+AVPX//PY5VGnmr
-         PMh8/910FClKBXpC+Ffitssgdo/KLt/GarDP192FFlK6RT3yTJxHyhYqO3YFG4FLaVvT
-         pFmmoholHhL1vxdfVoGxUfSJJNLtWNWHQn+qgj89q2lpoHw5YHQKgAKVdEfqDnuU/NS6
-         TYVkQ9yAme5Jp4qflWuebnIfq9FYgpYkXWz4NlDqvK0bfKouPbbqTaJ0w352funqt2Ur
-         0gUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684977811; x=1687569811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ImO6OtSkFfnvqFi/Tdj42NbWs/io79Pf0LI695zdQVY=;
-        b=izGgZPiHQxctUsSkO2Jdq9DBE5dYKAHdZwmPHWkAGK1VCEHAD8Vvcn5G7m5Mdk0+5C
-         Nqq208rPHgU5HgbjHBVdvJ/EPk4dxkC5EI+7uasahSijHArPwncZLGw6fhazPFZlQBCj
-         DGZ+y02ISuIFsA2GLIXj3L0v45ofm5YmqgRjy58QJiDIVFZ9C1whl7eQMWCv2waD/8X2
-         4oUVoSaHAN7HSh4KnuVG4zywxg6pydHit+/BUmOmM5bJBBIuK4/lkpE5XFc2blj9Rsdc
-         eb4apxdmEF5LRBhFcdiZ3yFQEJrA795om15AN3UlNB94+1IvnnBKhZ1cVv9jfKhA6gwF
-         fu5Q==
-X-Gm-Message-State: AC+VfDw3uJTpkBDivzXOl4YKUb341SqC0CmbJB6BVSmSnfAZYihK5sHY
-        Y10v7hShp6a2PQOuhhbstJ/TkInlYtV9DDskpF4=
-X-Google-Smtp-Source: ACHHUZ4R1YP38WQ+w5tcAppMXtmV8ADJBETAAAQK+pQaNcR7Z1INqwa5atnT5D3ecG2LzRAH0mK4g7Qq2e/3e42QVbE=
-X-Received: by 2002:ac2:4ad1:0:b0:4f3:8c0d:41c4 with SMTP id
- m17-20020ac24ad1000000b004f38c0d41c4mr6139693lfp.30.1684977811090; Wed, 24
- May 2023 18:23:31 -0700 (PDT)
+        Wed, 24 May 2023 21:24:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262BDF5;
+        Wed, 24 May 2023 18:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684977882; x=1716513882;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hFml+IFBGpyck4Ofg1pKOuGV669kPAVkwNRi7Imskrg=;
+  b=UkZBq5X3kxJsfctjZeq0tsJGYHfMyN2NP8OOs3tmTHZ0bjTSnYOYI5qy
+   l8XFoAaqiSeQ8vq1VLvIBspkPKbxie/Q6zlz1UHLSs6piiu0h01yWPWrD
+   ySaRNoN/8SvIDmGT6gWRHJMDdutjPIACzYX6f46hCuq1JD9bYo8HrRi5N
+   r9pNQtlChbrjVPoO+RVtSEC4SPuM+ey5biF5bVLa+IqsewgSxo3kCc1KK
+   a3TqXrEKpO2KgmYv+CWAIC4jTIAUnFo1VBQyjzjAvR/XE6KUqbr+GZdPt
+   hmdmVTfd+tuGDHou26bPjsuThhu4phTk+6yTP1yTKRov3ZLETT49Tx0Vg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="343208103"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="343208103"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 18:24:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="769672043"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="769672043"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 24 May 2023 18:24:29 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q1ziO-000FLD-0t;
+        Thu, 25 May 2023 01:24:28 +0000
+Date:   Thu, 25 May 2023 09:23:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Runyang Chen <runyang.chen@mediatek.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Runyang Chen <runyang.chen@mediatek.com>
+Subject: Re: [PATCH v3 2/2] clk: mediatek: reset: add infra_ao reset support
+ for MT8188
+Message-ID: <202305250908.Uvas9u4E-lkp@intel.com>
+References: <20230524133439.20659-3-runyang.chen@mediatek.com>
 MIME-Version: 1.0
-References: <1684919574-28368-1-git-send-email-zhaoyang.huang@unisoc.com> <CAJuCfpHLdmtzAvhk94vLmkDNBAO8xJMFEdnXy8j=0KGovmmC_w@mail.gmail.com>
-In-Reply-To: <CAJuCfpHLdmtzAvhk94vLmkDNBAO8xJMFEdnXy8j=0KGovmmC_w@mail.gmail.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Thu, 25 May 2023 09:23:07 +0800
-Message-ID: <CAGWkznGs=voCMYWsSRMJ7ZKxz0NcB6P9ynOK8AizHBHZG2MoDA@mail.gmail.com>
-Subject: Re: [PATCH] mm: deduct the number of pages reclaimed by madvise from workingset
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524133439.20659-3-runyang.chen@mediatek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 4:41=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Wed, May 24, 2023 at 2:13=E2=80=AFAM zhaoyang.huang
-> <zhaoyang.huang@unisoc.com> wrote:
-> >
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >
-> > The pages reclaimed by madvise_pageout are made of inactive and dropped=
- from LRU
-> > forcefully, which lead to the coming up refault pages possess a large r=
-efault
-> > distance than it should be. These could affect the accuracy of thrashin=
-g when
-> > madvise_pageout is used as a common way of memory reclaiming as ANDROID=
- does now.
->
-> Doesn't workingset_eviction() in the following call chain already
-> handle nonresident page aging?:
->
-> reclaim_pages
->   reclaim_folio_list
->     shrink_folio_list
->       __remove_mapping
->         workingset_eviction
->           workingset_age_nonresident
-Yes. What I suggest is to minor this pages from non-resident as they
-are dropped forcefully
->
->
-> >
-> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > ---
-> >  include/linux/swap.h | 2 +-
-> >  mm/madvise.c         | 4 ++--
-> >  mm/vmscan.c          | 8 +++++++-
-> >  3 files changed, 10 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/include/linux/swap.h b/include/linux/swap.h
-> > index 2787b84..0312142 100644
-> > --- a/include/linux/swap.h
-> > +++ b/include/linux/swap.h
-> > @@ -428,7 +428,7 @@ extern unsigned long mem_cgroup_shrink_node(struct =
-mem_cgroup *mem,
-> >  extern int vm_swappiness;
-> >  long remove_mapping(struct address_space *mapping, struct folio *folio=
-);
-> >
-> > -extern unsigned long reclaim_pages(struct list_head *page_list);
-> > +extern unsigned long reclaim_pages(struct mm_struct *mm, struct list_h=
-ead *page_list);
-> >  #ifdef CONFIG_NUMA
-> >  extern int node_reclaim_mode;
-> >  extern int sysctl_min_unmapped_ratio;
-> > diff --git a/mm/madvise.c b/mm/madvise.c
-> > index b6ea204..61c8d7b 100644
-> > --- a/mm/madvise.c
-> > +++ b/mm/madvise.c
-> > @@ -420,7 +420,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t =
-*pmd,
-> >  huge_unlock:
-> >                 spin_unlock(ptl);
-> >                 if (pageout)
-> > -                       reclaim_pages(&page_list);
-> > +                       reclaim_pages(mm, &page_list);
-> >                 return 0;
-> >         }
-> >
-> > @@ -516,7 +516,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t =
-*pmd,
-> >         arch_leave_lazy_mmu_mode();
-> >         pte_unmap_unlock(orig_pte, ptl);
-> >         if (pageout)
-> > -               reclaim_pages(&page_list);
-> > +               reclaim_pages(mm, &page_list);
-> >         cond_resched();
-> >
-> >         return 0;
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 20facec..048c10b 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -2741,12 +2741,14 @@ static unsigned int reclaim_folio_list(struct l=
-ist_head *folio_list,
-> >         return nr_reclaimed;
-> >  }
-> >
-> > -unsigned long reclaim_pages(struct list_head *folio_list)
-> > +unsigned long reclaim_pages(struct mm_struct *mm, struct list_head *fo=
-lio_list)
->
-> You would also need to change Damon usage of reclaim_pages() here:
-> https://elixir.bootlin.com/linux/v6.4-rc1/source/mm/damon/paddr.c#L253
-ok, thanks for reminding
->
-> >  {
-> >         int nid;
-> >         unsigned int nr_reclaimed =3D 0;
-> >         LIST_HEAD(node_folio_list);
-> >         unsigned int noreclaim_flag;
-> > +       struct lruvec *lruvec;
-> > +       struct mem_cgroup *memcg =3D get_mem_cgroup_from_mm(mm);
-> >
-> >         if (list_empty(folio_list))
-> >                 return nr_reclaimed;
-> > @@ -2764,10 +2766,14 @@ unsigned long reclaim_pages(struct list_head *f=
-olio_list)
-> >                 }
-> >
-> >                 nr_reclaimed +=3D reclaim_folio_list(&node_folio_list, =
-NODE_DATA(nid));
-> > +               lruvec =3D &memcg->nodeinfo[nid]->lruvec;
-> > +               workingset_age_nonresident(lruvec, -nr_reclaimed);
-> >                 nid =3D folio_nid(lru_to_folio(folio_list));
-> >         } while (!list_empty(folio_list));
-> >
-> >         nr_reclaimed +=3D reclaim_folio_list(&node_folio_list, NODE_DAT=
-A(nid));
-> > +       lruvec =3D &memcg->nodeinfo[nid]->lruvec;
-> > +       workingset_age_nonresident(lruvec, -nr_reclaimed);
-> >
-> >         memalloc_noreclaim_restore(noreclaim_flag);
-> >
-> > --
-> > 1.9.1
-> >
+Hi Runyang,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on pza/reset/next]
+[cannot apply to pza/imx-drm/next mbgg-mediatek/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Runyang-Chen/dt-bindings-reset-mt8188-add-thermal-reset-control-bit/20230524-213538
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230524133439.20659-3-runyang.chen%40mediatek.com
+patch subject: [PATCH v3 2/2] clk: mediatek: reset: add infra_ao reset support for MT8188
+config: riscv-randconfig-r042-20230524 (https://download.01.org/0day-ci/archive/20230525/202305250908.Uvas9u4E-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/7d969d160489d561f9b1fb6388adaa1ba8fe06a1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Runyang-Chen/dt-bindings-reset-mt8188-add-thermal-reset-control-bit/20230524-213538
+        git checkout 7d969d160489d561f9b1fb6388adaa1ba8fe06a1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/mediatek/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305250908.Uvas9u4E-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/mediatek/clk-mt8188-infra_ao.c:196:18: error: initializing 'u16 *' (aka 'unsigned short *') with an expression of type 'const u16[5]' (aka 'const unsigned short[5]') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           .rst_bank_ofs = infra_ao_rst_ofs,
+                           ^~~~~~~~~~~~~~~~
+   drivers/clk/mediatek/clk-mt8188-infra_ao.c:198:17: error: initializing 'u16 *' (aka 'unsigned short *') with an expression of type 'const u16[3]' (aka 'const unsigned short[3]') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           .rst_idx_map = infra_ao_idx_map,
+                          ^~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +196 drivers/clk/mediatek/clk-mt8188-infra_ao.c
+
+   193	
+   194	static const struct mtk_clk_rst_desc infra_ao_rst_desc = {
+   195		.version = MTK_RST_SET_CLR,
+ > 196		.rst_bank_ofs = infra_ao_rst_ofs,
+   197		.rst_bank_nr = ARRAY_SIZE(infra_ao_rst_ofs),
+   198		.rst_idx_map = infra_ao_idx_map,
+   199		.rst_idx_map_nr = ARRAY_SIZE(infra_ao_idx_map),
+   200	};
+   201	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
