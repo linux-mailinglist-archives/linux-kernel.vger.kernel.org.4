@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FA4711452
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FB6711426
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241943AbjEYShG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S241905AbjEYSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241977AbjEYSgl (ORCPT
+        with ESMTP id S241589AbjEYSfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:36:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B421FC9;
-        Thu, 25 May 2023 11:35:06 -0700 (PDT)
+        Thu, 25 May 2023 14:35:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CA51992;
+        Thu, 25 May 2023 11:34:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1E046145F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A73648B2;
+        Thu, 25 May 2023 18:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05667C433D2;
         Thu, 25 May 2023 18:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1020C433D2;
-        Thu, 25 May 2023 18:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039647;
-        bh=hJg46VfbTWxIwGTGG7h6AktdrZprwQtapsxWqyAjKFw=;
+        s=k20201202; t=1685039649;
+        bh=NybuOARIeQPHnMskvSwF0Aq/qo48rTF7fRrWfOjNa00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tf6HnR8Mnux8LnCEJlsaH0qc5u4BtM3WOwbUBnLC3yruO0AEzN+Ed2Bq4gxzYDewR
-         LBzs6XrDX9OuSj2wm6zcpK9nyAZf2H8RvrNGfa7rJwJLQBQKRBKeL6oP1XYC1PTECT
-         WWz+XvuhoCqIKm8Gd9SP8FboPPaNFeE85MKhkesntqdQwQJcJqGa1GJgoY/lERGn90
-         kE0MeqpGFJ8Lf1TESoW+sRdPBUJpwJrgsx36djWiu6iKamq6IxNQNP+e8kkqwl2ltl
-         BvrEAQ6FjY59woaSYsvpQ8njgTnvPbDWje7FzD6UxGQKXBcAkcpA9wcNvBKNluaVSg
-         KSnvPsETNcLRw==
+        b=DOlF+UinN2D/DILMp2vlNwCVq00NbF6AHNOwNVvwd4yF30Z+c92UEJJWZ7cy2hRru
+         2XrCv+t1ld+cPvALOP7wEgRTcMjRp3lr0cmc4p6TWaeI/6zsAquAPO5u1iMbJ4PsIj
+         sMzIUkrNbIq66lXxX5a0Q3YAcUmLZN8fUJvuSlIC8f/uRiovvL03BniqZkQQIQp/OC
+         LAPT7ZqjcflWolxPSgz1OjcmkjyKO5xCIsYhEU7FmsLggCrrHPqWyd4ssE+bpFN3sy
+         Fl6j/LQ/JHIGBLAvVZxegxlTPXfCRhOUE06wVlr2R0kwvJvmKj/gtEMU/NTbtxneuU
+         z7qihtKDoO2/w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, daniel.baluta@nxp.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.3 34/67] ASoC: SOF: pm: save io region state in case of errors in resume
-Date:   Thu, 25 May 2023 14:31:11 -0400
-Message-Id: <20230525183144.1717540-34-sashal@kernel.org>
+Cc:     Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, ying.xue@windriver.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net
+Subject: [PATCH AUTOSEL 6.3 35/67] tipc: add tipc_bearer_min_mtu to calculate min mtu
+Date:   Thu, 25 May 2023 14:31:12 -0400
+Message-Id: <20230525183144.1717540-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
 References: <20230525183144.1717540-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,69 +59,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-[ Upstream commit 171b53be635ac15d4feafeb33946035649b1ca14 ]
+[ Upstream commit 3ae6d66b605be604644d4bb5708a7ffd9cf1abe8 ]
 
-If there are failures in DSP runtime resume, the device state will not
-reach active and this makes it impossible e.g. to retrieve a possible
-DSP panic dump via "exception" debugfs node. If
-CONFIG_SND_SOC_SOF_DEBUG_ENABLE_DEBUGFS_CACHE=y is set, the data in
-cache is stale. If debugfs cache is not used, the region simply cannot
-be read.
+As different media may requires different min mtu, and even the
+same media with different net family requires different min mtu,
+add tipc_bearer_min_mtu() to calculate min mtu accordingly.
 
-To allow debugging these scenarios, update the debugfs cache contents in
-resume error handler. User-space can then later retrieve DSP panic and
-other state via debugfs (requires SOF debugfs cache to be enabled in
-build).
+This API will be used to check the new mtu when doing the link
+mtu negotiation in the next patch.
 
-Reported-by: Curtis Malainey <cujomalainey@chromium.org
-Link: https://github.com/thesofproject/linux/issues/4274
-Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com
-Reviewed-by: Curtis Malainey <cujomalainey@chromium.org
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com
-Link: https://lore.kernel.org/r/20230512104638.21376-1-peter.ujfalusi@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Acked-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/pm.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ net/tipc/bearer.c    | 13 +++++++++++++
+ net/tipc/bearer.h    |  3 +++
+ net/tipc/udp_media.c |  5 +++--
+ 3 files changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/sof/pm.c b/sound/soc/sof/pm.c
-index 85412aeb1ca16..40f392efd8246 100644
---- a/sound/soc/sof/pm.c
-+++ b/sound/soc/sof/pm.c
-@@ -159,7 +159,7 @@ static int sof_resume(struct device *dev, bool runtime_resume)
- 		ret = tplg_ops->set_up_all_pipelines(sdev, false);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "Failed to restore pipeline after resume %d\n", ret);
--			return ret;
-+			goto setup_fail;
- 		}
- 	}
- 
-@@ -173,6 +173,18 @@ static int sof_resume(struct device *dev, bool runtime_resume)
- 			dev_err(sdev->dev, "ctx_restore IPC error during resume: %d\n", ret);
- 	}
- 
-+setup_fail:
-+#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_ENABLE_DEBUGFS_CACHE)
-+	if (ret < 0) {
-+		/*
-+		 * Debugfs cannot be read in runtime suspend, so cache
-+		 * the contents upon failure. This allows to capture
-+		 * possible DSP coredump information.
-+		 */
-+		sof_cache_debugfs(sdev);
-+	}
-+#endif
-+
- 	return ret;
+diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
+index 35cac7733fd3a..0e9a29e1536b7 100644
+--- a/net/tipc/bearer.c
++++ b/net/tipc/bearer.c
+@@ -541,6 +541,19 @@ int tipc_bearer_mtu(struct net *net, u32 bearer_id)
+ 	return mtu;
  }
  
++int tipc_bearer_min_mtu(struct net *net, u32 bearer_id)
++{
++	int mtu = TIPC_MIN_BEARER_MTU;
++	struct tipc_bearer *b;
++
++	rcu_read_lock();
++	b = bearer_get(net, bearer_id);
++	if (b)
++		mtu += b->encap_hlen;
++	rcu_read_unlock();
++	return mtu;
++}
++
+ /* tipc_bearer_xmit_skb - sends buffer to destination over bearer
+  */
+ void tipc_bearer_xmit_skb(struct net *net, u32 bearer_id,
+diff --git a/net/tipc/bearer.h b/net/tipc/bearer.h
+index 490ad6e5f7a3c..bd0cc5c287ef8 100644
+--- a/net/tipc/bearer.h
++++ b/net/tipc/bearer.h
+@@ -146,6 +146,7 @@ struct tipc_media {
+  * @identity: array index of this bearer within TIPC bearer array
+  * @disc: ptr to link setup request
+  * @net_plane: network plane ('A' through 'H') currently associated with bearer
++ * @encap_hlen: encap headers length
+  * @up: bearer up flag (bit 0)
+  * @refcnt: tipc_bearer reference counter
+  *
+@@ -170,6 +171,7 @@ struct tipc_bearer {
+ 	u32 identity;
+ 	struct tipc_discoverer *disc;
+ 	char net_plane;
++	u16 encap_hlen;
+ 	unsigned long up;
+ 	refcount_t refcnt;
+ };
+@@ -232,6 +234,7 @@ int tipc_bearer_setup(void);
+ void tipc_bearer_cleanup(void);
+ void tipc_bearer_stop(struct net *net);
+ int tipc_bearer_mtu(struct net *net, u32 bearer_id);
++int tipc_bearer_min_mtu(struct net *net, u32 bearer_id);
+ bool tipc_bearer_bcast_support(struct net *net, u32 bearer_id);
+ void tipc_bearer_xmit_skb(struct net *net, u32 bearer_id,
+ 			  struct sk_buff *skb,
+diff --git a/net/tipc/udp_media.c b/net/tipc/udp_media.c
+index c2bb818704c8f..0a85244fd6188 100644
+--- a/net/tipc/udp_media.c
++++ b/net/tipc/udp_media.c
+@@ -738,8 +738,8 @@ static int tipc_udp_enable(struct net *net, struct tipc_bearer *b,
+ 			udp_conf.local_ip.s_addr = local.ipv4.s_addr;
+ 		udp_conf.use_udp_checksums = false;
+ 		ub->ifindex = dev->ifindex;
+-		if (tipc_mtu_bad(dev, sizeof(struct iphdr) +
+-				      sizeof(struct udphdr))) {
++		b->encap_hlen = sizeof(struct iphdr) + sizeof(struct udphdr);
++		if (tipc_mtu_bad(dev, b->encap_hlen)) {
+ 			err = -EINVAL;
+ 			goto err;
+ 		}
+@@ -760,6 +760,7 @@ static int tipc_udp_enable(struct net *net, struct tipc_bearer *b,
+ 		else
+ 			udp_conf.local_ip6 = local.ipv6;
+ 		ub->ifindex = dev->ifindex;
++		b->encap_hlen = sizeof(struct ipv6hdr) + sizeof(struct udphdr);
+ 		b->mtu = 1280;
+ #endif
+ 	} else {
 -- 
 2.39.2
 
