@@ -2,232 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7EA71103C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523FC711043
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241886AbjEYQBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
+        id S241904AbjEYQBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbjEYQBN (ORCPT
+        with ESMTP id S241905AbjEYQBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:01:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED0ABB;
-        Thu, 25 May 2023 09:01:11 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PF9whQ007396;
-        Thu, 25 May 2023 16:00:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=W0UodC4wO9Z0PPDH8IxHje0JR900ThyIMrr9RUQ8BQg=;
- b=Q0T5Lr+vZCGKyfz9i6KDG6BUaEr8BQSsipwn8mNMPmF5JLEuVkp5qLCHVXFRyFL0TR7E
- pR/7/kAqOmU6jYslXviVKTSoOOBtQO4NvlcfEVShlLWFKfcaB2mx9DzWpvGiZVCxk1qr
- NCGRETcOJ4f1BZTf7T/do8ezoXoqJDv97pC6HOVzMgcmDmhdPu9qniB74Z1AkuaIHcn9
- O4U4ohcdkOu90v92P43Kj6yjJv372GJ67KWGCKv9BPCU5PbqJ6AIH6y1okVyCYj8wVNC
- AQpy6FoTOz8XMFIOJCYlPv+b1XyW0ctqZ0tlVyaLRBBwjtT+modTGHAb37NYc/Z4L78c KA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsuc220hc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 16:00:47 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PG0lZ1006058
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 16:00:47 GMT
-Received: from [10.216.59.206] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 09:00:39 -0700
-Message-ID: <1e6c1471-91f0-f230-1590-c835ba27fba5@quicinc.com>
-Date:   Thu, 25 May 2023 21:30:34 +0530
+        Thu, 25 May 2023 12:01:34 -0400
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB511A2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:00:45 -0700 (PDT)
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-75afed17e0cso62529185a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:00:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685030445; x=1687622445;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XHGm6h9ltzIrb4jNjdDlUA0RTr0K5h3DXD0V46u1KXM=;
+        b=RPpWreNbjum54mv+8tCpRr8Nio2nyl+7sKzgNgiMrcqLN+GEWueVcxnsJl3DiRwqO+
+         V6Lr1o43y3xzMakjz5te6q2IBshZpv/hbexJEdzyAcaBVTTo5CX0JrhWzLxUCo5a6f6J
+         Jc0VM5Rax6IraxUTF3y994G++16w5uoE3h2FHaHOsVYUmSHPQhsNlIptuslMHVkakEF2
+         f3pqH+0quJG9ErBXSll9vbHuPTNhuhpDo4cBB9yqNhFcI0mgtzouMcRsbFFDkCk8nuTW
+         lUfrV1/sgKbHVBbDp4CFTkrKDdCnx40ommJKpjaOU4+oZRO1RvXOIcPLGYWd0R1g3/OM
+         LBFA==
+X-Gm-Message-State: AC+VfDyth9J5GC7t7wBrvehi3BYvK/NH802Zh4LjESw9V445k2qKzrKs
+        /xtuERzoZTaTFGhutpUfxDzf
+X-Google-Smtp-Source: ACHHUZ4Z77PxkwjQ7WFe2GRTFdAB5YMbwS9Fi8O2f9aEzq40ZuS6SSvTA3pLXmIPe4Uvb22Hlm64XQ==
+X-Received: by 2002:a37:68d0:0:b0:75b:23a1:421 with SMTP id d199-20020a3768d0000000b0075b23a10421mr11005599qkc.55.1685030444711;
+        Thu, 25 May 2023 09:00:44 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id f10-20020a05620a15aa00b007339c5114a9sm474202qkk.103.2023.05.25.09.00.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 09:00:44 -0700 (PDT)
+Date:   Thu, 25 May 2023 12:00:43 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>, Joe Thornber <ejt@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZG+GKwFC7M3FfAO5@redhat.com>
+References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+ <ZGb2Xi6O3i2pLam8@infradead.org>
+ <ZGeKm+jcBxzkMXQs@redhat.com>
+ <ZGgBQhsbU9b0RiT1@dread.disaster.area>
+ <ZGu0LaQfREvOQO4h@redhat.com>
+ <ZGzIJlCE2pcqQRFJ@bfoster>
+ <ZGzbGg35SqMrWfpr@redhat.com>
+ <ZG1dAtHmbQ53aOhA@dread.disaster.area>
+ <ZG5taYoXDRymo/e9@redhat.com>
+ <ZG9JD+4Zu36lnm4F@dread.disaster.area>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 03/18] docs: qcom: Add qualcomm minidump guide
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <corbet@lwn.net>, <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-4-git-send-email-quic_mojha@quicinc.com>
- <ZFjIcSRSitmOvmZw@debian.me>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <ZFjIcSRSitmOvmZw@debian.me>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fWnLbuw1DUmaxRUqwxLGGtNGT4L3nLvJ
-X-Proofpoint-GUID: fWnLbuw1DUmaxRUqwxLGGtNGT4L3nLvJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_08,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 mlxscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
- mlxlogscore=999 spamscore=0 phishscore=0 adultscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250132
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG9JD+4Zu36lnm4F@dread.disaster.area>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 25 2023 at  7:39P -0400,
+Dave Chinner <david@fromorbit.com> wrote:
 
+> On Wed, May 24, 2023 at 04:02:49PM -0400, Mike Snitzer wrote:
+> > On Tue, May 23 2023 at  8:40P -0400,
+> > Dave Chinner <david@fromorbit.com> wrote:
+> > 
+> > > On Tue, May 23, 2023 at 11:26:18AM -0400, Mike Snitzer wrote:
+> > > > On Tue, May 23 2023 at 10:05P -0400, Brian Foster <bfoster@redhat.com> wrote:
+> > > > > On Mon, May 22, 2023 at 02:27:57PM -0400, Mike Snitzer wrote:
+> > > > > ... since I also happen to think there is a potentially interesting
+> > > > > development path to make this sort of reserve pool configurable in terms
+> > > > > of size and active/inactive state, which would allow the fs to use an
+> > > > > emergency pool scheme for managing metadata provisioning and not have to
+> > > > > track and provision individual metadata buffers at all (dealing with
+> > > > > user data is much easier to provision explicitly). So the space
+> > > > > inefficiency thing is potentially just a tradeoff for simplicity, and
+> > > > > filesystems that want more granularity for better behavior could achieve
+> > > > > that with more work. Filesystems that don't would be free to rely on the
+> > > > > simple/basic mechanism provided by dm-thin and still have basic -ENOSPC
+> > > > > protection with very minimal changes.
+> > > > > 
+> > > > > That's getting too far into the weeds on the future bits, though. This
+> > > > > is essentially 99% a dm-thin approach, so I'm mainly curious if there's
+> > > > > sufficient interest in this sort of "reserve mode" approach to try and
+> > > > > clean it up further and have dm guys look at it, or if you guys see any
+> > > > > obvious issues in what it does that makes it potentially problematic, or
+> > > > > if you would just prefer to go down the path described above...
+> > > > 
+> > > > The model that Dave detailed, which builds on REQ_PROVISION and is
+> > > > sticky (by provisioning same blocks for snapshot) seems more useful to
+> > > > me because it is quite precise.  That said, it doesn't account for
+> > > > hard requirements that _all_ blocks will always succeed.
+> > > 
+> > > Hmmm. Maybe I'm misunderstanding the "reserve pool" context here,
+> > > but I don't think we'd ever need a hard guarantee from the block
+> > > device that every write bio issued from the filesystem will succeed
+> > > without ENOSPC.
+> > > 
+> > > If the block device can provide a guarantee that a provisioned LBA
+> > > range is always writable, then everything else is a filesystem level
+> > > optimisation problem and we don't have to involve the block device
+> > > in any way. All we need is a flag we can ready out of the bdev at
+> > > mount time to determine if the filesystem should be operating with
+> > > LBA provisioning enabled...
+> > > 
+> > > e.g. If we need to "pre-provision" a chunk of the LBA space for
+> > > filesystem metadata, we can do that ahead of time and track the
+> > > pre-provisioned range(s) in the filesystem itself.
+> > > 
+> > > In XFS, That could be as simple as having small chunks of each AG
+> > > reserved to metadata (e.g. start with the first 100MB) and limiting
+> > > all metadata allocation free space searches to that specific block
+> > > range. When we run low on that space, we pre-provision another 100MB
+> > > chunk and then allocate all metadata out of that new range. If we
+> > > start getting ENOSPC to pre-provisioning, then we reduce the size of
+> > > the regions and log low space warnings to userspace. If we can't
+> > > pre-provision any space at all and we've completely run out, we
+> > > simply declare ENOSPC for all incoming operations that require
+> > > metadata allocation until pre-provisioning succeeds again.
+> > 
+> > This is basically saying the same thing but:
+> > 
+> > It could be that the LBA space is fragmented and so falling back to
+> > the smallest region size (that matches the thinp block size) would be
+> > the last resort?  Then if/when thinp cannot even service allocating a
+> > new free thin block, dm-thinp will transition to out-of-data-space
+> > mode.
+> 
+> Yes, something of that sort, though we'd probably give up if we
+> can't get at least megabyte scale reservations - a single
+> modification in XFS can modify many structures and require
+> allocation of a lot of new metadata, so the fileystem cut-off would
+> for metadata provisioning failure would be much larger than the
+> dm-thinp region size....
+> 
+> > > This is built entirely on the premise that once proactive backing
+> > > device provisioning fails, the backing device is at ENOSPC and we
+> > > have to wait for that situation to go away before allowing new data
+> > > to be ingested. Hence the block device really doesn't need to know
+> > > anything about what the filesystem is doing and vice versa - The
+> > > block dev just says "yes" or "no" and the filesystem handles
+> > > everything else.
+> > 
+> > Yes.
+> > 
+> > > It's worth noting that XFS already has a coarse-grained
+> > > implementation of preferred regions for metadata storage. It will
+> > > currently not use those metadata-preferred regions for user data
+> > > unless all the remaining user data space is full.  Hence I'm pretty
+> > > sure that a pre-provisioning enhancment like this can be done
+> > > entirely in-memory without requiring any new on-disk state to be
+> > > added.
+> > > 
+> > > Sure, if we crash and remount, then we might chose a different LBA
+> > > region for pre-provisioning. But that's not really a huge deal as we
+> > > could also run an internal background post-mount fstrim operation to
+> > > remove any unused pre-provisioning that was left over from when the
+> > > system went down.
+> > 
+> > This would be the FITRIM with extension you mention below? Which is a
+> > filesystem interface detail?
+> 
+> No. We might reuse some of the internal infrastructure we use to
+> implement FITRIM, but that's about it. It's just something kinda
+> like FITRIM but with different constraints determined by the
+> filesystem rather than the user...
+> 
+> As it is, I'm not sure we'd even need it - a preiodic userspace
+> FITRIM would acheive the same result, so leaked provisioned spaces
+> would get cleaned up eventually without the filesystem having to do
+> anything specific...
+> 
+> > So dm-thinp would _not_ need to have new
+> > state that tracks "provisioned but unused" block?
+> 
+> No idea - that's your domain. :)
+> 
+> dm-snapshot, for certain, will need to track provisioned regions
+> because it has to guarantee that overwrites to provisioned space in
+> the origin device will always succeed. Hence it needs to know how
+> much space breaking sharing in provisioned regions after a snapshot
+> has been taken with be required...
 
-On 5/8/2023 3:31 PM, Bagas Sanjaya wrote:
-> On Wed, May 03, 2023 at 10:32:17PM +0530, Mukesh Ojha wrote:
->>   Documentation/admin-guide/qcom_minidump.rst | 246 ++++++++++++++++++++++++++++
->>   1 file changed, 246 insertions(+)
-> 
-> You forget to add toctree entry:
-> 
-> ---- >8 ----
-> diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
-> index 43ea35613dfcd4..251d070486c2ab 100644
-> --- a/Documentation/admin-guide/index.rst
-> +++ b/Documentation/admin-guide/index.rst
-> @@ -120,6 +120,7 @@ configure specific aspects of kernel behavior to your liking.
->      perf-security
->      pm/index
->      pnp
-> +   qcom_minidump
->      rapidio
->      ras
->      rtc
-> 
->> +Writing to sysfs node can also be used to set the mode to minidump.
->> +
->> +::
->> +	echo "mini" > /sys/module/qcom_scm/parameter/download_mode
-> 
-> The snippet above isn't rendered to code block, so I have to fix it up:
-> 
-> ---- >8 ----
-> diff --git a/Documentation/admin-guide/qcom_minidump.rst b/Documentation/admin-guide/qcom_minidump.rst
-> index 062c797e90d9cf..408fe1beed1b78 100644
-> --- a/Documentation/admin-guide/qcom_minidump.rst
-> +++ b/Documentation/admin-guide/qcom_minidump.rst
-> @@ -208,9 +208,8 @@ Similarly, "full" is passed to set the download mode to full dump
->   where entire ddr dump will be collected while setting it "full,mini"
->   will collect minidump along with fulldump.
->   
-> -Writing to sysfs node can also be used to set the mode to minidump.
-> +Writing to sysfs node can also be used to set the mode to minidump::
->   
-> -::
->   	echo "mini" > /sys/module/qcom_scm/parameter/download_mode
->   
->   Once the download mode is set, any kind of crash will make the device collect
-> 
->> +By default, dumps are downloaded via USB to the attached x86_64 machine
->> +running PCAT (Qualcomm tool) software. Upon download, we will see
->> +a set of binary blobs starts with name md_* in PCAT configured directory
->> +in x86_64 machine, so for above example from the client it will be
->> +md_REGION_A.BIN. This binary blob depends on region content to determine
->> +whether it needs external parser support to get the content of the region,
->> +so for simple plain ASCII text we don't need any parsing and the content
->> +can be seen just opening the binary file.
->> +
->> <snipped> ...
->> +One need to read the entire rawdump partition and pull out content to
->> +save it onto the attached x86_64 machine over USB. Later, this rawdump
->> +can be pass it to another tool dexter.exe(Qualcomm tool) which converts
->> +this into the similar binary blobs which we have got it when download type
->> +was set to USB i.e a set of registered region as blobs and their name
->> +starts with md_*.
->> +
->> +Replacing the dexter.exe with some open source tool can be added as future
->> +scope of this document.
-> 
-> There is inconsistency on inlining code keywords, so I have to inline
-> the rest:
-> 
-> ---- >8 ----
-> diff --git a/Documentation/admin-guide/qcom_minidump.rst b/Documentation/admin-guide/qcom_minidump.rst
-> index 408fe1beed1b78..117e61ef9fde67 100644
-> --- a/Documentation/admin-guide/qcom_minidump.rst
-> +++ b/Documentation/admin-guide/qcom_minidump.rst
-> @@ -118,7 +118,7 @@ Client driver can use ``qcom_apss_minidump_region_register`` API's to
->   register and ``qcom_apss_minidump_region_unregister`` to unregister
->   their region from minidump driver.
->   
-> -Client need to fill their region by filling qcom_apss_minidump_region
-> +Client need to fill their region by filling ``qcom_apss_minidump_region``
->   structure object which consist of the region name, region's
->   virtual and physical address and its size.
->   
-> @@ -166,7 +166,7 @@ Test
->   
->   Existing Qualcomm devices already supports entire ddr dump (also called
->   full dump) by writing appropriate value to Qualcomm's top control and
-> -status register(tcsr) in driver/firmware/qcom_scm.c .
-> +status register(tcsr) in ``driver/firmware/qcom_scm.c``.
->   
->   SCM device Tree bindings required to support download mode
->   For example (sm8450) ::
-> @@ -202,10 +202,10 @@ For example (sm8450) ::
->   
->   	};
->   
-> -User of minidump can pass qcom_scm.download_mode="mini" to kernel
-> +User of minidump can pass ``qcom_scm.download_mode="mini"`` to kernel
->   commandline to set the current download mode to minidump.
-> -Similarly, "full" is passed to set the download mode to full dump
-> -where entire ddr dump will be collected while setting it "full,mini"
-> +Similarly, ``"full"`` is passed to set the download mode to full dump
-> +where entire ddr dump will be collected while setting it ``"full,mini"``
->   will collect minidump along with fulldump.
->   
->   Writing to sysfs node can also be used to set the mode to minidump::
-> @@ -223,9 +223,9 @@ stored to an attached storage device.
->   
->   By default, dumps are downloaded via USB to the attached x86_64 machine
->   running PCAT (Qualcomm tool) software. Upon download, we will see
-> -a set of binary blobs starts with name md_* in PCAT configured directory
-> +a set of binary blobs starts with name ``md_*`` in PCAT configured directory
->   in x86_64 machine, so for above example from the client it will be
-> -md_REGION_A.BIN. This binary blob depends on region content to determine
-> +``md_REGION_A.BIN``. This binary blob depends on region content to determine
->   whether it needs external parser support to get the content of the region,
->   so for simple plain ASCII text we don't need any parsing and the content
->   can be seen just opening the binary file.
-> @@ -236,10 +236,10 @@ partition on the target device itself.
->   
->   One need to read the entire rawdump partition and pull out content to
->   save it onto the attached x86_64 machine over USB. Later, this rawdump
-> -can be pass it to another tool dexter.exe(Qualcomm tool) which converts
-> +can be pass it to another tool (``dexter.exe`` [Qualcomm tool]) which converts
->   this into the similar binary blobs which we have got it when download type
->   was set to USB i.e a set of registered region as blobs and their name
-> -starts with md_*.
-> +starts with ``md_*``.
->   
-> -Replacing the dexter.exe with some open source tool can be added as future
-> +Replacing the ``dexter.exe`` with some open source tool can be added as future
->   scope of this document.
+dm-thinp offers its own much more scalable snapshot support (doesn't
+use old dm-snapshot N-way copyout target).
 
-Thanks for the review and the shared diffs, have applied the changes for 
-the next version.
+dm-snapshot isn't going to be modified to support this level of
+hardening (dm-snapshot is basically in "maintenance only" now).
 
--- Mukesh
+But I understand your meaning: what you said is 100% applicable to
+dm-thinp's snapshot implementation and needs to be accounted for in
+thinp's metadata (inherent 'provisioned' flag).
 
+> > Nor would the block
+> > layer need an extra discard flag for a new class of "provisioned"
+> > blocks.
 > 
-> Thanks.
+> Right, I don't see that the discard operations need to care whether
+> the underlying storage is provisioned. dm-thinp and dm-snapshot can
+> treat REQ_OP_DISCARD as "this range is not longer in use" and do
+> whatever they want with them. 
 > 
+> > If XFS tracked this "provisioned but unused" state, dm-thinp could
+> > just discard the block like its told.  Would be nice to avoid dm-thinp
+> > needing to track "provisioned but unused".
+> >
+> > That said, dm-thinp does still need to know if a block was provisioned
+> > (given our previous designed discussion, to allow proper guarantees
+> > from this interface at snapshot time) so that XFS and other
+> > filesystems don't need to re-provision areas they already
+> > pre-provisioned.
+> 
+> Right.
+> 
+> I've simply assumed that dm-thinp would need to track entire
+> provisioned regions - used or unused - so it knows which writes to
+> empty or shared regions have a reservation to allow allocation to
+> succeed when the backing pool is otherwise empty.....
+> 
+> > However, it may be that if thinp did track "provisioned but unused"
+> > it'd be useful to allow snapshots to share provisioned blocks that
+> > were never used.  Meaning, we could then avoid "breaking sharing" at
+> > snapshot-time for "provisioned but unused" blocks.  But allowing this
+> > "optimization" undercuts the gaurantee that XFS needs for thinp
+> > storage that allows snapshots... SO, I think I answered my own
+> > question: thinp doesnt need to track "provisioned but unused" blocks
+> > but we must always ensure snapshots inherit provisoned blocks ;)
+> 
+> Sounds like a potential optimisation, but I haven't thought through
+> a potential snapshot device implementation that far to comment
+> sanely. I stopped once I got to the point where accounting tricks
+> count be used to guarantee space is available for breaking sharing
+> of used provisioned space after a snapshot was taken....
+> 
+> > > Further, managing shared pool exhaustion doesn't require a
+> > > reservation pool in the backing device and for the filesystems to
+> > > request space from it. Filesystems already have their own reserve
+> > > pools via pre-provisioning. If we want the filesystems to be able to
+> > > release that space back to the shared pool (e.g. because the shared
+> > > backing pool is critically short on space) then all we need is an
+> > > extension to FITRIM to tell the filesystem to also release internal
+> > > pre-provisioned reserves.
+> > 
+> > So by default FITRIM will _not_ discard provisioned blocks.  Only if
+> > a flag is used will it result in discarding provisioned blocks.
+> 
+> No. FITRIM results in discard of any unused free space in the
+> filesystem that matches the criteria set by the user. We don't care
+> if free space was once provisioned used space - we'll issue a
+> discard for the range regardless. The "special" FITRIM extension I
+> mentioned is to get filesystem metadata provisioning released;
+> that's completely separate to user data provisioning through
+> fallocate() which FITRIM will always discard if it has been freed...
+> 
+> IOWs, normal behaviour will be that a FITRIM ends up discarding a
+> mix of unprovisioned and provisioned space. Nobody will be able to
+> predict what mix the device is going to get at any point in time.
+> Also, if we turn on online discard, the block device is going to get
+> a constant stream of discard operations that will also be a mix of
+> provisioned and unprovisioned space that is not longer in use by the
+> filesystem. 
+> 
+> I suspect that you need to stop trying to double guess what
+> operations the filesystem will use provisioning for, what it will
+> send discards for and when it will send discards for them.. Just
+> assume the device will receive a constant stream of both
+> REQ_PROVISION and REQ_OP_DISCARD (for both provisioned and
+> unprovisioned regions) operations whenver the filesystem is active
+> on a thinp device.....
+
+Yeah, I was getting tripped up in the weeds a bit.  It's pretty
+straight-forward (and like I said at the start of our subthread here:
+this follow-on work, to inherit provisioned flag, can build on this
+REQ_PROVISION patchset).
+
+All said, I've now gotten this sub-thread on Joe Thornber's radar and
+we've started discussing. We'll be discussing with more focus
+tomorrow.
+
+Mike
