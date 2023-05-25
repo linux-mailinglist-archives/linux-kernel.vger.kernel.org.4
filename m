@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A8C71085E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67065710875
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235124AbjEYJKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S235433AbjEYJNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbjEYJKA (ORCPT
+        with ESMTP id S229543AbjEYJNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:10:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 224A5E4B;
-        Thu, 25 May 2023 02:09:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC5651042;
-        Thu, 25 May 2023 02:10:35 -0700 (PDT)
-Received: from [10.57.70.156] (unknown [10.57.70.156])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5DA9A3F67D;
-        Thu, 25 May 2023 02:09:48 -0700 (PDT)
-Message-ID: <320ee3b4-63ed-ec50-03c6-906803e34571@arm.com>
-Date:   Thu, 25 May 2023 10:09:47 +0100
+        Thu, 25 May 2023 05:13:50 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB5B197;
+        Thu, 25 May 2023 02:13:48 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75b0f2ce4b7so36248185a.2;
+        Thu, 25 May 2023 02:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685006027; x=1687598027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9dXxRgpCYwYEvO8+viBKaOCvYsHdp+OLwEgKK5Zar84=;
+        b=Ls554U3ah3KLc5ag0G4cR+GTuWgnowKVe2eWj/Eiys8rv5glhbXYEY9fV04gF59JLh
+         9jZhc0Ua/7ZvWvL7R+KdNgXZaz9zqr84HBjHnlHbQMyRkjTCXSCBLGmMTYztMY1sdlbN
+         K1NaU92EtWfRaVJFVNcqBsW64IOO2rKq4cYM/nBP2ybsXMM5B7APjNrY8f6p2fRElRwe
+         U4Bu6JukPUZplBQgQkXsL1h544YfvgWWB3T/R5LGGFgwWaxinNdHRDAmE9/4T5tNPeaq
+         Z+YwUeGwXdoEymEZw67hxXXg4RsGMG4mETL4X/y3aIUa1KYK1y9kZg15EKZZNoODA+PL
+         Yaew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685006027; x=1687598027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9dXxRgpCYwYEvO8+viBKaOCvYsHdp+OLwEgKK5Zar84=;
+        b=dBMFEvzUuYis0BLwR1Pjd17pK7iTn3dgflnb7NgZ2m0acfQRZUXQySorzNvcTQHNXg
+         YAGASUf1nhOUFl8Al1pS2P5wAkLtWDmsgeU57wOeZcdSrXdImclKII8IGFjmcPpUBfLB
+         GLT9nmcHMGpopxrC+j1qZMYo43Dh7+1MAuEkxKs4LiLXjwxhaWfcrDVcgGlN6ORjFWBq
+         Ub9jjJbTL/BS/KVum3aanCCWTrBhnn3my9kkS8VqoE21xV913VFWGLKadMaxT63QVYO4
+         jFPIqt6PBCksgmY2RWzCkfamm5HwKXrz2shfmBYU1CWk8KUgbQ9a31EveE64KTA31zs7
+         H+0w==
+X-Gm-Message-State: AC+VfDyDxuMPyMay4nytiCArCgRLnPGOMjAtPrXPx8+z0LDCuesQfCN4
+        VV1Odd4V7N7yZatyHWS8cR2K+KI6tIYh8Kcz09k=
+X-Google-Smtp-Source: ACHHUZ5/PSruSG0Zg49jiTqWBTWANT+/yiun94pxgP+eSbT3w3NfkfztzOx4znxgMQFr25/t/KPxnzbFOMfO9tlaHIM=
+X-Received: by 2002:ad4:5d48:0:b0:616:4c4b:c9b9 with SMTP id
+ jk8-20020ad45d48000000b006164c4bc9b9mr734564qvb.37.1685006027396; Thu, 25 May
+ 2023 02:13:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v4 03/11] coresight-tpdm: Initialize DSB subunit
- configuration
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-4-git-send-email-quic_taozha@quicinc.com>
- <db575b8f-12e9-dab5-c7f6-b524cbce64d9@arm.com>
- <92b73ba2-00c5-9f18-ed27-a302f4e79bb2@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <92b73ba2-00c5-9f18-ed27-a302f4e79bb2@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <ZGzsD_HMbMGhGwcr@surfacebook> <72990baf-6964-01ad-d891-7090831d0310@alliedtelesis.co.nz>
+ <ZG2jgwjK+CBmOk3G@sol> <f9006a57-4c67-c8a0-badc-84b3292aa686@alliedtelesis.co.nz>
+In-Reply-To: <f9006a57-4c67-c8a0-badc-84b3292aa686@alliedtelesis.co.nz>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 25 May 2023 12:13:11 +0300
+Message-ID: <CAHp75VfVr0N4Fv=s_12vcTi8=pGWJgeWoXpxQvqSNWDcZauS=A@mail.gmail.com>
+Subject: Re: using libgpiod to replace sysfs ABI (was Re: [PATCH] gpiolib:
+ Avoid side effects in gpio_is_visible())
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,55 +72,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2023 09:12, Tao Zhang wrote:
-> 
-> On 5/23/2023 9:42 PM, Suzuki K Poulose wrote:
->> On 27/04/2023 10:00, Tao Zhang wrote:
->>> DSB is used for monitoring “events”. Events are something that
->>> occurs at some point in time. It could be a state decode, the
->>> act of writing/reading a particular address, a FIFO being empty,
->>> etc. This decoding of the event desired is done outside TPDM.
->>> DSB subunit need to be configured in enablement and disablement.
->>> A struct that specifics associated to dsb dataset is needed. It
->>> saves the configuration and parameters of the dsb datasets. This
->>> change is to add this struct and initialize the configuration of
->>> DSB subunit.
->>>
->>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+On Thu, May 25, 2023 at 2:53=E2=80=AFAM Chris Packham
+<Chris.Packham@alliedtelesis.co.nz> wrote:
+> On 24/05/23 17:41, Kent Gibson wrote:
 
 ...
 
->>> + * dataset types. It covers Basic Counts(BC), Tenure Counts(TC),
->>> + * Continuous Multi-Bit(CMB), Multi-lane CMB(MCMB) and Discrete Single
->>> + * Bit(DSB). This function will initialize the configuration according
->>> + * to the dataset type supported by the TPDM.
->>> + */
->>>   static void __tpdm_enable(struct tpdm_drvdata *drvdata)
->>>   {
->>>       CS_UNLOCK(drvdata->base);
->>> @@ -110,15 +144,24 @@ static const struct coresight_ops tpdm_cs_ops = {
->>>       .source_ops    = &tpdm_source_ops,
->>>   };
->>>   -static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
->>> +static int tpdm_datasets_setup(struct tpdm_drvdata *drvdata)
->>>   {
->>>       u32 pidr;
->>>   -    CS_UNLOCK(drvdata->base);
->>>       /*  Get the datasets present on the TPDM. */
->>>       pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
->>>       drvdata->datasets |= pidr & GENMASK(TPDM_DATASETS - 1, 0);
->>> -    CS_LOCK(drvdata->base);
->>
->> Why are we removing the CS_{UN,}LOCK here ?
-> 
-> CS_UNLOCK is used before writing data to Coresight registers. Here this 
-> function
-> 
-> doesn't need to write data to any registers, so I remove the 
-> CS_{UN,}LOCK here.
+> It'd also be great if there was some way of ensuring that a line's state
+> is kept after the application has released the request (i.e. the txdis
+> case I mentioned). But that probably needs work on the kernel side to
+> make such guarantees.
 
-Please make this a separate patch to avoid confusing and keep it at the
-beginning of the series.
+Won't happen. It will require too much of strictness to be added into
+the kernel with likely breakage of the existing code and
+documentation. What is being discussed is a D-Bus (like?) daemon +
+Policy in user space that will allow user / process / cgroup / etc to
+"own" the line and track its state.
 
-Suzuki
-
+--=20
+With Best Regards,
+Andy Shevchenko
