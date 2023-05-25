@@ -2,71 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E00710A9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C86710A9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240691AbjEYLL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S240733AbjEYLL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240294AbjEYLL0 (ORCPT
+        with ESMTP id S240294AbjEYLLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:11:26 -0400
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E53D195
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:11:25 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id e1f6056f-faec-11ed-a9de-005056bdf889;
-        Thu, 25 May 2023 14:11:23 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Thu, 25 May 2023 14:11:22 +0300
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 07/11] dt-bindings: sc16is7xx: Add property to change
- GPIO function
-Message-ID: <ZG9CWhiTbLBKjPC9@surfacebook>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
- <20230525040324.3773741-8-hugo@hugovil.com>
+        Thu, 25 May 2023 07:11:52 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBB1191;
+        Thu, 25 May 2023 04:11:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7pnqEDqTdXXIQOBLwb2FYHGZeiwAvkXUoR0xGIGm1tA=; b=Y5fWM8svQePSKhhdt6bnlWPjdN
+        pZ6uBLzdn+6ZLX66yd6iAQSOPELpAsm2thocsaCrSBICaQtZpH+w3bUnUeot4cjW6uoEiJiKCNeEo
+        Hn0UM8Oruh62o+WHwv+tl/PZnTilFT6xDZElEoyuozcUNcdyGxv0ln3N6Tg1Z5bTdz4KuHbdZTdI0
+        v2NBZQ7iyQDxoBpGtCoF5ZRHR0YuQHEmi39yJynaQ4m0hD2JXpm1ux/qofPOcxXtoejMnAD2T2VSz
+        UjuSYtERGhniQnzXMm9lrmwgxVsD3ZwcekQwK/a061aLpV7X72NKqDLos/hahiKnIEIhHTZCBX9nb
+        JX3EUG6Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49710)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q28sj-0003y0-FZ; Thu, 25 May 2023 12:11:45 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q28sc-0002ct-V3; Thu, 25 May 2023 12:11:38 +0100
+Date:   Thu, 25 May 2023 12:11:38 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Subject: Re: [PATCH net-next v2 1/4] net: mdio: Introduce a regmap-based mdio
+ driver
+Message-ID: <ZG9CajddFYKAFlO/@shell.armlinux.org.uk>
+References: <20230525101126.370108-1-maxime.chevallier@bootlin.com>
+ <20230525101126.370108-2-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230525040324.3773741-8-hugo@hugovil.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230525101126.370108-2-maxime.chevallier@bootlin.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thu, May 25, 2023 at 12:03:21AM -0400, Hugo Villeneuve kirjoitti:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> Some variants in this series of uart controllers have GPIO pins that
+On Thu, May 25, 2023 at 12:11:23PM +0200, Maxime Chevallier wrote:
+> +struct mii_bus *devm_mdio_regmap_register(struct device *dev,
+> +					  const struct mdio_regmap_config *config)
+> +{
+> +	struct mdio_regmap_config *mrc;
+> +	struct mii_bus *mii;
+> +	int rc;
+> +
+> +	if (!config->parent)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	mii = devm_mdiobus_alloc_size(config->parent, sizeof(*mrc));
+> +	if (!mii)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	mrc = mii->priv;
+> +	memcpy(mrc, config, sizeof(*mrc));
+> +
+> +	mrc->regmap = config->regmap;
+> +	mrc->valid_addr = config->valid_addr;
 
-UART
+You have just memcpy'd everything from config into mrc. Doesn't this
+already include "regmap" and "valid_addr" ?
 
-> are shared between GPIO and modem control lines.
-> 
-> The pin mux mode (GPIO or modem control lines) can be set for each
-> ports (channels) supported by the variant.
-> 
-> This adds a property to the device tree to set the GPIO pin mux to
-> modem control lines on selected ports if needed.
-
-I'm wondering if we can convert this to YAML first and then add a new property.
+However, these are the only two things used, so does it really make
+sense to allocate the full mdio_regmap_config structure, or would a
+smaller data structure (of one pointer and one u8) be more appropriate?
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
