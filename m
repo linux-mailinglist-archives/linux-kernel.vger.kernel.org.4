@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA485711A2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0C8711A2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242115AbjEYW3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 18:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S242113AbjEYWaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 18:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjEYW3K (ORCPT
+        with ESMTP id S231964AbjEYWaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 18:29:10 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4D819D;
-        Thu, 25 May 2023 15:29:02 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PMBRD1008118;
-        Thu, 25 May 2023 22:28:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=T55xHer2V1gPTZVY0kGfyW8IZBUNGxw8atd6rU4rjME=;
- b=H9xk2lxCYr1Z/G3lu+hN5cfmw/aXlktXzFKSjJfPfYaYL7RQIceXvpi6MyXdqN6Fp8Tq
- /Xf1ihWpBuN5K/i2P4YjbnkNNJj7zCqMXhsBAJR0t9+M1pruuqGY6PE2AEl60JLE3Efk
- lrhen9GAcT0ILSAWNqx4WP67C8X1c2xajbZfY+38NHXQNrzU42BXH98fkTxGEjf+Kp1N
- tJ0wimyy5bI/H0IU6aRCUVV2jD7K3dU1Ad1CiwkfjgP/9frYq0LFOIbM1PS4qCQwl8l0
- S4yIQUqPhqP9ytQiLoaMZiRzaXoDAOY85/lKzelF9z2l1GODY7Ic4zBp2oPPWfFiWzTV BA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt5ufsdqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 22:28:47 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PMSkDE002316
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 22:28:46 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 15:28:46 -0700
-Message-ID: <9d50bc4e-e747-47fa-03cf-4dbd33f778dd@quicinc.com>
-Date:   Thu, 25 May 2023 15:28:46 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] drm/panel: Add driver for Visionox r66451 panel
-Content-Language: en-US
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Neil Armstrong <neil.armstrong@linaro.org>,
-        <devicetree@vger.kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
- <20230516-b4-r66451-panel-driver-v1-2-4210bcbb1649@quicinc.com>
- <3cca2809-fa26-f0cf-2ccc-6737d150b43d@linaro.org>
- <kc65fjf5xibvszx4afomzbmfrlld4vcnwfxqxefrupkaxw74fa@j2op4bj2recm>
- <2d9d7454-0e7d-b6f2-93ff-9eca69380e47@quicinc.com>
-In-Reply-To: <2d9d7454-0e7d-b6f2-93ff-9eca69380e47@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: LgdKqhXyjX6yBn0Hb1l7Qn846YNxKYdU
-X-Proofpoint-GUID: LgdKqhXyjX6yBn0Hb1l7Qn846YNxKYdU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_12,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- adultscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0 bulkscore=0
- impostorscore=0 phishscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305250190
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Thu, 25 May 2023 18:30:14 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEFA189
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:30:13 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4eefebso412265276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685053812; x=1687645812;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tpe07KW4MlBzxlGn7n37Z+ZqlMCf6ry7/JhPxHNLhGc=;
+        b=gnIqfD78xjJBrl22JS5xn0bJm2eRs9S14W4Wng9ZmN/KRqAlYoQCuuH4TE99W8J0Gw
+         DqJTar/YTthPR0dQielI1FOXVatroR8HUJuyf+cuNIIxNech7uODHv0p8Rzqq304rN4v
+         sZzHeaLXRJQ+32bQ8wm/EDFDhmOzwzoPHYf8Ii381bdvMLoWClbe+59CLtJmE+43626j
+         2NulVW9L0ULrslMvVfoO5v8PHnvaaxbEjYq9SEnxNW6qg8LvT3/FJcdb4a0cmKIxPt00
+         hlLUHZv6s2N42FO7nOEg3vvryPM+OO6YjcCIl3fy6jbjMCoQSEjzb3ex13zRiIkaYEFY
+         OOZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685053812; x=1687645812;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tpe07KW4MlBzxlGn7n37Z+ZqlMCf6ry7/JhPxHNLhGc=;
+        b=ianGZL7RfrJlQACnifApIPclk2c7BUti2pn1HY0gUDe/sKXO+zBmD6ec7xjviNZh1M
+         9jVdSiwQZ+t7lse0rXDRCAMkhv6t7i/kYjkBMsE7LuNIRx8QZJTNsqg1muxsLiB7CbUa
+         8zBnIKLRmPdr2pCSuq2S1Ye5gCsRKYtNBiljKdgBzUITTATc2rHOFSCgpiRU72oDEu0X
+         a98a8NcpTA40aYnildmHrFtedvZJe/VnWYw9FiMgLbNHBBU8HUcL3EVjRlvNw05A1T8S
+         QXl3Nb+OWdDGWzjkVywx4yqaGLEoD1ImxCEy1tImt+fFvwdJuq9coUkll/qzC0cLWX0h
+         On5Q==
+X-Gm-Message-State: AC+VfDwkc31kxWT56ALE8kW/I2x/AvN7Qoh1XAvva79K/bV9yXz4tSO2
+        D+nUA1Kw4k+3W4oq7+8A1UBlDXfYLkI=
+X-Google-Smtp-Source: ACHHUZ62cNRvxG25DIpG9Icp/006GZJVCqE64XxsrFxfdoy7ebQaEM9QJ0+Xwo1aB7s3oHXb9fFnwi+6caE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:5485:0:b0:ba7:3724:37dc with SMTP id
+ i127-20020a255485000000b00ba7372437dcmr2251497ybb.13.1685053812610; Thu, 25
+ May 2023 15:30:12 -0700 (PDT)
+Date:   Thu, 25 May 2023 15:30:11 -0700
+In-Reply-To: <2d7f7f80-278d-9fcf-cfc4-c433e95d9842@gmail.com>
+Mime-Version: 1.0
+References: <20230427095333.35038-1-abusse@amazon.com> <2d7f7f80-278d-9fcf-cfc4-c433e95d9842@gmail.com>
+Message-ID: <ZG/hc+9/2BraMrZB@google.com>
+Subject: Re: [PATCH 0/2] KVM support for Intel PMU v5 fixed function PMC bitmap
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Anselm Busse <abusse@amazon.com>, dwmw@amazon.co.uk,
+        hborghor@amazon.de, sironi@amazon.de,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,609 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 16, 2023, Like Xu wrote:
+> On 27/4/2023 5:53 pm, Anselm Busse wrote:
+> > Starting with v5, the Intel PMU allows to indicate the available fixed
+> > function PMCs not only through CPUID.0AH.EDX[4:0] but also through a
+> > bit mask in CPUID.0AH.ECX. According to the SDM the OS can consider a
+> > fix function PMC i supported for:
+> > 
+> > CPUID.0AH.ECX[i] || (CPUID.0AH.EDX[4:0] > i)
+> 
+> Yes, this feature is attractive for virtualization scenarios, and it gives
+> flexibility to control which fixed counters are available or not in the
+> virtual machine.
+> 
+> However, currently KVM/x86 also supports Intel PMU V2, so I would expect
+> that we will review the enablement code for v3 and v4 first.
 
+Looking at v3, I think we probably want to skip straight to v5.  I don't see a sane
+way for KVM to emulate/virtualize AnyThread, which comes in v3 without a separate
+CPUID feature flag.  The SDM even calls out that it'd be a mess to deal with in a
+virtualized environment.  v5 introduces a CPUID bit to allow deprecating AnyThread,
+i.e. would give KVM the ability to advertise a sane vPMU model to userspace.
+Amusingly, KVM advertises "edx.split.anythread_deprecated = 1" for v1+, so maybe
+we don't even need to do any enabling?  At glance, I don't see any other changes
+in v3 that require KVM support.
 
-On 5/23/2023 1:33 PM, Jessica Zhang wrote:
-> 
-> 
-> On 5/21/2023 3:28 AM, Marijn Suijten wrote:
->> On 2023-05-18 03:19:49, Dmitry Baryshkov wrote:
->>> On 16/05/2023 23:20, Jessica Zhang wrote:
->>>> Add support for the 1080x2340 Visionox R66451 AMOLED DSI panel that
->>>> comes with the Qualcomm HDK8350 display expansion pack.
->>>>
->>>> The panel enables display compression (DSC v1.2) by default.
->>>>
->>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>> ---
->>>>    drivers/gpu/drm/panel/Kconfig                 |   8 +
->>>>    drivers/gpu/drm/panel/Makefile                |   1 +
->>>>    drivers/gpu/drm/panel/panel-visionox-r66451.c | 395 
->>>> ++++++++++++++++++++++++++
->>>>    3 files changed, 404 insertions(+)
->>>>
->>>> diff --git a/drivers/gpu/drm/panel/Kconfig 
->>>> b/drivers/gpu/drm/panel/Kconfig
->>>> index 29cf5fa39ff2..9c2c36dbddf3 100644
->>>> --- a/drivers/gpu/drm/panel/Kconfig
->>>> +++ b/drivers/gpu/drm/panel/Kconfig
->>>> @@ -766,6 +766,14 @@ config DRM_PANEL_VISIONOX_VTDR6130
->>>>          Say Y here if you want to enable support for Visionox
->>>>          VTDR6130 1080x2400 AMOLED DSI panel.
->>>> +config DRM_PANEL_VISIONOX_R66451
->>>> +    tristate "Visionox R66451"
->>>> +    depends on OF
->>>> +    depends on DRM_MIPI_DSI
->>>> +    help
->>>> +      Say Y here if you want to enable support for Visionox
->>>> +      R66451 1080x2340 AMOLED DSI panel.
->>>> +
->>>>    config DRM_PANEL_WIDECHIPS_WS2401
->>>>        tristate "Widechips WS2401 DPI panel driver"
->>>>        depends on SPI && GPIOLIB
->>>> diff --git a/drivers/gpu/drm/panel/Makefile 
->>>> b/drivers/gpu/drm/panel/Makefile
->>>> index b3e8ba29edd3..e043a92ee676 100644
->>>> --- a/drivers/gpu/drm/panel/Makefile
->>>> +++ b/drivers/gpu/drm/panel/Makefile
->>>> @@ -78,5 +78,6 @@ obj-$(CONFIG_DRM_PANEL_TPO_TPG110) += 
->>>> panel-tpo-tpg110.o
->>>>    obj-$(CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA) += panel-truly-nt35597.o
->>>>    obj-$(CONFIG_DRM_PANEL_VISIONOX_RM69299) += panel-visionox-rm69299.o
->>>>    obj-$(CONFIG_DRM_PANEL_VISIONOX_VTDR6130) += 
->>>> panel-visionox-vtdr6130.o
->>>> +obj-$(CONFIG_DRM_PANEL_VISIONOX_R66451) += panel-visionox-r66451.o
->>>>    obj-$(CONFIG_DRM_PANEL_WIDECHIPS_WS2401) += panel-widechips-ws2401.o
->>>>    obj-$(CONFIG_DRM_PANEL_XINPENG_XPP055C272) += 
->>>> panel-xinpeng-xpp055c272.o
->>>> diff --git a/drivers/gpu/drm/panel/panel-visionox-r66451.c 
->>>> b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->>>> new file mode 100644
->>>> index 000000000000..e3648ead3e84
->>>> --- /dev/null
->>>> +++ b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->>>> @@ -0,0 +1,395 @@
->>>> +//SPDX-License-Identifier: GPL-2.0-only
->>>> +//Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
->>>> reserved.
->>>> +
->>>> +#include <linux/backlight.h>
->>>> +#include <linux/delay.h>
->>>> +#include <linux/gpio/consumer.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/of.h>
->>>> +#include <linux/regulator/consumer.h>
->>>> +
->>>> +#include <drm/drm_mipi_dsi.h>
->>>> +#include <drm/drm_modes.h>
->>>> +#include <drm/drm_panel.h>
->>>> +#include <drm/display/drm_dsc.h>
->>>> +#include <drm/display/drm_dsc_helper.h>
->>>> +
->>>> +#include <video/mipi_display.h>
->>>> +
->>>> +struct visionox_r66451 {
->>>> +    struct drm_panel panel;
->>>> +    struct mipi_dsi_device *dsi;
->>>> +    struct gpio_desc *reset_gpio;
->>>> +    struct regulator_bulk_data supplies[2];
->>>> +    bool prepared, enabled;
->>>> +};
->>>> +
->>>> +static inline struct visionox_r66451 *to_visionox_r66451(struct 
->>>> drm_panel *panel)
->>>> +{
->>>> +    return container_of(panel, struct visionox_r66451, panel);
->>>> +}
->>>> +
->>>> +static void visionox_r66451_reset(struct visionox_r66451 *ctx)
->>>> +{
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->>>> +    usleep_range(10000, 10100);
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>> +    usleep_range(10000, 10100);
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->>>> +    usleep_range(10000, 10100);
->>>> +}
->>>> +
->>>> +static int visionox_r66451_on(struct visionox_r66451 *ctx)
->>>> +{
->>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>> +    struct device *dev = &dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->>>> +
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xc2,
->>>> +                   0x09, 0x24, 0x0c, 0x00, 0x00, 0x0c, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x09, 0x3c);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->>>> +                   0x00, 0xb9, 0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 
->>>> 0x0a,
->>>> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x19,
->>>> +                   0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xde,
->>>> +                   0x40, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x00, 
->>>> 0x18,
->>>> +                   0x10, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x02, 
->>>> 0x00, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe8, 0x00, 0x02);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x00, 0x08);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xc4,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x32);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xcf,
->>>> +                   0x64, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x08,
->>>> +                   0x00, 0x0b, 0x77, 0x01, 0x01, 0x01, 0x01, 0x01, 
->>>> 0x01,
->>>> +                   0x02, 0x02, 0x02, 0x02, 0x02, 0x03);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd3,
->>>> +                   0x45, 0x00, 0x00, 0x01, 0x13, 0x15, 0x00, 0x15, 
->>>> 0x07,
->>>> +                   0x0f, 0x77, 0x77, 0x77, 0x37, 0xb2, 0x11, 0x00, 
->>>> 0xa0,
->>>> +                   0x3c, 0x9c);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->>>> +                   0x00, 0xb9, 0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 
->>>> 0x0a,
->>>> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x19,
->>>> +                   0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd8,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 
->>>> 0x3a,
->>>> +                   0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x0a, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x0a,
->>>> +                   0x00, 0x32, 0x00, 0x0a, 0x00, 0x22);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf,
->>>> +                   0x50, 0x42, 0x58, 0x81, 0x2d, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x6b, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x01, 0x0f, 0xff, 0xd4, 0x0e, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x0f, 0x53, 0xf1, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf7, 0x01);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x34, 0xb4, 0x00, 0x00, 0x00, 
->>>> 0x39, 0x04, 0x09, 0x34);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe6, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x40);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x50, 0x00, 0x00, 0x00, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x11);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x01, 0x00, 0x00, 0x00, 0x01);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf4, 0x00, 0x02);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x19);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x42);
->>>> +    mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
->>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_COLUMN_ADDRESS, 0x00, 
->>>> 0x00, 0x04, 0x37);
->>>
->>> Please use mipi_dsi_dcs_set_column_address(dsi, 0, 1080 - 1);
->>>
->>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PAGE_ADDRESS, 0x00, 
->>>> 0x00, 0x09, 0x23);
->>>
->>> mipi_dsi_dcs_set_page_address(dsi, 0, 2340 - 1);
->>
->> Yes please, thanks for already pointing these two out.
->>
->>>
->>>> +
->>>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(120);
->>>> +
->>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
->>>
->>> Should the mipi_dsi_dcs_set_display_on() (and maybe exit sleep mode) be
->>> a a part of _enable()? Correspondingly _off should IMO be a part of
->>> _disable callback().
->>>
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed on set display on: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(20);
->>>
->>>
->>> Do we need to add here the following line?
->>>
->>> dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->>>
->>>
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_off(struct visionox_r66451 *ctx)
->>>> +{
->>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>> +    struct device *dev = &dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->>>> +
->>>> +    ret = mipi_dsi_dcs_set_display_off(dsi);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to set display off: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(20);
->>>> +
->>>> +    ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(120);
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_prepare(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +    struct device *dev = &ctx->dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    if (ctx->prepared)
->>>> +        return 0;
->>>> +
->>>> +    ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies),
->>>> +                    ctx->supplies);
->>>> +    if (ret < 0)
->>>> +        return ret;
->>>> +
->>>> +    visionox_r66451_reset(ctx);
->>>> +
->>>> +    ret = visionox_r66451_on(ctx);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to initialize panel: %d\n", ret);
->>>> +        gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>> +        regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), 
->>>> ctx->supplies);
->>>> +        return ret;
->>>> +    }
->>>> +
->>>> +    ctx->prepared = true;
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_unprepare(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +    struct device *dev = &ctx->dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    if (!ctx->prepared)
->>>> +        return 0;
->>>> +
->>>> +    ret = visionox_r66451_off(ctx);
->>>> +    if (ret < 0)
->>>> +        dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
->>>> +
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>> +    regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->>>> +
->>>> +    ctx->prepared = false;
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static const struct drm_display_mode visionox_r66451_mode = {
->>>> +    .clock = (1080 + 95 + 1 + 40) * (2340 + 25 + 1 + 4) * 120 / 1000,
->>>> +    .hdisplay = 1080,
->>>> +    .hsync_start = 1080 + 95,
->>>> +    .hsync_end = 1080 + 95 + 1,
->>>> +    .htotal = 1080 + 95 + 1 + 40,
->>>> +    .vdisplay = 2340,
->>>> +    .vsync_start = 2340 + 25,
->>>> +    .vsync_end = 2340 + 25 + 1,
->>>> +    .vtotal = 2340 + 25 + 1 + 4,
->>>> +    .width_mm = 0,
->>>> +    .height_mm = 0,
->>>
->>> Please provide real values here.
->>>
->>>> +};
->>>> +
->>>> +static int visionox_r66451_enable(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>> +    struct drm_dsc_picture_parameter_set pps;
->>>> +    int ret;
->>>> +
->>>> +    if (ctx->enabled)
->>>> +        return 0;
->>>> +
->>>> +    if (!dsi->dsc) {
->>>> +        dev_err(&dsi->dev, "DSC not attached to DSI\n");
->>>> +        return -ENODEV;
->>>> +    }
->>>> +
->>>> +    drm_dsc_pps_payload_pack(&pps, dsi->dsc);
->>>> +    ret = mipi_dsi_picture_parameter_set(dsi, &pps);
->>
->> This `ret` value is unused.
-> 
-> Hi Marijn,
-> 
-> Acked.
-> 
->>
->> Do we also need to call mipi_dsi_compression_mode() to enable
->> compression? 
-> 
->  From my understanding, DSC is enabled by default for this panel, so 
-> it's not necessary to explicitly set it.
-> 
->> This also selects PPS table 1 (which is supposedly the
->> default reset value, and the PPS that is uploaded by
->> mipi_dsi_picture_parameter_set()).  Note that it does set the algorithm
->> to "VESA DSC Standard 1.1" but i am unsure if it makes a difference
->> (docs for mipi_dsi_picture_parameter_set() say that it is "1.1" as well)
-> 
-> We noticed the same thing when trying to debug an unrelated panel issue. 
-> FWIW, the raw PPS values being sent to the panel are correct and it's 
-> not breaking DSC for us.
-> 
->>
->>>> +
->>>> +    ctx->enabled = true;
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_disable(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +
->>>> +    ctx->enabled = false;
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_get_modes(struct drm_panel *panel,
->>>> +                    struct drm_connector *connector)
->>>> +{
->>>> +    struct drm_display_mode *mode;
->>>> +
->>>> +    mode = drm_mode_duplicate(connector->dev, &visionox_r66451_mode);
->>>> +    if (!mode)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    drm_mode_set_name(mode);
->>>> +
->>>> +    mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
->>>> +    connector->display_info.width_mm = mode->width_mm;
->>>> +    connector->display_info.height_mm = mode->height_mm;
->>>> +    drm_mode_probed_add(connector, mode);
->>>
->>> Can we use drm_connector_helper_get_modes_fixed() instead?
->>
->> This does not set DRM_MODE_TYPE_DRIVER though; is that preferred?
->>
->>>> +
->>>> +    return 1;
->>>> +}
->>>> +
->>>> +static const struct drm_panel_funcs visionox_r66451_funcs = {
->>>> +    .prepare = visionox_r66451_prepare,
->>>> +    .unprepare = visionox_r66451_unprepare,
->>>> +    .get_modes = visionox_r66451_get_modes,
->>>> +    .enable = visionox_r66451_enable,
->>>> +    .disable = visionox_r66451_disable,
->>>> +};
->>>> +
->>>> +static int visionox_r66451_bl_update_status(struct backlight_device 
->>>> *bl)
->>>> +{
->>>> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
->>>> +    u16 brightness = backlight_get_brightness(bl);
->>>> +
->>>> +    return mipi_dsi_dcs_set_display_brightness(dsi, 
->>>> cpu_to_le16(brightness));
->>>
->>> mipi_dsi_dcs_set_display_brightness() already converts the brightness,
->>> so you don't need cpu_to_le16 here.
->>
->> Tread carefully here: we've had the same issue and conversation on our
->> Sony panels where this extra inversion is required.
->> set_display_brightness() sends the bytes as little-endian to the panel
->> (and it even assumes little-endian in get_display_brightness()) but the
->> spec for 16-bit brightness values states that they have to be sent in
->> big-endian.  This is why c9d27c6be518b ("drm/mipi-dsi: Fix byte order of
->> 16-bit DCS set/get brightness") added
->> mipi_dsi_dcs_set_display_brightness_large().
->>
->> Jessica, if you need to have the endian swap here (should be very easy
->> to test with a real panel, but it should be given the max_brightness
->> value being over 8 bits) please switch to the _large() variant.
-> 
-> Got it, thanks for the heads up!
+v4 looks to be an entirely different story than v3 though.  So I agree with Like
+that we need to enable v3 and v4 before advertising support for v5.  And KVM *does*
+need to actually advertise v5.  Emulating the fixed counter bitmap without a way to
+tell userspace about the functionality will create a mess.
 
-Hi Marijn,
+TL;DR: If y'all want the shiny features in v5, please enable v3 and v4 first.  I'm
+totally fine taking a series to go all the way to v5 (might even be preferred due
+to the AnyThread crud), but I don't want to advertise v5 without supporting the
+required v3/v4 features.
 
-Just wanted to update this thread -- I've checked the backlight 
-brightness values in the sysfs and it matches the value being given in 
-the panel driver (255), so I think it should be fine to use 
-*_set_display_brightness() without the _large() variant.
+> Ref: https://lore.kernel.org/kvm/CALMp9eQVnk8gkOpX5AHhaCr8-5Fe=qNuX8PUP1Gv2H5FSYmHSw@mail.gmail.com/
 
-Thanks,
-
-Jessica Zhang
-
-> 
->>
->>>> +}
->>>> +
->>>> +static const struct backlight_ops visionox_r66451_bl_ops = {
->>>> +    .update_status = visionox_r66451_bl_update_status,
->>
->> Should this implement get_brightness?
-> 
-> I don't believe so. As far as I know, get_brightness() is an optional op 
-> for if the panel has a special HW readback for getting the brightness 
-> value, and this panel doesn't have that. So the default behavior of 
-> getting the current brightness property value should be fine.
-> 
->>
->>>> +};
->>>> +
->>>> +static struct backlight_device *
->>>> +visionox_r66451_create_backlight(struct mipi_dsi_device *dsi)
->>>> +{
->>>> +    struct device *dev = &dsi->dev;
->>>> +    const struct backlight_properties props = {
->>>> +        .type = BACKLIGHT_RAW,
->>>> +        .brightness = 255,
->>>> +        .max_brightness = 4095,
->>>> +    };
->>>> +
->>>> +    return devm_backlight_device_register(dev, dev_name(dev), dev, 
->>>> dsi,
->>>> +                          &visionox_r66451_bl_ops, &props);
->>>> +}
->>>> +
->>>> +static int visionox_r66451_probe(struct mipi_dsi_device *dsi)
->>>> +{
->>>> +    struct device *dev = &dsi->dev;
->>>> +    struct visionox_r66451 *ctx;
->>>> +    struct drm_dsc_config *dsc;
->>>> +    int ret = 0;
->>>> +
->>>> +    ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
->>>> +    if (!ctx)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    dsc = devm_kzalloc(dev, sizeof(*dsc), GFP_KERNEL);
->>>> +    if (!dsc)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    /* Set DSC params */
->>>> +    dsc->dsc_version_major = 0x1;
->>>> +    dsc->dsc_version_minor = 0x2;
->>>> +
->>>> +    dsc->slice_height = 20;
->>>> +    dsc->slice_width = 540;
->>>> +    dsc->slice_count = 2;
->>>> +    dsc->bits_per_component = 8;
->>>> +    dsc->bits_per_pixel = 0x8 << 4;
->>
->> What's the 0x for?  bpc is also just "8" and not 0x8.
-> 
-> Is there a functional difference between 0x8 vs 8? I can drop the "0x" 
-> if you prefer it as decimal instead of hex.
-> 
-> Thanks,
-> 
-> Jessica Zhang
-> 
->>
->> - Marijn
->>
->>>> +    dsc->block_pred_enable = true;
->>>> +
->>>> +    dsi->dsc = dsc;
->>>> +
->>>> +    ctx->supplies[0].supply = "vddio";
->>>> +    ctx->supplies[1].supply = "vdd";
->>>> +
->>>> +    ret = devm_regulator_bulk_get(&dsi->dev, 
->>>> ARRAY_SIZE(ctx->supplies),
->>>> +            ctx->supplies);
->>>> +
->>>> +    if (ret < 0)
->>>> +        return ret;
->>>> +
->>>> +    ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
->>>> +    if (IS_ERR(ctx->reset_gpio))
->>>> +        return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio), "Failed 
->>>> to get reset-gpios\n");
->>>> +
->>>> +    ctx->dsi = dsi;
->>>> +    mipi_dsi_set_drvdata(dsi, ctx);
->>>> +
->>>> +    dsi->lanes = 4;
->>>> +    dsi->format = MIPI_DSI_FMT_RGB888;
->>>> +    dsi->mode_flags = MIPI_DSI_MODE_LPM | 
->>>> MIPI_DSI_CLOCK_NON_CONTINUOUS;
->>>> +
->>>> +    drm_panel_init(&ctx->panel, dev, &visionox_r66451_funcs, 
->>>> DRM_MODE_CONNECTOR_DSI);
->>>> +    ctx->panel.backlight = visionox_r66451_create_backlight(dsi);
->>>> +    if (IS_ERR(ctx->panel.backlight))
->>>> +        return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
->>>> +                "Failed to create backlight\n");
->>>> +
->>>> +    drm_panel_add(&ctx->panel);
->>>> +
->>>> +    ret = mipi_dsi_attach(dsi);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
->>>> +        drm_panel_remove(&ctx->panel);
->>>> +    }
->>>> +
->>>> +    return ret;
->>>> +}
->>>> +
->>>> +static void visionox_r66451_remove(struct mipi_dsi_device *dsi)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = mipi_dsi_get_drvdata(dsi);
->>>> +    int ret;
->>>> +
->>>> +    ret = mipi_dsi_detach(dsi);
->>>> +    if (ret < 0)
->>>> +        dev_err(&dsi->dev, "Failed to detach DSI host: %d\n", ret);
->>>> +
->>>> +    drm_panel_remove(&ctx->panel);
->>>> +}
->>>> +
->>>> +static const struct of_device_id visionox_r66451_of_match[] = {
->>>> +    {.compatible = "visionox,r66451"},
->>>> +    { /*sentinel*/ }
->>>> +};
->>>> +MODULE_DEVICE_TABLE(of, visionox_r66451_of_match);
->>>> +
->>>> +static struct mipi_dsi_driver visionox_r66451_driver = {
->>>> +    .probe = visionox_r66451_probe,
->>>> +    .remove = visionox_r66451_remove,
->>>> +    .driver = {
->>>> +        .name = "panel-visionox-r66451",
->>>> +        .of_match_table = visionox_r66451_of_match,
->>>> +    },
->>>> +};
->>>> +
->>>> +module_mipi_dsi_driver(visionox_r66451_driver);
->>>> +
->>>> +MODULE_AUTHOR("Jessica Zhang <quic_jesszhan@quicinc.com>");
->>>> +MODULE_DESCRIPTION("Panel driver for the Visionox R66451 AMOLED DSI 
->>>> panel");
->>>> +MODULE_LICENSE("GPL");
->>>>
->>>
->>> -- 
->>> With best wishes
->>> Dmitry
->>>
+I agree 100% with Jim, the bitmask stuff is firmly v5+.
