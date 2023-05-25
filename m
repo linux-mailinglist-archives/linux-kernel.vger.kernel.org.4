@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA9D7115F5
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA607115F4
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242766AbjEYStM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S242783AbjEYStI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242831AbjEYSpb (ORCPT
+        with ESMTP id S242836AbjEYSpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 May 2023 14:45:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332BF3C33;
-        Thu, 25 May 2023 11:41:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB6F271B;
+        Thu, 25 May 2023 11:41:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B67664952;
-        Thu, 25 May 2023 18:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8EBC4339C;
-        Thu, 25 May 2023 18:41:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 939E96491E;
+        Thu, 25 May 2023 18:41:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA25C433EF;
+        Thu, 25 May 2023 18:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040072;
-        bh=fOu7aQcdH9a75fn0kj1O5zPfCCsrrlNUKFdNhS5qr+0=;
+        s=k20201202; t=1685040074;
+        bh=IvNBw8hwb62FFI+OmbFe1qqDN1agTOTkLDyTXHcuoOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PXQ2auti+e/BlgqZOMnLk6aO+GcdHTQKW3rjuWbeh4UyqRRNXNSZjX+0buUrqdY5U
-         6bZRoZkd2yMJu6eNbo1oW2urN/GK0aQ2hKRKmDsiKmm8lEx7xpwo9QxK02AMH6iM6f
-         iMU7G7v9ETSfNT/maUfXvS2jm67xg22fLOJbrRzYjG3jc2tnDU06mDWkPhjv+YWw+b
-         qe3wcpDXFP7zk0InhfT4+9Hizgbdb0IiNd9zpdsCSRrQLrX9xGbBtfz93s05jOmwj/
-         gMiVj7GZpXAK1ZfBFqAGXwLD6EWpUg8Pw3vSfmZD1RYLDNM64EDJXD2qm/E5gnL87k
-         Q1YdamsvUUIlg==
+        b=HS1iBt8R3VR/0oTBsBqGXhBt5EKReg0MO3wlddlQ2K7UNI8nnLivQSADgyxN+4eAU
+         av3B+Xio3L9hg6o96cR3pHfgzMqvYnawRRpMJUPtoxcVlWq3fYfUK5+PQY9zP/M3hq
+         dRg2nbwWhKlTR0xLnLmzAXkK/djFSetCVv2FDUHyLr0ni3zmjKbxB78CArxb375P8Z
+         krTitHbVnu6y884cvjWDzTm6OhhDKOrUESn5Xyd2JDCMqFIZ1R357K5TmcjPhI93pI
+         RWv6QXoL7/vUNW3/LqmPgj2D0dLWlI+mUyU2t5UtCO316m1PsfFlTkr+27YrrRESDO
+         Y+xlCIETfCe0w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 02/31] selftests/ftrace: Improve integration with kselftest runner
-Date:   Thu, 25 May 2023 14:40:33 -0400
-Message-Id: <20230525184105.1909399-2-sashal@kernel.org>
+Cc:     Benedict Wong <benedictwong@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 03/31] xfrm: Check if_id in inbound policy/secpath match
+Date:   Thu, 25 May 2023 14:40:34 -0400
+Message-Id: <20230525184105.1909399-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
 References: <20230525184105.1909399-1-sashal@kernel.org>
@@ -60,237 +59,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Benedict Wong <benedictwong@google.com>
 
-[ Upstream commit dbcf76390eb9a65d5d0c37b0cd57335218564e37 ]
+[ Upstream commit 8680407b6f8f5fba59e8f1d63c869abc280f04df ]
 
-The ftrace selftests do not currently produce KTAP output, they produce a
-custom format much nicer for human consumption. This means that when run in
-automated test systems we just get a single result for the suite as a whole
-rather than recording results for individual test cases, making it harder
-to look at the test data and masking things like inappropriate skips.
+This change ensures that if configured in the policy, the if_id set in
+the policy and secpath states match during the inbound policy check.
+Without this, there is potential for ambiguity where entries in the
+secpath differing by only the if_id could be mismatched.
 
-Address this by adding support for KTAP output to the ftracetest script and
-providing a trivial wrapper which will be invoked by the kselftest runner
-to generate output in this format by default, users using ftracetest
-directly will continue to get the existing output.
+Notably, this is checked in the outbound direction when resolving
+templates to SAs, but not on the inbound path when matching SAs and
+policies.
 
-This is not the most elegant solution but it is simple and effective. I
-did consider implementing this by post processing the existing output
-format but that felt more complex and likely to result in all output being
-lost if something goes seriously wrong during the run which would not be
-helpful. I did also consider just writing a separate runner script but
-there's enough going on with things like the signal handling for that to
-seem like it would be duplicating too much.
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Test: Tested against Android kernel unit tests & CTS
+Signed-off-by: Benedict Wong <benedictwong@google.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/ftrace/Makefile       |  3 +-
- tools/testing/selftests/ftrace/ftracetest     | 63 ++++++++++++++++++-
- .../testing/selftests/ftrace/ftracetest-ktap  |  8 +++
- 3 files changed, 70 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/ftrace/ftracetest-ktap
+ net/xfrm/xfrm_policy.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index d6e106fbce11c..a1e955d2de4cc 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index d15aa62887de0..aa88a8c389abb 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -3240,7 +3240,7 @@ xfrm_secpath_reject(int idx, struct sk_buff *skb, const struct flowi *fl)
  
--TEST_PROGS := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS := ftracetest-ktap
- TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index 8ec1922e974eb..9a73a110a8bfc 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
- echo " Options:"
- echo "		-h|--help  Show help message"
- echo "		-k|--keep  Keep passed test logs"
-+echo "		-K|--ktap  Output in KTAP format"
- echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-@@ -85,6 +86,10 @@ parse_opts() { # opts
-       KEEP_LOG=1
-       shift 1
-     ;;
-+    --ktap|-K)
-+      KTAP=1
-+      shift 1
-+    ;;
-     --verbose|-v|-vv|-vvv)
-       if [ $VERBOSE -eq -1 ]; then
- 	usage "--console can not use with --verbose"
-@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
- TEST_CASES=`find_testcases $TEST_DIR`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
- KEEP_LOG=0
-+KTAP=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-@@ -229,7 +235,7 @@ prlog() { # messages
-     newline=
-     shift
-   fi
--  printf "$*$newline"
-+  [ "$KTAP" != "1" ] && printf "$*$newline"
-   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
- }
- catlog() { #file
-@@ -260,11 +266,11 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+CASENAME=
- 
- testcase() { # testfile
-   CASENO=$((CASENO+1))
--  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
--  prlog -n "[$CASENO]$INSTANCE$desc"
-+  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+ static inline int
+ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
+-	      unsigned short family)
++	      unsigned short family, u32 if_id)
+ {
+ 	if (xfrm_state_kern(x))
+ 		return tmpl->optional && !xfrm_state_addr_cmp(tmpl, x, tmpl->encap_family);
+@@ -3251,7 +3251,8 @@ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
+ 		(tmpl->allalgs || (tmpl->aalgos & (1<<x->props.aalgo)) ||
+ 		 !(xfrm_id_proto_match(tmpl->id.proto, IPSEC_PROTO_ANY))) &&
+ 		!(x->props.mode != XFRM_MODE_TRANSPORT &&
+-		  xfrm_state_addr_cmp(tmpl, x, family));
++		  xfrm_state_addr_cmp(tmpl, x, family)) &&
++		(if_id == 0 || if_id == x->if_id);
  }
  
- checkreq() { # testfile
-@@ -277,40 +283,68 @@ test_on_instance() { # testfile
-   grep -q "^#[ \t]*flags:.*instance" $1
- }
+ /*
+@@ -3263,7 +3264,7 @@ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
+  */
+ static inline int
+ xfrm_policy_ok(const struct xfrm_tmpl *tmpl, const struct sec_path *sp, int start,
+-	       unsigned short family)
++	       unsigned short family, u32 if_id)
+ {
+ 	int idx = start;
  
-+ktaptest() { # result comment
-+  if [ "$KTAP" != "1" ]; then
-+    return
-+  fi
-+
-+  local result=
-+  if [ "$1" = "1" ]; then
-+    result="ok"
-+  else
-+    result="not ok"
-+  fi
-+  shift
-+
-+  local comment=$*
-+  if [ "$comment" != "" ]; then
-+    comment="# $comment"
-+  fi
-+
-+  echo $CASENO $result $INSTANCE$CASENAME $comment
-+}
-+
- eval_result() { # sigval
-   case $1 in
-     $PASS)
-       prlog "	[${color_green}PASS${color_reset}]"
-+      ktaptest 1
-       PASSED_CASES="$PASSED_CASES $CASENO"
-       return 0
-     ;;
-     $FAIL)
-       prlog "	[${color_red}FAIL${color_reset}]"
-+      ktaptest 0
-       FAILED_CASES="$FAILED_CASES $CASENO"
-       return 1 # this is a bug.
-     ;;
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-+      ktaptest 0 UNRESOLVED
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-       return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
-       return 0
-     ;;
-     $UNSUPPORTED)
-       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
-       return $UNSUPPORTED_RESULT # depends on use case
-     ;;
-     $XFAIL)
-       prlog "	[${color_green}XFAIL${color_reset}]"
-+      ktaptest 1 XFAIL
-       XFAILED_CASES="$XFAILED_CASES $CASENO"
-       return 0
-     ;;
-     *)
-       prlog "	[${color_blue}UNDEFINED${color_reset}]"
-+      ktaptest 0 error
-       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
-       return 1 # this must be a test bug
-     ;;
-@@ -371,6 +405,7 @@ __run_test() { # testfile
- run_test() { # testfile
-   local testname=`basename $1`
-   testcase $1
-+  prlog -n "[$CASENO]$INSTANCE$CASENAME"
-   if [ ! -z "$LOG_FILE" ] ; then
-     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
-   else
-@@ -405,6 +440,17 @@ run_test() { # testfile
- # load in the helper functions
- . $TEST_DIR/functions
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo "TAP version 13"
-+
-+  casecount=`echo $TEST_CASES | wc -w`
-+  for t in $TEST_CASES; do
-+    test_on_instance $t || continue
-+    casecount=$((casecount+1))
-+  done
-+  echo "1..${casecount}"
-+fi
-+
- # Main loop
- for t in $TEST_CASES; do
-   run_test $t
-@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo -n "# Totals:"
-+  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-+  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-+  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-+  echo -n " xpass:0"
-+  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-+  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-+  echo
-+fi
-+
- cleanup
- 
- # if no error, return 0
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-new file mode 100755
-index 0000000000000..b3284679ef3af
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -0,0 +1,8 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-+#
-+# Copyright (C) Arm Ltd., 2023
-+
-+./ftracetest -K
+@@ -3273,7 +3274,7 @@ xfrm_policy_ok(const struct xfrm_tmpl *tmpl, const struct sec_path *sp, int star
+ 	} else
+ 		start = -1;
+ 	for (; idx < sp->len; idx++) {
+-		if (xfrm_state_ok(tmpl, sp->xvec[idx], family))
++		if (xfrm_state_ok(tmpl, sp->xvec[idx], family, if_id))
+ 			return ++idx;
+ 		if (sp->xvec[idx]->props.mode != XFRM_MODE_TRANSPORT) {
+ 			if (start == -1)
+@@ -3695,7 +3696,7 @@ int __xfrm_policy_check(struct sock *sk, int dir, struct sk_buff *skb,
+ 		 * are implied between each two transformations.
+ 		 */
+ 		for (i = xfrm_nr-1, k = 0; i >= 0; i--) {
+-			k = xfrm_policy_ok(tpp[i], sp, k, family);
++			k = xfrm_policy_ok(tpp[i], sp, k, family, if_id);
+ 			if (k < 0) {
+ 				if (k < -1)
+ 					/* "-2 - errored_index" returned */
 -- 
 2.39.2
 
