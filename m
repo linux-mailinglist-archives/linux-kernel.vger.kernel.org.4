@@ -2,155 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF39F710E61
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40D5710E65
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241525AbjEYOc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S241635AbjEYOeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236052AbjEYOc1 (ORCPT
+        with ESMTP id S229702AbjEYOeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:32:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09D9101;
-        Thu, 25 May 2023 07:32:26 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:17:6c0::7a9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AEDD2660571B;
-        Thu, 25 May 2023 15:32:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685025145;
-        bh=bKbvtkUjIXfSUWM6dkyu+X6aQMMPjIEiQFqcy9qp028=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=JfIV8qpz5SLjVJ59PNVTZZJKHSNSvUS5Qug+7PWKXWK3wTXxSIJY5c4PC7gRBwS9j
-         i/CM0SrFbAzLeHEJAdyE0mwU5YD5or8yLv3+YsQ/ef8SfwKU7YmB40bwlIjdgb0ACb
-         /YMKtddMmPscABm5Yifra7az7Qqsy7Cr1by9umc4ww5dzAa9Fhfw1I5S3FMA2YBTHL
-         3UFEqPcdqYwEUEFbkTdK+vHRJHLyb3ZYTwFORVXMPI7izlYGcnMjiV+aOf943gGK2S
-         qrPNPUIS2cWepzogDg3nbzsRP33PIcXVMiEzuzATfX18D762xmZxepZRw9a0x/GtNp
-         M2oV4aNp56RIA==
-Message-ID: <bec8c0b0decc16b3533fadec8ad0f6d5c2f37d98.camel@collabora.com>
-Subject: Re: [PATCH v2] media: verisilicon: Fix crash when probing encoder
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Michael Tretter <m.tretter@pengutronix.de>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Diederik de Haas <didi.debian@cknow.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        p.zabel@pengutronix.de, mchehab@kernel.org,
-        m.szyprowski@samsung.com, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, hverkuil-cisco@xs4all.nl,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Date:   Thu, 25 May 2023 10:32:15 -0400
-In-Reply-To: <20230523145430.GB9943@pengutronix.de>
-References: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
-         <4995215.LvFx2qVVIh@bagend>
-         <7c1bf9c4-f14b-30cd-2610-871f5f512d06@collabora.com>
-         <12724349.O9o76ZdvQC@bagend>
-         <5d871928-dcd5-3f27-e975-d1639525dad0@leemhuis.info>
-         <20230523145430.GB9943@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 25 May 2023 10:34:09 -0400
+Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020020.outbound.protection.outlook.com [52.101.61.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC70CC;
+        Thu, 25 May 2023 07:34:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZB/iswJLjSX16mOEKwgOTv8yl2DMn7KmZ6JxFS8fn0f9kuCxUo+Fa/Lbdy2RRuzJlhuWbVsIlmeWHhRz/bO1Md7Q/PMY7h6MR9MoC5vYhtTRGjlMKVNd6oQnqcdWS4nb1j00fqyZzbfiMepl1dd8hABrquBH6Mg7DzWFmPWsQUjkCvNj9jZ2RLtG5CcyabNp1ao52DWlC3yGxp6kPHNNZdGQLiEA6kMYMKCfO3WF7NJYnJX2KQNoi9DdMZ9BBM57F1FcMvHltvbYll6XYKENQcp+Ag4zKIrZdAm5rBpa8E+wphSYO7sHitL9QTbs/Rv8DU9KE2m8suzeEjG2SKzL9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rn7aXzNk1537IH1OBP2NR6a9GMEDxVr+yJabDSZR/ZI=;
+ b=mW+yTfWxHXPu7WIfyt/NVP/I0ltWcIAq11LyRaNdu52/UAlYrdTBjwJKgoLsDtK8ALRrIasl91m7UHZ5NSHFO7C0KE8ZhhRBiCHieo5LFKDsRTnIEpwQR2f9XQeazRMz1GNVHAX+allXAItOYAt4SsjjZxrvrjKur59ZZr89SToj74immYhaH+0L7wHQ/uVHF/ROxAh1G3NsYuPVxqcqYD3072Ke024dU5e4YVbnh+2t+3mKYQSBDHSQvg/CZRh6TpWrwv81FWbcDxXvOJuOv5jcyonmNxcULAp6QuDZ0OcLFmd4d98MYuU7tcTnTKNxLgKQHBW1q7nRsAVR7r6dsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rn7aXzNk1537IH1OBP2NR6a9GMEDxVr+yJabDSZR/ZI=;
+ b=VuBVVIeQUW6MfPlraHl4gt5EjQe9tTJrWylb57P71KKGzohCLU3768SOkohEhT9fIQ+y/rb2byJvGoGA3d875GCZ83btUg2BiSZECDECBJV55LsxVPzWg6Sc2TT99wxytgt2zHyAox2AoS7P1yEExGmksJ7A+vJ4LPL9V28yi4w=
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
+ by PH0PR21MB1975.namprd21.prod.outlook.com (2603:10b6:510:1c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.7; Thu, 25 May
+ 2023 14:34:04 +0000
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::5600:ea5a:6768:1900]) by PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::5600:ea5a:6768:1900%5]) with mapi id 15.20.6433.013; Thu, 25 May 2023
+ 14:34:04 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Paul Rosswurm <paulros@microsoft.com>,
+        "olaf@aepfle.de" <olaf@aepfle.de>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        Long Li <longli@microsoft.com>,
+        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH net] net: mana: Fix perf regression: remove rx_cqes,
+ tx_cqes counters
+Thread-Topic: [PATCH net] net: mana: Fix perf regression: remove rx_cqes,
+ tx_cqes counters
+Thread-Index: AQHZjoX1WTJfOkpxnkOGdXtSJcYZ8a9qjN+AgACAu1A=
+Date:   Thu, 25 May 2023 14:34:04 +0000
+Message-ID: <PH7PR21MB31161F3291FF951877355DA9CA46A@PH7PR21MB3116.namprd21.prod.outlook.com>
+References: <1684963320-25282-1-git-send-email-haiyangz@microsoft.com>
+ <20230525064849.ca5p6npej7p2luw2@soft-dev3-1>
+In-Reply-To: <20230525064849.ca5p6npej7p2luw2@soft-dev3-1>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=e63b229e-0b77-4b7c-9d17-baa93e325182;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-25T14:29:33Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|PH0PR21MB1975:EE_
+x-ms-office365-filtering-correlation-id: b94e7dc3-33bd-4a0e-3dbb-08db5d2d173d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: SADQW2WteTWVXC1UI/s+PZEcnJ9p18OfkKltnBfdCRHKZBLd+2ALvCfQCu4cnHqiGhHpR+vbgkyq7TT0e+v1pcF01ML5k3Xe7xxfJrVlW94Cz1LcvXa+Nzw05ovrhJms3RhPOpr+itcHu/uJSMYPHvsCR4AntA0zhLVcFHPtSGLCSSfju3yr82Y5jNfqfcfmoy+rdTZiHOzk3w+rNl+fgtRi+R9CSLL1dXfqlps9FYoX3qt9n20pOAtvq69/+4+yY2ksWxjKGtVCA/sJkzif7wUDnKpvPLRDl1pIv3nawOx4Sl8xaEPV5jYhrAo25xB8dICQpUjTIumx8Ufbg5S4iTA11xWKAClpyeaKqEQCIK4eFhk1Saidgkjm524Xh0joE+NnZbhcZR34Kl+rKkYnllIH5ffZiPGC1Wm7tvXAZ32nW571a70k7jnPKqF7gWGMKNgJU6tfyLWUJdDezXo185+9tNcfaLHRllayPik5Io3ifrtVIJqtZ3N9XXMKln1Dw8lmcuXxIuxP7ykfKr3QOpWIEBi+HOOmpBJoHpw2cMsfeR0dO5z+0dXef6GyBr3oHEWIS2z8QZhpLDIvkmYfGKQ6zMU2oWG3wVVbORO6XUhU9ZiFhZDwLGHD23VRhrdEpjjN7RhsZxJHzjOj9+weqQzBL8+bSHHwWt3Otssv6FM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(346002)(366004)(39860400002)(451199021)(33656002)(82960400001)(38100700002)(82950400001)(122000001)(86362001)(38070700005)(55016003)(8676002)(8936002)(5660300002)(52536014)(10290500003)(7416002)(966005)(9686003)(6506007)(26005)(2906002)(186003)(83380400001)(66556008)(76116006)(71200400001)(786003)(7696005)(66946007)(41300700001)(316002)(4326008)(478600001)(54906003)(6916009)(8990500004)(66446008)(64756008)(66476007)(53546011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ei0052iCAa2LWnj4DdknuKikjA2boVslNCDnsd+2YVxT1yvMPaerYyY//G5X?=
+ =?us-ascii?Q?9Qzj9ZqIaOZvq5GuIjuUdsH2rnFFNBGktWn9rjM7Sd2N6yoAPLKxiNS92T0H?=
+ =?us-ascii?Q?U//oFhuy7vdy+Te3VIGdcfW2m3mSjAJNyRon9dr/AQ77rU/3cvGZffv0V+D4?=
+ =?us-ascii?Q?RqKT57TMw2Gf47576JPCiaBzp0c09VjjtDi7rJxZzJ4tvG++RA/nreIE+WZq?=
+ =?us-ascii?Q?AaNGvy3jSTgPNlh6osmp7WuYLa9n/M4zi+bZtMv0kJNU5jpqP0jdBXVEFQRA?=
+ =?us-ascii?Q?dZyLi52tfW773Skxvx0pdTDLjr2Onp96u44jIHT42LEBsjFyAV6x8RiJ001x?=
+ =?us-ascii?Q?XRP83BtNGYcg2uofFhwAnQV1YQ/S3DB3kQqrGebze/rR0vCjgzkU1KzaY7IS?=
+ =?us-ascii?Q?DNEbA+g7OtCfourUdPI2ph3JY1R25UYB6B0FRzXacJwaE3KOSLX2LTCtYKvr?=
+ =?us-ascii?Q?0XsR2BzLMilrbgpSrGbMqgYsWcqrPjYM7pTDjz3o4BxBAuHaQ1KILbFpOWTs?=
+ =?us-ascii?Q?4b0PZ+sUO28dESsmIWPn6AbDjc1vE3b2noK1pxFITJh74tAdCB5iOcJ8mCZo?=
+ =?us-ascii?Q?TftkXIX/5TpSXDjT/ao4co1UEZ9uKUDw5J/43/zk96o5xIVOC8pYr7CBMdIl?=
+ =?us-ascii?Q?essEdWpXSczyURMzDVEtUXWYQL3RA++3pWBeSYxii97Jkh7oUEs1WLt041md?=
+ =?us-ascii?Q?AyOkZlweUfLhzpsomADc0PB/VkRWTys5zc8ziT7h6cmUvF6+Nu8fLuKKZRem?=
+ =?us-ascii?Q?ak5Yp3LDd52HILfi7dJuBLCIwriPxdhIoodc2y3rz/ZbCRDnx6eK/g67ZR3O?=
+ =?us-ascii?Q?YdGiF8ZP9QogFZBkEhSWABuabNuEBCOFOKo/9dUgotbk0XwTwAoANMFzhpcT?=
+ =?us-ascii?Q?ZAhZLwOg0kigbyCux2N8+94WwCL1T3j8J8eTQUSuqpZQr4J6u3Tho4VfOqkK?=
+ =?us-ascii?Q?shJyo/iJJChSXLit9GmDLt9HNTXf27ZpfjhEp8QHSNffufBC5vTjlShb2fwL?=
+ =?us-ascii?Q?l4Eqw2y4uTqyN9VrFljalUINvG2bZ13b2i84nQZcgUUUdlJLx3QwXd6LG2sm?=
+ =?us-ascii?Q?74RmD6tJ2a6uHBQi0lV7e8CtkTHF57u2p7HE0cMmOPRjE7tUFVlmwXJT1ntt?=
+ =?us-ascii?Q?LjmsXgJ0lmqwMMYIITlZIbHnayW/KXIhowUtLkAaYFVhTxf9yCWLEe8vUI+f?=
+ =?us-ascii?Q?h4a9ngdkIs1XBpay8uPw7fjqbn6Q4B3/UAoCnOkJjmsPO2neZoYS31jLJU7I?=
+ =?us-ascii?Q?zzbop0BkHUXGDt8YbrUm7HFLWh6urRt1PPPqy5ju6fgS+Ngk8DtnZ3nHdLKZ?=
+ =?us-ascii?Q?6ZAvLZv9pTameX2IkE7oD8n2U9RWtjKEQqKNpOOK0chjTeoTklEzKs9DerWU?=
+ =?us-ascii?Q?o5MltTJ03XU7fztyvIoORJfNDTyAl5ulc+C98KjkjxlGZmBkdqDstCZLC2oE?=
+ =?us-ascii?Q?fpjCdAWk3/ays3azAE7sTlioIjjxJ4mLjxGslwL4tmbmJSOAFTM1cj85yAzu?=
+ =?us-ascii?Q?U687k0howEv9QnqtlioEubdCwfAEdf5KVLvm6IqfNHjKvla4MgraeSWM4mto?=
+ =?us-ascii?Q?s6ogLujvyEvja3bZRFboBd0gU+CQAncZNG2RQLLz?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b94e7dc3-33bd-4a0e-3dbb-08db5d2d173d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2023 14:34:04.7580
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6cow0s78QPjCze0+Amm9Ur8Yc7D9Vr3tjtfD+7XJ0lH5nC0OsNuVT3w1vF/bXnTtSyHueuzYyd9N5bIK754Skg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1975
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Micheal,
 
-Le mardi 23 mai 2023 =C3=A0 16:54 +0200, Michael Tretter a =C3=A9crit=C2=A0=
-:
-> On Tue, 23 May 2023 12:50:42 +0200, Linux regression tracking (Thorsten L=
-eemhuis) wrote:
-> > CCing the Regression list and a bunch of other people that were CCed in
-> > threads that look related:
->=20
-> Thanks!
->=20
-> >=20
-> > On 23.05.23 00:38, Diederik de Haas wrote:
-> > > On Monday, 22 May 2023 18:17:39 CEST Benjamin Gaignard wrote:
-> > > > Le 20/05/2023 =C3=A0 00:34, Diederik de Haas a =C3=A9crit :
-> > > > > On Thursday, 13 April 2023 21:52:50 CEST Nicolas Dufresne wrote:
-> > > [...]
-> > > > > When I booted into my 6.4-rc1 (but also rc2) kernel on my
-> > > > > Pine64 Quartz64 Model A, I noticed a crash which seems the same a=
-s
-> > > > > above, but I didn't have such a crash with my 6.3 kernel.
-> > > > > Searching for 'hantro' led me to this commit as the most likely c=
-ulprit
-> > > > > but when I build a new 6.4-rcX kernel with this commit reverted,
-> > > > > I still had this crash.
-> > > > > Do you have suggestions which commit would then be the likely cul=
-prit?
-> > > >=20
-> > > > This patch fix the crash at boot time, revert it doesn't seem to be=
- the
-> > > > solution. Maybe this proposal from Marek can help you ?
-> > > >=20
-> > > > https://patchwork.kernel.org/project/linux-media/patch/202304211047=
-59.2236463-1-m.szyprowski@samsung.com/
-> > >=20
-> > > That helped :) After applying that patch I no longer have the crash.
-> > > Thanks!
-> >=20
-> > That regression fix is now a month old, but not yet merged afaics --
-> > guess due to Nicolas comment that wasn't addressed yet and likely
-> > requires a updated patch.
->=20
-> I agree with Nicolas comment on that patch and it needs to be updated.
->=20
-> >=20
-> > Michael afaics a week ago posted a patch that to my *very limited
-> > understanding of things* (I hope I don't confuse matters here!) seems t=
-o
-> > address the same problem, but slightly differently:
-> > https://lore.kernel.org/all/20230516091209.3098262-1-m.tretter@pengutro=
-nix.de/
->=20
-> Correct, my patch addresses the same problem.
 
-Sorry, just got really busy and missed the second fix. From a hot fix stand
-point, your patch seems a lot safer. It does not go as far, and probably do=
-es
-not make the driver better, but considering we had such a slow response we =
-need
-to do something about it.
+> -----Original Message-----
+> From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Sent: Thursday, May 25, 2023 2:49 AM
+> To: Haiyang Zhang <haiyangz@microsoft.com>
+> Cc: linux-hyperv@vger.kernel.org; netdev@vger.kernel.org; Dexuan Cui
+> <decui@microsoft.com>; KY Srinivasan <kys@microsoft.com>; Paul Rosswurm
+> <paulros@microsoft.com>; olaf@aepfle.de; vkuznets@redhat.com;
+> davem@davemloft.net; wei.liu@kernel.org; edumazet@google.com;
+> kuba@kernel.org; pabeni@redhat.com; leon@kernel.org; Long Li
+> <longli@microsoft.com>; ssengar@linux.microsoft.com; linux-
+> rdma@vger.kernel.org; daniel@iogearbox.net; john.fastabend@gmail.com;
+> bpf@vger.kernel.org; ast@kernel.org; Ajay Sharma
+> <sharmaajay@microsoft.com>; hawk@kernel.org; linux-
+> kernel@vger.kernel.org; stable@vger.kernel.org
+> Subject: Re: [PATCH net] net: mana: Fix perf regression: remove rx_cqes,
+> tx_cqes counters
+>=20
+> [Some people who received this message don't often get email from
+> horatiu.vultur@microchip.com. Learn why this is important at
+> https://aka.ms/LearnAboutSenderIdentification ]
+>=20
+> The 05/24/2023 14:22, Haiyang Zhang wrote:
+>=20
+> Hi Haiyang,
+>=20
+> >
+> > The apc->eth_stats.rx_cqes is one per NIC (vport), and it's on the
+> > frequent and parallel code path of all queues. So, r/w into this
+> > single shared variable by many threads on different CPUs creates a
+> > lot caching and memory overhead, hence perf regression. And, it's
+> > not accurate due to the high volume concurrent r/w.
+>=20
+> Do you have any numbers to show the improvement of this change?
 
-Ezequiel, will you be fine with the approach ?
+The numbers are not published. The perf regression of the previous=20
+patch is very significant, and this patch eliminates the regression.
 
 >=20
-> >=20
-> > No reply yet.
-> >=20
-> > That's all a bit unfortunate, as it's not how regression fixes should b=
-e
-> > dealt with -- and caused multiple people headaches that could have been
-> > avoided. :-/
-> >=20
-> > But well, things happen. But it leads to the question:
-> >=20
-> > How can we finally address the issue quickly now to ensure is doesn't
-> > cause headaches for even more people?
-> >=20
-> > Marek, Michael, could you work on a patch together that we then get
-> > somewhat fast-tracked to Linus to avoid him getting even more unhappy
-> > about the state of things[1]?
+> >
+> > Since the error path of mana_poll_rx_cq() already has warnings, so
+> > keeping the counter and convert it to a per-queue variable is not
+> > necessary. So, just remove this counter from this high frequency
+> > code path.
+> >
+> > Also, remove the tx_cqes counter for the same reason. We have
+> > warnings & other counters for errors on that path, and don't need
+> > to count every normal cqe processing.
 >=20
-> Marek, if you have an updated patch, I will happily test and review it.
-> Otherwise, please take a look at my patch.
->=20
-> Michael
->=20
+> Will you not have problems with the counter 'apc->eth_stats.tx_cqe_err'?
+> It is not in the hot path but you will have concurrent access to it.
+
+Yes, but that error happens rarely, so a shared variable is good enough. So=
+, I=20
+don't change it in this patch.
+
+Thanks,
+- Haiyang
 
