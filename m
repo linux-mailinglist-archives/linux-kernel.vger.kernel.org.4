@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FB2711933
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249F3711AAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241650AbjEYVeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S235139AbjEYXan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 19:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjEYVeT (ORCPT
+        with ESMTP id S229689AbjEYXal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 17:34:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3025099;
-        Thu, 25 May 2023 14:34:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1ACB64B51;
-        Thu, 25 May 2023 21:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBA4C433EF;
-        Thu, 25 May 2023 21:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685050457;
-        bh=zZK1RRwMzH2sbsee7VnC7rlgcun9B4/SN/dI3FKVvrg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sYy8VE1VD0cAgEQuQim7zpsjY9TurkTcJPM8V//GYjopKthjG7swTE5W5MfBkiymv
-         gptEA5LzE3IQ95cBxZ2YaS+ouWHeojSMRaBTKoUhsGIXRsxsxPjsX6TPztQfMhMldh
-         SuTIH5cGrlLwRkrvhRW0H4JvwkVdYq4GVx9hTsSWN0X+ERFX/OkNNQPf1/WVd/JLgX
-         /AFo9muWJpPvbUiV5Vkz+O+/FB7GMsA1yaEPll0FSZXSUItNyIjw43FnpK+hMSGlrj
-         gSxpoHHqT3QTPfco7ev8HFXnGS/mrM0GTn+0tO7TzsMQgFzKyLBSEnWqD1V1v0qzTR
-         X5t+2G3DdOoZw==
-Date:   Thu, 25 May 2023 22:34:10 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v6 5/7] dt-bindings: usb: Add StarFive JH7110 USB
- controller
-Message-ID: <20230525-shopper-handbrake-27fc06aede32@spud>
-References: <20230518112750.57924-1-minda.chen@starfivetech.com>
- <20230518112750.57924-6-minda.chen@starfivetech.com>
+        Thu, 25 May 2023 19:30:41 -0400
+X-Greylist: delayed 6902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 May 2023 16:30:37 PDT
+Received: from mcarnes.com.br (mx01.mcarnes.com.br [143.255.12.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB678E7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:30:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mcarnes.com.br (Postfix) with ESMTP id AA740468C5A0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:35:32 -0300 (-03)
+Received: from mcarnes.com.br ([127.0.0.1])
+        by localhost (mcarnes.com.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id GZnGLsstci2s for <linux-kernel@vger.kernel.org>;
+        Thu, 25 May 2023 18:35:32 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mcarnes.com.br (Postfix) with ESMTP id 4E703468C59C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:35:32 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mcarnes.com.br 4E703468C59C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mcarnes.com.br;
+        s=57560CA4-14EE-11ED-BE35-8FFAC263C415; t=1685050532;
+        bh=z7JvdiV9YnMKDuDBIzxUa+OIl/EuU/+6EU2ly8lE4LM=;
+        h=From:To:Date:Message-ID:MIME-Version;
+        b=gpo4san3QN08ZZ5cct0jU5XVzyjkfjwjS7yns3mwIctePq2YXjEHaBFDXT9ppMrcS
+         SVhRAwWa+3YjwChW1QXRWOMwmqo0NiBtTWefOD26/9kLjlBSOL2qRn+rwPGKUt6TMi
+         Ay/OvTLhu25XneAbD/xrTLF0dOxJnuQEtWcxQMyllrnk7Ff02tFQbJqPgTDG+vpg4m
+         3GV63mgfXycyblsQhR5yzfsQC+WoMKYnOooJjNmxkxirxRM4lWXo1dWweI5ct2p0RA
+         Awx4jWiB4LrbiaEYy4yqxsGbBgkhveYLt8Lkhtb4zTGuTuX8etIJ14kBXfyKH0clzb
+         vNtQ69k3lnVWA==
+X-Virus-Scanned: amavisd-new at mcarnes.com.br
+Received: from mcarnes.com.br ([127.0.0.1])
+        by localhost (mcarnes.com.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XsA2xrzpE6TR for <linux-kernel@vger.kernel.org>;
+        Thu, 25 May 2023 18:35:32 -0300 (-03)
+Received: from [93.95.27.154] (unknown [93.95.27.154])
+        by mcarnes.com.br (Postfix) with ESMTPSA id 706E0468C594
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:35:31 -0300 (-03)
+Reply-To: souamisolution@gmail.com
+From:   katia@mcarnes.com.br
+To:     linux-kernel@vger.kernel.org
+Subject: Hello
+Date:   25 May 2023 14:35:28 -0700
+Message-ID: <20230525044008.9066F7B244ED06B7@mcarnes.com.br>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SLOnlnkMNKq6BWyy"
-Content-Disposition: inline
-In-Reply-To: <20230518112750.57924-6-minda.chen@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,60 +67,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---SLOnlnkMNKq6BWyy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello,
+I'm Tayeb Souami, I avail myself of this opportunity to approach=20
+you for an establishment of  Charity Organization with you=20
+=2E.would like to discuss more with you=E2=80=A6i would like to send a=20
+summary of this Donations for you to review..
+Could you please take a few minutes of your time to revert back=20=20
+to us if you are interested ? thank you :=20
+souamisolution@gmail.com
 
-On Thu, May 18, 2023 at 07:27:48PM +0800, Minda Chen wrote:
-> StarFive JH7110 platforms USB have a wrapper module around
-> the Cadence USBSS-DRD controller. Add binding information doc
-> for that.
->=20
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> Reviewed-by: Peter Chen <peter.chen@kernel.org>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  .../bindings/usb/starfive,jh7110-usb.yaml     | 115 ++++++++++++++++++
->  1 file changed, 115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110=
--usb.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.ya=
-ml b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> new file mode 100644
-> index 000000000000..24aa9c10d6ab
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/starfive,jh7110-usb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD controll=
-er
+Best Regard=20
 
-I think you told Krzysztof you'd rename this to "StarFive JH7110 Cadence
-USBSS-DRD SoC controller"?
-
-Otherwise, it looks like all the stuff from him and Rob have been sorted
-out, so other than $title this is
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor..
-
---SLOnlnkMNKq6BWyy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG/UUgAKCRB4tDGHoIJi
-0v75AP9K+Svm5FyZzmMv+llB8XO317ghvBO5MrADfge2KP6pPwEAl0bZpPNFfw8m
-AK1S29TZeiBbhbcxD8KECfWuk1118AQ=
-=3/eV
------END PGP SIGNATURE-----
-
---SLOnlnkMNKq6BWyy--
+Tayeb Souami=20
