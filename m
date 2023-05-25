@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F51711832
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9652F711834
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241649AbjEYUeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        id S241453AbjEYUgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbjEYUeN (ORCPT
+        with ESMTP id S233384AbjEYUgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:34:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B66183;
-        Thu, 25 May 2023 13:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685046840; x=1716582840;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XbEsnh0XvQPwp+NdV4jyUUSR/Afa5HTpPVjC2uDu5rA=;
-  b=KKMGMAuiYHNQOHk6dDNomLlA1Jc8MAMN9/B+wOKjbHNtquSZbdIiZMTp
-   Y6dKLS4Rbf+EIxRj8WkoPEAkLuFbEwVeX96PS/OIjnwp6Xs4N5Fxp2i9b
-   /5FMFIYXQdNp6lWs3kueO6zIDpDqK7350eF0Xr4Of+NPVGXs8jN7rTXOr
-   tKTuOpT1LsHyeoIHNkDvKfsTuAfVoDe+IKsynZ6AU2PrUIY6rqazLBYHc
-   /b5dLcdOVj3QmBbWpcJfKj0gJFpkkLsYm8O4i6Huhljd5OplgqhqC98aD
-   FY1l/Cif9fFzLwZHVq151PdTFUA1CA1SYk2KSxe5dYG2+NLglL/DrZ5+p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="357270220"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="357270220"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 13:33:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="735718948"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="735718948"
-Received: from favinash-mobl.amr.corp.intel.com (HELO desk) ([10.212.225.104])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 13:33:59 -0700
-Date:   Thu, 25 May 2023 13:33:58 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-Message-ID: <20230525203358.mm7sb4a2iodgfhwo@desk>
-References: <20230506030435.80262-1-chao.gao@intel.com>
- <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
- <ZGZhW/x5OWPmx1qD@google.com>
- <20230520010237.3tepk3q44j52leuk@desk>
- <ZGup1TjeqBF7bgWG@google.com>
- <ff2a97c2-1e8f-4adb-78c2-3cf5037f139f@intel.com>
- <20230522212328.uwyvp3hpwvte6t6g@desk>
- <aa65ec4f-ccf7-a344-692e-61abe9c95b47@intel.com>
- <20230523033405.dr2ci7h3ol5se64o@desk>
- <76c17c65-870b-d291-d223-6452e56d153a@intel.com>
+        Thu, 25 May 2023 16:36:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59C9BB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685046936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3mE/fckEZuR9c9fPTu4FUL0ylsLmFraWECVvvXZLruc=;
+        b=TJbks6XtPBDD0hAfbaAHqUy2yGIsQDFIXcgB3iRKlWV9R6FR2lHTU1PH8CuMC+qpSXE5Oy
+        bWMK//ZNyQVyh1wkhHcIfkiSbDtzXJ/OjfCaOH9hgk3V9HL/U6j7z7/87pQI85T+Ycw45Y
+        cuR1IRint98JYJEFzrd8nl92g0k5vsM=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-135-tUjEQHvROGqEkDwPfapU1w-1; Thu, 25 May 2023 16:35:34 -0400
+X-MC-Unique: tUjEQHvROGqEkDwPfapU1w-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6238c64280fso2730476d6.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:35:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685046934; x=1687638934;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3mE/fckEZuR9c9fPTu4FUL0ylsLmFraWECVvvXZLruc=;
+        b=ONuc3mWhzMzdY8cHIdi7HA7erxCoB/EBzuAbxTdShIEowWE7eEhZs8Lv2kPkygBZz8
+         06pknkQPNOwcLn2Ku8xjPGzz2r/1cU+nl47LhlGZ9qs+99N6BJH7SRPi55dNZA9S5Drg
+         PADLVjPEna3xbfsbjYcoEY6UG/rJqTksfcgQGhYvjNMZNnhbrDtHW2PPg6T8Ghl2TaAC
+         QdM/wKh1SraZMX9b9AsWZp8/t8MdsbuPXFK8dKgBeH0d/LuVtUCpJRh14Y05bmIJhGnY
+         5j3QYtgBgAegnGu1wL3pPFaooVj321JYYYCDDzAPq1jHYrBXj+7Gc0WpNK93YxWPNga6
+         KOBQ==
+X-Gm-Message-State: AC+VfDzksXDajzgv4F4xhHBNnfTyAVIShRiZfaYFb3lhyz9OZGWybGf+
+        HEILDHjzBVzfONJsbv/1mCuxbh1rlePx6lwmqKlMLgOF6/KqhMKaHABBMXwSKLOR6UuYqEI2nYD
+        KRIXKlO/js7CV7fYbulR+7KSw
+X-Received: by 2002:a05:6214:e6e:b0:625:ccca:328b with SMTP id jz14-20020a0562140e6e00b00625ccca328bmr2860163qvb.19.1685046934272;
+        Thu, 25 May 2023 13:35:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ45euEwzTp2G5RGMPSK3fbgDMQGjQu3VHUmMrVMif+hhFqBfdVa/ja2Hs14iGliwKoExaQfdA==
+X-Received: by 2002:a05:6214:e6e:b0:625:ccca:328b with SMTP id jz14-20020a0562140e6e00b00625ccca328bmr2860132qvb.19.1685046934059;
+        Thu, 25 May 2023 13:35:34 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id a4-20020a05620a124400b0075b1c6f9628sm650389qkl.71.2023.05.25.13.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 13:35:33 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, le.ma@amd.com, jesse.zhang@amd.com,
+        Jiadong.Zhu@amd.com, mario.limonciello@amd.com, Likun.Gao@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amdgpu: move gfx9_cs_data definition
+Date:   Thu, 25 May 2023 16:35:31 -0400
+Message-Id: <20230525203531.3233040-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76c17c65-870b-d291-d223-6452e56d153a@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,78 +79,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:42:24PM +0800, Xiaoyao Li wrote:
-> On 5/23/2023 11:34 AM, Pawan Gupta wrote:
-> > > If a guest is exposed without ARCH_CAP_TAA_NO, ARCH_CAP_MDS_NO,
-> > > ARCH_CAP_PSDP_NO, ARCH_CAP_FBSDP_NO, ARCH_CAP_SBDR_SSDP_NO and
-> > > ARCH_CAP_FB_CLEAR, vmx_update_fb_clear_dis() will leave
-> > > vmx->disable_fb_clear as true. So VERW doesn't clear Fill Buffer for guest.
-> > > But in the view of guset, it expects VERW to clear Fill Buffer.
-> > 
-> > That is correct, but whether VERW clears the CPU buffers also depends on
-> > if the hardware is affected or not, enumerating MD_CLEAR solely does not
-> > guarantee that VERW will flush CPU buffers. This was true even before
-> > MMIO Stale Data was discovered.
-> > 
-> > If host(hardware) enumerates:
-> > 
-> > 	MD_CLEAR | MDS_NO |   VERW behavior
-> > 	---------|--------|-------------------
-> > 	    1	 |    0	  | Clears CPU buffers
-> > 
-> > But on an MDS mitigated hardware(MDS_NO=1) if guest enumerates:
-> > 
-> > 	MD_CLEAR | MDS_NO |   VERW behavior
-> > 	---------|--------|-----------------------
-> > 	    1	 |    0	  | Not guaranteed to clear
-> > 	                        CPU buffers
-> > 
-> > After MMIO Stale Data, FB_CLEAR_DIS was introduced to keep this behavior
-> > intact(for hardware that is not affected by MDS/TAA).
-> 
-> Sorry, I don't understand it. What the behavior is?
+gcc with W=1 reports
+In file included from drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c:32:
+drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h:939:36: error:
+  ‘gfx9_cs_data’ defined but not used [-Werror=unused-const-variable=]
+  939 | static const struct cs_section_def gfx9_cs_data[] = {
+      |                                    ^~~~~~~~~~~~
 
-That on a mitigated hardware VERW may not clear the micro-architectural
-buffers.
+gfx9_cs_data is only used in gfx_v9_0.c, so move its definition there.
 
-There are many micro-architectural buffers, VERW only clears the
-affected ones. This is indicated in section "Fill Buffer Clearing
-Operations" of [1].
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h | 4 ----
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c        | 5 +++++
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-  Some processors may enumerate MD_CLEAR because they overwrite all
-  buffers affected by MDS/TAA, but they do not overwrite fill buffer
-  values. This is because fill buffers are not susceptible to MDS or TAA
-  on those processors.
+diff --git a/drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h b/drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h
+index 567a904804bc..6de4778789ed 100644
+--- a/drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h
++++ b/drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h
+@@ -936,7 +936,3 @@ static const struct cs_extent_def gfx9_SECT_CONTEXT_defs[] =
+     {gfx9_SECT_CONTEXT_def_8, 0x0000a2f5, 155 },
+     { 0, 0, 0 }
+ };
+-static const struct cs_section_def gfx9_cs_data[] = {
+-    { gfx9_SECT_CONTEXT_defs, SECT_CONTEXT },
+-    { 0, SECT_NONE }
+-};
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+index 8bf95a6b0767..c97a68a39d93 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -56,6 +56,11 @@
+ #include "asic_reg/pwr/pwr_10_0_sh_mask.h"
+ #include "asic_reg/gc/gc_9_0_default.h"
+ 
++static const struct cs_section_def gfx9_cs_data[] = {
++    { gfx9_SECT_CONTEXT_defs, SECT_CONTEXT },
++    { 0, SECT_NONE }
++};
++
+ #define GFX9_NUM_GFX_RINGS     1
+ #define GFX9_NUM_SW_GFX_RINGS  2
+ #define GFX9_MEC_HPD_SIZE 4096
+-- 
+2.27.0
 
-  For processors affected by FBSDP where MD_CLEAR may not overwrite fill
-  buffer values, Intel has released microcode updates that enumerate
-  FB_CLEAR so that VERW does overwrite fill buffer values.
-
-> > If the userspace
-> > truly wants the guest to have VERW flush behavior, it can export
-> > FB_CLEAR.
-> >
-> > I see your point that from a guest's perspective it is being lied about
-> > VERW behavior. OTOH, I am not sure if it is a good enough reason for
-> > mitigated hardware to keep the overhead of clearing micro-architectural
-> > buffers for generations of CPUs.
-> 
-> User takes the responsiblity because itself requests the specific feature
-> combination for its guest.
-
-As I understand, the MD_CLEAR enumeration on mitigated hardware is done
-purely for VM migration compatibility. Software is not expected to use
-VERW on mitigated hardware, below is from MDS documentation [2]:
-
-  Future processors set the MDS_NO bit in IA32_ARCH_CAPABILITIES to
-  indicate they are not affected by microarchitectural data sampling.
-  Such processors will continue to enumerate the MD_CLEAR bit in CPUID.
-  As none of these data buffers are vulnerable to exposure on such
-  parts, no data buffer overwriting is required or expected for such
-  parts, despite the MD_CLEAR indication. Software should look to the
-  MDS_NO bit to determine whether buffer overwriting mitigations are
-  required.
-
-[1] https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/processor-mmio-stale-data-vulnerabilities.html
-
-[2] https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/resources/processors-affected-mds.html
