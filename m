@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEB1710581
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB41B710582
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjEYFxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 01:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        id S231214AbjEYFxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 01:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjEYFxr (ORCPT
+        with ESMTP id S230174AbjEYFxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 May 2023 01:53:47 -0400
 Received: from ubuntu20 (unknown [193.203.214.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070AE18C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:52:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B57191
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:52:59 -0700 (PDT)
 Received: by ubuntu20 (Postfix, from userid 1003)
-        id CEE22E1D12; Thu, 25 May 2023 13:52:28 +0800 (CST)
+        id EAD56E1D1B; Thu, 25 May 2023 13:52:35 +0800 (CST)
 From:   Yang Yang <yang.yang29@zte.com.cn>
 To:     akpm@linux-foundation.org, david@redhat.com
 Cc:     yang.yang29@zte.com.cn, imbrenda@linux.ibm.com,
         jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
         xu.xin16@zte.com.cn
-Subject: [PATCH v10 1/5] ksm: support unsharing KSM-placed zero pages
-Date:   Thu, 25 May 2023 13:52:27 +0800
-Message-Id: <20230525055227.27213-1-yang.yang29@zte.com.cn>
+Subject: [PATCH v10 2/5] ksm: count all zero pages placed by KSM
+Date:   Thu, 25 May 2023 13:52:34 +0800
+Message-Id: <20230525055234.27274-1-yang.yang29@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <202305251341580149313@zte.com.cn>
 References: <202305251341580149313@zte.com.cn>
@@ -45,26 +45,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: xu xin <xu.xin16@zte.com.cn>
 
-When use_zero_pages of ksm is enabled, madvise(addr, len, MADV_UNMERGEABLE)
-and other ways (like write 2 to /sys/kernel/mm/ksm/run) to trigger
-unsharing will *not* actually unshare the shared zeropage as placed by KSM
-(which is against the MADV_UNMERGEABLE documentation). As these KSM-placed
-zero pages are out of the control of KSM, the related counts of ksm pages
-don't expose how many zero pages are placed by KSM (these special zero
-pages are different from those initially mapped zero pages, because the
-zero pages mapped to MADV_UNMERGEABLE areas are expected to be a complete
-and unshared page).
+As pages_sharing and pages_shared don't include the number of zero pages
+merged by KSM, we cannot know how many pages are zero pages placed by KSM
+when enabling use_zero_pages, which leads to KSM not being transparent with
+all actual merged pages by KSM. In the early days of use_zero_pages,
+zero-pages was unable to get unshared by the ways like MADV_UNMERGEABLE so
+it's hard to count how many times one of those zeropages was then unmerged.
 
-To not blindly unshare all shared zero_pages in applicable VMAs, the patch
-use pte_mkdirty (related with architecture) to mark KSM-placed zero pages.
-Thus, MADV_UNMERGEABLE will only unshare those KSM-placed zero pages.
+But now, unsharing KSM-placed zero page accurately has been achieved, so we
+can easily count both how many times a page full of zeroes was merged with
+zero-page and how many times one of those pages was then unmerged. and so,
+it helps to estimate memory demands when each and every shared page could
+get unshared.
 
-In addition, we'll reuse this mechanism to reliably identify KSM-placed
-ZeroPages to properly account for them (e.g., calculating the KSM profit
-that includes zeropages) in the latter patches.
-
-The patch will not degrade the performance of use_zero_pages as it doesn't
-change the way of merging empty pages in use_zero_pages's feature.
+So we add ksm_zero_pages under /sys/kernel/mm/ksm/ to show the number
+of all zero pages placed by KSM. Meanwhile, we update the Documentation.
 
 Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 Suggested-by: David Hildenbrand <david@redhat.com>
@@ -74,55 +69,148 @@ Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
 Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
 Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
 ---
- include/linux/ksm.h |  6 ++++++
- mm/ksm.c            | 11 ++++++++---
- 2 files changed, 14 insertions(+), 3 deletions(-)
+ Documentation/admin-guide/mm/ksm.rst |  7 +++++++
+ include/linux/ksm.h                  | 12 ++++++++++++
+ mm/khugepaged.c                      |  2 ++
+ mm/ksm.c                             | 12 ++++++++++++
+ mm/memory.c                          |  5 ++++-
+ 5 files changed, 37 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
+index 7626392fe82c..6cc919dbfd55 100644
+--- a/Documentation/admin-guide/mm/ksm.rst
++++ b/Documentation/admin-guide/mm/ksm.rst
+@@ -173,6 +173,13 @@ stable_node_chains
+         the number of KSM pages that hit the ``max_page_sharing`` limit
+ stable_node_dups
+         number of duplicated KSM pages
++ksm_zero_pages
++        how many zero pages that are still mapped into processes were mapped by
++        KSM when deduplicating.
++
++When ``use_zero_pages`` is/was enabled, the sum of ``pages_sharing`` +
++``ksm_zero_pages`` represents the actual number of pages saved by KSM.
++if ``use_zero_pages`` has never been enabled, ``ksm_zero_pages`` is 0.
+ 
+ A high ratio of ``pages_sharing`` to ``pages_shared`` indicates good
+ sharing, but a high ratio of ``pages_unshared`` to ``pages_sharing``
 diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-index 899a314bc487..98878107244f 100644
+index 98878107244f..e80aa49009b2 100644
 --- a/include/linux/ksm.h
 +++ b/include/linux/ksm.h
-@@ -26,6 +26,12 @@ int ksm_disable(struct mm_struct *mm);
+@@ -33,6 +33,14 @@ void __ksm_exit(struct mm_struct *mm);
+  */
+ #define is_ksm_zero_pte(pte)	(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte))
  
- int __ksm_enter(struct mm_struct *mm);
- void __ksm_exit(struct mm_struct *mm);
-+/*
-+ * To identify zeropages that were mapped by KSM, we reuse the dirty bit
-+ * in the PTE. If the PTE is dirty, the zeropage was mapped by KSM when
-+ * deduplicating memory.
-+ */
-+#define is_ksm_zero_pte(pte)	(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte))
- 
++extern unsigned long ksm_zero_pages;
++
++static inline void ksm_might_unmap_zero_page(pte_t pte)
++{
++	if (is_ksm_zero_pte(pte))
++		ksm_zero_pages--;
++}
++
  static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
  {
+ 	int ret;
+@@ -101,6 +109,10 @@ static inline void ksm_exit(struct mm_struct *mm)
+ {
+ }
+ 
++static inline void ksm_might_unmap_zero_page(pte_t pte)
++{
++}
++
+ #ifdef CONFIG_MEMORY_FAILURE
+ static inline void collect_procs_ksm(struct page *page,
+ 				     struct list_head *to_kill, int force_early)
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 6b9d39d65b73..3f293e2436f3 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -19,6 +19,7 @@
+ #include <linux/page_table_check.h>
+ #include <linux/swapops.h>
+ #include <linux/shmem_fs.h>
++#include <linux/ksm.h>
+ 
+ #include <asm/tlb.h>
+ #include <asm/pgalloc.h>
+@@ -711,6 +712,7 @@ static void __collapse_huge_page_copy_succeeded(pte_t *pte,
+ 				spin_lock(ptl);
+ 				ptep_clear(vma->vm_mm, address, _pte);
+ 				spin_unlock(ptl);
++				ksm_might_unmap_zero_page(pteval);
+ 			}
+ 		} else {
+ 			src_page = pte_page(pteval);
 diff --git a/mm/ksm.c b/mm/ksm.c
-index 0156bded3a66..f31c789406b1 100644
+index f31c789406b1..d3ed90159322 100644
 --- a/mm/ksm.c
 +++ b/mm/ksm.c
-@@ -447,7 +447,8 @@ static int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long nex
- 		if (is_migration_entry(entry))
- 			page = pfn_swap_entry_to_page(entry);
- 	}
--	ret = page && PageKsm(page);
-+	/* return 1 if the page is an normal ksm page or KSM-placed zero page */
-+	ret = (page && PageKsm(page)) || is_ksm_zero_pte(*pte);
- 	pte_unmap_unlock(pte, ptl);
- 	return ret;
- }
-@@ -1220,8 +1221,12 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
- 		page_add_anon_rmap(kpage, vma, addr, RMAP_NONE);
- 		newpte = mk_pte(kpage, vma->vm_page_prot);
- 	} else {
--		newpte = pte_mkspecial(pfn_pte(page_to_pfn(kpage),
--					       vma->vm_page_prot));
-+		/*
-+		 * Use pte_mkdirty to mark the zero page mapped by KSM, and then
-+		 * we can easily track all KSM-placed zero pages by checking if
-+		 * the dirty bit in zero page's PTE is set.
-+		 */
-+		newpte = pte_mkdirty(pte_mkspecial(pfn_pte(page_to_pfn(kpage), vma->vm_page_prot)));
+@@ -278,6 +278,9 @@ static unsigned int zero_checksum __read_mostly;
+ /* Whether to merge empty (zeroed) pages with actual zero pages */
+ static bool ksm_use_zero_pages __read_mostly;
+ 
++/* The number of zero pages which is placed by KSM */
++unsigned long ksm_zero_pages;
++
+ #ifdef CONFIG_NUMA
+ /* Zeroed when merging across nodes is not allowed */
+ static unsigned int ksm_merge_across_nodes = 1;
+@@ -1227,6 +1230,7 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+ 		 * the dirty bit in zero page's PTE is set.
+ 		 */
+ 		newpte = pte_mkdirty(pte_mkspecial(pfn_pte(page_to_pfn(kpage), vma->vm_page_prot)));
++		ksm_zero_pages++;
  		/*
  		 * We're replacing an anonymous page with a zero page, which is
  		 * not anonymous. We need to do proper accounting otherwise we
+@@ -3354,6 +3358,13 @@ static ssize_t pages_volatile_show(struct kobject *kobj,
+ }
+ KSM_ATTR_RO(pages_volatile);
+ 
++static ssize_t ksm_zero_pages_show(struct kobject *kobj,
++				struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%ld\n", ksm_zero_pages);
++}
++KSM_ATTR_RO(ksm_zero_pages);
++
+ static ssize_t general_profit_show(struct kobject *kobj,
+ 				   struct kobj_attribute *attr, char *buf)
+ {
+@@ -3421,6 +3432,7 @@ static struct attribute *ksm_attrs[] = {
+ 	&pages_sharing_attr.attr,
+ 	&pages_unshared_attr.attr,
+ 	&pages_volatile_attr.attr,
++	&ksm_zero_pages_attr.attr,
+ 	&full_scans_attr.attr,
+ #ifdef CONFIG_NUMA
+ 	&merge_across_nodes_attr.attr,
+diff --git a/mm/memory.c b/mm/memory.c
+index 8358f3b853f2..15e6bd757eab 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1415,8 +1415,10 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 			tlb_remove_tlb_entry(tlb, pte, addr);
+ 			zap_install_uffd_wp_if_needed(vma, addr, pte, details,
+ 						      ptent);
+-			if (unlikely(!page))
++			if (unlikely(!page)) {
++				ksm_might_unmap_zero_page(ptent);
+ 				continue;
++			}
+ 
+ 			delay_rmap = 0;
+ 			if (!PageAnon(page)) {
+@@ -3120,6 +3122,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 				inc_mm_counter(mm, MM_ANONPAGES);
+ 			}
+ 		} else {
++			ksm_might_unmap_zero_page(vmf->orig_pte);
+ 			inc_mm_counter(mm, MM_ANONPAGES);
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
 -- 
 2.15.2
