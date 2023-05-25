@@ -2,159 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1062F711746
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A77D7116FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242725AbjEYTV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S243393AbjEYTG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbjEYTVm (ORCPT
+        with ESMTP id S244035AbjEYTFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:21:42 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D17AE68
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:17:48 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96ff9c0a103so161138066b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685042185; x=1687634185;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aIsIFxmLlj97Nfx6D9vKSgsX1a6jDH3TwyPUkCdOSPQ=;
-        b=aJXv7msL9DrTUY8nTP6eYzvu5gs+lInFRlOLvZ9dPhvSmMchETpFRUDviL+a9C6jDA
-         Tgw2Vv6ChUAI3TMz0fvwdsIjqCo1AKfeWd7A9CXtiLKiSctyFkHT3SKg0LiZk1NajQ4v
-         saxwVtNg/PAhoBF+y2USvy4X9nKbiG2Knk+Dg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685042185; x=1687634185;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aIsIFxmLlj97Nfx6D9vKSgsX1a6jDH3TwyPUkCdOSPQ=;
-        b=cVAcuZu1q7teCoPTpATzVuiHxUgZ9RTDmXaH6gP5z+WVndAAOV7peZPOPsQiP7BnqN
-         50BQYESE7+vr1cpA6h/NUYCiBB/ErRkKdQiA2gIkBXgbGLLHKnpevxCRFLqw3xwfBKiW
-         5nzgDENw77C/PGglzFUfIXkDhcfKaIiKJszQ4tWwE9nYfaH8hxbNh9OvxQ99pIbfSmD0
-         naeA2RHAFl6jsx3mo7OkIgqvaVT/mataEKoJIjLogAZT39T8QTGpBRKc2r6/bPPIsPgc
-         Zj52PiYF0IzgV5bxxe/RkiEbRJ3NgedSOHVKn6FCdOK56NQpDtqACwe3kxTqfZiGJj+W
-         by7w==
-X-Gm-Message-State: AC+VfDxKGXyNwq3zaNgTOalTHPseVS/srMpf3e4TdCrAyGMUkJHUOERG
-        RG5QIAd/VKQEEOxAHaXLGT436TVMSRiDF9c7+Zl7yuYJ
-X-Google-Smtp-Source: ACHHUZ6QTHtH9ZgDVRrxTKaVVJVN2WV+8sZSwjCXcXN3ZM+gzeV4luDSR23IkGeHv0kDQoX5TIRivw==
-X-Received: by 2002:ac2:47f0:0:b0:4f4:dbcc:54da with SMTP id b16-20020ac247f0000000b004f4dbcc54damr376820lfp.27.1685041124236;
-        Thu, 25 May 2023 11:58:44 -0700 (PDT)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id v28-20020ac2593c000000b004f3946030fasm305060lfi.68.2023.05.25.11.58.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 11:58:44 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2af20198f20so9808231fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:58:43 -0700 (PDT)
-X-Received: by 2002:a17:907:6d9e:b0:96f:4ee4:10d4 with SMTP id
- sb30-20020a1709076d9e00b0096f4ee410d4mr2465428ejc.43.1685040638863; Thu, 25
- May 2023 11:50:38 -0700 (PDT)
+        Thu, 25 May 2023 15:05:45 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA1386BB;
+        Thu, 25 May 2023 11:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685040849; x=1716576849;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I9uqk67X9bs3sYyrSKFArEnF17vc0xskgqqQ5rfNWro=;
+  b=InJhDBtxi2J6JTpkhmNMySs/N0m5KSd8O9SBEwqH1nMQGcvOKeS9mGMM
+   Le5eDrDrwk9rBArR+HSpM0eh0wTxSyv3CbXzsAYYIZGiEiMWI3jWd7a3d
+   J+YyaqmcbXWO0Drgh61oNyuFzm1FnTlIWgM4VsGgoiY0CTPJhuxX5PcNK
+   DhbWmHQ2o8I9cvAuqo5SV0CUV+uNuI/5tyyqatKZtfD5Q7pYt6eneLM8F
+   mCmb5E6Uql5kySb3GAAxomb9vG3+rRVOpF7oBMp7rfcVTM+JFMPLw6cMh
+   0zFWnIYCzW80aWy6QrQWjv82GYuG2XWUU3Ay/9GRZCYYDw7oGZjIJ6qlK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="351499792"
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="scan'208";a="351499792"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 11:53:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="794765493"
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="scan'208";a="794765493"
+Received: from shuklaas-mobl1.amr.corp.intel.com (HELO [10.212.186.148]) ([10.212.186.148])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 11:52:59 -0700
+Message-ID: <603f5357-3018-6c1b-2dc8-ec96aee9552c@intel.com>
+Date:   Thu, 25 May 2023 11:52:58 -0700
 MIME-Version: 1.0
-References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-2-mcgrof@kernel.org>
- <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
- <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com> <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
-In-Reply-To: <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 25 May 2023 11:50:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgWCDw58fZDLGYVqVC2ee-Zec25unewdHFp8syCZFumvg@mail.gmail.com>
-Message-ID: <CAHk-=wgWCDw58fZDLGYVqVC2ee-Zec25unewdHFp8syCZFumvg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate detection
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] signal: move show_unhandled_signals sysctl to its own
+ file
+Content-Language: en-US
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linux FS Devel <linux-fsdevel@vger.kernel.org>, hch@lst.de,
-        brauner@kernel.org, david@redhat.com, tglx@linutronix.de,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
-        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
-        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Cc:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
+        arnd@arndb.de, bp@alien8.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        luto@kernel.org, peterz@infradead.org, brgerst@gmail.com,
+        christophe.jaillet@wanadoo.fr, kirill.shutemov@linux.intel.com,
+        jroedel@suse.de, j.granados@samsung.com, akpm@linux-foundation.org,
+        willy@infradead.org, linux-parisc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230522210814.1919325-1-mcgrof@kernel.org>
+ <20230522210814.1919325-3-mcgrof@kernel.org>
+ <d0fe7a6f-8cd9-0b81-758a-f3b444e74bab@intel.com>
+ <ZG29HWE9NWn56hTg@bombadil.infradead.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ZG29HWE9NWn56hTg@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:08=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> Certainly on the track where I wish we could go. Now this goes tested.
-> On 255 cores:
->
-> Before:
->
-> vagrant@kmod ~ $ sudo systemd-analyze
-> Startup finished in 41.653s (kernel) + 44.305s (userspace) =3D 1min 25.95=
-8s
-> graphical.target reached after 44.178s in userspace.
->
-> root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/s=
-tats
->  Virtual mem wasted bytes       1949006968
->
->
-> ; 1949006968/1024/1024/1024
->         ~1.81515418738126754761
->
-> So ~1.8 GiB... of vmalloc space wasted during boot.
->
-> After:
->
-> systemd-analyze
-> Startup finished in 24.438s (kernel) + 41.278s (userspace) =3D 1min 5.717=
-s
-> graphical.target reached after 41.154s in userspace.
->
-> root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/s=
-tats
->  Virtual mem wasted bytes       354413398
->
-> So still 337.99 MiB of vmalloc space wasted during boot due to
-> duplicates.
+On 5/24/23 00:30, Luis Chamberlain wrote:
+>> It doesn't actually have anything to do with moving the
+>> show_unhandled_signals sysctl, right?
+> Well in my case it is making sure the sysctl variable used is declared
+> as well.
 
-Ok. I think this will count as 'good enough for mitigation purposes'
+But what does this have to do with _this_ patch?  This:
 
-> The reason is the exclusive_deny_write_access() must be
-> kept during the life of the module otherwise as soon as it is done
-> others can still race to load
+> --- a/arch/x86/kernel/umip.c
+> +++ b/arch/x86/kernel/umip.c
+> @@ -12,6 +12,7 @@
+>  #include <asm/insn.h>
+>  #include <asm/insn-eval.h>
+>  #include <linux/ratelimit.h>
+> +#include <linux/signal.h>
 
-Yes. The exclusion only applies while the file is actively being read.
+For instance.  You don't move things to another header or make *ANY*
+change to the compilation of umip.c.  So why patch it?
 
-> So with two other hunks added (2nd and 4th), this now matches parity with
-> my patch, not suggesting this is right,
+It looks to me like a _fundamentally_ superfluous change.  That hunk
+literally *can't* be related to the rest of the patch.
 
-Yeah, we can't do that, because user space may quite validly want to
-write the file afterwards.
+>> If that's the case, it would be nice to have this in its own patch.
+> If its not really fixing any build bugs or functional bugs I don't see
+> the need. But if you really want it, I can do it.
+> 
+> Let me know!
 
-Or, in fact, unload the module and re-load it.
+Yes, I really want it.
 
-So the "exclusion" really needs to be purely temporary.
+Please remove all the x86 bits from _this_ patch.  If x86 has a
+separate, preexisting problem, please send that patch separately with a
+separate changelog and justification.
 
-That said, I considered moving the exclusion to module/main.c itself,
-rather than the reading part. That wouild get rid of the hacky "id =3D=3D
-READING_MODULE", and put the exclusion in the place that actually
-wants it.
-
-And that would allow us to at least extend that temporary exlusion a
-bit - we could keep it until the module has actually been loaded and
-inited.
-
-So it would probably improve on those numbers a bit more, but you'd
-still have the fundamental race where *serial* duplicates end up
-always wasting CPU effort and temporary vmalloc space.
-
-                   Linus
+We'll take a look.
