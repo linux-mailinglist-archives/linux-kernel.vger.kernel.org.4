@@ -2,194 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70B9710877
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B611710879
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239477AbjEYJOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
+        id S239274AbjEYJPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236207AbjEYJOm (ORCPT
+        with ESMTP id S239088AbjEYJPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:14:42 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579AFA7;
-        Thu, 25 May 2023 02:14:41 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so4003448a12.3;
-        Thu, 25 May 2023 02:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685006080; x=1687598080;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76DwNbDGQP83GHoYB0zX5gS/ikCHV5gsiqGNLpVFqG8=;
-        b=boIE2/DjBSzAR6jnreSa/tnfPh3NCpOeJliJnP/XB09U40pEdzi3vKzsQZT6i06JeG
-         sT+3n0kGa5LXepWTrSIcvuc8Te9puNUGfIveI5ZpGQrn0UTzkfSHNYb823DuojXpJXqn
-         0FoaQT8xOsNz1Z2zCRMTQofhxWwBEBUw36nuTN1T1TCOQkfpcsn/B/5cdO5AlnSHl9eq
-         L4N8phg1kxTKXnxidSbr3w5wzJPpv6WC90NsdhNw64tYe2sdtJ7Fcm7bp1qs1cE8IPr0
-         USWEhmil2Il3JBhBKtc+H/cxAGGaSwdEtwBJ0Z5L1fC8JFvTZxkuqJb+eZathGdIbGnz
-         H2bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685006080; x=1687598080;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=76DwNbDGQP83GHoYB0zX5gS/ikCHV5gsiqGNLpVFqG8=;
-        b=IroaceaBLkM2c7MEkRSGotCAvdaosK6iy1G+bK3t41+PdF4gXvlhE4/h3NJA6ArBG+
-         Jb9GPG1hDVBb8mdd7+SMVXAXZN0E+47mdnOWBrEN9UxCbyjapZcNSS3bg+KoV41oXFoZ
-         2ezs0BLgULkam6WHS/LbDaC87XZBFS9Pd4wvbEvp5eqzo8IBAxjUiGT/HAW7iqd2STnv
-         /hY4i3zdME/waiBOqy4Zr6lyXaOY+y/BTYtNVOEyrgBeu5s/YJKZAMEtw4sh09I4bWqT
-         scKg2iQ0iJ6VeafbQak6+lUTVSHn6iH+G37VOlEmyCwcGwMIJ6G5LGm+5cZvwfrei7Yw
-         AQOg==
-X-Gm-Message-State: AC+VfDzQukXLSz5H130Pfczxnag1TEXhOur566OwtQfW4kw9m5ILc2l3
-        7B+ExLiGz3UM1D0QZndSPZdwTZMusR/PNy1p5R0=
-X-Google-Smtp-Source: ACHHUZ7qksFuVsSCC5e4gkXBm7DhNf6+QyeUwJCZOQbWdl2/LWLcjBKNw8OpJCnaFNMia0GgI3lmJsOwrZhrCmISxoI=
-X-Received: by 2002:a17:906:dac4:b0:96f:da2c:ddc1 with SMTP id
- xi4-20020a170906dac400b0096fda2cddc1mr1039915ejb.75.1685006079534; Thu, 25
- May 2023 02:14:39 -0700 (PDT)
+        Thu, 25 May 2023 05:15:08 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EF81AC
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:15:04 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-51-2196sYpmN7CoD8Mxrq-LpA-1; Thu, 25 May 2023 10:14:54 +0100
+X-MC-Unique: 2196sYpmN7CoD8Mxrq-LpA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 25 May
+ 2023 10:14:53 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 25 May 2023 10:14:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kenny Ho' <y2kenny@gmail.com>, Andrew Lunn <andrew@lunn.ch>
+CC:     Marc Dionne <marc.dionne@auristor.com>,
+        Kenny Ho <Kenny.Ho@amd.com>,
+        "David Howells" <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] Remove hardcoded static string length
+Thread-Topic: [PATCH] Remove hardcoded static string length
+Thread-Index: AQHZjmnJx5LdtvUc0U+gvus5miHTlK9qs1lw
+Date:   Thu, 25 May 2023 09:14:53 +0000
+Message-ID: <30d65ea9170d4f60bd76ed516541cb46@AcuMS.aculab.com>
+References: <20230523223944.691076-1-Kenny.Ho@amd.com>
+ <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
+ <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
+ <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch>
+ <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
+ <5b1355b8-17f7-49c8-b7b5-3d9ecdb146ce@lunn.ch>
+ <CAOWid-dYtkcKuNxoOyf3yqSJ7OtcNjaqJLVX1QhRUhYSOO6vHA@mail.gmail.com>
+In-Reply-To: <CAOWid-dYtkcKuNxoOyf3yqSJ7OtcNjaqJLVX1QhRUhYSOO6vHA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230524093623.3698134-1-chenhuacai@loongson.cn> <ZG4rZYBKaWrsctuH@bhelgaas>
-In-Reply-To: <ZG4rZYBKaWrsctuH@bhelgaas>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 25 May 2023 17:14:28 +0800
-Message-ID: <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
-Subject: Re: [PATCH] pci: irq: Add an early parameter to limit pci irq numbers
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ahmed S . Darwish" <darwi@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>, linux-pci@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongson-kernel@lists.loongnix.cn,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bjorn,
+RnJvbTogS2VubnkgSG8NCj4gU2VudDogMjQgTWF5IDIwMjMgMTk6MDENCj4gDQo+IE9uIFdlZCwg
+TWF5IDI0LCAyMDIzIGF0IDE6NDPigK9QTSBBbmRyZXcgTHVubiA8YW5kcmV3QGx1bm4uY2g+IHdy
+b3RlOg0KPiA+DQo+ID4gVGhlIG90aGVyIGVuZCBvZiB0aGUgc29ja2V0IHNob3VsZCBub3QgYmxv
+dyB1cCwgYmVjYXVzZSB0aGF0IHdvdWxkIGJlDQo+ID4gYW4gb2J2aW91cyBET1Mgb3IgYnVmZmVy
+IG92ZXJ3cml0ZSBhdHRhY2sgdmVjdG9yLiBTbyB5b3UgbmVlZCB0bw0KPiA+IGRlY2lkZSwgZG8g
+eW91IHdhbnQgdG8gZXhwb3NlIHN1Y2ggaXNzdWVzIGFuZCBzZWUgaWYgYW55dGhpbmcgZG9lcw0K
+PiA+IGFjdHVhbGx5IGJsb3cgdXAsIG9yIGRvIHlvdSB3YW50IHRvIGRvIGEgYml0IG1vcmUgd29y
+ayBhbmQgY29ycmVjdGx5DQo+ID4gdGVybWluYXRlIHRoZSBzdHJpbmcgd2hlbiBjYXBwZWQ/DQo+
+IA0KPiBSaWdodC4uLiBJIGd1ZXNzIGl0J3Mgbm90IGNsZWFyIHRvIG1lIHRoYXQgZXhpc3Rpbmcg
+aW1wbGVtZW50YXRpb25zDQo+IG51bGwtdGVybWluYXRlIGNvcnJlY3RseSB3aGVuIFVUU19SRUxF
+QVNFIGNhdXNlcyB0aGUgc3RyaW5nIHRvIGV4Y2VlZA0KPiB0aGUgNjUgYnl0ZSBzaXplIG9mIHJ4
+cnBjX3ZlcnNpb25fc3RyaW5nLiAgV2UgY2FuIG9mIGNvdXJzZSBkbyBiZXR0ZXIsDQo+IGJ1dCBJ
+IGhlc2l0YXRlIHRvIGRvIHN0cm5jcHkgYmVjYXVzZSBJIGFtIG5vdCBmYW1pbGlhciB3aXRoIHRo
+aXMgY29kZQ0KPiBiYXNlIGVub3VnaCB0byB0ZWxsIGlmIHRoaXMgZnVuY3Rpb24gaXMgcGFydCBv
+ZiBzb21lIGhvdCBwYXRoIHdoZXJlDQo+IHN0cm5jcHkgbWF0dGVycy4NCg0KVGhlIHdob2xlIHRo
+aW5nIGxvb2tzIGxpa2UgaXQgaXMgZXhwZWN0aW5nIGEgbWF4IG9mIDY0IGNoYXJhY3RlcnMNCmFu
+ZCBhIHRlcm1pbmF0aW5nICdcMCcuDQpTaW5jZSBVVEVfUkVMRUFTRSBnb2VzIGluIGJldHdlZW4g
+dHdvIGZpeGVkIHN0cmluZ3MgdHJ1bmNhdGluZw0KdGhlIHdob2xlIHRoaW5nIHRvIDY0LzY1IGNo
+YXJzL2J5dGVzIGRvZXNuJ3Qgc2VlbSBpZGVhbC4NCg0KSSBkb2VzIHJhdGhlciBiZWcgdGhlIHF1
+ZXN0aW9uIGFzIHdoYXQgaXMgaW4gVVRTX1JFTEVBU0Ugd2hlbg0KaXQgZXhjZWVkcyAoSUlSQykg
+YWJvdXQgNDggY2hhcmFjdGVycz8NCg0KSWYgVVRTX1JFTEVBU0UgaXMgZ2V0dGluZyB0aGF0IGxv
+bmcsIGl0IG1pZ2h0IGVhc2lseSBleGNlZWQNCnRoZSA2NCBjaGFyYWN0ZXJzIHJldHVybmVkIGJ5
+IHVuYW1lKCkuDQoNCkkgc3VzcGVjdCB0aGF0IHlvdSBuZWVkIHRvIHRydW5jYXRlIFVUU19SRUxF
+QVNFIHRvIGxpbWl0DQp0aGUgc3RyaW5nIHRvIDY0IGNoYXJhY3RlcnMgLSBzbyBzb21ldGhpbmcg
+bGlrZToNCglzdGF0aWMgY2hhciBpZFs2NV07DQoJaWYgKCFpZFswXSkNCgkJc25wcmludGYoaWQs
+IHNpemVvZiBpZCwgInh4eC0lLjQ4cy15eXkiLCBVVFNfUkVMRUFTRSk7DQoNClVzaW5nIGFuIG9u
+LXN0YWNrIGJ1ZmZlciBhbG1vc3QgY2VydGFpbmx5IHdvdWxkbid0IG1hdHRlci4NCg0KCURhdmlk
+DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
+YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
+IChXYWxlcykNCg==
 
-On Wed, May 24, 2023 at 11:21=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
- wrote:
->
-> [+cc Marc, LKML]
->
-> On Wed, May 24, 2023 at 05:36:23PM +0800, Huacai Chen wrote:
-> > Some platforms (such as LoongArch) cannot provide enough irq numbers as
-> > many as logical cpu numbers. So we should limit pci irq numbers when
-> > allocate msi/msix vectors, otherwise some device drivers may fail at
-> > initialization. This patch add a cmdline parameter "pci_irq_limit=3Dxxx=
-x"
-> > to control the limit.
-> >
-> > The default pci msi/msix number limit is defined 32 for LoongArch and
-> > NR_IRQS for other platforms.
->
-> The IRQ experts can chime in on this, but this doesn't feel right to
-> me.  I assume arch code should set things up so only valid IRQ numbers
-> can be allocated.  This doesn't seem necessarily PCI-specific, I'd
-> prefer to avoid an arch #ifdef here, and I'd also prefer to avoid a
-> command-line parameter that users have to discover and supply.
-The problem we meet: LoongArch machines can have as many as 256
-logical cpus, and the maximum of msi vectors is 192. Even on a 64-core
-machine, 192 irqs can be easily exhausted if there are several NICs
-(NIC usually allocates msi irqs depending on the number of online
-cpus). So we want to limit the msi allocation.
-
-This is not a LoongArch-specific problem, because I think other
-platforms can also meet if they have many NICs. But of course,
-LoongArch can meet it more easily because the available msi vectors
-are very few. So, adding a cmdline parameter is somewhat reasonable.
-
-After some investigation, I think it may be possible to modify
-drivers/irqchip/irq-loongson-pch-msi.c and override
-msi_domain_info::domain_alloc_irqs() to limit msi allocation. However,
-doing that need to remove the "static" before
-__msi_domain_alloc_irqs(), which means revert
-762687ceb31fc296e2e1406559e8bb5 ("genirq/msi: Make
-__msi_domain_alloc_irqs() static"), I don't know whether that is
-acceptable.
-
-If such a revert is not acceptable, it seems that we can only use the
-method in this patch. Maybe rename pci_irq_limits to pci_msi_limits is
-a little better.
-
-Huacai
-
->
-> > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  drivers/pci/msi/msi.c | 26 +++++++++++++++++++++++++-
-> >  1 file changed, 25 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-> > index ef1d8857a51b..6617381e50e7 100644
-> > --- a/drivers/pci/msi/msi.c
-> > +++ b/drivers/pci/msi/msi.c
-> > @@ -402,12 +402,34 @@ static int msi_capability_init(struct pci_dev *de=
-v, int nvec,
-> >       return ret;
-> >  }
-> >
-> > +#ifdef CONFIG_LOONGARCH
-> > +#define DEFAULT_PCI_IRQ_LIMITS 32
-> > +#else
-> > +#define DEFAULT_PCI_IRQ_LIMITS NR_IRQS
-> > +#endif
-> > +
-> > +static int pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
-> > +
-> > +static int __init pci_irq_limit(char *str)
-> > +{
-> > +     get_option(&str, &pci_irq_limits);
-> > +
-> > +     if (pci_irq_limits =3D=3D 0)
-> > +             pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +early_param("pci_irq_limit", pci_irq_limit);
-> > +
-> >  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec=
-,
-> >                          struct irq_affinity *affd)
-> >  {
-> >       int nvec;
-> >       int rc;
-> >
-> > +     maxvec =3D clamp_val(maxvec, 0, pci_irq_limits);
-> > +
-> >       if (!pci_msi_supported(dev, minvec) || dev->current_state !=3D PC=
-I_D0)
-> >               return -EINVAL;
-> >
-> > @@ -776,7 +798,9 @@ static bool pci_msix_validate_entries(struct pci_de=
-v *dev, struct msix_entry *en
-> >  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *en=
-tries, int minvec,
-> >                           int maxvec, struct irq_affinity *affd, int fl=
-ags)
-> >  {
-> > -     int hwsize, rc, nvec =3D maxvec;
-> > +     int hwsize, rc, nvec;
-> > +
-> > +     nvec =3D clamp_val(maxvec, 0, pci_irq_limits);
-> >
-> >       if (maxvec < minvec)
-> >               return -ERANGE;
-> > --
-> > 2.39.1
-> >
