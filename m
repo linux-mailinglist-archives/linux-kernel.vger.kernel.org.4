@@ -2,209 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A245A710F13
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FACC710F1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241402AbjEYPGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
+        id S241425AbjEYPHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjEYPGT (ORCPT
+        with ESMTP id S241328AbjEYPHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:06:19 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF4EA3;
-        Thu, 25 May 2023 08:06:18 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6b2f1a04bso11524121cf.3;
-        Thu, 25 May 2023 08:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685027178; x=1687619178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KeTVaGcp8mf3R6o1m6w+QLJatVKY9fsQyGy4GYdH3/U=;
-        b=fAtd5/htRUFMBa6f2nihULsyk2krg4KuX1xoWANa66q5xQnrzl33EhjI7zDw/HAwyP
-         I+8jc6OlE/v38ijMp7n0KEs7MgDBx4is5tOGMyFslK7i0G9KI24TpDdkiJSwRGIEeBQw
-         ggqMtD24W8lTsA7GshRDvyDkhP2OGnjSpqzEz0OOMJrWuBIt4u3sSx0gMejYsnKbhx9v
-         7mjg1PZKVnmUJw41QmGV92z17mH6Prf/cBXyn5Cvi8HnhZzZaRgp0g8QmkOmj0J8j/hu
-         K+GjM6ifOJuG8aP0rLPjJxH82SDp4MV8J8hXDZ8v11Eiw2ZzbTfZmuvBKBB3W5t7PPIa
-         KfMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685027178; x=1687619178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KeTVaGcp8mf3R6o1m6w+QLJatVKY9fsQyGy4GYdH3/U=;
-        b=lHsUElvk7Fv6mLeF9q9JHNMBphjYw/wt9oyl4m1pa8cBhIfMNPyZvq5BlpjAwZMeyC
-         Es8mgbMR3Xssun0EwL0CIFDTYsPAP+/vswLrnkg0RWphybRZNkncu6uQlccTpNMfsoZh
-         S5ji7Dxn+5P07XXWGj+L6Yr4lhp9SHegNBeNUnnmcNrL4sKVBe5R/IfzrvTH9rqsffcg
-         Z0vzrrEV0Q0udiWDOXtkkHAwPtzXuwFZ7gChUViJ1wKnltuaY0Q4Pckd4v6hYD8ZyK3d
-         m2V9LRkyjYR5cf6rJ76ID3oYNOy7xq/5GiN8ieWur8NAk9UOXs/VJGGQyTl+f/9Nk64H
-         boeg==
-X-Gm-Message-State: AC+VfDwrmX6Ux0GWlK59uPI7UsY76p0Yr60tXM08C95GlzCOSPAXQVFa
-        PKr6IXoAS+jUZN1U5JlVoOSvC6wD01LahbnMgss=
-X-Google-Smtp-Source: ACHHUZ7UCznfEjmcmpbGGznthDIVRdV0Ywo844eEoZVqoIgAM1pxMcr4sL+6PvSj6oRGzSLaHoa3ww2gR4P5ptHqPYQ=
-X-Received: by 2002:ac8:5e53:0:b0:3eb:1512:91c5 with SMTP id
- i19-20020ac85e53000000b003eb151291c5mr31239024qtx.12.1685027177888; Thu, 25
- May 2023 08:06:17 -0700 (PDT)
+        Thu, 25 May 2023 11:07:31 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A8218D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:07:29 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PEE1Bp025343;
+        Thu, 25 May 2023 10:07:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=b1GGmFdgnxV0j14d3bCa6tyRgRpGUbNruAmTEOSH86Y=;
+ b=EvT2bDsjbR/a9InfY6zCZAmzDkVYa9rwI/Q0ddDxENbPqisPKSUlU9T/nR20Ndpt6VoO
+ altm9bs0EipBEjLDp6nxN3wWBX98MOAl5+jQZEg9OnzkRVwtt+qFfsvYepbPZOUSNAGv
+ n2roxA9iokXyl6CoIU4HhF5PsfEcGINFX/PoTcASEjreUGaIsCZsDyUTjI8G+4l2dqsV
+ RTRJ7dH6yUIz7AKvqSUPK3EEmqB9xHipNJmmh902lCtrXh0oT35vw0u+l8wClfLXR8sx
+ VieqOFo1Nb+H8Irrje3LaCyWy4/yrYel/yVbu6yTBiMe8XjRROS2LSuPh+8wJzjGBZ+Q sA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qptmm70m4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 10:07:03 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 25 May
+ 2023 10:07:01 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Thu, 25 May 2023 10:07:01 -0500
+Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.65.166])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 009A611D4;
+        Thu, 25 May 2023 15:07:00 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <tiwai@suse.com>, <broonie@kernel.org>, <perex@perex.cz>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH 00/13] ALSA: hda: Adding support for CS35L56 on HDA systems
+Date:   Thu, 25 May 2023 16:06:46 +0100
+Message-ID: <20230525150659.25409-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230525125503.400797-1-leitao@debian.org>
-In-Reply-To: <20230525125503.400797-1-leitao@debian.org>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 25 May 2023 11:05:40 -0400
-Message-ID: <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-To:     Breno Leitao <leitao@debian.org>
-Cc:     dsahern@kernel.org, Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, leit@fb.com, axboe@kernel.dk,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, dccp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 27W9qxTkt4LdEc7klTNrMyieOLb6UDL7
+X-Proofpoint-GUID: 27W9qxTkt4LdEc7klTNrMyieOLb6UDL7
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 8:55=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
-ote:
->
-> Most of the ioctls to net protocols operates directly on userspace
-> argument (arg). Usually doing get_user()/put_user() directly in the
-> ioctl callback.  This is not flexible, because it is hard to reuse these
-> functions without passing userspace buffers.
->
-> Change the "struct proto" ioctls to avoid touching userspace memory and
-> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
-> adapted to operate on a kernel memory other than on userspace (so, no
-> more {put,get}_user() and friends being called in the ioctl callback).
->
-> This changes the "struct proto" ioctl format in the following way:
->
->     int                     (*ioctl)(struct sock *sk, int cmd,
-> -                                        unsigned long arg);
-> +                                        int *karg);
->
-> So, the "karg" argument, which is passed to the ioctl callback, is a
-> pointer allocated to kernel space memory (inside a function wrapper).
-> This buffer (karg) may contain input argument (copied from userspace in
-> a prep function) and it might return a value/buffer, which is copied
-> back to userspace if necessary. There is not one-size-fits-all format
-> (that is I am using 'may' above), but basically, there are three type of
-> ioctls:
->
-> 1) Do not read from userspace, returns a result to userspace
-> 2) Read an input parameter from userspace, and does not return anything
->   to userspace
-> 3) Read an input from userspace, and return a buffer to userspace.
->
-> The default case (1) (where no input parameter is given, and an "int" is
-> returned to userspace) encompasses more than 90% of the cases, but there
-> are two other exceptions. Here is a list of exceptions:
->
-> * Protocol RAW:
->    * cmd =3D SIOCGETVIFCNT:
->      * input and output =3D struct sioc_vif_req
->    * cmd =3D SIOCGETSGCNT
->      * input and output =3D struct sioc_sg_req
->    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
->      argument, which is struct sioc_vif_req. Then the callback populates
->      the struct, which is copied back to userspace.
->
-> * Protocol RAW6:
->    * cmd =3D SIOCGETMIFCNT_IN6
->      * input and output =3D struct sioc_mif_req6
->    * cmd =3D SIOCGETSGCNT_IN6
->      * input and output =3D struct sioc_sg_req6
->
-> * Protocol PHONET:
->   * cmd =3D=3D SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
->      * input int (4 bytes)
->   * Nothing is copied back to userspace.
->
-> For the exception cases, functions sock_sk_ioctl_inout() will
-> copy the userspace input, and copy it back to kernel space.
->
-> The wrapper that prepare the buffer and put the buffer back to user is
-> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
-> calls sk_ioctl(), which will handle all cases.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+This set of patches adds support for using the CS35L56 boosted smart
+amplifier on HDA systems. In these systems the CS35L56 audio is
+routed through a HDA-to-I2S bridge codec.
 
-> +/* A wrapper around sock ioctls, which copies the data from userspace
-> + * (depending on the protocol/ioctl), and copies back the result to user=
-space.
-> + * The main motivation for this function is to pass kernel memory to the
-> + * protocol ioctl callbacks, instead of userspace memory.
-> + */
-> +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +       int rc =3D 1;
-> +
-> +       if (ipmr_is_sk(sk))
-> +               rc =3D ipmr_sk_ioctl(sk, cmd, arg);
-> +       else if (ip6mr_is_sk(sk))
-> +               rc =3D ip6mr_sk_ioctl(sk, cmd, arg);
-> +       else if (phonet_is_sk(sk))
-> +               rc =3D phonet_sk_ioctl(sk, cmd, arg);
+This doesn't include the changes to the Realtek driver to actually hook
+up the CS35L56 driver, because we don't yet have the QUIRK IDs to
+associate it with. But we want to publish the driver now so that it is
+available for bringing up hardware with the CS35L56.
 
-I don't understand what this buys us vs testing the sk_family,
-sk_protocol and cmd here.
+The first 10 patches are moving code out of the ASoC driver and into the
+shared library so that it can be shared with the HDA driver.
 
-It introduces even deeper dependencies on the protocol specific
-header files. And the CONFIG issues that result from that. And it
-adds a bunch of wrappers that are only used once.
+Patch #11 fixes missing #includes in the HDA headers so that the CS35L56
+driver doesn't have to #include headers that it doesn't use.
 
-> @@ -1547,6 +1547,28 @@ int ip_mroute_setsockopt(struct sock *sk, int optn=
-ame, sockptr_t optval,
->         return ret;
->  }
->
-> +/* Execute if this ioctl is a special mroute ioctl */
-> +int ipmr_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +       switch (cmd) {
-> +       /* These userspace buffers will be consumed by ipmr_ioctl() */
-> +       case SIOCGETVIFCNT: {
-> +               struct sioc_vif_req buffer;
-> +
-> +               return sock_ioctl_inout(sk, cmd, arg, &buffer,
-> +                                     sizeof(buffer));
-> +               }
+Finally, #12 and #13 actually add the support for CS35L56 on HDA.
 
-More importantly, if we go down the path of demultiplexing in protocol
-independent code to call protocol specific handlers, then there there
-is no need to have them call protocol independent helpers like
-sock_ioct_inout again. Just call the protocol-specific ioctl handlers
-directly?
+Richard Fitzgerald (5):
+  ASoC: cs35l56: Move runtime suspend/resume to shared library
+  ASoC: cs35l56: Move cs_dsp init into shared library
+  ASoC: cs35l56: Move part of cs35l56_init() to shared library
+  ASoC: cs35l56: Pass correct pointer to cs35l56_irq()
+  ALSA: hda: Fix missing header dependencies
 
+Simon Trimmer (8):
+  ASoC: cs35l56: Move shared data into a common data structure
+  ASoC: cs35l56: Make cs35l56_system_reset() code more generic
+  ASoC: cs35l56: Convert utility functions to use common data structure
+  ASoC: cs35l56: Move utility functions to shared file
+  ASoC: cs35l56: Make common function for control port wait
+  ASoC: cs35l56: Make a common function to shutdown the DSP
+  ALSA: hda: Add mute_hook to hda_component
+  ALSA: hda/cs35l56: Add driver for Cirrus Logic CS35L56 amplifier
 
+ include/sound/cs35l56.h           |  29 +-
+ sound/pci/hda/Kconfig             |  31 +
+ sound/pci/hda/Makefile            |   6 +
+ sound/pci/hda/cs35l56_hda.c       | 995 ++++++++++++++++++++++++++++++
+ sound/pci/hda/cs35l56_hda.h       |  48 ++
+ sound/pci/hda/cs35l56_hda_i2c.c   |  69 +++
+ sound/pci/hda/cs35l56_hda_spi.c   |  68 ++
+ sound/pci/hda/hda_auto_parser.h   |   2 +
+ sound/pci/hda/hda_component.h     |   1 +
+ sound/pci/hda/hda_generic.h       |   3 +
+ sound/soc/codecs/cs35l56-i2c.c    |  14 +-
+ sound/soc/codecs/cs35l56-sdw.c    |  72 +--
+ sound/soc/codecs/cs35l56-shared.c | 459 +++++++++++++-
+ sound/soc/codecs/cs35l56-spi.c    |  10 +-
+ sound/soc/codecs/cs35l56.c        | 648 ++++---------------
+ sound/soc/codecs/cs35l56.h        |  15 +-
+ 16 files changed, 1878 insertions(+), 592 deletions(-)
+ create mode 100644 sound/pci/hda/cs35l56_hda.c
+ create mode 100644 sound/pci/hda/cs35l56_hda.h
+ create mode 100644 sound/pci/hda/cs35l56_hda_i2c.c
+ create mode 100644 sound/pci/hda/cs35l56_hda_spi.c
 
-> +       case SIOCGETSGCNT: {
-> +               struct sioc_sg_req buffer;
-> +
-> +               return sock_ioctl_inout(sk, cmd, arg, &buffer,
-> +                                     sizeof(buffer));
-> +               }
-> +       }
-> +       /* return code > 0 means that the ioctl was not executed */
-> +       return 1;
-> +}
+-- 
+2.30.2
+
