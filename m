@@ -2,122 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC197107B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434FA7107CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238810AbjEYIid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S240312AbjEYInJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239928AbjEYIi3 (ORCPT
+        with ESMTP id S240290AbjEYInH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:38:29 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F286E7C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:37:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f623adec61so3312765e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685003872; x=1687595872;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NXlTQR3mkNIo3HOsZ1H2pP7ShXmOplvHz6L0vbceCUg=;
-        b=qu/k/5DqECU9IbtboDrmFdRe89GYbH/trzXYk46C81yh5N44aQ5AB8n1P9VgUTF2jr
-         Pkzkz8LEDnbGKS4sBH4ih5c2wyA2YC9PKKmd2wKx5pAFDuDf4b2oDg1CS1zTaDgucn6m
-         ON8DlaOXjbGcWZW7MNN4yXRY1wvMjUSZNW/RjnKstC/e/lBFrkbd8OOzXkrEzJxmYGDr
-         o+TK08/PDV/2z/066/yeCOWiiLxoJanzMAtkAFwHW+O0KFadXb5bRzKrPDb2QwvameTt
-         nFXPvrFBszyWzQahUYcz9VEtD+pxWmCaNPOGFkidZtfcwylEwyMAm4xbeUjXcScQqKpG
-         If0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685003872; x=1687595872;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NXlTQR3mkNIo3HOsZ1H2pP7ShXmOplvHz6L0vbceCUg=;
-        b=POLoXv3hjHCCpF5lUeL2sP5oAUVpDwaT3RUmNitk6ZB6Hg+U9S918DjTrSTSMAmovi
-         vG9o/Cf8gCa/XuXUzyuWmy6+pXmKGXN/H3J2fs4vRt38LIPMYB3S95xPfKrHTRdYSHkh
-         xvZ5AIaNR5ZpyLmvnMmTmeh416p924xYOpDNE8Kv619btut2jQTfTn9O0WvG1i46heyk
-         uZMLOWm2tbbSRlYmppJ9sDLLWFbAYTsy/PJbXh6yusIwt9vxJJt6jixDem/DTAaqgVfI
-         EAakz/CbFjkuBMCJKd4JsG+YXFkNFygNZf38hFNXn1XGV3sq2N+h16f1tJRYTjjXcRNX
-         L8uw==
-X-Gm-Message-State: AC+VfDzh3NNFe4gvxsnXmDCZwINlmnHco08qlLLNQChPl1pUmdxIdrt7
-        YtqhzNDta6YpNMz1/o9LqX1yyg==
-X-Google-Smtp-Source: ACHHUZ5SQQPDiVagKO/3USB3C9hbvuAr4jLS4JAHKciIaqgDydWaTXDgss8FAtTEX5yhdCX/1oPNAA==
-X-Received: by 2002:adf:f84c:0:b0:307:8694:44e0 with SMTP id d12-20020adff84c000000b00307869444e0mr1764181wrq.55.1685003872049;
-        Thu, 25 May 2023 01:37:52 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x4-20020a5d54c4000000b002c70ce264bfsm976048wrv.76.2023.05.25.01.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 01:37:50 -0700 (PDT)
-Date:   Thu, 25 May 2023 11:37:47 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Joel Granados <j.granados@samsung.com>
-Cc:     mcgrof@kernel.org, Christian Brauner <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Iurii Zaikin <yzaikin@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH v4 7/8] sysctl: Refactor base paths registrations
-Message-ID: <c97bfda5-cecf-4521-880b-02c6da987120@kili.mountain>
-References: <20230523122220.1610825-1-j.granados@samsung.com>
- <CGME20230523122236eucas1p17639bfdbfb30c9d751e0a8fc85fe2fd3@eucas1p1.samsung.com>
- <20230523122220.1610825-8-j.granados@samsung.com>
+        Thu, 25 May 2023 04:43:07 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2050.outbound.protection.outlook.com [40.107.8.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FCC9E;
+        Thu, 25 May 2023 01:43:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ml2uWa0mOJmc6mDcUSdsCJT+gNhfBte1Pg0DQcNco8pP350VzuaDdUHhZAvAHi2hS18xOydi2TqXePnv04ujI47tjJjPuOr9pKOctXzHdfdNxLc5WpPGRxei6kvnTMorUejniStOJMMOz4D3ZwZ4PiiKQ4WaRDVX1ieu5L2rLHwDOvWvhLt4j7an44yP6J/lFXvKopykoQaS7K94GYl/GR9jkbZ4zLIEFJBKXQL0719/MHIhmIKJEnuNEkELfPStU/fVnu8kMipW1jUh1dR+ea+txbFUgyRnfRPJrf45UHHQvi4tzSSb4300/GmywVf5DxR6yq4s7sWdpDk5OvQonA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z/8uxgSdL3l7/LRvYC73ji0Es39zv4Mj6qgR5rkZFR8=;
+ b=d0+5gPRIeogQJRDpAMUE5IpRJIr2qDkzbTAis28C5qGWVS7ojOXejWJJfr9Q1na7Z9Uxw333GnEnHSF//ph5A91wOw0gtogS4h31tye3teyuEHgsUZeKNefo+R7/KVlMKv7ccp6xGzXB/n/4w1EUCPqNqESMt2b6/1d7CUeVrS97bytmrqAm3M0HOsuaoRvHXq5I4vOiecEzo4ILuKH4kpO4GuojNnFlc6jbjoyR45kcWqtDkizUF0xAPAMm35vCcLRwUODaY5sbBwIJRaSQEgfenYEm8Qj8CVyyWot6CS273zf0GOtexuhCAsMh5hUH3uRxjQzXs2z63hllTCYuLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z/8uxgSdL3l7/LRvYC73ji0Es39zv4Mj6qgR5rkZFR8=;
+ b=i3WnR+NayA9wAMVfdpyqxExsrPeYkp+WP9hGooI7ogqgRQCxSMnBj0wsPQPcW4L8pZ1qitubQapeuRcje/59uvdOC6hSgrJklAzT1VTUlCZe7xVwZC2iSTktjXp/fZb7qzMuYRKVG3vzPaJhMAoSAtNBXbdpS+v4QfBvqtWWxxo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
+ by PAXPR04MB8558.eurprd04.prod.outlook.com (2603:10a6:102:215::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
+ 2023 08:42:59 +0000
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2]) by AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2%4]) with mapi id 15.20.6433.015; Thu, 25 May 2023
+ 08:42:59 +0000
+From:   wei.fang@nxp.com
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shenwei.wang@nxp.com, xiaoning.wang@nxp.com,
+        netdev@vger.kernel.org
+Cc:     linux-imx@nxp.com, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: fec: remove last_bdp from fec_enet_txq_xmit_frame()
+Date:   Thu, 25 May 2023 16:38:24 +0800
+Message-Id: <20230525083824.526627-1-wei.fang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0054.apcprd02.prod.outlook.com
+ (2603:1096:4:196::13) To AM5PR04MB3139.eurprd04.prod.outlook.com
+ (2603:10a6:206:8::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523122220.1610825-8-j.granados@samsung.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3139:EE_|PAXPR04MB8558:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53721ba4-b7d8-4b4d-d9ed-08db5cfc0b58
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zYA56Rjptc0rqlbgGPdlHhbXqd3gt1SoHQVxcKzzvn2FXQ4+1vtWgZTQ99NItZSCrYZVBOtoHWAVNzr0ntdFQXAEbAJ4QYlqA6B8uX2+zxCtJHpQWlDC5+8mnBHZCZwO24c23KgJLm+LUYwp9WLkLZYrYsmZiGkBIfJ8zdIXQT8LFHI8QZNtqRcfIMbHjGTjYOXy4q3Xjjqewn9xLH7KQ+slG4OsgQM3ip5Wx5bZMnzTyvXzkoTsBFr/jAcpknURgeG8KQclYjb/OFFyLQhatwUAID+X5iwgk6EJMDr59iVNaTD2QrJpJrRYgc93kwoGVJp7ze4uXgr0Nj+NrCr+J0PvViaOxHUdTtGCdsiP9f1MK9BCVJWGV9b6cF45qWgMCXl9lPP6kOwRHBLmvDxilnzHzBfMjnqDwC0iXmNXpQTGsXRJFUJ2rx0XesXyX3QMwrOHGjGi4w38oNtlVfdEr9a7+jfKjtS4LATgX0Q51t2KOPb+4JwRDaXGMaEyltJ3E8c6SpQPLReuTadVhBsbd7QekSQ+jfojryp+NdDmkQ7KFFH+7AbjEQkdM+ohzWul/7vp7SmFdjx6su+d8BARkkF/FS+8r+pgd2EC62ZcXIWPMghVhKe6+zLrtTd70yki
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(366004)(396003)(346002)(451199021)(9686003)(6506007)(6512007)(1076003)(26005)(6486002)(52116002)(186003)(2616005)(86362001)(36756003)(478600001)(8676002)(8936002)(5660300002)(4326008)(316002)(66476007)(66556008)(66946007)(41300700001)(83380400001)(38350700002)(38100700002)(6666004)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AGBoNAp+b2hqC4LKEV4SzoL1KwjsAxYgh5ncttlvJ259Y2tBC1QjCT7JYDL9?=
+ =?us-ascii?Q?gE+HJ8nnBjdoaFUAFQcIkMk748xhUfmIhryTQ8zfUX0vHe4leFOybS+ds21c?=
+ =?us-ascii?Q?sUDp4OzCi8T4Mzdu7YCvlw/URgMgcTpovU3fPs8svLwL5m05/sscWjCs6Zlf?=
+ =?us-ascii?Q?OslqClsCYWDvIvZOW55Ac+eyB6uEjF2r+EZhzTEbmCAeW5xHDWWoj1CxOKYG?=
+ =?us-ascii?Q?ykJcQIFsVq7XsGL8JhBWOEngU91VmGsquoA9I9ZMNsPXdbUesGL5D/6IB+kz?=
+ =?us-ascii?Q?HxRapP6aluIPlZwngrTPcyK7jXwFCZivTaYxMiiaF6/63wNsQ0CKd1XgaP1p?=
+ =?us-ascii?Q?FUxZBvOq2Pf7puikHpRWRxiLSqAXYV/PKpcXM47MO/FrWpTDAmviOdntfQvB?=
+ =?us-ascii?Q?oRuKY5nruOJSq3GObgOm22kU6LuhJ+qyD8iF17FmqWZQ9ppfNWxuaP6SmzXi?=
+ =?us-ascii?Q?6p1xnXIBV0L8GTzNAzvje74gAU4Ob9GYyRbAmw9glgIZhbqdCIRbf4glWoHV?=
+ =?us-ascii?Q?BM4pHdtCJGnLA+L6Ek+M0a4Ml2dA5L/iuvm+airYrAlCRe/eL0kMUUtiyfq6?=
+ =?us-ascii?Q?IvAtuQypRd2nx3DGN8+xjl0LUeeh2YKijvBLrLLJW9MSkQ+N7WN/jW/mhGBN?=
+ =?us-ascii?Q?mO1e29wPY/qgT/6SMY8xrQHad8SZrRv6MeOjVJGg1ZG2abl4yINeTnHi7dRn?=
+ =?us-ascii?Q?Xe6KGyBjXULKCqr6kkBJQCqsmyDyFlPMR07Gqv1sD/T6Ulma17OTlPpCfbcq?=
+ =?us-ascii?Q?BJyCR86nRP+QHLpeGss2z/8QuTHkqQRthh+8jfvTgM6sIWAVySs/FVz/uzc0?=
+ =?us-ascii?Q?9G6EEeWF8Q5j+CQX3BcZtqvWHflAOd9/xjujbJG1MvLzxUQxYJGu5rHtKROM?=
+ =?us-ascii?Q?eIxsmNI86SgaM7sBOR8XumTDb5cRWvIZYOI3jDr7kGpWnRJerlJUALyRBNr1?=
+ =?us-ascii?Q?F3U9eDdAWx0emsXbHpoZPhVSwNLdWAdk271GJ+7L8ByUGDV5XPvQgNpRQ6Ee?=
+ =?us-ascii?Q?SxkHVz0R6i8z04vaPDMyYZPbEEIQNPsmQQTzl5zwzpG74siYTv4rpLelgeZT?=
+ =?us-ascii?Q?qT/hhmf+GGtyEA04IlhPXCBTkeej17RZTYXa93y76fTik1YWFi6bbB+MaQmj?=
+ =?us-ascii?Q?WvF0TTXeozCFvJQKtXTwDXGeC6Ne17kSF0juNn8ie+8n652PvzYRZNyUS8R6?=
+ =?us-ascii?Q?PJT/RyJLi0c7SOajdkbEgkSZ72FUgcvfi1XuJef6/NgEheCwcUohaIvjPwlU?=
+ =?us-ascii?Q?1ILE57g+1j+76gMKPx4OBO4CflGO73+fQI21p3BubRJIXUTtKP/eWl722Fyz?=
+ =?us-ascii?Q?FC54nBvn/B+Wih2GVxry8TiLXOmM4Yrx+8xuiWzx27j+krPD1OeNLdNM9PaZ?=
+ =?us-ascii?Q?qmh9HEEpLnzvDT1HpnyFJJ+p0NTWdTpXmvo9pMuk9FTKD//klGZHEFADFltS?=
+ =?us-ascii?Q?YJ65NOq/n6k31d4h8BPStowQHn2ea4eqCit7q/Vf6yxC9/3vGJiZwWCm8h4q?=
+ =?us-ascii?Q?X36JdN5HYSCbC8CvVmn/E586IsU71oVOt+/6m24/d+OoYAUYTY/i+vcqE5Co?=
+ =?us-ascii?Q?hZXNXEzfVglZzBNz4WbHijVGN4zZh29zoLBAC1jj?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53721ba4-b7d8-4b4d-d9ed-08db5cfc0b58
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 08:42:59.6962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8aw33zlaR3e8GX+XapoJbOrkdxo3a+a80A9k380aM7UVOR9JBHPZhCpplI5fVy2jqmEZwm5He/3H4I5+bIcRkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8558
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 02:22:19PM +0200, Joel Granados wrote:
-> This is part of the general push to deprecate register_sysctl_paths and
-> register_sysctl_table. The old way of doing this through
-> register_sysctl_base and DECLARE_SYSCTL_BASE macro is replaced with a
-> call to register_sysctl_init. The 5 base paths affected are: "kernel",
-> "vm", "debug", "dev" and "fs".
-> 
-> We remove the register_sysctl_base function and the DECLARE_SYSCTL_BASE
-> macro since they are no longer needed.
-> 
-> In order to quickly acertain that the paths did not actually change I
-> executed `find /proc/sys/ | sha1sum` and made sure that the sha was the
-> same before and after the commit.
-> 
-> We end up saving 563 bytes with this change:
-> 
-> ./scripts/bloat-o-meter vmlinux.0.base vmlinux.1.refactor-base-paths
-> add/remove: 0/5 grow/shrink: 2/0 up/down: 77/-640 (-563)
-> Function                                     old     new   delta
-> sysctl_init_bases                             55     111     +56
-> init_fs_sysctls                               12      33     +21
-> vm_base_table                                128       -    -128
-> kernel_base_table                            128       -    -128
-> fs_base_table                                128       -    -128
-> dev_base_table                               128       -    -128
-> debug_base_table                             128       -    -128
-> Total: Before=21258215, After=21257652, chg -0.00%
-> 
-> Signed-off-by: Joel Granados <j.granados@samsung.com>
-> [mcgrof: modified to use register_sysctl_init() over register_sysctl()
->  and add bloat-o-meter stats]
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+From: Wei Fang <wei.fang@nxp.com>
 
-This needs a Fixes tag so it doesn't get backported by some weird fluke.
-Or you could just fold it in with the original patch which introduced
-the bug.
+Actually, the last_bdp is useless in fec_enet_txq_xmit_frame(),
+so remove it.
 
-Probably add a copy of the output from dmesg?  Maybe add some
-Reported-by tags?
+Signed-off-by: Wei Fang <wei.fang@nxp.com>
+---
+ drivers/net/ethernet/freescale/fec_main.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-regards,
-dan carpenter
-> 
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index 3ecf20ee5851..26fb00e0590b 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -3770,7 +3770,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 				   struct xdp_frame *frame)
+ {
+ 	unsigned int index, status, estatus;
+-	struct bufdesc *bdp, *last_bdp;
++	struct bufdesc *bdp;
+ 	dma_addr_t dma_addr;
+ 	int entries_free;
+ 
+@@ -3782,7 +3782,6 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 
+ 	/* Fill in a Tx ring entry */
+ 	bdp = txq->bd.cur;
+-	last_bdp = bdp;
+ 	status = fec16_to_cpu(bdp->cbd_sc);
+ 	status &= ~BD_ENET_TX_STATS;
+ 
+@@ -3810,7 +3809,6 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 		ebdp->cbd_esc = cpu_to_fec32(estatus);
+ 	}
+ 
+-	index = fec_enet_get_bd_index(last_bdp, &txq->bd);
+ 	txq->tx_skbuff[index] = NULL;
+ 
+ 	/* Send it on its way.  Tell FEC it's ready, interrupt when done,
+@@ -3820,7 +3818,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 	bdp->cbd_sc = cpu_to_fec16(status);
+ 
+ 	/* If this was the last BD in the ring, start at the beginning again. */
+-	bdp = fec_enet_get_nextdesc(last_bdp, &txq->bd);
++	bdp = fec_enet_get_nextdesc(bdp, &txq->bd);
+ 
+ 	txq->bd.cur = bdp;
+ 
+-- 
+2.25.1
+
