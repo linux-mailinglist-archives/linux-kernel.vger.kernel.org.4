@@ -2,140 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BFA710628
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F0D71062E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239202AbjEYHVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S238590AbjEYHWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbjEYHVg (ORCPT
+        with ESMTP id S238845AbjEYHW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:21:36 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FC419D;
-        Thu, 25 May 2023 00:21:35 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2553663f71eso819790a91.3;
-        Thu, 25 May 2023 00:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684999294; x=1687591294;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xqc0RvBjEqmfMd1qioMCyBJH4DDZdjxzMOj0X5GfsUA=;
-        b=gVlD33aFtOvzkcMkjOJ1fIcAsTV+rLJybqU5nLh5n7mK9K/xH9tWAzYgoNQrCpNzQI
-         gNdVIfwhcj32Xkr//kBOI/fZwy4qPkJOyjT/ndcJ9rGoHxucTUDOazC6Ff67pLMu4O1g
-         Z+1JDlh6ZrD2/nwUI0A8be0EpO0cmc5OSD3C03ecvqVsskQZSWlKofxeU/QnTjQBgTGP
-         S8EA8JrG76ODO5Cqe3zWQRvKzhBZIl9kMDrob4qb+c8iRP5IpEjy0MH4czojugLfHVD8
-         6+MyRN0ZujXqMbMr+CloWAYSHJWXZ5TGHx3HkVnQFbmsw7RzIQHv0J6x7Fu5MzgU2LBK
-         r8Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684999294; x=1687591294;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xqc0RvBjEqmfMd1qioMCyBJH4DDZdjxzMOj0X5GfsUA=;
-        b=IXxKy33Ln8mNZAWVxuY75ie37+IA/plckL96WoFfsgf2FlvNGt3lH57ISRN/av6Wr9
-         aJyCy5axPMwJykxDafRyYHah/abARNlkDJcKskrE+nB8gALk8JqjyYT/No54oSfDon8G
-         +b6ZdKy9gtnVc+zfDp/DPoJ1lvfFLQvIw498O1KyiHIKCE4pOZsUHhwQ+hHFL0CdQkb5
-         Mkmw+tW/8rr/5dyhN95kVaTZCZ+fotISQAjdcc1//eacZJUVfloCRGF29/hpqyZ4Kvrj
-         1uV7lRgk5gU4gQzWsqxrWDWsDXmjvIi+nmm55g1mA4rU91QI5p7qPTf1ututf8ynSCxf
-         t8Qg==
-X-Gm-Message-State: AC+VfDyvRR/rtZQCg3ktDG9uLuptEH+5bbRp0lK+qMjhnpeyKui0V8rx
-        59hzfSlHHhfsiyQnFhCo5ho=
-X-Google-Smtp-Source: ACHHUZ5IYbP3gSc5r6+a5rwq/3ZjNdRBiDTIFHh8RjXFUliqBUw8onJAOOk1gJ3maZ3R7QkHFAGCQw==
-X-Received: by 2002:a17:90a:9317:b0:253:62c2:4e1b with SMTP id p23-20020a17090a931700b0025362c24e1bmr640751pjo.48.1684999294520;
-        Thu, 25 May 2023 00:21:34 -0700 (PDT)
-Received: from [172.27.236.17] (ec2-16-163-40-128.ap-east-1.compute.amazonaws.com. [16.163.40.128])
-        by smtp.gmail.com with ESMTPSA id l64-20020a633e43000000b0053ef188c90bsm467964pga.89.2023.05.25.00.21.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 00:21:34 -0700 (PDT)
-Message-ID: <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
-Date:   Thu, 25 May 2023 15:21:28 +0800
+        Thu, 25 May 2023 03:22:29 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C941B4;
+        Thu, 25 May 2023 00:22:26 -0700 (PDT)
+Date:   Thu, 25 May 2023 09:22:23 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1684999344; bh=WqUc/D7b6J+dZZ3k3J04dIED1dcPikypQw79086aY+I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A4qui0d6SFgquCtdZyX+rdW4NmFRU+MwSYXoz+NIOgAxuOFHJkA+W16BNaGXrAxwi
+         d0tM4EyEQIRvkweDgiY07CEo3ZiJ5+1TnmhDDmOUYoqcsDtOdLbibs2POpPS07pecY
+         KPcXGq5T2pYQ6SKBHWVTX7h02Mhr5OLA1nQx/nO4=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, w@1wt.eu
+Subject: Re: [PATCH 11/13] tools/nolibc: sys_select: riscv: use
+ __NR_pselect6_time64 for rv32
+Message-ID: <76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de>
+References: <83339ea6-6653-41fe-af75-e0d51a4fa920@t-8ch.de>
+ <20230525071021.77223-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, seanjc@google.com
-References: <20230509134825.1523-1-yan.y.zhao@intel.com>
- <20230509135300.1855-1-yan.y.zhao@intel.com>
- <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com>
- <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
-Content-Language: en-US
-From:   Robert Hoo <robert.hoo.linux@gmail.com>
-In-Reply-To: <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525071021.77223-1-falcon@tinylab.org>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/2023 2:21 PM, Yan Zhao wrote:
-[...]
-> Yes, leaving each vCPU's MTRR to mimic HW.
+On 2023-05-25 15:10:21+0800, Zhangjin Wu wrote:
+> Hi, Thomas
 > 
-> As also suggested in SDM, the guest OS manipulates MTRRs in this way:
+> > On 2023-05-25 01:59:55+0800, Zhangjin Wu wrote:
+> > > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
+> > > __NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
+> > > system call ABI"), use __NR_pselect6_time64 instead.
+> > > 
+> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > ---
+> > >  tools/include/nolibc/sys.h | 7 ++++++-
+> > >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > > index c0335a84f880..00c7197dcd50 100644
+> > > --- a/tools/include/nolibc/sys.h
+> > > +++ b/tools/include/nolibc/sys.h
+> > > @@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
+> > >  		struct timeval *t;
+> > >  	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
+> > >  	return my_syscall1(__NR_select, &arg);
+> > > -#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
+> > > +#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
+> > > +#ifdef __NR_pselect6
+> > >  	struct timespec t;
+> > > +#else
+> > > +	struct timespec64 t;
+> > > +#define __NR_pselect6 __NR_pselect6_time64
+> > 
+> > Wouldn't this #define leak to the users of nolibc and lead to calls to
+> > pselect6_time64 with the ABI of the __NR_pselect6 if userspace is doing
+> > its own raw syscalls?
+> >
 > 
-> for each online CPUs {
-> 	disable MTRR
-> 	update fixed/var MTRR ranges
-> 	enable MTRR
-> }
-> Guest OS needs to access memory only after this full pattern.
+> Yeah, it would break the user-side raw __NR_pselect6 syscall for nolibc is a
+> header-only libc, so, it is not safe to use such method like glibc.
 > 
-Thanks for confirmation and clarification.
-
-> So, I think there should not have "hazard of inconsistency among per-VPU MTRR
-> states".
+> Something like this will let the syscall call to pselect6_time64 instead of the
+> user-required __NR_pselect6 and pass the wrong type of argument.
 > 
-> I want to have per-VM MTRR state is because I want to reduce unnessary EPT
-> zap, which costs quite a lot cpu cycles even when the EPT is empty.
+>     #include "nolibc.h"  // If no __NR_pselect6 defined, __NR_pselect6 = __NR_pselect6_time64
 > 
-> In this patch, per-VM MTRR pointer is used to point to vCPU 0's MTRR state,
-> so that it can save some memory to keep the MTRR state.
-> But I found out that it would only work when vCPU 0 (boot processor) is
-> always online (which is not true for x86 under some configration).
+>     #ifdef __NR_pselect6
+>         struct timespec t;  // come here for __NR_pselect6_time64, but t is not timespec64, broken
+>         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+>     #else
+>         struct timespec64 t;
+>         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+>     #endif
 > 
-> I'll try to find out lowest online vCPU and keep a per-VM copy of MTRR state
-> in next version.
+> I have used something like __NR_pselect6_time3264 locally, before
+> sending the patchset, I found a cleaner method already used in sys.h:
 > 
-> Thanks!
+>     #ifndef __NR__newselect
+>     #define __NR__newselect __NR_select
+>     #endif
 > 
+> But I forgot the arguments mixing issue, __NR__newselect and __NR_select
+> share the same type of arguments, but __NR_pselect6 and
+> __NR_pselect6_time64 not, so, I will use back the old method but still
+> need to find a better string, just like __NR__newselect, __NR__pselect6
+> may be used in kernel space in the future, and __NR_pselect6_time3264 is
+> too long, what about this?
+> 
+>     #ifdef __NR_pselect6
+>             struct timespec t;
+>     #define __NR_pselect6__ __NR_pselect6
+>     #else
+>             struct timespec64 t;
+>     #define __NR_pselect6__ __NR_pselect6_time64
+>     #endif
+> 
+> Or even ___NR_pselect6?
 
-IIUC, your saving comes from skips the intermediate state during boot, when 
-APs goes through setting MTRR, which would cause SPTE zap before your this 
-patch set.
+What about:
 
-MHO was, now that your ignores other vCPU's MTRR settings (unless it is 
-different from BP's MTRR?), why not let each vCPU's MTRR set/update 
-directly set to the per-VM MTRR states (if differs from current value). 
-It's guest OS/BIOS's responsibility to keep the consistency anyway. And 
-even if the malfunction caused by the inconsistency might differ from that 
-of native, SDM doesn't clearly state how the malfunction should be, does it?
-that's to say, anyone knows, when inconsistency happens, does it cause that 
-logical processor malfunction or in fact it impacts the global MTRR 
-settings? If the latter, I think leaving only the per-VM MTRR state aligns 
-with native.
+#ifdef __NR_pselect6
+        struct timespec t;
+        const long nr_pselect = __NR_pselect6;
+#else
+        struct timespec64 t;
+        const long nr_pselect = __NR_pselect6_time64;
+#endif
 
-BTW, with regard to KVM_X86_QUIRK_CD_NW_CLEARED, I see svm honors it while 
-vmx doesn't before it clear CR0.CD/NW.
+> 
+> The same issue is in this patch:
+> 
+>     [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64
+> 
+> will solve it with the same method.
 
-svm_set_cr0():
-
-	if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
-		hcr0 &= ~(X86_CR0_CD | X86_CR0_NW);
-
-
-vmx_set_cr0():
-
-	hw_cr0 = (cr0 & ~KVM_VM_CR0_ALWAYS_OFF);
-
-Perhaps vmx side can be fixed passingly?
+Thanks!
