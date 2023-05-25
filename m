@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7DC71119B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CF171119E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240609AbjEYREI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S233058AbjEYRE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240206AbjEYREF (ORCPT
+        with ESMTP id S231964AbjEYREz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:04:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73B8189
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:04:04 -0700 (PDT)
+        Thu, 25 May 2023 13:04:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28702189;
+        Thu, 25 May 2023 10:04:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF4161489
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:04:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1ABC433EF;
-        Thu, 25 May 2023 17:04:02 +0000 (UTC)
-Date:   Thu, 25 May 2023 18:03:59 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH] arm64: mm: pass original fault address to
- handle_mm_fault() in PER_VMA_LOCK block
-Message-ID: <ZG+U/70SxgfaM6sl@arm.com>
-References: <20230524131305.2808-1-jszhang@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C51647B1;
+        Thu, 25 May 2023 17:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB65C433D2;
+        Thu, 25 May 2023 17:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685034293;
+        bh=gBgpG9vTwOaMKv/+/eY1oC9MAIfEaLOfyfZw8B7xYrs=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=pio0Er+luZrzNM1SJ2AttAghtZM4LVeBGEhQJeM8Btg85aqeZ7C0Uk0WtKDGG48Hh
+         3SvpKa7OJKD21AzpxfUrxY0K6PiIbpIG2Cd1EidA3FOwdiYMtDsgP8c3SnaoTyDCDL
+         Oth+XHrdB2RPFdHB9gRJXFxYMD8tTQsG6iL+PvNWZrcwn22p4nktAuZOzgSkPimdPP
+         huP2sDOiV5QXSqeEwmdAHnJEqY6wOR4r41JG04UUpZQGMabslLkYHOfui+rP+xmMF1
+         vmSqg+dYqpgXHSHm4Abtsp/KplIC8kVbOGMHywkQCNCCSvMycqmrifBux7tTi59mFm
+         oYEmkyuR07H3g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524131305.2808-1-jszhang@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] wifi: ath9k: don't allow to overwrite ENDPOINT0
+ attributes
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230516150427.79469-1-pchelkin@ispras.ru>
+References: <20230516150427.79469-1-pchelkin@ispras.ru>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Takeshi Misawa <jeliantsurux@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168503428836.19957.620283860814904448.kvalo@kernel.org>
+Date:   Thu, 25 May 2023 17:04:50 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 09:13:05PM +0800, Jisheng Zhang wrote:
-> When reading the arm64's PER_VMA_LOCK support code, I found a bit
-> difference between arm64 and other arch when calling handle_mm_fault()
-> during VMA lock-based page fault handling: the fault address is masked
-> before passing to handle_mm_fault(). This is also different from the
-> usage in mmap_lock-based handling. I think we need to pass the
-> original fault address to handle_mm_fault() as we did in
-> commit 84c5e23edecd ("arm64: mm: Pass original fault address to
-> handle_mm_fault()").
-> 
-> If we go through the code path further, we can find that the "masked"
-> fault address can cause mismatched fault address between perf sw
-> major/minor page fault sw event and perf page fault sw event:
-> 
-> do_page_fault
->   perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, ..., addr)   // orig addr
->   handle_mm_fault
->     mm_account_fault
->       perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, ...) // masked addr
-> 
-> Fixes: cd7f176aea5f ("arm64/mm: try VMA lock-based page fault handling first")
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Fedor Pchelkin <pchelkin@ispras.ru> wrote:
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> A bad USB device is able to construct a service connection response
+> message with target endpoint being ENDPOINT0 which is reserved for
+> HTC_CTRL_RSVD_SVC and should not be modified to be used for any other
+> services.
+> 
+> Reject such service connection responses.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> 
+> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+> Reported-by: syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+
+Patch applied to ath-next branch of ath.git, thanks.
+
+061b0cb9327b wifi: ath9k: don't allow to overwrite ENDPOINT0 attributes
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230516150427.79469-1-pchelkin@ispras.ru/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
