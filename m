@@ -2,132 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0543C710A55
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E6F710A5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240656AbjEYKwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S240669AbjEYKwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238970AbjEYKwK (ORCPT
+        with ESMTP id S238970AbjEYKwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:52:10 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA5290;
-        Thu, 25 May 2023 03:52:09 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d293746e0so2319693b3a.2;
-        Thu, 25 May 2023 03:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685011929; x=1687603929;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uKxz95HpCbuh/D0m8xyBwXgcATYmLHxvtvHZsmTAjvM=;
-        b=MWrsouSOOS/cmfHAbtaBDlA5hu/Zsz8eQpc0ejq/r1lHJ6zWF379v3eijhTI/KVTpS
-         1C7+Mciljxexh94Kx57j0geBMnJLzmolaCy026y9US7G8p/pc8tDP4gaZVSg3nQmUFMb
-         p5YhDE5Om+Vw35b25srQIuABNbDm+ziiuaseIo2mPO6ROWPkW6HwVKyj5sGXWePXNU7o
-         w2ZeKQfs+OykPZX63MPepCJC4yqk/MewWKh8NxfCDfUMDTC84lt1Cpi96jkU22ukBHN9
-         CJyDZLXT5XP7ODQyj9PFsd08PcGDBEiyW4SohPSK/SPmau/sPhFcfOkgbpSUuxA4KIgs
-         CFmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685011929; x=1687603929;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uKxz95HpCbuh/D0m8xyBwXgcATYmLHxvtvHZsmTAjvM=;
-        b=fYyNxyGUqvLzsIX+Cydtj7t/ziVlz+A04GfeaVq6qr7EJJISkDdwUwkmzPNZNyNEgw
-         UG7v4boVGp1RdjbqqapEUIIwE9CqGITlOZgLfhxi5HhFmqXNPa1pJN9H2b7Aith9XKTQ
-         be+jo2CRgl9zPD+M/2aZgAzcgdxERb2hmi0Elw1tatxTCFhMTSwm+Tgh0ZZcEWYouYWD
-         53WRyIChzrVIMJOZI50nIk49uLoecuhVb/W5i7SicDZOl3CBiZrjLJg1N8kwql8jMuMu
-         QSaYynoq7v1WiDf5ll8GVINsPcHY0Q4qz18mWmmNyTKC+pyx/e5REKILWyk0y7/wa8gD
-         ciqA==
-X-Gm-Message-State: AC+VfDwkfmxgSnxWQjFdM0fN718bphre0P0VKsE8Q4PKdn4BT6RkuGcy
-        8/RIQU58RpYdaZQq/7XiA1uATVxVwhM=
-X-Google-Smtp-Source: ACHHUZ4t3SiYOJoolZUCHAT1XgTAYYbV/XtXlsKSF3tKEyR9blhYcZ1CFakdTFQ200+G0aZdshBR9g==
-X-Received: by 2002:a05:6a20:8413:b0:10c:5ff4:8bb9 with SMTP id c19-20020a056a20841300b0010c5ff48bb9mr10574335pzd.58.1685011928691;
-        Thu, 25 May 2023 03:52:08 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id 18-20020a630012000000b0052c9d1533b6sm905392pga.56.2023.05.25.03.52.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 03:52:08 -0700 (PDT)
-Message-ID: <e8f93560-a2f6-8e9f-031a-88d333482a31@gmail.com>
-Date:   Thu, 25 May 2023 17:52:02 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: absent both plymouth, and video= on linu lines, vtty[1-6]
- framebuffers produce vast raster right and bottom borders on the larger
- resolution of two displays
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Framebuffer <linux-fbdev@vger.kernel.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Nouveau/NVIDIA <nouveau@lists.freedesktop.org>,
-        Linux Stable <stable@vger.kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Felix Miata <mrmazda@earthlink.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 06:52:38 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2AB199;
+        Thu, 25 May 2023 03:52:36 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 6FAD52B0681B;
+        Thu, 25 May 2023 06:52:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 25 May 2023 06:52:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685011952; x=1685019152; bh=DU
+        FYLgNR0P3iMDujbNPJ6zcWMVF2ZDhcLM/UDfvQ7oE=; b=MOQIz0mdsCpzsJDpOT
+        8ymmHxd6/8U/1WrSlAu+26J9rPY+bl/QIyP7HlCrsPmJUlV8qXrewBBWaZM/zPbl
+        Avlzez1zIuARarFB8Q+CSpanGgDvavP3UvS7jOZjuO8BEJC5Skq+WhgsPSE7BYso
+        huvQr31ejgwQADplhhctQIrYZoiYvP65bWrP7Ep2/ENITKCKFjM+ORNVQInWBB/U
+        e1xnq3JiYlOQMGLPzi2Gn4d5fn7nPmSS0o6PhQUi+JS4X88aY797/1dcU900mr0r
+        b8dxJ/azB1vY1PWRzlUrX+dxP0NYO2gi5TQFJt7KPkijRDPkRNSWoC8W0yTowW0l
+        f+Mw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685011952; x=1685019152; bh=DUFYLgNR0P3iM
+        DujbNPJ6zcWMVF2ZDhcLM/UDfvQ7oE=; b=EflHhJQg9wl2mG7bcZk8ETaFCFS2e
+        +KCM2ZXWihEVKvLhonnr7dOUeqG2bh5qJx2FysmmLCMzUPG+HlbFcFxvGE9Yt6Rg
+        c1Zq4zh4OEYt+Q71eWIJqiin1aNt49jXbiLQh9SJE62wFNAo911XNBoucik+Gzc8
+        cspfKUzRXOjWxDMSK7p38IylIxc/LuzE632/sGzGIEm6R1Y34aKYTzNNhuewVS6x
+        mPkAw7cYASaqD4haDeYKF5F8Li1HLZYnk6WFDdHQJiPyYzjJou5z/uFu4KgXX886
+        wVCJOeYCov0f/WDjAlcaoDUMGPabIC66aH+QqtLdoHG3Q/7JEQQMjfKGQ==
+X-ME-Sender: <xms:7D1vZO4QU9Jez8-ha0NTKuIxJkxVOyWMOw59fwy-mdgdKCWyERZ0Qw>
+    <xme:7D1vZH4l8nWr7ujQavOzUH-YdKW1mkNYstrhjZKuCzbgYa4fM7wmWEDCrZfB3fK5i
+    E6t_sOrA2-CCtDMUqg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:7D1vZNeCUZGBr8hqNazi1vE2XPDcy56nt9wPzXEdZqoJHZzP3_eX-w>
+    <xmx:7D1vZLJLWXCFdXo0PikDzn15lfJXSQx6C7gtfm9COaeI2OXgWNRmiw>
+    <xmx:7D1vZCLrYnBxTsTvaUHJd6WCBIVu4xSqVNpfgBb3TGefKjjwmCI_bg>
+    <xmx:8D1vZJLI8FQKNsj_QLZ7J4Fw_p8dg7sgs9AIRGxRbmH08jCfAongICIo1Eg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C3EA8B60086; Thu, 25 May 2023 06:52:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <292934ce-73fa-4077-9051-2ad909828f4a@app.fastmail.com>
+In-Reply-To: <20230525102946.GE38236@hirez.programming.kicks-ass.net>
+References: <20230515075659.118447996@infradead.org>
+ <20230515080554.453785148@infradead.org>
+ <20230524093246.GP83892@hirez.programming.kicks-ass.net>
+ <20230525102946.GE38236@hirez.programming.kicks-ass.net>
+Date:   Thu, 25 May 2023 12:52:06 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Peter Zijlstra" <peterz@infradead.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Jonathan Corbet" <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
+        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, "Joerg Roedel" <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Baolu Lu" <baolu.lu@linux.intel.com>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, May 25, 2023, at 12:29, Peter Zijlstra wrote:
+> On Wed, May 24, 2023 at 11:32:47AM +0200, Peter Zijlstra wrote:
+>> On Mon, May 15, 2023 at 09:57:07AM +0200, Peter Zijlstra wrote:
+>
+> This then also means I need to look at this_cpu_cmpxchg128 and
+> this_cpu_cmoxchg64 behaviour when we dont have the CPUID feature.
+>
+> Because current verions seem to assume the instruction is present.
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+As far as I could tell when reviewing your series, this_cpu_cmpxchg64()
+is always available on all architectures. Depending on compile-time
+feature detection this would be either a native instruction that
+is guaranteed to work, or the irq-disabled version. On x86, this
+is handled at runtime with alternative_io().
 
-> Original Summary:
-> absent both plymouth, and video= on linu lines, vtty[1-6] framebuffers produce vast raster right and bottom borders on the larger resolution of two displays
-> 
-> To reproduce:
-> 1-connect two unequal native resolution displays to a Tesla or Firmi GPU
-> 2-don't have plymouth in use (I don't ever have it installed, so don't know whether it impacts)
-> 3-don't include e.g. video=1440x900@60 directive on Grub's linu lines
-> 4-boot Tumbleweed or Fedora 38
-> 5-switch to a vtty, e.g. Ctrl-Alt-F3
-> 
-> Actual behavior:
-> 1-Both displays utilize the resolution (same pixel grid) of the lower resolution display
-> 2-Lower resolution display behaves as expected (light text on black background)
-> 3-Higher resolution display uses same pixels as lower resolution display, with light text on black background, leaving right side and bottom raster instead of black
-> 
-> Expected behavior:
-> 1-Both displays utilize the resolution (same pixel grid) of the lower resolution display
-> 2-Lower resolution display behaves as expected
-> 3-Entire higher resolution display's background is black instead of portions in raster
-> 
-> Workaround: add e.g. video=1440x900@60 to Grub's linu lines, which causes both displays to use the same nominal mode on the full display space.
-> 
-> Typical other linu line options:
-> noresume consoleblank=0 net.ifnames=0 ipv6.disable=1 preempt=full mitigations=none
-> 
-> My Tesla has HDMI and DVI outputs, tested with 1920x1200 and 1680x1050 displays.
-> My Fermi has dual DisplayPort, tested with 2560x1440 and 1680x1050 displays.
-> Occurs Tumbleweed with 6.3.2 and 6.2.12 kernel-default, and with 6.2.15 on Fedora 38, and (partially with Tesla, right side only) with 6.2.12 and 6.3.3 on Mageia 9.
-> Does not occur with 6.1.12 kernel-default on NVidia, or with AMD Caicos (Terascale2) GPU, or with Intel Eaglelake GPU.
-> Tested only on legacy booting (no UEFI support).
-> Others might describe what I call "raster" as multicolored snow.
+this_cpu_cmpxchg128() clearly needed the system_has_cmpxchg128()
+check, same as system_has_cmpxchg_double() today.
 
-See bugzilla for the full thread and attached dmesg.
-
-Anyway, I'm adding it to regzbot:
-
-#regzbot introduced: v6.1.12..v6.2.12
-#regzbot title: vast raster right and bottom borders on larger display (two displays with inequal resolution) unless forcing resolution with video= parameter
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+     Arnd
