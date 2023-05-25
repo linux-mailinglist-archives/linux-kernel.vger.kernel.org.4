@@ -2,152 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A31710928
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481C8710930
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240330AbjEYJrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
+        id S239525AbjEYJu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjEYJrA (ORCPT
+        with ESMTP id S240261AbjEYJu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:47:00 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2086.outbound.protection.outlook.com [40.107.105.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854C4A9;
-        Thu, 25 May 2023 02:46:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MfU1WGGpMWIDU48BLSpHCSsfasi3lqy4Os+L8+WNmgh10nCFey5xLOiuqL+cNLmdwBXercdirozouoQuiiyU9sjviMMgKhUHXmNeJrmtlN87NIjQZdAFXKHwWO9Q7LAHB25X0QGa4c3zyNG+eKKDFHtfHf3n+1JYvob43UForzXLuJxnoMWAdVMGSBwGrqkh4kg3iMvtrlkGraOEAoM4XupZpWgJOMIDW+BvqUDMpfNT3jT01c6HhAljapZSgjbbcB+PvmUYzukptFJGHnibOOqDc+OUVq4qJ9W7+G8lv44U6NgdJX0rfb9nO+/eyGZBmYsrHtTKOHVXV1XZZtpxDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4AOxuBMkGqbkqaST1daTeOfgf+RVcE5uRuYDziO5n7o=;
- b=I9VIiecCcz50Pw0kgjOPhKI19h9Mqq53KtExMJ2qM1H3pxaaJ+T+1P8WL2fMhenxccedk4i+TiTtPKUi/bYV2XYB1kjQPQq3issjhD0DxCxtnua4JyidWKrMFGlPuqMovDEWs8Ipv746nM1zY8eR3Tg0r54pCbX7rM5iF2/qQ3PdNy1lnw8qiJZaUwlsWlNBZariJO3FWyk/JK0NSg4fWC27Eg5vKxBkQpQLTz9u0nEvROzgi9rUFXvFA73JAo8fjoNb8CtVY4KMbyCalxm2bxolCpLwjO5RzIRU0GFawZzH6edXSqs9+aNWcr4P9yYLQcUWbav5gowayoPEaX1Dzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4AOxuBMkGqbkqaST1daTeOfgf+RVcE5uRuYDziO5n7o=;
- b=Q42V0i8E3uRjTwHC+eGinipaa24wGYSgg2GilPR9ESGSCRaFGFmiy10duxssDVkf6Iuw1yZmFm8F+WtqEBVL9lNczw0d4gWGPqi2uUTOyrWrXqS20TpKCBNrJj+KgKE0W1NWgSlNe53CLfCSGe4PpWmIjzBUEUYog6bIzheAYTE=
-Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
- by DU2PR04MB8791.eurprd04.prod.outlook.com (2603:10a6:10:2e2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Thu, 25 May
- 2023 09:46:54 +0000
-Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
- ([fe80::682b:185:581f:7ea2]) by AM5PR04MB3139.eurprd04.prod.outlook.com
- ([fe80::682b:185:581f:7ea2%4]) with mapi id 15.20.6433.015; Thu, 25 May 2023
- 09:46:54 +0000
-From:   Wei Fang <wei.fang@nxp.com>
-To:     Simon Horman <simon.horman@corigine.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net-next] net: fec: remove last_bdp from
- fec_enet_txq_xmit_frame()
-Thread-Topic: [PATCH net-next] net: fec: remove last_bdp from
- fec_enet_txq_xmit_frame()
-Thread-Index: AQHZjuToAdjg79t7vkOJMZ+/LVMoXq9qs0IAgAAKGCA=
-Date:   Thu, 25 May 2023 09:46:54 +0000
-Message-ID: <AM5PR04MB3139757DD806591C0E2BFCC188469@AM5PR04MB3139.eurprd04.prod.outlook.com>
-References: <20230525083824.526627-1-wei.fang@nxp.com>
- <ZG8lpJvFnZlA3w2q@corigine.com>
-In-Reply-To: <ZG8lpJvFnZlA3w2q@corigine.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM5PR04MB3139:EE_|DU2PR04MB8791:EE_
-x-ms-office365-filtering-correlation-id: f014e7aa-f361-4c17-4a7e-08db5d04f957
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7OeBoKoyCONfqZnKfBXFLEyQZUsD2aktEysU/v6DB10rRmKZUiQ+gSiQ5ZBWY80hp5K29tqK+LWKpafOMi9EYL6B/25ram6WwnYIXP+1kwFXP/jyD9xIbNCAlQzJyzQ9/yPIXOeFZd+cB+ECHMMWHE6Ni3e7scQVaUY6bEjRSBeWvVCHEPI42kxb/wYMtU9Fbb7xDMWRrtvN1H2DFin7DqDQGKr3eD0IoVx/ZBYplxiXVmtvB6jdS9nxx8g/VhQ7E2kumTbtsLxBo4P8OI1sOPdOaG+ebHZhhcppXUGJUWXfju603ckAfBLtDEONWcYu15rBXmzAMdy4ZsMgi2d3x8qw1E4jyz2fxlVdzJWmy6L+JQmhidH2Anl847gO2EGja8tZ4iV+H1cpzEBReZx1erX8WhUxSf7E2NU2hYnZdKyUR6Jq3ddCyXw7XDPQVs99Jn34/kZZjh2A9qAViWp+xKTBhdsDkxvz8N8PdWZTuAbVm323iYcc/OwN1+8Aeuxs3FaVpBFjG+g6rawI5PTK2+T9gHNblGuXEihHmc6rW03Hn6GSNQvBx2fS0b+KiZYrUk6z+KPy0xwmYdDTLpTMrTpwN7lsh8eNAyvCTe7ulk/Sg4KFusEUVSY6X60IoWB1
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(376002)(396003)(346002)(136003)(451199021)(54906003)(4744005)(2906002)(52536014)(5660300002)(8676002)(8936002)(44832011)(7696005)(4326008)(41300700001)(76116006)(66556008)(66476007)(66946007)(6916009)(478600001)(66446008)(33656002)(64756008)(71200400001)(55016003)(316002)(9686003)(6506007)(38100700002)(26005)(53546011)(122000001)(86362001)(186003)(83380400001)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?NW1qSlhWTE1xNFVCN0tSZk1haE90MzNXU0MxclJ4V0J1M29IN1E2bTFRSXQ3?=
- =?gb2312?B?aFExRllSaWgxTitwWElPWVVkU1VxNWQ4ZW96MzcvQ3h5WWJTdTdiZEY0SC9Y?=
- =?gb2312?B?YlFLUnVPeDFLazN6Zm9Wc24yNFVxblc2MUhwOUFPajluZ3k3QTNrSDRGeTk1?=
- =?gb2312?B?bEV0VGh2aDdyVW5MbmY4b08rMmVoaHpBNHQ0RktaVnBzenl3cjNGVytuamRE?=
- =?gb2312?B?bzlpQkNRYnR5TkMxN3E0ZTlqanlyZGE2Z29CZVlFaHk3SUxUWmJ1MUtKYzUz?=
- =?gb2312?B?YTNQdE9pYkFxai9CNXh4SkVZMXgvUDhEbkpSbEtXeVEwc21pWHNjNWFCUWMv?=
- =?gb2312?B?YXNsdUVycGR3Ujh0RE85aXN3aFB3cWt2QllrWm1tcXpaZTllZFJ0VTYySjBo?=
- =?gb2312?B?R2VBWUpRT29ra3NCdkpuVU1tOXQ3Q3l6SC9QcURDaG9LeDQvTGhmMnFWcmZj?=
- =?gb2312?B?a092OUlmRlMybFhzeTRVMGpQdnJReGlIRzZNOVlTSm9CRWMwYStiRnFXaHNI?=
- =?gb2312?B?YkpMamNGVVF3cy9Zc3BkQnNYQU80d2xSVGFnUmVHU2x0TU5BbGMxcVJPU0ZD?=
- =?gb2312?B?QStqeGhyMVdlNGxTTVk4RFk3RWNMSmdybWZQVkJjUmw2eDNZMFFyY1ErMEpO?=
- =?gb2312?B?ajhJYTFhTG5KNysxSVF6RzllL25LMHg4YytxYURweUxRVUhibzA2alE5Z2FF?=
- =?gb2312?B?RFFuRWVVTXM4WTVJWHZsOVBBRDhlVnRBMDNoUmhQL1dVWnN2enhlWGxTSVFj?=
- =?gb2312?B?TlJWVTljaDIwWTd1QlduZUlFbDZwR1h0WCt4cHg2aTNpNzJnZlp6M0V6UUFG?=
- =?gb2312?B?ZGM0V21DbDRucXNPcEpYVmU3OVFQVllScmdCWUt3bXE3RDhFdmlRR2NjaUJT?=
- =?gb2312?B?SENUbFN5WEFYSzE3b3JEYWluNVpOeFFRck9FenpRZzJZUHF1MHlLT3EyZ1k2?=
- =?gb2312?B?eS9qTGlFalRvTGVzOVhoSjZvMlZKOGs4eXNmZmtCRTdSaGx2cFUrZkd6SGsw?=
- =?gb2312?B?aVZOODJxM1ZmY3lpMmNUS3lYdkZJcGkrZHhHVEhJbVZIZDJ0RU1DU2JNVXZ2?=
- =?gb2312?B?Ykp4ZXh4VThpdjFibktpNXFjcG1tbXlmRE4rR1pRT0NjNTZIOWsyaTFnVGxR?=
- =?gb2312?B?eDdyaWdyWHp5Tlh5RTJPYW5BeTkvQVRzUEF4c1MxWnd0T2VTY2N4bFdGR0hF?=
- =?gb2312?B?eXVmcFVPZTZVMXlDaU9IQUJ0cXpBMkZzcys3N3F5N2VDbkJLbGNuMDFnYjg5?=
- =?gb2312?B?UGhtemVUMWZNczBqdlc3RWQ3em41UDZXTDBhYUJZcDlvR1BVdXZGa1pBQ0VD?=
- =?gb2312?B?eEhxTmxHZmxQNkpnQ085TDJnUHU2d2E1ajVnclF1eWUwazR6YmptYXorMFlT?=
- =?gb2312?B?eFBNclhRNllCanhPWnd4NkhWN2RWQjhOam5yVC90ak9sVHZpdkJjcHMrZkFC?=
- =?gb2312?B?TlZGZG1nZmtYMjlTaWtPR05NVDI5ZTk3ZmYwY1E1SWlnckk2UmRrWkxkQllE?=
- =?gb2312?B?UStmemd3ZXByOW5vOUlqNzhhaitET0ozM0l2dXpHN1NvZnN4MDZLa1RaYVoz?=
- =?gb2312?B?dFVsMXpHQWFEL2Y5ZEtSNVhBcHdMWWpTMlBKQy9FemRYMnVPV3dMZXZ3N0Rh?=
- =?gb2312?B?WmhNemNUNVI5aWxFTUhqOXhWK0tVMGdnemtGcWl3RktkMHluZi93Q1I5ZUpN?=
- =?gb2312?B?V1RiQ080TjV0ZStPQ3Z0ZldFMU1ZVGlWM1BvZHIxck04NXJTNzJqL0JjYklq?=
- =?gb2312?B?UExpTmk0TGhBcER4QUN5RWdiam5JMHowaFM3NlVHelVTS0c0dEw2cnlPMStN?=
- =?gb2312?B?K29PSnpZUGVDai9rSXNrOGJMMjZEdjZpUW9mTVpLdFZOUjBKNGVkYW5QcHYw?=
- =?gb2312?B?T0F5UVFxSW5yb3pJd2dFT2lpS2RmRW94V3h2NmhkTVBkcVQveFc0bkJTeHdy?=
- =?gb2312?B?cXN6dTFiRVNaUWcxSGZWWHE0cGxKZmlHdjRUUytvVHM1djBYM1ppNU1qMWJn?=
- =?gb2312?B?U1hnUndUdHJ3RmEyRlJNam9BK2paNVQydWJhSmt0L0Q3OExUMktpSFBpeG5a?=
- =?gb2312?B?bmFxQWVmOVkvUVlaVG5wT2NkRHIrbXRRdzRiWkllSHQwSXFkci9uNzQ0a3U4?=
- =?gb2312?Q?ziPE=3D?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 25 May 2023 05:50:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC24B191
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685008180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hAxjra5W1+1SvpBMN22QXJJOi5JB+teXZgPwJvUgVGE=;
+        b=H5eCmI5ZjssqzzZPef2G9MeMirWeBvpgB42ph90+wq0JHNlgkrjIjNlJsOZTFfu7ONWP+M
+        Q0aWm1eL9R9jB9KmuIf31QQq6/gw6wZ9LZHCoVsiaQBa0ta2GjzDVc3QO4bgsMfF103OMs
+        D+eFVc/DBLhWApjVmJN9V/pIG2E5tgw=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-44-FIiChdNTPFimlaeJDlZfEQ-1; Thu, 25 May 2023 05:49:38 -0400
+X-MC-Unique: FIiChdNTPFimlaeJDlZfEQ-1
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-53425d37f33so902381a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:49:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685008177; x=1687600177;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hAxjra5W1+1SvpBMN22QXJJOi5JB+teXZgPwJvUgVGE=;
+        b=DBtByHAon5EpSh1gm8P3J+SGoHiCHyLM7g5Za4T4EKbXQQTH9inFKr0TXA18gxwQ6y
+         NnxBCt66lLfuMyJZhOtF+UcEmLTHMPR/3rue6Fiw7Lbv8uT5WtWeS++avJJtK5oW1Sb/
+         caaTFp1CE2oUStYBlP5M6QR0DoAjyQfWoxKHOnFZc0k/jclGDH/nHA3ngAFX6+dmZ8fu
+         mI7ueoWqOXvOdwwDYXCmmHsPp/Cu8gafSzcf1imYPC0SYSU7Zbg4V6NxOSD+nXYK5qgY
+         b2ojpWJzbC6DrnCgQ9UEH7Lz+CsbUu0OaAcprOFglYH9HqtwBpUZXAUvfOIac6Ccv9Yi
+         WoBQ==
+X-Gm-Message-State: AC+VfDwVApH1RZKLNk/g34cpYMEd+VyP1bNoQFxSi1GI2/MBAuDwB6Bj
+        rdUkGdG/+UItmx3qWbh+9xqzh80zENZlkrzIa/SMyZRaViNMWAKi4BTrjqPd2PS6AKYX7zQLO7s
+        J2ARKigdy7Nf0kL8LkuLQcmGR
+X-Received: by 2002:a17:903:230f:b0:1af:a03:8d82 with SMTP id d15-20020a170903230f00b001af0a038d82mr1149855plh.57.1685008177412;
+        Thu, 25 May 2023 02:49:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ64F7+wAhODeQTh71SkG9KiZ+8BDhumZp7KJkEik3KY4RGXnQjHL9XswjQ5pC+GeNWlMRi+Sg==
+X-Received: by 2002:a17:903:230f:b0:1af:a03:8d82 with SMTP id d15-20020a170903230f00b001af0a038d82mr1149833plh.57.1685008177110;
+        Thu, 25 May 2023 02:49:37 -0700 (PDT)
+Received: from localhost.localdomain.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170903234a00b001ab2b4105ddsm1008282plh.60.2023.05.25.02.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 02:49:36 -0700 (PDT)
+From:   Tao Liu <ltao@redhat.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Cc:     linux-kernel@vger.kernel.org, bhe@redhat.com, dyoung@redhat.com,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        Tao Liu <ltao@redhat.com>
+Subject: [PATCH] x86/kexec: Add EFI config table identity mapping for kexec kernel
+Date:   Thu, 25 May 2023 17:49:14 +0800
+Message-Id: <20230525094914.23420-1-ltao@redhat.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f014e7aa-f361-4c17-4a7e-08db5d04f957
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2023 09:46:54.7100
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZOkQ+0xr+azLDl7hM85N6SfrA96S4cYpMN4J5dzjQlK/wUtH6iRBKdL6ngByqyiuuSCpXDqad9jcQ15430Mvmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8791
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTaW1vbiBIb3JtYW4gPHNpbW9u
-Lmhvcm1hbkBjb3JpZ2luZS5jb20+DQo+IFNlbnQ6IDIwMjPE6jXUwjI1yNUgMTc6MDkNCj4gVG86
-IFdlaSBGYW5nIDx3ZWkuZmFuZ0BueHAuY29tPg0KPiBDYzogZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsg
-ZWR1bWF6ZXRAZ29vZ2xlLmNvbTsga3ViYUBrZXJuZWwub3JnOw0KPiBwYWJlbmlAcmVkaGF0LmNv
-bTsgU2hlbndlaSBXYW5nIDxzaGVud2VpLndhbmdAbnhwLmNvbT47IENsYXJrIFdhbmcNCj4gPHhp
-YW9uaW5nLndhbmdAbnhwLmNvbT47IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGRsLWxpbnV4LWlt
-eA0KPiA8bGludXgtaW14QG54cC5jb20+OyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+
-IFN1YmplY3Q6IFJlOiBbUEFUQ0ggbmV0LW5leHRdIG5ldDogZmVjOiByZW1vdmUgbGFzdF9iZHAg
-ZnJvbQ0KPiBmZWNfZW5ldF90eHFfeG1pdF9mcmFtZSgpDQo+IA0KPiBPbiBUaHUsIE1heSAyNSwg
-MjAyMyBhdCAwNDozODoyNFBNICswODAwLCB3ZWkuZmFuZ0BueHAuY29tIHdyb3RlOg0KPiA+IEZy
-b206IFdlaSBGYW5nIDx3ZWkuZmFuZ0BueHAuY29tPg0KPiA+DQo+ID4gQWN0dWFsbHksIHRoZSBs
-YXN0X2JkcCBpcyB1c2VsZXNzIGluIGZlY19lbmV0X3R4cV94bWl0X2ZyYW1lKCksIHNvDQo+ID4g
-cmVtb3ZlIGl0Lg0KPiANCj4gSSB0aGluayBpdCB3b3VsZCBiZSB1c2VmdWwgdG8gZGVzY3JpYmUg
-d2h5IGl0IGlzIHVzZWxlc3MuDQo+IA0KPiBGLmUuIGJlY2F1c2UgaXQgaXMgc2V0IHRvIGJkcCwg
-d2hpY2ggZG9lc24ndCBjaGFuZ2UsIHNvIGJkcCBjYW4gYmUgdXNlZCBkaXJlY3RseQ0KPiBpbnN0
-ZWFkLg0KPiANClNvcnJ5LCBJJ2xsIHJlZmluZSB0aGUgY29tbWl0IG1lc3NhZ2UgaW4gdGhlIG5l
-eHQgdmVyc2lvbi4gVGhhbmsgeW91IQ0K
+A kexec kernel bootup hang is observed on Intel Atom cpu due to unmapped
+EFI config table.
+
+Currently EFI system table is identity-mapped for the kexec kernel, but EFI
+config table is not mapped explicitly:
+
+    commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
+                          tables to the ident map")
+
+Later in the following 2 commits, EFI config table will be accessed when
+enabling sev at kernel startup. This may result in a page fault due to EFI
+config table's unmapped address. Since the page fault occurs at an early
+stage, it is unrecoverable and kernel hangs.
+
+    commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME features
+                          earlier during boot")
+    commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
+                          detection/setup")
+
+In addition, the issue doesn't appear on all systems, because the kexec
+kernel uses Page Size Extension (PSE) for identity mapping. In most cases,
+EFI config table can end up to be mapped into due to 1 GB page size.
+However if nogbpages is set, or cpu doesn't support pdpe1gb feature
+(e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
+due to 2 MB page size, thus a page fault hang is more likely to happen.
+
+In this patch, we will make sure the EFI config table is always mapped.
+
+Signed-off-by: Tao Liu <ltao@redhat.com>
+---
+ arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
+index 1a3e2c05a8a5..755aa12f583f 100644
+--- a/arch/x86/kernel/machine_kexec_64.c
++++ b/arch/x86/kernel/machine_kexec_64.c
+@@ -28,6 +28,7 @@
+ #include <asm/setup.h>
+ #include <asm/set_memory.h>
+ #include <asm/cpu.h>
++#include <asm/efi.h>
+ 
+ #ifdef CONFIG_ACPI
+ /*
+@@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
+ #endif
+ 
+ static int
+-map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
++map_efi_sys_cfg_tab(struct x86_mapping_info *info, pgd_t *level4p)
+ {
+ #ifdef CONFIG_EFI
+ 	unsigned long mstart, mend;
++	void *kaddr;
++	int ret;
+ 
+ 	if (!efi_enabled(EFI_BOOT))
+ 		return 0;
+@@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
+ 	if (!mstart)
+ 		return 0;
+ 
++	ret = kernel_ident_mapping_init(info, level4p, mstart, mend);
++	if (ret)
++		return ret;
++
++	kaddr = memremap(mstart, mend - mstart, MEMREMAP_WB);
++	if (!kaddr) {
++		pr_err("Could not map UEFI system table\n");
++		return -ENOMEM;
++	}
++
++	mstart = efi_config_table;
++
++	if (efi_enabled(EFI_64BIT)) {
++		efi_system_table_64_t *stbl = (efi_system_table_64_t *)kaddr;
++
++		mend = mstart + sizeof(efi_config_table_64_t) * stbl->nr_tables;
++	} else {
++		efi_system_table_32_t *stbl = (efi_system_table_32_t *)kaddr;
++
++		mend = mstart + sizeof(efi_config_table_32_t) * stbl->nr_tables;
++	}
++
++	memunmap(kaddr);
++
+ 	return kernel_ident_mapping_init(info, level4p, mstart, mend);
+ #endif
+ 	return 0;
+@@ -244,10 +271,10 @@ static int init_pgtable(struct kimage *image, unsigned long start_pgtable)
+ 	}
+ 
+ 	/*
+-	 * Prepare EFI systab and ACPI tables for kexec kernel since they are
+-	 * not covered by pfn_mapped.
++	 * Prepare EFI systab, config table and ACPI tables for kexec kernel
++	 * since they are not covered by pfn_mapped.
+ 	 */
+-	result = map_efi_systab(&info, level4p);
++	result = map_efi_sys_cfg_tab(&info, level4p);
+ 	if (result)
+ 		return result;
+ 
+-- 
+2.33.1
+
