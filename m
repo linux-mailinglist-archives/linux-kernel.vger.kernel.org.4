@@ -2,95 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0AE71094B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22F571094D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240722AbjEYJyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        id S240702AbjEYJz4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 05:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240694AbjEYJyr (ORCPT
+        with ESMTP id S235690AbjEYJzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:54:47 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2072.outbound.protection.outlook.com [40.107.212.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50D512E;
-        Thu, 25 May 2023 02:54:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jg3NXPSEpJQWqjCz8LZyDayV3qj4UvdPh3e3itq3j0+JqBnKYlOl6JPzrmsdPxFOR9kfFfBigGHYJDh78kNyVW1G9aPheuXZ7EYCHLVrGLqkdeTJK93/1qvzK0h5xY7kpfOeWhjg7nkpM6BpibmHF4vjTiduG2wJDUcMFpwwg0xh0NIidQsR9c9A/y8tvKUO/EDvhpKvlEJgjR1NwFZvmQ54b7exIs7BRxolp9PZQHA41DqbjszlsRGN0crCApNophm6IahwMGxZXY8ShpyRYh3tXSb71XD/TtEfErHexbPYREEqGN15KCq4/sNmRfr4DrON69oH5/BwduIk/VWzOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gskIlw+AYb7C5t/UCFLjfAKJwxYlwTqyvdZv0eQ09Vk=;
- b=ZDyYGuaVMFdKsoEN7EoJI+0VtMDvSw43mUEC1krVqPTDy3vk/uxoAdSwouD2QxqfGIt2NzswTLHA7Ofao5OMfGCfR9SM3M/6fIbed9s2VBab+jPxRF1hV3n0LQtRaVOdfj+8KJY8r0YvFY4mfE4S3VaPvSFElf3mr3mItIyAhrH2bhOanX1PXBDqqzbzAQkKFOUVoNELOd+jgtbhLyZ7ZSkNqaE8FhaFZpnFWhAG4a6OGcDQaL7ApoX/30yBX1YNtMqf+JaGzqOFJAgQ8eqQBDbrwYVvYd9RgrVQwJKxi8Ba+CpkbBp5KEV0mi15/sqEzwMxU0pD/184eGdhBziBAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gskIlw+AYb7C5t/UCFLjfAKJwxYlwTqyvdZv0eQ09Vk=;
- b=mjfSBm5Z2sJ+iJd06z/x2aHqNfUXGbc2M8KWerbP6L1ZowebPy9pg0wA6m90EdxpF4DU14QTFolyzgbrxAWezY60Y+jdH/gRzm0MlhZoaDD3OHoNxx+ED2Al3jyX3F3zZnjZEiWzx93K2cb++6OMhZ+xNifPKwZp9wzuidxnq6Y=
-Received: from BN9PR03CA0806.namprd03.prod.outlook.com (2603:10b6:408:13f::31)
- by PH7PR12MB9201.namprd12.prod.outlook.com (2603:10b6:510:2e8::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
- 2023 09:54:42 +0000
-Received: from BN8NAM11FT094.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13f:cafe::3b) by BN9PR03CA0806.outlook.office365.com
- (2603:10b6:408:13f::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17 via Frontend
- Transport; Thu, 25 May 2023 09:54:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT094.mail.protection.outlook.com (10.13.176.131) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.32 via Frontend Transport; Thu, 25 May 2023 09:54:42 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 25 May
- 2023 04:54:41 -0500
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <nava.kishore.manne@amd.com>,
-        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>
-Subject: [RFC PATCH] fpga: fpga-bridge: Add manual set option via sysfs
-Date:   Thu, 25 May 2023 15:24:38 +0530
-Message-ID: <20230525095438.2766625-1-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 25 May 2023 05:55:53 -0400
+Received: from mail6.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E6EE7;
+        Thu, 25 May 2023 02:55:51 -0700 (PDT)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 1E4782229AC;
+        Thu, 25 May 2023 11:55:50 +0200 (CEST)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 13087220D9B;
+        Thu, 25 May 2023 11:55:50 +0200 (CEST)
+X-TM-AS-ERS: 10.181.10.103-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgxLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx1.dmz.swissbit.com (mx.dmz.swissbit.com [10.181.10.103])
+        by mail6.swissbit.com (Postfix) with ESMTPS;
+        Thu, 25 May 2023 11:55:50 +0200 (CEST)
+From:   Christian Loehle <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Avri Altman <avri.altman@wdc.com>
+Subject: [PATCHv2 0/2] mmc: block: ioctl: Enhance userspace err-checking
+Thread-Topic: [PATCHv2 0/2] mmc: block: ioctl: Enhance userspace err-checking
+Thread-Index: AdmO7mibZ40MpwCrTAyP3SbyU0LCTQ==
+Date:   Thu, 25 May 2023 09:55:47 +0000
+Message-ID: <92013b1430374efd84828f467cd64017@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT094:EE_|PH7PR12MB9201:EE_
-X-MS-Office365-Filtering-Correlation-Id: b82dac1e-0163-4e4f-9ba5-08db5d060ffc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RuEDtTcArVFBb3NZy+LKSNEhpbig5/SuLO6G+Zem5MYSTfGt9QaUDzAHCqxXwG0GaiggMeKws2IfC2pc+e4GCd1Ap/lnFfrEcVWUmAB5Ns3pUpr/2wvSqz54iagMrOK1jlSdFnpuCtZ6BflTQ4J+I9i3KvNJ9wU8Eh2YVgQZdFmpXSVABbZwQANmsK5VBCyrmII/C51LGR32As5VgWF6lUKCdRsI4qRs6KYCrIhLbDWFPZoF7pC1F2PXamQulFCfGth/5MWZ4Yr0YlMVxMitXLTZrn8nzt+7lMxLgzxuCJgEjHsSphtMPwtEjSq3+D6UTxSh0CNt/ahTh/Hzp2QkSqfLWe+MSVDNxW/tbfpNMDN6cgoWVsHhg3LgzMSLchGFISLFOp3DYk6dvIEJI1IEcFaglUNMT8kAlJHEuXQFO2ics7rxqEXd9kZihU4c17UsOOTL5igpJYe4hy9Mheq3Oe0N+lcs3jHEMEfyALE9PgIXbdOWdMcsHU5UJfLH7Znk58YaNmKfFQHXZYx8XBDwLHPXhp173JuHJj+iMUvXBs/qF/itck2QIo2jjI7nmJiuh2SxA7SnH75owtZXV7A4+RxJJTK+OSLqj1lLKYgKVhJRXBPtVjm75xx9dnjRjW4AhsUYMwi5NG0uOtsEO8bUa0e8JgJfvU+axnBvbvebu57WA7X9plLm7+yGMKLs6Sj+KrSHzKGe8QaEgA1SYMV6otCtnqhsdom0XBpiIXI6zjZieyN9I53Kl7dkEk72boYC4qi5vuPGE8QhSbRauXf+QhVzcB+DBkus9oC0tXnKiY0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(426003)(6666004)(40460700003)(41300700001)(81166007)(26005)(1076003)(8676002)(8936002)(36756003)(36860700001)(5660300002)(2616005)(82310400005)(83380400001)(47076005)(336012)(2906002)(103116003)(186003)(86362001)(16526019)(356005)(40480700001)(82740400003)(70206006)(70586007)(478600001)(110136005)(316002)(36900700001)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 09:54:42.1988
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b82dac1e-0163-4e4f-9ba5-08db5d060ffc
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT094.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9201
-X-Spam-Status: No, score=-0.5 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-TMASE-Version: DDEI-5.1-9.0.1002-27648.006
+X-TMASE-Result: 10--5.681900-10.000000
+X-TMASE-MatchedRID: 8xV9Hp+2OHIx0Ef1LOCr0ENF5tKVli5K0NnUUVMlTKYli8Y5a0svLwoO
+        Pjrr9EUjy5mHbqk+bZO46fDNSVBzTaGDMgFJdihf+LfLuKfgdOBPnKxAOPp4WTd4L/plQfz0j3d
+        ZSyALReJzNhvK4/9wOg0wwSAB0/Gt7c0is1Jg1Fc6N/cDgNNi4Xdtc9b/HMCuzf+duMCJLEyE3Q
+        pvaMjVSYspy5fJnP2k+YJ8C27gzimmg8dBfLCnVyBpp+DpTrQjDjwwT0r6EXRShcWO/83xoj88n
+        yn5HOwB3xN6jyfnVfp+ZLbS08T2S4cWjt28Nz4w9k0tWBWiOf+ZmLDnd2pI3xSgk4EVhbwmfr0m
+        qpu8k1/i8zVgXoAltjrm2CwlZwVRIAcCikR3vq+K4yGkVExDUCp/hk68F/GCxbbdqRLCU9qvWgg
+        wXn7XqpxaTGG+kiW4
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 2a153936-2aae-43ca-8f11-0cef0494ce0d-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,89 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is intended for manual testing only.
-It is provide an option to manually test bridges.
+This series enhances the ioctl path so that userspace callers are
+able to reliably check all error bits for their operation.
 
-Enabling bridge (!0 values are handled)
-br1# echo 1 > /sys/class/fpga_bridge/<bridge>/set
+The current implementation poses the problem of error bits which
+the caller cannot check, this is potentially a security issue.
 
-Disable bridge
-br1# echo 0 > /sys/class/fpga_bridge/<bridge>/set
+If the phrase security issue has woken you up, but you haven't been using:
+mmc-utils sanitize
+mmc-utils erase secure-trim{1|2}
+mmc-utils secure-erase
+mmc-utils rpmb write-block
+you can go back to sleep, sorry to bother you.
+If you have, you are probably still fine, if there was no active
+attacker sabotaging your eMMC, the secure operation probably
+succeeded.
+There is just no way to confirm that it actually has.
 
-Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
----
- .../ABI/testing/sysfs-class-fpga-bridge       |  9 ++++++
- drivers/fpga/fpga-bridge.c                    | 30 +++++++++++++++++++
- 2 files changed, 39 insertions(+)
+Examples include e.g. a flash-fail of the eMMC.
+Card behavior differs here, R1 bit 19 could be set,
+many cards will just shut off on flash-fail, so if you want to play
+with this patch I would suggest aiming for WP_ERASE_SKIP,
+although that technically doesn't need the patch, as WP groups could
+be queried before and after erase.
 
-diff --git a/Documentation/ABI/testing/sysfs-class-fpga-bridge b/Documentation/ABI/testing/sysfs-class-fpga-bridge
-index 312ae2c579d8..e157eb737bfb 100644
---- a/Documentation/ABI/testing/sysfs-class-fpga-bridge
-+++ b/Documentation/ABI/testing/sysfs-class-fpga-bridge
-@@ -9,3 +9,12 @@ Date:		January 2016
- KernelVersion:	4.5
- Contact:	Alan Tull <atull@opensource.altera.com>
- Description:	Show bridge state as "enabled" or "disabled"
-+
-+What:		/sys/class/fpga_bridge/<bridge>/set
-+Date:		May 2023
-+KernelVersion:	6.4
-+Contact:	Nava kishore Manne <nava.kishore.manne@amd.com>
-+Description:	Manual set bridge state (0-disable, !0 enable).
-+		Enabling this option requires that the module is
-+		compiled with #define DEBUG which is enabled by default
-+		when CONFIG_DEBUG_KERNEL is setup.
-diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-index a6c25dee9cc1..54d15b709b10 100644
---- a/drivers/fpga/fpga-bridge.c
-+++ b/drivers/fpga/fpga-bridge.c
-@@ -13,6 +13,12 @@
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- 
-+/* For enabling manual bridge set(enable/disable) function */
-+#ifdef CONFIG_DEBUG_KERNEL
-+#undef DEBUG
-+#define DEBUG
-+#endif
-+
- static DEFINE_IDA(fpga_bridge_ida);
- static struct class *fpga_bridge_class;
- 
-@@ -307,9 +313,33 @@ static ssize_t state_show(struct device *dev,
- static DEVICE_ATTR_RO(name);
- static DEVICE_ATTR_RO(state);
- 
-+#ifdef DEBUG
-+static ssize_t set_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	struct fpga_bridge *bridge = to_fpga_bridge(dev);
-+	long enable;
-+	int ret;
-+
-+	ret = kstrtol(buf, 16, &enable);
-+	if (ret)
-+		return ret;
-+
-+	if (bridge->br_ops && bridge->br_ops->enable_set)
-+		enable = bridge->br_ops->enable_set(bridge, !!enable);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(set);
-+#endif
-+
- static struct attribute *fpga_bridge_attrs[] = {
- 	&dev_attr_name.attr,
- 	&dev_attr_state.attr,
-+#ifdef DEBUG
-+	&dev_attr_set.attr,
-+#endif
- 	NULL,
- };
- ATTRIBUTE_GROUPS(fpga_bridge);
+sudo ./mmc writeprotect user set temp 0x0 $(($(blockdev --getsz /dev/mmcblk2))) /dev/mmcblk2
+sudo ./mmc erase secure-erase 0 $(($(blockdev --getsz /dev/mmcblk2)-1)) /dev/mmcblk2
+
+will yield
+
+Executing Secure Erase from 0x00000000 to 0x0773ffff
+High Capacity Erase Unit Size=524288 bytes
+High Capacity Erase Timeout=600 ms
+High Capacity Write Protect Group Size=2097152 bytes
+RSP0: 0x00008900 # added by author, this is what the patch will add to RSP0
+ Secure Erase Succeed!
+
+even though no erase is issued.
+
+v2:
+- removed extra flag and made it default behavior for write or R1B
+- aggregate error flag in resp[0] instead of abusing resp[1]
+- avoid open loop busy polling and reuse __mmc_poll_for_busy
+
+Christian Loehle (2):
+  mmc: block: ioctl: do write error check for spi
+  mmc: block: ioctl: Add PROG-error aggregation
+
+ drivers/mmc/core/block.c   | 23 ++++++++++++-----------
+ drivers/mmc/core/mmc_ops.c | 25 ++++++++++++++++++++++++-
+ drivers/mmc/core/mmc_ops.h |  3 +++
+ 3 files changed, 39 insertions(+), 12 deletions(-)
+
 -- 
-2.25.1
+2.37.3
+
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
