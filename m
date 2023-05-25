@@ -2,189 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B527710A46
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE42710A48
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240042AbjEYKsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        id S240204AbjEYKsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbjEYKsF (ORCPT
+        with ESMTP id S234122AbjEYKsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:48:05 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2914810B;
-        Thu, 25 May 2023 03:48:02 -0700 (PDT)
-X-GND-Sasl: luca.ceresoli@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685011681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PvtD5KaOGb3+YhvFCawf7mSeDahxw55HHqCVBb0xeg8=;
-        b=hWYTOtl5/ZGgCo6I4YdQarf9V+/kxk7u9NVFRlDLaQZH3Xd/FrPoQU/Blo3atY9jj9ixFW
-        nFgiYbOm76R/Iq8QXnrFGWFFFRCfitAVU8lUe+G57tkrpLmT5JRw7+CFXCxwbPV+KM4SHW
-        QW8MacuHZCYRlhIq6EH9S61aG0VNJQRDS6u6PvPMXI7+fMIx+rIVo+mvI9YtxF5147A7Qc
-        4TKJpN8VFuCo7XMZvgWB9Vhe9bdJ2ffbC06NJvnQnRxjIWO+CSzQCBwXQW7KSimszyViT2
-        J9nl0/Li+33m/rNToQEMiYxGfBjzDJi9K/mJwSMNtlsDjXy28LlKDsFOuE6P6Q==
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-GND-Sasl: luca.ceresoli@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 2C57424000B;
-        Thu, 25 May 2023 10:47:57 +0000 (UTC)
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     devicetree@vger.kernel.org
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: dts: imx8mp-msc-sm2s: Add sound card
-Date:   Thu, 25 May 2023 12:47:55 +0200
-Message-Id: <20230525104755.286282-1-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 25 May 2023 06:48:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A1510B;
+        Thu, 25 May 2023 03:48:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3CC6449C;
+        Thu, 25 May 2023 10:48:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94633C433EF;
+        Thu, 25 May 2023 10:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685011731;
+        bh=syfifLlyaCvCKOOmv82wXtJYyig6H3axNUQALr6O/Po=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nUDlQbvjYUYvKbKHVeHHpAqXZgMNsmrf6QQHoQh1xz8pCNXHdXxZwsn0EfOB8rKRn
+         YhMg2VldyoCQEgcy04zbZ80kaL4/F2XCv4HVogzMs7jQCYymBfZCXXGaXPk3vq2Dv6
+         8d/yJrGwbW85yH5sTaeY2sogxLsSFO4OwBMMipnie5r9j/1dzFXlMORhVvF4mNga14
+         /ht5p2AjBcqc/HwzFGofqysVDqAnZf2x0swrfqkgDW4UtGNU9Fo2ztEhBbC6sOT9an
+         D17lK4fErodcOjSXvhQVFKqa6CXTLUZOyW2ctbxuP0tyj7vYYpQj05F9NUIDrgctFf
+         H30SgAvWakNlg==
+Date:   Thu, 25 May 2023 11:48:46 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Jerome Neanne <jneanne@baylibre.com>
+Cc:     tony@atomide.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com, nm@ti.com,
+        afd@ti.com, msp@baylibre.com
+Subject: Re: [PATCH] mfd: tps65219: Add support for soft shutdown via sys-off
+ API
+Message-ID: <20230525104846.GE9691@google.com>
+References: <20230511122100.2225417-1-jneanne@baylibre.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230511122100.2225417-1-jneanne@baylibre.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MSC SM2-MB-EP1 carrier board for the SM2S-IMX8PLUS SMARC module has an
-NXP SGTL5000 audio codec connected to I2S-0 (sai2).
+On Thu, 11 May 2023, Jerome Neanne wrote:
 
-This requires to:
+> Use new API for power-off mode support:
+> Link: https://lwn.net/Articles/894511/
+> Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
+> 
+> sys-off API allows support of shutdown handler and restart handler.
+> 
+> Shutdown was not supported before that enhancement.
+> This is required for platform that are not using PSCI.
+> 
+> Test:
+> - restart:
+>   # reboot
+>   Default is cold reset:
+>   # cat /sys/kernel/reboot/mode
+>   Switch boot mode to warm reset:
+>   # echo warm > /sys/kernel/reboot/mode
+> - power-off:
+>   # halt
+> 
+> Tested on AM62-LP-SK board.
+> 
+> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+> Suggested-by: Andrew Davis <afd@ti.com>
+> Reviewed-by: Andrew Davis <afd@ti.com>
+> ---
+> 
+> Notes:
+>     Change-log v2 to v1
+>     v1: Link: https://lore.kernel.org/all/20230203140150.13071-1-jneanne@baylibre.com/
+>     Andrew Davis Review:
+>     - Use new helpers devm_register_restart_handler and devm_register_power_off_handler
+>     Vignesh Raghavendra:
+>     - Fix typo on board name in commit message
+> 
+>  drivers/mfd/tps65219.c | 41 ++++++++++++++++++++++++++++++-----------
+>  1 file changed, 30 insertions(+), 11 deletions(-)
 
- * add the power supplies (always on)
- * enable sai2 with pinmuxes
- * reparent the CLKOUT1 clock that feeds the codec SYS_MCLK to
-   IMX8MP_CLK_24M in order it to generate an accurate 24 MHz rate
-
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
----
-
-Changed in v2:
-
- - switch to simple-audio-card
- - fix typo in commit message
- - no underscores in node names
- - rename "sgtl5000-sound" node to "sound"
----
- .../dts/freescale/imx8mp-msc-sm2s-ep1.dts     | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
-index 470ff8e31e32..cd651e1e3262 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
-@@ -14,6 +14,67 @@ / {
- 	compatible = "avnet,sm2s-imx8mp-14N0600E-ep1",
- 		     "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-imx8mp",
- 		     "fsl,imx8mp";
-+
-+	reg_vcc_3v3_audio: 3v3-audio-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_3V3_AUD";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	reg_vcc_1v8_audio: 1v8-audio-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_1V8_AUD";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "sgtl5000-audio";
-+		simple-audio-card,format = "i2s";
-+		simple-audio-card,frame-master = <&codec_dai>;
-+		simple-audio-card,bitclock-master = <&codec_dai>;
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&sai2>;
-+		};
-+
-+		codec_dai: simple-audio-card,codec {
-+			sound-dai = <&sgtl5000>;
-+		};
-+	};
-+};
-+
-+&i2c1 {
-+	sgtl5000: sgtl5000@a {
-+		compatible = "fsl,sgtl5000";
-+		reg = <0x0a>;
-+
-+		assigned-clocks = <&clk IMX8MP_CLK_CLKOUT1_SEL>;
-+		assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-+		assigned-clock-rates = <24000000>;
-+		clocks = <&clk IMX8MP_CLK_CLKOUT1>;
-+		clock-names = "mclk";
-+		#sound-dai-cells = <0>;
-+
-+		VDDA-supply  = <&reg_vcc_3v3_audio>;
-+		VDDD-supply  = <&reg_vcc_1v8_audio>;
-+		VDDIO-supply = <&reg_vcc_1v8_audio>;
-+	};
-+};
-+
-+/* I2S-0 = sai2 */
-+&sai2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sai2>;
-+
-+	assigned-clocks = <&clk IMX8MP_CLK_SAI2>;
-+	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
-+	assigned-clock-rates = <12288000>;
-+
-+	fsl,sai-mclk-direction-output;
-+	status = "okay";
- };
+Couple of nits.
  
- &flexcan1 {
-@@ -32,6 +93,15 @@ &iomuxc {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_smarc_gpio>;
- 
-+	pinctrl_sai2: sai2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI2_TXFS__AUDIOMIX_SAI2_TX_SYNC   0xd6
-+			MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK    0xd6
-+			MX8MP_IOMUXC_SAI2_RXD0__AUDIOMIX_SAI2_RX_DATA00 0xd6
-+			MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00 0xd6
-+		>;
-+	};
-+
- 	pinctrl_smarc_gpio: smarcgpiosgrp {
- 		fsl,pins =
- 			<MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11	0x19>, /* GPIO0 */
+> diff --git a/drivers/mfd/tps65219.c b/drivers/mfd/tps65219.c
+> index 0e402fda206b..5115d0a66701 100644
+> --- a/drivers/mfd/tps65219.c
+> +++ b/drivers/mfd/tps65219.c
+> @@ -25,25 +25,34 @@ static int tps65219_cold_reset(struct tps65219 *tps)
+>  				  TPS65219_MFP_COLD_RESET_I2C_CTRL_MASK);
+>  }
+>  
+> -static int tps65219_restart(struct notifier_block *this,
+> -			    unsigned long reboot_mode, void *cmd)
+> +static int tps65219_soft_shutdown(struct tps65219 *tps)
+>  {
+> -	struct tps65219 *tps;
+> +	return regmap_update_bits(tps->regmap, TPS65219_REG_MFP_CTRL,
+> +				  TPS65219_MFP_I2C_OFF_REQ_MASK,
+> +				  TPS65219_MFP_I2C_OFF_REQ_MASK);
+> +}
+>  
+> -	tps = container_of(this, struct tps65219, nb);
+> +static int tps65219_power_off_handler(struct sys_off_data *data)
+> +{
+> +	tps65219_soft_shutdown(data->cb_data);
+> +	return NOTIFY_DONE;
+> +}
+>  
+> +static int tps65219_restart(struct tps65219 *tps,
+> +			    unsigned long reboot_mode)
 
-base-commit: efdde75fee54667153a5fa236907b55452fddbfa
+Why the line-wrap?
+
+> +{
+>  	if (reboot_mode == REBOOT_WARM)
+>  		tps65219_warm_reset(tps);
+>  	else
+>  		tps65219_cold_reset(tps);
+> -
+
+This has nothing to do with the patch, and I liked it better before.
+
+>  	return NOTIFY_DONE;
+>  }
+>  
+> -static struct notifier_block pmic_rst_restart_nb = {
+> -	.notifier_call = tps65219_restart,
+> -	.priority = 200,
+> -};
+> +static int tps65219_restart_handler(struct sys_off_data *data)
+> +{
+> +	tps65219_restart(data->cb_data, data->mode);
+> +	return NOTIFY_DONE;
+> +}
+>  
+>  static const struct resource tps65219_pwrbutton_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(TPS65219_INT_PB_FALLING_EDGE_DETECT, "falling"),
+> @@ -269,13 +278,23 @@ static int tps65219_probe(struct i2c_client *client)
+>  		}
+>  	}
+>  
+> -	tps->nb = pmic_rst_restart_nb;
+> -	ret = register_restart_handler(&tps->nb);
+> +	ret = devm_register_restart_handler(tps->dev,
+> +					    tps65219_restart_handler,
+> +					    tps);
+> +
+>  	if (ret) {
+>  		dev_err(tps->dev, "cannot register restart handler, %d\n", ret);
+>  		return ret;
+>  	}
+>  
+> +	ret = devm_register_power_off_handler(tps->dev,
+> +					      tps65219_power_off_handler,
+> +					      tps);
+> +	if (ret) {
+> +		dev_err(tps->dev, "failed to register power-off handler: %d\n",
+> +			ret);
+
+I wouldn't wrap here either to be honest.
+
+checkpatch.pl now complains at 100-chars.
+
+> +		return ret;
+> +	}
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
