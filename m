@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7604F7111EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C747111EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240923AbjEYRUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S238184AbjEYRU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbjEYRU2 (ORCPT
+        with ESMTP id S236311AbjEYRUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:20:28 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9F1194
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:20:25 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f603ff9c02so6706405e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:20:25 -0700 (PDT)
+        Thu, 25 May 2023 13:20:55 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CAC1A4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:20:48 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75b08639930so58725485a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1685035224; x=1687627224;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0BsSMy+JyYACPWrjjdZYwT/+fcHGskJiY38T07+T9dQ=;
-        b=pffAAv8U4UDe2UO5AaMNBCKJwsA+fY/uXlxRYWYfOSF/U831Cbn+aYPxlrMSwbhgZb
-         TJ3rx1gTr+K1LN6r+qy3C+Gerl601yJAy8AKOIVHRjsHhwRhM0mR8bH/dqseh0HTJwDl
-         aTiHPcC0yw4VA3HzAumqaPgq0KwYo24ZqEHl9kQtn+U7cDTGuIhcpJuNZs5uHfdAhEEM
-         sYxNXpBUEAAXjC6xxQMqA15kRL462Pj9tKNyS/cgeUu5jjoy+gglRJ4yP7PXtcefEg26
-         u3Y3AIXcDMKw5KULmLOOQImp2uNFtr5k8MA3uRGHPFRaKVMeGy/HWPTjQYaXkLpCGlq1
-         MCag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685035224; x=1687627224;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1685035247; x=1687627247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0BsSMy+JyYACPWrjjdZYwT/+fcHGskJiY38T07+T9dQ=;
-        b=Hpvhy4+96iUE5Z3x4txizfOjFHOwQVmia0g/rLoOUptE2XyYYKVlHmKqNZVu4VRyx4
-         gx1voBQ6gMvF4KmWS7198zmThklUXL1EhgaGrDpWotGwryZwZaKzQAFTK8WvnM+CNPAM
-         uWwSynSXHs94eMOdJC57eFo2mIBHo6FcYO2fjlVHUSvtBuStoHkM8ExT51ycR7J8ZTfo
-         4hfdk0adgevQdEQ7/bD+k9ppB8KIQItEa+1zKAWPkbnC5ltEFZFKTXEZhcsAw81I5ZnW
-         QiStm8lxcSztMfXDBH0TFlQ+VHiOpLoHUNExBbA+EuxmEWGeOLxEnBOpKnsNfM+Pd6ao
-         pgsA==
-X-Gm-Message-State: AC+VfDx8aZMbHY7iniOHKwIe7xCz573oY+uoVBAdQNUDeH6HsZj/foZm
-        4KwvOBLiZeIJjQRLqVWAVM1oUQ==
-X-Google-Smtp-Source: ACHHUZ7XVIxEPsxV1O2HxjW5C+Kciziw8ncF6RMfoJyVKR3UnpdSFexzOl8yKxJCJvMncweFjvx0TA==
-X-Received: by 2002:a05:600c:249:b0:3f5:fb97:eafe with SMTP id 9-20020a05600c024900b003f5fb97eafemr2817182wmj.30.1685035224349;
-        Thu, 25 May 2023 10:20:24 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id e21-20020a05600c219500b003f604ca479esm6313634wme.3.2023.05.25.10.20.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 10:20:23 -0700 (PDT)
-Date:   Thu, 25 May 2023 19:20:23 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
-        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v2 00/11] RISCV: Add KVM_GET_REG_LIST API
-Message-ID: <20230525-6e0855eb07086a96eaa82362@orel>
-References: <cover.1684999824.git.haibo1.xu@intel.com>
+        bh=idVvh3Hi/Oxhf6eEX+oF6Y39sENzliovz45uq92Jgac=;
+        b=dXoLpKXqaoar+9J5WZ565irtkP9mp/Z9ejfauR9coLH2R8X9wD90CHTWYApPU+rDUz
+         KUwcmYAWzSlHMJeSlCR5GOtS+2V6LGwpwHdn067k72imWd3U1CwMREAbP6cWyNTV6TyA
+         /TDD4M0CAbLsVMvcZTjq35F1QoJS638ojjuiHzKSlhy6LJw8rVnpA4nRBbiRyrfB6gGO
+         lDy6bbUftSNHWTitNtQWpaal380n+vrX8lNcTfiYCu4jpne0FhNRfyMpuquQ+re0eYmg
+         Z5dYOCeYHB4Vt3zA71kGptKnRd13QaI5hIDK0uhfq03NRvgk+AmOI5wQqbmfXOEPEXTl
+         U6EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685035247; x=1687627247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=idVvh3Hi/Oxhf6eEX+oF6Y39sENzliovz45uq92Jgac=;
+        b=TIrqLL2ZwweVHNXMi4Q7NEzjBKYWDkSw5hm2RE8rl1tx09TkJFgWepjOmIAv3UTtFO
+         dGzWJUCLPBKSL7O2Q3veLA400/FGiMfBQU/iEW/d6qAn7/r1KP3MvuoPdHuDXAyzwDeG
+         PMPQg7GpQjFqCAYJLI/yLW8MawcjhS4R785I12za7O1kjsSfgUmsePh7eVJ/70TPo0K/
+         tIb32x+6aYYynJnoAL2LQtTVkgwOitmA/cwEwO/gPPWTDZrU4z/vXIyRWbC4Y/UTt+85
+         40d2JgysxAx463Uxd91m6a/e8h3prxppnrgn4GZi294g/yfikyretmuyThBJ8/9YEbTb
+         l0tg==
+X-Gm-Message-State: AC+VfDxRkvDJx80UYJ/+RLPnlxIkcB91a4t3EIHU6pgK+UIc2lW6Dq5q
+        cjh5+/N/tTJao71ZccX/RITyOBRhp/xkR8Bw5iJbQKqeMGu+MBnofOwdVw==
+X-Google-Smtp-Source: ACHHUZ6YN2OHVzq5lblbEVFVyuZYsf5PZl90I1LnhIBj0jt0olmiCSdaWhPh+5nnkil1lWiIUdAbGsFocTvFIUehI4g=
+X-Received: by 2002:a05:620a:439c:b0:75b:23a1:d858 with SMTP id
+ a28-20020a05620a439c00b0075b23a1d858mr3626403qkp.26.1685035247090; Thu, 25
+ May 2023 10:20:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1684999824.git.haibo1.xu@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-9-masahiroy@kernel.org>
+In-Reply-To: <20230521160426.1881124-9-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 25 May 2023 10:20:36 -0700
+Message-ID: <CAKwvOdmDRNXQd0oDCjV1XdCk4coEd4_=V_idpObc9ibuVwOWgw@mail.gmail.com>
+Subject: Re: [PATCH v6 08/20] modpost: remove is_shndx_special() check from section_rel(a)
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,35 +71,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 03:38:24PM +0800, Haibo Xu wrote:
-> KVM_GET_REG_LIST will dump all register IDs that are available to
-> KVM_GET/SET_ONE_REG and It's very useful to identify some platform
-> regression issue during VM migration.
-> 
-> Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
-> of the code as common test framework that can be shared by riscv.
-> 
-> Patch 8 enabled the KVM_GET_REG_LIST API in riscv and patch 9-11 added
-> the corresponding kselftest for checking possible register regressions.
-> 
-> The get-reg-list kvm selftest was ported from aarch64 and tested with
-> Linux 6.4-rc1 on a Qemu riscv virt machine.
-> 
+On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> This check is unneeded. Without it, sec_name() will returns the null
+> string "", then section_mismatch() will return immediately.
+>
+> Anyway, special section indices rarely appear in these loops.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
-> Changed since v1:
->   * rebase to Andrew's changes
->   * fix coding style
-> 
-> Andrew Jones (7):
->   KVM: arm64: selftests: Replace str_with_index with strdup_printf
->   KVM: arm64: selftests: Drop SVE cap check in print_reg
->   KVM: arm64: selftests: Remove print_reg's dependency on vcpu_config
->   KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
->   KVM: arm64: selftests: Delete core_reg_fixup
->   KVM: arm64: selftests: Split get-reg-list test code
->   KVM: arm64: selftests: Finish generalizing get-reg-list
+>
+> Changes in v6:
+>   - Remove is_shndx_special() definition
+>
+>  scripts/mod/modpost.c | 16 ++++------------
+>  scripts/mod/modpost.h |  5 -----
+>  2 files changed, 4 insertions(+), 17 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index f364738a236e..40fac4f64fcd 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1361,7 +1361,6 @@ static int addend_mips_rel(struct elf_info *elf, El=
+f_Shdr *sechdr, Elf_Rela *r)
+>  static void section_rela(const char *modname, struct elf_info *elf,
+>                          Elf_Shdr *sechdr)
+>  {
+> -       Elf_Sym  *sym;
+>         Elf_Rela *rela;
+>         Elf_Rela r;
+>         unsigned int r_sym;
+> @@ -1404,11 +1403,8 @@ static void section_rela(const char *modname, stru=
+ct elf_info *elf,
+>                                 continue;
+>                         break;
+>                 }
+> -               sym =3D elf->symtab_start + r_sym;
+> -               /* Skip special sections */
+> -               if (is_shndx_special(sym->st_shndx))
+> -                       continue;
+> -               check_section_mismatch(modname, elf, sym,
+> +
+> +               check_section_mismatch(modname, elf, elf->symtab_start + =
+r_sym,
+>                                        fsecndx, fromsec, r.r_offset, r.r_=
+addend);
+>         }
+>  }
+> @@ -1416,7 +1412,6 @@ static void section_rela(const char *modname, struc=
+t elf_info *elf,
+>  static void section_rel(const char *modname, struct elf_info *elf,
+>                         Elf_Shdr *sechdr)
+>  {
+> -       Elf_Sym *sym;
+>         Elf_Rel *rel;
+>         Elf_Rela r;
+>         unsigned int r_sym;
+> @@ -1463,11 +1458,8 @@ static void section_rel(const char *modname, struc=
+t elf_info *elf,
+>                 default:
+>                         fatal("Please add code to calculate addend for th=
+is architecture\n");
+>                 }
+> -               sym =3D elf->symtab_start + r_sym;
+> -               /* Skip special sections */
+> -               if (is_shndx_special(sym->st_shndx))
+> -                       continue;
+> -               check_section_mismatch(modname, elf, sym,
+> +
+> +               check_section_mismatch(modname, elf, elf->symtab_start + =
+r_sym,
+>                                        fsecndx, fromsec, r.r_offset, r.r_=
+addend);
+>         }
+>  }
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 1178f40a73f3..b1e2d95f8047 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -151,11 +151,6 @@ struct elf_info {
+>         Elf32_Word   *symtab_shndx_stop;
+>  };
+>
+> -static inline int is_shndx_special(unsigned int i)
+> -{
+> -       return i !=3D SHN_XINDEX && i >=3D SHN_LORESERVE && i <=3D SHN_HI=
+RESERVE;
+> -}
+> -
+>  /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
+>  static inline unsigned int get_secindex(const struct elf_info *info,
+>                                         const Elf_Sym *sym)
+> --
+> 2.39.2
+>
 
-All the patches above should also have your s-o-b since your posting them.
 
+--=20
 Thanks,
-drew
+~Nick Desaulniers
