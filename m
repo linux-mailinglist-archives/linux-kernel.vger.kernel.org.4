@@ -2,79 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A7A710E51
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A01710E5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241633AbjEYO2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S241628AbjEYOaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240925AbjEYO2G (ORCPT
+        with ESMTP id S236550AbjEYOaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:28:06 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4665A195;
-        Thu, 25 May 2023 07:28:05 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id ada2fe7eead31-439554d9a69so709629137.1;
-        Thu, 25 May 2023 07:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685024884; x=1687616884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KABNbqgRSF0ElKxd5/lulUsYdIV0ZGlWkswDAW4GXS0=;
-        b=LI7VgDt2YvGlufUmETttGA0dMPhUSaOePjgRZfDvPh654KQmqMTZaA9nyEmvKEdHdD
-         6JeqEDYtriVnbHpDlSGE2l3Z2wwTeVYgQIZCnmg/j/u+xCYK639DUxl40vBu94F2ks4h
-         ru8Y36StcH7ic/upryppG/EO0VBssQEElcn237Y1A3O41mxzQs2Gtr1Qc9XzSHHu/vxI
-         bC/UTvjgeGWY+JKWeM/fYIgIODntdQYfVh+zI8bzYUGASEeDmArKwGgXfOm/TS1+fxsf
-         r8+vV/wXAeKySN+BcL3hgdB8tkwg6Z37X9M3IxKnTYahGZefZjjCmXP0ut4XEqiEKBKV
-         aawg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685024884; x=1687616884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KABNbqgRSF0ElKxd5/lulUsYdIV0ZGlWkswDAW4GXS0=;
-        b=VzIvRSdiX1Sr3Nab1xLE80UgbHqUf4xFUTnCpvzEBNtgi/bD35xt3KN6+WstOWc/j9
-         TLokrupw/7WxxM+2iaekf+zpS3e9cPe0FA0ECyagR2m1K4bnrQFbjHgd9ittynRWaS8+
-         OuVqTEjVV5l3uPZG71U98SjjVkFbP9Ch1vwN3EDloCmaoJuda9kKd+odWNSZUyUnSim9
-         Djgw4dOk3OtH8WNR7jILw+lA0N3swn8oVMAhcZhwOT6cWVcTpylEqQO1OGu60pty1aoq
-         kAHamSc0I7jJ9pMjJFGJJ0ogwEK64o5+Nilas7BhzV03zdS64hNDiD/LN3YWQTF9SxZd
-         u/7g==
-X-Gm-Message-State: AC+VfDzRoouOo07VpCjyhFvQ1mZrQMG4etnm7yLBueo2KEjLybTB/Hea
-        p0CskvpE4ArgN35PhitlfQsFcQ3dUsrsi0NSb3M=
-X-Google-Smtp-Source: ACHHUZ6whagj/KairX2rPB95POUHKDXohXY/Ovl50/lXjaFnjBy+NEnbdnbPmymX+31TWsYMa8dOE09nQ01LnO4OHNA=
-X-Received: by 2002:a05:6102:126e:b0:42e:5b08:ec71 with SMTP id
- q14-20020a056102126e00b0042e5b08ec71mr853836vsg.11.1685024884316; Thu, 25 May
- 2023 07:28:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230523223944.691076-1-Kenny.Ho@amd.com> <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
- <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
- <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch> <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
- <5b1355b8-17f7-49c8-b7b5-3d9ecdb146ce@lunn.ch> <CAOWid-dYtkcKuNxoOyf3yqSJ7OtcNjaqJLVX1QhRUhYSOO6vHA@mail.gmail.com>
- <30d65ea9170d4f60bd76ed516541cb46@AcuMS.aculab.com>
-In-Reply-To: <30d65ea9170d4f60bd76ed516541cb46@AcuMS.aculab.com>
-From:   Kenny Ho <y2kenny@gmail.com>
-Date:   Thu, 25 May 2023 10:27:53 -0400
-Message-ID: <CAOWid-eEbeeU9mOpwgOatt5rHQhRt+xPrsQ1fsMemVZDdeN=MQ@mail.gmail.com>
-Subject: Re: [PATCH] Remove hardcoded static string length
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Kenny Ho <Kenny.Ho@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Thu, 25 May 2023 10:30:18 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2097.outbound.protection.outlook.com [40.107.114.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4DC191;
+        Thu, 25 May 2023 07:30:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CEfpkOPIOQOy9Etk/AeCjUyMYd5XJz2FbIMluFU1nAdEUkD9k2XI+LDpkZNAaEQ9bQH9Sh0Gj7fqTA2ty7qOBMff1eBUWGNnYXimtmECefvPF9agLJkHGUxzMFAzWywmSY1WxY3UDkdKiZnM6aH5eMtK1DFdN2CD++6C2bTdjp6BjKgWOc/fJkx9ot1j9FoQ55xQzQzYz1ZDKKkNgv9IRDzelwWibDCVpqC0DRAo3EJ3GUzsx91NUP7o700yW5L7x79EYvT24iGf1Hgdv0mlkySmPVyp0B4ncgeg+E0SFe1YLbvG6UVfudfkBSFP0HUlCByXHigawqPJTmxyQQfJKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FFgIf+VJoiO/4T2jo0d7y5UsIKpW2pajszveTAt44f4=;
+ b=WHoTDSLGMPlOGEIXNVWPVUDPDrS11zu3UjlheQjxuHM+uNWzUDKuvZBFm/fas757qgKAmr5ge8kRWnh8aTMHHx5w6JxIS2DPABEzTWeaPVDdd+xWKmJFfKEWjvUlXkVJntNQtycXjQ6YdLEz/l6Jul4KfI1OsUiy8ptnU/09VJGYa8BDKtj2I6CzFsFw4F6AMRcSA8PsFdBQiDAB52cgUEnYk1rkRzQH8girZJnQrnoott88hx5tY5Vp1aVvtMc+kMQ38v5EGwre4DlrYc9PDj1Kqycb7b+Ov1nAydm3hLrbYZ+T22i1SK3qgaT9pdLktfmtLUj06BrEMWPlqxTVeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FFgIf+VJoiO/4T2jo0d7y5UsIKpW2pajszveTAt44f4=;
+ b=OXzaFS+GsN3O1+ce2U2T9FM5RvKspBPkQTzsX7+QexTXFZPjjfbFP9eS8GSUYDlBQO0Bh9gdBiRPLEcnNMl4jSrZ4mojo4emxpvsxXs8qeHNfGbmbd3J6a99nJOm7qeypp41kfuIgIGhKrwOU7eDc4rZ+wcWUU6Y501EkYYomSQ=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYCPR01MB8439.jpnprd01.prod.outlook.com (2603:1096:400:159::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
+ 2023 14:30:11 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6433.016; Thu, 25 May 2023
+ 14:30:10 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display Unit
+ support
+Thread-Topic: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display Unit
+ support
+Thread-Index: AQHZfN4p/b5orSrwk0ai5QpLpQqzGK9bCteAgBAjuzA=
+Date:   Thu, 25 May 2023 14:30:10 +0000
+Message-ID: <OS0PR01MB5922CC640A93CF85033FB47086469@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230502100912.143114-1-biju.das.jz@bp.renesas.com>
+ <OS0PR01MB59220E8306506F3E0B17968A86789@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB59220E8306506F3E0B17968A86789@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB8439:EE_
+x-ms-office365-filtering-correlation-id: 529884fe-1e14-43dc-ca83-08db5d2c8b65
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1xhsD/PIWs2SanhsetkEfDrqi6w7GP5/A1ISd+iBvbbP0l9oUZyG6UvOkgQ8TBhOH87SbyHWO/BLBgR+mg522trCoP8TELd4S8MK2Vf3KAOyFpR530/1whBeHKBju5ikOOl029D3dxMLpXGQisRABdagi1xVAS/p1pilSRCK2tR5BjvAwmKYhZoDoU2MfMB+K3Y6FfKamBGQh4RZwewo1z6tPPXZJcn+0mO6ULjEQNau0cLKWpUZR8Qzy/3VnNdj3luTqOHouHDN2gm9scCQUqy8QW2RwY9D1gE4fjO/muoqgrN5vVsYFi4h1IeknJw4+qQdV26o6G+ZSuLLusckyBEKGbO9H1W6MG1wZn5Cqln1s7vkpNiWHuA/BZbIgTKsUi2Ds3Mz9miuHcx2qoVJ9kib1+9VGEnKa6ZxgxAGiHZoR5GyOpSuaQnbtmEKWYrsiiFQ9UFLvRv3cNqHvlNegG8H7lTuBWJol2WNXT92vVc6BNnc7TYKEkOvGEq6FG0+RDTUILx07IrULD+qfIFo1R0oWrq0sAOfI1HTwW6H5lMNcXfknJ5N7fA7R57qY4nOwJl3t3fF/yp09QZavhW+124SMR+KZ3zujvipdmjN+XHq5ZhNIi2TcF2ww7GfHLcN
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(451199021)(83380400001)(30864003)(2906002)(186003)(33656002)(38070700005)(86362001)(38100700002)(122000001)(55016003)(41300700001)(8676002)(7696005)(5660300002)(54906003)(478600001)(52536014)(110136005)(64756008)(4326008)(66476007)(316002)(71200400001)(66446008)(66946007)(66556008)(76116006)(8936002)(6506007)(9686003)(53546011)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?atfQVzmVgBsu2Hl761Y+7CCuBtgLhQb0PZ5DQz/9rUHHijqTknUmTm1imU/3?=
+ =?us-ascii?Q?toiRzTWP9gWdkGmIXo4osYfG/cCueSizz6KuV5cyjLnq/NwpXrig6RTyE8qo?=
+ =?us-ascii?Q?DSPIj1boXKoJkLKg8QoWJgkVB+O2Vt3jFDwi0Ez+/bv0NQFG9WVKxOJSOSfz?=
+ =?us-ascii?Q?d0tD0OJJVvXwE0d5y5gWquqzlAniq0jGi2Eq2RcubdMxYHwOiFo3B1ZftaBl?=
+ =?us-ascii?Q?gxGzsFlHUyu8u7oGDka54BSlqVYkpmUCyFZXQ1258tybhP40pDQMkJc0SYIW?=
+ =?us-ascii?Q?6kJ43yLDWZW1yFbuYumTLdVD/kiLOv0X+Lu7Qm6+v64Sav+FOcEWqNwqXgp5?=
+ =?us-ascii?Q?D3UolzilHIinHhwKSU4Oj+mN+4ozBdKFPVpjWJURRsOvRDKXYxnfA7tuITMK?=
+ =?us-ascii?Q?A7C10sjrWADZ3R2gfM/rBqR98lX8rSPtnSwaQpRq1xpmR3AfvNqZUUKJvRnX?=
+ =?us-ascii?Q?6P92PUArY3/wMhto0KN1ig1BldiyLs5RkOUcWQeOtuMeBSdX+zC4lXvXNiU7?=
+ =?us-ascii?Q?FRN6e8sJMle/62hKsbqrp85fVnKvcnvec9nkh/hWhVYVOB8czi4tUZANnPgm?=
+ =?us-ascii?Q?mE6BkN7eheBEgZolYstpxbwYzIkcmNBfS3K4vg08N+C2l2GlnBwwFK0pdTf9?=
+ =?us-ascii?Q?oyDqbrdrx838UWmMCevfSuVv3VxYjtMkNPWE0cfgV1ZFm0f5jFG2lz8TmK+s?=
+ =?us-ascii?Q?zlzoSwlx4tyg3qUV3fML+f9dP2VQXyB3FbOyyFRVLG5RSy9ch6Y8ncTY5y1C?=
+ =?us-ascii?Q?377Cbty6XKFrMmexq9g3an4f10wqU1x9gYByzLUByXTGPJbcq0KcqE/n+Dec?=
+ =?us-ascii?Q?BJ/1C+7g3PgpdZ2EDtr0aLOBeDl0Cf+FC6i0+kEj4E2JslPlv6scoV/a1zgp?=
+ =?us-ascii?Q?zWo5PaFCFtpXwSFrAyM2lsmfJ/HxjLS4WwG86Hf+johmo582rDCCPMUjBshe?=
+ =?us-ascii?Q?xSGplg51Imqz4zIyAtMTenEhAOItwgj2g4J0zfLZ6N0wXAEy5wnFZA/e0maA?=
+ =?us-ascii?Q?G16+AI8oaZNK3qR1iNR39IJho5w/ZjyUV8VghOiwL6x7rtFjdgU02xqtNgc9?=
+ =?us-ascii?Q?3WXLwKoEL1vMwIGUZdmei5Gh26kbUICVHyfhGLEdxUZ/epey8Tj9gGJqe+AO?=
+ =?us-ascii?Q?HK44cZVZ/qD4Jqua5lu71nESs0CNLxxyGdN30c6Jts9M/5ZXIwQ4LWy/kL6T?=
+ =?us-ascii?Q?nmxqImYNnSvfjlOjUeUhJvoAJ92bAlDoR87DSBW/enNXyMnV1XuEwOP5Jvhu?=
+ =?us-ascii?Q?5yxUlaVSHuQUmcbdGBm/EUgMF74xXr4emK8TMwJUfefdAI7vT6ZOVtNgMB42?=
+ =?us-ascii?Q?Jfoo9mHcdjyfOCxcU9UayNr5dTMpRc5ziajzPWrvQjCjY/mSBKUi9HEcSqc1?=
+ =?us-ascii?Q?1ziKOL8utdQrRQzGY7J6mS89URGknuteZ8rIXNk/DwRtiYLTRPNxKjSLx6gV?=
+ =?us-ascii?Q?phe8jOyXpAJEcBtYzRteXYnNhudXf8Hl+tuUtLygCiXFEjbPifo92PJe4tz1?=
+ =?us-ascii?Q?z3lDDykBRIK4iYszWhBfwTdDfAiRkMW7JBlUbSaw6J4OTHbp7eIKzebc45lj?=
+ =?us-ascii?Q?QWbV8cjtX4AkDNhkilfQ10oHlf1uHJBDzWdA+rk2?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 529884fe-1e14-43dc-ca83-08db5d2c8b65
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2023 14:30:10.1568
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jKyvXaNtQv6cXoTzzlvDS3cB64HjfA1Hlx0XZPFbgp3+r9UVOpskvmyHopLGA2Gdq/94UOzQ9eA58rT3/2ZrDGAftuSpqQFHbnIjQGOLUfs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8439
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,39 +127,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 5:14=E2=80=AFAM David Laight <David.Laight@aculab.c=
-om> wrote:
+Hi DRM maintainers,
+
+Gentle ping.
+
+Are we happy with moving all Renesas drm drivers to Renesas specific
+directory or preference is for separate one??
+
+If it is later, I can send RZ/G2L drm driver separate.
+
+Otherwise, I need to rebase and resend.
+
+Please let me know your preference.
+
+Cheers,
+Biju
+
+
+> -----Original Message-----
+> From: Biju Das
+> Sent: Monday, May 15, 2023 8:58 AM
+> To: David Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>;
+> Philipp Zabel <p.zabel@pengutronix.de>; Geert Uytterhoeven
+> <geert+renesas@glider.be>; Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com>; Kieran Bingham
+> <kieran.bingham+renesas@ideasonboard.com>
+> Cc: dri-devel@lists.freedesktop.org; linux-renesas-soc@vger.kernel.org;
+> Fabrizio Castro <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
+> <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Subject: RE: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display
+> Unit support
+>=20
+> Hi All,
+>=20
+> Gentle ping. Are we happy with this patch series?
+>=20
+> Cheers,
+> Biju
+>=20
+> > Subject: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display
+> > Unit support
+> >
+> > RZ/G2L LCD controller composed of Frame compression Processor(FCPVD),
+> > Video signal processor (VSPD) and Display unit(DU). The output of LCDC
+> > is connected to Display parallel interface and MIPI link video
+> > interface.
+> >
+> > The output from DSI is connected to ADV7535.
+> >
+> > Created a vendor specific directory renesas and moved all renesas drm
+> > drivers to it (rcar-du and shmobile). Then added support for RZ/G2L DU
+> > DRM driver by creating rz_du directory.
+> >
+> > Ref:
+> >
+> >
+> > v8->v9:
+> >  * Added Rb tag from Laurent and Acked-by tag from Kieran for patch#1.
+> >  * Added Rb tag from Laurent and Geert for patch#3.
+> >  * Dropped reset_control_assert() from error patch for
+> > rzg2l_du_crtc_get() as
+> >    suggested by Philipp Zabel.
+> >  * Added Rb tag from Laurent oatch#5.
+> >  * Updated MAINTAINERS entries for common parts(Makefile and Kconfig).
+> > v7->v8:
+> >  * Moved rcar-du and shmobile DRM drivers to renesas specific vendor
+> > directory.
+> >  * Fixed the typo vsp2->du in RZ/V2L DU bindings patch.
+> >  * Added Rb tag from Rob for RZ/V2L DU bindings patch.
+> >  * Dropped RCar du lib and created RZ/G2L DU DRM driver by creating
+> > rz_du folder.
+> >  * Updated MAINTAINERS entries.
+> > v6->v7:
+> >  * Split DU lib and  RZ/G2L du driver as separate patch series as
+> >    DU support added to more platforms based on RZ/G2L alike SoCs.
+> >  * Rebased to latest drm-tip.
+> >  * Added patch #2 for binding support for RZ/V2L DU
+> >  * Added patch #4 for driver support for RZ/V2L DU
+> >  * Added patch #5 for SoC DTSI support for RZ/G2L DU
+> >  * Added patch #6 for SoC DTSI support for RZ/V2L DU
+> >  * Added patch #7 for Enabling DU on SMARC EVK based on RZ/{G2L,V2L}
+> > SoCs.
+> >  * Added patch #8 for Enabling DU on SMARC EVK based on RZ/G2LC SoC.
+> > v5->v6:
+> >  * Merged DU lib and RZ/G2L du driver in same patch series
+> >  * Rebased to latest drm-misc.
+> >  * Merged patch#1 to RZ/G2L Driver patch.
+> >  * Updated KConfig dependency from ARCH_RENESAS->ARCH_RZG2L.
+> >  * Optimized rzg2l_du_output_name() by removing unsupported outputs.
+> >
+> > v4->v5:
+> >  * Added Rb tag from Rob for binding patch.
+> >  * Started using RCar DU libs(kms, vsp and encoder)
+> >  * Started using rcar_du_device, rcar_du_write, rcar_du_crtc,
+> >    rcar_du_format_info and rcar_du_encoder.
+> > v3->v4:
+> >  * Changed compatible name from
+> > renesas,du-r9a07g044->renesas,r9a07g044-
+> > du
+> >  * started using same compatible for RZ/G2{L,LC}
+> >  * Removed rzg2l_du_group.h and struct rzg2l_du_group
+> >  * Renamed __rzg2l_du_group_start_stop->rzg2l_du_start_stop
+> >  * Removed rzg2l_du_group_restart
+> >  * Updated rzg2l_du_crtc_set_display_timing
+> >  * Removed mode_valid callback.
+> >  * Updated rzg2l_du_crtc_create() parameters
+> >  * Updated compatible
+> >  * Removed RZG2L_DU_MAX_GROUPS
+> > V2->v3:
+> >  * Added new bindings for RZ/G2L DU
+> >  * Removed indirection and created new DRM driver based on R-Car DU
+> > v1->v2:
+> >  * Based on [1], all references to 'rzg2l_lcdc' replaced with
+> 'rzg2l_du'
+> >  * Updated commit description for bindings
+> >  * Removed LCDC references from bindings
+> >  * Changed clock name from du.0->aclk from bindings
+> >  * Changed reset name from du.0->du from bindings
+> >  * Replaced crtc_helper_funcs->rcar_crtc_helper_funcs
+> >  * Updated macro DRM_RZG2L_LCDC->DRM_RZG2L_DU
+> >  * Replaced rzg2l-lcdc-drm->rzg2l-du-drm
+> >  * Added forward declaration for struct reset_control
+> >
+> > [1]
+> >
+> > Biju Das (5):
+> >   drm: Place Renesas drivers in a separate dir
+> >   dt-bindings: display: Document Renesas RZ/G2L DU bindings
+> >   dt-bindings: display: renesas,rzg2l-du: Document RZ/V2L DU bindings
+> >   drm: Add RZ/G2L DU Support
+> >   MAINTAINERS: Add maintainer for RZ DU drivers
+> >
+> >  .../bindings/display/renesas,rzg2l-du.yaml    | 129 +++
+> >  MAINTAINERS                                   |  16 +-
+> >  drivers/gpu/drm/Kconfig                       |   4 +-
+> >  drivers/gpu/drm/Makefile                      |   3 +-
+> >  drivers/gpu/drm/renesas/Kconfig               |   5 +
+> >  drivers/gpu/drm/renesas/Makefile              |   5 +
+> >  drivers/gpu/drm/{ =3D> renesas}/rcar-du/Kconfig |   0
+> >  .../gpu/drm/{ =3D> renesas}/rcar-du/Makefile    |   0
+> >  .../gpu/drm/{ =3D> renesas}/rcar-du/rcar_cmm.c  |   0
+> >  .../gpu/drm/{ =3D> renesas}/rcar-du/rcar_cmm.h  |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_crtc.c  |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_crtc.h  |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_drv.c   |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_drv.h   |   0
+> >  .../{ =3D> renesas}/rcar-du/rcar_du_encoder.c   |   0
+> >  .../{ =3D> renesas}/rcar-du/rcar_du_encoder.h   |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_group.c |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_group.h |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_kms.c   |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_kms.h   |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_plane.c |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_plane.h |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_regs.h  |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_vsp.c   |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_du_vsp.h   |   0
+> >  .../{ =3D> renesas}/rcar-du/rcar_du_writeback.c |   0
+> >  .../{ =3D> renesas}/rcar-du/rcar_du_writeback.h |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_dw_hdmi.c  |   0
+> >  .../gpu/drm/{ =3D> renesas}/rcar-du/rcar_lvds.c |   0
+> >  .../gpu/drm/{ =3D> renesas}/rcar-du/rcar_lvds.h |   0
+> >  .../{ =3D> renesas}/rcar-du/rcar_lvds_regs.h    |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_mipi_dsi.c |   0
+> >  .../drm/{ =3D> renesas}/rcar-du/rcar_mipi_dsi.h |   0
+> >  .../rcar-du/rcar_mipi_dsi_regs.h              |   0
+> >  .../{ =3D> renesas}/rcar-du/rzg2l_mipi_dsi.c    |   0
+> >  .../rcar-du/rzg2l_mipi_dsi_regs.h             |   0
+> >  drivers/gpu/drm/renesas/rz-du/Kconfig         |  20 +
+> >  drivers/gpu/drm/renesas/rz-du/Makefile        |   8 +
+> >  drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.c | 714 ++++++++++++++++
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.h |  99 +++
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.c  | 188 +++++
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.h  |  89 ++
+> > .../gpu/drm/renesas/rz-du/rzg2l_du_encoder.c  | 112 +++
+> > .../gpu/drm/renesas/rz-du/rzg2l_du_encoder.h  |  28 +
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c  | 770 ++++++++++++++++++
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.h  |  43 +
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_regs.h |  67 ++
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c  | 430 ++++++++++
+> > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h  |  94 +++
+> >  .../gpu/drm/{ =3D> renesas}/shmobile/Kconfig    |   0
+> >  .../gpu/drm/{ =3D> renesas}/shmobile/Makefile   |   0
+> >  .../shmobile/shmob_drm_backlight.c            |   0
+> >  .../shmobile/shmob_drm_backlight.h            |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_crtc.c   |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_crtc.h   |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_drv.c    |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_drv.h    |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_kms.c    |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_kms.h    |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_plane.c  |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_plane.h  |   0
+> >  .../{ =3D> renesas}/shmobile/shmob_drm_regs.h   |   0
+> >  62 files changed, 2816 insertions(+), 8 deletions(-)  create mode
+> > 100644 Documentation/devicetree/bindings/display/renesas,rzg2l-du.yaml
+> >  create mode 100644 drivers/gpu/drm/renesas/Kconfig  create mode
+> > 100644 drivers/gpu/drm/renesas/Makefile  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/Kconfig (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/Makefile (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_cmm.c (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_cmm.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_crtc.c (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_crtc.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_drv.c (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_drv.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_encoder.c (100%)  rename drivers/gpu/drm/{ =3D=
 >
-> I does rather beg the question as what is in UTS_RELEASE when
-> it exceeds (IIRC) about 48 characters?
+> > renesas}/rcar-du/rcar_du_encoder.h (100%)  rename drivers/gpu/drm/{ =3D=
+>
+> > renesas}/rcar-du/rcar_du_group.c (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_group.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_kms.c (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_kms.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_plane.c (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_plane.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_regs.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_vsp.c (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_vsp.h (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/rcar-du/rcar_du_writeback.c (100%)  rename drivers/gpu/drm/{
+> > =3D> renesas}/rcar-du/rcar_du_writeback.h (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/rcar-du/rcar_dw_hdmi.c (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/rcar-du/rcar_lvds.c (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/rcar-du/rcar_lvds.h (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/rcar-du/rcar_lvds_regs.h (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/rcar-du/rcar_mipi_dsi.c (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/rcar-du/rcar_mipi_dsi.h (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/rcar-du/rcar_mipi_dsi_regs.h (100%)
+> > rename drivers/gpu/drm/{ =3D> renesas}/rcar-du/rzg2l_mipi_dsi.c (100%)
+> > rename drivers/gpu/drm/{ =3D> renesas}/rcar-du/rzg2l_mipi_dsi_regs.h
+> > (100%)  create mode 100644 drivers/gpu/drm/renesas/rz-du/Kconfig
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/Makefile
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.c
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.h
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.c
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.h
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_encoder.c
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_encoder.h
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.h
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_regs.h
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c
+> >  create mode 100644 drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h
+> >  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/Kconfig (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/shmobile/Makefile (100%)  rename
+> > drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_backlight.c (100%)
+> > rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_backlight.h
+> > (100%)  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_crtc.=
+c
+> > (100%)  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_crtc.=
+h
+> > (100%)  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_drv.c
+> > (100%)  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_drv.h
+> > (100%)  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_kms.c
+> > (100%)  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_kms.h
+> > (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/shmobile/shmob_drm_plane.c
+> > (100%)  rename drivers/gpu/drm/{ =3D>
+> > renesas}/shmobile/shmob_drm_plane.h
+> > (100%)  rename drivers/gpu/drm/{ =3D> renesas}/shmobile/shmob_drm_regs.=
+h
+> > (100%)
+> >
+> > --
+> > 2.25.1
 
-Thanks for the question as it made me dig deeper.  UTS_RELEASE is
-actually capped at 64:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Makef=
-ile?#n1317
-"""
-uts_len :=3D 64
-define filechk_utsrelease.h
-if [ `echo -n "$(KERNELRELEASE)" | wc -c ` -gt $(uts_len) ]; then \
- echo '"$(KERNELRELEASE)" exceeds $(uts_len) characters' >&2;    \
- exit 1;                                                         \
-...
-"""
-
-So UTS_RELEASE on its own would fit perfectly by coincidence (and it
-is also why UTS_RELEASE with the pre and postfix exceeds the limit.)
-That makes me wonder if the content / format of the version matter and
-looks like it sort of does by looking at when the string was
-introduced:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/net=
-/rxrpc/local_object.c?id=3D44ba06987c0b10faa998b9324850e8a6564c714d
-
-"The standard formulation seems to be: <project> <version> built
-<yyyy>-<mm>-<dd>"
-
-That commit also confirms the size and null termination requirement.
-
-I will create a separate patch with your suggestion.
-
-Regards,
-Kenny
