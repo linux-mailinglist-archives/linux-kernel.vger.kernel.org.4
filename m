@@ -2,1377 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79DE7110ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DF87110F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239318AbjEYQ1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S240438AbjEYQ1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240433AbjEYQ0x (ORCPT
+        with ESMTP id S240695AbjEYQ1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:26:53 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80741AC
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:26:48 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PEDsKi007206;
-        Thu, 25 May 2023 11:26:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=X+udqTI2OtkuOsDoDTgA44Try3hCLplGa1qSviCDUOY=;
- b=fsksf/cNgJgwr/GOMEnT9VgMPA6DjtWEBh3peerhjopViz6i1JH96jkcHqy1uKypMe+Z
- v/+I+VAdx2qypCZCtSKnuCZs1akT1e9JlSNeW+bKYwzCKu4NbkV3RXT0V33Xiv0S3jBU
- U8O7yYcx4JK0Q8yxPDuTXVFb/bC2CPLIvgdTz1eYT8LmFJlgb0sGXHUqLHDoC2NgrLlb
- adzzWmQ4LqthlWSMVmseQuezp1pCqJbYj7+3bkwWZrr3nje2sCJExK3URGrlxXJMhWjA
- lIZMlQznkylG6+oXjSpIOOzLtchivfFwVvNFixUwXdbNEvmdt8Ct+c/BGDPCVRRRxZG9 Vg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qsde8j0yh-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 11:26:28 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 25 May
- 2023 11:26:27 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 25 May 2023 11:26:27 -0500
-Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.65.166])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0665115B4;
-        Thu, 25 May 2023 16:26:26 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <tiwai@suse.com>, <broonie@kernel.org>, <perex@perex.cz>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v2 12/12] ALSA: hda/cs35l56: Add driver for Cirrus Logic CS35L56 amplifier
-Date:   Thu, 25 May 2023 17:26:18 +0100
-Message-ID: <20230525162618.20146-13-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230525162618.20146-1-rf@opensource.cirrus.com>
-References: <20230525162618.20146-1-rf@opensource.cirrus.com>
+        Thu, 25 May 2023 12:27:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82063E5A;
+        Thu, 25 May 2023 09:27:00 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 34E5221C65;
+        Thu, 25 May 2023 16:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685032018; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qBSf8dQvqenvM4XuaXqBfFlxjVrL5fPe+CB4lmnXjuk=;
+        b=C4s+hdIyCnXmGRzN2XmAwfRTIB+9xRT+DvPlRO3vRcui7FbrbO1JQDWFx0rfTnZPSjX5i1
+        rRTvdTF0fGM/eRmPRJQYStRfQXRzvjlNo/ZL8IUHR6kuT7x8QzWCoJZmsiqU3ukACJ1fan
+        DauIAYjaJf8QRWaSlI7nNnrfcF7cPGY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A2C412C141;
+        Thu, 25 May 2023 16:26:55 +0000 (UTC)
+Date:   Thu, 25 May 2023 18:26:52 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
+        npiggin@gmail.com, davem@davemloft.net,
+        Marc Zyngier <maz@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
+        christophe.leroy@csgroup.eu,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
+        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Colin Cross <ccross@android.com>
+Subject: Re: [PATCH v5 14/18] watchdog/hardlockup: detect hard lockups using
+ secondary (buddy) CPUs
+Message-ID: <ZG-MTPSZakRDl2CP@alley>
+References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
+ <20230519101840.v5.14.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: xMj4ED2i22fckKEdBw2g0AFBWlFH4Nwf
-X-Proofpoint-GUID: xMj4ED2i22fckKEdBw2g0AFBWlFH4Nwf
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519101840.v5.14.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Simon Trimmer <simont@opensource.cirrus.com>
+On Fri 2023-05-19 10:18:38, Douglas Anderson wrote:
+> Implement a hardlockup detector that doesn't doesn't need any extra
+> arch-specific support code to detect lockups. Instead of using
+> something arch-specific we will use the buddy system, where each CPU
+> watches out for another one. Specifically, each CPU will use its
+> softlockup hrtimer to check that the next CPU is processing hrtimer
+> interrupts by verifying that a counter is increasing.
+> 
+> --- a/kernel/watchdog.c
+> +++ b/kernel/watchdog.c
+> @@ -85,7 +85,7 @@ __setup("nmi_watchdog=", hardlockup_panic_setup);
+>  
+>  #endif /* CONFIG_HARDLOCKUP_DETECTOR */
+>  
+> -#if defined(CONFIG_HARDLOCKUP_DETECTOR_PERF)
+> +#if defined(CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER)
+>  
+>  static DEFINE_PER_CPU(atomic_t, hrtimer_interrupts);
+>  static DEFINE_PER_CPU(int, hrtimer_interrupts_saved);
+> @@ -106,6 +106,14 @@ notrace void arch_touch_nmi_watchdog(void)
+>  }
+>  EXPORT_SYMBOL(arch_touch_nmi_watchdog);
+>  
+> +void watchdog_hardlockup_touch_cpu(unsigned int cpu)
+> +{
+> +	per_cpu(watchdog_hardlockup_touched, cpu) = true;
+> +
+> +	/* Match with smp_rmb() in watchdog_hardlockup_check() */
+> +	smp_wmb();
 
-Add a driver for the Cirrus Logic CS35L56 amplifier. This uses the same
-component binding API as the CS35L41 driver. This is not a standalone
-HDA device; it provides control of the CS35L56 for systems that use a
-combination of an HDA codec and CS35L56 amplifiers with audio routed
-through the HDA codec.
+It is great that you described where the related barrier is.
 
-The CS35L56 combines a high-performance mono audio amplifier, Class-H
-tracking inductive boost converter, Halo Core(TM) DSP and a DC-DC boost
-converter supporting Class-H tracking.
+Another important information is what exactly is synchronized.
+And I am actually not sure what we are synchronizing here.
 
-Control interfaces are I2C or SPI through the standard Linux I2C or SPI
-bus framework.
+My understanding is that a write barrier should synchronize
+related writes, for example:
 
-Most chip functionality is controlled by on-board ROM firmware that is
-always running. Firmware patches can be applied by the driver in the form
-of a .wmfw file (firmware patch) and/or a .bin file (system tuning).
+	X = ...;
+	/* Make sure that X is modified before Y */
+	smp_wmb();
+	Y = ...;
 
-Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- sound/pci/hda/Kconfig           |  31 +
- sound/pci/hda/Makefile          |   6 +
- sound/pci/hda/cs35l56_hda.c     | 995 ++++++++++++++++++++++++++++++++
- sound/pci/hda/cs35l56_hda.h     |  48 ++
- sound/pci/hda/cs35l56_hda_i2c.c |  69 +++
- sound/pci/hda/cs35l56_hda_spi.c |  68 +++
- 6 files changed, 1217 insertions(+)
- create mode 100644 sound/pci/hda/cs35l56_hda.c
- create mode 100644 sound/pci/hda/cs35l56_hda.h
- create mode 100644 sound/pci/hda/cs35l56_hda_i2c.c
- create mode 100644 sound/pci/hda/cs35l56_hda_spi.c
+And the related read barrier should synchronize the related reads,
+for example:
 
-diff --git a/sound/pci/hda/Kconfig b/sound/pci/hda/Kconfig
-index 886255a03e8b..0f2e941ce646 100644
---- a/sound/pci/hda/Kconfig
-+++ b/sound/pci/hda/Kconfig
-@@ -130,6 +130,37 @@ config SND_HDA_SCODEC_CS35L41_SPI
- comment "Set to Y if you want auto-loading the side codec driver"
- 	depends on SND_HDA=y && SND_HDA_SCODEC_CS35L41_SPI=m
- 
-+config SND_HDA_SCODEC_CS35L56
-+	tristate
-+
-+config SND_HDA_SCODEC_CS35L56_I2C
-+	tristate "Build CS35L56 HD-audio side codec support for I2C Bus"
-+	depends on I2C
-+	depends on ACPI || COMPILE_TEST
-+	depends on SND_SOC
-+	select CS_DSP
-+	select SND_HDA_GENERIC
-+	select SND_SOC_CS35L56_SHARED
-+	select SND_HDA_SCODEC_CS35L56
-+	select SND_HDA_CS_DSP_CONTROLS
-+	help
-+	  Say Y or M here to include CS35L56 amplifier support with
-+	  I2C control.
-+
-+config SND_HDA_SCODEC_CS35L56_SPI
-+	tristate "Build CS35L56 HD-audio codec support for SPI Bus"
-+	depends on SPI_MASTER
-+	depends on ACPI || COMPILE_TEST
-+	depends on SND_SOC
-+	select CS_DSP
-+	select SND_HDA_GENERIC
-+	select SND_SOC_CS35L56_SHARED
-+	select SND_HDA_SCODEC_CS35L56
-+	select SND_HDA_CS_DSP_CONTROLS
-+	help
-+	  Say Y or M here to include CS35L56 amplifier support with
-+	  SPI control.
-+
- config SND_HDA_CODEC_REALTEK
- 	tristate "Build Realtek HD-audio codec support"
- 	select SND_HDA_GENERIC
-diff --git a/sound/pci/hda/Makefile b/sound/pci/hda/Makefile
-index 00d306104484..c6e6509e7b8e 100644
---- a/sound/pci/hda/Makefile
-+++ b/sound/pci/hda/Makefile
-@@ -31,6 +31,9 @@ snd-hda-codec-hdmi-objs :=	patch_hdmi.o hda_eld.o
- snd-hda-scodec-cs35l41-objs :=		cs35l41_hda.o
- snd-hda-scodec-cs35l41-i2c-objs :=	cs35l41_hda_i2c.o
- snd-hda-scodec-cs35l41-spi-objs :=	cs35l41_hda_spi.o
-+snd-hda-scodec-cs35l56-objs :=		cs35l56_hda.o
-+snd-hda-scodec-cs35l56-i2c-objs :=	cs35l56_hda_i2c.o
-+snd-hda-scodec-cs35l56-spi-objs :=	cs35l56_hda_spi.o
- snd-hda-cs-dsp-ctls-objs :=		hda_cs_dsp_ctl.o
- 
- # common driver
-@@ -55,6 +58,9 @@ obj-$(CONFIG_SND_HDA_CODEC_HDMI) += snd-hda-codec-hdmi.o
- obj-$(CONFIG_SND_HDA_SCODEC_CS35L41) += snd-hda-scodec-cs35l41.o
- obj-$(CONFIG_SND_HDA_SCODEC_CS35L41_I2C) += snd-hda-scodec-cs35l41-i2c.o
- obj-$(CONFIG_SND_HDA_SCODEC_CS35L41_SPI) += snd-hda-scodec-cs35l41-spi.o
-+obj-$(CONFIG_SND_HDA_SCODEC_CS35L56) += snd-hda-scodec-cs35l56.o
-+obj-$(CONFIG_SND_HDA_SCODEC_CS35L56_I2C) += snd-hda-scodec-cs35l56-i2c.o
-+obj-$(CONFIG_SND_HDA_SCODEC_CS35L56_SPI) += snd-hda-scodec-cs35l56-spi.o
- obj-$(CONFIG_SND_HDA_CS_DSP_CONTROLS) += snd-hda-cs-dsp-ctls.o
- 
- # this must be the last entry after codec drivers;
-diff --git a/sound/pci/hda/cs35l56_hda.c b/sound/pci/hda/cs35l56_hda.c
-new file mode 100644
-index 000000000000..5189f1e89a87
---- /dev/null
-+++ b/sound/pci/hda/cs35l56_hda.c
-@@ -0,0 +1,995 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// HDA audio driver for Cirrus Logic CS35L56 smart amp
-+//
-+// Copyright (C) 2023 Cirrus Logic, Inc. and
-+//                    Cirrus Logic International Semiconductor Ltd.
-+//
-+
-+#include <linux/acpi.h>
-+#include <linux/debugfs.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <sound/core.h>
-+#include <sound/hda_codec.h>
-+#include <sound/tlv.h>
-+#include "cs35l56_hda.h"
-+#include "hda_component.h"
-+#include "hda_cs_dsp_ctl.h"
-+#include "hda_generic.h"
-+
-+ /*
-+  * The cs35l56_hda_dai_config[] reg sequence configures the device as
-+  *  ASP1_BCLK_FREQ = 3.072 MHz
-+  *  ASP1_RX_WIDTH = 32 cycles per slot, ASP1_TX_WIDTH = 32 cycles per slot, ASP1_FMT = I2S
-+  *  ASP1_DOUT_HIZ_CONTROL = Hi-Z during unused timeslots
-+  *  ASP1_RX_WL = 24 bits per sample
-+  *  ASP1_TX_WL = 24 bits per sample
-+  *  ASP1_RXn_EN 1..3 and ASP1_TXn_EN 1..4 disabled
-+  */
-+static const struct reg_sequence cs35l56_hda_dai_config[] = {
-+	{ CS35L56_ASP1_CONTROL1,	0x00000021 },
-+	{ CS35L56_ASP1_CONTROL2,	0x20200200 },
-+	{ CS35L56_ASP1_CONTROL3,	0x00000003 },
-+	{ CS35L56_ASP1_DATA_CONTROL5,	0x00000018 },
-+	{ CS35L56_ASP1_DATA_CONTROL1,	0x00000018 },
-+	{ CS35L56_ASP1_ENABLES1,	0x00000000 },
-+};
-+
-+static void cs35l56_hda_play(struct cs35l56_hda *cs35l56)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	pm_runtime_get_sync(cs35l56->base.dev);
-+	ret = cs35l56_mbox_send(&cs35l56->base, CS35L56_MBOX_CMD_AUDIO_PLAY);
-+	if (ret == 0) {
-+		/* Wait for firmware to enter PS0 power state */
-+		ret = regmap_read_poll_timeout(cs35l56->base.regmap,
-+					       CS35L56_TRANSDUCER_ACTUAL_PS,
-+					       val, (val == CS35L56_PS0),
-+					       CS35L56_PS0_POLL_US,
-+					       CS35L56_PS0_TIMEOUT_US);
-+		if (ret)
-+			dev_warn(cs35l56->base.dev, "PS0 wait failed: %d\n", ret);
-+	}
-+	regmap_set_bits(cs35l56->base.regmap, CS35L56_ASP1_ENABLES1,
-+			BIT(CS35L56_ASP_RX1_EN_SHIFT) | BIT(CS35L56_ASP_RX2_EN_SHIFT) |
-+			cs35l56->asp_tx_mask);
-+	cs35l56->playing = true;
-+}
-+
-+static void cs35l56_hda_pause(struct cs35l56_hda *cs35l56)
-+{
-+	cs35l56->playing = false;
-+	cs35l56_mbox_send(&cs35l56->base, CS35L56_MBOX_CMD_AUDIO_PAUSE);
-+	regmap_clear_bits(cs35l56->base.regmap, CS35L56_ASP1_ENABLES1,
-+			  BIT(CS35L56_ASP_RX1_EN_SHIFT) | BIT(CS35L56_ASP_RX2_EN_SHIFT) |
-+			  BIT(CS35L56_ASP_TX1_EN_SHIFT) | BIT(CS35L56_ASP_TX2_EN_SHIFT) |
-+			  BIT(CS35L56_ASP_TX3_EN_SHIFT) | BIT(CS35L56_ASP_TX4_EN_SHIFT));
-+
-+	pm_runtime_mark_last_busy(cs35l56->base.dev);
-+	pm_runtime_put_autosuspend(cs35l56->base.dev);
-+}
-+
-+static void cs35l56_hda_playback_hook(struct device *dev, int action)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	dev_dbg(cs35l56->base.dev, "%s()%d: action: %d\n", __func__, __LINE__, action);
-+
-+	switch (action) {
-+	case HDA_GEN_PCM_ACT_PREPARE:
-+		if (cs35l56->playing)
-+			break;
-+
-+		/* If we're suspended: flag that resume should start playback */
-+		if (cs35l56->suspended) {
-+			cs35l56->playing = true;
-+			break;
-+		}
-+
-+		cs35l56_hda_play(cs35l56);
-+		break;
-+	case HDA_GEN_PCM_ACT_CLEANUP:
-+		if (!cs35l56->playing)
-+			break;
-+
-+		cs35l56_hda_pause(cs35l56);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void cs35l56_hda_mute_hook(struct device *dev, bool mute)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+	unsigned int val;
-+
-+	if (mute)
-+		val = CS35L56_MAIN_RENDER_USER_MUTE_MASK;
-+	else
-+		val = 0;
-+
-+	regmap_write(cs35l56->base.regmap, CS35L56_MAIN_RENDER_USER_MUTE, val);
-+}
-+
-+static int cs35l56_hda_runtime_suspend(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	if (cs35l56->cs_dsp.booted)
-+		cs_dsp_stop(&cs35l56->cs_dsp);
-+
-+	return cs35l56_runtime_suspend_common(&cs35l56->base);
-+}
-+
-+static int cs35l56_hda_runtime_resume(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = cs35l56_runtime_resume_common(&cs35l56->base, false);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (cs35l56->cs_dsp.booted) {
-+		ret = cs_dsp_run(&cs35l56->cs_dsp);
-+		if (ret) {
-+			dev_dbg(cs35l56->base.dev, "%s: cs_dsp_run ret %d\n", __func__, ret);
-+			goto err;
-+		}
-+	}
-+
-+	return 0;
-+
-+err:
-+	cs35l56_mbox_send(&cs35l56->base, CS35L56_MBOX_CMD_ALLOW_AUTO_HIBERNATE);
-+	regmap_write(cs35l56->base.regmap, CS35L56_DSP_VIRTUAL1_MBOX_1,
-+		     CS35L56_MBOX_CMD_HIBERNATE_NOW);
-+
-+	regcache_cache_only(cs35l56->base.regmap, true);
-+
-+	return ret;
-+}
-+
-+static int cs35l56_hda_mixer_info(struct snd_kcontrol *kcontrol,
-+				  struct snd_ctl_elem_info *uinfo)
-+{
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_ENUMERATED;
-+	uinfo->count = 1;
-+	uinfo->value.enumerated.items = CS35L56_NUM_INPUT_SRC;
-+	if (uinfo->value.enumerated.item >= CS35L56_NUM_INPUT_SRC)
-+		uinfo->value.enumerated.item = CS35L56_NUM_INPUT_SRC - 1;
-+	strcpy(uinfo->value.enumerated.name, cs35l56_tx_input_texts[uinfo->value.enumerated.item]);
-+
-+	return 0;
-+}
-+
-+static int cs35l56_hda_mixer_get(struct snd_kcontrol *kcontrol,
-+				 struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct cs35l56_hda *cs35l56 = (struct cs35l56_hda *)kcontrol->private_data;
-+	unsigned int reg_val;
-+	int i;
-+
-+	regmap_read(cs35l56->base.regmap, kcontrol->private_value, &reg_val);
-+	reg_val &= CS35L56_ASP_TXn_SRC_MASK;
-+
-+	for (i = 0; i < CS35L56_NUM_INPUT_SRC; ++i) {
-+		if (cs35l56_tx_input_values[i] == reg_val) {
-+			ucontrol->value.enumerated.item[0] = i;
-+			break;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int cs35l56_hda_mixer_put(struct snd_kcontrol *kcontrol,
-+				 struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct cs35l56_hda *cs35l56 = (struct cs35l56_hda *)kcontrol->private_data;
-+	unsigned int item = ucontrol->value.enumerated.item[0];
-+	bool changed;
-+
-+	if (item >= CS35L56_NUM_INPUT_SRC)
-+		return -EINVAL;
-+
-+	regmap_update_bits_check(cs35l56->base.regmap, kcontrol->private_value,
-+				 CS35L56_INPUT_MASK, cs35l56_tx_input_values[item],
-+				 &changed);
-+
-+	return changed;
-+}
-+
-+static int cs35l56_hda_posture_info(struct snd_kcontrol *kcontrol,
-+				    struct snd_ctl_elem_info *uinfo)
-+{
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-+	uinfo->count = 1;
-+	uinfo->value.integer.min = CS35L56_MAIN_POSTURE_MIN;
-+	uinfo->value.integer.max = CS35L56_MAIN_POSTURE_MAX;
-+	return 0;
-+}
-+
-+static int cs35l56_hda_posture_get(struct snd_kcontrol *kcontrol,
-+				   struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct cs35l56_hda *cs35l56 = (struct cs35l56_hda *)kcontrol->private_data;
-+	unsigned int pos;
-+	int ret;
-+
-+	ret = regmap_read(cs35l56->base.regmap, CS35L56_MAIN_POSTURE_NUMBER, &pos);
-+	if (ret)
-+		return ret;
-+
-+	ucontrol->value.integer.value[0] = pos;
-+
-+	return ret;
-+}
-+
-+static int cs35l56_hda_posture_put(struct snd_kcontrol *kcontrol,
-+				   struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct cs35l56_hda *cs35l56 = (struct cs35l56_hda *)kcontrol->private_data;
-+	unsigned long pos = ucontrol->value.integer.value[0];
-+	bool changed;
-+	int ret;
-+
-+	if ((pos < CS35L56_MAIN_POSTURE_MIN) ||
-+	    (pos > CS35L56_MAIN_POSTURE_MAX))
-+		return -EINVAL;
-+
-+	ret = regmap_update_bits_check(cs35l56->base.regmap,
-+				       CS35L56_MAIN_POSTURE_NUMBER,
-+				       CS35L56_MAIN_POSTURE_MASK,
-+				       pos, &changed);
-+	if (ret)
-+		return ret;
-+
-+	return changed;
-+}
-+
-+static const struct {
-+	const char *name;
-+	unsigned int reg;
-+} cs35l56_hda_mixer_controls[] = {
-+	{ "ASP1 TX1 Source", CS35L56_ASP1TX1_INPUT },
-+	{ "ASP1 TX2 Source", CS35L56_ASP1TX2_INPUT },
-+	{ "ASP1 TX3 Source", CS35L56_ASP1TX3_INPUT },
-+	{ "ASP1 TX4 Source", CS35L56_ASP1TX4_INPUT },
-+};
-+
-+static const DECLARE_TLV_DB_SCALE(cs35l56_hda_vol_tlv, -10000, 25, 0);
-+
-+static int cs35l56_hda_vol_info(struct snd_kcontrol *kcontrol,
-+				struct snd_ctl_elem_info *uinfo)
-+{
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-+	uinfo->count = 1;
-+	uinfo->value.integer.step = 1;
-+	uinfo->value.integer.min = 0;
-+	uinfo->value.integer.max = CS35L56_MAIN_RENDER_USER_VOLUME_MAX -
-+				   CS35L56_MAIN_RENDER_USER_VOLUME_MIN;
-+
-+	return 0;
-+}
-+
-+static int cs35l56_hda_vol_get(struct snd_kcontrol *kcontrol,
-+			       struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct cs35l56_hda *cs35l56 = (struct cs35l56_hda *)kcontrol->private_data;
-+	unsigned int raw_vol;
-+	int vol;
-+	int ret;
-+
-+	ret = regmap_read(cs35l56->base.regmap, CS35L56_MAIN_RENDER_USER_VOLUME, &raw_vol);
-+
-+	if (ret)
-+		return ret;
-+
-+	vol = (s16)(raw_vol & 0xFFFF);
-+	vol >>= CS35L56_MAIN_RENDER_USER_VOLUME_SHIFT;
-+
-+	if (vol & BIT(CS35L56_MAIN_RENDER_USER_VOLUME_SIGNBIT))
-+		vol |= ~((int)(BIT(CS35L56_MAIN_RENDER_USER_VOLUME_SIGNBIT) - 1));
-+
-+	ucontrol->value.integer.value[0] = vol - CS35L56_MAIN_RENDER_USER_VOLUME_MIN;
-+
-+	return 0;
-+}
-+
-+static int cs35l56_hda_vol_put(struct snd_kcontrol *kcontrol,
-+			       struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct cs35l56_hda *cs35l56 = (struct cs35l56_hda *)kcontrol->private_data;
-+	long vol = ucontrol->value.integer.value[0];
-+	unsigned int raw_vol;
-+	bool changed;
-+	int ret;
-+
-+	if ((vol < 0) || (vol > (CS35L56_MAIN_RENDER_USER_VOLUME_MAX -
-+				 CS35L56_MAIN_RENDER_USER_VOLUME_MIN)))
-+		return -EINVAL;
-+
-+	raw_vol = (vol + CS35L56_MAIN_RENDER_USER_VOLUME_MIN) <<
-+		  CS35L56_MAIN_RENDER_USER_VOLUME_SHIFT;
-+
-+	ret = regmap_update_bits_check(cs35l56->base.regmap,
-+				       CS35L56_MAIN_RENDER_USER_VOLUME,
-+				       CS35L56_MAIN_RENDER_USER_VOLUME_MASK,
-+				       raw_vol, &changed);
-+	if (ret)
-+		return ret;
-+
-+	return changed;
-+}
-+
-+static void cs35l56_hda_create_controls(struct cs35l56_hda *cs35l56)
-+{
-+	struct snd_kcontrol_new ctl_template = {
-+		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
-+		.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
-+		.info = cs35l56_hda_posture_info,
-+		.get = cs35l56_hda_posture_get,
-+		.put = cs35l56_hda_posture_put,
-+	};
-+	char name[64];
-+	int i;
-+
-+	snprintf(name, sizeof(name), "%s Posture Number", cs35l56->amp_name);
-+	ctl_template.name = name;
-+	cs35l56->posture_ctl = snd_ctl_new1(&ctl_template, cs35l56);
-+	if (snd_ctl_add(cs35l56->codec->card, cs35l56->posture_ctl)) {
-+		dev_err(cs35l56->base.dev, "Failed to add KControl: %s\n", ctl_template.name);
-+		return;
-+	}
-+
-+	/* Mixer controls */
-+	ctl_template.info = cs35l56_hda_mixer_info;
-+	ctl_template.get = cs35l56_hda_mixer_get;
-+	ctl_template.put = cs35l56_hda_mixer_put;
-+
-+	BUILD_BUG_ON(ARRAY_SIZE(cs35l56->mixer_ctl) != ARRAY_SIZE(cs35l56_hda_mixer_controls));
-+
-+	for (i = 0; i < ARRAY_SIZE(cs35l56_hda_mixer_controls); ++i) {
-+		snprintf(name, sizeof(name), "%s %s", cs35l56->amp_name,
-+			 cs35l56_hda_mixer_controls[i].name);
-+		ctl_template.private_value = cs35l56_hda_mixer_controls[i].reg;
-+		cs35l56->mixer_ctl[i] = snd_ctl_new1(&ctl_template, cs35l56);
-+		if (snd_ctl_add(cs35l56->codec->card, cs35l56->mixer_ctl[i])) {
-+			dev_err(cs35l56->base.dev, "Failed to add KControl: %s\n",
-+				ctl_template.name);
-+			return;
-+		}
-+	}
-+
-+	ctl_template.info = cs35l56_hda_vol_info;
-+	ctl_template.get = cs35l56_hda_vol_get;
-+	ctl_template.put = cs35l56_hda_vol_put;
-+	ctl_template.access = (SNDRV_CTL_ELEM_ACCESS_READWRITE | SNDRV_CTL_ELEM_ACCESS_TLV_READ);
-+	ctl_template.tlv.p = cs35l56_hda_vol_tlv;
-+	snprintf(name, sizeof(name), "%s Speaker Playback Volume", cs35l56->amp_name);
-+	ctl_template.name = name;
-+	cs35l56->volume_ctl = snd_ctl_new1(&ctl_template, cs35l56);
-+	if (snd_ctl_add(cs35l56->codec->card, cs35l56->volume_ctl)) {
-+		dev_err(cs35l56->base.dev, "Failed to add KControl: %s\n", ctl_template.name);
-+		return;
-+	}
-+}
-+
-+static void cs35l56_hda_remove_controls(struct cs35l56_hda *cs35l56)
-+{
-+	int i;
-+
-+	for (i = ARRAY_SIZE(cs35l56->mixer_ctl) - 1; i >= 0; i--)
-+		snd_ctl_remove(cs35l56->codec->card, cs35l56->mixer_ctl[i]);
-+
-+	snd_ctl_remove(cs35l56->codec->card, cs35l56->posture_ctl);
-+	snd_ctl_remove(cs35l56->codec->card, cs35l56->volume_ctl);
-+}
-+
-+static const struct cs_dsp_client_ops cs35l56_hda_client_ops = {
-+	.control_remove = hda_cs_dsp_control_remove,
-+};
-+
-+static int cs35l56_hda_request_firmware_file(struct cs35l56_hda *cs35l56,
-+					     const struct firmware **firmware, char **filename,
-+					     const char *dir, const char *system_name,
-+					     const char *amp_name,
-+					     const char *filetype)
-+{
-+	char *s, c;
-+	int ret = 0;
-+
-+	if (system_name && amp_name)
-+		*filename = kasprintf(GFP_KERNEL, "%scs35l56%s-%02x-dsp1-misc-%s-%s.%s", dir,
-+				      cs35l56->base.secured ? "s" : "", cs35l56->base.rev,
-+				      system_name, amp_name, filetype);
-+	else if (system_name)
-+		*filename = kasprintf(GFP_KERNEL, "%scs35l56%s-%02x-dsp1-misc-%s.%s", dir,
-+				      cs35l56->base.secured ? "s" : "", cs35l56->base.rev,
-+				      system_name, filetype);
-+	else
-+		*filename = kasprintf(GFP_KERNEL, "%scs35l56%s-%02x-dsp1-misc.%s", dir,
-+				      cs35l56->base.secured ? "s" : "", cs35l56->base.rev,
-+				      filetype);
-+
-+	if (!*filename)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Make sure that filename is lower-case and any non alpha-numeric
-+	 * characters except full stop and forward slash are replaced with
-+	 * hyphens.
-+	 */
-+	s = *filename;
-+	while (*s) {
-+		c = *s;
-+		if (isalnum(c))
-+			*s = tolower(c);
-+		else if (c != '.' && c != '/')
-+			*s = '-';
-+		s++;
-+	}
-+
-+	ret = firmware_request_nowarn(firmware, *filename, cs35l56->base.dev);
-+	if (ret != 0) {
-+		dev_dbg(cs35l56->base.dev, "Failed to request '%s'\n", *filename);
-+		kfree(*filename);
-+		*filename = NULL;
-+	} else {
-+		dev_dbg(cs35l56->base.dev, "Found '%s'\n", *filename);
-+	}
-+
-+	return ret;
-+}
-+
-+static const char cirrus_dir[] = "cirrus/";
-+static int cs35l56_hda_request_firmware_files(struct cs35l56_hda *cs35l56,
-+					      const struct firmware **wmfw_firmware,
-+					      char **wmfw_filename,
-+					      const struct firmware **coeff_firmware,
-+					      char **coeff_filename)
-+{
-+	const char *system_name = cs35l56->system_name;
-+	const char *amp_name = cs35l56->amp_name;
-+	int ret;
-+
-+	if (system_name && amp_name) {
-+		if (!cs35l56_hda_request_firmware_file(cs35l56, wmfw_firmware, wmfw_filename,
-+						       cirrus_dir, system_name, amp_name, "wmfw")) {
-+			cs35l56_hda_request_firmware_file(cs35l56, coeff_firmware, coeff_filename,
-+							  cirrus_dir, system_name, amp_name, "bin");
-+			return 0;
-+		}
-+	}
-+
-+	if (system_name) {
-+		if (!cs35l56_hda_request_firmware_file(cs35l56, wmfw_firmware, wmfw_filename,
-+						       cirrus_dir, system_name, NULL, "wmfw")) {
-+			if (amp_name)
-+				cs35l56_hda_request_firmware_file(cs35l56,
-+								  coeff_firmware, coeff_filename,
-+								  cirrus_dir, system_name,
-+								  amp_name, "bin");
-+			if (!*coeff_firmware)
-+				cs35l56_hda_request_firmware_file(cs35l56,
-+								  coeff_firmware, coeff_filename,
-+								  cirrus_dir, system_name,
-+								  NULL, "bin");
-+			return 0;
-+		}
-+	}
-+
-+	ret = cs35l56_hda_request_firmware_file(cs35l56, wmfw_firmware, wmfw_filename,
-+						cirrus_dir, NULL, NULL, "wmfw");
-+	if (!ret) {
-+		cs35l56_hda_request_firmware_file(cs35l56, coeff_firmware, coeff_filename,
-+						  cirrus_dir, NULL, NULL, "bin");
-+		return 0;
-+	}
-+
-+	/* When a firmware file is not found must still search for the coeff files */
-+	if (system_name) {
-+		if (amp_name)
-+			cs35l56_hda_request_firmware_file(cs35l56, coeff_firmware, coeff_filename,
-+							  cirrus_dir, system_name, amp_name, "bin");
-+		if (!*coeff_firmware)
-+			cs35l56_hda_request_firmware_file(cs35l56, coeff_firmware, coeff_filename,
-+							  cirrus_dir, system_name, NULL, "bin");
-+	}
-+
-+	if (!*coeff_firmware)
-+		cs35l56_hda_request_firmware_file(cs35l56, coeff_firmware, coeff_filename,
-+						  cirrus_dir, NULL, NULL, "bin");
-+
-+	return 0;
-+}
-+
-+static void cs35l56_hda_add_dsp_controls(struct cs35l56_hda *cs35l56)
-+{
-+	struct hda_cs_dsp_ctl_info info;
-+
-+	info.device_name = cs35l56->amp_name;
-+	info.fw_type = HDA_CS_DSP_FW_MISC;
-+	info.card = cs35l56->codec->card;
-+
-+	hda_cs_dsp_add_controls(&cs35l56->cs_dsp, &info);
-+}
-+
-+static int cs35l56_hda_fw_load(struct cs35l56_hda *cs35l56)
-+{
-+	const struct firmware *coeff_firmware = NULL;
-+	const struct firmware *wmfw_firmware = NULL;
-+	char *coeff_filename = NULL;
-+	char *wmfw_filename = NULL;
-+	int ret = 0;
-+
-+	mutex_lock(&cs35l56->base.irq_lock);
-+	pm_runtime_get_sync(cs35l56->base.dev);
-+
-+	/*
-+	 * When the device is running in secure mode the firmware files can
-+	 * only contain insecure tunings and therefore we do not need to
-+	 * shutdown the firmware to apply them and can use the lower cost
-+	 * reinit sequence instead.
-+	 */
-+	if (!cs35l56->base.secured) {
-+		ret = cs35l56_firmware_shutdown(&cs35l56->base);
-+		if (ret)
-+			goto err;
-+	}
-+
-+	cs35l56_hda_request_firmware_files(cs35l56, &wmfw_firmware, &wmfw_filename,
-+					   &coeff_firmware, &coeff_filename);
-+
-+	ret = cs_dsp_power_up(&cs35l56->cs_dsp, wmfw_firmware, wmfw_filename,
-+			      coeff_firmware, coeff_filename, "misc");
-+	if (ret) {
-+		dev_dbg(cs35l56->base.dev, "%s: cs_dsp_power_up ret %d\n", __func__, ret);
-+		goto err;
-+	}
-+
-+	if (wmfw_filename)
-+		dev_dbg(cs35l56->base.dev, "Loaded WMFW Firmware: %s\n", wmfw_filename);
-+
-+	if (coeff_filename)
-+		dev_dbg(cs35l56->base.dev, "Loaded Coefficients: %s\n", coeff_filename);
-+
-+	ret = cs_dsp_run(&cs35l56->cs_dsp);
-+	if (ret) {
-+		dev_dbg(cs35l56->base.dev, "%s: cs_dsp_run ret %d\n", __func__, ret);
-+		goto err;
-+	}
-+
-+	if (cs35l56->base.secured) {
-+		ret = cs35l56_mbox_send(&cs35l56->base, CS35L56_MBOX_CMD_AUDIO_REINIT);
-+		if (ret)
-+			goto err;
-+	} else {
-+		/* Reset the device and wait for it to boot */
-+		cs35l56_system_reset(&cs35l56->base, false);
-+		ret = cs35l56_wait_for_firmware_boot(&cs35l56->base);
-+		if (ret)
-+			goto err;
-+	}
-+
-+	/* Disable auto-hibernate so that runtime_pm has control */
-+	ret = cs35l56_mbox_send(&cs35l56->base, CS35L56_MBOX_CMD_PREVENT_AUTO_HIBERNATE);
-+	if (ret)
-+		goto err;
-+
-+	/* Re-read the values from the device after a firmware/cofficient download */
-+	cs35l56_reread_firmware_registers(&cs35l56->base);
-+
-+	regcache_mark_dirty(cs35l56->base.regmap);
-+	regcache_sync(cs35l56->base.regmap);
-+
-+	regmap_clear_bits(cs35l56->base.regmap, CS35L56_PROTECTION_STATUS,
-+			  CS35L56_FIRMWARE_MISSING);
-+	cs35l56->base.fw_patched = true;
-+err:
-+	pm_runtime_put(cs35l56->base.dev);
-+	mutex_unlock(&cs35l56->base.irq_lock);
-+
-+	return ret;
-+}
-+
-+static int cs35l56_hda_bind(struct device *dev, struct device *master, void *master_data)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+	struct hda_component *comps = master_data;
-+	int ret;
-+
-+	if (!comps || cs35l56->index < 0 || cs35l56->index >= HDA_MAX_COMPONENTS)
-+		return -EINVAL;
-+
-+	comps = &comps[cs35l56->index];
-+	if (comps->dev)
-+		return -EBUSY;
-+
-+	comps->dev = dev;
-+	cs35l56->codec = comps->codec;
-+	strscpy(comps->name, dev_name(dev), sizeof(comps->name));
-+	comps->playback_hook = cs35l56_hda_playback_hook;
-+	comps->mute_hook = cs35l56_hda_mute_hook;
-+
-+	ret = cs35l56_hda_fw_load(cs35l56);
-+	if (ret)
-+		return ret;
-+
-+	cs35l56_hda_create_controls(cs35l56);
-+	cs35l56_hda_add_dsp_controls(cs35l56);
-+
-+#if IS_ENABLED(CONFIG_SND_DEBUG)
-+	cs35l56->debugfs_root = debugfs_create_dir(dev_name(cs35l56->base.dev), sound_debugfs_root);
-+	cs_dsp_init_debugfs(&cs35l56->cs_dsp, cs35l56->debugfs_root);
-+#endif
-+
-+	dev_dbg(cs35l56->base.dev, "Bound\n");
-+
-+	return 0;
-+}
-+
-+static void cs35l56_hda_unbind(struct device *dev, struct device *master, void *master_data)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+	struct hda_component *comps = master_data;
-+
-+	cs35l56_hda_remove_controls(cs35l56);
-+
-+#if IS_ENABLED(CONFIG_SND_DEBUG)
-+	cs_dsp_cleanup_debugfs(&cs35l56->cs_dsp);
-+	debugfs_remove_recursive(cs35l56->debugfs_root);
-+#endif
-+
-+	cs_dsp_remove(&cs35l56->cs_dsp);
-+
-+	if (comps[cs35l56->index].dev == dev)
-+		memset(&comps[cs35l56->index], 0, sizeof(*comps));
-+
-+	dev_dbg(cs35l56->base.dev, "Unbound\n");
-+}
-+
-+static const struct component_ops cs35l56_hda_comp_ops = {
-+	.bind = cs35l56_hda_bind,
-+	.unbind = cs35l56_hda_unbind,
-+};
-+
-+static int __maybe_unused cs35l56_hda_system_suspend(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	if (cs35l56->playing)
-+		cs35l56_hda_pause(cs35l56);
-+
-+	cs35l56->suspended = true;
-+
-+	/*
-+	 * The interrupt line is normally shared, but after we start suspending
-+	 * we can't check if our device is the source of an interrupt, and can't
-+	 * clear it. Prevent this race by temporarily disabling the parent irq
-+	 * until we reach _no_irq.
-+	 */
-+	if (cs35l56->base.irq)
-+		disable_irq(cs35l56->base.irq);
-+
-+	return pm_runtime_force_suspend(dev);
-+}
-+
-+static int __maybe_unused cs35l56_hda_system_suspend_late(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	/*
-+	 * RESET is usually shared by all amps so it must not be asserted until
-+	 * all driver instances have done their suspend() stage.
-+	 */
-+	if (cs35l56->base.reset_gpio) {
-+		gpiod_set_value_cansleep(cs35l56->base.reset_gpio, 0);
-+		cs35l56_wait_min_reset_pulse();
-+	}
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused cs35l56_hda_system_suspend_no_irq(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	/* Handlers are now disabled so the parent IRQ can safely be re-enabled. */
-+	if (cs35l56->base.irq)
-+		enable_irq(cs35l56->base.irq);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused cs35l56_hda_system_resume_no_irq(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	/*
-+	 * WAKE interrupts unmask if the CS35L56 hibernates, which can cause
-+	 * spurious interrupts, and the interrupt line is normally shared.
-+	 * We can't check if our device is the source of an interrupt, and can't
-+	 * clear it, until it has fully resumed. Prevent this race by temporarily
-+	 * disabling the parent irq until we complete resume().
-+	 */
-+	if (cs35l56->base.irq)
-+		disable_irq(cs35l56->base.irq);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused cs35l56_hda_system_resume_early(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	/* Ensure a spec-compliant RESET pulse. */
-+	if (cs35l56->base.reset_gpio) {
-+		gpiod_set_value_cansleep(cs35l56->base.reset_gpio, 0);
-+		cs35l56_wait_min_reset_pulse();
-+
-+		/* Release shared RESET before drivers start resume(). */
-+		gpiod_set_value_cansleep(cs35l56->base.reset_gpio, 1);
-+		cs35l56_wait_control_port_ready();
-+	}
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused cs35l56_hda_system_resume(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	/* Undo pm_runtime_force_suspend() before re-enabling the irq */
-+	ret = pm_runtime_force_resume(dev);
-+	if (cs35l56->base.irq)
-+		enable_irq(cs35l56->base.irq);
-+
-+	if (ret)
-+		return ret;
-+
-+	cs35l56->suspended = false;
-+
-+	ret = cs35l56_is_fw_reload_needed(&cs35l56->base);
-+	dev_dbg(cs35l56->base.dev, "fw_reload_needed: %d\n", ret);
-+	if (ret > 0) {
-+		ret = cs35l56_hda_fw_load(cs35l56);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (cs35l56->playing)
-+		cs35l56_hda_play(cs35l56);
-+
-+	return 0;
-+}
-+
-+static int cs35l56_hda_read_acpi(struct cs35l56_hda *cs35l56, int id)
-+{
-+	u32 values[HDA_MAX_COMPONENTS];
-+	struct acpi_device *adev;
-+	const char *property, *sub;
-+	size_t nval;
-+	int i, ret;
-+
-+	/*
-+	 * ACPI_COMPANION isn't available when this driver was instantiated by
-+	 * the serial-multi-instantiate driver, so lookup the node by HID
-+	 */
-+	if (!ACPI_COMPANION(cs35l56->base.dev)) {
-+		adev = acpi_dev_get_first_match_dev("CSC3556", NULL, -1);
-+		if (!adev) {
-+			dev_err(cs35l56->base.dev, "Failed to find an ACPI device for %s\n",
-+				dev_name(cs35l56->base.dev));
-+			return -ENODEV;
-+		}
-+		ACPI_COMPANION_SET(cs35l56->base.dev, adev);
-+	}
-+
-+	property = "cirrus,dev-index";
-+	ret = device_property_count_u32(cs35l56->base.dev, property);
-+	if (ret <= 0)
-+		goto err;
-+
-+	if (ret > ARRAY_SIZE(values)) {
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+	nval = ret;
-+
-+	ret = device_property_read_u32_array(cs35l56->base.dev, property, values, nval);
-+	if (ret)
-+		goto err;
-+
-+	cs35l56->index = -1;
-+	for (i = 0; i < nval; i++) {
-+		if (values[i] == id) {
-+			cs35l56->index = i;
-+			break;
-+		}
-+	}
-+	if (cs35l56->index == -1) {
-+		dev_err(cs35l56->base.dev, "No index found in %s\n", property);
-+		ret = -ENODEV;
-+		goto err;
-+	}
-+
-+	sub = acpi_get_subsystem_id(ACPI_HANDLE(cs35l56->base.dev));
-+
-+	if (IS_ERR(sub)) {
-+		/* If no ACPI SUB, return 0 and fallback to legacy firmware path, otherwise fail */
-+		if (PTR_ERR(sub) == -ENODATA)
-+			return 0;
-+		else
-+			return PTR_ERR(sub);
-+	}
-+
-+	cs35l56->system_name = sub;
-+
-+	cs35l56->base.reset_gpio = devm_gpiod_get_index_optional(cs35l56->base.dev,
-+								 "reset",
-+								 cs35l56->index,
-+								 GPIOD_OUT_LOW);
-+	if (IS_ERR(cs35l56->base.reset_gpio)) {
-+		ret = PTR_ERR(cs35l56->base.reset_gpio);
-+
-+		/*
-+		 * If RESET is shared the first amp to probe will grab the reset
-+		 * line and reset all the amps
-+		 */
-+		if (ret != -EBUSY)
-+			return dev_err_probe(cs35l56->base.dev, ret, "Failed to get reset GPIO\n");
-+
-+		dev_info(cs35l56->base.dev, "Reset GPIO busy, assume shared reset\n");
-+		cs35l56->base.reset_gpio = NULL;
-+	}
-+
-+	return 0;
-+
-+err:
-+	dev_err(cs35l56->base.dev, "Failed property %s: %d\n", property, ret);
-+
-+	return ret;
-+}
-+
-+int cs35l56_hda_common_probe(struct cs35l56_hda *cs35l56, int id)
-+{
-+	int ret;
-+
-+	mutex_init(&cs35l56->base.irq_lock);
-+	dev_set_drvdata(cs35l56->base.dev, cs35l56);
-+
-+	ret = cs35l56_hda_read_acpi(cs35l56, id);
-+	if (ret) {
-+		dev_err_probe(cs35l56->base.dev, ret, "Platform not supported\n");
-+		goto err;
-+	}
-+
-+	cs35l56->amp_name = devm_kasprintf(cs35l56->base.dev, GFP_KERNEL, "AMP%d",
-+					   cs35l56->index + 1);
-+	if (!cs35l56->amp_name) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
-+
-+	cs35l56_init_cs_dsp(&cs35l56->base, &cs35l56->cs_dsp);
-+	cs35l56->cs_dsp.client_ops = &cs35l56_hda_client_ops;
-+
-+	if (cs35l56->base.reset_gpio) {
-+		dev_dbg(cs35l56->base.dev, "Hard reset\n");
-+
-+		/*
-+		 * The GPIOD_OUT_LOW to *_gpiod_get_*() will be ignored if the
-+		 * ACPI defines a different default state. So explicitly set low.
-+		 */
-+		gpiod_set_value_cansleep(cs35l56->base.reset_gpio, 0);
-+		cs35l56_wait_min_reset_pulse();
-+		gpiod_set_value_cansleep(cs35l56->base.reset_gpio, 1);
-+	}
-+
-+	ret = cs35l56_hw_init(&cs35l56->base);
-+	if (ret < 0)
-+		goto err;
-+
-+	/* Reset the device and wait for it to boot */
-+	cs35l56_system_reset(&cs35l56->base, false);
-+	ret = cs35l56_wait_for_firmware_boot(&cs35l56->base);
-+	if (ret)
-+		goto err;
-+
-+	regcache_mark_dirty(cs35l56->base.regmap);
-+	regcache_sync(cs35l56->base.regmap);
-+
-+	/* Disable auto-hibernate so that runtime_pm has control */
-+	ret = cs35l56_mbox_send(&cs35l56->base, CS35L56_MBOX_CMD_PREVENT_AUTO_HIBERNATE);
-+	if (ret)
-+		goto err;
-+
-+	ret = cs_dsp_halo_init(&cs35l56->cs_dsp);
-+	if (ret != 0) {
-+		dev_err_probe(cs35l56->base.dev, ret, "cs_dsp_halo_init failed\n");
-+		goto err;
-+	}
-+
-+	dev_dbg(cs35l56->base.dev, "DSP system name: '%s', amp name: '%s'\n",
-+		cs35l56->system_name, cs35l56->amp_name);
-+
-+	/* Populate soft registers in the regmap cache */
-+	cs35l56_reread_firmware_registers(&cs35l56->base);
-+
-+	regmap_multi_reg_write(cs35l56->base.regmap, cs35l56_hda_dai_config,
-+			       ARRAY_SIZE(cs35l56_hda_dai_config));
-+
-+	/*
-+	 * By default only enable one ASP1TXn, where n=amplifier index,
-+	 * This prevents multiple amps trying to drive the same slot.
-+	 */
-+	cs35l56->asp_tx_mask = BIT(cs35l56->index);
-+
-+	pm_runtime_set_autosuspend_delay(cs35l56->base.dev, 3000);
-+	pm_runtime_use_autosuspend(cs35l56->base.dev);
-+	pm_runtime_set_active(cs35l56->base.dev);
-+	pm_runtime_mark_last_busy(cs35l56->base.dev);
-+	pm_runtime_enable(cs35l56->base.dev);
-+
-+	ret = component_add(cs35l56->base.dev, &cs35l56_hda_comp_ops);
-+	if (ret) {
-+		dev_err(cs35l56->base.dev, "Register component failed: %d\n", ret);
-+		goto pm_err;
-+	}
-+
-+	cs35l56->base.init_done = true;
-+
-+	return 0;
-+
-+pm_err:
-+	pm_runtime_disable(cs35l56->base.dev);
-+err:
-+	gpiod_set_value_cansleep(cs35l56->base.reset_gpio, 0);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(cs35l56_hda_common_probe, SND_HDA_SCODEC_CS35L56);
-+
-+void cs35l56_hda_remove(struct device *dev)
-+{
-+	struct cs35l56_hda *cs35l56 = dev_get_drvdata(dev);
-+
-+	pm_runtime_get_sync(cs35l56->base.dev);
-+	pm_runtime_disable(cs35l56->base.dev);
-+
-+	component_del(cs35l56->base.dev, &cs35l56_hda_comp_ops);
-+
-+	kfree(cs35l56->system_name);
-+	pm_runtime_put_noidle(cs35l56->base.dev);
-+
-+	gpiod_set_value_cansleep(cs35l56->base.reset_gpio, 0);
-+}
-+EXPORT_SYMBOL_NS_GPL(cs35l56_hda_remove, SND_HDA_SCODEC_CS35L56);
-+
-+const struct dev_pm_ops cs35l56_hda_pm_ops = {
-+	SET_RUNTIME_PM_OPS(cs35l56_hda_runtime_suspend, cs35l56_hda_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(cs35l56_hda_system_suspend, cs35l56_hda_system_resume)
-+	LATE_SYSTEM_SLEEP_PM_OPS(cs35l56_hda_system_suspend_late,
-+				 cs35l56_hda_system_resume_early)
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(cs35l56_hda_system_suspend_no_irq,
-+				  cs35l56_hda_system_resume_no_irq)
-+};
-+EXPORT_SYMBOL_NS_GPL(cs35l56_hda_pm_ops, SND_HDA_SCODEC_CS35L56);
-+
-+MODULE_DESCRIPTION("CS35L56 HDA Driver");
-+MODULE_IMPORT_NS(SND_HDA_CS_DSP_CONTROLS);
-+MODULE_IMPORT_NS(SND_SOC_CS35L56_SHARED);
-+MODULE_AUTHOR("Richard Fitzgerald <rf@opensource.cirrus.com>");
-+MODULE_AUTHOR("Simon Trimmer <simont@opensource.cirrus.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(FW_CS_DSP);
-diff --git a/sound/pci/hda/cs35l56_hda.h b/sound/pci/hda/cs35l56_hda.h
-new file mode 100644
-index 000000000000..6e5bc5397db5
---- /dev/null
-+++ b/sound/pci/hda/cs35l56_hda.h
-@@ -0,0 +1,48 @@
-+/* SPDX-License-Identifier: GPL-2.0-only
-+ *
-+ * HDA audio driver for Cirrus Logic CS35L56 smart amp
-+ *
-+ * Copyright (C) 2023 Cirrus Logic, Inc. and
-+ *                    Cirrus Logic International Semiconductor Ltd.
-+ */
-+
-+#ifndef __CS35L56_HDA_H__
-+#define __CS35L56_HDA_H__
-+
-+#include <linux/device.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/firmware/cirrus/cs_dsp.h>
-+#include <linux/firmware/cirrus/wmfw.h>
-+#include <linux/regulator/consumer.h>
-+#include <sound/cs35l56.h>
-+
-+struct dentry;
-+
-+struct cs35l56_hda {
-+	struct cs35l56_base base;
-+	struct hda_codec *codec;
-+
-+	int index;
-+	const char *system_name;
-+	const char *amp_name;
-+
-+	struct cs_dsp cs_dsp;
-+	bool playing;
-+	bool suspended;
-+	u8 asp_tx_mask;
-+
-+	struct snd_kcontrol *posture_ctl;
-+	struct snd_kcontrol *volume_ctl;
-+	struct snd_kcontrol *mixer_ctl[4];
-+
-+#if IS_ENABLED(CONFIG_SND_DEBUG)
-+	struct dentry *debugfs_root;
-+#endif
-+};
-+
-+extern const struct dev_pm_ops cs35l56_hda_pm_ops;
-+
-+int cs35l56_hda_common_probe(struct cs35l56_hda *cs35l56, int id);
-+void cs35l56_hda_remove(struct device *dev);
-+
-+#endif /*__CS35L56_HDA_H__*/
-diff --git a/sound/pci/hda/cs35l56_hda_i2c.c b/sound/pci/hda/cs35l56_hda_i2c.c
-new file mode 100644
-index 000000000000..5dfe79554d0b
---- /dev/null
-+++ b/sound/pci/hda/cs35l56_hda_i2c.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// CS35L56 HDA audio driver I2C binding
-+//
-+// Copyright (C) 2023 Cirrus Logic, Inc. and
-+//                    Cirrus Logic International Semiconductor Ltd.
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#include "cs35l56_hda.h"
-+
-+static int cs35l56_hda_i2c_probe(struct i2c_client *clt)
-+{
-+	struct cs35l56_hda *cs35l56;
-+	int ret;
-+
-+	cs35l56 = devm_kzalloc(&clt->dev, sizeof(*cs35l56), GFP_KERNEL);
-+	if (!cs35l56)
-+		return -ENOMEM;
-+
-+	cs35l56->base.dev = &clt->dev;
-+	cs35l56->base.can_hibernate = true;
-+	cs35l56->base.regmap = devm_regmap_init_i2c(clt, &cs35l56_regmap_i2c);
-+	if (IS_ERR(cs35l56->base.regmap)) {
-+		ret = PTR_ERR(cs35l56->base.regmap);
-+		dev_err(cs35l56->base.dev, "Failed to allocate register map: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	ret = cs35l56_hda_common_probe(cs35l56, clt->addr);
-+	if (ret != 0)
-+		return ret;
-+	ret = cs35l56_irq_request(&cs35l56->base, clt->irq);
-+	if (ret < 0)
-+		cs35l56_hda_remove(cs35l56->base.dev);
-+
-+	return ret;
-+}
-+
-+static void cs35l56_hda_i2c_remove(struct i2c_client *clt)
-+{
-+	cs35l56_hda_remove(&clt->dev);
-+}
-+
-+static const struct i2c_device_id cs35l56_hda_i2c_id[] = {
-+	{ "cs35l56-hda", 0 },
-+	{}
-+};
-+
-+static struct i2c_driver cs35l56_hda_i2c_driver = {
-+	.driver = {
-+		.name		= "cs35l56-hda",
-+		.pm		= &cs35l56_hda_pm_ops,
-+	},
-+	.id_table	= cs35l56_hda_i2c_id,
-+	.probe_new	= cs35l56_hda_i2c_probe,
-+	.remove		= cs35l56_hda_i2c_remove,
-+};
-+module_i2c_driver(cs35l56_hda_i2c_driver);
-+
-+MODULE_DESCRIPTION("HDA CS35L56 I2C driver");
-+MODULE_IMPORT_NS(SND_HDA_SCODEC_CS35L56);
-+MODULE_IMPORT_NS(SND_SOC_CS35L56_SHARED);
-+MODULE_AUTHOR("Richard Fitzgerald <rf@opensource.cirrus.com>");
-+MODULE_AUTHOR("Simon Trimmer <simont@opensource.cirrus.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/sound/pci/hda/cs35l56_hda_spi.c b/sound/pci/hda/cs35l56_hda_spi.c
-new file mode 100644
-index 000000000000..bd572ce796d8
---- /dev/null
-+++ b/sound/pci/hda/cs35l56_hda_spi.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// CS35L56 HDA audio driver SPI binding
-+//
-+// Copyright (C) 2023 Cirrus Logic, Inc. and
-+//                    Cirrus Logic International Semiconductor Ltd.
-+
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/spi/spi.h>
-+
-+#include "cs35l56_hda.h"
-+
-+static int cs35l56_hda_spi_probe(struct spi_device *spi)
-+{
-+	struct cs35l56_hda *cs35l56;
-+	int ret;
-+
-+	cs35l56 = devm_kzalloc(&spi->dev, sizeof(*cs35l56), GFP_KERNEL);
-+	if (!cs35l56)
-+		return -ENOMEM;
-+
-+	cs35l56->base.dev = &spi->dev;
-+	cs35l56->base.regmap = devm_regmap_init_spi(spi, &cs35l56_regmap_spi);
-+	if (IS_ERR(cs35l56->base.regmap)) {
-+		ret = PTR_ERR(cs35l56->base.regmap);
-+		dev_err(cs35l56->base.dev, "Failed to allocate register map: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	ret = cs35l56_hda_common_probe(cs35l56, spi->chip_select);
-+	if (ret != 0)
-+		return ret;
-+	ret = cs35l56_irq_request(&cs35l56->base, spi->irq);
-+	if (ret < 0)
-+		cs35l56_hda_remove(cs35l56->base.dev);
-+
-+	return ret;
-+}
-+
-+static void cs35l56_hda_spi_remove(struct spi_device *spi)
-+{
-+	cs35l56_hda_remove(&spi->dev);
-+}
-+
-+static const struct spi_device_id cs35l56_hda_spi_id[] = {
-+	{ "cs35l56-hda", 0 },
-+	{}
-+};
-+
-+static struct spi_driver cs35l56_hda_spi_driver = {
-+	.driver = {
-+		.name		= "cs35l56-hda",
-+		.pm		= &cs35l56_hda_pm_ops,
-+	},
-+	.id_table	= cs35l56_hda_spi_id,
-+	.probe		= cs35l56_hda_spi_probe,
-+	.remove		= cs35l56_hda_spi_remove,
-+};
-+module_spi_driver(cs35l56_hda_spi_driver);
-+
-+MODULE_DESCRIPTION("HDA CS35L56 SPI driver");
-+MODULE_IMPORT_NS(SND_HDA_SCODEC_CS35L56);
-+MODULE_IMPORT_NS(SND_SOC_CS35L56_SHARED);
-+MODULE_AUTHOR("Richard Fitzgerald <rf@opensource.cirrus.com>");
-+MODULE_AUTHOR("Simon Trimmer <simont@opensource.cirrus.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.30.2
+	if (test(Y)) {
+		/*
+		 * Make sure that we use the updated X when
+		 * we saw the updated Y.
+		 */
+		 smp_rmb();
+		 do_something(X);
+	 }
 
+IMHO, we do not need any barrier here because we have only
+one variable "watchdog_hardlockup_touched" here.
+watchdog_hardlockup_check() will either see the updated value
+or not. But it does not synchronize it against any other
+variables or values.
+
+> +}
+> +
+>  static bool is_hardlockup(unsigned int cpu)
+>  {
+>  	int hrint = atomic_read(&per_cpu(hrtimer_interrupts, cpu));
+> @@ -443,11 +454,15 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
+>  	struct pt_regs *regs = get_irq_regs();
+>  	int duration;
+>  	int softlockup_all_cpu_backtrace = sysctl_softlockup_all_cpu_backtrace;
+> +	unsigned long hrtimer_interrupts;
+>  
+>  	if (!watchdog_enabled)
+>  		return HRTIMER_NORESTART;
+>  
+> -	watchdog_hardlockup_kick();
+> +	hrtimer_interrupts = watchdog_hardlockup_kick();
+> +
+> +	/* test for hardlockups */
+
+I would omit the comment. It is not valid when perf detector is used.
+And checking the buddy is clear from the function name.
+
+> +	watchdog_buddy_check_hardlockup(hrtimer_interrupts);
+
+I would personally move this into watchdog_hardlockup_kick().
+watchdog_timer_fn() is already complex enough. And checking
+the buddy when kicking a CPU makes sense.
+
+Also I would not pass "hrtimer_interrupts". I guess that it is
+just an optimization. It is an extra churn in the code. IMHO,
+is is not wort it. This code does not need to be super optimized.
+
+> +
+
+>  
+>  	/* kick the softlockup detector */
+>  	if (completion_done(this_cpu_ptr(&softlockup_completion))) {
+> diff --git a/kernel/watchdog_buddy.c b/kernel/watchdog_buddy.c
+> new file mode 100644
+> index 000000000000..fee45af2e5bd
+> --- /dev/null
+> +++ b/kernel/watchdog_buddy.c
+> @@ -0,0 +1,93 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/cpu.h>
+> +#include <linux/cpumask.h>
+> +#include <linux/kernel.h>
+> +#include <linux/nmi.h>
+> +#include <linux/percpu-defs.h>
+> +
+> +static cpumask_t __read_mostly watchdog_cpus;
+> +
+> +static unsigned int watchdog_next_cpu(unsigned int cpu)
+> +{
+> +	cpumask_t cpus = watchdog_cpus;
+
+A copy should be done by cpumask_copy().
+
+But the question is why a copy would be needed. When called from
+watchdog_buddy_check_hardlockup(), this function is not sychronized
+against the CPU hotplug. And even the copying would be racy.
+
+IMHO, the copy does not help much and we do not need it.
+
+The only important this is that this function would return
+a valid CPU. And I think that it is guarantted because
+CPU0 could not be disabled.
+
+> +	unsigned int next_cpu;
+> +
+> +	next_cpu = cpumask_next(cpu, &cpus);
+> +	if (next_cpu >= nr_cpu_ids)
+> +		next_cpu = cpumask_first(&cpus);
+> +
+> +	if (next_cpu == cpu)
+> +		return nr_cpu_ids;
+>> +	return next_cpu;
+> +}
+> +
+> +int __init watchdog_hardlockup_probe(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +void watchdog_hardlockup_enable(unsigned int cpu)
+> +{
+> +	unsigned int next_cpu;
+> +
+> +	/*
+> +	 * The new CPU will be marked online before the hrtimer interrupt
+> +	 * gets a chance to run on it. If another CPU tests for a
+> +	 * hardlockup on the new CPU before it has run its the hrtimer
+> +	 * interrupt, it will get a false positive. Touch the watchdog on
+> +	 * the new CPU to delay the check for at least 3 sampling periods
+> +	 * to guarantee one hrtimer has run on the new CPU.
+> +	 */
+> +	watchdog_hardlockup_touch_cpu(cpu);
+> +
+> +	/*
+> +	 * We are going to check the next CPU. Our watchdog_hrtimer
+> +	 * need not be zero if the CPU has already been online earlier.
+> +	 * Touch the watchdog on the next CPU to avoid false positive
+> +	 * if we try to check it in less then 3 interrupts.
+> +	 */
+> +	next_cpu = watchdog_next_cpu(cpu);
+> +	if (next_cpu < nr_cpu_ids)
+> +		watchdog_hardlockup_touch_cpu(next_cpu);
+
+Thinking loudly:
+
+This feels racy when many CPUs are enabled/disabled in parallel.
+I am not 100% sure it it can happen though.
+
+My understanding is that it can't happen because the CPU hotplug
+is serialized by cpu_add_remove_lock.
+
+So, this seems to work after all.
+
+> +
+> +	cpumask_set_cpu(cpu, &watchdog_cpus);
+> +}
+> +
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1035,10 +1035,55 @@ config BOOTPARAM_SOFTLOCKUP_PANIC
+>  
+>  	  Say N if unsure.
+>  
+> -config HARDLOCKUP_DETECTOR_PERF
+> +# Both the "perf" and "buddy" hardlockup detectors count hrtimer
+> +# interrupts. This config enables functions managing this common code.
+> +config HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
+>  	bool
+>  	select SOFTLOCKUP_DETECTOR
+>  
+> +config HARDLOCKUP_DETECTOR_PERF
+> +	bool
+> +	depends on HAVE_HARDLOCKUP_DETECTOR_PERF
+> +	select HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
+> +
+> +config HARDLOCKUP_DETECTOR_BUDDY
+> +	bool
+> +	depends on SMP
+> +	select HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
+> +
+> +# For hardlockup detectors you can have one directly provided by the arch
+> +# or use a "non-arch" one. If you're using a "non-arch" one that is
+> +# further divided the perf hardlockup detector (which, confusingly, needs
+> +# arch-provided perf support) and the buddy hardlockup detector (which just
+> +# needs SMP). In either case, using the "non-arch" code conflicts with
+> +# the NMI watchdog code (which is sometimes used directly and sometimes used
+> +# by the arch-provided hardlockup detector).
+> +config HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
+> +	bool
+> +	depends on (HAVE_HARDLOCKUP_DETECTOR_PERF || SMP) && !HAVE_NMI_WATCHDOG
+> +	default y
+> +
+> +config HARDLOCKUP_DETECTOR_PREFER_BUDDY
+> +	bool "Prefer the buddy CPU hardlockup detector"
+> +	depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH && HAVE_HARDLOCKUP_DETECTOR_PERF && SMP
+
+Huh, I have big troubles to scratch my head around this check:
+
+       HAVE_HARDLOCKUP_DETECTOR_NON_ARCH depends on HAVE_HARDLOCKUP_DETECTOR_PERF and SMP
+
+       and this depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH and again
+	       on HAVE_HARDLOCKUP_DETECTOR_PERF and SMP.
+
+> +	help
+> +	  Say Y here to prefer the buddy hardlockup detector over the perf one.
+> +
+> +	  With the buddy detector, each CPU uses its softlockup hrtimer
+> +	  to check that the next CPU is processing hrtimer interrupts by
+> +	  verifying that a counter is increasing.
+> +
+> +	  This hardlockup detector is useful on systems that don't have
+> +	  an arch-specific hardlockup detector or if resources needed
+> +	  for the hardlockup detector are better used for other things.
+> +
+> +# This will select the appropriate non-arch hardlockdup detector
+> +config HARDLOCKUP_DETECTOR_NON_ARCH
+> +	bool
+> +	depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
+> +	select HARDLOCKUP_DETECTOR_BUDDY if !HAVE_HARDLOCKUP_DETECTOR_PERF || HARDLOCKUP_DETECTOR_PREFER_BUDDY
+> +	select HARDLOCKUP_DETECTOR_PERF if HAVE_HARDLOCKUP_DETECTOR_PERF && !HARDLOCKUP_DETECTOR_PREFER_BUDDY
+> +
+>  #
+>  # Enables a timestamp based low pass filter to compensate for perf based
+>  # hard lockup detection which runs too fast due to turbo modes.
+> @@ -1053,9 +1098,10 @@ config HARDLOCKUP_CHECK_TIMESTAMP
+>  config HARDLOCKUP_DETECTOR
+>  	bool "Detect Hard Lockups"
+>  	depends on DEBUG_KERNEL && !S390
+
+Is there any reason why S390 could not or do not want to use the buddy
+hardlockup detector.
+
+> -	depends on HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_ARCH
+> +	depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH || HAVE_HARDLOCKUP_DETECTOR_ARCH
+>  	select LOCKUP_DETECTOR
+> -	select HARDLOCKUP_DETECTOR_PERF if HAVE_HARDLOCKUP_DETECTOR_PERF
+> +	select HARDLOCKUP_DETECTOR_NON_ARCH if HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
+
+Anyway, the configuration of the hard lockup detectors is insane and
+this patchset makes it even worse, especially the new
+HARDLOCKUP_DETECTOR_NON_ARCH stuff.
+
+It seems that sparc, powerpc and s390 are somehow special. Do you
+still have in mind how they are distinguished using the Kconfig
+variables?
+
+For example, I am pretty confused by the meaning of HAVE_NMI_WATCHDOG.
+
+And sparc has its own variant of
+watchdog_hardlockup_enable()/disable(). It means that it is
+arch-specific. Does it work with the 13th patch which made
+watchdog_hardlockup_enable()/disable() to be watchdog-hardlockup-type
+specific? Is is somehow related to HAVE_NMI_WATCHDOG?
+Does this replace the entire watchdog only only the enable part?
+
+I think that we need to make this more straightforward. But I first
+need to understand the existing maze of config variables.
+
+Best Regards,
+Petr
