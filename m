@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3068710716
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBE871071C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239319AbjEYIOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S237421AbjEYIP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235403AbjEYIOl (ORCPT
+        with ESMTP id S229527AbjEYIPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:14:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E14E1A1;
-        Thu, 25 May 2023 01:14:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79213643A2;
-        Thu, 25 May 2023 08:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C45C433EF;
-        Thu, 25 May 2023 08:14:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685002456;
-        bh=fJ0ImxHlk5vtkSx7zFqdK3Q8pgeQQrfYrqrZBkpl6x0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HzV+IGBSfB2AJXqMxyOrPVN+YDwI7XBpRFUjLfKpt3I5I8iED76YS6HRXR2Pf1Piz
-         qiBd5AD/9Ic8ehfMgDhPsqd5tt1HuZB6DPM1RU4ykZHaaH96LxquxIPP1dKE/UQ/an
-         3AzFDZ7rg2rAWOlGwB0GtzPVy3PdBLlf73AreD+gREDQ6t8Iy8bVyvXV4ednlDpWUn
-         zATJSlFd0JzSDggonWR3+DWtOQmnY4DSxl47Pjy3UW49ww14oOedKKhbG4gtTczLVI
-         eNxm0Z9Cn2qS0wo9PUeV9XAcgYq8hWnNKq+QSV7vJ/pmWR6CCe0BZQi1tuAQV8eE2e
-         doJu8VbVukaJA==
-Date:   Thu, 25 May 2023 10:14:06 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     bhelgaas@google.com, davem@davemloft.net, edumazet@google.com,
-        haiyangz@microsoft.com, jakeo@microsoft.com, kuba@kernel.org,
-        kw@linux.com, kys@microsoft.com, leon@kernel.org,
-        linux-pci@vger.kernel.org, mikelley@microsoft.com,
-        pabeni@redhat.com, robh@kernel.org, saeedm@nvidia.com,
-        wei.liu@kernel.org, longli@microsoft.com, boqun.feng@gmail.com,
-        ssengar@microsoft.com, helgaas@kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        josete@microsoft.com, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] PCI: hv: Fix a race condition bug in
- hv_pci_query_relations()
-Message-ID: <ZG8YzuK/5+8iE8He@lpieralisi>
-References: <20230420024037.5921-1-decui@microsoft.com>
- <20230420024037.5921-2-decui@microsoft.com>
+        Thu, 25 May 2023 04:15:25 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E013E195;
+        Thu, 25 May 2023 01:15:20 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P6vCna010987;
+        Thu, 25 May 2023 10:14:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=6eqB/2RVN5f/EsmFhOLILkPDHswfNdCOdRhZtrk1duU=;
+ b=K+tsvG6ECwhzWGvIrNzOwpjUqyOubAhwbi2QX4tUeFUYHRsm9Nb4JX0jBpFYvkxuBplF
+ DxOwlBlN0UZpkNadjuB2e5Q++17yRrTayHjHprSnkQdNHsgJqVZyEYQ2RKgO6/R2sNIy
+ DQ30QwWdeNvSW560OuPSk2VffPS7Cj/z2qEAuJou5eO5yRxVxMSjzbygIvlHhBMaA4yG
+ oM5PMGD85Y7sKFbwhr9kvSyCjaJwVyLOOqFjyZfffrHFcQwbD8t7tkCDMUNFo0GtMHJv
+ Y/XK385ajzTVd8EzcoimwS7aKwflkwBwF7Ml7EdMNanRpmOjdrulTBCwUzW98+hE/6kR Jw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qt2uy8k3c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 10:14:54 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B6BE810002A;
+        Thu, 25 May 2023 10:14:53 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A5474212FDC;
+        Thu, 25 May 2023 10:14:53 +0200 (CEST)
+Received: from [10.252.18.243] (10.252.18.243) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 25 May
+ 2023 10:14:52 +0200
+Message-ID: <32fafa74-8964-c9cf-f95b-f2cd084f46c6@foss.st.com>
+Date:   Thu, 25 May 2023 10:14:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420024037.5921-2-decui@microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Subject: Re: [PATCH v3 3/3] ARM: dts: stm32: fix several DT warnings on
+ stm32mp15
+To:     Marek Vasut <marex@denx.de>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
+References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
+ <20230517143542.284029-4-raphael.gallais-pou@foss.st.com>
+ <f64de05b-8854-4345-80c2-f424968defdc@denx.de>
+ <e963370c-7018-243a-712d-62ca8463bfd8@foss.st.com>
+ <5f201903-17cb-5054-763c-f03b1066db1d@denx.de>
+Content-Language: en-US
+In-Reply-To: <5f201903-17cb-5054-763c-f03b1066db1d@denx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.252.18.243]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_04,2023-05-24_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,64 +87,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:40:32PM -0700, Dexuan Cui wrote:
-> Fix the longstanding race between hv_pci_query_relations() and
-> survey_child_resources() by flushing the workqueue before we exit from
-> hv_pci_query_relations().
 
-"Fix the longstanding race" is vague. Please describe the race
-succinctly at least to give an idea of what the problem is.
+On 5/18/23 01:33, Marek Vasut wrote:
+> On 5/17/23 19:04, Raphael Gallais-Pou wrote:
+>> Hi Marek
+>
+> Hi,
+>
+>> On 5/17/23 17:41, Marek Vasut wrote:
+>>> On 5/17/23 16:35, Raphael Gallais-Pou wrote:
+>>>
+>>> Hi,
+>>>
+>>>> diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>>> b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>>> index 0f1110e42c93..a6e2e20f12fa 100644
+>>>> --- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>>> +++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>>> @@ -457,8 +457,7 @@ &ltdc {
+>>>>        status = "okay";
+>>>>          port {
+>>>> -        ltdc_ep0_out: endpoint@0 {
+>>>> -            reg = <0>;
+>>>> +        ltdc_ep0_out: endpoint {
+>>>>                remote-endpoint = <&sii9022_in>;
+>>>>            };
+>>>>        };
+>>>
+>>> This LTDC port/endpoint stuff always scares me, because I always feel I get it
+>>> wrong.
+>>>
+>>> I believe the LTDC does have one "port" , correct.
+>>>
+>>> But I think (?) that the LTDC has two endpoints, endpoint@0 for DPI (parallel
+>>> output out of the SoC) and endpoint@1 for DSI (internal connection into the
+>>> DSI serializer) ?
+>>
+>> You are correct indeed, I rushed the patch and did not thought about this. I
+>> agree that this can be confusing, as I also take some time to think through it.
+>>
+>>>
+>>> Only one of the endpoints can be connected at a time, but there are actually
+>>> two endpoints in the LTDC port {} node, aren't there ?
+>> Yes, they are mutually exclusive.
+>>>
+>>> So the original description should be OK I think , maybe #address/#size-cells
+>>> are missing instead ?
+>>
+>> Thing is: this file is only included in two device-trees : stm32mp157c-dk1.dts
+>> and stm32mp157c-dk2.dts.
+>>
+>> Among those two files there is only one which adds a second endpoint. Thus if
+>> the fields are set higher in the hierarchy, a warning yields.
+>
+> I do not understand this one part, which warning are you trying to fix ?
+> I just ran '$ make CHECK_DTBS=1 stm32mp157a-dk1.dtb stm32mp157c-dk2.dtb' in
+> latest linux-next and there was no warning related to LTDC .
 
-> Fixes: 4daace0d8ce8 ("PCI: hv: Add paravirtual PCI front-end for Microsoft Hyper-V VMs")
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> Cc: stable@vger.kernel.org
-> ---
-> 
-> v2:
->   Removed the "debug code".
->   No change to the patch body.
->   Added Cc:stable
-> 
-> v3:
->   Added Michael's Reviewed-by.
-> 
->  drivers/pci/controller/pci-hyperv.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index f33370b756283..b82c7cde19e66 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -3308,6 +3308,19 @@ static int hv_pci_query_relations(struct hv_device *hdev)
->  	if (!ret)
->  		ret = wait_for_response(hdev, &comp);
->  
-> +	/*
-> +	 * In the case of fast device addition/removal, it's possible that
-> +	 * vmbus_sendpacket() or wait_for_response() returns -ENODEV but we
-> +	 * already got a PCI_BUS_RELATIONS* message from the host and the
-> +	 * channel callback already scheduled a work to hbus->wq, which can be
-> +	 * running survey_child_resources() -> complete(&hbus->survey_event),
-> +	 * even after hv_pci_query_relations() exits and the stack variable
-> +	 * 'comp' is no longer valid. This can cause a strange hang issue
+I'm sorry, I looked back at it and my explanations are confusing.
 
-"A strange hang" sounds like we don't understand what's happening, it
-does not feel like it is a solid understanding of the issue.
+I use Alex Torgue's tree, and I'm based on the next branch, but linux-next
+should be the same I just checked it.
 
-I would remove it - given that you already explain that comp is no
-longer valid - that is already a bug that needs fixing.
+>
+> I think if you retain the stm32mp151.dtsi &ltdc { port { #address-cells = <1>;
+> #size-cells = <0>; }; }; part, then you wouldn't be getting any warnings
+> regarding LTDC , and you wouldn't have to remove the unit-address from
+> endpoint@0 .
+>
+> btw. I do use both endpoint@0/endpoint@1 in Avenger96 DTOs, but those are not
+> submitted yet, I have to clean them up a bit more first.
+>
+>> One way to do it would be to make the endpoint@0 go down in the device-tree with
+>> its dependencies, so that both endpoints are the same level without generating
+>> noise.
+>
+> I'm afraid I really don't quite understand which warning you're referring to.
+> Can you please share that warning and ideally how to trigger it (the
+> command-line incantation) ?
 
-Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Using '$ make dtbs W=1', you can observe several of the followings:
 
-> +	 * or sometimes a page fault. Flush hbus->wq before we exit from
-> +	 * hv_pci_query_relations() to avoid the issues.
-> +	 */
-> +	flush_workqueue(hbus->wq);
-> +
->  	return ret;
->  }
->  
-> -- 
-> 2.25.1
-> 
+arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning
+(avoid_unnecessary_addr_size): /soc/display-controller@5a001000/port:
+unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning (graph_child_address):
+/soc/display-controller@5a001000/port: graph node has single child node
+'endpoint@0', #address-cells/#size-cells are not necessary
+
+This &ltdc { port { #address-cells = <1>; #size-cells = <0>; }; }; part is
+actually annoying. This is because there is several device-trees that only got
+one endpoint, and some other that includes two.
+
+For instance: stm32mp15xx-dhcor-avenger96.dtsi vs stm32mp157c-dk2.dts.
+
+I would like to remove to root part of address/size field and let only the lower
+device-trees with with multiple endpoints handle their own fields. I hope this
+explains a bit better my process.
+
+Regards,
+Raphaël Gallais-Pou
+
