@@ -2,124 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886DD7112E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E137112F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbjEYRy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S234226AbjEYR4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjEYRy2 (ORCPT
+        with ESMTP id S233274AbjEYR4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:54:28 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C1097;
-        Thu, 25 May 2023 10:54:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-973bf581759so128328366b.0;
-        Thu, 25 May 2023 10:54:27 -0700 (PDT)
+        Thu, 25 May 2023 13:56:17 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E40BB6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:56:15 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2536e522b5cso8086a91.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:56:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685037265; x=1687629265;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y/20VApzN3sPBkZnwvcb54AXnS2bInta1+wgq5QOgNk=;
-        b=oPFaXJfLPwtyQ8WQccrT5LJWteQExDZlck7hQ8gV3hf2nc9G+/0BySXr22HsKUzmF4
-         9Di1OwPIY/19Mt7BETii5qHDnhYu1XOXOJPbC2lfFDbA/Kb6eb+4+wj3441d0t+M60sL
-         FCu78LPWypiTBBgyBI6eETM9558mdswP1U05UdIVYZpaUvOPHogvaF/ujUJ0RomnP1rD
-         9Jxo2LgGIaNZUEYKC8zm1r/hFCyuIjcZH9FZAIQjVbfiqsraqUk7BLkFVj0oa9QhargJ
-         0hMwvvVqh+q/OxQ9UcqL2Fj15UXlyi4Id2PyCkUlnckEtrGymRbvEW7SryyWCskwxECZ
-         BV8Q==
+        d=google.com; s=20221208; t=1685037375; x=1687629375;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XbZfqBItcXzKLk1nfsDlp5Oogh2CcWLWMFdBRAuDk8A=;
+        b=1Fu2PdpCfqH0lSpeQe9fNQSos+bXML3EY2SUDzAa3hOINxqpZBiwx+MKgAXVqSW3Mf
+         MW7fpm4nqWSK2vXx3qvWinUTBWg7a9vccLx5zjdoUU4QTqUpXQq0Cx8SEyyWG85HYd/y
+         5kl7Y7yefIzp6JZhL1XHcqCn/84W0wDSnSG7xOdPYS6bKI1jZQBfUCkWFKeCtb5Kmdr4
+         8HY43RvH5ZpeqfR3AFXcThEpJ516hVdsT60gZ/C+0wXpjuO0XBywIqv8zs6gikrGO+VE
+         VATFnSylOGmFtIWVBMuC8HB7mydZsgzQ0yFx5WAscXShL+wBFMj8nK1l28M7hlQG4HXl
+         e99w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685037265; x=1687629265;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y/20VApzN3sPBkZnwvcb54AXnS2bInta1+wgq5QOgNk=;
-        b=AzwCHLVTBJ0cP5CdBQS9lD68dHczoqnjNMXBeo67HVHtY2Up4FwdWlk6kNgRVgScwL
-         J+bz14RgohYErHYCLKEUeq6lWhnweA+BI8Vq2Er8kQumdVq7Y/qm4I3XqwAuvkd1fDRw
-         bsjeDJcDS/HoYze92yO3mcgUAWzI3gM9lmX9qrm5C/bCznZjTvbJQL0j774Z6OQfiGKj
-         oxIJvvTlLKdfYQ1Ij3NPOOeSMY+YAp/LDyjEHbPM2ERc9T7glPyrnCbDtMBu4zFxztya
-         UhDaANhF512iNX1hSwwEaJW1v7MEbIF+kvT0wXH4JP+1h/dQhHvOnb6tYqGVummvjtTe
-         foIg==
-X-Gm-Message-State: AC+VfDxugOH0IkRyZpyT47I80lj9S9dxljr8J2Lxw7P4HFI5FhCKvPWe
-        DR1ibhJlykhSwBcWkp3SoO5/liryaWH9ksxsSAk=
-X-Google-Smtp-Source: ACHHUZ4uYZNxBOT8583zqUCp1HxGXJcJEeFPbQbqIP0VbykWDy05PjW7yuUdg18pAwUBZmZYzK9+WAFtxN3EqV1tdgk=
-X-Received: by 2002:a17:907:36c9:b0:953:517a:8f1a with SMTP id
- bj9-20020a17090736c900b00953517a8f1amr2030819ejc.58.1685037265452; Thu, 25
- May 2023 10:54:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230525000307.3202449-1-namhyung@kernel.org>
-In-Reply-To: <20230525000307.3202449-1-namhyung@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 25 May 2023 10:54:13 -0700
-Message-ID: <CAEf4BzbKtJ+xehJqzStiUEB67YbDFpydVSiLbNi2=WQt+8iDBQ@mail.gmail.com>
-Subject: Re: [PATCH] perf bpf filter: Fix a broken perf sample data naming in BPF
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685037375; x=1687629375;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XbZfqBItcXzKLk1nfsDlp5Oogh2CcWLWMFdBRAuDk8A=;
+        b=b4eQ/Y7oqg+hFySi20lCfsBl5fCO8tM9qCQClOaNEdU1XZS3hEJTHKjzwIn9vvl/ye
+         G0KoiTr4POR8u5Wd3MMg5X+AAxWTSRg/UD6CaeruTlX2JTlL2+48Ba6HmfWHP6ocxLGM
+         Pudg5w5uyTzusyTJmjOcStVWLf7FHIxZkXWodhswdS9eSSQn06eMAphF972EKTxequv3
+         NhZ8OpzkVfcVCgplIN2dVqddGnDszUB9SArtrzprTRlShTWzDyx3ceFx8rdFni754bi3
+         BXL6kW2FhXR8xDnsZOcoJq7sxt2cdM+6kMlbLCgxry4QrktDW28p7zLICf01z7Opb3Gm
+         uaQg==
+X-Gm-Message-State: AC+VfDzFFMEBznH21QqVbdi1x1ZVeNmhlpaIJfvhsCH0VyBZZHOFxWtd
+        sbWJNWTA2uvRw3lreMXD8o9vBJEWrgg=
+X-Google-Smtp-Source: ACHHUZ4JHey+mOcsGiVcMsGqCzw8ThMYj8C/n07M15B/TbYvFT//nOZBrO0Oqn5wlK0fWMOwcq0sWS2EXSo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:fc4:b0:24d:fb1d:106d with SMTP id
+ gd4-20020a17090b0fc400b0024dfb1d106dmr537997pjb.2.1685037374878; Thu, 25 May
+ 2023 10:56:14 -0700 (PDT)
+Date:   Thu, 25 May 2023 10:56:13 -0700
+In-Reply-To: <20230420104622.12504-5-ljrcore@126.com>
+Mime-Version: 1.0
+References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-5-ljrcore@126.com>
+Message-ID: <ZG+hPaVxYcBq8S5o@google.com>
+Subject: Re: [PATCH v2 4/7] KVM: x86/pmu: Add documentation for fixed ctr on
+ PMU filter
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 5:03=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> BPF CO-RE requires 3 underscores for the ignored suffix rule but it
-> mistakenly used only 2.  Let's fix it.
->
-> Fixes: 3a8b8fc31748 ("perf bpf filter: Support pre-5.16 kernels where 'me=
-m_hops' isn't in 'union perf_mem_data_src'")
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On Thu, Apr 20, 2023, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> Update the documentation for the KVM_SET_PMU_EVENT_FILTER ioctl
+> to include a detailed description of how fixed performance events
+> are handled in the pmu filter. The action and fixed_counter_bitmap
+> members of the pmu filter to determine whether fixed performance
+> events can be programmed by the guest. This information is helpful
+> for correctly configuring the fixed_counter_bitmap and action fields
+> to filter fixed performance events.
+> 
+> Suggested-by: Like Xu <likexu@tencent.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304150850.rx4UDDsB-lkp@intel.com
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
 > ---
->  tools/perf/util/bpf_skel/sample_filter.bpf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
 
-Seems like that's the only remaining case. LGTM.
+Please post this separately from the selftests changes.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index a69e91088d76..b5836767e0e7 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5122,6 +5122,27 @@ Valid values for 'action'::
+>    #define KVM_PMU_EVENT_ALLOW 0
+>    #define KVM_PMU_EVENT_DENY 1
+>  
+> +Via this API, KVM userspace can also control the behavior of the VM's fixed
+> +counters (if any) by configuring the "action" and "fixed_counter_bitmap" fields.
+> +
+> +Specifically, KVM follows the following pseudo-code when determining whether to
+> +allow the guest FixCtr[i] to count its pre-defined fixed event::
+> +
+> +  FixCtr[i]_is_allowed = (action == ALLOW) && (bitmap & BIT(i)) ||
+> +    (action == DENY) && !(bitmap & BIT(i));
+> +  FixCtr[i]_is_denied = !FixCtr[i]_is_allowed;
+> +
+> +Note once this API interface is called, the default zero value of the field
 
-> diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/ut=
-il/bpf_skel/sample_filter.bpf.c
-> index cffe493af1ed..fb94f5280626 100644
-> --- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-> +++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-> @@ -25,7 +25,7 @@ struct perf_sample_data___new {
->  } __attribute__((preserve_access_index));
+No, there is no "default" value.  Userspace provides the exact value.  The KVM
+*selftest* clears fixed_counter_bitmap in all cases, but there is no default
+anywhere.
+
+> +"fixed_counter_bitmap" will implicitly affect all fixed counters, even if it's
+
+There is no implicit behavior, userspace very explicitly provides fixed_counter_bitmap.
+
+> +expected to be used only to control the events on generic counters.
+
+I would rather phrase this as:
+
+---
+KVM always consumes fixed_counter_bitmap, it's userspace's responsibility to
+ensure fixed_counter_bitmap is set correctly, e.g. if userspace wants to define
+a filter that only affects general purpose counters.
+---
+
+> +In addition, pre-defined performance events on the fixed counters already have
+> +event_select and unit_mask values defined, which means userspace can also
+> +control fixed counters by configuring "action"+ "events" fields.
 >
->  /* new kernel perf_mem_data_src definition */
-> -union perf_mem_data_src__new {
-> +union perf_mem_data_src___new {
->         __u64 val;
->         struct {
->                 __u64   mem_op:5,       /* type of opcode */
-> @@ -108,7 +108,7 @@ static inline __u64 perf_get_sample(struct bpf_perf_e=
-vent_data_kern *kctx,
->                 if (entry->part =3D=3D 7)
->                         return kctx->data->data_src.mem_blk;
->                 if (entry->part =3D=3D 8) {
-> -                       union perf_mem_data_src__new *data =3D (void *)&k=
-ctx->data->data_src;
-> +                       union perf_mem_data_src___new *data =3D (void *)&=
-kctx->data->data_src;
->
->                         if (bpf_core_field_exists(data->mem_hops))
->                                 return data->mem_hops;
-> --
-> 2.41.0.rc0.172.g3f132b7071-goog
->
->
+> +When there is a contradiction between these two polices, the fixed performance
+> +counter will only follow the rule of the pseudo-code above.
+
+This is unnecessary vague.  I think what you're saying is, with a slight reword
+of the first paragraph too:
+
+---
+Note, the "events" field also applies to fixed counters' hardcoded event_select
+and unit_mask values.  "fixed_counter_bitmap" has higher priority than "events"
+if there is a contradiction between the two.
+---
