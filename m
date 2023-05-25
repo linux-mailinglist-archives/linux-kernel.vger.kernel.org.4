@@ -2,126 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077B3711017
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E9E71101D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241846AbjEYPxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
+        id S241856AbjEYPys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241833AbjEYPwq (ORCPT
+        with ESMTP id S241831AbjEYPyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:52:46 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3C6195
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:52:37 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5341737d7aeso1566902a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:52:37 -0700 (PDT)
+        Thu, 25 May 2023 11:54:45 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23C3E6C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:54:17 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-559c416b024so9786317b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685029957; x=1687621957;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7rVaUtme+EMgdLDqkT+0xJV+Z1WpGr8J4+UhWtVcjr8=;
-        b=IvUB2IKXdPVzS5BHfvNthVBhxLC614xiN9wuIVEsKpqc1sdU2CVUrIYrj3r6tqujTX
-         F3CVgK0ZbMwTucYdyQPx3X/ff411RAhSLG/vO/b+hJpLobzQSlBLoLuslMCn/hv91N3i
-         AaJE9RtBh/wqPaSk7mLBnNqR+WhHs9sfwhB2WPeWfbQEprGfGpz6xUXwnemLMb7co5Nn
-         KMI5V0296BHn7TijqODaERxEfhtHVC/Tb3jYa2AXbWjvmZRNNAaCK7xe+fLbnWxebTCc
-         1WngHtTOP2scTVVWs19ADnOWMzOQoKkacKdlvcAEYti9dTduIBqxtvADOiHZsS+4emR/
-         zPWg==
+        d=google.com; s=20221208; t=1685030057; x=1687622057;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GDMfJuRmq9XZO6/bauwZ7gEniL7UaZKK/szKYWOECa4=;
+        b=uMzuO2hejV9q/GN2+mr53TGXW2G+ALCx8dieU7LqMmMLbcaqzK1NaU8E2yc8PK0igu
+         jFHKEAaHn6USjw1Oht6H19ZSLCERzzjA9yQ5NzU23BgBhevTKU2/RQnclcNfzmjZPRkJ
+         PH0DyeRi8go2kvRzxdXV4sVjXux8EXvzbNTkU0oiVP4oPzOnP9yTyt9YtHpCPDBAyULl
+         hsyGthIPgWmaC2JGf6OYQiQFbeOlj+CJhrllYORLxcMO6/aPCrN7sCa6MNCoaeEa42+1
+         KMpimxF8pf5qhphDP1fpMcHC5tRUAnhGFoVpjOJH9ozC20ilS6SCH7hRcwJQ84UpFvtS
+         opDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685029957; x=1687621957;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7rVaUtme+EMgdLDqkT+0xJV+Z1WpGr8J4+UhWtVcjr8=;
-        b=JQvE62K5pNwTvEwt9HPII3F5maPCwp48JNPRDGBxL61CCQwVnOS4sNpc5IB1GwiHDA
-         sQn80bC8XwQXCvR2n5PLVVHrndFdL4R9HQVG0vaZElB8UV85pWxkI6AfEb8qe/qb6h7X
-         QeC0uVfRClOU6ud+q0jl2npmUSmyTKMjmedIiU+QYJZATjDKj8ksqPuhoFyOx09il2ie
-         wTkqzherp9P9GxMT7XzgIcA4UGmFIwrQ/7558B0lw42oIl5Ky6w0+/NBimyFyvu7jh3F
-         I9GePXcZogE03sviDhp68bhiBXcXN58ei6D3ra31FmL7wuIXnHTEM6nJGybiRmbfIEwB
-         Rspg==
-X-Gm-Message-State: AC+VfDzOBOREvdDAUz4WDfRyYdbJhoVWTgB7qbxWwY+36QZEmxXNh6JP
-        5CU8EHoKzRALhADFlYO3AGw=
-X-Google-Smtp-Source: ACHHUZ5W7kiapIeT1AGeBpVKPigYmydXD2YhEImUqgogV9Ej++7d8rBHc9rIoGANlsYWGfUDQyb6OQ==
-X-Received: by 2002:a17:902:e852:b0:1a9:5aef:1aea with SMTP id t18-20020a170902e85200b001a95aef1aeamr2316030plg.66.1685029957214;
-        Thu, 25 May 2023 08:52:37 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170902c10900b001a5fccab02dsm1598335pli.177.2023.05.25.08.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:52:36 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shashank Sharma <shashank.sharma@amd.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] drm/amdgpu: Remove duplicate fdinfo fields
-Date:   Thu, 25 May 2023 08:52:25 -0700
-Message-Id: <20230525155227.560094-2-robdclark@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230525155227.560094-1-robdclark@gmail.com>
-References: <20230525155227.560094-1-robdclark@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685030057; x=1687622057;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GDMfJuRmq9XZO6/bauwZ7gEniL7UaZKK/szKYWOECa4=;
+        b=azIkPt+6H/HxCqYhjJWeM0+pU7nAQVK9Amr1+nQL2GWD1lLjFQ664L+enJrzaKfgVb
+         13FsQL3hGnFzlnnUyXZ64PuKgnD3ZDofQq9sONce0LGSbruKGCGDpaEzaHK+KYy7vEIk
+         dpbUr5QffgY4Yj8iNCGeIupYDvLf0fRy4zwE8l2qAg/SUZ6xuO4rYr0wBeMYyG3tRT0O
+         ugAPgTpmS6pHbX93/q6cMatuwU73IkFueXa/eKzEPzZJbqiEzoc2I6EfSAHBCYywuq/Z
+         HPZl4Lh6ZgpUH5h5iuU/HUP1or2xEedC9ObVb1hPOzD0O7ivR/3oNtnDX9eH5h1lCA9I
+         Y+HA==
+X-Gm-Message-State: AC+VfDxrHAJbtX2YRjN8dS8axZP0yOmx2kcb/LVjZAHferHpaB5B7Gyi
+        fiPoh8aQ7POfzD/cmlUJx2xUqMxs61Q=
+X-Google-Smtp-Source: ACHHUZ5WNd8rnwxWFJ/9rjJtw4n6PnCBnYKp2t3jItxGv4IVuMiB2nneyF+evn/DmfL4ZExcKzHQYX87Xtg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:5442:0:b0:ba8:8ab3:3806 with SMTP id
+ i63-20020a255442000000b00ba88ab33806mr2419407ybb.13.1685030056585; Thu, 25
+ May 2023 08:54:16 -0700 (PDT)
+Date:   Thu, 25 May 2023 08:54:15 -0700
+In-Reply-To: <ZG807ECX4TeBcE61@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230509134825.1523-1-yan.y.zhao@intel.com> <20230509135006.1604-1-yan.y.zhao@intel.com>
+ <ZFsr9TynkA/CyPgg@chao-email> <ZFtQeLNuXP6tDMne@yzhao56-desk.sh.intel.com>
+ <ZG1DhSdhpTkxrfCq@google.com> <ZG10zi6YtqGeik7u@yzhao56-desk.sh.intel.com>
+ <ZG4kMKXKnQuQOTa7@google.com> <ZG807ECX4TeBcE61@yzhao56-desk.sh.intel.com>
+Message-ID: <ZG+Epwp75nJ7tpXM@google.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: add a new mmu zap helper to indicate
+ memtype changes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Thu, May 25, 2023, Yan Zhao wrote:
+> On Wed, May 24, 2023 at 07:50:24AM -0700, Sean Christopherson wrote:
+> > bool __kvm_mmu_honors_guest_mtrrs(struct kvm *kvm, bool vm_has_noncoherent_dma);
+> > 
+> > static inline bool kvm_mmu_honors_guest_mtrrs(struct kvm *kvm)
+> > {
+> > 	
+> > 	return __kvm_mmu_honors_guest_mtrrs(kvm, kvm_arch_has_noncoherent_dma(kvm));
+> > }
+> 
+> This should work and it centralizes the comments into one place, though I dislike
+> having to pass true as vm_has_noncoherent_dma in case of 1->0 transition. :)
 
-Some of the fields that are handled by drm_show_fdinfo() crept back in
-when rebasing the patch.  Remove them again.
+Yeah, I don't love it either, but the whole 1=>0 transition is awkward.  FWIW,
+KVM doesn't strictly need to zap in that case since the guest isn't relying on
+WB for functionality, i.e. we could just skip it.
 
-Fixes: 376c25f8ca47 ("drm/amdgpu: Switch to fdinfo helper")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.c | 3 ---
- 1 file changed, 3 deletions(-)
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index 41d7bb51a297..ad0c43d7f532 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -13146,13 +13146,19 @@ EXPORT_SYMBOL_GPL(kvm_arch_has_assigned_device);
+> > > 
+> > >  void kvm_arch_register_noncoherent_dma(struct kvm *kvm)
+> > >  {
+> > > -       atomic_inc(&kvm->arch.noncoherent_dma_count);
+> > > +       if (atomic_inc_return(&kvm->arch.noncoherent_dma_count) == 1) {
+> > > +               if (kvm_mmu_cap_honors_guest_mtrrs(kvm))
+> > > +                       kvm_zap_gfn_range(kvm, 0, ~0ULL);
+> > 
+> > No need for multiple if statements.  Though rather than have identical code in
+> > both the start/end paths, how about this?  That provides a single location for a
+> > comment.  Or maybe first/last instead of start/end?
+> > 
+> > static void kvm_noncoherent_dma_start_or_end(struct kvm *kvm)
+> What does start_or_end or first_or_last stand for? 
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.c
-index 13d7413d4ca3..a93e5627901a 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.c
-@@ -80,23 +80,20 @@ void amdgpu_show_fdinfo(struct drm_printer *p, struct drm_file *file)
- 
- 	amdgpu_ctx_mgr_usage(&fpriv->ctx_mgr, usage);
- 
- 	/*
- 	 * ******************************************************************
- 	 * For text output format description please see drm-usage-stats.rst!
- 	 * ******************************************************************
- 	 */
- 
- 	drm_printf(p, "pasid:\t%u\n", fpriv->vm.pasid);
--	drm_printf(p, "drm-driver:\t%s\n", file->minor->dev->driver->name);
--	drm_printf(p, "drm-pdev:\t%04x:%02x:%02x.%d\n", domain, bus, dev, fn);
--	drm_printf(p, "drm-client-id:\t%Lu\n", vm->immediate.fence_context);
- 	drm_printf(p, "drm-memory-vram:\t%llu KiB\n", stats.vram/1024UL);
- 	drm_printf(p, "drm-memory-gtt: \t%llu KiB\n", stats.gtt/1024UL);
- 	drm_printf(p, "drm-memory-cpu: \t%llu KiB\n", stats.cpu/1024UL);
- 	drm_printf(p, "amd-memory-visible-vram:\t%llu KiB\n",
- 		   stats.visible_vram/1024UL);
- 	drm_printf(p, "amd-evicted-vram:\t%llu KiB\n",
- 		   stats.evicted_vram/1024UL);
- 	drm_printf(p, "amd-evicted-visible-vram:\t%llu KiB\n",
- 		   stats.evicted_visible_vram/1024UL);
- 	drm_printf(p, "amd-requested-vram:\t%llu KiB\n",
--- 
-2.40.1
-
+Start/End of device (un)assignment, or First/Last device (un)assigned.  Definitely
+feel free to pick a better name.
