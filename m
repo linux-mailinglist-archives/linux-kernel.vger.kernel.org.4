@@ -2,255 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4107D7112F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668F7711302
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239698AbjEYR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
+        id S229663AbjEYSCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjEYR7X (ORCPT
+        with ESMTP id S240014AbjEYSC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:59:23 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A1E97
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:59:22 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-62382e86f81so120876d6.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:59:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1685037561; x=1687629561;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xICDDNJzTMlV+C/EWakClHRszr/QmvJchpBapNb+gXg=;
-        b=ZtAAnBMTGJP2tWkUSP5xUaYDRcsCorb+brBvD5yulvtESeyck9fnJcZflYXGFaOG7q
-         rN/jpZWDOzstrhdML+6txc1IMJzYUmDz+m9TkT5vwAglK79Hc62v3bCWj1Gt+WltZpfF
-         fzPj0phTkncD8dyvZFVQzwbVUPeaSKn2qA+p0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685037561; x=1687629561;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xICDDNJzTMlV+C/EWakClHRszr/QmvJchpBapNb+gXg=;
-        b=UcPG207IxroidFtMr56oY/F3vacCA+UiR7fDWhOv4pnkpOY75XYz/Mikv2u/BFXbue
-         B2wJsgiaUna4rliBZ2P8Rva2GT+HSjfEYBtHAi6zK4MaegnUUMLw01U0tmR53KBnMAkB
-         RoBhiXpn+vQWa7UfoahNNcoySppgQioSYmCibs/fEO3j0Qwpc088Ia3ng4pC/0y2Ym4W
-         DEZkaAwrzhrYKcsfVmAhcWN3jaUynj2j4ALIU61g+lqiLZi+dNy57UK9ybtepnt1yyhs
-         dLX0+a+R8VkbnXBqPpqD31r9/Jq8zdPuEViszh42bxuSOMHX12Sw9zk8vUgE9DYYf96U
-         UHTA==
-X-Gm-Message-State: AC+VfDzYArL0LEPL/QhscoyoPj5UXBKsV3vRVQdX7A7bVkHgGuAotKok
-        LGvxMAL0HEZ1CXHr849CTNl85A==
-X-Google-Smtp-Source: ACHHUZ7/1WnwUtu7rRfenj0wPjQi+PDctVOTb4kqHC5JGDcy3jyqWBfFc9/AV3r8to5l29aRUSb+/g==
-X-Received: by 2002:a05:6214:4014:b0:619:152a:b9a5 with SMTP id kd20-20020a056214401400b00619152ab9a5mr2212677qvb.10.1685037561084;
-        Thu, 25 May 2023 10:59:21 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q26-20020a05620a039a00b0075c97468f57sm554049qkm.82.2023.05.25.10.59.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 10:59:20 -0700 (PDT)
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-To:     netdev@vger.kernel.org
-Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
-        Doug Berger <doug.berger@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next v2] net: phy: broadcom: Register dummy IRQ handler
-Date:   Thu, 25 May 2023 10:59:15 -0700
-Message-Id: <20230525175916.3550997-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 25 May 2023 14:02:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A35519C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:02:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 432F91042;
+        Thu, 25 May 2023 11:03:05 -0700 (PDT)
+Received: from merodach.members.linode.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 777C93F6C4;
+        Thu, 25 May 2023 11:02:17 -0700 (PDT)
+From:   James Morse <james.morse@arm.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        James Morse <james.morse@arm.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com,
+        dfustini@baylibre.com
+Subject: [PATCH v4 00/24] x86/resctrl: monitored closid+rmid together, separate arch/fs locking
+Date:   Thu, 25 May 2023 18:01:45 +0000
+Message-Id: <20230525180209.19497-1-james.morse@arm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004afe3c05fc8861de"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004afe3c05fc8861de
-Content-Transfer-Encoding: 8bit
+Hello!
 
-In order to have our interrupt descriptor fully setup and in particular
-the action, ensure that we register a full fledged interrupt handler.
-This also allow us to set the interrupt polarity and flow through the
-same call.
+Changes since v3 are to split the patches up at the end of the series a little
+more, and to make resctrl_arch_rmid_read() re-entrant which is needed before a
+nohz_full CPU can call it in process context, and then be IPI'd from another
+CPU. Otherwise changes since v3 are noted in each patch.
+~
+This series does two things, it changes resctrl to call resctrl_arch_rmid_read()
+in a way that works for MPAM, and it separates the locking so that the arch code
+and filesystem code don't have to share a mutex. I tried to split this as two
+series, but these touch similar call sites, so it would create more work.
 
-This is specifically necessary for kernel/irq/pm.c::suspend_device_irq
-to set the interrupt descriptor to the IRQD_WAKEUP_ARMED state and
-enable the interrupt for wake-up since it was still in a disabled state.
+(What's MPAM? See the cover letter of the first series. [1])
 
-Without an interrupt descriptor we would have ran into cases where the
-wake-up interrupt is not capable of waking up the system, specifically
-if we resumed the system ACPI S5 using the Ethernet PHY. In that case
-the Ethernet PHY interrupt would be pending by the time the kernel
-booted, which it would acknowledge but then we could never use it as
-a wake-up source again.
+On x86 the RMID is an independent number. MPAMs equivalent is PMG, but this
+isn't an independent number - it extends the PARTID (same as CLOSID) space
+with bits that aren't used to select the configuration. The monitors can
+then be told to match specific PMG values, allowing monitor-groups to be
+created.
 
-Fixes: 8baddaa9d4ba ("net: phy: broadcom: Add support for Wake-on-LAN")
-Suggested-by: Doug Berger <doug.berger@broadcom.com>
-Debugged-by: Doug Berger <doug.berger@broadcom.com>
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
-Changes in v2:
+But, MPAM expects the monitors to always monitor by PARTID. The
+Cache-storage-utilisation counters can only work this way.
+(In the MPAM spec not setting the MATCH_PARTID bit is made CONSTRAINED
+UNPREDICTABLE - which is Arm's term to mean portable software can't rely on
+this)
 
-- provided more details about the mechanics of wake-up interrupts arming
-- added a Debugged-by tag for Doug since he really whispered the
-  solution to my keyboard
+It gets worse, as some SoCs may have very few PMG bits. I've seen the
+datasheet for one that has a single bit of PMG space.
 
- drivers/net/phy/bcm-phy-lib.c | 6 ++++++
- drivers/net/phy/bcm-phy-lib.h | 2 ++
- drivers/net/phy/broadcom.c    | 9 ++++++++-
- 3 files changed, 16 insertions(+), 1 deletion(-)
+To be usable, MPAM's counters always need the PARTID and the PMG.
+For resctrl, this means always making the CLOSID available when the RMID
+is used.
 
-diff --git a/drivers/net/phy/bcm-phy-lib.c b/drivers/net/phy/bcm-phy-lib.c
-index 27c57f6ab211..5603d0a9ce96 100644
---- a/drivers/net/phy/bcm-phy-lib.c
-+++ b/drivers/net/phy/bcm-phy-lib.c
-@@ -1028,6 +1028,12 @@ void bcm_phy_get_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
- }
- EXPORT_SYMBOL_GPL(bcm_phy_get_wol);
- 
-+irqreturn_t bcm_phy_wol_isr(int irq, void *dev_id)
-+{
-+	return IRQ_HANDLED;
-+}
-+EXPORT_SYMBOL_GPL(bcm_phy_wol_isr);
-+
- MODULE_DESCRIPTION("Broadcom PHY Library");
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Broadcom Corporation");
-diff --git a/drivers/net/phy/bcm-phy-lib.h b/drivers/net/phy/bcm-phy-lib.h
-index c6fed43ec913..2f30ce0cab0e 100644
---- a/drivers/net/phy/bcm-phy-lib.h
-+++ b/drivers/net/phy/bcm-phy-lib.h
-@@ -8,6 +8,7 @@
- 
- #include <linux/brcmphy.h>
- #include <linux/phy.h>
-+#include <linux/interrupt.h>
- 
- struct ethtool_wolinfo;
- 
-@@ -115,5 +116,6 @@ static inline void bcm_ptp_stop(struct bcm_ptp_private *priv)
- 
- int bcm_phy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol);
- void bcm_phy_get_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol);
-+irqreturn_t bcm_phy_wol_isr(int irq, void *dev_id);
- 
- #endif /* _LINUX_BCM_PHY_LIB_H */
-diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
-index 418e6bc0e998..822c8b01dc53 100644
---- a/drivers/net/phy/broadcom.c
-+++ b/drivers/net/phy/broadcom.c
-@@ -927,7 +927,14 @@ static int bcm54xx_phy_probe(struct phy_device *phydev)
- 
- 	if (!IS_ERR(wakeup_gpio)) {
- 		priv->wake_irq = gpiod_to_irq(wakeup_gpio);
--		ret = irq_set_irq_type(priv->wake_irq, IRQ_TYPE_LEVEL_LOW);
-+
-+		/* Dummy interrupt handler which is not enabled but is provided
-+		 * in order for the interrupt descriptor to be fully set-up.
-+		 */
-+		ret = devm_request_irq(&phydev->mdio.dev, priv->wake_irq,
-+				       bcm_phy_wol_isr,
-+				       IRQF_TRIGGER_LOW | IRQF_NO_AUTOEN,
-+				       dev_name(&phydev->mdio.dev), phydev);
- 		if (ret)
- 			return ret;
- 	}
+To ensure RMID are always unique, this series combines the CLOSID and RMID
+into an index, and manages RMID based on that. For x86, the index and RMID
+would always be the same.
+
+
+Currently the architecture specific code in the cpuhp callbacks takes the
+rdtgroup_mutex. This means the filesystem code would have to export this
+lock, resulting in an ill-defined interface between the two, and the possibility
+of cross-architecture lock-ordering head aches.
+
+The second part of this series adds a domain_list_lock to protect writes to the
+domain list, and protects the domain list with RCU - or read_cpus_lock().
+
+Use of RCU is to allow lockless readers of the domain list, today resctrl only has
+one, rdt_bit_usage_show(). But to get MPAMs monitors working, its very likely
+they'll need to be plumbed up to perf. The uncore PMU driver would be a second
+lockless reader of the domain list.
+
+This series is based on v6.4-rc1, and can be retrieved from:
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/monitors_and_locking/v4
+
+Bugs welcome,
+
+
+Thanks,
+
+James
+
+
+[1] https://lore.kernel.org/lkml/20210728170637.25610-1-james.morse@arm.com/
+[v1] https://lore.kernel.org/all/20221021131204.5581-1-james.morse@arm.com/
+[v2] https://lore.kernel.org/lkml/20230113175459.14825-1-james.morse@arm.com/
+[v3] https://lore.kernel.org/r/20230320172620.18254-1-james.morse@arm.com 
+
+James Morse (24):
+  x86/resctrl: Track the closid with the rmid
+  x86/resctrl: Access per-rmid structures by index
+  x86/resctrl: Create helper for RMID allocation and mondata dir
+    creation
+  x86/resctrl: Move rmid allocation out of mkdir_rdt_prepare()
+  x86/resctrl: Allow RMID allocation to be scoped by CLOSID
+  x86/resctrl: Track the number of dirty RMID a CLOSID has
+  x86/resctrl: Use set_bit()/clear_bit() instead of open coding
+  x86/resctrl: Allocate the cleanest CLOSID by searching
+    closid_num_dirty_rmid
+  x86/resctrl: Move CLOSID/RMID matching and setting to use helpers
+  tick/nohz: Move tick_nohz_full_mask declaration outside the #ifdef
+  x86/resctrl: Add cpumask_any_housekeeping() for limbo/overflow
+  x86/resctrl: Make resctrl_arch_rmid_read() retry when it is
+    interrupted
+  x86/resctrl: Queue mon_event_read() instead of sending an IPI
+  x86/resctrl: Allow resctrl_arch_rmid_read() to sleep
+  x86/resctrl: Allow arch to allocate memory needed in
+    resctrl_arch_rmid_read()
+  x86/resctrl: Make resctrl_mounted checks explicit
+  x86/resctrl: Move alloc/mon static keys into helpers
+  x86/resctrl: Make rdt_enable_key the arch's decision to switch
+  x86/resctrl: Add helpers for system wide mon/alloc capable
+  x86/resctrl: Add cpu online callback for resctrl work
+  x86/resctrl: Allow overflow/limbo handlers to be scheduled on any-but
+    cpu
+  x86/resctrl: Add cpu offline callback for resctrl work
+  x86/resctrl: Move domain helper migration into resctrl_offline_cpu()
+  x86/resctrl: Separate arch and fs resctrl locks
+
+ arch/x86/include/asm/resctrl.h            |  90 +++++
+ arch/x86/kernel/cpu/resctrl/core.c        |  78 ++--
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c |  45 ++-
+ arch/x86/kernel/cpu/resctrl/internal.h    |  81 ++++-
+ arch/x86/kernel/cpu/resctrl/monitor.c     | 414 ++++++++++++++++------
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c |  15 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 335 ++++++++++++-----
+ include/linux/resctrl.h                   |  42 ++-
+ include/linux/tick.h                      |   9 +-
+ 9 files changed, 846 insertions(+), 263 deletions(-)
+
 -- 
-2.34.1
+2.39.2
 
-
---0000000000004afe3c05fc8861de
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIi35FbTGMSROxIx
-ou08smRwPZZ4sAicqgQFMxg4hUTKMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDUyNTE3NTkyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCEOY7xgxquOju2+/UJxS/fQJWh/7Wi32y3
-awBk5abRUtcL9UvdVkVG4PJbxqQmzNMxYv/t5hU///OEriL7Oi0v64LwaJTPUZfpu3JsFIhIlwdu
-06hM4MRCZGTEFNq0qEXckzqkfOnYA9sFf3G6wpZixo8hRhnVD4Nlz76B/nnkcI1fQx9R02dyg1VR
-WGwjsRtY82lpYVXcVewyKkf4H+Qs1hRFmd+SehUnTFIGG2lkB/VXzqDaa6sW9DkB+kz1ZFuZsepe
-KG4zmqy12tTosmm+ZZ7OA4l8C+5brTw1Jb/1YYy0HpBcP2G8rBurn6QYIW2t5dw435DX2dtzljp5
-263q
---0000000000004afe3c05fc8861de--
