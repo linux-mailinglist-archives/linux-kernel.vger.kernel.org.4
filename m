@@ -2,154 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D32371039E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2037103A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbjEYEDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S238426AbjEYEEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjEYEDP (ORCPT
+        with ESMTP id S238106AbjEYED7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:03:15 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183B683
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:03:13 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d341bdedcso1283592b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1684987392; x=1687579392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gNj2e5Vi2WIkbEKvTOMKfGlxOu0bnyuA1VYYGOrr0Yo=;
-        b=C1d4liKZ6puRJ9AH2oIPiS+SjvAzvsi3FfHBafsUWZksEXzfcpaeZOiYFlSc+3EW4C
-         taHtMK6aihD0auG7B6m7TjdFHvOIVce7NXLlxnXdz9fQrfaChbk6HMazh/LuToWoah8i
-         8OxUImfnhXnQpCFMTYpyIYOA8cJyGzXTdYqyVZ+P1fOqx+7rVFVWXNF9PJy25pyri55f
-         /KxbDXv8WalhMh27Pdc/v5vpjpfMnLVSvuoynurGKjBOmLlxUvPI78yq+8Lk9HKKkU/7
-         yxUjqWtn1CURH1hJ7nzteV3fY8iW0g2wbbryr0KergvkyF1lo+smv1sjR+oMkRkgZPOY
-         YYtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684987392; x=1687579392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gNj2e5Vi2WIkbEKvTOMKfGlxOu0bnyuA1VYYGOrr0Yo=;
-        b=hG0b0mTF5oUbvtRPfrikLopEHJU4Cm5ougdvrsimCLblv7xo2RCVA6lms4pfqhkvru
-         PaAV8LuGyKIda8gDc8FnIXU8Pm5pPyq6GOoT7cxNJBJt7rza0O9CRDLmoE25uG0Pv1+I
-         M0wGcN7j1diGwV9mrC9XfzYc3bN0kiQ3DCBydQFNkGU+OFRqb2tT58IeQ2gV6sGIDpLU
-         QqA7Egp/vyVEHrcVjDgJ7MQ/LDIQoXTM3MHI6mFYNoz5visTXkyJEowvRnueLTPKSNc6
-         BjzK0ZVXjQ5dqBpEKLcg1OvO3QB658kb4HATjLZuQgJoUiNdZrd6igVLjXH4dT+3iOGy
-         hE3A==
-X-Gm-Message-State: AC+VfDwKh5U9csAr6DvAsE953McywmCaHOiw/a8upP5/GBKX6vGF+DjB
-        hnxTVeOFgSgck6a4AJ+gMYwHFg==
-X-Google-Smtp-Source: ACHHUZ46LHkUfFKGLmC9bs93CWNBwcjgxU+AsZIPWLPp2Gx/kJ5+kN6V2e3c83ee06SiuTOfIrHARg==
-X-Received: by 2002:aa7:888f:0:b0:648:ebb2:3d6 with SMTP id z15-20020aa7888f000000b00648ebb203d6mr6505780pfe.26.1684987392528;
-        Wed, 24 May 2023 21:03:12 -0700 (PDT)
-Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id i11-20020aa7908b000000b0064c56d04316sm189916pfa.193.2023.05.24.21.03.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 21:03:12 -0700 (PDT)
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-To:     akpm@linux-foundation.org
-Cc:     mhocko@suse.com, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH 3/3] mm/mm_init.c: do not calculate zone_start_pfn/zone_end_pfn in zone_absent_pages_in_node()
-Date:   Thu, 25 May 2023 04:01:50 +0000
-Message-Id: <20230525040150.1588-3-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 25 May 2023 00:03:59 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AAB1BD;
+        Wed, 24 May 2023 21:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=hTAnpCAT2Q/2ABE+7VrADwqsnFx55RsF+ONOo7NqGT0=; b=c
+        qSqnmxSidxLnq8IDBCTwt1xAjrW57C8Jk1VEXaaHYPUL24vPC9Kj/irZFLAh5WiUISOOd1q6EYVl1
+        uzy7Y5TLOgWXf+JEbUeFVi9SFi8Z7RWR4/EhzpuoK9T9dmYnh8C33hmemuKUVfTgar0QJypXL4J20
+        tQONA6/F9JJNhUEg=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:52970 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q22CK-0001dB-Ms; Thu, 25 May 2023 00:03:38 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hugo@hugovil.com,
+        linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Date:   Thu, 25 May 2023 00:03:13 -0400
+Message-Id: <20230525040324.3773741-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: [PATCH v3 00/11] serial: sc16is7xx: fix GPIO regression and rs485 improvements
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In calculate_node_totalpages(), zone_start_pfn/zone_end_pfn are
-calculated in zone_spanned_pages_in_node(), so use them as parameters
-instead of node_start_pfn/node_end_pfn and the duplicated calculation
-process can de dropped.
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
----
- mm/mm_init.c | 35 ++++++++++++-----------------------
- 1 file changed, 12 insertions(+), 23 deletions(-)
+Hello,
+this patch series mainly fixes a GPIO regression and improve RS485 flags and properties
+detection from DT.
 
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 898af4eb9ce2..88c4a9266e2a 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -1166,23 +1166,11 @@ unsigned long __init absent_pages_in_range(unsigned long start_pfn,
- /* Return the number of page frames in holes in a zone on a node */
- static unsigned long __init zone_absent_pages_in_node(int nid,
- 					unsigned long zone_type,
--					unsigned long node_start_pfn,
--					unsigned long node_end_pfn)
-+					unsigned long zone_start_pfn,
-+					unsigned long zone_end_pfn)
- {
--	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
--	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
--	unsigned long zone_start_pfn, zone_end_pfn;
- 	unsigned long nr_absent;
- 
--	if (!node_start_pfn && !node_end_pfn)
--		return 0;
--
--	zone_start_pfn = clamp(node_start_pfn, zone_low, zone_high);
--	zone_end_pfn = clamp(node_end_pfn, zone_low, zone_high);
--
--	adjust_zone_range_for_zone_movable(nid, zone_type,
--			node_start_pfn, node_end_pfn,
--			&zone_start_pfn, &zone_end_pfn);
- 	nr_absent = __absent_pages_in_range(nid, zone_start_pfn, zone_end_pfn);
- 
- 	/*
-@@ -1254,6 +1242,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
- 						unsigned long node_end_pfn)
- {
- 	unsigned long realtotalpages = 0, totalpages = 0;
-+	int nid = pgdat->node_id;
- 	enum zone_type i;
- 
- 	for (i = 0; i < MAX_NR_ZONES; i++) {
-@@ -1262,15 +1251,15 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
- 		unsigned long spanned, absent;
- 		unsigned long real_size;
- 
--		spanned = zone_spanned_pages_in_node(pgdat->node_id, i,
--						     node_start_pfn,
--						     node_end_pfn,
--						     &zone_start_pfn,
--						     &zone_end_pfn);
-+		spanned = zone_spanned_pages_in_node(nid, i,
-+						node_start_pfn,
-+						node_end_pfn,
-+						&zone_start_pfn,
-+						&zone_end_pfn);
- 		if (spanned) {
--			absent = zone_absent_pages_in_node(pgdat->node_id, i,
--							   node_start_pfn,
--							   node_end_pfn);
-+			absent = zone_absent_pages_in_node(nid, i,
-+							zone_start_pfn,
-+							zone_end_pfn);
- 			real_size = spanned - absent;
- 			zone->zone_start_pfn = zone_start_pfn;
- 		} else {
-@@ -1289,7 +1278,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
- 
- 	pgdat->node_spanned_pages = totalpages;
- 	pgdat->node_present_pages = realtotalpages;
--	pr_debug("On node %d totalpages: %lu\n", pgdat->node_id, realtotalpages);
-+	pr_debug("On node %d totalpages: %lu\n", nid, realtotalpages);
- }
- 
- static unsigned long __init calc_memmap_size(unsigned long spanned_pages,
+It now also includes various small fixes and improvements that were previously
+sent as separate patches, but that made testing everything difficult.
+
+Patches 1 and 2 are simple comments fix/improvements.
+
+Patch 3 fixes an issue when debugging IOcontrol register. After testing the GPIO
+regression patches (patches 6 and 7, tests done by Lech Perczak), it appers that
+this patch is also necessary for having the correct IOcontrol register values.
+
+Patch 4 introduces a delay after a reset operation to respect datasheet
+timing recommandations.
+
+Patch 5 fixes an issue with init of first port during probing. This commit
+brings some questions and I appreciate if people from the serial subsystem could
+comment on my proposed solution.
+
+Patch 6 fixes a bug with the output value when first setting the GPIO direction.
+
+Patch 7, 8 and 9 fix a GPIO regression by (re)allowing to choose GPIO function for
+GPIO pins shared with modem status lines.
+
+Patch 10 allows to read common rs485 device-tree flags and properties.
+
+Patch 11 add a custom dump function as relying on regmal debugfs is not really
+practical for this driver.
+
+I have tested the changes on a custom board with two SC16IS752 DUART using a
+Variscite IMX8MN NANO SOM.
+
+Thank you.
+
+Link: [v1] https://lkml.org/lkml/2023/5/17/967
+      [v1] https://lkml.org/lkml/2023/5/17/777
+      [v1] https://lkml.org/lkml/2023/5/17/780
+      [v1] https://lkml.org/lkml/2023/5/17/785
+      [v1] https://lkml.org/lkml/2023/5/17/1311
+      [v2] https://lkml.org/lkml/2023/5/18/516
+
+Changes for V3:
+- Integrated all patches into single serie to facilitate debugging and tests.
+- Reduce number of exported GPIOs depending on new property nxp,modem-control-line-ports
+- Added additional example in DT bindings
+
+Hugo Villeneuve (11):
+  serial: sc16is7xx: fix syntax error in comments
+  serial: sc16is7xx: improve comments about variants
+  serial: sc16is7xx: mark IOCONTROL register as volatile
+  serial: sc16is7xx: add post reset delay
+  serial: sc16is7xx: fix broken port 0 uart init
+  serial: sc16is7xx: fix bug when first setting GPIO direction
+  dt-bindings: sc16is7xx: Add property to change GPIO function
+  serial: sc16is7xx: fix regression with GPIO configuration
+  serial: sc16is7xx: add I/O register translation offset
+  serial: sc16is7xx: add call to get rs485 DT flags and properties
+  serial: sc16is7xx: add dump registers function
+
+ .../bindings/serial/nxp,sc16is7xx.txt         |  46 +++++
+ drivers/tty/serial/sc16is7xx.c                | 180 +++++++++++++++---
+ 2 files changed, 199 insertions(+), 27 deletions(-)
+
+
+base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
 -- 
-2.25.1
+2.30.2
 
