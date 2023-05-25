@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA067103D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650B47103D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjEYEGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
+        id S238911AbjEYEGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238427AbjEYEEl (ORCPT
+        with ESMTP id S231764AbjEYEEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:04:41 -0400
+        Thu, 25 May 2023 00:04:51 -0400
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDE51BD;
-        Wed, 24 May 2023 21:04:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD57E62;
+        Wed, 24 May 2023 21:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
         ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JiheQ8Q8tkLBdJvTWHP7zHAZ71XGjHsp7B6ulAHNFcA=; b=U4DBiBAJsgcGOFh9IbpqBjXOUv
-        UnAAVx9ROJmWFNzrvAmmE/W9hORoX+16rWwrjZ/iZBAz7BeiY0X4YBdISLjpm6AbfzSXgzd0ysQFX
-        9bsS9sigwl4GbOEGFBIbOt0l7HfHbCelI791/m+N14c3JNM0VNGDBsvJEcugZ8N0XuAc=;
+        bh=9uFf80nuPq7IpOBCTtsrmsGYtNovsW/4uJuo42PakOo=; b=hZS8RhBGHMEWLID3br+gSAdS39
+        WNwEED5LXP+qFQrO0SMH4y60c3mBJasKvbCKoLvBfl7dcE1drHXktQSModQe0c9gXeMrMzRV8IVgR
+        XTy5IQ0QncyR5VRTIM4p2KUUwtvNMtP35sRxeB6GinMfzzB5l+wz4CcO7mFLpQV2zIwY=;
 Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:52970 helo=pettiford.lan)
         by mail.hugovil.com with esmtpa (Exim 4.92)
         (envelope-from <hugo@hugovil.com>)
-        id 1q22DH-0001dB-9Z; Thu, 25 May 2023 00:04:32 -0400
+        id 1q22DJ-0001dB-5g; Thu, 25 May 2023 00:04:34 -0400
 From:   Hugo Villeneuve <hugo@hugovil.com>
 To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -37,8 +37,8 @@ Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, hugo@hugovil.com,
         linux-gpio@vger.kernel.org,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Date:   Thu, 25 May 2023 00:03:22 -0400
-Message-Id: <20230525040324.3773741-9-hugo@hugovil.com>
+Date:   Thu, 25 May 2023 00:03:23 -0400
+Message-Id: <20230525040324.3773741-10-hugo@hugovil.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230525040324.3773741-1-hugo@hugovil.com>
 References: <20230525040324.3773741-1-hugo@hugovil.com>
@@ -53,7 +53,7 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-Subject: [PATCH v3 08/11] serial: sc16is7xx: fix regression with GPIO configuration
+Subject: [PATCH v3 09/11] serial: sc16is7xx: add I/O register translation offset
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
@@ -62,209 +62,142 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
-and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-changed the function of the GPIOs pins to act as modem control
-lines without any possibility of selecting GPIO function.
+If the shared GPIO pins on a dual port/channel variant like the
+SC16IS752 are configured as GPIOs for port A, and modem control lines
+on port A, we need to translate the Linux GPIO offset to an offset
+that is compatible with the I/O registers of the SC16IS7XX (IOState,
+IODir and IOIntEna).
 
-As a consequence, applications that depends on GPIO lines configured
-by default as GPIO pins no longer work as expected.
+Add a new variable to store that offset and set it when we detect that
+special case.
 
-Also, the change to select modem control lines function was done only
-for channel A of dual UART variants (752/762). This was not documented
-in the log message.
-
-This new patch allows to specify GPIO or modem control line function
-in the device tree, and for each of the ports (A or B).
-
-This is done by using the new device-tree property named
-"modem-control-line-ports" (property added in separate patch).
-
-We also now reduce the number of exported GPIOs according to the
-modem-status-line-port DT property.
-
-Boards that need to have GPIOS configured as modem control lines
-should add that property to their device tree. Here is a list of
-boards using the sc16is7xx driver in their device tree and that may
-need to be modified:
-    arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
-    mips/boot/dts/ingenic/cu1830-neo.dts
-    mips/boot/dts/ingenic/cu1000-neo.dts
-
-Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
-Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
 Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 ---
- drivers/tty/serial/sc16is7xx.c | 65 +++++++++++++++++++++++-----------
- 1 file changed, 44 insertions(+), 21 deletions(-)
+ drivers/tty/serial/sc16is7xx.c | 54 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 53 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index a5d8af0f6da0..97ec532a0a19 100644
+index 97ec532a0a19..c2cfd057ed9a 100644
 --- a/drivers/tty/serial/sc16is7xx.c
 +++ b/drivers/tty/serial/sc16is7xx.c
-@@ -236,7 +236,8 @@
- 
- /* IOControl register bits (Only 75x/76x) */
- #define SC16IS7XX_IOCONTROL_LATCH_BIT	(1 << 0) /* Enable input latching */
--#define SC16IS7XX_IOCONTROL_MODEM_BIT	(1 << 1) /* Enable GPIO[7:4] as modem pins */
-+#define SC16IS7XX_IOCONTROL_MODEM_A_BIT	(1 << 1) /* Enable GPIO[7:4] as modem A pins */
-+#define SC16IS7XX_IOCONTROL_MODEM_B_BIT	(1 << 2) /* Enable GPIO[3:0] as modem B pins */
- #define SC16IS7XX_IOCONTROL_SRESET_BIT	(1 << 3) /* Software Reset */
- 
- /* EFCR register bits */
-@@ -301,12 +302,12 @@
- /* Misc definitions */
- #define SC16IS7XX_FIFO_SIZE		(64)
- #define SC16IS7XX_REG_SHIFT		2
-+#define SC16IS7XX_GPIOS_PER_BANK	4
- 
- struct sc16is7xx_devtype {
- 	char	name[10];
- 	int	nr_gpio;
- 	int	nr_uart;
--	int	has_mctrl;
- };
- 
- #define SC16IS7XX_RECONF_MD		(1 << 0)
-@@ -336,6 +337,7 @@ struct sc16is7xx_port {
- 	struct clk			*clk;
+@@ -338,6 +338,7 @@ struct sc16is7xx_port {
  #ifdef CONFIG_GPIOLIB
  	struct gpio_chip		gpio;
-+	int				gpio_configured;
+ 	int				gpio_configured;
++	int				gpio_offset;
  #endif
  	unsigned char			buf[SC16IS7XX_FIFO_SIZE];
  	struct kthread_worker		kworker;
-@@ -447,35 +449,30 @@ static const struct sc16is7xx_devtype sc16is74x_devtype = {
- 	.name		= "SC16IS74X",
- 	.nr_gpio	= 0,
- 	.nr_uart	= 1,
--	.has_mctrl	= 0,
+@@ -1298,12 +1299,50 @@ static const struct uart_ops sc16is7xx_ops = {
  };
  
- static const struct sc16is7xx_devtype sc16is750_devtype = {
- 	.name		= "SC16IS750",
--	.nr_gpio	= 4,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 1,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is752_devtype = {
- 	.name		= "SC16IS752",
--	.nr_gpio	= 0,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 2,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is760_devtype = {
- 	.name		= "SC16IS760",
--	.nr_gpio	= 4,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 1,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is762_devtype = {
- 	.name		= "SC16IS762",
--	.nr_gpio	= 0,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 2,
--	.has_mctrl	= 1,
- };
- 
- static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
-@@ -1396,6 +1393,10 @@ static int sc16is7xx_probe(struct device *dev,
- 		return -ENOMEM;
- 	}
- 
-+#ifdef CONFIG_GPIOLIB
-+	s->gpio_configured = devtype->nr_gpio;
-+#endif /* CONFIG_GPIOLIB */
+ #ifdef CONFIG_GPIOLIB
 +
++/*
++ * We may need to translate the Linux GPIO offset to a SC16IS7XX offset.
++ * This is needed only for the case where a dual port variant is configured to
++ * have only port B as modem status lines.
++ *
++ * Example for SC16IS752/762 with upper bank (port A) set as GPIOs, and
++ * lower bank (port B) set as modem status lines (special case described above):
++ *
++ * Pin         GPIO pin     Linux GPIO     SC16IS7XX
++ * name        function     offset         offset
++ * --------------------------------------------------
++ * GPIO7/RIA    GPIO7          3              7
++ * GPIO6/CDA    GPIO6          2              6
++ * GPIO5/DTRA   GPIO5          1              5
++ * GPIO4/DSRA   GPIO4          0              4
++ * GPIO3/RIB    RIB           N/A            N/A
++ * GPIO2/CDB    CDB           N/A            N/A
++ * GPIO1/DTRB   DTRB          N/A            N/A
++ * GPIO0/DSRB   DSRB          N/A            N/A
++ *
++ * Example  for SC16IS750/760 with upper bank (7..4) set as modem status lines,
++ * and lower bank (3..0) as GPIOs:
++ *
++ * Pin         GPIO pin     Linux GPIO     SC16IS7XX
++ * name        function     offset         offset
++ * --------------------------------------------------
++ * GPIO7/RI     RI            N/A            N/A
++ * GPIO6/CD     CD            N/A            N/A
++ * GPIO5/DTR    DTR           N/A            N/A
++ * GPIO4/DSR    DSR           N/A            N/A
++ * GPIO3        GPIO3          3              3
++ * GPIO2        GPIO2          2              2
++ * GPIO1        GPIO1          1              1
++ * GPIO0        GPIO0          0              0
++ */
++
+ static int sc16is7xx_gpio_get(struct gpio_chip *chip, unsigned offset)
+ {
+ 	unsigned int val;
+ 	struct sc16is7xx_port *s = gpiochip_get_data(chip);
+ 	struct uart_port *port = &s->p[0].port;
+ 
++	offset += s->gpio_offset;
+ 	val = sc16is7xx_port_read(port, SC16IS7XX_IOSTATE_REG);
+ 
+ 	return !!(val & BIT(offset));
+@@ -1314,6 +1353,7 @@ static void sc16is7xx_gpio_set(struct gpio_chip *chip, unsigned offset, int val)
+ 	struct sc16is7xx_port *s = gpiochip_get_data(chip);
+ 	struct uart_port *port = &s->p[0].port;
+ 
++	offset += s->gpio_offset;
+ 	sc16is7xx_port_update(port, SC16IS7XX_IOSTATE_REG, BIT(offset),
+ 			      val ? BIT(offset) : 0);
+ }
+@@ -1324,6 +1364,7 @@ static int sc16is7xx_gpio_direction_input(struct gpio_chip *chip,
+ 	struct sc16is7xx_port *s = gpiochip_get_data(chip);
+ 	struct uart_port *port = &s->p[0].port;
+ 
++	offset += s->gpio_offset;
+ 	sc16is7xx_port_update(port, SC16IS7XX_IODIR_REG, BIT(offset), 0);
+ 
+ 	return 0;
+@@ -1336,6 +1377,8 @@ static int sc16is7xx_gpio_direction_output(struct gpio_chip *chip,
+ 	struct uart_port *port = &s->p[0].port;
+ 	u8 state = sc16is7xx_port_read(port, SC16IS7XX_IOSTATE_REG);
+ 
++	offset += s->gpio_offset;
++
+ 	if (val)
+ 		state |= BIT(offset);
+ 	else
+@@ -1395,6 +1438,7 @@ static int sc16is7xx_probe(struct device *dev,
+ 
+ #ifdef CONFIG_GPIOLIB
+ 	s->gpio_configured = devtype->nr_gpio;
++	s->gpio_offset = 0;
+ #endif /* CONFIG_GPIOLIB */
+ 
  	/* Always ask for fixed clock rate from a property. */
- 	device_property_read_u32(dev, "clock-frequency", &uartclk);
+@@ -1529,16 +1573,24 @@ static int sc16is7xx_probe(struct device *dev,
+ #endif /* CONFIG_GPIOLIB */
+ 			}
  
-@@ -1473,12 +1474,6 @@ static int sc16is7xx_probe(struct device *dev,
- 				     SC16IS7XX_EFCR_RXDISABLE_BIT |
- 				     SC16IS7XX_EFCR_TXDISABLE_BIT);
- 
--		/* Use GPIO lines as modem status registers */
--		if (devtype->has_mctrl)
--			sc16is7xx_port_write(&s->p[i].port,
--					     SC16IS7XX_IOCONTROL_REG,
--					     SC16IS7XX_IOCONTROL_MODEM_BIT);
--
- 		/* Initialize kthread work structs */
- 		kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc);
- 		kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_proc);
-@@ -1514,10 +1509,38 @@ static int sc16is7xx_probe(struct device *dev,
- 					 prop, p, u)
- 			if (u < devtype->nr_uart)
- 				s->p[u].irda_mode = true;
-+
-+		val = 0;
-+
-+		of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
-+					 prop, p, u)
-+			if (u < devtype->nr_uart) {
-+				/* Use GPIO lines as modem control lines */
-+				if (u == 0)
-+					val |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
-+				else if (u == 1)
-+					val |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
-+
+-		if (val)
++		if (val) {
 +#ifdef CONFIG_GPIOLIB
-+				if (s->gpio_configured >=
-+				    SC16IS7XX_GPIOS_PER_BANK)
-+					s->gpio_configured -=
-+						SC16IS7XX_GPIOS_PER_BANK;
++			/* Additional I/O regs offset. */
++			if (val == SC16IS7XX_IOCONTROL_MODEM_B_BIT)
++				s->gpio_offset = SC16IS7XX_GPIOS_PER_BANK;
 +#endif /* CONFIG_GPIOLIB */
-+			}
 +
-+		if (val)
-+			regmap_update_bits(
-+				s->regmap,
-+				SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIFT,
-+				SC16IS7XX_IOCONTROL_MODEM_A_BIT |
-+				SC16IS7XX_IOCONTROL_MODEM_B_BIT, val);
+ 			regmap_update_bits(
+ 				s->regmap,
+ 				SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIFT,
+ 				SC16IS7XX_IOCONTROL_MODEM_A_BIT |
+ 				SC16IS7XX_IOCONTROL_MODEM_B_BIT, val);
++		}
  	}
  
  #ifdef CONFIG_GPIOLIB
--	if (devtype->nr_gpio) {
-+	dev_dbg(dev, "GPIOs to configure: %d\n", s->gpio_configured);
-+
-+	if (s->gpio_configured) {
+ 	dev_dbg(dev, "GPIOs to configure: %d\n", s->gpio_configured);
++	dev_dbg(dev, "GPIOs offset: %d\n", s->gpio_offset);
+ 
+ 	if (s->gpio_configured) {
  		/* Setup GPIO controller */
- 		s->gpio.owner		 = THIS_MODULE;
- 		s->gpio.parent		 = dev;
-@@ -1527,7 +1550,7 @@ static int sc16is7xx_probe(struct device *dev,
- 		s->gpio.direction_output = sc16is7xx_gpio_direction_output;
- 		s->gpio.set		 = sc16is7xx_gpio_set;
- 		s->gpio.base		 = -1;
--		s->gpio.ngpio		 = devtype->nr_gpio;
-+		s->gpio.ngpio		 = s->gpio_configured;
- 		s->gpio.can_sleep	 = 1;
- 		ret = gpiochip_add_data(&s->gpio, s);
- 		if (ret)
-@@ -1555,7 +1578,7 @@ static int sc16is7xx_probe(struct device *dev,
- 		return 0;
- 
- #ifdef CONFIG_GPIOLIB
--	if (devtype->nr_gpio)
-+	if (s->gpio_configured)
- 		gpiochip_remove(&s->gpio);
- 
- out_thread:
-@@ -1581,7 +1604,7 @@ static void sc16is7xx_remove(struct device *dev)
- 	int i;
- 
- #ifdef CONFIG_GPIOLIB
--	if (s->devtype->nr_gpio)
-+	if (s->gpio_configured)
- 		gpiochip_remove(&s->gpio);
- #endif
- 
 -- 
 2.30.2
 
