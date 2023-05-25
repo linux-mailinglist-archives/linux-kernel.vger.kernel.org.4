@@ -2,174 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B75710CA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AC6710C95
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241236AbjEYM6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S241172AbjEYM5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241203AbjEYM5t (ORCPT
+        with ESMTP id S231895AbjEYM4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:57:49 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59770E4F;
-        Thu, 25 May 2023 05:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685019443; x=1716555443;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zXWmcNfVj5r4m70YB2L1aMH8putZ8+9SRme+s9zUBg0=;
-  b=MjSKShLfengFMkXzkLObgktrXQd1RK7udzH5XF6wubeO0ov82Uwe/ZG9
-   QnL9l3GmX5r89ae+m922Br9nxxsQxsodw/C++sQAIHxSbD7j/mWgNGMJ0
-   gP5aIavmIsoGslYCmcPdxRrllWybz1F+URLBuYEJu6ShQFiNWWEy/+U/A
-   dRXELbIAAL7s9jacemTtpAsiwgnn/MBkjgcx+5N+wl08fJYK6aKw7/v1v
-   qdIR4eP5pYxiSbrQK/EK5Y8qIA1v8le+qXosc40m5OWpqK4E9oipCVKUL
-   j5zUOjl7G+ftsqJtlMzey587z2g7Rra4U1WgOO90xmBP5nM6tu5vKjnNG
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="scan'208";a="215446720"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 05:57:23 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 25 May 2023 05:57:21 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Thu, 25 May 2023 05:57:17 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <sebastian.reichel@collabora.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>
-Subject: [PATCH 5/5] dt-bindings: timer: atmel,at91rm9200-st: convert to yaml
-Date:   Thu, 25 May 2023 15:56:02 +0300
-Message-ID: <20230525125602.640855-6-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230525125602.640855-1-claudiu.beznea@microchip.com>
-References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
+        Thu, 25 May 2023 08:56:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFAE183
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 05:56:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 562D564081
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:56:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAA9C4339E;
+        Thu, 25 May 2023 12:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685019409;
+        bh=i3jmjwyZnPca93skmInUGTJwx36Md+4xOabqF4P++OY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tRn4F7j1tJpKrKZOaStMoXT8YSXv13bpe0LG2jUZjUpXA7icJrWEDYyLHlnWnKFm6
+         VvB08fs/6eeFUt1hZRk7LnqJ4YlNpgjvT78EDBapulwnRMR0+wf3ubSoqVm9x5ucKM
+         eNkgfGIb0RhJAWWJJ2RsYT18Yq9nt7IC1R4ty7evr9HGjbhLISz06KtWnFse72glYY
+         a08FG2YBOq9M2I5NOHKqmW2tYlyDMtbAQEz1wic5RPcySFBN0H5VtlYIxN0nYnqguP
+         h+JYwhIlxJKQuj+7mKgYoNPobL4eQx1tVsVlUW9skxtXeRzoQ7SC0AHnu1B6UYPB4S
+         ZBL8KZi88zvvQ==
+Received: by mercury (Postfix, from userid 1000)
+        id A2D381060A3F; Thu, 25 May 2023 14:56:46 +0200 (CEST)
+Date:   Thu, 25 May 2023 14:56:46 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Osama Muhammad <osmtendev@gmail.com>
+Cc:     jinpu.wang@ionos.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] omap_ssi_port.c: Fix error checking for
+ debugfs_create_dir
+Message-ID: <20230525125646.f4rfjb2limbtuh2c@mercury.elektranox.org>
+References: <20230523172434.13477-1-osmtendev@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="thqsfdjzhqzzc6kc"
+Content-Disposition: inline
+In-Reply-To: <20230523172434.13477-1-osmtendev@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Atmel system timer to YAML.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- .../devicetree/bindings/arm/atmel-sysregs.txt |  9 ---
- .../bindings/timer/atmel,at91rm9200-st.yaml   | 66 +++++++++++++++++++
- 2 files changed, 66 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+--thqsfdjzhqzzc6kc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-index 54d3f586403e..68c0eacb01ac 100644
---- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-+++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-@@ -4,15 +4,6 @@ Chipid required properties:
- - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chipid"
- - reg : Should contain registers location and length
- 
--System Timer (ST) required properties:
--- compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
--- reg: Should contain registers location and length
--- interrupts: Should contain interrupt for the ST which is the IRQ line
--  shared across all System Controller members.
--- clocks: phandle to input clock.
--Its subnodes can be:
--- watchdog: compatible should be "atmel,at91rm9200-wdt"
--
- RAMC SDRAM/DDR Controller required properties:
- - compatible: Should be "atmel,at91rm9200-sdramc", "syscon"
- 			"atmel,at91sam9260-sdramc",
-diff --git a/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
-new file mode 100644
-index 000000000000..08ee459d9fa3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/atmel,at91rm9200-st.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Atmel System Timer (ST)
-+
-+maintainers:
-+  - Nicolas Ferre <nicolas.ferre@microchip.com>
-+  - Alexandre Belloni <alexandre.belloni@microchip.com>
-+  - Claudiu Beznea <claudiu.beznea@microchip.com>
-+
-+description:
-+  Atmel system timer integrates a period interval timer, a watchdog timer and a
-+  real-time timer.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - const: atmel,at91rm9200-st
-+          - const: syscon
-+          - const: simple-mfd
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    description:
-+      Contain interrupt for the ST which is the IRQ line shared across all
-+      system controller members.
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  watchdog:
-+    $ref: ../watchdog/atmel,at91rm9200-wdt.yaml
-+    description:
-+      Child node describing watchdog.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/at91.h>
-+
-+    st: timer@fffffd00 {
-+        compatible = "atmel,at91rm9200-st", "syscon", "simple-mfd";
-+        reg = <0xfffffd00 0x100>;
-+        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
-+        clocks = <&slow_xtal>;
-+
-+        watchdog {
-+            compatible = "atmel,at91rm9200-wdt";
-+        };
-+    };
-+
-+...
--- 
-2.34.1
+Hi,
 
+On Tue, May 23, 2023 at 10:24:34PM +0500, Osama Muhammad wrote:
+> This patch fixes the error checking in omap_ssi_port.c in
+> debugfs_create_dir. The correct way to check if an error occurred
+> is 'IS_ERR' inline function.
+>=20
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> ---
+
+This masks the error code. But the proper fix is to just ignore any
+errors as the help text for debugfs_create_dir() explains. Please send
+a new patch removing the 'if (!dir) return -ENOMEM;'. Also the
+function can be changed to be of type void afterwards.
+
+Thanks,
+
+-- Sebastian
+
+>  drivers/hsi/controllers/omap_ssi_port.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/hsi/controllers/omap_ssi_port.c b/drivers/hsi/contro=
+llers/omap_ssi_port.c
+> index b9495b720f1b..7ad41599baa5 100644
+> --- a/drivers/hsi/controllers/omap_ssi_port.c
+> +++ b/drivers/hsi/controllers/omap_ssi_port.c
+> @@ -157,12 +157,12 @@ static int ssi_debug_add_port(struct omap_ssi_port =
+*omap_port,
+>  	struct hsi_port *port =3D to_hsi_port(omap_port->dev);
+> =20
+>  	dir =3D debugfs_create_dir(dev_name(omap_port->dev), dir);
+> -	if (!dir)
+> +	if (IS_ERR(dir))
+>  		return -ENOMEM;
+>  	omap_port->dir =3D dir;
+>  	debugfs_create_file("regs", S_IRUGO, dir, port, &ssi_port_regs_fops);
+>  	dir =3D debugfs_create_dir("sst", dir);
+> -	if (!dir)
+> +	if (IS_ERR(dir))
+>  		return -ENOMEM;
+>  	debugfs_create_file_unsafe("divisor", 0644, dir, port,
+>  				   &ssi_sst_div_fops);
+> --=20
+> 2.34.1
+>=20
+
+--thqsfdjzhqzzc6kc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRvWwEACgkQ2O7X88g7
++ppt8hAAk2PTNjGFlYd6h3hSQhJ8lwjxNdtDToPXUdXukbpQw74/bSUFDGVjUEZf
+y/IzRmFtQFHYyd9ax+4FfHhFyw8Wnm9LXuVrO+ugrpNm8riqRmhC4tBEhDanyhI6
+B1opsYj+n8vt8gVphI87Nv6ZIkuYiRXzXmcm9vBxxYj9cOBqqBc3uWjZ3zmPnyMK
++CJaoJgtz4HYEGMRBSte3iQQ3LXoVItnY6NkKPRdp4W6GQs8jcJDzsqQEbM+D5cm
+/3xd1gPDZ8OfR2DFyHJCMwC0GTuFMpsjbFaxkX70h5rkIHnXfKPwr84wMMM82dQA
+D8NoeRUTMWOvKNukiqONOT9zXdMYQCJ+CczM5+YAQYV/RDLGTM0LqBJQshjuWYXn
+qCAV2FD5GcRbVXDzxUgLnEtoW9EO+eYICjks5vQLAkhHMjc1DQdCGIPipgurzFi1
+1gVjn5F0PzoqXkE9dOjnM2k3zgFXjc8bsBl7pna8zpOeYC25AICvOrBhvf3AfaSL
++1Tyy09RrPu+jo6f0EY53kJP1/nw0JwRXkKBcSYOzjCDEEWs37zZft5aFH2nCp2Q
+AiYsHTIAqat9ecTPAQRiDwB6f1ku5xLPkkj5VDRY6h5AMycn8G5xeJ9aYVUHqhPg
+k1UPP8gjhhZpuWT2EdTeZWovJYfiHIWLMcIUBhR0cRqRKpwDiQo=
+=rPGM
+-----END PGP SIGNATURE-----
+
+--thqsfdjzhqzzc6kc--
