@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB913710EB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDC2710EB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241694AbjEYOzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S241698AbjEYOzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241494AbjEYOy5 (ORCPT
+        with ESMTP id S241656AbjEYOy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:54:57 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D67E19A;
-        Thu, 25 May 2023 07:54:56 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-309553c5417so2182781f8f.2;
-        Thu, 25 May 2023 07:54:55 -0700 (PDT)
+        Thu, 25 May 2023 10:54:58 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF9E191;
+        Thu, 25 May 2023 07:54:57 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30957dd7640so1529671f8f.3;
+        Thu, 25 May 2023 07:54:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685026494; x=1687618494;
+        d=gmail.com; s=20221208; t=1685026495; x=1687618495;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MgugxQZ+bMvGGxcEF4OyoNgsowC99irm6wJEB6lkhic=;
-        b=jwrCSAKy7iZ9UPxpT/b8WHG4OXncdijOovtoR+94BKAZHN8hcwBZfnmvWeyC1bq10X
-         eMsavHmidOJozl7XbGDg480/ueANtV+5WVCJt7sX+ZIIVJsEeqvu7k318JypjUSGRfyi
-         63gmG6Sc1QmoByGFZ7vv8lPOEFU6nvx/0NvJO9HeLd1gfZZCldEPBIKtFdLVW8dbqoy8
-         TjBOfnewvFV322koPdoIwRCw4tB6RySI/cUKPLV3uOi9bNsI64Ax8viC1NLz9EVcGSEk
-         o1AfhZzUzL/jU8jUXH1w+QQbMiYKz1N05QafNGy1HEFQzJkmlynlXobDYNwt7XOfF953
-         fsyA==
+        bh=v7RZChTfO9Ux9viKPzKi7S1xLwMfKhuE6t9va88Kj50=;
+        b=H34FDSVCIspH1Do577D6zCt7FtKHMAv2UsgzeDJKAdeZAyyNF9t1/NLIf8QQOgyKVP
+         b1dOlR5RxVdICgHMYXHy20Xbr9goCUK5hdHKZvZhu5n1AJuzV4HzAKtUoinCUX9cWTWE
+         jdCm9hcEmurRBxgQSQszcXvsB3iYn0K7H5ZETBFz5Dp6MMW++g5YdrJ0216qY7eRa+ik
+         RvoX3gmcz8RBSMgb/PsKOWKW5iprEtIEwZJo/epYDS1P0U4ManTd4iwQYc2NfUg4Uzl5
+         yMijsKe+1xHlb7UyIYD/1ovq9zqgd/BYz9aHem7adqs5jNB1Jd+sCQOWlCKugQho9XcS
+         Dyzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685026494; x=1687618494;
+        d=1e100.net; s=20221208; t=1685026495; x=1687618495;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MgugxQZ+bMvGGxcEF4OyoNgsowC99irm6wJEB6lkhic=;
-        b=L9uiy+FFaBUWOOYWNCu+LxIBPELVx7wQxegJ9ktv7a6shBwBQP25tXH1NA0+zZM151
-         Pdw8I7X2FvNdfpnvsN5c5eFLq5IFHwsfeNF7TX2nH8r1BsdfRaEL3ZlwTGhgu7Z/Aq20
-         u5+eG4MGbIPRmjh7vGomXgax9V6/kP23LposalQbM744cfL/7BbKKsE7BfhnezGB8fTo
-         nIKlDs+K6AW1R2krWwGb1XDB0cnDuAOWKmylVl+T/fshSedEpqSx4viLUJ/xHaiKtA9b
-         WyAUmqRljISXBbrSg7NGpVrH0HT7hSNcUOLtBGkLJshs5RPseBOgTTz+NuKwxvUse+Z6
-         1mbg==
-X-Gm-Message-State: AC+VfDxNGEzttim01VAVQFVlX8Ml5aGF6fFyueAE2vvzSdA4XkMnBJLk
-        Jjduu1RB24Q6KWDdR6zWM50=
-X-Google-Smtp-Source: ACHHUZ6S1LeC8p+a6GWwe9ZYi5apUgvlxyfjWWX+Ppr6VGCV7UW60L4rPYI+7OGs8FOV2CLUJTgfCA==
-X-Received: by 2002:adf:f2ca:0:b0:306:36b5:8ada with SMTP id d10-20020adff2ca000000b0030636b58adamr2761281wrp.29.1685026494299;
-        Thu, 25 May 2023 07:54:54 -0700 (PDT)
+        bh=v7RZChTfO9Ux9viKPzKi7S1xLwMfKhuE6t9va88Kj50=;
+        b=J7ghjT6G7UqrACyy6mTk2+/0FeNRpgnfmXHkSVaS6ygFfFsemq/MFPRk5iYHsrdQYM
+         +Im3tEHFSYPJosM0dxEqgCgcbRYb+WxCCcw5X3F3bL5gpcvWJ4bMm8fAzJFYAE8SNfpV
+         DsUqkYRisYTkM92N+1+eryZa8x7nm/g7EhJtrvNcp4fyJVTDrMdh0KM3UcIZ+cvdMbmw
+         1EDS8cMKTt2dgQBg/iUhiSNdKRgY45bMyBEKhCsH5hLKta7dLEQPbddEYBSvmpKVPxPI
+         Yy8rLe6jP8tpyL+jLuXkG6y+qKGwManIWdk4JeOfk2szKWcQSzzzR+M7ad0Oj2MxtdfO
+         i5Bw==
+X-Gm-Message-State: AC+VfDyM0FVeBX4z07TZW7sVF2yrbvPdB21ZsRU3fiV8F8ALpILA5wTS
+        ynRwJucCyvzmjjZgGWDiVSU=
+X-Google-Smtp-Source: ACHHUZ6SWRun1ObfcRGxN6jIRjnc3y61W8wJm7tifqFEKq1XQAGGqenFcqMzMjD4FHiXWhs54gboMg==
+X-Received: by 2002:adf:f1c7:0:b0:306:2c39:5d52 with SMTP id z7-20020adff1c7000000b003062c395d52mr2560573wro.57.1685026495381;
+        Thu, 25 May 2023 07:54:55 -0700 (PDT)
 Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id t11-20020a5d49cb000000b0030732d6e104sm2048043wrs.105.2023.05.25.07.54.53
+        by smtp.googlemail.com with ESMTPSA id t11-20020a5d49cb000000b0030732d6e104sm2048043wrs.105.2023.05.25.07.54.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 07:54:53 -0700 (PDT)
+        Thu, 25 May 2023 07:54:55 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew@lunn.ch>,
@@ -62,9 +62,9 @@ To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
         linux-leds@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [net-next PATCH v2 03/13] Documentation: leds: leds-class: Document new Hardware driven LEDs APIs
-Date:   Thu, 25 May 2023 16:53:51 +0200
-Message-Id: <20230525145401.27007-4-ansuelsmth@gmail.com>
+Subject: [net-next PATCH v2 04/13] leds: trigger: netdev: refactor code setting device name
+Date:   Thu, 25 May 2023 16:53:52 +0200
+Message-Id: <20230525145401.27007-5-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525145401.27007-1-ansuelsmth@gmail.com>
 References: <20230525145401.27007-1-ansuelsmth@gmail.com>
@@ -80,112 +80,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document new Hardware driven LEDs APIs.
+From: Andrew Lunn <andrew@lunn.ch>
 
-Some LEDs can be programmed to be driven by hardware. This is not
-limited to blink but also to turn off or on autonomously.
-To support this feature, a LED needs to implement various additional
-ops and needs to declare specific support for the supported triggers.
+Move the code into a helper, ready for it to be called at
+other times. No intended behaviour change.
 
-Add documentation for each required value and API to make hw control
-possible and implementable by both LEDs and triggers.
-
+Signed-off-by: Andrew Lunn <andrew@lunn.ch>
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- Documentation/leds/leds-class.rst | 80 +++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ drivers/leds/trigger/ledtrig-netdev.c | 29 ++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/leds/leds-class.rst b/Documentation/leds/leds-class.rst
-index cd155ead8703..3d7874c18982 100644
---- a/Documentation/leds/leds-class.rst
-+++ b/Documentation/leds/leds-class.rst
-@@ -169,6 +169,86 @@ Setting the brightness to zero with brightness_set() callback function
- should completely turn off the LED and cancel the previously programmed
- hardware blinking function, if any.
+diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
+index 305eb543ba84..c93ac3bc85a6 100644
+--- a/drivers/leds/trigger/ledtrig-netdev.c
++++ b/drivers/leds/trigger/ledtrig-netdev.c
+@@ -104,15 +104,9 @@ static ssize_t device_name_show(struct device *dev,
+ 	return len;
+ }
  
-+Hardware driven LEDs
-+====================
-+
-+Some LEDs can be programmed to be driven by hardware. This is not
-+limited to blink but also to turn off or on autonomously.
-+To support this feature, a LED needs to implement various additional
-+ops and needs to declare specific support for the supported triggers.
-+
-+With hw control we refer to the LED driven by hardware.
-+
-+LED driver must define the following value to support hw control:
-+
-+    - hw_control_trigger:
-+               unique trigger name supported by the LED in hw control
-+               mode.
-+
-+LED driver must implement the following API to support hw control:
-+    - hw_control_is_supported:
-+                check if the flags passed by the supported trigger can
-+                be parsed and activate hw control on the LED.
-+
-+                Return 0 if the passed flags mask is supported and
-+                can be set with hw_control_set().
-+
-+                If the passed flags mask is not supported -EOPNOTSUPP
-+                must be returned, the LED trigger will use software
-+                fallback in this case.
-+
-+                Return a negative error in case of any other error like
-+                device not ready or timeouts.
-+
-+     - hw_control_set:
-+                activate hw control. LED driver will use the provided
-+                flags passed from the supported trigger, parse them to
-+                a set of mode and setup the LED to be driven by hardware
-+                following the requested modes.
-+
-+                Set LED_OFF via the brightness_set to deactivate hw control.
-+
-+                Return 0 on success, a negative error number on flags apply
-+                fail.
-+
-+    - hw_control_get:
-+                get active modes from a LED already in hw control, parse
-+                them and set in flags the current active flags for the
-+                supported trigger.
-+
-+                Return 0 on success, a negative error number on failing
-+                parsing the initial mode.
-+                Error from this function is NOT FATAL as the device may
-+                be in a not supported initial state by the attached LED
-+                trigger.
-+
-+    - hw_control_get_device:
-+                return the device associated with the LED driver in
-+                hw control. A trigger might use this to match the
-+                returned device from this function with a configured
-+                device for the trigger as the source for blinking
-+                events and correctly enable hw control.
-+                (example a netdev trigger configured to blink for a
-+                particular dev match the returned dev from get_device
-+                to set hw control)
-+
-+                Return a device or NULL if nothing is currently attached.
-+
-+LED driver can activate additional modes by default to workaround the
-+impossibility of supporting each different mode on the supported trigger.
-+Example are hardcoding the blink speed to a set interval, enable special
-+feature like bypassing blink if some requirements are not met.
-+
-+A trigger should first check if the hw control API are supported by the LED
-+driver and check if the trigger is supported to verify if hw control is possible,
-+use hw_control_is_supported to check if the flags are supported and only at
-+the end use hw_control_set to activate hw control.
-+
-+A trigger can use hw_control_get to check if a LED is already in hw control
-+and init their flags.
-+
-+When the LED is in hw control, no software blink is possible and doing so
-+will effectively disable hw control.
+-static ssize_t device_name_store(struct device *dev,
+-				 struct device_attribute *attr, const char *buf,
+-				 size_t size)
++static int set_device_name(struct led_netdev_data *trigger_data,
++			   const char *name, size_t size)
+ {
+-	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
+-
+-	if (size >= IFNAMSIZ)
+-		return -EINVAL;
+-
+ 	cancel_delayed_work_sync(&trigger_data->work);
  
- Known Issues
- ============
+ 	mutex_lock(&trigger_data->lock);
+@@ -122,7 +116,7 @@ static ssize_t device_name_store(struct device *dev,
+ 		trigger_data->net_dev = NULL;
+ 	}
+ 
+-	memcpy(trigger_data->device_name, buf, size);
++	memcpy(trigger_data->device_name, name, size);
+ 	trigger_data->device_name[size] = 0;
+ 	if (size > 0 && trigger_data->device_name[size - 1] == '\n')
+ 		trigger_data->device_name[size - 1] = 0;
+@@ -140,6 +134,23 @@ static ssize_t device_name_store(struct device *dev,
+ 	set_baseline_state(trigger_data);
+ 	mutex_unlock(&trigger_data->lock);
+ 
++	return 0;
++}
++
++static ssize_t device_name_store(struct device *dev,
++				 struct device_attribute *attr, const char *buf,
++				 size_t size)
++{
++	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
++	int ret;
++
++	if (size >= IFNAMSIZ)
++		return -EINVAL;
++
++	ret = set_device_name(trigger_data, buf, size);
++
++	if (ret < 0)
++		return ret;
+ 	return size;
+ }
+ 
 -- 
 2.39.2
 
