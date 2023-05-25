@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627EF71068E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DF6710656
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239973AbjEYHik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S231199AbjEYHfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236131AbjEYHiR (ORCPT
+        with ESMTP id S229836AbjEYHfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:38:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8883710C4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:36:51 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q25We-0004vQ-Pz; Thu, 25 May 2023 09:36:44 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q25Wc-002fnD-G8; Thu, 25 May 2023 09:36:42 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q25Wb-007mL8-T6; Thu, 25 May 2023 09:36:41 +0200
-Date:   Thu, 25 May 2023 09:36:41 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Aurelien Jarno <aurelien@aurel32.net>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, soc@kernel.org,
-        William Zhang <william.zhang@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: broadcom: Enable device-tree overlay
- support for RPi devices
-Message-ID: <20230525073641.macyt5h6uiylbytb@pengutronix.de>
-References: <20220410225940.135744-1-aurelien@aurel32.net>
- <20220410225940.135744-2-aurelien@aurel32.net>
+        Thu, 25 May 2023 03:35:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644AE189;
+        Thu, 25 May 2023 00:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685000109; x=1716536109;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jLH4kQk6zi0cVy2k1sUXs4W9z4mmK4Cl2bsLik9SWEQ=;
+  b=HipcddXa7Jt81SyYQ8jLSo5vDuWBZonYE1RqYCs9Eqfwt11G1Ugg1Hap
+   WFdcBwD6E1dyUFfaHnqrr+Fe7ODaEPDtaVzTdfs1JZeciOFb1qwn4Q3Ph
+   pXP60uMhtv0xVdRQujbJKM3oSA5oNLnwX1+o8xNvv2e+0uQ59L19af4+H
+   3qpj+464UbTEu9CQeTGH1Yt4RtgyfRwxrsSU+ar/a2kIL+rV35+RB70KR
+   KKGjItzfAm8ExkbILlqsyWty2q+iffmrDOGFVglz9pH2MQpJl/RoAIRY3
+   +Q9Y9ILgIqpePhclHfOOYijsS8poRs8teKJyW/7IBiz1g5DAnXh61hnSZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="417280815"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="417280815"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 00:32:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="769774564"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="769774564"
+Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 00:32:32 -0700
+From:   Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
+        maz@kernel.org, oliver.upton@linux.dev, seanjc@google.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: [PATCH v2 00/11] RISCV: Add KVM_GET_REG_LIST API
+Date:   Thu, 25 May 2023 15:38:24 +0800
+Message-Id: <cover.1684999824.git.haibo1.xu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s2mw4zp2wclyjf5b"
-Content-Disposition: inline
-In-Reply-To: <20220410225940.135744-2-aurelien@aurel32.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+KVM_GET_REG_LIST will dump all register IDs that are available to
+KVM_GET/SET_ONE_REG and It's very useful to identify some platform
+regression issue during VM migration.
 
---s2mw4zp2wclyjf5b
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
+of the code as common test framework that can be shared by riscv.
 
-Hello,
+Patch 8 enabled the KVM_GET_REG_LIST API in riscv and patch 9-11 added
+the corresponding kselftest for checking possible register regressions.
 
-[expanded Cc: to include William Zhang and Florian Fainelli]
+The get-reg-list kvm selftest was ported from aarch64 and tested with
+Linux 6.4-rc1 on a Qemu riscv virt machine.
 
-On Mon, Apr 11, 2022 at 12:59:39AM +0200, Aurelien Jarno wrote:
-> Add the '-@' DTC option for the Raspberry Pi devices. This option
-> populates the '__symbols__' node that contains all the necessary symbols
-> for supporting device-tree overlays (for instance from the firmware or
-> the bootloader) on these devices.
->=20
-> The Rasbperry Pi devices are well known for their GPIO header, that
-> allow various "HATs" or other modules do be connected and this enables
-> users to create out-of-tree device-tree overlays for these modules.
->=20
-> Please note that this change does increase the size of the resulting DTB
-> by ~40%. For example, with v5.17 increase in size is as follows:
->=20
->   bcm2711-rpi-400.dtb       26481 -> 36830 bytes
->   bcm2711-rpi-4-b.dtb       26537 -> 36886 bytes
->   bcm2711-rpi-cm4-io.dtb    26426 -> 36945 bytes
->   bcm2837-rpi-3-a-plus.dtb  14133 -> 19740 bytes
->   bcm2837-rpi-3-b.dtb       14310 -> 20006 bytes
->   bcm2837-rpi-3-b-plus.dtb  14670 -> 20474 bytes
->   bcm2837-rpi-cm3-io3.dtb   13680 -> 19266 bytes
->=20
-> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> ---
->  arch/arm64/boot/dts/broadcom/Makefile | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/=
-broadcom/Makefile
-> index 5082fcd1fea5..0aa8ee2afdd5 100644
-> --- a/arch/arm64/boot/dts/broadcom/Makefile
-> +++ b/arch/arm64/boot/dts/broadcom/Makefile
-> @@ -1,4 +1,15 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +
-> +# Enables support for device-tree overlays
-> +DTC_FLAGS_bcm2711-rpi-400 :=3D -@
-> +DTC_FLAGS_bcm2711-rpi-4-b :=3D -@
-> +DTC_FLAGS_bcm2711-rpi-cm4-io :=3D -@
-> +DTC_FLAGS_bcm2837-rpi-3-a-plus :=3D -@
-> +DTC_FLAGS_bcm2837-rpi-3-b :=3D -@
-> +DTC_FLAGS_bcm2837-rpi-3-b-plus :=3D -@
-> +DTC_FLAGS_bcm2837-rpi-cm3-io3 :=3D -@
-> +DTC_FLAGS_bcm2837-rpi-zero-2-w :=3D -@
+---
+Changed since v1:
+  * rebase to Andrew's changes
+  * fix coding style
 
-Instead of setting these all explicitly a single
+Andrew Jones (7):
+  KVM: arm64: selftests: Replace str_with_index with strdup_printf
+  KVM: arm64: selftests: Drop SVE cap check in print_reg
+  KVM: arm64: selftests: Remove print_reg's dependency on vcpu_config
+  KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
+  KVM: arm64: selftests: Delete core_reg_fixup
+  KVM: arm64: selftests: Split get-reg-list test code
+  KVM: arm64: selftests: Finish generalizing get-reg-list
 
-DTC_FLAGS :=3D -@
+Haibo Xu (4):
+  KVM: riscv: Add KVM_GET_REG_LIST API support
+  KVM: riscv: selftests: Make check_supported arch specific
+  KVM: riscv: selftests: Skip some registers set operation
+  KVM: riscv: selftests: Add get-reg-list test
 
-would work, too, without changing how the dts in subdirs are compiled.
-IMHO this would be suiteable for arch/arm64/boot/dts/broadcom.
+ Documentation/virt/kvm/api.rst                |   2 +-
+ arch/riscv/kvm/vcpu.c                         | 372 ++++++++++++
+ tools/testing/selftests/kvm/Makefile          |  13 +-
+ .../selftests/kvm/aarch64/get-reg-list.c      | 540 ++----------------
+ tools/testing/selftests/kvm/get-reg-list.c    | 426 ++++++++++++++
+ .../selftests/kvm/include/kvm_util_base.h     |  16 +
+ .../selftests/kvm/include/riscv/processor.h   |   3 +
+ .../testing/selftests/kvm/include/test_util.h |   2 +
+ tools/testing/selftests/kvm/lib/test_util.c   |  15 +
+ .../selftests/kvm/riscv/get-reg-list.c        | 539 +++++++++++++++++
+ 10 files changed, 1428 insertions(+), 500 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/get-reg-list.c
+ create mode 100644 tools/testing/selftests/kvm/riscv/get-reg-list.c
 
-Best regards
-Uwe
+-- 
+2.34.1
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---s2mw4zp2wclyjf5b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRvEAkACgkQj4D7WH0S
-/k6oCggAgumevLsiZb0L7EgnrAbT9p/8jCBn/6Fj3sxTeILFFAl5+fj2/DNvaOxh
-EOU4KxfAYrWB+RCnCBgF+KkNbwMUu0vSZLkR/zQrXCYxYpbCCkwcr0SnygdR9mka
-+42Br0w2kZXH/PeniQfa+8jb6YWEnjOVEyMXderruUt6X3kO+JrFfBGS5QMFJZjK
-b0S/UZZKKfaGwDpRMqEjxOPxGyqyg6Wm0VVaa7rgf/e4g3ifAq4L6H3auR+uJmBF
-NAKJ7P5FfeXIt4KYFNVGQQlC1AhrGNfDtYNs5nnDPO0rLkMY7ALCjCzhJqM8V7E5
-5YJ+ugJ4w9glR9YKMgwb8wl1GHRWIw==
-=4STT
------END PGP SIGNATURE-----
-
---s2mw4zp2wclyjf5b--
