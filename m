@@ -2,131 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837827108BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F947108BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbjEYJWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S229757AbjEYJWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239720AbjEYJWS (ORCPT
+        with ESMTP id S230054AbjEYJWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:22:18 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2101.outbound.protection.outlook.com [40.107.223.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF92197;
-        Thu, 25 May 2023 02:22:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cujpihuT8825avg5giw+vrptpUq05EYWF6if3jJ38g956kAtOUBWSwwDI/pd+sllUjbhD6nb3xsoSg+ycqjYgtZRQt1eOOUyyOWtx4priluxk04rYdHORlh8foDZoGo91Xr27WWatae5QaU1/ZVxb6XmaUpTMzTk7YzxIxI+nALovVhk7XPMf7INTa3UZVu09am/kUh/P+mfdfLAv8/o693FUw3aE7EE1iZpmZvR0XZtE/ky3HiqMpgenMjjD44Mcjhy4vdRLHq6wGh8SCl0AR+rWJjyJj+huuTybieotReb6CMjsZrSNNVtUYheLri9febFMXMvolz2ZpdPLd78gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EMfO/vu32VurDggZt36LOymkWd21xbA6UdoT+pTGNCs=;
- b=dbXhp5azDA11Gd+kOrplpiKWsFoy6qV66bm02AvAgzbAeIfipeA3NrNAbp7z+yOyzdIjC/54EQNBz0y2DzbSpVFPNzOdXMovxZ/SaxzdmCw6Np6d6T90lwwpTCYbK0gcGzT8gd5ry9xF8RwCZO6qnFy8iYg687teZ+Kbn8hlSh29p8MKB1VlnfPA3YDnZmHFDmmWIC0BX3J/6CCS2Nau99HsMrPXfKvaOxdtSAnfK1fPvIq67VntqlNobhp5WzLQLfUZPAefyEf12RHxfGiq5AszXsY3sTh8Ov82/6kR8xWBrcor/fh0HMQ450W4voxHbYPNH2lICmSipuXdXfv6CA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EMfO/vu32VurDggZt36LOymkWd21xbA6UdoT+pTGNCs=;
- b=UEVTCT8Yvgb5sqokHgql6kYv5Umg13mqenhUnOkjEbOmPnoxUE3u3+fzybb+P+tq6Hmj8J1z2PQT5ISSeE5IhuV2IkEa0UACS8p654sOd4zvk8UWjBCs/vP8fbc586gyB5eoZ+HdlrOXyzakVX1FH1t5FPR2vY9zO5SVqcebsXk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
- by PH7PR13MB5594.namprd13.prod.outlook.com (2603:10b6:510:130::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Thu, 25 May
- 2023 09:22:09 +0000
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7]) by BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7%7]) with mapi id 15.20.6411.029; Thu, 25 May 2023
- 09:22:09 +0000
-Date:   Thu, 25 May 2023 11:22:02 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Simon Kelley <simon@thekelleys.org.uk>,
-        Kalle Valo <kvalo@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-wireless@vger.kernel.org
-Subject: Re: [PATCH wireless] atmel: Fix an error handling path in
- atmel_probe()
-Message-ID: <ZG8oulcaldoFLOPl@corigine.com>
-References: <1e65f174607a83348034197fa7d603bab10ba4a9.1684569156.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e65f174607a83348034197fa7d603bab10ba4a9.1684569156.git.christophe.jaillet@wanadoo.fr>
-X-ClientProxiedBy: AM0PR03CA0074.eurprd03.prod.outlook.com
- (2603:10a6:208:69::15) To BY3PR13MB4834.namprd13.prod.outlook.com
- (2603:10b6:a03:36b::10)
+        Thu, 25 May 2023 05:22:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF6A19C;
+        Thu, 25 May 2023 02:22:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA4E64423;
+        Thu, 25 May 2023 09:22:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DED4C433EF;
+        Thu, 25 May 2023 09:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685006534;
+        bh=0hZSGcHyqzdzaOuM6U5q0Dp8CKovA8zm9JgGyYfNPhE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OjQxmGaHbV7EunIkCt3xbaGcUstmiCj813xkEHYDcM1QaFab5e6g4/onM4N6rcMPN
+         x86+wwj5mYrxcsaQ3oar5R2jPEzIa7211iBmaIwNcTzQZpGpagdXoHDEcvp3wcNtD/
+         cWfTWCoIqxIK/l8OYF/QPNIjqful4u5x7tj4Hm8J4SvpRawHnlVwvP41sFhSXyu5jh
+         O8s1N6+EuC6YFHcpK/fryL7sUr/TNkhlTlZ/K1OCZxXRoEBofD/yK7LVyXPlpzFQ+r
+         sXNKOcO3vbQLV/xah9lrnylrhi6kDAV3U8G/K2ybdqj0Mp8jbIqFYSIRyrrgHA+PR/
+         Gx1BXlpo+1mVw==
+Date:   Thu, 25 May 2023 11:22:08 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] fs: split off vfs_getdents function of getdents64
+ syscall
+Message-ID: <20230525-funkanstalt-ertasten-a43443d045c8@brauner>
+References: <ZG0slV2BhSZkRL_y@codewreck.org>
+ <ZG0qgniV1DzIbbzi@codewreck.org>
+ <20230524-monolog-punkband-4ed95d8ea852@brauner>
+ <ZG6DUfdbTHS-e5P7@codewreck.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|PH7PR13MB5594:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee1377b3-2f87-41df-a697-08db5d0183ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vYP8y0v/QKc0iulvynUnCOWOpxOHdW+M+HsIuDzFpV1WhvqOfz9l/8/4mjZdXGKKXv4BwG89ltTpQRf3gdbEiM7UcPVx+UOYVH1Lu2m5EsPQa2HOng8o++GDQT0hThIWAaCk2uJcm5Pe4x21b9rUFLV85rAOvF9MUClO2oyma0tIJvcmu1c2W4EJkoc2FuHCi0QYq22U1cO6ntlGs1Iv8OrAYNH5SjW35eUuUwlzZ3lC15Q+bd52bRizGWnfn6QRhWc5VmSa00+V1gae/YllhtBJCPAXA1uP5kWblOV9dAqsS2mFX+TBVtPEMqJ6Jqh4QyvqHtvYb9k6UT/kuJIoHBxvp8aIxXNr7GPa52enD87tTWh8RZYVGN8nsAXe6uEC9bkqM4VSr3yfgF43EWm3nYbtKEMQjGhA9cNghkR4od54UwqxYwk7UtGj41iO3pGnkIatZstAc+Mm31nnuC3q5WX1CVJR+JdBGROKfXACo6RdmQUzvyv9yH65LScizWhv+GmE+Aci/mRLkKTuqf9YnPyHkiSYtObWYx4wg69TrE5r77g4eO/yBEGGsDhunoYQSkwvw43z9zxQMfLjIB7a/b0pXcLqPG6ofrJsyies6DA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(366004)(346002)(39840400004)(451199021)(8936002)(8676002)(5660300002)(2906002)(4744005)(54906003)(66476007)(66556008)(41300700001)(66946007)(6916009)(316002)(4326008)(478600001)(186003)(44832011)(6512007)(6506007)(6666004)(6486002)(2616005)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4K26XpnLeh0uIQZcjMkKs/jPRadqNNIY+a69KWtyJ8qMs16jIuTXaG/yPGOJ?=
- =?us-ascii?Q?u9uXjz8v3DCxH9DvfRC8t35Lqnba9OJADA1MZFWWuiGMlujJ2Qd08DZ9kc5B?=
- =?us-ascii?Q?FEJWX3WsY00WxQ96TVlOT7NTKioJjqc7ByChaUbMDXIyodvTuCY0Ed90GtX5?=
- =?us-ascii?Q?L5OvnAbwZV/fUwFzM9FURAUVBR4D52YXEe5uTP7hSOsiFY+CslVm6XilRuur?=
- =?us-ascii?Q?RP3UHbvap9IryMlvJJuEmWVUXdi2Poa0nQCWJccQ5KqP1LmwYzEG1m4agf5a?=
- =?us-ascii?Q?+m9sggswv0K19V4Ohmrqi2NkNVXYqdF5Z39gruqrWibCc7W05cT+wS/NScmp?=
- =?us-ascii?Q?8w3ZsdT8cQCpYa3neQoHTJsasiO1+w3vt3dE3v4pRw40MnteDIzedVBK1uVU?=
- =?us-ascii?Q?6wil67qomZ1AvaiIQtu07LyhEEkdKI68t4/zyACIRwKTSpDBYP1BBaSDkqkv?=
- =?us-ascii?Q?oLrOGVdSMmX1rVEUzt3hrlIrzbMIJ2JvAm39qFC3XiKoNahZvZwWEcXk9RSJ?=
- =?us-ascii?Q?T2qz3wy6+J5wDXlk/j9aCNRw+8BmPvpNQie8oscdWRwqRYLhhfKDsQUVeZlE?=
- =?us-ascii?Q?qP4X+s3Za2lOMCOg2ExFEaxvRoeKu0H+5SGFw5O+bn5Kup9loUaqiv0NJWIH?=
- =?us-ascii?Q?mdR4vdYha8cX6gfJboKrb5mfIJiDGgT1GgtQf2mJ2gKvuJ0+gSeedvgi7ion?=
- =?us-ascii?Q?A+vnCXVrEswlZc9lrc1GtqQGXQyNU58Un8KxRjGuNqefoRelcFwcXw3ZKjT+?=
- =?us-ascii?Q?rS6Zy2M/IBYW4krZCYJGr9irY2U+8Nt5DH4ryyPpnoG7XmCkuWz/j7WUbmBE?=
- =?us-ascii?Q?XiDtRdXT/73QLep1AE9Mll/Zi6XWlkaygHWuaT9Jz5xCQLwQGBu+fTsQK6w8?=
- =?us-ascii?Q?M5TFKAz+Bi8IVtRHb54mLBUFpGjpPP27gFs9qL9kjmLJdDJTCHnRFtuO/QDt?=
- =?us-ascii?Q?Jts4ChcVyhQN1AyhuSqg7WP6EwzvtOHRnsra/ZHUSICQOdIc+9Urs9h1IDc+?=
- =?us-ascii?Q?fdp4QP2WypQZsSbbTQCR9gT/1H4+QfXb1QliX/MnZ3ekc7wSKdo/hlh2hRyH?=
- =?us-ascii?Q?h7fB4Oa6ugXlwNydbC0Nf/4LIlkL4bRVxQgL5Y++0ZnoOQuBy2/91XCfbvhL?=
- =?us-ascii?Q?UvYDOYY1nUyozNv3FdeGG4Pak+cvv2YZm65yDZdLeS5e6nu5LslxnF537aAZ?=
- =?us-ascii?Q?Z/j4cQTAAn2q1FTcWn0oV8jSerUgADjK23PAiXy6j+7pyeFpLzDp0beXaB3Z?=
- =?us-ascii?Q?sQ8pjhKDWPlJKoDf8NBmWlWkxH9+L/bT9/PvixzqLxjTLr4VMT6cgwXTCIIE?=
- =?us-ascii?Q?JOcPrW0SHHI2QdxA0rPaAT/+s8aw0zaPpNB+/4hX31t83yA6ZYhtNZ34Xe4s?=
- =?us-ascii?Q?AzfIe9hpReJ5xH3xEY3lvKDnHtmi5gD08NZD56zZowDuhp7yqXl4HEiyselY?=
- =?us-ascii?Q?or2ozYJU8a0H7ATWJ91likr/2fQzGW68oGVZFpSyLLl4naRJtOHOFJN50nb1?=
- =?us-ascii?Q?MS7VyHR//5LCfp3CoKlXf+r8ErD4uNXIrIeSGJkH7/V/HP10O3ZzdLu72MPK?=
- =?us-ascii?Q?B0rDdL+YJl0O2F5FNDUBN35qFWoh/VMgfjIEB9NqsA1a+YZ5pNtKJCXSefHw?=
- =?us-ascii?Q?2VkDg6E2jTMKa9bnqr/CodbzWhN1tTrl/FqzbPVjfhK0G4XLlaA6iH8Y78Uz?=
- =?us-ascii?Q?2KJMJA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee1377b3-2f87-41df-a697-08db5d0183ef
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 09:22:09.7626
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rAxK/QW22W7lb2xMLBO0VPJa8NVBBbW6oon+80kuD7YIfUscCRnwIrkaKyjCqHzpCRtfm7KirGySr3QByhrVVs7jDHMYyZXMNrxdhBtuLQE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB5594
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZG6DUfdbTHS-e5P7@codewreck.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 09:53:14AM +0200, Christophe JAILLET wrote:
-> Should atmel_config() fail, some resources need to be released as already
-> done in the remove function.
+On Thu, May 25, 2023 at 06:36:17AM +0900, Dominique Martinet wrote:
+> Christian Brauner wrote on Wed, May 24, 2023 at 03:52:45PM +0200:
+> > The main objection in [1] was to allow specifying an arbitrary offset
+> > from userspace. What [3] did was to implement a pread() variant for
+> > directories, i.e., pgetdents(). That can't work in principle/is
+> > prohibitively complex. Which is what your series avoids by not allowing
+> > any offsets to be specified.
 > 
-> While at it, remove a useless and erroneous comment. The probe is
-> atmel_probe(), not atmel_attach().
+> Yes.
 > 
-> Fixes: 15b99ac17295 ("[PATCH] pcmcia: add return value to _config() functions")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > However, there's still a problem here. Updates to f_pos happen under an
+> > approriate lock to guarantee consistency of the position between calls
+> > that move the cursor position. In the normal read-write path io_uring
+> > doesn't concern itself with f_pos as it keeps local state in
+> > kiocb->ki_pos.
+> > 
+> > But then it still does end up running into f_pos consistency problems
+> > for read-write because it does allow operating on the current f_pos if
+> > the offset if struct io_rw is set to -1.
+> > 
+> > In that case it does retrieve and update f_pos which should take
+> > f_pos_lock and a patchset for this was posted but it didn't go anywhere.
+> > It should probably hold that lock. See Jann's comments in the other
+> > thread how that currently can lead to issues.
+> 
+> Assuming that is this mail:
+> https://lore.kernel.org/io-uring/CAG48ez1O9VxSuWuLXBjke23YxUA8EhMP+6RCHo5PNQBf3B0pDQ@mail.gmail.com/
+> 
+> So, ok, I didn't realize fdget_pos() actually acted as a lock on the
+> file's f_pos_lock (apparently only if FMODE_ATMOIC_POS is set? but it
+> looks set on most if not all directories through finish_open(), that
+> looks called consistently enough)
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+It's set for any regular file and directory.
 
+> 
+> What was confusing is that default_llseek updates f_pos under the
+> inode_lock (write), and getdents also takes that lock (for read only in
+> shared implem), so I assumed getdents also was just protected by this
+> read lock, but I guess that was a bad assumption (as I kept pointing
+> out, a shared read lock isn't good enough, we definitely agree there)
+> 
+> 
+> In practice, in the non-registered file case io_uring is also calling
+> fdget, so the lock is held exactly the same as the syscall and I wasn't
+
+No, it really isn't. fdget() doesn't take f_pos_lock at all:
+
+fdget()
+-> __fdget()
+   -> __fget_light()
+      -> __fget()
+         -> __fget_files()
+            -> __fget_files_rcu()
+
+If that were true then any system call that passes an fd and uses
+fdget() would try to acquire a mutex on f_pos_lock. We'd be serializing
+every *at based system call on f_pos_lock whenever we have multiple fds
+referring to the same file trying to operate on it concurrently.
+
+We do have fdget_pos() and fdput_pos() as a special purpose fdget() for
+a select group of system calls that require this synchronization.
+
+> so far off -- but we need to figure something for the registered file
+> case.
+> openat variants don't allow working with the registered variant at all
+> on the parent fd, so as far as I'm concerned I'd be happy setting the
+> same limitation for getdents: just say it acts on fd and not files, and
+> call it a day...
+
+I don't follow. Also this is hacky so no.
+
+The reason why io_uring *at implementations don't work with fixed files
+is that the VFS interface expect regular fds. You could very well make
+this work for fixed files but why. It would mean exposing a whole new
+set of vfs helpers to io_uring and would probably involve nasty corner
+cases.
+
+Also the connection between regular and fixed files in io_uring is
+pretty much fluent. While fixed files can only remain pinned in an
+io_uring instance it requires that the caller explicitly gave up all
+references in their fdtable to that struct file by closing all fds
+referring to the same file.
+
+But there's no guarantee. For example, if another thread dups the fd or
+the caller sends the fd via SCM_RIGHTS to another process or the caller
+simply doesn't close the fd or another thread gets an fd to the same
+file from that task via pidfd_getfd before it closed it this doesn't hold.
+
+So it's very well possible to have an fd and a fixed io_uring reference
+referring to the same file. The first one can be used with the regular
+system call interface and io_uring *at requests that forbid fixed files.
+And the other one can be used for i_uring fixed file operations. Doesn't
+matter if that shouldn't be done, it's possible afaict.
+
+For regular and fixed files you also have the same problem from within
+the same io_uring instance where you can have concurrent getdent
+requests. You'd end up producing the exact same inconsistencies.
+
+> It'd also be possible to check if REQ_F_FIXED_FILE flag was set and
+> manually take the lock somehow but we don't have any primitive that
+> takes f_pos_lock from a file (the only place that takes it is fdget
+> which requires a fd), so I'd rather not add such a new exception.
+> I assume the other patch you mentioned about adding that lock was this
+> one:
+> https://lore.kernel.org/all/20220222105504.3331010-1-dylany@fb.com/T/#m3609dc8057d0bc8e41ceab643e4d630f7b91bde6
+> and it just atkes the lock, but __fdget_pos also checks for
+> FMODE_ATOMIC_OPS and file_count and I'm not sure I understand how it
+> sets (f.flags & FDPUT_POS_UNLOCK) (for fdput_pos) so I'd rather not add
+> such a code path at this point..
+> 
+> 
+> So, ok, what do you think about just forbidding registered files?
+> I can't see where that wouldn't suffice but I might be missing something
+> else.
+
+It doesn't help.
