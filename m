@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3B571039A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE36A71039B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjEYEBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S230458AbjEYECv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEYEAw (ORCPT
+        with ESMTP id S229441AbjEYECs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:00:52 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789AB18C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:00:48 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso662094a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:00:48 -0700 (PDT)
+        Thu, 25 May 2023 00:02:48 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54649135
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:02:47 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d24136685so413506b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:02:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684987248; x=1687579248;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fbPhjGSXQJp1Mv0ZtInpjnht/26Ks3SJwp4Da2PXbgI=;
-        b=PAFnqy+zovgTMggMbCtkEyMgICd3xzu80qdhmXtsZ3KCNdSp2pQ7eY5IHVAbg8160C
-         42vlSPU30SH66yRm42PTD3NQ3p1y0UJe2tz5cFi1Jwq57mvjL9azA9xmldhetdJbdb8q
-         EYREzRv3IwAbUFa/qUVD4txtrJxoZuRAvpnbv332ipFfT3OAMgnm8lZ2xu39hCJCMSp2
-         4BOo9qcnv88ZsSVj/dg7Q0tVlb2H9YHDqy1PrXeOzAB3tsqGN8yyHmhqlHCePg11CbXc
-         zzZQqHjx2PNCuL+NjQAy+DdvijiaPW66ZCK6R4GfyZTJ+5cXStEehjg4QO5nKuMO+/Z9
-         gWQQ==
+        d=shopee.com; s=shopee.com; t=1684987367; x=1687579367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANsIwyslEqWqt/AnM3EiaC6NohGcLnN3qIazUJUVzP4=;
+        b=NQJaaIdzuOmU2ZfoUS/HfLXDpN2lpDz6rxgmnio+kZPpgUMm8yFkHv0hT8FTIcZdVt
+         Ro2TjOvsYI8Sjxrlcl9/rf95KDbQVHMgA1b5mYpT8p72lDYlZA1C5tZy72BZcjaAxdWv
+         5LloYVYAxTGN2gD10YUAommoIjdIy/149C79MorSY1AtC/EmTjZy/5Hg0tgXhtqZ/Adr
+         CiNne8GdcsARkuTNHNT6MOFjZ+iM6Ydix0MCy/3hqzvExsAklMKN0t5GFNMkV3NW//HI
+         n07UXJRmrOF6W2ZNXMqSbRAxdQBg4fDRbECDjakujwM97aOUZD9iU/igqiVV9oKC9mxF
+         Ghjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684987248; x=1687579248;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fbPhjGSXQJp1Mv0ZtInpjnht/26Ks3SJwp4Da2PXbgI=;
-        b=k032lu14aqMrdYgvIaFAl5HE2LB0JcuTWe9QrZeT9rgcmmCg5y2Uwnc2wLujzXpJXE
-         BEFj02sXeu7spQoGQggWtSQ88sJFq23KEu5MtnJOcigUF+lch+IY7e3HOHyhqRR2GevU
-         hcDbuMVsP4QeqSidFMym0aGz9IVPgeaU51yrGKCKER3y/fsttQja4iCWpxrNGf2P/2lF
-         OfMEOxTtz2f2yLvJ7ww6ck4SSryl2HsGi4wgrv3c9Az4tv3nbHzXqTn3JNKYCdnxCnfh
-         ml+pkTHCcd6QfUrLXuwh8LXh/pSDx5IZ35vFo26jOS1Ow28UoKdhXBud6KTEh4diiIOo
-         D5oQ==
-X-Gm-Message-State: AC+VfDwT7O03/eqHfqHqdcwalsmqIYNAyFrxg3lMKzc5Tll/da7Wao4X
-        MzXmgFmjDWxE29WeP6Eux/M=
-X-Google-Smtp-Source: ACHHUZ6s1npl1bYCzYgOakwTY2MoDRaFk8LblQjNAAYweSSl710voBr5XeeEG9PsjCDMzsGflsvpHA==
-X-Received: by 2002:a17:902:d509:b0:1ab:7c4:eb24 with SMTP id b9-20020a170902d50900b001ab07c4eb24mr316884plg.22.1684987247726;
-        Wed, 24 May 2023 21:00:47 -0700 (PDT)
-Received: from MSCND1355B05.fareast.nevint.com ([183.242.39.186])
-        by smtp.gmail.com with ESMTPSA id y10-20020a17090322ca00b001aaf92130afsm251661plg.116.2023.05.24.21.00.44
+        d=1e100.net; s=20221208; t=1684987367; x=1687579367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ANsIwyslEqWqt/AnM3EiaC6NohGcLnN3qIazUJUVzP4=;
+        b=V3nxlHfZg+9F8m+NXlsjC0Szs6tR/e8rgBtt1KauIlgRnHPb9s73vge3AcwwUXKZcq
+         kDZnuNMH78yH/VzvrZ+rpOjOE/pBK9fwRVc9pq2MuMcYjC70xMoRmPVCB1F45w//exul
+         bEbbS0suDj28zNGeanUS0fSI6v7+a5w8pJcCEYHqJQxyCTr6ED5p4Hf57pfh09BhoVEm
+         3rdV9aZAnFgzQWaQBnbB8oYTusCRvPxIzvQXYH4FoLjDIIxzsXb5OGOBY6aD1sMhk/GD
+         JmXBrNGDIvCVaSxIRGAW9Qw6o6+kOBkkvbZpoD5zmwdvrXC8at+5+laDt+mRkfePzyRo
+         DSMw==
+X-Gm-Message-State: AC+VfDwFgKCziULzV2w/Q8bnvC51xc1ktgPSeclSu6a+wTKISLUR93qN
+        7gQ/t1BDbjo0E0D5T80aeueaIB2HVLlHgaqLdUktl63A
+X-Google-Smtp-Source: ACHHUZ4M33VfkiEYeZxyk70nhvhOVHqK3x9PsgMDApROp+V/I6KHRI3r1n/c1Qap5fKrlvpfXIq1fA==
+X-Received: by 2002:a05:6a20:748e:b0:10c:b9ed:6a3f with SMTP id p14-20020a056a20748e00b0010cb9ed6a3fmr1539402pzd.7.1684987366781;
+        Wed, 24 May 2023 21:02:46 -0700 (PDT)
+Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id i11-20020aa7908b000000b0064c56d04316sm189916pfa.193.2023.05.24.21.02.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 21:00:46 -0700 (PDT)
-From:   Zqiang <qiang.zhang1211@gmail.com>
-To:     tj@kernel.org, jiangshanlai@gmail.com, qiang.zhang1211@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] workqueue: Do not set CPU_INTENSIVE worker flags with wq_cpu_intensive_thresh_us=0
-Date:   Thu, 25 May 2023 12:00:38 +0800
-Message-Id: <20230525040038.12346-1-qiang.zhang1211@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 21:02:46 -0700 (PDT)
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+To:     akpm@linux-foundation.org
+Cc:     mhocko@suse.com, david@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
+Subject: [PATCH 1/3] mm/mm_init.c: remove comments in zone_spanned_pages_in_node() and zone_absent_pages_in_node()
+Date:   Thu, 25 May 2023 04:01:48 +0000
+Message-Id: <20230525040150.1588-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the system start with workqueue.cpu_intensive_thresh_us=0, for running
-per-cpu worker, the CPU_INTENSIVE flag will be set unconditionally in
-wq_worker_tick(), this commit therefore disable set CPU_INTENSIVE and
-directly return when workqueue.cpu_intensive_thresh_us=0.
+Since commit 03e85f9d5f1f ("mm/page_alloc: Introduce free_area_init_core_hotplug"),
+free_area_init_node() doesn't get called in hotplug path anymore, so
+remove the comments related to it.
 
-Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
+Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
 ---
+ mm/mm_init.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-[   17.359725] workqueue: process_srcu hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
-[   19.752679] workqueue: gc_worker hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
-[   19.796721] workqueue: gc_worker hogged CPU for >0us 8 times, consider switching to WQ_UNBOUND
-[   21.992637] workqueue: wait_rcu_exp_gp hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
-[   27.143632] workqueue: kfree_rcu_monitor hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
-[   27.143647] workqueue: kfree_rcu_monitor hogged CPU for >0us 8 times, consider switching to WQ_UNBOUND
-[   38.472708] workqueue: reg_todo hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
-
- kernel/workqueue.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index c4f4ca0bd2af..eaea5386859e 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1152,6 +1152,7 @@ void wq_worker_tick(struct task_struct *task)
- 	 * We probably want to make this prettier in the future.
- 	 */
- 	if ((worker->flags & WORKER_NOT_RUNNING) || READ_ONCE(worker->sleeping) ||
-+						!wq_cpu_intensive_thresh_us ||
- 	    worker->task->se.sum_exec_runtime - worker->current_at <
- 	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
- 		return;
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 7f7f9c677854..cf55bba04b23 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -1174,7 +1174,6 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
+ 	unsigned long zone_start_pfn, zone_end_pfn;
+ 	unsigned long nr_absent;
+ 
+-	/* When hotadd a new node from cpu_up(), the node should be empty */
+ 	if (!node_start_pfn && !node_end_pfn)
+ 		return 0;
+ 
+@@ -1227,7 +1226,7 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
+ {
+ 	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
+ 	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
+-	/* When hotadd a new node from cpu_up(), the node should be empty */
++
+ 	if (!node_start_pfn && !node_end_pfn)
+ 		return 0;
+ 
 -- 
-2.17.1
+2.25.1
 
