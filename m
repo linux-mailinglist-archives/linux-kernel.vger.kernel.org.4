@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5621A710DFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E78710DF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241277AbjEYOGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
+        id S241518AbjEYOG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241497AbjEYOG3 (ORCPT
+        with ESMTP id S241442AbjEYOGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:06:29 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09716E41;
-        Thu, 25 May 2023 07:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=SVC7JU89Ibvqe/MRZpOcFxuHYUrMm1k3g+sVe4L8ZBU=; b=gv2pVZjzfU8lmN8kiDmrxA2FPp
-        Hs8GB7EJ+p8Y4szzuK/Wwq75bBCn7htDFUqKAB95csz8QWQxojoyjozXu0jb7ow/pky/Xc5f0bKId
-        cJbR7oAgsXVTDTtUYlJEMkVEdWhczVA5Rvn1eKpfCeoq8bun/XH+rMEzqaKFz1DCS6OI=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48210 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q2Bb2-00084I-0S; Thu, 25 May 2023 10:05:40 -0400
-Date:   Thu, 25 May 2023 10:05:39 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        jringle@gridpoint.com, tomasz.mon@camlingroup.com,
-        l.perczak@camlintechnologies.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230525100539.b2c0720f35563150334e4bf9@hugovil.com>
-In-Reply-To: <1ae6fb11-6aa8-66e-86a-a9b5a6403f5e@linux.intel.com>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
-        <20230525040324.3773741-5-hugo@hugovil.com>
-        <1ae6fb11-6aa8-66e-86a-a9b5a6403f5e@linux.intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 25 May 2023 10:06:24 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A78AE6A;
+        Thu, 25 May 2023 07:05:59 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d3578c25bso2595210b3a.3;
+        Thu, 25 May 2023 07:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685023558; x=1687615558;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nPgjNadYh8O7MO97+r7j/d1jHMHXaP+jYO/Oxgqowkw=;
+        b=ommVYYHtLu2Vj/VFDhve63ednPa4iUIK0BRPyAFZDujd9Xt3JeLe+O3NF8Q8zlzkb3
+         aAXyFBFxNP7JQq+72gNtmddn2k/TBovdx3V+3Yz9YMyNttqh+BBSrX9Zfb+xSFw/gPcr
+         BySOJjvCUI6vMlc6mRMYWDZ+Bz5xuY2eUtxI3YpE7E65jL0TVHE+nwtzVcrukf3bLDrr
+         aYfWvmJT/hI+RvF9yWEnRe3yTezD0hZVbSYP6jgO+d8W8pYSJmwv8Pa6LscCpMrOyENV
+         GSXMHLuYp0SDMYbwBePjskTW1ktJ+ZlqbpP6qGOjnYHcjksb8MXfpQE2C4NJhDVIE7dj
+         sYqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685023558; x=1687615558;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nPgjNadYh8O7MO97+r7j/d1jHMHXaP+jYO/Oxgqowkw=;
+        b=Cmxz6pJvSUpWszFnKuVqD05YlOemhtt4zKesOjGpSN3Vg+Li9xbNIoK+DFdqVxUeW7
+         dje+mKXaQa8KerJWMx+hsd5oxdc/QxExmE1KLFRR1qzIGoafN4uolGdmUq7O3L/FEG4a
+         KjvpVQgmZkTJCedwBs5Plo5ik3qfXwnm2OUgO/m7WBunkpY3wfD4wx5LaKGGGdw8mHr9
+         H5U5Yj0iwTUVr/vUh/L9kfoVk72fJVrIK4PvMqxB9lwmbvfENcbw7xLtks69M0seOxMe
+         xaBoQ6qBtXPeCqsgP10l04ZCjkMFQdizcySGjPmFoI/a/5uMUf0+rLubrQfpdXBqnRQ8
+         cbnA==
+X-Gm-Message-State: AC+VfDwBr+vX+LS763oS6Lt6WMje1PG8T4jSJNM58012s7SWHoyXGQph
+        lE9TAGJOKwkMlFZCtAIeLGI=
+X-Google-Smtp-Source: ACHHUZ47Dl0L7k8F6DW64BTj9LkTtrQ2DbW8Gx4wNp/sPCbMg+J5frhhwcYCQPMqLQmTxkr+7BdQlQ==
+X-Received: by 2002:a05:6a00:1a0f:b0:64d:42f6:4c7b with SMTP id g15-20020a056a001a0f00b0064d42f64c7bmr8027787pfv.27.1685023557843;
+        Thu, 25 May 2023 07:05:57 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-28.three.co.id. [180.214.233.28])
+        by smtp.gmail.com with ESMTPSA id s5-20020a62e705000000b0063b7f3250e9sm1242426pfh.7.2023.05.25.07.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 07:05:57 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id BF66B1068F8; Thu, 25 May 2023 21:05:54 +0700 (WIB)
+Date:   Thu, 25 May 2023 21:05:54 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Framebuffer <linux-fbdev@vger.kernel.org>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Nouveau/NVIDIA <nouveau@lists.freedesktop.org>,
+        Linux Stable <stable@vger.kernel.org>
+Cc:     Antonino Daplas <adaplas@gmail.com>, Helge Deller <deller@gmx.de>,
+        Felix Miata <mrmazda@earthlink.net>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [Nouveau] Fwd: absent both plymouth, and video= on linu lines,
+ vtty[1-6] framebuffers produce vast raster right and bottom borders on the
+ larger resolution of two displays
+Message-ID: <ZG9rQmIs1W8IcEcY@debian.me>
+References: <e8f93560-a2f6-8e9f-031a-88d333482a31@gmail.com>
+ <585f36f8-431a-e929-0a04-ffb65f02e9df@gmail.com>
+ <d4879ff1-b9ac-0373-ceb2-beaa645fba23@leemhuis.info>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="grvaiosJJE1u57Uo"
+Content-Disposition: inline
+In-Reply-To: <d4879ff1-b9ac-0373-ceb2-beaa645fba23@leemhuis.info>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 04/11] serial: sc16is7xx: add post reset delay
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 14:05:35 +0300 (EEST)
-Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
 
-> On Thu, 25 May 2023, Hugo Villeneuve wrote:
+--grvaiosJJE1u57Uo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 25, 2023 at 01:24:42PM +0200, Thorsten Leemhuis wrote:
+> Bagas, thx again for your efforts, much appreciated. But I guess for drm
+> drivers that have a line like
 >=20
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >=20
-> > Make sure we wait at least 3us before initiating communication with
-> > the device after reset.
-> >=20
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/tty/serial/sc16is7xx.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >=20
-> > diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is=
-7xx.c
-> > index a7c4da3cfd2b..af7e66db54b4 100644
-> > --- a/drivers/tty/serial/sc16is7xx.c
-> > +++ b/drivers/tty/serial/sc16is7xx.c
-> > @@ -1428,6 +1428,12 @@ static int sc16is7xx_probe(struct device *dev,
-> >  	regmap_write(s->regmap, SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIF=
-T,
-> >  			SC16IS7XX_IOCONTROL_SRESET_BIT);
-> > =20
-> > +	/*
-> > +	 * After reset, the host must wait at least 3us before initializing a
-> > +	 * communication with the device.
-> > +	 */
-> > +	usleep_range(3, 5);
-> > +
-> >  	for (i =3D 0; i < devtype->nr_uart; ++i) {
-> >  		s->p[i].line		=3D i;
-> >  		/* Initialize port data */
+> B: https://gitlab.freedesktop.org/drm/[...]
 >=20
-> Does this fix a problem? You don't have a Fixes tag nor did you describe
-> a problem that arises if the is not there in the changelog.
+> in MAINTAINERS (which includes all the popular drm drivers) this just
+> creates a lot of confusion for everyone, as one issue will likely end up
+> being discussed in two or three places in parallel (bugzilla,
+> freedesktop, email). Better tell reporters to move their issue to the
+> freedesktop drm tracker and close the ticket in bugzilla. And don't get
+> regzbot involved, as it for now it sadly is unable to monitor the
+> freedesktop drm tracker (sooner or later I'll fix that, but for now it's
+> a blind spot :-/).
+>=20
+> Pretty sure none of the DRM developers will disagree, but if I'm wrong,
+> please holler.
 
-Not for the moment, that is why I didn't put a Fixes tag.
+OK, thanks!
 
-A potential problem that can arise is that on a much faster processor, ther=
-e is a chance that we could reach the first instruction that request a read=
-/write before the reset post-delay.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Hugo.
+--grvaiosJJE1u57Uo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZG9rQgAKCRD2uYlJVVFO
+o2q1AP0at4ur6rVluyiWwI+vlx6EPDtqu5dzAi4NoyxwtVFJuwEArRNKmZCx78ih
+F/NmfUXKN6TG2PwPATDa1cn4Qwp+9g8=
+=9SOh
+-----END PGP SIGNATURE-----
+
+--grvaiosJJE1u57Uo--
