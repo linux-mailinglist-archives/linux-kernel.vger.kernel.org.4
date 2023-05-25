@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FFA710566
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8D771056D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjEYFmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 01:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S233131AbjEYFsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 01:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEYFmI (ORCPT
+        with ESMTP id S229459AbjEYFsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 01:42:08 -0400
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD9AA9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:42:04 -0700 (PDT)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4QRcPj6mDLz4y3ZQ;
-        Thu, 25 May 2023 13:42:01 +0800 (CST)
-Received: from szxlzmapp07.zte.com.cn ([10.5.230.251])
-        by mse-fl2.zte.com.cn with SMTP id 34P5fuuu048390;
-        Thu, 25 May 2023 13:41:56 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp03[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Thu, 25 May 2023 13:41:58 +0800 (CST)
-Date:   Thu, 25 May 2023 13:41:58 +0800 (CST)
-X-Zmail-TransId: 2b05646ef526ffffffff997-8eb34
-X-Mailer: Zmail v1.0
-Message-ID: <202305251341580149313@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>, <david@redhat.com>
-Cc:     <imbrenda@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
-        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>,
-        <yang.yang29@zte.com.cn>, <jiang.xuexin@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIHYxMCAwLzVdIGtzbTogc3VwcG9ydCB0cmFja2luZyBLU00tcGxhY2VkIHplcm8tcGFnZXM=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 34P5fuuu048390
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 646EF529.001/4QRcPj6mDLz4y3ZQ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 01:48:51 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870B495;
+        Wed, 24 May 2023 22:48:49 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so3693233a12.3;
+        Wed, 24 May 2023 22:48:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684993728; x=1687585728;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B8+s/K+5RvHd3mBUPmt+K92bKir5drTiVIL22nfYEIw=;
+        b=KRrFryhheh/ZeXU1dlBJNp3XYdKdEqdTXRk17E4sPW0496eoqAizFBO4HOQhXAXqHQ
+         +I3zGLfTBICtRAOmdfvUVyCJxnDon/VHu03pIbc6+6GP4EgTh4MoKakKf05kq2dbeTkW
+         P5HV2VWSmDLRFnOqfW81XtrsfKH6x3IOylWCTQBGdwAtFGaYrU7QJWKj9h3PinX52pMR
+         bQWRGoW3tw8vBP00HUfyDudiEvaW1zY6HIM3eFL3zWxtW03/yJ6oefit/84CX2mI1HVC
+         g3XFPKkFMENozcdI4nWLwrUbJS5ZKpk/Ga31RyrCVFTXiWOvuuOx3moSWVWXv+AGzOK9
+         4iZg==
+X-Gm-Message-State: AC+VfDxWDAve2N0QUDINa0moiVAyg8UyXsVXU9r4jYooARDqQfyIXb1U
+        GGmKnRhoxxvFUuJ3zU46baU=
+X-Google-Smtp-Source: ACHHUZ78kwCROM6GPOi1V6fq6adO7uQrYlWFOtHDvlX1THAntXJfkj8+8n3Bv+8+Mx+VI4jYcFWVQg==
+X-Received: by 2002:a50:ed1a:0:b0:510:e877:33c with SMTP id j26-20020a50ed1a000000b00510e877033cmr3218941eds.30.1684993727811;
+        Wed, 24 May 2023 22:48:47 -0700 (PDT)
+Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id d6-20020a056402078600b0050d89daaa70sm189740edy.2.2023.05.24.22.48.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 22:48:47 -0700 (PDT)
+Message-ID: <75375f8d-e157-a364-3da5-9c8d5b832927@kernel.org>
+Date:   Thu, 25 May 2023 07:48:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Jacky Huang <ychuang570808@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230516075217.205401-1-ychuang570808@gmail.com>
+ <20230516075217.205401-11-ychuang570808@gmail.com>
+ <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
+ <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
+ <e312b861-a5cc-43b0-b2b0-7d66f47a3d0b@app.fastmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+In-Reply-To: <e312b861-a5cc-43b0-b2b0-7d66f47a3d0b@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On 24. 05. 23, 11:00, Arnd Bergmann wrote:
+> On Wed, May 24, 2023, at 10:34, Jacky Huang wrote:
+>> On 2023/5/24 下午 03:42, Jiri Slaby wrote:
+>>> On 16. 05. 23, 9:52, Jacky Huang wrote:
+>>>> +static void ma35d1serial_config_port(struct uart_port *port, int flags)
+>>>> +{
+>>>> +    /*
+>>>> +     * Driver core for serial ports forces a non-zero value for port
+>>>> type.
+>>>> +     * Write an arbitrary value here to accommodate the serial core
+>>>> driver,
+>>>> +     * as ID part of UAPI is redundant.
+>>>> +     */
+>>>> +    port->type = 1;
+>>>
+>>> So this 1 translates to PORT_8250. Why not to use it directly? Or
+>>> something more saner like PORT_16550A?
+>>>
+>> It's not actually 8250 or 16550A.
+>> Can we add the following definition to
+>> 'include/uapi/linux/serial_core.h' and use PORT_MA35 instead?
+>>
+>> #define PORT_MA35    124
+> 
+> This was already in a previous version, until Greg commented
+> that it was probably not needed:
+> 
+> https://lore.kernel.org/lkml/20fc81c9-5517-ce1e-639a-3b425cf27759@gmail.com/
+> 
+> Since leaving port->type at PORT_UNKNOWN doesn't work, and almost
+> all other drivers have something in serial_core.h, it's probably
+> best to do the same here. Checking the other drivers showed that
+> drivers/tty/serial/lantiq.c is currently the only exception, it
+> defines PORT_LTQ_ASC locally, which causes a conflict with
+> PORT_SPRD.
 
-The core idea of this patch set is to enable users to perceive the number
-of any pages merged by KSM, regardless of whether use_zero_page switch has
-been turned on, so that users can know how much free memory increase is
-really due to their madvise(MERGEABLE) actions. But the problem is, when
-enabling use_zero_pages, all empty pages will be merged with kernel zero
-pages instead of with each other as use_zero_pages is disabled, and then
-these zero-pages are no longer monitored by KSM.
+Hmm.
 
-The motivations to do this is seen at:
-https://lore.kernel.org/lkml/202302100915227721315@zte.com.cn/
+Anyone has an idea what this is really used for in userspace? Can we 
+replace all of them by simply some sort of "PORT_OTHER"?
 
-In one word, we hope to implement the support for KSM-placed zero pages
-tracking without affecting the feature of use_zero_pages, so that app
-developer can also benefit from knowing the actual KSM profit by getting
-KSM-placed zero pages to optimize applications eventually when
-/sys/kernel/mm/ksm/use_zero_pages is enabled.
+For example:
 
-Change log
-----------
-v9->v10:
--------
-(1) Fix a compile error due to [PATCH v8 3/5] when CONFIG_KSM is not set.
+xdg-open `echo -n 'https://codesearch.debian.net/search?q=\b('; sed -n 
+'s@#define\s\(\w\+\)\s.*@\1@ p' include/uapi/linux/serial_core.h | tail 
+-20 | sed 's@.* \(.*\)[\x09 ][\x09 ]*.*@\1@'|paste -sd'|' | tr -d '\n'; 
+echo ')\b'`
 
-(2) Rename the function 'ksm_notify_unmap_zero_page' as
-    'ksm_might_unmap_zero_page'.
+gives _no_ clue. FTR the above translates here into:
+https://codesearch.debian.net/search?q=\b(PORT_HSCIF|PORT_ASC|PORT_TILEGX|PORT_MEN_Z135|PORT_SC16IS7XX|PORT_MESON|PORT_DIGICOLOR|PORT_SPRD|PORT_CRIS|PORT_STM32|PORT_MVEBU|PORT_PIC32|PORT_MPS2UART|PORT_MTK_BTIF|PORT_RDA|PORT_MLB_USIO|PORT_SIFIVE_V0|PORT_SUNIX|PORT_LINFLEXUART|PORT_SUNPLUS)\b
 
-(3) In [PATCH 5/5], we get ksm_zero_pages from its own 'mm' instead of
-	the global system.
-
-(4) In [PATCH 5/5], we add a subject task of testing ksm zero pages when
-	unmerging by triggering write fault.
-
-v8->v9:
-------
-(1) The previous [PATCH v8 4/6] is squashed into the current [PATCH v9 2/5].
-
-(2) Improve the codes as David's suggestions.
-
-v7->v8:
--------
-(1) Since [1] which fix the bug of pte_mkdirty on sparc64 that makes pte
-    writable, then we can remove the architechture restrictions of our
-	features.
-(2) Improve the scheme of update ksm_zero_pages: add the handling case when
-    khugepaged replaces a shared zeropage by a THP. 
-
-[1] https://lore.kernel.org/all/20230411141529.428991-2-david@redhat.com/
-
-v6->v7:
--------
-This is an all-newed version which is different from v6 which relys on KSM's
-rmap_item. The patch series don't rely on rmap_item but pte_dirty, so the
-general handling of tracking KSM-placed zero-pages is simplified a lot.
-
-For safety, we restrict this feature only to the tested and known-working
-architechtures (ARM, ARM64, and X86) fow now.
-
-xu xin (5):
-  ksm: support unsharing KSM-placed zero pages
-  ksm: count all zero pages placed by KSM
-  ksm: add ksm zero pages for each process
-  ksm: consider KSM-placed zeropages when calculating KSM profit
-  selftest: add a testcase of ksm zero pages
-
- Documentation/admin-guide/mm/ksm.rst              | 25 ++++--
- fs/proc/base.c                                    |  1 +
- include/linux/ksm.h                               | 20 +++++
- include/linux/mm_types.h                          |  9 ++-
- mm/khugepaged.c                                   |  2 +
- mm/ksm.c                                          | 28 +++++--
- mm/memory.c                                       |  5 +-
- tools/testing/selftests/mm/ksm_functional_tests.c | 98 ++++++++++++++++++++++-
- 8 files changed, 172 insertions(+), 16 deletions(-)
-
+thanks,
 -- 
-2.15.2
+js
+suse labs
+
