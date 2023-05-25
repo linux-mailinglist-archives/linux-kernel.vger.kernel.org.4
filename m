@@ -2,139 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6BA711210
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4A0711214
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241110AbjEYRXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S233096AbjEYRYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241057AbjEYRWx (ORCPT
+        with ESMTP id S232848AbjEYRYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:22:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FA01B0;
-        Thu, 25 May 2023 10:22:43 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFA50X019838;
-        Thu, 25 May 2023 17:22:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=C6frukfeGXpvecIDVedYupuFh0HkkzeJimIJCDhca/0=;
- b=GBg1t2me5bUunEBbE8QuPVHF0NpbFgtp6Oz8q7F7fIOilyGO99X26n8Xg2cHe0WTgmPd
- /x377sUTdFwKBFtPTBcz4grOiUa/YLxNcGzDjZRqwTSwrATK5CkIUHTP9S/SfXmCYWpE
- jep4Q8wFRbcAze8sp8G4EOhEA6zUkqpYz15nPWyD1+a4vClBbCo463jyHS6Gsk8PU05l
- yqK9hFn7/kfD8b79qAS3t9gEFKGM7+YIOAjGUUz2d7RN1J9S8LCHS4TcZ2WOmMJRwuzW
- V+U4QrWncOsJRFhCMF6yKU3T0n8jbL2RPA4AHznTHlneHYRe73x/KVSEnpq5nMF0BGC3 kg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt8tarhxt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 17:22:39 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PHMcnd020730
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 17:22:38 GMT
-Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 25 May 2023 10:22:32 -0700
-From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-Subject: [PATCH V2 6/6] arm64: dts: qcom: sm8550: Add camera clock controller
-Date:   Thu, 25 May 2023 22:51:42 +0530
-Message-ID: <20230525172142.9039-7-quic_jkona@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230525172142.9039-1-quic_jkona@quicinc.com>
-References: <20230525172142.9039-1-quic_jkona@quicinc.com>
+        Thu, 25 May 2023 13:24:22 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CC51B6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:23:53 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-625a9e2bf6bso5995866d6.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685035432; x=1687627432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VC9d8VClaITWEwUqcZuECdjYIAHc9o2yDDJtZ/g64PQ=;
+        b=2N4wtctLmAyqgk6QelqOPqcr11aEX0XTiLh40tSKsZu79Sy4COrVl2Z8K24JocwdoW
+         dYrKrwaD8bN2bpiI4Nj8B8J4QwFK0synUuMU+eXYSC7SVFXmh6xLIxPgyRADyiXO08qx
+         XyqvzzB8Dlo3mUzMgMDiq69NcrW8vZIPXnVsTbx5a5ptd2l4gwXbTlCim583CyqVBudU
+         nhQukbeip9nqQca6/H9rHUZnTOcIB12CDWbVikX1CXeKx1z5ztrqgpo/9/JWZ/0M1u1Q
+         FbEXGOMuolY08JM1UdQRy7aokre5tRBznwdrNNHpmlM/GI3wUxk8x85j7+WvWasJ3M1f
+         BcHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685035432; x=1687627432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VC9d8VClaITWEwUqcZuECdjYIAHc9o2yDDJtZ/g64PQ=;
+        b=WLGdWnHMr3gHlARosuBTEY1KmGcBWbPpcZ5dgo+i6ZT1B4fxwmGrYTXeae2vpZXrG4
+         ZLor20vuU/VhMbCNPobYDr6jeOwFzly/1NT7Jj7zZrUdmw3MG7BCtut29AxiXN8IVfaB
+         o1Ajrx7I4iJLKUDzxeq360FeYy6H+pzooQKe9ths32XQjQG83w2MvXn8ZZQFQTrAbVtt
+         Sp+Q+PnL+2uamAtaQGZQIFPdHfQgWaXpmC9vnh/zDGmX68B6+X2mHGMn5C9yFBz1vLEx
+         1vWByEKOSfftnUIDg/f1OZeVYopPGpC8yBAQXqjOsMMU9VPmq6V4pq8GES0WJJHOaCoD
+         zupg==
+X-Gm-Message-State: AC+VfDy5Wn/1xJxFGBMT/Q9XhhgiVZXbKPW/3pRkkR4kTqOpcyfHcZ6s
+        A5U6rcgRkK1UsoBimH9DVLTZGnYeK3AQh1HDfxQJFO6KYEVNEpOaXUc=
+X-Google-Smtp-Source: ACHHUZ4qe1nrt/7Y3nnUpJTssvtLZ9Ax5aXY+A9hbBKo1yMUqtOd2FwROyCyhdET7piu/JRXMZMAooTYMsxLsncG8LQ=
+X-Received: by 2002:ad4:5bcf:0:b0:5ed:d3d:405 with SMTP id t15-20020ad45bcf000000b005ed0d3d0405mr1730001qvt.34.1685035431606;
+ Thu, 25 May 2023 10:23:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: N8v8AUjgh15_ds2NKERZrJYVqAWB_k-l
-X-Proofpoint-ORIG-GUID: N8v8AUjgh15_ds2NKERZrJYVqAWB_k-l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_10,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- adultscore=0 mlxscore=0 spamscore=0 phishscore=0 suspectscore=0
- bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305250144
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-10-masahiroy@kernel.org>
+In-Reply-To: <20230521160426.1881124-10-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 25 May 2023 10:23:40 -0700
+Message-ID: <CAKwvOdnjAM9tVe9M0+Gz4gsrHDUvjKuDdKZ_VpLiQEFk1=BnTw@mail.gmail.com>
+Subject: Re: [PATCH v6 09/20] modpost: pass struct module pointer to check_section_mismatch()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device node for camera clock controller on Qualcomm
-SM8550 platform.
+On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> The next commit will use it.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
----
-Changes since V1:
- - Padded non-zero address part to 8 hex digits
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+> ---
+>
+>  scripts/mod/modpost.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 40fac4f64fcd..378fb9649545 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1229,7 +1229,7 @@ static void default_mismatch_handler(const char *mo=
+dname, struct elf_info *elf,
+>         }
+>  }
+>
+> -static void check_section_mismatch(const char *modname, struct elf_info =
+*elf,
+> +static void check_section_mismatch(struct module *mod, struct elf_info *=
+elf,
+>                                    Elf_Sym *sym,
+>                                    unsigned int fsecndx, const char *from=
+sec,
+>                                    Elf_Addr faddr, Elf_Addr taddr)
+> @@ -1240,7 +1240,7 @@ static void check_section_mismatch(const char *modn=
+ame, struct elf_info *elf,
+>         if (!mismatch)
+>                 return;
+>
+> -       default_mismatch_handler(modname, elf, mismatch, sym,
+> +       default_mismatch_handler(mod->name, elf, mismatch, sym,
+>                                  fsecndx, fromsec, faddr,
+>                                  tosec, taddr);
+>  }
+> @@ -1358,7 +1358,7 @@ static int addend_mips_rel(struct elf_info *elf, El=
+f_Shdr *sechdr, Elf_Rela *r)
+>  #define R_LARCH_SUB32          55
+>  #endif
+>
+> -static void section_rela(const char *modname, struct elf_info *elf,
+> +static void section_rela(struct module *mod, struct elf_info *elf,
+>                          Elf_Shdr *sechdr)
+>  {
+>         Elf_Rela *rela;
+> @@ -1404,12 +1404,12 @@ static void section_rela(const char *modname, str=
+uct elf_info *elf,
+>                         break;
+>                 }
+>
+> -               check_section_mismatch(modname, elf, elf->symtab_start + =
+r_sym,
+> +               check_section_mismatch(mod, elf, elf->symtab_start + r_sy=
+m,
+>                                        fsecndx, fromsec, r.r_offset, r.r_=
+addend);
+>         }
+>  }
+>
+> -static void section_rel(const char *modname, struct elf_info *elf,
+> +static void section_rel(struct module *mod, struct elf_info *elf,
+>                         Elf_Shdr *sechdr)
+>  {
+>         Elf_Rel *rel;
+> @@ -1459,7 +1459,7 @@ static void section_rel(const char *modname, struct=
+ elf_info *elf,
+>                         fatal("Please add code to calculate addend for th=
+is architecture\n");
+>                 }
+>
+> -               check_section_mismatch(modname, elf, elf->symtab_start + =
+r_sym,
+> +               check_section_mismatch(mod, elf, elf->symtab_start + r_sy=
+m,
+>                                        fsecndx, fromsec, r.r_offset, r.r_=
+addend);
+>         }
+>  }
+> @@ -1476,19 +1476,19 @@ static void section_rel(const char *modname, stru=
+ct elf_info *elf,
+>   * to find all references to a section that reference a section that wil=
+l
+>   * be discarded and warns about it.
+>   **/
+> -static void check_sec_ref(const char *modname, struct elf_info *elf)
+> +static void check_sec_ref(struct module *mod, struct elf_info *elf)
+>  {
+>         int i;
+>         Elf_Shdr *sechdrs =3D elf->sechdrs;
+>
+>         /* Walk through all sections */
+>         for (i =3D 0; i < elf->num_sections; i++) {
+> -               check_section(modname, elf, &elf->sechdrs[i]);
+> +               check_section(mod->name, elf, &elf->sechdrs[i]);
+>                 /* We want to process only relocation sections and not .i=
+nit */
+>                 if (sechdrs[i].sh_type =3D=3D SHT_RELA)
+> -                       section_rela(modname, elf, &elf->sechdrs[i]);
+> +                       section_rela(mod, elf, &elf->sechdrs[i]);
+>                 else if (sechdrs[i].sh_type =3D=3D SHT_REL)
+> -                       section_rel(modname, elf, &elf->sechdrs[i]);
+> +                       section_rel(mod, elf, &elf->sechdrs[i]);
+>         }
+>  }
+>
+> @@ -1659,7 +1659,7 @@ static void read_symbols(const char *modname)
+>                                              sym_get_data(&info, sym));
+>         }
+>
+> -       check_sec_ref(modname, &info);
+> +       check_sec_ref(mod, &info);
+>
+>         if (!mod->is_vmlinux) {
+>                 version =3D get_modinfo(&info, "version");
+> --
+> 2.39.2
+>
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index bef33b253813..aa41eb4758a5 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -5,6 +5,7 @@
- 
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/clock/qcom,sm8450-videocc.h>
-+#include <dt-bindings/clock/qcom,sm8550-camcc.h>
- #include <dt-bindings/clock/qcom,sm8550-gcc.h>
- #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
- #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
-@@ -2398,6 +2399,20 @@ videocc: clock-controller@aaf0000 {
- 			#power-domain-cells = <1>;
- 		};
- 
-+		camcc: clock-controller@ade0000 {
-+			compatible = "qcom,sm8550-camcc";
-+			reg = <0 0x0ade0000 0 0x20000>;
-+			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-+				 <&bi_tcxo_div2>,
-+				 <&bi_tcxo_ao_div2>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SM8550_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		mdss: display-subsystem@ae00000 {
- 			compatible = "qcom,sm8550-mdss";
- 			reg = <0 0x0ae00000 0 0x1000>;
--- 
-2.40.1
 
+--=20
+Thanks,
+~Nick Desaulniers
