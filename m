@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CF171119E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0179A7111A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjEYRE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S240613AbjEYRFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjEYREz (ORCPT
+        with ESMTP id S230511AbjEYRFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:04:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28702189;
-        Thu, 25 May 2023 10:04:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C51647B1;
-        Thu, 25 May 2023 17:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB65C433D2;
-        Thu, 25 May 2023 17:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685034293;
-        bh=gBgpG9vTwOaMKv/+/eY1oC9MAIfEaLOfyfZw8B7xYrs=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=pio0Er+luZrzNM1SJ2AttAghtZM4LVeBGEhQJeM8Btg85aqeZ7C0Uk0WtKDGG48Hh
-         3SvpKa7OJKD21AzpxfUrxY0K6PiIbpIG2Cd1EidA3FOwdiYMtDsgP8c3SnaoTyDCDL
-         Oth+XHrdB2RPFdHB9gRJXFxYMD8tTQsG6iL+PvNWZrcwn22p4nktAuZOzgSkPimdPP
-         huP2sDOiV5QXSqeEwmdAHnJEqY6wOR4r41JG04UUpZQGMabslLkYHOfui+rP+xmMF1
-         vmSqg+dYqpgXHSHm4Abtsp/KplIC8kVbOGMHywkQCNCCSvMycqmrifBux7tTi59mFm
-         oYEmkyuR07H3g==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 25 May 2023 13:05:15 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA9C194
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:05:13 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96f818c48fbso160779566b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:05:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685034311; x=1687626311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YSr58RBXCv1EwUMOYtICqFDX8H+m5pyEj79JnZvBvqM=;
+        b=FUBX4bX4Rtu2T0f2hT26650q+dMnkZkzNX0I0hBfyLgOH2Ax4epbIripcg6b1UDFpM
+         o3prOgLKFbhWUaC45DzFa9SPMncTSsRCM3jaIgaKdONEpkKIUcalhdfLJHBraYaiCHV8
+         h8i1H4qHYaOI0fXj3tt41b8ArUeOIe7GFAM0I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685034311; x=1687626311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YSr58RBXCv1EwUMOYtICqFDX8H+m5pyEj79JnZvBvqM=;
+        b=EWLfjGDTs/KCWlyz+GhaLao530AnP2paZyFFcQV+CXRYycs+Z29LO5Co1bu99AIggF
+         S6c+blRii4lSUU9wEmVGETvvzfhK324Ttc0DLZwxL9UCyUpMau2wUSEG4IB+1mVy7gQy
+         DUPJOxm1jnBe6MUItZ4pclvsUEuBYrnERKyAokqbZw+Bsk3nZb5TTnuspiwYqEfoMPiJ
+         tOBoN+pyGdypjBFNOHGTVTB0pe2Red5eaM5EV9HWy2uSzUBU/p2qHIJN4iYFK0FYUVkX
+         ULlMJiQTihg2SIYHN2SkPTQfNV1DZIMqEdq3idSbGSaTW7P8jL7fEvl19peBJaJjFZG5
+         kPaw==
+X-Gm-Message-State: AC+VfDzEI0Cr7OI4Xlix+vn6aG/ww721jYyAgOOtLv8GcBgJfBiuVgrA
+        ngy/H4Cn01Vg4KOhlw9WznhL3C0lNG08oIZ0yZu2t7jD
+X-Google-Smtp-Source: ACHHUZ6uH0dxGmSHk2QP4FGd05sZlruROx1GHPp7aE6YWMjtS1eNeiDc/ZUC9aGHrRnO0QYK8uJIRw==
+X-Received: by 2002:a17:906:c155:b0:96a:41ed:e3fa with SMTP id dp21-20020a170906c15500b0096a41ede3famr2578944ejc.22.1685034311646;
+        Thu, 25 May 2023 10:05:11 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id u12-20020a1709064acc00b0097382ed45cbsm1089846ejt.108.2023.05.25.10.05.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 10:05:10 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so4907454a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:05:10 -0700 (PDT)
+X-Received: by 2002:a17:907:3185:b0:970:925:6563 with SMTP id
+ xe5-20020a170907318500b0097009256563mr2076202ejb.8.1685034310240; Thu, 25 May
+ 2023 10:05:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] wifi: ath9k: don't allow to overwrite ENDPOINT0
- attributes
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230516150427.79469-1-pchelkin@ispras.ru>
-References: <20230516150427.79469-1-pchelkin@ispras.ru>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Takeshi Misawa <jeliantsurux@gmail.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168503428836.19957.620283860814904448.kvalo@kernel.org>
-Date:   Thu, 25 May 2023 17:04:50 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <ZGxfrOLZ4aN9/MvE@infradead.org> <20230522205744.2825689-1-dhowells@redhat.com>
+ <3068545.1684872971@warthog.procyon.org.uk> <ZG2m0PGztI2BZEn9@infradead.org>
+ <3215177.1684918030@warthog.procyon.org.uk> <CAHk-=wjaqHgd4u63XdZoTPs1YCJnDZ7-GQHKKdFrT32y2-__tw@mail.gmail.com>
+ <e00ee9f5-0f02-6463-bc84-b94c17f488bc@redhat.com>
+In-Reply-To: <e00ee9f5-0f02-6463-bc84-b94c17f488bc@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 May 2023 10:04:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgPWUCyhiM+=S3nmh4JK8qtBQteYvtiXpoYpDjfKHnEhQ@mail.gmail.com>
+Message-ID: <CAHk-=wgPWUCyhiM+=S3nmh4JK8qtBQteYvtiXpoYpDjfKHnEhQ@mail.gmail.com>
+Subject: Re: Extending page pinning into fs/direct-io.c
+To:     David Hildenbrand <david@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fedor Pchelkin <pchelkin@ispras.ru> wrote:
+On Thu, May 25, 2023 at 9:45=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> I think the correct way to test for a zero page is
+> is_zero_pfn(page_to_pfn(page).
 
-> A bad USB device is able to construct a service connection response
-> message with target endpoint being ENDPOINT0 which is reserved for
-> HTC_CTRL_RSVD_SVC and should not be modified to be used for any other
-> services.
-> 
-> Reject such service connection responses.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-> 
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-by: syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Yeah. Except it's really ugly and strange, and we should probably add
+a helper for that pattern.
 
-Patch applied to ath-next branch of ath.git, thanks.
+The reason it has that odd "look at pfn" is just because I think the
+first users were in the page table code, which had the pfn already,
+and the test is basically based on the zero_page_mask thing that the
+affected architectures have.
 
-061b0cb9327b wifi: ath9k: don't allow to overwrite ENDPOINT0 attributes
+So I suspect we should add that
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230516150427.79469-1-pchelkin@ispras.ru/
+    is_zero_pfn(page_to_pfn(page))
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+as a helper inline function rather than write it out even more times
+(that "is this 'struct page' a zero page" pattern already exists in
+/proc and a few other places.
 
+is_longterm_pinnable_page() already has it, so adding it as a helper
+there in <linux/mm.h> is probably a good idea.
+
+                Linus
