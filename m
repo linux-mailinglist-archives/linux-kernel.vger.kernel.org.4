@@ -2,266 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BBF711336
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263DA71133F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241257AbjEYSIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S234274AbjEYSLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241228AbjEYSIo (ORCPT
+        with ESMTP id S231599AbjEYSLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:08:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F73E7F;
-        Thu, 25 May 2023 11:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=YL8OMDLHODA41rvR8ub9++8ad6Sy/4p0ql0b8s32pR4=; b=hG3IAvmXcplLQeAkZUYiIB2Lu1
-        wosgmRGyX2O7q/NhVvhVdn4UWMpVTx3FVQiRQS/1KtwYsOs5n0hJCGyE2oYr/A6fQ9tjw0DqMYe6u
-        wo51sRdOEd1/CzSnlBjTBRUtcPu7puN+EljKWHqncqQyRl+08ZIiujx2jiMbc+w6uLyfkzBQE5nNj
-        bOTepye23vwfIh9CrUmOnJFHqmZHvIzZTFq1AyEoTsj1JM3ByOxaqCGS4xGxkxCL/p7V3klhUYf3c
-        3uZrAYijmR68QIr2l2efVer9Egw/SZ/NHj23zusMNth8PgW7BYpicGg0+jWl189lWrIJospApzMMq
-        OdOTjUPA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2FNm-00HL6H-01;
-        Thu, 25 May 2023 18:08:14 +0000
-Date:   Thu, 25 May 2023 11:08:13 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>, hch@lst.de,
-        brauner@kernel.org, david@redhat.com
-Cc:     tglx@linutronix.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
-        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
-        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com
-Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate
- detection
-Message-ID: <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
-References: <20230524213620.3509138-1-mcgrof@kernel.org>
- <20230524213620.3509138-2-mcgrof@kernel.org>
- <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
- <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com>
+        Thu, 25 May 2023 14:11:07 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202AC125;
+        Thu, 25 May 2023 11:11:03 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFBTQ4021226;
+        Thu, 25 May 2023 18:10:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=k/r0fgBjSAJae8JY6gVMJ84uFagaJuMzHr7EblkGMp4=;
+ b=jD6v+OtLZcXOW9wbp+1alveyseHuTlfVrg10JQqSVAw5fJAmu5L3kRJMzKOmH9q26mzT
+ fm/6b7USpD//OWLCmT7zyfc6bvE7Dm8ZbNLAubpuFHPFj8vOUFDU0eSSyDslsittK9th
+ NotVnmyG/7z/kVsNCHOTBGarSihElmLz2JozbmbHgicL7n0vL/oXMvMzoSZbmfpCYG+R
+ tkHXlqCg/fWAtcbKUJfmrMfCu18ZpKxi1Efs4yys3Ux1cwrO5hhh+YwRG34q5wR5xNsx
+ RDIrfvJzZWu6dhs/vUN/5NbFzB7zHTqk67RM8/N6V9NrvW3uBhQSnjFLN7ZQkTnYQIAb og== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt8tarn2w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 18:10:30 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PIARC1012425
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 18:10:27 GMT
+Received: from [10.110.20.135] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 11:10:25 -0700
+Message-ID: <208f05b3-ed92-5b22-6200-8bb28d62fd77@quicinc.com>
+Date:   Thu, 25 May 2023 11:10:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
+Content-Language: en-US
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Leonard Lausen <leonard@lausen.nl>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Bjorn Andersson" <andersson@kernel.org>
+CC:     <freedreno@lists.freedesktop.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        <regressions@lists.linux.dev>, David Airlie <airlied@gmail.com>,
+        "Nikita Travkin" <nikita@trvn.ru>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
+ <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
+ <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
+ <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+ <20230508021536.txtamifw2vkfncnx@ripper>
+ <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
+ <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
+ <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
+ <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
+ <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
+ <7deff127-4c6d-1f59-33a8-f44eea86bacd@quicinc.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <7deff127-4c6d-1f59-33a8-f44eea86bacd@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: dWDv8Ky6LVDFNGnQw98blBLLg0kw7kTl
+X-Proofpoint-ORIG-GUID: dWDv8Ky6LVDFNGnQw98blBLLg0kw7kTl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_10,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 mlxscore=0 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305250151
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ fsdevel please review,
 
-On Wed, May 24, 2023 at 09:00:02PM -0700, Linus Torvalds wrote:
-> On Wed, May 24, 2023 at 2:52 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > This is all disgusting.
+
+On 5/25/2023 10:57 AM, Kuogee Hsieh wrote:
 > 
-> Bringing back the original thread, because I just sent an alternate
-> patch to Luis to test.
+> On 5/24/2023 5:58 AM, Leonard Lausen wrote:
+>>>>>>>> [  275.025497] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488]
+>>>>>>>> [dpu error]vblank timeout
+>>>>>>>> [  275.025514] [drm:dpu_kms_wait_for_commit_done:510] [dpu 
+>>>>>>>> error]wait
+>>>>>>>> for commit done returned -110
+>>>>>>>> [  275.064141] [drm:dpu_encoder_frame_done_timeout:2382] [dpu
+>>>>>>>> error]enc33 frame done timeout
+>>>>>> This is a different crash but the root-cause of both the issues is 
+>>>>>> the
+>>>>>> bridge hpd_enable/disable series.
+>>>>>>
+>>>>>> https://patchwork.freedesktop.org/patch/514414/
+>>>> Yes, the new patch to fix this issue is here
+>>>>
+>>>> https://patchwork.freedesktop.org/patch/538601/?series=118148&rev=3
+>>>>
+>>>> Apologies if you were not CCed on this, if a next version is CCed,
+>>>> will ask kuogee to cc you.
+>>>>
+>>>> Meanwhile, will be great if you can verify if it works for you and
+>>>> provide Tested-by tags.
+>>> Hi Leonard,
+>>>
+>>> I had  cc you with v5 patches.
+>>>
+>>> Would you please verify it.
+>> Hi Kuogee,
+>>
+>> thank you. Verified the v6 patch fixes the regression when ported to
+>> 6.3.3. One non-fatal issue remains: Suspending and resuming the system
+>> while USB-C DP monitor is connected triggers an error, though the system
+>> recovers within a second without the need to unplug the cable.
+>>
+>> [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
+>>
+>>
+>> dmesg snippet related to the suspend below
+>>
+>>
+>> [  197.845110] usb 2-1.4.4: reset SuperSpeed USB device number 12 
+>> using xhci-hcd
+>> [  198.235191] [drm:drm_mode_config_helper_resume] *ERROR* Failed to 
+>> resume (-107)
 > 
-> That one is also disgusting, but for different reasons: it needs some
-> polish if it works. It's a very simple patch, in that it just extends
-> our existing i_writecount and ETXTBSY logic to also have a "exclusive"
-> mode, and says that we do the module file reading in that exclusive
-> mode (so if/when udev in its incompetence tries to load the same
-> module X number of times at the same time, only one will read at a
-> time).
-
-Indeed, this is the sort of gem I was hoping we could acomplish.
-
-> The disgusting part is mainly the hacky test for "id ==
-> READING_MODULE", and it would probably be better with some kind of
-> "exclusive flag" field for general use, but right now READING_MODULE
-> is basically that one user.
+> Hi Leonard,
 > 
-> Luis having explained _why_ we'd want this (and honestly, it took a
-> couple of tries), I can only say that udev is horribly broken, and
-> this most definitely should be fixed in user mode. udev randomly
-> loading the same module multiple times just because it gets confused
-> is not ok.
-
-At this point it would be good for for someone on the udev camp to at
-least to *try*. If the problem is the fork on udev, maybe the shmem
-could be used to share the module context to prevent duplicates.
-
-> Any udev developer that goes "we can't fix it in user space" should be
-> ashamed of themselves. Really? Just randomly doing the same thing in
-> parallel and expecting the kernel to sort out your mess? What a crock.
+> I did not see this problem at my setup (Kodiak) during suspend/resume.
 > 
-> But this *might* mitigate that udev horror. And not introduce any new
-> kernel-side horror, just a slight extension of our existing writer
-> exclusion logic to allow "full exclusive access".
-
-Yes, that expresses what is needed well and is simple enough.
-
-> (Note: it's not actually excluding other purely regular readers - but
-> it *is* excluding not just writers, but also other "special readers"
-> that want to exclude writers)
+> Will investigate more on Trogdor device.
 > 
-> I'd like to point out that this patch really is completely untested.
-> It built for me, but that's all the testing it has gotten. It's
-> _small_. Tiny, even. But that "id == READING_MODULE" thing really is
-> pretty disgusting and I feel this needs more thought.
-
->  fs/kernel_read_file.c | 6 +++++-
->  include/linux/fs.h    | 6 ++++++
->  2 files changed, 11 insertions(+), 1 deletion(-)
+> Thanks,
 > 
-> diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
-> index 5d826274570c..ff3e894f8cd4 100644
-> --- a/fs/kernel_read_file.c
-> +++ b/fs/kernel_read_file.c
-> @@ -48,7 +48,11 @@ ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
->  	if (!S_ISREG(file_inode(file)->i_mode))
->  		return -EINVAL;
->  
-> -	ret = deny_write_access(file);
-> +	/* Module reading wants *exclusive* access to the file */
-> +	if (id == READING_MODULE)
-> +		ret = exclusive_deny_write_access(file);
-> +	else
-> +		ret = deny_write_access(file);
->  	if (ret)
->  		return ret;
->  
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 21a981680856..722b42a77d51 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -2566,6 +2566,12 @@ static inline int deny_write_access(struct file *file)
->  	struct inode *inode = file_inode(file);
->  	return atomic_dec_unless_positive(&inode->i_writecount) ? 0 : -ETXTBSY;
->  }
-> +static inline int exclusive_deny_write_access(struct file *file)
-> +{
-> +	int old = 0;
-> +	struct inode *inode = file_inode(file);
-> +	return atomic_try_cmpxchg(&inode->i_writecount, &old, -1) ? 0 : -ETXTBSY;
-> +}
->  static inline void put_write_access(struct inode * inode)
->  {
->  	atomic_dec(&inode->i_writecount);
 
-Certainly on the track where I wish we could go. Now this goes tested.
-On 255 cores:
+Hi Leonard
 
-Before:                                                                          
-                                                                                 
-vagrant@kmod ~ $ sudo systemd-analyze                                            
-Startup finished in 41.653s (kernel) + 44.305s (userspace) = 1min 25.958s        
-graphical.target reached after 44.178s in userspace.  
+Feel free to open a bug for this and assign to me, we can check this and 
+ask more info if needed on that bug.
 
-root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/stats    
- Virtual mem wasted bytes       1949006968 
+Thanks
 
-                                                                                 
-; 1949006968/1024/1024/1024                                                      
-        ~1.81515418738126754761                                                  
-                                                                                 
-So ~1.8 GiB... of vmalloc space wasted during boot.
+Abhinav
 
-After:
-
-systemd-analyze 
-Startup finished in 24.438s (kernel) + 41.278s (userspace) = 1min 5.717s 
-graphical.target reached after 41.154s in userspace.
-
-root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/stats
- Virtual mem wasted bytes       354413398
-
-So still 337.99 MiB of vmalloc space wasted during boot due to
-duplicates. The reason is the exclusive_deny_write_access() must be
-kept during the life of the module otherwise as soon as it is done
-others can still race to load after and fail later after it sees the
-module is already loaded. It sounds crazy to think that such races
-exist because that means userspace didn't see the module loaded yet
-and still tried finit_module() but the stats reveal that's the
-case.
-
-So with two other hunks added (2nd and 4th), this now matches parity with
-my patch, not suggesting this is right, just demonstrating how this
-could be resolved with this. We could also just have a helper which lets
-the module code allow_write_access() at the end of its use of the fd
-(failure to load or module is removed).
-
-diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
-index 5d826274570c..ff5b338a288b 100644
---- a/fs/kernel_read_file.c
-+++ b/fs/kernel_read_file.c
-@@ -48,7 +48,11 @@ ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
- 	if (!S_ISREG(file_inode(file)->i_mode))
- 		return -EINVAL;
- 
--	ret = deny_write_access(file);
-+	/* Module reading wants *exclusive* access to the file */
-+	if (id == READING_MODULE)
-+		ret = exclusive_deny_write_access(file);
-+	else
-+		ret = deny_write_access(file);
- 	if (ret)
- 		return ret;
- 
-@@ -119,7 +123,8 @@ ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
- 	}
- 
- out:
--	allow_write_access(file);
-+	if (id != READING_MODULE)
-+		allow_write_access(file);
- 	return ret == 0 ? copied : ret;
- }
- EXPORT_SYMBOL_GPL(kernel_read_file);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 21a981680856..722b42a77d51 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2566,6 +2566,12 @@ static inline int deny_write_access(struct file *file)
- 	struct inode *inode = file_inode(file);
- 	return atomic_dec_unless_positive(&inode->i_writecount) ? 0 : -ETXTBSY;
- }
-+static inline int exclusive_deny_write_access(struct file *file)
-+{
-+	int old = 0;
-+	struct inode *inode = file_inode(file);
-+	return atomic_try_cmpxchg(&inode->i_writecount, &old, -1) ? 0 : -ETXTBSY;
-+}
- static inline void put_write_access(struct inode * inode)
- {
- 	atomic_dec(&inode->i_writecount);
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 044aa2c9e3cb..88aaada929b1 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3078,8 +3079,10 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
- 	len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
- 				       READING_MODULE);
- 	if (len < 0) {
--		mod_stat_inc(&failed_kreads);
--		mod_stat_add_long(len, &invalid_kread_bytes);
-+		if (len != -ETXTBSY) {
-+			mod_stat_inc(&failed_kreads);
-+			mod_stat_add_long(len, &invalid_kread_bytes);
-+		}
- 		return len;
- 	}
- 
+> 
+>> [  198.528638] OOM killer enabled.
+>> [  198.531866] Restarting tasks ...
+>> [  198.531994] usb 1-1.4.4.1: USB disconnect, device number 27
+>> [  198.532223] usb 1-1.4.3: USB disconnect, device number 23
+>> [  198.532509] usb 1-1.4.2.1: USB disconnect, device number 29
+>> [  198.534805] r8152-cfgselector 2-1.4.4.2: USB disconnect, device 
+>> number 13
+>> [  198.535444] done.
+>> [  198.535536] usb 1-1.1: USB disconnect, device number 15
+>> [  198.567811] random: crng reseeded on system resumption
+>> [  198.583431] PM: suspend exit
