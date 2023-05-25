@@ -2,58 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7FD710A93
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B9C710A97
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240259AbjEYLKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        id S240577AbjEYLKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbjEYLKH (ORCPT
+        with ESMTP id S240294AbjEYLKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:10:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AC4195;
-        Thu, 25 May 2023 04:10:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FF160B70;
-        Thu, 25 May 2023 11:10:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D759BC433D2;
-        Thu, 25 May 2023 11:10:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685013004;
-        bh=k4r63m/Lzik54AT7G/zi6fUsz03lRD6D3jdSLwaE5vY=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=TXG6EJnqdWhnpqnbyGNl9//DYbVzicXxZHKXFDQNsyCg2EF2r3Dokx5BObEOAM1Cu
-         wpBq7c2rIsCLoL2TFctDcAoe+Tc21wt/u/KGfLmIoJpG/dOQ+8+PuYVdVSF7ft9KGP
-         9Zbjc2KPBIWiJaLvmXbhX6v9r2xGy2E6mcrLa6VMBq/r39QSwi4FNqRbr7XgzYeAIa
-         uL3pdw40Lak/q42KB9d9hr4PAbIVb1oGxlJRxR4rGM9O5M0f+Ms6p36QPzsfJwiwMS
-         LLLshkjQynzjMnrAvs9g1zdA1k/IZUNJfOSUdYLTbMFlo/S/ihzChSkGXYtup9fqdl
-         ja6mXpWSIK5LA==
-Date:   Thu, 25 May 2023 13:10:00 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
-Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
- working properly
-In-Reply-To: <CAO-hwJ+MTRu9KxqwQc7UYFBsa0kkrnYfwVB30KsLZnw=wfcOMg@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.2305251308471.29760@cbobk.fhfr.pm>
-References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info> <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info> <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com> <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
- <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info> <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com> <nycvar.YFH.7.76.2305231422180.29760@cbobk.fhfr.pm> <CAO-hwJ+MTRu9KxqwQc7UYFBsa0kkrnYfwVB30KsLZnw=wfcOMg@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 25 May 2023 07:10:42 -0400
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A362819C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:10:30 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+        id c0ee11ec-faec-11ed-b3cf-005056bd6ce9;
+        Thu, 25 May 2023 14:10:28 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Thu, 25 May 2023 14:10:27 +0300
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 06/11] serial: sc16is7xx: fix bug when first setting
+ GPIO direction
+Message-ID: <ZG9CIww5WbgJ3TUf@surfacebook>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+ <20230525040324.3773741-7-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525040324.3773741-7-hugo@hugovil.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,38 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023, Benjamin Tissoires wrote:
-
-> > > That bug is pre-existing (ie the problem was not introduced by that
-> > > commit), but who knows if the retry makes things worse (ie if it then
-> > > triggers on a retry, the response data will be the *previous* response).
-> > >
-> > > The whole "goto exit" games should be removed too, because we're in a
-> > > for-loop, and instead of "goto exit" it should just do "break".
-> > >
-> > > IOW, something like this might be worth testing.
-> > >
-> > > That said, while I think the code is buggy, I doubt this is the actual
-> > > cause of the problem people are reporting. But it would be lovely to
-> > > hear if the attached patch makes any difference, and I think this is
-> > > fixing a real - but unlikely - problem anyway.
+Thu, May 25, 2023 at 12:03:20AM -0400, Hugo Villeneuve kirjoitti:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> FWIW, Linus, your patch is
-> Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> When we want to configure a pin as an output pin with a value of logic
+> 0, we end up as having a value of logic 1 on the output pin. Setting a
+> logic 0 a second time (or more) after that will correctly output a
+> logic 0 on the output pin.
 > 
-> Feel free to submit it to us or to apply it directly if you prefer as
-> this is clearly a fix for a code path issue.
+> By default, all GPIO pins are configured as inputs. When we enter
+> c16is7xx_gpio_direction_output() for the first time, we first set the
 
-It would be nice to hear from the people who were able to reproduce the 
-issue whether this makes any observable difference in behavior though. I 
-don't currently think it would, as it fixes a potential NULL pointer 
-dereference, which is not what has been reported.
+Missing 's'.
 
-Has anyone of the affected people tried to bisect the issue?
-
-Thanks,
+> desired value in IOSTATE, and then we configure the pin as an output.
+> The datasheet states that writing to IOSTATE register will trigger a
+> transfer of the value to the I/O pin configured as output, so if the
+> pin is configured as an input, nothing will be transferred.
+> 
+> Therefore, set the direction first in IODIR, and then set the desired
+> value in IOSTATE.
+> 
+> This is what is done in NXP application note AN10587.
 
 -- 
-Jiri Kosina
-SUSE Labs
+With Best Regards,
+Andy Shevchenko
+
 
