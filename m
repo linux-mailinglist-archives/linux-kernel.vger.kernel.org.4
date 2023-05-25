@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA127102F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA607102F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237424AbjEYCf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 22:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S235884AbjEYCl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234004AbjEYCfY (ORCPT
+        with ESMTP id S229944AbjEYCl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 22:35:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04AA9119;
-        Wed, 24 May 2023 19:35:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD5061042;
-        Wed, 24 May 2023 19:36:06 -0700 (PDT)
-Received: from [10.162.43.6] (unknown [10.162.43.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AC6F3F762;
-        Wed, 24 May 2023 19:35:20 -0700 (PDT)
-Message-ID: <0729b811-92f2-13a7-5f97-8ea249c88adf@arm.com>
-Date:   Thu, 25 May 2023 08:05:17 +0530
+        Wed, 24 May 2023 22:41:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE2EF5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 19:41:54 -0700 (PDT)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QRXMN2HggzsSXn;
+        Thu, 25 May 2023 10:39:44 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 25 May 2023 10:41:51 +0800
+Message-ID: <b29eab0c-4084-0e91-3e31-7f7c264ad629@huawei.com>
+Date:   Thu, 25 May 2023 10:41:51 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 03/36] mm: Add folio_flush_mapping()
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-4-willy@infradead.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230315051444.3229621-4-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     <andersson@kernel.org>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <soc@kernel.org>, <wanghuiqiang@huawei.com>,
+        <tanxiaofei@huawei.com>, <liuyonglong@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <20230522072211.8894-1-lihuisong@huawei.com>
+ <20230522072211.8894-2-lihuisong@huawei.com>
+ <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -47,63 +57,142 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+在 2023/5/23 17:39, Sudeep Holla 写道:
+> On Mon, May 22, 2023 at 03:22:10PM +0800, Huisong Li wrote:
+>> The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
+>> for ensuring cache coherent on HiSilicon SoC. The performance of
+>> the application may be affected if some hccs ports are in non-full
+>> lane status, have a large number of CRC errors and so on.
+>>
+>> This driver provides the query interface of the health status and
+>> port information of HCCS on Kunpeng SoC.
+>>
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> ---
+>>   MAINTAINERS                          |    6 +
+>>   drivers/soc/Kconfig                  |    1 +
+>>   drivers/soc/Makefile                 |    1 +
+>>   drivers/soc/hisilicon/Kconfig        |   19 +
+>>   drivers/soc/hisilicon/Makefile       |    2 +
+>>   drivers/soc/hisilicon/kunpeng_hccs.c | 1287 ++++++++++++++++++++++++++
+>>   drivers/soc/hisilicon/kunpeng_hccs.h |  196 ++++
+>>   7 files changed, 1512 insertions(+)
+>>   create mode 100644 drivers/soc/hisilicon/Kconfig
+>>   create mode 100644 drivers/soc/hisilicon/Makefile
+>>   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
+>>   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index eddbc48c61e9..fe0e796e8445 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -9399,6 +9399,12 @@ S:	Maintained
+>>   W:	http://www.hisilicon.com
+>>   F:	drivers/spi/spi-hisi-sfc-v3xx.c
+>>   
+>> +HISILICON KUNPENG SOC HCCS DRIVER
+> s/HCCS/HCCS INFO or QUERY/ ?
+>
+>> +M:	Huisong Li <lihuisong@huawei.com>
+>> +S:	Maintained
+>> +F:	drivers/soc/hisilicon/kunpeng_hccs.c
+>> +F:	drivers/soc/hisilicon/kunpeng_hccs.h
+>> +
+>>   HMM - Heterogeneous Memory Management
+>>   M:	Jérôme Glisse <jglisse@redhat.com>
+>>   L:	linux-mm@kvack.org
+>> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+>> index 4e176280113a..d21e75d69294 100644
+>> --- a/drivers/soc/Kconfig
+>> +++ b/drivers/soc/Kconfig
+>> @@ -10,6 +10,7 @@ source "drivers/soc/bcm/Kconfig"
+>>   source "drivers/soc/canaan/Kconfig"
+>>   source "drivers/soc/fsl/Kconfig"
+>>   source "drivers/soc/fujitsu/Kconfig"
+>> +source "drivers/soc/hisilicon/Kconfig"
+>>   source "drivers/soc/imx/Kconfig"
+>>   source "drivers/soc/ixp4xx/Kconfig"
+>>   source "drivers/soc/litex/Kconfig"
+>> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+>> index 3b0f9fb3b5c8..531f46f3ad98 100644
+>> --- a/drivers/soc/Makefile
+>> +++ b/drivers/soc/Makefile
+>> @@ -14,6 +14,7 @@ obj-$(CONFIG_MACH_DOVE)		+= dove/
+>>   obj-y				+= fsl/
+>>   obj-y				+= fujitsu/
+>>   obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
+>> +obj-y				+= hisilicon/
+>>   obj-y				+= imx/
+>>   obj-y				+= ixp4xx/
+>>   obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+>> diff --git a/drivers/soc/hisilicon/Kconfig b/drivers/soc/hisilicon/Kconfig
+>> new file mode 100644
+>> index 000000000000..87a1f15cbedb
+>> --- /dev/null
+>> +++ b/drivers/soc/hisilicon/Kconfig
+>> @@ -0,0 +1,19 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +
+>> +menu "Hisilicon SoC drivers"
+>> +	depends on ARCH_HISI || COMPILE_TEST
+>> +
+>> +config KUNPENG_HCCS
+> Ditto, add INFO or QUERY to the name as HCCS alone suggests it is some
+> driver to manage the above bus protocol which is not correct.
+>
+>> +	tristate "HCCS driver on Kunpeng SoC"
+>> +	depends on ACPI
+>> +	depends on ARM64 || COMPILE_TEST
+>> +	help
+>> +	  The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
+>> +	  for ensuring cache coherent on HiSilicon SoC. The performance of
+>> +	  the application may be affected if some hccs ports are in non-full
+>> +	  lane status, have a large number of CRC errors and so on.
+>> +
+>> +	  Say M here if you want to include support for querying the health
+>> +	  status and port information of HCCS on Kunpeng SoC.
+>> +
+>> +endmenu
+>> diff --git a/drivers/soc/hisilicon/Makefile b/drivers/soc/hisilicon/Makefile
+>> new file mode 100644
+>> index 000000000000..226e747e70d6
+>> --- /dev/null
+>> +++ b/drivers/soc/hisilicon/Makefile
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +obj-$(CONFIG_KUNPENG_HCCS)	+= kunpeng_hccs.o
+>> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+>> new file mode 100644
+>> index 000000000000..20a506a04bb7
+>> --- /dev/null
+>> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+>> @@ -0,0 +1,1287 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * The Huawei Cache-Coherent System (HCCS) is a bus protocol standard for
+>> + * ensuring cache coherent on HiSilicon SoC.
+>> + *
+>> + * Copyright (c) 2023 Hisilicon Limited.
+>> + * Author: Huisong Li <lihuisong@huawei.com>
+>> + *
+>> + * HCCS driver for Kunpeng SoC provides the following features:
+>> + * - Retrieve info as belows each port:
+> [snip]
+>
+>> + *    - port type
+>> + *    - lane mode
+>> + *    - using status
+> perhaps just status, "using status" doesn't sound correct to me.
+>
+>
+Hi Sudeep,
 
-On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
-> This is the folio equivalent of page_mapping_file(), but rename it
-> to make it clear that it's very different from page_file_mapping().
-> Theoretically, there's nothing flush-only about it, but there are no
-> other users today, and I doubt there will be; it's almost always more
-> useful to know the swapfile's mapping or the swapcache's mapping.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Here, the interface is used to determine whether a port is in use or 
+enabled.
+If we just use 'status', it cannot inidicates its own meaning by name.
+What do you think?
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+/Huisong
 
-> ---
->  include/linux/pagemap.h | 26 +++++++++++++++++++++-----
->  1 file changed, 21 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-> index a56308a9d1a4..e56c2023aa0e 100644
-> --- a/include/linux/pagemap.h
-> +++ b/include/linux/pagemap.h
-> @@ -369,6 +369,26 @@ static inline struct address_space *folio_file_mapping(struct folio *folio)
->  	return folio->mapping;
->  }
->  
-> +/**
-> + * folio_flush_mapping - Find the file mapping this folio belongs to.
-> + * @folio: The folio.
-> + *
-> + * For folios which are in the page cache, return the mapping that this
-> + * page belongs to.  Anonymous folios return NULL, even if they're in
-> + * the swap cache.  Other kinds of folio also return NULL.
-> + *
-> + * This is ONLY used by architecture cache flushing code.  If you aren't
-> + * writing cache flushing code, you want either folio_mapping() or
-> + * folio_file_mapping().
-> + */
-> +static inline struct address_space *folio_flush_mapping(struct folio *folio)
-> +{
-> +	if (unlikely(folio_test_swapcache(folio)))
-> +		return NULL;
-> +
-> +	return folio_mapping(folio);
-> +}
-> +
->  static inline struct address_space *page_file_mapping(struct page *page)
->  {
->  	return folio_file_mapping(page_folio(page));
-> @@ -379,11 +399,7 @@ static inline struct address_space *page_file_mapping(struct page *page)
->   */
->  static inline struct address_space *page_mapping_file(struct page *page)
->  {
-> -	struct folio *folio = page_folio(page);
-> -
-> -	if (unlikely(folio_test_swapcache(folio)))
-> -		return NULL;
-> -	return folio_mapping(folio);
-> +	return folio_flush_mapping(page_folio(page));
->  }
->  
->  /**
+[snip]
+
