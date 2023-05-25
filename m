@@ -2,130 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0623710FA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8BA710FA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241802AbjEYPb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S233087AbjEYPcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbjEYPby (ORCPT
+        with ESMTP id S241807AbjEYPcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:31:54 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D430599;
-        Thu, 25 May 2023 08:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=EkzddqA17p235kwja0SprO9NNK44EhEHUgSVbdwHCo4=; b=V9sZ9f5qxoG0lmo+ePzz7kr/r+
-        jI7Cg7o38QlwBJo7L33SmqQh1Vs20zOyI/jaukfVWjM2qOUuAKOln/LyrrNN4p+nadgmOHjtkJ9aI
-        ey+IC/lxGqIbazvjzgUwwt4zVJTSpFZ3ZcnLsJi3kGioe7CMsDu/UFz9iqAQgkXdHyUY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48052 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q2CwL-0000UV-T4; Thu, 25 May 2023 11:31:46 -0400
-Date:   Thu, 25 May 2023 11:31:45 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     andy.shevchenko@gmail.com
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230525113145.35cef67328b63ba4239d2361@hugovil.com>
-In-Reply-To: <ZG9FBgX2useVeuWl@surfacebook>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
-        <20230525040324.3773741-10-hugo@hugovil.com>
-        <ZG9FBgX2useVeuWl@surfacebook>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 25 May 2023 11:32:05 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0020D18D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:32:03 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae58e4b295so11527945ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685028723; x=1687620723;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UmQi8fIzOJff3kyNGKaVTa69XxHyX2JQ/cM/6RRUYVY=;
+        b=fv94K8XOnLGVRz+eN9eeXw5o+qvVgngk6JKw1Zc/4W9HISDqNzb6NTDZBmnff2uF0x
+         s5UovWDO85t7EqIV86tWY8ZU2upyA6OzuFoNhF18Xoyi6iOi9X6ArwTaL9zTBfN7Pzgr
+         kzl9XtnZrOFzXK50ZCTxsObp0OyTd9FkCT+x+ZugTmNn1ciepfVkwk/j/eVPBYVCCzqO
+         oXJP4obDUZFABgjNJ+UUe0wQ35BPiePXyaqyQMA0Ny48yerkpH3uFOFGgERMw8Mv6s5v
+         7fAOt7TTr5MJ8GTgDpy69t1asKioeh5cpxs2rXz60oovYZ4cpnKUeYnsfQVhCK+Vt1ns
+         zqlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685028723; x=1687620723;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UmQi8fIzOJff3kyNGKaVTa69XxHyX2JQ/cM/6RRUYVY=;
+        b=FU+t9yow44UhtK01kyRNpKhEwN7IWam16j5T6OEDKNeftDthqMUPKRMnh1z4FTpzSg
+         6K8/0FNDd0NitW4pxhfBXcetPe4nsw5t9Wm1bDBo8D0i+AVzKCPcRhav62GlVEQx10lP
+         YvCyOGwS3NUmkf3YEapvO05lS3stuP2acXZiRpDeg5frM/LeuA844d3oF/TdpQNPLhjN
+         Vic+4XGNQkxaG6yX5SrtlVFGJbXBvpnjG05YqgNjlmJKB0BEQbTTO7myxEinfZy61Wd2
+         Nm3m2GWvQL/4/vGIEjvpqLCMng6a+qO7h94waGwERDdAQpwxsi4V/7U2lhacAp4ygYgV
+         xUJw==
+X-Gm-Message-State: AC+VfDzdRM7Txx/T9SadyNh4OKndAqMzJu2l5/aHeu2VZa0rd2gW0las
+        +22DeTdXSHam6hqIuSpwQ06QAQ==
+X-Google-Smtp-Source: ACHHUZ46Du0JEr4QEa4hb5TfjiXFSDB8X9bCJLLgtTlTN8tlUOafA+SKBkA/6yJjF+jYQ0axnk4tVg==
+X-Received: by 2002:a17:903:2793:b0:1ad:e633:ee96 with SMTP id jw19-20020a170903279300b001ade633ee96mr2007567plb.55.1685028723461;
+        Thu, 25 May 2023 08:32:03 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:2825:fb66:f9f3:171d])
+        by smtp.gmail.com with ESMTPSA id bj2-20020a170902850200b001993a1fce7bsm1557285plb.196.2023.05.25.08.32.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 08:32:02 -0700 (PDT)
+Date:   Thu, 25 May 2023 09:32:00 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+Cc:     linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org, corbet@lwn.net,
+        quic_visr@quicinc.com
+Subject: Re: [PATCH v5 0/2] Update section header name check
+Message-ID: <ZG9/cEMRMg06Pz4u@p14s>
+References: <20230223150559.2429562-1-quic_mohs@quicinc.com>
+ <20230302215735.GA1401708@p14s>
+ <f9c6fead-d573-a8bc-7e88-a53313ff8bef@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f9c6fead-d573-a8bc-7e88-a53313ff8bef@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 09/11] serial: sc16is7xx: add I/O register
- translation offset
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 14:22:46 +0300
-andy.shevchenko@gmail.com wrote:
-
-> Thu, May 25, 2023 at 12:03:23AM -0400, Hugo Villeneuve kirjoitti:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > If the shared GPIO pins on a dual port/channel variant like the
-> > SC16IS752 are configured as GPIOs for port A, and modem control lines
-> > on port A, we need to translate the Linux GPIO offset to an offset
-> > that is compatible with the I/O registers of the SC16IS7XX (IOState,
-> > IODir and IOIntEna).
-> > 
-> > Add a new variable to store that offset and set it when we detect that
-> > special case.
+On Thu, May 11, 2023 at 10:09:45PM +0530, Mohammad Rafi Shaik wrote:
 > 
-> ...
+> On 3/3/2023 3:27 AM, Mathieu Poirier wrote:
+> > On Thu, Feb 23, 2023 at 08:35:57PM +0530, Mohammad Rafi Shaik wrote:
+> > > Update section header name check and corresponding documentation.
+> > > Changes since v4:
+> > >      -- Rephrase commit message.
+> > Asked for clarifications on V4 that were never given to me.  This patchset will
+> > not move forward until those have been resolved.
+> The present Qualcomm DSP binary contains resource table name as
+> ".resource_table.ac_bin_process.",
+
+My questions still haven't been answered:
+
+1. Why do we have to change the kernel because of the way a company specific
+tool generates an ELF?
+
+2. Why is the "ac_bin_process" part needed at all?
+
+> so the current logic with strcmp will fail with present comparision  as the
+> binary name is not only .resource_table but resource_table.ac_bin_process So
+> to overcome this issue we modified the way of checking the resource table
+> name to make it generic.
 > 
-> > +/*
-> > + * We may need to translate the Linux GPIO offset to a SC16IS7XX offset.
-> > + * This is needed only for the case where a dual port variant is configured to
-> > + * have only port B as modem status lines.
-> > + *
-> > + * Example for SC16IS752/762 with upper bank (port A) set as GPIOs, and
-> > + * lower bank (port B) set as modem status lines (special case described above):
-> > + *
-> > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
-> > + * name        function     offset         offset
-> > + * --------------------------------------------------
-> > + * GPIO7/RIA    GPIO7          3              7
-> > + * GPIO6/CDA    GPIO6          2              6
-> > + * GPIO5/DTRA   GPIO5          1              5
-> > + * GPIO4/DSRA   GPIO4          0              4
-> > + * GPIO3/RIB    RIB           N/A            N/A
-> > + * GPIO2/CDB    CDB           N/A            N/A
-> > + * GPIO1/DTRB   DTRB          N/A            N/A
-> > + * GPIO0/DSRB   DSRB          N/A            N/A
-> > + *
-> > + * Example  for SC16IS750/760 with upper bank (7..4) set as modem status lines,
+> strstarts(name_table + name, ".resource_table");
 > 
-> Single space is enough.
-
-Fixed.
-
- 
-> > + * and lower bank (3..0) as GPIOs:
-> > + *
-> > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
-> > + * name        function     offset         offset
-> > + * --------------------------------------------------
-> > + * GPIO7/RI     RI            N/A            N/A
-> > + * GPIO6/CD     CD            N/A            N/A
-> > + * GPIO5/DTR    DTR           N/A            N/A
-> > + * GPIO4/DSR    DSR           N/A            N/A
-> > + * GPIO3        GPIO3          3              3
-> > + * GPIO2        GPIO2          2              2
-> > + * GPIO1        GPIO1          1              1
-> > + * GPIO0        GPIO0          0              0
-> > + */
+> This logic will perform a string comparison with name ".resouce_table"as our
+> binary name is .resource_table.ac_bin_process it succeeds
 > 
-> Wondering if you can always register 8 pins and use valid mask to define which
-> one are in use?
-
-I will look into it, I think it may be a good idea and could help to simplify things a bit.
-
-Hugo.
+> > > Changes since v3:
+> > >      -- Rephrase commit message.
+> > > Changes since v2:
+> > >      -- Update the commit message with example.
+> > >      -- Update the documentation text appropriately.
+> > > Changes since v1:
+> > >      -- Update the commit message.
+> > >      -- Use strstarts instead of strstr.
+> > >      -- Update documentation file.
+> > > 
+> > > Srinivasa Rao Mandadapu (2):
+> > >    remoteproc: elf_loader: Update resource table name check
+> > >    docs: remoteproc: Update section header name requirement
+> > > 
+> > >   Documentation/staging/remoteproc.rst       | 5 ++++-
+> > >   drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+> > >   2 files changed, 5 insertions(+), 2 deletions(-)
+> > > 
+> > > -- 
+> > > 2.25.1
+> > > 
