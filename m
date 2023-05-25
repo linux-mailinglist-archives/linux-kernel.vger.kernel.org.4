@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7895771162C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72834711632
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243005AbjEYSwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
+        id S243106AbjEYSxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243304AbjEYSua (ORCPT
+        with ESMTP id S243540AbjEYSvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:50:30 -0400
+        Thu, 25 May 2023 14:51:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662BF1FE3;
-        Thu, 25 May 2023 11:43:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FFE213D;
+        Thu, 25 May 2023 11:44:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27BAE61B13;
-        Thu, 25 May 2023 18:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60251C433EF;
-        Thu, 25 May 2023 18:42:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 955786111E;
+        Thu, 25 May 2023 18:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1B1C433A0;
+        Thu, 25 May 2023 18:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040161;
-        bh=mQZOCKaKu/hy1ed/IVeQUFZPlBqiN0A0UWtyYRHjdh8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GA3qVSS0YhFVDBWBH3yw34RGB4XSYzbp7xIW8YDdKz2fAIeX7LDdBm/Pv/P++QH3n
-         O+dbBwvUB8oaMXMKaT1LY90QS9IcvQEQ3Md87AjyjzKXAR6VskzEhTozXN6DLaeR2V
-         JhFWpPc13qEj64Ex8aq43RRGR+RzGusygWS45UJIMA8pDBykHj57fOfRJOMAyoFr7y
-         yXR9v2eT3dSwOs12qTSkycfMOK2od3oVGzT7CPHcKHwN8z7nwB+gX6xThREmFcacuT
-         AKfPdXkG26R2Obw0B7CXSTm/NbgJEVFA+VBFpXHPEPsiTf9O291eaHygyuGrZN7O3n
-         NhMLnlnxoegyw==
+        s=k20201202; t=1685040163;
+        bh=UW0bjrj+djKa8PiNccOOz0mhX2Prxc3KJ8yUZrQeR3Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ao6LfJHuRCaaqebhAMkXNMmXttLeApwbOQTquFfEKHN4Ba7YHddfJjtngZ5IqNo9u
+         WI3DvLKwaE1Zo6YcON+pFzUXM2yR4piqBtVsU4c3hxB9hssWbGBB7nXq2k9ZEP7UNm
+         nUeMUBJwK+L/dQbet0nvQBhYsju6HRcNaoLTE+w8Xw768ZFceqMPfCHuwFgae/T3+f
+         23YIoIBQUcnIFulKwq3vZF5BvhjuRkzRSWgfKuM5rPUM+NDBvYaatrKLyOxMyZMoiq
+         X6FNezS5InraG3QSEbimrfRI0ugrCKZGV+GmLAnQe4ee1tLCjTbx1rT5N76C5aiA+b
+         lcNaCyvk2HbfQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Maxim Kochetkov <fido_max@inbox.ru>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        ckeepax@opensource.cirrus.com, nicolas.ferre@microchip.com,
-        u.kleine-koenig@pengutronix.de, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.4 01/27] ASoC: dwc: limit the number of overrun messages
-Date:   Thu, 25 May 2023 14:42:10 -0400
-Message-Id: <20230525184238.1943072-1-sashal@kernel.org>
+Cc:     Benedict Wong <benedictwong@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 02/27] xfrm: Check if_id in inbound policy/secpath match
+Date:   Thu, 25 May 2023 14:42:11 -0400
+Message-Id: <20230525184238.1943072-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
+References: <20230525184238.1943072-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,42 +59,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Kochetkov <fido_max@inbox.ru>
+From: Benedict Wong <benedictwong@google.com>
 
-[ Upstream commit ab6ecfbf40fccf74b6ec2ba7ed6dd2fc024c3af2 ]
+[ Upstream commit 8680407b6f8f5fba59e8f1d63c869abc280f04df ]
 
-On slow CPU (FPGA/QEMU emulated) printing overrun messages from
-interrupt handler to uart console may leads to more overrun errors.
-So use dev_err_ratelimited to limit the number of error messages.
+This change ensures that if configured in the policy, the if_id set in
+the policy and secpath states match during the inbound policy check.
+Without this, there is potential for ambiguity where entries in the
+secpath differing by only the if_id could be mismatched.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru
-Link: https://lore.kernel.org/r/20230505062820.21840-1-fido_max@inbox.ru
-Signed-off-by: Mark Brown <broonie@kernel.org
+Notably, this is checked in the outbound direction when resolving
+templates to SAs, but not on the inbound path when matching SAs and
+policies.
+
+Test: Tested against Android kernel unit tests & CTS
+Signed-off-by: Benedict Wong <benedictwong@google.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/dwc/dwc-i2s.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/xfrm/xfrm_policy.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/dwc/dwc-i2s.c b/sound/soc/dwc/dwc-i2s.c
-index 65112b9d8588a..90b8814d7506a 100644
---- a/sound/soc/dwc/dwc-i2s.c
-+++ b/sound/soc/dwc/dwc-i2s.c
-@@ -132,13 +132,13 @@ static irqreturn_t i2s_irq_handler(int irq, void *dev_id)
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index 6f58be5a17711..9d4b405659058 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -3223,7 +3223,7 @@ xfrm_secpath_reject(int idx, struct sk_buff *skb, const struct flowi *fl)
  
- 		/* Error Handling: TX */
- 		if (isr[i] & ISR_TXFO) {
--			dev_err(dev->dev, "TX overrun (ch_id=%d)\n", i);
-+			dev_err_ratelimited(dev->dev, "TX overrun (ch_id=%d)\n", i);
- 			irq_valid = true;
- 		}
+ static inline int
+ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
+-	      unsigned short family)
++	      unsigned short family, u32 if_id)
+ {
+ 	if (xfrm_state_kern(x))
+ 		return tmpl->optional && !xfrm_state_addr_cmp(tmpl, x, tmpl->encap_family);
+@@ -3234,7 +3234,8 @@ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
+ 		(tmpl->allalgs || (tmpl->aalgos & (1<<x->props.aalgo)) ||
+ 		 !(xfrm_id_proto_match(tmpl->id.proto, IPSEC_PROTO_ANY))) &&
+ 		!(x->props.mode != XFRM_MODE_TRANSPORT &&
+-		  xfrm_state_addr_cmp(tmpl, x, family));
++		  xfrm_state_addr_cmp(tmpl, x, family)) &&
++		(if_id == 0 || if_id == x->if_id);
+ }
  
- 		/* Error Handling: TX */
- 		if (isr[i] & ISR_RXFO) {
--			dev_err(dev->dev, "RX overrun (ch_id=%d)\n", i);
-+			dev_err_ratelimited(dev->dev, "RX overrun (ch_id=%d)\n", i);
- 			irq_valid = true;
- 		}
- 	}
+ /*
+@@ -3246,7 +3247,7 @@ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
+  */
+ static inline int
+ xfrm_policy_ok(const struct xfrm_tmpl *tmpl, const struct sec_path *sp, int start,
+-	       unsigned short family)
++	       unsigned short family, u32 if_id)
+ {
+ 	int idx = start;
+ 
+@@ -3256,7 +3257,7 @@ xfrm_policy_ok(const struct xfrm_tmpl *tmpl, const struct sec_path *sp, int star
+ 	} else
+ 		start = -1;
+ 	for (; idx < sp->len; idx++) {
+-		if (xfrm_state_ok(tmpl, sp->xvec[idx], family))
++		if (xfrm_state_ok(tmpl, sp->xvec[idx], family, if_id))
+ 			return ++idx;
+ 		if (sp->xvec[idx]->props.mode != XFRM_MODE_TRANSPORT) {
+ 			if (start == -1)
+@@ -3666,7 +3667,7 @@ int __xfrm_policy_check(struct sock *sk, int dir, struct sk_buff *skb,
+ 		 * are implied between each two transformations.
+ 		 */
+ 		for (i = xfrm_nr-1, k = 0; i >= 0; i--) {
+-			k = xfrm_policy_ok(tpp[i], sp, k, family);
++			k = xfrm_policy_ok(tpp[i], sp, k, family, if_id);
+ 			if (k < 0) {
+ 				if (k < -1)
+ 					/* "-2 - errored_index" returned */
 -- 
 2.39.2
 
