@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4D2710E04
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D647D710E05
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241565AbjEYOIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S241557AbjEYOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236270AbjEYOIE (ORCPT
+        with ESMTP id S241531AbjEYOIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:08:04 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD93E5B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:07:42 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30a4ebbda56so2127522f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:07:42 -0700 (PDT)
+        Thu, 25 May 2023 10:08:06 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7FC1A6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:07:45 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ae4e49727eso14437505ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685023661; x=1687615661;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=shopee.com; s=shopee.com; t=1685023664; x=1687615664;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tF/YLiXt+Wz4pi2y/9855PYbDqln/umnaCm1hvZD/nY=;
-        b=FshkKSklE4mhKDuI6cA8Jo6KkrVTc+5WF31v25PXSvMB1rfjab0/nMv74UstUBhCfU
-         5MtIhSo6Xux7Ezw1l2v1Y2BPsxH+4Zt/6PrKAFVHHQ+3XW8SGHgFxBwo6YZTJP0zCTHr
-         NLdeggUhG/BB9v0f0G9+FXR7gaqibHnL22DUBB7yrt5lOkfaYu5Smu6x3RITL0I7OLlr
-         tOFfnrhOtqGJvlRjuIuxAhOv1OJ+WR/Ce5iIHQHmXrQbfCjHCqp+5gFvHc7i9IiIh+hM
-         Uev0MHBAymDNkVZy42ErzwArl0KTFA37qHyPxU9N81IgDPCsnn6hAI3U1QoJNldvDJo/
-         TGPQ==
+        bh=c33tBT8cy9JPPgdRV9qNDNmoB5Xhj3TMTGSWoBJRi6Y=;
+        b=FYZ4Qv3lhHI2M6JlMLNPzk+I50IUxOLOyogHAdzY/9dAsG8hcofW6kRBUtQtqme6eF
+         El9ACrF9m6b/U1v8bIU9e6ogQnPYpCAlIPROFX03fQH6TtFmc+NpjRypzzUfvLQcCPgA
+         IMmLH6zkb8bityx6mv4Sc2Ngs1jHgYVESI6kU386dGSu1gtYkoe5zYsIezw/Lbapda2D
+         nzPd62vGlE4aAG9wK8L5blxg5ilcUkQLkzhsgEsNhgv0XLZ251TEbnLh/AN6hpKUPdj/
+         oCrWYI+n54m3SyBU4d/ncPb8TQUouvgBEbP8YkzUCmoCXR0LG38N128QLQtSZRlCobg6
+         IAWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023661; x=1687615661;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+        d=1e100.net; s=20221208; t=1685023664; x=1687615664;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=tF/YLiXt+Wz4pi2y/9855PYbDqln/umnaCm1hvZD/nY=;
-        b=elA1gqNPvI5nSyJkMH44uCnyqruTKI17ytt4et/e/3SILR1oAUYbSa+e1hTyAAMoz4
-         ibs/rnpCICqkI8NSV4O6blC/aGY56qr1++7v1SoVsO73QWAoK+jYIrgxkk460XPw5qH1
-         jxQlxku0efQ+sl2j/Mr88M6+E9Mrg98NnrG0oKecSwSszBrIeIL4WzpEqwRrLB2FLqxk
-         jQO5HcuGM+0uLaT3rC80FPXVfBq6ER2L4njhcEoKfshqn3pERnET/kqP7k3sCqEwbVB7
-         KS/B9arXGAUU4rNVKG/r5opthfy2XvMdJZlq0MaTs3kciaQsqVygdGP0n4xPc+ctnxYA
-         TjKQ==
-X-Gm-Message-State: AC+VfDxN6iTawNZ2HueTMLdDojA6vup87n9yg637nHbs/+9qSSzOBz3h
-        4ykfiMtjqrHaJsa5r9RXigk9aA==
-X-Google-Smtp-Source: ACHHUZ4ixPjz/IrEBqNV7Mpn53Q4wlZCzaDBAs9Ux+XQ1aLD12RR5fr2BMAIeKn7BLlXdlrzhMvtcQ==
-X-Received: by 2002:a5d:58d4:0:b0:309:5029:b075 with SMTP id o20-20020a5d58d4000000b003095029b075mr2584321wrf.13.1685023660991;
-        Thu, 25 May 2023 07:07:40 -0700 (PDT)
-Received: from localhost ([2a01:e0a:28d:66d0:ed59:2d5:ca3d:ee5c])
-        by smtp.gmail.com with ESMTPSA id e7-20020a056000194700b00307bc4e39e5sm1892289wry.117.2023.05.25.07.07.39
+        bh=c33tBT8cy9JPPgdRV9qNDNmoB5Xhj3TMTGSWoBJRi6Y=;
+        b=FOE+4D5dtTvx3tD9LgCo/psW0TL6FrN4yLOk8GRoK1bzZxwVEA16pgeFuqnOEFsL9O
+         go06k0juE9AMuNRZsz9Jo7rHZTr2ig+JDcyw5LKoHYnP1eEiN7KGSwi1n8bCWYUijpvl
+         hoVXHFjwnI+2pTf33NGQbO8HYkgM0axiK8LMsbZyFO/bgB0duGG+rHKn4X4gMbfOUf4i
+         eSbUylxaUEWnALZGV89nR/vOooPDUMqSTVcaF0S833Syg41EuH7VxUmiiG90zzzR8PII
+         +50I+a1pH1PNulUln6+GoWt8wuzIgHBNeBKv7lGl9jVFkSrklybkEDkgciMDZgVP//sH
+         FyQA==
+X-Gm-Message-State: AC+VfDybCliUvOf9feILDbujsblLm1TDgj9hc1AQQM3mKo71gNDmzE1j
+        ZsS/hKdylNWUf89MbYY4JenJ8w==
+X-Google-Smtp-Source: ACHHUZ45yFuJ/9A4MCbSl44XKJvuN/lObdaSmxg20qFmfGTxUn37ZhJoyCioHCu8T2L7XphJ/xFaww==
+X-Received: by 2002:a17:902:e88b:b0:1b0:f8:9b2d with SMTP id w11-20020a170902e88b00b001b000f89b2dmr856962plg.29.1685023664547;
+        Thu, 25 May 2023 07:07:44 -0700 (PDT)
+Received: from [10.12.184.48] ([143.92.127.226])
+        by smtp.gmail.com with ESMTPSA id v11-20020a1709029a0b00b001ac5b0a959bsm1478099plp.24.2023.05.25.07.07.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 07:07:40 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Thu, 25 May 2023 07:07:44 -0700 (PDT)
+Message-ID: <5453d94d-c231-6d50-02bd-a510109bb306@shopee.com>
+Date:   Thu, 25 May 2023 22:07:39 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH 1/3] mm/mm_init.c: remove comments in
+ zone_spanned_pages_in_node() and zone_absent_pages_in_node()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     akpm@linux-foundation.org, mhocko@suse.com, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230525040150.1588-1-haifeng.xu@shopee.com>
+ <20230525082444.GT4967@kernel.org>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <20230525082444.GT4967@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 25 May 2023 16:07:39 +0200
-Message-Id: <CSVF1AQBGQU0.1V5KJP08TCKLT@burritosblues>
-Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <jpanis@baylibre.com>, <jneanne@baylibre.com>,
-        <aseketeli@baylibre.com>, <u-kumar1@ti.com>
-Subject: Re: [PATCH v5 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl
- and GPIOs
-From:   "Esteban Blanc" <eblanc@baylibre.com>
-To:     <andy.shevchenko@gmail.com>
-X-Mailer: aerc 0.14.0
-References: <20230522163115.2592883-1-eblanc@baylibre.com>
- <20230522163115.2592883-3-eblanc@baylibre.com>
- <ZG0QmjZwvzWbNwA4@surfacebook>
-In-Reply-To: <ZG0QmjZwvzWbNwA4@surfacebook>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue May 23, 2023 at 9:14 PM CEST,  wrote:
-> Mon, May 22, 2023 at 06:31:14PM +0200, Esteban Blanc kirjoitti:
-> > TI TPS6594 PMIC has 11 GPIOs which can be used
-> > for different functions.
-> >=20
-> > This patch adds a pinctrl and GPIO drivers in
-> > order to use those functions.
->
-> ...
->
-> > +#define FUNCTION(n, g, v)                                             =
-       \
-> > +	{                                                                    =
-\
-> > +		.pinfunction =3D PINCTRL_PINFUNCTION((n), (g), ARRAY_SIZE(g)), \
-> > +		.muxval =3D v,                                                 \
-> > +	}
->
-> It seems you have used SPACEs before \, can you move to TABs?
 
-Once again clang-format is not doing the right thing. Sur I will fix
-this.
 
-> > +// Used to compute register address of GPIO1_CONF to GPIO11_CONF
->
-> This is good.
->
-> > -#define TPS6594_REG_GPIOX_CONF(gpio_inst)		(0x31 + (gpio_inst))
-> > +#define TPS6594_REG_GPIOX_CONF(gpio_inst)	(0x31 + (gpio_inst))
->
-> But why this?!
+On 2023/5/25 16:24, Mike Rapoport wrote:
+> On Thu, May 25, 2023 at 04:01:48AM +0000, Haifeng Xu wrote:
+>> Since commit 03e85f9d5f1f ("mm/page_alloc: Introduce free_area_init_core_hotplug"),
+>> free_area_init_node() doesn't get called in hotplug path anymore, so
+>> remove the comments related to it.
+>>
+>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>> ---
+>>  mm/mm_init.c | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/mm/mm_init.c b/mm/mm_init.c
+>> index 7f7f9c677854..cf55bba04b23 100644
+>> --- a/mm/mm_init.c
+>> +++ b/mm/mm_init.c
+>> @@ -1174,7 +1174,6 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
+>>  	unsigned long zone_start_pfn, zone_end_pfn;
+>>  	unsigned long nr_absent;
+>>  
+>> -	/* When hotadd a new node from cpu_up(), the node should be empty */
+>>  	if (!node_start_pfn && !node_end_pfn)
+>>  		return 0;
+> 
+> I think it's better to call calculate_node_totalpages only if node actually has 
+> memory and for node with no memory we just need to make sure all the node
+> and zone page counts are indeed set to 0.
 
-Once again, clang-format... I will fix this.
+Yes, it's good advice.
 
-Thanks for your help.
-Best regards,
+> 
+> Then the condition here and in zone_spanned_pages_in_node() can be removed
+> along with the comment and patch 2 won't be required at all.
 
---=20
-Esteban Blanc
-BayLibre
+Regarding to patch 2, if the node has mmeory but contains zone with no memory,
+it can avoid the calculation of absent pages.
 
+I thik we can add a check that whether zone_end_pfn is equal to zone_start_pfn
+in patch 3. If it's true, return 0 directly. So patch 2 can be dropped.
+
+Thanks!
+
+>   
+>> @@ -1227,7 +1226,7 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
+>>  {
+>>  	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
+>>  	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
+>> -	/* When hotadd a new node from cpu_up(), the node should be empty */
+>> +
+>>  	if (!node_start_pfn && !node_end_pfn)
+>>  		return 0;
+>>  
+>> -- 
+>> 2.25.1
+>>
+>>
+> 
