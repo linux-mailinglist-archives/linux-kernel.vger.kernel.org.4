@@ -2,235 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F7D7105B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 08:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D577105C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 08:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238427AbjEYGjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 02:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S229650AbjEYGoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 02:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjEYGjo (ORCPT
+        with ESMTP id S235395AbjEYGoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 02:39:44 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE869189;
-        Wed, 24 May 2023 23:39:42 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-4572fa2a92fso62240e0c.2;
-        Wed, 24 May 2023 23:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684996782; x=1687588782;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qgfz3nPmdI+S3+lmqQSPwAQ/1Clj8Evj/a1VGGmq+xQ=;
-        b=T3cMmHhcvuP+7ZN2NgqUHMGn4+w8CPYaAlgxvRNG/znwCGXb47yZVYnKngsBb9P7B+
-         g9IEVdgKxHQVLl9p0RyOXqbHTlvFLbvcnX4O/FIETgHowGN9rkxrfxAT7vODH9FXUhXI
-         56+xnusvDY6M+gmbHhK3bz8NIhA2hYusd8OUkPLHMAvGLHcqXcS1x+4ajlBZCtpkcGrD
-         2MngpJR7Jb5yT2MUjxb6AWMuBY0slbWkLj0I+lSyFqwJstZ57tCDcJlUofXYrW2bJCYU
-         8qh44tMQWKIVXHP4rsCuUUIHLGP6B5kBn+GrIa6B9qsXTXqZhGa1g4asVzbofxqN7T5P
-         /jNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684996782; x=1687588782;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qgfz3nPmdI+S3+lmqQSPwAQ/1Clj8Evj/a1VGGmq+xQ=;
-        b=IQNlGLGdchWq50JwaNH5dl7AuisIfpzp329WHqdLanHmfo5m9Gn6o/61OSjRCNoaPz
-         PWqckaRSuNuB9oPoKr1gkrjb7ACjrKd1Hx4jAE3vqAuuN+6a/Md2m+G9i8XHV9XK1cGu
-         SJ6bxhju3D74Q1170Aubg8MBn6e6OQXPLr4GJkGWjcpw0lHCiTzMUBasFm3bZwTzrIsE
-         tl7Q6qRY5bChg31TWEDOj0Pf0KQ6MBD6OMTiJhw4NL7raHRlforlxkhgGPUf6pd/YzVy
-         GywCo8HglyPm+vCb4NVG/W3LCcc2ZYRCI9o+K2kduthXE8ueTEZtaLFm9uWNqOy1Pm/N
-         VbjA==
-X-Gm-Message-State: AC+VfDwqZWvFVUOigytf8iWVYZInB+2MzqjptGyR96I0lzvD9+oiqN09
-        ynqF5M8TdX0ZhpXiMaauMaTRRE3vR64Z696n8r4=
-X-Google-Smtp-Source: ACHHUZ5bIBNeZo+jv9CLtMpvIEyomJv5OJ+5YoSCKwOxzNybuCkIMtT/jmFYv+DRVD/DuiaellhYuykZe36Qo3uV07Q=
-X-Received: by 2002:a67:bb09:0:b0:421:c588:4d40 with SMTP id
- m9-20020a67bb09000000b00421c5884d40mr6078738vsn.15.1684996781899; Wed, 24 May
- 2023 23:39:41 -0700 (PDT)
+        Thu, 25 May 2023 02:44:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF39C;
+        Wed, 24 May 2023 23:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684997072; x=1716533072;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=+4/r9oF6dU0Hy6oZ7Gzueuky1SFLNFY9hvkQuvTUbz4=;
+  b=e3iKEYiMW6gjtAUBosfG/Kc/DYLBrjFI26NxQornkDXM8pqsByMP4zOs
+   WZgQ50dJLKzEjB5XXkD1bqEm5eAxSoWGqpY5je1GNgEpgJ7dHFpYUVVwv
+   FyUERWa2Wb7GfCMhlGDrKIJxR4n8sVWLP60ExOipFUh+Gw0zuJXwTaDMv
+   OUe3s8h0bZ7kUwy8n6i2m/SVom4gmlM1dILnpBze/VCeRZqin696KwKCB
+   UpQPsBmMxd6s322dSxzwOlOte9H2CpcjWy5lBwZTQk8Hl8J0H8fXxoKsx
+   e5hL7d+mXHIN5cJaD3VxtTgIdQznUmaH4gIEbHSBhWXZYyEUXT4r/ad01
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="352644114"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="352644114"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 23:44:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="698864440"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="698864440"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 24 May 2023 23:44:28 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 23:44:27 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 23:44:27 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 23:44:27 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 24 May 2023 23:44:27 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kOLJ5c8tin6JbcDilbYsVNw/f85G5H91dGR5hpG/DrKbYxrdyDubHP6yK23bDVR0V1Qp3kORkm+nxw5ruG55+ZEeCkZg9qH3wsAiBq+WODSKqL74MaPF243E1bLJ6t4PoilR12N7DqiFAkhnszbFxu9zdOfcmp+Kv6UwuBdjVKi+tprx//buC5c1TNsjWYSutSnBJgWotFKmQCI7o0WAZmU3U6CulySeYF6VjjZMAqAd6o8JA3P4iSrX0Y2Jg6HDtOzTmWdVHd9xdfJ4NoZdetksLy5/Zd6/gEj503NWxkNuzsISZISByXaT/6TMXcvUrP4DUpEfeo2cKlbX0bwffg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F0RhA1m690ALkUa/nFoAZvXyHl/KVGvg91fwMJ4AYL4=;
+ b=hu0glDxkvQbFk10RQFRjnPVt0973OeCo0Kl2hd+DC/Nt2SYmXaTa4ckLle2aG4UdqxIAozRtERaKT6hQPfW2UHaTlP3tFQ8RBEqGuuQM82SLxhF9t5vN9Nj8KCDJVwTxo8La67sz/rUULqRRodc73oaYM6OTm0wss114p3QssnVGhscaGDE9Q5PIpHNxnpOVRfbllFL6hGMnmxbq5WBaOsUIFs6lwg3meB//Oism2TJPKcS+WmbEczudDvtafftaenpevCK++yPBEv37sRLCh8GBCmvI388/OaWEzWxDVJcxyDe6AOMzlquF6AAWiFYIMoVHobxICoNyWh/qcmIjYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by MW3PR11MB4522.namprd11.prod.outlook.com (2603:10b6:303:2d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Thu, 25 May
+ 2023 06:44:25 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::b14b:5c9c:fa0e:8e7c]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::b14b:5c9c:fa0e:8e7c%7]) with mapi id 15.20.6411.028; Thu, 25 May 2023
+ 06:44:24 +0000
+Date:   Thu, 25 May 2023 14:41:09 +0800
+From:   Yujie Liu <yujie.liu@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-modules@vger.kernel.org>
+Subject: Re: [linus:master] [module] 8660484ed1:
+ WARNING:at_kernel/module/dups.c:#kmod_dup_request_exists_wait
+Message-ID: <ZG8DBbIuNNe5muY6@yujie-X299>
+References: <202305221508.753c7b78-yujie.liu@intel.com>
+ <ZG2doZJrCK7Nlrqf@bombadil.infradead.org>
+ <ZG3Ho7eK+KqoAdda@yujie-X299>
+ <ZG5OGRDfIbMs6sxz@bombadil.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZG5OGRDfIbMs6sxz@bombadil.infradead.org>
+X-ClientProxiedBy: SG2P153CA0026.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::13)
+ To CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
 MIME-Version: 1.0
-References: <20230320095620.7480-1-di.shen@unisoc.com> <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
- <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
- <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org> <CAHYJL4rnfVp+X3imbxWzUd9ixTFAPe4ioLyi-t50PwhL0y5v8A@mail.gmail.com>
- <da59b4ef-1532-1b3a-7a73-9a095d8c9390@linaro.org> <CAHYJL4qJwKHFsCPUvLzmUEAJtEfHDAO23D5=0zAXOYSCABJ8_g@mail.gmail.com>
- <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org> <e31da1fa-168d-9a85-cdb3-66192d887d83@arm.com>
- <ce9b3b01-e496-9e02-5583-41893b7154c7@linaro.org> <6022d391-9ae8-2bb4-0f81-2c99466dc556@arm.com>
-In-Reply-To: <6022d391-9ae8-2bb4-0f81-2c99466dc556@arm.com>
-From:   Di Shen <cindygm567@gmail.com>
-Date:   Thu, 25 May 2023 14:39:30 +0800
-Message-ID: <CAHYJL4r0yxLDHsTDKdcny6F7Lbzo-D48RGWyax07YUUFuzC2mg@mail.gmail.com>
-Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
- not be reset
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
-        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|MW3PR11MB4522:EE_
+X-MS-Office365-Filtering-Correlation-Id: d4282c25-ffa9-4259-c340-08db5ceb7a3e
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f430uoNHvzhNgRJcK31VeaBqliTXy5BPbgRn0rPQgRJlYCP7rck8Rl27a2lpOF8z0+z+7iD2iLbOwVWDWrM2uNstjN44IK9YD2GW2cX0SlrNEzxUMtm+rezZOdi9QvU7W+hnTAbZnNdYCQXFZBOXcuWkgxbRx1zb3kJ6TTACQ2pdhuSTQb5OcS3ZSM/NaWnDjL8/TbwMkPf/ot5RMxzsPj0qU/udmB8OHA7CZo/kqiMB84pwI5GfOlmxLDzS6Ubv1cJOEuDsL9GJUaaqf1WUvFORB/ECGU4UWiJEmZCXiulXCbCWH7YtDDAvNemxFH41ovOnac25ptI+A6rd1dqKi/njA27Dgtpvv3Y9nEuS+uxO/i450XWX8Hm57h9WkTmflzfMQpz0scKtZcxq79nXRGMjCR5oc/0puP+KerLZQ75JP5JJ2eEj/7B0tm1gdPWHkpUsXCOl5e+uRR6vp1nhvZBqX1Pz6K4lGcvrzlW1UdgO2D8CgMyCU4h6vBShTd3AdDPYSgiNNGW3lL+AOA2ty9v25OQ8TOuZzV6KOBbmYWpIl9C2ik9mk0i558LeJdsWMa3t5Ggf+lAwiuI/bhahrQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(396003)(366004)(376002)(39860400002)(136003)(451199021)(38100700002)(82960400001)(33716001)(66946007)(66476007)(66556008)(478600001)(86362001)(6916009)(4326008)(6666004)(83380400001)(6486002)(66899021)(41300700001)(316002)(186003)(44832011)(966005)(2906002)(9686003)(6512007)(26005)(6506007)(5660300002)(8936002)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W24fIr1FjIS11UHL6+BBno54rRN303dLxZrovOM/uqxMA3iL0BZUWHc9btNS?=
+ =?us-ascii?Q?kPNAEfeifS2AaBq7Do3/4W0e4gZC3TNHwXE2Y4RL451tK/d3lw/8pYGN3tAK?=
+ =?us-ascii?Q?i3trQQQCVnhO/PL3woV59l+MgpRMk584zbE8uiyXNmReI/nT4R5Wv4tUYUbN?=
+ =?us-ascii?Q?hKzeVzEedLgWBnx1dv4SqUY76IAY5aoL1llXwvNXAnh6ciLLO9pVYGtbYeGi?=
+ =?us-ascii?Q?iYFchYm+WDrNuEYuia2CbMd5QdiHGXcs/is0mHcpvSQ3lf1ajZuTV3a49D7W?=
+ =?us-ascii?Q?2/SHXw4uJOMbM1mH4TLFCImV5T5A08RQw5vHygNFhMKlwNslNY6KIOzLBajM?=
+ =?us-ascii?Q?zYol1bLuAKt8z5MpJ0fA6V4nd/gP1VUBdyQIHc42Jmi75/kkihida0fAoWUX?=
+ =?us-ascii?Q?y43QoWeqzo/ABVDeGleXp6IM86WH0Cj9ByA6RgQEYtPjXHNwarHtLHTDDeHJ?=
+ =?us-ascii?Q?/zbZGU3a7iuUHTax/5nL0fBsGo62ZsLJ+9qYIrXiRuoSWISLVoZHZpNBNlel?=
+ =?us-ascii?Q?z7kVjcLXynYJ54Th+dqZ7X/ESA5ZlSNYTybwv46/1zR1+yE5NXjmsbAt3tFt?=
+ =?us-ascii?Q?fxqfufiL3u+DBXTY8r8apyd5yJ8pQ4979A3dpB+SGEDIJpwDejQX90TFEMET?=
+ =?us-ascii?Q?idEUjjW6HlN6BgUG6AbQjgZmuu/F4QAHl1u40XDKYNo/VUowzX7iBavYDe6o?=
+ =?us-ascii?Q?1YG1WwfS+0IBCXPocnfTWIheQZblA4/tps8NVpoFiPxV6ieXJyZBgWAenDJr?=
+ =?us-ascii?Q?YrAs6Zy2+bocBhpsjPNWNCv36k7w2H/SucqfVXKjmibNYbrpUrMOUItDSCk1?=
+ =?us-ascii?Q?0QIp2jwu36/x2wplMmCsGNEYmN6Ybi4MF0laf/dI13W6dJIqHNQrayQ4/DuJ?=
+ =?us-ascii?Q?rHZaq0c+RdYYHpgF12jrXd4ITeUniB29ExVhBAGyvKRiuAC6E3PpsaB/369x?=
+ =?us-ascii?Q?J5V/JgbNNob9uPuyqd0wcUJjOQdIsJDnsi9flEcbCdh+Poph8z4+5Fw/Qojo?=
+ =?us-ascii?Q?tcNNyFPjWHKbOS6+A+l2Un01e/ufvyCHRUv0nBHS0Jm0Gf8xYjwvucXsVlFI?=
+ =?us-ascii?Q?0JeLGKIzoUDyP9Is7zMwQKtkp1c/U3O31Os3xts0F9HkeMkSYUvswyfX0XhL?=
+ =?us-ascii?Q?Y6csoPOoiDoGrYX4dFYAmf9C6updzIM2U8nnaDDun7G7v8xALWxhSoE90464?=
+ =?us-ascii?Q?odEpfEdAwzjpbvq8d0Ewwe7aObhmJnh1dgVTF94qumdP3qqw0njNrY5jb8fP?=
+ =?us-ascii?Q?5S2y88pAK5jcNGMUg7KwDDZw/FJuiT7r13YrDY463F37I7Tvr+3YcATWFDjr?=
+ =?us-ascii?Q?7H9chS5+Q4dJZBGm9G5D6S47GPqbdMt05gsrHHS+YssCgbL3fCs2wqzB5YvV?=
+ =?us-ascii?Q?vhd2lJ2/EnakkOhcLu8qREnY96DG7vcrfvt0cOfhOhN1KGzNp3HGHLQwrI2f?=
+ =?us-ascii?Q?Q0JVHNMxENcMH2NMmDUgaT7L+e9s7llcBOqA4A7VvHJOjNXBx+IyIs/ishYj?=
+ =?us-ascii?Q?B17Yi6N6fTkg6gFtOJMDIzSQtVJpYiTlh9n8X6t8SnmOXQ27WTkK+NUU56Uh?=
+ =?us-ascii?Q?YE/1s/crnEbcmPVuAWnQXGgYaRgTjGJVgDyKLIPv?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4282c25-ffa9-4259-c340-08db5ceb7a3e
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 06:44:24.3972
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hkSo6LxhCRHpL2g4ndI44/H+kA4tliWNu70GIrWE+nXeLhCHsylcy3UyILNp5kgaN6ecn+EpxXoTkRn2OhFicQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4522
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 11:21=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
->
->
->
-> On 4/14/23 16:06, Daniel Lezcano wrote:
-> > On 14/04/2023 16:18, Lukasz Luba wrote:
-> >>
-> >>
-> >> On 4/14/23 12:12, Daniel Lezcano wrote:
-> >>> On 13/04/2023 10:40, Di Shen wrote:
-> >>>> We have discussed this question in patch-v1:
-> >>>> https://lore.kernel.org/all/f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm=
-.com/
-> >>>>
-> >>>> Simply put, we use the trip_temp in the Android System; set differen=
-t
-> >>>> trip_temp for thermal control of different scenarios.
-> >>>
-> >>> The changes are dealing with the trip points and trying to detect the
-> >>> threshold. That part should be handled in the thermal core or thermal
-> >>> trip side, not in the governor.
-> >>>
-> >>> AFAICT, if a trip point is changed, then the power allocator should
-> >>> be reset, including the cdev state.
-> >>>
-> >>> It would be more convenient to add an ops to the governor ops
-> >>> structure to reset the governor and then call it when a trip point is
-> >>> changed in thermal_zone_set_trip()
-> >>>
-> >>>
-> >>
-> >> Sounds reasonable to have a proper API and fwk handling this corner
-> >> case scenario.
-> >> Although, if there is a need for a 'easy-to-backport' fix for IPA only=
-,
-> >> I agree with this patch, since it's straight forward to put in some
-> >> Android kernel. We can later fix the framework to handle this properly=
-.
-> >> Anyway, both ways are OK to me.
-> >
-> > Unfortunately, we can not do the maintenance of the Linux kernel based
-> > on an 'easy-to-backport' policy to Android.
-> >
-> > This patch could be applied from-list to Android as a hotfix. But for
-> > Linux the fix should be more elaborated. One solution is to add a
-> > 'reset' ops and call it from the trip point update function.
->
-> Fair enough.
->
-> >
-> > Did you double check the issue is not impacting the other governors too=
- ?
->
-> No, unfortunately, I haven't checked other governors.
+On Wed, May 24, 2023 at 10:49:13AM -0700, Luis Chamberlain wrote:
+> On Wed, May 24, 2023 at 04:15:31PM +0800, Yujie Liu wrote:
+> > Hi Luis,
+> > 
+> > On Tue, May 23, 2023 at 10:16:17PM -0700, Luis Chamberlain wrote:
+> > > On Mon, May 22, 2023 at 03:51:59PM +0800, kernel test robot wrote:
+> > > > Hello,
+> > > > 
+> > > > kernel test robot noticed "WARNING:at_kernel/module/dups.c:#kmod_dup_request_exists_wait" on:
+> > > > 
+> > > > commit: 8660484ed1cf3261e89e0bad94c6395597e87599 ("module: add debugging auto-load duplicate module support")
+> > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > > > 
+> > > > [test failed on linux-next/master 798d276b39e984345d52b933a900a71fa0815928]
+> > > > 
+> > > > in testcase: boot
+> > > > 
+> > > > compiler: gcc-11
+> > > > test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> > > > 
+> > > > (please refer to attached dmesg/kmsg for entire log/backtrace)
+> > > > 
+> > > > 
+> > > > We are not sure if this is expected as this patch is for debugging
+> > > > duplicate module requests issues, so we are sending this report for
+> > > > your information. Thanks.
+> > > > 
+> > > > 
+> > > > If you fix the issue, kindly add following tag
+> > > > | Reported-by: kernel test robot <yujie.liu@intel.com>
+> > > > | Closes: https://lore.kernel.org/oe-lkp/202305221508.753c7b78-yujie.liu@intel.com
+> > > > 
+> > > > 
+> > > > [   48.705567][    T1] ------------[ cut here ]------------
+> > > > [   48.706519][    T1] module-autoload: duplicate request for module intel_qat
+> > > > [ 48.707866][ T1] WARNING: CPU: 0 PID: 1 at kernel/module/dups.c:183 kmod_dup_request_exists_wait (kernel/module/dups.c:183 (discriminator 1)) 
+> > > 
+> > > This is a real issue since CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE was enabled.
+> > > If you enable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE and these warnings
+> > > come up a bette detailed report would be better. In this case the goal
+> > > was to capture races of request_module() and so the idea for developers
+> > > is to identify the module that caused this, in this case intel_qat, and
+> > > then see who called the request_module() for it. They could try things
+> > > like try_module_get(), but could also ensure that multiple requests
+> > > won't be done in the code by using locking schemes or whatever. Only
+> > > one request should be issued.
+> > > 
+> > > The trace below would show possible users but I don't even see
+> > > drivers/crypto/qat/qat_c3xxx/adf_drv.c in my kernel tree.
+> > > 
+> > > If you don't to deal with this reporting you can just disable this
+> > > config option.
+> > 
+> > Thanks a lot for the information. Does this indicate that there is
+> > indeed a multiple requests issue in that crypto driver and we could
+> > report to its author/owner? Thanks.
+> 
+> Not for the crypto driver, there are multiple requests for
+> something like:
+> 
+>   request_module("intel_qat")
+> 
+> the trace shows who it could be. A git grep shows:
+> 
+> git grep request_module | grep intel_qat
+> drivers/crypto/intel/qat/qat_c3xxx/adf_drv.c: request_module("intel_qat");
+> drivers/crypto/intel/qat/qat_c3xxxvf/adf_drv.c: request_module("intel_qat");
+> drivers/crypto/intel/qat/qat_c62x/adf_drv.c: request_module("intel_qat");
+> drivers/crypto/intel/qat/qat_c62xvf/adf_drv.c: request_module("intel_qat");
+> drivers/crypto/intel/qat/qat_dh895xcc/adf_drv.c: request_module("intel_qat");
+> drivers/crypto/intel/qat/qat_dh895xccvf/adf_drv.c: request_module("intel_qat");
+> 
+> And so there should be one request issued, ideally.
+> 
+> Nothing bad happens of multiple request are sent, however duplicate
+> requests means that you can end up userspace trying to load multiple
+> requests just for one to be freed.
+> 
+> This is not a serious bug.
+> 
+> Soon, I'll implement a solution so that even if duplicate requests get
+> to userspace it won't trigger a duplicate load in-kernel, and therefore
+> duplicate module loads won't have to free the extra ones. At that point
+> this becomes less of an issue.
+> 
+> request_module() just calls to modprobe, and modprobe is supposed to
+> check if a module is already loaded before trying finit_module(). If
+> two duplicate requests end up calling modprobe though there is a small
+> race that two concurrent finit_module() calls will happen as userspace
+> would not have seen one load request going in before. The issue is that
+> finit_module() uses vmalloc space multiple times for the size of the
+> module, even if the module is a duplicate. One vmalloc space is for
+> kernel_read*() call, the other is for the copy we want to keep around
+> in kernel, the final copy. If module deeecompression is used another
+> vmalloc is used. So in the worst case 3 vmallocs.
+> 
+> A duplicate request could end up being failed only to find out a module
+> is already loaded, and so about 2-3 times the size of vmalloc space of
+> a module size could be free'd just due to a duplicate.
+> 
+> We could avoid memory pressure proactively by trying to issue only one
+> request out.
+> 
+> CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS was added to detect these possible
+> duplicates when they were triggered by module-autoloading, through the
+> request_module() API, directly from the kernel. It turns out that there
+> aren't many of these duplicates. That was the point to the exercise.
+> To proove the kernel likely wasn't the one causing tons of duplicates.
+> 
+> Because if you enable CONFIG_MODULE_STATS and then cat /sys/kernel/debug/modules/stats
+> you will see tons of duplicates. This gets worse  by the number of CPUs
+> you have. Seeing little reports of CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS
+> proves the issue is elsewhere and at this point I'm certain this is
+> coming from udev kmod library usage and it forking and not being able
+> to detect the same context for the kmod library for loading modules,
+> and so duplicate module request go out for tons of modules for each CPU.
+> 
+> See commit 064f4536d13939 ("module: avoid allocation if module is
+> already present and ready") for a graph of this.
+> 
+> That commit also prevents having to do one vmalloc allocation if the
+> module is already present. I'm going to work now on one which prevents
+> the first, and so duplicates requests coming from either userspace or
+> the module-autoloader should be harmless. But that is not merged yet,
+> and I still have to post the patch.
+> 
+> So in the meantime CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE should only
+> be enabled so to try to help those who wish to be proactive and want
+> to enhance the kernel module auto-loader so to only issue one
+> request_module() for a module needed by the kernel.
+> 
+> Technically CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS also implements a
+> way to unify requests for the same module into one, and they all
+> share the same result, but this works only for non-async calls to
+> request_module(). That config option is a debug mechanism right now,
+> but we could make it default later.
+> 
+> > Not sure if I undertand this correctly: enabling
+> > CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE can help detect multiple
+> > requests issues in existing code, so we should report to the original
+> > author of the modules that have this issue,
+> 
+> It would be an optimization that they could make. It is not a serious
+> bug. It would be a more serious bug if we had tons of these reports
+> all over. But a few, no.
+> 
+> Come to think of it, at this point in time CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE
+> should just be considered informational and debugging, no need to report
+> anything to anyone becuase I do think I can get the vmalloc wasted
+> space issue figured out for userspace and kernel module-autoloader,
+> and so this becomes a non-issue at all. Yes, it would still be nice
+> to reduce latencies by having duplicate requests not be issued, but
+> the developers keen on that would enable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE.
+> 
+> So I'd say enable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE only if
+> you want to avoid help avoid duplicates yourself. The kconfig language
+> already is a bit clear about that, but we could enhance it to explain
+> the gains for developers who may want this. Since we can't talk about
+> the future though in kconfig, I think the language now is OK.
+> 
+> The bigger source of duplicates has been determined to come from
+> userspace, I'll Cc you on a patch to fix the last vmalloc wasted
+> space, so that this would never incur tons of wasted vmalloc space.
+> 
+> I'd recommend for now to just disable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE
+> unless you want to make the reports informational and describe the
+> situation as I just did.
+> 
+> Actually, could we talk soon about testing? Because I want to automate
+> some more tests for modules with kdevops.
 
-Hi Lukasz and Daniel,
-I rethought about this issue, and have tried three ways to solve it.
-Finally, I realized that the root cause might be the cdev->state
-update and notify. We should get back to take cdev->state into
-account.
+Thanks a lot for the detailed explanation and guidance! We will disable
+CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE in the regular tests of kernel
+test robot, and will keep an eye on the latest updates in the thread of
+"module: avoid all memory pressure due to duplicates" patch series [1].
 
-The three ways:
-1.From trips updating perspective:
-As your suggestion=EF=BC=8Cadd an ops function for thermal_governor
-structure=EF=BC=8Cdefine it in IPA governor, and call it when trips are
-changed by userspace(sysfs node).
+[1] https://lore.kernel.org/all/20230524213620.3509138-1-mcgrof@kernel.org/
 
-2.From cdev->state updating perspective:
-For example, for gov_power_allocator there are two branches reached to
-__thermal_cdev_update.
-
-power_allocator_trottle
-        |
-allow_maximum_power()[gov_power_allocator.c]
-        |
-__thermal_cdev_update()[thermal_helpers.c]<<<<<<<(1)
-        |
-thermal_cdev_set_cur_state()
-        |
-cdev->ops->set_cur_state()
-        |
-thermal_notify_cdev_state_update()
-        |
-     .......
-
-
-power_allocator_throttle()[gov_power_allocator.c]
-        |
-allocate_power()
-        |
-power_actor_set_power()
-        |
-__thermal_cdev_update()[thermal_helpers.c]<<<<<<(2)
-        |
-      ......
-
-Add a variable last_state for thermal_cooling_device structure to
-record the last target cooling state, and before
-thermal_notify_cdev_state_update, determine whether the last_state is
-equal to current state. If not equal, then
-thermal_notify_cdev_state_update.
-
-static void thermal_cdev_set_cur_state(struct thermal_cooling_device
-*cdev,
-~                                        unsigned long target)
-{
-        if (cdev->ops->set_cur_state(cdev, target))
-                return;
-
-~       if (cdev->last_state !=3D target)
-+               thermal_notify_cdev_state_update(cdev->id, target);
-+
-+       cdev->last_state =3D target;
-+
-        thermal_cooling_device_stats_update(cdev, target);
-}
-
-In this way, it will only update and notify when the state is changed
-which means there's no need to use update flag to make sure it updates
-cdev->state only once.
-
-It can avoid a lot of unnecessary notifications, not only when the
-temperature drops below the first trip point(at this situation
-cdev->state is always 0) but also when the policy is working.
-
-3.Similar to the second method, but an easier one.
-Actually, in the set_cur_state ops of every cooling device, it has
-already checked whether the last cooling state is equal to current
-value or not, and returns 0. Like cpufreq cooling device:
-static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
-                                unsigned long state)
-{
-        //.......
-        /* Request state should be less than max_level */
-        if (state > cpufreq_cdev->max_level)
-                return -EINVAL;
-
-        /* Check if the old cooling action is same as new cooling
-action */
-        if (cpufreq_cdev->cpufreq_state =3D=3D state)
-                return 0; //return -EAGAIN;
-}
-
-What if return a non-zero value? 1 or -EAGAIN(means thy again)? Then
-thermal_cdev_set_cur_state() in __thermal_cdev_update() can return
-directly without update and notify.
-
-I prefer method 3. Because there's no more new variable or function
-compared to 1 and 2, and it can make code more brief.
-
-Well, what do you think about the three ways? Look forward to your
-comments. Thank you!
-
-Best regards,
-Di
+--
+Best Regards,
+Yujie
