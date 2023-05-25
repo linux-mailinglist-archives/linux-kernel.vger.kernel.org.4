@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8400E710405
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C73E71040A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236141AbjEYEWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
+        id S234004AbjEYEWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234004AbjEYEV4 (ORCPT
+        with ESMTP id S233082AbjEYEWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:21:56 -0400
+        Thu, 25 May 2023 00:22:05 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D123B2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:21:54 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8bab3b392so273951276.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:21:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50530186
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:21:59 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba83a9779f3so293722276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:21:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684988514; x=1687580514;
+        d=google.com; s=20221208; t=1684988518; x=1687580518;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6+sgLz6IKrRIO1yM+TpsTAd9X8BjcHwKTpevLF9Po4=;
-        b=acs2JXhDytmqbLjWUEKhEkUFKrCaBUNuqEeIXFSkxZV7b+9bvAMlxxDqn1jMcHOB14
-         6XTzYmb7BFqj32KP8Wz01ehCy45RNxbyvseLn6490y+8WoJrQGGpQHvwkaGw7ej7km5t
-         bhOGaNsgyLj7VWjNFdJhyWwzEanRcmUEaTuQ2G9MinnG9DfhOzAuYJa7uA1UES3fcKAx
-         x7aREWcR8ycChGRDqL+f49aHXOvU5WmK3BjMLybSUXNEqDzvoB+so/1VjVSz7j8H9tSg
-         JD6uWtRebzL9lUiVjL+uIVvXGV5uDiLrCkacj8IckkLT1Uf4HwzA8Uy/jDe0oM2lFoxT
-         ZJ3Q==
+        bh=98GS1yBDh3h/h+5NjI7rziULFIid1JDrRb2JVZKNFRg=;
+        b=TrJRb1gjIODGA9G7zYo/ODm6PuuPJltD0EoZbN0FAIcLUYYdMaLXh/5IU8HVTcKVNC
+         k5wzgdMdFokn8teszJWIGewAhgthSJ74xEx25ozikYO4GrC1VIY3sorovF/gMq6ZX8Zx
+         RSDyJE4ZK71g5Sayo/ckvyuUtEdT58zK8TiCXOs845fYwWqyYgM6t/IlPm9s94x46BPA
+         QYa/+wL5NzxrwcR94nzoNAE5aOkb8ZCSVbdSXHWA6Ppz8CUSLXOWnbJFX696ET55oULe
+         HtqAD7LaZhWbSRN9YFONBTv1QH4ns7fJ+2CdjxdLZeiNql45+MpaB+baDQF3WYiyYyUb
+         0wtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684988514; x=1687580514;
+        d=1e100.net; s=20221208; t=1684988518; x=1687580518;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6+sgLz6IKrRIO1yM+TpsTAd9X8BjcHwKTpevLF9Po4=;
-        b=GaHrTMpUJlCEjQKYUW3x5vIPdZd6TiSk8DXVHqHjqTQbz3dKV8JZykavcGFP2edB7G
-         wdoIW96y/D1Tr3Maijg1JFOiUViowsTLrfnldEF5c8QqIJEDKUQoq3WytXo0CEAsT0GU
-         4XQp5Y7ujHW3qp4Sxm7rY3YEH8Mu3zGbSeClAkHT9DG7hmtsZNrqPiIUSBZwEcHi5Tw9
-         xi3sglqcWCdMrg4xtdS/3IH5+qyGkxX+r14uO5ed/X8E9Zi6w8m+09KUx19aKr9NAT47
-         5JNYlOg2MGJh6LrPSBwD/VsN9vbkyWkS4ZnRCtsWLAxDFoICscJqKQGJH/yJUbBWyJsa
-         FCJg==
-X-Gm-Message-State: AC+VfDyqHHLilNShn5nJIEnx5FNSpXA28z7kADgmLyGHjIGt8aZV21OR
-        bvgcZIyc4Sxj6qjwIw/WUp3uYs2ctrj3Jg==
-X-Google-Smtp-Source: ACHHUZ5TJwnLd31an9veopSLqB2YlrNro/fDAjUNvfcwvcpKtjRqsyiBLYFC26WloVni/2gtqK+0Lx0Bg89szg==
+        bh=98GS1yBDh3h/h+5NjI7rziULFIid1JDrRb2JVZKNFRg=;
+        b=dTvuHS2eXJu+YQKgH/rullc00WmGNW83Jqvmj+YBxgPd4IgMVIiLnIdVQSFdjY3Ha7
+         ThCN2F4aYDih1GLvIfd0/+23Z50yC5MSUkzmCEBx8MpzANGvn7UjC7KiBW63XT6bA1Sw
+         CPa70RiQh1U/eQjmRH2crmcWJXZD1sXroD9a/EMkKPoVFWdtFXqtImEXWijA+GL5Pnt+
+         WkuPnyK5LADGCtVeK1U5vbgfzWPAQ/HMKEHAUuam+jY+uardSvqCPR+Cijk4Epl+XOG4
+         uJppUoc+FfMkdogDZEyD6kJkYRgLKygQ3WtFLK8z30eIPRptQAnBgKt3c3OZULWsiem+
+         9B4w==
+X-Gm-Message-State: AC+VfDyrD6mTai8keSFB8EUimA0vCcaEqZppfjna0w+YAhXK7kdQ1fOL
+        lqJlZEVROxl770hdnVqvVS3k9eOxTasEUA==
+X-Google-Smtp-Source: ACHHUZ7gMiNS3iV21rOO3brq86ZzcHBDRBwpvNy6cIuEboXIgU711R2ZSvPfIrHn1P2qoneGVAb2ZjtNAv4qNQ==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:1613:b0:ba2:2d0e:a752 with SMTP
- id bw19-20020a056902161300b00ba22d0ea752mr1276553ybb.6.1684988513884; Wed, 24
- May 2023 21:21:53 -0700 (PDT)
-Date:   Thu, 25 May 2023 12:21:30 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:6902:1024:b0:ba8:6422:7fc with SMTP
+ id x4-20020a056902102400b00ba8642207fcmr1455878ybt.7.1684988518586; Wed, 24
+ May 2023 21:21:58 -0700 (PDT)
+Date:   Thu, 25 May 2023 12:21:31 +0800
 In-Reply-To: <20230525042133.212534-1-davidgow@google.com>
 Mime-Version: 1.0
 References: <20230525042133.212534-1-davidgow@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230525042133.212534-3-davidgow@google.com>
-Subject: [PATCH v3 3/4] kunit: kmalloc_array: Use kunit_add_action()
+Message-ID: <20230525042133.212534-4-davidgow@google.com>
+Subject: [PATCH v3 4/4] Documentation: kunit: Add usage notes for kunit_add_action()
 From:   David Gow <davidgow@google.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Daniel Latypov <dlatypov@google.com>,
@@ -70,157 +70,98 @@ Cc:     David Gow <davidgow@google.com>,
         Sadiya Kazi <sadiyakazi@google.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Berg <benjamin.berg@intel.com>
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kunit_add_action() function is much simpler and cleaner to use that
-the full KUnit resource API for simple things like the
-kunit_kmalloc_array() functionality.
+Add some basic documentation for kunit_add_action() and related
+deferred action functions.
 
-Replacing it allows us to get rid of a number of helper functions, and
-leaves us with no uses of kunit_alloc_resource(), which has some
-usability problems and is going to have its behaviour modified in an
-upcoming patch.
-
-Note that we need to use kunit_defer_trigger_all() to implement
-kunit_kfree().
-
-Reviewed-by: Benjamin Berg <benjamin.berg@intel.com>
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
-Tested-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Rae Moar <rmoar@google.com>
 Signed-off-by: David Gow <davidgow@google.com>
 ---
 
-No changes since v2:
-https://lore.kernel.org/linux-kselftest/20230518083849.2631178-3-davidgow@google.com/
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20230518083849.2631178-4-davidgow@google.com/
+- Fix a couple of typos (Thanks Bagas, Rae)
+- Add Rae's Reviewed-by.
 
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20230421084226.2278282-4-davidgow@google.com/
-- Use the kunit_action_t typedef.
-  - This fixes some spurious checkpatch warnings.
-
-Changes since RFCv2:
-https://lore.kernel.org/linux-kselftest/20230331080411.981038-4-davidgow@google.com/
-- Update to match changes in the the action API.
-- Always allocate the action context with GFP_KERNEL.
-- Update documentation to note that this will cause GFP_KERNEL
-  allocations, regardless of the gfp argument passed in.
+This patch is new in v2.
 
 ---
- include/kunit/test.h | 10 +++++++--
- lib/kunit/test.c     | 48 +++++++++-----------------------------------
- 2 files changed, 17 insertions(+), 41 deletions(-)
+ Documentation/dev-tools/kunit/usage.rst | 51 +++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 3028a1a3fcad..2f23d6efa505 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -324,8 +324,11 @@ enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite);
-  * @gfp: flags passed to underlying kmalloc().
-  *
-  * Just like `kmalloc_array(...)`, except the allocation is managed by the test case
-- * and is automatically cleaned up after the test case concludes. See &struct
-- * kunit_resource for more information.
-+ * and is automatically cleaned up after the test case concludes. See kunit_add_action()
-+ * for more information.
-+ *
-+ * Note that some internal context data is also allocated with GFP_KERNEL,
-+ * regardless of the gfp passed in.
-  */
- void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp);
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 46957d1cbcbb..c27e1646ecd9 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -615,6 +615,57 @@ For example:
+ 		KUNIT_ASSERT_STREQ(test, buffer, "");
+ 	}
  
-@@ -336,6 +339,9 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp);
-  * @gfp: flags passed to underlying kmalloc().
-  *
-  * See kmalloc() and kunit_kmalloc_array() for more information.
-+ *
-+ * Note that some internal context data is also allocated with GFP_KERNEL,
-+ * regardless of the gfp passed in.
-  */
- static inline void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
- {
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index f5e4ceffd282..d3fb93a23ccc 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -752,58 +752,28 @@ static struct notifier_block kunit_mod_nb = {
- };
- #endif
++Registering Cleanup Actions
++---------------------------
++
++If you need to perform some cleanup beyond simple use of ``kunit_kzalloc``,
++you can register a custom "deferred action", which is a cleanup function
++run when the test exits (whether cleanly, or via a failed assertion).
++
++Actions are simple functions with no return value, and a single ``void*``
++context argument, and fulfill the same role as "cleanup" functions in Python
++and Go tests, "defer" statements in languages which support them, and
++(in some cases) destructors in RAII languages.
++
++These are very useful for unregistering things from global lists, closing
++files or other resources, or freeing resources.
++
++For example:
++
++.. code-block:: C
++
++	static void cleanup_device(void *ctx)
++	{
++		struct device *dev = (struct device *)ctx;
++
++		device_unregister(dev);
++	}
++
++	void example_device_test(struct kunit *test)
++	{
++		struct my_device dev;
++
++		device_register(&dev);
++
++		kunit_add_action(test, &cleanup_device, &dev);
++	}
++
++Note that, for functions like device_unregister which only accept a single
++pointer-sized argument, it's possible to directly cast that function to
++a ``kunit_action_t`` rather than writing a wrapper function, for example:
++
++.. code-block:: C
++
++	kunit_add_action(test, (kunit_action_t *)&device_unregister, &dev);
++
++``kunit_add_action`` can fail if, for example, the system is out of memory.
++You can use ``kunit_add_action_or_reset`` instead which runs the action
++immediately if it cannot be deferred.
++
++If you need more control over when the cleanup function is called, you
++can trigger it early using ``kunit_release_action``, or cancel it entirely
++with ``kunit_remove_action``.
++
  
--struct kunit_kmalloc_array_params {
--	size_t n;
--	size_t size;
--	gfp_t gfp;
--};
--
--static int kunit_kmalloc_array_init(struct kunit_resource *res, void *context)
-+void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- {
--	struct kunit_kmalloc_array_params *params = context;
-+	void *data;
- 
--	res->data = kmalloc_array(params->n, params->size, params->gfp);
--	if (!res->data)
--		return -ENOMEM;
-+	data = kmalloc_array(n, size, gfp);
- 
--	return 0;
--}
-+	if (!data)
-+		return NULL;
- 
--static void kunit_kmalloc_array_free(struct kunit_resource *res)
--{
--	kfree(res->data);
--}
-+	if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree, data) != 0)
-+		return NULL;
- 
--void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
--{
--	struct kunit_kmalloc_array_params params = {
--		.size = size,
--		.n = n,
--		.gfp = gfp
--	};
--
--	return kunit_alloc_resource(test,
--				    kunit_kmalloc_array_init,
--				    kunit_kmalloc_array_free,
--				    gfp,
--				    &params);
-+	return data;
- }
- EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
- 
--static inline bool kunit_kfree_match(struct kunit *test,
--				     struct kunit_resource *res, void *match_data)
--{
--	/* Only match resources allocated with kunit_kmalloc() and friends. */
--	return res->free == kunit_kmalloc_array_free && res->data == match_data;
--}
--
- void kunit_kfree(struct kunit *test, const void *ptr)
- {
- 	if (!ptr)
- 		return;
- 
--	if (kunit_destroy_resource(test, kunit_kfree_match, (void *)ptr))
--		KUNIT_FAIL(test, "kunit_kfree: %px already freed or not allocated by kunit", ptr);
-+	kunit_release_action(test, (kunit_action_t *)kfree, (void *)ptr);
- }
- EXPORT_SYMBOL_GPL(kunit_kfree);
- 
+ Testing Static Functions
+ ------------------------
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
