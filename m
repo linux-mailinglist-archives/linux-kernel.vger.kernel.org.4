@@ -2,102 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8255710E4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94594710E50
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241626AbjEYO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S241498AbjEYO1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241569AbjEYO0c (ORCPT
+        with ESMTP id S241631AbjEYO1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:26:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E345189
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:26:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2602364635
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB6FC433EF;
-        Thu, 25 May 2023 14:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685024790;
-        bh=JwGEFsVAytpbnNTBcy9sEez5APaywOmU9QISh6P6Aw4=;
-        h=From:Date:Subject:To:Cc:From;
-        b=SSYfx3l/xw++zk8yHiFZKMnV7NCo0yZ0o6m+PMrdb4g+bxcEF2Xb8II2nZB5HwnlE
-         //N4HEtbd2P90fo6T89Ow23UxAy6hnJWoubiLOsoX6IfBK3FQsxoS5jqm/vEakQj8D
-         ucHrj3f8a0AY6755FV6ZY9Unf/tjsJx5xaKlwPlTYfKUDoroiT3U1Hrnnxk7JRNOwf
-         Fh2rJZgfLXN7pJYOhJaEn3Lt3br5bnBpWxzy/sk2oTJvLzl6LKIZ7IiXuJWsOossA5
-         9WTt7Dkty72DAJPBa0tjU9X3zb87r97sDdEaqv9IltfqOXJmryr5vVcO4PdZCr/Qle
-         ybqFL8jhtWflg==
-From:   Simon Horman <horms@kernel.org>
-Date:   Thu, 25 May 2023 16:26:25 +0200
-Subject: [PATCH] kexec: Avoid calculating array size twice
+        Thu, 25 May 2023 10:27:09 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B17F1B4;
+        Thu, 25 May 2023 07:27:08 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39831cb47c6so592989b6e.2;
+        Thu, 25 May 2023 07:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685024827; x=1687616827;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C3UAQNcfvYSrO7NwjcGLPnwIV6p+B20zb2tpMvZ8UCQ=;
+        b=nrdDvpuBR5mNmD/4QPb46UJPDw5hb53K3iun1XuSKuf5aD19dd5AzaG/hzWOkp4Mcu
+         T1+tjfw9RCcmJre/EMltvE8uosN6c1cRn5THCfyIXQzgW5YdPml6WU1E4/NZbzYhf/0W
+         et4ML8D3N2IJEKb26jt8HpdqkRdZKSwKuMHxsXzk7qrIR9ci6XZdWX1WnhAFoXmfzOyE
+         6rDqrYpO3Kvj7/RlTKDnLskO2U5uTkcyLlOZhdv34Xux9a9Y+EIb4/fbTidwOfDqGKTl
+         mcsd2WYiQDYoZ9HoEWQLmGik2d2BB0ubiipKzg4tYBKUbEBqfkK+HS/yRtyHjejc3x9b
+         /e3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685024827; x=1687616827;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C3UAQNcfvYSrO7NwjcGLPnwIV6p+B20zb2tpMvZ8UCQ=;
+        b=XKKsGgBo5IpDRy9VG1QvFAtDra1/j+IDD7OlEPRQvuka+x4v8myGJUiGPrxIKiyYgN
+         z6WploY37TSsIommrT1Gnlyq/CNHC5b8/UAaHnE3f2YbMk1p3JhHVtEELPBkx+urNyB+
+         g+BPnGGwbDn5grOazQpZQ5FuTLr3G3V+unVT5OwTaWC4UoxNOGE8oU00HRD1t8QiVj9e
+         ozNwBvoafXBY4muHD98QR6oitpnS7u+keWPP3Ek9sT4mz9Hz4bepgxoofHDi7yTSmk0R
+         JWkJtuHgaeSNAB2b+UVVKOfjzzrNOepYMG8/21y2SIKb24pBLCG24jqQfzVoFtI4X6fE
+         y37w==
+X-Gm-Message-State: AC+VfDxKRDXQLX8IO8y2CxRHKuViSqYWljesEnR8XEV5TaSUdNA3ttfV
+        ynlGW4p/D8ap/6meF+scSGUPthHdSFU=
+X-Google-Smtp-Source: ACHHUZ4/epwYClLdnQuvLAY/sefgIgLya2KfguUdlbhb+alHSNc8E8ImhqL7Ey/jOI2qFkuBqWSDLw==
+X-Received: by 2002:aca:2b07:0:b0:38b:efe8:dfa8 with SMTP id i7-20020aca2b07000000b0038befe8dfa8mr10211291oik.51.1685024827557;
+        Thu, 25 May 2023 07:27:07 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id g10-20020a9d620a000000b006a5e0165d3esm680859otj.19.2023.05.25.07.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 07:27:06 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     linux@roeck-us.net
+Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (oxp-sensors) Stop passing device structure
+Date:   Thu, 25 May 2023 11:26:52 -0300
+Message-Id: <20230525142652.41981-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230525-kexec-array_size-v1-1-8b4bf4f7500a@kernel.org>
-X-B4-Tracking: v=1; b=H4sIABBwb2QC/x2N0QrCMAwAf2Xk2UCtrQ/+ioikXeaCo0qCMjf27
- ws+3sFxKxirsMGlW0H5Kyav5nA8dFBHag9G6Z0hhngKOWZ88swVSZV+d5OFsT/nGiilkmgAzwo
- ZY1FqdfSwfabJ5Vt5kPn/ud62bQcbFtZsdwAAAA==
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid calculating array size twice in kexec_purgatory_setup_sechdrs().
-Once using array_size(), and once open-coded.
+We don't need to pass device structure to write_to_ec() so we remove
+that from the function declaration.
+The same is valid for pwm_enable() and pwm_disable() as we were passing
+the pointer to hand it off to write_to_ec().
 
-Flagged by Coccinelle:
-
-  .../kexec_file.c:881:8-25: WARNING: array_size is already used (line 877) to compute the same size
-
-No functional change intended.
-Compile tested only.
-
-Signed-off-by: Simon Horman <horms@kernel.org>
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 ---
- kernel/kexec_file.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/hwmon/oxp-sensors.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index f989f5f1933b..3f5677679744 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -867,6 +867,7 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index a4ee757f879f..0ec7588610ad 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -141,7 +141,7 @@ static int read_from_ec(u8 reg, int size, long *val)
+ 	return 0;
+ }
+ 
+-static int write_to_ec(const struct device *dev, u8 reg, u8 value)
++static int write_to_ec(u8 reg, u8 value)
  {
- 	unsigned long bss_addr;
- 	unsigned long offset;
-+	size_t sechdrs_size;
- 	Elf_Shdr *sechdrs;
- 	int i;
+ 	int ret;
  
-@@ -874,11 +875,11 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
- 	 * The section headers in kexec_purgatory are read-only. In order to
- 	 * have them modifiable make a temporary copy.
- 	 */
--	sechdrs = vzalloc(array_size(sizeof(Elf_Shdr), pi->ehdr->e_shnum));
-+	sechdrs_size = array_size(sizeof(Elf_Shdr), pi->ehdr->e_shnum);
-+	sechdrs = vzalloc(sechdrs_size);
- 	if (!sechdrs)
- 		return -ENOMEM;
--	memcpy(sechdrs, (void *)pi->ehdr + pi->ehdr->e_shoff,
--	       pi->ehdr->e_shnum * sizeof(Elf_Shdr));
-+	memcpy(sechdrs, (void *)pi->ehdr + pi->ehdr->e_shoff, sechdrs_size);
- 	pi->sechdrs = sechdrs;
+@@ -156,14 +156,14 @@ static int write_to_ec(const struct device *dev, u8 reg, u8 value)
+ 	return ret;
+ }
  
- 	offset = 0;
+-static int oxp_pwm_enable(const struct device *dev)
++static int oxp_pwm_enable(void)
+ {
+-	return write_to_ec(dev, OXP_SENSOR_PWM_ENABLE_REG, 0x01);
++	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x01);
+ }
+ 
+-static int oxp_pwm_disable(const struct device *dev)
++static int oxp_pwm_disable(void)
+ {
+-	return write_to_ec(dev, OXP_SENSOR_PWM_ENABLE_REG, 0x00);
++	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x00);
+ }
+ 
+ /* Callbacks for hwmon interface */
+@@ -234,9 +234,9 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 		switch (attr) {
+ 		case hwmon_pwm_enable:
+ 			if (val == 1)
+-				return oxp_pwm_enable(dev);
++				return oxp_pwm_enable();
+ 			else if (val == 0)
+-				return oxp_pwm_disable(dev);
++				return oxp_pwm_disable();
+ 			return -EINVAL;
+ 		case hwmon_pwm_input:
+ 			if (val < 0 || val > 255)
+@@ -254,7 +254,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 			default:
+ 				break;
+ 			}
+-			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
++			return write_to_ec(OXP_SENSOR_PWM_REG, val);
+ 		default:
+ 			break;
+ 		}
+-- 
+2.40.1
 
