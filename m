@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523FC711043
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6060C711044
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241904AbjEYQBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S241535AbjEYQCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241905AbjEYQBe (ORCPT
+        with ESMTP id S234226AbjEYQCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:01:34 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB511A2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:00:45 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-75afed17e0cso62529185a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:00:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685030445; x=1687622445;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XHGm6h9ltzIrb4jNjdDlUA0RTr0K5h3DXD0V46u1KXM=;
-        b=RPpWreNbjum54mv+8tCpRr8Nio2nyl+7sKzgNgiMrcqLN+GEWueVcxnsJl3DiRwqO+
-         V6Lr1o43y3xzMakjz5te6q2IBshZpv/hbexJEdzyAcaBVTTo5CX0JrhWzLxUCo5a6f6J
-         Jc0VM5Rax6IraxUTF3y994G++16w5uoE3h2FHaHOsVYUmSHPQhsNlIptuslMHVkakEF2
-         f3pqH+0quJG9ErBXSll9vbHuPTNhuhpDo4cBB9yqNhFcI0mgtzouMcRsbFFDkCk8nuTW
-         lUfrV1/sgKbHVBbDp4CFTkrKDdCnx40ommJKpjaOU4+oZRO1RvXOIcPLGYWd0R1g3/OM
-         LBFA==
-X-Gm-Message-State: AC+VfDyth9J5GC7t7wBrvehi3BYvK/NH802Zh4LjESw9V445k2qKzrKs
-        /xtuERzoZTaTFGhutpUfxDzf
-X-Google-Smtp-Source: ACHHUZ4Z77PxkwjQ7WFe2GRTFdAB5YMbwS9Fi8O2f9aEzq40ZuS6SSvTA3pLXmIPe4Uvb22Hlm64XQ==
-X-Received: by 2002:a37:68d0:0:b0:75b:23a1:421 with SMTP id d199-20020a3768d0000000b0075b23a10421mr11005599qkc.55.1685030444711;
-        Thu, 25 May 2023 09:00:44 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id f10-20020a05620a15aa00b007339c5114a9sm474202qkk.103.2023.05.25.09.00.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 09:00:44 -0700 (PDT)
-Date:   Thu, 25 May 2023 12:00:43 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>, Joe Thornber <ejt@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Sarthak Kukreti <sarthakkukreti@chromium.org>,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZG+GKwFC7M3FfAO5@redhat.com>
-References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
- <ZGb2Xi6O3i2pLam8@infradead.org>
- <ZGeKm+jcBxzkMXQs@redhat.com>
- <ZGgBQhsbU9b0RiT1@dread.disaster.area>
- <ZGu0LaQfREvOQO4h@redhat.com>
- <ZGzIJlCE2pcqQRFJ@bfoster>
- <ZGzbGg35SqMrWfpr@redhat.com>
- <ZG1dAtHmbQ53aOhA@dread.disaster.area>
- <ZG5taYoXDRymo/e9@redhat.com>
- <ZG9JD+4Zu36lnm4F@dread.disaster.area>
+        Thu, 25 May 2023 12:02:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC6DE6E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685030514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QvUcs4If2hARdVYQbwQSb9t9GwbJ5lUj+bf6ECD95z4=;
+        b=Aks1mSHSztRZ9cY0vydYln/3+g8bsD9Sx/bwVBLgvRh27CeZezTvFT9rGslEJlI4bQPLZP
+        epSAoiH4Ml31ZJV5Bc3k9o/HgwxrI5FViYGqTYPKymc64ldfiH/RDd9vVNSweu06eVBG5c
+        LzfuJoPLJsvolrScgwzlVK0MoGAM7GA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-597-icn4RW4zPkuDyVxq8yJVuw-1; Thu, 25 May 2023 12:01:53 -0400
+X-MC-Unique: icn4RW4zPkuDyVxq8yJVuw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 38832800141;
+        Thu, 25 May 2023 16:01:52 +0000 (UTC)
+Received: from llong.com (unknown [10.22.34.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73CD9492B0A;
+        Thu, 25 May 2023 16:01:51 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Jay Shin <jaeshin@redhat.com>,
+        Waiman Long <longman@redhat.com>, stable@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH] blk-cgroup: Flush stats before releasing blkcg_gq
+Date:   Thu, 25 May 2023 12:01:05 -0400
+Message-Id: <20230525160105.1968749-1-longman@redhat.com>
+In-Reply-To: <20230525043518.831721-1-ming.lei@redhat.com>
+References: <20230525043518.831721-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG9JD+4Zu36lnm4F@dread.disaster.area>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,224 +68,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25 2023 at  7:39P -0400,
-Dave Chinner <david@fromorbit.com> wrote:
+As noted by Michal, the blkg_iostat_set's in the lockless list hold
+reference to blkg's to protect against their removal. Those blkg's
+hold reference to blkcg. When a cgroup is being destroyed,
+cgroup_rstat_flush() is only called at css_release_work_fn() which
+is called when the blkcg reference count reaches 0. This circular
+dependency will prevent blkcg and some blkgs from being freed after
+they are made offline.
 
-> On Wed, May 24, 2023 at 04:02:49PM -0400, Mike Snitzer wrote:
-> > On Tue, May 23 2023 at  8:40P -0400,
-> > Dave Chinner <david@fromorbit.com> wrote:
-> > 
-> > > On Tue, May 23, 2023 at 11:26:18AM -0400, Mike Snitzer wrote:
-> > > > On Tue, May 23 2023 at 10:05P -0400, Brian Foster <bfoster@redhat.com> wrote:
-> > > > > On Mon, May 22, 2023 at 02:27:57PM -0400, Mike Snitzer wrote:
-> > > > > ... since I also happen to think there is a potentially interesting
-> > > > > development path to make this sort of reserve pool configurable in terms
-> > > > > of size and active/inactive state, which would allow the fs to use an
-> > > > > emergency pool scheme for managing metadata provisioning and not have to
-> > > > > track and provision individual metadata buffers at all (dealing with
-> > > > > user data is much easier to provision explicitly). So the space
-> > > > > inefficiency thing is potentially just a tradeoff for simplicity, and
-> > > > > filesystems that want more granularity for better behavior could achieve
-> > > > > that with more work. Filesystems that don't would be free to rely on the
-> > > > > simple/basic mechanism provided by dm-thin and still have basic -ENOSPC
-> > > > > protection with very minimal changes.
-> > > > > 
-> > > > > That's getting too far into the weeds on the future bits, though. This
-> > > > > is essentially 99% a dm-thin approach, so I'm mainly curious if there's
-> > > > > sufficient interest in this sort of "reserve mode" approach to try and
-> > > > > clean it up further and have dm guys look at it, or if you guys see any
-> > > > > obvious issues in what it does that makes it potentially problematic, or
-> > > > > if you would just prefer to go down the path described above...
-> > > > 
-> > > > The model that Dave detailed, which builds on REQ_PROVISION and is
-> > > > sticky (by provisioning same blocks for snapshot) seems more useful to
-> > > > me because it is quite precise.  That said, it doesn't account for
-> > > > hard requirements that _all_ blocks will always succeed.
-> > > 
-> > > Hmmm. Maybe I'm misunderstanding the "reserve pool" context here,
-> > > but I don't think we'd ever need a hard guarantee from the block
-> > > device that every write bio issued from the filesystem will succeed
-> > > without ENOSPC.
-> > > 
-> > > If the block device can provide a guarantee that a provisioned LBA
-> > > range is always writable, then everything else is a filesystem level
-> > > optimisation problem and we don't have to involve the block device
-> > > in any way. All we need is a flag we can ready out of the bdev at
-> > > mount time to determine if the filesystem should be operating with
-> > > LBA provisioning enabled...
-> > > 
-> > > e.g. If we need to "pre-provision" a chunk of the LBA space for
-> > > filesystem metadata, we can do that ahead of time and track the
-> > > pre-provisioned range(s) in the filesystem itself.
-> > > 
-> > > In XFS, That could be as simple as having small chunks of each AG
-> > > reserved to metadata (e.g. start with the first 100MB) and limiting
-> > > all metadata allocation free space searches to that specific block
-> > > range. When we run low on that space, we pre-provision another 100MB
-> > > chunk and then allocate all metadata out of that new range. If we
-> > > start getting ENOSPC to pre-provisioning, then we reduce the size of
-> > > the regions and log low space warnings to userspace. If we can't
-> > > pre-provision any space at all and we've completely run out, we
-> > > simply declare ENOSPC for all incoming operations that require
-> > > metadata allocation until pre-provisioning succeeds again.
-> > 
-> > This is basically saying the same thing but:
-> > 
-> > It could be that the LBA space is fragmented and so falling back to
-> > the smallest region size (that matches the thinp block size) would be
-> > the last resort?  Then if/when thinp cannot even service allocating a
-> > new free thin block, dm-thinp will transition to out-of-data-space
-> > mode.
-> 
-> Yes, something of that sort, though we'd probably give up if we
-> can't get at least megabyte scale reservations - a single
-> modification in XFS can modify many structures and require
-> allocation of a lot of new metadata, so the fileystem cut-off would
-> for metadata provisioning failure would be much larger than the
-> dm-thinp region size....
-> 
-> > > This is built entirely on the premise that once proactive backing
-> > > device provisioning fails, the backing device is at ENOSPC and we
-> > > have to wait for that situation to go away before allowing new data
-> > > to be ingested. Hence the block device really doesn't need to know
-> > > anything about what the filesystem is doing and vice versa - The
-> > > block dev just says "yes" or "no" and the filesystem handles
-> > > everything else.
-> > 
-> > Yes.
-> > 
-> > > It's worth noting that XFS already has a coarse-grained
-> > > implementation of preferred regions for metadata storage. It will
-> > > currently not use those metadata-preferred regions for user data
-> > > unless all the remaining user data space is full.  Hence I'm pretty
-> > > sure that a pre-provisioning enhancment like this can be done
-> > > entirely in-memory without requiring any new on-disk state to be
-> > > added.
-> > > 
-> > > Sure, if we crash and remount, then we might chose a different LBA
-> > > region for pre-provisioning. But that's not really a huge deal as we
-> > > could also run an internal background post-mount fstrim operation to
-> > > remove any unused pre-provisioning that was left over from when the
-> > > system went down.
-> > 
-> > This would be the FITRIM with extension you mention below? Which is a
-> > filesystem interface detail?
-> 
-> No. We might reuse some of the internal infrastructure we use to
-> implement FITRIM, but that's about it. It's just something kinda
-> like FITRIM but with different constraints determined by the
-> filesystem rather than the user...
-> 
-> As it is, I'm not sure we'd even need it - a preiodic userspace
-> FITRIM would acheive the same result, so leaked provisioned spaces
-> would get cleaned up eventually without the filesystem having to do
-> anything specific...
-> 
-> > So dm-thinp would _not_ need to have new
-> > state that tracks "provisioned but unused" block?
-> 
-> No idea - that's your domain. :)
-> 
-> dm-snapshot, for certain, will need to track provisioned regions
-> because it has to guarantee that overwrites to provisioned space in
-> the origin device will always succeed. Hence it needs to know how
-> much space breaking sharing in provisioned regions after a snapshot
-> has been taken with be required...
+It is less a problem if the cgroup to be destroyed also has other
+controllers like memory that will call cgroup_rstat_flush() which will
+clean up the reference count. If block is the only controller that uses
+rstat, these offline blkcg and blkgs may never be freed leaking more
+and more memory over time.
 
-dm-thinp offers its own much more scalable snapshot support (doesn't
-use old dm-snapshot N-way copyout target).
+To prevent this potential memory leak:
 
-dm-snapshot isn't going to be modified to support this level of
-hardening (dm-snapshot is basically in "maintenance only" now).
+- flush blkcg per-cpu stats list in __blkg_release(), when no new stat
+  can be added to avoid use-after-free of the percpu blkg_iostat_set in
+  futue cgroup_rstat_flush*() calls.
 
-But I understand your meaning: what you said is 100% applicable to
-dm-thinp's snapshot implementation and needs to be accounted for in
-thinp's metadata (inherent 'provisioned' flag).
+- add a cgroup_rstat_flush_acquire() helper and call it to acquire
+  cgroup_rstat_lock to block concurrent execution of other
+  cgroup_rstat_flush*() calls
 
-> > Nor would the block
-> > layer need an extra discard flag for a new class of "provisioned"
-> > blocks.
-> 
-> Right, I don't see that the discard operations need to care whether
-> the underlying storage is provisioned. dm-thinp and dm-snapshot can
-> treat REQ_OP_DISCARD as "this range is not longer in use" and do
-> whatever they want with them. 
-> 
-> > If XFS tracked this "provisioned but unused" state, dm-thinp could
-> > just discard the block like its told.  Would be nice to avoid dm-thinp
-> > needing to track "provisioned but unused".
-> >
-> > That said, dm-thinp does still need to know if a block was provisioned
-> > (given our previous designed discussion, to allow proper guarantees
-> > from this interface at snapshot time) so that XFS and other
-> > filesystems don't need to re-provision areas they already
-> > pre-provisioned.
-> 
-> Right.
-> 
-> I've simply assumed that dm-thinp would need to track entire
-> provisioned regions - used or unused - so it knows which writes to
-> empty or shared regions have a reservation to allow allocation to
-> succeed when the backing pool is otherwise empty.....
-> 
-> > However, it may be that if thinp did track "provisioned but unused"
-> > it'd be useful to allow snapshots to share provisioned blocks that
-> > were never used.  Meaning, we could then avoid "breaking sharing" at
-> > snapshot-time for "provisioned but unused" blocks.  But allowing this
-> > "optimization" undercuts the gaurantee that XFS needs for thinp
-> > storage that allows snapshots... SO, I think I answered my own
-> > question: thinp doesnt need to track "provisioned but unused" blocks
-> > but we must always ensure snapshots inherit provisoned blocks ;)
-> 
-> Sounds like a potential optimisation, but I haven't thought through
-> a potential snapshot device implementation that far to comment
-> sanely. I stopped once I got to the point where accounting tricks
-> count be used to guarantee space is available for breaking sharing
-> of used provisioned space after a snapshot was taken....
-> 
-> > > Further, managing shared pool exhaustion doesn't require a
-> > > reservation pool in the backing device and for the filesystems to
-> > > request space from it. Filesystems already have their own reserve
-> > > pools via pre-provisioning. If we want the filesystems to be able to
-> > > release that space back to the shared pool (e.g. because the shared
-> > > backing pool is critically short on space) then all we need is an
-> > > extension to FITRIM to tell the filesystem to also release internal
-> > > pre-provisioned reserves.
-> > 
-> > So by default FITRIM will _not_ discard provisioned blocks.  Only if
-> > a flag is used will it result in discarding provisioned blocks.
-> 
-> No. FITRIM results in discard of any unused free space in the
-> filesystem that matches the criteria set by the user. We don't care
-> if free space was once provisioned used space - we'll issue a
-> discard for the range regardless. The "special" FITRIM extension I
-> mentioned is to get filesystem metadata provisioning released;
-> that's completely separate to user data provisioning through
-> fallocate() which FITRIM will always discard if it has been freed...
-> 
-> IOWs, normal behaviour will be that a FITRIM ends up discarding a
-> mix of unprovisioned and provisioned space. Nobody will be able to
-> predict what mix the device is going to get at any point in time.
-> Also, if we turn on online discard, the block device is going to get
-> a constant stream of discard operations that will also be a mix of
-> provisioned and unprovisioned space that is not longer in use by the
-> filesystem. 
-> 
-> I suspect that you need to stop trying to double guess what
-> operations the filesystem will use provisioning for, what it will
-> send discards for and when it will send discards for them.. Just
-> assume the device will receive a constant stream of both
-> REQ_PROVISION and REQ_OP_DISCARD (for both provisioned and
-> unprovisioned regions) operations whenver the filesystem is active
-> on a thinp device.....
+- don't grab bio->bi_blkg reference when adding the stats into blkcg's
+  per-cpu stat list since all stats are guaranteed to be consumed before
+  releasing blkg instance, and grabbing blkg reference for stats was
+  the most fragile part of original patch
 
-Yeah, I was getting tripped up in the weeds a bit.  It's pretty
-straight-forward (and like I said at the start of our subthread here:
-this follow-on work, to inherit provisioned flag, can build on this
-REQ_PROVISION patchset).
+Based on Waiman's patch:
 
-All said, I've now gotten this sub-thread on Joe Thornber's radar and
-we've started discussing. We'll be discussing with more focus
-tomorrow.
+https://lore.kernel.org/linux-block/20221215033132.230023-3-longman@redhat.com/
 
-Mike
+Fixes: 3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()")
+Cc: stable@vger.kernel.org
+Reported-by: Jay Shin <jaeshin@redhat.com>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: mkoutny@suse.com
+Cc: Yosry Ahmed <yosryahmed@google.com>
+Co-developed-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ block/blk-cgroup.c     | 57 +++++++++++++++++++++++++++++++-----------
+ include/linux/cgroup.h |  1 +
+ kernel/cgroup/rstat.c  | 15 ++++++++++-
+ 3 files changed, 57 insertions(+), 16 deletions(-)
+
+diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+index 0ce64dd73cfe..90c2efc3767f 100644
+--- a/block/blk-cgroup.c
++++ b/block/blk-cgroup.c
+@@ -160,13 +160,39 @@ static void blkg_free(struct blkcg_gq *blkg)
+ 	schedule_work(&blkg->free_work);
+ }
+ 
++static void __blkcg_rstat_flush(struct llist_node *lnode);
++
+ static void __blkg_release(struct rcu_head *rcu)
+ {
+ 	struct blkcg_gq *blkg = container_of(rcu, struct blkcg_gq, rcu_head);
++	struct blkcg *blkcg = blkg->blkcg;
++	int cpu;
+ 
+ #ifdef CONFIG_BLK_CGROUP_PUNT_BIO
+ 	WARN_ON(!bio_list_empty(&blkg->async_bios));
+ #endif
++	/*
++	 * Flush all the non-empty percpu lockless lists before releasing
++	 * us, given these stat belongs to us.
++	 *
++	 * Hold the cgroup_rstat_lock before calling __blkcg_rstat_flush()
++	 * to block concurrent cgroup_rstat_flush*() calls.
++	 */
++	for_each_possible_cpu(cpu) {
++		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
++		struct llist_node *lnode;
++
++		if (llist_empty(lhead))
++			continue;
++
++		lnode = llist_del_all(lhead);
++		if (!lnode)
++			continue;
++
++		cgroup_rstat_flush_acquire();
++		__blkcg_rstat_flush(lnode);
++		cgroup_rstat_flush_release();
++	}
+ 
+ 	/* release the blkcg and parent blkg refs this blkg has been holding */
+ 	css_put(&blkg->blkcg->css);
+@@ -951,23 +977,12 @@ static void blkcg_iostat_update(struct blkcg_gq *blkg, struct blkg_iostat *cur,
+ 	u64_stats_update_end_irqrestore(&blkg->iostat.sync, flags);
+ }
+ 
+-static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
++static void __blkcg_rstat_flush(struct llist_node *lnode)
+ {
+-	struct blkcg *blkcg = css_to_blkcg(css);
+-	struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
+-	struct llist_node *lnode;
+ 	struct blkg_iostat_set *bisc, *next_bisc;
+ 
+-	/* Root-level stats are sourced from system-wide IO stats */
+-	if (!cgroup_parent(css->cgroup))
+-		return;
+-
+ 	rcu_read_lock();
+ 
+-	lnode = llist_del_all(lhead);
+-	if (!lnode)
+-		goto out;
+-
+ 	/*
+ 	 * Iterate only the iostat_cpu's queued in the lockless list.
+ 	 */
+@@ -991,13 +1006,26 @@ static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
+ 		if (parent && parent->parent)
+ 			blkcg_iostat_update(parent, &blkg->iostat.cur,
+ 					    &blkg->iostat.last);
+-		percpu_ref_put(&blkg->refcnt);
+ 	}
+ 
+-out:
+ 	rcu_read_unlock();
+ }
+ 
++static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
++{
++	struct blkcg *blkcg = css_to_blkcg(css);
++	struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
++	struct llist_node *lnode;
++
++	/* Root-level stats are sourced from system-wide IO stats */
++	if (!cgroup_parent(css->cgroup))
++		return;
++
++	lnode = llist_del_all(lhead);
++	if (lnode)
++		__blkcg_rstat_flush(lnode);
++}
++
+ /*
+  * We source root cgroup stats from the system-wide stats to avoid
+  * tracking the same information twice and incurring overhead when no
+@@ -2075,7 +2103,6 @@ void blk_cgroup_bio_start(struct bio *bio)
+ 
+ 		llist_add(&bis->lnode, lhead);
+ 		WRITE_ONCE(bis->lqueued, true);
+-		percpu_ref_get(&bis->blkg->refcnt);
+ 	}
+ 
+ 	u64_stats_update_end_irqrestore(&bis->sync, flags);
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 885f5395fcd0..88e6647f49df 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -694,6 +694,7 @@ void cgroup_rstat_updated(struct cgroup *cgrp, int cpu);
+ void cgroup_rstat_flush(struct cgroup *cgrp);
+ void cgroup_rstat_flush_atomic(struct cgroup *cgrp);
+ void cgroup_rstat_flush_hold(struct cgroup *cgrp);
++void cgroup_rstat_flush_acquire(void);
+ void cgroup_rstat_flush_release(void);
+ 
+ /*
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 9c4c55228567..b0fd4e27f466 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -273,7 +273,20 @@ void cgroup_rstat_flush_hold(struct cgroup *cgrp)
+ }
+ 
+ /**
+- * cgroup_rstat_flush_release - release cgroup_rstat_flush_hold()
++ * cgroup_rstat_flush_acquire - acquire cgroup_rstat_lock
++ *
++ * Callers can acquire the internal cgroup_rstat_lock to prevent concurrent
++ * execution of cgroup_rstat_flush*() and the controller callbacks.
++ */
++void cgroup_rstat_flush_acquire(void)
++	__acquires(&cgroup_rstat_lock)
++{
++	spin_lock_irq(&cgroup_rstat_lock);
++}
++
++/**
++ * cgroup_rstat_flush_release - release cgroup_rstat_flush_hold() or
++ *				cgroup_rstat_flush_acquire()
+  */
+ void cgroup_rstat_flush_release(void)
+ 	__releases(&cgroup_rstat_lock)
+-- 
+2.31.1
+
