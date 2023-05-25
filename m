@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63157710D4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D8B710D4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241287AbjEYNfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S241294AbjEYNgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjEYNfU (ORCPT
+        with ESMTP id S231397AbjEYNgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:35:20 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4A4132;
-        Thu, 25 May 2023 06:35:15 -0700 (PDT)
-Date:   Thu, 25 May 2023 13:35:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1685021712; x=1685280912;
-        bh=7IixD+bhmeF+BKHzzoQ2QhW1JCPmJJ1WQf05j26o1sY=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=DYGfzTpQu21styBltnt9D3k03W6GJg/uDtdfvnDhGdlAkMwooOCP07D9xAQ+v0Wle
-         KbKuwPAFzEvhNoPQ1nq7IxFvMvcr5KZr0c3jE2ihw1dMspOJYajdYkiKhTL0jgcrL8
-         VX9v2M3+UZJwdBgpDwL8eaiW2Ot1x743FfbdZK6hPcqXn2cRwonPFhT3036J3r0n/c
-         tPpCXSVwyt5qf44euL/D1m9D6kHglDndgT1xe7Vb2qJwz1FM2Yr1kJ4EWSCu8GbEWW
-         k5Ym3rg8IWCXZ2PdDnA62WRuqHwtHGoupZ7Jvqx0S+qUMucL6cwo0UokPYRlRlkjaS
-         0J5j2mM4B2C0Q==
-To:     Alice Ryhl <aliceryhl@google.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v2 1/4] rust: sync: reword the `Arc` safety comment for `Send`
-Message-ID: <JuMYWDm-bTPwPZDn-6oMCeneM4Po-XXsrihWp6sJmkrr60ANrJ3s32Vm6mlxrttdZAlSG5lcjPGtOqf9yrsAkgjV7JNyDZvHkH0einxCNhg=@proton.me>
-In-Reply-To: <20230523144418.1250547-2-aliceryhl@google.com>
-References: <20230523144418.1250547-1-aliceryhl@google.com> <20230523144418.1250547-2-aliceryhl@google.com>
-Feedback-ID: 71780778:user:proton
+        Thu, 25 May 2023 09:36:08 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9A1186
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:36:02 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-456ece9f868so182152e0c.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685021762; x=1687613762;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ov9l8FL7BwYwKqG7H5oyY0frtOe8uhygiLSX6k8PTbI=;
+        b=FTGnmwc/8XuVxw8RRrNUkhtbD1OmLbPoXEWEuxveBCQE1e4MEAMCAMzeS2w3tD0MlC
+         OCc7FUarJb2g2hJ+RlEquLLDByg6UsKYwOaf+b2gSBxiar8useuctrOZSNt//fTQDF2W
+         BgwZ8TY8c9BYqTdrGw11hb/IrxpWMubofw3e0Fk4WvIR8QbM4mDDEgnLU3zqZ71CFBAI
+         jz10RAtTyXDso74IZ2isDf0HgAtJvEVeoZ8qnUSr9QyVgWID2EgySX0/7feflWsFO9iX
+         5/2M9ooFpuSbwsAQvjVQ4aRsUlcv55SWImpxppNIkxW2sX0ugX/wJcnOUdBi12iQPzgO
+         On9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685021762; x=1687613762;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ov9l8FL7BwYwKqG7H5oyY0frtOe8uhygiLSX6k8PTbI=;
+        b=LVwDD4iQwRDbIcN3Fw7ScuQzqAMzIWO/q/jhQBl7t7CZe6YiTg6/CURX7Q97gdOvUR
+         5/68ompSmmv9n1QuKGsAjNRh++9PTx3IlsNVAXOKN4qktyPU+33S8S7vqhwp8j+bP9VS
+         rGHb+Xur+KvyzgQ+ZtUR3FsBFqw6UZYtYcOSgbIIqhEnSWMkkPJU27PZwZT0xXxqZjcx
+         p3s2urSablUBRs2wU6wQnQjTsq2sRIaFagNx5um1Sthj+IB8WoUlKvxDBGXnoGn9pb4y
+         k3wMmfq4U5HTxWUNtafWiM7m706i81HBWASxQMCy6c2zEKEvG7y2/VYpqaYVl8e5kkGB
+         Lp8g==
+X-Gm-Message-State: AC+VfDwQGOJx9Mz9BpJVjc4+qP4QAKAvmp8oF6rXgSDYhGaj2dRikM1e
+        GaPGe1adQil327qDCCh5H46qt5sIgw0Ep4zqUZw/Dw==
+X-Google-Smtp-Source: ACHHUZ6hEQ45lbwXx+G6ezAhs9WCYK6b2/hR5Ysgv/EhTEfLG4ICjMUwPmh9Da0tdUB8On5X47OsUHjbWWRnS06hQFE=
+X-Received: by 2002:a1f:43d5:0:b0:440:4058:936e with SMTP id
+ q204-20020a1f43d5000000b004404058936emr6477554vka.12.1685021761798; Thu, 25
+ May 2023 06:36:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+ <20230516134447.GB30894@willie-the-truck> <20230522164117.GA6342@willie-the-truck>
+In-Reply-To: <20230522164117.GA6342@willie-the-truck>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 25 May 2023 19:05:49 +0530
+Message-ID: <CA+G9fYs2y4RvOEOJ2qwX=O98j7sgkQJ+jZucd28wPUj6L-vN2A@mail.gmail.com>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
+To:     Will Deacon <will@kernel.org>
+Cc:     broonie@kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 16:44, Alice Ryhl wrote:
-> The safety comment on `impl Send for Arc` talks about "directly"
-> accessing the value, when it really means "accessing the value with a
-> mutable reference". This commit clarifies that.
->=20
-> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+On Mon, 22 May 2023 at 22:11, Will Deacon <will@kernel.org> wrote:
+>
+> Naresh,
+>
+> On Tue, May 16, 2023 at 02:44:49PM +0100, Will Deacon wrote:
+> > On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+> > > Following kernel BUG noticed while running selftests arm64 fp-stress
+> > > running stable rc kernel versions 6.1.29-rc1 and 6.3.3-rc1.
+> >
+> > Is there a known-good build so that we could attempt a bisection?
+>
+> FWIW, I've been trying (and failing) all day to reproduce this in QEMU.
+> I matched the same VL configuration as you have in the fastmodel and
+> tried enabling additional memory debugging options too, but I'm yet to
+> see a kfence splat (or any other splat fwiw).
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Thanks for trying it out.
+I have shared log [Log link] below on Linux next-20230314 which is the
+starting point of BUG that we started noticing and that is raw log showing
+FVP log with all -C details.
 
-> ---
->   rust/kernel/sync/arc.rs | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index e6d206242465..87a4c9ed712b 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -146,8 +146,8 @@ impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::Dis=
-patchFromDyn<Arc<U>> for Ar
->=20
->   // SAFETY: It is safe to send `Arc<T>` to another thread when the under=
-lying `T` is `Sync` because
->   // it effectively means sharing `&T` (which is safe because `T` is `Syn=
-c`); additionally, it needs
-> -// `T` to be `Send` because any thread that has an `Arc<T>` may ultimate=
-ly access `T` directly, for
-> -// example, when the reference count reaches zero and `T` is dropped.
-> +// `T` to be `Send` because any thread that has an `Arc<T>` may ultimate=
-ly access `T` using a
-> +// mutable reference, for example, when the reference count reaches zero=
- and `T` is dropped.
->   unsafe impl<T: ?Sized + Sync + Send> Send for Arc<T> {}
->=20
->   // SAFETY: It is safe to send `&Arc<T>` to another thread when the unde=
-rlying `T` is `Sync` for the
-> --
-> 2.40.1.698.g37aff9b760-goog
->=20
+>
+> How often do you see this?
 
---=20
-Cheers,
-Benno
+Our CI system running  selftests: arm64 - subtests by using
+./run_kselftest.sh -c arm64
+
+With full selftests: arm64 the probability of occurrence is 40%.
+
+On Linux next this fp-stress BUG: has been happening *intermittently* from
+next-20230314 dated March 14, 2023.
+On Linux stable-rc it started happening on 6.3.2-rc1 and 6.1.28-rc2.
+
+More details (on previous email),
+- https://lore.kernel.org/all/CA+G9fYtZjGomLjDi+Vf-hdcLpKPKbPmn4nwoPXvn24SG2hEJMg@mail.gmail.com/
+
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230314/testrun/15566007/suite/log-parser-test/test/check-kernel-bug-
+9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/details/
+
+Log link:
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230314/testrun/15566007/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/log
+
+
+>
+> Will
