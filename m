@@ -2,175 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806DB711999
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F2771199B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241988AbjEYVzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S241923AbjEYVz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 17:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241923AbjEYVzJ (ORCPT
+        with ESMTP id S229689AbjEYVzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 17:55:09 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA7312C;
-        Thu, 25 May 2023 14:55:07 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d3bc0dce9so55285b3a.0;
-        Thu, 25 May 2023 14:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685051707; x=1687643707;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LbQCRta1Y9jbQW7prv57mERnTrGdSIJmBXQojqB73vg=;
-        b=pbWH4QGdh0eZ5BhoWFAbimtwVSr5dFKasEjOv9jjhNBdAU6EGes6ukcV9zKfQWTXuL
-         q4qvWBY5WF9mX7kYrOFW9n2dgKTCShheYn1vLGSQoXBBeLbTQBTiaBVAMC+puZJFgq/h
-         CUq1r2Loqb0u716ScZuQM7w/kJ4hur5T7D+jirn1+eaIGIrYe9W3uqKJr141gcmpQbbV
-         gXwKgNgwxHyCNwR604AEM+q/W2nIdZKdd09vlO7ZSX65O13xOSfyMQJYmzpF71BddTwQ
-         EA1Mg1qKGJefuGGP9lsHRr7/Uemx6PmrpGSM0YVjG+kJJumFQniY8NUWYYQ1J1+tG2jL
-         hP5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685051707; x=1687643707;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LbQCRta1Y9jbQW7prv57mERnTrGdSIJmBXQojqB73vg=;
-        b=W4o80LiiB5rSiid+1sZ6bVYtvu1swQk7PpyJn0L/NUASxvcclugAzJveGRr3XV9BJo
-         yV8UqqANH+zKCPCuxo1FlhEKkRbHSh5ODtN239v8dD+irywoXeK765Bkx51u83OyD0cN
-         oTBY3zUMBRXiyaZ3u3MXFtzH8E+ZEAaPRHoUjXowo7R2S+Q/KLse3gn8peAb6GBW0epV
-         xicT0MQ99iC5r4kOLnZHfSp4P4k8XQ5M6TV9N6/Rk3kKC0SkePq+rKqzAt80SAO6EGJv
-         cvYsUh6LtLKugXVpM5Q45fDo+a1QsOu73ozof36tcx2s6+rcHq0xWMrTzV0kv9ytbmG3
-         5gfw==
-X-Gm-Message-State: AC+VfDxOOyfdekSu40lIIDddBtFNgO0b2sDosp1J7cuhd7ebyX2LwwWs
-        KbTXhITuzKaqa2kzpCSH7kM=
-X-Google-Smtp-Source: ACHHUZ5URYK9lc36UtJVOivvqnqiAeYzt89uGFIDG12Ovoo/KrGPXZ/a5fF54ob6IoRVoFI/xvSRQA==
-X-Received: by 2002:a17:902:ce86:b0:1af:adc2:ab5b with SMTP id f6-20020a170902ce8600b001afadc2ab5bmr262553plg.0.1685051707020;
-        Thu, 25 May 2023 14:55:07 -0700 (PDT)
-Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
-        by smtp.gmail.com with ESMTPSA id i12-20020a1709026acc00b001afd275e186sm1829141plt.286.2023.05.25.14.55.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 14:55:06 -0700 (PDT)
-Date:   Thu, 25 May 2023 21:55:04 +0000
-From:   Alok Tiagi <aloktiagi@gmail.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, willy@infradead.org,
-        David.Laight@aculab.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        hch@infradead.org, tycho@tycho.pizza
-Subject: Re: [RFC v7 1/2] epoll: Implement eventpoll_replace_file()
-Message-ID: <ZG/ZOP0qtG4lVrNY@ip-172-31-38-16.us-west-2.compute.internal>
-References: <20230524063933.2339105-1-aloktiagi@gmail.com>
- <20230524-quirlig-leckt-5e89366ede47@brauner>
+        Thu, 25 May 2023 17:55:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4578F1A2;
+        Thu, 25 May 2023 14:55:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF16364B4C;
+        Thu, 25 May 2023 21:55:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092ADC433EF;
+        Thu, 25 May 2023 21:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685051721;
+        bh=IgD7xJ1lA+7Cr5PgL3YBlO1IxdEO/OuNhvvPdqnlKxg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ss71CwgdAXO3cm4O1DSbwTa1VhUPeCg/3xhmhPBy8sk8F85uXVRXvOIbFNA8YdhWt
+         5IL6XMpG0bweXFZThN23VyFcWTHLzi4qyrCHQe46y1rhq4PDgolIU+NuJ5nUzFeEsq
+         4AFT6qCAYQah7FaAIxtICAovZMqzHZPUSDABMVbV+qoDplLt2Xh/HXINbos3tGNZt4
+         LlnOOMYWaLOEJQieePPRXrUF5nWpE7v3pCp45+DYepfUjtwXw8khDrjHyrR80o0TzS
+         XHo+ITROLIRhocrGnHJmLB1J4E90Sq175S+SqmjCnmE14c3xlTtDOl0JBEVc2Jrxi9
+         U/JxyK5tLu6SA==
+Date:   Thu, 25 May 2023 22:55:16 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: interrupt-controller: sifive,plic: Sort
+ compatible values
+Message-ID: <20230525-upper-racing-a77b28c675f1@spud>
+References: <9cbf54da1ace03d7a45f28230fd99954d8c0d141.1683725029.git.geert+renesas@glider.be>
+ <20230518-landless-reoccupy-efd52921a51e@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="S5kQZEC6MB10FqOH"
 Content-Disposition: inline
-In-Reply-To: <20230524-quirlig-leckt-5e89366ede47@brauner>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230518-landless-reoccupy-efd52921a51e@spud>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 07:26:24PM +0200, Christian Brauner wrote:
-> On Wed, May 24, 2023 at 06:39:32AM +0000, aloktiagi wrote:
-> > Introduce a mechanism to replace a file linked in the epoll interface with a new
-> > file.
-> > 
-> > eventpoll_replace() finds all instances of the file to be replaced and replaces
-> > them with the new file and the interested events.h
-> 
-> I've spent a bit more time on this and I have a few more
-> questions/thoughts.
-> 
-> * What if the seccomp notifier replaces a pollable file with a
->   non-pollable file? Right now you check that the file is pollable and
->   if it isn't you're not updating the file references in the epoll
->   instance for the file descriptor you updated. Why these semantics and
->   not e.g., removing all instances of that file referring to the updated
->   fd?
->
 
-good question. the current implementation relies on __fput() calling
-eventpoll_release() to ultimately release the file. eventpoll_replace_file()
-only removes the file if it can successfully install the new file in epoll.
- 
-> * What if the seccomp notifier replaces the file of a file descriptor
->   with an epoll file descriptor? If the fd and original file are present
->   in an epoll instance does that mean you add the epoll file into all
->   epoll instances? That also means you create nested epoll instances
->   which are supported but are subject to various limitations. What's the
->   plan?
->
+--S5kQZEC6MB10FqOH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My plan was to allow these cases since there is support for nested epoll
-instances. But thinking more on this, since seccomp subsystem is the only
-caller of eventpoll_replace_file(), I am not sure whether there is a valid
-use case where seccomp is used to intercept a system call that uses an
-epoll fd as a parameter. Maybe its ok to not do the replacement for such
-cases. Thoughts?
- 
-> * What if you have two threads in the same threadgroup that each have a
->   seccomp listener profile attached to them. Both have the same fd open.
-> 
->   Now both replace the same fd concurrently. Both threads concurrently
->   update references in the epoll instances now since the spinlock and
->   mutex are acquired and reacquired again. Afaict, you can end up with
->   some instances of the fd temporarily generating events for file1 and
->   other instances generating events for file2 while the replace is in
->   progress. Thus generating spurious events and userspace might be
->   acting on a file descriptor that doesn't yet refer to the new file?
->   That's possibly dangerous.
-> 
->   Maybe I'm mistaken but if so I'd like to hear the details why that
->   can't happen.
->
+On Thu, May 18, 2023 at 10:12:11PM +0100, Conor Dooley wrote:
+> On Wed, May 10, 2023 at 03:26:00PM +0200, Geert Uytterhoeven wrote:
+> > Restore alphabetical sort order of the supported SiFive-compatible
+> > values.
+> >=20
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>=20
+> Palmer has assigned this one to me on the RISC-V patchwork, any objections
+> to me taking it via the riscv-dt tree Marc? There's some other patches for
+> a new platform that's almost ready touching the file too, so if you don't
+> mind I'd like to grab this one.
 
-Considering file1 is the original file and file2 is the new file. First
-the eventpoll_replace_file() is called before receive_fd_replace(), so
-the file1 is still active and file2 would not receive any events. Within
-receive_fd_replace() the install phase first installs file2 alongside file1
-without removing file1. So during this phase the userspace can continue to
-receive events on file1. In the remove phase within eventpoll_replace_file()
-the epi for file1 is set to dying and replaced with file2. At this point the
-fd should see no new events, since receive_fd_replace() is yet to be called.
- 
->   Thinking about it what if the same file is registered via multiple fds
->   at the same time? Can't you end up in a scenario where you have the
->   same fd referring to different files in one or multiple epoll
->   instance?
-> 
->   I mean, you can get into that situation via dup2() where you change
->   the file descriptor to refer to a different file but the fd might
->   still be registered in the epoll instance referring to the old file
->   provided there's another fd open holding the old file alive.
-> 
+Given the lack of objections, I've picked it up. Happy to drop again if
+that's not okay.
 
-The current implementation scopes the replacement to the fd being replaced
-in the call to receive_fd_replace() since thats what the userspace intends
-to do. In case there are multiple fds pointing to the same file, and 
-receive_fd_replace() replaces only one of them, we would end up updating
-the file for only one of the fds. The other fd will see the same result as
-seen today without this patch, where the replaced file doesn't exist in 
-epoll since it got cleared due to __fput().
+Applied to riscv-dt-for-next, thanks!
 
->   The difference though is that userspace must've been dumb enough to
->   actually do that whereas now this can just happen behind their back
->   misleading them.
->
+[1/1] dt-bindings: timer: sifive,clint: Clean up compatible value section
+      https://git.kernel.org/conor/c/1bd2339df1b5
 
-Since this is mainly serving the seccomp add fd usecase today, do you think
-its something that can be documented as a limitation? I am not aware of the
-interesting ways users are using seccomp add fd to think of all the possible
-scenarios, so I am open to suggestions.
+Thanks,
+Conor.
 
->   Honestly, the kernel can't give you any atomicity in replacing these
->   references and if so it would require new possibly invasive locking
->   that would very likely not be acceptable upstream just for the sake of
->   this feature. I still have a very hard time seeing any of this
->   happening.
-> 
-> * I haven't looked at the codepath that tries to restore the old file on
->   failure. That might introduce even more weirdness.
+--S5kQZEC6MB10FqOH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG/ZRAAKCRB4tDGHoIJi
+0uW0AQCfnKCmslrgIr0P1M8dZpov5SsIGUXTSLn6GE0QicZD4AEAn/qXuOQg5tvM
+PUXHkTvj3S1bKB5s/qpE1NB2lmE7bQU=
+=3WbE
+-----END PGP SIGNATURE-----
+
+--S5kQZEC6MB10FqOH--
