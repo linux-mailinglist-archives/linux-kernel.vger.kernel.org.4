@@ -2,2094 +2,418 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A795711AB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ED2711ABB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjEYXfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 19:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S241125AbjEYXi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 19:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjEYXfQ (ORCPT
+        with ESMTP id S230389AbjEYXi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 19:35:16 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AE410F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:35:11 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2af1ae3a21fso1344991fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:35:11 -0700 (PDT)
+        Thu, 25 May 2023 19:38:28 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C250A3;
+        Thu, 25 May 2023 16:38:25 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so58979e87.3;
+        Thu, 25 May 2023 16:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685057708; x=1687649708;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NvHp9kbCmzprhhlxYhMadzLgMrWsN+n0AbItfKTfEyY=;
-        b=izymOdd+Q29tsFN7jNoCbsg0wB+kGwbMnM3zrwJEWCMOimOc/KcmYHpX9bB2aNtkET
-         2GroRU66e5TB7d61WOeVZmXrkrpsuhOL4sbS4fAhUXp2p/huKn3mEW6jUuJLR64YVo2m
-         pcypEfSV1ljmkHBG8pgfyh78AzSm9H2aAnHN7NIILyFZjJkhcNWO7hRYM3FXJzbVcGmw
-         7jLlzFCyKqYT4+XzF/pdjT9cXs8+NgQRdwlq4kHDZGkoDkbyT805xxJghWmz53tqI6mJ
-         84HjEcnpYzQNCDygdq8qqqgOn7UWFSywV7eMaLgfdk2Husu8WCSg7wa2eWvLW9kvIQUJ
-         NKqg==
+        d=gmail.com; s=20221208; t=1685057903; x=1687649903;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CRzA4TSuNbRkvjf9wpxiaSWiXpR8KS7NFNcbPrnX1fM=;
+        b=JB7LEsBbwGJoTtw+4gPJ0wdvGW3V0/naNYN3touihHC6spNUNJiPJ2qHzWOBLXum3O
+         TqrQhjObO2mWpvsmh/rT27jUOhnKc4bPXEKVyRpypRcZ2K8G5iqOTIGRsDYum7xde4Mf
+         e2D/aBbK/kzqEU5VmVFECi/3m4+ADpf+Dew10oSTkUJOOJrYKdOaC7c46BSqixIadjA6
+         6cc7q5kABqBhSSqz+jvfZJdtqq21s7LfpPrx4hKObCwt4qwaSynVjlSPuuLE6Wulj/nr
+         fg49Y4JTq4X1muuvn0oS41NdRwUgOQfQHxbs0MyTeYtCFeGsAcKRS8Dp9pAbrRm8/ZkC
+         jncA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685057708; x=1687649708;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NvHp9kbCmzprhhlxYhMadzLgMrWsN+n0AbItfKTfEyY=;
-        b=DLTJwX+cYuhZ9rrUHObO+JEb9HqZH2H+Feb0TC6aTFIZyvBvsyFTl+ZJzaaZSo65Hr
-         bMd5ECd42Z/NGjRp0XHiAE/c61GK3cScti7ZL/grIUvsscp2Ep5HSIXPcJkLiqswmtGr
-         TYb9CXPSooKNlHGxgaUuur+ScXzFDooFeYwUiZ8dluNdLAOd1BU2t0qBn2SCgBY1c1ox
-         MdKi2NzO6sLz3ZLSnCNjXrd27zBcum3K3jwbxSY6aaMdX4QaJYVUfy4qByKx/hmovjsJ
-         DmPh915DBFXBYdO1oopZCUY4il22I65Bxu9ZPOgAkMCSt0DZHHM8aEa2IYnAgUXEWCzM
-         D2Zg==
-X-Gm-Message-State: AC+VfDwUFuZ8B4kcFwamO+IcFpNmuqDKqDgv30CBOHSHbawZ2QZkyZrN
-        E3IQXpR2YqS7W90QNnBKbBMTfQ==
-X-Google-Smtp-Source: ACHHUZ4lkGqNKo23snGWN8LOFvAhtqK5N/i32hhWlYsc4buR3LXuRttdrfl8uPX6tIVI4EqDKUKI5w==
-X-Received: by 2002:a2e:b00a:0:b0:2ad:988e:7f8e with SMTP id y10-20020a2eb00a000000b002ad988e7f8emr38933ljk.51.1685057708430;
-        Thu, 25 May 2023 16:35:08 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id j6-20020a2e3c06000000b002a8d01905f7sm420891lja.101.2023.05.25.16.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 16:35:08 -0700 (PDT)
-Message-ID: <9f474fe8-523c-3668-540a-a8fc04ed64a6@linaro.org>
-Date:   Fri, 26 May 2023 01:35:06 +0200
+        d=1e100.net; s=20221208; t=1685057903; x=1687649903;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CRzA4TSuNbRkvjf9wpxiaSWiXpR8KS7NFNcbPrnX1fM=;
+        b=AAjfnRZhGfXTHj9tPJZ/eb7Rs5BIU3YtjetHEETjoZc+7MyAO+oSkEQXGO97jhBitH
+         irQcqvHdS9vMHl/bWnfZHhKwTnsdTZnel1ZXkoomcuKTG0ZWBxKL9TNz9wFdRp94CIWT
+         IRKRQi8Dtn4k8pCmxDxvLO4phNfmSHhAncLTPGtKYXR1l+vFjD1YXl+QGKBM+yKyvc1B
+         F4GTShpKPx1Zh0hFmuotEpkwfw21I9qSsO3EmWRj7T3g7CIEMy4KWDaBCfV9iQ3+yHjR
+         39bL/YHjBjhC712vBwe0vexaPPSPGonjDqD6bEEuC4or1d/403SYBf8EQ9HlMK6TO0LP
+         APVQ==
+X-Gm-Message-State: AC+VfDypFUZVa80LkuFEq1MX5hKBQwQJc0q9mvVLNQYHDH6512woChe8
+        AbEFQGNB1HCYovOsRwS86Sb/eSLiovIcsl9ZfLBQ2OvtW5wB1snA
+X-Google-Smtp-Source: ACHHUZ5NMCdPUVjM5R5bbPJt5lHPlFhkOwBTYUBVbDDnIoj1Ja5KuF2jxBA6+ywTZmp7DqG4ZHKTgc3uLdA8fqrIpWA=
+X-Received: by 2002:ac2:44ae:0:b0:4ed:c61d:c8e8 with SMTP id
+ c14-20020ac244ae000000b004edc61dc8e8mr8272273lfm.29.1685057903022; Thu, 25
+ May 2023 16:38:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: msm8916: Define regulator
- constraints next to usage
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
- <20230510-msm8916-regulators-v1-7-54d4960a05fc@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230510-msm8916-regulators-v1-7-54d4960a05fc@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 25 May 2023 18:38:11 -0500
+Message-ID: <CAH2r5muUoXaeFdq=HUnEvjrppaD2e0_HUZOkgcHDSk_MmZOUag@mail.gmail.com>
+Subject: [GIT PULL] SMB3 client fixes and move of cifs and ksmbd to under
+ "smb" directory
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Please pull the following changes since commit
+44c026a73be8038f03dbdeef028b642880cf1511:
+
+  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.4-rc3-smb3-client-fixes
+
+for you to fetch changes up to ab6cacf833ba337b41700ee193d2c8936f1d049e:
+
+  smb3: move Documentation/filesystems/cifs to
+Documentation/filesystems/smb (2023-05-24 16:29:21 -0500)
+
+----------------------------------------------------------------
+Four smb3 client server fixes (3 also for stable) and three patches to
+move of fs/cifs and fs/ksmbd to a new common "fs/smb" parent directory
+- Move the client and server source directories to a common parent
+directory: e.g. fs/cifs --> fs/smb/client and fs/ksmbd -->
+fs/smb/server and fs/smbfs_common --> fs/smb/common
+- important readahead fix
+- important fix for SMB1 regression
+- fix for missing mount option ("mapchars") in mount API conversion
+- minor debugging improvement
+
+----------------------------------------------------------------
+David Howells (1):
+      cifs: Fix cifs_limit_bvec_subset() to correctly check the maxmimum size
+
+Paulo Alcantara (1):
+      cifs: fix smb1 mount regression
+
+Steve French (5):
+      smb3: display debug information better for encryption
+      cifs: mapchars mount option ignored
+      smb: move client and server files to common directory fs/smb
+      cifs: correct references in Documentation to old fs/cifs path
+      smb3: move Documentation/filesystems/cifs to Documentation/filesystems/smb
+
+ Documentation/admin-guide/cifs/changes.rst              |  4 ++--
+ Documentation/admin-guide/cifs/usage.rst                |  8 ++++----
+ Documentation/filesystems/index.rst                     |  2 +-
+ Documentation/filesystems/{cifs => smb}/cifsroot.rst    |  2 +-
+ Documentation/filesystems/{cifs => smb}/index.rst       |  0
+ Documentation/filesystems/{cifs => smb}/ksmbd.rst       |  0
+ Documentation/userspace-api/ioctl/ioctl-number.rst      |  2 +-
+ MAINTAINERS                                             | 10 +++++-----
+ fs/Kconfig                                              |  9 +--------
+ fs/Makefile                                             |  4 +---
+ fs/smb/Kconfig                                          | 11 +++++++++++
+ fs/smb/Makefile                                         |  5 +++++
+ fs/{cifs => smb/client}/Kconfig                         |  0
+ fs/{cifs => smb/client}/Makefile                        |  0
+ fs/{cifs => smb/client}/asn1.c                          |  0
+ fs/{cifs => smb/client}/cached_dir.c                    |  0
+ fs/{cifs => smb/client}/cached_dir.h                    |  0
+ fs/{cifs => smb/client}/cifs_debug.c                    |  8 ++++++--
+ fs/{cifs => smb/client}/cifs_debug.h                    |  0
+ fs/{cifs => smb/client}/cifs_dfs_ref.c                  |  0
+ fs/{cifs => smb/client}/cifs_fs_sb.h                    |  0
+ fs/{cifs => smb/client}/cifs_ioctl.h                    |  0
+ fs/{cifs => smb/client}/cifs_spnego.c                   |  0
+ fs/{cifs => smb/client}/cifs_spnego.h                   |  0
+ fs/{cifs => smb/client}/cifs_spnego_negtokeninit.asn1   |  0
+ fs/{cifs => smb/client}/cifs_swn.c                      |  0
+ fs/{cifs => smb/client}/cifs_swn.h                      |  0
+ fs/{cifs => smb/client}/cifs_unicode.c                  |  0
+ fs/{cifs => smb/client}/cifs_unicode.h                  |  0
+ fs/{cifs => smb/client}/cifs_uniupr.h                   |  0
+ fs/{cifs => smb/client}/cifsacl.c                       |  0
+ fs/{cifs => smb/client}/cifsacl.h                       |  0
+ fs/{cifs => smb/client}/cifsencrypt.c                   |  2 +-
+ fs/{cifs => smb/client}/cifsfs.c                        |  0
+ fs/{cifs => smb/client}/cifsfs.h                        |  0
+ fs/{cifs => smb/client}/cifsglob.h                      |  2 +-
+ fs/{cifs => smb/client}/cifspdu.h                       |  2 +-
+ fs/{cifs => smb/client}/cifsproto.h                     |  0
+ fs/{cifs => smb/client}/cifsroot.c                      |  0
+ fs/{cifs => smb/client}/cifssmb.c                       |  0
+ fs/{cifs => smb/client}/connect.c                       |  0
+ fs/{cifs => smb/client}/dfs.c                           |  2 +-
+ fs/{cifs => smb/client}/dfs.h                           |  0
+ fs/{cifs => smb/client}/dfs_cache.c                     |  0
+ fs/{cifs => smb/client}/dfs_cache.h                     |  0
+ fs/{cifs => smb/client}/dir.c                           |  0
+ fs/{cifs => smb/client}/dns_resolve.c                   |  0
+ fs/{cifs => smb/client}/dns_resolve.h                   |  0
+ fs/{cifs => smb/client}/export.c                        |  0
+ fs/{cifs => smb/client}/file.c                          |  3 ++-
+ fs/{cifs => smb/client}/fs_context.c                    |  8 ++++++++
+ fs/{cifs => smb/client}/fs_context.h                    |  0
+ fs/{cifs => smb/client}/fscache.c                       |  0
+ fs/{cifs => smb/client}/fscache.h                       |  0
+ fs/{cifs => smb/client}/inode.c                         |  0
+ fs/{cifs => smb/client}/ioctl.c                         |  0
+ fs/{cifs => smb/client}/link.c                          |  0
+ fs/{cifs => smb/client}/misc.c                          |  0
+ fs/{cifs => smb/client}/netlink.c                       |  0
+ fs/{cifs => smb/client}/netlink.h                       |  0
+ fs/{cifs => smb/client}/netmisc.c                       |  0
+ fs/{cifs => smb/client}/nterr.c                         |  0
+ fs/{cifs => smb/client}/nterr.h                         |  0
+ fs/{cifs => smb/client}/ntlmssp.h                       |  0
+ fs/{cifs => smb/client}/readdir.c                       |  0
+ fs/{cifs => smb/client}/rfc1002pdu.h                    |  0
+ fs/{cifs => smb/client}/sess.c                          |  0
+ fs/{cifs => smb/client}/smb1ops.c                       |  0
+ fs/{cifs => smb/client}/smb2file.c                      |  0
+ fs/{cifs => smb/client}/smb2glob.h                      |  0
+ fs/{cifs => smb/client}/smb2inode.c                     |  0
+ fs/{cifs => smb/client}/smb2maperror.c                  |  0
+ fs/{cifs => smb/client}/smb2misc.c                      |  0
+ fs/{cifs => smb/client}/smb2ops.c                       |  0
+ fs/{cifs => smb/client}/smb2pdu.c                       |  0
+ fs/{cifs => smb/client}/smb2pdu.h                       |  0
+ fs/{cifs => smb/client}/smb2proto.h                     |  0
+ fs/{cifs => smb/client}/smb2status.h                    |  0
+ fs/{cifs => smb/client}/smb2transport.c                 |  0
+ fs/{cifs => smb/client}/smbdirect.c                     |  0
+ fs/{cifs => smb/client}/smbdirect.h                     |  0
+ fs/{cifs => smb/client}/smbencrypt.c                    |  2 +-
+ fs/{cifs => smb/client}/smberr.h                        |  0
+ fs/{cifs => smb/client}/trace.c                         |  0
+ fs/{cifs => smb/client}/trace.h                         |  0
+ fs/{cifs => smb/client}/transport.c                     |  0
+ fs/{cifs => smb/client}/unc.c                           |  0
+ fs/{cifs => smb/client}/winucase.c                      |  0
+ fs/{cifs => smb/client}/xattr.c                         |  0
+ fs/{smbfs_common => smb/common}/Makefile                |  4 ++--
+ fs/{smbfs_common => smb/common}/arc4.h                  |  0
+ fs/{smbfs_common => smb/common}/cifs_arc4.c             |  0
+ fs/{smbfs_common => smb/common}/cifs_md4.c              |  0
+ fs/{smbfs_common => smb/common}/md4.h                   |  0
+ fs/{smbfs_common => smb/common}/smb2pdu.h               |  0
+ fs/{smbfs_common => smb/common}/smbfsctl.h              |  0
+ fs/{ksmbd => smb/server}/Kconfig                        |  0
+ fs/{ksmbd => smb/server}/Makefile                       |  0
+ fs/{ksmbd => smb/server}/asn1.c                         |  0
+ fs/{ksmbd => smb/server}/asn1.h                         |  0
+ fs/{ksmbd => smb/server}/auth.c                         |  2 +-
+ fs/{ksmbd => smb/server}/auth.h                         |  0
+ fs/{ksmbd => smb/server}/connection.c                   |  0
+ fs/{ksmbd => smb/server}/connection.h                   |  0
+ fs/{ksmbd => smb/server}/crypto_ctx.c                   |  0
+ fs/{ksmbd => smb/server}/crypto_ctx.h                   |  0
+ fs/{ksmbd => smb/server}/glob.h                         |  0
+ fs/{ksmbd => smb/server}/ksmbd_netlink.h                |  0
+ fs/{ksmbd => smb/server}/ksmbd_spnego_negtokeninit.asn1 |  0
+ fs/{ksmbd => smb/server}/ksmbd_spnego_negtokentarg.asn1 |  0
+ fs/{ksmbd => smb/server}/ksmbd_work.c                   |  0
+ fs/{ksmbd => smb/server}/ksmbd_work.h                   |  0
+ fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.c               |  0
+ fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.h               |  0
+ fs/{ksmbd => smb/server}/mgmt/share_config.c            |  0
+ fs/{ksmbd => smb/server}/mgmt/share_config.h            |  0
+ fs/{ksmbd => smb/server}/mgmt/tree_connect.c            |  0
+ fs/{ksmbd => smb/server}/mgmt/tree_connect.h            |  0
+ fs/{ksmbd => smb/server}/mgmt/user_config.c             |  0
+ fs/{ksmbd => smb/server}/mgmt/user_config.h             |  0
+ fs/{ksmbd => smb/server}/mgmt/user_session.c            |  0
+ fs/{ksmbd => smb/server}/mgmt/user_session.h            |  0
+ fs/{ksmbd => smb/server}/misc.c                         |  0
+ fs/{ksmbd => smb/server}/misc.h                         |  0
+ fs/{ksmbd => smb/server}/ndr.c                          |  0
+ fs/{ksmbd => smb/server}/ndr.h                          |  0
+ fs/{ksmbd => smb/server}/nterr.h                        |  0
+ fs/{ksmbd => smb/server}/ntlmssp.h                      |  0
+ fs/{ksmbd => smb/server}/oplock.c                       |  0
+ fs/{ksmbd => smb/server}/oplock.h                       |  0
+ fs/{ksmbd => smb/server}/server.c                       |  0
+ fs/{ksmbd => smb/server}/server.h                       |  0
+ fs/{ksmbd => smb/server}/smb2misc.c                     |  0
+ fs/{ksmbd => smb/server}/smb2ops.c                      |  0
+ fs/{ksmbd => smb/server}/smb2pdu.c                      |  0
+ fs/{ksmbd => smb/server}/smb2pdu.h                      |  0
+ fs/{ksmbd => smb/server}/smb_common.c                   |  0
+ fs/{ksmbd => smb/server}/smb_common.h                   |  2 +-
+ fs/{ksmbd => smb/server}/smbacl.c                       |  0
+ fs/{ksmbd => smb/server}/smbacl.h                       |  0
+ fs/{ksmbd => smb/server}/smbfsctl.h                     |  2 +-
+ fs/{ksmbd => smb/server}/smbstatus.h                    |  2 +-
+ fs/{ksmbd => smb/server}/transport_ipc.c                |  0
+ fs/{ksmbd => smb/server}/transport_ipc.h                |  0
+ fs/{ksmbd => smb/server}/transport_rdma.c               |  0
+ fs/{ksmbd => smb/server}/transport_rdma.h               |  0
+ fs/{ksmbd => smb/server}/transport_tcp.c                |  0
+ fs/{ksmbd => smb/server}/transport_tcp.h                |  0
+ fs/{ksmbd => smb/server}/unicode.c                      |  0
+ fs/{ksmbd => smb/server}/unicode.h                      |  0
+ fs/{ksmbd => smb/server}/uniupr.h                       |  0
+ fs/{ksmbd => smb/server}/vfs.c                          |  0
+ fs/{ksmbd => smb/server}/vfs.h                          |  0
+ fs/{ksmbd => smb/server}/vfs_cache.c                    |  0
+ fs/{ksmbd => smb/server}/vfs_cache.h                    |  0
+ fs/{ksmbd => smb/server}/xattr.h                        |  0
+ 156 files changed, 59 insertions(+), 39 deletions(-)
+ rename Documentation/filesystems/{cifs => smb}/cifsroot.rst (97%)
+ rename Documentation/filesystems/{cifs => smb}/index.rst (100%)
+ rename Documentation/filesystems/{cifs => smb}/ksmbd.rst (100%)
+ create mode 100644 fs/smb/Kconfig
+ create mode 100644 fs/smb/Makefile
+ rename fs/{cifs => smb/client}/Kconfig (100%)
+ rename fs/{cifs => smb/client}/Makefile (100%)
+ rename fs/{cifs => smb/client}/asn1.c (100%)
+ rename fs/{cifs => smb/client}/cached_dir.c (100%)
+ rename fs/{cifs => smb/client}/cached_dir.h (100%)
+ rename fs/{cifs => smb/client}/cifs_debug.c (99%)
+ rename fs/{cifs => smb/client}/cifs_debug.h (100%)
+ rename fs/{cifs => smb/client}/cifs_dfs_ref.c (100%)
+ rename fs/{cifs => smb/client}/cifs_fs_sb.h (100%)
+ rename fs/{cifs => smb/client}/cifs_ioctl.h (100%)
+ rename fs/{cifs => smb/client}/cifs_spnego.c (100%)
+ rename fs/{cifs => smb/client}/cifs_spnego.h (100%)
+ rename fs/{cifs => smb/client}/cifs_spnego_negtokeninit.asn1 (100%)
+ rename fs/{cifs => smb/client}/cifs_swn.c (100%)
+ rename fs/{cifs => smb/client}/cifs_swn.h (100%)
+ rename fs/{cifs => smb/client}/cifs_unicode.c (100%)
+ rename fs/{cifs => smb/client}/cifs_unicode.h (100%)
+ rename fs/{cifs => smb/client}/cifs_uniupr.h (100%)
+ rename fs/{cifs => smb/client}/cifsacl.c (100%)
+ rename fs/{cifs => smb/client}/cifsacl.h (100%)
+ rename fs/{cifs => smb/client}/cifsencrypt.c (99%)
+ rename fs/{cifs => smb/client}/cifsfs.c (100%)
+ rename fs/{cifs => smb/client}/cifsfs.h (100%)
+ rename fs/{cifs => smb/client}/cifsglob.h (99%)
+ rename fs/{cifs => smb/client}/cifspdu.h (99%)
+ rename fs/{cifs => smb/client}/cifsproto.h (100%)
+ rename fs/{cifs => smb/client}/cifsroot.c (100%)
+ rename fs/{cifs => smb/client}/cifssmb.c (100%)
+ rename fs/{cifs => smb/client}/connect.c (100%)
+ rename fs/{cifs => smb/client}/dfs.c (99%)
+ rename fs/{cifs => smb/client}/dfs.h (100%)
+ rename fs/{cifs => smb/client}/dfs_cache.c (100%)
+ rename fs/{cifs => smb/client}/dfs_cache.h (100%)
+ rename fs/{cifs => smb/client}/dir.c (100%)
+ rename fs/{cifs => smb/client}/dns_resolve.c (100%)
+ rename fs/{cifs => smb/client}/dns_resolve.h (100%)
+ rename fs/{cifs => smb/client}/export.c (100%)
+ rename fs/{cifs => smb/client}/file.c (99%)
+ rename fs/{cifs => smb/client}/fs_context.c (99%)
+ rename fs/{cifs => smb/client}/fs_context.h (100%)
+ rename fs/{cifs => smb/client}/fscache.c (100%)
+ rename fs/{cifs => smb/client}/fscache.h (100%)
+ rename fs/{cifs => smb/client}/inode.c (100%)
+ rename fs/{cifs => smb/client}/ioctl.c (100%)
+ rename fs/{cifs => smb/client}/link.c (100%)
+ rename fs/{cifs => smb/client}/misc.c (100%)
+ rename fs/{cifs => smb/client}/netlink.c (100%)
+ rename fs/{cifs => smb/client}/netlink.h (100%)
+ rename fs/{cifs => smb/client}/netmisc.c (100%)
+ rename fs/{cifs => smb/client}/nterr.c (100%)
+ rename fs/{cifs => smb/client}/nterr.h (100%)
+ rename fs/{cifs => smb/client}/ntlmssp.h (100%)
+ rename fs/{cifs => smb/client}/readdir.c (100%)
+ rename fs/{cifs => smb/client}/rfc1002pdu.h (100%)
+ rename fs/{cifs => smb/client}/sess.c (100%)
+ rename fs/{cifs => smb/client}/smb1ops.c (100%)
+ rename fs/{cifs => smb/client}/smb2file.c (100%)
+ rename fs/{cifs => smb/client}/smb2glob.h (100%)
+ rename fs/{cifs => smb/client}/smb2inode.c (100%)
+ rename fs/{cifs => smb/client}/smb2maperror.c (100%)
+ rename fs/{cifs => smb/client}/smb2misc.c (100%)
+ rename fs/{cifs => smb/client}/smb2ops.c (100%)
+ rename fs/{cifs => smb/client}/smb2pdu.c (100%)
+ rename fs/{cifs => smb/client}/smb2pdu.h (100%)
+ rename fs/{cifs => smb/client}/smb2proto.h (100%)
+ rename fs/{cifs => smb/client}/smb2status.h (100%)
+ rename fs/{cifs => smb/client}/smb2transport.c (100%)
+ rename fs/{cifs => smb/client}/smbdirect.c (100%)
+ rename fs/{cifs => smb/client}/smbdirect.h (100%)
+ rename fs/{cifs => smb/client}/smbencrypt.c (98%)
+ rename fs/{cifs => smb/client}/smberr.h (100%)
+ rename fs/{cifs => smb/client}/trace.c (100%)
+ rename fs/{cifs => smb/client}/trace.h (100%)
+ rename fs/{cifs => smb/client}/transport.c (100%)
+ rename fs/{cifs => smb/client}/unc.c (100%)
+ rename fs/{cifs => smb/client}/winucase.c (100%)
+ rename fs/{cifs => smb/client}/xattr.c (100%)
+ rename fs/{smbfs_common => smb/common}/Makefile (59%)
+ rename fs/{smbfs_common => smb/common}/arc4.h (100%)
+ rename fs/{smbfs_common => smb/common}/cifs_arc4.c (100%)
+ rename fs/{smbfs_common => smb/common}/cifs_md4.c (100%)
+ rename fs/{smbfs_common => smb/common}/md4.h (100%)
+ rename fs/{smbfs_common => smb/common}/smb2pdu.h (100%)
+ rename fs/{smbfs_common => smb/common}/smbfsctl.h (100%)
+ rename fs/{ksmbd => smb/server}/Kconfig (100%)
+ rename fs/{ksmbd => smb/server}/Makefile (100%)
+ rename fs/{ksmbd => smb/server}/asn1.c (100%)
+ rename fs/{ksmbd => smb/server}/asn1.h (100%)
+ rename fs/{ksmbd => smb/server}/auth.c (99%)
+ rename fs/{ksmbd => smb/server}/auth.h (100%)
+ rename fs/{ksmbd => smb/server}/connection.c (100%)
+ rename fs/{ksmbd => smb/server}/connection.h (100%)
+ rename fs/{ksmbd => smb/server}/crypto_ctx.c (100%)
+ rename fs/{ksmbd => smb/server}/crypto_ctx.h (100%)
+ rename fs/{ksmbd => smb/server}/glob.h (100%)
+ rename fs/{ksmbd => smb/server}/ksmbd_netlink.h (100%)
+ rename fs/{ksmbd => smb/server}/ksmbd_spnego_negtokeninit.asn1 (100%)
+ rename fs/{ksmbd => smb/server}/ksmbd_spnego_negtokentarg.asn1 (100%)
+ rename fs/{ksmbd => smb/server}/ksmbd_work.c (100%)
+ rename fs/{ksmbd => smb/server}/ksmbd_work.h (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.c (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/ksmbd_ida.h (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/share_config.c (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/share_config.h (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/tree_connect.c (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/tree_connect.h (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/user_config.c (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/user_config.h (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/user_session.c (100%)
+ rename fs/{ksmbd => smb/server}/mgmt/user_session.h (100%)
+ rename fs/{ksmbd => smb/server}/misc.c (100%)
+ rename fs/{ksmbd => smb/server}/misc.h (100%)
+ rename fs/{ksmbd => smb/server}/ndr.c (100%)
+ rename fs/{ksmbd => smb/server}/ndr.h (100%)
+ rename fs/{ksmbd => smb/server}/nterr.h (100%)
+ rename fs/{ksmbd => smb/server}/ntlmssp.h (100%)
+ rename fs/{ksmbd => smb/server}/oplock.c (100%)
+ rename fs/{ksmbd => smb/server}/oplock.h (100%)
+ rename fs/{ksmbd => smb/server}/server.c (100%)
+ rename fs/{ksmbd => smb/server}/server.h (100%)
+ rename fs/{ksmbd => smb/server}/smb2misc.c (100%)
+ rename fs/{ksmbd => smb/server}/smb2ops.c (100%)
+ rename fs/{ksmbd => smb/server}/smb2pdu.c (100%)
+ rename fs/{ksmbd => smb/server}/smb2pdu.h (100%)
+ rename fs/{ksmbd => smb/server}/smb_common.c (100%)
+ rename fs/{ksmbd => smb/server}/smb_common.h (99%)
+ rename fs/{ksmbd => smb/server}/smbacl.c (100%)
+ rename fs/{ksmbd => smb/server}/smbacl.h (100%)
+ rename fs/{ksmbd => smb/server}/smbfsctl.h (98%)
+ rename fs/{ksmbd => smb/server}/smbstatus.h (99%)
+ rename fs/{ksmbd => smb/server}/transport_ipc.c (100%)
+ rename fs/{ksmbd => smb/server}/transport_ipc.h (100%)
+ rename fs/{ksmbd => smb/server}/transport_rdma.c (100%)
+ rename fs/{ksmbd => smb/server}/transport_rdma.h (100%)
+ rename fs/{ksmbd => smb/server}/transport_tcp.c (100%)
+ rename fs/{ksmbd => smb/server}/transport_tcp.h (100%)
+ rename fs/{ksmbd => smb/server}/unicode.c (100%)
+ rename fs/{ksmbd => smb/server}/unicode.h (100%)
+ rename fs/{ksmbd => smb/server}/uniupr.h (100%)
+ rename fs/{ksmbd => smb/server}/vfs.c (100%)
+ rename fs/{ksmbd => smb/server}/vfs.h (100%)
+ rename fs/{ksmbd => smb/server}/vfs_cache.c (100%)
+ rename fs/{ksmbd => smb/server}/vfs_cache.h (100%)
+ rename fs/{ksmbd => smb/server}/xattr.h (100%)
 
 
-On 17.05.2023 20:48, Stephan Gerhold wrote:
-> Right now each MSM8916 device has a huge block of regulator constraints
-> with allowed voltages for each regulator. For lack of better
-> documentation these voltages are often copied as-is from the vendor
-> device tree, without much extra thought.
-> 
-> Unfortunately, the voltages in the vendor device trees are often
-> misleading or even wrong, e.g. because:
-> 
->  - There is a large voltage range allowed and the actual voltage is
->    only set somewhere hidden in some messy vendor driver. This is often
->    the case for pm8916_{l14,l15,l16} because they have a broad range of
->    1.8-3.3V by default.
-> 
->  - The voltage is actually wrong but thanks to the voltage constraints
->    in the RPM firmware it still ends up applying the correct voltage.
-> 
-> To have proper regulator constraints it is important to review them in
-> context of the usage. The current setup in the MSM8916 device trees
-> makes this quite hard because each device duplicates the standard
-> voltages for components of the SoC and mixes those with minor
-> device-specific additions and dummy voltages for completely unused
-> regulators.
-> 
-> The actual usage of the regulators for the SoC components is in
-> msm8916-pm8916.dtsi, so it can and should also define the related
-> voltage constraints. These are not board-specific but defined in the
-> APQ8016E/PM8916 Device Specification. The board DT can then focus on
-> describing the actual board-specific regulators, which makes it much
-> easier to review and spot potential mistakes there.
-> 
-> Note that this commit does not make any functional change. All used
-> regulators still have the same regulator constraints as before. Unused
-> regulators do not have regulator constraints anymore because most of
-> these were too broad or even entirely wrong. They should be added back
-> with proper voltage constraints when there is an actual usage.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
-I'm a bit torn between saying "this is very nice already" and "we should
-probably override each regulator individually" like so:
+-- 
+Thanks,
 
-&pm8916_l17 {
-	[...]
-}
-
-to minimize mistakes..
-
-Not sure what to make of it, I see Bjorn already applied this, so I guess
-I'm just leaving some potential ideas for the future here.
-
-Konrad
-
->  arch/arm64/boot/dts/qcom/apq8016-sbc.dts           | 153 +++++----------------
->  arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts   | 115 ++--------------
->  .../boot/dts/qcom/msm8916-alcatel-idol347.dts      | 110 +--------------
->  arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts     | 110 +--------------
->  arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts | 110 +--------------
->  arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts     | 120 +++-------------
->  .../boot/dts/qcom/msm8916-longcheer-l8150.dts      | 110 +--------------
->  .../boot/dts/qcom/msm8916-longcheer-l8910.dts      | 110 +--------------
->  arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi       | 102 +++++++++++---
->  .../dts/qcom/msm8916-samsung-a2015-common.dtsi     | 110 +--------------
->  .../boot/dts/qcom/msm8916-samsung-gt5-common.dtsi  | 110 +--------------
->  .../boot/dts/qcom/msm8916-samsung-j5-common.dtsi   | 103 --------------
->  .../boot/dts/qcom/msm8916-samsung-serranove.dts    | 103 --------------
->  arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi          | 103 --------------
->  .../boot/dts/qcom/msm8916-wingtech-wt88047.dts     | 119 +++-------------
->  15 files changed, 210 insertions(+), 1478 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-> index 7d7af6406c39..ab8dfd858025 100644
-> --- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-> +++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-> @@ -329,6 +329,40 @@ &pm8916_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	/*
-> +	 * The 96Boards specification expects a 1.8V power rail on the low-speed
-> +	 * expansion connector that is able to provide at least 0.18W / 100 mA.
-> +	 * L15/L16 are connected in parallel to provide 55 mA each. A minimum load
-> +	 * must be specified to ensure the regulators are not put in LPM where they
-> +	 * would only provide 5 mA.
-> +	 */
-> +	pm8916_l15: l15 {
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		regulator-system-load = <50000>;
-> +		regulator-allow-set-load;
-> +		regulator-always-on;
-> +	};
-> +	pm8916_l16: l16 {
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		regulator-system-load = <50000>;
-> +		regulator-allow-set-load;
-> +		regulator-always-on;
-> +	};
-> +
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +	};
-> +};
-> +
-> +&pm8916_s4 {
-> +	regulator-always-on;
-> +	regulator-boot-on;
-> +};
-> +
->  &sdhc_1 {
->  	status = "okay";
->  
-> @@ -446,125 +480,6 @@ &wcnss_iris {
->  &stm { status = "okay"; };
->  &tpiu { status = "okay"; };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -
-> -		regulator-always-on;
-> -		regulator-boot-on;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	/*
-> -	 * The 96Boards specification expects a 1.8V power rail on the low-speed
-> -	 * expansion connector that is able to provide at least 0.18W / 100 mA.
-> -	 * L15/L16 are connected in parallel to provide 55 mA each. A minimum load
-> -	 * must be specified to ensure the regulators are not put in LPM where they
-> -	 * would only provide 5 mA.
-> -	 */
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -		regulator-system-load = <50000>;
-> -		regulator-allow-set-load;
-> -		regulator-always-on;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -		regulator-system-load = <50000>;
-> -		regulator-allow-set-load;
-> -		regulator-always-on;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  /*
->   * 2mA drive strength is not enough when connecting multiple
->   * I2C devices with different pull up resistors.
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-> index 0d517804e44e..753413b48751 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-> @@ -114,6 +114,18 @@ &pm8916_resin {
->  	status = "okay";
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l16: l16 {
-> +		regulator-min-microvolt = <2900000>;
-> +		regulator-max-microvolt = <2900000>;
-> +	};
-> +
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &pm8916_vib {
->  	status = "okay";
->  };
-> @@ -153,109 +165,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-system-load = <200000>;
-> -		regulator-allow-set-load;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	accel_int_default: accel-int-default-state {
->  		pins = "gpio115";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> index ddd64cc46998..4bfbad669b1e 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> @@ -156,6 +156,13 @@ &pm8916_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &pm8916_vib {
->  	status = "okay";
->  };
-> @@ -195,109 +202,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	accel_int_default: accel-int-default-state {
->  		pins = "gpio31";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts b/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
-> index 982457503a3c..37755e885395 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
-> @@ -128,6 +128,13 @@ &blsp1_uart2 {
->  	status = "okay";
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &sdhc_1 {
->  	status = "okay";
->  
-> @@ -163,109 +170,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	gpio_keys_default: gpio-keys-default-state {
->  		pins = "gpio107", "gpio117";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-> index 9584d271c526..4a6bf99c755f 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-> @@ -114,6 +114,13 @@ &pm8916_resin {
->  	status = "okay";
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &pm8916_vib {
->  	status = "okay";
->  };
-> @@ -153,109 +160,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-system-load = <200000>;
-> -		regulator-allow-set-load;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	camera_flash_default: camera-flash-default-state {
->  		pins = "gpio31", "gpio32";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-> index 8197710372ad..29aaa35438a3 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-> @@ -222,11 +222,28 @@ &lpass_codec {
->  	status = "okay";
->  };
->  
-> +&pm8916_l8 {
-> +	regulator-min-microvolt = <2950000>;
-> +	regulator-max-microvolt = <2950000>;
-> +};
-> +
->  &pm8916_resin {
->  	status = "okay";
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l16: l16 {
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +	};
-> +
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &pm8916_vib {
->  	status = "okay";
->  };
-> @@ -321,109 +338,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	accel_irq_default: accel-irq-default-state {
->  		pins = "gpio115";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
-> index 68d1b76aaf77..b7b1f1ceaf1f 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
-> @@ -223,6 +223,13 @@ &pm8916_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &pm8916_usbin {
->  	status = "okay";
->  };
-> @@ -267,109 +274,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	accel_int_default: accel-int-default-state {
->  		pins = "gpio116";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
-> index 5ef51d3e9098..d1eb3f2ecf3f 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
-> @@ -95,6 +95,13 @@ &pm8916_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &pm8916_vib {
->  	status = "okay";
->  };
-> @@ -134,109 +141,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	button_backlight_default: button-backlight-default-state {
->  		pins = "gpio17";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
-> index 29ef46c33350..b38eecbd6253 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
-> @@ -61,30 +61,92 @@ &wcnss_iris {
->  };
->  
->  &rpm_requests {
-> -	smd_rpm_regulators: regulators {
-> +	pm8916_rpm_regulators: regulators {
->  		compatible = "qcom,rpm-pm8916-regulators";
-> +		vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> +		vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> +		vdd_l7-supply = <&pm8916_s4>;
->  
->  		/* pm8916_s1 is managed by rpmpd (MSM8916_VDDCX) */
-> -		pm8916_s3: s3 {};
-> -		pm8916_s4: s4 {};
->  
-> -		pm8916_l1: l1 {};
-> -		pm8916_l2: l2 {};
-> +		pm8916_s3: s3 {
-> +			regulator-min-microvolt = <1250000>;
-> +			regulator-max-microvolt = <1350000>;
-> +		};
-> +
-> +		pm8916_s4: s4 {
-> +			regulator-min-microvolt = <1850000>;
-> +			regulator-max-microvolt = <2150000>;
-> +		};
-> +
-> +		/*
-> +		 * Some of the regulators are unused or managed by another
-> +		 * processor (e.g. the modem). We should still define nodes for
-> +		 * them to ensure the vote from the application processor can be
-> +		 * dropped in case the regulators are already on during boot.
-> +		 *
-> +		 * The labels for these nodes are omitted on purpose because
-> +		 * boards should configure a proper voltage before using them.
-> +		 */
-> +		l1 {};
-> +
-> +		pm8916_l2: l2 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
->  		/* pm8916_l3 is managed by rpmpd (MSM8916_VDDMX) */
-> -		pm8916_l4: l4 {};
-> -		pm8916_l5: l5 {};
-> -		pm8916_l6: l6 {};
-> -		pm8916_l7: l7 {};
-> -		pm8916_l8: l8 {};
-> -		pm8916_l9: l9 {};
-> -		pm8916_l10: l10 {};
-> -		pm8916_l11: l11 {};
-> -		pm8916_l12: l12 {};
-> -		pm8916_l13: l13 {};
-> -		pm8916_l14: l14 {};
-> -		pm8916_l15: l15 {};
-> -		pm8916_l16: l16 {};
-> -		pm8916_l17: l17 {};
-> -		pm8916_l18: l18 {};
-> +
-> +		l4 {};
-> +
-> +		pm8916_l5: l5 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8916_l6: l6 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8916_l7: l7 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8916_l8: l8 {
-> +			regulator-min-microvolt = <2900000>;
-> +			regulator-max-microvolt = <2900000>;
-> +		};
-> +
-> +		pm8916_l9: l9 {
-> +			regulator-min-microvolt = <3300000>;
-> +			regulator-max-microvolt = <3300000>;
-> +		};
-> +
-> +		l10 {};
-> +
-> +		pm8916_l11: l11 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +			regulator-allow-set-load;
-> +			regulator-system-load = <200000>;
-> +		};
-> +
-> +		pm8916_l12: l12 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8916_l13: l13 {
-> +			regulator-min-microvolt = <3075000>;
-> +			regulator-max-microvolt = <3075000>;
-> +		};
-> +
-> +		l14 {};
-> +		l15 {};
-> +		l16 {};
-> +		l17 {};
-> +		l18 {};
->  	};
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-> index b362a76eebc9..37a872949851 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-> @@ -252,6 +252,13 @@ &pm8916_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &sdhc_1 {
->  	status = "okay";
->  
-> @@ -279,109 +286,6 @@ &usb_hs_phy {
->  	extcon = <&muic>;
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	accel_int_default: accel-int-default-state {
->  		pins = "gpio115";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
-> index 4464beeeaab1..a49e1641e59b 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
-> @@ -120,6 +120,13 @@ &pm8916_resin {
->  	status = "okay";
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  /* FIXME: Replace with MAX77849 MUIC when driver is available */
->  &pm8916_usbin {
->  	status = "okay";
-> @@ -162,109 +169,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3660b";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-system-load = <200000>;
-> -		regulator-allow-set-load;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	accel_int_default: accel-int-default-state {
->  		pins = "gpio115";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
-> index 6e231e92e675..6192d04a58ae 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
-> @@ -128,109 +128,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <3000000>;
-> -		regulator-max-microvolt = <3000000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	gpio_hall_sensor_default: gpio-hall-sensor-default-state {
->  		pins = "gpio52";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-> index fa5b330aaeae..fc4c61c4e1e6 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-> @@ -320,109 +320,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3660b";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	fg_alert_default: fg-alert-default-state {
->  		pins = "gpio121";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-> index b27896e83a0e..c8ea2f6f6b3d 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-> @@ -126,109 +126,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-system-load = <200000>;
-> -		regulator-allow-set-load;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	/* pins are board-specific */
->  	button_default: button-default-state {
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
-> index 78020a0db4e4..323590598113 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
-> @@ -149,6 +149,22 @@ &pm8916_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pm8916_rpm_regulators {
-> +	pm8916_l16: l16 {
-> +		/*
-> +		 * L16 is only used for AW2013 which is fine with 2.5-3.3V.
-> +		 * Use the recommended typical voltage of 2.8V as minimum.
-> +		 */
-> +		regulator-min-microvolt = <2800000>;
-> +		regulator-max-microvolt = <3300000>;
-> +	};
-> +
-> +	pm8916_l17: l17 {
-> +		regulator-min-microvolt = <2850000>;
-> +		regulator-max-microvolt = <2850000>;
-> +	};
-> +};
-> +
->  &pm8916_vib {
->  	status = "okay";
->  };
-> @@ -188,109 +204,6 @@ &wcnss_iris {
->  	compatible = "qcom,wcn3620";
->  };
->  
-> -&smd_rpm_regulators {
-> -	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-> -	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-> -	vdd_l7-supply = <&pm8916_s4>;
-> -
-> -	s3 {
-> -		regulator-min-microvolt = <1250000>;
-> -		regulator-max-microvolt = <1350000>;
-> -	};
-> -
-> -	s4 {
-> -		regulator-min-microvolt = <1850000>;
-> -		regulator-max-microvolt = <2150000>;
-> -	};
-> -
-> -	l1 {
-> -		regulator-min-microvolt = <1225000>;
-> -		regulator-max-microvolt = <1225000>;
-> -	};
-> -
-> -	l2 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1200000>;
-> -	};
-> -
-> -	l4 {
-> -		regulator-min-microvolt = <2050000>;
-> -		regulator-max-microvolt = <2050000>;
-> -	};
-> -
-> -	l5 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l6 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l7 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -	};
-> -
-> -	l8 {
-> -		regulator-min-microvolt = <2900000>;
-> -		regulator-max-microvolt = <2900000>;
-> -	};
-> -
-> -	l9 {
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l10 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <2800000>;
-> -	};
-> -
-> -	l11 {
-> -		regulator-min-microvolt = <2950000>;
-> -		regulator-max-microvolt = <2950000>;
-> -		regulator-allow-set-load;
-> -		regulator-system-load = <200000>;
-> -	};
-> -
-> -	l12 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2950000>;
-> -	};
-> -
-> -	l13 {
-> -		regulator-min-microvolt = <3075000>;
-> -		regulator-max-microvolt = <3075000>;
-> -	};
-> -
-> -	l14 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l15 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l16 {
-> -		regulator-min-microvolt = <2800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -	};
-> -
-> -	l17 {
-> -		regulator-min-microvolt = <2850000>;
-> -		regulator-max-microvolt = <2850000>;
-> -	};
-> -
-> -	l18 {
-> -		regulator-min-microvolt = <2700000>;
-> -		regulator-max-microvolt = <2700000>;
-> -	};
-> -};
-> -
->  &msmgpio {
->  	camera_flash_default: camera-flash-default-state {
->  		pins = "gpio31", "gpio32";
-> 
+Steve
