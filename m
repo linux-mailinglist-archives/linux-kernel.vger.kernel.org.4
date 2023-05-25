@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF4D71149E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCF57114B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242139AbjEYSjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S242152AbjEYSjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242077AbjEYSin (ORCPT
+        with ESMTP id S242085AbjEYSio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:38:43 -0400
+        Thu, 25 May 2023 14:38:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB92210F3;
-        Thu, 25 May 2023 11:36:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177E11BD6;
+        Thu, 25 May 2023 11:37:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FAB4648CF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC672648FA;
+        Thu, 25 May 2023 18:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC09DC433D2;
         Thu, 25 May 2023 18:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DAEC433EF;
-        Thu, 25 May 2023 18:36:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039803;
-        bh=Q9A4Vs3lebOXbaWAXB5FHxUKTB6qt8LQqgyX3PSeKdM=;
+        s=k20201202; t=1685039806;
+        bh=Ki4cMz1lLwGiIiiCwi2lRMtlNdqGc8g9KIvY00HYzDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SK7+7NIT1VtdliN4RivCHp500O3YAJLM9DAdkqtIyapH05VFsJoRpg0DXxWk77EVr
-         BGegapCy7rA1JjjGZolnp37TYOak/RIe44dpNOMCmNYfVLuqMxpoCV4e52ok8VBnZB
-         nyAZmoVMvccTe57JzUcyCQCuYQnVexc6YXLxgMXlCieiWxSmoxM4sEU2278XI4yypY
-         bqqBDi3dW+0PR8ujjvKgq2JCb1NL0TonwgqYR10gSirr3AewL6C/U/51q7+A3b5X2o
-         I7KWmYPv7H+csJ45L61Qnjw/qrnLXmFdkSuthLLoqXKgWbn+hwo6lWEDEud5xQ9Z1L
-         d8FnLd95jBHaA==
+        b=H3/y/bn87XDxfuoCFFfVeddvuGhqf4MkxXu2j0+EMMaKjN17hclJbDMcy8TQuRY2/
+         ix4bsDRkfcOspiLk9T1JnAlvwVnF0ESjPod7r0C2YT/7NMolaViVfdL6auhtclcm9y
+         5ZuVQd4UOVykbCA/ktrcR0KfxBWr0jQHDc6VqIUax1upqO0Pro5pGqyqem7u9DVbyS
+         4XuItmxFO/sxaRFQyLO8EmqNeHI9D5EBsqV76OIQSL2rbE1kWNazR94h4kJJEQW1YE
+         hTUmOemG5JvpA2Zr6OFbVmYwWIxUhHl9JUZARoLEZO9Ppykp40ZHN2RO/eFBDr3TfX
+         UfUHJ/2AzSXMA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benedict Wong <benedictwong@google.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 07/57] xfrm: Check if_id in inbound policy/secpath match
-Date:   Thu, 25 May 2023 14:35:17 -0400
-Message-Id: <20230525183607.1793983-7-sashal@kernel.org>
+Cc:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, afd@ti.com,
+        shifu0704@thundersoft.com, shenghao-ding@ti.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 08/57] ASoC: dt-bindings: Adjust #sound-dai-cells on TI's single-DAI codecs
+Date:   Thu, 25 May 2023 14:35:18 -0400
+Message-Id: <20230525183607.1793983-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
 References: <20230525183607.1793983-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -59,77 +61,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benedict Wong <benedictwong@google.com>
+From: Martin Povišer <povik+lin@cutebit.org>
 
-[ Upstream commit 8680407b6f8f5fba59e8f1d63c869abc280f04df ]
+[ Upstream commit efb2bfd7b3d210c479b9361c176d7426e5eb8663 ]
 
-This change ensures that if configured in the policy, the if_id set in
-the policy and secpath states match during the inbound policy check.
-Without this, there is potential for ambiguity where entries in the
-secpath differing by only the if_id could be mismatched.
+A bunch of TI's codecs have binding schemas which force #sound-dai-cells
+to one despite those codecs only having a single DAI. Allow for bindings
+with zero DAI cells and deprecate the former non-zero value.
 
-Notably, this is checked in the outbound direction when resolving
-templates to SAs, but not on the inbound path when matching SAs and
-policies.
-
-Test: Tested against Android kernel unit tests & CTS
-Signed-off-by: Benedict Wong <benedictwong@google.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org
+Link: https://lore.kernel.org/r/20230509153412.62847-1-povik+lin@cutebit.org
+Signed-off-by: Mark Brown <broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_policy.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ Documentation/devicetree/bindings/sound/tas2562.yaml | 6 ++++--
+ Documentation/devicetree/bindings/sound/tas2770.yaml | 6 ++++--
+ Documentation/devicetree/bindings/sound/tas27xx.yaml | 6 ++++--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-index 7f49dab3b6b59..39d47752813bb 100644
---- a/net/xfrm/xfrm_policy.c
-+++ b/net/xfrm/xfrm_policy.c
-@@ -3237,7 +3237,7 @@ xfrm_secpath_reject(int idx, struct sk_buff *skb, const struct flowi *fl)
+diff --git a/Documentation/devicetree/bindings/sound/tas2562.yaml b/Documentation/devicetree/bindings/sound/tas2562.yaml
+index 30f6b029ac085..cb519a4b6e710 100644
+--- a/Documentation/devicetree/bindings/sound/tas2562.yaml
++++ b/Documentation/devicetree/bindings/sound/tas2562.yaml
+@@ -52,7 +52,9 @@ properties:
+     description: TDM TX current sense time slot.
  
- static inline int
- xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
--	      unsigned short family)
-+	      unsigned short family, u32 if_id)
- {
- 	if (xfrm_state_kern(x))
- 		return tmpl->optional && !xfrm_state_addr_cmp(tmpl, x, tmpl->encap_family);
-@@ -3248,7 +3248,8 @@ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
- 		(tmpl->allalgs || (tmpl->aalgos & (1<<x->props.aalgo)) ||
- 		 !(xfrm_id_proto_match(tmpl->id.proto, IPSEC_PROTO_ANY))) &&
- 		!(x->props.mode != XFRM_MODE_TRANSPORT &&
--		  xfrm_state_addr_cmp(tmpl, x, family));
-+		  xfrm_state_addr_cmp(tmpl, x, family)) &&
-+		(if_id == 0 || if_id == x->if_id);
- }
+   '#sound-dai-cells':
+-    const: 1
++    # The codec has a single DAI, the #sound-dai-cells=<1>; case is left in for backward
++    # compatibility but is deprecated.
++    enum: [0, 1]
  
- /*
-@@ -3260,7 +3261,7 @@ xfrm_state_ok(const struct xfrm_tmpl *tmpl, const struct xfrm_state *x,
-  */
- static inline int
- xfrm_policy_ok(const struct xfrm_tmpl *tmpl, const struct sec_path *sp, int start,
--	       unsigned short family)
-+	       unsigned short family, u32 if_id)
- {
- 	int idx = start;
+ required:
+   - compatible
+@@ -69,7 +71,7 @@ examples:
+      codec: codec@4c {
+        compatible = "ti,tas2562";
+        reg = <0x4c>;
+-       #sound-dai-cells = <1>;
++       #sound-dai-cells = <0>;
+        interrupt-parent = <&gpio1>;
+        interrupts = <14>;
+        shutdown-gpios = <&gpio1 15 0>;
+diff --git a/Documentation/devicetree/bindings/sound/tas2770.yaml b/Documentation/devicetree/bindings/sound/tas2770.yaml
+index bc90e72bf7cf9..1859fbe1cdf17 100644
+--- a/Documentation/devicetree/bindings/sound/tas2770.yaml
++++ b/Documentation/devicetree/bindings/sound/tas2770.yaml
+@@ -54,7 +54,9 @@ properties:
+       - 1 # Falling edge
  
-@@ -3270,7 +3271,7 @@ xfrm_policy_ok(const struct xfrm_tmpl *tmpl, const struct sec_path *sp, int star
- 	} else
- 		start = -1;
- 	for (; idx < sp->len; idx++) {
--		if (xfrm_state_ok(tmpl, sp->xvec[idx], family))
-+		if (xfrm_state_ok(tmpl, sp->xvec[idx], family, if_id))
- 			return ++idx;
- 		if (sp->xvec[idx]->props.mode != XFRM_MODE_TRANSPORT) {
- 			if (start == -1)
-@@ -3655,7 +3656,7 @@ int __xfrm_policy_check(struct sock *sk, int dir, struct sk_buff *skb,
- 		 * are implied between each two transformations.
- 		 */
- 		for (i = xfrm_nr-1, k = 0; i >= 0; i--) {
--			k = xfrm_policy_ok(tpp[i], sp, k, family);
-+			k = xfrm_policy_ok(tpp[i], sp, k, family, if_id);
- 			if (k < 0) {
- 				if (k < -1)
- 					/* "-2 - errored_index" returned */
+   '#sound-dai-cells':
+-    const: 1
++    # The codec has a single DAI, the #sound-dai-cells=<1>; case is left in for backward
++    # compatibility but is deprecated.
++    enum: [0, 1]
+ 
+ required:
+   - compatible
+@@ -71,7 +73,7 @@ examples:
+      codec: codec@41 {
+        compatible = "ti,tas2770";
+        reg = <0x41>;
+-       #sound-dai-cells = <1>;
++       #sound-dai-cells = <0>;
+        interrupt-parent = <&gpio1>;
+        interrupts = <14>;
+        reset-gpio = <&gpio1 15 0>;
+diff --git a/Documentation/devicetree/bindings/sound/tas27xx.yaml b/Documentation/devicetree/bindings/sound/tas27xx.yaml
+index 66a0df8850ea6..079cb6f8d4474 100644
+--- a/Documentation/devicetree/bindings/sound/tas27xx.yaml
++++ b/Documentation/devicetree/bindings/sound/tas27xx.yaml
+@@ -47,7 +47,9 @@ properties:
+     description: TDM TX voltage sense time slot.
+ 
+   '#sound-dai-cells':
+-    const: 1
++    # The codec has a single DAI, the #sound-dai-cells=<1>; case is left in for backward
++    # compatibility but is deprecated.
++    enum: [0, 1]
+ 
+ required:
+   - compatible
+@@ -64,7 +66,7 @@ examples:
+      codec: codec@38 {
+        compatible = "ti,tas2764";
+        reg = <0x38>;
+-       #sound-dai-cells = <1>;
++       #sound-dai-cells = <0>;
+        interrupt-parent = <&gpio1>;
+        interrupts = <14>;
+        reset-gpios = <&gpio1 15 0>;
 -- 
 2.39.2
 
