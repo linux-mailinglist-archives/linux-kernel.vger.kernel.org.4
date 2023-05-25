@@ -2,78 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D676B712BCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EADF710744
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjEZRam convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 26 May 2023 13:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S239531AbjEYIZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbjEZRai (ORCPT
+        with ESMTP id S233942AbjEYIZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:30:38 -0400
-Received: from pmg.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E979189
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:30:35 -0700 (PDT)
-Received: from pmg.saludzona6.gob.ec (localhost.localdomain [127.0.0.1])
-        by pmg.saludzona6.gob.ec (Proxmox) with ESMTP id 584E31A2F68;
-        Fri, 26 May 2023 11:32:49 -0500 (-05)
-Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [192.168.50.8])
-        by pmg.saludzona6.gob.ec (Proxmox) with ESMTP id 729A61A2816;
-        Fri, 26 May 2023 10:47:09 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 8D78F22869CE;
-        Thu, 25 May 2023 03:24:03 -0500 (-05)
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id r6nSSPZx0S5s; Thu, 25 May 2023 03:23:58 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id D8C192286C09;
-        Thu, 25 May 2023 03:23:45 -0500 (-05)
-X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id tVWo-qTgSMMj; Thu, 25 May 2023 03:23:45 -0500 (-05)
-Received: from [23.146.243.48] (unknown [23.146.243.48])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 3C2BE228740C;
-        Thu, 25 May 2023 03:23:27 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 25 May 2023 04:25:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FAB18C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:25:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E14D860FAA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:25:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7728C433D2;
+        Thu, 25 May 2023 08:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685003104;
+        bh=grNGwJfKWoBTpHT3Wmi+ZF/bEInd8peYBr4JARBqluI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V3o5NCJv7n+774JknAT+F+0rMRvBC6KmsOrVG4f08XgskuY4sSSiQi7M7cNRfTxXQ
+         5I6/akS+M3M7SP1DCY+34zoMT/xVgzoLV0+kGckVsZdDB9/+BUVtWkHMMN0rKTQ7mS
+         W27f/A5CDV7sg5I0P7RDaL9UIWsHdn+DVwm+93nnd6MFwG/H3Q0R9Vx03TtgOjsacr
+         LNA2Aad2GWcYq8TFWud+C7F8jdV9L6eVAVxbQgtapC/Fpf4ly/38ygoU+WE5AedTmX
+         9RCL5yidlze9IyNjv1rR/f61EpLLyQqz4stJmLjbOnspBIyJE+0EJVybRABtI37GaW
+         +y5IXHjxX2vQQ==
+Date:   Thu, 25 May 2023 11:24:44 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     akpm@linux-foundation.org, mhocko@suse.com, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm/mm_init.c: remove comments in
+ zone_spanned_pages_in_node() and zone_absent_pages_in_node()
+Message-ID: <20230525082444.GT4967@kernel.org>
+References: <20230525040150.1588-1-haifeng.xu@shopee.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?ATENCI=C3=93N=3A?=
-To:     Recipients <gladys.montenegro@saludzona6.gob.ec>
-From:   "ZIMBRA WEBMAIL ADMIN " <gladys.montenegro@saludzona6.gob.ec>
-Date:   Thu, 25 May 2023 01:23:20 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230525082327.3C2BE228740C@mail.saludzona6.gob.ec>
-X-yoursite-MailScanner: Found to be clean, Found to be clean
-X-yoursite-MailScanner-Information: Please contact the ISP for more information
-X-yoursite-MailScanner-ID: D8C192286C09.A90B5
-X-yoursite-MailScanner-From: gladys.montenegro@saludzona6.gob.ec
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525040150.1588-1-haifeng.xu@shopee.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATENCIÓN:
+On Thu, May 25, 2023 at 04:01:48AM +0000, Haifeng Xu wrote:
+> Since commit 03e85f9d5f1f ("mm/page_alloc: Introduce free_area_init_core_hotplug"),
+> free_area_init_node() doesn't get called in hotplug path anymore, so
+> remove the comments related to it.
+> 
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> ---
+>  mm/mm_init.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 7f7f9c677854..cf55bba04b23 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -1174,7 +1174,6 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
+>  	unsigned long zone_start_pfn, zone_end_pfn;
+>  	unsigned long nr_absent;
+>  
+> -	/* When hotadd a new node from cpu_up(), the node should be empty */
+>  	if (!node_start_pfn && !node_end_pfn)
+>  		return 0;
 
-Quiero notificarle que si no envía su contraseña y cualquier otra información que solicitamos para la actualización posterior de su cuenta, desactivaremos su cuenta de correo electrónico con efecto inmediato, así que envíela ahora.
+I think it's better to call calculate_node_totalpages only if node actually has 
+memory and for node with no memory we just need to make sure all the node
+and zone page counts are indeed set to 0.
 
-1) Contraseña:
-2) Vuelva a escribir la contraseña:
-
-EQUIPO DE CORREO WEB DE ZIMBRA
+Then the condition here and in zone_spanned_pages_in_node() can be removed
+along with the comment and patch 2 won't be required at all.
+  
+> @@ -1227,7 +1226,7 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
+>  {
+>  	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
+>  	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
+> -	/* When hotadd a new node from cpu_up(), the node should be empty */
+> +
+>  	if (!node_start_pfn && !node_end_pfn)
+>  		return 0;
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
 -- 
-This message has been scanned for viruses and
-dangerous content by MailScanner, and is
-believed to be clean.
-
-
+Sincerely yours,
+Mike.
