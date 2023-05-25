@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FB6711426
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EF371142A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241905AbjEYSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S241913AbjEYSgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241589AbjEYSfJ (ORCPT
+        with ESMTP id S241881AbjEYSfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:35:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CA51992;
-        Thu, 25 May 2023 11:34:09 -0700 (PDT)
+        Thu, 25 May 2023 14:35:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E986B1BCB;
+        Thu, 25 May 2023 11:34:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A73648B2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40C21648BB;
+        Thu, 25 May 2023 18:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E54C4339E;
         Thu, 25 May 2023 18:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05667C433D2;
-        Thu, 25 May 2023 18:34:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039649;
-        bh=NybuOARIeQPHnMskvSwF0Aq/qo48rTF7fRrWfOjNa00=;
+        s=k20201202; t=1685039650;
+        bh=JX+nrVURjyP+KRfBbp1VkQbPd7NZtc4TQcwVsolORiM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DOlF+UinN2D/DILMp2vlNwCVq00NbF6AHNOwNVvwd4yF30Z+c92UEJJWZ7cy2hRru
-         2XrCv+t1ld+cPvALOP7wEgRTcMjRp3lr0cmc4p6TWaeI/6zsAquAPO5u1iMbJ4PsIj
-         sMzIUkrNbIq66lXxX5a0Q3YAcUmLZN8fUJvuSlIC8f/uRiovvL03BniqZkQQIQp/OC
-         LAPT7ZqjcflWolxPSgz1OjcmkjyKO5xCIsYhEU7FmsLggCrrHPqWyd4ssE+bpFN3sy
-         Fl6j/LQ/JHIGBLAvVZxegxlTPXfCRhOUE06wVlr2R0kwvJvmKj/gtEMU/NTbtxneuU
-         z7qihtKDoO2/w==
+        b=HmZvD9AG+TlTdprrhrE2Uv+cAgVgTBppTjgMYl/2HviuMoHpoKMxpbverxYzNaXHU
+         rOrw0LRs519gcYUOOjFQm37ckFuffiIwRA5O6plz3zySYAE1wzwXFJX3Su8VcYD+0F
+         K66tkhTFd++lj6wTq8Qwzbbjbq2ovqCAX4SreZH278cJ1y1yX+Njee7QbTYqcWN25b
+         qlSiVDnuPO/Imlp1d2ij6/O1KnpnlrhFJJCY/PwSNfQ+ajkot3RHtKa5ICZK4nroKO
+         2ibwQPaGbevq+5JhB5cj32bx+5Uy0awMYRH4hyPn3VODEAUnr3V2g/0M4hjEgbZFkk
+         Zt1axM7tRGEBQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, ying.xue@windriver.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net
-Subject: [PATCH AUTOSEL 6.3 35/67] tipc: add tipc_bearer_min_mtu to calculate min mtu
-Date:   Thu, 25 May 2023 14:31:12 -0400
-Message-Id: <20230525183144.1717540-35-sashal@kernel.org>
+Cc:     Holger Dengler <dengler@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>, hca@linux.ibm.com,
+        gor@linux.ibm.com, linux-s390@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 36/67] s390/pkey: zeroize key blobs
+Date:   Thu, 25 May 2023 14:31:13 -0400
+Message-Id: <20230525183144.1717540-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
 References: <20230525183144.1717540-1-sashal@kernel.org>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,102 +59,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Holger Dengler <dengler@linux.ibm.com>
 
-[ Upstream commit 3ae6d66b605be604644d4bb5708a7ffd9cf1abe8 ]
+[ Upstream commit 844cf829e5f33e00b279230470c8c93b58b8c16f ]
 
-As different media may requires different min mtu, and even the
-same media with different net family requires different min mtu,
-add tipc_bearer_min_mtu() to calculate min mtu accordingly.
+Key blobs for the IOCTLs PKEY_KBLOB2PROTK[23] may contain clear key
+material. Zeroize the copies of these keys in kernel memory after
+creating the protected key.
 
-This API will be used to check the new mtu when doing the link
-mtu negotiation in the next patch.
-
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+Signed-off-by: Holger Dengler <dengler@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/bearer.c    | 13 +++++++++++++
- net/tipc/bearer.h    |  3 +++
- net/tipc/udp_media.c |  5 +++--
- 3 files changed, 19 insertions(+), 2 deletions(-)
+ drivers/s390/crypto/pkey_api.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
-index 35cac7733fd3a..0e9a29e1536b7 100644
---- a/net/tipc/bearer.c
-+++ b/net/tipc/bearer.c
-@@ -541,6 +541,19 @@ int tipc_bearer_mtu(struct net *net, u32 bearer_id)
- 	return mtu;
- }
- 
-+int tipc_bearer_min_mtu(struct net *net, u32 bearer_id)
-+{
-+	int mtu = TIPC_MIN_BEARER_MTU;
-+	struct tipc_bearer *b;
-+
-+	rcu_read_lock();
-+	b = bearer_get(net, bearer_id);
-+	if (b)
-+		mtu += b->encap_hlen;
-+	rcu_read_unlock();
-+	return mtu;
-+}
-+
- /* tipc_bearer_xmit_skb - sends buffer to destination over bearer
-  */
- void tipc_bearer_xmit_skb(struct net *net, u32 bearer_id,
-diff --git a/net/tipc/bearer.h b/net/tipc/bearer.h
-index 490ad6e5f7a3c..bd0cc5c287ef8 100644
---- a/net/tipc/bearer.h
-+++ b/net/tipc/bearer.h
-@@ -146,6 +146,7 @@ struct tipc_media {
-  * @identity: array index of this bearer within TIPC bearer array
-  * @disc: ptr to link setup request
-  * @net_plane: network plane ('A' through 'H') currently associated with bearer
-+ * @encap_hlen: encap headers length
-  * @up: bearer up flag (bit 0)
-  * @refcnt: tipc_bearer reference counter
-  *
-@@ -170,6 +171,7 @@ struct tipc_bearer {
- 	u32 identity;
- 	struct tipc_discoverer *disc;
- 	char net_plane;
-+	u16 encap_hlen;
- 	unsigned long up;
- 	refcount_t refcnt;
- };
-@@ -232,6 +234,7 @@ int tipc_bearer_setup(void);
- void tipc_bearer_cleanup(void);
- void tipc_bearer_stop(struct net *net);
- int tipc_bearer_mtu(struct net *net, u32 bearer_id);
-+int tipc_bearer_min_mtu(struct net *net, u32 bearer_id);
- bool tipc_bearer_bcast_support(struct net *net, u32 bearer_id);
- void tipc_bearer_xmit_skb(struct net *net, u32 bearer_id,
- 			  struct sk_buff *skb,
-diff --git a/net/tipc/udp_media.c b/net/tipc/udp_media.c
-index c2bb818704c8f..0a85244fd6188 100644
---- a/net/tipc/udp_media.c
-+++ b/net/tipc/udp_media.c
-@@ -738,8 +738,8 @@ static int tipc_udp_enable(struct net *net, struct tipc_bearer *b,
- 			udp_conf.local_ip.s_addr = local.ipv4.s_addr;
- 		udp_conf.use_udp_checksums = false;
- 		ub->ifindex = dev->ifindex;
--		if (tipc_mtu_bad(dev, sizeof(struct iphdr) +
--				      sizeof(struct udphdr))) {
-+		b->encap_hlen = sizeof(struct iphdr) + sizeof(struct udphdr);
-+		if (tipc_mtu_bad(dev, b->encap_hlen)) {
- 			err = -EINVAL;
- 			goto err;
- 		}
-@@ -760,6 +760,7 @@ static int tipc_udp_enable(struct net *net, struct tipc_bearer *b,
- 		else
- 			udp_conf.local_ip6 = local.ipv6;
- 		ub->ifindex = dev->ifindex;
-+		b->encap_hlen = sizeof(struct ipv6hdr) + sizeof(struct udphdr);
- 		b->mtu = 1280;
- #endif
- 	} else {
+diff --git a/drivers/s390/crypto/pkey_api.c b/drivers/s390/crypto/pkey_api.c
+index 5a05d1cdfec20..a8def50c149bd 100644
+--- a/drivers/s390/crypto/pkey_api.c
++++ b/drivers/s390/crypto/pkey_api.c
+@@ -1293,6 +1293,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
+ 			return PTR_ERR(kkey);
+ 		rc = pkey_keyblob2pkey(kkey, ktp.keylen, &ktp.protkey);
+ 		DEBUG_DBG("%s pkey_keyblob2pkey()=%d\n", __func__, rc);
++		memzero_explicit(kkey, ktp.keylen);
+ 		kfree(kkey);
+ 		if (rc)
+ 			break;
+@@ -1426,6 +1427,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
+ 					kkey, ktp.keylen, &ktp.protkey);
+ 		DEBUG_DBG("%s pkey_keyblob2pkey2()=%d\n", __func__, rc);
+ 		kfree(apqns);
++		memzero_explicit(kkey, ktp.keylen);
+ 		kfree(kkey);
+ 		if (rc)
+ 			break;
+@@ -1552,6 +1554,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
+ 					protkey, &protkeylen);
+ 		DEBUG_DBG("%s pkey_keyblob2pkey3()=%d\n", __func__, rc);
+ 		kfree(apqns);
++		memzero_explicit(kkey, ktp.keylen);
+ 		kfree(kkey);
+ 		if (rc) {
+ 			kfree(protkey);
 -- 
 2.39.2
 
