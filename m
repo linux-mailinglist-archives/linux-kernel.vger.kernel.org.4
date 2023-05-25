@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02248710958
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57863710957
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbjEYJ52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240626AbjEYJ5Z (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240582AbjEYJ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 25 May 2023 05:57:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65AD19A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685008598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235941AbjEYJ5X (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 25 May 2023 05:57:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AF1E42
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:57:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3F9481FDEB;
+        Thu, 25 May 2023 09:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685008622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t6hI85KYFXecZ4TFaVRfX5VbflWtTsorELlETNCsufk=;
-        b=WTsX6YZ0hO2E0eQMDsw4wzcVX/rs4InusLreUQ9bu1+akODdPZP8IgJX1lHpCZhC2zcmsT
-        gHuzSmMRa6iT7t3ueuSaWQUurj1FfscspbInhTHSR+/P8uo1OBwHMyoyqjOijh0leEfVJb
-        d5PZTf05GjBW7pQhfd/n5+qPNQ/7SUg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-520-V2O2rwQWPXaWZhgy7WzoMw-1; Thu, 25 May 2023 05:56:36 -0400
-X-MC-Unique: V2O2rwQWPXaWZhgy7WzoMw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-96fffd1ba46so43845966b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:56:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685008595; x=1687600595;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6hI85KYFXecZ4TFaVRfX5VbflWtTsorELlETNCsufk=;
-        b=Qe3ejlf5ouv7jOlIpBSAWKbRY9VKQ5zvY0tPsMfhDnucHD+Lj9O9fijqt1AT0oLZnx
-         RXSeTcfyTsoqkqjZF2MLv0O77xFTxmJSZx8A2/TidDZmrZvw4e+kd87M6Vgo9rn1s2hF
-         tFrKxf4/uw7Aorux9euahai/z3RBMXhrARNt4o6s7SpeVvihJ4rbWR/C98R3taYJN+ww
-         pWMy4aB906CKboNhZtbXOIYfYlnnkGBnVDex2PSwzBTGpfK50tHTZWFlAn944QRSwbBy
-         4nVXn7kVfyXtinOngJTPQLHR/Ggg2ANNcXbZ6ISHmsE/6zWQ2qmslml2JybaKk+uePpQ
-         gLrA==
-X-Gm-Message-State: AC+VfDz7z0/d1dlZQ2Vh5A3TFkZkYvCNYBE/KjNBom0jI0nTHLoki3e3
-        I9PigwUJTUU0cp9PuIg2Kd+hp5ZO7gQ41m0DNKrWKZghWAjEr8UEl39igzba9Vvznng21U9OaTz
-        unrwjQDFqKdv/ordQ8dvUV+t3
-X-Received: by 2002:a17:907:ea1:b0:96f:6c70:c012 with SMTP id ho33-20020a1709070ea100b0096f6c70c012mr1144460ejc.45.1685008595404;
-        Thu, 25 May 2023 02:56:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7NxUhXTjVpSolwDAs1ytrmiQ+dWzfSSVxM7FPSpsoLypUxbCiRayn1g2CMEdlWpwI5JjAg7w==
-X-Received: by 2002:a17:907:ea1:b0:96f:6c70:c012 with SMTP id ho33-20020a1709070ea100b0096f6c70c012mr1144443ejc.45.1685008595097;
-        Thu, 25 May 2023 02:56:35 -0700 (PDT)
-Received: from [192.168.0.46] (host-87-12-203-248.business.telecomitalia.it. [87.12.203.248])
-        by smtp.gmail.com with ESMTPSA id y17-20020a17090614d100b009658475919csm610605ejc.188.2023.05.25.02.56.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 02:56:34 -0700 (PDT)
-Message-ID: <98d42e27-31a3-6394-d4fc-f95f3524aa2e@redhat.com>
-Date:   Thu, 25 May 2023 11:56:33 +0200
+        bh=4GNSHGfIZxQ1UhhiGEkHCb26Lr2vl2sDD7sOPkyvdkU=;
+        b=MZDYBRU9Bci0RIKRdZfhb12KZdd9o1+5028a4eYfDixTe4z1IdRWSXjk66QO6tzlNaulQy
+        WZ1dBfkrIItBPmayNV/8uTD00kaoo20NBU8WkD1phAjgkj00Xdl7uTivdEejt7FHwMMCZp
+        mVxs9mvTLhPm9+eWdNcEDUTZV59bBtc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685008622;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4GNSHGfIZxQ1UhhiGEkHCb26Lr2vl2sDD7sOPkyvdkU=;
+        b=0t/2LQU/B8+fh1GulagPyChZ0uVz9Rj1PtNj04VJ1wXRvIb7YwU/hyR/vQYuKzI5gEJeTc
+        ZL4xpARQQtIMHCBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1BEBE134B2;
+        Thu, 25 May 2023 09:57:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 51s1Bu4wb2TzagAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 25 May 2023 09:57:02 +0000
+Message-ID: <df866e1b-a052-4323-8662-cef5d924fa2b@suse.cz>
+Date:   Thu, 25 May 2023 11:57:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] sched/deadline: simplify dl_bw_cpus() using
- cpumask_weight_and()
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/4] mm: compaction: Ensure rescanning only happens on
+ partially scanned pageblocks
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230515113344.6869-1-mgorman@techsingularity.net>
+ <20230515113344.6869-2-mgorman@techsingularity.net>
 Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, vschneid@redhat.com, linux-kernel@vger.kernel.org
-References: <20230522115605.1238227-1-linmiaohe@huawei.com>
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-In-Reply-To: <20230522115605.1238227-1-linmiaohe@huawei.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230515113344.6869-2-mgorman@techsingularity.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,14 +83,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 13:56, Miaohe Lin wrote:
-> cpumask_weight_and() can be used to count of bits both in rd->span and
-> cpu_active_mask. No functional change intended.
+On 5/15/23 13:33, Mel Gorman wrote:
+> compact_zone() intends to rescan pageblocks if there is a failure to
+> migrate "within the current order-aligned block". However, the pageblock
+> scan may already be complete and moved to the next block causing the
+> next pageblock to be "rescanned". Ensure only the most recent pageblock
+> is rescanned.
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Reported-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-Reviewed-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Thanks,
--- Daniel
+> ---
+>  mm/compaction.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index c8bcdea15f5f..81791c124bb8 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -2464,8 +2464,9 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
+>  			 * fast_find_migrateblock revisiting blocks that were
+>  			 * recently partially scanned.
+>  			 */
+> -			if (cc->direct_compaction && !cc->finish_pageblock &&
+> -						(cc->mode < MIGRATE_SYNC)) {
+> +			if (!pageblock_aligned(cc->migrate_pfn) &&
+> +			    cc->direct_compaction && !cc->finish_pageblock &&
+> +			    (cc->mode < MIGRATE_SYNC)) {
+>  				cc->finish_pageblock = true;
+>  
+>  				/*
 
