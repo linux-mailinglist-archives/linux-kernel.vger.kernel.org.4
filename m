@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79CC71178C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9CF711798
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241805AbjEYTn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S242091AbjEYTqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241599AbjEYTnY (ORCPT
+        with ESMTP id S242080AbjEYTqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:43:24 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CD3E78
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:42:57 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6d7abe934so7163065e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685043755; x=1687635755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7NMbT2YdIMrqMQsEZ82lgEO8OSkjFBY3sGV3h+uAcAY=;
-        b=YCO41YRi1ZMzvGGFVVlZPvs6dIRiJRYrCc8vWQdSe+nTL6Fi2am6Rvi2CKPWd5XVom
-         Y88OTW1si93b5Uu4MjcPyp2JjOvV3Vfsd4gIdKp3WFxk6FBwwaf+0EB0snMSgR3IJE33
-         s/cQ5jHIAntOYEAKJ2LitYGJddOWocZXFIdN6zjBZwKSs5RaeqWD5orMJyuEfQ7m4Lrc
-         o+x1zr4dfupuVn1CZpAuFquEnV48tA2SzYn57S2T3c2JRW5/KbkS2kkFyQ/rVF3sL27t
-         fgxNYd6vzZUM7LhnK4pNzA89DpX7das7nO9lsW/OM1rtfAPsioHXUjgNaOKkzsCsFKSk
-         oXbg==
+        Thu, 25 May 2023 15:46:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B701AC
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685043845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oE4/So5LeNg3LFo5KgJMJSE76TRPYlYOShUwOH/4MCk=;
+        b=DSjQcNWSa5Ksx5Fuo+H8XefF4dgtO+U9rFt1KK3KpOL64e1l6zf+rIVRaqXxPFcVmXBG7f
+        cxlXKJIauGhwGsvj4qLN0iYFQIslj96HFWM5KiRH8ttXHUocC/TF9Cthjr7HC8J1EqaBQj
+        J/LOAA1XeE2farXjciRYujW6OdVMQHY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-kv1TurmMMt65le1tS_Nhlg-1; Thu, 25 May 2023 15:44:01 -0400
+X-MC-Unique: kv1TurmMMt65le1tS_Nhlg-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-510eb233a81so2645332a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:44:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685043755; x=1687635755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7NMbT2YdIMrqMQsEZ82lgEO8OSkjFBY3sGV3h+uAcAY=;
-        b=FrjExfTGfH1pqExczgfHxWTBejlSwl8MFUqXTibNVWv8hMuTid8oFydZj3GtwBy6tf
-         aLgkEoA2itUTlrAisjFB4vHy4PqhlIDyXG8dpLI+Az/P8BPyUTnxNZnCNJX3rDMReKET
-         5KhqD7+4gl7pkSpNo+t8XNz6UFZQIg0AYzz9ET3NRLt51hQ/RkNR9qvYQbCcqm7B9tQw
-         wuKxu/Kf0TZgpvR/39RbRzAQ+mbrDFrNx7wYfBtQZ8jM1W1zE9onjolqU26FwWDkmoh9
-         dCroWzntyDDzkAp8rH1hFsmcXkr+6trYr+/JU848rUFgJ1d9SbQUwluDQNIkF7vo8DBd
-         WNwA==
-X-Gm-Message-State: AC+VfDylRmNdliFX15D/LjJUTFboDaALlsDNtL+fwXKpKbu9f3oHsjDe
-        W1eZYSJ8wFFFz8dXVtync/jdHg==
-X-Google-Smtp-Source: ACHHUZ7MR4izT0ZwRRpeleq/5bCnFlwjq19+lIxGvN/01yzQePGbdveziISmCJHVwM+aPb2DvwdsLw==
-X-Received: by 2002:a7b:c406:0:b0:3f6:e13:b268 with SMTP id k6-20020a7bc406000000b003f60e13b268mr3832943wmi.22.1685043755591;
-        Thu, 25 May 2023 12:42:35 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003f4f89bc48dsm6758859wml.15.2023.05.25.12.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 12:42:34 -0700 (PDT)
-Date:   Thu, 25 May 2023 22:42:29 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        Wells Lu <wellslutw@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kernel Janitors <kernel-janitors@vger.kernel.org>
-Subject: Re: RE: [PATCH] pinctrl:sunplus: Add check for kmalloc
-Message-ID: <ac995ef4-b9ab-4771-a3a1-46054ba303c6@kili.mountain>
-References: <1684836688-9204-1-git-send-email-wellslutw@gmail.com>
- <ZGztCHNr1jmpFq0A@surfacebook>
- <1560e9c0e5154802ab020b9da846d65f@sphcmbx02.sunplus.com.tw>
- <ZG0V6_bUaz3Thy0q@surfacebook>
- <b9207257-b04f-ee2e-7025-015b0f22358a@wanadoo.fr>
- <dd0ea27640d2420eb3b521076c643919@sphcmbx02.sunplus.com.tw>
- <dbb3c0bd-3b09-2b59-8cd1-2838b9880abf@wanadoo.fr>
+        d=1e100.net; s=20221208; t=1685043840; x=1687635840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oE4/So5LeNg3LFo5KgJMJSE76TRPYlYOShUwOH/4MCk=;
+        b=QMYlxjW8PfxmPLscgxfhAY8jFQD7xtrKkgrq/bLqZ2C/HixECgP1u6aqyH4EkBluZC
+         O+N4vBCuVDpfH8aZTDyiI75U2/kYGpRQ33gBiRcAZ7UOpKtc37wY5gDVtaMioxa0uaiJ
+         J+8ufKUZU0Dt/9K0eF2OIbRG/FXuIdAcwD2HPTqfyurwhwp1zX/V5A/HHeQbLmAh4c5G
+         Qhsc9lV8eLig8cq7IWkDabYA3lAKIhPoL2ac4WVlqmsF6wK7zBPzr6Ol7gkrJ4g3dH7J
+         bbOnZdOAsvlITbcoptn9tTvbsDVS1WozhOgjo2Gn9dQ53bgRui8yGAsFyJGfjAxpLG8t
+         9ytQ==
+X-Gm-Message-State: AC+VfDzVui1KXblgsbXEv+v/4CkhHiwHaeiVeKHSi0BIPS124/FE6g50
+        PAMlXw5H3u0G+5dx6z5I+8XmMtCTCXDUAwapWGTbAVxRrlsKbYVhF8Ct5S1wnrNdxurf8r/m5ys
+        GAhbnxUwC3IkSbVmxUYuhuoGV
+X-Received: by 2002:a17:907:9289:b0:933:868:413a with SMTP id bw9-20020a170907928900b009330868413amr2461154ejc.15.1685043840710;
+        Thu, 25 May 2023 12:44:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Rrchj/ujtT0nSHQHC4MQvvsLCt6BwBsjFRmag2kyIMmu0HHwRHzCGf5cOvPhHT/1adDWBfA==
+X-Received: by 2002:a17:907:9289:b0:933:868:413a with SMTP id bw9-20020a170907928900b009330868413amr2461147ejc.15.1685043840436;
+        Thu, 25 May 2023 12:44:00 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id gs8-20020a170906f18800b0096f4389714csm1219835ejb.55.2023.05.25.12.43.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 12:44:00 -0700 (PDT)
+Message-ID: <e5c4c61c-a3a3-97d0-ad50-8c5b345dc334@redhat.com>
+Date:   Thu, 25 May 2023 21:43:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dbb3c0bd-3b09-2b59-8cd1-2838b9880abf@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/5] platform/x86: think-lmi: Correct NVME password
+ handling
+Content-Language: en-US, nl
+To:     Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc:     "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
+References: <mpearson-lenovo@squebb.ca>
+ <20230525193132.3727-1-mpearson-lenovo@squebb.ca>
+ <20230525193132.3727-3-mpearson-lenovo@squebb.ca>
+ <17963a3d-996f-4bb8-918e-aadba15be9bc@app.fastmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <17963a3d-996f-4bb8-918e-aadba15be9bc@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 08:37:36PM +0200, Christophe JAILLET wrote:
-> 
-> Hi,
-> (adding Dan in copy because the initial report is related to smatch)
-> 
-> I don't use kmemleak, but could you share some input about its report?
-> 
-> 
-> I've not rechecked my analysis, but it looked promising.
-> Maybe Dan could also give a look at it and confirm your finding, or dig
-> further with smatch to make sure that its static analysis was complete
-> enough.
+Hi,
 
-Smatch doesn't really complain about memory leaks.  I wrote that check
-13 years ago and focused more on avoiding false positives instead of
-being thorough.  It turns out that avoiding false positives is
-achievable but pretty useless.
+On 5/25/23 21:39, Mark Pearson wrote:
+> Hi Hans,
+> 
+> My apologies - I completely forgot to add the v2 tag on this patch series...had a complete brain fart.
 
-Checking for the of_get_parent() leaks is probably easier.  I could just
-add it to check_unwind.c or create something custom.  The heuristic for
-the custom check would be to print a warning if the success path
-releases it but the others don't.
+No worries I did not even notice the v2 was missing,
+my brain automatically added it :)
+ 
+> I assume I should resend them all - correctly named.
 
-regards,
-dan carpenter
+Well I have some review remarks on patch 5/5, it would be good if you can address those (if you agree with them) and then lets jump straight to v3 to avoid confusion ?
+
+> I also have no idea why they showed up out of order...I'm blaming that one on the email server.
+
+The out of order thing is normal, this sometimes happens with email.
+
+> Sorry :(
+
+Again no worries / no problem ...
+
+Regards,
+
+Hans
+
+
+
+
+> On Thu, May 25, 2023, at 3:31 PM, Mark Pearson wrote:
+>> NVME passwords identifier have been standardised across the Lenovo
+>> systems and now use udrp and adrp (user and admin level) instead of
+>> unvp and mnvp.
+>>
+>> This should apparently be backwards compatible.
+>>
+>> Also cleaned up so the index is set to a default of 1 rather than 0
+>> as this just makes more sense (there is no device 0).
+>>
+>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> ---
+>> Changes in V2: None. Version bumped in series
+>>
+>>  drivers/platform/x86/think-lmi.c | 8 ++++++--
+>>  1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+>> index c7e98fbe7c3d..1c02958035ad 100644
+>> --- a/drivers/platform/x86/think-lmi.c
+>> +++ b/drivers/platform/x86/think-lmi.c
+>> @@ -456,9 +456,9 @@ static ssize_t new_password_store(struct kobject *kobj,
+>>  				sprintf(pwd_type, "mhdp%d", setting->index);
+>>  		} else if (setting == tlmi_priv.pwd_nvme) {
+>>  			if (setting->level == TLMI_LEVEL_USER)
+>> -				sprintf(pwd_type, "unvp%d", setting->index);
+>> +				sprintf(pwd_type, "udrp%d", setting->index);
+>>  			else
+>> -				sprintf(pwd_type, "mnvp%d", setting->index);
+>> +				sprintf(pwd_type, "adrp%d", setting->index);
+>>  		} else {
+>>  			sprintf(pwd_type, "%s", setting->pwd_type);
+>>  		}
+>> @@ -1524,6 +1524,10 @@ static int tlmi_analyze(void)
+>>  		if (!tlmi_priv.pwd_nvme)
+>>  			goto fail_clear_attr;
+>>
+>> +		/* Set default hdd/nvme index to 1 as there is no device 0 */
+>> +		tlmi_priv.pwd_hdd->index = 1;
+>> +		tlmi_priv.pwd_nvme->index = 1;
+>> +
+>>  		if (tlmi_priv.pwdcfg.core.password_state & TLMI_HDD_PWD) {
+>>  			/* Check if PWD is configured and set index to first drive found */
+>>  			if (tlmi_priv.pwdcfg.ext.hdd_user_password ||
+>> -- 
+>> 2.40.1
+> 
 
