@@ -2,100 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A0B7117C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E6F7117C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbjEYUAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S240311AbjEYUB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242131AbjEYUAm (ORCPT
+        with ESMTP id S242009AbjEYUBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:00:42 -0400
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E722B95
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:00:37 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 2H8UqmnigZO7A2H8UqejSu; Thu, 25 May 2023 22:00:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685044836;
-        bh=Nn++8Gtv+O3RQJEDu5H3rgKwGw3s8JlnntA9IjlyTMI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=KRMcaq3eKxGPDnANHauSBiLaw1EsdjNG32425HNmPXaWwYupyiGT8nkgmIZTIwR3L
-         ZjZYywM2TvTPEvm4oXOgi55tmcGCX8UUJtOoiY6Yuma6kXfyinQucit7AtC5RXpRPV
-         pOyzkHzu5OmsY0a5wuduCD6+yDNAj4dv/jOlUFtm5XfRugeRTaYHRoRmfiVt6pjUSr
-         nQNEghRoLZiHOBrBHUBl4QkXWzmIdejBNADt4ZRlO3aRC6j1cuq43gJUCl8NpMFI0c
-         YJ7P/ELhrJVqoKm+/EGmOzfWoU6CLHFHkVtr5CVdcox2XxZZ+QoTSfrGPiG9OUbA5Q
-         JC86PF81cfjGg==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 25 May 2023 22:00:36 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <381c7339-685c-8973-ecf2-5a34cd18cda3@wanadoo.fr>
-Date:   Thu, 25 May 2023 22:00:34 +0200
+        Thu, 25 May 2023 16:01:22 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7757895;
+        Thu, 25 May 2023 13:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=nqfhm3/Yv5prAaAJ3hLzCTN2dKkIp+erbKr/gQI7qtE=; b=HDLoT+2z2oyn1lpV6boByRvq0B
+        ssnHAwUL8qfkkR0wmfBHbhRowm5fQdTtJqQ9zqhRmuz1XaWy6Ln7+rAu5po+Lmpx9sBXTVHdZETE/
+        Mk5yY/q6l7oaKOWnK16xkeHVczkDp0Ndpl/lf5fveWhxxq5oft2IikFtcuzeGW3EaokONEGiN/Opg
+        tcaJYmrmOvH9EHlQaywLLzT1ag+S4i4vMvMfl/9s3MvkWj/6a8KXQumR8quO3e4cOjlPdq35CNqlX
+        q5+N8wIeHk9VImG40lii0oygOVjO39OSgFLOEMcvslER6QxS067b7aJKJ9EcPmeHKe9GMnHnvUvmM
+        bnOWDWcA==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1q2H93-0001Bo-V8; Thu, 25 May 2023 22:01:09 +0200
+Received: from [178.197.248.42] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1q2H92-000XIa-Sz; Thu, 25 May 2023 22:01:08 +0200
+Subject: Re: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with
+ bpf_sk_assign
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>, lmb@isovalent.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        haoluo@google.com, joe@cilium.io, joe@wand.net.nz,
+        john.fastabend@gmail.com, jolsa@kernel.org, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, netdev@vger.kernel.org, pabeni@redhat.com,
+        sdf@google.com, song@kernel.org, willemdebruijn.kernel@gmail.com,
+        yhs@fb.com
+References: <20230525081923.8596-1-lmb@isovalent.com>
+ <20230525174131.4706-1-kuniyu@amazon.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <99681548-fa79-0607-d574-db61818cab78@iogearbox.net>
+Date:   Thu, 25 May 2023 22:01:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] pinctrl:sunplus: Add check for kmalloc
-Content-Language: fr, en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     andy.shevchenko@gmail.com,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        Wells Lu <wellslutw@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1684836688-9204-1-git-send-email-wellslutw@gmail.com>
- <ZGztCHNr1jmpFq0A@surfacebook>
- <1560e9c0e5154802ab020b9da846d65f@sphcmbx02.sunplus.com.tw>
- <ZG0V6_bUaz3Thy0q@surfacebook>
- <b9207257-b04f-ee2e-7025-015b0f22358a@wanadoo.fr>
- <9f937bde-c908-4941-b65c-e4c303d3acae@kili.mountain>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <9f937bde-c908-4941-b65c-e4c303d3acae@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230525174131.4706-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26918/Thu May 25 09:25:14 2023)
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 25/05/2023 à 21:19, Dan Carpenter a écrit :
-> On Tue, May 23, 2023 at 10:05:49PM +0200, Christophe JAILLET wrote:
->> Should be looked at more carefully, but
->>    dt_to_map_one_config		(in /drivers/pinctrl/devicetree.c)
->>      .dt_node_to_map
->>        --> sppctl_dt_node_to_map
+On 5/25/23 7:41 PM, Kuniyuki Iwashima wrote:
+> From: Lorenz Bauer <lmb@isovalent.com>
+> Date: Thu, 25 May 2023 09:19:22 +0100
+>> Currently the bpf_sk_assign helper in tc BPF context refuses SO_REUSEPORT
+>> sockets. This means we can't use the helper to steer traffic to Envoy, which
+>> configures SO_REUSEPORT on its sockets. In turn, we're blocked from removing
+>> TPROXY from our setup.
 >>
->> Should dt_to_map_one_config() fail, pinctrl_dt_free_maps() is called
->> (see https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/devicetree.c#L281)
+>> The reason that bpf_sk_assign refuses such sockets is that the bpf_sk_lookup
+>> helpers don't execute SK_REUSEPORT programs. Instead, one of the
+>> reuseport sockets is selected by hash. This could cause dispatch to the
+>> "wrong" socket:
+>>
+>>      sk = bpf_sk_lookup_tcp(...) // select SO_REUSEPORT by hash
+>>      bpf_sk_assign(skb, sk) // SK_REUSEPORT wasn't executed
+>>
+>> Fixing this isn't as simple as invoking SK_REUSEPORT from the lookup
+>> helpers unfortunately. In the tc context, L2 headers are at the start
+>> of the skb, while SK_REUSEPORT expects L3 headers instead.
+>>
+>> Instead, we execute the SK_REUSEPORT program when the assigned socket
+>> is pulled out of the skb, further up the stack. This creates some
+>> trickiness with regards to refcounting as bpf_sk_assign will put both
+>> refcounted and RCU freed sockets in skb->sk. reuseport sockets are RCU
+>> freed. We can infer that the sk_assigned socket is RCU freed if the
+>> reuseport lookup succeeds, but convincing yourself of this fact isn't
+>> straight forward. Therefore we defensively check refcounting on the
+>> sk_assign sock even though it's probably not required in practice.
+>>
+>> Fixes: 8e368dc ("bpf: Fix use of sk->sk_reuseport from sk_assign")
+>> Fixes: cf7fbe6 ("bpf: Add socket assign support")
 > 
-> Thanks for this call tree, I don't have this file enabled in my build
-> so it's not easy for me to find how sppctl_dt_node_to_map() was called.
+> Please use 12 chars of hash.
 > 
-> drivers/pinctrl/devicetree.c
->     160                  dev_err(p->dev, "pctldev %s doesn't support DT\n",
->     161                          dev_name(pctldev->dev));
->     162                  return -ENODEV;
->     163          }
->     164          ret = ops->dt_node_to_map(pctldev, np_config, &map, &num_maps);
->                                                                ^^^^
-> "map" isn't stored anywhere so it will be leaked.  I guess kmemleak
-> already figured this out.
+> $ cat ~/.gitconfig
+> [core]
+> 	abbrev = 12
+> [pretty]
+> 	fixes = Fixes: %h (\"%s\")
 > 
->     165          if (ret < 0)
->     166                  return ret;
->     167          else if (num_maps == 0) {
->     168                  /*
-> 
+> $ git show 8e368dc --pretty=fixes | head -n 1
+> Fixes: 8e368dc72e86 ("bpf: Fix use of sk->sk_reuseport from sk_assign")
 
-Hi, thanks Dan for sharing your PoV on this.
+Yeap, not quite sure what happened here but the 12 chars is clear. Will
+be fixed up in v2, too, ofc.
 
-CJ
+>> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+>> Cc: Joe Stringer <joe@cilium.io>
+>> Link: https://lore.kernel.org/bpf/CACAyw98+qycmpQzKupquhkxbvWK4OFyDuuLMBNROnfWMZxUWeA@mail.gmail.com/
+>> ---
+>>   include/net/inet6_hashtables.h | 36 +++++++++++++++++++++++++++++-----
+>>   include/net/inet_hashtables.h  | 27 +++++++++++++++++++++++--
+>>   include/net/sock.h             |  7 +++++--
+>>   include/uapi/linux/bpf.h       |  3 ---
+>>   net/core/filter.c              |  2 --
+>>   net/ipv4/inet_hashtables.c     | 15 +++++++-------
+>>   net/ipv4/udp.c                 | 23 +++++++++++++++++++---
+>>   net/ipv6/inet6_hashtables.c    | 19 +++++++++---------
+>>   net/ipv6/udp.c                 | 23 +++++++++++++++++++---
+>>   tools/include/uapi/linux/bpf.h |  3 ---
+>>   10 files changed, 119 insertions(+), 39 deletions(-)
+>>
+[...]
+>> @@ -85,14 +92,33 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
+>>   					      int iif, int sdif,
+>>   					      bool *refcounted)
+>>   {
+>> -	struct sock *sk = skb_steal_sock(skb, refcounted);
+>> -
+>> +	bool prefetched;
+>> +	struct sock *sk = skb_steal_sock(skb, refcounted, &prefetched);
+>> +	struct net *net = dev_net(skb_dst(skb)->dev);
+>> +	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
+> 
+> nit: Reverse Xmas Tree order.  Same for other chunks.
 
+It is, the prefetched bool is simply used one line below. I don't think
+this is much different than most other code from style pov..
+
+>> +
+>> +	if (prefetched) {
+>> +		struct sock *reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
+>> +							       &ip6h->saddr, sport,
+>> +							       &ip6h->daddr, ntohs(dport));
+>> +		if (reuse_sk) {
+>> +			if (reuse_sk != sk) {
+>> +				if (*refcounted) {
+>> +					sock_put(sk);
+>> +					*refcounted = false;
+>> +				}
+>> +				if (IS_ERR(reuse_sk))
+>> +					return NULL;
+>> +			}
+>> +			return reuse_sk;
+>> +		}
+> 
+> Maybe we can add a hepler to avoid this duplication ?
+
+We'll check if it can be made a bit nicer and integrate this into the v2.
+
+Thanks,
+Daniel
