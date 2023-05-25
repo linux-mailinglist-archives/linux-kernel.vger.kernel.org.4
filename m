@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4DE71160D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BF5711688
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243307AbjEYSua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S242866AbjEYSwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242566AbjEYSqD (ORCPT
+        with ESMTP id S243150AbjEYSuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:46:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103164209;
-        Thu, 25 May 2023 11:42:24 -0700 (PDT)
+        Thu, 25 May 2023 14:50:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A111FC4;
+        Thu, 25 May 2023 11:43:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC6A160B37;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE82F60BD4;
+        Thu, 25 May 2023 18:42:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C215DC4339B;
         Thu, 25 May 2023 18:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB832C433D2;
-        Thu, 25 May 2023 18:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040143;
-        bh=ODzEe5MTMPERDf+zXbuLdOTQOBegDNhuK6ZJ0a/0Ze4=;
+        s=k20201202; t=1685040145;
+        bh=vPBYA2SwKFT9H7jH540n6evqbAfIJZJoHuTUD7tDdEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KcAZSQqGX+VjlkQ/vXkCCwrzvmaUqnbP5sBUwoFVpvFmgmFMUpR7zeIGzxbOWl9Q5
-         1mhMmmQJ0IJPYuTIvOjwhGPi9GzLU6VcpoRCxVjv/7eqZjoDoRQaBDuvE1aRBM0O4K
-         vXkShnCXAlsDFAmmyHGI+CCQoZfQqrAh/L9ZtCyx8KbKZWFjbg3p9+B6wXGJE5tAlW
-         Cj8X1TfHlL3REd7+vcJGkCgoY8+oH18nVtQgTgXeHBroRVlhpOT1gF1fZ4TwGddxRc
-         nlDuklIp3o9xwtzfeQH3pdGGMt69ytACjuTY97FRyTzrlpvqAXlgmHtunN85x6QJlN
-         qWtUXTR7gSlzA==
+        b=UGv6CKDuKy7ldpC359v0eeDQc3cMQ/wTE8zni6aK3PYaAVx8L8lpLNcZc7iyAhNaj
+         Pfc1EUMYrHvf+AKf9SUOsUn7t8IIoeDyebrpo6cZM9YCdt0Xn2Z3EIP/VVEVoTxX6v
+         YGeYJPbJN40L0eQ15RHcrDc+EiqAw+iGI8whS37jXRWbnIziF09AZSW234rohnsg9n
+         Vw9tnCLsg/iz0zQByKpSO0zp0qQr6O+H+8UQ5zDVbPRERneJwZP3ki4oGPZyhfAryf
+         0CUpCrpyb4Qq7gMTgYYkwb3RCWGHJY5MyY44Z9J0WtmSIg+6C33cCgXS1HGVnZLnwe
+         +WmQ32wwsBueA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Michael=20B=C3=BCsch?= <m@bues.ch>,
-        kernel test robot <lkp@intel.com>,
+Cc:     Tom Rix <trix@redhat.com>,
         Simon Horman <simon.horman@corigine.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
-        llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 26/31] wifi: b43: fix incorrect __packed annotation
-Date:   Thu, 25 May 2023 14:40:57 -0400
-Message-Id: <20230525184105.1909399-26-sashal@kernel.org>
+        Florian Westphal <fw@strlen.de>,
+        Sasha Levin <sashal@kernel.org>, pablo@netfilter.org,
+        kadlec@netfilter.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 27/31] netfilter: conntrack: define variables exp_nat_nla_policy and any_addr with CONFIG_NF_NAT
+Date:   Thu, 25 May 2023 14:40:58 -0400
+Message-Id: <20230525184105.1909399-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
 References: <20230525184105.1909399-1-sashal@kernel.org>
@@ -54,8 +53,8 @@ Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,64 +63,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit 212457ccbd60dba34f965e4ffbe62f0e4f970538 ]
+[ Upstream commit 224a876e37543eee111bf9b6aa4935080e619335 ]
 
-clang warns about an unpacked structure inside of a packed one:
+gcc with W=1 and ! CONFIG_NF_NAT
+net/netfilter/nf_conntrack_netlink.c:3463:32: error:
+  ‘exp_nat_nla_policy’ defined but not used [-Werror=unused-const-variable=]
+ 3463 | static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
+      |                                ^~~~~~~~~~~~~~~~~~
+net/netfilter/nf_conntrack_netlink.c:2979:33: error:
+  ‘any_addr’ defined but not used [-Werror=unused-const-variable=]
+ 2979 | static const union nf_inet_addr any_addr;
+      |                                 ^~~~~~~~
 
-drivers/net/wireless/broadcom/b43/b43.h:654:4: error: field data within 'struct b43_iv' is less aligned than 'union (unnamed union at /home/arnd/arm-soc/drivers/net/wireless/broadcom/b43/b43.h:651:2)' and is usually due to 'struct b43_iv' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+These variables use is controlled by CONFIG_NF_NAT, so should their definitions.
 
-The problem here is that the anonymous union has the default alignment
-from its members, apparently because the original author mixed up the
-placement of the __packed attribute by placing it next to the struct
-member rather than the union definition. As the struct itself is
-also marked as __packed, there is no need to mark its members, so just
-move the annotation to the inner type instead.
-
-As Michael noted, the same problem is present in b43legacy, so
-change both at the same time.
-
-Acked-by: Michael Büsch <m@bues.ch>
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
 Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Tested-by: Larry Finger <Larry.Finger@lwfinger.net>
-Link: https://lore.kernel.org/oe-kbuild-all/202305160749.ay1HAoyP-lkp@intel.com/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20230516183442.536589-1-arnd@kernel.org
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/broadcom/b43/b43.h             | 2 +-
- drivers/net/wireless/broadcom/b43legacy/b43legacy.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/netfilter/nf_conntrack_netlink.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/wireless/broadcom/b43/b43.h b/drivers/net/wireless/broadcom/b43/b43.h
-index 9fc7c088a539e..67b4bac048e58 100644
---- a/drivers/net/wireless/broadcom/b43/b43.h
-+++ b/drivers/net/wireless/broadcom/b43/b43.h
-@@ -651,7 +651,7 @@ struct b43_iv {
- 	union {
- 		__be16 d16;
- 		__be32 d32;
--	} data __packed;
-+	} __packed data;
- } __packed;
+diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
+index c9ca857f1068d..27d3e54666b90 100644
+--- a/net/netfilter/nf_conntrack_netlink.c
++++ b/net/netfilter/nf_conntrack_netlink.c
+@@ -2976,7 +2976,9 @@ static int ctnetlink_exp_dump_mask(struct sk_buff *skb,
+ 	return -1;
+ }
  
++#if IS_ENABLED(CONFIG_NF_NAT)
+ static const union nf_inet_addr any_addr;
++#endif
  
-diff --git a/drivers/net/wireless/broadcom/b43legacy/b43legacy.h b/drivers/net/wireless/broadcom/b43legacy/b43legacy.h
-index 6b0cec467938f..f49365d14619f 100644
---- a/drivers/net/wireless/broadcom/b43legacy/b43legacy.h
-+++ b/drivers/net/wireless/broadcom/b43legacy/b43legacy.h
-@@ -379,7 +379,7 @@ struct b43legacy_iv {
- 	union {
- 		__be16 d16;
- 		__be32 d32;
--	} data __packed;
-+	} __packed data;
- } __packed;
+ static __be32 nf_expect_get_id(const struct nf_conntrack_expect *exp)
+ {
+@@ -3466,10 +3468,12 @@ ctnetlink_change_expect(struct nf_conntrack_expect *x,
+ 	return 0;
+ }
  
- #define B43legacy_PHYMODE(phytype)	(1 << (phytype))
++#if IS_ENABLED(CONFIG_NF_NAT)
+ static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
+ 	[CTA_EXPECT_NAT_DIR]	= { .type = NLA_U32 },
+ 	[CTA_EXPECT_NAT_TUPLE]	= { .type = NLA_NESTED },
+ };
++#endif
+ 
+ static int
+ ctnetlink_parse_expect_nat(const struct nlattr *attr,
 -- 
 2.39.2
 
