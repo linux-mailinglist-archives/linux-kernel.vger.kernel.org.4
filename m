@@ -2,130 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238877117C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A0B7117C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240853AbjEYT7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S234662AbjEYUAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242078AbjEYT7G (ORCPT
+        with ESMTP id S242131AbjEYUAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:59:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCF790
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RwpqfGGYax+pT0MfFhzfIhAN71y4/MDvl/Gv7NEcip0=; b=oLpgFZXKkrtYOWRAbCHp7PQRav
-        lquzf2zcJ26RmpzS5UFAL8NT3JPGzYq63xAMI1M3GfGZ9i1WH1t904bDMUDPQVQu/riz1mhMNWERz
-        TOgqASQ+QbDvnsuNvwinwMCLYKtZgxFcO6cnRurXhmjrtmCPWcU8eJtgQ/6Sb+vq63l8qdIsLH8QG
-        hY4ZTHrcleIeQTeMQvBgjt+i1xe7UPfmm5ZMlQkhpATEBiHF91EoNbRUEclX5uA/P6kGg9AUeH7E7
-        1i5doJchK0ufkm2guGo/zW81XeC2GjBZnpMq47JHJ3srZ5AhsAmc1G3F4BJXnC4q4Qp5xuISpjNxo
-        lYgqBbEA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q2H6k-00CVtH-EG; Thu, 25 May 2023 19:58:46 +0000
-Date:   Thu, 25 May 2023 20:58:46 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, steven.sistare@oracle.com,
-        david@redhat.com, ying.huang@intel.com,
-        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Khalid Aziz <khalid@kernel.org>
-Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
- scan
-Message-ID: <ZG+99h3zg7POIits@casper.infradead.org>
-References: <20230525191507.160076-1-khalid.aziz@oracle.com>
+        Thu, 25 May 2023 16:00:42 -0400
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E722B95
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:00:37 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 2H8UqmnigZO7A2H8UqejSu; Thu, 25 May 2023 22:00:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685044836;
+        bh=Nn++8Gtv+O3RQJEDu5H3rgKwGw3s8JlnntA9IjlyTMI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=KRMcaq3eKxGPDnANHauSBiLaw1EsdjNG32425HNmPXaWwYupyiGT8nkgmIZTIwR3L
+         ZjZYywM2TvTPEvm4oXOgi55tmcGCX8UUJtOoiY6Yuma6kXfyinQucit7AtC5RXpRPV
+         pOyzkHzu5OmsY0a5wuduCD6+yDNAj4dv/jOlUFtm5XfRugeRTaYHRoRmfiVt6pjUSr
+         nQNEghRoLZiHOBrBHUBl4QkXWzmIdejBNADt4ZRlO3aRC6j1cuq43gJUCl8NpMFI0c
+         YJ7P/ELhrJVqoKm+/EGmOzfWoU6CLHFHkVtr5CVdcox2XxZZ+QoTSfrGPiG9OUbA5Q
+         JC86PF81cfjGg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 25 May 2023 22:00:36 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <381c7339-685c-8973-ecf2-5a34cd18cda3@wanadoo.fr>
+Date:   Thu, 25 May 2023 22:00:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525191507.160076-1-khalid.aziz@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] pinctrl:sunplus: Add check for kmalloc
+Content-Language: fr, en-US
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     andy.shevchenko@gmail.com,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        Wells Lu <wellslutw@gmail.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1684836688-9204-1-git-send-email-wellslutw@gmail.com>
+ <ZGztCHNr1jmpFq0A@surfacebook>
+ <1560e9c0e5154802ab020b9da846d65f@sphcmbx02.sunplus.com.tw>
+ <ZG0V6_bUaz3Thy0q@surfacebook>
+ <b9207257-b04f-ee2e-7025-015b0f22358a@wanadoo.fr>
+ <9f937bde-c908-4941-b65c-e4c303d3acae@kili.mountain>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <9f937bde-c908-4941-b65c-e4c303d3acae@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 01:15:07PM -0600, Khalid Aziz wrote:
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 5a9501e0ae01..b548e05f0349 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -764,6 +764,42 @@ static bool too_many_isolated(pg_data_t *pgdat)
->  	return too_many;
->  }
->  
-> +/*
-> + * Check if this base page should be skipped from isolation because
-> + * it has extra refcounts that will prevent it from being migrated.
-> + * This code is inspired by similar code in migrate_vma_check_page(),
-> + * can_split_folio() and folio_migrate_mapping()
-> + */
-> +static inline bool page_has_extra_refs(struct page *page,
-> +					struct address_space *mapping)
-> +{
-> +	unsigned long extra_refs;
-> +	struct folio *folio;
-> +
-> +	/*
-> +	 * Skip this check for pages in ZONE_MOVABLE or MIGRATE_CMA
-> +	 * pages that can not be long term pinned
-> +	 */
-> +	if (is_zone_movable_page(page) || is_migrate_cma_page(page))
-> +		return false;
-> +
-> +	folio = page_folio(page);
-> +
-> +	/*
-> +	 * caller holds a ref already from get_page_unless_zero()
-> +	 * which is accounted for in folio_expected_refs()
-> +	 */
-> +	extra_refs = folio_expected_refs(mapping, folio);
-> +
-> +	/*
-> +	 * This is an admittedly racy check but good enough to determine
-> +	 * if a page is pinned and can not be migrated
-> +	 */
-> +	if ((folio_ref_count(folio) - extra_refs) > folio_mapcount(folio))
-> +		return true;
-> +	return false;
-> +}
-> +
->  /**
->   * isolate_migratepages_block() - isolate all migrate-able pages within
->   *				  a single pageblock
-> @@ -992,12 +1028,12 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  			goto isolate_fail;
+Le 25/05/2023 à 21:19, Dan Carpenter a écrit :
+> On Tue, May 23, 2023 at 10:05:49PM +0200, Christophe JAILLET wrote:
+>> Should be looked at more carefully, but
+>>    dt_to_map_one_config		(in /drivers/pinctrl/devicetree.c)
+>>      .dt_node_to_map
+>>        --> sppctl_dt_node_to_map
+>>
+>> Should dt_to_map_one_config() fail, pinctrl_dt_free_maps() is called
+>> (see https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/devicetree.c#L281)
+> 
+> Thanks for this call tree, I don't have this file enabled in my build
+> so it's not easy for me to find how sppctl_dt_node_to_map() was called.
+> 
+> drivers/pinctrl/devicetree.c
+>     160                  dev_err(p->dev, "pctldev %s doesn't support DT\n",
+>     161                          dev_name(pctldev->dev));
+>     162                  return -ENODEV;
+>     163          }
+>     164          ret = ops->dt_node_to_map(pctldev, np_config, &map, &num_maps);
+>                                                                ^^^^
+> "map" isn't stored anywhere so it will be leaked.  I guess kmemleak
+> already figured this out.
+> 
+>     165          if (ret < 0)
+>     166                  return ret;
+>     167          else if (num_maps == 0) {
+>     168                  /*
+> 
 
-Just out of shot, we have ...
+Hi, thanks Dan for sharing your PoV on this.
 
-                if (unlikely(!get_page_unless_zero(page)))
-
-This is the perfect opportunity to use folio_get_nontail_page() instead.
-You get back the folio without having to cast the pointer yourself
-or call page_folio().  Now you can use a folio throughout your new
-function, saving a call to compound_head().
-
-For a followup patch, everything in this loop below this point can use
-the folio ... that's quite a lot of change.
-
->  		/*
-> -		 * Migration will fail if an anonymous page is pinned in memory,
-> -		 * so avoid taking lru_lock and isolating it unnecessarily in an
-> -		 * admittedly racy check.
-> +		 * Migration will fail if a page has extra refcounts
-> +		 * from long term pinning preventing it from migrating,
-> +		 * so avoid taking lru_lock and isolating it unnecessarily.
->  		 */
-
-Isn't "long term pinning" the wrong description of the problem?  Long term
-pins suggest to me FOLL_LONGTERM.  I think this is simple short term
-pins that we care about here.
+CJ
 
