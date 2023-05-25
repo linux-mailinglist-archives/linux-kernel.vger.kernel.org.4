@@ -2,88 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8FE710562
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FFA710566
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjEYFkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 01:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S233062AbjEYFmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 01:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjEYFkl (ORCPT
+        with ESMTP id S229459AbjEYFmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 01:40:41 -0400
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F9BA1;
-        Wed, 24 May 2023 22:40:39 -0700 (PDT)
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-64f47448aeaso1353972b3a.0;
-        Wed, 24 May 2023 22:40:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684993239; x=1687585239;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DUK+1sZwH5x1POWo13nOYhiz5YcV3CrJGvFKdHODSKo=;
-        b=P5aPmgayiHAnMuvWbYhQE0mpZpyB81ISHO6aQPuDxUeQWKGsmzcHF9zzHTaGz9Ba6l
-         OmZQ4Tb3LSxaFKFFNrfQPR/gBddy3EPcPLk14iBLtbpLa00Iejm1iU851FGMbEeuFf+2
-         nU63CN2WgLbu1IVgB8k2lkkWv2CvD7ueWSJrbuSIuEcfOrqT4dkmonxFej32AlRF40u5
-         l5JnwUtv1qAzhKSnvFfrtUn3rO9YXg9ySz3JwmrXUZ4HRS3/6SVyDMkMvy6uQIyMvmXG
-         Xx2mwYR7fmEOb1TsEsue4JVqwS26wAmoAIS4wP2VSI8jvQNCI6tcf7gmgBDEZQy0U58O
-         a9Sg==
-X-Gm-Message-State: AC+VfDxc1pG8Yluish1XQ4QpvUuWxNHi60PNzKpsO8HafHwi4P2cI4xI
-        yO6cwqen2T+xjxqqh9jcDg==
-X-Google-Smtp-Source: ACHHUZ6uyACOdfWrTJazLeuZey8MxnQsdqH4Yg8rdw+RboEE9NQkTu0PW+BYUJ0O+3A7zpcRIryqhA==
-X-Received: by 2002:aa7:88d0:0:b0:63b:854e:8459 with SMTP id k16-20020aa788d0000000b0063b854e8459mr6626319pff.31.1684993238570;
-        Wed, 24 May 2023 22:40:38 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b0064dbf805ff7sm364200pff.72.2023.05.24.22.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 22:40:38 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     mhiramat@kernel.org, rostedt@goodmis.org, beaub@linux.microsoft.com
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kelulanainsley@gmail.com, sunliming <sunliming@kylinos.cn>
-Subject: [PATCH] tracing/user_events: Fix the order of the fields in the trace output
-Date:   Thu, 25 May 2023 13:40:32 +0800
-Message-Id: <20230525054032.29392-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 25 May 2023 01:42:08 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD9AA9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:42:04 -0700 (PDT)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4QRcPj6mDLz4y3ZQ;
+        Thu, 25 May 2023 13:42:01 +0800 (CST)
+Received: from szxlzmapp07.zte.com.cn ([10.5.230.251])
+        by mse-fl2.zte.com.cn with SMTP id 34P5fuuu048390;
+        Thu, 25 May 2023 13:41:56 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp03[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Thu, 25 May 2023 13:41:58 +0800 (CST)
+Date:   Thu, 25 May 2023 13:41:58 +0800 (CST)
+X-Zmail-TransId: 2b05646ef526ffffffff997-8eb34
+X-Mailer: Zmail v1.0
+Message-ID: <202305251341580149313@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <akpm@linux-foundation.org>, <david@redhat.com>
+Cc:     <imbrenda@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
+        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>,
+        <yang.yang29@zte.com.cn>, <jiang.xuexin@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIHYxMCAwLzVdIGtzbTogc3VwcG9ydCB0cmFja2luZyBLU00tcGxhY2VkIHplcm8tcGFnZXM=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 34P5fuuu048390
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 646EF529.001/4QRcPj6mDLz4y3ZQ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4bec284cc0b9 ("tracing/user_events: Use print_format_fields() for
-trace output") use print_event_fields() as safe and gives user readable
-output. However, due to the insertion of the struct ftrace_event_field
-structure into the field linked list from the header, the trace output
-oder of fields of user events is reversed. Fix the problem by insertint
-to the tail of field linked list.
+From: xu xin <xu.xin16@zte.com.cn>
 
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- kernel/trace/trace_events_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The core idea of this patch set is to enable users to perceive the number
+of any pages merged by KSM, regardless of whether use_zero_page switch has
+been turned on, so that users can know how much free memory increase is
+really due to their madvise(MERGEABLE) actions. But the problem is, when
+enabling use_zero_pages, all empty pages will be merged with kernel zero
+pages instead of with each other as use_zero_pages is disabled, and then
+these zero-pages are no longer monitored by KSM.
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index aacd22c1e9f8..e9e2ec3c7613 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -972,7 +972,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
- 	if (filter_type == FILTER_OTHER)
- 		field->filter_type = filter_assign_type(type);
- 
--	list_add(&field->link, &user->fields);
-+	list_add_tail(&field->link, &user->fields);
- 
- 	/*
- 	 * Min size from user writes that are required, this does not include
+The motivations to do this is seen at:
+https://lore.kernel.org/lkml/202302100915227721315@zte.com.cn/
+
+In one word, we hope to implement the support for KSM-placed zero pages
+tracking without affecting the feature of use_zero_pages, so that app
+developer can also benefit from knowing the actual KSM profit by getting
+KSM-placed zero pages to optimize applications eventually when
+/sys/kernel/mm/ksm/use_zero_pages is enabled.
+
+Change log
+----------
+v9->v10:
+-------
+(1) Fix a compile error due to [PATCH v8 3/5] when CONFIG_KSM is not set.
+
+(2) Rename the function 'ksm_notify_unmap_zero_page' as
+    'ksm_might_unmap_zero_page'.
+
+(3) In [PATCH 5/5], we get ksm_zero_pages from its own 'mm' instead of
+	the global system.
+
+(4) In [PATCH 5/5], we add a subject task of testing ksm zero pages when
+	unmerging by triggering write fault.
+
+v8->v9:
+------
+(1) The previous [PATCH v8 4/6] is squashed into the current [PATCH v9 2/5].
+
+(2) Improve the codes as David's suggestions.
+
+v7->v8:
+-------
+(1) Since [1] which fix the bug of pte_mkdirty on sparc64 that makes pte
+    writable, then we can remove the architechture restrictions of our
+	features.
+(2) Improve the scheme of update ksm_zero_pages: add the handling case when
+    khugepaged replaces a shared zeropage by a THP. 
+
+[1] https://lore.kernel.org/all/20230411141529.428991-2-david@redhat.com/
+
+v6->v7:
+-------
+This is an all-newed version which is different from v6 which relys on KSM's
+rmap_item. The patch series don't rely on rmap_item but pte_dirty, so the
+general handling of tracking KSM-placed zero-pages is simplified a lot.
+
+For safety, we restrict this feature only to the tested and known-working
+architechtures (ARM, ARM64, and X86) fow now.
+
+xu xin (5):
+  ksm: support unsharing KSM-placed zero pages
+  ksm: count all zero pages placed by KSM
+  ksm: add ksm zero pages for each process
+  ksm: consider KSM-placed zeropages when calculating KSM profit
+  selftest: add a testcase of ksm zero pages
+
+ Documentation/admin-guide/mm/ksm.rst              | 25 ++++--
+ fs/proc/base.c                                    |  1 +
+ include/linux/ksm.h                               | 20 +++++
+ include/linux/mm_types.h                          |  9 ++-
+ mm/khugepaged.c                                   |  2 +
+ mm/ksm.c                                          | 28 +++++--
+ mm/memory.c                                       |  5 +-
+ tools/testing/selftests/mm/ksm_functional_tests.c | 98 ++++++++++++++++++++++-
+ 8 files changed, 172 insertions(+), 16 deletions(-)
+
 -- 
-2.25.1
-
+2.15.2
