@@ -2,150 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840C6710F55
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2CE710F56
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241732AbjEYPSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S241665AbjEYPSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233538AbjEYPS2 (ORCPT
+        with ESMTP id S241652AbjEYPS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:18:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1664E98
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685027865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fOUzguOOu1eni0hOPBESb2FaTGC+gEEK2fy0+NLRd2Y=;
-        b=a/742ry9r0lLvK8ERgjUlTwe2l4RJHJP/4RhRKbC/l4KRp1ud1GawS3hGRe42OzIC9WT9h
-        gZbjZpFS/l9E/M6u8N0fMM6uCOzDoglx6a4bmqo1DGLbnft5JhidfSqpgG9RcPbQvBkyGE
-        HL8UF7O2FrdZbecBg6w0kifuMYm1sDA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-587--50MNHoFOo2WRg_ymbLqZA-1; Thu, 25 May 2023 11:17:41 -0400
-X-MC-Unique: -50MNHoFOo2WRg_ymbLqZA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30953bcb997so858498f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:17:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685027860; x=1687619860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fOUzguOOu1eni0hOPBESb2FaTGC+gEEK2fy0+NLRd2Y=;
-        b=CpGBuvquz9oh1AZmePUqd3DiQkDGd5VwGZoxowFssRFKc3Fp1EdW9sAsv7w24lj72m
-         T8Ok5tkAMXMv3osT++QGDdBqPSUW0X3bb9Wjwmi1m/ihc/kA85VZmEV02nV5AGt2dLzG
-         67qzjjPS6aUZDh5uQzCxnve4TLvwjzb72aG6uEEG7OUFGyHpyfnSF1MnQ4HkfkhNmb52
-         t8Jhugp/+5gbYyQvfTuLoplmJKrGkym4RHF8jldhiYlJTA6UP/UnCnlOfQmwtwhrdpJP
-         fJjcIiSMMmSXZjcv/4kcO9N4J8mfHrDWEl9s9PBOw0CSKtDTctd+9Ff+rdGHwXnTLYt/
-         L3Mw==
-X-Gm-Message-State: AC+VfDzbjl/URhZIEOAC/onXeayaSRSOi5wHoNQHqNI2EwtC1c6A3dIR
-        TtUJKZ43wSqkPMWBu/CbsccruGSzuFJr7S15ft0X/0LWNJSSvWFCDntOEIYYAxP4+mRkLWfQvXI
-        MRGjVh19J2JpzHKNwVmjsLtPr
-X-Received: by 2002:a5d:4212:0:b0:2ef:ba4f:c821 with SMTP id n18-20020a5d4212000000b002efba4fc821mr2822695wrq.36.1685027860657;
-        Thu, 25 May 2023 08:17:40 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6u2bAg+oYFeJ8M2WSKlZ3Xymkov7A3BUBv/G/uJks2LTYCIXu75pDamPUph1Z92vbUzEybCA==
-X-Received: by 2002:a5d:4212:0:b0:2ef:ba4f:c821 with SMTP id n18-20020a5d4212000000b002efba4fc821mr2822672wrq.36.1685027860264;
-        Thu, 25 May 2023 08:17:40 -0700 (PDT)
-Received: from sgarzare-redhat ([217.171.68.36])
-        by smtp.gmail.com with ESMTPSA id g12-20020a5d488c000000b003090cb7a9e6sm2104222wrq.31.2023.05.25.08.17.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:17:39 -0700 (PDT)
-Date:   Thu, 25 May 2023 17:17:36 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Simon Horman <horms@kernel.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] virtio: Add missing documentation for structure fields
-Message-ID: <xjns5ktnvejnlze6viube6qzxs4fd5fb5trpvqpip2rlrvift4@utwfddrxavxw>
-References: <20230510-virtio-kdoc-v3-1-e2681ed7a425@kernel.org>
+        Thu, 25 May 2023 11:18:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD39191;
+        Thu, 25 May 2023 08:18:26 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:17:6c0::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C63E6605974;
+        Thu, 25 May 2023 16:18:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685027905;
+        bh=UlQyQzcqGuTpdU5jKpxWIWS4C0om2CVjEO+7lI3Bg3g=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HI8T4l6bZpDNxXnhASVlY2DPW1lDXkr2yecfHrGBcYCBVSX9vb8aMt4WzKCCNN0/T
+         BWL2ukjX2BMOeXj2awDCSfe4N1VB9pI/uW6p8x/FvYyKkRF//W2SkBmzPIf7DKFk6f
+         jx1A/4zgm9QHQ2GJJCvHVQS+g6PlzoOt5A/ipla6VNNhwzdUE0lQtzIbyt43eYLI+O
+         fsgHF/VOk9zcOFn5jWLQTn8ki3NyeLZMWqOXwQZApgN7mo2L+2i7AKxH3jDljofb1K
+         QF7FqUGe/TAhBfzdHNUtjYbvUvliGWUJNgySn+Ou0kOjjtEgrqwLZDVQZ9A10Bmd19
+         iEUcfHR3LL2LQ==
+Message-ID: <ab2b13e31e1af52ae52b0678b0abd5dd9d616e8a.camel@collabora.com>
+Subject: Re: [PATCH v7 00/13] AV1 stateless decoder for RK3588
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Date:   Thu, 25 May 2023 11:18:13 -0400
+In-Reply-To: <20230503083438.85139-1-benjamin.gaignard@collabora.com>
+References: <20230503083438.85139-1-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230510-virtio-kdoc-v3-1-e2681ed7a425@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 04:35:42PM +0200, Simon Horman wrote:
->Add missing documentation for the vqs_list_lock field of struct virtio_device,
->and the validate field of struct virtio_driver.
->
->./scripts/kernel-doc says:
->
-> .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
-> .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
-> 2 warnings as Errors
->
->No functional changes intended.
->
->Signed-off-by: Simon Horman <horms@kernel.org>
->---
->Changes in v3:
->- As suggested by Stefano Garzarella
->  + Drop inline comment for @vqs_list_lock which is now covered by Kdoc
->  + Add "Returns 0 or -errno." to @validate Kdoc
->- Link to v2: https://lore.kernel.org/r/20230510-virtio-kdoc-v2-1-1c5a20eb4cfe@kernel.org
->
->Changes in v2:
->- As suggested by Michael S. Tsirkin
->  + @validate is not called on probe
->  + @validate does validates config space
->  + embarrassingly, validate was misspelt
->- Link to v1: https://lore.kernel.org/r/20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org
->---
-> include/linux/virtio.h | 5 ++++-
-> 1 file changed, 4 insertions(+), 1 deletion(-)
->
->diff --git a/include/linux/virtio.h b/include/linux/virtio.h
->index b93238db94e3..de6041deee37 100644
->--- a/include/linux/virtio.h
->+++ b/include/linux/virtio.h
->@@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
->  * @config_enabled: configuration change reporting enabled
->  * @config_change_pending: configuration change reported while disabled
->  * @config_lock: protects configuration change reporting
->+ * @vqs_list_lock: protects @vqs.
->  * @dev: underlying device.
->  * @id: the device type identification (used to match it with a driver).
->  * @config: the configuration ops for this device.
->@@ -117,7 +118,7 @@ struct virtio_device {
-> 	bool config_enabled;
-> 	bool config_change_pending;
-> 	spinlock_t config_lock;
->-	spinlock_t vqs_list_lock; /* Protects VQs list access */
->+	spinlock_t vqs_list_lock;
-> 	struct device dev;
-> 	struct virtio_device_id id;
-> 	const struct virtio_config_ops *config;
->@@ -160,6 +161,8 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
->  * @feature_table_size: number of entries in the feature table array.
->  * @feature_table_legacy: same as feature_table but when working in legacy mode.
->  * @feature_table_size_legacy: number of entries in feature table legacy array.
->+ * @validate: the function to call to validate features and config space.
->+ *            Returns 0 or -errno.
->  * @probe: the function to call when a device is found.  Returns 0 or -errno.
->  * @scan: optional function to call after successful probe; intended
->  *    for virtio-scsi to invoke a scan.
->
+Le mercredi 03 mai 2023 =C3=A0 10:34 +0200, Benjamin Gaignard a =C3=A9crit=
+=C2=A0:
+> This series implement AV1 stateless decoder for RK3588 SoC.
+> The hardware support 8 and 10 bits bitstreams up to 7680x4320.
+> AV1 feature like film grain or scaling are done by the postprocessor.
+> The driver can produce NV12_4L4, NV12_10LE40_4L4, NV12 and P010 pixels fo=
+rmats.
+> Even if Rockchip have named the hardware VPU981 it looks like a VC9000 bu=
+t=20
+> with a different registers mapping.
 
-LGTM!
+Just wanted to add a comment about the series. After discussion with Ezequi=
+el,
+it seems this driver is getting quite big, at some point we should probably
+split it, so the newer chips have a driver free from legacy, and also free =
+from
+having encoders in the same driver. But as usual, who makes the work tend t=
+o
+rule, and this one did not turned too badly, a lot of the extra work ended
+related to issues with the VP9/G2 integration. G2 cores are much closer to
+VC8000D/9000D then G1 and might have been the right moment to make the spli=
+t,
+but we kind of miss that opportunity. The difference is that G2 had highly
+limited post processing support, VC8000D/9000D have the same post processor=
+,
+which is similar in functionality to the G1 post processor.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+**Informative, feel free to skip the rest**
 
-Thanks,
-Stefano
+Because I was asked at least twice last week, the reason for having encoder=
+s in
+that driver is that the Hantro H1 and G1 cores shares the same cache storag=
+e,
+and cannot be run concurrently. The solution that was picked was to place t=
+hem
+both in the same driver, sharing the same m2m ctx and leaving it to the ker=
+nel
+scheduler to dispatch on both encoder and decoder cores. Newer VSI cores ca=
+n run
+concurrently.
+
+In newer chips generation, notably RKVDEC2 and probably VC9000D (we don't h=
+ave
+spec), the multicore model will not work with such a scheduling model since=
+ for
+8k stream you need to use 2 cores, where you can use those two concurrently=
+ for
+other streams. The scheduling will have to be fancier to ensure we don't st=
+arve
+the 8K+ streams. Having a clean driver to do so will help. This AV1 core do=
+es
+not have 8K support with this method of binding two cores together, so I se=
+e no
+harm going forward similarly to what we did for the G2 core (HEVC/VP9). Per=
+haps
+there is going to be challenges in possibly moving the implementation in fu=
+ture,
+I'd be very happy to get feedback about this, so the we can help Ezequiel h=
+ere
+in making sure this driver does not become a giant blob of unrelated but si=
+milar
+chips all under the same driver.
+
+regards,
+Nicolas
+
+>=20
+> The full branch can be found here:
+> https://gitlab.collabora.com/linux/for-upstream/-/commits/rk3588_av1_deco=
+der_v7
+>=20
+> Fluster score is: 200/239 while testing AV1-TEST-VECTORS with GStreamer-A=
+V1-V4L2SL-Gst1.0.
+> The failing tests are:
+> - the 2 tests with 2 spatial layers: few errors in luma/chroma values
+> - tests with resolution < hardware limit (64x64)
+> - 10bits film grain test: bad macroblocks while decoding, the same 8bits
+>   test is working fine.
+>=20
+> Changes in v7:
+> - Rebased on media_tree master branch.
+> - Fix warnings exposed by W=3D1
+> - Fix Angelo's comments
+>=20
+> Changes in v6:
+> - Rename NV12_10LE40_4L4 pixel format into NV15_4L4.
+> - Add defines for post-proc selection.
+> - Change patch order as requested by Nicolas.
+> - Fix frame-larger-than warning.
+>=20
+> Changes in v5:
+> - Add a patch to initialize bit_depth field of V4L2_CTRL_TYPE_AV1_SEQUENC=
+E
+>   ioctl.
+>=20
+> Changes in v4:
+> - Squash "Save bit depth for AV1 decoder" and "Check AV1 bitstreams bit
+>   depth" patches.
+> - Double motion vectors buffer size.
+> - Fix the various errors reported by Hans.
+>=20
+> Changes in v3:
+> - Fix arrays loops limites.
+> - Remove unused field.
+> - Reset raw pixel formats list when bit depth or film grain feature
+>   values change.
+> - Enable post-processor P010 support
+>=20
+> Changes in v2:
+> - Remove useless +1 in sbs computation.=20
+> - Describe NV12_10LE40_4L4 pixels format.
+> - Post-processor could generate P010.
+> - Fix comments done on v1.
+> - The last patch make sure that only post-processed formats are used when=
+ film
+>   grain feature is enabled.
+>=20
+> Benjamin
+>=20
+>=20
+> Benjamin Gaignard (12):
+>   dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+>   media: AV1: Make sure that bit depth in correctly initialize
+>   media: Add NV15_4L4 pixel format
+>   media: verisilicon: Get bit depth for V4L2_PIX_FMT_NV15_4L4
+>   media: verisilicon: Add AV1 decoder mode and controls
+>   media: verisilicon: Check AV1 bitstreams bit depth
+>   media: verisilicon: Compute motion vectors size for AV1 frames
+>   media: verisilicon: Add AV1 entropy helpers
+>   media: verisilicon: Add Rockchip AV1 decoder
+>   media: verisilicon: Add film grain feature to AV1 driver
+>   media: verisilicon: Enable AV1 decoder on rk3588
+>   media: verisilicon: Conditionally ignore native formats
+>=20
+> Nicolas Dufresne (1):
+>   v4l2-common: Add support for fractional bpp
+>=20
+>  .../bindings/media/rockchip-vpu.yaml          |    1 +
+>  .../media/v4l/pixfmt-yuv-planar.rst           |   16 +
+>  drivers/media/platform/verisilicon/Makefile   |    3 +
+>  drivers/media/platform/verisilicon/hantro.h   |    8 +
+>  .../media/platform/verisilicon/hantro_drv.c   |   68 +-
+>  .../media/platform/verisilicon/hantro_hw.h    |  102 +
+>  .../platform/verisilicon/hantro_postproc.c    |    9 +-
+>  .../media/platform/verisilicon/hantro_v4l2.c  |   67 +-
+>  .../media/platform/verisilicon/hantro_v4l2.h  |    8 +-
+>  .../verisilicon/rockchip_av1_entropymode.c    | 4424 +++++++++++++++++
+>  .../verisilicon/rockchip_av1_entropymode.h    |  272 +
+>  .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
+>  .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
+>  .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2232 +++++++++
+>  .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
+>  .../platform/verisilicon/rockchip_vpu_hw.c    |  134 +
+>  drivers/media/v4l2-core/v4l2-common.c         |  162 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c     |    5 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+>  include/media/v4l2-common.h                   |    2 +
+>  include/uapi/linux/videodev2.h                |    1 +
+>  21 files changed, 8326 insertions(+), 103 deletions(-)
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entro=
+pymode.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entro=
+pymode.h
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmg=
+rain.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmg=
+rain.h
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_hw=
+_av1_dec.c
+>  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_re=
+gs.h
+>=20
 
