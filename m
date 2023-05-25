@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E528711084
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E3A711082
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbjEYQJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
+        id S231597AbjEYQJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjEYQJc (ORCPT
+        with ESMTP id S231451AbjEYQJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:09:32 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211D910D1;
-        Thu, 25 May 2023 09:09:01 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so4135568a12.1;
-        Thu, 25 May 2023 09:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685030939; x=1687622939;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IcWAv44UOzgNnQAtx1ryJsdICiVGnUV50w5gHYxHJdU=;
-        b=fbFXoVxPVQEDK7R8QBWEC1K7HGxa802C//fMX4YnZw56/6do6hgNWVtWFd0pT0D7cB
-         MgnUBF1qWGggCG/RHGZeovTjKBygDmm6a4B9CbLVgjnLNDkM1Xsmm+nW4pEZtz6ceD6f
-         hGEea4ie7UGIAJX/jej/kVh75RNnaQv5bfUEnDeCv3aYyUxX58fHipmAVlrjyfvNMLdn
-         I2qywoGy2W5Ly3KvxSmu1cXeNl9q+u/iOkzlgSlJVcMU36SjpovBaAgZA16nefeCqbHh
-         oNj4YPjA39Qk8cKiF7hHabev8Nq35vPVnXxtlzYewwerqQZcFZXxXKasdFB8zO7LmSb5
-         Y9uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685030939; x=1687622939;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IcWAv44UOzgNnQAtx1ryJsdICiVGnUV50w5gHYxHJdU=;
-        b=J5WZ4xsrUtiGlNT9d3iybEU0LFpNY6oFirVH+IqKfUn1oP94TvIoozgd8aJXFu82ti
-         NuZMUJ+Diyb2BReEr9YFYztreyr7cHqpjDDPvlvYE3JG/leTwEhRKzWgpQ/vA0VNUN9J
-         m+RmjrtXYxsJfvpyPzDtiqOODt4GWirIHQ8etGiUHxqgZBnvzJGiYqoZA/Yq3Qm+RwXw
-         rL8mnnzesETdUi+V5YTMtCuRA8deR2LTdTBxBL71qE2ayGg9vjbgDuutf52z4pXaSW2G
-         OWFOrVP6nC32qBF2m/UXkWe/WKlwFjGpJ7kGd+iS3bcZjOmHZfJYGNzRWLpE8yao93b6
-         Yj+g==
-X-Gm-Message-State: AC+VfDzMILB192OXMjkzIy1g+2TGRaQTEiYVEz5prepTkMe6ZoAX2TGp
-        WCuONJbTPivsuVSGOEZO51A=
-X-Google-Smtp-Source: ACHHUZ5aRnoSIRNdiIHvkgCkLYnZLc8qfPsO3XjpYKTNfLJB6im8Hvz60RomEksrR7SmVMKhDhgvSA==
-X-Received: by 2002:aa7:d484:0:b0:50d:b7e5:fdde with SMTP id b4-20020aa7d484000000b0050db7e5fddemr4782214edr.19.1685030938612;
-        Thu, 25 May 2023 09:08:58 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.78])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa7d90f000000b00510d8e43fe0sm696613edr.7.2023.05.25.09.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 09:08:58 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     linux@roeck-us.net, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] adm1266.c: Drop error checking for debugfs_create_dir
-Date:   Thu, 25 May 2023 21:08:27 +0500
-Message-Id: <20230525160827.15285-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 25 May 2023 12:09:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0774CE4A;
+        Thu, 25 May 2023 09:08:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5360B61757;
+        Thu, 25 May 2023 16:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5F6C433EF;
+        Thu, 25 May 2023 16:08:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685030925;
+        bh=yLNmU6oM5rYoi5bPYZ/1slw69C0cgZhSY5hlcUA5fLw=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=Bu7qXz//675tf5qYPE/GYQkvDL0wEkK4QF/4oVCwgjKzAF7dkBEN0QLTxDylDHISb
+         5RZrMsrBMGLWEmbz62O3KAnacy3+YjbfzuLTcVCgUvYPGfDg+toCJHFVJ4le5xcSmJ
+         a+9exhF5fAeDvnUbEBtH1ONGYujt5o/ThXx38F4nhgwwbSA/RHgx4/fJavoct6E1Ll
+         phsxg0+tMYGVUkFEfZdqU8gk31GNHA7fvw19BMPW6/Qts421gsq0kS+44mCI754Tt3
+         fnayGxDEg7B0q1k/ltESgbFqWmjF5sUnDEbb3v5ps4dzqN1Hja8KvDTK09v6B9HdzH
+         zbqQxOOExmERw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [v5,43/44] wifi: add HAS_IOPORT dependencies
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230522105049.1467313-44-schnelle@linux.ibm.com>
+References: <20230522105049.1467313-44-schnelle@linux.ibm.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jouni Malinen <j@w1.fi>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-wireless@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168503091986.22756.11469892190478443875.kvalo@kernel.org>
+Date:   Thu, 25 May 2023 16:08:41 +0000 (UTC)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the error checking in adm1266.c.
-The DebugFS kernel API is developed in
-a way that the caller can safely ignore the errors that
-occur during the creation of DebugFS nodes.
+Niklas Schnelle <schnelle@linux.ibm.com> wrote:
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
----
- drivers/hwmon/pmbus/adm1266.c | 2 --
- 1 file changed, 2 deletions(-)
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Acked-by: Kalle Valo <kvalo@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-index 1ac2b2f4c570..184d75269d2b 100644
---- a/drivers/hwmon/pmbus/adm1266.c
-+++ b/drivers/hwmon/pmbus/adm1266.c
-@@ -340,8 +340,6 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
- 		return;
- 
- 	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
--	if (!data->debugfs_dir)
--		return;
- 
- 	debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
- 				    adm1266_state_read);
+Patch applied to wireless-next.git, thanks.
+
+040a22191879 wifi: add HAS_IOPORT dependencies
+
 -- 
-2.34.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20230522105049.1467313-44-schnelle@linux.ibm.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
