@@ -2,148 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499397109AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499F97109E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240863AbjEYKQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S240920AbjEYKRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240793AbjEYKQH (ORCPT
+        with ESMTP id S240916AbjEYKQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:16:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22284139;
-        Thu, 25 May 2023 03:16:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3D8861006;
-        Thu, 25 May 2023 10:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F94C433EF;
-        Thu, 25 May 2023 10:15:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685009763;
-        bh=7bXHnIYWtYF8xI7DWrHnG3fKIHxxxog4xxhaz5xiH1w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QALVqdn7P/EEvs1ccrAeWVErDIOt1p3IKbax3xk3ikHcjvnMA3VMa2rOwPIW2tdaH
-         Zh2Ii9xY3JaT+YmZGkM5DKs6WG2dBRri4XTd7C6CVmyHrKHJ6E+C0m8h5qiifmnSQV
-         SdGmhqkU9lPYxQGXKFa7OpN3e0ySccLt2YSOGO8SnnsguhHjWD5NxjyBlq4PYmD6Fl
-         pztMKQGT4oN27tybKp8xiculeV2/LQWSxX7Rh4Vf1J2WVOLv5521Vib55zTsZ5AyLY
-         XpBOgVkJ88lXDCXRreNFeoQYNZLcbVZiuy0g1LOT5dpPS3b58+NsM9nXoayF4o9QW6
-         yGiiBPPZ7ZP7Q==
-Date:   Thu, 25 May 2023 12:15:54 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     bhelgaas@google.com, davem@davemloft.net, edumazet@google.com,
-        haiyangz@microsoft.com, jakeo@microsoft.com, kuba@kernel.org,
-        kw@linux.com, kys@microsoft.com, leon@kernel.org,
-        linux-pci@vger.kernel.org, mikelley@microsoft.com,
-        pabeni@redhat.com, robh@kernel.org, saeedm@nvidia.com,
-        wei.liu@kernel.org, longli@microsoft.com, boqun.feng@gmail.com,
-        ssengar@microsoft.com, helgaas@kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        josete@microsoft.com, stable@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] PCI: hv: Fix a race condition in hv_irq_unmask()
- that can cause panic
-Message-ID: <ZG81WpJBBegbLSbT@lpieralisi>
-References: <20230420024037.5921-1-decui@microsoft.com>
- <20230420024037.5921-3-decui@microsoft.com>
+        Thu, 25 May 2023 06:16:39 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F7D1A4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:16:33 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2B3E55C01A6;
+        Thu, 25 May 2023 06:16:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 25 May 2023 06:16:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685009790; x=1685096190; bh=Wc
+        9w3kWKGue5AkBPboUKgcnbBhGEfTTn2MbGT+ui8WA=; b=TzySZ+u5L0uFc+qqrv
+        IRyEduQPvIG4W2O3GlLsHyhJHat69y72XD3vaEkp9FkEGbU3/YQBbPRwOcQY3hBu
+        m9EkNCTLuCnmqDyo7lTz1UFJUfSk2MSnzIF3r5XnTI1Huf66d+BcbwhQnRk9y1kX
+        eMki1U9U0YinrJ9SLxd35yFlOs+fBOIm0YIpvfLseImTY4jBtCrfivc4+3MwAjEg
+        0VImjXmPSpTgX16qHomzlk9Bo33O+BHeADuXwQUJwmNz+NCRQaiLImrlSjwJi34k
+        bmXOFnhx2sdXuc1AWdj64I3CZ6558GqHxlYmtcobw7+Oq3lVfGZjSoB81pFULtEs
+        H0YQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685009790; x=1685096190; bh=Wc9w3kWKGue5A
+        kBPboUKgcnbBhGEfTTn2MbGT+ui8WA=; b=PVF5K47n8yC9R/VDm9XLqi0J+pxnP
+        eiZBLtHRArSD70tEPVFrAI9kai89n35FYjo2jIRf511mWq5+Rc4okUPivl5OMOKW
+        p2VHC4SVB3pwXrz6XHNzTJl3gXVpYFJrWpNhOZlpfhZwq5uloNxwc0rM0hipGcm1
+        bDXm/KvKXBc/IdjgkI4MkpmOIGCEJRVTl8nyxWl8dbWCe5CnpNjWtcB7yCiIAfPp
+        v8Ldr+s4thbhLk8IX4jYWToCMPn5r0GKlgUYFZZWHw257jQ2aSJrRPiWkLR4G72s
+        2CZccZBcCi/7AVUpgXaALAGuCBWdN9DhnSkFOUwufnuSrYXQp2hRQ3Mxg==
+X-ME-Sender: <xms:fTVvZBUIXoXWcgEwoS7pGqI-XGO8wN00X1ZGcasr8QWxwM0t5gHsgw>
+    <xme:fTVvZBlrnjX5QHT4V1Q9pL84EQafg1ZGzHZ3bR8xarbZw6BzkkYVPTN4PRMlcgi0V
+    EyxIxQHpQEpzuS3WbA>
+X-ME-Received: <xmr:fTVvZNZnGIlg9Tpvp8-6q8QNvqXMy_dK-2ejCtU_s8RKpumk6_dctluwGN3-dJt39M8CUOetSCJw95c5RPlA3rv6W3BzY7E0GUV_lpBKMUDRUw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghs
+    hhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeeggfehleehje
+    eileehveefkefhtdeffedtfeeghfekffetudevjeegkeevhfdvueenucffohhmrghinhep
+    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:fTVvZEXm2d4VHuIh0hjelk7U8YvjapXNrT5kgwTap23J2N_rVnXA6w>
+    <xmx:fTVvZLnNiAF80tCOxmMzfO2JEGS3wPacsQQafzqVk-TVdgfxpgxKQg>
+    <xmx:fTVvZBdqhiVApI5mf2HCDpUcXpy8eI0urDYA0nme3hRzY8w43b882w>
+    <xmx:fjVvZDuVa07yKQ_P7IcVoOxXTgIt8C85zdVdUnhmGVG1pHJm47SC4g>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 25 May 2023 06:16:28 -0400 (EDT)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Cc:     kunit-dev@googlegroups.com
+Subject: [PATCH v2 00/12] firewire: deliver hardware time stamp for asynchronous transaction
+Date:   Thu, 25 May 2023 19:16:13 +0900
+Message-Id: <20230525101625.888906-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420024037.5921-3-decui@microsoft.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:40:33PM -0700, Dexuan Cui wrote:
-> When the host tries to remove a PCI device, the host first sends a
-> PCI_EJECT message to the guest, and the guest is supposed to gracefully
-> remove the PCI device and send a PCI_EJECTION_COMPLETE message to the host;
-> the host then sends a VMBus message CHANNELMSG_RESCIND_CHANNELOFFER to
-> the guest (when the guest receives this message, the device is already
-> unassigned from the guest) and the guest can do some final cleanup work;
-> if the guest fails to respond to the PCI_EJECT message within one minute,
-> the host sends the VMBus message CHANNELMSG_RESCIND_CHANNELOFFER and
-> removes the PCI device forcibly.
-> 
-> In the case of fast device addition/removal, it's possible that the PCI
-> device driver is still configuring MSI-X interrupts when the guest receives
-> the PCI_EJECT message; the channel callback calls hv_pci_eject_device(),
-> which sets hpdev->state to hv_pcichild_ejecting, and schedules a work
-> hv_eject_device_work(); if the PCI device driver is calling
-> pci_alloc_irq_vectors() -> ... -> hv_compose_msi_msg(), we can break the
-> while loop in hv_compose_msi_msg() due to the updated hpdev->state, and
-> leave data->chip_data with its default value of NULL; later, when the PCI
-> device driver calls request_irq() -> ... -> hv_irq_unmask(), the guest
-> crashes in hv_arch_irq_unmask() due to data->chip_data being NULL.
-> 
-> Fix the issue by not testing hpdev->state in the while loop: when the
-> guest receives PCI_EJECT, the device is still assigned to the guest, and
-> the guest has one minute to finish the device removal gracefully. We don't
-> really need to (and we should not) test hpdev->state in the loop.
-> 
-> Fixes: de0aa7b2f97d ("PCI: hv: Fix 2 hang issues in hv_compose_msi_msg()")
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> Cc: stable@vger.kernel.org
-> ---
-> 
-> v2:
->   Removed the "debug code".
->   No change to the patch body.
->   Added Cc:stable
-> 
-> v3:
->   Added Michael's Reviewed-by.
-> 
->  drivers/pci/controller/pci-hyperv.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index b82c7cde19e66..1b11cf7391933 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -643,6 +643,11 @@ static void hv_arch_irq_unmask(struct irq_data *data)
->  	pbus = pdev->bus;
->  	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
->  	int_desc = data->chip_data;
-> +	if (!int_desc) {
-> +		dev_warn(&hbus->hdev->device, "%s() can not unmask irq %u\n",
-> +			 __func__, data->irq);
-> +		return;
-> +	}
+Hi,
 
-That's a check that should be there regardless ?
+This patchset is revised version of the previous one[1]. Copied from the
+cover letter:
 
->  	spin_lock_irqsave(&hbus->retarget_msi_interrupt_lock, flags);
->  
-> @@ -1911,12 +1916,6 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
->  		hv_pci_onchannelcallback(hbus);
->  		spin_unlock_irqrestore(&channel->sched_lock, flags);
->  
-> -		if (hpdev->state == hv_pcichild_ejecting) {
-> -			dev_err_once(&hbus->hdev->device,
-> -				     "the device is being ejected\n");
-> -			goto enable_tasklet;
-> -		}
-> -
->  		udelay(100);
->  	}
+1394 OHCI hardware supports hardware time stamp for asynchronous
+communication at 8,000 Hz resolution (= isochronous cycle), while
+current implementation of FireWire subsystem does not deliver the time
+stamp to both unit driver and user space application when operating the
+asynchronous communication. It is inconvenient to a kind of application
+which attempts to synchronize data from multiple sources by the (coarse)
+time stamp.
 
-I don't understand why this code is in hv_compose_msi_msg() in the first
-place (and why only in that function ?) to me this looks like you are
-adding plasters in the code that can turn out to be problematic while
-ejecting a device, this does not seem robust at all - that's my opinion.
+This patchset changes the subsystem so that the unit driver and the user
+space application to receive the time stamp, therefore it affects kernel
+service for asynchronous transaction, kernel API for unit driver, and UAPI
+for user space application.
 
-Feel free to merge this code, I can't ACK it, sorry.
 
-Lorenzo
+The first patch is newly added for KUnit test to check layout of structure
+exposed to user space. I'm pleased if getting any review by KUnit
+developers since it is my first time to write any KUnit test.
+
+The new feature will be used for my future work to replace tasklet with
+workqueue. The hardware time stamp could enable us to compute the
+processing delay so precise.
+
+[1] https://lore.kernel.org/lkml/20230125120301.51585-1-o-takashi@sakamocchi.jp/
+
+Takashi Sakamoto (12):
+  firewire: add KUnit test to check layout of UAPI structures
+  firewire: cdev: add new version of ABI to notify time stamp at
+    request/response subaction of transaction
+  firewire: cdev: add new event to notify request subaction with time
+    stamp
+  firewire: cdev: implement new event to notify request subaction with
+    time stamp
+  firewire: core: use union for callback of transaction completion
+  firewire: core: implement variations to send request and wait for
+    response with time stamp
+  firewire: cdev: code refactoring to operate event of response
+  firewire: cdev: add new event to notify response subaction with time
+    stamp
+  firewire: cdev: implement new event to notify response subaction with
+    time stamp
+  firewire: cdev: code refactoring to dispatch event for phy packet
+  firewire: cdev: add new event to notify phy packet with time stamp
+  firewire: cdev: implement new event relevant to phy packet with time
+    stamp
+
+ drivers/firewire/.kunitconfig       |   4 +
+ drivers/firewire/Kconfig            |  16 ++
+ drivers/firewire/Makefile           |   3 +
+ drivers/firewire/core-cdev.c        | 252 +++++++++++++++++++++-------
+ drivers/firewire/core-transaction.c |  93 +++++++---
+ drivers/firewire/core.h             |   7 +
+ drivers/firewire/ohci.c             |  17 +-
+ drivers/firewire/uapi-test.c        |  87 ++++++++++
+ include/linux/firewire.h            |  82 ++++++++-
+ include/uapi/linux/firewire-cdev.h  | 180 +++++++++++++++++---
+ 10 files changed, 625 insertions(+), 116 deletions(-)
+ create mode 100644 drivers/firewire/.kunitconfig
+ create mode 100644 drivers/firewire/uapi-test.c
+
+-- 
+2.39.2
+
