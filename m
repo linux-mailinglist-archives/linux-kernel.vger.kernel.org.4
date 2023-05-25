@@ -2,167 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276E2711766
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1062F711746
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbjEYT22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S242725AbjEYTV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242036AbjEYT2K (ORCPT
+        with ESMTP id S240643AbjEYTVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:28:10 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3AD9B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:27:22 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso7934995e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:27:22 -0700 (PDT)
+        Thu, 25 May 2023 15:21:42 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D17AE68
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:17:48 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96ff9c0a103so161138066b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:17:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685042744; x=1687634744;
+        d=linux-foundation.org; s=google; t=1685042185; x=1687634185;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K4TyW3F7pnvio/+Mfhq8AWNdmZyUuT7pRHhynq/9Tkg=;
-        b=UU6/pwsLMHpaU5AyFKe4m8NfGGfrbXiOq7ozubgQdQpLm8Ay4qm7QfKefuQMRxheM5
-         squEU/t5DsGljg3WHkDX8FT8h/ovSdWEURORkPLeXvCsEimABwxjgzoOHQ2wbw2rBxc/
-         SM5Xerkl6yGXyUKkeTXJ5uHftKVq0r6XTQpdJVRYe85doW/EPN6ygxUIX0Y/dHB7q74C
-         c/6qpAPf56WEv7qJv0bmW/jrtk99d/s0E9FmJCN4Ey/9vzRRH4fYuO3jFtYdKpc9VM8F
-         QHlIJzIkChvAK/sqtvs7WmzOPe7CBMYKAvIb0xxrq6bmz9oOj7w4A4M/1zUNpld5JUgY
-         anng==
+        bh=aIsIFxmLlj97Nfx6D9vKSgsX1a6jDH3TwyPUkCdOSPQ=;
+        b=aJXv7msL9DrTUY8nTP6eYzvu5gs+lInFRlOLvZ9dPhvSmMchETpFRUDviL+a9C6jDA
+         Tgw2Vv6ChUAI3TMz0fvwdsIjqCo1AKfeWd7A9CXtiLKiSctyFkHT3SKg0LiZk1NajQ4v
+         saxwVtNg/PAhoBF+y2USvy4X9nKbiG2Knk+Dg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685042744; x=1687634744;
+        d=1e100.net; s=20221208; t=1685042185; x=1687634185;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K4TyW3F7pnvio/+Mfhq8AWNdmZyUuT7pRHhynq/9Tkg=;
-        b=MhztR5uVuvFa1Q7brYBza/k62hHhOPlB/ltnywE/Ur5QdyZNWijFg82FFXx5Lbl42a
-         ZS8DPrSqHQxSdTX3QMFETA4Nd0IiRBpa00px24ISE5L0BH4NM55PjcIDv8tj1R1ggPRl
-         94P4xH+upWdKQxrlI61Qz5B50LEsH8BmB1VB3odRvTytL5amNjXfTJ6/56TnBYkwVO8R
-         sIllBDpn+6wfbdLJaxPgk8o63dnI8i6BMMEJjIJvU4EzcudgZaQIpBAl7Pd3ZLXMSgxC
-         pJKwCbnlNM48bvjMrXNkJfni3AuyT/Xtvy1SXJMT1fjn1iWJVXVDoVMzmdkUUW1aWcLw
-         cCgA==
-X-Gm-Message-State: AC+VfDyiUmOZb0jhuBR+u3V5fhbpdrHu8zF9wcAco+UeQ7GcI9O6bitj
-        1CPislZdKwIdbUfjz38CLDqgJH4qm6Xbj1Nt6+y74oA0Ak/it0vQhqk=
-X-Google-Smtp-Source: ACHHUZ5GTqd7fBY2t/VsImNxtKg3wE/Gu9bWc5wXf9VM1FTSPsP6J5EhYxlCZpUDcOPoJNXaDlmmKkil1MiOvKm6f0g=
-X-Received: by 2002:a1c:7307:0:b0:3f6:3ad:16a with SMTP id d7-20020a1c7307000000b003f603ad016amr3007271wmb.31.1685040419721;
- Thu, 25 May 2023 11:46:59 -0700 (PDT)
+        bh=aIsIFxmLlj97Nfx6D9vKSgsX1a6jDH3TwyPUkCdOSPQ=;
+        b=cVAcuZu1q7teCoPTpATzVuiHxUgZ9RTDmXaH6gP5z+WVndAAOV7peZPOPsQiP7BnqN
+         50BQYESE7+vr1cpA6h/NUYCiBB/ErRkKdQiA2gIkBXgbGLLHKnpevxCRFLqw3xwfBKiW
+         5nzgDENw77C/PGglzFUfIXkDhcfKaIiKJszQ4tWwE9nYfaH8hxbNh9OvxQ99pIbfSmD0
+         naeA2RHAFl6jsx3mo7OkIgqvaVT/mataEKoJIjLogAZT39T8QTGpBRKc2r6/bPPIsPgc
+         Zj52PiYF0IzgV5bxxe/RkiEbRJ3NgedSOHVKn6FCdOK56NQpDtqACwe3kxTqfZiGJj+W
+         by7w==
+X-Gm-Message-State: AC+VfDxKGXyNwq3zaNgTOalTHPseVS/srMpf3e4TdCrAyGMUkJHUOERG
+        RG5QIAd/VKQEEOxAHaXLGT436TVMSRiDF9c7+Zl7yuYJ
+X-Google-Smtp-Source: ACHHUZ6QTHtH9ZgDVRrxTKaVVJVN2WV+8sZSwjCXcXN3ZM+gzeV4luDSR23IkGeHv0kDQoX5TIRivw==
+X-Received: by 2002:ac2:47f0:0:b0:4f4:dbcc:54da with SMTP id b16-20020ac247f0000000b004f4dbcc54damr376820lfp.27.1685041124236;
+        Thu, 25 May 2023 11:58:44 -0700 (PDT)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id v28-20020ac2593c000000b004f3946030fasm305060lfi.68.2023.05.25.11.58.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 11:58:44 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2af20198f20so9808231fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:58:43 -0700 (PDT)
+X-Received: by 2002:a17:907:6d9e:b0:96f:4ee4:10d4 with SMTP id
+ sb30-20020a1709076d9e00b0096f4ee410d4mr2465428ejc.43.1685040638863; Thu, 25
+ May 2023 11:50:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230525173818.219633-1-royluo@google.com> <408575c0-2967-4cdb-92c7-1b2845038d20@rowland.harvard.edu>
-In-Reply-To: <408575c0-2967-4cdb-92c7-1b2845038d20@rowland.harvard.edu>
-From:   Roy Luo <royluo@google.com>
-Date:   Thu, 25 May 2023 11:46:23 -0700
-Message-ID: <CA+zupgwz8Mbd8=7ep7t0OU-34bbwsc9fMK4dHip0rgqD7FSd2A@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     raychi@google.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-2-mcgrof@kernel.org>
+ <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
+ <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com> <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
+In-Reply-To: <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 May 2023 11:50:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgWCDw58fZDLGYVqVC2ee-Zec25unewdHFp8syCZFumvg@mail.gmail.com>
+Message-ID: <CAHk-=wgWCDw58fZDLGYVqVC2ee-Zec25unewdHFp8syCZFumvg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate detection
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linux FS Devel <linux-fsdevel@vger.kernel.org>, hch@lst.de,
+        brauner@kernel.org, david@redhat.com, tglx@linutronix.de,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
+        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
+        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:02=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
-edu> wrote:
+On Thu, May 25, 2023 at 11:08=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
+g> wrote:
 >
-> On Thu, May 25, 2023 at 05:38:18PM +0000, Roy Luo wrote:
-> > Expose usb device state to userland as the information is useful in
-> > detecting non-compliant setups and diagnosing enumeration failures.
-> > For example:
-> > - End-to-end signal integrity issues: the device would fail port reset
-> >   repeatedly and thus be stuck in POWERED state.
-> > - Charge-only cables (missing D+/D- lines): the device would never ente=
-r
-> >   POWERED state as the HC would not see any pullup.
-> >
-> > What's the status quo?
-> > We do have error logs such as "Cannot enable. Maybe the USB cable is ba=
-d?"
-> > to flag potential setup issues, but there's no good way to expose them =
-to
-> > userspace.
-> >
-> > Why add a sysfs entry in struct usb_port instead of struct usb_device?
-> > The struct usb_device is not device_add() to the system until it's in
-> > ADDRESS state hence we would miss the first two states. The struct
-> > usb_port is a better place to keep the information because its life
-> > cycle is longer than the struct usb_device that is attached to the port=
-.
-> >
-> > Signed-off-by: Roy Luo <royluo@google.com>
-> > ---
+> Certainly on the track where I wish we could go. Now this goes tested.
+> On 255 cores:
 >
-> > diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-> > index e23833562e4f..110143568c77 100644
-> > --- a/drivers/usb/core/hub.h
-> > +++ b/drivers/usb/core/hub.h
-> > @@ -84,8 +84,10 @@ struct usb_hub {
-> >   * @peer: related usb2 and usb3 ports (share the same connector)
-> >   * @req: default pm qos request for hubs without port power control
-> >   * @connect_type: port's connect type
-> > + * @state: device state of the usb device attached to the port
+> Before:
 >
-> This member is essentially a duplicate of the .child member of the
-> usb_port structure.  That is, it points to the .state member of the
-> child device instead of to the child device itself, but this is pretty
-> much the same thing.  You could replace *(port_dev->state) with
-> port_dev->child->state.
+> vagrant@kmod ~ $ sudo systemd-analyze
+> Startup finished in 41.653s (kernel) + 44.305s (userspace) =3D 1min 25.95=
+8s
+> graphical.target reached after 44.178s in userspace.
 >
-Alan, thanks for the quick response!
-Yes, port_dev->state is indeed the same as port_dev->child->state. However,
-I still add port_dev->state because port_dev->child won't be assigned until
-the corresponding usb_device is in ADDRESS state.
-I wish I can assign get port_dev->child assigned earlier, but I think
-the current design - assign port_dev->child and device_add() after ADDRESS
-state - also makes sense because there are many ways that the enumeration
-could fail in the early stage. By adding port_dev->state, I can link
-usb_device->state to usb_port as soon as the usb_device is created to get
-around the limitation of port_dev->child.
-I would be very happy to hear other ideas.
+> root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/s=
+tats
+>  Virtual mem wasted bytes       1949006968
+>
+>
+> ; 1949006968/1024/1024/1024
+>         ~1.81515418738126754761
+>
+> So ~1.8 GiB... of vmalloc space wasted during boot.
+>
+> After:
+>
+> systemd-analyze
+> Startup finished in 24.438s (kernel) + 41.278s (userspace) =3D 1min 5.717=
+s
+> graphical.target reached after 41.154s in userspace.
+>
+> root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/s=
+tats
+>  Virtual mem wasted bytes       354413398
+>
+> So still 337.99 MiB of vmalloc space wasted during boot due to
+> duplicates.
 
+Ok. I think this will count as 'good enough for mitigation purposes'
 
-> > diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> > index 06a8f1f84f6f..7f3430170115 100644
-> > --- a/drivers/usb/core/port.c
-> > +++ b/drivers/usb/core/port.c
-> > @@ -160,6 +160,19 @@ static ssize_t connect_type_show(struct device *de=
-v,
-> >  }
-> >  static DEVICE_ATTR_RO(connect_type);
-> >
-> > +static ssize_t state_show(struct device *dev,
-> > +                       struct device_attribute *attr, char *buf)
-> > +{
-> > +     struct usb_port *port_dev =3D to_usb_port(dev);
-> > +     enum usb_device_state state =3D USB_STATE_NOTATTACHED;
-> > +
-> > +     if (port_dev->state)
-> > +             state =3D *port_dev->state;
-> > +
-> > +     return sprintf(buf, "%s\n",  usb_state_string(state));
->
-> This races with device addition and removal (and with device state
-> changes).  To prevent these races, you have to hold the
-> device_state_lock spinlock while accessing the child device and its
-> state.
->
-> Unfortunately that spinlock is private to hub.c, so you will have to
-> make it public before you can use it here.
->
-> Alan Stern
+> The reason is the exclusive_deny_write_access() must be
+> kept during the life of the module otherwise as soon as it is done
+> others can still race to load
+
+Yes. The exclusion only applies while the file is actively being read.
+
+> So with two other hunks added (2nd and 4th), this now matches parity with
+> my patch, not suggesting this is right,
+
+Yeah, we can't do that, because user space may quite validly want to
+write the file afterwards.
+
+Or, in fact, unload the module and re-load it.
+
+So the "exclusion" really needs to be purely temporary.
+
+That said, I considered moving the exclusion to module/main.c itself,
+rather than the reading part. That wouild get rid of the hacky "id =3D=3D
+READING_MODULE", and put the exclusion in the place that actually
+wants it.
+
+And that would allow us to at least extend that temporary exlusion a
+bit - we could keep it until the module has actually been loaded and
+inited.
+
+So it would probably improve on those numbers a bit more, but you'd
+still have the fundamental race where *serial* duplicates end up
+always wasting CPU effort and temporary vmalloc space.
+
+                   Linus
