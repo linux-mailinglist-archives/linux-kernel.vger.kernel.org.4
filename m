@@ -2,162 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888FD710F30
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4546710F3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241562AbjEYPKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S241519AbjEYPLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240923AbjEYPKa (ORCPT
+        with ESMTP id S240923AbjEYPLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:10:30 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB04E73
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:09:40 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2af316b4515so7110341fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685027322; x=1687619322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g5XsRCnJXw5agxTtSv8CFfkB96RGLAZ6espWkPg/3a0=;
-        b=kXPXhsYN7hQ2LhUGrPQ20GTon06sJ6QF0mLkvgipiXYB3oiK4KciklEkWoEIWZ3rSl
-         ynZBVV84FFY62lveh0ggZ3XRUNXdudxVdS1IpFHtKq+82MVjq7cOePQrQIrP12eKwK4z
-         RLJoIq7js+cnUfZI5o/oNwHA/MF40yxk1PB2LhlHh09P0qig8knvonMrC6tXdj0V+k/w
-         EK9dVRj4yZ56f71b8iHlqEyF5p3W4AcnkLjJdkuVrVQYps3d/d8Sj0M8mCUdtfbbXxOe
-         RfXMN+0HPm8EL9hlWwamXb+7/cpeyO0Dn2t6VVHZG6nVX6XW9PqZjo7306VPIhpjGrc1
-         9DEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685027322; x=1687619322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g5XsRCnJXw5agxTtSv8CFfkB96RGLAZ6espWkPg/3a0=;
-        b=DUVcD7mBhwb5lEYAguajQ5sUUTND77ncH+U+MKSV4EKkSCJSkPktER0maMaymJmLsV
-         38wE2jHNkjdMA4lI8SlUJdYXLSeWufXM3i98BswF4rqCEQSj3Oi18Ch7ssPhqTPRup7f
-         1hd02Y3m4Xa3FQilHEvqOkQKP7fc+xPhXd2uMcVLR+RqkwksLojS/6ZKAFnhVUM8hboM
-         ZVlBPQBQNTmy7SBpscZct6LI2EXYGBgStqWKaiQFLtUf8lBMMhzvqjsmcVFPXfJVjc8j
-         Bx+7iiU1rF1c3QfHgcHfk3z9eNVaE5BXGpR4ZvTsE161Z9a0EWWSJ2Hz9vSjXnbfZNk8
-         Va5g==
-X-Gm-Message-State: AC+VfDxBrcoXrAu90k1zt4boLY3JSyVKVXpjPcP0Hu4GQrfGeLRc7756
-        sSAzkke8jkuWRG8M/BAJf6ChIA==
-X-Google-Smtp-Source: ACHHUZ7o0OPFdjXoRrgjAnOYax+ZckVAwO/nALq8VnwdY7JZQ7NKMlB4OsXq9uuL1GVNuH5ZvmUORg==
-X-Received: by 2002:a2e:9d42:0:b0:2af:1c0a:20e1 with SMTP id y2-20020a2e9d42000000b002af1c0a20e1mr1013262ljj.52.1685027322146;
-        Thu, 25 May 2023 08:08:42 -0700 (PDT)
-Received: from debian (151.236.202.107.c.fiberdirekt.net. [151.236.202.107])
-        by smtp.gmail.com with ESMTPSA id w21-20020a2e9bd5000000b002ac7978f0a6sm271812ljj.100.2023.05.25.08.08.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:08:41 -0700 (PDT)
-Date:   Thu, 25 May 2023 17:08:39 +0200
-From:   =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
-        <ramon.nordin.rodriguez@ferroamp.se>
-To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, horatiu.vultur@microchip.com,
-        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
-        Thorsten.Kummermehr@microchip.com
-Subject: Re: [PATCH net-next v3 2/6] net: phy: microchip_t1s: replace
- read-modify-write code with phy_modify_mmd
-Message-ID: <ZG9599nfDnkcw8er@debian>
-References: <20230524144539.62618-1-Parthiban.Veerasooran@microchip.com>
- <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 11:11:48 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8677CE7B;
+        Thu, 25 May 2023 08:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=z7+nMZ9RFV52bXnLVvhiG04oxR20pwfVjg7lkDTaJjw=; b=V9GE/J7fz5RM6iLW+KQaCqCpCM
+        Vpi+7HFGIeJeaEgAJBxCh94gQqEs2yD8Uu00Gqw/R/FuWQNwZBD2/9Eo3FyKAQh8yryxXYclXUkhA
+        LjXAww/r0LardvpxWHUo62udMvLxASeXb4nPj4RqxQU37LWXYYNKw9entBzxb66iL/TI=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:47616 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q2Cbq-0000IA-Q9; Thu, 25 May 2023 11:10:35 -0400
+Date:   Thu, 25 May 2023 11:10:34 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        jringle@gridpoint.com, tomasz.mon@camlingroup.com,
+        l.perczak@camlintechnologies.com,
+        linux-serial <linux-serial@vger.kernel.org>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230525111034.fc59852a7f91c752ed39499d@hugovil.com>
+In-Reply-To: <2936e18f-44ea-faed-9fa0-2ddefe7c3194@linux.intel.com>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+        <20230525040324.3773741-6-hugo@hugovil.com>
+        <2936e18f-44ea-faed-9fa0-2ddefe7c3194@linux.intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 05/11] serial: sc16is7xx: fix broken port 0 uart init
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:15:35PM +0530, Parthiban Veerasooran wrote:
-> Replace read-modify-write code in the lan867x_config_init function to
-> avoid handling data type mismatch and to simplify the code.
-> 
-> Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-> ---
->  drivers/net/phy/microchip_t1s.c | 23 +++++++++++------------
->  1 file changed, 11 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/net/phy/microchip_t1s.c b/drivers/net/phy/microchip_t1s.c
-> index a42a6bb6e3bd..b5b5a95fa6e7 100644
-> --- a/drivers/net/phy/microchip_t1s.c
-> +++ b/drivers/net/phy/microchip_t1s.c
-> @@ -31,19 +31,19 @@
->   * W   0x1F 0x0099 0x7F80 ------
->   */
->  
-> -static const int lan867x_fixup_registers[12] = {
-> +static const u32 lan867x_fixup_registers[12] = {
->  	0x00D0, 0x00D1, 0x0084, 0x0085,
->  	0x008A, 0x0087, 0x0088, 0x008B,
->  	0x0080, 0x00F1, 0x0096, 0x0099,
->  };
->  
-> -static const int lan867x_fixup_values[12] = {
-> +static const u16 lan867x_fixup_values[12] = {
->  	0x0002, 0x0000, 0x3380, 0x0006,
->  	0xC000, 0x801C, 0x033F, 0x0404,
->  	0x0600, 0x2400, 0x2000, 0x7F80,
->  };
->  
-> -static const int lan867x_fixup_masks[12] = {
-> +static const u16 lan867x_fixup_masks[12] = {
->  	0x0E03, 0x0300, 0xFFC0, 0x000F,
->  	0xF800, 0x801C, 0x1FFF, 0xFFFF,
->  	0x0600, 0x7F00, 0x2000, 0xFFFF,
-> @@ -63,23 +63,22 @@ static int lan867x_config_init(struct phy_device *phydev)
->  	 * used, which might then write the same value back as read + modified.
->  	 */
->  
-> -	int reg_value;
->  	int err;
-> -	int reg;
->  
->  	/* Read-Modified Write Pseudocode (from AN1699)
->  	 * current_val = read_register(mmd, addr) // Read current register value
->  	 * new_val = current_val AND (NOT mask) // Clear bit fields to be written
->  	 * new_val = new_val OR value // Set bits
-> -	 * write_register(mmd, addr, new_val) // Write back updated register value
-> +	 * write_register(mmd, addr, new_val) // Write back updated register value.
-> +	 * Although AN1699 says Read, Modify, Write, the write is not required if
-> +	 * the register already has the required value.
->  	 */
+On Thu, 25 May 2023 14:20:59 +0300 (EEST)
+Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
 
-Nitpick, I think this block comment can be reduced to:
-/* The following block deviates from AN1699 which states that a values
- * should be written back, even if unmodified.
- * Which is not necessary, so it's safe to use phy_modify_mmd here.*/
+> On Thu, 25 May 2023, Hugo Villeneuve wrote:
+>=20
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >=20
+> > While experimenting with rs485 configuration on a SC16IS752 dual UART,
+>=20
+> You can remove this intro, it's not necessary.
 
- The comment I added was intended to describe why I was doing weird
- things, but now I think it's more interesting to describe why we're
- deviating from the AN.
+Fixed.
 
- Or the block comment could be dropped all togheter, I'm guessing no one
- is going to consult the AN if things 'just work'
+=20
+> > I found that the sc16is7xx_config_rs485() function was called only for
+> > the second port (index 1, channel B), causing initialization problems
+> > for the first port.
+>=20
+> Just start with:
+>=20
+> sc16is7xx_config_rs485() function is called only for ...
+>=20
+> > For the sc16is7xx driver, port->membase and port->mapbase are not set,
+> > and their default values are 0. And we set port->iobase to the device
+> > index. This means that when the first device is registered using the
+> > uart_add_one_port() function, the following values will be in the port
+> > structure:
+> >     port->membase =3D 0
+> >     port->mapbase =3D 0
+> >     port->iobase  =3D 0
+> >=20
+> > Therefore, the function uart_configure_port() in serial_core.c will
+> > exit early because of the following check:
+> > 	/*
+> > 	 * If there isn't a port here, don't do anything further.
+> > 	 */
+> > 	if (!port->iobase && !port->mapbase && !port->membase)
+> > 		return;
+> >=20
+> > Typically, I2C and SPI drivers do not set port->membase and
+> > port->mapbase. But I found that the max310x driver sets
+> > port->membase to ~0 (all ones).
+>=20
+> The max310x driver sets port->membase to ~0 (all ones) to solve the same=
+=20
+> problem.
 
->  	for (int i = 0; i < ARRAY_SIZE(lan867x_fixup_registers); i++) {
-> -		reg = lan867x_fixup_registers[i];
-> -		reg_value = phy_read_mmd(phydev, MDIO_MMD_VEND2, reg);
-> -		reg_value &= ~lan867x_fixup_masks[i];
-> -		reg_value |= lan867x_fixup_values[i];
-> -		err = phy_write_mmd(phydev, MDIO_MMD_VEND2, reg, reg_value);
-> -		if (err != 0)
-> +		err = phy_modify_mmd(phydev, MDIO_MMD_VEND2,
-> +				     lan867x_fixup_registers[i],
-> +				     lan867x_fixup_masks[i],
-> +				     lan867x_fixup_values[i]);
-> +		if (err)
->  			return err;
->  	}
->  
-> -- 
-> 2.34.1
-> 
+Fixed.
+
+
+> > By implementing the same change in our
+> > driver, uart_configure_port() is now correctly executed.
+>=20
+> our driver -> this driver
+
+Fixed.
+
+=20
+> This changelog was really well describing the problem! :-)
+>=20
+> > Fixes: dfeae619d781 ("serial: sc16is7xx")
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> > I am not sure if this change is the best long-term solution to this
+> > problem, and maybe uart_configure_port() itself could be modified to
+> > take into account the fact that some devices have all three *base
+> > values set to zero?
+>=20
+> Yeah, some other solution should be devised. Maybe we should add another=
+=20
+> .iotype for thse kind of devices. But I'm fine with this for this fix.
+> After editing the changelog, feel free to add:
+>=20
+> Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+
+Added.
+
+=20
+> > Also, many drivers use port->iobase as an index, is it the correct way
+> > to use it?
+>=20
+> "Many" for this and max310x? Besides that, uartlite.c has a comment which=
+=20
+> says "mark port in use".
+
+Ok,=20
+anyway with your approval I will remove these comments which will not part =
+of the final commit message anyway.
+
+Hugo.
+
+
+> > For example, for our driver, there was
+> > commit 5da6b1c079e6 ("sc16is7xx: Set iobase to device index") with the
+> > following explanation:
+> >     "Set the .iobase value to the relative index within the device to a=
+llow
+> >     infering the order through sysfs."
+> >=20
+> >  drivers/tty/serial/sc16is7xx.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is=
+7xx.c
+> > index af7e66db54b4..8a2fc6f89d36 100644
+> > --- a/drivers/tty/serial/sc16is7xx.c
+> > +++ b/drivers/tty/serial/sc16is7xx.c
+> > @@ -1443,6 +1443,7 @@ static int sc16is7xx_probe(struct device *dev,
+> >  		s->p[i].port.fifosize	=3D SC16IS7XX_FIFO_SIZE;
+> >  		s->p[i].port.flags	=3D UPF_FIXED_TYPE | UPF_LOW_LATENCY;
+> >  		s->p[i].port.iobase	=3D i;
+> > +		s->p[i].port.membase	=3D (void __iomem *)~0;
+> >  		s->p[i].port.iotype	=3D UPIO_PORT;
+> >  		s->p[i].port.uartclk	=3D freq;
+> >  		s->p[i].port.rs485_config =3D sc16is7xx_config_rs485;
+> >=20
