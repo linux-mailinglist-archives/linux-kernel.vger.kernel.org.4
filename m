@@ -2,149 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C607102DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCF57102E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235880AbjEYCYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 22:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S232530AbjEYC1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236525AbjEYCYP (ORCPT
+        with ESMTP id S229451AbjEYC1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 22:24:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68117139;
-        Wed, 24 May 2023 19:24:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03EB1635A0;
-        Thu, 25 May 2023 02:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0FEC433D2;
-        Thu, 25 May 2023 02:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684981453;
-        bh=1XyJN682bKPmnrFMOUA/Rz8FyBhig9nJpB9ztqCBcMA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UDEj8I3OQISu5wf/9VcTweiPKsdAojV5u/bdpiZ76ZZeRJmm0NuU7d2PHyvTL7njK
-         d8A3DpR/AMg7zrSetNBn/55/5Pza0YtFdIa1gBPMaKMEdDWqnNgTYnRKHLGXjuK7/U
-         WF/mQ7Hj/+wVbSO/gMBsnUPvndFEW5x+k+l0WgzjrO1aoMnDePhaHyLqb9ZKNFUi6G
-         zyZxqHGByC7Ds0cjyCxvWacmZrytuaPkhQ57OjM5fuRl1J7H/DCAdTgNSjDPsF+MBv
-         6MN1Eqc1YhJud4XYlX5di0PEFunkYoxqOkqg/nn6loUCe8yFTzWo4JECqhvOyaYZWe
-         eAR7Fy5Kq1lMQ==
-Date:   Thu, 25 May 2023 10:24:08 +0800
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] tracing/selftests: Update synthetic event selftest to
- use common_stacktrace
-Message-Id: <20230525102408.4b2750621cb1deeb05e58980@kernel.org>
-In-Reply-To: <20230523225402.55951f2f@rorschach.local.home>
-References: <20230523225402.55951f2f@rorschach.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 May 2023 22:27:45 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A467135;
+        Wed, 24 May 2023 19:27:41 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34P2Q6uO4002726, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34P2Q6uO4002726
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 25 May 2023 10:26:06 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 25 May 2023 10:26:17 +0800
+Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 25 May 2023 10:26:17 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Thu, 25 May 2023 10:26:17 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Ray Chi <raychi@google.com>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH v2 1/3] usb: phy: add usb phy notify port status API
+Date:   Thu, 25 May 2023 10:26:02 +0800
+Message-ID: <20230525022617.30537-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS01.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 22:54:29 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb port status change.
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> With the rename of the stacktrace field to common_stacktrace, update the
-> selftests to reflect this change. Copy the current selftest to test the
-> backward compatibility "stacktrace" keyword. Also the "requires" of that
-> test was incorrect, so it would never actually ran before. That is fixed
-> now.
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v1 to v2 change:
+    No change
+---
+ drivers/usb/core/hub.c  | 13 +++++++++++++
+ include/linux/usb/phy.h | 14 ++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-Looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thanks,
-
-> ---
->  .../trigger-synthetic-event-stack-legacy.tc   | 24 +++++++++++++++++++
->  .../trigger-synthetic-event-stack.tc          |  5 ++--
->  2 files changed, 26 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
-> new file mode 100644
-> index 000000000000..d0cd91a93069
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack-legacy.tc
-> @@ -0,0 +1,24 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: event trigger - test inter-event histogram trigger trace action with dynamic string param (legacy stack)
-> +# requires: set_event synthetic_events events/sched/sched_process_exec/hist "long[] stack' >> synthetic_events":README
-> +
-> +fail() { #msg
-> +    echo $1
-> +    exit_fail
-> +}
-> +
-> +echo "Test create synthetic event with stack"
-> +
-> +# Test the old stacktrace keyword (for backward compatibility)
-> +echo 's:wake_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
-> +echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
-> +echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(wake_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
-> +echo 1 > events/synthetic/wake_lat/enable
-> +sleep 1
-> +
-> +if ! grep -q "=>.*sched" trace; then
-> +    fail "Failed to create synthetic event with stack"
-> +fi
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
-> index 755dbe94ccf4..8f1cc9a86a06 100644
-> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
-> @@ -1,7 +1,7 @@
->  #!/bin/sh
->  # SPDX-License-Identifier: GPL-2.0
->  # description: event trigger - test inter-event histogram trigger trace action with dynamic string param
-> -# requires: set_event synthetic_events events/sched/sched_process_exec/hist "long[]' >> synthetic_events":README
-> +# requires: set_event synthetic_events events/sched/sched_process_exec/hist "can be any field, or the special string 'common_stacktrace'":README
->  
->  fail() { #msg
->      echo $1
-> @@ -10,9 +10,8 @@ fail() { #msg
->  
->  echo "Test create synthetic event with stack"
->  
-> -
->  echo 's:wake_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
-> -echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
-> +echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=common_stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
->  echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(wake_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
->  echo 1 > events/synthetic/wake_lat/enable
->  sleep 1
-> -- 
-> 2.39.2
-> 
-
-
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..b4fbbeae1927 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+ 		ret = 0;
+ 	}
+ 	mutex_unlock(&hub->status_mutex);
++
++	if (!ret) {
++		struct usb_device *hdev = hub->hdev;
++
++		if (hdev && !hdev->parent) {
++			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
++
++			if (hcd->usb_phy)
++				usb_phy_notify_port_status(hcd->usb_phy,
++					    port1 - 1, *status, *change);
++		}
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..53bf3540098f 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -144,6 +144,10 @@ struct usb_phy {
+ 	 */
+ 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
+ 
++	/* notify phy port status change */
++	int	(*notify_port_status)(struct usb_phy *x,
++		int port, u16 portstatus, u16 portchange);
++
+ 	/* notify phy connect status change */
+ 	int	(*notify_connect)(struct usb_phy *x,
+ 			enum usb_device_speed speed);
+@@ -316,6 +320,16 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+ 		return 0;
+ }
+ 
++static inline int
++usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus,
++	    u16 portchange)
++{
++	if (x && x->notify_port_status)
++		return x->notify_port_status(x, port, portstatus, portchange);
++	else
++		return 0;
++}
++
+ static inline int
+ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
+ {
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.34.1
+
