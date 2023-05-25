@@ -2,42 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CC3710589
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632B571058E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 08:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbjEYF4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 01:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S234043AbjEYGBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 02:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjEYF4V (ORCPT
+        with ESMTP id S229458AbjEYGBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 01:56:21 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F67BE7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:56:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VjR-1Ir_1684994174;
-Received: from 30.97.48.238(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjR-1Ir_1684994174)
-          by smtp.aliyun-inc.com;
-          Thu, 25 May 2023 13:56:15 +0800
-Message-ID: <c3dbd82a-75c2-969d-02ce-b7a31b29a95e@linux.alibaba.com>
-Date:   Thu, 25 May 2023 13:56:14 +0800
+        Thu, 25 May 2023 02:01:38 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34155D3;
+        Wed, 24 May 2023 23:01:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684994441; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=H7Gb/GRK434tf5OoFV6XbjyMYYnHGuSRucN4PO3V2e+FGGD7KOBK5mY8HNnINmHC5czdnwrxagyq6/Cwd0pLVvcj9GSpAda+e1jrJ+jAglsyYaJkTbkOA+gS/+PxjqT90bIvSdke9JRz4scMS63L21s3yx+ANT+7ySBpnmAi4rc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1684994441; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=fZWlL+X281/Zl5DVb1uux7mzuNKw9DdevEn+JSeEMus=; 
+        b=RC0kMIuyUQBt+7JzNiM4zZK/VETPVvyil8YX3M/Qd9EXvQHTgsmhHc5FNNr8Vt1CX79/Dk50rlu72I1jo3vLMbkaRZaFxMh+wLrw0in32EeSA9WHu5LjSLxvcD6uv3UTSgIx675qrDRkF3JQyh2rIHWqID2RUiWKGEcqjhllJvs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684994441;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=fZWlL+X281/Zl5DVb1uux7mzuNKw9DdevEn+JSeEMus=;
+        b=R99uKyKyy5+i/nPLyF4nQwGNSzfNX7s46DuXv0vApoQhpBWhSwMbYxatZldcTkBt
+        76j0n5fU/z0mz8tM/xhDGUraHLQc752afncsVaXfLoVQBR3smjZ972NlVlczdww3ZFB
+        O3VHFsAvmQxMUUtme1TTDxjCSZXmg/KggcKKGhYU=
+Received: from [10.10.10.217] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1684994440573922.120964931391; Wed, 24 May 2023 23:00:40 -0700 (PDT)
+Message-ID: <98d3cefc-0198-f3b2-8ab6-c99ed50e5f57@arinc9.com>
+Date:   Thu, 25 May 2023 09:00:27 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] erofs: don't calculate new start when expanding read
- length
-To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
-        jefflexu@linux.alibaba.com, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
-        zhangwen@coolpad.com
-References: <20230525055147.13220-1-zbestahu@gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230525055147.13220-1-zbestahu@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next 03/30] net: dsa: mt7530: properly support
+ MT7531AE and MT7531BE
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-4-arinc.unal@arinc9.com>
+ <20230524144817.dubqwmfbthes2ggh@skbuf>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230524144817.dubqwmfbthes2ggh@skbuf>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,59 +84,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/5/25 22:51, Yue Hu wrote:
-> From: Yue Hu <huyue2@coolpad.com>
+On 24.05.2023 17:48, Vladimir Oltean wrote:
+> On Mon, May 22, 2023 at 03:15:05PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> Introduce the p5_sgmii field to store the information for whether port 5
+>> has got SGMII or not.
+>>
+>> Move the comment about MT7531AE and MT7531BE to mt7531_setup(), where the
+>> switch is identified.
+>>
+>> Get rid of mt7531_dual_sgmii_supported() now that priv->p5_sgmii stores the
+>> information. Address the code where mt7531_dual_sgmii_supported() is used.
+>>
+>> Get rid of mt7531_is_rgmii_port() which just prints the opposite of
+>> priv->p5_sgmii.
+>>
+>> Remove P5_INTF_SEL_GMAC5_SGMII. The p5_interface_select enum is supposed to
+>> represent the mode that port 5 is being used in, not the hardware
+>> information of port 5. Set p5_intf_sel to P5_INTF_SEL_GMAC5 instead, if
+>> port 5 is not dsa_is_unused_port().
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> Acked-by: Daniel Golle <daniel@makrotopia.org>
+>> ---
 > 
-> We only expand the trailing edge and not the leading edge.  So no need
-> to obtain new start again.  Let's use the existing ->headoffset instead.
+> Pretty busy patch, and after reading it, I'm not sure:
 > 
-> Signed-off-by: Yue Hu <huyue2@coolpad.com>
-> ---
->   fs/erofs/zdata.c | 12 +++++-------
->   1 file changed, 5 insertions(+), 7 deletions(-)
+> - why? (this seems to be absent from the commit message)
+> - how are MT7531AE and MT7531BE supported any more properly after this
+>    change, as the commit title claims
+> - what is the overall effect, other than just refactoring. If that's
+>    all, what's written on the tin needs to be a better representation of
+>    what's inside.
 > 
-> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-> index 874fee35af32..bab8dcb8e848 100644
-> --- a/fs/erofs/zdata.c
-> +++ b/fs/erofs/zdata.c
-> @@ -1828,26 +1828,24 @@ static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
->   {
->   	struct inode *inode = f->inode;
->   	struct erofs_map_blocks *map = &f->map;
-> -	erofs_off_t cur, end;
-> +	erofs_off_t cur, end, headoffset = f->headoffset;
+> Pure refactoring is not a bad goal in itself, as long as we're on the
+> same page that there is a justification which makes the new code better
+> than the old one.
 
+With this patch, instead of reading the MT7531_TOP_SIG_SR register 
+multiple times, the register will be read once and the value will be 
+stored on the p5_sgmii field. This saves unnecessary reads of the 
+register. I will mention this on the patch log.
 
-That is not quite useful, or could you merge this info the original patch?
+This is already being done on the U-Boot driver.
 
-Thanks,
-Gao Xiang
+https://github.com/u-boot/u-boot/blob/master/drivers/net/mtk_eth.c#L859
 
->   	int err;
->   
->   	if (backmost) {
->   		if (rac)
-> -			end = f->headoffset + readahead_length(rac) - 1;
-> +			end = headoffset + readahead_length(rac) - 1;
->   		else
-> -			end = f->headoffset + PAGE_SIZE - 1;
-> +			end = headoffset + PAGE_SIZE - 1;
->   		map->m_la = end;
->   		err = z_erofs_map_blocks_iter(inode, map,
->   					      EROFS_GET_BLOCKS_READMORE);
->   		if (err)
->   			return;
->   
-> -		/* expend ra for the trailing edge if readahead */
-> +		/* expand ra for the trailing edge if readahead */
->   		if (rac) {
-> -			loff_t newstart = readahead_pos(rac);
-> -
->   			cur = round_up(map->m_la + map->m_llen, PAGE_SIZE);
-> -			readahead_expand(rac, newstart, cur - newstart);
-> +			readahead_expand(rac, headoffset, cur - headoffset);
->   			return;
->   		}
->   		end = round_up(end, PAGE_SIZE);
+I think "improve MT7531AE and MT7531BE support" will be a better subject.
+
+Arınç
