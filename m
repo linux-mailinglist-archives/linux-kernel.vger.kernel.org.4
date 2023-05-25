@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A19711441
+	by mail.lfdr.de (Postfix) with ESMTP id C91D0711442
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241736AbjEYSgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S241870AbjEYSg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241815AbjEYSfx (ORCPT
+        with ESMTP id S241690AbjEYSfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:35:53 -0400
+        Thu, 25 May 2023 14:35:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C0210C7;
-        Thu, 25 May 2023 11:34:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A9910DD;
+        Thu, 25 May 2023 11:34:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D518560A47;
-        Thu, 25 May 2023 18:34:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48350C433D2;
-        Thu, 25 May 2023 18:34:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6110D648A9;
+        Thu, 25 May 2023 18:34:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A2FC433EF;
+        Thu, 25 May 2023 18:34:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039660;
-        bh=fpqoULnVRtw5Y0dDZwpIfs4sYiENDoFspuX+MK4wXMo=;
+        s=k20201202; t=1685039661;
+        bh=yCycSPHSw5nWKhjjZfEVu6ifWKOZhPfIznzIcS3wp84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dfJLQNe2BQrjWRUFBMtNkeAasROe8CHI4B6QYB11rBu68MtFIIPPDGUBN3TxEejRV
-         o9ryTeFTsGIG0+OTM8lB4R2KIPfqgF10qHhKM/XG04Ri81B/fPMJqj36PD/VbyudHH
-         DJ2wlZfYeS7vfxdWMoBXhJW6VwlxxXdnbFUfuimucNuiL0Ed7g6D+1P2PtoJ2ml1Sk
-         1PbFYdJdB6+Rrr+WJsCGQjwrV+nS4+FDjsaEtoHEo3Sr2Qltp2bp3PfbDrxNhxshX/
-         htC5mhD4kMqA5S1GfHdR36EHAYZ6gvTEG0J79nWMuIMUV/QUpky6MuMfXXOHGORpHE
-         66Q5jCttt7Aaw==
+        b=BRL0jC3W8xbYHkgbSkkueKRSywnlm2H4OFYaQXemfERcbP9ddpm6qCvk4zq0BQdKN
+         mJDDKkeuxd/zVMEttOqHCg+OMCEEOPITyigvHyyZOeccQI4bf8g34TC8bToO0ZcqL2
+         POU/6xl92Wm6s20u5zyOLvHDQ2dDWZmqlff0gr2U12G2hK4Rrd2O4V0TneIOVO0Suf
+         T1ZlRaQBkdjC4kwQNpWB7MSXlNUPXKPS61PRe/Kzd+wJARJhS2DOIbMSHsRNwJq/uu
+         a+uje7fb1yIBjmHKpJYLw//ZYH4i7p+HCxlI54gqATEbuTdyInoZpBQ/3T9Z/TAxL9
+         cbfmFCuUNlHpQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>, gor@linux.ibm.com,
-        svens@linux.ibm.com, christophe.jaillet@wanadoo.fr,
-        nrb@linux.ibm.com, linux-s390@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 38/67] s390/ipl: fix IPIB virtual vs physical address confusion
-Date:   Thu, 25 May 2023 14:31:15 -0400
-Message-Id: <20230525183144.1717540-38-sashal@kernel.org>
+Cc:     =?UTF-8?q?Rub=C3=A9n=20G=C3=B3mez?= <mrgommer@proton.me>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 39/67] ACPI: resource: Add IRQ override quirk for LG UltraPC 17U70P
+Date:   Thu, 25 May 2023 14:31:16 -0400
+Message-Id: <20230525183144.1717540-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
 References: <20230525183144.1717540-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -59,46 +59,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Rubén Gómez <mrgommer@proton.me>
 
-[ Upstream commit 2facd5d3980f3a26c04fe6ec8689a1d019a5812c ]
+[ Upstream commit 71a485624c4cbb144169852d7bb8ca8c0667d7a3 ]
 
-The pointer to IPL Parameter Information Block is stored
-in the absolute lowcore for later use by dump tools. That
-pointer is a virtual address, though it should be physical
-instead.
+Add an ACPI IRQ override quirk for LG UltraPC 17U70P to address the
+internal keyboard problem on it.
 
-Note, this does not fix a real issue, since virtual and
-physical addresses are currently the same.
-
-Suggested-by: Heiko Carstens <hca@linux.ibm.com>
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=213031
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216983
+Signed-off-by: Rubén Gómez Agudo <mrgommer@proton.me>
+[ rjw: Subject, changelog, white space damage fixes ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/kernel/ipl.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/acpi/resource.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/s390/kernel/ipl.c b/arch/s390/kernel/ipl.c
-index 5f0f5c86963a9..e43ee9becbbb9 100644
---- a/arch/s390/kernel/ipl.c
-+++ b/arch/s390/kernel/ipl.c
-@@ -1936,14 +1936,13 @@ static struct shutdown_action __refdata dump_action = {
+diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+index e8492b3a393ab..0800a9d775580 100644
+--- a/drivers/acpi/resource.c
++++ b/drivers/acpi/resource.c
+@@ -516,6 +516,17 @@ static const struct dmi_system_id maingear_laptop[] = {
+ 	{ }
+ };
  
- static void dump_reipl_run(struct shutdown_trigger *trigger)
- {
--	unsigned long ipib = (unsigned long) reipl_block_actual;
- 	struct lowcore *abs_lc;
- 	unsigned int csum;
++static const struct dmi_system_id lg_laptop[] = {
++	{
++		.ident = "LG Electronics 17U70P",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LG Electronics"),
++			DMI_MATCH(DMI_BOARD_NAME, "17U70P"),
++		},
++	},
++	{ }
++};
++
+ struct irq_override_cmp {
+ 	const struct dmi_system_id *system;
+ 	unsigned char irq;
+@@ -532,6 +543,7 @@ static const struct irq_override_cmp override_table[] = {
+ 	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+ 	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+ 	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
++	{ lg_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+ };
  
- 	csum = (__force unsigned int)
- 	       csum_partial(reipl_block_actual, reipl_block_actual->hdr.len, 0);
- 	abs_lc = get_abs_lowcore();
--	abs_lc->ipib = ipib;
-+	abs_lc->ipib = __pa(reipl_block_actual);
- 	abs_lc->ipib_checksum = csum;
- 	put_abs_lowcore(abs_lc);
- 	dump_run(trigger);
+ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
 -- 
 2.39.2
 
