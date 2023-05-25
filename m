@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4178C7110F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CD071111F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240750AbjEYQ1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S235291AbjEYQiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240568AbjEYQ1P (ORCPT
+        with ESMTP id S235080AbjEYQiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:27:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8D8E6E;
-        Thu, 25 May 2023 09:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=spc29Cm0a+oO128y4mo0IaM9JJ5/Y6pCdvJ8tr2Dfag=; b=sEI6Kn0a/+TFGY+DqA8SqsqAMN
-        r7wV/N+GHENm2Gx0P3CUwavLtTrdIDeJfvkRnuCSc3HzFZzTQd67RxcBAT3dA7+CfxrwV85NQuG10
-        zRwGHZMZ79ECgzmQGchKlnTlACoWCjc7DnZDP+G0S405EljESD4eSB/MtdNl5raXm245Eg0NWlGEf
-        Hz6I5Yc+uVW2wh1GyuVmvu2tBufkFykrDMWiVbr6lPOV1EJhjKd5789WUng75huN0nTLl4IE+AMb0
-        xJvhIHyFZSAAZIqnh4u87tCrTL07cphpiuPcS3XioCP/E/HEguj6wQubhuKM3Y84R3pHu+rEEvh5q
-        KO5lmlHQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2Dnk-00H5bT-26;
-        Thu, 25 May 2023 16:26:56 +0000
-Message-ID: <dd0e4fac-16ef-5ca6-db8d-21ecf1c0e802@infradead.org>
-Date:   Thu, 25 May 2023 09:26:55 -0700
+        Thu, 25 May 2023 12:38:01 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3366195
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:37:59 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3a611b3ddso1478514e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685032678; x=1687624678;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SNfCUobrUAUA40iHcw/nxcay95zNsz3B8ogepnZvesE=;
+        b=hX9uByaQAh6r7X5V2dES+20lCPIMCD6w+iaY0Oj7clZFaG3SjaSngMzrGlXDwHWFzR
+         8xr+Ny07W3tUaqCSSj4yeJeeVqij7mvecUolAWpEHfaZdpFY3ULu2JHC6sfO+OA5sHhC
+         87AY24b8aRCM0dRqEzwlYt+J3n/dHAgHZJ7Lo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685032678; x=1687624678;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SNfCUobrUAUA40iHcw/nxcay95zNsz3B8ogepnZvesE=;
+        b=GPa3Jc31fB+i9h8MVbpPnaGy07qKsZz+5kEDWEtKgITliOdkyaQ+HyzY3H7xzGM4yp
+         s5cx7dBn+Z1MaeCd2z/XmFMfXicj0CxLPvKJQJlRZt+5BfCMEVKKu2vilDZOZR97Lfmi
+         55JXPbSzrMuQcM/GeW3PslAQM7H7ZRbFb7/t6jhQR07dMsPFgMptUm6FipuOKQbk4Adn
+         IVScq4+PozqOJqTgadNDAftV2VK1N4VJ8ldt4ItyS9guAHgOOOWts+b7VztnDI0GYoWD
+         2902oB9zJXfo3SFEwQyszzx45jrnSCHSGltdmsX+sTL2GN2aWgh4+a9SfLHX7wDu81pw
+         Hmig==
+X-Gm-Message-State: AC+VfDwnIYjFUhDUosN6junqmgHavyrm5AdGiDD4fHCHdffrNIvgyNA0
+        GACsUmrnuU40b/o2Uu05DP11MYCTGgpN3rYq7XyeaAE7
+X-Google-Smtp-Source: ACHHUZ6VPqV9nt/EEzRnVYbVCdKB2LVoEoXfP5ZyzPw0MNG81yti+g2+E8ixHdUQUVe+KOwLGFBXfw==
+X-Received: by 2002:ac2:5630:0:b0:4f4:c6df:22a0 with SMTP id b16-20020ac25630000000b004f4c6df22a0mr868442lff.18.1685032677758;
+        Thu, 25 May 2023 09:37:57 -0700 (PDT)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id p2-20020a19f002000000b004edb8fac1cesm263084lfc.215.2023.05.25.09.37.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 09:37:57 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f3a611b3ddso1478491e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:37:57 -0700 (PDT)
+X-Received: by 2002:a17:907:a407:b0:96f:5511:8803 with SMTP id
+ sg7-20020a170907a40700b0096f55118803mr1880847ejc.22.1685032321217; Thu, 25
+ May 2023 09:32:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] soc: fsl: cpm1: Fix TSA and QMC dependencies in
- case of COMPILE_TEST
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel test robot <lkp@intel.com>
-References: <20230523085902.75837-1-herve.codina@bootlin.com>
- <20230523085902.75837-2-herve.codina@bootlin.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230523085902.75837-2-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <ZGxfrOLZ4aN9/MvE@infradead.org> <20230522205744.2825689-1-dhowells@redhat.com>
+ <3068545.1684872971@warthog.procyon.org.uk> <ZG2m0PGztI2BZEn9@infradead.org> <3215177.1684918030@warthog.procyon.org.uk>
+In-Reply-To: <3215177.1684918030@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 May 2023 09:31:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjaqHgd4u63XdZoTPs1YCJnDZ7-GQHKKdFrT32y2-__tw@mail.gmail.com>
+Message-ID: <CAHk-=wjaqHgd4u63XdZoTPs1YCJnDZ7-GQHKKdFrT32y2-__tw@mail.gmail.com>
+Subject: Re: Extending page pinning into fs/direct-io.c
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 24, 2023 at 1:47=E2=80=AFAM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> True - but I was thinking of just treating the zero_page specially and ne=
+ver
+> hold a pin or a ref on it.  It can be checked by address, e.g.:
+>
+>     static inline void bio_release_page(struct bio *bio, struct page *pag=
+e)
+>     {
+>             if (page =3D=3D ZERO_PAGE(0))
+>                     return;
 
+That won't actually work.
 
-On 5/23/23 01:59, Herve Codina wrote:
-> In order to compile tsa.c and qmc.c, CONFIG_CPM must be set.
-> 
-> Without this dependency, the linker fails with some missing
-> symbols for COMPILE_TEST configurations that need QMC without
-> enabling CPM.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202305160221.9XgweObz-lkp@intel.com/
+We do have cases that try to use the page coloring that we support.
 
-Fixes all of my CPM build issues. (with patch 2/2 also applied)
-Thanks.
+Admittedly it seems to be only rmda that does it directly with
+something like this:
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+        vmf->page =3D ZERO_PAGE(vmf->address);
 
-> ---
->  drivers/soc/fsl/qe/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/fsl/qe/Kconfig b/drivers/soc/fsl/qe/Kconfig
-> index 7268c2fbcbc1..e0d096607fef 100644
-> --- a/drivers/soc/fsl/qe/Kconfig
-> +++ b/drivers/soc/fsl/qe/Kconfig
-> @@ -36,7 +36,7 @@ config UCC
->  config CPM_TSA
->  	tristate "CPM TSA support"
->  	depends on OF && HAS_IOMEM
-> -	depends on CPM1 || COMPILE_TEST
-> +	depends on CPM1 || (CPM && COMPILE_TEST)
->  	help
->  	  Freescale CPM Time Slot Assigner (TSA)
->  	  controller.
-> @@ -47,7 +47,7 @@ config CPM_TSA
->  config CPM_QMC
->  	tristate "CPM QMC support"
->  	depends on OF && HAS_IOMEM
-> -	depends on CPM1 || (FSL_SOC && COMPILE_TEST)
-> +	depends on CPM1 || (FSL_SOC && CPM && COMPILE_TEST)
->  	depends on CPM_TSA
->  	help
->  	  Freescale CPM QUICC Multichannel Controller
+but you can get arbitrary zero pages by pinning or GUPing them from
+user space mappings.
 
--- 
-~Randy
+Now, the only architectures that *use* multiple zero pages are - I
+think - MIPS (including Loongarch) and s390.
+
+So it's rare, but it does happen.
+
+             Linus
