@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE8A710FC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8748B710FC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241474AbjEYPiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S241667AbjEYPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234225AbjEYPiH (ORCPT
+        with ESMTP id S241327AbjEYPjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:38:07 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7FC99;
-        Thu, 25 May 2023 08:38:07 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-456f7ea8694so237357e0c.0;
-        Thu, 25 May 2023 08:38:07 -0700 (PDT)
+        Thu, 25 May 2023 11:39:07 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8F099
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:39:05 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96f5685f902so118977466b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:39:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685029086; x=1687621086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/9d5HraNv7RlWulERyCsylj00zboFv7KU4ycsvo9n/0=;
-        b=TZzb5+2/XZxAz9DJKwqmMw7eEONON3ZLhRN2IzIcwwV8U/9lRUVWaoqY3P9GL/EGbk
-         lHycfck0D0xnwuf9zv3933Jz3UjhS9mM0YLFQOqWRHju0zNrBLfCT4agxSQk/Af755vY
-         hfruqStbC4UQDilS0swaaLIKFT+dIt5lICIDi0E1Oxglx0UBDioJ2XjBvSmhE+C0UA5H
-         j9RebkYy8DQqCRnuTv7IOx8l/jXGxTmc5vUtqhwsYttr1xrCSQ9LpUN2fLTOzXDUC6sQ
-         bYIIeVqT7AggfNtyCtK7cJ6vTFtlpTN3e2efPD/vZWZAJ4ad4DWxCNbuzCHyw06eGw6P
-         f/wQ==
+        d=gmail.com; s=20221208; t=1685029144; x=1687621144;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GfIokcEoUcrcdH5Go22anmvwVolnzE/qQC062YOEZBw=;
+        b=cvguMHhN93mqSQdUe1bjg940LLueVFfQ47fuxKmIVJY/Ts6fCEhW9ogRFrfJA+RRR+
+         RBcXG0QSx/sambwpr+QIBK1LV5uqmTgGP6ooQuHGTTZN/FhWue1mcwJxp98ulY6Hp9ML
+         6DLu7ziSS/4wROUF6FS0zJELXciorIweRVpuj6oxGyigLIT+1P9HuQ7JF7fbhPF42A3r
+         2SaUdYpBLNiM7uyoY1rEzwfQaAW2nm+DrC5FBvAteUOt+p4kXLFOEjj0RZqXI9cYNp3b
+         /FMfrlChKs5sx75VUR8S4uiPFqH3wUVDvM6TOvTAUAAGxuEQViiHd2/iVDQdiLyC1IcU
+         gfeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685029086; x=1687621086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/9d5HraNv7RlWulERyCsylj00zboFv7KU4ycsvo9n/0=;
-        b=COyK/rgmq0air5TrClTvsbA/PczhWJaoJ8bhb+l1eoiqGegpVUCn73uHvgnDnI+req
-         WO6o3ceLWyPSvsAfijoYmIiEvh48Afba1fdUPAajiSNKxhej078VEfM9bMPjzJi+XOwF
-         J+qJqw9fh/2AiPHEWtyiaGcnGc1rIAcrURz6hatT6wrek3Trog5Fn2nSWHGaj7SyFJ94
-         Hvi8qlA8wj1SVjXM3KZkHjma2fSoELqHuVdyjE/KqRHVGmGMAb4dDC6PI0FtrfHMASyA
-         R0y81aPty+GIi96R25nrtqHemiNlOAUfxnDibLLeq9oskMshzFXMcdx11Ivh5JfiLVD8
-         +MaA==
-X-Gm-Message-State: AC+VfDzKTYAgn2VSc9MTKCXmB+bNsbl1qsm5B4i8RAvJaMe1BqtzcmQS
-        Sd97SCQ4ehk3oQB9kHHPBvqK3vM06cNYAPqqh3s=
-X-Google-Smtp-Source: ACHHUZ7GgANnM2SaBGxcq1S0uMC0DIpsfaSw0ggHBRlPsSoDmq9Ip+hZNqc6c3RHcrhX/tGb2TnYqeP+dE8yzmGi2A8=
-X-Received: by 2002:a1f:5584:0:b0:450:a3:7c2e with SMTP id j126-20020a1f5584000000b0045000a37c2emr5960444vkb.7.1685029086050;
- Thu, 25 May 2023 08:38:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685029144; x=1687621144;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GfIokcEoUcrcdH5Go22anmvwVolnzE/qQC062YOEZBw=;
+        b=WSqi1ykm7O9HEh2dD/efedCskCp0HaymN2R9VXaUkOKGlDLd4+UHpdlfThBpYM3pOS
+         MZ6MeeHzvzllfzdGR8cGxCHMW9JBVgGpwlltjWE5Gbi/GRetlLFSNqDiaPiijgIrHb/r
+         9F+8LN6asOtk0R9HwU7y4+8CRleMv6TNgVGz6JPt0qNRZhYX8ifLVvvntnD1o6q8Jkj8
+         1CsoLLbFUCsItnYrhvUOVVOLPaTaWx0JivO3BYHc4w+/LSP7iDOv0tIjDLthSIC0YxJB
+         9evQVRkX1vWLdsEUpH2TdiARC07eDjytTH5FhqmBK89jsXUw5YvrIQNBrhMMgXzm+VOE
+         kgoQ==
+X-Gm-Message-State: AC+VfDyv1W0il2Pu7cjryoU/6WGRvsoRRvvz70Sibm4N99GANuMC1Ivc
+        DFz+ByaGlizEsjZKu3lF8cJkMAU8NiCOdQ==
+X-Google-Smtp-Source: ACHHUZ6YyP9kiSwwOJOPi/Waygje0qyYEtUEHEDx7A8q1UjnvXuwJoPlLNUOL0Q5qhBjpxhoJ/uQiA==
+X-Received: by 2002:a17:906:4fc7:b0:973:9337:1aac with SMTP id i7-20020a1709064fc700b0097393371aacmr2177841ejw.60.1685029143624;
+        Thu, 25 May 2023 08:39:03 -0700 (PDT)
+Received: from Osmten.. ([103.84.150.78])
+        by smtp.gmail.com with ESMTPSA id j22-20020a1709062a1600b0096b1206aa3fsm979608eje.89.2023.05.25.08.39.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 08:39:03 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     sre@kernel.org, jinpu.wang@ionos.com
+Cc:     linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH] omap_ssi_port.c: Drop error checking for debugfs_create_dir
+Date:   Thu, 25 May 2023 20:38:37 +0500
+Message-Id: <20230525153837.13198-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230523223944.691076-1-Kenny.Ho@amd.com> <01936d68-85d3-4d20-9beb-27ff9f62d826@lunn.ch>
- <CAB9dFdt4-cBFhEqsTXk9suE+Bw-xcpM0n3Q6rFmBaa+8A5uMWQ@mail.gmail.com>
- <c0fda91b-1e98-420f-a18a-16bbed25e98d@lunn.ch> <CAOWid-erNGD24Ouf4fAJJBqm69QVoHOpNt0E-G+Wt=nq1W4oBQ@mail.gmail.com>
- <5b1355b8-17f7-49c8-b7b5-3d9ecdb146ce@lunn.ch> <CAOWid-dYtkcKuNxoOyf3yqSJ7OtcNjaqJLVX1QhRUhYSOO6vHA@mail.gmail.com>
- <30d65ea9170d4f60bd76ed516541cb46@AcuMS.aculab.com> <CAOWid-eEbeeU9mOpwgOatt5rHQhRt+xPrsQ1fsMemVZDdeN=MQ@mail.gmail.com>
- <81d01562a59a4fb49cd4681ebcf2e74a@AcuMS.aculab.com>
-In-Reply-To: <81d01562a59a4fb49cd4681ebcf2e74a@AcuMS.aculab.com>
-From:   Kenny Ho <y2kenny@gmail.com>
-Date:   Thu, 25 May 2023 11:37:54 -0400
-Message-ID: <CAOWid-d=OFn7JS5JvsK9qc7X6HeZgOm5OAd1_g2=_GZgpKRZnA@mail.gmail.com>
-Subject: Re: [PATCH] Remove hardcoded static string length
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Kenny Ho <Kenny.Ho@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,25 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:04=E2=80=AFAM David Laight <David.Laight@aculab.=
-com> wrote:
-> But isn't UTS_RELEASE usually much shorter?
-> I think it is what 'uname -r' prints, the longest I've seen recently
-> is "3.10.0-1127.19.1.el7.x86_64" - well under the limit.
+This patch fixes the error checking in spi-dw-core.c in
+omap_ssi_port.c. The DebugFS kernel API is developed in
+a way that the caller can safely ignore the errors that
+occur during the creation of DebugFS nodes.
 
-Usually yes, but I believe LOCALVERSION can be appended to
-KERNELRELEASE / UTS_RELEASE which can makes it much longer.
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+---
+ drivers/hsi/controllers/omap_ssi_port.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-> > "The standard formulation seems to be: <project> <version> built
-> > <yyyy>-<mm>-<dd>"
->
-> Which I don't recall the string actually matching?
-> Also the people who like reproducible builds don't like __DATE__.
+diff --git a/drivers/hsi/controllers/omap_ssi_port.c b/drivers/hsi/controllers/omap_ssi_port.c
+index 7ad41599baa5..8feb91d256fd 100644
+--- a/drivers/hsi/controllers/omap_ssi_port.c
++++ b/drivers/hsi/controllers/omap_ssi_port.c
+@@ -151,23 +151,20 @@ static int ssi_div_set(void *data, u64 val)
+ 
+ DEFINE_DEBUGFS_ATTRIBUTE(ssi_sst_div_fops, ssi_div_get, ssi_div_set, "%llu\n");
+ 
+-static int ssi_debug_add_port(struct omap_ssi_port *omap_port,
++static void ssi_debug_add_port(struct omap_ssi_port *omap_port,
+ 				     struct dentry *dir)
+ {
+ 	struct hsi_port *port = to_hsi_port(omap_port->dev);
+ 
+ 	dir = debugfs_create_dir(dev_name(omap_port->dev), dir);
+-	if (IS_ERR(dir))
+-		return -ENOMEM;
++
+ 	omap_port->dir = dir;
+ 	debugfs_create_file("regs", S_IRUGO, dir, port, &ssi_port_regs_fops);
+ 	dir = debugfs_create_dir("sst", dir);
+-	if (IS_ERR(dir))
+-		return -ENOMEM;
++
+ 	debugfs_create_file_unsafe("divisor", 0644, dir, port,
+ 				   &ssi_sst_div_fops);
+ 
+-	return 0;
+ }
+ #endif
+ 
+@@ -1217,11 +1214,8 @@ static int ssi_port_probe(struct platform_device *pd)
+ 	pm_runtime_enable(omap_port->pdev);
+ 
+ #ifdef CONFIG_DEBUG_FS
+-	err = ssi_debug_add_port(omap_port, omap_ssi->dir);
+-	if (err < 0) {
+-		pm_runtime_disable(omap_port->pdev);
+-		goto error;
+-	}
++	 ssi_debug_add_port(omap_port, omap_ssi->dir);
++
+ #endif
+ 
+ 	hsi_add_clients_from_dt(port, np);
+-- 
+2.34.1
 
-That's correct, it was not matching even when it was introduced.  I am
-simply taking that as people caring about the content and not simply
-making rxrpc_version_string =3D=3D UTS_RELEASE.  The current format is:
-
-"linux-" UTS_RELEASE " AF_RXRPC"
-
-Kenny
