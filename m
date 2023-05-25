@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698ED710F66
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71760710F7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241763AbjEYPW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S241778AbjEYPZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241762AbjEYPWW (ORCPT
+        with ESMTP id S241592AbjEYPZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:22:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3808918D
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685028089;
+        Thu, 25 May 2023 11:25:10 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AB618D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:25:08 -0700 (PDT)
+Date:   Thu, 25 May 2023 17:25:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685028307;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0V518OsqUrGCxG2mh1VgKtRufND8RHTunMvUY4Z4UHo=;
-        b=BBAKNuUPpEv2ECqiqtY49NhlgIKuCbuj9hRGw/OxTKJxNLvNPFBgYa4E9XIeLGmcQdqiKi
-        cW+OrarvwTFqU4nV8pf54iak+fEQyZcNYbpbf7sJy6vwV1fmdBn1VyYDEKXU9CfgltySKs
-        aUv3KTBncmtfU5n6RIVVwB6pAvz3xtY=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-580-SmlqZtjRPGSJqZE98RDf7w-1; Thu, 25 May 2023 11:21:27 -0400
-X-MC-Unique: SmlqZtjRPGSJqZE98RDf7w-1
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7748b05ab49so229356639f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:21:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685028086; x=1687620086;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0V518OsqUrGCxG2mh1VgKtRufND8RHTunMvUY4Z4UHo=;
-        b=d0EkUtIhmBBCfR8tlqadvMNbaoGDSVRxaftjdhggKrpobTuiNZgc2hO4S6CANueHzD
-         a/e60XHnKhlZ8ZmkBHBXJR88Fn/zp2exuqi+4nnU6/BVuJLYIP5gewFRs6+Tsfv543+p
-         sgkSE+NH7QfZIm5r1qCfzDvj4MKkaQFHsznuZTFHJ5yGU3osDnDF/0WtkeST0jK+BLMs
-         ZKJ+6qHI4L2G977nSr6KpeKzFXQTkDVBK9CYaHwwHIvcLo99TfBP3uorS2iaUlcfn1Qb
-         4DsvkVay75Kz+y4eb7f9HK68Hh3vQWykhtIuY1PmA8oXF+s0q4dotF9aaUzTn3FZ3cm1
-         8Bhw==
-X-Gm-Message-State: AC+VfDyeIaDVdNY25MeGiqWqDXtpydm2KSPmjiKGisuYlqZog84wrbVl
-        oMp+OED82u1Z/lCnvw0Sz3q149iRxkcD1Dv/F189rrLVZzVYIALU+EnsVTS1wikAGb6gwHjly2D
-        O9iOovvKB8ZCTAPCMJ0DCLOgQ
-X-Received: by 2002:a05:6602:195:b0:76c:8877:861f with SMTP id m21-20020a056602019500b0076c8877861fmr12238212ioo.1.1685028086169;
-        Thu, 25 May 2023 08:21:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5Dvwin5vA64+Lt/6YHmWpeTY/wo7iHQfofVJf9Xm4liofqM3m0CvvT/D9oG9z9hJVh0cakng==
-X-Received: by 2002:a05:6602:195:b0:76c:8877:861f with SMTP id m21-20020a056602019500b0076c8877861fmr12238202ioo.1.1685028085781;
-        Thu, 25 May 2023 08:21:25 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id cn15-20020a0566383a0f00b0041a9022c3dasm458603jab.118.2023.05.25.08.21.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:21:25 -0700 (PDT)
-Date:   Thu, 25 May 2023 09:21:23 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
-        kevin.tian@intel.com
-Subject: Re: [PATCH v2 1/1] vfio/nvgpu: Add vfio pci variant module for
- grace hopper
-Message-ID: <20230525092123.2a41c1e4.alex.williamson@redhat.com>
-In-Reply-To: <ZGQfszAGGKhCp20q@nvidia.com>
-References: <20230509040734.24392-1-ankita@nvidia.com>
-        <20230516150914.26ae99c3.alex.williamson@redhat.com>
-        <ZGQfszAGGKhCp20q@nvidia.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        bh=8IcW9rC36xzwMdbICTITL2z/ciN/8f8kQF9VFbHEV/M=;
+        b=DipyCF2VJlIvZhy1SaQDDJGeqdtzdKSIr3hldqaBDuALGxnV4F9qpRgOAa3xV7N98OKai9
+        XwCef9hPfzy0so0FmGGN8viFmO33snwdazU2vP+6iCqgpvUIHsLWgDrQ1B/wNpea4BPHh7
+        azCuXvSsLtnCXBm8BwHx11lbxRfk2vgz4/cnGONP5vo6OAUGe3V7ySW5O9UMNfOQ3npZ0+
+        Qs3FSIxHQnyJgxQNbx/tHPPp8jmah93HuOO2JJkMYGk6R6fFhJknAR845k0oy0sXlPQr8i
+        8oSt6GIhAifm93+R5c4DJDCP0qt7RCMPVHxOi/PPCDZx3y8rZL/D8NWGPVaD6A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685028307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8IcW9rC36xzwMdbICTITL2z/ciN/8f8kQF9VFbHEV/M=;
+        b=72LYjcqsdNTY0LTHn7swrYGO8pKrQ0aok0hlESiwa1Kf4cNTPCOoBIiFOH63b6FtezcjJu
+        aaEx+/ePBQAdWhCg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Crystal Wood <swood@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Stultz <jstultz@google.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 1/4] sched/core: Provide sched_rtmutex() and expose
+ sched work helpers
+Message-ID: <20230525152505.obklNijZ@linutronix.de>
+References: <20230427111937.2745231-1-bigeasy@linutronix.de>
+ <20230427111937.2745231-2-bigeasy@linutronix.de>
+ <20230503132051.GB1676736@hirez.programming.kicks-ass.net>
+ <20230510150415.6BXNs0I1@linutronix.de>
+ <20230511134308.GV4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230511134308.GV4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,75 +76,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 21:28:35 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+On 2023-05-11 15:43:08 [+0200], Peter Zijlstra wrote:
+> > If a sched_submit_work() would use a mutex_t lock then we would
+> > recursively call blk_flush_plug() before setting tsk->blocked_on and
+>=20
+> I'm not following, mutex code sets tsk->blocked_on before it calls
+> schedule(), getting into the very same problem you have with rt_mutex.
+>=20
+> > perform the same callback and block on the very same lock (again).
+> > This isn't different compared to !RT therefore you must not use a
+> > sleeping lock (mutex_t) in the callback.
+>=20
+> See the enforcement thing; today nothing stops the code from using a
+> mutex or other blocking primitives here.
 
-> On Tue, May 16, 2023 at 03:09:14PM -0600, Alex Williamson wrote:
-> 
-> > > +# SPDX-License-Identifier: GPL-2.0-only
-> > > +config NVGPU_VFIO_PCI
-> > > +	tristate "VFIO support for the GPU in the NVIDIA Grace Hopper Superchip"
-> > > +	depends on ARM64 || (COMPILE_TEST && 64BIT)
-> > > +	select VFIO_PCI_CORE  
-> > 
-> > I think this should be a 'depends on' as well, that's what we have for
-> > the other vfio-pci variant drivers.  
-> 
-> It should be removed completely, AFAICT:
-> 
-> config VFIO_PCI
->         tristate "Generic VFIO support for any PCI device"
->         select VFIO_PCI_CORE
-> 
-> Ensures it is turned on
-> 
-> if VFIO_PCI
-> source "drivers/vfio/pci/mlx5/Kconfig"
-> endif
+I tried to explain that if blk_flush_plug() blocks on a mutex_t then it
+will invoke schedule() -> blk_flush_plug() -> schedule() ->
+blk_flush_plug() -> =E2=80=A6 until it runs out of stack.
 
-The source command actually comes after the VFIO_PCI endif, the mlx5
-Kconfig is sourced if PCI && MMU.
+So it is broken regardless of RT but yes we don't enforce it and yes
+people might use it and it would work as long as the lock is not
+contended.
 
-> Autoamtically injects a 'depends on VFIO_PCI' to all the enclosed
-> kconfig statements (and puts them nicely in the menu)
-> 
-> So we have everything needed already
-> 
-> SELECT is the correct action since it doesn't have a config text.
+> > Do I rebase my stuff on top of his then and we good?
+>=20
+> I just suggested he try something else:
+>=20
+>   https://lkml.kernel.org/r/20230510150946.GO4253@hirez.programming.kicks=
+-ass.net
+>=20
+> if that works out this worry goes away.
+>=20
+> If we get PROVE_RAW_LOCK_NESTING usable, something like the below might
+> help out with the validation part...
 
-In fact I think it's the current variant drivers that are incorrect to
-make use of 'depends on', this makes those variant drivers implicitly
-depend on VFIO_PCI, but it should instead be possible to build a kernel
-that doesn't include vfio-pci but does include mlx5-vfio-pci, or other
-vfio-pci variant drivers.  Currently if I disable VFIO_PCI I no longer
-have the option to select either the mlx5 or hisi_acc drivers, they
-actually depend only on VFIO_PCI_CORE, but currently only VFIO_PCI can
-select VFIO_PCI_CORE.
+Okay. So if I don't collide with workqueue do you buy this or do you
+ask for something else. I'm not sure=E2=80=A6
 
-I withdraw my objection to using select, the other variant drivers
-should adopt select as well, imo.
- 
-> > Is our test for vm_end < vm_start in vfio-pci-core just paranoia?  I
-> > don't see an equivalent here.  
-> 
-> Yes, mm core will not invoke the op with something incorrect.
->  
-> > Can we also get a comment in the code outlining the various reasons
-> > that this "BAR" doesn't need the disabled access protections that
-> > vfio-pci-core implements?  For example outlining the behavior relative
-> > to BAR access while the memory enable bit is disabled, the bus being in
-> > reset, or the device being in a low-power state.  
-> 
-> The HW has some "isolation" feature that kicks in and safely
-> disconnects the GPU from the CPU.
-> 
-> A lot of work has been done to make things like VFIO and KVM safe
-> against machine checks/etc under basically all circumstances.
+Regarding PROVE_RAW_LOCK_NESTING: If I boot -rc3 with `quiet' then I
+don't see any complains.
+Otherwise it is printk during boot (caller is holding raw_spinlock_t and
+then printk() calls to serial driver with spinlock_t).
+=46rom time to time ppl send "fixes" for PROVE_RAW_LOCK_NESTING splats so
+I would guess they boot with `quiet' and there isn't much else. So we
+are getting close here I guess.
 
-So a comment in the code to reflect that the hardware takes this into
-account such that we don't need to worry about mmap access during bus
-reset or otherwise disabled MMIO access of the PCI device would not be
-unreasonable.  Thanks,
+Do you want me to test the suggested validation map somewhere? Because
+if it works, it could be queued.
 
-Alex
-
+Sebastian
