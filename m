@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07697102B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2A27102BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbjEYCND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 22:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S235517AbjEYCP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235437AbjEYCMk (ORCPT
+        with ESMTP id S233504AbjEYCPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 22:12:40 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B19CD3;
-        Wed, 24 May 2023 19:12:36 -0700 (PDT)
-X-UUID: 9a2c7740faa111ed9cb5633481061a41-20230525
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=eCqP2l+Kqdf5yUqoHyrwDaNfrpAvvcfVlREwKoCaOqs=;
-        b=Qukh1Icz8GtFgzsd5Nfoj8eBlaUkVCe6WR4mBlWd0uehu8iI0QJAyfiJiaTW7Ut7uRZgm49yzJbR9fYenQtOBmien/a79T008xbZDE7TPRDrIGSRPIUUztbzVw2lGU5ZULYbthDZBplPnYJhlG7WhCDoLv9i82EAC/NFiunBgUM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:7c52b6b6-d726-4dbb-856c-680af51c0394,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.25,REQID:7c52b6b6-d726-4dbb-856c-680af51c0394,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:0b2d473c-de1e-4348-bc35-c96f92f1dcbb,B
-        ulkID:230525101232CBEBVDHU,BulkQuantity:0,Recheck:0,SF:48|38|29|28|17|19,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 9a2c7740faa111ed9cb5633481061a41-20230525
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1004778313; Thu, 25 May 2023 10:12:30 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 25 May 2023 10:12:28 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 25 May 2023 10:12:28 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
-CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5,8/8] media: mediatek: vcodec: Add dbgfs help function
-Date:   Thu, 25 May 2023 10:12:19 +0800
-Message-ID: <20230525021219.23638-9-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230525021219.23638-1-yunfei.dong@mediatek.com>
-References: <20230525021219.23638-1-yunfei.dong@mediatek.com>
+        Wed, 24 May 2023 22:15:24 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC0CE4B;
+        Wed, 24 May 2023 19:14:54 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 7A8463200C74;
+        Wed, 24 May 2023 22:13:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 24 May 2023 22:13:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684980823; x=1685067223; bh=cCCWDiGBHNH/1
+        3JSmnh5Q5sUosrLOySbAC+m9QUmDV4=; b=SoiaSR/lHyn8YlOGNvmlUKSK5ABhj
+        WvyfcAQtlXujwXqam0dUdFo++bThKQz2VJ0jIZF2SIPOOt1jUO2Kq+SNaDeeMhKy
+        XE7L3kkG7VtJviJ7IKCsK/54QOwjUPpizCM743Pr+zfgjQLFDQf/afy+wFXFIMGL
+        I0m1KX6CrPG/Wy0dUzI2L0M5YuA1Q2EqIhIlU5ReTfSSniU0HEItcoBZXkmttYlN
+        hUV6En9JyJTbX0TdOLpS8/XSDmseJo6RimWO7XccimpMd49Ak9kYwvvVg0Fxba+l
+        rqBVZhHFBQAQEhTxmHfwlZ+QVDMtQcmXv3MH20zidvG+L0U/SJYsL/gJQ==
+X-ME-Sender: <xms:VsRuZDX5LQnF7AcKlts6u7mcixpjRZUO4j9X1iLhOOVrscSS6x936A>
+    <xme:VsRuZLnVSjE0Dl1hDKrIeCaNJ2FWVTTal2ZIySNfyILTxi_eSwk66C85xA0QQPIn-
+    48p2JXcylwuOKTYUuE>
+X-ME-Received: <xmr:VsRuZPaNzaS_lZWPwauTyIOxF3MB4Kwmew9PfjR4F6jaD2DFpAynx9kjahk5dRsO8-WldaxrQJ7-WSGTkSsw-bC0Rnk1WBoQKis>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejiedgheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeigefgjefgvdfgjeefveethfeguddukeetudejteejieegleevgfevudek
+    keffgfenucffohhmrghinhepuggvsghirghnrdhorhhgpdhunhhigidrrhhspdhsihhgnh
+    grlhhsrdhinhgtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:VsRuZOXhu1D7NFkCmH7mNOhMcpSZefjrWjIyBvRJ54ajY2gSmkDdMw>
+    <xmx:VsRuZNmwUj7wM--ySqJD8iwhOIOeHqmEjMyq2QUsYFPDUmNOIVnlBw>
+    <xmx:VsRuZLfeCovWomzNnKlalq_uc3jCDvISqkyMbPIszx83ceRlEJN3_Q>
+    <xmx:V8RuZDjE1WtQ0A_3N0T_fjx4_bH-RW4Wc2hZ5EMK44lEzgwKgFck-g>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 24 May 2023 22:13:39 -0400 (EDT)
+Date:   Thu, 25 May 2023 12:13:46 +1000 (AEST)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     Michael Schmitz <schmitzmic@gmail.com>,
+        Andreas Schwab <schwab@linux-m68k.org>, stable@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] m68k: Move signal frame following exception on
+ 68020/030
+In-Reply-To: <CAMuHMdX_0F0hSZKqBBCN3876BmfwbQb1_+N3h-V8xs5ouRXF=A@mail.gmail.com>
+Message-ID: <74df27ea-ad17-e869-695b-a7e8b042289c@linux-m68k.org>
+References: <cover.1683365892.git.fthain@linux-m68k.org> <9e66262a754fcba50208aa424188896cc52a1dd1.1683365892.git.fthain@linux-m68k.org> <CAMuHMdX_0F0hSZKqBBCN3876BmfwbQb1_+N3h-V8xs5ouRXF=A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,62 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Getting dbgfs help information with command "echo -help > vdec".
+On Mon, 22 May 2023, Geert Uytterhoeven wrote:
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 24 ++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+> 
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> i.e. will queue as a fix in the m68k for-v6.4 branch.
+> 
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-index 237d0dc8a1fc..2372fc449b45 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-@@ -52,6 +52,23 @@ static void mtk_vdec_dbgfs_get_format_type(struct mtk_vcodec_ctx *ctx, char *buf
- 	*used += curr_len;
- }
- 
-+static void mtk_vdec_dbgfs_get_help(char *buf, int *used, int total)
-+{
-+	int curr_len;
-+
-+	curr_len = snprintf(buf + *used, total - *used,
-+			    "help: (1: echo -'info' > vdec 2: cat vdec)\n");
-+	*used += curr_len;
-+
-+	curr_len = snprintf(buf + *used, total - *used,
-+			    "\t-picinfo: get resolution\n");
-+	*used += curr_len;
-+
-+	curr_len = snprintf(buf + *used, total - *used,
-+			    "\t-format: get output & capture queue format\n");
-+	*used += curr_len;
-+}
-+
- static ssize_t mtk_vdec_dbgfs_write(struct file *filp, const char __user *ubuf,
- 				    size_t count, loff_t *ppos)
- {
-@@ -84,6 +101,11 @@ static ssize_t mtk_vdec_dbgfs_read(struct file *filp, char __user *ubuf,
- 	if (!buf)
- 		return -ENOMEM;
- 
-+	if (strstr(dbgfs->dbgfs_buf, "-help")) {
-+		mtk_vdec_dbgfs_get_help(buf, &used_len, total_len);
-+		goto read_buffer;
-+	}
-+
- 	if (strstr(dbgfs->dbgfs_buf, "-picinfo"))
- 		dbgfs_index[MTK_VDEC_DBGFS_PICINFO] = true;
- 
-@@ -110,7 +132,7 @@ static ssize_t mtk_vdec_dbgfs_read(struct file *filp, char __user *ubuf,
- 			mtk_vdec_dbgfs_get_format_type(ctx, buf, &used_len, total_len);
- 	}
- 	mutex_unlock(&dbgfs->dbgfs_lock);
--
-+read_buffer:
- 	ret = simple_read_from_buffer(ubuf, count, ppos, buf, used_len);
- 	kfree(buf);
- 	return ret;
--- 
-2.25.1
+Thanks Geert!
 
+> I plan to send this upstream later this week, so any additional
+> testing would be appreciated.
+> 
+
+If there is a userland program that needs all of its sigaltstack space, 
+and cannot accomodate a 256 byte margin, it will be hard to find that 
+program. Often these signal stacks are used for handling (would-be) fatal 
+signals that may not happen in regression testing.
+
+If we fix the kernel and a failure eventually does show up in a userland 
+program, we may be able to patch that program. Looking through Debian's 
+codebase, which is easily searchable, I found lots of different ways to 
+determine the signal stack size. But it's not clear to me which programs 
+calculate it correctly.
+
+Many programs take the architecture's SIGSTKSZ or MINSIGSTKSZ or 
+getauxval(AT_MINSIGSTKSZ) or sysconf(_SC_SIGSTKSZ), or some combination, 
+and then apply an arbitrary safety factor. Some add a constant or apply a 
+lower bound that may reflect the actual requirements of the signal 
+handler. Some just use page_size().
+
+https://sources.debian.org/src/rust-generator/0.7.1-1/src/stack/unix.rs/?hl=85#L84
+https://sources.debian.org/src/ocaml/4.13.1-4/runtime/signals_nat.c/?hl=293#L289
+https://sources.debian.org/src/ruby3.1/3.1.2-7/signal.c/?hl=538#L531
+https://sources.debian.org/src/python3.11/3.11.2-6/Modules/faulthandler.c/?hl=1385#L1368
+https://sources.debian.org/src/llvm-toolchain-9/1:9.0.1-20/llvm/lib/Support/Unix/Signals.inc/?hl=259#L250
+https://sources.debian.org/src/musl/1.2.3-1/src/aio/aio.c/?hl=98#L83
+https://sources.debian.org/src/libreoffice/4:7.4.5-2/external/breakpad/SIGSTKSZ.patch/?hl=4#L4
+https://sources.debian.org/src/libuv1/1.44.2-1/src/unix/thread.c/?hl=168#L165
+https://sources.debian.org/src/stress-ng/0.15.08-1/core-helper.c/?hl=3290#L3276
+https://sources.debian.org/src/cysignals/1.11.2+ds-2/src/cysignals/implementation.c/?hl=446#L442
+https://sources.debian.org/src/vim/2:9.0.1378-2/src/os_unix.c/?hl=828#L811
+https://sources.debian.org/src/m4/1.4.19-3/m4/sigaltstack.m4/?hl=88#L72
+https://sources.debian.org/src/varnish/7.1.1-1.1/bin/varnishd/cache/cache_main.c/?hl=342#L330
+https://sources.debian.org/src/sfxr-qt/1.5.0+ds-2/debian/patches/catch2-patch/?hl=3223#L3121
