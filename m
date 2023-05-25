@@ -2,68 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BA87102C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDED7102C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbjEYCQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 22:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S233504AbjEYCQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237470AbjEYCQM (ORCPT
+        with ESMTP id S230324AbjEYCQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 22:16:12 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BF71B0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 19:15:50 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-561bd0d31c1so341657b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 19:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684980944; x=1687572944;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f+ykmbunbSMTavDYm2cC5wCQ70/w+yrfqKokU2pUa/E=;
-        b=ZQPTv5nvfUy0tCUe+PyijpeyjNtyS3t+oE375SI9VbLxJTzUtZpvxT6GmIulV45OaJ
-         PgQC/pMRoePHBFKps1iaVohDrCxsU8JB02eBZXGzQ0gM0xRR80OuDBX+yFu9sacRwhwP
-         oSLuU0L5IeSwu4JUbV3atF8Soje0Fo0VrGvqpX86Fw/I1kkzbFiZk/uuTehU0BXftsjW
-         EiCRWkJWN65/Me1pgLNoHu/EXQs8RGc1f3uVqLDaJ24EozLuP75f3r2O7MNl7ExsyzEd
-         KqxfJjMC09sYG0+froE8i35zKiyqug9kr4xIEEsiPbQ61FxN6gz6DpjDRaNG1AatejKD
-         mFLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684980944; x=1687572944;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f+ykmbunbSMTavDYm2cC5wCQ70/w+yrfqKokU2pUa/E=;
-        b=SGNizCbEgr3LjnQzymjHL+OES24cx0LUH87a7LXm4HifD+X83KqkBwBvgTGsao7xFM
-         FQRfbaNKpy1/BhLd6O6mCGU7ltFt36kerzMTMWVNv+m8+5mE+ouPPwMZOdxbW/SUyKZx
-         IfmKvICVczhqLLynLVZeq1tl37CF/5uZysr1tmlEX9R8iw5upKi5oDrEhIXLYy+NM2vb
-         BZG051P2oMeW+h2Lf+9ntCqEb+lROOZRhtRyKx2WM+tYLKGyEMZIRD+q3Nz+EUYBwwwc
-         y952q+xlNfh8U5P/P+MRCkl5aRSCTfRAddedLtaXxk0oATNbZ/BIV/E5YUru39m21Bn8
-         2T0g==
-X-Gm-Message-State: AC+VfDz3IDaVfwW/pksRaGBd2MWRMMhzVSdYndAKxLZlNktlJ5psKO6r
-        wtHCDnZF36sK/yfiswiifoMBN2AGfuv5hay4nOsn
-X-Google-Smtp-Source: ACHHUZ7DBGKRnzGPMn8pKO1h24akzMY7IvEQlCqulZs21z3hu3zLql0mOGpOGcNJWDfCq2t0t+xz5dFsHHENC31W2XE=
-X-Received: by 2002:a0d:cc92:0:b0:561:c184:6568 with SMTP id
- o140-20020a0dcc92000000b00561c1846568mr21324234ywd.18.1684980944143; Wed, 24
- May 2023 19:15:44 -0700 (PDT)
+        Wed, 24 May 2023 22:16:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 111F3E47;
+        Wed, 24 May 2023 19:16:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC3BD1042;
+        Wed, 24 May 2023 19:16:49 -0700 (PDT)
+Received: from [10.162.43.6] (unknown [10.162.43.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 52CB33F762;
+        Wed, 24 May 2023 19:16:03 -0700 (PDT)
+Message-ID: <3a777e9c-8a84-7ecb-8b19-606e7692eabe@arm.com>
+Date:   Thu, 25 May 2023 07:46:00 +0530
 MIME-Version: 1.0
-References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
- <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
- <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com> <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
-In-Reply-To: <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 24 May 2023 22:15:33 -0400
-Message-ID: <CAHC9VhReahw8G4Vc0eMdhQMLhGYE53=X48akC13rN4EPkiF3tQ@mail.gmail.com>
-Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Eric Paris <eparis@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v4 01/36] mm: Convert page_table_check_pte_set() to
+ page_table_check_ptes_set()
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-arch@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-2-willy@infradead.org>
+Content-Language: en-US
+In-Reply-To: <20230315051444.3229621-2-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,40 +47,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 2:05=E2=80=AFPM Ivan Babrou <ivan@cloudflare.com> w=
-rote:
->
-> On Tue, May 23, 2023 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > > Could you elaborate on what exactly you would like to see added? It's
-> > > not clear to me what is missing.
-> >
-> > I should have been more clear, let me try again ...
-> >
-> > From my perspective, this patch adds code and complexity to deal with
-> > the performance impact of auditing.  In some cases that is the right
-> > thing to do, but I would much rather see a more in-depth analysis of
-> > where the audit hot spots are in this benchmark, and some thoughts on
-> > how we might improve that.  In other words, don't just add additional
-> > processing to bypass (slower, more involved) processing; look at the
-> > processing that is currently being done and see if you can find a way
-> > to make it faster.  It will likely take longer, but the results will
-> > be much more useful.
->
-> The fastest way to do something is to not do it to begin with.
 
-While you are not wrong, I believe you and I are focusing on different
-things.  From my perspective, you appear primarily concerned with
-improving performance by reducing the overhead of auditing.  I too am
-interested in reducing the audit overhead, but I also place a very
-high value on maintainable code, perhaps more than performance simply
-because the current audit code quality is so very poor.
-Unfortunately, the patch you posted appears to me as yet another
-bolt-on performance tweak that doesn't make an attempt at analyzing
-the current hot spots of syscall auditing, and ideally offering
-solutions.  Perhaps ultimately this approach is the only sane thing
-that can be done, but I'd like to see some analysis first of the
-syscall auditing path.
 
---=20
-paul-moore.com
+On 3/15/23 10:44, Matthew Wilcox (Oracle) wrote:
+> Tell the page table check how many PTEs & PFNs we want it to check.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+> ---
+>  arch/arm64/include/asm/pgtable.h |  2 +-
+>  arch/riscv/include/asm/pgtable.h |  2 +-
+>  arch/x86/include/asm/pgtable.h   |  2 +-
+>  include/linux/page_table_check.h | 14 +++++++-------
+>  mm/page_table_check.c            | 14 ++++++++------
+>  5 files changed, 18 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 0bd18de9fd97..9428748f4691 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -358,7 +358,7 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  			      pte_t *ptep, pte_t pte)
+>  {
+> -	page_table_check_pte_set(mm, addr, ptep, pte);
+> +	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+>  	return __set_pte_at(mm, addr, ptep, pte);
+>  }
+>  
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index ab05f892d317..b516f3b59616 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -459,7 +459,7 @@ static inline void __set_pte_at(struct mm_struct *mm,
+>  static inline void set_pte_at(struct mm_struct *mm,
+>  	unsigned long addr, pte_t *ptep, pte_t pteval)
+>  {
+> -	page_table_check_pte_set(mm, addr, ptep, pteval);
+> +	page_table_check_ptes_set(mm, addr, ptep, pteval, 1);
+>  	__set_pte_at(mm, addr, ptep, pteval);
+>  }
+>  
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 15ae4d6ba476..1031025730d0 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -1022,7 +1022,7 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
+>  static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  			      pte_t *ptep, pte_t pte)
+>  {
+> -	page_table_check_pte_set(mm, addr, ptep, pte);
+> +	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+>  	set_pte(ptep, pte);
+>  }
+>  
+> diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
+> index 01e16c7696ec..ba269c7009e4 100644
+> --- a/include/linux/page_table_check.h
+> +++ b/include/linux/page_table_check.h
+> @@ -20,8 +20,8 @@ void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
+>  				  pmd_t pmd);
+>  void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+>  				  pud_t pud);
+> -void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+> -				pte_t *ptep, pte_t pte);
+> +void __page_table_check_ptes_set(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, pte_t pte, unsigned int nr);
+>  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+>  				pmd_t *pmdp, pmd_t pmd);
+>  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+> @@ -73,14 +73,14 @@ static inline void page_table_check_pud_clear(struct mm_struct *mm,
+>  	__page_table_check_pud_clear(mm, addr, pud);
+>  }
+>  
+> -static inline void page_table_check_pte_set(struct mm_struct *mm,
+> +static inline void page_table_check_ptes_set(struct mm_struct *mm,
+>  					    unsigned long addr, pte_t *ptep,
+> -					    pte_t pte)
+> +					    pte_t pte, unsigned int nr)
+>  {
+>  	if (static_branch_likely(&page_table_check_disabled))
+>  		return;
+>  
+> -	__page_table_check_pte_set(mm, addr, ptep, pte);
+> +	__page_table_check_ptes_set(mm, addr, ptep, pte, nr);
+>  }
+>  
+>  static inline void page_table_check_pmd_set(struct mm_struct *mm,
+> @@ -138,9 +138,9 @@ static inline void page_table_check_pud_clear(struct mm_struct *mm,
+>  {
+>  }
+>  
+> -static inline void page_table_check_pte_set(struct mm_struct *mm,
+> +static inline void page_table_check_ptes_set(struct mm_struct *mm,
+>  					    unsigned long addr, pte_t *ptep,
+> -					    pte_t pte)
+> +					    pte_t pte, unsigned int nr)
+>  {
+>  }
+>  
+> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> index 25d8610c0042..e6f4d40caaa2 100644
+> --- a/mm/page_table_check.c
+> +++ b/mm/page_table_check.c
+> @@ -184,20 +184,22 @@ void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+>  }
+>  EXPORT_SYMBOL(__page_table_check_pud_clear);
+>  
+> -void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+> -				pte_t *ptep, pte_t pte)
+> +void __page_table_check_ptes_set(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, pte_t pte, unsigned int nr)
+>  {
+> +	unsigned int i;
+> +
+>  	if (&init_mm == mm)
+>  		return;
+>  
+> -	__page_table_check_pte_clear(mm, addr, *ptep);
+> +	for (i = 0; i < nr; i++)
+> +		__page_table_check_pte_clear(mm, addr, ptep[i]);
+>  	if (pte_user_accessible_page(pte)) {
+> -		page_table_check_set(mm, addr, pte_pfn(pte),
+> -				     PAGE_SIZE >> PAGE_SHIFT,
+> +		page_table_check_set(mm, addr, pte_pfn(pte), nr,
+>  				     pte_write(pte));
+>  	}
+>  }
+> -EXPORT_SYMBOL(__page_table_check_pte_set);
+> +EXPORT_SYMBOL(__page_table_check_ptes_set);
+>  
+>  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+>  				pmd_t *pmdp, pmd_t pmd)
