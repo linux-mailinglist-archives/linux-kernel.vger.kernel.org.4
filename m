@@ -2,202 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED001710955
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D08710954
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240803AbjEYJ4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        id S240791AbjEYJ4u convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 05:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240762AbjEYJ4j (ORCPT
+        with ESMTP id S240750AbjEYJ4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 May 2023 05:56:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6FB1A7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:56:34 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q27hv-000885-Ei; Thu, 25 May 2023 11:56:31 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q27hu-002h3F-O0; Thu, 25 May 2023 11:56:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q27ht-007oDQ-Ot; Thu, 25 May 2023 11:56:29 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Philipp Marek <philipp@marek.priv.at>
-Subject: [PATCH 3/3] w1: gpio: rename pointer to driver data from pdata to ddata
-Date:   Thu, 25 May 2023 11:56:24 +0200
-Message-Id: <20230525095624.615350-3-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525095624.615350-1-u.kleine-koenig@pengutronix.de>
-References: <20230525095624.615350-1-u.kleine-koenig@pengutronix.de>
+Received: from mail6.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA5E198;
+        Thu, 25 May 2023 02:56:33 -0700 (PDT)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 4CF2A2229B1;
+        Thu, 25 May 2023 11:56:29 +0200 (CEST)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 365D32229AD;
+        Thu, 25 May 2023 11:56:29 +0200 (CEST)
+X-TM-AS-ERS: 10.181.10.102-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
+        by mail6.swissbit.com (Postfix) with ESMTPS;
+        Thu, 25 May 2023 11:56:29 +0200 (CEST)
+From:   Christian Loehle <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Avri Altman <avri.altman@wdc.com>
+Subject: [PATCHv2 2/2] mmc: block: ioctl: Add PROG-error aggregation
+Thread-Topic: [PATCHv2 2/2] mmc: block: ioctl: Add PROG-error aggregation
+Thread-Index: AdmO7sTHynhJBfr0QaiYbMnasjMjBA==
+Date:   Thu, 25 May 2023 09:56:27 +0000
+Message-ID: <461dba105f644867a6687858d51324e8@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4335; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=AL8CVkR6GSrHzRoCdksK3js8JGBEqMjHRgMeJ1Oggjc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkbzDH0KELSukdPftEo8RAgyLRMStfIcT+5PD0R yJ4FlQUnNeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZG8wxwAKCRCPgPtYfRL+ ToyTCAC5m+tHjJxbk2R67TK+LYh2Xcq/tl4oYbKBVtVdT9GRgTeCH5PBijr9h8emMFaGOZt032S vFroEkvptDgSa/UakxeJVBExfQvq7GS8PDcNdqICsyszxT2GAWK4FDp688PrOu3uz3DXhirTSjw cM717ggqNsWD2HmTYZ95Ixc1GYGj4jPEx1cPoGwPi5gSjVOGmT/RuK/CLTNmHFOZd+XEm1U/gyQ EJDuKcTd4yWHQRhJr9Md/FOKyqbY/sSrGwvyuXqSKJjVTedqG0B422+mcdAneA9xV6WUDgSXUUH pxUmsPDMtQoG1R+uwOwzFcdAO+AOhliX4SM9ZtoCwvEnEcKP
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27648.006
+X-TMASE-Result: 10--14.647500-10.000000
+X-TMASE-MatchedRID: ViBM8e+kg1tvBOh2s92TSM2CuVPkCNzu2FA7wK9mP9fG5dXdQTj2OIGz
+        z42T0DP5p3HiycuTwqB22LX9ExaXqivLSgqaAVoR9k0tWBWiOf/5UnqVnIHSz40nZyQtGDZRcQn
+        7AixVvVx72aKohPmGR8+cZr5skxwlUIGCvH0MbYudx4sU8R+eYNUEOicf335Wyuet65/g7pDwbY
+        qNisklFI8eV9xXSOFA5p98cjyQCaIdj9vNGYhpkfZOZ2c2VQUgrzD8YrC59vwQRik6+J7XSekgE
+        vppMdRRihBIRRThmIoXIQarK0WBEPTxGqS5mxwxSHCU59h5KrHjGl5yCARaLSow3ZvJGhxdo8WM
+        kQWv6iXGlDvsLUDW2o6HM5rqDwqtt/M5vLBr1IEgtSmzLrssL2uxZN6twIvAMpethoiaJsES0SE
+        YHUAztQ==
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: c8eaafc1-628c-4b60-8317-7b7097e3f147-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pdata is a relict when this was still platform data.
+Userspace currently has no way of checking for error bits of
+detection mode X. These are error bits that are only detected by
+the card when executing the command. For e.g. a sanitize operation
+this may be minutes after the RSP was seen by the host.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Currently userspace programs cannot see these error bits reliably.
+They could issue a multi ioctl cmd with a CMD13 immediately following
+it, but since errors of detection mode X are automatically cleared
+(they are all clear condition B).
+mmc_poll_for_busy of the first ioctl may have already hidden such an
+error flag.
+
+In case of the security operations: sanitize, secure erases and
+RPMB writes, this could lead to the operation not being performed
+successfully by the card with the user not knowing.
+If the user trusts that this operation is completed
+(e.g. their data is sanitized), this could be a security issue.
+An attacker could e.g. provoke a eMMC (VCC) flash fail, where a
+successful sanitize of a card is not possible. A card may move out
+of PROG state but issue a bit 19 R1 error.
+
+This patch therefore will also have the consequence of a mmc-utils
+patch, which enables the bit for the security-sensitive operations.
+
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 ---
- drivers/w1/masters/w1-gpio.c | 54 ++++++++++++++++++------------------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ drivers/mmc/core/block.c   | 17 ++++++-----------
+ drivers/mmc/core/mmc_ops.c | 25 ++++++++++++++++++++++++-
+ drivers/mmc/core/mmc_ops.h |  3 +++
+ 3 files changed, 33 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/w1/masters/w1-gpio.c b/drivers/w1/masters/w1-gpio.c
-index 67596428f69b..0956ea857226 100644
---- a/drivers/w1/masters/w1-gpio.c
-+++ b/drivers/w1/masters/w1-gpio.c
-@@ -25,25 +25,25 @@ struct w1_gpio_ddata {
- 
- static u8 w1_gpio_set_pullup(void *data, int delay)
- {
--	struct w1_gpio_ddata *pdata = data;
-+	struct w1_gpio_ddata *ddata = data;
- 
- 	if (delay) {
--		pdata->pullup_duration = delay;
-+		ddata->pullup_duration = delay;
- 	} else {
--		if (pdata->pullup_duration) {
-+		if (ddata->pullup_duration) {
- 			/*
- 			 * This will OVERRIDE open drain emulation and force-pull
- 			 * the line high for some time.
- 			 */
--			gpiod_set_raw_value(pdata->gpiod, 1);
--			msleep(pdata->pullup_duration);
-+			gpiod_set_raw_value(ddata->gpiod, 1);
-+			msleep(ddata->pullup_duration);
- 			/*
- 			 * This will simply set the line as input since we are doing
- 			 * open drain emulation in the GPIO library.
- 			 */
--			gpiod_set_value(pdata->gpiod, 1);
-+			gpiod_set_value(ddata->gpiod, 1);
- 		}
--		pdata->pullup_duration = 0;
-+		ddata->pullup_duration = 0;
- 	}
- 
- 	return 0;
-@@ -51,16 +51,16 @@ static u8 w1_gpio_set_pullup(void *data, int delay)
- 
- static void w1_gpio_write_bit(void *data, u8 bit)
- {
--	struct w1_gpio_ddata *pdata = data;
-+	struct w1_gpio_ddata *ddata = data;
- 
--	gpiod_set_value(pdata->gpiod, bit);
-+	gpiod_set_value(ddata->gpiod, bit);
- }
- 
- static u8 w1_gpio_read_bit(void *data)
- {
--	struct w1_gpio_ddata *pdata = data;
-+	struct w1_gpio_ddata *ddata = data;
- 
--	return gpiod_get_value(pdata->gpiod) ? 1 : 0;
-+	return gpiod_get_value(ddata->gpiod) ? 1 : 0;
- }
- 
- #if defined(CONFIG_OF)
-@@ -74,15 +74,15 @@ MODULE_DEVICE_TABLE(of, w1_gpio_dt_ids);
- static int w1_gpio_probe(struct platform_device *pdev)
- {
- 	struct w1_bus_master *master;
--	struct w1_gpio_ddata *pdata;
-+	struct w1_gpio_ddata *ddata;
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = dev->of_node;
- 	/* Enforce open drain mode by default */
- 	enum gpiod_flags gflags = GPIOD_OUT_LOW_OPEN_DRAIN;
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index e46330815484..44c1b2825032 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -470,7 +470,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	struct mmc_data data = {};
+ 	struct mmc_request mrq = {};
+ 	struct scatterlist sg;
+-	bool r1b_resp, use_r1b_resp = false;
++	bool r1b_resp;
+ 	unsigned int busy_timeout_ms;
  	int err;
+ 	unsigned int target_part;
+@@ -551,8 +551,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	busy_timeout_ms = idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS;
+ 	r1b_resp = (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B;
+ 	if (r1b_resp)
+-		use_r1b_resp = mmc_prepare_busy_cmd(card->host, &cmd,
+-						    busy_timeout_ms);
++		mmc_prepare_busy_cmd(card->host, &cmd, busy_timeout_ms);
  
--	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
--	if (!pdata)
-+	ddata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
-+	if (!ddata)
- 		return -ENOMEM;
+ 	mmc_wait_for_req(card->host, &mrq);
+ 	memcpy(&idata->ic.response, cmd.resp, sizeof(cmd.resp));
+@@ -605,19 +604,15 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	if (idata->ic.postsleep_min_us)
+ 		usleep_range(idata->ic.postsleep_min_us, idata->ic.postsleep_max_us);
  
- 	/*
-@@ -99,23 +99,23 @@ static int w1_gpio_probe(struct platform_device *pdev)
- 	if (!master)
- 		return -ENOMEM;
- 
--	pdata->gpiod = devm_gpiod_get_index(dev, NULL, 0, gflags);
--	if (IS_ERR(pdata->gpiod)) {
-+	ddata->gpiod = devm_gpiod_get_index(dev, NULL, 0, gflags);
-+	if (IS_ERR(ddata->gpiod)) {
- 		dev_err(dev, "gpio_request (pin) failed\n");
--		return PTR_ERR(pdata->gpiod);
-+		return PTR_ERR(ddata->gpiod);
- 	}
- 
--	pdata->pullup_gpiod =
-+	ddata->pullup_gpiod =
- 		devm_gpiod_get_index_optional(dev, NULL, 1, GPIOD_OUT_LOW);
--	if (IS_ERR(pdata->pullup_gpiod)) {
-+	if (IS_ERR(ddata->pullup_gpiod)) {
- 		dev_err(dev, "gpio_request_one "
- 			"(ext_pullup_enable_pin) failed\n");
--		return PTR_ERR(pdata->pullup_gpiod);
-+		return PTR_ERR(ddata->pullup_gpiod);
- 	}
- 
--	master->data = pdata;
-+	master->data = ddata;
- 	master->read_bit = w1_gpio_read_bit;
--	gpiod_direction_output(pdata->gpiod, 1);
-+	gpiod_direction_output(ddata->gpiod, 1);
- 	master->write_bit = w1_gpio_write_bit;
- 
- 	/*
-@@ -133,8 +133,8 @@ static int w1_gpio_probe(struct platform_device *pdev)
+-	/* No need to poll when using HW busy detection. */
+-	if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
+-		return 0;
+-
+ 	if (mmc_host_is_spi(card->host)) {
+ 		if (idata->ic.write_flag || r1b_resp || cmd.flags & MMC_RSP_SPI_BUSY)
+ 			return mmc_spi_err_check(card);
  		return err;
  	}
+-	/* Ensure RPMB/R1B command has completed by polling with CMD13. */
+-	if (idata->rpmb || r1b_resp)
+-		err = mmc_poll_for_busy(card, busy_timeout_ms, false,
+-					MMC_BUSY_IO);
++	/* Poll for write/R1B execution errors */
++	if (idata->ic.write_flag || r1b_resp)
++		err = mmc_poll_for_busy_err_flags(card, busy_timeout_ms, false,
++					MMC_BUSY_IO, &idata->ic.response[0]);
  
--	if (pdata->pullup_gpiod)
--		gpiod_set_value(pdata->pullup_gpiod, 1);
-+	if (ddata->pullup_gpiod)
-+		gpiod_set_value(ddata->pullup_gpiod, 1);
+ 	return err;
+ }
+diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
+index 3b3adbddf664..11e566ab719c 100644
+--- a/drivers/mmc/core/mmc_ops.c
++++ b/drivers/mmc/core/mmc_ops.c
+@@ -57,7 +57,9 @@ static const u8 tuning_blk_pattern_8bit[] = {
+ struct mmc_busy_data {
+ 	struct mmc_card *card;
+ 	bool retry_crc_err;
++	bool aggregate_err_flags;
+ 	enum mmc_busy_cmd busy_cmd;
++	u32 *status;
+ };
  
- 	platform_set_drvdata(pdev, master);
+ struct mmc_op_cond_busy_data {
+@@ -464,7 +466,8 @@ static int mmc_busy_cb(void *cb_data, bool *busy)
+ 	u32 status = 0;
+ 	int err;
  
-@@ -144,10 +144,10 @@ static int w1_gpio_probe(struct platform_device *pdev)
- static int w1_gpio_remove(struct platform_device *pdev)
+-	if (data->busy_cmd != MMC_BUSY_IO && host->ops->card_busy) {
++	if (data->busy_cmd != MMC_BUSY_IO && host->ops->card_busy &&
++			!data->aggregate_err_flags) {
+ 		*busy = host->ops->card_busy(host);
+ 		return 0;
+ 	}
+@@ -477,6 +480,9 @@ static int mmc_busy_cb(void *cb_data, bool *busy)
+ 	if (err)
+ 		return err;
+ 
++	if (data->aggregate_err_flags)
++		*data->status = R1_STATUS(*data->status) | status;
++
+ 	switch (data->busy_cmd) {
+ 	case MMC_BUSY_CMD6:
+ 		err = mmc_switch_status_error(host, status);
+@@ -549,12 +555,29 @@ int mmc_poll_for_busy(struct mmc_card *card, unsigned int timeout_ms,
+ 
+ 	cb_data.card = card;
+ 	cb_data.retry_crc_err = retry_crc_err;
++	cb_data.aggregate_err_flags = false;
+ 	cb_data.busy_cmd = busy_cmd;
+ 
+ 	return __mmc_poll_for_busy(host, 0, timeout_ms, &mmc_busy_cb, &cb_data);
+ }
+ EXPORT_SYMBOL_GPL(mmc_poll_for_busy);
+ 
++int mmc_poll_for_busy_err_flags(struct mmc_card *card, unsigned int timeout_ms,
++		      bool retry_crc_err, enum mmc_busy_cmd busy_cmd, u32 *status)
++{
++	struct mmc_host *host = card->host;
++	struct mmc_busy_data cb_data;
++
++	cb_data.card = card;
++	cb_data.retry_crc_err = retry_crc_err;
++	cb_data.aggregate_err_flags = true;
++	cb_data.busy_cmd = busy_cmd;
++	cb_data.status = status;
++
++	return __mmc_poll_for_busy(host, 0, timeout_ms, &mmc_busy_cb, &cb_data);
++}
++EXPORT_SYMBOL_GPL(mmc_poll_for_busy_err_flags);
++
+ bool mmc_prepare_busy_cmd(struct mmc_host *host, struct mmc_command *cmd,
+ 			  unsigned int timeout_ms)
  {
- 	struct w1_bus_master *master = platform_get_drvdata(pdev);
--	struct w1_gpio_ddata *pdata = master->data;
-+	struct w1_gpio_ddata *ddata = master->data;
- 
--	if (pdata->pullup_gpiod)
--		gpiod_set_value(pdata->pullup_gpiod, 0);
-+	if (ddata->pullup_gpiod)
-+		gpiod_set_value(ddata->pullup_gpiod, 0);
- 
- 	w1_remove_master_device(master);
- 
+diff --git a/drivers/mmc/core/mmc_ops.h b/drivers/mmc/core/mmc_ops.h
+index 09ffbc00908b..fc7ec43a78dc 100644
+--- a/drivers/mmc/core/mmc_ops.h
++++ b/drivers/mmc/core/mmc_ops.h
+@@ -47,6 +47,9 @@ int __mmc_poll_for_busy(struct mmc_host *host, unsigned int period_us,
+ 			void *cb_data);
+ int mmc_poll_for_busy(struct mmc_card *card, unsigned int timeout_ms,
+ 		      bool retry_crc_err, enum mmc_busy_cmd busy_cmd);
++int mmc_poll_for_busy_err_flags(struct mmc_card *card, unsigned int timeout_ms,
++		      bool retry_crc_err, enum mmc_busy_cmd busy_cmd,
++		      u32 *status);
+ int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
+ 		unsigned int timeout_ms, unsigned char timing,
+ 		bool send_status, bool retry_crc_err, unsigned int retries);
 -- 
-2.39.2
+2.37.3
+
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
