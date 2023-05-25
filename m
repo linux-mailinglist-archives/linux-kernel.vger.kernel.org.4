@@ -2,195 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5458A710D2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19712710D33
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240641AbjEYNYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        id S234944AbjEYNZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjEYNYf (ORCPT
+        with ESMTP id S235319AbjEYNZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:24:35 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72FF99
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:24:33 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f6a6b9bebdso70265e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685021072; x=1687613072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cJE2Y+9lHKdGfQARiSKxGndvrD8wTcpfzxVhMA8TopU=;
-        b=YiF+QeExMQxuNZllkEbjao6wMWMhEVzx3YUS3ZCR+T5Z2ViGeXLDrlgSwESrKLz4XQ
-         aHC36izj9qACsxIgCo1nJDvqof44tKuHXIkY4kMj3RL7juxIvC7mFQrH6i1cUU7b8BrD
-         Io4wq4+XN+bmjjD0soDHYJ9NIDAYY3aUCLSrnFNj4uMSnImFW/vOejV5JXLMM/pp7EJp
-         sYWnIaQW3BDRzeONo50RoHpiggh6qlgQNYUcj5w+dS4gssm5oB7LTIUIZhfDspsPxQ5c
-         arukdP3Z6mDo9glEQxRMdshI8016mULKUSggLbucCMYpclqFvItsXNBoomXocgU7GeYp
-         Q3nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685021072; x=1687613072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cJE2Y+9lHKdGfQARiSKxGndvrD8wTcpfzxVhMA8TopU=;
-        b=ABWbUxTOBkDVtql3y0P9ThgiVWqUDGzNvzWd4BZYhK2oFG1xZOe6K3kVH3FxUndsni
-         Ik5e7O6utlONlzALpUojpRmw+wS6XDJsEDiAF4DSIYf5qPWG2WrpBcV1etTGPWO+FKsJ
-         dLxYoBbscuoFKOhoGycc9lyxL1xJGnFeJeBgmcenwNmyM/zB7o5A+Pi8yZfwlwiYu5Mo
-         yYQOUdp9F+8PxASUSibW9zlUMx8JeEZwn6yt3YaaH2UGsyVkOICKuL2XD52oTksSsNr2
-         V/CLcfhuIzEQRG4ottkqMxXM1oPPOxTYwkXqlTohfGDu+/BDeC4xz+FmmtQacWqgZHug
-         IiCw==
-X-Gm-Message-State: AC+VfDxofEVSdcbRZBydyBvQ0BbtPeSRXUtTeLRNSPWj12tz3GkD8xZC
-        Nbojz4+KfRAQl1OCcKIzaqW5dLgJWOS3uX6CZnq5NA==
-X-Google-Smtp-Source: ACHHUZ4Z0j2Nxi6xWsZl7nLei6HQfuzqIW/xvulwwCVcsoBQeSDRrx4VHDdQSD2O4FHODE6va2MYGq8ssJeMeT0CGbQ=
-X-Received: by 2002:a05:600c:1c1b:b0:3f6:f4b:d4a6 with SMTP id
- j27-20020a05600c1c1b00b003f60f4bd4a6mr134629wms.7.1685021072117; Thu, 25 May
- 2023 06:24:32 -0700 (PDT)
+        Thu, 25 May 2023 09:25:37 -0400
+Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [IPv6:2001:1600:3:17::190d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E86183
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:25:35 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QRphW6LYlzMqNXH;
+        Thu, 25 May 2023 15:25:31 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QRphL6y4hzMrvhL;
+        Thu, 25 May 2023 15:25:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685021131;
+        bh=FnMYgGOtsnzYjWDK5xXufVoQQ5U2qAP20b96T/ZBHdg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=N/UVINRRySa+8dk6MOPMQdB5xSfG70ugF/mQ8iSHsAXEhJ3x5cnQ644+BuQ9671BQ
+         zwHHW8JkLMYSrp/tJcXYwsHIYERU1eHBBUHAhpe4S2ynd7Zz3nYjsu9tDLnvH3P5lj
+         9BBmh81fJGEtVFfk8S66LDxQxXZ1KMberOvy83Ck=
+Message-ID: <0b069bc3-0362-d8ec-fc2a-05dd65218c39@digikod.net>
+Date:   Thu, 25 May 2023 15:25:09 +0200
 MIME-Version: 1.0
-References: <20230525081923.8596-1-lmb@isovalent.com>
-In-Reply-To: <20230525081923.8596-1-lmb@isovalent.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 25 May 2023 15:24:20 +0200
-Message-ID: <CANn89iJx74gR7Xuahd0S3pLXYC8EX6+JRkbt6T_bemMX-8zyig@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-To:     Lorenz Bauer <lmb@isovalent.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Joe Stringer <joe@wand.net.nz>, Joe Stringer <joe@cilium.io>,
-        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [RFC PATCH v1 0/9] Hypervisor-Enforced Kernel Integrity
+To:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>
+Cc:     Alexander Graf <graf@amazon.com>,
+        Forrest Yuan Yu <yuanyu@google.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        John Andersen <john.s.andersen@intel.com>,
+        Liran Alon <liran.alon@oracle.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Marian Rotariu <marian.c.rotariu@gmail.com>,
+        =?UTF-8?Q?Mihai_Don=c8=9bu?= <mdontu@bitdefender.com>,
+        =?UTF-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thara Gopinath <tgopinath@microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Zahra Tarkhani <ztarkhani@microsoft.com>,
+        =?UTF-8?Q?=c8=98tefan_=c8=98icleru?= <ssicleru@bitdefender.com>,
+        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20230505152046.6575-1-mic@digikod.net>
+ <1e10da25-5704-18ee-b0ce-6de704e6f0e1@quicinc.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <1e10da25-5704-18ee-b0ce-6de704e6f0e1@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 10:19=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> w=
-rote:
->
-> Currently the bpf_sk_assign helper in tc BPF context refuses SO_REUSEPORT
-> sockets. This means we can't use the helper to steer traffic to Envoy, wh=
-ich
-> configures SO_REUSEPORT on its sockets. In turn, we're blocked from remov=
-ing
-> TPROXY from our setup.
->
-> The reason that bpf_sk_assign refuses such sockets is that the bpf_sk_loo=
-kup
-> helpers don't execute SK_REUSEPORT programs. Instead, one of the
-> reuseport sockets is selected by hash. This could cause dispatch to the
-> "wrong" socket:
->
->     sk =3D bpf_sk_lookup_tcp(...) // select SO_REUSEPORT by hash
->     bpf_sk_assign(skb, sk) // SK_REUSEPORT wasn't executed
->
-> Fixing this isn't as simple as invoking SK_REUSEPORT from the lookup
-> helpers unfortunately. In the tc context, L2 headers are at the start
-> of the skb, while SK_REUSEPORT expects L3 headers instead.
->
-> Instead, we execute the SK_REUSEPORT program when the assigned socket
-> is pulled out of the skb, further up the stack. This creates some
-> trickiness with regards to refcounting as bpf_sk_assign will put both
-> refcounted and RCU freed sockets in skb->sk. reuseport sockets are RCU
-> freed. We can infer that the sk_assigned socket is RCU freed if the
-> reuseport lookup succeeds, but convincing yourself of this fact isn't
-> straight forward. Therefore we defensively check refcounting on the
-> sk_assign sock even though it's probably not required in practice.
->
-> Fixes: 8e368dc ("bpf: Fix use of sk->sk_reuseport from sk_assign")
-> Fixes: cf7fbe6 ("bpf: Add socket assign support")
-> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-> Cc: Joe Stringer <joe@cilium.io>
-> Link: https://lore.kernel.org/bpf/CACAyw98+qycmpQzKupquhkxbvWK4OFyDuuLMBN=
-ROnfWMZxUWeA@mail.gmail.com/
-> ---
->  include/net/inet6_hashtables.h | 36 +++++++++++++++++++++++++++++-----
->  include/net/inet_hashtables.h  | 27 +++++++++++++++++++++++--
->  include/net/sock.h             |  7 +++++--
->  include/uapi/linux/bpf.h       |  3 ---
->  net/core/filter.c              |  2 --
->  net/ipv4/inet_hashtables.c     | 15 +++++++-------
->  net/ipv4/udp.c                 | 23 +++++++++++++++++++---
->  net/ipv6/inet6_hashtables.c    | 19 +++++++++---------
->  net/ipv6/udp.c                 | 23 +++++++++++++++++++---
->  tools/include/uapi/linux/bpf.h |  3 ---
->  10 files changed, 119 insertions(+), 39 deletions(-)
+
+On 24/05/2023 23:04, Trilok Soni wrote:
+> On 5/5/2023 8:20 AM, Mickaël Salaün wrote:
+>> Hi,
+>>
+>> This patch series is a proof-of-concept that implements new KVM features
+>> (extended page tracking, MBEC support, CR pinning) and defines a new API to
+>> protect guest VMs. No VMM (e.g., Qemu) modification is required.
+>>
+>> The main idea being that kernel self-protection mechanisms should be delegated
+>> to a more privileged part of the system, hence the hypervisor. It is still the
+>> role of the guest kernel to request such restrictions according to its
+> 
+> Only for the guest kernel images here? Why not for the host OS kernel?
+
+As explained in the Future work section, protecting the host would be 
+useful, but that doesn't really fit with the KVM model. The Protected 
+KVM project is a first step to help in this direction [11].
+
+In a nutshell, KVM is close to a type-2 hypervisor, and the host kernel 
+is also part of the hypervisor.
 
 
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index e7391bf310a7..920131e4a65d 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -332,10 +332,10 @@ static inline int compute_score(struct sock *sk, st=
-ruct net *net,
->         return score;
->  }
->
-> -static inline struct sock *lookup_reuseport(struct net *net, struct sock=
- *sk,
-> -                                           struct sk_buff *skb, int doff=
-,
-> -                                           __be32 saddr, __be16 sport,
-> -                                           __be32 daddr, unsigned short =
-hnum)
-> +struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
-> +                                  struct sk_buff *skb, int doff,
-> +                                  __be32 saddr, __be16 sport,
-> +                                  __be32 daddr, unsigned short hnum)
->  {
->         struct sock *reuse_sk =3D NULL;
->         u32 phash;
-> @@ -346,6 +346,7 @@ static inline struct sock *lookup_reuseport(struct ne=
-t *net, struct sock *sk,
->         }
->         return reuse_sk;
->  }
-> +EXPORT_SYMBOL_GPL(inet_lookup_reuseport);
->
->  /*
->   * Here are some nice properties to exploit here. The BSD API
-> @@ -369,8 +370,8 @@ static struct sock *inet_lhash2_lookup(struct net *ne=
-t,
->         sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
->                 score =3D compute_score(sk, net, hnum, daddr, dif, sdif);
->                 if (score > hiscore) {
-> -                       result =3D lookup_reuseport(net, sk, skb, doff,
-> -                                                 saddr, sport, daddr, hn=
-um);
-> +                       result =3D inet_lookup_reuseport(net, sk, skb, do=
-ff,
-> +                                                      saddr, sport, dadd=
-r, hnum);
->                         if (result)
->                                 return result;
->
+> Embedded devices w/ Android you have mentioned below supports the host
+> OS as well it seems, right?
 
-Please split in a series.
+What do you mean?
 
-First a patch renaming lookup_reuseport() to inet_lookup_reuseport()
-and inet6_lookup_reuseport()
-(cleanup, no change in behavior)
 
-This would ease review and future bug hunting quite a bit.
+> 
+> Do we suggest that all the functionalities should be implemented in the
+> Hypervisor (NS-EL2 for ARM) or even at Secure EL like Secure-EL1 (ARM).
+
+KVM runs in EL2. TrustZone is mainly used to enforce DRM, which means 
+that we may not control the related code.
+
+This patch series is dedicated to hypervisor-enforced kernel integrity, 
+then KVM.
+
+> 
+> I am hoping that whatever we suggest the interface here from the Guest
+> to the Hypervisor becomes the ABI right?
+
+Yes, hypercalls are part of the KVM ABI.
+
+> 
+> 
+>>
+>> # Current limitations
+>>
+>> The main limitation of this patch series is the statically enforced
+>> permissions. This is not an issue for kernels without module but this needs to
+>> be addressed.  Mechanisms that dynamically impact kernel executable memory are
+>> not handled for now (e.g., kernel modules, tracepoints, eBPF JIT), and such
+>> code will need to be authenticated.  Because the hypervisor is highly
+>> privileged and critical to the security of all the VMs, we don't want to
+>> implement a code authentication mechanism in the hypervisor itself but delegate
+>> this verification to something much less privileged. We are thinking of two
+>> ways to solve this: implement this verification in the VMM or spawn a dedicated
+>> special VM (similar to Windows's VBS). There are pros on cons to each approach:
+>> complexity, verification code ownership (guest's or VMM's), access to guest
+>> memory (i.e., confidential computing).
+> 
+> Do you foresee the performance regressions due to lot of tracking here?
+
+The performance impact of execution prevention should be negligible 
+because once configured the hypervisor do nothing except catch 
+illegitimate access attempts.
+
+
+> Production kernels do have lot of tracepoints and we use it as feature
+> in the GKI kernel for the vendor hooks implementation and in those cases
+> every vendor driver is a module.
+
+As explained in this section, dynamic kernel modifications such as 
+tracepoints or modules are not currently supported by this patch series. 
+Handling tracepoints is possible but requires more work to define and 
+check legitimate changes. This proposal is still useful for static 
+kernels though.
+
+
+> Separate VM further fragments this
+> design and delegates more of it to proprietary solutions?
+
+What do you mean? KVM is not a proprietary solution.
+
+For dynamic checks, this would require code not run by KVM itself, but 
+either the VMM or a dedicated VM. In this case, the dynamic 
+authentication code could come from the guest VM or from the VMM itself. 
+In the former case, it is more challenging from a security point of view 
+but doesn't rely on external (proprietary) solution. In the latter case, 
+open-source VMMs should implement the specification to provide the 
+required service (e.g. check kernel module signature).
+
+The goal of the common API layer provided by this RFC is to share code 
+as much as possible between different hypervisor backends.
+
+
+> 
+> Do you have any performance numbers w/ current RFC?
+
+No, but the only hypervisor performance impact is at boot time and 
+should be negligible. I'll try to get some numbers for the 
+hardware-enforcement impact, but it should be negligible too.
