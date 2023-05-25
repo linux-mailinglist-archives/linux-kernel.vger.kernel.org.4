@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6769D71164D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE01B7116AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243390AbjEYS4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        id S243423AbjEYS5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243196AbjEYSyz (ORCPT
+        with ESMTP id S243208AbjEYSy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:54:55 -0400
+        Thu, 25 May 2023 14:54:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FBF3C38;
-        Thu, 25 May 2023 11:46:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D7A3C3D;
+        Thu, 25 May 2023 11:46:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6C796497E;
-        Thu, 25 May 2023 18:43:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ACE0C4339B;
-        Thu, 25 May 2023 18:43:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09FC26400A;
+        Thu, 25 May 2023 18:43:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E13DC433D2;
+        Thu, 25 May 2023 18:43:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040228;
-        bh=aITDxaXfjnHA6ppXc/Ks65rfqWo1xEXjI/MDQ0VzuqY=;
+        s=k20201202; t=1685040231;
+        bh=tsOJjx9ye5H/JgMqH0AWxKvBvRFygR5UUo7JVIXt4W8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kY2KUnngPfzsyAjyYXj5ey/MoOMs/4CfJSryuGw/X0z2BiJaQTU395VfpEXaopKvm
-         2Evpgk283teZHnMe24eGhvBumxK8k8lRuGxRLevEgpOGqL9b9iLKhhsytODkFU9kV8
-         mRjnEGUR1U5BqcI5gVMGzwQESMmkGtFr1LG0J66UrsfcDcjVS5yOOJDHrAEBYsTwft
-         tBZU5BSqauOMv2HrPuo+NXsCIt2fLP2vRxe+EpUPJLkk5qrtns8Lm8FY8Dzv7ImPL6
-         NE4DZXscFp0lE6IPGeEv1NWtF/VMWxSt5ryQ1L2/CtPl8CBe9ATfalJNFQ71GptPIp
-         wGV7se4KE1Aug==
+        b=H5FB3P+QHJgrXWWsS2b9WaX58xk0oAr0sWK5COGJdIAI8dlGQySfReTJ51JggJ3ZO
+         9SC5swQELWNmd4e6yIF2SMSKWiF2jxTczHxBPpw9bXLa2omoMLTXeKeQB57L4bqh0g
+         6derLWnuoD5gqLkzFZaABCdHu2xoJ6Kap2D372fkUhBmAZ6+x/JP4rTxK08uWyZaKu
+         nR3G9EbRSrbEa4ubuNioT9feR3wJqdzi3T9FF73jbe66T8qD/zlIjmzQTH5H5KThuB
+         hO1Ox4VSAR6ZHiClj/mPs+Gn+BcMxJgqbh4BOXRKhWKXj6wfLayZYX2q91jPHAX8N7
+         f/etaoT6UhFVg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Takashi Iwai <tiwai@suse.de>,
-        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.4 25/27] ALSA: oss: avoid missing-prototype warnings
-Date:   Thu, 25 May 2023 14:42:34 -0400
-Message-Id: <20230525184238.1943072-25-sashal@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 26/27] atm: hide unused procfs functions
+Date:   Thu, 25 May 2023 14:42:35 -0400
+Message-Id: <20230525184238.1943072-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
 References: <20230525184238.1943072-1-sashal@kernel.org>
@@ -59,60 +59,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 040b5a046a9e18098580d3ccd029e2318fca7859 ]
+[ Upstream commit fb1b7be9b16c1f4626969ba4e95a97da2a452b41 ]
 
-Two functions are defined and used in pcm_oss.c but also optionally
-used from io.c, with an optional prototype. If CONFIG_SND_PCM_OSS_PLUGINS
-is disabled, this causes a warning as the functions are not static
-and have no prototype:
+When CONFIG_PROC_FS is disabled, the function declarations for some
+procfs functions are hidden, but the definitions are still build,
+as shown by this compiler warning:
 
-sound/core/oss/pcm_oss.c:1235:19: error: no previous prototype for 'snd_pcm_oss_write3' [-Werror=missing-prototypes]
-sound/core/oss/pcm_oss.c:1266:19: error: no previous prototype for 'snd_pcm_oss_read3' [-Werror=missing-prototypes]
+net/atm/resources.c:403:7: error: no previous prototype for 'atm_dev_seq_start' [-Werror=missing-prototypes]
+net/atm/resources.c:409:6: error: no previous prototype for 'atm_dev_seq_stop' [-Werror=missing-prototypes]
+net/atm/resources.c:414:7: error: no previous prototype for 'atm_dev_seq_next' [-Werror=missing-prototypes]
 
-Avoid this by making the prototypes unconditional.
+Add another #ifdef to leave these out of the build.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/20230516195046.550584-2-arnd@kernel.org
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20230516194625.549249-2-arnd@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/oss/pcm_plugin.h | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ net/atm/resources.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/core/oss/pcm_plugin.h b/sound/core/oss/pcm_plugin.h
-index 8d2f7a4e3ab67..0e1c8cae6c5bd 100644
---- a/sound/core/oss/pcm_plugin.h
-+++ b/sound/core/oss/pcm_plugin.h
-@@ -141,6 +141,14 @@ int snd_pcm_area_copy(const struct snd_pcm_channel_area *src_channel,
+diff --git a/net/atm/resources.c b/net/atm/resources.c
+index 889349c6d90db..04b2235c5c261 100644
+--- a/net/atm/resources.c
++++ b/net/atm/resources.c
+@@ -443,6 +443,7 @@ int atm_dev_ioctl(unsigned int cmd, void __user *arg, int compat)
+ 	return error;
+ }
  
- void *snd_pcm_plug_buf_alloc(struct snd_pcm_substream *plug, snd_pcm_uframes_t size);
- void snd_pcm_plug_buf_unlock(struct snd_pcm_substream *plug, void *ptr);
-+#else
-+
-+static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
-+static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
-+static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
-+
++#ifdef CONFIG_PROC_FS
+ void *atm_dev_seq_start(struct seq_file *seq, loff_t *pos)
+ {
+ 	mutex_lock(&atm_dev_mutex);
+@@ -458,3 +459,4 @@ void *atm_dev_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+ {
+ 	return seq_list_next(v, &atm_devs, pos);
+ }
 +#endif
-+
- snd_pcm_sframes_t snd_pcm_oss_write3(struct snd_pcm_substream *substream,
- 				     const char *ptr, snd_pcm_uframes_t size,
- 				     int in_kernel);
-@@ -151,14 +159,6 @@ snd_pcm_sframes_t snd_pcm_oss_writev3(struct snd_pcm_substream *substream,
- snd_pcm_sframes_t snd_pcm_oss_readv3(struct snd_pcm_substream *substream,
- 				     void **bufs, snd_pcm_uframes_t frames);
- 
--#else
--
--static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
--static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
--static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
--
--#endif
--
- #ifdef PLUGIN_DEBUG
- #define pdprintf(fmt, args...) printk(KERN_DEBUG "plugin: " fmt, ##args)
- #else
 -- 
 2.39.2
 
