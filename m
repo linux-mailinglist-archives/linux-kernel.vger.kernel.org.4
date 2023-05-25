@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F8D71192F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA15711930
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241640AbjEYVcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S241754AbjEYVcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 17:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241590AbjEYVcb (ORCPT
+        with ESMTP id S241590AbjEYVcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 17:32:31 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EF39B;
-        Thu, 25 May 2023 14:32:29 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f6d7abe9a4so545685e9.2;
-        Thu, 25 May 2023 14:32:29 -0700 (PDT)
+        Thu, 25 May 2023 17:32:33 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139DB99;
+        Thu, 25 May 2023 14:32:31 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6cbdf16d2so537435e9.2;
+        Thu, 25 May 2023 14:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685050348; x=1687642348;
+        d=gmail.com; s=20221208; t=1685050349; x=1687642349;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aGYKDyqaRYyF06kc0kQI1x33jaIORBrVfDXbHMi3/zg=;
-        b=DP6lYqPky6px5tmigzrw/JPlbeESfU308MJAS79DQ6vDKpqwMfxMi5DwpyrLXMEaoq
-         DMimX/Z90r45mP53YSJGL6pChnWHKLuTYKLV3gwSkDIij8EIk9MkloKUelhP+ZTcI80Y
-         TYXKHU/mb8XYrswhRY6e5rnxo/I6uyy1xuYOFx5gnJj43U/ICgeqvDvJ98xc0UW72ZEy
-         Uos4qCoBkiHBdUe3VM8sNY0BAGZrYOq1ikTCEe2Z9GneYDMZB5TSv5VpzoxXqCBdhiIr
-         lc2wTFJDbu4l5kJ3nKPsvWsb5gX3kpxdOLpcEU4N9yH7ysGWmpMN9HspjPDzGdqkCeBd
-         Nh5g==
+        bh=8mEj8qP5XF/9ldbcMemiLlsXak845k7PJxDzZ1dMqEU=;
+        b=ioiKn9CBYthG8xxKYQo8TxKOtdDY5SlG4ZXk92xoPbp0Nb+I3H0U0WVwXzKmcFGlxR
+         3J3IZOj3Hv+bPlOmtHbfEWsION+boDaK1z69IUNbJoVVPtBz87LL6dX0qLLFxAKBBVQD
+         Z92SgeZztCxaYqZjTglZ6VEcdZWVthA1HFnOmuqctyv38vmKoC6DCckMAToL1kHSsN1i
+         oo4tObTqlpyuKnTjc+YYxUO2siYI0VUbVz/jeGCmtd4BLkuINxci4P+7FG2qEGKNleNm
+         UGGABJC7WXTvWeM6GbC4E+oGc5YNsz0KEO+x/ga0E2AnrtDmqMKRoYDufvcNO7thl4Bj
+         o3xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685050348; x=1687642348;
+        d=1e100.net; s=20221208; t=1685050349; x=1687642349;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aGYKDyqaRYyF06kc0kQI1x33jaIORBrVfDXbHMi3/zg=;
-        b=jth0qIAXsxALg7QKjDinpH4OpRQmfJKkfIgDZClZrqnyYXZ8egpH81BzhpXNEL7KQS
-         9oeUBHARnj1NBUQptEmuRnIvIbCPTsoJd6ZGKdmOYy6BMsK8VPkWfXZxB85/aSr0pHzo
-         S1kK/EDJZsXddc+tb98RidWE98TOWuYd4m5D4HJahj4rEsK+E3Oqs9czyaGPH/yFhXaZ
-         349YLGPO1ftTmKOAYJkIfgWMvU3e4lLs9amNLmAlauvyVfj939sH/aRHJ6K5JfhIatyS
-         ZRJNXBbg/RSE/O9I3HCFva+kDRKM6Nx+6VjwclWlJM/bIthTsBDpOasKWdnjT6D6kc46
-         DjQQ==
-X-Gm-Message-State: AC+VfDzVn4A1e3IyVHQ2Q4F+8xRxxE4XiR6CWk31nOPb89PXjCkj+pHr
-        Y/COXJzmpTf12bLOKf5MG4k=
-X-Google-Smtp-Source: ACHHUZ6Kqbdzmyh+me9CcSttyVU8juNLoSIzVzRJlsLP1JcGG1MAXG0U7Zt4z68P7xgsHatXlDMIUA==
-X-Received: by 2002:a05:600c:2104:b0:3f6:675:3219 with SMTP id u4-20020a05600c210400b003f606753219mr3214367wml.40.1685050347984;
-        Thu, 25 May 2023 14:32:27 -0700 (PDT)
+        bh=8mEj8qP5XF/9ldbcMemiLlsXak845k7PJxDzZ1dMqEU=;
+        b=V4vXL35v3BIH3yReQRHXZ2gDXvueQMvhi/G9LAMnQ4E9mAkIB/OVXUwaNbUjdUdIrH
+         h45VhitDVQ8CHZfWXnOqaM6MuRppGoxuqwLFpYpChTRnsHgIhSWtINwTINn836NAqfoc
+         DRMRPPI8lF0nuywzdzjhIMK4XaLFbLjG1FRmqCV9DZZ0bnoe/CLjCr4mcKtSVtsfmHy4
+         4SQoplFQ4OQ4VNZRInBYyVdFIwHYvz8CNpahlaz9ldN2kI4c3OiNMVhg8xLoXWeHwnmz
+         Lhrj5JrJa3kf9SLWUaiSVrniWyqH+PsMGQkTfQnj4Zvi5qk/FqqtXenliXnOfwpWnHxR
+         zfAQ==
+X-Gm-Message-State: AC+VfDx9cP0D+US3vXE0hpq6WuddhisHHYhycbly6GDMgZzDyMY+Z4GV
+        CtfTXdYezUffI1ge49avUp4=
+X-Google-Smtp-Source: ACHHUZ5bhPJjwV31GPGt81pXFy720Z4YPIi76oGnWG+ridyglI01EIaIW60NbblCE00XCHI2ruWCeg==
+X-Received: by 2002:a05:600c:2046:b0:3f6:683:628b with SMTP id p6-20020a05600c204600b003f60683628bmr3061032wmg.3.1685050349373;
+        Thu, 25 May 2023 14:32:29 -0700 (PDT)
 Received: from xws.localdomain (pd9e5a196.dip0.t-ipconnect.de. [217.229.161.150])
-        by smtp.gmail.com with ESMTPSA id 10-20020a05600c228a00b003f42461ac75sm6814504wmf.12.2023.05.25.14.32.26
+        by smtp.gmail.com with ESMTPSA id 10-20020a05600c228a00b003f42461ac75sm6814504wmf.12.2023.05.25.14.32.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 14:32:27 -0700 (PDT)
+        Thu, 25 May 2023 14:32:28 -0700 (PDT)
 From:   Maximilian Luz <luzmaximilian@gmail.com>
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Mark Gross <markgross@kernel.org>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         Maximilian Luz <luzmaximilian@gmail.com>
-Subject: [PATCH 1/2] platform/surface: aggregator_tabletsw: Add support for book mode in KIP subsystem
-Date:   Thu, 25 May 2023 23:32:17 +0200
-Message-Id: <20230525213218.2797480-2-luzmaximilian@gmail.com>
+Subject: [PATCH 2/2] platform/surface: aggregator_tabletsw: Add support for book mode in POS subsystem
+Date:   Thu, 25 May 2023 23:32:18 +0200
+Message-Id: <20230525213218.2797480-3-luzmaximilian@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230525213218.2797480-1-luzmaximilian@gmail.com>
 References: <20230525213218.2797480-1-luzmaximilian@gmail.com>
@@ -77,46 +77,46 @@ Devices with a type-cover have an additional "book" mode, deactivating
 type-cover input and turning off its backlight. This is currently
 unsupported, leading to the warning
 
-  surface_aggregator_tablet_mode_switch 01:0e:01:00:01: unknown KIP cover state: 6
+  surface_aggregator_tablet_mode_switch 01:26:01:00:01: unknown device posture for type-cover: 6
 
 Therefore, add support for this state and map it to enable tablet-mode.
 
-Fixes: 9f794056db5b ("platform/surface: Add KIP/POS tablet-mode switch driver")
+Fixes: 37ff64cd81ff ("platform/surface: aggregator_tabletsw: Add support for Type-Cover posture source")
 Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
  drivers/platform/surface/surface_aggregator_tabletsw.c | 5 +++++
  1 file changed, 5 insertions(+)
 
 diff --git a/drivers/platform/surface/surface_aggregator_tabletsw.c b/drivers/platform/surface/surface_aggregator_tabletsw.c
-index 8f52b62d1c195..4a029f5db20a9 100644
+index 4a029f5db20a9..c0a1a5869246e 100644
 --- a/drivers/platform/surface/surface_aggregator_tabletsw.c
 +++ b/drivers/platform/surface/surface_aggregator_tabletsw.c
-@@ -210,6 +210,7 @@ enum ssam_kip_cover_state {
- 	SSAM_KIP_COVER_STATE_LAPTOP        = 0x03,
- 	SSAM_KIP_COVER_STATE_FOLDED_CANVAS = 0x04,
- 	SSAM_KIP_COVER_STATE_FOLDED_BACK   = 0x05,
-+	SSAM_KIP_COVER_STATE_BOOK          = 0x06,
+@@ -340,6 +340,7 @@ enum ssam_pos_state_cover {
+ 	SSAM_POS_COVER_LAPTOP        = 0x03,
+ 	SSAM_POS_COVER_FOLDED_CANVAS = 0x04,
+ 	SSAM_POS_COVER_FOLDED_BACK   = 0x05,
++	SSAM_POS_COVER_BOOK          = 0x06,
  };
  
- static const char *ssam_kip_cover_state_name(struct ssam_tablet_sw *sw,
-@@ -231,6 +232,9 @@ static const char *ssam_kip_cover_state_name(struct ssam_tablet_sw *sw,
- 	case SSAM_KIP_COVER_STATE_FOLDED_BACK:
+ enum ssam_pos_state_sls {
+@@ -372,6 +373,9 @@ static const char *ssam_pos_state_name_cover(struct ssam_tablet_sw *sw, u32 stat
+ 	case SSAM_POS_COVER_FOLDED_BACK:
  		return "folded-back";
  
-+	case SSAM_KIP_COVER_STATE_BOOK:
++	case SSAM_POS_COVER_BOOK:
 +		return "book";
 +
  	default:
- 		dev_warn(&sw->sdev->dev, "unknown KIP cover state: %u\n", state->state);
+ 		dev_warn(&sw->sdev->dev, "unknown device posture for type-cover: %u\n", state);
  		return "<unknown>";
-@@ -244,6 +248,7 @@ static bool ssam_kip_cover_state_is_tablet_mode(struct ssam_tablet_sw *sw,
- 	case SSAM_KIP_COVER_STATE_DISCONNECTED:
- 	case SSAM_KIP_COVER_STATE_FOLDED_CANVAS:
- 	case SSAM_KIP_COVER_STATE_FOLDED_BACK:
-+	case SSAM_KIP_COVER_STATE_BOOK:
+@@ -421,6 +425,7 @@ static bool ssam_pos_state_is_tablet_mode_cover(struct ssam_tablet_sw *sw, u32 s
+ 	case SSAM_POS_COVER_DISCONNECTED:
+ 	case SSAM_POS_COVER_FOLDED_CANVAS:
+ 	case SSAM_POS_COVER_FOLDED_BACK:
++	case SSAM_POS_COVER_BOOK:
  		return true;
  
- 	case SSAM_KIP_COVER_STATE_CLOSED:
+ 	case SSAM_POS_COVER_CLOSED:
 -- 
 2.40.1
 
