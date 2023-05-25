@@ -2,135 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBB47107DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A127C7107E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240417AbjEYIrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S240426AbjEYItA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbjEYIre (ORCPT
+        with ESMTP id S235393AbjEYIs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:47:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD789E;
-        Thu, 25 May 2023 01:47:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C360B21CA3;
-        Thu, 25 May 2023 08:47:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685004451; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KuhUxhJ4qXqlC8S61jGgkZ/rePw29whTgtvzHY6sSiI=;
-        b=ZrusZYsCefuMnAVLQhgd8aBN2vNvwAyrM1z1cZn9oRunL0M8JfFy92IqTRXhxJg9dyQ+3V
-        Q8yHLX3wYbtbH0HYQWtQlKL9UMpQKxyFX1cHfV97/XUUa9mdp5HlUf7zSKu6aMJI3TC4fN
-        /g6oWielTzMSNQo/9YenUVIHEIU6Zp0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685004451;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KuhUxhJ4qXqlC8S61jGgkZ/rePw29whTgtvzHY6sSiI=;
-        b=XdzjVSs3+TjUoFyH5X//zoHI1wt48WjIl65701RGoFiCfws+iTsL1D3tjnaB6pIYnjG35e
-        Nerxvu9ESp34vGDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B1FAA13356;
-        Thu, 25 May 2023 08:47:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mxRrK6Mgb2TyRAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 25 May 2023 08:47:31 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 36009A075C; Thu, 25 May 2023 10:47:31 +0200 (CEST)
-Date:   Thu, 25 May 2023 10:47:31 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        "Darrick J . Wong" <djwong@kernel.org>, dhowells@redhat.com,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, Bob Peterson <rpeterso@redhat.com>
-Subject: Re: [PATCH 06/32] sched: Add task_struct->faults_disabled_mapping
-Message-ID: <20230525084731.losrlnarpbqtqzil@quack3>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-7-kent.overstreet@linux.dev>
- <20230510010737.heniyuxazlprrbd6@quack3>
- <ZFs3RYgdCeKjxYCw@moria.home.lan>
- <20230523133431.wwrkjtptu6vqqh5e@quack3>
- <ZGzugpw7vgCFxOYL@moria.home.lan>
+        Thu, 25 May 2023 04:48:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 301BC9E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:48:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE7A61FB;
+        Thu, 25 May 2023 01:49:41 -0700 (PDT)
+Received: from [10.162.43.6] (unknown [10.162.43.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60BAD3F67D;
+        Thu, 25 May 2023 01:48:55 -0700 (PDT)
+Message-ID: <2898744e-1a67-5a8f-6adc-462d7f362b93@arm.com>
+Date:   Thu, 25 May 2023 14:18:52 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGzugpw7vgCFxOYL@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] arm64/cpufeature: Use helper for ECV CNTPOFF cpufeature
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230523-arm64-ecv-helper-v1-1-506dfb5fb199@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230523-arm64-ecv-helper-v1-1-506dfb5fb199@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 23-05-23 12:49:06, Kent Overstreet wrote:
-> > > No, that's definitely handled (and you can see it in the code I linked),
-> > > and I wrote a torture test for fstests as well.
-> > 
-> > I've checked the code and AFAICT it is all indeed handled. BTW, I've now
-> > remembered that GFS2 has dealt with the same deadlocks - b01b2d72da25
-> > ("gfs2: Fix mmap + page fault deadlocks for direct I/O") - in a different
-> > way (by prefaulting pages from the iter before grabbing the problematic
-> > lock and then disabling page faults for the iomap_dio_rw() call). I guess
-> > we should somehow unify these schemes so that we don't have two mechanisms
-> > for avoiding exactly the same deadlock. Adding GFS2 guys to CC.
+
+
+On 5/24/23 03:19, Mark Brown wrote:
+> The newly added support for ECV CNTPOFF open codes the recently added
+> helper ARM64_CPUID_FIELDS(), make use of the helper.  No functional
+> change.
 > 
-> Oof, that sounds a bit sketchy. What happens if the dio call passes in
-> an address from the same address space?
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-If we submit direct IO that uses mapped file F at offset O as a buffer for
-direct IO from file F, offset O, it will currently livelock in an
-indefinite retry loop. It should rather return error or fall back to
-buffered IO. But that should be fixable. Andreas?
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-But if the buffer and direct IO range does not overlap, it will just
-happily work - iomap_dio_rw() invalidates only the range direct IO is done
-to.
-
-> What happens if we race with the pages we faulted in being evicted?
-
-We fault them in again and retry.
-
-> > Also good that you've written a fstest for this, that is definitely a useful
-> > addition, although I suspect GFS2 guys added a test for this not so long
-> > ago when testing their stuff. Maybe they have a pointer handy?
+> ---
+>  arch/arm64/kernel/cpufeature.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 > 
-> More tests more good.
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 7d7128c65161..27326f35b646 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -2235,11 +2235,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+>  		.capability = ARM64_HAS_ECV_CNTPOFF,
+>  		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+>  		.matches = has_cpuid_feature,
+> -		.sys_reg = SYS_ID_AA64MMFR0_EL1,
+> -		.field_pos = ID_AA64MMFR0_EL1_ECV_SHIFT,
+> -		.field_width = 4,
+> -		.sign = FTR_UNSIGNED,
+> -		.min_field_value = ID_AA64MMFR0_EL1_ECV_CNTPOFF,
+> +		ARM64_CPUID_FIELDS(ID_AA64MMFR0_EL1, ECV, CNTPOFF)
+>  	},
+>  #ifdef CONFIG_ARM64_PAN
+>  	{
 > 
-> So if we want to lift this scheme to the VFS layer, we'd start by
-> replacing the lock you added (grepping for it, the name escapes me) with
-> a different type of lock - two_state_shared_lock in my code, it's like a
-> rw lock except writers don't exclude other writers. That way the DIO
-> path can use it without singlethreading writes to a single file.
-
-Yes, I've noticed that you are introducing in bcachefs a lock with very
-similar semantics to mapping->invalidate_lock, just with this special lock
-type. What I'm kind of worried about with two_state_shared_lock as
-implemented in bcachefs is the fairness. AFAICS so far if someone is e.g.
-heavily faulting pages on a file, direct IO to that file can be starved
-indefinitely. That is IMHO not a good thing and I would not like to use
-this type of lock in VFS until this problem is resolved. But it should be
-fixable e.g. by introducing some kind of deadline for a waiter after which
-it will block acquisitions of the other lock state.
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> ---
+> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+> change-id: 20230523-arm64-ecv-helper-c1665690b8b0
+> 
+> Best regards,
