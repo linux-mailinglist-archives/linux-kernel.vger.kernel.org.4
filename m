@@ -2,207 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493F4710F51
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840C6710F55
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241721AbjEYPR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S241732AbjEYPSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233538AbjEYPRy (ORCPT
+        with ESMTP id S233538AbjEYPS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:17:54 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2089.outbound.protection.outlook.com [40.107.8.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5AE18D;
-        Thu, 25 May 2023 08:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JaqtJCYv8GEOJTt4Jpn23KCOtnF2GS1ThHOERK+62aw=;
- b=bRHY7up55n9tI8HEYkQ24oyx8ZRd/1jpgrk0VzHIC4ZsVsc3mO7Ho/72KYiKqdnUpQJKvQFA7ec9XVBwdZcNZT2YmY2uBEgdr3+Dv9YVGzLKx7LFZwlRaH4zP4Xr+hilrQs5ZrO/r3LAO/VxLQnWi4aQxOWY7gV9tA221/NpZ+E=
-Received: from DB6PR1001CA0033.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:55::19)
- by DU0PR08MB7994.eurprd08.prod.outlook.com (2603:10a6:10:3e1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Thu, 25 May
- 2023 15:17:44 +0000
-Received: from DBAEUR03FT005.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:4:55:cafe::75) by DB6PR1001CA0033.outlook.office365.com
- (2603:10a6:4:55::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15 via Frontend
- Transport; Thu, 25 May 2023 15:17:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT005.mail.protection.outlook.com (100.127.142.81) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.16 via Frontend Transport; Thu, 25 May 2023 15:17:44 +0000
-Received: ("Tessian outbound 99a3040377ca:v136"); Thu, 25 May 2023 15:17:44 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 89d94cfb46a114e4
-X-CR-MTA-TID: 64aa7808
-Received: from c9f0007a83f3.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 383C9FE0-3F87-48CC-8ABA-5A3CBDD1A1D1.1;
-        Thu, 25 May 2023 15:17:37 +0000
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id c9f0007a83f3.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 25 May 2023 15:17:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VLK3p1MNARmKMIg7MIUSsWpO1hE6FM4ikETSzfl8vceBzw4SlSkpMnRLbDHF4yDolFK/GGqrVngH2d48Q87JXJuICJ16mm4FPG03MEvhi9wkMLy9Jp+782W22XVcbQY78tU+ScZnsahKR/aT2GAmECpBSE0zNjuhVMYK8rAiPkxpwy7XE9e7eQ5CTsX9Bo8XjkP2d91ypsvP1IWs0VupZgLzW7khnRE94dtKLlnHnSiJDJh4avuk21V7b9UEXocfH4KvfHFRSjsspMKrxoihRU5xkHGLo7Uy04LcpTFJ5h111/t7Nkgx/yTzkjzyhjexr+WNYkzLERMS01PUp1JZ4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JaqtJCYv8GEOJTt4Jpn23KCOtnF2GS1ThHOERK+62aw=;
- b=lr3jIVVlH6AVPnoW7tRl+UZL7h316M7cpdKohHruhs4Oql/BtZoyDV/gfv9QBbV5v+rjmD5nr0BgF10iaww6DOqp9jjsElL3F1uVWvUwXX70SypG7QzuSGGe6akpTL+/MZ7fKalUAglyex2ACSW3wGj1tnoUctSxNIIFXrcM8D33VbJb0X2u1B1CjHdbm83BEDB1GlCzjEhOJq6og0xEHmF69dppnSLTrCSbBvY6kqhe3YGy8bFunzjLTQqYRanTMQ7L0WMYBwMMRHbPlQp5q6KdrSKuRK7aVTiT27I6gCsbE0uGDLYNRQ+8Tp4Cee4SrU9FfrhaRQdC7ip8OZlYPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JaqtJCYv8GEOJTt4Jpn23KCOtnF2GS1ThHOERK+62aw=;
- b=bRHY7up55n9tI8HEYkQ24oyx8ZRd/1jpgrk0VzHIC4ZsVsc3mO7Ho/72KYiKqdnUpQJKvQFA7ec9XVBwdZcNZT2YmY2uBEgdr3+Dv9YVGzLKx7LFZwlRaH4zP4Xr+hilrQs5ZrO/r3LAO/VxLQnWi4aQxOWY7gV9tA221/NpZ+E=
-Received: from DBBPR08MB4538.eurprd08.prod.outlook.com (2603:10a6:10:d2::15)
- by DU0PR08MB9750.eurprd08.prod.outlook.com (2603:10a6:10:446::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
- 2023 15:17:34 +0000
-Received: from DBBPR08MB4538.eurprd08.prod.outlook.com
- ([fe80::96b:b3e2:f0e1:4b48]) by DBBPR08MB4538.eurprd08.prod.outlook.com
- ([fe80::96b:b3e2:f0e1:4b48%6]) with mapi id 15.20.6433.016; Thu, 25 May 2023
- 15:17:34 +0000
-From:   Justin He <Justin.He@arm.com>
-To:     Li Yang <leoyang.li@nxp.com>, Toshi Kani <toshi.kani@hpe.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
-CC:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] apei/ghes: correctly return NULL for
- ghes_get_devices()
-Thread-Topic: [PATCH v2] apei/ghes: correctly return NULL for
- ghes_get_devices()
-Thread-Index: AQHZio5ijWrlLPoKjkaclOfBPO5Xm69rGtXw
-Date:   Thu, 25 May 2023 15:17:34 +0000
-Message-ID: <DBBPR08MB45386D3C1E4958A36FDA781BF7469@DBBPR08MB4538.eurprd08.prod.outlook.com>
-References: <20230519201249.31147-1-leoyang.li@nxp.com>
-In-Reply-To: <20230519201249.31147-1-leoyang.li@nxp.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-x-ms-traffictypediagnostic: DBBPR08MB4538:EE_|DU0PR08MB9750:EE_|DBAEUR03FT005:EE_|DU0PR08MB7994:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b4b30a1-52fc-407c-6c42-08db5d3330b2
-x-checkrecipientrouted: true
-nodisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: AcmzoXkNU3sCTwisRQXH0cO4DHU0Fr98nSiUoOFrY6XZ487LyRfKo+9P0XgHpVgJiruedsV+fjHz7F0SkeLGPUfWAQ6aUEKcfzw9A7CA8V7vLb/utf7zWnZdVT/0BlGD2Q8MGsH3eFLt3Lzi7gG0X23819yMsYw1Y8G9IDz7DxS+iCcwaG0sXOx/yHsUTdiuEfF07cXmNzkBodgXAW41/sdYZJ69j3r5pV5vt4ggxBZaC25Az5Hqboo6mYTM0Ph8TXkkDmlabqtF0pBZWK3XHTIB9cyMYha4EMaMq73gtdhYKOQPjQvuJYgPoWVNh0tdcSzeC8JrIqoUU34FBhsH7QDOkWjs3p67U4cDwaoupn5d+QjuCw9P9w1or/0bQgkQYdTVkQwWbDFMmypYYPBLLGqYmfltNlTIoH34eq97aLIfmlT7F76DRxyX792oM5GGNfn9yEUI/6jH7wjfqfFLy4YHldjxjq6fMzXzQm/fDlSRtTh5QkvI2pFTYM0WOEm6uShEbH4liv79cg4KqzHlV1kJBaXhrCvfdnszcyyznZFD60Ommkxa+u+OFjJq12DlQkey2Bav/I/o8oTXi69+gqeTvIYHXH7YEh7qssMMMInPpM4QjRGjcSIrpKkLSFgR
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB4538.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199021)(26005)(9686003)(6506007)(53546011)(33656002)(55016003)(83380400001)(7696005)(186003)(86362001)(71200400001)(8676002)(8936002)(478600001)(38070700005)(110136005)(54906003)(5660300002)(38100700002)(2906002)(52536014)(122000001)(316002)(41300700001)(4326008)(66946007)(66556008)(66446008)(66476007)(76116006)(64756008);DIR:OUT;SFP:1101;
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 25 May 2023 11:18:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1664E98
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685027865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fOUzguOOu1eni0hOPBESb2FaTGC+gEEK2fy0+NLRd2Y=;
+        b=a/742ry9r0lLvK8ERgjUlTwe2l4RJHJP/4RhRKbC/l4KRp1ud1GawS3hGRe42OzIC9WT9h
+        gZbjZpFS/l9E/M6u8N0fMM6uCOzDoglx6a4bmqo1DGLbnft5JhidfSqpgG9RcPbQvBkyGE
+        HL8UF7O2FrdZbecBg6w0kifuMYm1sDA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-587--50MNHoFOo2WRg_ymbLqZA-1; Thu, 25 May 2023 11:17:41 -0400
+X-MC-Unique: -50MNHoFOo2WRg_ymbLqZA-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30953bcb997so858498f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:17:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685027860; x=1687619860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fOUzguOOu1eni0hOPBESb2FaTGC+gEEK2fy0+NLRd2Y=;
+        b=CpGBuvquz9oh1AZmePUqd3DiQkDGd5VwGZoxowFssRFKc3Fp1EdW9sAsv7w24lj72m
+         T8Ok5tkAMXMv3osT++QGDdBqPSUW0X3bb9Wjwmi1m/ihc/kA85VZmEV02nV5AGt2dLzG
+         67qzjjPS6aUZDh5uQzCxnve4TLvwjzb72aG6uEEG7OUFGyHpyfnSF1MnQ4HkfkhNmb52
+         t8Jhugp/+5gbYyQvfTuLoplmJKrGkym4RHF8jldhiYlJTA6UP/UnCnlOfQmwtwhrdpJP
+         fJjcIiSMMmSXZjcv/4kcO9N4J8mfHrDWEl9s9PBOw0CSKtDTctd+9Ff+rdGHwXnTLYt/
+         L3Mw==
+X-Gm-Message-State: AC+VfDzbjl/URhZIEOAC/onXeayaSRSOi5wHoNQHqNI2EwtC1c6A3dIR
+        TtUJKZ43wSqkPMWBu/CbsccruGSzuFJr7S15ft0X/0LWNJSSvWFCDntOEIYYAxP4+mRkLWfQvXI
+        MRGjVh19J2JpzHKNwVmjsLtPr
+X-Received: by 2002:a5d:4212:0:b0:2ef:ba4f:c821 with SMTP id n18-20020a5d4212000000b002efba4fc821mr2822695wrq.36.1685027860657;
+        Thu, 25 May 2023 08:17:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6u2bAg+oYFeJ8M2WSKlZ3Xymkov7A3BUBv/G/uJks2LTYCIXu75pDamPUph1Z92vbUzEybCA==
+X-Received: by 2002:a5d:4212:0:b0:2ef:ba4f:c821 with SMTP id n18-20020a5d4212000000b002efba4fc821mr2822672wrq.36.1685027860264;
+        Thu, 25 May 2023 08:17:40 -0700 (PDT)
+Received: from sgarzare-redhat ([217.171.68.36])
+        by smtp.gmail.com with ESMTPSA id g12-20020a5d488c000000b003090cb7a9e6sm2104222wrq.31.2023.05.25.08.17.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 08:17:39 -0700 (PDT)
+Date:   Thu, 25 May 2023 17:17:36 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Simon Horman <horms@kernel.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] virtio: Add missing documentation for structure fields
+Message-ID: <xjns5ktnvejnlze6viube6qzxs4fd5fb5trpvqpip2rlrvift4@utwfddrxavxw>
+References: <20230510-virtio-kdoc-v3-1-e2681ed7a425@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9750
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT005.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 94e61f9f-b565-4c43-a052-08db5d332aae
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DMBqGNQjPzd+yBFCyRN867o/tpGfC8q6ZHGra0K12V0oErQ5h2couFhjp8FrQ/vEiPEqBblyaoBfXxDv9yz5YrWZdtE/+KEf+FDuJ1xtSM88US5keqgPAAtqvP57Wxa9e7AoSRVMJOB/DrzYSJNTN5BtrS6dXWBIew1ko6eXXc1SvhRsmXi0nQf5ab3lVLx9bwWAdqNAM0Ex5asfBTWr7nSvlEF6DxAR3TUaiwA34BCcsrwhoyF2KoMvoAcS9h2/HlWo0/YZnquu8R6EQznCv5jgiDmpHybs/qMqEhj0+AsreFzlte86OoXGT5bGfR7R4n4JvyHKeOjvVVHP78qcQ2vg1ltu0S2woEhLwHuees9YMZRaLdMTEnW7KF6yZXpDkNPUGoYNxASuzmtojdjMs88l7/PkcBFjEdyDpQWlR8VYfe77oXRz+wgfxRi5Rgw/8ZKiYaJ/CB/X58lwLhqKyY9z6ZH4Ed6QNOL8FH5tPU4bwriOu4xX0b+Wkn+bWF7q57LOfDm3diAxB5CW8SB2VzlMsjov/vHsplUAMaQekt0FZLrnzD+hHupxoLBf8981GFnGhQ6i9y0L49JqqFEeh1xWyK5ZD/iOOcV7e7hnJMZDEG+ElB9jsZF1LQlYUI/ul3QdG7e+C4kWgtZSS5KkU7A7bp1iV3hE66qmdk9Tu4eW56q03hP5fAQyYRk3OHMRAkDAo8eE/p/ZmOyXt86xeW/yRLcPN/GRcYCCOxR5nzPBjfRCJ1HWRx0sclhpM1Mx
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(376002)(396003)(451199021)(40470700004)(46966006)(36840700001)(8676002)(8936002)(5660300002)(52536014)(336012)(86362001)(83380400001)(47076005)(82310400005)(9686003)(53546011)(186003)(6506007)(36860700001)(26005)(356005)(82740400003)(81166007)(40460700003)(54906003)(110136005)(33656002)(7696005)(478600001)(450100002)(4326008)(40480700001)(55016003)(70206006)(41300700001)(70586007)(316002)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 15:17:44.4615
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b4b30a1-52fc-407c-6c42-08db5d3330b2
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT005.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB7994
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230510-virtio-kdoc-v3-1-e2681ed7a425@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+On Thu, May 25, 2023 at 04:35:42PM +0200, Simon Horman wrote:
+>Add missing documentation for the vqs_list_lock field of struct virtio_device,
+>and the validate field of struct virtio_driver.
+>
+>./scripts/kernel-doc says:
+>
+> .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
+> .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
+> 2 warnings as Errors
+>
+>No functional changes intended.
+>
+>Signed-off-by: Simon Horman <horms@kernel.org>
+>---
+>Changes in v3:
+>- As suggested by Stefano Garzarella
+>  + Drop inline comment for @vqs_list_lock which is now covered by Kdoc
+>  + Add "Returns 0 or -errno." to @validate Kdoc
+>- Link to v2: https://lore.kernel.org/r/20230510-virtio-kdoc-v2-1-1c5a20eb4cfe@kernel.org
+>
+>Changes in v2:
+>- As suggested by Michael S. Tsirkin
+>  + @validate is not called on probe
+>  + @validate does validates config space
+>  + embarrassingly, validate was misspelt
+>- Link to v1: https://lore.kernel.org/r/20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org
+>---
+> include/linux/virtio.h | 5 ++++-
+> 1 file changed, 4 insertions(+), 1 deletion(-)
+>
+>diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+>index b93238db94e3..de6041deee37 100644
+>--- a/include/linux/virtio.h
+>+++ b/include/linux/virtio.h
+>@@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
+>  * @config_enabled: configuration change reporting enabled
+>  * @config_change_pending: configuration change reported while disabled
+>  * @config_lock: protects configuration change reporting
+>+ * @vqs_list_lock: protects @vqs.
+>  * @dev: underlying device.
+>  * @id: the device type identification (used to match it with a driver).
+>  * @config: the configuration ops for this device.
+>@@ -117,7 +118,7 @@ struct virtio_device {
+> 	bool config_enabled;
+> 	bool config_change_pending;
+> 	spinlock_t config_lock;
+>-	spinlock_t vqs_list_lock; /* Protects VQs list access */
+>+	spinlock_t vqs_list_lock;
+> 	struct device dev;
+> 	struct virtio_device_id id;
+> 	const struct virtio_config_ops *config;
+>@@ -160,6 +161,8 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
+>  * @feature_table_size: number of entries in the feature table array.
+>  * @feature_table_legacy: same as feature_table but when working in legacy mode.
+>  * @feature_table_size_legacy: number of entries in feature table legacy array.
+>+ * @validate: the function to call to validate features and config space.
+>+ *            Returns 0 or -errno.
+>  * @probe: the function to call when a device is found.  Returns 0 or -errno.
+>  * @scan: optional function to call after successful probe; intended
+>  *    for virtio-scsi to invoke a scan.
+>
 
-> -----Original Message-----
-> From: Li Yang <leoyang.li@nxp.com>
-> Sent: Saturday, May 20, 2023 4:13 AM
-> To: Rafael J. Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>;
-> James Morse <James.Morse@arm.com>; Tony Luck <tony.luck@intel.com>;
-> Borislav Petkov <bp@alien8.de>; Justin He <Justin.He@arm.com>
-> Cc: Li Yang <leoyang.li@nxp.com>; linux-acpi@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: [PATCH v2] apei/ghes: correctly return NULL for ghes_get_devices=
-()
->
-> Since 315bada690e0 ("EDAC: Check for GHES preference in the chipset-speci=
-fic
-> EDAC drivers"), vendor specific EDAC driver will not probe correctly when
-> CONFIG_ACPI_APEI_GHES is enabled but no GHES device is present.  Make
-> ghes_get_devices() return NULL when the GHES device list is empty to fix =
-the
-> problem.
->
-> Fixes: 9057a3f7ac36 ("EDAC/ghes: Prepare to make ghes_edac a proper
-> module")
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> Cc: Jia He <justin.he@arm.com>
-> ---
->
-> V2: fix the fallthrough case in x86 path
->
->  drivers/acpi/apei/ghes.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c index
-> 34ad071a64e9..4382fe13ee3e 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -1544,6 +1544,8 @@ struct list_head *ghes_get_devices(void)
->
->                       pr_warn_once("Force-loading ghes_edac on an unsuppo=
-rted
-> platform. You're on your own!\n");
->               }
-> +     } else if (list_empty(&ghes_devs)) {
-> +             return NULL;
->       }
-I have no major objections to the fix. Just curious about the edac driver i=
-n you platform.
-IIUC, in your case, CONFIG_ACPI_APEI_GHES is enabled and edac_ghes driver i=
-s either not
-loaded or fails to load. Is my understanding correct?
-I wonder whether ghes_get_devices() can unblock such check condition and le=
-t other
-chipset-specific edac drivers continue with the initialization. @Toshi, Wha=
-t do u think of it?
+LGTM!
 
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
---
-Cheers,
-Justin (Jia He)
+Thanks,
+Stefano
 
-
-IMPORTANT NOTICE: The contents of this email and any attachments are confid=
-ential and may also be privileged. If you are not the intended recipient, p=
-lease notify the sender immediately and do not disclose the contents to any=
- other person, use it for any purpose, or store or copy the information in =
-any medium. Thank you.
