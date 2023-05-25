@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97B37107D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC197107B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240395AbjEYIp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S238810AbjEYIid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240434AbjEYIpz (ORCPT
+        with ESMTP id S239928AbjEYIi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:45:55 -0400
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D571C1A7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1685004343;
-        bh=i4JEJ+iedFMD6KYt68n+jBY5d6yW9GHI2pIwF3VrG6E=;
-        h=From:To:Cc:Subject:Date;
-        b=ITjvE82gtsckH3mIB3+ctrFLSncvE4ZvTh+TC82CpOByKMj96wD8rizhyNdGJpDiD
-         CSnbqyikB1rygnrQA6+chud/DlG5ETyZqDvKzC/wMJMvBK0IbzUj7mEzVryX0a+eLA
-         O02Zc/7u7osRfRSx5k9oEB9XB8aSjhKUkIzwO2wU=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id 95F03E33; Thu, 25 May 2023 16:37:31 +0800
-X-QQ-mid: xmsmtpt1685003851tlop1r3kr
-Message-ID: <tencent_C121802C93CB4095C6D7D95113442E830A07@qq.com>
-X-QQ-XMAILINFO: NZzGjqyvvdMf3CIm3NRvKWvf4w2LJXGJBmFdxBUX8nKHjbCHKx88KiV4xnC/MK
-         X50X3D9GiGHM28l6Q4K8avJ9hAPGZeO7XviIIplWP8VP7LZGu6ZQ3OqW10NUTlqwUdg62KW5Ic+C
-         DveeQxN9107ZK4608lLEJFCCoAsn7gm5xn1jI+adS7hCH9mwpTovczuoDPTTCVoRyaWl/+98iJz6
-         yusmciq20K5ejhHhyDVOioD0Nv9u1D59waREjFx0UlVs2109DmkWj5cT7j4euOggH7FT0qpiTGUw
-         kmWo1fXjsdi6Y8MM/vh4PXUvZchB1JmVpSqyyfwncYoaGUVN1yrkywNabMIx0OKGCh1NdJoUxXOC
-         olxR51n8hWSTbioy8kt3oN6dYtSQUIeiBR8HJx2Hk7htEkMw8HyxnNQiEIfcSKKnfTjceHkMHSmH
-         uQDB8DKNWCNi8T5bQVLcDtbfpJCxDEnfvA5NoDAMSi5LlH6RLz6n73VDBKmIsVjVxdLJHfPf+Cpe
-         y9ZX5w+CFAOzjFYPwz/Zm2qiTeXgER4RXatPWhfxeWjlndxgqzV2oEpwT+YG5kfbYMYudvUstb/C
-         HJeiHHOaurW/i7+1PhRXeDtO95Ev8gjt4uxFPCNtWbnwTq6Hzp3t6LVV7MRFaLs3Xmuvjp16B0b/
-         XaAXnjJ7lBwxYXIwOSRdbymXTq6Qt2eqCftegyNEEAXgcpl1Z4s96IQAsCeGE6utYuaqL2psOqIL
-         uT5nQCi+NTqN6Klp25kvwnmjA0xJetcF9qsFrPwgC9Y4TzaMwK0cby+OAnAfLolSpzTM88bO4Ycu
-         CkYBwsaM9eumHOMsUEuIkz3UO1Pjdzj/0/tQQjMPbcQ7ndtb24Kzn4UTIxWpy4t0XPULoEBTS70x
-         JrAHLh4KEQ4eHd703OySug4mU6Ndmx8EWzBvGbYKR/O1Q3yv3LkuduwBU7qRwqRiFyfFpHZJ0fqa
-         jO6YeJIWcwEz9P7c3IzMUNnK75s6AsTDe/gS3rMXc=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     mst@redhat.com
-Cc:     Rong Tao <rongtao@cestc.cn>, Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org (open list),
-        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND
-        NET DRIVERS)
-Subject: [PATCH v2] tools/virtio: Add .gitignore for ringtest
-Date:   Thu, 25 May 2023 16:37:28 +0800
-X-OQ-MSGID: <20230525083729.26278-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.1
+        Thu, 25 May 2023 04:38:29 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F286E7C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:37:59 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f623adec61so3312765e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685003872; x=1687595872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NXlTQR3mkNIo3HOsZ1H2pP7ShXmOplvHz6L0vbceCUg=;
+        b=qu/k/5DqECU9IbtboDrmFdRe89GYbH/trzXYk46C81yh5N44aQ5AB8n1P9VgUTF2jr
+         Pkzkz8LEDnbGKS4sBH4ih5c2wyA2YC9PKKmd2wKx5pAFDuDf4b2oDg1CS1zTaDgucn6m
+         ON8DlaOXjbGcWZW7MNN4yXRY1wvMjUSZNW/RjnKstC/e/lBFrkbd8OOzXkrEzJxmYGDr
+         o+TK08/PDV/2z/066/yeCOWiiLxoJanzMAtkAFwHW+O0KFadXb5bRzKrPDb2QwvameTt
+         nFXPvrFBszyWzQahUYcz9VEtD+pxWmCaNPOGFkidZtfcwylEwyMAm4xbeUjXcScQqKpG
+         If0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685003872; x=1687595872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NXlTQR3mkNIo3HOsZ1H2pP7ShXmOplvHz6L0vbceCUg=;
+        b=POLoXv3hjHCCpF5lUeL2sP5oAUVpDwaT3RUmNitk6ZB6Hg+U9S918DjTrSTSMAmovi
+         vG9o/Cf8gCa/XuXUzyuWmy6+pXmKGXN/H3J2fs4vRt38LIPMYB3S95xPfKrHTRdYSHkh
+         xvZ5AIaNR5ZpyLmvnMmTmeh416p924xYOpDNE8Kv619btut2jQTfTn9O0WvG1i46heyk
+         uZMLOWm2tbbSRlYmppJ9sDLLWFbAYTsy/PJbXh6yusIwt9vxJJt6jixDem/DTAaqgVfI
+         EAakz/CbFjkuBMCJKd4JsG+YXFkNFygNZf38hFNXn1XGV3sq2N+h16f1tJRYTjjXcRNX
+         L8uw==
+X-Gm-Message-State: AC+VfDzh3NNFe4gvxsnXmDCZwINlmnHco08qlLLNQChPl1pUmdxIdrt7
+        YtqhzNDta6YpNMz1/o9LqX1yyg==
+X-Google-Smtp-Source: ACHHUZ5SQQPDiVagKO/3USB3C9hbvuAr4jLS4JAHKciIaqgDydWaTXDgss8FAtTEX5yhdCX/1oPNAA==
+X-Received: by 2002:adf:f84c:0:b0:307:8694:44e0 with SMTP id d12-20020adff84c000000b00307869444e0mr1764181wrq.55.1685003872049;
+        Thu, 25 May 2023 01:37:52 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id x4-20020a5d54c4000000b002c70ce264bfsm976048wrv.76.2023.05.25.01.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 01:37:50 -0700 (PDT)
+Date:   Thu, 25 May 2023 11:37:47 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Joel Granados <j.granados@samsung.com>
+Cc:     mcgrof@kernel.org, Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Iurii Zaikin <yzaikin@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH v4 7/8] sysctl: Refactor base paths registrations
+Message-ID: <c97bfda5-cecf-4521-880b-02c6da987120@kili.mountain>
+References: <20230523122220.1610825-1-j.granados@samsung.com>
+ <CGME20230523122236eucas1p17639bfdbfb30c9d751e0a8fc85fe2fd3@eucas1p1.samsung.com>
+ <20230523122220.1610825-8-j.granados@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523122220.1610825-8-j.granados@samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On Tue, May 23, 2023 at 02:22:19PM +0200, Joel Granados wrote:
+> This is part of the general push to deprecate register_sysctl_paths and
+> register_sysctl_table. The old way of doing this through
+> register_sysctl_base and DECLARE_SYSCTL_BASE macro is replaced with a
+> call to register_sysctl_init. The 5 base paths affected are: "kernel",
+> "vm", "debug", "dev" and "fs".
+> 
+> We remove the register_sysctl_base function and the DECLARE_SYSCTL_BASE
+> macro since they are no longer needed.
+> 
+> In order to quickly acertain that the paths did not actually change I
+> executed `find /proc/sys/ | sha1sum` and made sure that the sha was the
+> same before and after the commit.
+> 
+> We end up saving 563 bytes with this change:
+> 
+> ./scripts/bloat-o-meter vmlinux.0.base vmlinux.1.refactor-base-paths
+> add/remove: 0/5 grow/shrink: 2/0 up/down: 77/-640 (-563)
+> Function                                     old     new   delta
+> sysctl_init_bases                             55     111     +56
+> init_fs_sysctls                               12      33     +21
+> vm_base_table                                128       -    -128
+> kernel_base_table                            128       -    -128
+> fs_base_table                                128       -    -128
+> dev_base_table                               128       -    -128
+> debug_base_table                             128       -    -128
+> Total: Before=21258215, After=21257652, chg -0.00%
+> 
+> Signed-off-by: Joel Granados <j.granados@samsung.com>
+> [mcgrof: modified to use register_sysctl_init() over register_sysctl()
+>  and add bloat-o-meter stats]
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Ignore executables for ringtest.
+This needs a Fixes tag so it doesn't get backported by some weird fluke.
+Or you could just fold it in with the original patch which introduced
+the bug.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
-v2: Fix Subject and Description of submission.
-v1: https://lore.kernel.org/lkml/tencent_C8F0F579940491D14055C82FABE812478505@qq.com/
----
- tools/virtio/ringtest/.gitignore | 7 +++++++
- 1 file changed, 7 insertions(+)
- create mode 100644 tools/virtio/ringtest/.gitignore
+Probably add a copy of the output from dmesg?  Maybe add some
+Reported-by tags?
 
-diff --git a/tools/virtio/ringtest/.gitignore b/tools/virtio/ringtest/.gitignore
-new file mode 100644
-index 000000000000..100b9e30c0f4
---- /dev/null
-+++ b/tools/virtio/ringtest/.gitignore
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/noring
-+/ptr_ring
-+/ring
-+/virtio_ring_0_9
-+/virtio_ring_inorder
-+/virtio_ring_poll
--- 
-2.39.1
-
+regards,
+dan carpenter
+> 
