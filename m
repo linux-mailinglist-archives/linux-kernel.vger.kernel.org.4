@@ -2,213 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734377118DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E6A7118DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjEYVNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S235464AbjEYVOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 17:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEYVNc (ORCPT
+        with ESMTP id S229470AbjEYVOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 17:13:32 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1E89E
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:13:30 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so2966994e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685049208; x=1687641208;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9SZgJkEuk57kDCIrdJoLldT8KXfqYqeFjG76R55NgrE=;
-        b=JaqdJoj9FHwmqSNvGCTLn6JkyfBJXC2SvUwAMk/jEV2ZshDAV0tXnrE12dQqxrI18Z
-         /E6pgcbNwp5Qz6XhHWMAw6TpizGL5QO5arU/UQJmWffUcqub9HRQl1tcR5PEdTFy4DU+
-         xFZuQuCeSExnUERqP9+oy5Vc5i9LZzisLqRHQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685049208; x=1687641208;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9SZgJkEuk57kDCIrdJoLldT8KXfqYqeFjG76R55NgrE=;
-        b=OcANQ5sYClEYqYNpggE/xbgHcH9zi64u0lKWPpPu/zkBFRvsHdj5NtlR77xLTGO2ic
-         SScoNjiPnlunNNlf7RZXE7WBhn7fQ3oxrneDpZuevtGHqKkizYP37xxdNJ1q8IZgyt74
-         lpwmEzjGuHkKNDQLhlSHGYp64st7QswcwfYDg4ENEK1xngW20e0hk0/T/8KjoAHCJrxv
-         MfPQDoJH15pB9i1/1zXsT23BlxxreIhiQdKyOxFaK3NREnCalzjosfgq49DOG4wKCg1A
-         WSL3kIBUPYyo+6uRqFDAPUQRiLMhnmsiX3DBWdKZgq9W6BLznk81HjRtQ8sdoyqAk6OJ
-         u6NA==
-X-Gm-Message-State: AC+VfDxUagl3kHWfdp+ytShmZ5FSH4B4MFlTss+3Iqge2LKYvIIlR1hn
-        /5cMP5ZhRahelUL5QLGoEz1x9tUDx14mDFTnvPqX2qwi
-X-Google-Smtp-Source: ACHHUZ7ZDQKGdjlsym0W31pqwfVwogd+mYhbts97YQDT0bFQbbDetflOnPJtfX78U6pJUgD4v5hZpg==
-X-Received: by 2002:ac2:5fe4:0:b0:4f2:5338:d0a8 with SMTP id s4-20020ac25fe4000000b004f25338d0a8mr7375877lfg.56.1685049208378;
-        Thu, 25 May 2023 14:13:28 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id j28-20020ac2551c000000b004f399531e8csm338457lfk.226.2023.05.25.14.13.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 14:13:27 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f3b39cea1eso2950967e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:13:27 -0700 (PDT)
-X-Received: by 2002:a17:907:1628:b0:973:8edc:5a3a with SMTP id
- hb40-20020a170907162800b009738edc5a3amr82698ejc.30.1685049186309; Thu, 25 May
- 2023 14:13:06 -0700 (PDT)
+        Thu, 25 May 2023 17:14:31 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2086.outbound.protection.outlook.com [40.107.101.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479C09E;
+        Thu, 25 May 2023 14:14:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hk5oQvfgc44rV0cvvZe1fuHrcPBcBBQTxfekSjkrBUeLl1dtLJYxydWEtEMRhjA4+ZuoLDh2ZcZxHIkAfpTmmc0oAt6d+4n5UQ31BvVDmhUJAtirtwFlm6w9Ebn9xWSqRlrW3nPeqk8fJIck0Bj+T2QAidPtRcaJQp9woVnQfZ7pOQHB8GYtHob+9vUKGXESg1kbmdjZyvsr1gH/l1WHQhJufqSImPM5+wQLyrMJludbcaq6L3zh2Ed+KxbNQzWYrFBeyoYhByGLB92qtl2qZBQSiTHOpau5E8Ud8KsIxnQRrdj7jInL9cFm5xZZJp/o+KYjdIZjAP+gbxWdhstovA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OnMpYLLCBQ6qeulIOv2PyoEMFubfH8Q+LayzKZcAogk=;
+ b=QjwWc6w0oRsE2Z/Mpet/b1lYSk/EAi6betfTSjYMzH7dRVLXdz13R5tgq0Tbe+l+DJTMVXdD7vAjrbGt3MVj+i0FgVJm2Nyupqq3PW+iIu1vxxTmPdjU0FRhA4YW1CzCCgs798ZZShRmNJtqVyyc25oHAQd3aOfWtJve8gd/SOPVeUMB2Qpj7b0I890IZU5/zluv4RcvMmrnOlcPOljo8RbNa9xX5cmMfvXs7qmJhBuB5ftHHeC2mv8o24aFvOrXKGg2dVRhUfOYumEcTYxc3dudM58ecLUQ8o14NEBXDFpBUdI4uEATVnvbJvP8hxgRrOiVWqHxHTUjzvVNQY4K2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=aculab.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OnMpYLLCBQ6qeulIOv2PyoEMFubfH8Q+LayzKZcAogk=;
+ b=e01RcUvvYNeMgdFctd6KKEOZ2pl5ryZ3A6/b4VT4yRCgIz4P8u0qRSxF0UNz92RM6b44N9gn6UJt//8LHuLgU+5DHvEFpJNipM/etsEcXstPQSe12lP6PUdYLhf4ubFFtz6im+vBkayTGhftKT0S64XPUVS9zqGaQ6WyfqnB9hg=
+Received: from DM5PR08CA0029.namprd08.prod.outlook.com (2603:10b6:4:60::18) by
+ IA1PR12MB6283.namprd12.prod.outlook.com (2603:10b6:208:3e5::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.28; Thu, 25 May 2023 21:14:28 +0000
+Received: from DM6NAM11FT095.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:60:cafe::77) by DM5PR08CA0029.outlook.office365.com
+ (2603:10b6:4:60::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16 via Frontend
+ Transport; Thu, 25 May 2023 21:14:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT095.mail.protection.outlook.com (10.13.172.180) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6433.17 via Frontend Transport; Thu, 25 May 2023 21:14:27 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 25 May
+ 2023 16:14:27 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 25 May
+ 2023 16:14:27 -0500
+Received: from yuho-dev.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 25 May 2023 16:14:26 -0500
+From:   Kenny Ho <Kenny.Ho@amd.com>
+To:     David Laight <David.Laight@aculab.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        "Kenny Ho" <y2kenny@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <alexander.deucher@amd.com>
+CC:     Kenny Ho <Kenny.Ho@amd.com>
+Subject: [PATCH] Truncate UTS_RELEASE for rxrpc version
+Date:   Thu, 25 May 2023 17:13:46 -0400
+Message-ID: <20230525211346.718562-1-Kenny.Ho@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-3-mcgrof@kernel.org>
- <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com> <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
- <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
-In-Reply-To: <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 25 May 2023 14:12:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
-Message-ID: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
-        lucas.de.marchi@gmail.com, christophe.leroy@csgroup.eu,
-        peterz@infradead.org, rppt@kernel.org, dave@stgolabs.net,
-        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Content-Type: multipart/mixed; boundary="0000000000002e29d205fc8b1635"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT095:EE_|IA1PR12MB6283:EE_
+X-MS-Office365-Filtering-Correlation-Id: d9bf4e0b-bfef-41f2-19e2-08db5d650610
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8e+3+xJJalhLVKKEHp0PA+Yn9E7cDXUweo3GTe2TNR2wbK2N+GXuuIJrphmG2y7GP36tXt0yg4e90CZdZPYzzcXUmll1160mZqy6LQ/K4C340YZzq9KSOicwcMq1orzXqYtiUZdvqQEexmOtloom5BT7tkXMgt2oyOr0BJrUSBdmgU21VDD2ikm3GnTjAteaUw/e9iOa4kit/J/+H/os6fjc3MOPiWEwh6qfxd/Q8mzir33dfW6gKP1XUPK4TqV9GkGUff+MMA2HXeUSpHKe42/d6ChTa9c4eX5i05La9EU4Gju4Xq+Znc/TnqCnRHbSIz3IZts+Blq6IOLv6kmKVhFh4/FxlDSY38Ly0iUwBNQT8hzyR1cnE50SvRFfbK5Cc4HORY3/JdNdTEeqWvBnkd8KiU5naAJqWKu3LNFumxCOjpkb/iCwjPer6Mzq1IflfrGGtutCk4xe8XPngB8OMtvrpGk/TLC+GMvaP6+oHI8Pr0j7zGhGLnsXKAPInfUgoWlCht7VLQqC1c/cudKi6Ar9YbHMn79SxIrqt8cM3Ck+OPsXi/hr9W7CuMdQu+3VUe0tMGMLxEvrH077MUV/X0lUAXODzgafm8UTqOjSDOJy9kKTR4g2m3QLdNT3Xqr5Nh5AMYc/HU11iHPFqZh2x29iSwOrEKp5FO7nDT7iY3Era8iKJ2wgmSa8YTO6yt8Vptjpq9s3xy0bHth05VpsOetOOdNWFbIJikgZfM4ZWTOHrzeJi1sLCV/dseRbrb5k9k1/GgqPymlnTZkPdxMAWw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199021)(40470700004)(46966006)(36840700001)(7696005)(6666004)(966005)(40460700003)(2616005)(186003)(36860700001)(83380400001)(426003)(336012)(1076003)(47076005)(26005)(40480700001)(36756003)(82740400003)(82310400005)(86362001)(921005)(81166007)(356005)(70206006)(2906002)(70586007)(7416002)(316002)(6636002)(4326008)(8936002)(8676002)(41300700001)(5660300002)(478600001)(110136005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 21:14:27.7074
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9bf4e0b-bfef-41f2-19e2-08db5d650610
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT095.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6283
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002e29d205fc8b1635
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+UTS_RELEASE has maximum length of 64 which can cause rxrpc_version to
+exceed the 65 byte message limit.
 
-On Thu, May 25, 2023 at 11:45=E2=80=AFAM Lucas De Marchi
-<lucas.demarchi@intel.com> wrote:
->
-> Are you willig to merge (a possibly improved version of) your patch
-> or the userspace change is still something that would be desired?
+Per https://web.mit.edu/kolya/afs/rx/rx-spec
+"If a server receives a packet with a type value of 13, and the
+client-initiated flag set, it should respond with a 65-byte payload
+containing a string that identifies the version of AFS software it is
+running."
 
-I think a user space change should still be something that people
-should look at, particularly as the kernel side patch I'm willing to
-accept doesn't catch the "completely serial" cases, only the "trying
-to load at the same time that the same module is literally busy being
-loaded".
+Current implementation causes compile error when WERROR is turned on and
+when UTS_RELEASE exceed the length of 49 (making the version string more
+than 64 characters.)
 
-But I've cleaned up my patch a bit, and while the cleaned-up version
-is rather larger as a patch (mainly because of just also re-organizing
-the finit_module() code to do all the 'struct file' prep), I'm
-actually pretty happy with this attached patch conceptually.
+Signed-off-by: Kenny Ho <Kenny.Ho@amd.com>
+---
+ net/rxrpc/local_event.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-In this form, it actually "makes sense" to me, rather than being just
-clearly a workaround.  Also, unlike the previous patch, this doesn't
-actually make any changes to the basic kernel_read_file() set of
-functions, it's all done by the module loading code itself.
+diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
+index 19e929c7c38b..90af6fbb9266 100644
+--- a/net/rxrpc/local_event.c
++++ b/net/rxrpc/local_event.c
+@@ -16,8 +16,6 @@
+ #include <generated/utsrelease.h>
+ #include "ar-internal.h"
+ 
+-static const char rxrpc_version_string[65] = "linux-" UTS_RELEASE " AF_RXRPC";
+-
+ /*
+  * Reply to a version request
+  */
+@@ -30,6 +28,7 @@ static void rxrpc_send_version_request(struct rxrpc_local *local,
+ 	struct sockaddr_rxrpc srx;
+ 	struct msghdr msg;
+ 	struct kvec iov[2];
++	static char rxrpc_version_string[65];
+ 	size_t len;
+ 	int ret;
+ 
+@@ -38,6 +37,12 @@ static void rxrpc_send_version_request(struct rxrpc_local *local,
+ 	if (rxrpc_extract_addr_from_skb(&srx, skb) < 0)
+ 		return;
+ 
++	if (!rxrpc_version_string[0])
++		snprintf(rxrpc_version_string,
++				sizeof(rxrpc_version_string),
++				"linux-%.49s AF_RXRPC",
++				UTS_RELEASE);
++
+ 	msg.msg_name	= &srx.transport;
+ 	msg.msg_namelen	= srx.transport_len;
+ 	msg.msg_control	= NULL;
+-- 
+2.25.1
 
-Luis, would you mind testing this version on your load? It still won't
-actually handle the purely serial case, so there *will* be those
-spurious double module reads from different CPU's just doing the
-things serially, but the exclusive file access region has been
-extended to not just cover the actual file content reading, but to
-cover the whole "turn it into a a real module" part too.
-
-Also, this does *not* update some of the comments in the module
-loading. I changed finit_module to use "kernel_read_file()" instead of
-"kernel_read_file_from_fd()", since it actually now has to look up the
-file descriptor anyway. But the comments still talk about that
-"from_fd" thing.
-
-Anyway, this is back to "ENTIRELY UNTESTED" territory, in that I've
-compiled this, but haven't booted it. The changes look obvious, but
-hey, mistakes happen.
-
-And the commit message is just a place-holder. Obviously. I won't sign
-off on this or write more of a commit message until it has had some
-real testing.
-
-                  Linus
-
---0000000000002e29d205fc8b1635
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-Attempt-at-workaround-for-horrible-udev-module-loadi.patch"
-Content-Disposition: attachment; 
-	filename="0001-Attempt-at-workaround-for-horrible-udev-module-loadi.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_li3mpxbp0>
-X-Attachment-Id: f_li3mpxbp0
-
-RnJvbSBlMzIyM2JmYmRkNTQ1NWYwYjExMzM3YTU5MWZhZDNhMTgxNmI5ZDA5IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IFRodSwgMjUgTWF5IDIwMjMgMDk6MzI6MjUgLTA3MDAKU3ViamVjdDog
-W1BBVENIXSBBdHRlbXB0IGF0IHdvcmthcm91bmQgZm9yIGhvcnJpYmxlIHVkZXYgbW9kdWxlIGxv
-YWRpbmcKIGJlaGF2aW9yCgotLS0KIGluY2x1ZGUvbGludXgvZnMuaCAgIHwgIDYgKysrKwoga2Vy
-bmVsL21vZHVsZS9tYWluLmMgfCA3MiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0t
-LS0tLS0tLS0tLQogMiBmaWxlcyBjaGFuZ2VkLCA1NiBpbnNlcnRpb25zKCspLCAyMiBkZWxldGlv
-bnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2ZzLmggYi9pbmNsdWRlL2xpbnV4L2Zz
-LmgKaW5kZXggMjFhOTgxNjgwODU2Li43MjJiNDJhNzdkNTEgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUv
-bGludXgvZnMuaAorKysgYi9pbmNsdWRlL2xpbnV4L2ZzLmgKQEAgLTI1NjYsNiArMjU2NiwxMiBA
-QCBzdGF0aWMgaW5saW5lIGludCBkZW55X3dyaXRlX2FjY2VzcyhzdHJ1Y3QgZmlsZSAqZmlsZSkK
-IAlzdHJ1Y3QgaW5vZGUgKmlub2RlID0gZmlsZV9pbm9kZShmaWxlKTsKIAlyZXR1cm4gYXRvbWlj
-X2RlY191bmxlc3NfcG9zaXRpdmUoJmlub2RlLT5pX3dyaXRlY291bnQpID8gMCA6IC1FVFhUQlNZ
-OwogfQorc3RhdGljIGlubGluZSBpbnQgZXhjbHVzaXZlX2Rlbnlfd3JpdGVfYWNjZXNzKHN0cnVj
-dCBmaWxlICpmaWxlKQoreworCWludCBvbGQgPSAwOworCXN0cnVjdCBpbm9kZSAqaW5vZGUgPSBm
-aWxlX2lub2RlKGZpbGUpOworCXJldHVybiBhdG9taWNfdHJ5X2NtcHhjaGcoJmlub2RlLT5pX3dy
-aXRlY291bnQsICZvbGQsIC0xKSA/IDAgOiAtRVRYVEJTWTsKK30KIHN0YXRpYyBpbmxpbmUgdm9p
-ZCBwdXRfd3JpdGVfYWNjZXNzKHN0cnVjdCBpbm9kZSAqIGlub2RlKQogewogCWF0b21pY19kZWMo
-Jmlub2RlLT5pX3dyaXRlY291bnQpOwpkaWZmIC0tZ2l0IGEva2VybmVsL21vZHVsZS9tYWluLmMg
-Yi9rZXJuZWwvbW9kdWxlL21haW4uYwppbmRleCAwNDRhYTJjOWUzY2IuLmI0YzdlOTI1ZmRiMCAx
-MDA2NDQKLS0tIGEva2VybmVsL21vZHVsZS9tYWluLmMKKysrIGIva2VybmVsL21vZHVsZS9tYWlu
-LmMKQEAgLTMwNTcsMTEgKzMwNTcsNTMgQEAgU1lTQ0FMTF9ERUZJTkUzKGluaXRfbW9kdWxlLCB2
-b2lkIF9fdXNlciAqLCB1bW9kLAogCXJldHVybiBsb2FkX21vZHVsZSgmaW5mbywgdWFyZ3MsIDAp
-OwogfQogCi1TWVNDQUxMX0RFRklORTMoZmluaXRfbW9kdWxlLCBpbnQsIGZkLCBjb25zdCBjaGFy
-IF9fdXNlciAqLCB1YXJncywgaW50LCBmbGFncykKK3N0YXRpYyBpbnQgZmlsZV9pbml0X21vZHVs
-ZShzdHJ1Y3QgZmlsZSAqZmlsZSwgY29uc3QgY2hhciBfX3VzZXIgKiB1YXJncywgaW50IGZsYWdz
-KQogewogCXN0cnVjdCBsb2FkX2luZm8gaW5mbyA9IHsgfTsKIAl2b2lkICpidWYgPSBOVUxMOwog
-CWludCBsZW47CisKKwlsZW4gPSBrZXJuZWxfcmVhZF9maWxlKGZpbGUsIDAsICZidWYsIElOVF9N
-QVgsIE5VTEwsCisJCQkJICAgICAgIFJFQURJTkdfTU9EVUxFKTsKKwlpZiAobGVuIDwgMCkgewor
-CQltb2Rfc3RhdF9pbmMoJmZhaWxlZF9rcmVhZHMpOworCQltb2Rfc3RhdF9hZGRfbG9uZyhsZW4s
-ICZpbnZhbGlkX2tyZWFkX2J5dGVzKTsKKwkJcmV0dXJuIGxlbjsKKwl9CisKKwlpZiAoZmxhZ3Mg
-JiBNT0RVTEVfSU5JVF9DT01QUkVTU0VEX0ZJTEUpIHsKKwkJaW50IGVyciA9IG1vZHVsZV9kZWNv
-bXByZXNzKCZpbmZvLCBidWYsIGxlbik7CisJCXZmcmVlKGJ1Zik7IC8qIGNvbXByZXNzZWQgZGF0
-YSBpcyBubyBsb25nZXIgbmVlZGVkICovCisJCWlmIChlcnIpIHsKKwkJCW1vZF9zdGF0X2luYygm
-ZmFpbGVkX2RlY29tcHJlc3MpOworCQkJbW9kX3N0YXRfYWRkX2xvbmcobGVuLCAmaW52YWxpZF9k
-ZWNvbXByZXNzX2J5dGVzKTsKKwkJCXJldHVybiBlcnI7CisJCX0KKwl9IGVsc2UgeworCQlpbmZv
-LmhkciA9IGJ1ZjsKKwkJaW5mby5sZW4gPSBsZW47CisJfQorCisJcmV0dXJuIGxvYWRfbW9kdWxl
-KCZpbmZvLCB1YXJncywgZmxhZ3MpOworfQorCisvKgorICoga2VybmVsX3JlYWRfZmlsZSgpIHdp
-bGwgYWxyZWFkeSBkZW55IHdyaXRlIGFjY2VzcywgYnV0IG1vZHVsZQorICogbG9hZGluZyB3YW50
-cyBfZXhjbHVzaXZlXyBhY2Nlc3MgdG8gdGhlIGZpbGUsIHNvIHdlIGRvIHRoYXQKKyAqIGhlcmUs
-IGFsb25nIHdpdGggYmFzaWMgc2FuaXR5IGNoZWNrcy4KKyAqLworc3RhdGljIGludCBwcmVwYXJl
-X2ZpbGVfZm9yX21vZHVsZV9sb2FkKHN0cnVjdCBmaWxlICpmaWxlKQoreworCWlmICghZmlsZSB8
-fCAhKGZpbGUtPmZfbW9kZSAmIEZNT0RFX1JFQUQpKQorCQlyZXR1cm4gLUVCQURGOworCWlmICgh
-U19JU1JFRyhmaWxlX2lub2RlKGZpbGUpLT5pX21vZGUpKQorCQlyZXR1cm4gLUVJTlZBTDsKKwly
-ZXR1cm4gZXhjbHVzaXZlX2Rlbnlfd3JpdGVfYWNjZXNzKGZpbGUpOworfQorCitTWVNDQUxMX0RF
-RklORTMoZmluaXRfbW9kdWxlLCBpbnQsIGZkLCBjb25zdCBjaGFyIF9fdXNlciAqLCB1YXJncywg
-aW50LCBmbGFncykKK3sKKwlzdHJ1Y3QgZmQgZjsKIAlpbnQgZXJyOwogCiAJZXJyID0gbWF5X2lu
-aXRfbW9kdWxlKCk7CkBAIC0zMDc1LDI4ICszMTE3LDE0IEBAIFNZU0NBTExfREVGSU5FMyhmaW5p
-dF9tb2R1bGUsIGludCwgZmQsIGNvbnN0IGNoYXIgX191c2VyICosIHVhcmdzLCBpbnQsIGZsYWdz
-KQogCQkgICAgICB8TU9EVUxFX0lOSVRfQ09NUFJFU1NFRF9GSUxFKSkKIAkJcmV0dXJuIC1FSU5W
-QUw7CiAKLQlsZW4gPSBrZXJuZWxfcmVhZF9maWxlX2Zyb21fZmQoZmQsIDAsICZidWYsIElOVF9N
-QVgsIE5VTEwsCi0JCQkJICAgICAgIFJFQURJTkdfTU9EVUxFKTsKLQlpZiAobGVuIDwgMCkgewot
-CQltb2Rfc3RhdF9pbmMoJmZhaWxlZF9rcmVhZHMpOwotCQltb2Rfc3RhdF9hZGRfbG9uZyhsZW4s
-ICZpbnZhbGlkX2tyZWFkX2J5dGVzKTsKLQkJcmV0dXJuIGxlbjsKKwlmID0gZmRnZXQoZmQpOwor
-CWVyciA9IHByZXBhcmVfZmlsZV9mb3JfbW9kdWxlX2xvYWQoZi5maWxlKTsKKwlpZiAoIWVycikg
-eworCQllcnIgPSBmaWxlX2luaXRfbW9kdWxlKGYuZmlsZSwgdWFyZ3MsIGZsYWdzKTsKKwkJYWxs
-b3dfd3JpdGVfYWNjZXNzKGYuZmlsZSk7CiAJfQotCi0JaWYgKGZsYWdzICYgTU9EVUxFX0lOSVRf
-Q09NUFJFU1NFRF9GSUxFKSB7Ci0JCWVyciA9IG1vZHVsZV9kZWNvbXByZXNzKCZpbmZvLCBidWYs
-IGxlbik7Ci0JCXZmcmVlKGJ1Zik7IC8qIGNvbXByZXNzZWQgZGF0YSBpcyBubyBsb25nZXIgbmVl
-ZGVkICovCi0JCWlmIChlcnIpIHsKLQkJCW1vZF9zdGF0X2luYygmZmFpbGVkX2RlY29tcHJlc3Mp
-OwotCQkJbW9kX3N0YXRfYWRkX2xvbmcobGVuLCAmaW52YWxpZF9kZWNvbXByZXNzX2J5dGVzKTsK
-LQkJCXJldHVybiBlcnI7Ci0JCX0KLQl9IGVsc2UgewotCQlpbmZvLmhkciA9IGJ1ZjsKLQkJaW5m
-by5sZW4gPSBsZW47Ci0JfQotCi0JcmV0dXJuIGxvYWRfbW9kdWxlKCZpbmZvLCB1YXJncywgZmxh
-Z3MpOworCWZkcHV0KGYpOworCXJldHVybiBlcnI7CiB9CiAKIC8qIEtlZXAgaW4gc3luYyB3aXRo
-IE1PRFVMRV9GTEFHU19CVUZfU0laRSAhISEgKi8KLS0gCjIuNDEuMC5yYzEuNC5nYjRkYWU3NTA1
-MAoK
---0000000000002e29d205fc8b1635--
