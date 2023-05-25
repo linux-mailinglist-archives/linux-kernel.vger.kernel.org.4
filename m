@@ -2,205 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FF3710D00
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871E5710D06
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbjEYNJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
+        id S241170AbjEYNLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbjEYNJJ (ORCPT
+        with ESMTP id S231397AbjEYNLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:09:09 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E35135
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685020147; x=1716556147;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FZHfnXDUHqWO45L7noO97I0GLl4T6oUSYEyNE//HkVE=;
-  b=wWzwwx7tv9m6CUZGqVsLvKUfsPMvQCiGFCZ7HXomSumVWfVzzYMP9AC9
-   rER8AulZzmnjX7hp83a986PDAbYuQwWmSuSJB6HAHXb91+V7cHNf6TyCU
-   d3Bs2xn3BTEAh4Ily5QOA1p1/75jlzK1JqFG5RfFfLC8QvgbvH7+iIafm
-   /50PiQJa8ZFRlZQyFTIdepJn2qrE5fBzvV9wuDG6wVWENeq79J2eo1Uit
-   rg0UqG0cfxH8kDu5n0CAN44+aIbLxCf+h4SjtJqcV8XsMJkuSFQFb0oro
-   8ow5dfirGwcRSWhP9sqaeizC63eF8bVUEr7CEIzV6aOHfP7yTczDia8vd
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="asc'?scan'208";a="217260982"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 06:09:06 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 25 May 2023 06:09:06 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 25 May 2023 06:09:03 -0700
-Date:   Thu, 25 May 2023 14:08:41 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Atish Patra <atishp@atishpatra.org>
-CC:     Anup Patel <apatel@ventanamicro.com>,
-        Alexandre Ghiti <alex@ghiti.fr>, <robh@kernel.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        <jeeheng.sia@starfivetech.com>, Anup Patel <anup@brainfault.org>,
-        <linux-kernel@vger.kernel.org>, <palmer@rivosinc.com>,
-        <leyfoon.tan@starfivetech.com>, <mason.huo@starfivetech.com>,
-        Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Song Shuai <suagrfillet@gmail.com>,
-        <linux-riscv@lists.infradead.org>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-Message-ID: <20230525-guacamole-swimmer-68048a73baac@wendy>
-References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
- <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
- <CAHVXubj92O_dwGShOJgrYezqk2pA2NtFyhNFbAPyhn7=PztK6Q@mail.gmail.com>
- <20230517-preacher-primer-f41020b3376a@wendy>
- <CAHVXubhMLgb54_7zV2yFuGPoMKCkUXwozHbDvghc7kQqNLK-JA@mail.gmail.com>
- <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
- <fe8d716c-fb4f-1f3f-6c69-de1d8b9fb6af@ghiti.fr>
- <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
- <CAOnJCULpa-TJuG=TtCDOxOdUviZzWheLE-GMiU1r7GWaKn0nuQ@mail.gmail.com>
+        Thu, 25 May 2023 09:11:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B9CB2;
+        Thu, 25 May 2023 06:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9DEm7cVBdm52kK3UCzMVMzsLM3W+SSD9KxYzTiOP2os=; b=U1iALbTK7rHRU7VruFM7TO2E1Z
+        xvRWFPd1doSjCsYDCMHOsTa++oGrg2nEYlCWtLO9dvrCYG9N6QHsuU4eTucS5i/YzLpxsrSFrNYvb
+        TnGFukTMiMyFir0UB6XRsXp7+8l811BLakEig4nBp09A0rwnSvgUO8h8Obxd2EIXiNEj99e87oVpR
+        wwUrVPb3F/WC52qPGfwBWdAQ/yTLMvMbyc9o7/4SrP+Orf6KuaDzcBvOeSUSIZQtnSs2xNgAfKEGX
+        wAZb3MoIN8mFE7OLypmP7Jb+v5G1tAMXpGUnnBN6AvHH0VEO3mjcUXclEe3PAtmDJI25A1jXCr8Et
+        CiIKtoYQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q2Ajx-00CD2j-1K; Thu, 25 May 2023 13:10:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6AAC3001AE;
+        Thu, 25 May 2023 15:10:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B530C20A78741; Thu, 25 May 2023 15:10:43 +0200 (CEST)
+Date:   Thu, 25 May 2023 15:10:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
+Message-ID: <20230525131043.GT83892@hirez.programming.kicks-ass.net>
+References: <20230515075659.118447996@infradead.org>
+ <20230515080554.453785148@infradead.org>
+ <20230524093246.GP83892@hirez.programming.kicks-ass.net>
+ <20230525102946.GE38236@hirez.programming.kicks-ass.net>
+ <292934ce-73fa-4077-9051-2ad909828f4a@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="e/nYzQDYCEl2uMHS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOnJCULpa-TJuG=TtCDOxOdUviZzWheLE-GMiU1r7GWaKn0nuQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <292934ce-73fa-4077-9051-2ad909828f4a@app.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---e/nYzQDYCEl2uMHS
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, May 24, 2023 at 04:45:36PM -0700, Atish Patra wrote:
-> On Thu, May 18, 2023 at 7:04=E2=80=AFAM Anup Patel <apatel@ventanamicro.c=
-om> wrote:
-> > On Thu, May 18, 2023 at 5:39=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr>=
- wrote:
-> > > On 5/18/23 08:53, Anup Patel wrote:
-> > > > On Wed, May 17, 2023 at 8:26=E2=80=AFPM Alexandre Ghiti <alexghiti@=
-rivosinc.com> wrote:
-> > > >> On Wed, May 17, 2023 at 1:28=E2=80=AFPM Conor Dooley <conor.dooley=
-@microchip.com> wrote:
-
-> > > > I think we have two possible approaches:
-> > > >
-> > > > 1) Update OpenSBI to set "no-map" DT property for firmware
-> > > >      reserved regions. We were doing this previously but removed
-> > > >      it later for performance reasons mentioned by Alex. It is also
-> > > >      worth mentioning that ARM Trusted Firmware also sets "no-map"
-> > > >      DT property for firmware reserved regions.
-> > > >
-> > > > 2) Add a new "no-save-restore" DT property in the reserved
-> > > >      memory DT bindings. The hibernate support of Linux arch/riscv
-> > > >      will use this DT property to exclude memory regions from
-> > > >      save-restore. The EFI implementation of EDK2 and U-Boot
-> > > >      should do the following:
-> > > >      1) Treat all memory having "no-map" DT property as EFI
-> > > >          reserved memory
-> > > >      2) Treat all memory not having "no-map" DT property and
-> > > >          not having "no-save-restore" DT property as EfiBootService=
-sData
-> > > >      3) Treat all memory not having "no-map" DT property and
-> > > >           having "no-save-restore" DT property as EfiRuntimeService=
-Data
-> > > >           (Refer,
-> > > > https://devicetree-specification.readthedocs.io/en/latest/chapter3-=
-devicenodes.html#reserved-memory-and-uefi)
-> > > >
-> > > > Personally, I am leaning towards approach#1 since approach#2
-> > > > will require changing DeviceTree specification as well.
-> > >
-> > >
-> > > If needed, indeed #1 is the simplest, but I insist, to me it is not
-> > > needed (and we don't have it in the current opensbi), if you have
-> > > another opinion, I'm open to discuss it!
+On Thu, May 25, 2023 at 12:52:06PM +0200, Arnd Bergmann wrote:
+> On Thu, May 25, 2023, at 12:29, Peter Zijlstra wrote:
+> > On Wed, May 24, 2023 at 11:32:47AM +0200, Peter Zijlstra wrote:
+> >> On Mon, May 15, 2023 at 09:57:07AM +0200, Peter Zijlstra wrote:
 > >
->=20
-> The problem with relying on the "mmode_resv" name is that there will be
-> other use cases where a portion of the memory must be reserved and access=
-ing
-> that from the kernel will result in fault. CoVE is such a use case where
-> TSM will probably run from a memory region with confidential memory
-> which the kernel must not access.
-
-We should only rely on this node name for known bad versions of opensbi
-IMO. Going forward, if something needs to be reserved for firmware, the
-firmware should make sure that it is reserved by using the property for
-that purpose :)
-
-> We have to name it "mmode_resv" as well or mark it as "no-map" which will
-> present a hole in mappings. We will end up in same 1GB hugepage issue
-> if we choose "no-map".
->=20
-> Another option is to use compatible string or label property to indicate
-> that this memory region is not to be saved/restored during hibernation.
-> This can be documented in RISC-V DT bindings as well as the booting guide
-> doc that alex was talking about.
-
-Sure, a dt-binding for sbi reserved regions doesn't immediately sound
-like an awful idea... But we still have to work around the borked
-firmware - be that disabling hibernation or using the mmode_resv node
-when we know that the version of OpenSBI is one of those with the
-problem.
-
-> > I agree with you, backward compatibility with older firmwares
-> > is important.
+> > This then also means I need to look at this_cpu_cmpxchg128 and
+> > this_cpu_cmoxchg64 behaviour when we dont have the CPUID feature.
 > >
-> This does break the compatibility with the older firmware w.r.to hibernat=
-ion
-> feature. However
->=20
-> It is specific to hibernation only. So hibernation will fail to work
-> if an user is running kernel > 6.4 but 0.8 < OpenSBI < 1.2
->=20
-> The same problem lies if users use other firmware that don't have
-> no-map property today. IMO, this can be documented as a known problem.
+> > Because current verions seem to assume the instruction is present.
+> 
+> As far as I could tell when reviewing your series, this_cpu_cmpxchg64()
+> is always available on all architectures. Depending on compile-time
+> feature detection this would be either a native instruction that
+> is guaranteed to work, or the irq-disabled version. On x86, this
+> is handled at runtime with alternative_io().
+> 
+> this_cpu_cmpxchg128() clearly needed the system_has_cmpxchg128()
+> check, same as system_has_cmpxchg_double() today.
 
-I'd rather we disabled it than documented it as broken.
-Or disable _and_ document it.
+So, having just dug through all that, on x86:
 
-> > Let's go with your proposed change to treat reserved DT nodes
-> > with "mmode_resv*" name as M-mode firmware memory (it could
-> > be any M-mode firmware). We will certainly need to document it
-> > somewhere as an expectation of Linux RISC-V kernel.
-> >
-> > @Sunil How about treating "mmode_resv*" as
-> > EfiRuntimeServiceData in EDK2 ? Other reserved memory
-> > nodes can follow the device tree specification.
-> >
->=20
-> Either way, we also need to fix U-Boot to match the behavior.  Currently,
-> it treats any reserved memory without no-map property as EFI_BOOT_SERVICE=
-S_DATA.
+this_cpu_cmpxchg64() is:
 
-Cheers,
-Conor.
+ X86_CMPXCHG64=n -> fallback, irrespective of CX8
+ X86_CMPXCHG64=y -> cmpxchg8b
+ X86_64          -> cmpxchg
 
---e/nYzQDYCEl2uMHS
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+I've changed it to be similar between 32bit and 64bit such that both:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG9d2QAKCRB4tDGHoIJi
-0maSAQCoxOuFYoGc3O1JyCjXO6qa+zm4l++2Pqf7ZuTXvNrVEQD/Yk8gJXoswIwD
-gmiA19aLLcO4jMPHJBdKls6YMKqBcg4=
-=FqJr
------END PGP SIGNATURE-----
+  cmpxchg#b when CX#, otherwise this_cpu_cmpxchg#b_emu
 
---e/nYzQDYCEl2uMHS--
+
