@@ -2,75 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B9C7117E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96087117ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241228AbjEYUKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S233917AbjEYUOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbjEYUKw (ORCPT
+        with ESMTP id S231869AbjEYUOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:10:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94BC9B;
-        Thu, 25 May 2023 13:10:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 25 May 2023 16:14:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302769B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:14:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 934C121900;
-        Thu, 25 May 2023 20:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685045446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hq78prvpqK+0+yurD5QWLy6AtRXjlqEAnbV+QgwIthY=;
-        b=f5iDpVUpbRXENQYHAhQd8gnxlIAzNVvflxj8Gwtpgxavu7fBu2cmHE1NcsgQdayJ5VB3b3
-        GYiOYDZSbla2cO8n0zTzpR2GQppFdGMbRjepUxCysDl/VxA6tQQNe89t8MuU7qsrcwngvt
-        MBzZveY+wAptU2VARxTqisbLaxl7PIY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685045446;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hq78prvpqK+0+yurD5QWLy6AtRXjlqEAnbV+QgwIthY=;
-        b=rcqn0ys/CKLXGKb/FKUEfBxrIP2J4q88H3k5A2br3Sn6G3CNtmkdIE7n1hQYm+1zJiyDV9
-        B+qxj+XlzAdMXYCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8159A13356;
-        Thu, 25 May 2023 20:10:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sEhzH8bAb2TsDAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 25 May 2023 20:10:46 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 12FFDA075C; Thu, 25 May 2023 22:10:46 +0200 (CEST)
-Date:   Thu, 25 May 2023 22:10:46 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [git pull] vfs.git sysv pile
-Message-ID: <20230525201046.cth6qizdh7lwobxj@quack3>
-References: <Y/gugbqq858QXJBY@ZenIV>
- <4214717.mogB4TqSGs@suse>
- <20230320124725.pe4jqdsp4o47kmdp@quack3>
- <3307436.0oRPG1VZx4@suse>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE4E464A61
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 20:14:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6894CC433D2;
+        Thu, 25 May 2023 20:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685045682;
+        bh=c9RYj0+T+0idw1Qy78csQBqrvbedfd4wjKYCGYBBYrg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q1esTd0qvQJc7TabmbiYhEBwa0xNKAeKW7a84pfVHnWhu/iA29rxP1T9hxs59SbsX
+         eUk+QNURpIP86mhVgJ4oEo0KOALxuVfwQjbVXuzv0VEILEnClglckuNPQlH4U89aQr
+         KNRuq/zeefVuy3pkin9GdjC4JvGbRuPulhBLk+u25Xzfr7xveS4YsIgknyTVIHJjew
+         EYr3l206f7r3O/V+3LaWNHJQfIX6j7CiMn4L3D/nrGJ3UDeWG9Qzw38YxudMhoF90W
+         EMOPCgOC+stBd2u4eMe4LVwNqTNF6uH+2IuI2Lk1sZwoCsZ8aySOoW2/sOLKv0rK0z
+         J+4mVPPhfua3A==
+Date:   Thu, 25 May 2023 13:14:39 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, ndesaulniers@google.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/amdkfd: remove unused function
+ get_reserved_sdma_queues_bitmap
+Message-ID: <20230525201439.GA2741545@dev-arch.thelio-3990X>
+References: <20230525200759.3214525-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3307436.0oRPG1VZx4@suse>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230525200759.3214525-1-trix@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,37 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 27-03-23 12:29:56, Fabio M. De Francesco wrote:
-> On lunedì 20 marzo 2023 13:47:25 CEST Jan Kara wrote:
-> > On Mon 20-03-23 12:18:38, Fabio M. De Francesco wrote:
-> > > On giovedì 16 marzo 2023 11:30:21 CET Fabio M. De Francesco wrote:
-> > > > On giovedì 16 marzo 2023 10:00:35 CET Jan Kara wrote:
-> > > > > On Wed 15-03-23 19:08:57, Fabio M. De Francesco wrote:
-> > > > > > On mercoledì 1 marzo 2023 15:14:16 CET Al Viro wrote:
+On Thu, May 25, 2023 at 04:07:59PM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:122:24: error:
+>   unused function 'get_reserved_sdma_queues_bitmap' [-Werror,-Wunused-function]
+> static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
+>                        ^
+> This function is not used so remove it.
 > 
-> [snip]
-> 
-> > > > > > > I think I've pushed a demo patchset to vfs.git at some point back 
-> in
-> > > > > > > January... Yep - see #work.ext2 in there; completely untested,
-> > > > > > > though.
-> 
-> Al,
-> 
-> I reviewed and tested your patchset (please see below).
-> 
-> I think that you probably also missed Jan's last message about how you prefer 
-> they to be treated.
-> 
-> Jan asked you whether you will submit these patches or he should just pull 
-> your branch into his tree.
-> 
-> Please look below for my tags and Jan's question.
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Ok, Al didn't reply so I've just pulled the patches from Al's tree, added
-your Tested-by tag and push out the result into linux-next.
+Caused by commit 09a95a85cf3e ("drm/amdkfd: Update SDMA queue management
+for GFX9.4.3") it seems.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+You can actually go a step farther and remove the
+reserved_sdma_queues_bitmap member from 'struct kfd_device_info' because
+it is now only assigned, never read.
+
+$ git grep reserved_sdma_queues_bitmap next-20230525
+next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device.c:        kfd->device_info.reserved_sdma_queues_bitmap = 0xFULL;
+next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device.c:        kfd->device_info.reserved_sdma_queues_bitmap = 0x3ULL;
+next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c:static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
+next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c:    return dqm->dev->kfd->device_info.reserved_sdma_queues_bitmap;
+next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_priv.h:    uint64_t reserved_sdma_queues_bitmap;
+
+> ---
+>  drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+> index 493b4b66f180..2fbd0a96424f 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+> @@ -119,11 +119,6 @@ unsigned int get_num_xgmi_sdma_queues(struct device_queue_manager *dqm)
+>  		dqm->dev->kfd->device_info.num_sdma_queues_per_engine;
+>  }
+>  
+> -static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
+> -{
+> -	return dqm->dev->kfd->device_info.reserved_sdma_queues_bitmap;
+> -}
+> -
+>  static void init_sdma_bitmaps(struct device_queue_manager *dqm)
+>  {
+>  	bitmap_zero(dqm->sdma_bitmap, KFD_MAX_SDMA_QUEUES);
+> -- 
+> 2.27.0
+> 
